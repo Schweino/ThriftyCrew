@@ -1,0 +1,296 @@
+{
+    "name":  "Stuffed Chicken Breast",
+    "slug":  "stuffed-chicken-breast",
+    "cuisine":  "Italian-American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thecozycook.com/stuffed-chicken-breast/",
+    "source_site":  "thecozycook.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Completed slug: stuffed-chicken-breast. All 13 bought lines are used by a step; no step calls for anything unbought. Filling = cream cheese, mozzarella, parmesan, dried basil, dried oregano, onion powder, red pepper flakes, folded with the wilted spinach/garlic and chopped sun-dried tomatoes. Tops seasoned with salt, black pepper, paprika. Both olive-oil lines used (searing and wilting).",
+                         "Basil rides the dried-oregano buy string uncosted (about 0.5 g per the mapper); it is on the shopper\u0027s list, so I name it in the filling. Black pepper rides the salt buy string (1 1/2 tsp) uncosted; it is bought, so I name it in the seasoning step. Neither is a computed prose number, just a named ingredient.",
+                         "No shop_smart bullet makes a checkable per-package arithmetic claim (no cheaper-per-ounce, no lasts-N-batches, no nothing-left). All bullets are qualitative shopping logic, so none needs a cost_lines trace. I did NOT claim block cheese beats pre-shredded, because the mapper resolved mozzarella-cheese and parmesan to shredded/grated cells (the build buys the bag and the tub); the 2026-08-15 block-vs-tub trap is avoided by design.",
+                         "DATA SANITY (all plausible, none blocking): macros land 524 cal / 63.8 g protein / 9.6 g carb / 25.6 g fat per serving, cleanly inside this run\u0027s band (400-650 cal AND \u003c=35 g carb). Mapper macro cross-check PASSED (protein +3.3%, carb within 1 g, cal -7.2% vs source). Chicken is 3178 g = 14 breasts at ~227 g (8 oz) each, i.e. one stuffed breast per serving, which matches the mapper\u0027s each-weight ruling and the source\u0027s own protein figure. No title ingredient missing from the build; no note-vs-build contradiction; no single cost line looks like it should dominate a 14-serving batch. Herb/cheese/aromatic profile is consistent with an Italian-American spinach-and-sun-dried-tomato stuffed chicken."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "breadcrumbs",
+                                  "panko",
+                                  "rice",
+                                  "pasta",
+                                  "shrimp",
+                                  "feta",
+                                  "bacon"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  524,
+                 "protein":  64,
+                 "carbs":  10,
+                 "fat":  26,
+                 "cost_ps":  "3.24"
+             },
+    "intro_html":  "Stuffed chicken breast looks like you fussed over it and plates like a restaurant special, but it is really just a paring knife, a bowl of filling, and a hot pan. Each big breast gets a pocket packed with spinach, sun-dried tomatoes, cream cheese, mozzarella, and parmesan, seared golden and finished in the oven. Every serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories with under 10 grams of carbs, for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a steakhouse-looking dinner for the price of a side salad.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each) (3178 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste (21 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 3/4 teaspoons paprika (4 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tablespoons olive oil; 2 tablespoons plus 1 teaspoon olive oil (79 g)",
+                                "\u003cstrong\u003eSpinach:\u003c/strong\u003e 10 1/2 cups packed spinach, roughly chopped (about 11 oz) (315 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 14 cloves garlic, minced (42 g)",
+                                "\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 1 1/4 cups sun-dried tomatoes, drained and chopped (63 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz. 1/3-less-fat cream cheese, softened (397 g)",
+                                "\u003cstrong\u003eMozzarella Cheese (generic (USDA)):\u003c/strong\u003e 3 1/2 cups shredded mozzarella (392 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 1/4 cups grated Parmesan (116 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 3/4 teaspoons EACH dried basil and dried oregano (2 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e scant 1 teaspoon onion powder (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 teaspoon red pepper flakes (1 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each): ~$15.62. \u003cstrong\u003eBuy 7 lbs: $15.62.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tablespoons olive oil; 2 tablespoons plus 1 teaspoon olive oil: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Spinach, 10 1/2 cups packed spinach, roughly chopped (about 11 oz): ~$2.22. \u003cstrong\u003eBuy 2 10oz bags: $3.99.\u003c/strong\u003e",
+                       "Garlic, 14 cloves garlic, minced: ~$0.57. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Sun-Dried Tomatoes, 1 1/4 cups sun-dried tomatoes, drained and chopped: ~$1.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 14 oz. 1/3-less-fat cream cheese, softened: ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
+                       "Mozzarella Cheese, 3 1/2 cups shredded mozzarella: ~$2.10. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 1/4 cups grated Parmesan: ~$1.40. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, paprika, dried oregano, onion powder, red pepper flakes): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.54 across 14 servings, so roughly $1.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.46 across 14 servings, roughly $2.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.36. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Chicken breast, a little dairy, and a handful of pantry herbs is a cheap way to eat something that tastes expensive. The cream cheese and two cheeses are the splurge, and they are exactly what turn plain chicken into dinner.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the big pack of breasts.\u003c/strong\u003e You want large breasts here, since a small one has no room for a pocket. The value pack is cheaper per pound than the tidy tray of two, and when breast hits a sale price, grab extra and freeze it in batch-size bags.",
+                       "\u003cstrong\u003eLet the sun-dried tomatoes do double duty.\u003c/strong\u003e Buy the kind packed in oil, chop them for the filling, and use the drained oil to sear the chicken. That is free flavor you already paid for, and it stretches the olive oil.",
+                       "\u003cstrong\u003eGrab the shredded bag and the grated tub.\u003c/strong\u003e The mozzarella and parmesan melt into the filling, so whichever bag and tub are on sale is the right call. No need to chase a fancy wedge to hide it inside a chicken breast.",
+                       "\u003cstrong\u003eSpinach shrinks to almost nothing.\u003c/strong\u003e That pile of leaves looks like a lot in the cart, but it wilts down to a fraction in the pan, so do not talk yourself into buying less than the recipe calls for.",
+                       "\u003cstrong\u003eThe 1/3-less-fat cream cheese is not a diet dodge.\u003c/strong\u003e It is what keeps the filling creamy without turning greasy in the fridge over a week of lunches. Buy whichever bricks are cheapest and soften them on the counter first."
+                   ],
+    "make_it":  [
+                    "Weigh your empty baking dish and write the number down. That is how you portion 14 even servings at the end instead of eyeballing it.",
+                    "Preheat the oven to 375F. Warm a teaspoon or two of the oil in a large skillet over medium heat, add the chopped spinach and minced garlic, and cook 3 to 4 minutes until the spinach wilts down. Pull it off the heat and let it cool.",
+                    "In a big bowl, stir together the softened cream cheese, mozzarella, parmesan, dried basil, dried oregano, onion powder, and red pepper flakes. Fold in the cooled spinach and garlic and the chopped sun-dried tomatoes until it is one even filling.",
+                    "Pat the chicken breasts dry. With a sharp paring knife, cut a deep pocket into the thick side of each breast, going most of the way through but not out the other side.",
+                    "Pack each pocket full of the filling. Sprinkle the tops of the stuffed breasts with salt, black pepper, and paprika.",
+                    "Heat the rest of the oil in a large oven-safe skillet over medium-high heat. Working two or three breasts at a time so the pan stays hot, sear each side 2 to 3 minutes until golden. Use two spatulas to turn them gently so the filling stays put.",
+                    "Slide the seared breasts into your weighed baking dish, or leave them in the oven-safe skillet, and bake uncovered at 375F for 17 to 20 minutes, until the thickest part reaches 165F.",
+                    "Rest the chicken 5 minutes so the juices settle, then portion."
+                ],
+    "portion_html":  "Line up 14 containers. Because this batch is 14 breasts across 14 servings, one stuffed breast per container is your portion. To keep it honest, weigh the finished dish, subtract the empty dish weight from Step 1, and divide by 14, then even things out if one breast came out heavier than the rest. Each serving lands near \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/stuffed-chicken-breast/\" target=\"_blank\" rel=\"noopener\"\u003ethecozycook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A steakhouse-looking chicken dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  27.54,
+    "cost_batch_true":  31.46,
+    "cost_per_serving":  1.97,
+    "cost_per_serving_true":  2.25,
+    "cost_pantry_add":  13.9,
+    "cost_first_run":  45.36,
+    "scaler":  {
+                   "cost":  "31.46",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3178,
+                                   "buy":  "7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each)",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  4,
+                                   "buy":  "1 3/4 teaspoons paprika",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  79,
+                                   "buy":  "3 1/2 tablespoons olive oil; 2 tablespoons plus 1 teaspoon olive oil",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Spinach",
+                                   "canon":  "Spinach",
+                                   "grams":  315,
+                                   "buy":  "10 1/2 cups packed spinach, roughly chopped (about 11 oz)",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "14 cloves garlic, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Sun-Dried Tomatoes",
+                                   "canon":  "Sun-Dried Tomatoes",
+                                   "grams":  63,
+                                   "buy":  "1 1/4 cups sun-dried tomatoes, drained and chopped",
+                                   "bid":  "sun-dried-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
+                                   "grams":  397,
+                                   "buy":  "14 oz. 1/3-less-fat cream cheese, softened",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mozzarella Cheese",
+                                   "canon":  "Mozzarella Cheese",
+                                   "grams":  392,
+                                   "buy":  "3 1/2 cups shredded mozzarella",
+                                   "bid":  "mozzarella-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  116,
+                                   "buy":  "1 1/4 cups grated Parmesan",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "1 3/4 teaspoons EACH dried basil and dried oregano",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  2,
+                                   "buy":  "scant 1 teaspoon onion powder",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  1,
+                                   "buy":  "1/2 teaspoon red pepper flakes",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Spinach and sun-dried tomato stuffed chicken breast, seared and baked for meal prep. Fourteen servings at {{cal}} calories, {{protein}} grams of protein, and under 10 grams of carbs for about ${{cost_ps}} each (at everyday cost).",
+                 "keywords":  "stuffed chicken breast, high protein meal prep, low carb meal prep, spinach sun-dried tomato chicken, budget chicken dinner, keto chicken meal prep, cheap high protein dinner",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.24,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each) (3178 g)",
+                                          "Salt, About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste (21 g)",
+                                          "Paprika, 1 3/4 teaspoons paprika (4 g)",
+                                          "Olive Oil, 3 1/2 tablespoons olive oil; 2 tablespoons plus 1 teaspoon olive oil (79 g)",
+                                          "Spinach, 10 1/2 cups packed spinach, roughly chopped (about 11 oz) (315 g)",
+                                          "Garlic, 14 cloves garlic, minced (42 g)",
+                                          "Sun-Dried Tomatoes, 1 1/4 cups sun-dried tomatoes, drained and chopped (63 g)",
+                                          "1/3 Fat Cream Cheese, 14 oz. 1/3-less-fat cream cheese, softened (397 g)",
+                                          "Mozzarella Cheese, 3 1/2 cups shredded mozzarella (392 g)",
+                                          "Parmesan Cheese, 1 1/4 cups grated Parmesan (116 g)",
+                                          "Dried Oregano, 1 3/4 teaspoons EACH dried basil and dried oregano (2 g)",
+                                          "Onion Powder, scant 1 teaspoon onion powder (2 g)",
+                                          "Red Pepper Flakes, 1/2 teaspoon red pepper flakes (1 g)"
+                                      ],
+                 "steps":  [
+                               "Wilt the chopped spinach and minced garlic in a little oil, then let cool.",
+                               "Mix the cream cheese, mozzarella, parmesan, basil, oregano, onion powder, and red pepper flakes, then fold in the spinach, garlic, and sun-dried tomatoes.",
+                               "Cut a deep pocket in each chicken breast and pack it with the filling.",
+                               "Sprinkle the tops with salt, black pepper, and paprika, then sear each breast golden in a hot oiled skillet.",
+                               "Bake uncovered at 375F for 17 to 20 minutes until the chicken reaches 165F, rest 5 minutes, and portion into 14 containers."
+                           ],
+                 "step_names":  [
+                                    "Wilt the spinach",
+                                    "Mix the filling",
+                                    "Stuff the chicken",
+                                    "Season and sear",
+                                    "Bake and portion"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  3178
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Spinach",
+                                  "grams":  315
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Sun-Dried Tomatoes",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "1/3 Fat Cream Cheese",
+                                  "grams":  397
+                              },
+                              {
+                                  "item":  "Mozzarella Cheese",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  116
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  1
+                              }
+                          ]
+}

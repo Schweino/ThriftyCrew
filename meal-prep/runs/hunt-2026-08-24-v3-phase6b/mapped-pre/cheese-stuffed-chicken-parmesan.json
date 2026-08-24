@@ -3,7 +3,7 @@
     "title":  "Cheese-Stuffed Chicken Parmesan",
     "source_url":  "https://thecozycook.com/baked-chicken-parmesan/",
     "servings":  4,
-    "built_at":  "2026-08-24T12:20:56",
+    "built_at":  "2026-08-24T18:18:45",
     "line_count":  14,
     "resolved_count":  7,
     "residual_count":  7,
@@ -31,7 +31,7 @@
                      "gpu_known":  false,
                      "density_known":  false,
                      "fooddb_known":  false,
-                     "evidence":  "nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: boneless/skinless/breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/thigh | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/breast; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                     "evidence":  "nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: boneless/skinless/breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/thigh | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/breast; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw [SR Legacy] per 100 g: 120.0 cal, 22.5 P, 0.0 C; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null
@@ -76,7 +76,7 @@
                      "gpu_known":  false,
                      "density_known":  false,
                      "fooddb_known":  false,
-                     "evidence":  "nearest vocabulary rows: All-Purpose Flour [flour] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: flour, 7 of 7 stores, cheapest 0.3392 at Sam\u0027s Club",
+                     "evidence":  "nearest vocabulary rows: All-Purpose Flour [flour] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. Arrowroot flour [SR Legacy] per 100 g: 357.0 cal, 0.3 P, 88.2 C | Carob flour [SR Legacy] per 100 g: 222.0 cal, 4.62 P, 88.9 C; board MAPPED: flour, 7 of 7 stores, cheapest 0.3392 at Sam\u0027s Club",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null
@@ -90,8 +90,8 @@
                      "resolution":  "unresolved",
                      "gpu_known":  false,
                      "density_known":  false,
-                     "fooddb_known":  false,
-                     "evidence":  "nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "fooddb_known":  true,
+                     "evidence":  "nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form; no densities.json row and no each-noun; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null
@@ -106,7 +106,7 @@
                      "gpu_known":  false,
                      "density_known":  false,
                      "fooddb_known":  false,
-                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. Pepper, banana, raw [SR Legacy] per 100 g: 27.0 cal, 1.66 P, 5.35 C | Peppers, ancho, dried [SR Legacy] per 100 g: 281.0 cal, 11.9 P, 51.4 C | Peppers, hungarian, raw [SR Legacy] per 100 g: 29.0 cal, 0.8 P, 6.7 C; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null

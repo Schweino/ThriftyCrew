@@ -3,7 +3,7 @@
     "title":  "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
     "source_url":  "https://www.wellplated.com/chicken-sweet-potato-kale-skillet/",
     "servings":  4,
-    "built_at":  "2026-08-24T12:10:28",
+    "built_at":  "2026-08-24T18:18:45",
     "line_count":  13,
     "resolved_count":  5,
     "residual_count":  8,
@@ -152,7 +152,7 @@
                      "gpu_known":  false,
                      "density_known":  false,
                      "fooddb_known":  false,
-                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. Spices, sage, ground [SR Legacy] per 100 g: 315.0 cal, 10.6 P, 60.7 C | Sage Valley, Gluten Free Vanilla Sandwich Cookies [SR Legacy] per 100 g: 499.0 cal, 3.13 P, 71.9 C | George Weston Bakeries, Brownberry Sage and Onion Stuffing Mix, dry [SR Legacy] per 100 g: 390.0 cal, 13.3 P, 72.7 C; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null
@@ -196,8 +196,8 @@
                      "resolution":  "unresolved",
                      "gpu_known":  false,
                      "density_known":  false,
-                     "fooddb_known":  false,
-                     "evidence":  "nearest vocabulary rows: Ricotta Cheese [ricotta] same form | Provolone Cheese [provolone-cheese] same form | Parmesan Cheese [parmesan] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "fooddb_known":  true,
+                     "evidence":  "nearest vocabulary rows: Ricotta Cheese [ricotta] same form | Provolone Cheese [provolone-cheese] same form | Parmesan Cheese [parmesan] same form; no densities.json row and no each-noun; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
                      "source":  null,
                      "optional":  false,
                      "grams_source_basis":  null

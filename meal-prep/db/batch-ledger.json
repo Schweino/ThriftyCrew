@@ -441,5 +441,69 @@
                          "detail":  "completed 2026-08-16 in the original run, before this ledger row existed: both slugs were sourced, selected, mapped, written and spec-built, then held at rejected-audit on the fresh-produce pricing gap. Row w4 was opened 2026-08-16 when they were revived, so these stages predate it. See state history in runs\\hunt-2026-08-15-lowcarb-100\\state\\."
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-24-v3-phase6b-w1",
+      "opened":  "2026-08-24T12:49:26",
+      "last_activity":  "2026-08-24T18:32:16",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "stuffed-chicken-breast",
+                    "slow-cooker-pork-loin-roast-or-pork-shoulder"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-24T12:49:26",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-24T12:49:27",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-24T12:49:27",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-24T12:49:27",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-24T13:11:46",
+                         "detail":  "2/2 GO"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-24T18:31:05",
+                         "detail":  "2/2 GO (re-audit, whole-wave, cost basis moved)"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-24T18:31:56",
+                         "detail":  "compute-v2-perserving + reanchor on 2 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-24T18:31:57",
+                         "detail":  "2 row(s) via hunt-2026-08-24-v3-phase6b-w1"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-24T18:32:15",
+                         "detail":  "2 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-24T18:32:16",
+                         "detail":  "2/2 wave slug(s) published through engine\\publish (visibility preserved) + 10 collateral spec(s) carried by propagate (total dirty 12)"
+                     }
+                 ]
   }
 ]

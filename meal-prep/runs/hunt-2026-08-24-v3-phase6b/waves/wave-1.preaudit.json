@@ -5,7 +5,7 @@
     "wave":  1,
     "batch":  "hunt-2026-08-24-v3-phase6b-w1",
     "scope":  "whole-wave",
-    "generated":  "2026-08-24T13:06:21",
+    "generated":  "2026-08-24T18:23:56",
     "elapsed_sec":  16.4,
     "wave_slugs":  [
                        "stuffed-chicken-breast",
@@ -16,7 +16,7 @@
                   "slow-cooker-pork-loin-roast-or-pork-shoulder"
               ],
     "inputs":  {
-                   "costed_mtime":  "2026-08-24T12:48:24",
+                   "costed_mtime":  "2026-08-24T18:16:41",
                    "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
                    "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
@@ -26,7 +26,7 @@
                                                            "check":  "spec-present",
                                                            "verdict":  "pass",
                                                            "numbers":  {
-                                                                           "mtime":  "2026-08-24T12:48:05"
+                                                                           "mtime":  "2026-08-24T18:16:41"
                                                                        },
                                                            "detail":  "spec present and parses"
                                                        },
@@ -70,9 +70,9 @@
                                                            "check":  "cost-reconcile",
                                                            "verdict":  "pass",
                                                            "numbers":  {
-                                                                           "spec_mtime":  "2026-08-24T12:48:05",
-                                                                           "costed_mtime":  "2026-08-24T12:48:24",
-                                                                           "costed_is_newer_than_spec":  true
+                                                                           "spec_mtime":  "2026-08-24T18:16:41",
+                                                                           "costed_mtime":  "2026-08-24T18:16:41",
+                                                                           "costed_is_newer_than_spec":  false
                                                                        },
                                                            "detail":  "every spec cost field matches its engine row to the cent"
                                                        },
@@ -117,7 +117,7 @@
                                                                                  "check":  "spec-present",
                                                                                  "verdict":  "pass",
                                                                                  "numbers":  {
-                                                                                                 "mtime":  "2026-08-24T13:03:55"
+                                                                                                 "mtime":  "2026-08-24T18:16:41"
                                                                                              },
                                                                                  "detail":  "spec present and parses"
                                                                              },
@@ -161,8 +161,8 @@
                                                                                  "check":  "cost-reconcile",
                                                                                  "verdict":  "pass",
                                                                                  "numbers":  {
-                                                                                                 "spec_mtime":  "2026-08-24T13:03:55",
-                                                                                                 "costed_mtime":  "2026-08-24T12:48:24",
+                                                                                                 "spec_mtime":  "2026-08-24T18:16:41",
+                                                                                                 "costed_mtime":  "2026-08-24T18:16:41",
                                                                                                  "costed_is_newer_than_spec":  false
                                                                                              },
                                                                                  "detail":  "every spec cost field matches its engine row to the cent"

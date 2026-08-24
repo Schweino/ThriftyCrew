@@ -1,0 +1,281 @@
+{
+    "name":  "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+    "slug":  "slow-cooker-pork-loin-roast-or-pork-shoulder",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+    "source_site":  "recipetineats.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "NUMBERS: every gram, buy string, and macro was transcribed from the issued skeleton and the mapped decision file. No number was computed in prose. Macros per serving 602 cal / 54.9 g protein / 28 g carb / 29.5 g fat. In band for this run: calories 602 is inside 400 to 650 (PASS); carbohydrate 28 g is at or under 35 g (PASS). Prose carries only the {{cal}}, {{protein}}, and ${{cost_ps}} tokens plus the literal bound \u0027under 30 grams of carbs\u0027 (28 g actual).",
+                         "CUT BOOKED IS LOIN. The mapper booked pork-loin (not shoulder): loin gives 55 g protein against the source\u0027s 56 and lands the calories in band, while shoulder would push the dish to 738 cal/serving. The buy string and pricing are loin. Prose is written for the pork loin roast that is actually bought. The title still offers the shoulder, and the steps keep the longer alternate timing, but they phrase it as \u0027a heavier, fattier roast\u0027 rather than naming the unbought \u0027pork shoulder\u0027 commodity, so a make_it step cannot read as buying a cut the recipe does not shop for (the batch auditor\u0027s Blocker 1 alternate-cut PHANTOM).",
+                         "COOKTIME REPAIRED (2026-08-24 post-audit): the skeleton had shipped head.cookTime PT10H / totalTime PT10H10M, the SHOULDER cook time from the source, on a build booked, priced, and macro-checked as LOIN (loin cooks LOW 4 to 5 hours; shoulder would breach the calorie cap at ~738). The repair pass reset head.cookTime to PT4H30M and head.totalTime to PT4H40M to match the booked loin, per the batch auditor\u0027s Blocker 2. make_it and head.steps already lead with the loin 4 to 5 hour time and now note the heavier-cut alternate without naming the unbought \u0027pork shoulder\u0027 commodity (see next note); prose and head metadata now agree on the loin path.",
+                         "EVERY BOUGHT INGREDIENT IS USED BY A STEP and no step uses anything unbought. Walked both directions. Rub (make_it step 2): paprika, dried thyme (rides the paprika composite buy line), garlic powder, onion powder (rides the garlic-powder composite buy line), cayenne, black pepper, salt, plus ~1 tsp of the olive oil. Sear (step 3): pork loin and the rest of the olive oil. Sauce (step 4): butter, garlic, honey, apple cider vinegar, and the sauce salt and black pepper (the second EACH salt/pepper that rides the Salt composite line). Cook (step 5): pork. Thicken (step 6): cornstarch slurry into the pan juices. Slice/portion (step 7): pork and sauce. All 12 costed lines used; the two composite riders (dried thyme, onion powder) are named in the rub; no step calls for anything off the list.",
+                         "COMPOSITE LINES named in prose so nothing bought goes unmentioned: the Paprika line\u0027s buy string carries dried thyme, and the Garlic Powder line\u0027s carries onion powder; both are called out in the rub step. The Salt line\u0027s buy string carries the sauce\u0027s scant 1 tsp EACH salt and black pepper; both are called out in the sauce step.",
+                         "SHOP_SMART CLAIM TRACING: no bullet makes a per-ounce, leftover, or lasts-several-batches claim, so none requires a cost_lines entry to prove it. Every statement is grounded in the recipe\u0027s own buy amounts (8 1/4 lb loin, 1 1/3 cups honey, 2 sticks butter, the spice jars, cider vinegar/garlic/cornstarch) and in the mapper\u0027s own note that the honey butter sauce carries essentially all of the dish\u0027s carbohydrate (a macro-composition statement, not a package claim). Re-walk the bullets against cost_lines once the spec is costed, before publish.",
+                         "SCALE SANITY at 14 servings: all lines scale cleanly from the 8-serving source at 1.75x. Pork 3719 g (about 8 1/4 lb, ~266 g raw/serving, reasonable for a protein-forward meal prep). Honey 445 g = 1 1/3 cups (0.75 cup x 1.75). Butter 219 g = scant 1 cup / 2 sticks (125 g x 1.75). Garlic 9 cloves (5 x 1.75 = 8.75, rounded up). Cornstarch 1 3/4 tbsp (1 tbsp x 1.75). Apple cider vinegar scant 1/2 cup. Nothing implausible for a 14-serving batch."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "em dash",
+                                  "en dash",
+                                  "scotch fillet"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  602,
+                 "protein":  55,
+                 "carbs":  28,
+                 "fat":  30,
+                 "cost_ps":  "3.30"
+             },
+    "intro_html":  "A pork loin roast is one of the leanest cuts in the whole meat case, and that is exactly why it goes dry and sad in the wrong hands. The slow cooker fixes that. You coat the roast in a smoky paprika and thyme rub, sear it for color, then let it cook low and slow under a honey butter sauce that keeps every slice moist. At the end you reduce those pan juices down to a glossy glaze and spoon it right back over the pork. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with under 30 grams of carbs. That is a Sunday-roast dinner that asked you for about ten minutes of real work.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 1/4 lb boneless pork loin roast, trimmed (3719 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/2 tablespoons olive oil, divided (35 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3 1/2 teaspoons EACH paprika and dried thyme (8 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 teaspoons EACH garlic powder and onion powder (5 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e scant 1 teaspoon cayenne pepper (optional) (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e scant 1 teaspoon black pepper (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tablespoon plus 1/2 teaspoon salt; scant 1 teaspoon EACH salt and black pepper (26 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 1/3 cups honey (445 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e scant 1 cup (2 sticks) unsalted butter (219 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 9 cloves garlic, minced (26 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e scant 1/2 cup apple cider vinegar (104 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 3/4 tablespoons cornstarch, mixed with a splash of cold water (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 8 1/4 lb boneless pork loin roast, trimmed: ~$17.55. \u003cstrong\u003eBuy 9 lbs: $19.26.\u003c/strong\u003e",
+                       "Olive Oil, 2 1/2 tablespoons olive oil, divided: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1 1/3 cups honey: ~$3.53. \u003cstrong\u003ePantry staple; this batch alone uses about 2 12oz bottles.\u003c/strong\u003e",
+                       "Butter, scant 1 cup (2 sticks) unsalted butter: ~$1.44. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Garlic, 9 cloves garlic, minced: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Apple Cider Vinegar, scant 1/2 cup apple cider vinegar: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, garlic powder, cayenne pepper, black pepper, salt, cornstarch): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.79 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.27 across 14 servings, roughly $1.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.16. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a honey butter pork roast that eats like a holiday dinner. The pork loin carries the plate; the honey, butter, and spice rub just make it taste like you fussed.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eEight and a quarter pounds of boneless pork loin roast is the whole game.\u003c/strong\u003e This is where nearly all of the money and every gram of protein live. Reach for a whole boneless loin roast and trim it yourself rather than the pre-cut chops or the skinny tenderloin, so you are paying for pork and not for the butcher\u0027s knife work. A loin holds its shape through a long cook, which is why it slices clean into containers.",
+                       "\u003cstrong\u003eHoney and unsalted butter make the sauce that carries this dish.\u003c/strong\u003e You need one and a third cups of honey and two sticks of unsalted butter, so grab the plain squeeze honey and a standard box of butter instead of anything fancy. The honey is where almost all of the carbs in this recipe come from, and it is what turns the melted butter and pan juices into a glaze at the end.",
+                       "\u003cstrong\u003eThe rub is a handful of pantry spices you probably already own.\u003c/strong\u003e Paprika, dried thyme, garlic powder, onion powder, black pepper, a little cayenne if you like heat, and salt. Buy the small jars once and you will be seasoning meat with them for a long time. Nothing on that list is a specialty spice.",
+                       "\u003cstrong\u003eApple cider vinegar, fresh garlic, and a little cornstarch round it out.\u003c/strong\u003e The splash of cider vinegar cuts the sweetness of the honey butter, the garlic goes into the sauce, and a spoonful of cornstarch stirred with cold water thickens the juices into that glaze. Get the everyday cider vinegar, not the raw filtered bottle, since it all cooks down the same."
+                   ],
+    "make_it":  [
+                    "Weigh the empty bowl or container you plan to portion from and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "Mix the rub in a small bowl: the paprika, dried thyme, garlic powder, onion powder, cayenne if you want the heat, black pepper, and salt. Rub the pork loin all over with about a teaspoon of the olive oil, then sprinkle the rub over the whole roast and pat it on so it sticks.",
+                    "Heat the rest of the olive oil in a large skillet over medium heat. Sear the pork on every side until it is deep golden brown, watching that the spices color but do not burn. Move the seared roast into the slow cooker.",
+                    "Wipe out the skillet and melt the butter in it. Add the minced garlic and cook about a minute until fragrant, then stir in the honey, apple cider vinegar, and the sauce salt and black pepper. Let it simmer hard for 30 seconds, then pour it all over the pork and put the lid on.",
+                    "Cook on LOW for 4 to 5 hours, until the pork loin is tender and cooked through. A heavier, fattier roast will need longer, closer to 10 hours on LOW.",
+                    "Lift the pork onto a platter and tent it loosely with foil to rest for 10 to 20 minutes. Pour all the juices from the slow cooker into a saucepan. Stir the cornstarch together with a splash of cold water, add it to the pan, and simmer on medium-high for about 5 minutes until the sauce reduces to a syrupy glaze.",
+                    "Slice the pork into thick slices. Set your portioning bowl on the scale, add the sliced pork and the glaze, then subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give every container that same weight of pork and sauce."
+                ],
+    "portion_html":  "Set your portioning bowl on the scale, add all the sliced pork and the reduced glaze, and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14 and spoon that exact weight into each container so every one gets an even share of pork and honey butter sauce. Each serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/slow-cooker-pork-loin-roast/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A high-protein meal-prep dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  23.79,
+    "cost_batch_true":  27.27,
+    "cost_per_serving":  1.7,
+    "cost_per_serving_true":  1.95,
+    "cost_pantry_add":  18.89,
+    "cost_first_run":  46.16,
+    "scaler":  {
+                   "cost":  "27.27",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "canon":  "Pork Loin",
+                                   "grams":  3719,
+                                   "buy":  "8 1/4 lb boneless pork loin roast, trimmed",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  35,
+                                   "buy":  "2 1/2 tablespoons olive oil, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "3 1/2 teaspoons EACH paprika and dried thyme",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "1 3/4 teaspoons EACH garlic powder and onion powder",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  2,
+                                   "buy":  "scant 1 teaspoon cayenne pepper (optional)",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "scant 1 teaspoon black pepper",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  26,
+                                   "buy":  "1 tablespoon plus 1/2 teaspoon salt; scant 1 teaspoon EACH salt and black pepper",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  445,
+                                   "buy":  "1 1/3 cups honey",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  219,
+                                   "buy":  "scant 1 cup (2 sticks) unsalted butter",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "9 cloves garlic, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "canon":  "Apple Cider Vinegar",
+                                   "grams":  104,
+                                   "buy":  "scant 1/2 cup apple cider vinegar",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  14,
+                                   "buy":  "1 3/4 tablespoons cornstarch, mixed with a splash of cold water",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Slow cooker pork loin roast for meal prep: a spice-rubbed boneless pork loin cooked low and slow under a honey butter sauce, then sliced and glazed with the reduced pan juices, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with under 30 grams of carbs.",
+                 "keywords":  "slow cooker pork loin, honey butter pork roast, crockpot pork loin, high protein meal prep, budget pork dinner",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT4H30M",
+                 "totalTime":  "PT4H40M",
+                 "costPerServing":  3.30,
+                 "recipeIngredient":  [
+                                          "Pork Loin, 8 1/4 lb boneless pork loin roast, trimmed (3719 g)",
+                                          "Olive Oil, 2 1/2 tablespoons olive oil, divided (35 g)",
+                                          "Paprika, 3 1/2 teaspoons EACH paprika and dried thyme (8 g)",
+                                          "Garlic Powder, 1 3/4 teaspoons EACH garlic powder and onion powder (5 g)",
+                                          "Cayenne Pepper, scant 1 teaspoon cayenne pepper (optional) (2 g)",
+                                          "Black Pepper, scant 1 teaspoon black pepper (2 g)",
+                                          "Salt, 1 tablespoon plus 1/2 teaspoon salt; scant 1 teaspoon EACH salt and black pepper (26 g)",
+                                          "Honey, 1 1/3 cups honey (445 g)",
+                                          "Butter, scant 1 cup (2 sticks) unsalted butter (219 g)",
+                                          "Garlic, 9 cloves garlic, minced (26 g)",
+                                          "Apple Cider Vinegar, scant 1/2 cup apple cider vinegar (104 g)",
+                                          "Cornstarch, 1 3/4 tablespoons cornstarch, mixed with a splash of cold water (14 g)"
+                                      ],
+                 "steps":  [
+                               "Weigh the empty portioning bowl and write the number down.",
+                               "Mix the paprika, thyme, garlic powder, onion powder, cayenne, black pepper, and salt rub, oil the pork loin, and coat it all over.",
+                               "Sear the pork golden in the olive oil, then move it to the slow cooker.",
+                               "Melt butter with the garlic, stir in honey, cider vinegar, salt, and pepper, and pour the sauce over the pork.",
+                               "Cook on LOW 4 to 5 hours for loin, or about 10 hours for a heavier, fattier roast, until tender.",
+                               "Rest the pork, then thicken the pan juices with the cornstarch slurry into a glaze.",
+                               "Slice the pork, weigh the total, and divide it and the sauce across 14 containers."
+                           ],
+                 "step_names":  [
+                                    "Weigh the pot",
+                                    "Season the rub",
+                                    "Sear the pork",
+                                    "Make the honey butter sauce",
+                                    "Slow cook",
+                                    "Rest and thicken the glaze",
+                                    "Slice and portion"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  3719
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  445
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  219
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  26
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  104
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  14
+                              }
+                          ]
+}
