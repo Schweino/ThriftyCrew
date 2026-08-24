@@ -158,6 +158,30 @@ def preresolved(tmp, slugs, holds=None, residual=None):
     return tmp
 
 
+def skeletoned(tmp, slugs, cal=500, carbs=20):
+    """Write the intake + snapshot build-intake-skeleton.ps1 would have written, so a write-lane
+    fixture has its machine half without shelling PowerShell. Same injection philosophy as
+    preresolved(): the daemon's behaviour OVER the skeleton is what these fixtures are about, and the
+    skeleton builder's own behaviour is fixtured in its own suite."""
+    out = os.path.join(tmp, "intake")
+    os.makedirs(out, exist_ok=True)
+    for slug in slugs:
+        doc = {"name": slug, "slug": slug, "protein": "beef", "cuisine": "", "source_url": "https://d/x",
+               "visibility": "paid",
+               "ingredients": [{"item": "93/7 Ground Beef", "grams": 1568, "buy": "3 1/2 lb"},
+                               {"item": "Rice", "grams": 630, "buy": "3 cups dry"},
+                               {"item": "Yellow Onion", "grams": 220, "buy": "2 medium"}],
+               "macros_per_serving": {"calories": cal, "protein_g": 35.0, "carbs_g": carbs, "fat_g": 20.0},
+               "writer_notes": [], "forbidden_prose_terms": [], "prose": {},
+               "head": {"description": "", "keywords": "", "image": "", "prepTime": "PT15M",
+                        "cookTime": "PT25M", "totalTime": "PT40M", "steps": []}}
+        with open(os.path.join(out, "%s.json" % slug), "w", encoding="utf-8") as f:
+            json.dump(doc, f)
+        with open(os.path.join(out, "%s.skeleton.json" % slug), "w", encoding="utf-8") as f:
+            json.dump({"slug": slug, "findings": [], "intake": doc}, f)
+    return tmp
+
+
 def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
     return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
@@ -191,10 +215,12 @@ def run():
     # =================================================================================================
     H("B5 - a null is STUCK, never a verdict")
     # =================================================================================================
+    _b5tmp = tempfile.mkdtemp(prefix="daemon-b5-")
+    skeletoned(_b5tmp, ["s1"])
     for lane_name, agent, seed_ch, schema in (
             ("write", "recipe-writer", "write", hunt_lib.WRITE),
             ("qa", "recipe-source-qa", "qa", hunt_lib.QA)):
-        d = daemon(dispatcher=FakeDispatch({agent: [None, None, None, None]}))
+        d = daemon(run_dir=_b5tmp, dispatcher=FakeDispatch({agent: [None, None, None, None]}))
         d.ch[seed_ch].push({"slug": "s1"})
         d.ch[seed_ch].close()
         arun(d.run((lane_name,)))
@@ -202,7 +228,7 @@ def run():
         T("MUST FIRE  a %s dispatch that never answered marks the recipe STUCK, not rejected"
           % lane_name,
           o.get("status") == "stuck" and o.get("state") is None, json.dumps(o))
-    d = daemon(dispatcher=FakeDispatch({"recipe-writer": [None, None, None, None]}))
+    d = daemon(run_dir=_b5tmp, dispatcher=FakeDispatch({"recipe-writer": [None, None, None, None]}))
     d.ch["write"].push({"slug": "s1"})
     d.ch["write"].close()
     arun(d.run(("write",)))
@@ -215,7 +241,10 @@ def run():
     # =================================================================================================
     H("B6 - retry budgets are keyed PER SLUG, and the breaker watches run-wide")
     # =================================================================================================
-    d = daemon(dispatcher=FakeDispatch({"recipe-writer": [None, None, None, {"slug": "s1",
+    _b6tmp = tempfile.mkdtemp(prefix="daemon-b6-")
+    skeletoned(_b6tmp, ["s1"])
+    d = daemon(run_dir=_b6tmp,
+               dispatcher=FakeDispatch({"recipe-writer": [None, None, None, {"slug": "s1",
                                                                              "status": "ok",
                                                                              "state": "written"}]}))
     d.ch["write"].push({"slug": "s1"})
@@ -226,7 +255,9 @@ def run():
       d.retry_counts.get("write:s1") == hunt_lib.MAX_STAGE_RETRIES + 1
       and d.outcomes and d.outcomes[0]["status"] == "stuck",
       "counts=%s outcomes=%s" % (json.dumps(d.retry_counts), json.dumps(d.outcomes)))
-    d = daemon(dispatcher=FakeDispatch({"recipe-writer": [None] * 30}))
+    _brtmp = tempfile.mkdtemp(prefix="daemon-breaker-")
+    skeletoned(_brtmp, ["s%d" % i for i in range(4)])
+    d = daemon(run_dir=_brtmp, dispatcher=FakeDispatch({"recipe-writer": [None] * 30}))
     for i in range(4):
         d.ch["write"].push({"slug": "s%d" % i})
     d.ch["write"].close()
@@ -396,6 +427,37 @@ def run():
     T("MUST FIRE  THE UNHOLD, against the REAL state machine and the REAL map-preresolve: the bid is "
       "wired between two seeds, and the second seed advances the recipe with ZERO dispatches",
       *_unhold_between_seeds())
+
+    # =================================================================================================
+    H("D8 - the intake skeleton, the pre-write band gate, and the locked-field postcondition")
+    # =================================================================================================
+    T("MUST FIRE  the skeleton is built BEFORE the writer is dispatched, per slug, through ps_invoke",
+      *_skeleton_runs_first())
+    T("MUST FIRE  an OUT-OF-BAND skeleton retires at `priced -> rejected-macros` with ZERO writer "
+      "dispatches - v2 paid for the prose first and checked the band after",
+      *_prewrite_band_retires())
+    T("CLEAN TWIN an in-band skeleton dispatches the writer exactly once",
+      *_prewrite_band_passes())
+    T("MUST FIRE  an INCOMPLETE skeleton (exit 1) is STUCK - the band may not be ruled on a macro "
+      "figure computed over part of the dish, and it is not a pass either",
+      *_skeleton_incomplete_is_stuck())
+    T("MUST FIRE  a BLOCKED skeleton (exit 2) is STUCK and never reaches the writer",
+      *_skeleton_blocked_is_stuck())
+    T("MUST FIRE  the write prompt says the intake ALREADY EXISTS and names only the writer-fillable "
+      "fields - the writer completes it in place, it no longer creates it",
+      *_write_prompt_is_in_place())
+    T("MUST FIRE  a locked-field drift buys ONE re-dispatch, quoting the drifted fields VERBATIM",
+      *_drift_buys_one_reask())
+    T("MUST FIRE  a SECOND drift is rejected-qa with the fields in the detail - one correction, "
+      "never a loop, never a silent daemon-side revert",
+      *_second_drift_is_rejected())
+    T("CLEAN TWIN a clean prose-only fill passes with no re-dispatch at all",
+      *_clean_fill_no_reask())
+    T("MUST FIRE  a -Verify that could not RUN is STUCK, never a pass and never a drift",
+      *_verify_blocked_is_stuck())
+    T("MUST FIRE  a scratch cost ledger reaches build-v2-spec as -CostedFile, and the live run still "
+      "gets -RunCost (the drill that wrote the live batch ledger is why this is a flag, not a habit)",
+      *_scratch_cost_args())
 
     # =================================================================================================
     H("The band gate, read off the built spec")
@@ -631,7 +693,8 @@ def _cost_mutex():
 
         fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"},
                                              {"slug": "s2", "status": "ok", "state": "written"}]})
-        d = daemon(dispatcher=fd, ps=slow_cost)
+        skeletoned(tmp, ["s1", "s2"])
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=slow_cost)
         d.spec_band = lambda slug, specs_dir=None: (500, 20)      # in band, so the lane completes
         d.ch["write"].push({"slug": "s1"})
         d.ch["write"].push({"slug": "s2"})
@@ -1063,7 +1126,9 @@ def _rung3_records_not_gates():
 def _lane_daemon():
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    d = daemon(dispatcher=fd, ps=ps)
+    tmp = tempfile.mkdtemp(prefix="daemon-lane-")
+    skeletoned(tmp, ["s1"])
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (500, 20)
     d.ch["write"].push({"slug": "s1"})
     d.ch["write"].close()
@@ -1335,10 +1400,223 @@ def _unhold_between_seeds():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+# =====================================================================================================
+# D8 - the intake skeleton, the pre-write band gate, and the locked-field postcondition
+# =====================================================================================================
+
+def _write_daemon(tmp, slugs, writer_results, ps=None, cal=500, carbs=20, skeleton=True, **kw):
+    if skeleton:
+        skeletoned(tmp, slugs, cal=cal, carbs=carbs)
+    fd = FakeDispatch({"recipe-writer": list(writer_results)})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps or FakePS(), **kw)
+    d.spec_band = lambda slug, specs_dir=None: (500, 20)          # in band, so the lane completes
+    for slug in slugs:
+        d.ch["write"].push({"slug": slug})
+    d.ch["write"].close()
+    arun(d.run(("write",)))
+    return d, fd
+
+
+def _ok_write(slug="s1"):
+    return {"slug": slug, "status": "ok", "state": "written"}
+
+
+def _skeleton_runs_first():
+    tmp = tempfile.mkdtemp(prefix="daemon-skel1-")
+    try:
+        ps = FakePS()
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        builds = [c for c in ps.find("build-intake-skeleton.ps1") if "-Verify" not in c["args"]]
+        prompt = fd.prompts("recipe-writer")[0] if fd.prompts("recipe-writer") else ""
+        return (len(builds) == 1 and FakePS.value_after(builds[0]["args"], "-Slug") == "s1"
+                and "THE INTAKE ALREADY EXISTS" in prompt,
+                "builds=%d slug=%s" % (len(builds), FakePS.value_after(builds[0]["args"], "-Slug")
+                                       if builds else None))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prewrite_band_retires():
+    """The whole point of moving the gate: v2 checked the band on the WRITE result, after the most
+    expensive per-recipe stage had already run. Here the skeleton says 700 cal and no prose is paid
+    for at all - the assertion that matters is `dispatches == 0`."""
+    tmp = tempfile.mkdtemp(prefix="daemon-skel2-")
+    try:
+        ps = FakePS()
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=700)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (not fd.prompts("recipe-writer") and to == ["rejected-macros"]
+                and d.outcomes and d.outcomes[0]["state"] == "rejected-macros"
+                and "pre-write" in d.outcomes[0]["detail"],
+                "dispatches=%d advances=%s outcome=%s"
+                % (len(fd.prompts("recipe-writer")), to, json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prewrite_band_passes():
+    tmp = tempfile.mkdtemp(prefix="daemon-skel3-")
+    try:
+        ps = FakePS()
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=500)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (len(fd.prompts("recipe-writer")) == 1 and to == ["spec-built", "written"]
+                and not d.outcomes,
+                "dispatches=%d advances=%s" % (len(fd.prompts("recipe-writer")), to))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _skeleton_incomplete_is_stuck():
+    tmp = tempfile.mkdtemp(prefix="daemon-skel4-")
+    try:
+        ps = FakePS({"build-intake-skeleton.ps1":
+                     lambda a: (1, "    FINDING  no food-macros-db row for 'Heavy Cream'", "")})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        return (not fd.prompts("recipe-writer") and d.outcomes
+                and d.outcomes[0]["status"] == "stuck"
+                and "Heavy Cream" in d.outcomes[0]["detail"],
+                "dispatches=%d outcomes=%s" % (len(fd.prompts("recipe-writer")),
+                                               json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _skeleton_blocked_is_stuck():
+    tmp = tempfile.mkdtemp(prefix="daemon-skel5-")
+    try:
+        ps = FakePS({"build-intake-skeleton.ps1":
+                     lambda a: (2, "build-intake-skeleton: BLOCKED - required input missing", "")})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        return (not fd.prompts("recipe-writer") and d.outcomes
+                and d.outcomes[0]["status"] == "stuck" and "BLOCKED" in d.outcomes[0]["detail"],
+                "dispatches=%d outcomes=%s" % (len(fd.prompts("recipe-writer")),
+                                               json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _write_prompt_is_in_place():
+    tmp = tempfile.mkdtemp(prefix="daemon-skel6-")
+    try:
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()])
+        prompt = fd.prompts("recipe-writer")[0]
+        # v2's line was "Produce ONE intake JSON at <RunDir>\intake\<slug>.json". It leaves in the
+        # same commit as the skeleton, or the writer and the skeleton race for the same file with two
+        # different ideas of who creates it.
+        return ("THE INTAKE ALREADY EXISTS" in prompt and "FILL ONLY THESE FIELDS" in prompt
+                and "Produce %s" % tmp not in prompt and "Compute NO number" in prompt
+                and "forbidden_prose_terms" in prompt,
+                prompt[:160])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _drift_reply(drifted):
+    """A -Verify that reports drift once and then clean, the way a writer that fixed it would read."""
+    seq = {"n": 0}
+
+    def reply(args):
+        if "-Verify" not in args:
+            return 0, "", ""
+        seq["n"] += 1
+        if seq["n"] == 1:
+            return 1, ("build-intake-skeleton: %d LOCKED FIELD(S) DRIFTED in s1\n" % len(drifted)
+                       + "\n".join("    " + d for d in drifted)
+                       + "\nBUILD-INTAKE-SKELETON-COMPLETE"), ""
+        return 0, "every locked field is as issued", ""
+    return reply
+
+
+def _drift_buys_one_reask():
+    tmp = tempfile.mkdtemp(prefix="daemon-drift1-")
+    try:
+        drifted = ["ingredients[1].grams: issued '630', returned '900'",
+                   "macros_per_serving.calories: issued '500', returned '640'",
+                   "head.totalTime: issued 'PT40M', returned 'PT25M'"]
+        ps = FakePS({"build-intake-skeleton.ps1": _drift_reply(drifted)})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write(), _ok_write()], ps=ps)
+        prompts = fd.prompts("recipe-writer")
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        quoted = len(prompts) == 2 and all(d0 in prompts[1] for d0 in drifted)
+        return (quoted and to == ["spec-built", "written"] and not d.outcomes
+                and "This is the one correction" in prompts[1],
+                "dispatches=%d quoted=%s advances=%s" % (len(prompts), quoted, to))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _second_drift_is_rejected():
+    tmp = tempfile.mkdtemp(prefix="daemon-drift2-")
+    try:
+        drifted = ["ingredients[0].buy: issued '3 1/2 lb', returned '4 lb'",
+                   "name: issued 's1', returned 's1 Deluxe'",
+                   "macros_per_serving.fat_g: issued '20', returned '18'"]
+        body = ("build-intake-skeleton: 3 LOCKED FIELD(S) DRIFTED in s1\n"
+                + "\n".join("    " + d for d in drifted) + "\nBUILD-INTAKE-SKELETON-COMPLETE")
+        ps = FakePS({"build-intake-skeleton.ps1":
+                     lambda a: ((1, body, "") if "-Verify" in a else (0, "", ""))})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write(), _ok_write()], ps=ps)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (len(fd.prompts("recipe-writer")) == 2 and to == ["rejected-qa"]
+                and d.outcomes and d.outcomes[0]["state"] == "rejected-qa"
+                and "drifted twice" in d.outcomes[0]["detail"]
+                and "ingredients[0].buy" in d.outcomes[0]["detail"],
+                "dispatches=%d advances=%s outcome=%s"
+                % (len(fd.prompts("recipe-writer")), to, json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _clean_fill_no_reask():
+    tmp = tempfile.mkdtemp(prefix="daemon-drift3-")
+    try:
+        ps = FakePS()
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        verifies = [c for c in ps.find("build-intake-skeleton.ps1") if "-Verify" in c["args"]]
+        return (len(fd.prompts("recipe-writer")) == 1 and len(verifies) == 1 and not d.outcomes,
+                "dispatches=%d verifies=%d" % (len(fd.prompts("recipe-writer")), len(verifies)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _verify_blocked_is_stuck():
+    """A diff with nothing to diff against is not a pass and it is not a drift either. Re-asking the
+    writer here would be asking it to fix fields nobody can name."""
+    tmp = tempfile.mkdtemp(prefix="daemon-drift4-")
+    try:
+        ps = FakePS({"build-intake-skeleton.ps1":
+                     lambda a: ((2, "BLOCKED - no skeleton snapshot", "") if "-Verify" in a
+                                else (0, "", ""))})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write(), _ok_write()], ps=ps)
+        return (len(fd.prompts("recipe-writer")) == 1 and d.outcomes
+                and d.outcomes[0]["status"] == "stuck"
+                and "could not run" in d.outcomes[0]["detail"],
+                "dispatches=%d outcomes=%s" % (len(fd.prompts("recipe-writer")),
+                                               json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _scratch_cost_args():
+    live = daemon()
+    drill = daemon(costed_path="C:\\scratch\\costed.json", specs_dir="C:\\scratch\\recipes")
+    a_live = live.spec_args("s1")
+    a_drill = drill.spec_args("s1")
+    return ("-RunCost" in a_live and "-CostedFile" not in a_live
+            and "-CostedFile" in a_drill and "-OutDir" in a_drill
+            and "-AllowUncosted" in a_drill and "-RunCost" not in a_drill,
+            "live=%s drill=%s" % (json.dumps(a_live), json.dumps(a_drill)))
+
+
 def _band(cal, carbs):
+    """The POST-BUILD band read. The skeleton is deliberately IN band (500/20) so the pre-write gate
+    passes and these fixtures exercise the postcondition over the BUILT SPEC, which D8 keeps."""
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    d = daemon(dispatcher=fd, ps=ps)
+    tmp = tempfile.mkdtemp(prefix="daemon-band-")
+    skeletoned(tmp, ["s1"], cal=500, carbs=20)
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (cal, carbs)
     d.ch["write"].push({"slug": "s1"})
     d.ch["write"].close()
@@ -1387,13 +1665,36 @@ def _band_gate_real_machine():
                 return False, "staging refused at %s: %s" % (st, o.strip()[:150])
         fd = FakeDispatch({"recipe-writer": [{"slug": "band-drill", "status": "ok",
                                               "state": "written"}]})
+        # THE REAL build-intake-skeleton.ps1 RUNS HERE, over real decision files and the live food DB,
+        # and so does its real -Verify. The grams are chosen so the skeleton lands squarely IN band
+        # (3000 g of 93/7 beef, 400 g dry rice, 240 g onion = 431 cal / 24.4 carbs against 400-650 and
+        # a 35 g carb ceiling), because this fixture is about the POST-BUILD read landing on disk -
+        # the pre-write gate has its own fixtures.
+        mapped_doc = {"slug": "band-drill", "title": "Band Drill", "source_url": "https://d/x",
+                      "protein": "beef", "ingredients": [
+                          {"item": "93/7 Ground Beef", "grams": 3000, "buy": "6 1/2 lb", "decision": "mapped"},
+                          {"item": "Rice", "grams": 400, "buy": "2 cups dry", "decision": "mapped"},
+                          {"item": "Yellow Onion", "grams": 240, "buy": "2 medium", "decision": "mapped"}]}
+        ext_doc = {"state": "ok", "title": "Band Drill", "source_url": "https://d/x", "servings": 4,
+                   "time_total": "40 minutes", "time_active": "15 minutes",
+                   "ingredients": [], "instructions": [], "concerns": []}
+        os.makedirs(os.path.join(run_dir, "mapped"), exist_ok=True)
+        os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
+        with open(os.path.join(run_dir, "mapped", "band-drill.json"), "w", encoding="utf-8") as f:
+            json.dump(mapped_doc, f)
+        with open(os.path.join(run_dir, "extracted", "band-drill.json"), "w", encoding="utf-8") as f:
+            json.dump(ext_doc, f)
         d = HD.Daemon(run_dir, "band-drill-run", dispatcher=fd, quiet=True)   # REAL ps_invoke
         d.spec_band = lambda slug, specs_dir=None: (700, 20)
         d.ch["write"].push({"slug": "band-drill"})
         d.ch["write"].close()
         arun(d.run(("write",)))
         final = d.state_of("band-drill")
-        return (final == "rejected-macros" and not d.findings,
+        # ONE finding is expected and is the point: the skeleton ruled the recipe IN band and the
+        # built spec came out at 700 cal, so a number moved between the two gates and the daemon says
+        # so out loud. Both gates ran, both used hunt_lib.in_band, and the rejection LANDED.
+        return (final == "rejected-macros" and len(d.findings) == 1
+                and "a number moved between them" in d.findings[0],
                 "on-disk state=%s findings=%s" % (final, json.dumps(d.findings)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

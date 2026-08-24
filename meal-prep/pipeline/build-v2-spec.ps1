@@ -481,7 +481,13 @@ if($structuralOnly){
   # -RunCost flow: structural spec first so cost-recipes can read it, then cost, then final render
   Write-Spec (Build-Spec $null) $outFile
   Write-Output ("structural spec written; running engine\cost-recipes.ps1 -Slugs $slug ...")
-  & (Join-Path $mp 'engine\cost-recipes.ps1') -Slugs @($slug)
+  # -OutFile $CostedFile ADDED 2026-08-24 (v3 D8). Without it this call always wrote the LIVE
+  # db\costed.json while the row was then READ back from $CostedFile, so passing -CostedFile with
+  # -RunCost wrote one file, read another, and threw "cost-recipes ran but no costed row appeared"
+  # on a scratch path. -CostedFile now means one thing on both halves, which is what lets a gate
+  # drill run the REAL cost pass without writing the live ledger - the same discipline
+  # wave-publish's -LedgerPath exists for.
+  & (Join-Path $mp 'engine\cost-recipes.ps1') -Slugs @($slug) -OutFile $CostedFile
   $costRow = Get-CostedRow $CostedFile $slug
   if(-not $costRow){ throw ("cost-recipes ran but no costed row appeared for $slug - check db\cost-flags.txt") }
   $costFields = Render-CostFields $costRow $gramsArr $scalerIng $slug

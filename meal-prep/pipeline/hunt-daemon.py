@@ -57,6 +57,7 @@ import local_extract                                             # noqa: E402
 HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
 INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
+BUILD_SKELETON_PS = os.path.join(HERE, "build-intake-skeleton.ps1")
 WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
 WAVE_PUBLISH_PS = os.path.join(HERE, "wave-publish.ps1")
 BATCH_LEDGER_PS = os.path.join(HERE, "batch-ledger.ps1")
@@ -191,7 +192,8 @@ class Daemon(object):
 
     def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
-                 quiet=False, ledger_path="", preresolve_args=()):
+                 quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
+                 costed_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         self.conditions = conditions
@@ -206,6 +208,16 @@ class Daemon(object):
         # the first drain drill did exactly that, twice, and left two open w5/w6 rows behind.
         # Empty means the live ledger, which is what a real run wants.
         self.ledger_path = ledger_path
+        # A SCRATCH SPEC STORE AND A SCRATCH COST LEDGER, for exactly the reason ledger_path exists.
+        # The phase-3 drain drill wrote two stalled rows into the LIVE batch ledger before --ledger
+        # existed; the write lane can do the same to db\recipes and db\costed.json, which are read by
+        # the live site's own pipeline. Empty means the real ones, which is what a real run wants.
+        # NOTE the coupling, which is build-v2-spec's rule and not ours: `-RunCost` is refused unless
+        # OutDir IS the real db\recipes, because cost-recipes reads its specs from there. So a scratch
+        # spec store means an UNCOSTED spec, and the daemon says so in the log rather than quietly
+        # producing a spec whose cost block is zeros and letting a reader assume it was priced.
+        self.specs_dir = specs_dir
+        self.costed_path = costed_path
         self.pool_path = pool_path or harvest.POOL
         self.quiet = quiet
         # A TEST SEAM, and the ONLY thing it may ever carry is a path: extra arguments appended to
@@ -1165,6 +1177,74 @@ class Daemon(object):
     # WRITE - cap 3, plus the band gate read off the BUILT SPEC (section 4.5's D9/D8 note)
     # ---------------------------------------------------------------------------------------------
 
+    # ---------------------------------------------------------------------------------------------
+    # D8: THE MACHINE HALF OF THE INTAKE, and the band gate that now runs BEFORE the prose is paid for.
+    # ---------------------------------------------------------------------------------------------
+
+    async def build_skeleton(self, slug):
+        """build-intake-skeleton.ps1, before the writer. Returns (ok, macros, detail).
+
+        `ok` False means the skeleton is not a thing the band can be ruled on - either BLOCKED (exit 2)
+        or INCOMPLETE (exit 1, named findings: a missing food-DB row makes the macros partial, and
+        build-v2-spec would throw on it downstream anyway). Unlike map-preresolve, exit 1 here is NOT
+        the normal case: a skeleton is either complete or it is not.
+        """
+        rc, out, err = await self.ps(BUILD_SKELETON_PS,
+                                     ["-RunDir", self.run_dir, "-Slug", slug], timeout=600)
+        detail = ((out or "") + (err or "")).strip()
+        if rc != hunt_lib.EXIT_CLEAN:
+            return False, None, detail[-400:]
+        path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                mac = (json.load(f) or {}).get("macros_per_serving") or {}
+        except Exception as e:                                    # noqa: BLE001
+            return False, None, "the skeleton reported clean but %s will not read (%s)" % (path, e)
+        return True, mac, detail[-400:]
+
+    async def verify_skeleton(self, slug):
+        """The locked-field diff, AFTER the writer. Returns (clean, drifted_fields, detail).
+
+        THE SKELETON IS A POSTCONDITION, NOT A SUGGESTION. Exit 1 names the fields, and the daemon
+        quotes them verbatim back to the writer for its ONE re-ask.
+        """
+        rc, out, err = await self.ps(BUILD_SKELETON_PS, [
+            "-Verify",
+            "-InFile", os.path.join(self.run_dir, "intake", "%s.json" % slug),
+            "-Skeleton", os.path.join(self.run_dir, "intake", "%s.skeleton.json" % slug),
+        ], timeout=300)
+        text = ((out or "") + (err or "")).strip()
+        if rc == hunt_lib.EXIT_CLEAN:
+            return True, [], text[-400:]
+        fields = [ln.strip() for ln in text.splitlines()
+                  if ln.startswith("    ") and ":" in ln and "COMPLETE" not in ln]
+        if rc == hunt_lib.EXIT_CANNOT_RUN:
+            # A diff with nothing to diff against is not a pass, and it is not a drift either.
+            return False, [], "the locked-field diff could not run: %s" % text[-300:]
+        return False, fields, text[-400:]
+
+    def spec_args(self, slug):
+        """The build-v2-spec arguments, honouring a scratch spec store / cost ledger when a drill set
+        one. -RunCost is build-v2-spec's own coupling: it is refused unless OutDir IS db\recipes."""
+        args = ["-InFile", os.path.join(self.run_dir, "intake", "%s.json" % slug)]
+        if self.costed_path:
+            args += ["-CostedFile", self.costed_path]
+        if self.specs_dir:
+            args += ["-OutDir", self.specs_dir, "-AllowUncosted", "-Force"]
+        else:
+            args += ["-RunCost"]
+        return args
+
+    async def retire_out_of_band(self, slug, verdict, where):
+        """priced -> rejected-macros, in ONE advance. Both band gates land the same way: the pre-write
+        one because no prose was ever paid for, and the post-build one because the state advances
+        happen after it, so the recipe is still at `priced` when it rules."""
+        self.log("macro gate (%s): %s at %s - retiring" % (where, slug, verdict["reason"]))
+        await self.advance(slug, "rejected-macros", "macro-gate",
+                           "macro gate (%s): %s" % (where, verdict["reason"]))
+        self.finish(slug, "rejected", "rejected-macros",
+                    "macro gate (%s): %s" % (where, verdict["reason"]))
+
     async def write_lane(self):
         async def worker(_i):
             while True:
@@ -1174,6 +1254,25 @@ class Daemon(object):
                 if self.halted():
                     return
                 slug = c["slug"]
+
+                # D8: THE SKELETON FIRST. Every gram, buy string and macro in the intake comes from the
+                # mapper's decision file and the food DB, so the writer receives a file it can only add
+                # prose to - it structurally cannot introduce a number.
+                ok, macros, why = await self.build_skeleton(slug)
+                if not ok:
+                    self.stuck(slug, "write",
+                               "the intake skeleton is not complete, so the band cannot be ruled on "
+                               "it: %s" % why[:250])
+                    continue
+
+                # THE PRE-WRITE BAND GATE. v2 checked the band on the WRITE result - after the most
+                # expensive per-recipe stage had already run. The skeleton carries macros_per_serving,
+                # so an out-of-band recipe retires before a single word of prose is paid for.
+                verdict = hunt_lib.in_band(macros.get("calories"), macros.get("carbs_g"), self.band)
+                if not verdict["ok"]:
+                    await self.retire_out_of_band(slug, verdict, "pre-write")
+                    continue
+
                 r = await self.with_retry(
                     lambda: self.dispatch("recipe-writer", self.write_prompt(slug),
                                           "write", slug, [slug], schema=hunt_lib.WRITE,
@@ -1186,13 +1285,45 @@ class Daemon(object):
                     self.finish(slug, "rejected", "rejected-qa", r.get("detail") or "writer rejected")
                     await self.advance(slug, "rejected-qa", "writer", (r.get("detail") or "")[:200])
                     continue
+
+                # THE LOCKED-FIELD DIFF, and the adapter's one-correction discipline. On a named drift
+                # the writer is re-dispatched ONCE with the drifted fields quoted VERBATIM - never a
+                # silent daemon-side revert, because the writer has to see what it did. A second drift
+                # is rejected-qa with the fields in the detail. One correction, never a loop, never a
+                # coercion.
+                clean, drift, vdetail = await self.verify_skeleton(slug)
+                if not clean and not drift:
+                    self.stuck(slug, "write", vdetail[:250])
+                    continue
+                if not clean:
+                    self.log("write: %s drifted %d locked field(s) - one re-ask" % (slug, len(drift)))
+                    r2 = await self.with_retry(
+                        lambda: self.dispatch("recipe-writer", self.redrift_prompt(slug, drift),
+                                              "write", "%s:redrift" % slug, [slug],
+                                              schema=hunt_lib.WRITE, stage="writer"),
+                        slug, "write")
+                    if r2 is None:
+                        self.stuck(slug, "write", "no response to the locked-field re-ask")
+                        continue
+                    clean, drift2, vdetail = await self.verify_skeleton(slug)
+                    if not clean:
+                        detail = "locked fields drifted twice: %s" % "; ".join(drift2 or drift)
+                        self.finish(slug, "rejected", "rejected-qa", detail)
+                        await self.advance(slug, "rejected-qa", "writer", detail[:200])
+                        continue
                 # THE COST PASS IS SERIALIZED. Spec assembly stayed parallel; this does not.
-                await self.cost_engine(BUILD_V2_SPEC_PS,
-                                       ["-InFile", os.path.join(self.run_dir, "intake",
-                                                                "%s.json" % slug), "-RunCost"])
-                cal, carbs = self.spec_band(slug)
+                await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug))
+                cal, carbs = self.spec_band(slug, specs_dir=self.specs_dir or None)
                 verdict = hunt_lib.in_band(cal, carbs, self.band)
                 if not verdict["ok"]:
+                    # THE POST-BUILD READ STAYS, and D8 does not get to "simplify" it away. The
+                    # pre-write gate is a PREDICTION about the artifact; this is a mechanical
+                    # POSTCONDITION over the artifact itself, read off the built spec's own
+                    # stat.cal/stat.carbs. Both call the same parity-covered hunt_lib.in_band, and
+                    # keeping both costs one file read. If they ever disagree, something between the
+                    # skeleton and the spec moved a number, which is exactly the thing worth hearing
+                    # about.
+                    #
                     # THE ROUTE MATTERS, AND THE FIRST BUILD GOT IT WRONG (found on the 2026-08-24
                     # cold read). The recipe sits at `priced` here - the state advances below happen
                     # AFTER the gate - so the route out has to be legal FROM `priced`. The first
@@ -1202,15 +1333,11 @@ class Daemon(object):
                     # reproduced v2's measured on-disk trace, spec-built -> written -> rejected-qa,
                     # which was legal but claimed a spec build and a prose write that never happened.
                     # SHORTENED 2026-08-24 (v3 D8): `priced` now has `rejected-macros` among its
-                    # exits, so the honest verdict lands in ONE advance and the run record stops
-                    # asserting work nobody did. `rejected-macros` is also the name D8's PRE-write
-                    # gate uses from the same position, so both band gates retire a recipe the same
-                    # way and -Status counts them as one class.
-                    self.log("macro gate: %s built at %s - retiring" % (slug, verdict["reason"]))
-                    await self.advance(slug, "rejected-macros", "macro-gate",
-                                       "macro gate: %s" % verdict["reason"])
-                    self.finish(slug, "rejected", "rejected-macros",
-                                "macro gate: %s" % verdict["reason"])
+                    # exits, so the honest verdict lands in ONE advance.
+                    self.findings.append("%s: the BUILT SPEC is out of band (%s) although the "
+                                         "skeleton was in band - a number moved between them"
+                                         % (slug, verdict["reason"]))
+                    await self.retire_out_of_band(slug, verdict, "post-build")
                     continue
                 await self.advance(slug, "spec-built", "writer", "")
                 await self.advance(slug, "written", "writer", "")
@@ -1230,18 +1357,50 @@ class Daemon(object):
         stat = spec.get("stat") or {}
         return stat.get("cal"), stat.get("carbs")
 
+    # The fields the writer owns, named once so the prompt and the re-ask cannot drift apart.
+    WRITER_FILLABLE = ("prose.* (intro_html, shop_smart, make_it, portion_html, cost_closing_html, "
+                       "upsell_html), cuisine, head.description, head.keywords, head.steps, "
+                       "head.step_names, writer_notes, forbidden_prose_terms")
+
     def write_prompt(self, slug):
+        """PROSE ONLY, IN PLACE. D8 changed the old 'Produce ONE intake JSON' line in the same commit
+        that shipped the skeleton: the writer and the skeleton must not race for the same file with two
+        different ideas of who creates it."""
         return (
-            "Write recipe %s in Brad's voice and complete its intake.\n"
+            "Write recipe %s in Brad's voice and COMPLETE its intake IN PLACE.\n"
             "Inputs: %s\\extracted\\%s.json (the transcription - the recipe of record)\n"
-            "        %s\\mapped\\%s.json (commodity ids, food-DB rows)\n"
-            "Produce %s\\intake\\%s.json.\n\n"
+            "        %s\\mapped\\%s.json (commodity ids, food-DB rows)\n\n"
+            "THE INTAKE ALREADY EXISTS at %s\\intake\\%s.json. build-intake-skeleton.ps1 wrote it: the\n"
+            "name, slug, protein, source_url, visibility, every ingredient line with its grams and buy\n"
+            "string, macros_per_serving, and head.prepTime/cookTime/totalTime are all in it already,\n"
+            "derived from the decision files above. Do not create it and do not re-derive it.\n\n"
+            "FILL ONLY THESE FIELDS, in place: %s.\n"
+            "Every other field is LOCKED. A snapshot of the file as issued sits beside it at\n"
+            "intake\\%s.skeleton.json, and the orchestrator diffs your result against it: any change to a\n"
+            "locked field is refused and comes back to you with the field named. That is not a\n"
+            "formality - the reason you receive the numbers instead of computing them is that the\n"
+            "prose-number defect class dies by construction rather than at QA.\n\n"
             "Voice rails: no em dashes, Brad's tone, the existing framework, 14 servings.\n"
-            "Compute NO number: every macro and every cost comes from the engine, and the\n"
-            "orchestrator runs the spec build and reads the band off the built spec itself. Do not\n"
-            "run hunt-run.ps1 and do not move any state.\n\n"
+            "Compute NO number. Every macro and every cost comes from the engine, and the orchestrator\n"
+            "runs the spec build and reads the band off the built spec itself. Do not run hunt-run.ps1\n"
+            "and do not move any state.\n\n"
             "This run's conditions: %s\n"
-            % (slug, self.run_dir, slug, self.run_dir, slug, self.run_dir, slug, self.conditions))
+            % (slug, self.run_dir, slug, self.run_dir, slug, self.run_dir, slug,
+               self.WRITER_FILLABLE, slug, self.conditions))
+
+    def redrift_prompt(self, slug, drift):
+        """THE ONE RE-ASK, quoting the drifted fields VERBATIM. Never a silent daemon-side revert: the
+        writer has to see what it did, or the same edit comes back on the next recipe. One correction,
+        never a loop - a second drift is rejected-qa."""
+        return (
+            "%s\\intake\\%s.json came back with LOCKED fields changed. These are machine fields; the\n"
+            "skeleton issued them and nothing downstream re-derives them, so a change here publishes a\n"
+            "wrong number.\n\n"
+            "%s\n\n"
+            "Put each of those back to the ISSUED value exactly as quoted, leave your prose as it is,\n"
+            "and change nothing else. You may still edit only: %s.\n"
+            "This is the one correction. A second drift retires the recipe at rejected-qa.\n"
+            % (self.run_dir, slug, "\n".join("  - %s" % d for d in drift), self.WRITER_FILLABLE))
 
     # ---------------------------------------------------------------------------------------------
     # QA - cap 2, one owner-routed repair cycle (section S7)
@@ -1883,6 +2042,13 @@ def main(argv=None):
     ap.add_argument("--lanes", default="pool,decide,extract,map,price,write,qa")
     ap.add_argument("--ledger", default="",
                     help="a scratch batch ledger, for a drill. Empty means the live one.")
+    ap.add_argument("--specs", default="",
+                    help="a scratch spec store, for a drill. Empty means the live db\\recipes. NOTE "
+                         "build-v2-spec refuses -RunCost unless OutDir IS db\\recipes, so a scratch "
+                         "spec store means an UNCOSTED spec and the daemon says so.")
+    ap.add_argument("--costed", default="",
+                    help="a scratch db\\costed.json, for a drill that runs the REAL cost pass. Empty "
+                         "means the live one.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--status", action="store_true")
@@ -1900,7 +2066,8 @@ def main(argv=None):
 
     d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions,
                {"calMin": a.cal_min, "calMax": a.cal_max, "carbMax": a.carb_max},
-               a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger)
+               a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
+               specs_dir=a.specs, costed_path=a.costed)
 
     async def go():
         ok, err = await d.seed()

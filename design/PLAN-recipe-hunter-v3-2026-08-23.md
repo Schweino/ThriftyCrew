@@ -886,11 +886,21 @@ build time, fix THIS document in the same commit rather than deviating silently.
   "unresolved" | "different-form" | "unbid" | "new-food-suspect", gpu_known, density_known,
   fooddb_known, evidence, source: "cache" | "vocab" | "alias"}`.
 - **Skeleton locked vs writer-fillable** (from the intake schema in build-v2-spec): LOCKED - name,
-  slug, protein, cuisine, source_url, visibility, `ingredients[]` (item/grams/buy),
-  `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`,
+  slug, protein, source_url, visibility, `ingredients[]` (item/grams/buy),
+  `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`, `cuisine`,
   head.description/keywords/steps/step_names, `writer_notes`, `forbidden_prose_terms`. The
   post-write check is `build-intake-skeleton.ps1 -Verify -InFile <intake> -Skeleton <snapshot>`:
   exit 1 on any locked-field drift, naming the fields.
+  **`cuisine` MOVED from LOCKED to WRITER-FILLABLE, CORRECTED 2026-08-24 (D8 build, measured against
+  every file that exists before the writer).** Nothing on disk carries a cuisine at skeleton time: not
+  the extraction contract (state, reason, title, source_url, servings, times, ingredients,
+  instructions, concerns), not the mapper decision file (slug, title, source_url, servings, scale,
+  protein, ingredients), not the run state file, and not the pool candidate's signature (protein /
+  method / sauce_family / starch). Locking a field with no mechanical source would mean the skeleton
+  either invents one or refuses to build, and the first is worse. It is a judgment about the dish
+  rather than a number, so it sits with the writer under the existing "the writer computes no number"
+  rule - exactly where v2 had it - and build-v2-spec checks its presence as it always did. The
+  locked-field diff would have caught this at run time; recording it here is cheaper.
 - **Preaudit report:** per-slug per-check `{check, verdict: "pass"|"fail", numbers, detail}` plus
   one shared-checks block (db-agreement-class audits, P8 probe) that runs ONCE per wave, not per
   slug. Card rebuilds go to per-slug scratch dirs (no collision). **The auditor's
@@ -1435,6 +1445,45 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     the daemon's band-failure route shortens from v2's three-advance trace to
     `priced -> rejected-macros` in the same commit (see the S6 correction - the daemon's real-
     state-machine band fixture moves with it, and it is the fixture that caught this trap live).
+
+  **BUILT 2026-08-24 (phase 4).** `meal-prep\pipeline\build-intake-skeleton.ps1` (33 fixtures in its
+  own -SelfTest) plus eleven daemon-level fixtures under "D8 - the intake skeleton, the pre-write band
+  gate, and the locked-field postcondition". The write lane is now: skeleton -> pre-write band gate ->
+  writer -> locked-field `-Verify` -> one re-ask on drift -> cost pass under `Daemon.cost_engine` ->
+  the post-build `spec_band` postcondition, which STAYS. Both band gates call `hunt_lib.in_band` and
+  both retire `priced -> rejected-macros` in one advance. `Daemon.write_prompt` changed in the same
+  commit: the writer completes the intake IN PLACE and is told which fields it owns, and the
+  recipe-writer agent definition carries the matching edit with prompt-backup synced.
+
+  **FOUR THINGS THE BUILD FOUND, all recorded rather than worked around.**
+  - **`cuisine` had no mechanical source** - see the section 4.5 correction above.
+  - **The per-serving macro arithmetic existed in THREE places already** (parse-compute's
+    `PerServing`, spec-guards' inline recompute, wave-preaudit's `Get-MacroRecompute`) and the
+    skeleton needed a fourth. It was extracted to `meal-prep\pipeline\macro-recompute-lib.ps1` -
+    wave-preaudit's copy, because it is the one with fixtures over all four macros where the build
+    guard only covers two - and wave-preaudit and build-intake-skeleton now dot-source it.
+    wave-preaudit's suite is green after the move and is what proves the behaviour did not change.
+    The other two copies are older, load-bearing and fixtured where they live; consolidating them has
+    a real parity cost and was NOT smuggled into this commit. Recorded, not done.
+  - **`build-v2-spec -RunCost` ignored `-CostedFile` on the WRITE half.** It shelled
+    `cost-recipes.ps1 -Slugs <slug>` with no `-OutFile`, so the pass always rewrote the LIVE
+    `db\costed.json` while the row was then read back from `-CostedFile`: passing a scratch path wrote
+    one file, read another, and threw "cost-recipes ran but no costed row appeared". Fixed by passing
+    `-OutFile $CostedFile`, so `-CostedFile` means one thing on both halves. That is what lets a drill
+    run the REAL cost pass without touching the live ledger, the same discipline wave-publish's
+    `-LedgerPath` exists for.
+  - **The daemon gained `--specs` and `--costed`** for the same reason it gained `--ledger`: the write
+    lane can write `db\recipes` and `db\costed.json`, which the live site's pipeline reads. Note the
+    coupling, which is build-v2-spec's rule and not the daemon's: `-RunCost` is refused unless OutDir
+    IS `db\recipes`, so a scratch spec store means an UNCOSTED spec and the daemon says so rather than
+    producing zeros a reader could mistake for a price.
+
+  **EXIT 1 MEANS SOMETHING DIFFERENT HERE THAN IN D7, and both are section 4.5's convention.** For
+  map-preresolve, exit 1 is the NORMAL case (a residual exists and the dispatch proceeds). For
+  build-intake-skeleton it is work STOPPED: a skeleton is either complete or it is not, and a macro
+  figure computed over part of the dish is not something a band gate may rule on - build-v2-spec would
+  throw on the same missing food-DB row downstream anyway. The daemon marks it STUCK, which is neither
+  a pass nor a rejection.
 - **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - **BUILT 2026-08-24;
   the phase-3 gate record is in section 6.** The port, under §4.2's
   parity gate; daemon-owned state writes and lane-log start/end pairs with token stamping; the wave

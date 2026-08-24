@@ -59,6 +59,7 @@ $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
 $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $here 'feed-endpoint-lib.ps1')
+. (Join-Path $here 'macro-recompute-lib.ps1')   # Get-MacroRecompute - the ONE per-serving arithmetic
 
 $UTF8 = New-Object Text.UTF8Encoding($false)
 
@@ -94,38 +95,10 @@ function New-Check {
   }
 }
 
-function Get-MacroRecompute {
-  <#
-    Recompute per-serving macros from the spec's own grams x food-macros-db, exactly the arithmetic
-    build-v2-spec.ps1 runs at write time (f = grams / serving_grams; scale every macro by f; divide by
-    servings) - extended from its cal+protein pair to all four, because the auditor recomputes all four
-    and a carb drift is as publishable a wrong number as a calorie one.
-    $Rows: objects with .item and .grams.  $Db: hashtable item -> food-DB row.
-  #>
-  param($Rows, $Db, [int]$Servings)
-  $cal = 0.0; $pro = 0.0; $carb = 0.0; $fat = 0.0
-  $missing = New-Object System.Collections.Generic.List[string]
-  foreach ($r in @($Rows)) {
-    $item = [string]$r.item
-    if (-not $Db.ContainsKey($item)) { if (-not $missing.Contains($item)) { $missing.Add($item) }; continue }
-    $d = $Db[$item]
-    $sg = [double]$d.serving_grams
-    if ($sg -le 0) { if (-not $missing.Contains($item)) { $missing.Add($item) }; continue }
-    $f = [double]$r.grams / $sg
-    $cal  += $f * [double]$d.calories
-    $pro  += $f * [double]$d.protein_g
-    $carb += $f * [double]$d.carbs_g
-    $fat  += $f * [double]$d.fat_g
-  }
-  $n = [Math]::Max(1, $Servings)
-  return [ordered]@{
-    cal     = [Math]::Round($cal  / $n, 1)
-    protein = [Math]::Round($pro  / $n, 1)
-    carbs   = [Math]::Round($carb / $n, 1)
-    fat     = [Math]::Round($fat  / $n, 1)
-    missing = @($missing)
-  }
-}
+# Get-MacroRecompute MOVED 2026-08-24 to macro-recompute-lib.ps1 (dot-sourced above), because D8's
+# build-intake-skeleton.ps1 needs the identical arithmetic and a fourth copy of it is the
+# two-copies-of-the-same-math trap this estate already has a scar from. Behaviour is unchanged and
+# this file's own fixtures still prove it - they are the reason this copy was the one that moved.
 
 function Test-MacroDrift {
   <# Which of the four macros drift past tolerance. Returns the list of complaints, empty when clean. #>
