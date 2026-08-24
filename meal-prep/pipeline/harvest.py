@@ -1635,6 +1635,191 @@ def cmd_mark_taken(a):
     return 0
 
 
+# =====================================================================================================
+# PUBLISHER SOURCING (Brad's ruling 2026-08-24: "build something that can go source new publishers,
+# but only when I say and not automatically").
+#
+# MANUAL BY CONSTRUCTION. This is never called by harvest-crawl.ps1 - that wrapper's own self-test
+# asserts its executing region contains no `--probe` - and it is not wired into --crawl. Fetching a
+# stranger's site on a timer is how a domain gets BLOCKED, and a blocked publisher costs far more than
+# a slow one.
+#
+# QUALIFYING A PUBLISHER NEEDS NO MODEL. What makes a site usable is entirely mechanical, and the
+# source-domains ledger already scores exactly it: does it serve robots.txt, does robots ALLOW us, can
+# it be enumerated (sitemap or WP-REST), and do its pages carry the machine-readable Recipe block every
+# stage downstream reads. A site with beautiful recipes and no JSON-LD is worth nothing to this
+# pipeline; a plain one with clean markup is worth a great deal. Arithmetic, not judgment.
+#
+# DISCOVERY IS THE ONLY HARD PART, and there are two free roads: --from-cache mines outbound links out
+# of pages already fetched (recipe publishers link to each other), and --domains takes a list you hand
+# it. Neither needs a model.
+#
+# NOTHING IS ADMITTED WITHOUT --admit. The ledger's own rule is that a publisher earns enumeration by
+# having WORKED, so a probe result is evidence for a decision, never the decision.
+# =====================================================================================================
+
+PROBE_INFRA = re.compile(
+    r"(facebook|instagram|pinterest|twitter|youtube|tiktok|amazon|amzn|google|gstatic|googleapis|"
+    r"w3[.]org|schema[.]org|gmpg|wp[.]com|w[.]org|yoast|adthrive|raptive|scorecardresearch|clarity|"
+    r"omappapi|convertkit|mailchi|error-report|html-load|ytimg|bit[.]ly|linktr|cloudflare|jsdelivr|"
+    r"shopify|penguinrandomhouse|barnesandnoble|booksamillion|bookshop|indiebound|target[.]com|walmart|"
+    r"doubleclick|wordpress|disqus|typekit|fontawesome|cdn|analytics|substack|kit[.]com|memberful|"
+    r"samcart|ck[.]page|apple[.]com|microsoft|paypal|stripe)", re.I)
+PROBE_FOODY = re.compile(
+    r"(recipe|kitchen|cook|eat|food|meal|fit|protein|nutrit|plate|dish|spoon|fork|pan|table|chef|bake|"
+    r"delish|yum|savor|nourish|wholesome|lean|prep|skillet|grill|bowl|feast|pantry|supper)", re.I)
+
+PROBE_LINK = re.compile(r"https?://([a-z0-9.-]+[.][a-z]{2,})[/\"']", re.I)
+
+
+def mine_link_domains(known, cap=40, sample=1200):
+    """Candidate publisher domains, mined from pages already in the cache. No network, no model."""
+    import random                                                 # noqa: PLC0415
+    files = []
+    for root, _dirs, names in os.walk(PAGE_CACHE):
+        for n in names:
+            files.append(os.path.join(root, n))
+    if not files:
+        return []
+    random.seed(11)
+    picked = random.sample(files, min(sample, len(files)))
+    hits = {}
+    for f in picked:
+        try:
+            with open(f, "r", encoding="utf-8", errors="replace") as fh:
+                body = fh.read()
+        except Exception:                                         # noqa: BLE001
+            continue
+        seen = set()
+        for m in PROBE_LINK.finditer(body):
+            d = m.group(1).lower()
+            d = d[4:] if d.startswith("www.") else d
+            if d in known or d.count(".") > 2:
+                continue
+            if PROBE_INFRA.search(d) or not PROBE_FOODY.search(d):
+                continue
+            seen.add(d)
+        for d in seen:
+            hits[d] = hits.get(d, 0) + 1
+    return [d for d, _n in sorted(hits.items(), key=lambda x: -x[1])][:cap]
+
+
+def probe_domain(domain, samples=5):
+    """Everything that decides whether a publisher is usable, and all of it mechanical."""
+    out = {"domain": domain, "robots": False, "allowed": True, "enumerated": 0,
+           "sampled": 0, "jsonld": 0, "with_ingredients": 0, "with_nutrition": 0,
+           "verdict": "", "why": ""}
+    try:
+        robots = get_robots(domain)
+    except Exception as e:                                        # noqa: BLE001
+        out["verdict"] = "UNUSABLE"
+        out["why"] = "robots.txt could not be read (%s)" % str(e)[:60]
+        return out
+    out["robots"] = bool(robots.available)
+    try:
+        urls = enumerate_domain(domain, robots)
+    except Exception as e:                                        # noqa: BLE001
+        out["verdict"] = "UNUSABLE"
+        out["why"] = "could not enumerate (%s)" % str(e)[:60]
+        return out
+    out["enumerated"] = len(urls)
+    if not urls:
+        out["verdict"] = "UNUSABLE"
+        out["why"] = "no sitemap and no WP-REST - nothing to enumerate, so the harvester starves"
+        return out
+    pacer = Pacer()
+    for u in urls[:samples]:
+        if not robots.allows(u):
+            out["allowed"] = False
+            continue
+        body = cached_body(u)
+        if body is None:
+            pacer.wait(domain)
+            body, _net = fetch_through_cache(u)
+        if body is None:
+            continue
+        out["sampled"] += 1
+        node = recipe_jsonld(body)
+        if not node:
+            continue
+        out["jsonld"] += 1
+        if ingredient_lines(node):
+            out["with_ingredients"] += 1
+        b = read_band(node)
+        if b.get("cal") is not None:
+            out["with_nutrition"] += 1
+    if not out["allowed"] and out["sampled"] == 0:
+        out["verdict"] = "UNUSABLE"
+        out["why"] = "robots.txt disallows the recipe paths"
+        return out
+    if out["sampled"] == 0:
+        out["verdict"] = "UNUSABLE"
+        out["why"] = "no sample page could be fetched"
+        return out
+    rate = out["with_ingredients"] / float(out["sampled"])
+    if rate >= 0.6:
+        out["verdict"] = "USABLE"
+    elif rate > 0:
+        out["verdict"] = "THIN"
+    else:
+        out["verdict"] = "UNUSABLE"
+    out["why"] = ("%d of %d sampled pages carry a Recipe block with ingredients; %d also state nutrition"
+                  % (out["with_ingredients"], out["sampled"], out["with_nutrition"]))
+    return out
+
+
+def cmd_probe_domains(a):
+    known = set(d.lower() for d in reliable_domains())
+    try:
+        with open(SOURCE_DOMAINS_JSON, "r", encoding="utf-8-sig") as f:
+            known |= set(str(r.get("domain") or "").lower() for r in (json.load(f).get("domains") or []))
+    except Exception:                                             # noqa: BLE001
+        pass
+    if a.domains:
+        cands = [d.strip().lower() for d in a.domains.split(",") if d.strip()]
+    else:
+        cands = mine_link_domains(known)
+        say("harvest --probe-domains: mined %d candidate domain(s) from the page cache" % len(cands))
+    cands = [d for d in cands if d not in known]
+    if not cands:
+        say("harvest --probe-domains: no candidate domains to probe (all already in the ledger)")
+        say("HARVEST-COMPLETE")
+        return 0
+    if a.limit:
+        cands = cands[:a.limit]
+    say("harvest --probe-domains: probing %d, %d sample page(s) each. MANUAL ONLY - never scheduled."
+        % (len(cands), a.samples or 5))
+    results = []
+    for d in cands:
+        r = probe_domain(d, samples=a.samples or 5)
+        results.append(r)
+        say("  %-28s %-9s enum %-6d sampled %d  recipe-block %d  ingredients %d  nutrition %d"
+            % (d[:28], r["verdict"], r["enumerated"], r["sampled"], r["jsonld"],
+               r["with_ingredients"], r["with_nutrition"]))
+        if r["verdict"] != "USABLE":
+            say("      %s" % r["why"])
+    usable = [r for r in results if r["verdict"] == "USABLE"]
+    say("")
+    say("  USABLE %d, THIN %d, UNUSABLE %d"
+        % (len(usable), len([r for r in results if r["verdict"] == "THIN"]),
+           len([r for r in results if r["verdict"] == "UNUSABLE"])))
+    if a.out:
+        with open(a.out, "w", encoding="utf-8") as f:
+            json.dump({"probed": now_stamp(), "results": results}, f, ensure_ascii=False, indent=1)
+        say("  wrote %s" % a.out)
+    if not a.admit:
+        say("  NOTHING ADMITTED. Re-run with --admit to add the USABLE ones to the source-domains "
+            "ledger - a probe is evidence for a decision, not the decision.")
+    else:
+        for r in usable:
+            rc, _o = run_ps(SOURCE_DOMAINS_PS, ["-Record", "-Domain", r["domain"], "-Outcome", "ok",
+                                                "-HasJsonLd", "-Note",
+                                                "admitted by --probe-domains: " + r["why"]], timeout=60)
+            say("  admitted %-28s (rc %d)" % (r["domain"], rc))
+    say("HARVEST-COMPLETE")
+    return 0
+
+
 def cmd_reingredients(a):
     """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
 
@@ -2361,6 +2546,13 @@ def main(argv=None):
     ap.add_argument("--dossier", action="store_true")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--rescore", action="store_true")
+    ap.add_argument("--probe-domains", dest="probe_domains", action="store_true",
+                    help="MANUAL ONLY. Probe candidate publisher domains mechanically - robots, "
+                         "enumeration, and whether their pages carry a usable recipe block. "
+                         "Never scheduled and never called by the crawl.")
+    ap.add_argument("--admit", action="store_true",
+                    help="with --probe-domains: add the USABLE ones to the source-domains ledger")
+    ap.add_argument("--samples", type=int, default=5)
     ap.add_argument("--reingredients", action="store_true",
                     help="restore ingredient lines to available candidates from the page cache. "
                          "No network and no model - a re-parse of pages already fetched.")
@@ -2398,6 +2590,8 @@ def main(argv=None):
         return cmd_dossier(a)
     if a.resignature:
         return cmd_resignature(a)
+    if a.probe_domains:
+        return cmd_probe_domains(a)
     if a.reingredients:
         return cmd_reingredients(a)
     if a.rescore:

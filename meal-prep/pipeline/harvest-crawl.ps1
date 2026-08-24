@@ -70,6 +70,12 @@ if ($SelfTest) {
     ($code.Length -gt 0 -and -not ($code -match 'serve|llama|nvidia|StopOnly')) 'found a card reference in the executing region'
   T 'MUST FIRE  ...and never invokes an agent, because the whole point is that harvesting is free' `
     ($code.Length -gt 0 -and -not ($code -match 'claude|daemon|dispatch')) 'found an agent reference in the executing region'
+  # MUST FIRE: the SCHEDULED wrapper may never source publishers. Brad's rule is that publisher
+  # discovery happens only when he asks - fetching a stranger's site on a timer is how a domain gets
+  # BLOCKED, and a blocked publisher costs far more than a slow one. --probe-domains is manual, and
+  # this is where that is enforced rather than merely intended.
+  T 'MUST FIRE  the scheduled crawl NEVER probes for new publishers - that is manual by ruling' `
+    ($code.Length -gt 0 -and -not ($code -match 'probe|--admit')) 'the scheduled task can source publishers'
   T 'MUST FIRE  the one external program it runs is the pinned interpreter on harvest.py --crawl' `
     ($code -match '&\s+\$py\s+@args' -and $code -match "'--crawl'" -and $code -match '\$harvest') `
     'the invocation is not python + harvest.py --crawl'
