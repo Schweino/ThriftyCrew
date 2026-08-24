@@ -515,6 +515,17 @@ Two consequences worth naming so they get built:
   rejected-qa -By macro-gate`, with a real-state-machine fixture proving the rejection LANDS; once
   D8 extends the graph, the daemon's route shortens to `priced -> rejected-macros` in the same
   commit, and the fixture moves with it.)**
+
+  **BUILT 2026-08-24 (phase 4, D8's first commit).** `priced` now reads
+  `@('spec-built', 'rejected-macros')` in hunt-run.ps1's `$script:NEXT`, fixtured as FIXTURE 4b-ii
+  in hunt-run's own -SelfTest (three cases: the new edge is legal, the normal exit still stands, and
+  `priced -> written` is still refused). The daemon's band-failure route is now the single advance
+  `priced -> rejected-macros`, and `_band_gate_fires` pins the advance COUNT as well as the
+  destination - three advances again would mean the run record had gone back to claiming a spec
+  build and a prose write nobody paid for. Measured must-fire, both suites, by reverting the graph
+  edit: hunt-run's new case goes red, and in the daemon suite the INJECTED twin still passes while
+  `_band_gate_real_machine` goes red. That is the FakePS blind spot restated one more time, and it
+  is why the real-machine twin is the one that counts.
 - **The skeleton is a postcondition, not a suggestion.** After the writer returns, the orchestrator
   diffs the intake's machine fields against the skeleton it issued; any drift (a gram, a buy string,
   a macro) rejects the intake and re-dispatches with the drift named. That is the D8 fixture's
@@ -1375,7 +1386,8 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     fields (4.5's list) in place", in the same commit as the skeleton, or the writer and the
     skeleton race for the same file with two different ideas of who creates it. The recipe-writer
     agent definition gets the matching edit (prompt-backup sync applies).
-  - **The state-graph edit is D8's first commit, not an afterthought:** `priced` gains
+  - **The state-graph edit is D8's first commit, not an afterthought (DONE 2026-08-24 - the
+    S6 correction above carries the BUILT record):** `priced` gains
     `rejected-macros` in hunt-run.ps1's `$script:NEXT`, fixtured in hunt-run's own -SelfTest, and
     the daemon's band-failure route shortens from v2's three-advance trace to
     `priced -> rejected-macros` in the same commit (see the S6 correction - the daemon's real-

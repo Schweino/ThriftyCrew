@@ -334,8 +334,8 @@ def run():
     # =================================================================================================
     H("The band gate, read off the built spec")
     # =================================================================================================
-    T("MUST FIRE  a spec outside the band is retired and never reaches QA, down v2's exact route "
-      "(spec-built -> written -> rejected-qa; priced has no other legal exit)",
+    T("MUST FIRE  a spec outside the band is retired and never reaches QA, in ONE advance "
+      "(priced -> rejected-macros, since D8 gave `priced` that exit)",
       *_band_gate_fires())
     T("MUST FIRE  and against the REAL state machine the rejection LANDS on disk - the first build's "
       "direct priced->rejected-qa advance would have been refused and nobody would have seen it",
@@ -1067,14 +1067,19 @@ def _band(cal, carbs):
 
 
 def _band_gate_fires():
-    """The route is load-bearing: the recipe sits at `priced`, whose ONLY legal exit is spec-built,
-    so the rejection must travel spec-built -> written -> rejected-qa (v2's measured on-disk trace).
-    The first build advanced priced -> rejected-qa directly; FakePS accepted it and the real state
-    machine would have refused it, leaving the recipe at `priced` on disk while the daemon counted
-    it rejected. The real-machine twin below is what actually pins that."""
+    """The route is load-bearing: the recipe sits at `priced` when the gate rules, so the rejection
+    has to be legal FROM `priced`. The first build advanced priced -> rejected-qa directly; FakePS
+    accepted it and the real state machine would have refused it, leaving the recipe at `priced` on
+    disk while the daemon counted it rejected. The interim fix walked v2's measured trace
+    (spec-built -> written -> rejected-qa), legal but asserting a spec build and a prose write that
+    never happened. D8's state-graph edit gave `priced` a `rejected-macros` exit, so the route is
+    now ONE advance and this fixture pins the count as much as the destination: three advances here
+    again would mean the run record started claiming work nobody did. The real-machine twin below
+    proves it LANDS."""
     d, to = _band(700, 20)
-    return (to == ["spec-built", "written", "rejected-qa"]
+    return (to == ["rejected-macros"]
             and d.outcomes and d.outcomes[0]["status"] == "rejected"
+            and d.outcomes[0]["state"] == "rejected-macros"
             and "above the 650 ceiling" in d.outcomes[0]["detail"],
             "advances=%s outcome=%s" % (to, json.dumps(d.outcomes)))
 
@@ -1107,7 +1112,7 @@ def _band_gate_real_machine():
         d.ch["write"].close()
         arun(d.run(("write",)))
         final = d.state_of("band-drill")
-        return (final == "rejected-qa" and not d.findings,
+        return (final == "rejected-macros" and not d.findings,
                 "on-disk state=%s findings=%s" % (final, json.dumps(d.findings)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

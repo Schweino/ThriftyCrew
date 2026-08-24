@@ -87,7 +87,15 @@ $script:NEXT = @{
   'mapped'     = @('pricing', 'priced', 'rejected-not-carried', 'rejected-macros')
   'pricing'    = @('priced', 'parked', 'rejected-not-carried')
   'parked'     = @('pricing', 'priced', 'parked', 'rejected-not-carried')
-  'priced'     = @('spec-built')
+  # `priced` -> `rejected-macros` added 2026-08-24 (v3 D8). The band gate MOVED to before the
+  # writer: build-intake-skeleton.ps1 carries macros_per_serving from parse-compute, so an
+  # out-of-band recipe is retired at skeleton build, while the recipe still sits at `priced`.
+  # Until this edit the only exit from `priced` was spec-built, so the daemon had to walk the
+  # recipe forward through spec-built -> written just to reach a rejection state - three
+  # advances that each claim work nobody did, on a recipe no writer was ever paid for. Same
+  # reasoning as the 2026-08-16 addition above: a verdict a state machine cannot express is a
+  # verdict that gets faked or lost.
+  'priced'     = @('spec-built', 'rejected-macros')
   'spec-built' = @('written', 'spec-built', 'rejected-qa')
   # the QA repair routes. A source-QA failure is owner-routed, so a genuine transcription defect really
   # does send the recipe back to extraction; what stays refused is skipping FORWARD past qa-passed.
@@ -476,6 +484,16 @@ if ($runSelfTest) {
   T 'MUST FIRE  a macro rejection is reachable from mapped'            (Test-LegalTransition 'mapped' 'rejected-macros') 'refused'
   T 'MUST FIRE  a macro rejection is terminal like every other reject' (-not (Test-LegalTransition 'rejected-macros' 'mapped')) 'allowed'
   T 'CLEAN TWIN rejected-macros counts as a rejection, not as in-flight' ($script:REJECTED_STATES -contains 'rejected-macros') 'missing from REJECTED_STATES'
+
+  # ---- FIXTURE 4b-ii. THE PRE-WRITE BAND GATE'S EXIT (v3 D8, 2026-08-24). The band gate moved to
+  # before the writer, where the recipe is still `priced`. Until this edit `priced` offered only
+  # spec-built, so the only way to record a macro rejection was to advance the recipe through
+  # spec-built -> written first - two states asserting a spec was assembled and prose was written
+  # for a recipe no writer ever saw. The daemon's band route now goes priced -> rejected-macros in
+  # ONE advance, and the run record stops claiming work nobody did.
+  T 'MUST FIRE  a macro rejection is reachable from priced (the pre-write band gate)' (Test-LegalTransition 'priced' 'rejected-macros') 'refused'
+  T 'CLEAN TWIN the normal exit from priced still stands'                             (Test-LegalTransition 'priced' 'spec-built') 'refused'
+  T 'MUST FIRE  priced still cannot skip the spec and go straight to written'         (-not (Test-LegalTransition 'priced' 'written')) 'allowed'
 
   # ---- FIXTURE 4c. THE DOUBLE-BOOKED WAVE, frozen. A trim returns recipes to `qa-passed` so they can be
   # repaired, but -WaveClose only ever mints a NEW wave and cannot rewrite the old manifest, so the next

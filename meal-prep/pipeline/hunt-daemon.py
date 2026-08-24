@@ -971,22 +971,23 @@ class Daemon(object):
                 verdict = hunt_lib.in_band(cal, carbs, self.band)
                 if not verdict["ok"]:
                     # THE ROUTE MATTERS, AND THE FIRST BUILD GOT IT WRONG (found on the 2026-08-24
-                    # cold read). The recipe sits at `priced` here, and hunt-run's legal graph gives
-                    # `priced` exactly ONE exit: spec-built. A direct priced->rejected-qa advance is
-                    # REFUSED - the FakePS fixtures accepted it, the real state machine would not,
-                    # and the recipe would have sat at `priced` on disk while this process counted
-                    # it rejected. v2's measured on-disk trace is the port:
-                    # the writer had already advanced spec-built -> written, and the macro gate then
-                    # rejected FROM `written`, which is legal (crustless-bacon-gruyere-quiche:
-                    # "rejected-qa  macro gate: 369 cal / 2g carbs per serving"). Reproduce exactly
-                    # that. `rejected-macros` would be the honest name, but it is not reachable from
-                    # this position until D8 extends the graph - see the S6 correction.
+                    # cold read). The recipe sits at `priced` here - the state advances below happen
+                    # AFTER the gate - so the route out has to be legal FROM `priced`. The first
+                    # build advanced priced -> rejected-qa directly; the FakePS fixtures accepted it
+                    # and the real state machine refused it, which would have left the recipe at
+                    # `priced` on disk while this process counted it rejected. The interim fix
+                    # reproduced v2's measured on-disk trace, spec-built -> written -> rejected-qa,
+                    # which was legal but claimed a spec build and a prose write that never happened.
+                    # SHORTENED 2026-08-24 (v3 D8): `priced` now has `rejected-macros` among its
+                    # exits, so the honest verdict lands in ONE advance and the run record stops
+                    # asserting work nobody did. `rejected-macros` is also the name D8's PRE-write
+                    # gate uses from the same position, so both band gates retire a recipe the same
+                    # way and -Status counts them as one class.
                     self.log("macro gate: %s built at %s - retiring" % (slug, verdict["reason"]))
-                    await self.advance(slug, "spec-built", "writer", "")
-                    await self.advance(slug, "written", "writer", "")
-                    await self.advance(slug, "rejected-qa", "macro-gate",
+                    await self.advance(slug, "rejected-macros", "macro-gate",
                                        "macro gate: %s" % verdict["reason"])
-                    self.finish(slug, "rejected", "rejected-qa", "macro gate: %s" % verdict["reason"])
+                    self.finish(slug, "rejected", "rejected-macros",
+                                "macro gate: %s" % verdict["reason"])
                     continue
                 await self.advance(slug, "spec-built", "writer", "")
                 await self.advance(slug, "written", "writer", "")
