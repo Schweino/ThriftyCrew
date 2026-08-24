@@ -233,6 +233,21 @@ would need its own justification.
 **F is the one I would argue for beyond its size:** without it, every other item here is unverifiable
 after the fact and the next cost regression is invisible again.
 
+**EVERY ITEM ABOVE IS ALSO A SPEED ITEM.** Round trips are SERIAL inside a session, so re-read context
+costs wall clock as well as tokens - measured this run at ~1,000-1,700 tokens/sec on the tool-heavy
+stages (mapper, registrar) against 4,000-5,000 on the think-heavy ones (write, audit). In seconds:
+`map:5x` ran 167 s/recipe against 378-449 s for the small batches (A); the 9 registrar dispatches cost
+~10 minutes between them (B); the pricer spent 217 s on 2 terms the pre-pass had already answered (D);
+and a Qwen label pass (J) would run CONCURRENTLY with the Claude lanes, hiding inside work already
+happening. Full detail in the worklist's section 6.
+
+**Two cautions on any speed number from this run.** Effective concurrency was only **1.54x** (98.0
+lane-minutes inside a 63.5-minute wall span) because the pipeline STARVED - 9 accepted, 3 parked, 2
+retired - not because scheduling failed. And the audit path spent 1,307 s, a third of the wall clock,
+certifying TWO recipes; over a wave of 10 that is the trade section 11 defends, over a wave of 2 it
+dominates. **~32 wall minutes per published recipe is a CEILING measured on a starved pipeline, not the
+pipeline's speed.**
+
 ### 4.4 Is the Qwen label-transcription offload (J / 3.6) ordered?
 And if so, under what verification conditions - specifically, is a COMPLETENESS check (not just
 substring proof) acceptable as the gate, and what card-ownership window may it take?

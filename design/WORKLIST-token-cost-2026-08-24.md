@@ -57,10 +57,23 @@ never had enough recipes to see.
 
 ### A. Seed extraction so the mapper never runs a batch of one  (C3 lever - seeding order)
 
-**Evidence.** `map:1x` cost 436,685 and 577,141 for one recipe each. `map:5x` cost 212,244 per recipe.
-Batching five is **2.1 to 2.7x cheaper per recipe**. On this run the two singleton batches cost
-1,013,826 tokens where a batch of five would have charged roughly 424,000 - about **590,000 tokens
-burned on two recipes** for no accuracy gained.
+**Evidence.** Per RECIPE, across all four mapper batches this run:
+
+| batch | input / recipe | seconds / recipe |
+|---|---|---|
+| `map:1x` | 436,685 | 378 |
+| `map:1x` | 577,141 | (unpaired) |
+| `map:2x` | **444,975** | **449** |
+| `map:5x` | **212,244** | **167** |
+
+**CORRECTED 2026-08-24, same day, before anyone builds on it.** The first write-up of this item said
+"batching five is 2.1 to 2.7x cheaper", comparing the best batch against the worst and reading as though
+batch size alone did it. It does not: `map:2x` was WORSE per recipe than `map:1x` on BOTH axes. Batch
+size correlates with efficiency; ingredient NOVELTY drives it at least as hard, and `map:2x` carried two
+ingredient-heavy recipes (one of which parked on a garnish line). The honest claim is narrower: **the
+5-recipe batch ran at ~2x the token efficiency and ~2.3x the speed of the singletons, and no batch of
+2 has yet beaten a batch of 1.** Anything built here must be measured against batch CONTENT, not just
+batch size, or the win will not reproduce.
 
 **Cause.** The extraction ladder settles pages serially, so the first pages trickle into the map
 channel one at a time, and `Chan.take_batch` correctly sweeps whatever is queued rather than waiting.
@@ -266,3 +279,58 @@ the 07:00 ad pull, the 08:00 capture and the nightly's 21:30-06:30. Scheduling, 
 The alternatives ingredient line that parked a recipe (item G) could be FLAGGED before the mapper is
 ever dispatched. Flagging is explicitly permitted locally - but this case does not need a model at all,
 only a check for an `or`-list in an ingredient line.
+
+---
+
+## 6. SPEED (Brad asked whether the improvements cover wall clock too; the first draft was cost-only)
+
+**They do, and it is the same mechanism, because round trips are SERIAL inside a session.** Every
+re-read of the conversation costs milliseconds as well as tokens, so the cost levers in section 2 are
+speed levers with no change of plan. Measured across this run's dispatches:
+
+| dispatch | input | sec | tokens/sec |
+|---|---|---|---|
+| map:1x | 436,685 | 378 | 1,155 |
+| map:2x | 889,950 | 898 | 991 |
+| map:5x | 1,061,220 | 837 | 1,267 |
+| registrar (avg of 9) | ~110,000 | 64 | 1,718 |
+| pricer batch 1 | 741,705 | 217 | 3,417 |
+| write (avg of 2) | ~1,240,000 | 300 | ~4,100 |
+| audit REPAIR | 2,890,062 | 717 | 4,030 |
+
+The tool-heavy stages (mapper, registrar) run at ~1,000-1,700 tokens/sec because they spend their time
+waiting on tool round trips; the think-heavy ones (write, audit) run at 4,000-5,000. **The expensive
+dispatches are the slow ones, and for the same reason.**
+
+### 6.1 The run achieved only 1.54x effective concurrency
+98.0 lane-minutes of dispatch work compressed into a 63.5-minute wall span. The design permits far more
+(v2 section 2.4: 3 extractors, 2 mappers, 3 writers, 2 QA, 1 pricer). The cause here was STARVATION, not
+a scheduling defect: 9 accepted recipes, of which 3 parked and 2 retired at the band gate, so the lanes
+had nothing to overlap. **This number is not a defect to fix; it is a reason to distrust any wall-clock
+figure taken from a thin run** - including this one. A fuller pipeline would overlap far more.
+
+### 6.2 The audit path dominates a small wave
+The three audit-lane dispatches cost 1,307 s (21.8 min) - a third of the run's wall clock - to certify
+TWO recipes, and the repair dispatch alone was 717 s and 2,890,062 tokens, the single most expensive
+dispatch of the run. Amortised over a wave of 10 that is exactly the trade section 11 defends. Over a
+wave of 2 it is the dominant cost. **The lever is not a cheaper auditor - section 11 puts that out of
+scope - it is fuller waves.** See item A and OPEN Q 4.5.
+
+### 6.3 What each cost item is worth in SECONDS
+- **A (batching):** `map:5x` ran at 167 s/recipe against 378-449 s for the small batches. On the
+  measured spread, the single biggest wall-clock lever in the pipeline.
+- **B (registrar evidence):** 9 registrar dispatches x ~64 s = ~10 minutes of the run. Cutting round
+  trips cuts that roughly in proportion.
+- **C / J (labels out of the conversation):** the mapper's 9-10 WebFetches are round trips AND large
+  context; both terms are wall clock. And a Qwen label pass runs CONCURRENTLY with the Claude lanes, so
+  its own 15-30 s per recipe hides inside work already happening.
+- **D (pricer shell loop):** 24 tool calls for 2 terms took 217 s. The pre-pass had already answered.
+- **F (instrumentation):** `-LaneSummary` already reports `mean_sec` and `total_min` per lane, so speed
+  regressions ARE visible today. The blind spot is only in attributing them - the round-trip count is
+  what ties a slow lane to a cause.
+
+### 6.4 The headline
+**63.5 wall minutes produced 2 publishable recipes: ~32 minutes per published recipe.** Section 7's
+target and 6a's 453 s / ~227 s per-recipe map figures are not comparable to it, because this run never
+reached a steady state (criterion 3 is unreportable for the same reason). Treat 32 min/recipe as a
+CEILING measured on a starved pipeline, not as the pipeline's speed.
