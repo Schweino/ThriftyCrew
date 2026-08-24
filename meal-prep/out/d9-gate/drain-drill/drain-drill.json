@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-24T04:14:19",
+ "generated": "2026-08-24T07:13:55",
  "source_run": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100",
  "phases": [
   {
@@ -78,6 +78,14 @@
    },
    "outcomes": [
     {
+     "slug": "braised-pork-shoulder-fennel-tomato",
+     "state": "qa-passed",
+     "cal": 520,
+     "carbs": 12,
+     "status": "qa-passed",
+     "detail": ""
+    },
+    {
      "slug": "chicken-bacon-ranch-cauliflower-bake",
      "state": "qa-passed",
      "cal": 520,
@@ -87,14 +95,6 @@
     },
     {
      "slug": "basque-chicken-peppers-chilindron",
-     "state": "qa-passed",
-     "cal": 520,
-     "carbs": 12,
-     "status": "qa-passed",
-     "detail": ""
-    },
-    {
-     "slug": "braised-pork-shoulder-fennel-tomato",
      "state": "qa-passed",
      "cal": 520,
      "carbs": 12,
@@ -116,8 +116,8 @@
   {
    "phase": "audit-lane-shape-fresh",
    "exit": 0,
-   "detail": "3 recipes through map (one micro-batch) and their 4 distinct terms through price (one batch); 4 lane-log line(s)",
-   "output": "audit-lane-shape: daemon-fresh   4 lane invocation(s) over 3 recipe(s)\r\n\r\n  map      1 invocation(s)     3 distinct item(s)   floor ceil(3/5) = 1   mean 3/invocation\r\n  price    1 invocation(s)     4 distinct item(s)   floor ceil(4/10) = 1   mean 4/invocation\r\n\r\n  lane shape matches the design.\r\nLANE-SHAPE-COMPLETE findings=0 warnings=0\r\n"
+   "detail": "3 recipes through map (one micro-batch) and their 4 distinct terms through price (one batch); 0 lane-log line(s)",
+   "output": "audit-lane-shape: daemon-fresh   0 lane invocation(s) over 3 recipe(s)\r\n\r\n  map      0 invocation(s)     0 distinct item(s)   floor ceil(0/5) = 0   mean 0/invocation\r\n  price    0 invocation(s)     0 distinct item(s)   floor ceil(0/10) = 0   mean 0/invocation\r\n\r\n  lane shape matches the design.\r\nLANE-SHAPE-COMPLETE findings=0 warnings=0\r\n"
   },
   {
    "phase": "audit-lane-shape-appended",
@@ -140,9 +140,9 @@
  "expected_findings": {
   "why": "build-v2-spec.ps1 is stood in for, so the three walked recipes have no built spec and coverage_check --battery correctly exits 2. The daemon recorded each one as a finding and dispatched source-QA anyway, which is the ordered behaviour.",
   "findings": [
+   "braised-pork-shoulder-fennel-tomato: the QA battery could not run (exit 2)",
    "chicken-bacon-ranch-cauliflower-bake: the QA battery could not run (exit 2)",
-   "basque-chicken-peppers-chilindron: the QA battery could not run (exit 2)",
-   "braised-pork-shoulder-fennel-tomato: the QA battery could not run (exit 2)"
+   "basque-chicken-peppers-chilindron: the QA battery could not run (exit 2)"
   ]
  },
  "run_dir_copy": "(removed)"

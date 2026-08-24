@@ -227,7 +227,15 @@ async def drill(source, keep):
 
     lane_since = time.strftime("%Y-%m-%dT%H:%M:%S")
     stand = Stand(run_dir)
-    ps = filtered_ps(["build-v2-spec.ps1"])
+    # build-intake-skeleton.ps1 JOINED THE STAND-IN LIST 2026-08-24 (v3 D8), for the same reason
+    # build-v2-spec is on it. D8 put the skeleton builder and its locked-field -Verify in front of
+    # and behind the writer, and this drill's writer is a stand-in that produces no prose - so the
+    # real -Verify would refuse every walked recipe on "the writer returned NO prose at all",
+    # which is the postcondition working and tells this drill nothing. What this drill measures is
+    # section 4.2's LANE SHAPE, so the surfaces the stand-in cannot satisfy are stood in for and
+    # the skeleton itself is written below. The write lane's own behaviour is fixtured in
+    # hunt_daemon_selftest.py and was demonstrated live by the phase-4 gate run.
+    ps = filtered_ps(["build-v2-spec.ps1", "build-intake-skeleton.ps1"])
     # A LEDGER OF ITS OWN. Measured 2026-08-24: the first two runs of this drill opened w5 and w6
     # in the LIVE batch ledger and left them open, which batch-ledger -Verify would report as
     # stalled batches forever. wave-publish.ps1 built -LedgerPath for exactly this reason.
@@ -286,6 +294,25 @@ async def drill(source, keep):
         d.ch["write"].push(c)
     d.ch["write"].close()
     d.spec_band = lambda slug, specs_dir=None: (520, 12)   # the cost engine is stood in for
+    # The skeleton the stood-in builder would have written, so the pre-write band gate has real
+    # numbers to rule on. In band on purpose: this drill is about lane shape, and the band gate's own
+    # behaviour has its fixtures elsewhere.
+    for c in picked:
+        ip = os.path.join(run_dir, "intake", "%s.json" % c["slug"])
+        os.makedirs(os.path.dirname(ip), exist_ok=True)
+        doc = {"name": c["slug"], "slug": c["slug"], "protein": "beef", "cuisine": "",
+               "source_url": "https://d/x", "visibility": "paid",
+               "ingredients": [{"item": "93/7 Ground Beef", "grams": 1568, "buy": "3 1/2 lb"}],
+               "macros_per_serving": {"calories": 520, "protein_g": 35.0, "carbs_g": 12,
+                                      "fat_g": 20.0},
+               "writer_notes": [], "forbidden_prose_terms": [], "prose": {},
+               "head": {"description": "", "keywords": "", "image": "", "prepTime": "PT15M",
+                        "cookTime": "PT25M", "totalTime": "PT40M", "steps": []}}
+        with open(ip, "w", encoding="utf-8") as fh:
+            json.dump(doc, fh)
+        with open(os.path.join(run_dir, "intake", "%s.skeleton.json" % c["slug"]), "w",
+                  encoding="utf-8") as fh:
+            json.dump({"slug": c["slug"], "findings": [], "notes": [], "intake": doc}, fh)
     say("  walking: %s" % ", ".join(c["slug"] for c in picked))
     # The LANES directly rather than run(): run() ends by force-closing a wave, which is the
     # workflow's own order and correct in a live run, but here it would sweep these three into a
