@@ -204,3 +204,65 @@ edited while the daemon was executing it.
 - **No fill-wait in any channel.** B3 measured that deadlocking.
 - **C4 (lane-log spawn tax) and C6 (effort tuning) remain measure-first.** Nothing in this run's data
   justifies either yet, and neither was measured here.
+
+---
+
+## 5. What could move to Qwen (asked by Brad, 2026-08-24, during the run)
+
+Judged against section 1.4's doctrine, which section 10 makes an invariant. One measured number governs
+the whole question: **asserting a MATCH is 37% false at 0.90-0.98 confidence, so a local YES is at most
+a lead.** Structured transcription, by contrast, measured 1.000 valid strict JSON and is "local by
+default, always mechanically verified".
+
+### J. Nutrition label transcription - the one real opportunity
+
+This is item C's quadratic term seen from the other side. Local transcribes, Claude rules:
+
+- **LOCAL:** transcribe the label VERBATIM - every serving row, every number - substring-proven against
+  the page text, in the shape `local_extract.verify_split` already uses at rung 1.
+- **CLAUDE:** choose which serving basis applies and which food it is. Picking between "per 100 g" and
+  "per 2 tbsp" is nearer a match assertion than a transcription, and the mapper's definition requires
+  the household measure and the grams to AGREE - that is a ruling, not a copy.
+
+The saving survives the split, because the saving is that the PAGE TEXT never enters the priced
+conversation: Claude receives a compact label block instead of a fetched web page that then rides along
+on ~30 round trips.
+
+**Two conditions, both non-negotiable.**
+1. **Substring proof cannot prove ABSENCE.** Section 4.3 already names this about rung 2 truncation - a
+   page cut at the slot ceiling still verifies line by line with ingredients silently missing. A label
+   verifier must additionally assert COMPLETENESS (serving size plus every macro the food DB needs), or
+   a dropped line reads as clean.
+2. **No verifier, no local placement.** Doctrine rule 1.
+
+### K. Two things that look like Qwen work and are not
+
+The registrar's 4-9 Greps (item B) and the pricer's 12 PowerShell + 8 Bash calls (item D) are expensive,
+but they are dictionary lookups and shell invocations, not model work. Qwen would be slower AND
+wrong-shaped. Both are already fixed by handing over evidence the caller holds; putting a GPU on them
+would be paying for the same lookup twice.
+
+### L. What may never move, and why
+
+| stage | why it stays frontier |
+|---|---|
+| commodity-registrar | its whole job is asserting identity - the 37% number |
+| the mapper's `canon_item` decision | same |
+| the pricer's adjudication | "this row is the ingredient" is a named forbidden case |
+| recipe-dedup-selector | "these two dishes are the same" is also named - and it costs 2,519 per candidate, so there is no upside to weigh against the risk |
+| recipe-writer | Brad's voice, doctrine rule 3 |
+| source-QA and the batch auditor | section 11 puts cheapening the audit tier out of scope; its 31% bought every correct NO-GO this estate has |
+
+### M. The constraint that is NOT throughput
+
+Qwen is fast enough: 2.74 s per short call, 3.6x at jobs=4, and this run's extraction averaged 26 s per
+page. Nine labels fanned 4-wide adds perhaps 15-30 s per recipe to a lane that runs CONCURRENTLY with
+the Claude lanes, so wall clock barely moves. The real cost is CARD OWNERSHIP: llama-server (~13.5 GB)
+and the sidecar (~3.5 GB) cannot co-reside, so more local work means holding the card longer, against
+the 07:00 ad pull, the 08:00 capture and the nightly's 21:30-06:30. Scheduling, not throughput.
+
+### N. Cheaper than any of the above
+
+The alternatives ingredient line that parked a recipe (item G) could be FLAGGED before the mapper is
+ever dispatched. Flagging is explicitly permitted locally - but this case does not need a model at all,
+only a check for an `or`-list in an ingredient line.
