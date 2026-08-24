@@ -260,6 +260,114 @@ def family_of(text, families=None):
     return None
 
 
+# The INGREDIENT-LEVEL corroborators for a sauce family. This is NOT a third copy of $script:FAMILIES.
+#
+# $script:FAMILIES (considered-dishes.ps1, read at runtime by load_families) is a vocabulary of DISH
+# NAME needles - 'alfredo', 'marry me', 'barbecue' - and Get-Family searches a title with it. By the
+# time --classify runs, that search has already been done and come back empty: every row the local
+# classifier is asked about is BY CONSTRUCTION a row whose name and first twelve ingredients contain
+# none of those needles. Verifying the model's answer against that same vocabulary would therefore
+# reject every answer it could ever give, and the classifier would be a no-op with a passing
+# self-test. That trap is the reason this table exists and the reason it is shaped the way it is.
+#
+# So the corroborator asks a DIFFERENT question at a DIFFERENT layer: not "is this family in the
+# dish's name" but "is the thing that MAKES this family actually in the pot". family_evidence()
+# searches the PS needles AND these, so a needle added to the source of record is picked up here for
+# free and this table can never be the narrower of the two.
+#
+# It lives in Python and not beside $script:FAMILIES because considered-dishes.ps1 and
+# make-saturation.ps1 key DISHES BY NAME; adding ingredient evidence there would silently change what
+# the rulings ledger and the saturation table mean. Nothing outside harvest --classify wants it.
+FAMILY_EVIDENCE = {
+    "cream":  ("heavy cream", "whipping cream", "half and half", "half-and-half", "sour cream",
+               "cream cheese", "creme fraiche", "mascarpone", "evaporated milk", "condensed milk",
+               "cream of chicken", "cream of mushroom", "double cream", "boursin", "alfredo sauce"),
+    "tomato": ("tomato sauce", "tomato paste", "tomato puree", "crushed tomato", "diced tomato",
+               "canned tomato", "passata", "marinara sauce", "ketchup", "salsa", "sun-dried tomato",
+               "sundried tomato", "rotel", "pizza sauce", "tomato soup"),
+    "soy":    ("soy sauce", "tamari", "coconut aminos", "hoisin", "oyster sauce", "sesame oil",
+               "toasted sesame", "mirin", "rice wine vinegar", "rice vinegar", "gochujang",
+               "fish sauce", "ponzu", "shaoxing", "black bean sauce"),
+    "curry":  ("curry powder", "curry paste", "garam masala", "tikka paste", "tandoori paste",
+               "turmeric", "coconut milk", "coconut cream", "madras", "vindaloo", "curry leaves",
+               "korma paste", "red curry", "green curry", "yellow curry"),
+    "wine":   ("white wine", "red wine", "dry vermouth", "marsala", "sherry", "cooking wine",
+               "brandy", "cognac", "port wine", "chardonnay", "pinot", "sauvignon"),
+    "cheese": ("parmesan", "parmigiano", "mozzarella", "cheddar", "gruyere", "feta", "monterey jack",
+               "pepper jack", "provolone", "ricotta", "romano", "asiago", "swiss cheese", "velveeta",
+               "queso", "cotija", "shredded cheese", "cream cheese", "goat cheese", "blue cheese"),
+    "bbq":    ("barbecue sauce", "bbq sauce", "barbeque sauce", "liquid smoke", "molasses",
+               "kansas city", "sweet baby ray", "root beer", "sweet and sour sauce",
+               "honey garlic sauce", "teriyaki glaze", "dr pepper"),
+    "herb":   ("fresh basil", "basil leaves", "cilantro", "parsley", "thyme", "rosemary", "oregano",
+               "fresh sage", "rubbed sage", "dill", "tarragon", "chives", "pesto", "chimichurri",
+               "fresh mint", "bay leaf", "bay leaves", "herbes de provence", "italian seasoning",
+               "poultry seasoning", "herb blend"),
+    "spice":  ("chili powder", "chile powder", "chipotle", "smoked paprika", "cayenne",
+               "taco seasoning", "fajita seasoning", "adobo", "harissa", "berbere", "jerk seasoning",
+               "cajun seasoning", "blackening", "sumac", "zaatar", "ancho", "guajillo",
+               "chili flakes", "red pepper flakes", "gochugaru", "curry powder", "five spice",
+               "ras el hanout", "chili paste", "sriracha"),
+}
+
+
+def family_evidence(fam, text, families=None):
+    """The substring that CORROBORATES `fam` in `text`, or None if nothing in the pot supports it.
+
+    Section 1.4's first local-placement rule: local output is never trusted, always verified -
+    substring proof, closed enums, or arithmetic recompute. A closed grammar buys STRUCTURAL validity
+    only; it guarantees the answer is one of ten words and says nothing whatever about whether it is
+    true. This is the substring proof that turns a grammar-shaped answer into a checked one.
+
+    'plain' is corroborated by construction - it is the claim that nothing is there - and returns "".
+    """
+    if fam in (None, "", "plain"):
+        return ""
+    if families is None:
+        families = load_families()
+    t = (text or "").lower()
+    for n in tuple(families.get(fam) or ()) + tuple(FAMILY_EVIDENCE.get(fam) or ()):
+        if n and n in t:
+            return n
+    return None
+
+
+def keyword_family(cand, families=None):
+    """What Get-Family sets on a candidate at CRAWL time: the name plus the first twelve ingredient
+    lines. qualify() and --classify's clear step have to read the same window or they disagree about
+    which answers were the vocabulary's and which were the model's - measured on 2026-08-24, a clear
+    step that read the whole ingredient list instead spared 44 model-set families because a family
+    word happened to sit in line 13 or later. One expression, one window, both callers.
+    """
+    return family_of((cand.get("name") or "") + " "
+                     + " ".join((cand.get("ingredients_verbatim") or [])[:12]), families)
+
+
+def classify_text(cand):
+    """Everything the classifier is allowed to read about a candidate: its name and its ingredients.
+
+    A pool entry carries no instructions - qualify() keeps only the ingredient lines - so this IS the
+    whole evidence base, and for a page with no JSON-LD Recipe block it is a title and nothing else.
+    """
+    return ((cand.get("name") or cand.get("slug") or "") + " "
+            + " ".join(cand.get("ingredients_verbatim") or []))
+
+
+def classify_prompt(name, ings, enum):
+    """--classify's prompt, in one place so --selftest can assert its load-bearing sentences offline.
+
+    See classify_one for what the second sentence is worth: it is the difference between 1 of 177
+    evidence-free rows answering 'plain' and 138 of them answering 'bbq' because bbq is enum[0].
+    """
+    return ("Name the sauce or flavour family of this dish, using only the list below.\n"
+            "Most dinners have NO sauce family. A dish that is simply roasted, baked, grilled or "
+            "pan-fried meat with oil, salt, pepper and dry seasoning is plain. Answer plain unless "
+            "the dish clearly carries one of the other families.\n"
+            "Answer with exactly one word from the list and nothing else.\n"
+            "List: %s\nDish: %s\nIngredients: %s\nAnswer:"
+            % (", ".join(enum), name, ings))
+
+
 def load_methods(ledger_path=CONSIDERED_JSON):
     """The method enum, read from the rulings ledger's own -Method values.
 
@@ -832,7 +940,7 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
     entry["signature"] = {
         "protein": detect_protein(lines, entry.get("name") or ""),
         "method": detect_method(entry.get("name") or "", instr, methods),
-        "sauce_family": family_of((entry.get("name") or "") + " " + " ".join(lines[:12]), families),
+        "sauce_family": keyword_family(entry, families),
         "starch": detect_starch(lines),
     }
 
@@ -1095,12 +1203,15 @@ def _batch_call(script, args, rows, payload, key_name, timeout=600):
         json.dump(payload, f, ensure_ascii=False)
     try:
         rc, out = run_ps(script, args + ["-BatchFile", tmp, "-Json"], timeout=timeout)
+        # None is COULD NOT RUN and {} is ran-and-found-nothing, and score_pool does completely
+        # different things with them. Collapsing the two is what emptied 6,251 neighbour blocks on
+        # 2026-08-24 - see score_pool.
         if rc not in (0, 3):
-            return {}
+            return None
         try:
             data = json.loads(out)
         except Exception:
-            return {}
+            return None
         if isinstance(data, dict):
             data = [data]
         return {r.get("key"): r for r in data if isinstance(r, dict)}
@@ -1120,6 +1231,8 @@ def batch_find_similar(rows, top=DOSSIER_NEIGHBOUR_CAP):
     payload = [{"key": r["slug"], "name": r["name"], "protein": r.get("protein") or "",
                 "items": r.get("items") or []} for r in rows]
     res = _batch_call(FIND_SIMILAR_PS, ["-Top", top], rows, payload, "fs")
+    if res is None:
+        return None
     return {k: (v.get("matches") or []) for k, v in res.items()}
 
 
@@ -1130,6 +1243,8 @@ def batch_prior_rulings(rows):
     payload = [{"key": r["slug"], "name": r["name"], "protein": r.get("protein") or "",
                 "method": r.get("method") or ""} for r in rows]
     res = _batch_call(CONSIDERED_PS, ["-Query"], rows, payload, "cd")
+    if res is None:
+        return None
     return {k: (v.get("rulings") or []) for k, v in res.items()}
 
 
@@ -1161,7 +1276,17 @@ def load_embed_neighbours(path=NEIGHBOUR_FILE):
 
 
 def score_pool(pool, quiet=False):
-    """Refresh neighbours / prior rulings / saturation pressure for every AVAILABLE candidate."""
+    """Refresh neighbours / prior rulings / saturation pressure for every AVAILABLE candidate.
+
+    A LANE THAT COULD NOT LOOK LEAVES ITS FIELD ALONE. An empty `neighbours` block does not read as
+    "we did not check", it reads as "nothing in the catalog is like this" - the strongest accept
+    signal a dossier can carry, and build_dossier says so in as many words. So it must never be
+    manufactured by a lane that failed to run. Measured on 2026-08-24: a --classify pass in a git
+    worktree wiped all 6,251 neighbour blocks in one write, because find-similar.ps1's input
+    (catalog-digest.json) is a build product that is not in git, _batch_call returned {} for
+    "could not run", and this function wrote that {} out as data. It now REFUSES that write and says
+    which lane went blind, in the shape audit-semantic-identity has used since it was built.
+    """
     rows = []
     for c in pool["candidates"]:
         if c.get("status") != "available":
@@ -1176,12 +1301,18 @@ def score_pool(pool, quiet=False):
     prior = batch_prior_rulings(rows)
     sat = load_saturation()
     emb = load_embed_neighbours()
+    blind = []
+    if sim is None:
+        blind.append("find-similar.ps1 (word overlap) - its input is %s, a build product that is not "
+                     "in git, so a worktree has no copy of it" % CATALOG_DIGEST)
+    if prior is None:
+        blind.append("considered-dishes.ps1 (prior rulings) - input %s" % CONSIDERED_JSON)
     n = 0
     for c in pool["candidates"]:
         if c.get("status") != "available":
             continue
         neigh = []
-        for m in (sim.get(c["slug"]) or [])[:DOSSIER_NEIGHBOUR_CAP]:
+        for m in ((sim or {}).get(c["slug"]) or [])[:DOSSIER_NEIGHBOUR_CAP]:
             # find-similar scores against the catalog digest and nothing else, so every row it
             # returns is a LIVE recipe by construction.
             neigh.append({"slug": m.get("slug"), "name": m.get("name"), "score": m.get("score"),
@@ -1199,15 +1330,27 @@ def score_pool(pool, quiet=False):
                           "score": round(float(m.get("score") or 0), 4), "shared": [],
                           "source": "bge-m3",
                           "side": ("live-catalog" if m.get("side") == "catalog" else "backlog")})
-        c["neighbours"] = neigh
-        c["prior_rulings"] = prior.get(c["slug"]) or []
+        # sim is None -> the word-overlap lane never ran. The embedding lane is allowed to be absent
+        # (load_embed_neighbours documents that), but a blind word-overlap lane means this row's
+        # neighbour block was not recomputed at all, so the one on record stands.
+        if sim is not None:
+            c["neighbours"] = neigh
+        if prior is not None:
+            c["prior_rulings"] = (prior or {}).get(c["slug"]) or []
         sig = c.get("signature") or {}
         fam = sig.get("sauce_family")
         c["saturation_pressure"] = sat.get("%s|%s" % (sig.get("protein") or "any", fam), 0) if fam else 0
         n += 1
     if not quiet:
-        say("  scored %d available candidate(s): word-overlap%s + prior rulings + saturation"
-            % (n, "+bge-m3" if emb else ""))
+        # the line names the signals that ACTUALLY ran. A summary that lists a lane which went blind
+        # is the same lie as an empty neighbour block, just cheaper to read.
+        ran = [lane for lane, ok in (("word-overlap", sim is not None), ("bge-m3", bool(emb)),
+                                     ("prior rulings", prior is not None),
+                                     ("saturation", True)) if ok]
+        say("  scored %d available candidate(s): %s" % (n, " + ".join(ran)))
+        for b in blind:
+            say("  BLIND: %s. The field it feeds was LEFT AS IT WAS rather than emptied - an empty "
+                "block is a claim, not a gap." % b)
     return n
 
 
@@ -1410,6 +1553,32 @@ def cmd_classify(a):
     that cannot reach the model has not classified anything, and reporting that as a clean run is the
     could-not-look-is-not-a-clean-bill failure this estate has mechanised against five times. Nothing
     here schedules the server: it is started by hand at run start and stopped at run end (section 4.4).
+
+    THE PASS OF 2026-08-23, AND WHY THIS FUNCTION LOOKS LIKE THIS. That run classified 370 candidates
+    and returned bbq 180 / cream 116 / tomato 83 / herb 72 / spice 58 / cheese 53 / null 38 / soy 26 /
+    wine 19 / curry 16, with "Baked Chicken Legs", "Baked Pork Chops", "Baked Chicken Quarters" and
+    "Juiciest Easiest Roast Chicken Ever" all filed under bbq. Measured against the live 27B on
+    2026-08-24, two causes, both mechanical:
+
+      1. NOTHING TOLD THE MODEL WHAT 'plain' MEANT, so it never used it - 1 of 177 evidence-free rows.
+         Asked to name a family for a dish that has none, it took the first alternative in the
+         grammar: 138 of those 177 came back bbq, and bbq is enum[0]. Proof it was the ORDER and not
+         a reading: rotate the enum and the same four dishes answer cream instead, every time.
+      2. 177 OF THE 293 ROWS HAD NO INGREDIENTS AT ALL. They are the no-JSON-LD path in qualify() -
+         pages that gave up a title and nothing else, including image URLs the crawler enrolled as
+         candidates. The prompt sent them "Ingredients: " and asked for a family anyway.
+
+    So the pass now does three things it did not do:
+      * it does not ASK about a row with no ingredients. Nothing to read is not a family of null
+        confidence, it is a row we did not look at, and it is recorded and named as skipped.
+      * the prompt DEFINES plain and makes it the default (see classify_one).
+      * every family the model names must be CORROBORATED by something in the pot (family_evidence).
+        Uncorroborated, the answer is discarded and the row stays null - section 1.4 rule 1, the
+        substring proof a closed grammar does not provide.
+
+    --reclassify re-derives the model's answers after a change like that one. It clears sauce_family
+    ONLY where family_of would not have set it, so a keyword answer - which came from the source of
+    record and was never in doubt - is never clobbered by a model that is being re-tried.
     """
     if not llama_up():
         say("harvest --classify: REFUSING - llama-server is not answering at %s." % LLAMA_URL)
@@ -1421,7 +1590,18 @@ def cmd_classify(a):
         return 2
     families = load_families()
     enum = sorted(families.keys()) + ["plain"]
-    pool = read_pool()
+    pool = read_pool(a.pool or POOL)
+    if getattr(a, "reclassify", False):
+        cleared = 0
+        for c in pool["candidates"]:
+            if c.get("status") != "available":
+                continue
+            sig = c.get("signature") or {}
+            if sig.get("sauce_family") and not keyword_family(c, families):
+                sig["sauce_family"] = None
+                cleared += 1
+        say("harvest --classify --reclassify: cleared %d model-set family/families; keyword-set "
+            "families were left alone" % cleared)
     todo = [c for c in pool["candidates"]
             if c.get("status") == "available" and not (c.get("signature") or {}).get("sauce_family")]
     if a.limit:
@@ -1432,28 +1612,64 @@ def cmd_classify(a):
         say("HARVEST-COMPLETE")
         return 0
     say("harvest --classify: %d candidate(s), closed enum %s" % (len(todo), ", ".join(enum)))
-    done = 0
+    named = plain = skipped = uncorroborated = failed = 0
+    tally = {}
     for c in todo:
+        if not (c.get("ingredients_verbatim") or []):
+            # A title is not evidence. family_of has already read this name with the source-of-record
+            # vocabulary and found nothing; asking a 27B to name a family from the same string with
+            # nothing to check the answer against is how 138 baked chicken dinners became barbecue.
+            skipped += 1
+            continue
         verdict = classify_one(c, enum)
-        if verdict in enum:
-            c["signature"]["sauce_family"] = None if verdict == "plain" else verdict
-            done += 1
+        if verdict not in enum:
+            failed += 1
+            continue
+        if verdict == "plain":
+            plain += 1
+            continue
+        proof = family_evidence(verdict, classify_text(c), families)
+        if not proof:
+            uncorroborated += 1
+            continue
+        c["signature"]["sauce_family"] = verdict
+        tally[verdict] = tally.get(verdict, 0) + 1
+        named += 1
     score_pool(pool)
-    write_pool(pool)
-    say("  classified %d of %d" % (done, len(todo)))
+    write_pool(pool, a.pool or POOL)
+    asked = len(todo) - skipped
+    say("  asked %d of %d: %d named a corroborated family, %d plain, %d named a family nothing in "
+        "the pot supported (discarded), %d call(s) failed"
+        % (asked, len(todo), named, plain, uncorroborated, failed))
+    if tally:
+        say("  families: %s" % ", ".join("%s %d" % kv for kv in sorted(tally.items(),
+                                                                      key=lambda x: -x[1])))
+    if skipped:
+        say("  SKIPPED %d row(s) with no ingredients - the page carried no JSON-LD Recipe block, so "
+            "there is nothing to classify FROM. They keep a null family, which only widens the "
+            "neighbour search. This is a crawl finding, not a classify one." % skipped)
     say("HARVEST-COMPLETE")
-    return 0 if done == len(todo) else 1
+    return 0 if failed == 0 else 1
 
 
 def classify_one(cand, enum, url=None):
     """One grammar-forced closed-enum call. The answer is a SHORTLIST KEY, never a verdict: it steers
     which neighbours the dossier carries and nothing else (section 3 S1 item 4). A value outside the
-    enum is discarded rather than coerced."""
+    enum is discarded rather than coerced, and a value INSIDE it is still only a claim - cmd_classify
+    corroborates it against the ingredients before it is written.
+
+    THE PROMPT DEFINES 'plain' AND MAKES IT THE DEFAULT, and those two sentences are the whole fix.
+    Before them, 'plain' was one bare token among nine sauce names and the model read it as a tenth
+    flavour it had never heard of rather than as "none of these": it answered plain for 1 of 177
+    evidence-free rows and took the grammar's first alternative for the rest. Measured on the same
+    twelve dishes, same enum, same temperature, 2026-08-24: the four known-wrong cases go bbq ->
+    plain and the strong twins (Slow Cooker BBQ Pulled Pork, Slow Cooker Kansas City Ribs, Lemon
+    Roasted Chicken) do not move. Do not "tidy" those sentences away - --selftest asserts they are
+    still here, because a prompt is a load-bearing part and it is the part that reads like prose.
+    """
     url = (url or LLAMA_URL).rstrip("/") + "/completion"
     ings = "; ".join((cand.get("ingredients_verbatim") or [])[:15])
-    prompt = ("Classify the sauce or flavour family of this dish. Answer with exactly one word from "
-              "the list and nothing else.\nList: %s\nDish: %s\nIngredients: %s\nAnswer:"
-              % (", ".join(enum), cand.get("name") or cand.get("slug"), ings))
+    prompt = classify_prompt(cand.get("name") or cand.get("slug"), ings, enum)
     grammar = "root ::= (" + " | ".join('"%s"' % e for e in enum) + ")"
     body = json.dumps({"prompt": prompt, "grammar": grammar, "n_predict": 8, "temperature": 0.0}
                       ).encode("utf-8")
@@ -2155,6 +2371,175 @@ def cmd_selftest(_a):
     T("MUST FIRE  --classify's health probe is a real probe, not an assumption",
       llama_up("http://127.0.0.1:1", timeout=1) is False, "claimed up")
 
+    # ---- a lane that could not look leaves its field alone -----------------------------------------
+    #
+    # 2026-08-24: a --classify pass in a git worktree emptied all 6,251 neighbour blocks in one write.
+    # find-similar.ps1's input is catalog-digest.json, a build product that is not in git; _batch_call
+    # returned {} for "could not run"; score_pool wrote that out as data. An empty neighbour block is
+    # not a gap, it is the claim that NOTHING IN THE CATALOG IS LIKE THIS - the strongest accept
+    # signal a dossier carries - so it is exactly the field a blind lane must not touch.
+    realb = dict((k, globals()[k]) for k in ("batch_find_similar", "batch_prior_rulings",
+                                             "load_saturation", "load_embed_neighbours"))
+    try:
+        scored = {"candidates": [dict(new_entry("keep", "Keep Me", "https://d/k", "d", "crawl"),
+                                      neighbours=[{"slug": "x", "name": "X", "score": 9}],
+                                      prior_rulings=[{"verdict": "rejected"}])]}
+        globals()["batch_find_similar"] = lambda rows, top=DOSSIER_NEIGHBOUR_CAP: None
+        globals()["batch_prior_rulings"] = lambda rows: None
+        globals()["load_saturation"] = lambda path=SATURATION_JSON: {}
+        globals()["load_embed_neighbours"] = lambda path=NEIGHBOUR_FILE: {}
+        score_pool(scored, quiet=True)
+        T("MUST FIRE  a blind word-overlap lane leaves the neighbour block on record ALONE - an "
+          "empty block is a claim, not a gap",
+          len(scored["candidates"][0]["neighbours"]) == 1,
+          str(scored["candidates"][0]["neighbours"]))
+        T("MUST FIRE  and a blind prior-rulings lane does not erase a ruling either",
+          len(scored["candidates"][0]["prior_rulings"]) == 1,
+          str(scored["candidates"][0]["prior_rulings"]))
+        globals()["batch_find_similar"] = lambda rows, top=DOSSIER_NEIGHBOUR_CAP: {}
+        score_pool(scored, quiet=True)
+        T("CLEAN TWIN a lane that RAN and found nothing does empty the block - that answer is real",
+          scored["candidates"][0]["neighbours"] == [],
+          str(scored["candidates"][0]["neighbours"]))
+    finally:
+        for k, v in realb.items():
+            globals()[k] = v
+
+    # ---- --classify: the bbq pile-up of 2026-08-23, frozen ------------------------------------------
+    #
+    # That pass filed "Baked Chicken Legs", "Baked Pork Chops", "Baked Chicken Quarters" and
+    # "Juiciest Easiest Roast Chicken Ever" under bbq - 180 rows of it - because nothing had told the
+    # model what 'plain' meant and bbq is enum[0]. The model is not the fixture here; it cannot be,
+    # --selftest has to run with the card cold. What is frozen is THE CHECK: given the wrong answer,
+    # does anything catch it. Every case below is a real row from that pass.
+    T("MUST FIRE  every family in the source-of-record vocabulary has an ingredient corroborator",
+      all(f in FAMILY_EVIDENCE for f in fams),
+      ",".join(sorted(set(fams) - set(FAMILY_EVIDENCE))))
+    T("MUST FIRE  the corroborator is not the NAMING vocabulary a second time - that would reject "
+      "every answer --classify can ever give, and still pass",
+      all(set(FAMILY_EVIDENCE[f]) - set(fams[f]) for f in fams),
+      ",".join(f for f in fams if not set(FAMILY_EVIDENCE[f]) - set(fams[f])))
+    T("the corroborator searches the PS needles TOO, so it is never the narrower of the two",
+      family_evidence("cream", "Marry Me Chicken", fams) == "marry me",
+      str(family_evidence("cream", "Marry Me Chicken", fams)))
+
+    legs = ["8 to 10 bone-in, skin-on chicken legs/drumsticks", "2 tablespoons extra-virgin olive oil",
+            "2 tablespoons light brown sugar", "2 teaspoons smoked paprika", "1 teaspoon ground cumin",
+            "1 teaspoon garlic powder", "1 teaspoon kosher salt", "1/4 teaspoon ground cayenne pepper"]
+    quarters = ["4 chicken leg quarters", "1/4 cup extra-virgin olive oil", "1 tablespoon kosher salt",
+                "1 tablespoon paprika", "2 teaspoons smoked paprika", "1 1/2 teaspoons ground cumin",
+                "1/2 teaspoon cayenne pepper", "Bread (optional for mopping up the pan juices)"]
+    for nm, lines in (("Baked Chicken Legs", legs), ("Baked Chicken Quarters", quarters),
+                      ("Juiciest Easiest Roast Chicken Ever", []), ("Baked Pork Chops_2.Jpg", []),
+                      ("Choosing Beef Stew Meat", [])):
+        cand = {"name": nm, "ingredients_verbatim": lines}
+        why = "a dry rub is not a barbecue sauce" if lines else "there is nothing in the pot at all"
+        T("MUST FIRE  'bbq' for '%s' is discarded - %s" % (nm, why),
+          family_evidence("bbq", classify_text(cand), fams) is None,
+          str(family_evidence("bbq", classify_text(cand), fams)))
+
+    ribs = {"name": "Slow Cooker Kansas City Ribs",
+            "ingredients_verbatim": ["3 lb pork ribs", "1 cup barbecue sauce", "1/4 cup brown sugar"]}
+    creamy = {"name": "Skillet Chicken", "ingredients_verbatim": ["1 cup half and half", "spinach"]}
+    lemon = {"name": "Lemon Roasted Chicken",
+             "ingredients_verbatim": ["1 whole chicken", "2 lemons", "fresh thyme", "olive oil"]}
+    T("CLEAN TWIN 'bbq' survives when there is barbecue sauce in the pot",
+      family_evidence("bbq", classify_text(ribs), fams) == "barbecue",
+      str(family_evidence("bbq", classify_text(ribs), fams)))
+    T("CLEAN TWIN 'cream' survives on half and half, which no NAME needle would have found",
+      family_evidence("cream", classify_text(creamy), fams) == "half and half",
+      str(family_evidence("cream", classify_text(creamy), fams)))
+    T("CLEAN TWIN 'herb' survives on fresh thyme",
+      family_evidence("herb", classify_text(lemon), fams) == "thyme",
+      str(family_evidence("herb", classify_text(lemon), fams)))
+    T("'plain' is corroborated by construction - it is the claim that nothing is there",
+      family_evidence("plain", "anything", fams) == "", "not corroborated")
+
+    win = new_entry("w", "Roast Chicken", "https://d/w", "d", "crawl")
+    win["ingredients_verbatim"] = ["1 chicken"] * 12 + ["1 cup alfredo sauce"]
+    T("MUST FIRE  --classify's clear step reads QUALIFY's window and no wider - a family word in "
+      "ingredient line 13 was never the vocabulary's answer, so the row is the model's to re-derive",
+      keyword_family(win, fams) is None and family_of(classify_text(win), fams) == "cream",
+      "%s / %s" % (keyword_family(win, fams), family_of(classify_text(win), fams)))
+
+    # the prompt is a load-bearing part that happens to read like prose, so it is asserted like a part
+    pr = classify_prompt("X", "y", sorted(fams) + ["plain"])
+    T("MUST FIRE  the prompt DEFINES plain and makes it the default - without those two sentences "
+      "the model answered plain for 1 evidence-free row in 177",
+      "is plain" in pr and "Answer plain unless" in pr, pr[:80])
+
+    # ---- --classify end to end, with the model stubbed out ------------------------------------------
+    tmpc = os.path.join(os.environ.get("TEMP", "."), "harvest-classify-selftest-%d.json" % os.getpid())
+    asked = []
+    real = dict((k, globals()[k]) for k in ("llama_up", "classify_one", "score_pool"))
+    try:
+        rows = []
+        for slug, nm, lines in (("no-ings", "Baked Pork Chops_2.Jpg", []),
+                                ("rub", "Baked Chicken Legs", legs),
+                                ("sauced", "Kansas City Ribs", ribs["ingredients_verbatim"])):
+            e = new_entry(slug, nm, "https://d/" + slug, "d", "crawl")
+            e["ingredients_verbatim"] = lines
+            rows.append(e)
+        write_pool({"candidates": rows}, tmpc)
+        globals()["llama_up"] = lambda *_a, **_k: True
+        globals()["score_pool"] = lambda p, quiet=False: 0
+        globals()["classify_one"] = lambda c, enum, url=None: (asked.append(c["slug"]) or "bbq")
+        rc = cmd_classify(argparse.Namespace(pool=tmpc, limit=0, reclassify=False))
+        got = dict((c["slug"], (c.get("signature") or {}).get("sauce_family"))
+                   for c in read_pool(tmpc)["candidates"])
+        T("MUST FIRE  a row with no ingredients is never sent to the model - 177 of the 293 rows the "
+          "2026-08-23 pass classified were a title and nothing else",
+          "no-ings" not in asked, ",".join(asked))
+        T("MUST FIRE  and it keeps a null family rather than the model's guess",
+          got.get("no-ings") is None, str(got.get("no-ings")))
+        T("MUST FIRE  'bbq' answered for a dry-rub bake is DISCARDED, not written",
+          got.get("rub") is None, str(got.get("rub")))
+        T("CLEAN TWIN 'bbq' answered for ribs in barbecue sauce IS written",
+          got.get("sauced") == "bbq", str(got.get("sauced")))
+        T("a pass that asked and was answered exits clean", rc == 0, str(rc))
+
+        # --reclassify re-derives the MODEL's answers and must not touch the vocabulary's
+        p = read_pool(tmpc)
+        for c in p["candidates"]:
+            if c["slug"] == "no-ings":
+                c["signature"]["sauce_family"] = "bbq"    # a model guess: nothing names bbq here
+        write_pool(p, tmpc)
+        globals()["classify_one"] = lambda c, enum, url=None: "plain"
+        cmd_classify(argparse.Namespace(pool=tmpc, limit=0, reclassify=True))
+        got2 = dict((c["slug"], (c.get("signature") or {}).get("sauce_family"))
+                    for c in read_pool(tmpc)["candidates"])
+        T("MUST FIRE  --reclassify clears a family the MODEL set", got2.get("no-ings") is None,
+          str(got2.get("no-ings")))
+        T("MUST FIRE  and never clears one the KEYWORD vocabulary would set - that answer came from "
+          "the source of record and was never the thing in doubt",
+          got2.get("sauced") == "bbq", str(got2.get("sauced")))
+    finally:
+        for k, v in real.items():
+            globals()[k] = v
+        for suffix in ("", ".tmp"):
+            try:
+                os.remove(tmpc + suffix)
+            except OSError:
+                pass
+
+    # ---- and the same cases against the REAL model, when the card happens to be warm ----------------
+    #
+    # This is the only fixture in the file that needs a GPU, so it cannot be a precondition of
+    # --selftest - every other caller runs with the card cold. It is not skipped SILENTLY either: a
+    # skip prints what went unchecked, because a self-test that quietly drops its hardest case is the
+    # could-not-look-is-not-a-clean-bill failure in miniature.
+    if llama_up():
+        cenum = sorted(fams) + ["plain"]
+        for nm, lines, want in (("Juiciest Easiest Roast Chicken Ever", [], "plain"),
+                                ("Baked Chicken Quarters", quarters, "plain"),
+                                ("Slow Cooker BBQ Pulled Pork", [], "bbq"),
+                                ("Slow Cooker Kansas City Ribs", ribs["ingredients_verbatim"], "bbq")):
+            live = classify_one({"name": nm, "ingredients_verbatim": lines}, cenum)
+            T("LIVE MODEL  '%s' reads as %s" % (nm, want), live == want, live or "(no answer)")
+    else:
+        print("  SKIP  the live-model fixtures - llama-server is down. The prompt's four frozen "
+              "cases were NOT re-measured this run; every check above still ran.")
+
     print("")
     if bad:
         print("harvest SELF-TEST FAIL (%d)" % len(bad))
@@ -2169,6 +2554,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(add_help=True, description="the v3 harvest plane")
     ap.add_argument("--crawl", action="store_true")
     ap.add_argument("--classify", action="store_true")
+    ap.add_argument("--reclassify", action="store_true")
     ap.add_argument("--ingest", default="")
     ap.add_argument("--mark-taken", dest="mark_taken", default="")
     ap.add_argument("--mark-ruled", dest="mark_ruled", default="")
@@ -2197,7 +2583,7 @@ def main(argv=None):
         return cmd_selftest(a)
     if a.crawl:
         return cmd_crawl(a)
-    if a.classify:
+    if a.classify or a.reclassify:
         return cmd_classify(a)
     if a.ingest:
         return cmd_ingest(a)

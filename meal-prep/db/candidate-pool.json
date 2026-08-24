@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-23T19:35:08",
+ "updated": "2026-08-24T02:41:40",
  "count": 2162,
  "candidates": [
   {
@@ -1291,7 +1291,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -1941,7 +1941,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -2203,7 +2203,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -2620,7 +2620,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -3224,7 +3224,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -3359,7 +3359,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -3374,7 +3374,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -3591,7 +3591,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -3747,7 +3747,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -3785,7 +3785,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -4047,7 +4047,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -4171,7 +4171,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -4293,7 +4293,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -4511,7 +4511,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "bread"
    },
    "band": {
@@ -4667,7 +4667,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -5263,7 +5263,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -5525,7 +5525,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -6107,7 +6107,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -6241,7 +6241,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 1,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -6256,7 +6256,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -6717,7 +6717,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -6979,7 +6979,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -7351,7 +7351,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -7614,7 +7614,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -7807,7 +7807,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -7931,7 +7931,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -8086,7 +8086,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -8101,7 +8101,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -8605,7 +8605,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -9846,7 +9846,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -9984,7 +9984,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -10110,7 +10110,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 1,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -12372,7 +12372,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -12525,7 +12525,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -14071,7 +14071,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -14756,7 +14756,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -14915,7 +14915,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -14953,7 +14953,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -15090,7 +15090,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 1,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -15535,7 +15535,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -15970,7 +15970,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -16732,7 +16732,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -18992,7 +18992,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -19504,7 +19504,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -19693,7 +19693,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -20423,7 +20423,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -20544,7 +20544,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 2,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -21310,7 +21310,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -21863,7 +21863,7 @@
    "signature": {
     "protein": "turkey",
     "method": "skillet",
-    "sauce_family": "cheese",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -22023,7 +22023,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -22714,7 +22714,7 @@
    "signature": {
     "protein": "pork",
     "method": "braised",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -22837,7 +22837,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 5,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -28567,7 +28567,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -29778,7 +29778,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -30231,7 +30231,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -30488,7 +30488,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -30746,7 +30746,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -31432,7 +31432,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -31667,7 +31667,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -31856,7 +31856,7 @@
    "signature": {
     "protein": "any",
     "method": "braised",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -32031,7 +32031,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -32445,7 +32445,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -35315,7 +35315,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -35648,7 +35648,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -36194,7 +36194,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -36453,7 +36453,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -37072,7 +37072,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -37307,7 +37307,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -37642,7 +37642,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -38164,7 +38164,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -38307,7 +38307,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -38561,7 +38561,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -39040,7 +39040,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -39298,7 +39298,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -39878,7 +39878,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -40405,7 +40405,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -40757,7 +40757,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -46601,7 +46601,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -47886,7 +47886,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -48051,7 +48051,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -48239,7 +48239,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -48710,7 +48710,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -48868,7 +48868,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -48883,7 +48883,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -49596,7 +49596,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -49853,7 +49853,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -50840,7 +50840,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -51340,7 +51340,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -52344,7 +52344,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -52770,7 +52770,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -53039,7 +53039,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -53409,7 +53409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -53673,7 +53673,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -54702,7 +54702,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -55391,7 +55391,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -55558,7 +55558,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -55928,7 +55928,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -56141,7 +56141,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -57061,7 +57061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -57495,7 +57495,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -58262,7 +58262,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -58409,7 +58409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -58644,7 +58644,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -58967,7 +58967,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -59229,7 +59229,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -59468,7 +59468,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -59661,7 +59661,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -59824,7 +59824,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -60200,7 +60200,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -60643,7 +60643,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -60900,7 +60900,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -62596,7 +62596,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -63426,7 +63426,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -64626,7 +64626,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -65393,7 +65393,7 @@
    "signature": {
     "protein": "chicken",
     "method": "skillet",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -65576,7 +65576,7 @@
      "at": "2026-08-23T18:20:25"
     }
    ],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -65765,7 +65765,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -65907,7 +65907,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "cheese",
+    "sauce_family": null,
     "starch": "bean"
    },
    "band": {
@@ -66373,7 +66373,7 @@
    "signature": {
     "protein": "chicken",
     "method": "skillet",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -66558,7 +66558,7 @@
      "at": "2026-08-23T18:20:25"
     }
    ],
-   "saturation_pressure": 9,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -66598,7 +66598,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -67496,7 +67496,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "potato"
    },
    "band": {
@@ -67612,7 +67612,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -68201,7 +68201,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -68703,7 +68703,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -68960,7 +68960,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -69324,7 +69324,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -69730,7 +69730,7 @@
    "signature": {
     "protein": "beef",
     "method": "braised",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "potato"
    },
    "band": {
@@ -70554,7 +70554,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -70837,7 +70837,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -70954,7 +70954,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -70969,7 +70969,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -71334,7 +71334,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -71522,7 +71522,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -71687,7 +71687,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -71934,7 +71934,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -72099,7 +72099,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -72287,7 +72287,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -72638,7 +72638,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -73381,7 +73381,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -73689,7 +73689,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -74209,7 +74209,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -74519,7 +74519,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -74948,7 +74948,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -75323,7 +75323,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -75646,7 +75646,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -75909,7 +75909,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -76148,7 +76148,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "potato"
    },
    "band": {
@@ -76274,7 +76274,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 9,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -76289,7 +76289,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -76797,7 +76797,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -77059,7 +77059,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -77332,7 +77332,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -77787,7 +77787,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -78145,7 +78145,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -78843,7 +78843,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -79070,7 +79070,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -79442,7 +79442,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -80098,7 +80098,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -80462,7 +80462,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -80650,7 +80650,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -80769,7 +80769,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -81187,7 +81187,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -83097,7 +83097,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -83260,7 +83260,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 9,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -83275,7 +83275,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -84835,7 +84835,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -84937,7 +84937,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85056,7 +85056,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85204,7 +85204,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85393,7 +85393,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85495,7 +85495,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85614,7 +85614,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85683,7 +85683,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85826,7 +85826,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -85951,7 +85951,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -86525,7 +86525,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -86859,7 +86859,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -87206,7 +87206,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -87331,7 +87331,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -87469,7 +87469,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -87594,7 +87594,7 @@
    "signature": {
     "protein": "pork",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -87683,7 +87683,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 5,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -88229,7 +88229,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -88527,7 +88527,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -88740,7 +88740,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -88931,7 +88931,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -89008,7 +89008,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -89527,7 +89527,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -89824,7 +89824,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -90061,7 +90061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -90563,7 +90563,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -90753,7 +90753,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -90845,7 +90845,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -91058,7 +91058,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -91150,7 +91150,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -91409,7 +91409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -91802,7 +91802,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -91963,7 +91963,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -92002,7 +92002,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -92264,7 +92264,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -92500,7 +92500,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -92870,7 +92870,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -93127,7 +93127,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -93276,7 +93276,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -93395,7 +93395,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -93844,7 +93844,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -93960,7 +93960,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -94021,7 +94021,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -94281,7 +94281,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -94625,7 +94625,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -95016,7 +95016,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -95542,7 +95542,7 @@
    "signature": {
     "protein": "beef",
     "method": "braised",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "bean"
    },
    "band": {
@@ -95693,7 +95693,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -96219,7 +96219,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -96713,7 +96713,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -97686,7 +97686,7 @@
    "signature": {
     "protein": "any",
     "method": "braised",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -97964,7 +97964,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -99265,7 +99265,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -101045,7 +101045,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -101428,7 +101428,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -101790,7 +101790,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -101905,7 +101905,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -102698,7 +102698,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -103220,7 +103220,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -103336,7 +103336,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 3,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -103569,7 +103569,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -103996,7 +103996,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -105769,7 +105769,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "bean"
    },
    "band": {
@@ -106660,7 +106660,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -107481,7 +107481,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -107680,7 +107680,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -108435,7 +108435,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "rice"
    },
    "band": {
@@ -108950,7 +108950,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -110247,7 +110247,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -110316,7 +110316,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -112294,7 +112294,7 @@
    "signature": {
     "protein": "pork",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -112369,7 +112369,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 1,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -113860,7 +113860,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -114207,7 +114207,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -114678,7 +114678,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -114838,7 +114838,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 9,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -114876,7 +114876,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -117507,7 +117507,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -117640,7 +117640,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": "tomato",
     "starch": "none"
    },
    "band": {
@@ -118153,7 +118153,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -118672,7 +118672,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -121533,7 +121533,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -122073,7 +122073,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "couscous"
    },
    "band": {
@@ -122293,7 +122293,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -122381,7 +122381,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 1,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -122467,7 +122467,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -123018,7 +123018,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -124027,7 +124027,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -124351,7 +124351,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "herb",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -124848,7 +124848,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -125061,7 +125061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -125606,7 +125606,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "cream",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -125979,7 +125979,7 @@
    "signature": {
     "protein": "pork",
     "method": "braised",
-    "sauce_family": "spice",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -126100,7 +126100,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 4,
+   "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -127475,7 +127475,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
@@ -127544,7 +127544,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": "bbq",
+    "sauce_family": null,
     "starch": "none"
    },
    "band": {
