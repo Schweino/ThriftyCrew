@@ -582,16 +582,49 @@ sequencing - everything hunt-orchestrator.js does - with three abilities the san
 
 ### 4.1a The dispatch adapter (the part of D9 most likely to be built wrong - read this twice)
 
-Judgment calls go out as headless Claude Code invocations. **`claude -p` cannot invoke a named
-subagent as its top-level agent** - subagents in `.claude\agents\` are things a running session
-delegates to, not entry points - and prompting a headless main loop to "use the recipe-writer
-subagent" pays for TWO contexts per call (the main loop plus the subagent), which quietly defeats
-the plan. The adapter therefore reconstructs each agent from its definition file:
+Judgment calls go out as headless Claude Code invocations.
+
+**CORRECTED 2026-08-24 (D9 build, measured on Claude Code CLI 2.1.173). This subsection was written
+on a premise that is false, and the correction makes the adapter simpler and stronger rather than
+harder.** What it said: "`claude -p` cannot invoke a named subagent as its top-level agent -
+subagents in `.claude\agents\` are things a running session delegates to, not entry points - and
+prompting a headless main loop to 'use the recipe-writer subagent' pays for TWO contexts per call".
+The second half is still true of *prompting* a main loop to delegate. The first half is not, because
+the CLI has a flag for exactly this:
+
+```
+echo "List the exact names of every tool available to you right now, comma separated." \
+  | claude -p --agent recipe-source-qa --output-format json
+result     -> "WebFetch, Read, Grep, Glob, Bash, PowerShell"   (that agent's frontmatter list EXACTLY)
+modelUsage -> claude-fable-5                                    (that agent's frontmatter model)
+num_turns  -> 1                                                 (ONE context; nothing delegated)
+```
+
+So the adapter dispatches `claude -p --agent <name>`, and this is BETTER than reconstruction for a
+reason beyond convenience: reconstructing the agent would make `hunt_dispatch.py` a SECOND reader of
+the frontmatter, and two readers of one authority is how this estate's forked-taxonomy defects start.
+With `--agent`, the CLI reads the definition file and the adapter cannot disagree with it - section
+4.4a's "the frontmatter is the single authority" holds by construction instead of by care.
+
+**`--effort` also exists on this CLI** (low/medium/high/xhigh/max), so point 4 below has no gap left
+to report: `model`, `effort` and `tools` all reach the dispatch. The adapter still parses the
+frontmatter, for two jobs: to pass `--effort` explicitly (the same value the file states, so it
+cannot disagree), and to CHECK that the model which actually billed is the model the file pins - a
+silently downgraded pin is recorded as a finding on the result rather than refused, because the pin
+is the frontmatter's to state and the CLI's to honor.
+
+The reconstruction road below is BUILT AND FIXTURED ANYWAY, one flag away
+(`hunt_dispatch.dispatch(..., reconstruct=True)`), as the fallback if a future CLI drops `--agent`:
 
 1. Parse the agent's `.claude\agents\<name>.md` frontmatter (model, tools, effort) and body.
 2. Dispatch `claude -p` with: `--model <the pinned model>`, `--append-system-prompt <the agent
    body>`, `--allowedTools <the frontmatter tool list>`, `--output-format json`, cwd = repo root,
    and the estate's permission settings. The user prompt is the dossier + stage contract only.
+   (One mechanical detail the D9 build found and pinned: the prompt travels on STDIN, never as a
+   positional argument. Windows caps a command line at 32,767 characters and a dossier batch can
+   approach that, and the CLI's variadic flags will swallow a positional prompt - measured,
+   `--tools "" <prompt>` exits with "Input must be provided either through stdin or as a prompt
+   argument".)
 3. Parse the JSON result envelope; validate the payload against the stage schema in the daemon;
    re-ask once on schema failure - **and enum violations ARE schema failures: the re-ask quotes the
    refusal's named violations back to the agent, and the daemon NEVER auto-coerces (ADDED 2026-08-23,
@@ -604,17 +637,47 @@ the plan. The adapter therefore reconstructs each agent from its definition file
    being forked, so the daemon's only move on an enum violation is the re-ask;
    then per-slug retry budgets and the breaker exactly as hunt-lib
    prescribes. A transport/timeout failure is a null - STUCK, never a verdict (B5).
-4. Where a frontmatter field has no CLI flag (e.g. `effort`), record the gap in the drill report
-   rather than silently dropping it; if it materially changes an agent's behavior, that is a
-   phase-3 finding to resolve before go-live, not after.
+4. Where a frontmatter field has no CLI flag, record the gap in the drill report rather than
+   silently dropping it. **RESOLVED 2026-08-24: there is no such field.** `--model`, `--effort` and
+   `--allowedTools` all exist on CLI 2.1.173, and on the `--agent` road the CLI applies all three
+   from the file itself.
 
 **The phase-3 drill must dispatch every agent type once against scratch inputs and (a) diff its
 behavior against a Workflow-dispatched twin, (b) measure the fixed per-call overhead** - a headless
 invocation loads project context (CLAUDE.md, settings, memory) on every call, and whether that costs
 more or less than a Workflow subagent's per-dispatch overhead is a question for the drill's
-measurement, not for this document's assumption. If measured overhead is large, the counter-move is
-bigger dossiers per call (the batch sizes are caps, not quotas), and the recorded fallback in §4.2
-remains.
+measurement, not for this document's assumption.
+
+**RUN 2026-08-24. Full record in `meal-prep\out\d9-gate\adapter-drill.json` and
+`adapter-drill-notes.md`; the shared prompt spec is `meal-prep\pipeline\hunt-dispatch-drill.json`,
+one file both roads read so neither can quietly ask a different question.**
+
+*(a) The behavior diff: 10 agent types, 10 of 10 conforming on BOTH roads, every named key AGREES,
+zero findings.* Reconstructing an agent outside the harness does not change what it decides.
+
+*(b) The overhead, measured on deliberately ~60-token prompts so the input count IS the fixed part:*
+
+| | headless (`--agent`) | Workflow twin |
+|---|---|---|
+| input tokens per dispatch, mean | **18,050** | **46,572** |
+| median | 15,470 | 49,624 |
+| range | 7,220 - 30,942 | 18,452 - 78,624 |
+| wall clock, mean | 7.3 s | (10 in parallel, 12.7 s total) |
+
+**The headless road costs ~2.6x LESS context per dispatch than a Workflow subagent**, so the
+counter-move this paragraph reserved - bigger dossiers per call - is not needed, and the batch sizes
+stay caps rather than becoming quotas for overhead reasons. (Cache caveat for anyone re-measuring:
+three of the ten headless dispatches read 20-23k tokens from a warm prompt cache and seven created
+theirs cold, so 18,050 is a mixed-cache mean and should be quoted as one.) The recorded fallback in
+§4.2 remains available and was not needed.
+
+*One divergence the drill surfaced, and it matters for why the daemon validates at all.* The
+Workflow harness FORCES structured output; the daemon validates after the fact. Given a field typed
+as a string whose honest answer was the JSON literal `null`, the harness coerced the answer to the
+string `"null"` and passed, while the adapter refused the payload whole, re-asked once quoting the
+violation, got the same honest `null` and refused again. Neither is wrong, but they are not the same
+guarantee, and for a daemon whose rule is NEVER auto-coerce, the validate-then-refuse behavior is the
+one this plan wants.
 
 **State-write ownership changes with the daemon, and this is an accuracy feature, not a style
 choice:** judgment agents stop running `hunt-run.ps1` / `ingredient-queue.ps1 -Add` / ledger stamps
@@ -852,6 +915,14 @@ build time, fix THIS document in the same commit rather than deviating silently.
   {name, protein, method, verdict, reason}}], note}` (the `record` block is what the daemon writes
   to considered-dishes verbatim); **WRITE drops its macro fields** - the band is settled pre-write,
   so the writer returns `{slug, status, state, detail}` only.
+  **What that costs between D9 and D8, stated so a reader does not mistake a hole for a weakened
+  gate (ADDED 2026-08-24, D9 build).** The workflow's write lane gated the band on the writer's OWN
+  REPORTED numbers, which those dropped fields carried; D8's `build-intake-skeleton.ps1` pre-write
+  band gate is a phase-4 deliverable. In the interval the daemon enforces the band by reading the
+  BUILT SPEC - `db\recipes\<slug>.json`'s `stat.cal` and `stat.carbs` - after the write lane returns.
+  That is a mechanical postcondition over the artifact instead of a self-report about it, so it is
+  strictly the stronger of the two, and it needs nothing from D8. `hunt_lib.in_band` is the shared
+  predicate either way, and it is one of the ported functions the parity gate covers.
 
   **How a DECIDE verdict lands on the state machine (ADDED 2026-08-23 - the build found this document
   silent on it, and silence here is how a verdict gets faked).** hunt-run.ps1 allows exactly two exits
@@ -1418,6 +1489,21 @@ Two clarifications recorded for the phase-1 builder, so neither becomes a mid-bu
   `find-similar.ps1 -SelfTest` and `considered-dishes.ps1 -SelfTest`. **D7's map-preresolve.ps1 and
   D8's build-intake-skeleton.ps1 are the next new PS collection code this plan orders; their builders
   read all three traps first, and any fixture over a collection uses at least three elements.**
+  **A FOURTH TRAP, and this one is about the fixtures rather than the code (2026-08-24, D9,
+  measured). A CONCURRENCY FIXTURE THAT CANNOT LOSE A ROW PROVES NOTHING, and the estate had one.**
+  `source-domains.ps1 -SelfTest`'s "8 concurrent -Record calls all land" test - the very fixture this
+  plan tells every later ledger to copy (see D9's phase-1 obligations) - PASSED WITH ITS OWN MUTEX
+  NEUTERED. The reason is arithmetic, not PowerShell: each `Start-Job` child spawns its own
+  powershell.exe at roughly a second apiece while the read-modify-write costs about two
+  milliseconds, so no two writers were ever inside the critical section at the same time. There was
+  no race to lose. Two things are needed and both are now in `source-domains.ps1` and
+  `ingredient-resolutions.ps1`: **a START BARRIER** (every child is handed the same UTC instant and
+  spins until it arrives) and **a critical section slow enough to overlap** (the scratch store is
+  seeded with 400 rows, which puts the read-modify-write in the tens of milliseconds). With both,
+  the neutered runs measured `kept 1 of 4 rows` and `ok=-1 of 8, kept 0 of 400`; with the locks in
+  place, both are green. The locks were always right; only their fixtures were asleep. **Every
+  concurrent-writers fixture this plan orders - ingredient-resolutions is the one D9 built, and any
+  later ledger a cap>1 lane writes - must be PROVEN to fail with its lock removed before it counts.**
 
 **Phase 2 gate: PASSED 2026-08-23.** Evidence, so the next session does not re-earn it.
 
