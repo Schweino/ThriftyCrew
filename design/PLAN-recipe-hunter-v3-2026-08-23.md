@@ -1025,6 +1025,30 @@ serialized cost passes and a costed.json that parses.
 (`-By local`, tokens 0) - the lane log is the only record of the run's SHAPE, and a page settled
 locally is work done, not work skipped. audit-lane-shape continues to judge the log unchanged.
 
+**CORRECTED 2026-08-24 (D9's drain drill, measured): "unchanged" was not available, because
+audit-lane-shape.ps1 was counting every dispatch TWICE.** `hunt-run.ps1 -Lane` grew an `event` field
+on 2026-08-16 so a stage could stamp both ends and its duration could finally be measured; the audit
+never learned about it and kept treating every LINE as an invocation. So since that date it has read
+every dispatch as two and every item as a duplicate, which means `<lane>-lane-duplicate-items` has
+fired BY CONSTRUCTION on every paired log, and every invocation count it printed was doubled.
+Measured on a lane log the daemon wrote - 4 dispatches, 8 lines - it reported 2 map and 6 price
+invocations with all four price terms flagged as repeats, and not one of those was real. The fix is
+`Get-Invocations`: a start and an end sharing lane + label + item list are ONE invocation, and the
+END line is the survivor because it carries the token stamp; a line with no `event` at all is an
+older unpaired line and stands alone, which keeps the audit readable against historical logs. Frozen
+as fixture 3b in `audit-lane-shape.ps1 -SelfTest`, both directions: the collapsed pair reports no
+duplicate, and the raw lines are shown to be exactly what used to fire it. **This also means the
+lane-shape findings on the v2 lowcarb-100 log are partly an artifact and should be re-read, not
+quoted.**
+
+**And one thing the pen-ownership rule moves that this document did not name (ADDED 2026-08-24, found
+by the drain drill).** v2's audit dispatch told the auditor, in prose, to run `batch-ledger.ps1
+-Stamp -Stage audit` on a GO, and wave-publish's P2 gate refuses to publish a batch with no audit
+stamp. Under section 4.1a the agent stops running shell - so if the daemon does not stamp it, nothing
+does, and every wave stops dead at P2. The verdict stays the auditor's; only the pen moves. The same
+applies to the batch OPEN when a drill runs on a scratch ledger, since `hunt-run -WaveClose` has no
+`-LedgerPath`, only `-NoLedger`.
+
 ## 5. Deliverables
 
 Each ships with its must-fire fixture and clean twin in the same commit, per the guard-fixture rule.
@@ -1207,7 +1231,8 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
   retires before any writer dispatch; a clean prose-only fill passes untouched.
-- **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - the port, under §4.2's
+- **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - **BUILT 2026-08-24;
+  the phase-3 gate record is in section 6.** The port, under §4.2's
   parity gate; daemon-owned state writes and lane-log start/end pairs with token stamping; the wave
   control flow ported decision-for-decision. Fixtures: the full hunt-lib suite ported, plus
   daemon-level twins for B5 (null is STUCK), B6 (per-slug budgets), B7 (first-token verdicts), B8
@@ -1594,6 +1619,53 @@ settle rate is a rate and not a verdict about a page, and the daemon should not 
 escalation as a permanent property of a URL. **(b) The two-server-shape sweep is an operating
 shape, not a workaround** - see the resolved conflict in section 4.3, and `--from-report` is what
 makes it cheap.
+
+**Phase 3 gate: PASSED 2026-08-24.** Evidence, so the next session does not re-earn it.
+
+*Gate 1 - the hunt-lib parity suite green, every ported fixture, both implementations, shared
+vectors.* **MET. 58/58 on both sides.** `hunt-lib-vectors.json` holds one vector per assertion
+hunt-lib.js's own selfTest already made, in four kinds: pure calls, a bumpRetries SEQUENCE (B6 is
+about state carried between calls), a breaker operation sequence, and five named async channel
+scenarios. `hunt_lib.py --parity` runs them against the port; `hunt-lib-parity.js` runs the SAME file
+against hunt-lib.js in a zero-agent Workflow (run wf_26cad6f5-70e: 0 agents, 0 tokens, 9 ms). The JS
+side splices hunt-lib.js's source in by generator with its SHA-256 stamped, and `hunt_lib.py
+--selftest` re-hashes the shipped file and fires if the two drift - because the first build passed
+the source through `args` and evaluated it, and the harness refuses that ("EvalError: Code generation
+from strings disallowed for this context").
+
+*Gate 2 - the adapter drill: every agent type once, behavior diffed against a Workflow twin, fixed
+per-dispatch overhead measured.* **MET, and it corrected this document.** See §4.1a: `--agent` works,
+`--effort` exists, 10 of 10 agree on both roads, and the headless road costs 18,050 input tokens per
+dispatch against the twin's 46,572.
+
+*Gate 3 - the drain drill per §4.2.* **MET.** `hunt_daemon_drill.py`, seeded from the real
+lowcarb-100 dir's `-Status` (read-only) and then working on a copy: a wave of 4 closed, preaudited,
+audited GO and walked every publish gate under `wave-publish -DryRun` (P1 verdict, P1b freshness, P2
+ledger stamp, P3 states, 4 would publish, 0 held, no reviewer dispatched because a dry run publishes
+nothing); 3 more recipes walked write -> qa -> qa-passed; the run dir diffed clean against the
+contract - files, directories, lane-line keys, lane vocabulary, state-file keys - with 7 start/end
+pairs all carrying token stamps. The judgment agents and `build-v2-spec -RunCost` are stood in for,
+each for a stated reason, and the drill's report says so rather than hiding it.
+
+*Gate 4 - audit-lane-shape clean on a daemon-produced lane log.* **MET, after fixing the audit.**
+A run dir the daemon wrote from `-Init` onwards, driven through the two lanes the audit actually
+shape-judges: `map 1 invocation, 3 distinct items, floor 1` and `price 1 invocation, 4 distinct
+items, floor 1`, "lane shape matches the design", findings=0, exit 0. Getting there required the
+`Get-Invocations` correction recorded in §4.5 - the audit had been counting every dispatch twice
+since 2026-08-16 - and two daemon fixes the drill earned: the map lane now enqueues a whole
+micro-batch before waking the pricer once (waking per slug turned the cross-recipe drainer into a
+per-recipe stage), and a term already sent to the pricer this run is never sent again (`absent_terms`
+is consumed destructively, so the second recipe wanting a shared term re-queued it behind a pricer
+that had already ruled).
+
+*Three things a phase-4 builder should carry forward.* **(a) The drill wrote to the live batch
+ledger before anyone noticed** - two open w5/w6 rows that `batch-ledger -Verify` would have called
+stalled batches forever. Reverted, and the daemon now takes a `--ledger` scratch path that every
+batch-ledger call goes through, mirroring wave-publish's own `-LedgerPath`. Any drill that touches
+the wave lane uses it. **(b) A concurrency fixture that cannot lose a row proves nothing** - see the
+fourth PS trap in this section. **(c) The QA battery correctly exits 2 when a spec was never built,
+and the daemon records that as a finding and still dispatches source-QA.** Could-not-look is never a
+clean bill, and it is also never a reason to skip the judge.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order

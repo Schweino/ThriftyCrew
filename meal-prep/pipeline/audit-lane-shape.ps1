@@ -1,4 +1,4 @@
-# audit-lane-shape.ps1 - did the Recipe Hunter run its lanes in the SHAPE the design specifies?
+﻿# audit-lane-shape.ps1 - did the Recipe Hunter run its lanes in the SHAPE the design specifies?
 #
 # WHY THIS EXISTS (2026-08-15). A session built the hunt orchestration from
 # .claude\skills\recipe-hunter\SKILL.md alone instead of design\PLAN-recipe-hunter-v2-2026-08-15.md
@@ -61,6 +61,39 @@ $script:LANE_KNOWN = @('hunt', 'select', 'extract', 'map', 'price', 'write', 'qa
 # PURE PREDICATES. Everything that decides a finding lives here, takes plain objects, and touches no
 # disk, so the self-test's fixtures are the real judge and not a mock of it.
 # ===================================================================================================
+
+# ONE INVOCATION IS ONE INVOCATION, however many lines it wrote.
+#
+# ADDED 2026-08-24 (PLAN-recipe-hunter-v3 D9's drain drill, measured). hunt-run.ps1 -Lane grew an
+# `event` field on 2026-08-16 so a stage could stamp BOTH ends and its duration could finally be
+# measured. This audit never learned about it. It counted every line as an invocation, so from that
+# day forward it read every dispatch as two and every item as a duplicate - which means
+# `<lane>-lane-duplicate-items` has fired by construction on every paired log since, and every
+# invocation count it printed was doubled.
+#
+# Measured on a lane log the D9 daemon wrote: 4 dispatches, 8 lines, and the audit reported 2 map
+# and 6 price "invocations" with all four price terms flagged as repeats. Not one of those was real.
+#
+# A start and an end line share lane + label + item list. Collapse them, preferring the END line
+# because it is the one carrying the token stamp. A line with no `event` at all is an older
+# unpaired line and stands on its own, which is what keeps this readable against historical logs.
+function Get-Invocations {
+  param($Lines)
+  $out = @(); $seen = @{}
+  foreach ($l in @($Lines)) {
+    $ev = [string]$l.event
+    if (-not $ev) { $out += $l; continue }
+    $key = ('{0}|{1}|{2}' -f [string]$l.lane, [string]$l.label, ((@($l.items) | ForEach-Object { [string]$_ }) -join "`u{1}"))
+    if ($seen.ContainsKey($key)) {
+      # the pair's second half: keep the END line, which carries the tokens
+      if ($ev -eq 'end') { $out[$seen[$key]] = $l }
+      continue
+    }
+    $seen[$key] = $out.Count
+    $out += $l
+  }
+  return @($out)
+}
 
 # The headline: how many invocations did this lane take, against how many the batch size needed?
 function Get-BatchShape {
@@ -237,6 +270,38 @@ if ($runSelfTest) {
   T 'CLEAN TWIN one batch carrying both recipes prices harissa once' `
     ((@((Get-BatchShape @((Inv 'b1' @('harissa', 'couscous', 'preserved lemon'))) 10).repeated)).Count -eq 0) 'reported a repeat that is not there'
 
+  # ---- FIXTURE 3b. START/END PAIRS ARE ONE INVOCATION (added 2026-08-24, D9's drain drill).
+  # This audit read every LINE as an invocation, and hunt-run.ps1 has stamped both ends of every
+  # dispatch since 2026-08-16. So from that day it counted every invocation twice and reported every
+  # item as a duplicate - `<lane>-lane-duplicate-items` fired by construction, on every paired log,
+  # and the counts it printed were doubled. Measured on a D9 lane log: 4 dispatches, 8 lines, read
+  # as 2 map and 6 price invocations with all four price terms flagged as repeats. None of it real.
+  function PairInv([string]$Label, $Items, [string]$Event, [int]$In) {
+    return [pscustomobject]@{ lane = 'price'; label = $Label; items = @($Items); count = @($Items).Count
+                              by = 'pricer'; event = $Event; in = $In; out = 224 }
+  }
+  $paired = @((PairInv 'batch 1' @('harissa', 'couscous') 'start' -1),
+              (PairInv 'batch 1' @('harissa', 'couscous') 'end' 15470),
+              (PairInv 'batch 2' @('sumac', 'zaatar') 'start' -1),
+              (PairInv 'batch 2' @('sumac', 'zaatar') 'end' 15470))
+  $collapsed = @(Get-Invocations $paired)
+  T 'MUST FIRE  a start/end PAIR is ONE invocation, not two' ($collapsed.Count -eq 2) ("got " + $collapsed.Count)
+  T 'MUST FIRE  and the END line is the survivor, because it is the one carrying the token stamp' `
+    ((@($collapsed | Where-Object { [int]$_.in -eq 15470 })).Count -eq 2) `
+    (@($collapsed | ForEach-Object { [string]$_.in }) -join ',')
+  T 'MUST FIRE  a paired log reports NO duplicate items - an item in its own start and end line was
+        never priced twice' `
+    ((@((Get-BatchShape $collapsed 10).repeated)).Count -eq 0) `
+    (@((Get-BatchShape $collapsed 10).repeated) -join ',')
+  T '   and the raw lines, uncollapsed, are exactly what used to fire it' `
+    ((@((Get-BatchShape $paired 10).repeated)).Count -eq 4) `
+    (@((Get-BatchShape $paired 10).repeated) -join ',')
+  T 'CLEAN TWIN an OLD unpaired line (no event field) still counts as its own invocation' `
+    ((@(Get-Invocations @((Inv 'b1' @('a')), (Inv 'b2' @('b'))))).Count -eq 2) 'collapsed two real invocations'
+  T 'CLEAN TWIN two DIFFERENT batches that happen to share a label are not collapsed into one' `
+    ((@(Get-Invocations @((PairInv 'batch 1' @('a') 'start' -1), (PairInv 'batch 1' @('b') 'start' -1)))).Count -eq 2) `
+    'collapsed two invocations that carried different items'
+
   # ---- FIXTURE 4. THE PER-RECIPE FINGERPRINT, independent of any threshold. Every invocation confined to
   # a single recipe while several recipes were waiting is the defect itself, not a symptom of it.
   $owners = @{ 'mascarpone' = @('chicken-florentine'); 'kewpie mayo' = @('loco-moco')
@@ -356,7 +421,7 @@ foreach ($l in $seenLanes) {
 
 foreach ($l in @($script:LANE_BATCH.Keys | Sort-Object)) {
   $size = [int]$script:LANE_BATCH[$l]
-  $inv = @($log | Where-Object { [string]$_.lane -eq $l })
+  $inv = @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq $l }))
   $shape = Get-BatchShape $inv $size
   $sig = if ($l -eq 'price') { Get-PerRecipeSignature $inv $owners } else { $null }
   $lanes += [pscustomobject]@{ lane = $l; shape = $shape; signature = $sig }
@@ -382,7 +447,7 @@ foreach ($l in @($script:LANE_BATCH.Keys | Sort-Object)) {
 }
 
 # THE NON-COMPLIANCE CATCH. An orchestrator that never calls -Lane must not pass by leaving no evidence.
-$priceInv = @($log | Where-Object { [string]$_.lane -eq 'price' })
+$priceInv = @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq 'price' }))
 if ($everPriced.Count -and -not $priceInv.Count) {
   $findings += [pscustomobject]@{ code = 'price-lane-unlogged'; lane = 'price'
     detail = ("{0} recipe(s) went through the pricing state and the lane log records ZERO pricer invocations. The run's lane shape cannot be audited at all, and could-not-look is never a clean bill. Record each invocation with hunt-run.ps1 -Lane -LaneName price -Items '<terms>'." -f $everPriced.Count) }

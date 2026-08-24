@@ -1,0 +1,149 @@
+{
+ "generated": "2026-08-24T04:14:19",
+ "source_run": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-15-lowcarb-100",
+ "phases": [
+  {
+   "phase": "seed-from-real",
+   "seed_counts": {
+    "wave": 4,
+    "write": 10
+   },
+   "held": [],
+   "review_pending": [
+    "baked-cauliflower-mac-smoked-sausage",
+    "chicken-piccata-skillet",
+    "chimichurri-steak-sheet-pan",
+    "creamy-tuscan-chicken-skillet",
+    "flank-steak-parmesan-green-beans",
+    "french-chicken-fricassee",
+    "garlic-butter-steak-bites-zucchini",
+    "hatch-green-chile-chicken-casserole",
+    "keto-cheeseburger-skillet",
+    "keto-turkey-broccoli-cheddar-casserole",
+    "low-carb-ground-beef-stroganoff-skillet",
+    "low-carb-taco-cabbage-beef-skillet",
+    "mexican-chorizo-egg-casserole",
+    "pulled-pork-stuffed-peppers",
+    "sheet-pan-smoked-sausage-broccoli-cheddar",
+    "sheet-pan-tandoori-chicken-cauliflower",
+    "spinach-artichoke-chicken-casserole",
+    "spinach-provolone-stuffed-flank-steak-rolls",
+    "turkey-meatballs-cream-sauce-skillet",
+    "turkey-zucchini-noodle-casserole"
+   ],
+   "wip": 14
+  },
+  {
+   "phase": "wave",
+   "qa_passed_pool": [
+    "balsamic-sirloin-steak-sheet-pan",
+    "low-carb-steak-fajita-skillet",
+    "low-carb-turkey-cauliflower-mushroom-casserole",
+    "philly-cheesesteak-stuffed-peppers"
+   ],
+   "results": [
+    {
+     "wave": 5,
+     "slugs": [
+      "low-carb-turkey-cauliflower-mushroom-casserole",
+      "balsamic-sirloin-steak-sheet-pan",
+      "philly-cheesesteak-stuffed-peppers",
+      "low-carb-steak-fajita-skillet"
+     ],
+     "published": [],
+     "held": [],
+     "verdict": "GO",
+     "dry_run": true,
+     "would_publish": [
+      "low-carb-turkey-cauliflower-mushroom-casserole",
+      "balsamic-sirloin-steak-sheet-pan",
+      "philly-cheesesteak-stuffed-peppers",
+      "low-carb-steak-fajita-skillet"
+     ]
+    }
+   ],
+   "publish_dry_run": true
+  },
+  {
+   "phase": "write-qa",
+   "slugs": [
+    "basque-chicken-peppers-chilindron",
+    "braised-pork-shoulder-fennel-tomato",
+    "chicken-bacon-ranch-cauliflower-bake"
+   ],
+   "states_after": {
+    "basque-chicken-peppers-chilindron": "qa-passed",
+    "braised-pork-shoulder-fennel-tomato": "qa-passed",
+    "chicken-bacon-ranch-cauliflower-bake": "qa-passed"
+   },
+   "outcomes": [
+    {
+     "slug": "chicken-bacon-ranch-cauliflower-bake",
+     "state": "qa-passed",
+     "cal": 520,
+     "carbs": 12,
+     "status": "qa-passed",
+     "detail": ""
+    },
+    {
+     "slug": "basque-chicken-peppers-chilindron",
+     "state": "qa-passed",
+     "cal": 520,
+     "carbs": 12,
+     "status": "qa-passed",
+     "detail": ""
+    },
+    {
+     "slug": "braised-pork-shoulder-fennel-tomato",
+     "state": "qa-passed",
+     "cal": 520,
+     "carbs": 12,
+     "status": "qa-passed",
+     "detail": ""
+    }
+   ]
+  },
+  {
+   "phase": "contract-diff",
+   "pairs": {
+    "lines_written": 14,
+    "pairs": 7,
+    "unpaired": [],
+    "pairs_with_token_stamps": 7
+   },
+   "findings": []
+  },
+  {
+   "phase": "audit-lane-shape-fresh",
+   "exit": 0,
+   "detail": "3 recipes through map (one micro-batch) and their 4 distinct terms through price (one batch); 4 lane-log line(s)",
+   "output": "audit-lane-shape: daemon-fresh   4 lane invocation(s) over 3 recipe(s)\r\n\r\n  map      1 invocation(s)     3 distinct item(s)   floor ceil(3/5) = 1   mean 3/invocation\r\n  price    1 invocation(s)     4 distinct item(s)   floor ceil(4/10) = 1   mean 4/invocation\r\n\r\n  lane shape matches the design.\r\nLANE-SHAPE-COMPLETE findings=0 warnings=0\r\n"
+  },
+  {
+   "phase": "audit-lane-shape-appended",
+   "exit": 1,
+   "codes_after": [
+    "map-lane-duplicate-items",
+    "price-lane-duplicate-items",
+    "price-lane-not-batched"
+   ],
+   "exit_original": 1,
+   "codes_original": [
+    "map-lane-duplicate-items",
+    "price-lane-duplicate-items",
+    "price-lane-not-batched"
+   ],
+   "output": "audit-lane-shape: hunt-2026-08-15-lowcarb-100   848 lane invocation(s) over 91 recipe(s)\r\n\r\n  map     28 invocation(s)    45 distinct item(s)   floor ceil(45/5) = 9   mean 3.14/invocation\r\n  price   22 invocation(s)    24 distinct item(s)   floor ceil(24/10) = 3   mean 2.27/invocation\r\n  audit   27 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n  extract  58 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n  hunt   265 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n  qa      92 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n  select 275 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n  write   73 invocation(s)   (no batch size declared in the plan - counted, not judged)\r\n\r\n  FINDINGS  3\r\n    [map-lane-duplicate-items] 29 item(s) went to the map lane more than once: baked-cauliflower-mac-smoked-sausage, basque-chicken-peppers-chilindron, braised-pork-shoulder-fennel-tomato, burmese-chicken-dal-curry, chicken-chasseur, chicken-marsala-skillet, creamy-garlic-herb-wine-pork-chops, crustless-bacon-gruyere-quiche, french-chicken-fricassee, garlic-butter-steak-bites-zucchini, italian-sausage-peppers-onions-skillet, italian-sausage-stuffed-peppers-bake, keto-cheeseburger-skillet, keto-turkey-broccoli-cheddar-casserole, low-carb-beef-meatloaf, low-carb-ground-beef-stroganoff-skillet, methi-malai-murgh-creamy-fenugreek-chicken, mexican-chorizo-egg-casserole, philly-cheesesteak-stuffed-peppers, pork-chile-verde-stew, pulled-pork-stuffed-peppers, sheet-pan-smoked-sausage-broccoli-cheddar, sheet-pan-tandoori-chicken-cauliflower, slow-cooker-korean-galbi-jjim-short-ribs, spinach-artichoke-chicken-casserole, thai-coconut-curry-pork-shoulder, turkey-meatballs-cream-sauce-skillet, turkey-parmesan-meatball-bake, turkey-zucchini-noodle-casserole. ingredient-queue.ps1 is keyed by TERM so a shared ingredient is priced ONCE; a repeat means the cross-recipe dedup was discarded.\r\n    [price-lane-not-batched] 22 invocation(s) for 24 distinct item(s) at batch size 10. 3 would have done it, and each invocation carried 2.27 on average. The price lane is a batch drainer, not a per-recipe stage.\r\n    [price-lane-duplicate-items] 17 item(s) went to the price lane more than once: 90/10 ground beef, bacon bits, brandy, cardamom pods, chipotle powder, creamed coconut, dry white wine, green bell pepper, green bell pepper (enqueued for attribution; queue deduped onto the existing item, ground chicken, gruyere, shaved beef steak, tandoori spice mix, thai chiles, unsweetened ketchup, which the pricer has since resolved CARRIED at 6 of 7 stores), yellow split peas. ingredient-queue.ps1 is keyed by TERM so a shared ingredient is priced ONCE; a repeat means the cross-recipe dedup was discarded.\r\n\r\nLANE-SHAPE-COMPLETE findings=3 warnings=0\r\n"
+  }
+ ],
+ "findings": [],
+ "expected_findings": {
+  "why": "build-v2-spec.ps1 is stood in for, so the three walked recipes have no built spec and coverage_check --battery correctly exits 2. The daemon recorded each one as a finding and dispatched source-QA anyway, which is the ordered behaviour.",
+  "findings": [
+   "chicken-bacon-ranch-cauliflower-bake: the QA battery could not run (exit 2)",
+   "basque-chicken-peppers-chilindron: the QA battery could not run (exit 2)",
+   "braised-pork-shoulder-fennel-tomato: the QA battery could not run (exit 2)"
+  ]
+ },
+ "run_dir_copy": "(removed)"
+}
