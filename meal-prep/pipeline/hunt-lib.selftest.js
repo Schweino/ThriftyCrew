@@ -4,10 +4,20 @@ export const meta = {
   phases: [{ title: 'SelfTest' }],
 }
 
-// The orchestrator's decision logic, inlined here because a workflow script cannot import from the
-// repo. This file is generated from meal-prep\pipeline\hunt-lib.js - if they drift, the fixtures are
-// testing something that is no longer shipped, which is worse than having no fixtures at all.
-// hunt-lib.js carries the authoritative copy and the reasoning; this is the runner.
+// SUPERSEDED 2026-08-24 by `hunt-lib-parity.js` (PLAN-recipe-hunter-v3 section 4.2, D9). Kept for
+// history; do not extend it, and do not read a green run here as the parity gate.
+//
+// Everything below is a HAND-COPIED duplicate of hunt-lib.js, and the paragraph that used to sit
+// here said so: "if they drift, the fixtures are testing something that is no longer shipped, which
+// is worse than having no fixtures at all". That is a warning, not a mechanism, and a warning is
+// what this estate keeps discovering it had instead of a check.
+//
+// The replacement keeps the one unavoidable part - a workflow script cannot read the repo, so the
+// copy has to exist - and removes the human from it: `hunt_lib.py --emit-parity` splices hunt-lib.js
+// in mechanically and stamps its SHA-256, and `hunt_lib.py --selftest` re-hashes the shipped file
+// and FIRES if the two have drifted. It also runs the fixtures as SHARED VECTORS
+// (`hunt-lib-vectors.json`) against both hunt-lib.js and hunt_lib.py, which is what the parity gate
+// actually asks for and what this file cannot do at all.
 
 const firstToken = v => String(v == null ? '' : v).trim().toUpperCase().split(/[^A-Z-]+/).filter(Boolean)[0] || ''
 const isPass = v => firstToken(v) === 'PASS'
