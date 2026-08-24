@@ -957,6 +957,30 @@ build time, fix THIS document in the same commit rather than deviating silently.
   converts one into the other, and the daemon never writes a queue record from evidence. EMPTY
   after a full ladder PERMITS not-carried (search-verdict-lib's own table) - permitting is not
   recording.
+  **AS-BUILT 2026-08-24 (D10). Four additions and one caveat, none of which move a rule.**
+  - **The FILE is `{schema: "price-evidence/1", run, batch, generated, batch_terms, roster,
+    findings, terms: [{term, unit, stores: [<the row above>]}]}`.** The row shape is exactly as
+    specified; the envelope exists because a reader needs to know which batch it is holding and
+    which store roster the enumeration was made against. `findings` is where a degraded gather says
+    so in words.
+  - **Every row carries a `tier`: `server` | `driver` | `pricer-tab` | `attended`.** It is the
+    sixth field and it is load-bearing for the pricer: "nobody has looked and it is yours" and "we
+    looked and were blocked" are both UNUSABLE, and the tier is what tells them apart. The tiers
+    are S5's own, post-correction.
+  - **`relevance` is NULL on a driver-gathered hit, and that is deliberate.** probe-ingredient's
+    relevance is a PowerShell heuristic (`Get-ProbeRelevance`); porting its formula into
+    pull-browser-stores.py would fork a heuristic across two languages for a field that is a SORT
+    HINT and never a verdict. Driver hits arrive in the store's own ranking, which is the honest
+    hint. The field is present and null rather than absent, so a reader never has to guess.
+  - **A hit MAY carry an optional `unit_price` string** where the store publishes one. Sam's Club
+    rows carry no pack size at all and its unit price is precisely what an adjudicator compares a
+    club pack against. Evidence, never a verdict.
+  - **THE CAVEAT, and it protects Rule B: an EMPTY from a DRIVER store is RUNG 1 ONLY.** The lookup
+    mode searches the term as given and does not walk the retry ladder (see the D10 lookup work
+    order below) - so a driver EMPTY does not permit not-carried until the pricer completes the
+    ladder itself. A SERVER EMPTY is a full-ladder empty and permits it as this table always said.
+    The evidence file says which in every reason string, the prompt says it, and the pricer agent
+    definition says it.
 - **Dossier (ADDED 2026-08-23 - the phase-1 gate run showed the contract was underspecified, and each
   of these three fields was added because a measured disagreement traced back to its absence).** Per
   candidate: `{slug, name, url, domain, signature, band, servings, ingredients_verbatim (capped at
@@ -1737,6 +1761,33 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     happens; the must-fire that a probe transport ERROR lands as UNUSABLE-with-reason and never as
     EMPTY; and the clean twin where every store answers. The REAL surface is exercised by the gate
     run itself, not by a fixture that hits stores.
+  **AS-BUILT 2026-08-24 (D10 built). What exists on disk, and the six decisions a later reader
+  would otherwise have to reverse-engineer:**
+  - **`meal-prep\pipeline\price_evidence.py` is a NEW module** - the join and the render, with its
+    own hermetic `--selftest` and the marker `PRICE-EVIDENCE-COMPLETE`. The daemon imports it; it
+    is never shelled. Its header carries the no-mutex argument in full.
+  - **The seven store names are READ out of `ingredient-queue.ps1`'s own `$STORES`, never copied.**
+    An unreadable roster makes the file enumerate only the stores it actually gathered AND record a
+    finding saying so - blind rather than clean, the same discipline as the daemon's stop-list read.
+  - **The lookup output file is `{store, store_key, generated, ladder, note, results: [<verdict>]}`**
+    - the verdict objects are exactly as the work order specifies; the envelope names the store and
+    the ladder that was NOT walked, which is the sentence that keeps a rung-1 EMPTY honest.
+  - **The paced lookup lane writes under `TC_LOOKUP_SWEEP`, never a store's capture key**, because
+    `sweepToCsv()` exports every MATCHES term found under a capture key - a hunter term left there
+    would be published as a captured price by the next morning's run. A fixture asserts the key
+    collides with nothing in STORES.
+  - **Fareway lookups are MATCHES or UNUSABLE and almost never EMPTY, and that is correct.**
+    `farewayShopExtract` THROWS when the Apollo cache holds no priced nodes, which is the same
+    signal as "has not hydrated yet" - the extractor refuses to tell blindness from emptiness, so
+    the lookup lane does not either, and the honest state for an unreadable page is UNUSABLE.
+  - **`--selftest-lookup` runs the hermetic half alone** (no browser, no network at all); the
+    driver's own `--selftest` runs it first and folds its failures into its count. The driver's exit
+    codes are untouched: 0/1/2 per its own header, and a refused lookup is a 2.
+  **MEASURED WHILE BUILDING (2026-08-24): a nonzero probe exit was reporting the wrong sentence.**
+  `parse_probe_stdout` answers "probe printed nothing" for an empty stdout, which is true and
+  useless; the guard line on stderr is the one that says why. A fixture that asked for the 401 by
+  name is what caught it, and the rule it froze is: when a surface EXITS nonzero, its own sentence
+  outranks the parser's complaint about the silence that followed.
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
