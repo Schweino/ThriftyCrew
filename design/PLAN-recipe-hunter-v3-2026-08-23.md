@@ -690,7 +690,9 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 | harvest fetches | 8 workers, MEASURED 2026-08-23 at 131 pages/min - which IS the politeness ceiling (7 domains / 2-4 s each), so more workers buy nothing | network + per-domain politeness |
 | JSON-LD parse, band filter, signatures | CORRECTED 2026-08-23: runs INSIDE the 8 fetch threads, and no process pool was built or is needed - the crawl sits at the politeness ceiling with CPU idle, and --resignature re-derives 652 signatures in 60 s single-threaded. Build the pool only if a measurement ever shows parse waiting on CPU, which nothing has | trivial CPU |
 | bge-m3 embeddings | **CPU, measured and settled 2026-08-23: 36.36 ms/text, whole-pool build 24 s cold / 0 s warm - the GPU branch is CLOSED, not deferred** | trivial CPU (§3 S1) |
-| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (~100-200-token prompts) fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`). **RESOLVED 2026-08-23 (D6 build, measured on the box, and the audit's prediction was exactly right).** llama-server's `/props` reports the per-slot budget rather than the total, which is the only honest source since `-c` and `--parallel` are start-time flags: at serve.ps1's defaults it reports **4,096 tokens per slot**, and rung 2 needs **~11,465** (a 24k-char page at 3.5 chars/token plus 4,096 out plus headroom). Raising `-c` is not the way out - measured free VRAM with the 4-slot server up was **1,200 MiB**, against the ~1.5-2 GB doubling the KV cache would need. What DOES work costs nothing: **`-Slots 1` at the same `-c 16384` gives one slot the whole 16,384** and measured **14,688 MiB used, i.e. LESS VRAM than the 4-slot server**, because `-c` is the total either way. So the sweep is two passes on two server shapes - rung 1 fanned at 4 slots, rung 2 narrow at 1 - and `extract_sweep.py --from-report` exists precisely so pass 2 targets only what pass 1 escalated instead of re-earning 45 settled answers. The dangerous alternative is named in code: local_extract REFUSES rung 2 on a too-small slot (exit 2) rather than truncating the page, because a page cut at the slot ceiling still substring-verifies line by line - the checker proves what IS there and can never prove what is absent | GPU |
+| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (CORRECTED 2026-08-24: ~750 tokens/slot after D6's prompt rewrite - the
+rewrite that took the pilot from 1-in-7 to 6-of-7 made the prompt ~450 tokens, and the size
+estimate here predated it) still fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`). **RESOLVED 2026-08-23 (D6 build, measured on the box, and the audit's prediction was exactly right).** llama-server's `/props` reports the per-slot budget rather than the total, which is the only honest source since `-c` and `--parallel` are start-time flags: at serve.ps1's defaults it reports **4,096 tokens per slot**, and rung 2 needs **~11,465** (a 24k-char page at 3.5 chars/token plus 4,096 out plus headroom). Raising `-c` is not the way out - measured free VRAM with the 4-slot server up was **1,200 MiB**, against the ~1.5-2 GB doubling the KV cache would need. What DOES work costs nothing: **`-Slots 1` at the same `-c 16384` gives one slot the whole 16,384** and measured **14,688 MiB used, i.e. LESS VRAM than the 4-slot server**, because `-c` is the total either way. So the sweep is two passes on two server shapes - rung 1 fanned at 4 slots, rung 2 narrow at 1 - and `extract_sweep.py --from-report` exists precisely so pass 2 targets only what pass 1 escalated instead of re-earning 45 settled answers. The dangerous alternative is named in code: local_extract REFUSES rung 2 on a too-small slot (exit 2) rather than truncating the page, because a page cut at the slot ceiling still substring-verifies line by line - the checker proves what IS there and can never prove what is absent | GPU |
 | QA battery / wave-preaudit | 8-wide across the SHARED checks, serial across slugs (S8's CORRECTED 2026-08-23 finding: the slug loop rides build-card2's process-global costed.json cache, and fanning it re-pays the 5.8 MB parse per child) | CPU, seconds |
 | cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
 | CDP store sweeps | 1 thread per store (existing) | vendor politeness - the floor |
@@ -1060,7 +1062,7 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   line MUST FIRE the substring check; a JSON-LD line split that drops a token fails round-trip.
   BUILT 2026-08-23, in three pieces. `local_extract.py` gained rung 1 (`--from-jsonld`), the
   section 4.5 contract emitter (`to_contract`), the `/props` slot-context probe, and a `--selftest`
-  with **37 fixtures** including an end-to-end drill that runs the CLI as a child against a dead
+  with **38 fixtures** including an end-to-end drill that runs the CLI as a child against a dead
   endpoint and asserts exit 2, the named server, and that NOTHING was written; the old
   `--url`/`--file` form is untouched, exactly as D2 kept coverage_check's. `extract_sweep.py` is the
   phase-2 bridge - cache-only, ladder, contract, lane-log per settle - with **23 fixtures** of its
@@ -1164,8 +1166,9 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     lines through its own pen per section 4.1a - it does NOT re-derive the ladder, for the same
     reason D6 imported harvest's parsers instead of writing a third one.
   - **The daemon never starts or stops llama-server.** Section 4.4 stands unchanged. At extract-lane
-    start it reads the live slot context: rung 1 fits any shape (a split call is ~100-200 tokens in,
-    256 out); rung 2 requires `local_extract.RUNG2_MIN_SLOT_CTX` (~11,465), which only the 1-slot
+    start it reads the live slot context: rung 1 fits any shape (the D6 split prompt is ~450 tokens
+    + the line + 256 out, ~750/slot total - still under half of even an 8-slot 2,048-token split);
+    rung 2 requires `local_extract.RUNG2_MIN_SLOT_CTX` (~11,465), which only the 1-slot
     shape provides. When the live shape cannot fit rung 2, escalation files ACCUMULATE and the
     daemon's `-Status` output names the pending narrow pass - the operator then either restarts the
     server narrow and lets the daemon drain rung 2 via the `--from-report` shape, or rules the batch
@@ -1173,12 +1176,15 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     local pass failed on), so skipping an unavailable rung 2 by OPERATOR RULING is within doctrine;
     doing it silently or automatically is not.
   - **One cheap retry before paying anything more.** Rung 1 at temp 0.1 is not deterministic
-    (measured: a page escalated at 88% coverage settled on re-run with zero code change). Before a
-    page whose rung-1 failure was a SINGLE line at >=85% coverage costs a ~50 s rung-2 attempt or a
-    Claude dispatch, one rung-1 retry (~10 GPU-seconds) is the obvious spend. Named constants in
-    hunt_lib (e.g. `RUNG1_RETRY_MAX_FAILED_LINES = 1`, `RUNG1_RETRY_MIN_COVERAGE = 0.85`), daemon
-    config, with a fixture proving a second identical failure still escalates - one retry, never a
-    loop.
+    (measured: a page whose ONE failing line sat at 88% round-trip coverage settled on re-run with
+    zero code change, and a different page flipped the other way between rounds). The rule, stated
+    so nobody has to guess which number means what: retry rung 1 ONCE when at most
+    `RUNG1_RETRY_MAX_FAILED_LINES` (= 1) lines failed AND every failing line's per-line round-trip
+    coverage (the `coverage` field in the escalation's `failures[]`) is >=
+    `RUNG1_RETRY_MIN_COVERAGE` (= 0.85) - near-misses only; a qty/unit substring failure or a
+    low-coverage mangle goes straight down the ladder. ~10 GPU-seconds against a ~50 s rung-2
+    attempt or a Claude dispatch. Constants live in hunt_lib as daemon config, with a fixture
+    proving a second identical failure still escalates - one retry, never a loop.
   - **The rung-3 dispatch and its landing.** The `<slug>.escalation.json` file IS the dispatch
     payload (S3: the failure reason and unverified lines travel with the page; the extractor is
     told not to re-run the local script). The daemon writes the extractor's returned JSON through
@@ -1188,9 +1194,9 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     rather than escalated to nowhere - and deletes the escalation file on settle (the one-way
     cleanup rule; leaving it would double-dispatch a settled page).
   - **The economics to plan the lane around (all measured on the 50-page gate corpus):** rung 1
-    settles 92-94% at 9.5 s/page fanned; rung 2 settles 3 of 16 attempts (~19%) at ~50 s/page on
-    the narrow server; the residue is ~6%. The ladder's value sits almost entirely in rung 1 -
-    budget the card and the operator asks accordingly.
+    settles 92% at 9.5 s/page fanned; rung 2 settles 3 of 16 attempts (~19%) at ~50 s/page on the
+    narrow server and lifts the ladder to 94%; the residue is 6%. The ladder's value sits almost
+    entirely in rung 1 - budget the card and the operator asks accordingly.
 - **D10 price evidence pre-pass** (paths, so nothing is guessed: `grocery\probe-ingredient.ps1`,
   `grocery\pull-browser-stores.py`, `grocery\search-verdict-lib.ps1`, `grocery\price-ingredient.ps1`,
   `grocery\ingredient-queue.ps1`) - probe + unattended CDP gathering wired into the price lane's
@@ -1419,16 +1425,32 @@ twice, because the first round was worth more than a pass.**
 
 | round | settled at rung 1 | settled at rung 2 | escalated to Claude | settled overall | s/page (rung 1, fanned) |
 |---|---|---|---|---|---|
-| 1 (as first written) | 38/50 = **76%** | 2 of 12 attempted | 10/50 = **20%** | 40/50 = 80% | 9.6 s |
-| 2 (after the corrections below) | 46/50 = **92%** | 1 of 4 attempted | **3/50 = 6%** | 47/50 = **94%** | 9.5 s |
+| 1 (after the pilot's prompt rewrite - 4.5's first correction) | 38/50 = **76%** | 2 of 12 attempted | 10/50 = **20%** | 40/50 = 80% | 9.6 s |
+| 2 (adding the HTML-entity parser fix + the for-serving prompt line) | 46/50 = **92%** | 1 of 4 attempted | **3/50 = 6%** | 47/50 = **94%** | 9.5 s |
 
-Round 1's 13 escalations are what produced the section 4.5 corrections: 9 of them were a single
-line each, of one narrow class (a for-serving / for-topping / adjust-to-taste note the model left
-out of prep), and one was the HTML-entity defect in the shared parser. Round 2 fixed the prompt
-and the parser - **not the threshold** - and the escalation rate fell from 20% to 6%. **The plan's
-own estimate for this deliverable was "~5-15% of pages" reaching the Claude extractor; the
-measured figure is 6%.** The three survivors are honest hard pages, and one of them names the
-known brand class ("1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil").
+(The prompt AS FIRST WRITTEN never ran on the gate corpus: it measured **1 settled page in 7** on
+the pre-gate pilot, which is what forced 4.5's first correction before any 50-page sweep was worth
+the GPU time. Round 1 is the rewritten prompt; round 2 is the same prompt plus the two smaller
+fixes named in its label.)
+
+Round 1's 13 escalations, recounted from `gate-pass1.json` (2026-08-24 cold read - an earlier
+draft of this record said "9 of one narrow class", which was wrong on both numbers): **11 of the
+13 failed on exactly one line.** Six of those eleven were one narrow class - a for-serving /
+for-topping / adjust-to-taste note left out of prep, fixed by ONE added prompt sentence; one was
+the HTML-entity defect in the shared parser (`&amp;`); four were assorted single-word drops. The
+two multi-line failures were the brand class (5 lines of "Specially Selected...") and Budget
+Bytes prices embedded INSIDE prose notes ("(12 oz total, $1.29)", 7 lines) - which the
+price-annotation rule deliberately does not strike, because striking a price out of a sentence
+would take words with it. Round 2 fixed the parser and added the one prompt sentence - **never the
+threshold** - and the escalation rate fell from 20% to 6%. Honesty about the residue of that gain:
+two of the round-2 settles (the beets line that dropped a "4", the KFC flavour note) had no fix
+aimed at them and settled on the re-roll, and one page went the other way (settled round 1,
+escalated round 2 pass 1, re-settled on the narrow pass) - that is the nondeterminism item below,
+not a hidden third fix. **The plan's own estimate for this deliverable was "~5-15% of pages"
+reaching the Claude extractor; the measured figure is 6%.** The three survivors are honest hard
+pages: the brand class ("1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil"), a dropped
+"1" in "1 dry pint cherry or grape tomatoes", and a dropped "stalks" in "2 large celery
+stalks".
 
 Rung 2's own numbers, across both rounds: **3 of 16 attempted pages settled (19%) at ~50 s/page**
 on the narrow server. That is expensive and low-yield, and it is a real finding for D9: the
@@ -1473,7 +1495,8 @@ its verifier block, and the failure direction is preserved everywhere: uncached 
 and too-small slot are all exit-2 BLOCKED, never a silent pass or a silent Claude dispatch.
 
 Two things a phase-3 builder should carry forward. **(a) Rung 1 is not deterministic.**
-`jalape-o-popper-chicken` escalated at 88% coverage on one pass and settled on the next with no
+`jalape-o-popper-chicken` escalated on one line at 88% round-trip coverage (17 of 18 lines
+verified) and settled on the next pass with no
 code change between them (temp 0.1, not 0). A borderline page is a coin the sweep flips, so a
 settle rate is a rate and not a verdict about a page, and the daemon should not treat one
 escalation as a permanent property of a URL. **(b) The two-server-shape sweep is an operating

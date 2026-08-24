@@ -385,7 +385,10 @@ def extract_from_jsonld(html: str, url: str | None = None, llm: LocalLLM | None 
             "section": f.get("section") or None,
         })
         if not chk["ok"]:
-            failures.append({"raw": raw, "reasons": chk["reasons"]})
+            # `coverage` rides along because the daemon's retry rule keys on it (the D9 pin:
+            # retry once when the ONE failing line was a near-miss at >=0.85). Without it here,
+            # the rule would have to re-run the verifier to learn a number it already computed.
+            failures.append({"raw": raw, "coverage": chk["coverage"], "reasons": chk["reasons"]})
 
     total = len(lines)
     good = total - len(failures)
@@ -780,6 +783,9 @@ def selftest() -> int:
       json.dumps(dirty["verification"]))
     T("  and the escalation names the line and the reason it failed",
       "chicken" in (dirty["escalate_reason"] or ""), str(dirty["escalate_reason"]))
+    T("  and each failures[] entry carries the line's coverage - the daemon's retry rule keys on it",
+      isinstance(dirty["verification"]["failures"][0].get("coverage"), float),
+      json.dumps(dirty["verification"]["failures"][0]))
 
     # ---- raw is BY CONSTRUCTION: the model cannot author it ---------------------------------------
     liar = extract_from_jsonld(
