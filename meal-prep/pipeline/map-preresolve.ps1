@@ -884,6 +884,36 @@ function Select-CheapestAlternative {
   return $best
 }
 
+# A BID MAY NOT BE AN ID ITS OWN RULING SAYS IT REFUSED (2026-08-24, found in the 6b post-run read).
+#
+# `turmeric-braised-chicken-with-golden-beets-and-leeks` was ruled:
+#     "item": "Bone-In Skinless Chicken Drumstick",
+#     "bid":  "chicken-thighs",
+#     "notes": "...Refused the chicken-thighs bridge on the standing 'leg quarters are not thighs'
+#               precedent: drumsticks are a distinct cut ... so the thigh id would overprice and
+#               mis-weigh."
+# The prose refuses the id; the machine-readable field IS the id. The SAME mapper got hawaiian-chicken
+# right with identical reasoning, so it is a slip rather than a policy - and nothing checked, because
+# the evidence gate is written for a HUMAN reader and no machine reads it. Measured across every
+# mapped file this estate has: 1 of 579 ruled lines. Rare, and it was on its way to pricing a drumstick
+# recipe off thigh rows.
+#
+# WHICH SIDE IS WRONG IS NOT KNOWABLE HERE, so this does not pick one. It is a FINDING, which parks the
+# recipe and quotes both halves back - the same safe direction every other assembly finding takes.
+#
+# WORD BOUNDARIES MATTER: `chicken-breast` is a substring of `bone-in-chicken-breast`, and a ruling
+# that refuses one while bidding the other is CORRECT reasoning, not a contradiction.
+$script:REFUSAL_WORDS = 'refus\w*|reject\w*|declin\w*|rul\w*\s+out|not\s+bridg\w*'
+
+function Test-BidContradictsNotes {
+  param([string]$Bid, [string]$Notes)
+  if (-not $Bid -or -not $Notes) { return $false }
+  $b = [regex]::Escape($Bid.Trim())
+  # the bid, as a whole token, appearing within ~60 characters AFTER a refusal word
+  $rx = ('(?i)(?:' + $script:REFUSAL_WORDS + ')(?:[^.;]{0,60}?)(?<![a-z0-9-])' + $b + '(?![a-z0-9-])')
+  return [bool]([regex]::IsMatch($Notes, $rx))
+}
+
 function Test-IsGarnishLine([string]$Raw) {
   if (-not $Raw) { return $false }
   $s = $Raw.ToLower()
@@ -1257,6 +1287,12 @@ function New-MappedDecisionFile {
       decision   = $decision
       notes      = $notes
       grams_from = $gramsFrom }) | Out-Null
+    # THE RULING MUST NOT REFUSE THE ID IT IS BIDDING (2026-08-24). See Test-BidContradictsNotes for
+    # the founding case. Which side is wrong is not knowable here, so both halves are quoted back and
+    # the recipe parks - the same safe direction every other finding in this assembler takes.
+    if (Test-BidContradictsNotes -Bid $bid -Notes $notes) {
+      $findings.Add(("'{0}': the ruling BIDS '{1}' and its own evidence says it refused that id - '{2}'. One of the two is wrong and this file cannot tell which, so nothing is assembled over it" -f $raw, $bid, ($notes -replace '\s+', ' ').Trim().Substring(0, [Math]::Min(160, ($notes -replace '\s+', ' ').Trim().Length)))) | Out-Null
+    }
     if ($item -and -not $terms.Contains($item)) { $terms.Add($item) | Out-Null }
   }
 
@@ -1672,6 +1708,39 @@ if ($runSelfTest) {
     (($resA.doc.PSObject.Properties.Name) -join ',')
   T 'MUST FIRE  `protein` comes off the RUN STATE FILE, which has carried it since sourcing - D8 refuses to build without it and the wave manifest is built out of it' `
     ($resA.doc.protein -eq 'pork') ([string]$resA.doc.protein)
+
+  # ---- FIXTURE A1c. A BID MAY NOT BE AN ID ITS OWN RULING REFUSED --------------------------------
+  # FROZEN FIXTURE, verbatim from turmeric-braised-chicken-with-golden-beets-and-leeks in the 6b run.
+  # Its notes refuse `chicken-thighs` on the leg-quarters-are-not-thighs precedent and its bid IS
+  # chicken-thighs. The same mapper got hawaiian-chicken right with identical reasoning, so it is a
+  # slip - and nothing caught it, because the evidence gate is written for a HUMAN reader and no
+  # machine reads it. 1 of 579 ruled lines across every mapped file this estate has.
+  $realNotes = ("98 g per skinless bone-in drumstick as purchased (USDA 62 g meat at a 63% bone-in " +
+                "yield). Refused the chicken-thighs bridge on the standing 'leg quarters are not " +
+                "thighs' precedent: drumsticks are a distinct cut, a distinct price class")
+  T 'MUST FIRE  a ruling that BIDS the id its own evidence refused is caught' `
+    (Test-BidContradictsNotes -Bid 'chicken-thighs' -Notes $realNotes) 'the contradiction was missed'
+  T 'CLEAN TWIN the SAME evidence bidding the RIGHT id is not a contradiction' `
+    (-not (Test-BidContradictsNotes -Bid 'chicken-drumsticks' -Notes $realNotes)) 'flagged a correct ruling'
+  # WORD BOUNDARIES. `chicken-breast` is a substring of `bone-in-chicken-breast`, and refusing one
+  # while bidding the other is sound reasoning - this is a real ruling from the same run.
+  $subNotes = ("REFUSED chicken-breast (boneless skinless): a split bone-in breast sells well below " +
+               "the boneless per-lb price AND carries about 28% bone. New id proposed.")
+  T 'MUST FIRE  refusing `chicken-breast` while bidding `bone-in-chicken-breast` is SOUND, not a contradiction' `
+    (-not (Test-BidContradictsNotes -Bid 'bone-in-chicken-breast' -Notes $subNotes)) 'flagged a sound ruling'
+  T 'CLEAN TWIN ...but bidding the exact id that was refused still fires' `
+    (Test-BidContradictsNotes -Bid 'chicken-breast' -Notes $subNotes) 'missed an exact contradiction'
+  T 'CLEAN TWIN evidence with no refusal in it is never a contradiction' `
+    (-not (Test-BidContradictsNotes -Bid 'rice' -Notes 'mapped to rice, the obvious id')) 'false positive'
+  # AND THE BOUNDARY IN THE DIRECTION THAT ACTUALLY NEEDS IT. The first pair of boundary fixtures
+  # tested a bid that does not appear in the notes at all, so they passed with or without the
+  # lookarounds and proved nothing. The guard earns its place HERE: a SHORT id sitting inside a LONGER
+  # refused one. Refusing `bone-in-chicken-breast` while bidding plain `chicken-breast` is a correct
+  # ruling, and a substring match would call it a contradiction and park a good recipe.
+  $longRefusal = 'Refused bone-in-chicken-breast: this line is the boneless cut, sold by a different id.'
+  T 'MUST FIRE  a SHORT bid inside a LONGER refused id is not a contradiction - substring matching would park a good recipe' `
+    (-not (Test-BidContradictsNotes -Bid 'chicken-breast' -Notes $longRefusal)) `
+    'matched chicken-breast inside bone-in-chicken-breast'
 
   # ---- FIXTURE A1e. B2: A GUESS IS NOT A CROSS-CHECK --------------------------------------------
   # FROZEN FIXTURE, and the founding case is verbatim from the 2026-08-24 no-band drill.
