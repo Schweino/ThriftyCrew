@@ -249,12 +249,12 @@ is ever dispatched. Flagging is permitted locally - but this case needs no model
 |---|---|---|---|
 | D1 | quantity-less GARNISH line | treat as optional: drop from cost and macros, keep it named for the reader | **BUILT** b4679175 |
 | D2 | rib recipes | REFUSE the whole class - "ribs are super high in calories and the protein/carb ratio would never stay under the gate" | **BUILT** 3056a7d1 |
-| D3 | which cost items to build | ALL FOUR: the yield fixes, B, F, A | B and F built; A pending |
+| D3 | which cost items to build | ALL FOUR: the yield fixes, B, F, A | **ALL BUILT** F 051fb9e7, B 19a63e9a, A cd1ddd92 |
 | D4 | weekly-usage stop rule | explicitly waived for this work ("forget about my usage - build everything") | noted |
-| D5 | ALTERNATIVES line | price them and take the CHEAPEST, disclose it on the card - but ONLY alternatives that resolve through a board id or label. An include-pattern substitution never counts. | pending |
-| D6 | commodity fixes 2.7 and 2.8 | ORDERED, both, with fixtures. This is an explicit exception to section 11 for these two rows. | pending |
-| D7 | pop-vs-gate class | record the (source claim, our recompute) pair on every band-gate ruling. No margin applied, no gate behaviour changed. | pending |
-| D8 | verification run | YES - a fresh full run once everything lands | pending |
+| D5 | ALTERNATIVES line | price them and take the CHEAPEST, disclose it on the card - but ONLY alternatives that resolve through a board id or label. An include-pattern substitution never counts. | **BUILT** 2c14b4f4 |
+| D6 | commodity fixes 2.7 and 2.8 | ORDERED, both, with fixtures. This is an explicit exception to section 11 for these two rows. | **BUILT** ce9f69c1 |
+| D7 | pop-vs-gate class | record the (source claim, our recompute) pair on every band-gate ruling. No margin applied, no gate behaviour changed. | **BUILT** 21ddb500 |
+| D8 | verification run | YES - a fresh full run once everything lands | **BLOCKED - no corpus, see 3.7** |
 
 **D5 is the one with a dependency and it is worth stating plainly:** picking the cheapest alternative is
 only safe because it is restricted to exact id/label matches. `price-ingredient.ps1` already reports
@@ -264,6 +264,38 @@ motivating recipe would have priced cauliflower rice as white rice (2.8).
 **D6 is recorded as an EXPLICIT EXCEPTION** because section 11 puts "any board/commodity
 capture-pipeline changes beyond reading what it already produces" out of scope. Brad ordered these two
 rows specifically; the exception does not generalise.
+
+---
+
+### 3.7 D8 IS BLOCKED: the qualifying pool is EXHAUSTED at this band
+
+Measured 2026-08-24 after the build, before the verification run:
+
+```
+available meeting 500-650 cal / <=40 carbs, protein >= 50  :  0   <- the run band
+                                            protein >= 45  : 11
+                                            protein >= 40  : 20
+                                            protein >= 35  : 34
+                                            no floor       : 64
+```
+
+6b consumed all 21 qualifying candidates. Of the 635 still `available`, only **204 are
+band-verified**, and the pop filter requires verified nutrition - an inferred number is not evidence
+that a dish clears a 50 g floor - so the other 431 cannot be popped at all.
+
+**The band was NOT lowered to manufacture a corpus.** Three routes, in cost order:
+
+1. **Crawl the seven existing publishers for pages not yet seen** - zero Claude tokens. Run first.
+2. **Resume 6b parked recipes** - the sharpest available test of D1 and D5, because
+   `cheese-stuffed-chicken-parmesan` parked on `Fresh parsley (to garnish)` and
+   `one-pan-chicken-with-sweet-potatoes-kale-and-cranberries` parked on the rice-blend alternatives
+   line. Those are precisely the two defects those units were built for, so this tests the yield work
+   directly rather than by proxy. Costs about one mapper batch.
+3. **Add publishers** - the real fix for corpus depth, and the same root cause as 5.1. A build.
+
+**This is also the 5-minute model biting.** That model needs concurrency ~3x, which needs enough
+recipes in flight, which needs a backlog deeper than one narrow band can supply from seven publishers.
+Corpus depth is not a side issue; it is the second of the three multiplicative terms.
 
 ---
 
