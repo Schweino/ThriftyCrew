@@ -2678,17 +2678,26 @@ per-token price on top).
 - **C3. Seed FULL batches.** MAP_BATCH=5 and PRICE_BATCH=10 amortize the fixed working set per
   recipe; the gate ran 4 and 5. Free money at scale - the seeding side just needs to prefer full
   slices when the backlog allows.
-- **C4. Measure the lane-log spawn tax, then maybe move the pen.** Every lane event spawns
-  powershell.exe (~1s under PS 5.1) via hunt-run.ps1 -Lane. At 200 recipes that is on the order of
-  2,000 spawns - potentially tens of minutes of pure process startup. The daemon owns a real clock
-  already; if the measurement is material, it appends lane-log.jsonl lines directly and
-  hunt-run.ps1 stays the reader/contract owner. Measure first (C1 makes this visible).
+- **C4. MEASURED 2026-08-24, AND CLOSED: the pen does not move.** The estimate here was ~1s per
+  spawn and "potentially tens of minutes" at 200 recipes. Measured on the box, five samples:
+  **310 ms**, not 1,000. The 6b run logged 80 lane events across 9 accepted recipes - 8.9 per
+  recipe - for **24.8 s summed, 0.65% of a 63.5-minute run**. Projected at 200 recipes that is
+  ~1,778 events and **9.2 minutes SUMMED**, and because lanes run concurrently the wall-clock
+  cost is less than the sum rather than equal to it.
+  So the tax is real and small, and moving the pen would cost more than it saves: hunt-run.ps1 is
+  both the contract owner and the reader, and a daemon that appends lane lines directly makes TWO
+  writers of one format - the drift this estate keeps designing out. Brad closed it 2026-08-24.
+  The measurement is the deliverable; C4 asked for one and the answer is no.
 - **C5. D11 early wins now instead of later:** minimal tool lists per agent (A3 is the first), and
   standing constants OUT of per-call prompts INTO agent definitions where the prefix cache pays
   once per session instead of per dispatch.
-- **C6. Effort tuning is measure-first and per-lane.** The mapper stays `high` through the pin
-  change (accuracy stage). Writer/QA at `medium` are candidates ONLY with an A/B against a
-  baseline - the residue principle in 4.4a applies to effort exactly as it does to tiers.
+- **C6. Effort tuning is measure-first and per-lane. STILL OPEN 2026-08-24.** The mapper stays
+  `high` through the pin change (accuracy stage). Writer/QA at `medium` are candidates ONLY with
+  an A/B against a baseline - the residue principle in 4.4a applies to effort exactly as it does
+  to tiers. Reviewed 2026-08-24 and deliberately NOT settled: unlike C4 this cannot be answered
+  by a measurement anyone can take alone. It needs the same corpus run twice and compared on the
+  AUDITOR'S VERDICTS rather than on token counts, because a cheaper stage that changes what the
+  auditor says is not cheaper. That is a run's tokens, so it is Brad's to order.
 - **C7. Do NOT batch QA.** Fidelity is per recipe and accuracy-sensitive; the per-dispatch
   overhead is the price of the verdict being about ONE recipe. Reviewed and rejected, recorded so
   nobody re-derives it as an optimization.
