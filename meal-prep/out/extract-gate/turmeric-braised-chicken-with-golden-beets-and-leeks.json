@@ -1,0 +1,131 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Turmeric Braised Chicken with Golden Beets and Leeks",
+  "source_url": "https://www.skinnytaste.com/turmeric-braised-chicken-with-golden-beets-and-leeks/",
+  "servings": 4,
+  "time_total": "80 minutes",
+  "time_active": "20 minutes",
+  "ingredients": [
+    {
+      "raw": "2 leeks (white and light green parts only)",
+      "item": "leeks",
+      "qty": "2",
+      "unit": null,
+      "prep": "white and light green parts only",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 bunch (4 golden beets with their greens, scrubbed)",
+      "item": "golden beets with their greens",
+      "qty": "1 bunch",
+      "unit": null,
+      "prep": "(4, scrubbed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 garlic cloves (minced)",
+      "item": "garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons ground turmeric (divided)",
+      "item": "ground turmeric",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground ginger",
+      "item": "ground ginger",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1-1/2 teaspoons kosher salt",
+      "item": "kosher salt",
+      "qty": "1-1/2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup freshly squeezed lemon juice",
+      "item": "freshly squeezed lemon juice",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 skinless chicken drumsticks (on the bone)",
+      "item": "skinless chicken drumsticks",
+      "qty": "4",
+      "unit": null,
+      "prep": "on the bone",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 skinless chicken thighs (on the bone)",
+      "item": "skinless chicken thighs",
+      "qty": "4",
+      "unit": null,
+      "prep": "on the bone",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup white wine (swap for chicken broth for whole30/paleo)",
+      "item": "white wine",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "(swap for chicken broth for whole30/paleo)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 425°F.",
+    "Slice the leeks in half lengthwise. Rinse them, fanning out the outer layers to wash away any grit. Slice the cleaned leeks into thin half-moons.",
+    "Remove the greens from the beets. Rinse them and coarsely chop. Halve the beets and cut each section into four wedges.",
+    "In a large mixing bowl, toss the leeks, beets, and beet greens together with the garlic, 1 teaspoon of turmeric, ginger, salt, lemon juice, and olive oil until thoroughly combined. Spoon the mixture into a 9 x 13-inch baking dish or casserole pan and arrange in an even layer.",
+    "Add the chicken and the other teaspoon of turmeric to the mixing bowl and toss to coat in the remaining turmeric mixture. Transfer the chicken legs to the baking dish and nestle in the beet mixture.",
+    "Drizzle any of the remaining marinade over the top of the chicken and pour the wine around the sides of the dish.",
+    "Roast, uncovered, until the chicken is fork-tender and the beets are soft, about 1 hour."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

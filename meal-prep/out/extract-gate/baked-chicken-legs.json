@@ -1,0 +1,119 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Chicken Legs",
+  "source_url": "https://www.wellplated.com/baked-chicken-legs/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "8 to 10 bone-in, skin-on chicken legs/drumsticks ((about 2 1/2 pounds))",
+      "item": "bone-in, skin-on chicken legs/drumsticks",
+      "qty": "8 to 10",
+      "unit": null,
+      "prep": "(about 2 1/2 pounds)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons light brown sugar (dark works too)",
+      "item": "light brown sugar",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "(dark works too)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground cumin",
+      "item": "ground cumin",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground cayenne pepper (optional)",
+      "item": "ground cayenne pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": "(optional)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "Chopped fresh cilantro or green onion (optional for serving)",
+      "item": "fresh cilantro or green onion",
+      "qty": null,
+      "unit": null,
+      "prep": "Chopped (optional for serving)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Pat the chicken legs dry with paper towels, and place them in a large mixing bowl. Drizzle with the oil.",
+    "In a small bowl, stir together the brown sugar, smoked paprika, cumin, garlic, salt, black pepper, and cayenne. Sprinkle over the chicken, then toss to evenly coat. Let stand at room temperature while you preheat the oven, or refrigerate for up to 1 day.",
+    "Place a rack in the center of your oven and preheat to 425°F. Line a large rimmed baking sheet with aluminum foil or a double layer of parchment paper.",
+    "Arrange the drumsticks in a single layer on the baking sheet. Bake chicken legs for 30-35 minutes, or until the internal temperature is at least 165°F when a meat thermometer is inserted in the thickest part of the meat without touching bone; unlike Baked Chicken Breast, you don’t need to worry about pulling legs a few degrees early for resting time; up to 200°F will be fine. Let rest a few minutes, then serve hot sprinkled with cilantro or green onion."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

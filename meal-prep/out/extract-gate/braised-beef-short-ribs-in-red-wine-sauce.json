@@ -1,0 +1,145 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Braised Beef Short Ribs in Red Wine Sauce",
+  "source_url": "https://www.recipetineats.com/braised-beef-short-ribs-in-red-wine-sauce/",
+  "servings": 5,
+  "time_total": "195 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "5 - 6 beef short ribs (, 300-400g/10-14oz each (Note 1))",
+      "item": "beef short ribs",
+      "qty": "5 - 6",
+      "unit": null,
+      "prep": "300-400g/10-14oz each (Note 1)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5 tsp each salt and pepper",
+      "item": "salt and pepper",
+      "qty": "1.5 tsp each",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 garlic cloves (, crushed)",
+      "item": "garlic cloves",
+      "qty": "3",
+      "unit": null,
+      "prep": "crushed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large onion (, chopped (brown, yellow or white))",
+      "item": "large onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "chopped (brown, yellow or white)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 celery ribs (, chopped)",
+      "item": "celery ribs",
+      "qty": "2",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 carrots (, chopped)",
+      "item": "carrots",
+      "qty": "2",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp tomato paste",
+      "item": "tomato paste",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups (500ml) dry red wine ((Note 2))",
+      "item": "dry red wine",
+      "qty": "2 cups (500ml)",
+      "unit": null,
+      "prep": "(Note 2)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups (500ml) beef stock/broth, low sodium",
+      "item": "beef stock/broth",
+      "qty": "2 cups (500ml)",
+      "unit": null,
+      "prep": "low sodium",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 sprigs thyme ((optional))",
+      "item": "thyme",
+      "qty": "2",
+      "unit": "sprigs",
+      "prep": "optional",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 bay leaves",
+      "item": "bay leaves",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 160°C/325°F.",
+    "Sprinkle beef all over with salt and pepper.",
+    "Heat oil in a large ovenproof pot over high heat. Add half the ribs and brown aggressively all over (~5 - 7 min in total). Remove and repeat with remaining ribs, then remove.",
+    "Turn heat down to medium. Add onion and garlic into the same pot and cook for 2 minutes.",
+    "Add carrot and celery, cook for 5 minutes until carrot is softened and sweet.",
+    "Add tomato paste and cook for 1 minute.",
+    "Add wine, broth, thyme and bay leaves. Stir until tomato paste is dissolved.",
+    "Return beef into liquid, arranging them so they are submerged (Note 3).",
+    "Cover with lid and transfer to oven for 3 hours, or until the meat can easily be pried apart with forks. (Note 4 Other cook methods)",
+    "Remove beef carefully, keeping the meat on the bone. (Note 4) Cover to keep warm.",
+    "Strain all liquid in the pot, pressing juices out of the onion, carrot etc. (Optional - can skip if you don't mind chunky sauce) Return sauce into pot, bring to simmer and stir. Adjust as necessary - simmer to reduce/thicken, add water to thin, season with salt and pepper if needed.",
+    "Place beef on serving plate, spoon over sauce. Serve!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

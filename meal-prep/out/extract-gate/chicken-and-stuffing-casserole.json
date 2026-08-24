@@ -1,0 +1,159 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken and Stuffing Casserole",
+  "source_url": "https://thecozycook.com/chicken-and-stuffing-casserole/",
+  "servings": 6,
+  "time_total": "60 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 tablespoons butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ yellow onion (diced)",
+      "item": "yellow onion",
+      "qty": "½",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 rib celery (diced)",
+      "item": "rib celery",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cooked sausage links (finely diced)",
+      "item": "cooked sausage links",
+      "qty": "3",
+      "unit": null,
+      "prep": "finely diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lbs. boneless/skinless chicken breasts",
+      "item": "boneless/skinless chicken breasts",
+      "qty": "2",
+      "unit": "lbs.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/pepper (to taste)",
+      "item": "Salt/pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 ½ cups frozen green beans (thawed and patted dry)",
+      "item": "frozen green beans",
+      "qty": "2 ½",
+      "unit": "cups",
+      "prep": "thawed and patted dry",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 oz. cream of chicken soup",
+      "item": "cream of chicken soup",
+      "qty": "10.5",
+      "unit": "oz.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup sour cream",
+      "item": "sour cream",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup milk",
+      "item": "milk",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon dried thyme",
+      "item": "dried thyme",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon ground sage",
+      "item": "ground sage",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 oz. dry stuffing mix (see notes)",
+      "item": "dry stuffing mix",
+      "qty": "6",
+      "unit": "oz.",
+      "prep": "(see notes)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ cups chicken broth",
+      "item": "chicken broth",
+      "qty": "1 ½",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 375° F.",
+    "Melt the butter in a small skillet over medium heat. Add the onions, celery, and sausage and sauté until softened, about 5 minutes. Remove and set aside.",
+    "Cut the chicken into bite-sized pieces and pat it dry. Arrange on the bottom of a lightly greased 9 x 13-inch baking dish. Season with salt and pepper.",
+    "Combine the cream of chicken soup, sour cream, milk, thyme, and ground sage. Add it to the top of the chicken and spread evenly to coat.",
+    "Top with thawed green beans. Note: The green beans will be al dente (have a slight crunch). For softer green beans, submerge them into the sauce a bit.",
+    "Combine the stuffing mix, chicken broth, sauteed onions, celery, and sausage. Add it to the top of the casserole dish.",
+    "Cover and bake for 40 minutes. Remove the cover and bake for 5 more minutes.",
+    "Serve with my mashed potatoes and 10-minute chicken gravy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

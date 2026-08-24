@@ -1,0 +1,131 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Quick Spicy Peanut Palmini Noodle Stir Fry",
+  "source_url": "https://www.skinnytaste.com/hearts-of-palm-noodle-peanut-stir-fry/",
+  "servings": 1,
+  "time_total": "15 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tbsp sesame oil (divided)",
+      "item": "sesame oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 clove garlic (minced)",
+      "item": "garlic",
+      "qty": "1",
+      "unit": "clove",
+      "prep": "(minced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 -1/2 teaspoons fresh ginger",
+      "item": "fresh ginger",
+      "qty": "1 -1/2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 12 ounce package Palmini (hearts of palm) linguini",
+      "item": "Palmini (hearts of palm) linguini",
+      "qty": "1",
+      "unit": "12 ounce package",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp low sodium soy sauce (or liquid aminos for whole30)",
+      "item": "low sodium soy sauce",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": "or liquid aminos for whole30",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon sriracha",
+      "item": "sriracha",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1-1/2 cups baby spinach",
+      "item": "baby spinach",
+      "qty": "1-1/2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon peanut butter (or almond butter for whole30)",
+      "item": "peanut butter",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "(or almond butter for whole30)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large egg",
+      "item": "large egg",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "sesame seeds (for topping)",
+      "item": "sesame seeds",
+      "qty": null,
+      "unit": null,
+      "prep": "for topping",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "scallions (for garnish)",
+      "item": "scallions",
+      "qty": null,
+      "unit": null,
+      "prep": "for garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a large nonstick skillet heat 1/2 tablespoon oil, add the garlic and ginger and cook until fragrant, 30 seconds.",
+    "Add the hearts of palm noodles and stir.",
+    "Add 1 tbsp soy sauce, sriracha, and stir cook 1 minute, add spinach and cook until wilted, 2 to 3 minutes then push to one side.",
+    "Add peanut butter on the other side and leave until melted, about 30 seconds then mix all together.",
+    "Push everything to the side.",
+    "Add remaining oil on the other side and crack the egg, scramble then mix all together.",
+    "Transfer to a bowl, top with more sriracha, sesame seeds and scallions."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

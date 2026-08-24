@@ -1,0 +1,170 @@
+{
+  "state": "escalate",
+  "reason": "only 7/14 ingredient lines (50%) were found verbatim in the page; below the 85% bar this transcription is untrusted",
+  "title": "Irish Beef and Guinness Stew",
+  "source_url": "https://www.recipetineats.com/irish-beef-and-guinness-stew/",
+  "servings": null,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2.5 lb / 1.25 kg beef chuck, boneless short rib or any other slow cooking beef (no bone)",
+      "item": "beef chuck",
+      "qty": "2.5 lb / 1.25 kg",
+      "unit": null,
+      "prep": "boneless short rib or any other slow cooking beef (no bone)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 tsp each salt and black pepper",
+      "item": "salt and black pepper",
+      "qty": "3/4 tsp each",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 garlic cloves, minced",
+      "item": "garlic cloves",
+      "qty": "3",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 onions, chopped (brown, white or yellow)",
+      "item": "onions",
+      "qty": "2",
+      "unit": null,
+      "prep": "chopped (brown, white or yellow)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 oz / 180g bacon, speck or pancetta, diced",
+      "item": "bacon",
+      "qty": "6 oz / 180g",
+      "unit": null,
+      "prep": "speck or pancetta, diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tbsp flour (all purpose/plain, Note 3 for GF)",
+      "item": "flour",
+      "qty": "3",
+      "unit": "tbsp",
+      "prep": "all purpose/plain, Note 3 for GF",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "440ml / 14.9 oz Guinness Beer (Note 1)",
+      "item": "Guinness Beer",
+      "qty": "440ml / 14.9 oz",
+      "unit": null,
+      "prep": "Note 1",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tbsp tomato paste",
+      "item": "tomato paste",
+      "qty": "4",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups (750 ml) chicken stock/broth (or beef broth – Note 4)",
+      "item": "chicken stock/broth",
+      "qty": "3 cups (750 ml)",
+      "unit": null,
+      "prep": "or beef broth – Note 4",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 carrots, peeled and cut into 1.25 cm / 1/2″ thick pieces",
+      "item": "carrots",
+      "qty": "3",
+      "unit": null,
+      "prep": "peeled and cut into 1.25 cm / 1/2″ thick pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large celery stalks, cut into 2cm / 1″ pieces",
+      "item": "celery stalks",
+      "qty": "2 large",
+      "unit": null,
+      "prep": "cut into 2cm / 1″ pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 bay leaves",
+      "item": "bay leaves",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 sprigs thyme (or sub with 1 tsp dried thyme leaves)",
+      "item": "thyme",
+      "qty": "3 sprigs",
+      "unit": null,
+      "prep": "or sub with 1 tsp dried thyme leaves",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Cut the beef into 5cm/2″ chunks. Pat dry then sprinkle with salt and pepper.",
+    "Heat oil in a heavy based pot over high heat. Add beef in batches and brown well all over. Remove onto plate. Repeat with remaining beef.",
+    "Lower heat to medium. If the pot is looking dry, add oil.",
+    "Cook garlic and onion for 3 minutes until softening, then add bacon.",
+    "Cook until bacon is browned, then stir through carrot and celery.",
+    "Add flour, and stir for 1 minute to cook off the flour.",
+    "Add Guinness, chicken broth/stock and tomato paste. Mix well (to ensure flour dissolves well), add bay leaves and thyme.",
+    "Return beef into the pot (including any juices). Liquid level should just cover – see video or photos.",
+    "Cover, lower heat so it is bubbling gently. Cook for 2 hours – the beef should be pretty tender by now. Remove lid then simmer for a further 30 – 45 minutes or until the beef falls apart at a touch, the sauce has reduced and thickened slightly.",
+    "Skim off fat on surface, if desired. Adjust salt and pepper to taste. Remove bay leaves and thyme.",
+    "Serve with creamy mashed potatoes!!"
+  ],
+  "concerns": [],
+  "extracted_by": "local-page",
+  "verification": {
+    "lines": 14,
+    "verified": 7,
+    "unverified": 7,
+    "verified_rate": 0.5,
+    "unverified_lines": [
+      "2.5 lb / 1.25 kg beef chuck, boneless short rib or any other slow cooking beef (no bone)",
+      "3 garlic cloves, minced",
+      "2 onions, chopped (brown, white or yellow)",
+      "6 oz / 180g bacon, speck or pancetta, diced",
+      "3 cups (750 ml) chicken stock/broth (or beef broth – Note 4)",
+      "3 carrots, peeled and cut into 1.25 cm / 1/2″ thick pieces",
+      "2 large celery stalks, cut into 2cm / 1″ pieces"
+    ],
+    "passed": false
+  },
+  "escalate": true,
+  "escalate_reason": "rung 1: 1 of 14 JSON-LD ingredient lines failed the split check: 2 large celery stalks (, cut into 2cm / 1\" pieces) -> round-trip covered 88% of the line (bar 90%); dropped stalks | rung 2: only 7/14 ingredient lines (50%) were found verbatim in the page; below the 85% bar this transcription is untrusted"
+}

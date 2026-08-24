@@ -1,0 +1,121 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Chicken Wings with Honey Lime Sauce",
+  "source_url": "https://www.isabeleats.com/baked-chicken-wings-recipe/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 pounds chicken wings, (cut in half at joints)",
+      "item": "chicken wings",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": "cut in half at joints",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground coriander",
+      "item": "ground coriander",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon paprika",
+      "item": "paprika",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons unsalted butter (melted)",
+      "item": "unsalted butter",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": "(melted)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons honey",
+      "item": "honey",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon chopped cilantro",
+      "item": "cilantro",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lime, (juiced and zested)",
+      "item": "lime",
+      "qty": "1",
+      "unit": null,
+      "prep": "juiced and zested",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon crushed red pepper flakes",
+      "item": "crushed red pepper flakes",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 450°F. Fill a large stockpot with water, place on stove over high heat and bring to a boil. Season the water generously with sea salt.",
+    "When water is boiling, add the chicken wings to the pot and lower heat to medium-high. Cook for 7 minutes.",
+    "Remove the wings with a slotted spoon and place them in a bowl lined with a kitchen towel. Pat and squeeze the wings as dry as you can with another kitchen towel. Transfer them to a large sheet pan and set aside.",
+    "In a small bowl, combine salt, ground coriander, garlic powder and paprika. Sprinkle seasoning on top of wings and toss to combine.",
+    "Place sheet pan in oven and bake wings for 25 minutes, flip the wings over and bake for another 8 minutes. Remove from oven and toss with sauce.",
+    "In a medium bowl, whisk together all ingredients. Pour sauce over baked chicken wings, toss to coat and enjoy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

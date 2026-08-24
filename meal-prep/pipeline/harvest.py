@@ -58,6 +58,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
+import html
 import json
 import os
 import random
@@ -443,7 +444,7 @@ def flatten_instructions(v, depth=0):
     if v is None or depth > 4:
         return out
     if isinstance(v, str):
-        s = re.sub(r"<[^>]+>", " ", v).strip()
+        s = html.unescape(re.sub(r"<[^>]+>", " ", v)).strip()
         if s:
             out.append(s)
         return out
@@ -512,6 +513,13 @@ def ingredient_lines(node):
     out = []
     for x in (v or []):
         s = re.sub(r"<[^>]+>", " ", str(x))
+        # HTML ENTITIES ARE UNESCAPED (2026-08-23, D6 measurement). JSON-LD is embedded in HTML and
+        # publishers escape their own lines: "softened &amp; cut into cubes", "1/2&nbsp;cup". The
+        # extraction contract says `raw` is the line EXACTLY AS PRINTED, and "&amp;" is not what is
+        # printed - "&" is. It cost a real page an escalation: the split was perfect and the
+        # round-trip check demanded the token "amp", which exists in no recipe. Unescaping here fixes
+        # the line for every reader of this parser at once, which is why it is here and not in D6.
+        s = html.unescape(s)
         s = re.sub(r"\s+", " ", s).strip()
         if s:
             out.append(s)
@@ -1848,6 +1856,18 @@ def cmd_selftest(_a):
       (recipe_jsonld(html) or {}).get("name") == "Deep", str(recipe_jsonld(html)))
     T("CLEAN TWIN a page with no JSON-LD yields no node, and must not crash",
       recipe_jsonld("<html><body>nothing</body></html>") is None, "found one")
+    T("MUST FIRE  an HTML entity in a recipeIngredient line is unescaped - `raw` is what is PRINTED",
+      ingredient_lines({"recipeIngredient": ["4 oz. cream cheese (softened &amp; cut into cubes)"]})
+      == ["4 oz. cream cheese (softened & cut into cubes)"],
+      str(ingredient_lines({"recipeIngredient": ["4 oz. cream cheese (softened &amp; cut into cubes)"]})))
+    T("  and a non-breaking space collapses like any other whitespace",
+      ingredient_lines({"recipeIngredient": ["1/2&nbsp;cup milk"]}) == ["1/2 cup milk"],
+      str(ingredient_lines({"recipeIngredient": ["1/2&nbsp;cup milk"]})))
+    T("CLEAN TWIN a line with no entity is untouched",
+      ingredient_lines({"recipeIngredient": ["2 cups rice"]}) == ["2 cups rice"])
+    T("instructions are unescaped too - the same escaping, the same page",
+      flatten_instructions(["Stir the beef &amp; onions."]) == ["Stir the beef & onions."],
+      str(flatten_instructions(["Stir the beef &amp; onions."])))
     steps = flatten_instructions([{"@type": "HowToSection", "itemListElement": [
         {"@type": "HowToStep", "text": "Sear the pork"}, {"@type": "HowToStep", "text": "Bake it"}]}])
     T("HowToSection/HowToStep flatten into the ordered string list (section 4.5)",

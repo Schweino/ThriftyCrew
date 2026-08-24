@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-23T18:30:54",
+ "updated": "2026-08-23T19:35:08",
  "count": 2162,
  "candidates": [
   {
@@ -668,7 +668,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
@@ -915,7 +931,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -1076,7 +1092,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -1275,7 +1291,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -1925,7 +1941,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -2187,7 +2203,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -2604,7 +2620,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -3208,7 +3224,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -3343,7 +3359,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -3358,7 +3374,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -3575,7 +3591,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -3731,7 +3747,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -3769,7 +3785,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -4031,7 +4047,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -4155,7 +4171,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -4277,7 +4293,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -4495,7 +4511,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "bread"
    },
    "band": {
@@ -4651,7 +4667,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -4689,7 +4705,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -5247,7 +5263,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -5509,7 +5525,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -6091,7 +6107,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -6225,7 +6241,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -6240,7 +6256,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -6701,7 +6717,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -6963,7 +6979,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -7157,7 +7173,7 @@
    "signature": {
     "protein": "chicken",
     "method": "stew",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "potato"
    },
    "band": {
@@ -7297,7 +7313,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -7335,7 +7351,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -7598,7 +7614,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -7791,7 +7807,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -7915,7 +7931,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -8070,7 +8086,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -8085,7 +8101,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -8324,7 +8340,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -8589,7 +8605,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -9830,7 +9846,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -9968,7 +9984,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -10094,7 +10110,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -11078,7 +11094,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -11963,7 +11979,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -12255,6 +12271,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -12340,7 +12372,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -12493,7 +12525,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -13223,7 +13255,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -13523,7 +13555,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|casserole|plain",
+     "slug": "ground-beef-stroganoff",
+     "name": "Ground Beef Stroganoff",
+     "protein": "beef",
+     "method": "casserole",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live ground-beef-stroganoff-pasta (bge 0.965); casserole/cheddar format not a distinct plate.",
+     "dupe_of": [
+      "ground-beef-stroganoff-pasta"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:26"
+    }
+   ],
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
@@ -14023,7 +14071,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -14708,7 +14756,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -14867,7 +14915,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -14905,7 +14953,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -15042,7 +15090,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -15329,7 +15377,7 @@
    "signature": {
     "protein": "pork",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -15447,7 +15495,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -15487,7 +15535,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -15922,7 +15970,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -16684,7 +16732,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -17205,7 +17253,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
@@ -17499,7 +17563,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "potato"
    },
    "band": {
@@ -17655,7 +17719,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -18435,7 +18499,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -18552,7 +18616,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -18928,7 +18992,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -19440,7 +19504,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -19629,7 +19693,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -20359,7 +20423,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -20480,7 +20544,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -20613,7 +20677,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
@@ -21180,7 +21310,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -21733,7 +21863,7 @@
    "signature": {
     "protein": "turkey",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "cheese",
     "starch": "none"
    },
    "band": {
@@ -21893,7 +22023,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -22451,7 +22581,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "tomato",
     "starch": "none"
    },
    "band": {
@@ -22584,7 +22714,7 @@
    "signature": {
     "protein": "pork",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -22707,7 +22837,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -23781,6 +23911,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -23844,7 +23987,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -24135,6 +24278,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -24501,7 +24660,7 @@
    "signature": {
     "protein": "turkey",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -24617,7 +24776,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -24632,7 +24791,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -24923,6 +25082,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -25159,7 +25334,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -25450,6 +25625,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -25733,7 +25924,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -26024,6 +26215,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -26447,7 +26654,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -26578,6 +26785,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -26979,7 +27199,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -27270,6 +27490,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -27660,7 +27896,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -28331,7 +28567,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -28674,7 +28910,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "tomato",
     "starch": "none"
    },
    "band": {
@@ -28976,7 +29212,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -29120,7 +29422,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "tomato",
     "starch": "none"
    },
    "band": {
@@ -29476,7 +29778,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -29624,7 +29926,7 @@
    "signature": {
     "protein": "chicken",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "wine",
     "starch": "none"
    },
    "band": {
@@ -29750,8 +30052,74 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -29863,7 +30231,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -30120,7 +30488,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -30378,7 +30746,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -31064,7 +31432,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -31299,7 +31667,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -31488,7 +31856,7 @@
    "signature": {
     "protein": "any",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -31663,7 +32031,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -32077,7 +32445,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -32312,7 +32680,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -32708,7 +33076,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -33113,7 +33481,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -33620,7 +33988,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -34108,7 +34476,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -34552,7 +34920,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -34947,7 +35315,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -35248,7 +35616,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
@@ -35264,7 +35648,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -35810,7 +36194,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -36069,7 +36453,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -36688,7 +37072,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -36923,7 +37307,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -37258,7 +37642,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -37526,7 +37910,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|casserole|plain",
+     "slug": "ground-beef-stroganoff",
+     "name": "Ground Beef Stroganoff",
+     "protein": "beef",
+     "method": "casserole",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live ground-beef-stroganoff-pasta (bge 0.965); casserole/cheddar format not a distinct plate.",
+     "dupe_of": [
+      "ground-beef-stroganoff-pasta"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:26"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -37764,7 +38164,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -37907,7 +38307,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -38161,7 +38561,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -38640,7 +39040,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -38898,7 +39298,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -39478,7 +39878,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -39824,7 +40224,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -40005,7 +40405,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -40357,7 +40757,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -40733,7 +41133,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -41148,6 +41548,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -41354,7 +41767,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -41900,6 +42313,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -42084,7 +42510,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -42451,7 +42877,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -42965,7 +43391,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -43257,7 +43683,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -43504,7 +43930,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -43804,7 +44230,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -43912,7 +44404,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -44201,7 +44693,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -44332,6 +44824,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -44486,7 +44991,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -44616,6 +45121,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -44862,7 +45380,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -44992,6 +45510,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -45285,7 +45816,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -45415,6 +45946,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -45561,7 +46105,73 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
@@ -45692,7 +46302,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -45822,6 +46432,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -45978,7 +46601,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -46235,7 +46858,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -46571,6 +47194,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -46634,7 +47270,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -47250,7 +47886,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -47415,7 +48051,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -47603,7 +48239,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -48074,7 +48710,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -48232,7 +48868,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -48247,7 +48883,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -48587,7 +49223,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -48960,7 +49596,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -49217,7 +49853,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -49457,7 +50093,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -49802,7 +50438,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -50204,7 +50840,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -50503,7 +51139,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -50664,7 +51300,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -50704,7 +51340,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -51311,7 +51947,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -51708,7 +52344,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -52012,7 +52648,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -52134,7 +52770,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -52403,7 +53039,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -52773,7 +53409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -53037,7 +53673,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -53307,7 +53943,73 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -53726,7 +54428,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -54000,7 +54702,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -54263,7 +54965,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -54623,7 +55391,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -54790,7 +55558,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -55160,7 +55928,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -55373,7 +56141,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -55691,7 +56459,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -55824,6 +56592,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -55932,7 +56713,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -56280,7 +57061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -56714,7 +57495,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -57481,7 +58262,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -57628,7 +58409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -57863,7 +58644,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -58186,7 +58967,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -58448,7 +59229,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -58687,7 +59468,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -58880,7 +59661,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -59043,7 +59824,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -59419,7 +60200,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -59862,7 +60643,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -60119,7 +60900,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -60331,7 +61112,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -60676,7 +61457,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -61156,7 +61937,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -61815,7 +62596,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -61964,7 +62745,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -62468,7 +63249,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -62645,7 +63426,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -62994,7 +63775,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -63518,7 +64299,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -63845,7 +64626,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -63992,7 +64773,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -64258,7 +65039,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -64612,7 +65393,7 @@
    "signature": {
     "protein": "chicken",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -64728,8 +65509,74 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -64767,7 +65614,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -64918,7 +65765,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -65060,7 +65907,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "cheese",
     "starch": "bean"
    },
    "band": {
@@ -65526,7 +66373,7 @@
    "signature": {
     "protein": "chicken",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -65644,8 +66491,74 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
+   "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -65685,7 +66598,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -66021,7 +66934,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -66151,6 +67064,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -66411,7 +67337,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -66541,6 +67467,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -66557,7 +67496,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "potato"
    },
    "band": {
@@ -66673,7 +67612,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -66711,7 +67650,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -66965,7 +67904,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -67095,6 +68034,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -67249,7 +68201,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -67751,7 +68703,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -68008,7 +68960,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -68372,7 +69324,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -68778,7 +69730,7 @@
    "signature": {
     "protein": "beef",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "potato"
    },
    "band": {
@@ -69016,7 +69968,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "bread"
    },
    "band": {
@@ -69177,7 +70129,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -69192,7 +70144,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -69327,6 +70279,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -69589,7 +70554,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -69872,7 +70837,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -69989,7 +70954,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -70004,7 +70969,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -70192,7 +71157,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -70369,7 +71334,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -70557,7 +71522,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -70722,7 +71687,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -70969,7 +71934,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -71134,7 +72099,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -71322,7 +72287,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -71673,7 +72638,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -72172,7 +73137,23 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
@@ -72400,7 +73381,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -72708,7 +73689,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -73228,7 +74209,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -73538,7 +74519,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -73967,7 +74948,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -74342,7 +75323,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -74665,7 +75646,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -74928,7 +75909,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -75167,7 +76148,7 @@
    "signature": {
     "protein": "chicken",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "potato"
    },
    "band": {
@@ -75293,7 +76274,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -75308,7 +76289,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -75816,7 +76797,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -76078,7 +77059,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -76200,7 +77181,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -76351,7 +77332,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -76636,7 +77617,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -76806,7 +77787,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -76994,7 +77975,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -77164,7 +78145,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -77398,7 +78379,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -77716,7 +78697,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -77862,7 +78843,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -78089,7 +79070,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -78461,7 +79442,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -78718,7 +79699,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "wine",
     "starch": "none"
    },
    "band": {
@@ -79117,7 +80098,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -79259,7 +80240,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -79481,7 +80462,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -79669,7 +80650,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -79788,7 +80769,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -80206,7 +81187,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -80651,7 +81632,7 @@
    "signature": {
     "protein": "pork",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -80787,7 +81768,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -80806,7 +81787,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -81095,7 +82076,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -81627,7 +82608,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -82116,7 +83097,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -82279,7 +83260,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -82294,7 +83275,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -82678,7 +83659,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -83510,7 +84491,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -83854,7 +84835,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -83956,7 +84937,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -84075,7 +85056,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -84223,7 +85204,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -84412,7 +85393,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -84514,7 +85495,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -84633,7 +85614,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -84702,7 +85683,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -84845,7 +85826,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -84970,7 +85951,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -85187,7 +86168,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "curry",
     "starch": "none"
    },
    "band": {
@@ -85544,7 +86525,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -85878,7 +86859,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -86225,7 +87206,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -86350,7 +87331,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -86488,7 +87469,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -86613,7 +87594,7 @@
    "signature": {
     "protein": "pork",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -86702,7 +87683,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -86809,7 +87790,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -87101,6 +88082,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -87232,7 +88229,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -87530,7 +88527,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -87743,7 +88740,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -87934,7 +88931,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -88011,7 +89008,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -88530,7 +89527,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -88827,7 +89824,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -89064,7 +90061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -89566,7 +90563,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -89756,7 +90753,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -89848,7 +90845,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -90061,7 +91058,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -90153,7 +91150,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -90412,7 +91409,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -90723,7 +91720,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -90739,7 +91802,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -90900,7 +91963,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -90939,7 +92002,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -91201,7 +92264,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -91437,7 +92500,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -91807,7 +92870,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -92064,7 +93127,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -92213,7 +93276,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -92332,7 +93395,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -92586,7 +93649,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -92781,7 +93844,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -92897,7 +93960,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -92958,7 +94021,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -93218,7 +94281,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -93562,7 +94625,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -93921,7 +94984,23 @@
      "side": "live-catalog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -93937,7 +95016,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -94381,7 +95460,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -94397,7 +95542,7 @@
    "signature": {
     "protein": "beef",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "bean"
    },
    "band": {
@@ -94548,7 +95693,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -95074,7 +96219,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -95568,7 +96713,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -96227,7 +97372,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -96475,7 +97686,7 @@
    "signature": {
     "protein": "any",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -96753,7 +97964,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -98054,7 +99265,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -98638,7 +99849,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -98924,6 +100135,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -99669,7 +100896,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -99818,7 +101045,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -100201,7 +101428,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -100563,7 +101790,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -100678,7 +101905,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -101471,7 +102698,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -101961,7 +103188,23 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -101977,7 +103220,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -102093,7 +103336,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -102273,6 +103516,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -102313,7 +103569,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -102740,7 +103996,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -103277,7 +104533,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -103340,7 +104662,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -103470,6 +104792,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -104434,7 +105769,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "bean"
    },
    "band": {
@@ -105325,7 +106660,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -105467,7 +106802,7 @@
    "signature": {
     "protein": "turkey",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -105582,7 +106917,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 2,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -105882,7 +107217,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
@@ -106080,7 +107481,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -106279,7 +107680,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -106643,7 +108044,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -106773,6 +108174,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -107021,7 +108435,7 @@
    "signature": {
     "protein": "any",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "rice"
    },
    "band": {
@@ -107536,7 +108950,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -108089,7 +109503,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "tomato",
     "starch": "pasta"
    },
    "band": {
@@ -108231,7 +109645,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -108636,7 +110050,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 15,
    "status": "available",
    "entered_by": "crawl",
@@ -108767,7 +110247,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -108836,7 +110316,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -109208,7 +110688,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -109500,6 +110980,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -109989,7 +111485,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -110495,7 +111991,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -110798,7 +112294,7 @@
    "signature": {
     "protein": "pork",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -110873,7 +112369,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -112364,7 +113860,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -112711,7 +114207,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -113182,7 +114678,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -113342,7 +114838,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 9,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -113380,7 +114876,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -114645,7 +116141,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -114989,7 +116485,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
@@ -115945,7 +117507,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -116078,7 +117640,7 @@
    "signature": {
     "protein": "sausage",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -116591,7 +118153,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -116935,7 +118497,23 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "beef|bake|plain",
+     "slug": "swedish-meatballs",
+     "name": "Swedish Meatballs",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
+     "dupe_of": [
+      "swedish-meatball-potato-bowls"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
+    }
+   ],
    "saturation_pressure": 0,
    "status": "available",
    "entered_by": "crawl",
@@ -117094,7 +118672,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -118170,6 +119748,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -119904,6 +121498,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -119923,7 +121533,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -120463,7 +122073,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "couscous"
    },
    "band": {
@@ -120683,7 +122293,7 @@
    "signature": {
     "protein": "pork",
     "method": "skillet",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -120771,7 +122381,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 1,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": [
@@ -120857,7 +122467,7 @@
    "signature": {
     "protein": "any",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -121138,7 +122748,7 @@
    "signature": {
     "protein": "chicken",
     "method": "bake",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "potato"
    },
    "band": {
@@ -121301,7 +122911,7 @@
      "at": "2026-08-16T07:30:14"
     }
    ],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -121408,7 +123018,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -121854,6 +123464,22 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|cream",
+     "slug": "creamy-beef-and-shells",
+     "name": "Creamy Beef and Shells",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live cheesy-beef-and-shells-casserole (3/4 axes).",
+     "dupe_of": [
+      "cheesy-beef-and-shells-casserole",
+      "beef-stuffed-shells"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:21"
     }
    ],
    "saturation_pressure": 0,
@@ -122401,7 +124027,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -122725,7 +124351,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -123222,7 +124848,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -123435,7 +125061,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -123802,6 +125428,19 @@
      "run": "hunt-2026-08-15-lowcarb-100",
      "by": "backfill",
      "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "sausage|skillet|spice",
+     "slug": "mexican-breakfast-tacos-chorizo-and-egg",
+     "name": "Mexican Breakfast Tacos (Chorizo and Egg)",
+     "protein": "sausage",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Breakfast, scrambled eggs cook-to-order; not a batch dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
     }
    ],
    "saturation_pressure": 0,
@@ -123842,7 +125481,7 @@
    "signature": {
     "protein": "chicken",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "herb",
     "starch": "none"
    },
    "band": {
@@ -123952,7 +125591,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 3,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -123967,7 +125606,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "cream",
     "starch": "none"
    },
    "band": {
@@ -124210,7 +125849,73 @@
      "side": "backlog"
     }
    ],
-   "prior_rulings": [],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    }
+   ],
    "saturation_pressure": 5,
    "status": "available",
    "entered_by": "crawl",
@@ -124274,7 +125979,7 @@
    "signature": {
     "protein": "pork",
     "method": "braised",
-    "sauce_family": null,
+    "sauce_family": "spice",
     "starch": "none"
    },
    "band": {
@@ -124395,7 +126100,7 @@
     }
    ],
    "prior_rulings": [],
-   "saturation_pressure": 0,
+   "saturation_pressure": 4,
    "status": "available",
    "entered_by": "crawl",
    "batch_concerns": []
@@ -125770,7 +127475,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {
@@ -125839,7 +127544,7 @@
    "signature": {
     "protein": "any",
     "method": "any",
-    "sauce_family": null,
+    "sauce_family": "bbq",
     "starch": "none"
    },
    "band": {

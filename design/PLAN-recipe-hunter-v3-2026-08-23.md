@@ -3,7 +3,9 @@
 Date: 2026-08-23. Author: Fable (end-to-end review session, at Brad's direction: "find where we can
 move stuff to local llm to save tokens... a full redesign is absolutely okay... speed and accuracy are
 the two most important things... utilize up to 8 cores").
-Status: IN BUILD. Phase 0 (D1 + D2) built 2026-08-23; every later phase is still plan only.
+Status: IN BUILD. Phases 0 (D1 + D2), 1 (D3 + D4 + D5) and 2 (D6) built 2026-08-23, each with its
+gate record in section 6; phase 3 (D9, the daemon) is the next build and everything after it is still
+plan only.
 Corrections made during a build are folded into this document in the same commit and marked
 CORRECTED with the date and the measurement behind them - the plan is the spec, so it is the plan
 that moves when code reality disagrees with it.
@@ -401,6 +403,10 @@ escalation-role text ("you receive only pages the local pass could not settle; t
 and unverified lines are in your dispatch - do not re-run the local script"), because in v3 every
 page that reaches it has ALREADY failed the local pass, and re-running local_extract there would
 waste minutes re-earning a failure the dispatch already carries.
+**SHIPPED 2026-08-23 with D6**, together with the sentence that makes the rule safe to obey: a
+page in the extractor's queue is never a page nobody tried, because a down endpoint BLOCKS the
+sweep instead of dispatching. `ops\audit-prompt-backup.ps1 -Sync` was run and `ops\prompt-backup`
+is committed with it.
 **Three D6 build notes earned in phase 1 (2026-08-23):** (1) **reuse harvest.py's parsers.**
 `find_recipe_node`, `flatten_instructions`, `ingredient_lines`, `extract_number` and `parse_yield`
 exist there with fixtures, shape-matched to fetch-recipe.ps1's PS implementations; a third JSON-LD
@@ -684,7 +690,7 @@ from prose, and SKILL.md forbids exactly that. So the port is governed:
 | harvest fetches | 8 workers, MEASURED 2026-08-23 at 131 pages/min - which IS the politeness ceiling (7 domains / 2-4 s each), so more workers buy nothing | network + per-domain politeness |
 | JSON-LD parse, band filter, signatures | CORRECTED 2026-08-23: runs INSIDE the 8 fetch threads, and no process pool was built or is needed - the crawl sits at the politeness ceiling with CPU idle, and --resignature re-derives 652 signatures in 60 s single-threaded. Build the pool only if a measurement ever shows parse waiting on CPU, which nothing has | trivial CPU |
 | bge-m3 embeddings | **CPU, measured and settled 2026-08-23: 36.36 ms/text, whole-pool build 24 s cold / 0 s warm - the GPU branch is CLOSED, not deferred** | trivial CPU (§3 S1) |
-| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (~100-200-token prompts) fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`) | GPU |
+| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (~100-200-token prompts) fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`). **RESOLVED 2026-08-23 (D6 build, measured on the box, and the audit's prediction was exactly right).** llama-server's `/props` reports the per-slot budget rather than the total, which is the only honest source since `-c` and `--parallel` are start-time flags: at serve.ps1's defaults it reports **4,096 tokens per slot**, and rung 2 needs **~11,465** (a 24k-char page at 3.5 chars/token plus 4,096 out plus headroom). Raising `-c` is not the way out - measured free VRAM with the 4-slot server up was **1,200 MiB**, against the ~1.5-2 GB doubling the KV cache would need. What DOES work costs nothing: **`-Slots 1` at the same `-c 16384` gives one slot the whole 16,384** and measured **14,688 MiB used, i.e. LESS VRAM than the 4-slot server**, because `-c` is the total either way. So the sweep is two passes on two server shapes - rung 1 fanned at 4 slots, rung 2 narrow at 1 - and `extract_sweep.py --from-report` exists precisely so pass 2 targets only what pass 1 escalated instead of re-earning 45 settled answers. The dangerous alternative is named in code: local_extract REFUSES rung 2 on a too-small slot (exit 2) rather than truncating the page, because a page cut at the slot ceiling still substring-verifies line by line - the checker proves what IS there and can never prove what is absent | GPU |
 | QA battery / wave-preaudit | 8-wide across the SHARED checks, serial across slugs (S8's CORRECTED 2026-08-23 finding: the slug loop rides build-card2's process-global costed.json cache, and fanning it re-pays the 5.8 MB parse per child) | CPU, seconds |
 | cost engine, costed.json, recipes-db | **serialized by the daemon's cost-engine mutex (§4.5)** - spec assembly stays parallel, the cost pass does not | correctness |
 | CDP store sweeps | 1 thread per store (existing) | vendor politeness - the floor |
@@ -764,6 +770,8 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | decide dossier batch | run-scoped, from `harvest.py --dossier --out` | harvest.py -> bridge/daemon decide dispatch (transient) |
 | DECIDE verdict file | run-scoped; decide_apply accepts EITHER a bare DECIDE payload OR hunt-pool-seed.js's own return shape (`{verdicts:[{batch,decisions,note},...]}`) verbatim - it flattens the batches itself and a `stuck` batch contributes nothing, so the operator never hand-merges (ADDED 2026-08-23 after the gate run did exactly that with a throwaway one-liner) | bridge/daemon -> decide_apply.py (transient) |
 | extraction | `<RunDir>\extracted\<slug>.json` | rung 1/2 (local) or rung 3 (Claude) -> map, QA, coverage_check |
+| extraction ESCALATION (ADDED 2026-08-23, D6) | `<RunDir>\extracted\<slug>.escalation.json` | the sweep -> the rung-3 extractor dispatch. Same contract with `state: "escalate"` plus the failure reason and the unverified lines S3 says the dispatch must carry. A DIFFERENT filename on purpose: a half-settled extraction sitting under the settled name is how a run publishes a recipe nothing verified. A later rung settling the page DELETES the escalation file, so a stale one can never be dispatched |
+| extraction sweep report (ADDED 2026-08-23, D6) | `<RunDir>\extracted\sweep-report.json` | extract_sweep.py -> the phase gate, and `--from-report` for the narrow rung-2 pass |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
 | mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
 | intake skeleton snapshot | `<RunDir>\intake\<slug>.skeleton.json` | build-intake-skeleton.ps1 -> the post-write diff |
@@ -910,6 +918,11 @@ different questions and this estate has conflated them at least five times.
   the round-trip fixtures. It is NOT find-similar's STOP list and must not import it - that list
   exists to kill name-identity noise and deliberately swallows words like "chicken" that a split
   must never be excused from covering.)
+  **CORRECTED 2026-08-23 (D6 build, measured on a 7-publisher pilot and then on the 50-page gate corpus). Three things belong to this threshold that this paragraph did not name, and the first is the biggest.**
+  - **The PROMPT is part of the threshold.** The split prompt's first draft carried the extractor agent's own wording - item is "the food itself, brand and preparation stripped" - and said nothing about the parentheticals publishers put in their own JSON-LD. That settled **1 page in 7**. The model was obeying: it stripped "small" from "small onion", "extra virgin" from "extra virgin olive oil", "divided" from a cheese line, and dropped "(or gluten-free flour mix)" entirely - every one a word the round-trip check is RIGHT to demand back. The check was not too strict; the instruction was telling the model to throw material away. Rewritten to state the rule the checker enforces (every word lands somewhere; keep size/cut/grade/form/variety words; the whole bracketed note goes in prep), the SAME corpus settled **6 of 7**. A threshold and the prompt that feeds it are one mechanism, and tuning the threshold before reading the prompt would have been the wrong move on a 14% settle rate.
+  - **A bracketed CURRENCY amount is struck from the line before it is counted.** Budget Bytes prints its per-ingredient cost inside its JSON-LD ("2 cloves garlic ($0.16)"), which failed 17 of 17 lines on that publisher - every page it has. $0.16 is not a property of the garlic, and the only way to "cover" it is to stuff a dollar amount into prep where the mapper and pricer would read it as something the recipe says about the food. This is an ANNOTATION rule (it removes a bracketed price), NOT a stopword (which would remove a word), and the fixture pins the difference: a bracketed NOTE is still demanded.
+  - **A boolean covers the words that set it.** `optional: true` accounts for "optional", "to taste", "garnish", "desired" - the line "1/4 teaspoon cayenne pepper (optional)" was transcribed perfectly and failed only because the covering set looked in four text fields when the answer was in a fifth. Note the direction, which is the whole safety of it: the excuse applies ONLY when the flag is set, so a line saying "(optional)" that the model reads as not-optional still fails.
+  **A KNOWN escalation class, recorded rather than excused:** a line naming a BRAND ("1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil") cannot both satisfy the extractor contract's "brand stripped" rule and cover every token. It escalates, and that is the right answer - brands cannot be enumerated, and the alternative is a hole in the check wide enough to hide a dropped food in.
 
 **Resume seed table** (the daemon's `-Status`-driven re-entry; normative so nobody re-derives it):
 
@@ -983,9 +996,9 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   is kept flagged; an ambiguous serving basis demotes to band-unverified (never a guess); an exact
   already-published slug never enters the pool; a `ruled:` candidate never resurfaces as available;
   an --ingest candidate gets the same band/signature/dedup treatment as a crawled one.
-  BUILT 2026-08-23. `meal-prep\pipeline\harvest.py`, stdlib-only under C:\Codex\Python312, 84
+  BUILT 2026-08-23. `meal-prep\pipeline\harvest.py`, stdlib-only under C:\Codex\Python312, 88
   fixtures green (57 at first commit; the gate round added the signature-detector, batch-concern,
-  neighbour-side and entry-guard classes), marker HARVEST-COMPLETE, verbs --crawl / --classify /
+  neighbour-side and entry-guard classes; D6 added the HTML-entity class to `ingredient_lines`), marker HARVEST-COMPLETE, verbs --crawl / --classify /
   --ingest / --mark-taken / --mark-ruled / --dossier / --rescore / --resignature / --status
   (--resignature re-derives every signature from the cached page: the correction mechanism for the
   whole detector class, zero network). Three things the build settled that the plan had
@@ -1045,6 +1058,26 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   check; orchestrator-facing exit contract (settled / escalate); the extractor agent's
   "try local first" section removed/gated for its escalation-only role (S3). Fixtures: an invented
   line MUST FIRE the substring check; a JSON-LD line split that drops a token fails round-trip.
+  BUILT 2026-08-23, in three pieces. `local_extract.py` gained rung 1 (`--from-jsonld`), the
+  section 4.5 contract emitter (`to_contract`), the `/props` slot-context probe, and a `--selftest`
+  with **37 fixtures** including an end-to-end drill that runs the CLI as a child against a dead
+  endpoint and asserts exit 2, the named server, and that NOTHING was written; the old
+  `--url`/`--file` form is untouched, exactly as D2 kept coverage_check's. `extract_sweep.py` is the
+  phase-2 bridge - cache-only, ladder, contract, lane-log per settle - with **23 fixtures** of its
+  own, among them a drill against the real hunt-run.ps1 in a scratch run dir proving the lane line
+  is `lane=extract by=local in=0 out=0`, and its must-fire twin proving an ESCALATION writes no
+  settle line. The JSON-LD parsing is harvest.py's, imported (a fixture asserts the module), and
+  building on it found a live defect in that shared parser: **`recipeIngredient` arrives
+  HTML-ESCAPED** ("softened &amp;amp; cut into cubes"), so `raw` was carrying entity text the
+  contract says is "the line exactly as printed". Fixed in `ingredient_lines` and
+  `flatten_instructions` with four fixtures - it had already cost one real page an escalation over
+  the token "amp".
+  One more rule the build earned and froze: **the sweep's file cleanup runs ONE WAY.** Settling
+  clears an earlier escalation file (or the extract lane dispatches a Claude extractor for a page
+  already transcribed), but escalating never clears an earlier SETTLE - the round-2 rung-1-only
+  pass re-ran a page round 1 had settled at rung 2 and deleted a verified extraction to put a
+  failure in its place. A verified transcription is not made wrong by a later, cheaper pass not
+  reaching it. Must-fire fixture, both directions.
   **PINNED FOR THE PHASE-2 BUILDER (2026-08-23 cold read - facts, not guesses):**
   - The file exists and works; D6 EXTENDS it. Its transport is `graph\lib\llm.py`'s LocalLLM with a
     deliberate 600 s timeout (the comment above that number says why - do not "fix" it down). Its
@@ -1185,7 +1218,7 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 |---|---|---|
 | 0 | D1 + D2 (batteries) | batteries green on the real lowcarb-100 wave dirs; a re-audit of one repaired slug costs seconds + one scoped sign-off |
 | 1 **DONE 2026-08-23** | D3 + D4 + D5 (harvest + decider) | a harvest of >=200 in-band candidates from >=6 publishers with dupe-dossier spot-check; decider ruling on dossiers alone matches a hand check on 20 candidates; front-end token share re-measured on a mini-run |
-| 2 | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
+| 2 **DONE 2026-08-23** | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
 | 3 | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
 | 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
@@ -1329,6 +1362,62 @@ Two clarifications recorded for the phase-1 builder, so neither becomes a mid-bu
   `find-similar.ps1 -SelfTest` and `considered-dishes.ps1 -SelfTest`. **D7's map-preresolve.ps1 and
   D8's build-intake-skeleton.ps1 are the next new PS collection code this plan orders; their builders
   read all three traps first, and any fixture over a collection uses at least three elements.**
+
+**Phase 2 gate: PASSED 2026-08-23.** Evidence, so the next session does not re-earn it.
+
+*The corpus.* Exactly the 50 cached pages the pickup block named: the 4 accepted recipes at
+`selected` in `runs\hunt-2026-08-23-v3-phase1-mini` plus 46 available band-verified candidates
+popped round-robin across all 7 publishers. **Zero fetches, zero politeness budget** - every page
+came off the harvester's cache, which is what the pool exists for.
+
+*Gate 1 - rung-1/2 settle rate and escalation rate on 50 cached pages.* **MET, and measured
+twice, because the first round was worth more than a pass.**
+
+| round | settled at rung 1 | settled at rung 2 | escalated to Claude | settled overall | s/page (rung 1, fanned) |
+|---|---|---|---|---|---|
+| 1 (as first written) | 38/50 = **76%** | 2 of 12 attempted | 10/50 = **20%** | 40/50 = 80% | 9.6 s |
+| 2 (after the corrections below) | 46/50 = **92%** | 1 of 4 attempted | **3/50 = 6%** | 47/50 = **94%** | 9.5 s |
+
+Round 1's 13 escalations are what produced the section 4.5 corrections: 9 of them were a single
+line each, of one narrow class (a for-serving / for-topping / adjust-to-taste note the model left
+out of prep), and one was the HTML-entity defect in the shared parser. Round 2 fixed the prompt
+and the parser - **not the threshold** - and the escalation rate fell from 20% to 6%. **The plan's
+own estimate for this deliverable was "~5-15% of pages" reaching the Claude extractor; the
+measured figure is 6%.** The three survivors are honest hard pages, and one of them names the
+known brand class ("1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil").
+
+Rung 2's own numbers, across both rounds: **3 of 16 attempted pages settled (19%) at ~50 s/page**
+on the narrow server. That is expensive and low-yield, and it is a real finding for D9: the
+ladder's value sits almost entirely in rung 1, so a daemon deciding how to spend the card should
+run rung 1 over everything and treat rung 2 as an occasional second look rather than a stage.
+
+*Gate 2 - ZERO unverified lines pass into any settled extraction.* **MET, mechanically.** Both
+sweep reports carry `unverified_lines_in_settled: 0` over all 50 pages, and it cannot be otherwise
+by construction: rung 1's bar is EVERY line (one failure escalates the whole page), and the
+settled contract carries the verifier's block so the claim is auditable rather than asserted. The
+fixture pins it from the other side - an escalation is written to a DIFFERENT filename, so an
+unsettled page cannot occupy the settled name.
+
+*Gate 3 - wall clock against the D6 envelope (~7-14 s/page fanned; near-serial means an idle
+card).* **MET at 9.5-9.6 s/page mean, 476-482 s for 50 pages.** The fan-out is doing real work and
+the number proves it rather than assuming it: the SAME page measured 13.5 s fanned across 4 slots
+and 22.8 s on the 1-slot server, and the whole rung-2 pass ran at 49 s/page where rung-1 pages ran
+at 9.5. A serial rung-1 sweep would have been ~25-45 minutes; it was 8.
+
+*The bridge did real work, not a drill.* All four accepted recipes were extracted locally,
+advanced `selected -> extracted` through hunt-run.ps1, and lane-logged `by=local, in=0, out=0`.
+That is four Claude extractor invocations the run did not pay for, and the lane log says so.
+
+*Also done in the same sitting, per the phase-2 pickup block:* `harvest.py --classify` ran while
+the card was hot and filled the pool's sauce-family nulls that phase 1 could never reach.
+
+Two things a phase-3 builder should carry forward. **(a) Rung 1 is not deterministic.**
+`jalape-o-popper-chicken` escalated at 88% coverage on one pass and settled on the next with no
+code change between them (temp 0.1, not 0). A borderline page is a coin the sweep flips, so a
+settle rate is a rate and not a verdict about a page, and the daemon should not treat one
+escalation as a permanent property of a URL. **(b) The two-server-shape sweep is an operating
+shape, not a workaround** - see the resolved conflict in section 4.3, and `--from-report` is what
+makes it cheap.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order

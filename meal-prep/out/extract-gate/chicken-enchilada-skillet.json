@@ -1,0 +1,111 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Enchilada Skillet",
+  "source_url": "https://www.isabeleats.com/chicken-enchilada-skillet/",
+  "servings": 6,
+  "time_total": "25 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 white onion, (diced)",
+      "item": "white onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "(diced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 green bell pepper, (diced)",
+      "item": "green bell pepper",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 cups cooked shredded chicken",
+      "item": "cooked shredded chicken",
+      "qty": "4",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups enchilada sauce, (divided)",
+      "item": "enchilada sauce",
+      "qty": "3",
+      "unit": "cups",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons taco seasoning",
+      "item": "taco seasoning",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 corn tortillas, (cut into 1-inch strips)",
+      "item": "corn tortillas",
+      "qty": "8",
+      "unit": null,
+      "prep": "cut into 1-inch strips",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups Mexican-blend shredded cheese",
+      "item": "Mexican-blend shredded cheese",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "For serving: Chopped cilantro, sour cream, and guacamole",
+      "item": "Chopped cilantro, sour cream, and guacamole",
+      "qty": null,
+      "unit": null,
+      "prep": "For serving",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the olive oil over medium heat in an oven-safe pan or skillet. Add the diced onions and bell pepper, and saute until soft and translucent, about 5 minutes.",
+    "Add the shredded chicken, 2 ½ cups enchilada sauce, and taco seasoning. Stir and simmer for about 5 minutes to combine the flavors.",
+    "Gently fold in the tortilla strips until fully combined. Continue cooking for an additional 5 minutes to allow the tortilla strips to soften and soak up flavor.",
+    "Top with the remaining ½ cup enchilada sauce, the shredded cheese, and broil for 5 minutes until the cheese is fully melted and bubbly.",
+    "Top with chopped cilantro and serve immediately with sour cream or guacamole."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 9,
+    "verified": 9,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

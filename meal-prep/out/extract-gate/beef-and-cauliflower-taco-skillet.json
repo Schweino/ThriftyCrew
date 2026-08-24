@@ -1,0 +1,184 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Beef and Cauliflower Taco Skillet",
+  "source_url": "https://www.budgetbytes.com/beef-and-cauliflower-taco-skillet/",
+  "servings": 4,
+  "time_total": "25 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "2 cloves garlic ($0.16)",
+      "item": "garlic",
+      "qty": "2",
+      "unit": "cloves",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp olive oil ($0.16)",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 lb. ground beef ($2.50)",
+      "item": "ground beef",
+      "qty": "1/2",
+      "unit": "lb.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups riced cauliflower ($1.25)",
+      "item": "riced cauliflower",
+      "qty": "3",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 10oz. can diced tomatoes with green chiles ($0.55)",
+      "item": "diced tomatoes with green chiles",
+      "qty": "1",
+      "unit": "10oz. can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 15oz. can black beans ($0.50)",
+      "item": "black beans",
+      "qty": "1",
+      "unit": "15oz. can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp chili powder ($0.30)",
+      "item": "chili powder",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp smoked paprika ($0.10)",
+      "item": "smoked paprika",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp ground cumin ($0.10)",
+      "item": "ground cumin",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp dried oregano ($0.05)",
+      "item": "dried oregano",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 tsp salt ($0.02)",
+      "item": "salt",
+      "qty": "1/4",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp pepper ($0.02)",
+      "item": "pepper",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 oz. cheddar cheese, shredded ($0.38)",
+      "item": "cheddar cheese",
+      "qty": "2",
+      "unit": "oz.",
+      "prep": "shredded",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 avocado ($0.99)",
+      "item": "avocado",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tomato ($0.46)",
+      "item": "tomato",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup finely diced red onion ($0.10)",
+      "item": "red onion",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "finely diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 handful fresh cilantro ($0.10)",
+      "item": "fresh cilantro",
+      "qty": "1 handful",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Mince the garlic. Add the garlic, olive oil, and ground beef to a large skillet and cook over medium heat until the ground beef is browned. If you're using a high fat content beef, you may want to drain off the excess fat before the next step.",
+    "Drain the can of black beans and add them to the skillet along with the diced tomatoes with green chiles (not drained), chili powder, smoked paprika, cumin, oregano, salt, and  pepper. Stir and cook until the skillet is simmering.",
+    "Add the riced cauliflower to the skillet (no need to thaw, if frozen). Continue to stir and cook over medium heat until the cauliflower is tender (about five minutes).",
+    "While the beef and cauliflower are heating, dice the tomato, avocado, and red onion. Roughly chop the cilantro.",
+    "Top the beef and cauliflower mixture with the shredded cheddar. Place a lid on the skillet, and let it heat over medium for a few minutes, or until the cheddar has melted.",
+    "Once the cheese is melted, top the skillet with the tomato, avocado, red onion, and cilantro. Serve immediately."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

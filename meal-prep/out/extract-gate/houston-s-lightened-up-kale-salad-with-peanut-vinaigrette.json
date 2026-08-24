@@ -1,0 +1,179 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Houston’s (Lightened-Up) Kale Salad with Peanut Vinaigrette",
+  "source_url": "https://www.skinnytaste.com/houstons-grilled-chicken-kale-salad-with-peanut-vinaigrette/",
+  "servings": 2,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 tablespoons peanut oil",
+      "item": "peanut oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon toasted sesame oil",
+      "item": "toasted sesame oil",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons unseasoned rice vinegar",
+      "item": "unseasoned rice vinegar",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon reduced sodium soy sauce (or gf soy sauce)",
+      "item": "reduced sodium soy sauce",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": "or gf soy sauce",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons raw honey",
+      "item": "raw honey",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ pound boneless (skinless chicken breast)",
+      "item": "boneless skinless chicken breast",
+      "qty": "½ pound",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Freshly ground black pepper",
+      "item": "Freshly ground black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 small bunch kale leaves (ribs and stems removed, finely chopped (about 4 generous cups))",
+      "item": "kale leaves",
+      "qty": "1",
+      "unit": null,
+      "prep": "small bunch (ribs and stems removed, finely chopped (about 4 generous cups))",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup finely chopped green cabbage",
+      "item": "green cabbage",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup shredded carrots",
+      "item": "shredded carrots",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup chopped fresh mint",
+      "item": "fresh mint",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup chopped fresh cilantro",
+      "item": "fresh cilantro",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 small scallions (chopped)",
+      "item": "scallions",
+      "qty": "2",
+      "unit": null,
+      "prep": "small, chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ tablespoons chopped roasted (salted peanuts)",
+      "item": "peanuts",
+      "qty": "1 ½",
+      "unit": "tablespoons",
+      "prep": "chopped roasted (salted)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a small bowl, combine vinaigrette ingredients.",
+    "Whisk to combine and set aside.",
+    "Preheat outdoor grill or grill pan over medium-high heat.",
+    "Place chicken between a piece of plastic wrap or parchment and pound to an even thickness.",
+    "Season with ¼ teaspoon salt and pepper, to taste.",
+    "Grill for 5-6 minutes, turn and grill for an additional 5-6 minutes more, or until chicken is cooked through.",
+    "Allow chicken to rest for 5 minutes, then slice thin.",
+    "In a large bowl, combine salad ingredients from kale to scallions.",
+    "Top each with dressing, toss to evenly combine.",
+    "Divide salad evenly on 2 plates or bowls, top each with chicken and peanuts and serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Crock Pot Pork Chops",
+  "source_url": "https://thecozycook.com/crock-pot-pork-chops/",
+  "servings": 4,
+  "time_total": "195 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "½ tsp each: dried rosemary, oregano, and thyme",
+      "item": "dried rosemary, oregano, and thyme",
+      "qty": "½ tsp each",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ tsp ground sage",
+      "item": "ground sage",
+      "qty": "¼",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp pepper",
+      "item": "pepper",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4-6 pork chops (see notes)",
+      "item": "pork chops",
+      "qty": "4-6",
+      "unit": null,
+      "prep": "see notes",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups chicken broth",
+      "item": "chicken broth",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 beef bouillon cube",
+      "item": "beef bouillon cube",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 oz. cream of mushroom soup",
+      "item": "cream of mushroom soup",
+      "qty": "10.5",
+      "unit": "oz.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon mustard powder",
+      "item": "mustard powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon onion powder",
+      "item": "onion powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 yellow onion (sliced)",
+      "item": "yellow onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons butter",
+      "item": "butter",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons flour",
+      "item": "flour",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2-3 drops Kitchen Bouquet (optional)",
+      "item": "Kitchen Bouquet",
+      "qty": "2-3",
+      "unit": "drops",
+      "prep": "optional",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Pat the pork chops completely dry. Combine pork seasoning mixture and sprinkle it over the top and bottom of the pork chops. Add them to the crock pot.",
+    "Combine the chicken broth, beef bouillon cube, cream of mushroom soup, mustard powder, Worcestershire sauce, and onion powder. Add it to the crock pot, covering the pork chops. Top with sliced onions.",
+    "Cook on low for 3-6 hours. Very thin pork chops will only need 3, very thick will need up to 6. They are done when the internal temperature is 145 degrees.",
+    "Carefully remove the pork chops and transfer them to a plate. Tent with foil. Transfer the liquid from the crock pot to a large measuring cup with a spout. (If possible, run the liquid through a fine mesh strainer for silky smooth gravy.) The onions can be reserved and added to the gravy or served on the side.",
+    "Melt the butter in a large skillet over medium heat. (If your crock is stovetop safe you can prepare the gravy in that.) Ensure that there is plenty of surface area in the vessel that you’re using, this ensures the gravy is nice and thick.",
+    "Whisk in the flour and stir continuously for 2 minutes, until the flour smell is gone and it begins to brown.",
+    "Add the liquid from the crock pot in small splashes, stirring continuously. Bring to a boil, then reduce to a simmer. Simmer until desired thickness is obtained. Add 2-3 drops of kitchen bouquet browning and seasoning sauce if a darker color is preferred.",
+    "You can add the pork chops back to gravy and spoon the gravy on top, or transfer the pork chops to serving plates and serve with gravy on the side.",
+    "Serve with mashed potatoes and roasted green beans."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

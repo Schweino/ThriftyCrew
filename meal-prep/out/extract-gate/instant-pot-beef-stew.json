@@ -1,0 +1,187 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Instant Pot Beef Stew",
+  "source_url": "https://www.spendwithpennies.com/instant-pot-beef-stew/",
+  "servings": 8,
+  "time_total": "120 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 pounds stewing beef (trimmed and cubed)",
+      "item": "stewing beef",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": "trimmed and cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon salt",
+      "item": "salt",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon black pepper",
+      "item": "black pepper",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large onion (diced)",
+      "item": "large onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups beef broth",
+      "item": "beef broth",
+      "qty": "3",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup red wine (or 1 more cup beef broth)",
+      "item": "red wine",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "(or 1 more cup beef broth)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup tomato paste",
+      "item": "tomato paste",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon fresh rosemary (chopped)",
+      "item": "fresh rosemary",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 sprigs fresh thyme",
+      "item": "fresh thyme",
+      "qty": "2",
+      "unit": "sprigs",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups baby potatoes (cubed)",
+      "item": "baby potatoes",
+      "qty": "3",
+      "unit": "cups",
+      "prep": "cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 large carrots (chopped)",
+      "item": "large carrots",
+      "qty": "4",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 ribs celery (chopped, about 1 cup)",
+      "item": "ribs celery",
+      "qty": "2",
+      "unit": null,
+      "prep": "chopped, about 1 cup",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons cornstarch",
+      "item": "cornstarch",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons water",
+      "item": "water",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ cup peas (defrosted)",
+      "item": "peas",
+      "qty": "¾ cup",
+      "unit": null,
+      "prep": "(defrosted)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Toss beef with garlic powder, salt and pepper.",
+    "Turn a 6-quart Instant Pot to sauté and add half of the olive oil. Brown half of the beef, about 3-5 minutes, don’t stir too much so you get a nice crust. Repeat with remaining beef and set aside.",
+    "Add onions (and a bit more oil if needed) to the Instant Pot and cook 2-3 minutes or just until slightly softened.",
+    "Add beef, broth, wine, tomato paste, rosemary, thyme, and vegetables except peas (ensure ingredients do not go above fill line). Secure lid and select Meat/Stew; cook on high pressure 35 minutes.",
+    "Once the timer beeps, allow for a natural-release for about 15 minutes. Release any remaining pressure.",
+    "Remove lid and turn to sauté bringing broth to a boil.",
+    "Create a slurry by combining cornstarch and water in a small bowl or cup.",
+    "Once the broth is simmering, stir in the cornstarch to reach desired consistency (you may not need all of it). Allow to simmer 2-3 minutes or until thickened and bubbly.",
+    "Stir in peas and serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

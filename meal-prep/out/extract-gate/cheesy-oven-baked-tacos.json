@@ -1,0 +1,93 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Cheesy Oven Baked Tacos",
+  "source_url": "https://www.spendwithpennies.com/cheesy-oven-baked-tacos/",
+  "servings": 6,
+  "time_total": "45 minutes",
+  "time_active": "25 minutes",
+  "ingredients": [
+    {
+      "raw": "1 pound lean ground beef",
+      "item": "lean ground beef",
+      "qty": "1",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ounce taco seasoning (1 packet, or 2 tablespoons homemade taco seasoning)",
+      "item": "taco seasoning",
+      "qty": "1 ounce",
+      "unit": null,
+      "prep": "(1 packet, or 2 tablespoons homemade taco seasoning)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 onion (diced)",
+      "item": "onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10 ounces canned diced tomatoes with chilies (such as Rotel)",
+      "item": "canned diced tomatoes with chilies",
+      "qty": "10",
+      "unit": "ounces",
+      "prep": "(such as Rotel)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "12 to 14 taco shells",
+      "item": "taco shells",
+      "qty": "12 to 14",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 ½ cups shredded cheddar cheese blend (divided)",
+      "item": "shredded cheddar cheese blend",
+      "qty": "2 ½",
+      "unit": "cups",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "toppings as desired (see notes)",
+      "item": "toppings",
+      "qty": null,
+      "unit": null,
+      "prep": "as desired (see notes)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400°F.",
+    "Cook ground beef and onion until no pink remains. Drain fat. Add in taco seasoning, undrained tomatoes and ¼ cup water. Cook until no liquid remains (about 5 minutes).",
+    "Place your taco shells in a 9×13 pan. Use small balls of foil between every second shell to help them stand up if needed.",
+    "Divide 1 ½ cups of cheese between the shells. Top with meat mixture divided between shells and finally top with remaining cheese.",
+    "Bake 15-18 minutes or until cheese melts. Top with desired toppings and serve immediately."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 7,
+    "verified": 7,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Meatball Pasta Bake",
+  "source_url": "https://www.spendwithpennies.com/baked-spaghetti-meatball-casserole/",
+  "servings": 8,
+  "time_total": "90 minutes",
+  "time_active": "30 minutes",
+  "ingredients": [
+    {
+      "raw": "1 pound lean ground beef",
+      "item": "lean ground beef",
+      "qty": "1",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "⅓ cup fresh bread crumbs",
+      "item": "fresh bread crumbs",
+      "qty": "⅓",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoons milk",
+      "item": "milk",
+      "qty": "1",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon salt",
+      "item": "salt",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon black pepper",
+      "item": "black pepper",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup finely diced onion",
+      "item": "finely diced onion",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons chopped fresh parsley",
+      "item": "fresh parsley",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 egg",
+      "item": "egg",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces spaghetti",
+      "item": "spaghetti",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded mozzarella cheese (divided)",
+      "item": "shredded mozzarella cheese",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup shredded Parmesan cheese (divided)",
+      "item": "shredded Parmesan cheese",
+      "qty": "½",
+      "unit": "cup",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large egg (slightly beaten)",
+      "item": "large egg",
+      "qty": "1",
+      "unit": null,
+      "prep": "slightly beaten",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons chopped fresh parsley",
+      "item": "fresh parsley",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "28 ounces pasta sauce (jarred or homemade)",
+      "item": "pasta sauce",
+      "qty": "28",
+      "unit": "ounces",
+      "prep": "(jarred or homemade)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Grease a large casserole dish.",
+    "Preheat oven to 400°F. Combine all meatball ingredients and form into 1″ balls.",
+    "Place meatballs in a 9x13 dish and bake 18-20 minutes. Remove from oven and reduce heat to 350°F. Remove the meatballs and set aside.",
+    "Boil the pasta until al dente. Drain well and toss with olive oil.",
+    "Stir together egg, parsley, ½ cup mozzarella cheese, ¼ cup parmesan cheese & pepper to taste. Toss with the pasta and place it in the 9x13 dish.",
+    "Top with meatballs and pasta sauce. Cover with foil and bake 35 minutes. Remove foil, top with remaining cheeses and continue to bake until cheese is melted and browned, about 10 minutes."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

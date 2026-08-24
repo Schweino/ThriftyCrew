@@ -1,0 +1,125 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Instant Pot Pork Chops",
+  "source_url": "https://www.spendwithpennies.com/instant-pot-pork-chops/",
+  "servings": 4,
+  "time_total": "65 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 pounds bone in pork chops (at least ¾-inch thick)",
+      "item": "bone in pork chops",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": "at least ¾-inch thick",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "salt and black pepper (to taste)",
+      "item": "salt and black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 small onion (diced)",
+      "item": "small onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups sliced mushrooms (brown or white)",
+      "item": "sliced mushrooms",
+      "qty": "3",
+      "unit": "cups",
+      "prep": "(brown or white)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ¼ cup beef broth (divided)",
+      "item": "beef broth",
+      "qty": "1 ¼ cup",
+      "unit": null,
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 ounces condensed cream of mushroom soup (1 can)",
+      "item": "condensed cream of mushroom soup",
+      "qty": "10.5",
+      "unit": "ounces",
+      "prep": "(1 can)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon chopped fresh parsley",
+      "item": "parsley",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "chopped fresh",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons cornstarch",
+      "item": "cornstarch",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Season pork chops with garlic powder, salt and pepper.",
+    "Turn Instant Pot on to SAUTEE. Add oil.",
+    "Brown pork chops in batches, about 2 minutes per side. Remove from Instant Pot and set aside.",
+    "Add 1 cup broth to the Instant Pot and scrape any brown bits from the bottom of the pot. (Deglaze well to avoid getting a burn notice).",
+    "In order, add sliced mushrooms, chopped onion, browned pork chops. Top with mushroom soup and parsley.",
+    "Seal the lid and turn the Instant Pot to HIGH pressure for 15 minutes (it will take about 15 minutes to reach pressure).",
+    "Once done, allow the Instant Pot to naturally release for 10 minutes.  Release any remaining pressure.",
+    "Remove pork chops from the gravy and set aside.",
+    "Combine remaining broth and cornstarch in a small bowl. Turn the Instant Pot on to SAUTEE to bring gravy to a boil. Add cornstarch mixture a little bit at a time to reach desired consistency.",
+    "Serve pork chops over mashed potatoes with gravy."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Poblano Soup",
+  "source_url": "https://www.isabeleats.com/chicken-poblano-soup/",
+  "servings": 6,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 celery stalks, (diced)",
+      "item": "celery stalks",
+      "qty": "2",
+      "unit": null,
+      "prep": "(diced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 carrots, (peeled and diced)",
+      "item": "carrots",
+      "qty": "2",
+      "unit": null,
+      "prep": "peeled and diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ yellow onion, (diced)",
+      "item": "yellow onion",
+      "qty": "½",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 poblano peppers, (stemmed and diced)",
+      "item": "poblano peppers",
+      "qty": "3",
+      "unit": null,
+      "prep": "stemmed and diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 cloves garlic, (minced)",
+      "item": "garlic",
+      "qty": "4",
+      "unit": "cloves",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ teaspoons kosher salt, (plus more to taste)",
+      "item": "kosher salt",
+      "qty": "1 ½",
+      "unit": "teaspoons",
+      "prep": "plus more to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground cumin",
+      "item": "ground cumin",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon dried oregano",
+      "item": "dried oregano",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon chili powder",
+      "item": "chili powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon freshly ground black pepper",
+      "item": "freshly ground black pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups shredded chicken",
+      "item": "shredded chicken",
+      "qty": "3",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 (15-ounce) can yellow corn, (drained and rinsed)",
+      "item": "yellow corn",
+      "qty": "1",
+      "unit": "can",
+      "prep": "(15-ounce), (drained and rinsed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 cups chicken broth",
+      "item": "chicken broth",
+      "qty": "6",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup heavy cream",
+      "item": "heavy cream",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup shredded cheddar cheese",
+      "item": "shredded cheddar cheese",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "For serving: lime wedges, chopped cilantro",
+      "item": "lime wedges, chopped cilantro",
+      "qty": null,
+      "unit": null,
+      "prep": "For serving",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the olive oil in a large pot or Dutch oven over medium-high heat. Add the celery, carrots, onion, and poblano peppers. Sauté for 10-12 minutes until the vegetables are tender.",
+    "Stir in the garlic and cook for an additional 30 seconds until fragrant.",
+    "Stir in the salt, cumin, oregano, chili powder, and black pepper. Cook for 5 more minutes.",
+    "Add the shredded chicken, corn, and broth. Stir, bring to a boil over high heat, reduce the heat to low, cover, and simmer for 15 minutes.",
+    "Add heavy cream and shredded cheese. Stir until the cheese has fully melted. Cover and cook for an additional 15 minutes.",
+    "Taste for salt and add more if needed. Serve in bowls and topped with lime juice and chopped cilantro."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

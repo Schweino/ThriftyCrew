@@ -1,0 +1,185 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Beef Stew Recipe",
+  "source_url": "https://www.spendwithpennies.com/beef-stew-recipe/",
+  "servings": 8,
+  "time_total": "90 minutes",
+  "time_active": "20 minutes",
+  "ingredients": [
+    {
+      "raw": "2 pounds stewing beef (trimmed and cubed)",
+      "item": "stewing beef",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": "trimmed and cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons all-purpose flour",
+      "item": "all-purpose flour",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon salt",
+      "item": "salt",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon black pepper",
+      "item": "black pepper",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons olive oil (more as needed)",
+      "item": "olive oil",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": "(more as needed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 onion (chopped)",
+      "item": "onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 cups beef broth",
+      "item": "beef broth",
+      "qty": "6",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup red wine (optional)",
+      "item": "red wine",
+      "qty": "½",
+      "unit": "cup",
+      "prep": "(optional)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 pound potatoes (peeled and cubed)",
+      "item": "potatoes",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "peeled and cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 carrots (cut into 1 inch pieces)",
+      "item": "carrots",
+      "qty": "4",
+      "unit": null,
+      "prep": "cut into 1 inch pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 ribs celery (cut into 1 inch pieces)",
+      "item": "ribs celery",
+      "qty": "4",
+      "unit": null,
+      "prep": "cut into 1 inch pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons tomato paste",
+      "item": "tomato paste",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon dried rosemary (or 1 sprig fresh)",
+      "item": "dried rosemary",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": "(or 1 sprig fresh)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons cornstarch (or as needed)",
+      "item": "cornstarch",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "(or as needed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons water (or as needed)",
+      "item": "water",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "(or as needed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ cup peas",
+      "item": "peas",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Combine flour, garlic powder, salt, and pepper. Toss beef in flour mixture.",
+    "Heat olive oil in a large Dutch oven or pot over medium-high heat. Shake off any excess flour from the beef and brown in small batches. Remove and set aside in a bowl.",
+    "Add the onions to the pot, adding more oil as needed, and cook until they begin to soften, about 3 minutes.",
+    "Add beef broth and red wine while scraping up any brown bits in the pan.",
+    "Stir in browned beef, potatoes, carrots, celery, tomato paste, and rosemary.  Reduce heat to medium-low, cover, and simmer 1 hour or until beef is tender (up to 90 minutes).",
+    "Mix equal parts cornstarch and water to create a slurry. Slowly add the slurry to the boiling stew to reach desired consistency (you may not need all of the slurry, if you'd like a thicker stew, you can add extra).",
+    "Stir in peas and simmer 5-10 minutes before serving . Season with salt & pepper to taste."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

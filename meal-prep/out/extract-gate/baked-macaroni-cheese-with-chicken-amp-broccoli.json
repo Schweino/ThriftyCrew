@@ -1,0 +1,171 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Macaroni Cheese with Chicken &amp; BROCCOLI",
+  "source_url": "https://www.recipetineats.com/baked-macaroni-cheese-with-chicken-broccoli-one-pot/",
+  "servings": 4,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lb / 500g skinless chicken breast or thigh fillets (, cut into bite size pieces)",
+      "item": "skinless chicken breast or thigh fillets",
+      "qty": "1 lb / 500g",
+      "unit": null,
+      "prep": "cut into bite size pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tbsp butter",
+      "item": "butter",
+      "qty": "3",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 garlic cloves (, minced)",
+      "item": "garlic cloves",
+      "qty": "2",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 small onion (, finely chopped)",
+      "item": "small onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tbsp plain flour",
+      "item": "plain flour",
+      "qty": "4",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 1/2 cups milk (, low fat)",
+      "item": "milk",
+      "qty": "2 1/2",
+      "unit": "cups",
+      "prep": "low fat",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup water",
+      "item": "water",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Black pepper",
+      "item": "Black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups macaroni / elbow pasta ((Note 1))",
+      "item": "macaroni / elbow pasta",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "(Note 1)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large head of broccoli (, broken into florets (or 1 1/2 smaller ones))",
+      "item": "large head of broccoli",
+      "qty": "1",
+      "unit": null,
+      "prep": "broken into florets (or 1 1/2 smaller ones)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 - 2 cups grated cheese ((cheddar, tasty or gruyere))",
+      "item": "grated cheese",
+      "qty": "1 1/2 - 2",
+      "unit": "cups",
+      "prep": "(cheddar, tasty or gruyere)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup panko ((or ordinary breadcrumbs))",
+      "item": "panko",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "(or ordinary breadcrumbs)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp parmesan cheese",
+      "item": "parmesan cheese",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 180C/350F.",
+    "Heat oil in a deep heavy based skillet or dutch oven over high heat. Add chicken and cook until just cooked - it's fine if it's still raw inside. Remove chicken into a bowl. (Note 2)",
+    "Reduce heat to medium and melt butter. Add garlic and onion and saute for 5 minutes until onion is translucent. Add flour and cook for 1 minute.",
+    "Pour in half the milk and whisk it in so the flour butter mixture melts. It should thicken quite quickly - around 30 seconds. Pour the remaining milk in, whisking constantly, then add the water, salt and pepper.",
+    "Turn the heat up to medium high and cook, whisking occasionally, for around 3 to 5 minutes until you start seeing steam rising from the white sauce when you whisk it.",
+    "Add the macaroni and chicken, stir, then top with broccoli.",
+    "Place the lid on and bake for 20 minutes.",
+    "Remove from the oven, switch oven to broiler/grill on high.",
+    "Remove lid (Note 3), stir through cheese, then sprinkle over panko and parmesan. (Will still look bit watery at this stage).",
+    "Place pot under the broiler/grill for 5 minutes, or until top is golden.",
+    "Remove, then let it stand for 5 minutes before serving (sauce thickens quickly)."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 15,
+    "verified": 15,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

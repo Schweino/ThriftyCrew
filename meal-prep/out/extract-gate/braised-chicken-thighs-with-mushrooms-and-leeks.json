@@ -1,0 +1,132 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Braised Chicken Thighs with Mushrooms and Leeks",
+  "source_url": "https://www.skinnytaste.com/braised-chicken-thighs-with-mushrooms-and-leeks/",
+  "servings": 4,
+  "time_total": "75 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 large or 3 medium leeks (whites only)",
+      "item": "leeks",
+      "qty": "2 large or 3 medium",
+      "unit": null,
+      "prep": "whites only",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1 1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Freshly ground black pepper",
+      "item": "Freshly ground black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon paprika",
+      "item": "paprika",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "olive oil spray",
+      "item": "olive oil spray",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 pieces bone-in (skin-off chicken thighs, trimmed, about 40 ounces)",
+      "item": "bone-in (skin-off chicken thighs",
+      "qty": "8 pieces",
+      "unit": null,
+      "prep": "trimmed, about 40 ounces)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon butter",
+      "item": "butter",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces white mushrooms (quartered)",
+      "item": "white mushrooms",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": "(quartered)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons flour (or gluten-free flour mix)",
+      "item": "flour",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "(or gluten-free flour mix)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup chicken broth or water with chicken bouillon",
+      "item": "chicken broth or water",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "with chicken bouillon",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons sherry",
+      "item": "sherry",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Rinse the leeks well and separate the layers to make sure there is no dirt. Slice into 1/4-inch thick half moons.",
+    "Preheat the oven to 375 degrees.",
+    "Mix together 1 1/4 teaspoons of salt, 1/4 teaspoon pepper and the paprika and season all sides of the chicken.",
+    "Heat a large Dutch oven or oven safe skillet on high heat. Once hot spritz with olive oil and brown the chicken, in batches on all sides, about 5 minutes on each side, adjusting the heat as needed.",
+    "Set aside and repeat with the remaining chicken. Set aside.",
+    "Reduce the heat to medium-low and add the butter. When the butter starts to foam, add the leeks and cook, stirring until soft, about 6 to 8 minutes. Add the mushrooms, 1/4 teaspoon salt, stir and cook covered 5 minutes, stirring until they release their juices.",
+    "Sprinkle the flour over them, stir in the chicken broth and the sherry and simmer for 2 to 3 minutes.",
+    "Return the chicken to the Dutch oven, spooning the mushroom-sherry sauce over them and cook in the oven, covered, for 40 to 50 minutes, until cooked through and tender."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

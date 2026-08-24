@@ -1,0 +1,138 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Pork Chops",
+  "source_url": "https://www.wellplated.com/baked-pork-chops/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 boneless pork chops (at least 3/4-inch thick, about 2 pounds)",
+      "item": "boneless pork chops",
+      "qty": "4",
+      "unit": null,
+      "prep": "at least 3/4-inch thick, about 2 pounds",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Brine (if using)",
+      "item": "Brine",
+      "qty": null,
+      "unit": null,
+      "prep": "if using",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons extra virgin olive oil",
+      "item": "extra virgin olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ tablespoons chili powder",
+      "item": "chili powder",
+      "qty": "1 ½",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons dry mustard",
+      "item": "dry mustard",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon smoked paprika",
+      "item": "smoked paprika",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon ground cumin",
+      "item": "ground cumin",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon kosher salt (increase to 1 1/2 teaspoons if not brining)",
+      "item": "kosher salt",
+      "qty": "½ teaspoon",
+      "unit": null,
+      "prep": "(increase to 1 1/2 teaspoons if not brining)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon cayenne pepper (optional)",
+      "item": "cayenne pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": "(optional)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "4 cups Water",
+      "item": "Water",
+      "qty": "4",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons Kosher salt",
+      "item": "Kosher salt",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Trim the pork chops of any excess fat. Brine the pork chops (you can skip it but I HIGHLY recommend brining for the juiciest possible pork. It's worth it!): In a large pot, whisk together the water and salt. Add the pork and submerge for 45 minutes at room temperature (or up to 12 hours in the refrigerator). Drain and pat dry (no need to rinse).",
+    "When ready to bake, place a rack in the center of your oven and preheat to 265°F. Line a rimmed baking sheet with parchment paper and place a wire rack on top. Rub the pork all over with the oil—make sure it's nice and moist so the rub still stick.",
+    "In a small bowl, combine the chili powder, mustard, smoked paprika, cumin, salt (check amount depending upon whether or not you brined), black pepper, and cayenne pepper. Rub all over the pork.",
+    "Arrange the pork chops side by side on the rack so they are not touching. Roast until they register 135°F on an instant read thermometer inserted at the thickest part, 30 to 40 minutes. (The FDA says to roast to 145°F but there will be carry over cooking; if you go all the way to 145°F the pork chops will be dry).",
+    "Remove the pork chops to a plate or cutting board, cover, and let rest for at least minutes."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

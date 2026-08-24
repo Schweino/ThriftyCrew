@@ -1,0 +1,111 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Crock Pot Pork Roast with Gravy",
+  "source_url": "https://thecozycook.com/crock-pot-pork-roast-and-gravy/",
+  "servings": 6,
+  "time_total": "305 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "3 lb. Pork Shoulder, give or take in size",
+      "item": "Pork Shoulder",
+      "qty": "3",
+      "unit": "lb.",
+      "prep": "give or take in size",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 oz. condensed cream of chicken soup",
+      "item": "condensed cream of chicken soup",
+      "qty": "10.5",
+      "unit": "oz.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 oz. condensed cream of mushroom soup",
+      "item": "condensed cream of mushroom soup",
+      "qty": "10.5",
+      "unit": "oz.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 (.87 oz.) packet pork gravy mix",
+      "item": "pork gravy mix",
+      "qty": "1",
+      "unit": null,
+      "prep": "(.87 oz.) packet",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 yellow onion (sliced)",
+      "item": "yellow onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lbs. whole carrots (cut into halves or thirds)",
+      "item": "whole carrots",
+      "qty": "2",
+      "unit": "lbs.",
+      "prep": "cut into halves or thirds",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp dried rosemary",
+      "item": "dried rosemary",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 tsp EACH: dried oregano, thyme, sage",
+      "item": "dried oregano, thyme, sage",
+      "qty": "3/4 tsp EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp EACH: ground nutmeg, pepper",
+      "item": "ground nutmeg, pepper",
+      "qty": "1/8 tsp EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Mix the soups and gravy mix together in the slow cooker.",
+    "Pat the pork dry with paper towels. Combine the seasonings in a small bowl and rub them over the surface of the pork.",
+    "Add the pork to the slow cooker along with the carrots and sliced onions.",
+    "Cook on low for 8-9 hours, or on high for 5.",
+    "Serve with potatoes and enjoy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 9,
+    "verified": 9,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

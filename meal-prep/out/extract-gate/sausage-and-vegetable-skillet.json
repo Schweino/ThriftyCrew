@@ -1,0 +1,82 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Sausage and Vegetable Skillet",
+  "source_url": "https://www.budgetbytes.com/sausage-and-vegetable-skillet/",
+  "servings": 4,
+  "time_total": "15 minutes",
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "1 Tbsp cooking oil ($0.04)",
+      "item": "cooking oil",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lb. Italian sausage ($5.99)",
+      "item": "Italian sausage",
+      "qty": "1",
+      "unit": "lb.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 lb. frozen cauliflower florets ($1.00)",
+      "item": "frozen cauliflower florets",
+      "qty": "1/2",
+      "unit": "lb.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 lb. frozen peppers and onions ($1.00)",
+      "item": "frozen peppers and onions",
+      "qty": "1/2",
+      "unit": "lb.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 lb. frozen kale ($0.83)",
+      "item": "kale",
+      "qty": "1/4",
+      "unit": "lb.",
+      "prep": "frozen",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ tsp seasoning salt or seasoning blend (or to taste) ($0.05)",
+      "item": "seasoning salt or seasoning blend",
+      "qty": "½ tsp",
+      "unit": null,
+      "prep": "or to taste",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Add the cooking oil and sausage to a skillet. Cook the sausage over medium heat until brown and crispy.",
+    "Add the cauliflower, peppers and onions, and kale to the skillet with the sausage. Continue to stir and cook until the vegetables are heated through.",
+    "Add a liberal amount (or to taste) of your favorite seasoning salt or seasoning blend and stir to combine. Serve hot."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 6,
+    "verified": 6,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

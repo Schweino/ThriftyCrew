@@ -1,0 +1,84 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Honey Sriracha Chicken Drumsticks",
+  "source_url": "https://www.budgetbytes.com/crispy-baked-honey-sriracha-chicken-drumsticks/",
+  "servings": 6,
+  "time_total": "55 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "6 chicken drumsticks (about 1.75 lbs.) ($3.54)",
+      "item": "chicken drumsticks",
+      "qty": "6",
+      "unit": null,
+      "prep": "about 1.75 lbs.",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Pinch of salt and pepper ($0.05)",
+      "item": "salt and pepper",
+      "qty": "Pinch",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp cornstarch ($0.08)",
+      "item": "cornstarch",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup sriracha ($0.34)",
+      "item": "sriracha",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp butter ($0.22)",
+      "item": "butter",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp honey ($0.24)",
+      "item": "honey",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 400ºF. Line a baking sheet with foil, then top it with wire cooling racks to hold the chicken up off the baking sheet. For easy cleaning, spritz the wire racks with non-stick spray.",
+    "Place the chicken drumsticks in a large bowl and season with a pinch of salt and pepper. Sprinkle the cornstarch over top, then stir until the drumsticks are evenly coated in cornstarch.",
+    "Place the coated chicken pieces on the prepared baking sheet. Bake the drumsticks for about 50 minutes, or until the surface is golden brown and crispy.",
+    "While the chicken is in the oven, combine the sriracha, butter, and honey in a small sauce pot. Heat over a low flame until the butter is melted and the sauce is smooth. Set the sauce aside.",
+    "When the chicken comes out of the oven, brush the sauce liberally over the surface of the chicken, then serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 6,
+    "verified": 6,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

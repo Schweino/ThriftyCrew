@@ -1,0 +1,178 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Broccoli Rice Casserole",
+  "source_url": "https://thecozycook.com/broccoli-cheddar-chicken-and-rice-casserole/",
+  "servings": 6,
+  "time_total": "60 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 tablespoons butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 boneless skinless chicken breasts (or 2 cups diced rotisserie chicken)",
+      "item": "boneless skinless chicken breasts",
+      "qty": "2",
+      "unit": null,
+      "prep": "(or 2 cups diced rotisserie chicken)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/Pepper (to taste)",
+      "item": "Salt/Pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Italian seasoning",
+      "item": "Italian seasoning",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 1/2 cups chicken broth",
+      "item": "chicken broth",
+      "qty": "2 1/2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ¼ cups white long grain rice (uncooked)",
+      "item": "white long grain rice",
+      "qty": "1 ¼",
+      "unit": "cups",
+      "prep": "(uncooked)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2-3 cups fresh broccoli florets (uncooked)",
+      "item": "fresh broccoli florets",
+      "qty": "2-3",
+      "unit": "cups",
+      "prep": "(uncooked)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10.5 oz. Cream of Chicken Soup ((condensed))",
+      "item": "Cream of Chicken Soup",
+      "qty": "10.5",
+      "unit": "oz.",
+      "prep": "(condensed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup milk",
+      "item": "milk",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup sour cream",
+      "item": "sour cream",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded cheddar cheese (separated)",
+      "item": "shredded cheddar cheese",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "(separated)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon dried thyme",
+      "item": "dried thyme",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup Ritz crackers (crushed)",
+      "item": "Ritz crackers",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "crushed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons melted butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "melted",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Note: Refer to your rice package for the amount of liquid (we'll use chicken broth) and cooking time. I use white long grain rice and the cooking time/liquid amount outlined here works perfectly.",
+    "Preheat the oven to 350° F. Cut chicken into bite-sized pieces and season with salt/pepper, and Italian seasoning.",
+    "Heat butter in a large pot over medium heat until melted. Add the chicken and cook until golden brown, about 5 minutes. Remove the chicken and set aside.",
+    "Add the chicken broth, olive oil, and rice to the pot. Bring to a boil, then reduce heat to a simmer. Cover tightly and cook for 6 minutes.",
+    "Add the broccoli and replace the cover. Cook for 9 more minutes, or until no liquid remains in the pot and the rice is cooked through. (If it's not cooked through yet, quickly replace lid and simmer 5 more minutes, or until cooked through.)",
+    "Keep it covered and remove from heat. Let the rice stand for 10 minutes, do not stir. Any rice on the bottom of the pot will release.",
+    "Add the cooked chicken, cream of chicken soup, milk, sour cream, optional seasonings, and half of the cheddar cheese. Stir to combine.,",
+    "Transfer to a lightly greased 9 x 13-inch casserole dish and top with remaining cheese. Cover and bake for 15 minutes.",
+    "Combine the melted butter and crushed crackers. Sprinkle over the casserole bake uncovered for 10 more minutes. Serve!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

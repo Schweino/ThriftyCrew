@@ -1,0 +1,236 @@
+{
+  "state": "escalate",
+  "reason": "only 1/21 ingredient lines (5%) were found verbatim in the page; below the 85% bar this transcription is untrusted",
+  "title": "Cilantro Lime Beer Can Chicken Tacos",
+  "source_url": "https://www.isabeleats.com/beer-can-chicken-tacos/",
+  "servings": "5",
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "1 (4-5 pound) Simply Nature Fresh Organic Whole Chicken",
+      "item": "Simply Nature Fresh Organic Whole Chicken",
+      "qty": "1",
+      "unit": null,
+      "prep": "(4-5 pound)",
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1 cup lightly packed cilantro, leaves and stems",
+      "item": "cilantro",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "lightly packed, leaves and stems",
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil",
+      "item": "Specially Selected Sicilian Extra Virgin Olive Oil",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1/2 medium yellow onion",
+      "item": "yellow onion",
+      "qty": "1/2",
+      "unit": "medium",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "2 limes zested and juiced",
+      "item": "limes",
+      "qty": "2",
+      "unit": null,
+      "prep": "zested and juiced",
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "3 cloves garlic",
+      "item": "garlic",
+      "qty": "3",
+      "unit": "cloves",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "2 tablespoons Simply Nature Organic Apple Cider Vinegar",
+      "item": "Simply Nature Organic Apple Cider Vinegar",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1 1/2 tablespoons kosher salt",
+      "item": "kosher salt",
+      "qty": "1 1/2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "2 teaspoons Stonemill Chili Powder",
+      "item": "Stonemill Chili Powder",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1 teaspoon Stonemill Ground Cumin",
+      "item": "Stonemill Ground Cumin",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1/2 teaspoon Stonemill Ground Black Pepper",
+      "item": "Stonemill Ground Black Pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "1 (12-ounce) can Hopping Nomad Session IPA Beer",
+      "item": "Hopping Nomad Session IPA Beer",
+      "qty": "1",
+      "unit": "(12-ounce) can",
+      "prep": null,
+      "optional": false,
+      "section": "For the chicken"
+    },
+    {
+      "raw": "2 cups lightly packed shredded cabbage",
+      "item": "cabbage",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "lightly packed shredded",
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "1/3 cup shredded carrots",
+      "item": "carrots",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": "shredded",
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "1 lime, zested and juiced",
+      "item": "lime",
+      "qty": "1",
+      "unit": null,
+      "prep": "zested and juiced",
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "2 tablespoons chopped cilantro",
+      "item": "cilantro",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "chopped",
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "1/2 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "1/4 teaspoon Stonemill Ground Black Pepper",
+      "item": "Stonemill Ground Black Pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": "For the quick slaw"
+    },
+    {
+      "raw": "warm tortillas (corn or flour)",
+      "item": "tortillas",
+      "qty": null,
+      "unit": null,
+      "prep": "warm (corn or flour)",
+      "optional": false,
+      "section": "For the tacos"
+    },
+    {
+      "raw": "chopped cilantro",
+      "item": "cilantro",
+      "qty": null,
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": "For the tacos"
+    },
+    {
+      "raw": "hot sauce (optional)",
+      "item": "hot sauce",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": "For the tacos"
+    }
+  ],
+  "instructions": [
+    "Prep the chicken: Remove the neck and giblets from the whole chicken and discard. Pat chicken dry with paper towels and transfer to a gallon zip-top storage bag and set aside.",
+    "Make the marinade: Add cilantro, oil, onion, lime zest, lime juice, garlic, apple cider vinegar, salt, chili powder, cumin, and black pepper to a food processor or blender. Pulse until smooth.",
+    "Marinate the chicken: Pour the marinade over the chicken in the zip-top storage bag, close, and massage into the chicken so that it is completely coated. Place chicken in the refrigerator and marinate overnight, or up to 24 hours.",
+    "Prep the grill: When ready to grill, preheat the grill to medium heat (350°F-375°F) by lighting the burners (or charcoal) on only one half of the grill, and leaving them off on the other half. This creates a zone of direct heat and a zone of indirect heat.",
+    "Place the beer can in the chicken: Remove the chicken from the storage bag and shake off any excess marinade. Open the can of beer and discard (or drink) half of it. Lower the chicken onto the half-full beer, placing the can in the cavity with the chicken sitting upright.",
+    "Grill: Carefully place the chicken with the beer can onto the cool side of the grill so that it’s over indirect heat. The legs of the chicken and the beer can will act as a tripod so that the chicken sits upright. Close the lid and let the chicken cook for 1 hour.",
+    "Rotate and finish grilling: Open the lid and carefully rotate the chicken 180° so that it heats evenly. Close the lid and let the chicken cook for another 45 minutes to 1 hour, or until a meat thermometer reads 165°F when inserted into the thickest part of the thigh.",
+    "Rest: Carefully transfer the chicken and beer can to a rimmed plate or tray and let it rest for 10 minutes. Then, carefully remove the beer can from the cavity of the chicken and discard. The beer will still be hot so be extra careful.",
+    "Make the quick slaw: While the chicken is resting, make the slaw by adding cabbage, carrots, lime juice, cilantro, salt, and pepper to a large bowl. Mix together, taste, and season with more salt if necessary. Set aside.",
+    "Cut or shred chicken: Transfer the chicken to a cutting board and slice or shred the chicken into bite-sized pieces.",
+    "Serve: Serve in warm corn or flour tortillas with quick slaw and garnish with chopped cilantro and hot sauce if desired."
+  ],
+  "concerns": [],
+  "extracted_by": "local-page",
+  "verification": {
+    "lines": 21,
+    "verified": 1,
+    "unverified": 20,
+    "verified_rate": 0.0476,
+    "unverified_lines": [
+      "1 (4-5 pound) Simply Nature Fresh Organic Whole Chicken",
+      "1 cup lightly packed cilantro, leaves and stems",
+      "1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil",
+      "1/2 medium yellow onion",
+      "2 limes zested and juiced",
+      "3 cloves garlic",
+      "2 tablespoons Simply Nature Organic Apple Cider Vinegar",
+      "1 1/2 tablespoons kosher salt",
+      "2 teaspoons Stonemill Chili Powder",
+      "1 teaspoon Stonemill Ground Cumin"
+    ],
+    "passed": false
+  },
+  "escalate": true,
+  "escalate_reason": "rung 1: 4 of 21 JSON-LD ingredient lines failed the split check: 1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil -> round-trip covered 78% of the line (bar 90%); dropped specially, selected; 2 tablespoons Simply Nature Organic Apple Cider Vinegar -> round-trip covered 62% of the line (bar 90%); dropped simply, nature, organic; 2 teaspoons Stonemill Chili Powder -> round-trip covered 80% of the line (bar 90%); dropped stonemill | rung 2: only 1/21 ingredient lines (5%) were found verbatim in the page; below the 85% bar this transcription is untrusted"
+}

@@ -1,0 +1,110 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Blackberry Sage Pork Chops",
+  "source_url": "https://www.budgetbytes.com/blackberry-sage-pork-chops/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "4 thin center cut pork chops (about 1 lb. total) ($4.15)",
+      "item": "thin center cut pork chops",
+      "qty": "4",
+      "unit": null,
+      "prep": "about 1 lb. total",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "pinch of salt and pepper ($0.05)",
+      "item": "salt and pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "pinch",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp olive oil ($0.16)",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup blackberry jam or preserves ($1.38)",
+      "item": "blackberry jam or preserves",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp butter ($0.10)",
+      "item": "butter",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp balsamic vinegar ($0.40)",
+      "item": "balsamic vinegar",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp water ($0.00)",
+      "item": "water",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp dried sage ($0.05)",
+      "item": "dried sage",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp salt ($0.02)",
+      "item": "salt",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Take the chops out of the refrigerator and let them warm on the countertop for about 10 minutes. Remove them from the package, pat dry with a paper towel, then season both sides of each chop with a pinch of salt and pepper.",
+    "Heat 1 Tbsp of olive oil in a large skillet over medium to medium-high heat. Once the oil is hot (it should appear wavy on the surface, but not be smoking), add the chops. Let the pork chops cook until browned on each side (3-5 minutes per side), then transfer them to a clean plate. Remove the skillet from the heat.",
+    "Let the skillet cool for just a couple of minutes, then add the blackberry jam, butter, balsamic vinegar, water, and sage. Return the skillet to the burner and turn the heat on to low. Whisk the ingredients together until the jam and the browned bits on the bottom of the skillet have dissolved into the sauce. Turn the heat up to medium and let the sauce come to a simmer. Let the sauce simmer over medium heat until it's thick enough to coat a spoon (5 minutes or so). Turn the heat off, taste the sauce, and add salt as needed (I added 1/8 tsp).",
+    "Return the chops and any juices that have accumulated on the plate to the sauce. Coat each side of the chops in the sauce and let them warm through in the simmering sauce. Spoon the sauce over each chop after plating."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 9,
+    "verified": 9,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

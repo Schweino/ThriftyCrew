@@ -1,0 +1,172 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Cheese-Stuffed Chicken Parmesan",
+  "source_url": "https://thecozycook.com/baked-chicken-parmesan/",
+  "servings": 4,
+  "time_total": "60 minutes",
+  "time_active": "20 minutes",
+  "ingredients": [
+    {
+      "raw": "4 boneless skinless chicken breasts",
+      "item": "boneless skinless chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 ½ cups shredded mozzarella cheese (separated)",
+      "item": "shredded mozzarella cheese",
+      "qty": "2 ½",
+      "unit": "cups",
+      "prep": "(separated)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup shredded Parmesan Cheese (separated)",
+      "item": "shredded Parmesan Cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "(separated)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup flour",
+      "item": "flour",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ¼ teaspoons seasoned salt",
+      "item": "seasoned salt",
+      "qty": "1 ¼",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon pepper",
+      "item": "pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 eggs",
+      "item": "eggs",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup Italian breadcrumbs",
+      "item": "Italian breadcrumbs",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tablespoons butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 Tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "3",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Fresh parsley (to garnish)",
+      "item": "Fresh parsley",
+      "qty": null,
+      "unit": null,
+      "prep": "to garnish",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 cups marinara sauce",
+      "item": "marinara sauce",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Fresh Parsley (to garnish)",
+      "item": "Fresh Parsley",
+      "qty": null,
+      "unit": null,
+      "prep": "to garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Note: I recommend a 12 or 13 inch oven-safe pan for this recipe. A large dutch oven will also work. Otherwise, transfer the chicken to a lightly greased casserole dish after browning. Add the sauce/cheese, and bake as directed.",
+    "Pat the chicken breasts completely dry.",
+    "Cut a slice in middle of each chicken breast to create a pocket, don’t cut all the way through to the other side. PRO TIP: Flash freeze the chicken for 10-15 minutes to firm it up for easier cutting.",
+    "Stuff each one with 2-3 Tablespoons of mozzarella cheese, close to seal.",
+    "Create an assembly line for breading the chicken:",
+    "Plate #1: ½ cup flour + 1 ¼ tsp seasoned salt + 1/4 tsp pepper.",
+    "Bowl #2: 2 whisked eggs + ½ teaspoon garlic powder",
+    "Plate #3: 1 cups breadcrumbs + ¼ cup shredded Parmesan",
+    "Coat the chicken in the flour mixture and tap to rid any excess.",
+    "Dip into the whisked eggs just long enough to lightly coat the chicken, let the excess drip off the edge of the bowl",
+    "Generously coat in the breadcrumb mixture.",
+    "Heat the oil and butter to a pan over medium heat.",
+    "Brown the chicken in batches of 2, leave room around the outside to allow the edges to crisp.",
+    "Cook for about 4 minutes per side, until light golden brown. Add more oil if needed. (I use 2 spatulas to carefully flip the chicken.)",
+    "Remove from heat and place the chicken on a paper towel lined plate. The paper towels absorb the excess oil, leaving you with crispier chicken. Note: The inside is still very raw.",
+    "Preheat oven to 400 degrees.",
+    "Return the chicken to the pan or transfer to a casserole dish. Spoon marinara sauce around the sides and on the top.",
+    "Sprinkle generously with remaining mozzarella and Parmesan cheese.",
+    "Bake uncovered for 20 minutes.",
+    "If desired, increase heat to 450 degrees and cook just until it browns more on top, watch closely the whole time.",
+    "Remove from the oven, garnish with parsley, and serve!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

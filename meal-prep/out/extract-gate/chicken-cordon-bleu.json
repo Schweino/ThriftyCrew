@@ -1,0 +1,142 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Cordon Bleu",
+  "source_url": "https://www.wellplated.com/baked-chicken-cordon-bleu/",
+  "servings": 4,
+  "time_total": "60 minutes",
+  "time_active": "25 minutes",
+  "ingredients": [
+    {
+      "raw": "1/2 cup breadcrumbs (whole wheat if available)",
+      "item": "breadcrumbs",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "(whole wheat if available)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup Panko breadcrumbs (whole wheat if available)",
+      "item": "Panko breadcrumbs",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "(whole wheat if available)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup grated Parmesan cheese",
+      "item": "Parmesan cheese",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "grated",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon onion powder",
+      "item": "onion powder",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large eggs",
+      "item": "large eggs",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 small/medium boneless, skinless chicken breasts (about 8 to 10 ounces each)",
+      "item": "small/medium boneless, skinless chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": "about 8 to 10 ounces each",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 thin slices deli ham (a scant .25 pounds)",
+      "item": "thin slices deli ham",
+      "qty": "4",
+      "unit": null,
+      "prep": "(a scant .25 pounds)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 ounces freshly shredded Gruyere (Swiss, or white cheddar cheese (about 3/4 cup))",
+      "item": "freshly shredded Gruyere",
+      "qty": "3",
+      "unit": "ounces",
+      "prep": "(Swiss, or white cheddar cheese (about 3/4 cup))",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons unsalted butter (melted)",
+      "item": "unsalted butter",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": "melted",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat your oven to 375 degrees F. Generously coat a 9x13-inch baking dish with nonstick spray. In a wide, shallow bowl (a pie dish works well), stir together the breadcrumbs, Panko, Parmesan, garlic powder, onion powder, salt, and pepper.",
+    "In a separate wide, shallow dish, beat the eggs.",
+    "Working one at a time, place a chicken breast on the cutting board with the presentation (smooth) side down. To keep things tidy, cover with a large piece of plastic wrap. With a mallet or rolling pin, gently pound the chicken breasts until they are each 1/4-inch thick (it will seem very thin, but will be easy to roll this way. Be careful not to hit too vigorously for as the meat becomes thinner, it may tear).",
+    "Top each chicken breast with 1 slice of ham and 3/4 ounce (3 tablespoons) cheese.",
+    "Starting on the narrower side, roll up the chicken like a sleeping bag, tucking in the ham and cheese as you go. Secure with toothpicks (I used about 2 per breast).",
+    "Arrange your work station in the following order: rolled chicken, beaten eggs, breadcrumbs, baking dish. Working one at a time, dip each piece of chicken into the eggs to coat, shaking off any excess.",
+    "Dip the chicken into the breadcrumbs, gently patting as needed so that the crumbs adhere to all sides. Place in the prepared baking dish.",
+    "Lightly mist the tops of the chicken with baking spray. Drizzle with melted butter.",
+    "Bake for 30 to 35 minutes, until the internal temperature of the chicken reaches 155 to 160 degrees F on an instant read thermometer (chicken is considered cooked at 165 degrees F, but the temperature will continue to rise as it rests). Let rest 5 to 10 minutes, remove the toothpicks, then serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

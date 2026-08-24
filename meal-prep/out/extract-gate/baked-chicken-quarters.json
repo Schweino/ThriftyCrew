@@ -1,0 +1,118 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Chicken Quarters",
+  "source_url": "https://www.wellplated.com/baked-chicken-quarters/",
+  "servings": 4,
+  "time_total": "100 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 chicken leg quarters (thigh and drumstick still attached, about 3 1/2 pounds)",
+      "item": "chicken leg quarters",
+      "qty": "4",
+      "unit": null,
+      "prep": "thigh and drumstick still attached, about 3 1/2 pounds",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon paprika",
+      "item": "paprika",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ teaspoons ground cumin",
+      "item": "ground cumin",
+      "qty": "1 ½",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ teaspoons garlic powder",
+      "item": "garlic powder",
+      "qty": "1 ½",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon cayenne pepper",
+      "item": "cayenne pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Bread (optional for mopping up the pan juices)",
+      "item": "Bread",
+      "qty": null,
+      "unit": null,
+      "prep": "for mopping up the pan juices",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Place a rack in the center of your oven and preheat to 325°F. Pat the chicken very dry and transfer to a rimmed baking sheet or roasting pan (make sure your pan is large enough to cook the pieces without them overlapping; a little touching at the sides is OK).",
+    "In a bowl or liquid measuring cup with a spout, whisk together the oil, salt, paprika, smoked paprika, cumin, garlic powder, cayenne, and black pepper. Rub it all over the chicken, coating both sides. Arrange the chicken quarters skin-side up.",
+    "Roast the chicken quarters until an internal read thermometer inserted at the thickest part registers 165°F, about 1 to 1 1/2 hours (don’t worry if you go over; dark meat is very forgiving and will still taste super tender; I've left this in until about 190°F with great results). Transfer to a carving board. Cover and let rest 10 minutes, then enjoy with the pan juices spooned over the top (or mop them up with bread, yum!)."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}
