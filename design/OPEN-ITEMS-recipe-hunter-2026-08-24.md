@@ -61,7 +61,21 @@ bumping the PHANTOM baseline to 5 without adjudication.
 
 Owner: the gate's owning stage. NOT a mapper or capture issue - every named food resolves and is bought.
 
-### 2.4 The alternate-cut mention (same blocker, second rule)
+### 2.4 The pork spec ships the SHOULDER cook time on a LOIN build (wave 1 NO-GO, blocker 2)
+`meal-prep/db/recipes/slow-cooker-pork-loin-roast-or-pork-shoulder.json`, `head.cookTime` = PT10H,
+`head.totalTime` = PT10H10M. The recipe is booked, priced and macro-checked as pork LOIN (scaler bid
+`pork-loin`, 8 1/4 lb), and the loin path cooks LOW 4-5 hours. PT10H is the alternate-shoulder time from
+the source, and it goes into JSON-LD recipe markup - readers and Google get 10h10m for a ~4h40m roast.
+
+The WRITER flagged it in `writer_notes` and recommended the repair; the auditor's ruling is that **a
+known-flagged defect does not publish**. Fix named by the auditor: `head.cookTime` PT4H30M,
+`head.totalTime` PT4H40M, then rebuild the card. Prose already leads with the loin time.
+
+Recipe-local. IN FLIGHT in wave 1's one repair cycle at the time of writing - if the repair lands this
+closes; if it does not, it stays open. **The class is worth a fixture either way:** a spec whose times
+came from an alternate cut the recipe is not built as, with the writer's own flag still open at the gate.
+
+### 2.5 The alternate-cut mention (blocker 1, second rule)
 `"If you went with a heavier pork shoulder instead, give it closer to 10 hours"` on a recipe whose TITLE
 offers both cuts. The auditor: needs either its own rule or a prose rephrase, and if the lib rule is
 judged too risky the fallback owner is the WRITER stage (give each rider its own display line).
@@ -119,6 +133,48 @@ when nothing upstream can still arrive). Recorded so the steady-state measuremen
 
 ---
 
+### 3.6 WHAT COULD MOVE TO QWEN (Brad asked during the run; full analysis in the worklist, items J-N)
+Judged against section 1.4's local-placement doctrine, which section 10 makes an invariant. One measured
+number governs most of it: **asserting a MATCH is 37% false at 0.90-0.98 confidence, so a local YES is at
+most a lead.** Structured transcription, by contrast, measured **1.000 valid strict JSON**.
+
+**One real opportunity - nutrition label transcription (worklist J).** This is the quadratic term from
+the other side: 9-10 WebFetched pages per singleton mapper dispatch, each then re-billed on every later
+round trip. Split along the doctrine line:
+- **LOCAL:** transcribe the label VERBATIM - every serving row, every number - substring-proven against
+  the page text, in the shape `local_extract.verify_split` already uses at rung 1.
+- **CLAUDE:** choose the serving basis and the food. Picking between "per 100 g" and "per 2 tbsp" is
+  nearer a match assertion than a copy, and the mapper's definition requires the household measure and
+  the grams to AGREE - that is a ruling.
+
+The saving survives the split, because the saving IS that the page text stops entering the priced
+conversation. **Two non-negotiable conditions:** substring proof cannot prove ABSENCE, so the verifier
+must also assert COMPLETENESS (section 4.3 already names this about rung 2 truncation); and no verifier
+means no local placement (doctrine rule 1).
+
+**Two FALSE opportunities (worklist K).** The registrar's 4-9 Greps and the pricer's 12 PowerShell + 8
+Bash calls are expensive but they are dictionary lookups and shell invocations, not model work. Qwen
+there would be slower AND wrong-shaped. Worklist B and D already fix them by handing over evidence the
+caller holds; a GPU there pays for the same lookup twice.
+
+**What may NEVER move (worklist L).** commodity-registrar, the mapper's `canon_item`, the pricer's
+adjudication, recipe-dedup-selector (also already the cheapest thing in the run at 2,519/candidate, so
+there is no upside to weigh), recipe-writer (Brad's voice), source-QA and the batch auditor (section 11
+puts cheapening the audit tier out of scope).
+
+**The constraint is NOT throughput (worklist M).** Qwen is fast enough - 2.74 s per short call, 3.6x at
+jobs=4, and this run's extraction averaged 26 s/page. Nine labels fanned 4-wide adds perhaps 15-30 s per
+recipe to a lane that runs CONCURRENTLY with the Claude lanes. The real cost is **card ownership**:
+llama-server (~13.5 GB) and the sidecar (~3.5 GB) cannot co-reside, so more local work means holding the
+card longer, against the 07:00 ad pull, the 08:00 capture and the nightly's 21:30-06:30. Scheduling, not
+speed. **Any J build must state what it does to the card-ownership window.**
+
+**Cheaper than any of it (worklist N).** The alternatives line (2.1) could be FLAGGED before the mapper
+is ever dispatched. Flagging is permitted locally - but this case needs no model at all, only an
+`or`-list check on an ingredient line.
+
+---
+
 ## 4. OPEN QUESTIONS for Brad (nothing can be fixtured until these are answered)
 
 ### 4.1 What should the pipeline do with an ALTERNATIVES ingredient line?
@@ -132,15 +188,28 @@ and needs no model - it is an `or`-list check on an ingredient line.
 the cost and the macros with a note; or assign a conventional garnish weight, which invents a number and
 would need its own justification.
 
-### 4.3 Which cost items from the worklist, if any, are ordered?
-See `WORKLIST-token-cost-2026-08-24.md`. Ranked by my read: **B first** (hand the registrar its evidence -
-lowest risk, ~797k on this run, the daemon already holds the data), then **A** (seeding order so the
-mapper never batches one, 500k-900k), then **F** (stamp round-trip and tool-call counts, or none of this
-is verifiable later), then **C/D**.
+### 4.3 Which cost items are ordered? (full detail in `WORKLIST-token-cost-2026-08-24.md`)
 
-### 4.4 Is the 6b target of 12 abandoned, or is a second run wanted?
+| id | item | measured evidence | risk | my ranking |
+|---|---|---|---|---|
+| **B** | Hand the registrar its evidence instead of making it Grep | 8 dispatches, ~797k, Grep 4-9x over namespaces the daemon ALREADY read to derive `-NewBids` | LOW | **1st** |
+| **A** | Seed extraction so the mapper never batches one | `map:1x` 436,685 and 577,141/recipe vs `map:5x` 212,244; ~590k burned on two recipes | MED - must be seeding order, NEVER a channel fill-wait (B3 deadlock) | **2nd** |
+| **F** | Stamp real API round-trip and tool-call counts | `-LaneSummary` reads `turns=1` for a 47-round-trip session; diagnosing this run needed transcript archaeology outside the pipeline | LOW, additive | **3rd** |
+| **C** | Keep nutrition labels out of the judgment conversation (C-i cache, C-ii pre-pass) | 9-10 WebFetch per singleton mapper dispatch; no label cache exists anywhere | MED, and it is an ACCURACY risk - a pre-pass must hand over the label, not a summary | 4th |
+| **D** | The pricer's shell loop (C2 verbatim) | 24 tool calls, 741,705 tokens for TWO terms, after the pre-pass had already answered | MED - Rule B and unchecked-is-never-not-carried do not move | 5th |
+| **E** | Larger price batches | lane took 2 of a possible 10; same C3 lever as A | unmeasured | 6th |
+| **J** | Offload label TRANSCRIPTION to Qwen (see 3.6) | the same quadratic term as C, attacked locally | MED - needs a completeness verifier, and a stated card-ownership window | with C |
+
+**F is the one I would argue for beyond its size:** without it, every other item here is unverifiable
+after the fact and the next cost regression is invisible again.
+
+### 4.4 Is the Qwen label-transcription offload (J / 3.6) ordered?
+And if so, under what verification conditions - specifically, is a COMPLETENESS check (not just
+substring proof) acceptable as the gate, and what card-ownership window may it take?
+
+### 4.5 Is the 6b target of 12 abandoned, or is a second run wanted?
 The qualifying pool held 21 candidates and yielded 9 acceptances; the band is narrow against a pool
-harvested under a wider one. Item **H** below would widen what is reachable without touching the band.
+harvested under a wider one. Item **5.1** below would widen what is reachable without touching the band.
 
 ---
 
