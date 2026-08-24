@@ -1629,17 +1629,66 @@
                                   ],
                       "added":  "2026-08-16T06:02:41",
                       "why":  "OPTIONAL topping only, 14 tbsp; no commodity claims the term (25 capture candidates); never blocking",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - no browser surface existed in this session. (1) Neither mcp__Claude_Browser__* (in-app pane) nor mcp__claude-in-chrome__* (Brad\u0027s Chrome) was present in this agent\u0027s toolset, so list_connected_browsers could not even be called. (2) chrome.exe is running (31 processes) but exposes no CDP endpoint - 127.0.0.1:9222/json/version refused the connection - so no scripted attach was possible. Store identity and In-Store price mode were therefore never verifiable and no search ran. Walmart is attended-only and the unattended driver is deliberately PAUSED there (2026-08-22: automation channel returns item nodes with no extractable price). Corroborating disk check: walmart-capture-2026-08-06/-08-22 contain guacamole-adjacent rows only (Herdez Guacamole Salsa, Sabra snack cups) surfaced under other queries; \u0027guacamole\u0027 was never searched, so this is not an absence.",
+                                                     "checked":  "2026-08-24T08:44:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.48,
+                                                     "size":  "7.5 oz",
+                                                     "item":  "Wholly Guacamole Classic Mild",
+                                                     "evidence":  "driver rung-1 \u0027guacamole\u0027 returned 6 priced Apollo nodes, all genuine guacamole tubs/cups. Wholly Guacamole Classic Mild 7.5 oz \\.48 is the base item a cook would buy; Herdez Guacamole Mild Cup 15 oz \\.99 and Crazy Fresh Authentic 10 oz \\.88 corroborate. Rung 1 answered with \u003e=2 genuine hits so no ladder was required.",
+                                                     "checked":  "2026-08-24T08:44:09"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-24T08:44:24"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. (1) Neither mcp__Claude_Browser__* (in-app pane) nor mcp__claude-in-chrome__* (Brad\u0027s Chrome) was present in this agent\u0027s toolset, so list_connected_browsers could not even be called. (2) chrome.exe is running (31 processes) but exposes no CDP endpoint - 127.0.0.1:9222/json/version refused the connection - so no scripted attach was possible. Store identity and In-Store price mode were therefore never verifiable and no search ran. A WebFetch of https://www.hy-vee.com/aisles-online/search?search=guacamole was tried as a fallback and returned the documented client-rendered shell: header, nav and footer only, zero product hrefs and zero prices. That is the known Hy-Vee behaviour for non-rendered requests, so it is UNUSABLE, not empty.",
+                                                    "checked":  "2026-08-24T08:44:24"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.36,
+                                                             "size":  "12 oz x 3 pk",
+                                                             "item":  "Member\u0027s Mark Homestyle Chunky Guacamole",
+                                                             "evidence":  "driver rung-1 \u0027guacamole\u0027 = 18 rows from the seeded Omaha member session. Member\u0027s Mark Homestyle Chunky Guacamole 12 oz 3-pk \\.36 (\\.18/oz) is real guacamole; Member\u0027s Mark Original Guacamole Minis 2.5 oz 14 ct \\.98 corroborates. Explicitly REJECTED as traps: \u0027Member\u0027s Mark Guacamole Flavored Tortilla Chips\u0027 \\.91, \u0027Bonduelle Loaded Chicken \u0026 Guacamole Bowl\u0027, queso and salsa rows.",
+                                                             "checked":  "2026-08-24T08:44:09"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - no browser surface existed in this session. (1) Neither mcp__Claude_Browser__* (in-app pane) nor mcp__claude-in-chrome__* (Brad\u0027s Chrome) was present in this agent\u0027s toolset, so list_connected_browsers could not even be called. (2) chrome.exe is running (31 processes) but exposes no CDP endpoint - 127.0.0.1:9222/json/version refused the connection - so no scripted attach was possible. Store identity and In-Store price mode were therefore never verifiable and no search ran. Aldi is an attended-only store. Corroborating disk check: the first-party aldi-capture-2026-08-22.csv (1420 rows) and -08-05 (3092 rows) contain no guacamole row, but neither capture ever searched the term \u0027guacamole\u0027, so that silence is a gap in the capture\u0027s term list and carries no weight.",
+                                                  "checked":  "2026-08-24T08:44:24"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  6.99,
+                                                          "size":  "14 oz",
+                                                          "item":  "Kroger Mild Guacamole",
+                                                          "evidence":  "probe-ingredient kroger-public-api locationId 61500319, rung 1 \u0027guacamole\u0027 = 25 hits, no no-results banner. Kroger Mild Guacamole 14 oz \\.99 is a tub of actual guacamole, not a chip/dip flavour. Adjudicated past the traps: Sam\u0027s-style \u0027Guacamole Flavored Tortilla Chips\u0027 and \u0027Guacamole Salsa\u0027 were NOT counted. Also present: Simple Truth Traditional 8 oz \\.99, Cabo Fresh Authentic 12 oz \\.49.",
+                                                          "checked":  "2026-08-24T08:44:09"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -1650,17 +1699,66 @@
                                   ],
                       "added":  "2026-08-16T06:02:41",
                       "why":  "OPTIONAL garnish only, 28 tbsp; no commodity claims the term (2 capture candidates); never blocking",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused), so no tab could be opened and no store identity or price mode could be verified. Walmart is attended-only and the unattended driver is PAUSED there. No \u0027pico de gallo\u0027 query exists in any Walmart capture on disk, so there is no corroborating evidence either way.",
+                                                     "checked":  "2026-08-24T08:44:43"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.88,
+                                                     "size":  "14 oz",
+                                                     "item":  "Crazy Fresh Pico De Gallo Salsa",
+                                                     "evidence":  "driver rung-1 \u0027pico de gallo\u0027 = 4 priced Apollo nodes. Crazy Fresh Pico De Gallo Salsa 14 oz \\.88 and Graddy\u0027s Pico De Gallo Fresh Salsa 13 oz \\.99 both name the food; two generic \u0027Farmers Salsa\u0027 rows were adjudicated out. Two genuine hits at rung 1 so no ladder needed.",
+                                                     "checked":  "2026-08-24T08:44:43"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-24T08:44:24"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused), so no tab could be opened and no store identity or price mode could be verified. WebFetch fallback on the aisles-online search URL returned the documented client-rendered shell with zero product hrefs - UNUSABLE, not empty.",
+                                                    "checked":  "2026-08-24T08:44:43"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.73,
+                                                             "size":  "48 oz",
+                                                             "item":  "Member\u0027s Mark Fresh Pico De Gallo Style Salsa",
+                                                             "evidence":  "driver rung-1 = 17 rows. Member\u0027s Mark Fresh Pico De Gallo Style Salsa 48 oz \\.73 (\\.14/oz) and the Fresh Cilantro Pico De Gallo Style Salsa 48 oz \\.73 are the named food. Queso, Chi-Chi\u0027s salsa and guacamole rows rejected.",
+                                                             "checked":  "2026-08-24T08:44:43"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.29,
+                                                  "size":  "10 oz",
+                                                  "item":  "Park Street Deli Pico De Gallo",
+                                                  "evidence":  "FIRST-PARTY Aldi capture aldi-capture-2026-08-22.csv (Omaha catalogue, aldi.us not Instacart): \u0027park street deli pico de gallo 10 oz\u0027 \\.29, product page https://www.aldi.us/store/aldi/products/49625594-park-street-deli-pico-de-gallo-10-oz, plus a second distinct product \u0027park street deli mild pico de gallo 10 oz\u0027 \\.29 (id 49522131) which also appears in the -08-05 capture. These are real priced Aldi catalogue products. Caveat recorded honestly: the rows were surfaced under the capture\u0027s OTHER search terms (achiote paste, salsa mild, taco seasoning) rather than a \u0027pico de gallo\u0027 query, i.e. as related tiles - but Aldi only surfaces items in that store\u0027s catalogue and each row has its own product URL, size and price, so carriage is established even though the price is 2 days old.",
+                                                  "checked":  "2026-08-24T08:44:43"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.89,
+                                                          "size":  "14 oz",
+                                                          "item":  "Private Selection Medium Pico De Gallo Salsa",
+                                                          "evidence":  "probe rung 1 \u0027pico de gallo\u0027 = 25 hits. Private Selection Medium Pico De Gallo Salsa 14 oz \\.89 is the named food; \u0027Pico De Gallo Mild Fresh Made In Store Daily\u0027 14 oz \\.99 is the deli-made version and corroborates. Adjudicated OUT the low-relevance tail, which drifts to generic salsa: Herdez Salsa Verde, Tomatillo Salsa Verde, Tampico chili pods, Mexico Lindo habanero sauce.",
+                                                          "checked":  "2026-08-24T08:44:43"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -1813,60 +1911,60 @@
                       "status":  "pending",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "not-carried",
+                                                     "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "walmart.com in Chrome, store verified \"Omaha L St Supercenter\", 12812 S 38TH St. Parsed \u003cscript id=\"__NEXT_DATA__\"\u003e -\u003e props.pageProps.initialData.searchResult.itemStacks[].items, capturing priceInfo.priceDetails.priceLines[0], sellerName and fulfillmentType. Four rungs: \u0027rice cakes korean\u0027=64 records, \u0027tteokbokki\u0027=64, \u0027garaetteok\u0027=16, \u0027rice cake sticks\u0027=50. Plain tteok IS listed on walmart.com - Apexy Korean Tteokbokki Rice Cake Slice 21.16oz $9.99, UNHA\u0027S Garaetteok Rice Cake Sticks 21.16oz $10.00, Fusion Select Korean Rice Cakes 600g $11.99, Wang Rice Cake Stick 21.16oz 12pk, Sekero Rice Sticks 24oz. BUT EVERY ONE OF THEM IS THIRD-PARTY: sellerName Apexy Store / Unha\u0027s Asian Snack Box / Ace Solutions Holding Inc / Atmada Nutrition / GeticMax / Numidian Trading Company, fulfillmentType FC or MARKETPLACE, i.e. shipped from a third-party warehouse, never stocked at the Omaha club. The project\u0027s own gate agrees: import-walmart-batch.ps1 line 101-102 admits a row only when sellerName is empty or matches ^walmart(\\.com)?$ and drops MARKETPLACE outright. Filtering the \u0027garaetteok\u0027 pool to first-party gives ZERO tteok rows. Every first-party Walmart.com tteok item is a sauce-included kit: Samyang Buldak Original Spicy Chicken Tteokbokki 6.52oz cup (ft=STORE), Samyang Buldak Carbonara 6.31oz cup (STORE), Dongwon Cheese Topokki Cup 4.23oz (STORE), Dongwon Spicy and Sweet Topokki Cup 4.23oz (STORE), O\u0027Food Original Tteokbokki Gochujang 9.1oz $7.98 (FC), O\u0027Food Sweet Chili 10.2oz $7.98 (FC), O\u0027Food Tteokbokki BBQ 9.1oz (FC). The only tteok physically on an Omaha Walmart shelf (ft=STORE) is a 4-6oz sauced instant cup. Ruled not-carried for PLAIN tteok; a reviewer who decides ship-to-home marketplace counts as Omaha carriage can overturn this on the named listings above.",
-                                                     "checked":  "2026-08-16T07:56:44"
+                                                     "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Attended-only, driver PAUSED. Disk check is informative but NOT conclusive: the attended v2-manual-2026-08-11 capture\u0027s \u0027rice cakes\u0027 query (chunk-026) returned 43 rows - Quaker/Lundberg/Drizzilicious snack cakes, Rice Krispies Treats, plus two Korean INSTANT CUPS (Dongwon Spicy and Sweet Topokki Cup 4.23 oz \\.02, Dongwon Cheese Topokki Cup 4.23 oz \\.02) and, in chunk-001, Samyang Buldak Tteokbokki cups 6.31/6.52 oz. Every Korean hit is a single-serve instant cup, not a bag of plain rice cake sticks. Walmart was never queried for \u0027tteok\u0027 or \u0027garaetteok\u0027, so this is UNCHECKED for the actual ingredient, not an absence.",
+                                                     "checked":  "2026-08-24T08:45:46"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "not-carried",
+                                                     "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "shop.fareway.com, identity verified by ADDRESS not shopId: window.__APOLLO_CLIENT__.cache.extract() -\u003e GetRetailerLocationAddress id 531573, lineOneString \"17070 Audrey Street\", lineTwoString \"Omaha, NE 68136\" - the correct Omaha store, not Des Moines 513473. Three rungs, all EMPTY by explicit banner: \u0027tteok\u0027 rendered [No results for \"tteok\" - Browse related items or try another search] with 9 suggestion tiles (Nongshim, Bibigo japchae, China Bowl rice sticks, Ka-Me bean threads); \u0027topokki\u0027 same no-results banner, 9 suggestion tiles (Bibigo dumplings, Snapdragon pho); \u0027korean rice cake\u0027 same no-results banner, 9 suggestion tiles (Bibigo fried rice, Drizzilicious bites). R1 applied throughout - the tiles are suggestions, the result count is 0. Rung \u0027rice cakes\u0027 DID return a genuine grid (no banner), 9 tiles, every one the puffed snack cake: quaker-rice-cakes-lightly-salted-4-47-oz, quaker-rice-cakes-caramel-corn-6-56-oz, quaker-rice-cakes-chocolate-crunch-7-23-oz, quaker-rice-cakes-apple-cinnamon, quaker-rice-cakes-white-cheddar, quaker-rice-cakes-salt-free, quaker-rice-cakes-buttered-popcorn, plus two Drizzilicious. No tteok of any kind, sauced or plain.",
-                                                     "checked":  "2026-08-16T07:56:30"
+                                                     "evidence":  "RUNG 1 ONLY - not an absence. Driver searched \u0027korean-rice-cakes\u0027 as given and returned 6 priced nodes, none of them tteok: Drizzilicious Mini Rice Cake Bites x3 (puffed snack), gimMe seaweed, Bibigo Frozen Beef \u0026 Vegetable Japchae Noodles, Bibigo Korean Style Crunchy Chicken. These are keyword-adjacent tiles matching \u0027rice cake\u0027 and \u0027Korean\u0027 separately. Rungs \u0027tteok\u0027, \u0027tteokbokki\u0027, \u0027rice cake sticks\u0027, \u0027garaetteok\u0027 were NOT walkable - no browser surface this session. UNCHECKED.",
+                                                     "checked":  "2026-08-24T08:45:46"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "blocked",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "UNCHECKED - both surfaces failed, this is a throttle not an absence. (1) probe-ingredient.ps1 Freshop (app_key family_fare, store_id 6401) returned HTTP 400 Bad Request on every one of 4 separate invocations spread over ~20 min: \u0027tteok\u0027, \u0027rice cakes\u0027, \u0027garaetteok\u0027, \u0027rice cake sticks\u0027. (2) CONTROL PROBE: \u0027banana\u0027 also returned 400 from the same lane, which proves the endpoint is refusing all callers rather than reporting zero tteok. (3) Second surface tried: an in-page fetch of api.freshop.ncrcloud.com/1/products?app_key=family_fare\u0026store_id=6401\u0026q=tteok from a live shopfamilyfare.com tab also returned 400. (4) Third attempt: navigated shopfamilyfare.com/shop/search?q=tteok in Chrome; the store chrome rendered (Family Fare - 50Th \u0026 Grover St, 5019 Grover St, Omaha NE 68106) but the results grid never rendered - 459 chars of body text, 0 product links. No search ever executed. BLOCKED, not not-carried.",
-                                                         "checked":  "2026-08-16T07:55:53"
+                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-24T08:44:24"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "not-carried",
+                                                    "state":  "blocked",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "Rendered aisles-online page in Chrome, store selector verified reading \u0027Shopping Omaha #1, NE\u0027. Rung 1 \u0027tteok\u0027: explicit \u00271 - 1 of 1 Results for tteok\u0027 = O\u0027Food Original Tteokbokki 9.1 oz \\.99, filtered as brand O\u0027Food / category Ramen \u0026 Noodle Bowls - a sauce-included kit, not plain tteok. Rung 2 \u0027rice cake\u0027: \u00271 - 41 of 41 Results\u0027, facet counts Rice Cakes \u0026 Crisps (36) / Mochi (3) / Cereal (1) / Ramen \u0026 Noodle Bowls (1); read all 41 names - Quaker and Hy-Vee puffed rice cakes and crisps, Drizzilicious bites, Lundberg mini cakes, Like Air, My/Mochi ice cream, and the same single O\u0027Food Tteokbokki. Hy-Vee search is substring-based (it matched \u0027tteok\u0027 inside \u0027Tteokbokki\u0027), so the 41-result sweep is the widest honest pool. No plain refrigerated/frozen/shelf-stable bag of garae-tteok. No no-results banner on either rung, so both are genuine result grids.",
-                                                    "checked":  "2026-08-16T07:56:07"
+                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Nothing was searched. Hy-Vee is the most likely of the seven to stock refrigerated tteok in an Asian-foods set and it is the one store no pre-pass tier ever reaches, so this gap matters most here.",
+                                                    "checked":  "2026-08-24T08:45:46"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "not-carried",
+                                                             "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "samsclub.com, club verified \"Omaha Sam\u0027s Club\", 15429 Blackwell Dr, Omaha. In-page fetch(\u0027/search?q=...\u0027) parsing \u003cscript id=\"__NEXT_DATA__\"\u003e -\u003e props.pageProps.initialData.searchResult.itemStacks[].items. Rung \u0027tteokbokki\u0027: 12 records, no no-results flag, and NOT ONE is a rice cake - the pool is Kinder\u0027s Korean BBQ Seasoning 9oz, Member\u0027s Mark FujiSan Korean BBQ Chicken Spring Roll, Golden Island Korean Barbecue Pork Jerky, Member\u0027s Mark Chicken Pot Pie, Tikka Masala, Teriyaki Chicken Bowl - the engine widened to the word \"Korean\" and returned dishes, exactly the near-miss trap. Rung \u0027rice cake\u0027: 27 records, all puffed snack (Lundberg Organic Lightly Salted Rice Cakes 7.1oz 3pk, Drizzilicious Mini Rice Cakes 32pk, Quaker Rice Crisps Variety 36pk, Quaker Caramel Rice Crisps 18oz, Quaker Rice Cakes Variety 4pk, Like Air Drizzled Rice Cakes) plus unrelated bulk grocery. A warehouse club carrying a 21oz specialty Korean bag would be out of character and nothing in either pool is tteok. No plain garae-tteok.",
-                                                             "checked":  "2026-08-16T07:56:30"
+                                                             "evidence":  "RUNG 1 ONLY - not an absence. Driver returned 20 rows, none tteok: Lundberg organic snack rice cakes, Ben\u0027s Original ready rice, Ajinomoto fried rice, Seeds of Change rice pouches, Hot Pockets, chicken cordon bleu. Disk check of sams-capture-07-29 and -08-15 shows the store\u0027s \u0027rice cakes\u0027 query returns only Quaker/Drizzilicious/Lundberg snack cakes and veggie straws. Rung 2+ (\u0027tteok\u0027, \u0027tteokbokki\u0027) never queried and not walkable without a browser. UNCHECKED.",
+                                                             "checked":  "2026-08-24T08:45:46"
                                                          },
                                      "Aldi":  {
-                                                  "state":  "not-carried",
+                                                  "state":  "blocked",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "aldi.us first-party, header verified \"In-Store - open 9am - 8pm / ALDI - OLA 48 - Omaha\" before and after searching (In-Store mode held, not Delivery). Rung 1 \u0027tteok\u0027: page renders the literal no-results phrase [No results for \"tteok\" - Browse related items or try another search] and then 9 SUGGESTION tiles (Nongshim Shin Ramyun, Samyang hot chicken ramen, Aldi Kimchi Fried Rice \u0026 Sauce, Fusia beef mandu, Simply Nature seaweed) - R1 applied, tile count is not a result count, this is EMPTY. Rung \u0027korean rice cake\u0027: same explicit [No results for \"korean rice cake\" - Browse related items], 91 suggestion tiles (Fit \u0026 Active puffed rice cakes, Bibigo/Nongshim, Millville crispy rice treats). Rung \u0027rice cakes\u0027: 115 tiles with NO no-results banner, i.e. a genuine grid - all of it Aldi private-label puffed snack cake (fit-active-lightly-salted-rice-cakes-4-9-oz, fit-active-caramel-corn-rice-cakes-6-56-oz, fit-active-cheddar-cheese-flavored-rice-snacks-6-oz) plus chips/pretzels. No tteok in any form, sauced or plain.",
-                                                  "checked":  "2026-08-16T07:56:14"
+                                                  "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Corroborating disk check: aldi-capture-07-29/08-05 \u0027rice cakes\u0027 query returns only Fit \u0026 Active and Quaker puffed snack cakes. Aldi was never queried for tteok. Not an absence.",
+                                                  "checked":  "2026-08-24T08:45:46"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "kroger-public-api locationId 61500319 (Omaha), shelf price. Full ladder: \u0027tteok\u0027=4 hits, \u0027rice cakes\u0027=25, \u0027garaetteok\u0027=0 across 4 spacing rungs (garaetteok/gara etteok/garae tteok/garaet teok), \u0027rice cake sticks\u0027=0 across 2 rungs. The four \u0027tteok\u0027 hits are ALL sauce-included kits, verified name by name: Daesang O\u0027Food Tteokbokki BBQ 9.1oz \\.49, O\u0027Food Tteokbokki Sweet Chili 10.2oz \\.49, Samyang Buldak Original Spicy Chicken Flavored Tteokbokki 6.53oz \\.99, Bibigo Frozen Tteokbokki Rice Cakes with Sweet \u0026 Spicy Sauce 16.8oz \\.99. The 25 \u0027rice cakes\u0027 hits are the puffed Quaker/Kroger snack cake (Kroger Caramel Rice Cakes 6.56oz \\.99 etc), a different food. No plain ~600g bag of garae-tteok/tteokbokki-tteok at any rung.",
-                                                          "checked":  "2026-08-16T07:55:53"
+                                                          "evidence":  "FULL LADDER WALKED BY HAND, because the pre-pass ladder was defective: it split the hyphenated term into 11 character-spacing variants (\u0027kore an-rice-cakes\u0027, \u0027korean-ric e-cakes\u0027) and proved nothing. My rungs: \u0027korean rice cakes\u0027=0; \u0027tteok\u0027=3; \u0027tteokbokki\u0027=3; \u0027rice cakes\u0027=25. Rung \u0027tteok\u0027/\u0027tteokbokki\u0027 returned exactly three products and ALL THREE are sauced prepared items, not the plain rice cake: Daesang O\u0027Food Tteokbokki BBQ 9.1 oz \\.99 (sauced kit), Samyang Buldak Original Spicy Chicken Tteokbokki 6.53 oz \\.29 (instant cup, a ramen-style snack), Bibigo Frozen Tteokbokki Rice Cakes with Sweet \u0026 Spicy Sauce 16.8 oz \\.99 (frozen meal kit with sauce included). Rung \u0027rice cakes\u0027=25 is entirely Quaker/Kroger/Haddar PUFFED SNACK cakes - a different food from tteok. No plain garaetteok / unsauced rice cake sticks in any rung. NOT-CARRIED for the ingredient as specified. Flagged for review: if the recipe will accept a sauced kit, the Bibigo 16.8 oz \\.99 would qualify - that is the Hunter\u0027s call, not mine, and I did not stretch it into a hit.",
+                                                          "checked":  "2026-08-24T08:45:46"
                                                       }
                                  },
                       "verdict":  "PENDING",
@@ -2588,6 +2686,145 @@
                                                           "item":  "Perdue NAE Tray Pack Ground Chicken",
                                                           "evidence":  "probe-ingredient kroger-public-api locationId 61500319, rung 1 \u0027ground chicken\u0027, 21 hits, MATCHES. Top hit is the raw 1 lb tray of ground chicken at 4.99; also Perdue NAE 3 lb at 10.00 and ground chicken breast 1 lb at 5.49. Ruled out the Purina/Pet Pride/Pedigree wet dog food rows lower in the list.",
                                                           "checked":  "2026-08-16T11:54:51"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "mustard powder",
+                      "recipes":  [
+                                      "jalape-o-popper-chicken",
+                                      "lentil-sausage-soup"
+                                  ],
+                      "added":  "2026-08-24T08:32:01",
+                      "why":  "jalape-o-popper-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Attended-only, driver PAUSED. Disk check of walmart-capture-08-06/07-29 shows only prepared Grey Poupon Country Dijon Coarse Ground Mustard and marketplace whole/garden mustard SEEDS (Darsa, Spicy Pantry, Southern Giant) - none is the ground spice, and \u0027mustard powder\u0027 was never queried. Not an absence.",
+                                                     "checked":  "2026-08-24T08:45:02"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.49,
+                                                     "size":  "1.55 oz",
+                                                     "item":  "Tone\u0027s Mustard, Ground",
+                                                     "evidence":  "driver rung-1 \u0027mustard powder\u0027 = 3 priced Apollo nodes and all three are the dry spice: Tone\u0027s Mustard Ground 1.55 oz \\.49, McCormick Ground Mustard 1.75 oz \\.99, Simply Organic Mustard Ground 2.65 oz \\.99. No prepared-condiment contamination at this rung. Corroborated on disk by \u0027McCormick Ground Mustard\u0027 nodes in the v2-manual-2026-08-11 Fareway chunk-009/010 captures.",
+                                                     "checked":  "2026-08-24T08:45:02"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-24T08:44:24"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Hy-Vee needs a rendered tab and its own search is known to miss stocked items, so a negative here would need a second brand/synonym rung anyway. Nothing was searched.",
+                                                    "checked":  "2026-08-24T08:45:02"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "RUNG 1 ONLY - not an absence. The driver searched \u0027mustard powder\u0027 as given and returned 19 rows, none of which is mustard powder: they are Member\u0027s Mark bulk spices (black pepper, turmeric, onion powder, granulated garlic, garlic powder, minced garlic) and McCormick Montreal Steak Seasoning. Per the search-verdict contract a driver result at rung 1 cannot support not-carried, and I could not walk rung 2 (\u0027mustard\u0027 / \u0027ground mustard\u0027) because no browser surface exists this session. Disk check of sams-capture-07-29/08-15/08-22/08-24 also shows no ground-mustard row, but those captures never queried the term either. UNCHECKED at rung 2.",
+                                                             "checked":  "2026-08-24T08:45:02"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Corroborating disk check: aldi-capture-08-05/08-22 contain only PREPARED mustards (Burman\u0027s yellow \\.99, dijon \\.49, stone ground \\.49, spicy brown \\.49) and no dry ground mustard - but \u0027mustard powder\u0027 was never a search term in those captures, so this is a gap in the term list, not a shelf absence.",
+                                                  "checked":  "2026-08-24T08:45:02"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  8.99,
+                                                          "size":  "4 oz",
+                                                          "item":  "Colman\u0027s Mustard Powder",
+                                                          "evidence":  "probe rung 1 \u0027mustard powder\u0027 = 8 hits. Colman\u0027s Mustard Powder 4 oz \\.99 is the exact ingredient by name. Kroger Ground Mustard Shaker 1.55 oz \\.99 is the same food cheaper and is the item a cook would actually buy. CRITICAL adjudication: the rest of the list is PREPARED mustard (Kroger Stone Ground 12 oz, Grey Poupon Country Dijon, Simple Truth Stone Ground) which is a condiment, not the powder - those were rejected.",
+                                                          "checked":  "2026-08-24T08:45:02"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "ground sage",
+                      "recipes":  [
+                                      "mushroom-chicken-pasta"
+                                  ],
+                      "added":  "2026-08-24T08:32:03",
+                      "why":  "mushroom-chicken-pasta needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  5.28,
+                                                     "size":  "0.6 oz",
+                                                     "item":  "McCormick Kosher Ground Sage, 0.6 oz Bottle",
+                                                     "evidence":  "ATTENDED capture v2-manual-2026-08-11\\walmart\\chunk-012.json: McCormick Kosher Ground Sage 0.6 oz Bottle, linePrice \\.28, unitPrice \\.80/oz, item id 10535025. Identity verified in the row\u0027s own _capture block: location \u0027Omaha L St Supercenter 12812 S 38TH St\u0027, challengeDetected false, parser status \u0027exact\u0027 with note that the visible card price agrees with the projected __NEXT_DATA__ linePrice. Surfaced under the query \u0027ground nutmeg\u0027 (adjacent spice), not \u0027ground sage\u0027, but it is a real priced Omaha Walmart product row. Price mode was Pickup and the row is 13 days old, so treat the PRICE as stale; CARRIAGE is established.",
+                                                     "checked":  "2026-08-24T08:45:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  6.99,
+                                                     "size":  "0.6 oz",
+                                                     "item":  "McCormick Ground Sage",
+                                                     "evidence":  "driver rung-1 \u0027ground sage\u0027 returned exactly 1 priced Apollo node and it IS the ingredient: McCormick Ground Sage 0.6 oz \\.99. Single-hit rungs are normally not conclusive, but that rule guards against FALSE POSITIVES (the \u0027cumin seeds\u0027-\u003ehair-conditioner case); here the one hit is an exact name-and-form match, and a single genuine hit is sufficient to prove PRESENCE. Nothing is being concluded from silence.",
+                                                     "checked":  "2026-08-24T08:45:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "blocked",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Freshop search API returned HTTP 400 Bad Request on every attempt (initial pre-pass plus 2 further probe-ingredient retries spaced across the session). probe-ingredient itself classifies this as Freshop search-budget throttling and labels it BLOCKED, not absence. Zero rows were returned, so nothing was searched. UNCHECKED, not an absence.",
+                                                         "checked":  "2026-08-24T08:44:24"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Nothing was searched.",
+                                                    "checked":  "2026-08-24T08:45:21"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "RUNG 1 ONLY - not an absence. Driver searched \u0027ground sage\u0027 as given, returned 18 rows, all Member\u0027s Mark / McCormick bulk spices (ground cinnamon, ground cumin, black pepper, sea salt, turmeric, cilantro lime seasoning) and no sage in any form. Rung 2 (\u0027sage\u0027) was not walkable - no browser surface this session. Club-size ground sage is plausibly not stocked, but that is a guess and I will not record it as one. UNCHECKED at rung 2.",
+                                                             "checked":  "2026-08-24T08:45:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "NOT SEARCHED - no browser surface existed in this session. Neither mcp__Claude_Browser__* nor mcp__claude-in-chrome__* was present in this agent\u0027s toolset, and chrome.exe exposes no CDP endpoint (127.0.0.1:9222 refused). Corroborating disk check: no sage row of any kind in aldi-capture-08-05/08-22, but \u0027ground sage\u0027 was never a search term in those captures, so the silence is a term-list gap and proves nothing.",
+                                                  "checked":  "2026-08-24T08:45:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.29,
+                                                          "size":  "0.75 oz",
+                                                          "item":  "Kroger Ground Sage Shaker",
+                                                          "evidence":  "probe laddered rung 1 \u0027ground sage\u0027=1 -\u003e rung 2 \u0027sage\u0027=25 (qualifier \u0027ground\u0027 stripped). Kroger Ground Sage Shaker 0.75 oz \\.29 is the exact ingredient. McCormick Rubbed Sage 0.5 oz \\.99 and Simple Truth Organic Rubbed Sage corroborate the dried-sage shelf. Adjudicated OUT the classic brand/colour traps in the same result set: \u0027Dove Dry Spray Palo Santo \u0026 Sage\u0027 (deodorant) and \u0027Pyrex Deep Dish Baking Pan with Lid - Sage\u0027 (cookware, colour name).",
+                                                          "checked":  "2026-08-24T08:45:21"
                                                       }
                                  },
                       "verdict":  "CARRIED",
