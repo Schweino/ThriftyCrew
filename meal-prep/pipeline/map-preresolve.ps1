@@ -492,7 +492,28 @@ function New-PreResolveTable {
       $gpuKnown = ($null -ne $g -and [double]$g -gt 0)
     }
     if (-not $densityKnown -and -not $eachKnown) { $evidence.Add("no densities.json row and no each-noun") }
-    if (-not $foodDbKnown) { $evidence.Add("no food-macros-db row - a label needs transcribing") }
+    if (-not $foodDbKnown) {
+      $evidence.Add("no food-macros-db row - a label needs transcribing")
+      # ...AND THE CANDIDATE ROWS FDC ALREADY HAS FOR IT, so the mapper does not go and fetch a page.
+      # This is the line the 9-10 WebFetches per singleton dispatch hang off: each fetched page then
+      # rides in the mapper's conversation for every later round trip, which is the quadratic term
+      # measured on 6b. The cache is filled mechanically by fdc_lookup and holds CANDIDATES only -
+      # picking which row is the food stays frontier, and the live probe showed why (FDC's top hit for
+      # "chicken drumstick" is "Chicken, skin (drumsticks and thighs)" at 440 cal, which is skin).
+      $fdc = Get-FdcCandidates $lookup
+      # WORDED AS A SHELF, NOT AN ANSWER, and the wording is load-bearing. FDC's search is keyword
+      # based, so for some terms every candidate is wrong while LOOKING authoritative: "cinnamon"
+      # returns Bread / Muffins / Bagels and "unsalted butter" returns Pretzels / Popcorn, all of them
+      # real SR Legacy rows with real numbers and none of them the food. Meanwhile "parsley" returns
+      # fresh, freeze-dried and dried spice, which is a genuinely useful shelf. Telling the two apart
+      # is an identity call - section 1.4 puts those with the mapper at 37% false locally - so this
+      # hands over the rows and says plainly that NONE of them may be right.
+      if ($fdc) {
+        $evidence.Add("USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. " +
+                      "FDC matches on keywords, so all of these can be the wrong food: pick the one " +
+                      "that IS this ingredient, or none of them and transcribe a label instead. " + $fdc)
+      }
+    }
 
     # 6. THE BOARD. What Omaha actually carries, from data the daily pipeline already wrote.
     if ($BoardAnswers.ContainsKey($lookup)) {
@@ -912,6 +933,39 @@ function Test-BidContradictsNotes {
   # the bid, as a whole token, appearing within ~60 characters AFTER a refusal word
   $rx = ('(?i)(?:' + $script:REFUSAL_WORDS + ')(?:[^.;]{0,60}?)(?<![a-z0-9-])' + $b + '(?![a-z0-9-])')
   return [bool]([regex]::IsMatch($Notes, $rx))
+}
+
+# FDC CANDIDATE ROWS, read from the cache fdc_lookup.py fills. Read-only and offline: this never
+# reaches the network, so a cold cache simply means the mapper works the way it always did.
+$script:FdcCache = $null
+
+function Get-FdcCandidates {
+  param([string]$Term)
+  if (-not $Term) { return '' }
+  if ($null -eq $script:FdcCache) {
+    $script:FdcCache = @{}
+    # Built from segments rather than one literal: a backslash path is one bad escape away from
+    # silently pointing at nothing, and a cache that never loads looks exactly like a cold cache.
+    $cf = Join-Path (Join-Path (Join-Path $script:repoRoot 'meal-prep') 'db') 'fdc-cache.json'
+    if (Test-Path $cf) {
+      try {
+        $doc = Get-Content $cf -Raw -Encoding utf8 | ConvertFrom-Json
+        foreach ($k in $doc.terms.PSObject.Properties.Name) { $script:FdcCache[$k] = $doc.terms.$k }
+      } catch { $script:FdcCache = @{} }
+    }
+  }
+  $key = ($Term -replace '\s+', ' ').Trim().ToLower()
+  if (-not $script:FdcCache.ContainsKey($key)) { return '' }
+  $rows = @($script:FdcCache[$key].candidates)
+  if (-not $rows.Count) { return '' }
+  $parts = @()
+  foreach ($r in ($rows | Select-Object -First 3)) {
+    $m = $r.macros
+    $parts += ("{0} [{1}] per 100 g: {2} cal, {3} P, {4} C" -f `
+               [string]$r.description, [string]$r.data_type,
+               [string]$m.calories, [string]$m.protein_g, [string]$m.carbs_g)
+  }
+  return ($parts -join ' | ')
 }
 
 function Test-IsGarnishLine([string]$Raw) {
