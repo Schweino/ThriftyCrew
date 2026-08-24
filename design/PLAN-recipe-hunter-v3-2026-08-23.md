@@ -498,9 +498,23 @@ introduce a number, which retires the class of prose-number defects rather than 
 
 Two consequences worth naming so they get built:
 - **The run-band gate moves BEFORE write.** The skeleton carries `macros_per_serving` from
-  parse-compute, so an out-of-band recipe is retired at skeleton build (state `rejected-macros`, as
-  the existing state machine already supports) before any prose is paid for. v2 checked the band on
-  the WRITE result - after the most expensive per-recipe stage had already run.
+  parse-compute, so an out-of-band recipe is retired at skeleton build before any prose is paid for.
+  v2 checked the band on the WRITE result - after the most expensive per-recipe stage had already
+  run.
+  **CORRECTED 2026-08-24 (phase-3 cold read, checked against hunt-run.ps1's graph): this paragraph
+  said the state machine "already supports" `rejected-macros` here. It does not.** The machine
+  allows `rejected-macros` only from `extracted` and `mapped`; at skeleton-build time the recipe
+  sits at `priced`, whose ONLY legal exit is `spec-built`. So D8's first build item is a
+  STATE-GRAPH EDIT: add `rejected-macros` to `priced`'s exits in hunt-run.ps1's `$script:NEXT`,
+  with a fixture in hunt-run's own -SelfTest (the same care `rejected-macros`' original addition
+  took - a verdict a state machine cannot express is a verdict that gets faked or lost, and this
+  one WAS being faked: the trap was found because the daemon's interim band gate hit it live. Its
+  first build advanced `priced -> rejected-qa` directly, which the injected fixtures accepted and
+  the real machine refuses - the recipe would have sat at `priced` on disk while the daemon counted
+  it rejected. Fixed 2026-08-24 to reproduce v2's measured on-disk trace, `spec-built -> written ->
+  rejected-qa -By macro-gate`, with a real-state-machine fixture proving the rejection LANDS; once
+  D8 extends the graph, the daemon's route shortens to `priced -> rejected-macros` in the same
+  commit, and the fixture moves with it.)**
 - **The skeleton is a postcondition, not a suggestion.** After the writer returns, the orchestrator
   diffs the intake's machine fields against the skeleton it issued; any drift (a gram, a buy string,
   a macro) rejects the intake and re-dispatches with the drift named. That is the D8 fixture's
@@ -1008,10 +1022,24 @@ different questions and this estate has conflated them at least five times.
 | priced | skeleton build (band gate) -> write lane |
 | spec-built / written | qa lane (stages skip work whose output file exists) |
 | qa-passed | wave pool |
-| waved | wave lane, resuming at the first un-stamped ledger stage |
+| waved | counted and REPORTED in --status; never auto-resumed (CORRECTED 2026-08-24, see below) |
 | published, not verified | post-publish review pending |
 | held | open-items report; never auto-republished |
-| STUCK (per the prior run's report) | re-enter the lane that stalled |
+| STUCK (per the prior run's report) | re-enter the lane that stalled (which the daemon gets by construction: a STUCK recipe's state file was never advanced, so its real on-disk state seeds it back into the lane it stalled in) |
+
+**The `waved` row, CORRECTED 2026-08-24 (phase-3 cold read).** This table is normative, and its
+original `waved` row promised "wave lane, resuming at the first un-stamped ledger stage" - a
+behavior NOBODY has ever implemented. v2's own drain seed deliberately excluded `waved` recipes
+("those belong to wave 1 and the trim returns the audit-clean ones to this pool itself" - the
+comment is still in hunt-orchestrator.js), and the daemon does the same: it counts them, reports
+them in `--status`, and touches nothing. A normative row that promises unimplemented behavior is a
+guess-trap for the next builder, so the row now states reality, and the OPERATOR PATH for a run
+killed mid-wave is the one v2 used: `hunt-run.ps1 -WaveSync -Wave <k>` reconciles the manifest,
+the trim path returns audit-clean recipes to `qa-passed`, and the next daemon seed carries them
+into a fresh wave. Auto-resuming a half-published wave from its ledger stamps is a real feature
+with a real design cost (which stamp is trustworthy after a crash mid-publish?); if the phase-6
+proving run finds the manual path too expensive, it becomes a measured, ordered item - never a
+silent build-time addition.
 
 **The cost-engine mutex (a live race v2 tolerated; v3 removes it).** `build-v2-spec -RunCost`
 shells the cost engine, which rewrites `db\costed.json`; the write lane runs 3 concurrent writers,
@@ -1293,6 +1321,27 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     header** rather than leaving the next reader to wonder. If any part of it ever aggregates into
     ONE file written by the cap-2 map lane, that file takes the named-mutex pattern WITH a
     concurrency fixture proven to fail with the lock removed (the fourth PS trap, this section).
+  - **The exit codes mean this, and only this (4.5's convention read onto THIS script):** exit 1 is
+    the NORMAL case - residual lines exist, the table is written, the mapper dispatch PROCEEDS over
+    the residual. Exit 0 (zero residual) still dispatches the mapper, because S4 lists the macro
+    cross-check as mapper judgment on every recipe - a fully pre-resolved table shrinks that
+    dispatch to the cross-check alone, it never silently skips the judge. Exit 2 blocks the batch:
+    could-not-look is never a clean bill, and it is never a reason to guess either.
+  - **The cross-check arithmetic is parse-compute.ps1's** - the same surface S6 names for the
+    skeleton's `macros_per_serving`. map-preresolve (or the daemon) runs it and the numbers travel
+    in the mapper's dispatch prompt as pre-computed inputs to verify; they are NOT a new schema
+    field (the two named deltas stay the only two).
+  - **THE UNHOLD PATH, pinned because the seed table alone would strand a repaired recipe forever.**
+    Section 4.5 seeds `mapped` with open holds to the HELD list, not to any lane - correct while
+    the hold stands, and a trap the moment Brad wires the missing bid: on the next resume the
+    recipe would land back on the held list with nobody re-checking anything. The pinned default:
+    AT SEED TIME the daemon re-runs map-preresolve over the `mapped` recipes (mechanical, zero
+    agents, seconds); a hold that has CLEARED advances through the existing mapper decision file at
+    `mapped\<slug>.json` - its term set is already ruled, so the daemon performs the
+    `mapped -> pricing/priced` advance from the refreshed board answers exactly as it would have on
+    first pass, and no agent is re-paid for a judgment already rendered. A hold still standing
+    stays on the held list, named. This is a D7 fixture: a scratch run dir with an unbid hold, the
+    bid wired between two seeds, the second seed advancing it with ZERO dispatches.
 - **D8 `build-intake-skeleton.ps1`** - machine-complete intake skeleton; the pre-write band gate;
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
@@ -1320,6 +1369,17 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     lock. And the phase-3 drain drill stands `build-v2-spec -RunCost` in for exactly this reason
     (it rewrites the live `db\costed.json`); the D8 drill should instead run the real cost pass
     against a scratch costed.json the way wave-publish's own gate drill does with `-LedgerPath`.
+  - **The writer COMPLETES the skeleton-written intake IN PLACE - it no longer creates the file.**
+    `Daemon.write_prompt` currently says "Produce ONE intake JSON at <RunDir>\intake\<slug>.json";
+    D8 changes that line to "the skeleton has already written it; fill ONLY the writer-fillable
+    fields (4.5's list) in place", in the same commit as the skeleton, or the writer and the
+    skeleton race for the same file with two different ideas of who creates it. The recipe-writer
+    agent definition gets the matching edit (prompt-backup sync applies).
+  - **The state-graph edit is D8's first commit, not an afterthought:** `priced` gains
+    `rejected-macros` in hunt-run.ps1's `$script:NEXT`, fixtured in hunt-run's own -SelfTest, and
+    the daemon's band-failure route shortens from v2's three-advance trace to
+    `priced -> rejected-macros` in the same commit (see the S6 correction - the daemon's real-
+    state-machine band fixture moves with it, and it is the fixture that caught this trap live).
 - **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - **BUILT 2026-08-24;
   the phase-3 gate record is in section 6.** The port, under §4.2's
   parity gate; daemon-owned state writes and lane-log start/end pairs with token stamping; the wave
@@ -1404,7 +1464,11 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   on a five-EMPTY/one-UNUSABLE/one-unreached hypothetical, so D10's must-fire is about the
   MECHANICAL pre-pass emitting UNUSABLE-as-PENDING, not about re-teaching the agent; and the
   singleton cap is architecture (hunt_lib.LANE_CAPS marks it), so the pre-gather also runs one
-  batch at a time.
+  batch at a time. One more, so nobody builds a probe that does not exist: S5's "the daemon checks
+  that precondition" for Sam's means the daemon READS what pull-browser-stores.py reports about its
+  own driver profile - the puller owns the session and is the only honest source on it. The daemon
+  never opens a browser to find out, and a report it cannot get is UNUSABLE for the batch, which
+  reads PENDING and hands Sam's to the attending pricer.
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
@@ -1820,7 +1884,14 @@ The phase-4 gate's "mapper residual rate measured" means: over one real batch, c
 map-preresolve settled from cache/vocab/alias against the lines that reached the mapper dispatch -
 the mapped-pre tables and the mapper's decision files carry both numbers. llama-server is NOT
 needed for phase 4 (map and write touch no GPU); the card question only arises if extraction runs
-in the same sitting.
+in the same sitting. **The gate corpus is already on disk, verified 2026-08-24:** the 10 recipes at
+`priced` in `runs\hunt-2026-08-15-lowcarb-100` all carry both their `extracted\<slug>.json` and
+`mapped\<slug>.json` files, so "one wave written from skeletons" needs zero extraction and zero
+mapping work - seed from that run dir's -Status exactly as the drain drill does, on a COPY, with
+the daemon's `--ledger` scratch path and publish left in -DryRun unless Brad orders the wave live.
+For the residual-rate half of the gate, dossier-pop a fresh batch from the pool instead - those 10
+recipes are already mapped, so measuring D7's residual on them would measure the cache, not the
+pre-resolver.
 
 *Three things a phase-4 builder should carry forward.* **(a) The drill wrote to the live batch
 ledger before anyone noticed** - two open w5/w6 rows that `batch-ledger -Verify` would have called

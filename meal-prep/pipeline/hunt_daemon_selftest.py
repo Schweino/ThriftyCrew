@@ -334,8 +334,12 @@ def run():
     # =================================================================================================
     H("The band gate, read off the built spec")
     # =================================================================================================
-    T("MUST FIRE  a spec outside the band is retired and never reaches QA",
+    T("MUST FIRE  a spec outside the band is retired and never reaches QA, down v2's exact route "
+      "(spec-built -> written -> rejected-qa; priced has no other legal exit)",
       *_band_gate_fires())
+    T("MUST FIRE  and against the REAL state machine the rejection LANDS on disk - the first build's "
+      "direct priced->rejected-qa advance would have been refused and nobody would have seen it",
+      *_band_gate_real_machine())
     T("CLEAN TWIN a spec inside the band advances to written and reaches QA",
       *_band_gate_clean())
     T("MUST FIRE  the WIP limit gates pool pops",
@@ -1063,10 +1067,50 @@ def _band(cal, carbs):
 
 
 def _band_gate_fires():
+    """The route is load-bearing: the recipe sits at `priced`, whose ONLY legal exit is spec-built,
+    so the rejection must travel spec-built -> written -> rejected-qa (v2's measured on-disk trace).
+    The first build advanced priced -> rejected-qa directly; FakePS accepted it and the real state
+    machine would have refused it, leaving the recipe at `priced` on disk while the daemon counted
+    it rejected. The real-machine twin below is what actually pins that."""
     d, to = _band(700, 20)
-    return (to == ["rejected-qa"] and d.outcomes and d.outcomes[0]["status"] == "rejected"
+    return (to == ["spec-built", "written", "rejected-qa"]
+            and d.outcomes and d.outcomes[0]["status"] == "rejected"
             and "above the 650 ceiling" in d.outcomes[0]["detail"],
             "advances=%s outcome=%s" % (to, json.dumps(d.outcomes)))
+
+
+def _band_gate_real_machine():
+    """The band rejection, against the REAL hunt-run.ps1 on a scratch run dir. This is the fixture
+    the FakePS blind spot demands: it proves every advance in the route is LEGAL, so the on-disk
+    state is the rejection rather than a refused transition nobody saw."""
+    tmp = tempfile.mkdtemp(prefix="daemon-bandreal-")
+    try:
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
+                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+        if rc != 0:
+            return False, "could not init: %s" % o.strip()[:150]
+        for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
+            args = ["-Advance", "-RunDir", run_dir, "-Slug", "band-drill", "-To", st,
+                    "-By", "drill", "-Detail", "drill"]
+            if i == 0:
+                args += ["-Title", "Band Drill", "-SourceUrl", "https://d/x", "-Protein", "beef"]
+            rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+            if rc != 0:
+                return False, "staging refused at %s: %s" % (st, o.strip()[:150])
+        fd = FakeDispatch({"recipe-writer": [{"slug": "band-drill", "status": "ok",
+                                              "state": "written"}]})
+        d = HD.Daemon(run_dir, "band-drill-run", dispatcher=fd, quiet=True)   # REAL ps_invoke
+        d.spec_band = lambda slug, specs_dir=None: (700, 20)
+        d.ch["write"].push({"slug": "band-drill"})
+        d.ch["write"].close()
+        arun(d.run(("write",)))
+        final = d.state_of("band-drill")
+        return (final == "rejected-qa" and not d.findings,
+                "on-disk state=%s findings=%s" % (final, json.dumps(d.findings)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _band_gate_clean():

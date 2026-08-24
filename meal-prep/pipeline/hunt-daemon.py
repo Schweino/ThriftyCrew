@@ -970,7 +970,20 @@ class Daemon(object):
                 cal, carbs = self.spec_band(slug)
                 verdict = hunt_lib.in_band(cal, carbs, self.band)
                 if not verdict["ok"]:
+                    # THE ROUTE MATTERS, AND THE FIRST BUILD GOT IT WRONG (found on the 2026-08-24
+                    # cold read). The recipe sits at `priced` here, and hunt-run's legal graph gives
+                    # `priced` exactly ONE exit: spec-built. A direct priced->rejected-qa advance is
+                    # REFUSED - the FakePS fixtures accepted it, the real state machine would not,
+                    # and the recipe would have sat at `priced` on disk while this process counted
+                    # it rejected. v2's measured on-disk trace is the port:
+                    # the writer had already advanced spec-built -> written, and the macro gate then
+                    # rejected FROM `written`, which is legal (crustless-bacon-gruyere-quiche:
+                    # "rejected-qa  macro gate: 369 cal / 2g carbs per serving"). Reproduce exactly
+                    # that. `rejected-macros` would be the honest name, but it is not reachable from
+                    # this position until D8 extends the graph - see the S6 correction.
                     self.log("macro gate: %s built at %s - retiring" % (slug, verdict["reason"]))
+                    await self.advance(slug, "spec-built", "writer", "")
+                    await self.advance(slug, "written", "writer", "")
                     await self.advance(slug, "rejected-qa", "macro-gate",
                                        "macro gate: %s" % verdict["reason"])
                     self.finish(slug, "rejected", "rejected-qa", "macro gate: %s" % verdict["reason"])
