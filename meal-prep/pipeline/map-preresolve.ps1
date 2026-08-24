@@ -38,6 +38,7 @@
 #   .\map-preresolve.ps1 -RunDir <dir> -Slugs a,b,c      (the daemon calls it through hunt_lib.ps_invoke)
 #   .\map-preresolve.ps1 -RunDir <dir> -Slugs a -Json    the tables on stdout as well as on disk
 #   .\map-preresolve.ps1 -Assemble -RunDir <dir> -Slug a -RulingsFile <payload.json>
+#   .\map-preresolve.ps1 -NewBids -RulingsFile <payload.json>       (JSON: the bids nothing wires yet)
 #   .\map-preresolve.ps1 -SelfTest
 #
 # -Assemble: THE DAEMON HOLDS THE PEN ON mapped\<slug>.json (phase 6a, A1 / cold-read pins P2-P6).
@@ -90,6 +91,7 @@ param(
   [string]$RunDir = '',
   [string[]]$Slugs = @(),
   [switch]$Assemble,                # A1 / pin P5: build mapped\<slug>.json from the table + the rulings
+  [switch]$NewBids,                 # A4: which bids in a rulings payload does the vocabulary NOT wire?
   [string]$Slug = '',               # -Assemble is per slug: ONE writer per file, so no mutex
   [string]$RulingsFile = '',        # the mapper's payload for that slug, written by the daemon
   [int]$TargetServings = 14,        # the house batch size; a parameter so a fixture can prove the scale
@@ -106,7 +108,7 @@ $ErrorActionPreference = 'Stop'
 # resets ours in THIS scope - the PS 5.1 trap that made migrate-prose-tokens' first -SelfTest run
 # execute the live path instead of its fixtures.
 $runSelfTest = [bool]$SelfTest; $runJson = [bool]$Json; $runNoBoard = [bool]$NoBoard; $runNoPrecheck = [bool]$NoPrecheck
-$runAssemble = [bool]$Assemble
+$runAssemble = [bool]$Assemble; $runNewBids = [bool]$NewBids
 
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = Split-Path -Parent $here                      # ...\meal-prep
@@ -169,6 +171,58 @@ function As-Array {
   if ($null -eq $Value) { return ,@() }
   $assigned = $Value
   return ,@($assigned)
+}
+
+function Get-CommodityIds {
+  <#
+    EVERY GROCERY COMMODITY ID THE ESTATE ALREADY KNOWS, across all THREE namespaces.
+
+    CORRECTED 2026-08-24 BY THE PHASE-6A GATE DRILL, and the live mapper's own evidence is the
+    measurement. The first build asked db\ingredients.json - the recipe VOCABULARY - whether a bid was
+    "new", and refused `brown-lentils` as an unapproved new commodity id. It is nothing of the sort:
+    it is a LIVE BOARD ID in grocery\commodities.json, priced at 5 of 7 stores, and what was actually
+    missing was a vocabulary ROW pointing at it. The mapper said so in as many words and was right:
+    "proposing 'brown-lentils' as new would have been precisely the duplicate-minting the 2026-08-16
+    audit caught ten times over."
+
+    THE TWO NAMESPACES ARE DIFFERENT QUESTIONS, and the commodity-registrar's own definition is
+    explicit that they have different answers more often than not: "which existing NAME does this
+    resolve to" is db\ingredients.json, and "which existing ID prices it" is these three files. The
+    registrar gate is about the second. A missing vocabulary row is a real gap, but it is the mapper's
+    to propose and it does not mint a commodity.
+
+      1. grocery\commodities.json                the weekly staples catalog (588 ids)
+      2. grocery\recipe-commodities.json         the recipe sale-overlay rule set, {commodities:[...]}
+      3. grocery\out\recipe-board-everyday.json  the recipe-board baseline, {comparison:[...]} - its
+                                                 row set is its OWN authority; some ids live nowhere else
+  #>
+  param([string]$Root)
+  $ids = @{}
+  function Add-Ids($rows) {
+    foreach ($r in (As-Array $rows)) {
+      if ($null -eq $r) { continue }
+      $id = ''
+      foreach ($f in @('id', 'bid', 'commodity_id')) {
+        if ($r.PSObject.Properties.Name -contains $f -and $r.$f) { $id = [string]$r.$f; break }
+      }
+      if ($id) { $ids[$id] = $true }
+    }
+  }
+  foreach ($rel in @('grocery\commodities.json', 'grocery\recipe-commodities.json',
+                     'grocery\out\recipe-board-everyday.json')) {
+    $path = Join-Path $Root $rel
+    $doc = $null
+    try { $doc = Read-Json $path } catch { $doc = $null }
+    if ($null -eq $doc) { continue }
+    # Three shapes on disk and all three are real: a bare array, {commodities:[...]}, {comparison:[...]}.
+    if ($doc -is [array]) { Add-Ids $doc }
+    else {
+      foreach ($k in @('commodities', 'comparison', 'items', 'rows')) {
+        if ($doc.PSObject.Properties.Name -contains $k) { Add-Ids $doc.$k }
+      }
+    }
+  }
+  return $ids
 }
 
 function Get-LeadingNumber {
@@ -726,11 +780,47 @@ function New-MappedDecisionFile {
   }
   $scale = if ($srcServ -gt 0) { [Math]::Round($TargetServ / $srcServ, 4) } else { 0 }
 
-  # ---- the two arrays, indexed by the ONE key that joins them to the table: the raw line. --------
+  # ---- the two arrays, joined to the table by the RAW LINE, with ONE bounded fallback. -----------
+  #
+  # MEASURED ON THE PHASE-6A GATE DRILL, 2026-08-24: over a 2-recipe batch the model copied 17 of 17
+  # `lines[]` raws and 15 of 16 `rulings[]` raws EXACTLY - and truncated one, writing
+  # '1/4 cup grated Parmesan cheese' where the table says '1/4 cup grated Parmesan cheese (plus
+  # additional for serving)'. The assembler correctly refused the file. But refusing a whole recipe -
+  # after a 15-minute paid dispatch that ruled the line perfectly well - over a dropped parenthetical
+  # is a gate failing on transcription rather than on judgment, and re-asking for a copy of a long
+  # string is buying a second session to fix a typo.
+  #
+  # SO: raw first, then TERM, and nothing else. `term` is the table's own short key, it is what the
+  # residual block leads each line with, and it is short enough to copy exactly. The fallback fires
+  # ONLY when the term identifies exactly ONE table row - an ambiguous term is not a match, it is a
+  # guess, and a guess here pairs an ingredient with another line's ruling. Anything the term road
+  # cannot settle is still a finding and still refuses the file.
   $lineBy = @{}
   foreach ($l in (As-Array $Payload.lines)) { if ($l.raw) { $lineBy[[string]$l.raw] = $l } }
   $ruleBy = @{}
   foreach ($r in (As-Array $Payload.rulings)) { if ($r.raw) { $ruleBy[[string]$r.raw] = $r } }
+  # term -> ruling, kept ONLY where the term is unique in the payload AND unique in the table
+  $ruleByTerm = @{}
+  $termDupes = @{}
+  foreach ($r in (As-Array $Payload.rulings)) {
+    $rt = [string]$r.term
+    if (-not $rt) { continue }
+    if ($ruleByTerm.ContainsKey($rt)) { $termDupes[$rt] = $true } else { $ruleByTerm[$rt] = $r }
+  }
+  $lineByTerm = @{}
+  $lineTermDupes = @{}
+  foreach ($l in (As-Array $Payload.lines)) {
+    $lt = [string]$l.term
+    if (-not $lt) { continue }
+    if ($lineByTerm.ContainsKey($lt)) { $lineTermDupes[$lt] = $true } else { $lineByTerm[$lt] = $l }
+  }
+  $tableTermCount = @{}
+  foreach ($row0 in (As-Array $Table.rows)) {
+    $tt = [string]$row0.term
+    if (-not $tt) { continue }
+    $tableTermCount[$tt] = 1 + [int]$tableTermCount[$tt]
+  }
+  $paraphrased = New-Object System.Collections.Generic.List[string]
 
   # ---- the registrar's verdicts, keyed by the bid they were asked about (A4 / pin P6). -----------
   $regBy = @{}
@@ -744,8 +834,19 @@ function New-MappedDecisionFile {
   foreach ($row in (As-Array $Table.rows)) {
     $raw = [string]$row.raw
     $optional = [bool]$row.optional
+    $rowTerm = [string]$row.term
     $ruling = $null; if ($ruleBy.ContainsKey($raw)) { $ruling = $ruleBy[$raw] }
+    if ($null -eq $ruling -and $rowTerm -and $ruleByTerm.ContainsKey($rowTerm) `
+        -and -not $termDupes.ContainsKey($rowTerm) -and [int]$tableTermCount[$rowTerm] -eq 1) {
+      $ruling = $ruleByTerm[$rowTerm]
+      $paraphrased.Add(("ruling for '{0}' joined on its TERM - the returned raw line was '{1}', which is not this table's" -f $rowTerm, [string]$ruling.raw)) | Out-Null
+    }
     $line = $null;   if ($lineBy.ContainsKey($raw))  { $line = $lineBy[$raw] }
+    if ($null -eq $line -and $rowTerm -and $lineByTerm.ContainsKey($rowTerm) `
+        -and -not $lineTermDupes.ContainsKey($rowTerm) -and [int]$tableTermCount[$rowTerm] -eq 1) {
+      $line = $lineByTerm[$rowTerm]
+      $paraphrased.Add(("buy line for '{0}' joined on its TERM rather than on the raw line" -f $rowTerm)) | Out-Null
+    }
 
     # AN UNBID ROW MUST NEVER REACH HERE. The daemon holds the recipe at `mapped` off the table's
     # `holds` list, before it assembles anything - so an unbid row arriving here means the hold was
@@ -781,33 +882,34 @@ function New-MappedDecisionFile {
       if ($ruling.canon_item) { $item = [string]$ruling.canon_item }
       if ($ruling.PSObject.Properties.Name -contains 'bid') { $bid = [string]$ruling.bid }
       if ($ruling.PSObject.Properties.Name -contains 'board' -and $ruling.board) { $board = [string]$ruling.board }
+      # `board` is informational (no consumer reads it - see 4.5's frozen field set) and the table's
+      # value is the pre-resolve's own reading, so a ruling that says nothing leaves it alone.
     }
 
     # ---- THE REGISTRAR GATE (A4 / pin P6). ------------------------------------------------------
     # A3 strips the Agent tool from the mapper, which severs the road its own definition orders new
     # ids down ("through the commodity-registrar gate"). A4 rebuilds it daemon-side, and the
-    # ENFORCEMENT lives here rather than in the prompt: a bid nothing in db\ingredients.json wires is
-    # a NEW commodity id, and it may only be minted with an approve (or an alias to something that
+    # ENFORCEMENT lives here rather than in the prompt: a bid NO COMMODITY NAMESPACE already carries
+    # is a NEW commodity id, and it may only be minted with an approve (or an alias to something that
     # already exists) from the registrar. This test does not trust the payload to declare its own
-    # proposals - it reads the vocabulary.
+    # proposals - it reads the three namespaces (see Get-CommodityIds, and read its correction note:
+    # the first build asked the recipe VOCABULARY instead and refused a live board id).
     if ($bid -and -not $KnownBids.ContainsKey($bid)) {
       $g = $null; if ($regBy.ContainsKey($bid)) { $g = $regBy[$bid] }
       $verdict = ''; if ($g) { $verdict = ([string]$g.verdict).Trim().ToLower() }
       if ($verdict -eq 'alias' -and $g.bid) {
-        $board = ''
         $bid = [string]$g.bid
         if (-not $KnownBids.ContainsKey($bid)) {
-          $findings.Add(("'{0}': the registrar aliased the proposed id to '{1}', which db\ingredients.json does not wire either" -f $raw, $bid)) | Out-Null
+          $findings.Add(("'{0}': the registrar aliased the proposed id to '{1}', which no commodity namespace carries either" -f $raw, $bid)) | Out-Null
           continue
         }
-        $board = [string]$KnownBids[$bid].board
       } elseif ($verdict -eq 'approve') {
         # minted, and the board field is whatever the ruling said - the id has no vocabulary row yet
       } elseif ($verdict -eq 'reject') {
         $findings.Add(("'{0}': the commodity-registrar REJECTED the new id '{1}' - {2}" -f $raw, $bid, ([string]$g.reason))) | Out-Null
         continue
       } else {
-        $findings.Add(("'{0}' proposes the NEW commodity id '{1}' and no commodity-registrar ruling approves it - a duplicate id lets the same food carry two disagreeing prices while every per-file guard reads green" -f $raw, $bid)) | Out-Null
+        $findings.Add(("'{0}' proposes the NEW commodity id '{1}' - no commodity namespace carries it and no commodity-registrar ruling approves it. A duplicate id lets the same food carry two disagreeing prices while every per-file guard reads green" -f $raw, $bid)) | Out-Null
         continue
       }
     }
@@ -822,25 +924,80 @@ function New-MappedDecisionFile {
       continue
     }
 
+    if (-not $item -and $rulingDecision -eq 'mapped-null' -and [string]$ruling.term) {
+      # MEASURED ON THE PHASE-6A GATE DRILL, 2026-08-24. The live mapper ruled `mustard powder`
+      # `mapped-null` with canon_item null - correctly REFUSING to bridge dry ground seed onto the
+      # prepared-condiment id (a true form flip on both price and gram weight, and it argued the case
+      # in writing). `mapped-null` means "a real food with no commodity id", which is pantry-static
+      # pricing and is the safe answer rule 1 asks for. But it nulled the NAME along with the id, and a
+      # line with no food cannot be costed or weighed - so the whole recipe died on a naming
+      # convention after the judgment had already been made correctly.
+      # The food's name is sitting in the ruling's own `term`, which came from the extraction. Use it,
+      # and NAME the substitution rather than doing it quietly.
+      $item = [string]$ruling.term
+      $paraphrased.Add(("'{0}' was ruled mapped-null with no canon_item; the food is named from its own term" -f $item)) | Out-Null
+    }
     if (-not $item) {
       $findings.Add(("'{0}' carries no item name after assembly - a line with no food cannot be priced or weighed" -f $raw)) | Out-Null
       continue
     }
 
-    # ---- THE GRAMS, and the ONE place the scale is applied (pin P3). ------------------------------
-    # The RULING's (or the line's) grams win when stated, because grams and the buy string must agree
-    # BY CONSTRUCTION - the v2 files say so in their own `conventions` field - and the buy string is
-    # the mapper's. Measured against the frozen v2 file: 5 of 7 lines are the exact scale and 2 are
-    # not, both because the mapper quantized the printed measure (14 oz x 3.5 = 1389 g printed as
-    # "3 lb" = 1361 g; 1/3 cup x 3.5 printed as "1 cup plus 3 tbsp" = 134 g rather than 132 g).
-    # Otherwise the engine's SOURCE-basis weight is scaled here, once.
+    # ---- THE GRAMS: EVERY ROAD IS SOURCE BASIS, AND THE SCALE IS APPLIED ONCE, HERE. --------------
+    #
+    # CORRECTED 2026-08-24 BY THE PHASE-6A GATE DRILL, and it is the most important thing that drill
+    # found. The first build asked the mapper for TARGET grams - the weight matching its own
+    # target-scale buy string - and the live mapper returned SOURCE grams on every single line it
+    # stated one for. Ten lines across two recipes, and the ratio was EXACTLY the recipe's own scale
+    # factor every time: "3 1/2 lb boneless skinless chicken breast" carrying 454 g (3.50x), "2 1/3 lb
+    # bulk Italian sausage" carrying 454 g (2.33x), "5 1/4 cups nonfat milk" carrying 368 g.
+    #
+    # THAT IS NOT SLOPPINESS, IT IS THE ONLY SENSIBLE READING OF ITS INPUTS. Every gram the mapper is
+    # shown - the table's `grams_source_basis`, the source recipe's own printed measures - is source
+    # basis. Asking it to hand back a differently-based number in a field called `grams` was asking a
+    # model to remember an invisible convention, and the estate's own rule is that a rule a model must
+    # remember is a rule it sometimes forgets (phase 3 measured this stage answering ADVANCE once and
+    # HOLD once to its own standing rule).
+    #
+    # So the basis is now the same on every road: the mapper states `grams_source` (or `grams`, read
+    # the same way), the engine states `grams_source_basis`, and THIS LINE is the only place a scale
+    # is ever applied. Quantization still lives in the buy string and is worth up to a few percent -
+    # a basis error was worth 250%, and the band gate would have retired both of the drill's recipes
+    # at 212 and 217 cal against a 400 floor. Failing closed is the right direction and throwing away
+    # a good recipe on a fabricated number is D8's own named worse-than-no-gate case.
     $grams = $null
     $gramsFrom = ''
-    if ($ruling -and $null -ne $ruling.grams) { try { $grams = [double]$ruling.grams; $gramsFrom = 'ruling' } catch { $grams = $null } }
-    if ($null -eq $grams -and $line -and $null -ne $line.grams) { try { $grams = [double]$line.grams; $gramsFrom = 'line' } catch { $grams = $null } }
+    foreach ($src in @($ruling, $line)) {
+      if ($null -eq $src) { continue }
+      foreach ($f in @('grams_source', 'grams')) {
+        if ($src.PSObject.Properties.Name -contains $f -and $null -ne $src.$f) {
+          try { $grams = [double]$src.$f } catch { $grams = $null }
+          if ($null -ne $grams) {
+            $gramsFrom = $(if ($src -eq $ruling) { 'ruling' } else { 'line' })
+            break
+          }
+        }
+      }
+      if ($null -ne $grams) { break }
+    }
+    if ($null -ne $grams -and $scale -gt 0) { $grams = $grams * $scale }
     if ($null -eq $grams -and $null -ne $row.grams_source_basis -and $scale -gt 0) {
       $grams = [double]$row.grams_source_basis * $scale
-      $gramsFrom = 'engine x scale'
+      $gramsFrom = 'engine'
+    }
+    # THE CROSS-CHECK, on every line where BOTH the engine and the mapper weighed the same food. A
+    # quantized buy string moves a few percent; a basis error moves by the scale factor. Anything past
+    # 50% is not rounding, and it is NAMED rather than quietly averaged away.
+    if ($gramsFrom -ne 'engine' -and $null -ne $grams -and $null -ne $row.grams_source_basis -and $scale -gt 0) {
+      $engineTarget = [double]$row.grams_source_basis * $scale
+      # A SUB-GRAM REFERENCE IS NOT A REFERENCE. Below 1 g the ratio is dominated by rounding on both
+      # sides - a dried-parsley line the engine makes 0.4 g reads as a 2.5x disagreement against a
+      # perfectly honest 1 g, which is noise wearing a finding's clothes.
+      if ($engineTarget -ge 1) {
+        $ratio = $grams / $engineTarget
+        if ($ratio -gt 1.5 -or $ratio -lt 0.667) {
+          $findings.Add(("'{0}': the ruling weighs it {1} g at target scale and the qty engine makes it {2} g - a {3}x disagreement. Quantizing a printed measure moves a few percent; this is a different basis or a different food" -f $raw, [int]$grams, [int]$engineTarget, [Math]::Round($ratio, 2))) | Out-Null
+        }
+      }
     }
     if ($null -eq $grams -or $grams -le 0) {
       # NEVER A SILENT ZERO. A zero-gram line is an ingredient the reader buys and the card ignores,
@@ -866,7 +1023,14 @@ function New-MappedDecisionFile {
       item       = $item
       bid        = $(if ($bid) { $bid } else { $null })
       board      = $(if ($board) { $board } else { $null })
-      grams      = [int][Math]::Round($grams, 0)
+      # A SUB-HALF-GRAM LINE ROUNDS TO ZERO, AND ZERO IS THE ONE VALUE THIS FILE MAY NOT CARRY.
+      # Measured on the gate drill: two bay leaves at 2.33x is 0.47 g, dried oregano 1 1/4 tsp is
+      # 0.4 g, and all three rounded to 0 - past the `-le 0` refusal above, which sees the unrounded
+      # number. build-intake-skeleton then DROPPED them with "included but carries no grams", which is
+      # the silent-zero this assembler exists to refuse, arriving through [Math]::Round.
+      # A bay leaf is a thing the shopper buys, so it is floored at 1 g rather than dropped or refused:
+      # refusing would kill good recipes over herbs, and dropping is the fabricated-band defect.
+      grams      = [Math]::Max(1, [int][Math]::Round($grams, 0))
       buy        = $buy
       optional   = $optional
       decision   = $decision
@@ -903,6 +1067,10 @@ function New-MappedDecisionFile {
     db_entries_added     = @((As-Array $Payload.db_entries_added))
     new_commodity_proposals = @((As-Array $Payload.new_commodity_proposals))
     registrar_rulings    = @((As-Array $Payload.registrar_rulings))
+    # NAMED, NEVER SILENT. Every line joined by the fallback rather than by an exact raw copy is
+    # recorded here, so a model that quietly stops copying the join key is visible in the artifact
+    # instead of only in a run that happened to fail.
+    join_fallbacks       = @($paraphrased.ToArray())
     macro_cross_check    = $Payload.macro_cross_check
   }
   return [pscustomobject]@{ doc = [pscustomobject]$doc; findings = @() }
@@ -1187,10 +1355,12 @@ if ($runSelfTest) {
     ($mClass.Success) 'could not find function Get-LineClass'
   if ($mClass.Success) { Invoke-Expression $mClass.Value }
 
-  # A vocabulary of WIRED bids, plus the 200-row floor is irrelevant here (this is the pure function).
+  # The COMMODITY id namespaces, as the assembler sees them: a set of ids that already price a food.
+  # NOT the recipe vocabulary - see Get-CommodityIds' correction note, and the gate drill that earned
+  # it. The plausibility floor lives on the live path, not in this pure function.
   $known = @{}
   foreach ($b in @('cauliflower','kielbasa','heavy-cream','cream-cheese','parmesan','onions')) {
-    $known[$b] = [pscustomobject]@{ bid=$b; item=$b; board='weekly' }
+    $known[$b] = $true
   }
 
   function New-Tbl {
@@ -1223,9 +1393,11 @@ if ($runSelfTest) {
     lines = @(
       [pscustomobject]@{ raw='16 ounces cauliflower chopped into macaroni sized pieces'; buy='3 1/2 lb, chopped into macaroni-sized pieces (about 3 medium heads)'; notes='exact 3.5x, zero drift' },
       # THE QUANTIZATION CASE, and it is 2 of the 7 lines on the real v2 file: the mapper's printed
-      # measure moved off the exact scale, so it states the grams that AGREE with its own buy string.
-      # Exact 3.5x here is 1389 g; the file says 1361, because "3 lb" is what a cook buys.
-      [pscustomobject]@{ raw='14 ounces smoked sausage'; buy='3 lb, sliced into thin rounds (about three and a half 14 oz ropes)'; notes='quantized -2.0%'; grams=1361 },
+      # measure moved off the exact scale, so it states the grams that agree with its own buy string.
+      # IT STATES THEM AT SOURCE BASIS, which is the phase-6a gate drill's correction - see the grams
+      # block above. The v2 file's target weight is 1361 g for "3 lb"; at 3.5x that is 388.9 g of
+      # source, against the engine's unquantized 396.893. The exact 3.5x would have been 1389.
+      [pscustomobject]@{ raw='14 ounces smoked sausage'; buy='3 lb, sliced into thin rounds (about three and a half 14 oz ropes)'; notes='quantized -2.0%'; grams_source=388.9 },
       [pscustomobject]@{ raw='1/4 cup heavy cream'; buy='3/4 cup plus 2 tbsp'; notes='14 tbsp at 15 g/tbsp' })
     rulings = @() }
   $resA = New-MappedDecisionFile (New-Tbl $rowsA 4) $payA $stateRow $known 14
@@ -1233,12 +1405,41 @@ if ($runSelfTest) {
     (@($resA.findings).Count -eq 0 -and $resA.doc.scale_factor -eq 3.5 -and
      @($resA.doc.ingredients)[0].grams -eq 1588) `
     ("findings=" + (@($resA.findings) -join '; ') + " g=" + [string]@($resA.doc.ingredients)[0].grams)
-  T 'MUST FIRE  a RULING''s grams beat the engine''s, because grams and the buy string must agree by construction - "3 lb" is 1361 g and the exact 3.5x would be 1389' `
+  T 'MUST FIRE  a MAPPER-STATED weight beats the engine''s and is SCALED ONCE like every other road - 388.9 g of source is the 1361 g the v2 file carries for "3 lb"' `
     (@($resA.doc.ingredients)[1].grams -eq 1361 -and @($resA.doc.ingredients)[1].grams_from -eq 'line') `
     ([string]@($resA.doc.ingredients)[1].grams + ' from ' + [string]@($resA.doc.ingredients)[1].grams_from)
-  T 'CLEAN TWIN a line with no stated grams takes the engine''s weight, scaled once' `
-    (@($resA.doc.ingredients)[2].grams -eq 210 -and @($resA.doc.ingredients)[2].grams_from -eq 'engine x scale') `
+  T 'CLEAN TWIN a line with no stated grams takes the engine''s weight, scaled once, and the two roads land on the same basis' `
+    (@($resA.doc.ingredients)[2].grams -eq 210 -and @($resA.doc.ingredients)[2].grams_from -eq 'engine') `
     ([string]@($resA.doc.ingredients)[2].grams)
+
+  # ---- FIXTURE A1b. THE BASIS CROSS-CHECK (added 2026-08-24 from the gate drill). -----------------
+  # The live mapper returned SOURCE grams on all ten lines it weighed, in a field the contract then
+  # called TARGET - the ratio was EXACTLY the recipe's own scale factor every time. Now that every
+  # road is source basis, the inverse mistake (a mapper handing back a target-scale number) is the one
+  # left, and it is caught wherever the engine weighed the same food. A basis error moves by the scale
+  # factor; quantizing a printed measure moves a few percent.
+  $payBasis = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='16 ounces cauliflower chopped into macaroni sized pieces'; buy='3 1/2 lb'; notes=''; grams_source=1588 },
+              [pscustomobject]@{ raw='14 ounces smoked sausage'; buy='3 lb'; notes=''; grams_source=388.9 },
+              [pscustomobject]@{ raw='1/4 cup heavy cream'; buy='3/4 cup plus 2 tbsp'; notes='' })
+    rulings = @() }
+  $resBasis = New-MappedDecisionFile (New-Tbl $rowsA 4) $payBasis $stateRow $known 14
+  T 'MUST FIRE  a TARGET-scale number in a source-basis field is caught by the engine cross-check and NAMED, rather than shipping a 3.5x line' `
+    ($null -eq $resBasis.doc -and (@($resBasis.findings) -join ' ') -match 'disagreement' -and
+     (@($resBasis.findings) -join ' ') -match 'different basis') ((@($resBasis.findings) -join '; ')[0..220] -join '')
+  T 'CLEAN TWIN a QUANTIZED weight a few percent off the engine passes - that is what quantizing a printed measure looks like, and refusing it would refuse the v2 corpus' `
+    (@($resA.findings).Count -eq 0) ((@($resA.findings) -join '; '))
+  # ...and a SUB-HALF-GRAM line is floored at 1, never rounded to the zero this file may not carry
+  $rowsTiny = @((New-Row 'a' 'a' 'Cauliflower' 'cauliflower' 'resolved' 100.0),
+                (New-Row 'b' 'b' 'Heavy Cream' 'heavy-cream' 'resolved' 100.0),
+                (New-Row 'bay' 'bay leaves' 'Bay Leaves' 'kielbasa' 'resolved' 0.2))
+  $payTiny = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='a'; buy='1 lb'; notes='' }, [pscustomobject]@{ raw='b'; buy='1 cup'; notes='' },
+              [pscustomobject]@{ raw='bay'; buy='2 bay leaves'; notes='' }); rulings=@() }
+  $resTiny = New-MappedDecisionFile (New-Tbl $rowsTiny 6) $payTiny $stateRow $known 14
+  T 'MUST FIRE  a SUB-HALF-GRAM line is floored at 1 g, never rounded to the zero this file may not carry - two bay leaves at 2.33x is 0.47 g, and the skeleton DROPS a zero-gram line' `
+    (@($resTiny.findings).Count -eq 0 -and @($resTiny.doc.ingredients)[2].grams -eq 1) `
+    ("findings=" + (@($resTiny.findings) -join '; ') + " g=" + [string]@($resTiny.doc.ingredients)[2].grams)
   T 'MUST FIRE  the servings block is written out whole - source, target and the factor - so nothing downstream re-derives a scale' `
     ($resA.doc.source_servings -eq 4 -and $resA.doc.target_servings -eq 14 -and $resA.doc.scale_factor -eq 3.5) `
     (([string]$resA.doc.source_servings) + '->' + [string]$resA.doc.target_servings + ' x' + [string]$resA.doc.scale_factor)
@@ -1265,8 +1466,8 @@ if ($runSelfTest) {
               [pscustomobject]@{ raw='b'; buy='2 cups'; notes='' },
               [pscustomobject]@{ raw='c'; buy='3 tbsp'; notes='' },
               [pscustomobject]@{ raw='d'; buy=''; notes='' })
-    rulings = @([pscustomobject]@{ raw='c'; term='c'; canon_item='Sumac Blend'; bid=$null; decision='mapped-null'; grams=42; evidence='real food, no commodity id - pantry-static' },
-                [pscustomobject]@{ raw='d'; term='d'; canon_item='Water'; bid=$null; decision='not-purchased'; grams=$null; evidence='nobody buys water' }) }
+    rulings = @([pscustomobject]@{ raw='c'; term='c'; canon_item='Sumac Blend'; bid=$null; decision='mapped-null'; grams_source=12; evidence='real food, no commodity id - pantry-static' },
+                [pscustomobject]@{ raw='d'; term='d'; canon_item='Water'; bid=$null; decision='not-purchased'; grams_source=$null; evidence='nobody buys water' }) }
   $resB = New-MappedDecisionFile (New-Tbl $rowsB 4) $payB $stateRow $known 14
   $classes = @(@($resB.doc.ingredients) | ForEach-Object { Get-LineClass ([string]$_.decision) })
   T 'MUST FIRE  EVERY decision string the assembler emits classes as included / optional / not-purchased under the REAL Get-LineClass - never `unknown`, never `unsettled`' `
@@ -1282,7 +1483,7 @@ if ($runSelfTest) {
   # ...and a word outside the closed set is refused rather than shipped as a 22nd value
   $payBad = [pscustomobject]@{ slug='drill-dish'
     lines = @([pscustomobject]@{ raw='c'; buy='3 tbsp'; notes='' })
-    rulings = @([pscustomobject]@{ raw='c'; term='c'; canon_item='X'; bid=$null; decision='unresolved-hold'; grams=10; evidence='' }) }
+    rulings = @([pscustomobject]@{ raw='c'; term='c'; canon_item='X'; bid=$null; decision='unresolved-hold'; grams_source=3; evidence='' }) }
   $resBad = New-MappedDecisionFile (New-Tbl @((New-Row 'c' 'c' '' '' 'unresolved' $null)) 4) $payBad $stateRow $known 14
   T 'MUST FIRE  a decision word OUTSIDE the closed set is refused and named - `unresolved-hold` is a real v2 value that classed `unsettled` and dropped a protein' `
     ($null -eq $resBad.doc -and (@($resBad.findings) -join ' ') -match 'unresolved-hold') ((@($resBad.findings) -join '; '))
@@ -1299,7 +1500,7 @@ if ($runSelfTest) {
   $linesC = @([pscustomobject]@{ raw='p'; buy='1 can'; notes='' },
               [pscustomobject]@{ raw='q'; buy='1 lb'; notes='' },
               [pscustomobject]@{ raw='r'; buy='1 cup'; notes='' })
-  $ruleC  = @([pscustomobject]@{ raw='p'; term='p'; canon_item='Artichoke Hearts'; bid='artichoke-hearts'; decision='mapped'; grams=1092; evidence='new id proposed' })
+  $ruleC  = @([pscustomobject]@{ raw='p'; term='p'; canon_item='Artichoke Hearts'; bid='artichoke-hearts'; decision='mapped'; grams_source=312; evidence='new id proposed' })
   $reject = [pscustomobject]@{ slug='drill-dish'; lines=$linesC; rulings=$ruleC
     registrar_rulings=@([pscustomobject]@{ proposed_bid='artichoke-hearts'; verdict='reject'; bid=''; reason='the existing canned-vegetables id already prices this' }) }
   $resRej = New-MappedDecisionFile (New-Tbl $rowsC 4) $reject $stateRow $known 14
@@ -1325,8 +1526,8 @@ if ($runSelfTest) {
   $aliasBad = [pscustomobject]@{ slug='drill-dish'; lines=$linesC; rulings=$ruleC
     registrar_rulings=@([pscustomobject]@{ proposed_bid='artichoke-hearts'; verdict='alias'; bid='nothing-wires-this'; reason='' }) }
   $resAB = New-MappedDecisionFile (New-Tbl $rowsC 4) $aliasBad $stateRow $known 14
-  T 'MUST FIRE  an alias onto an id db\ingredients.json does not wire either is refused - an alias is a claim about an EXISTING row' `
-    ($null -eq $resAB.doc -and (@($resAB.findings) -join ' ') -match 'does not wire either') ((@($resAB.findings) -join '; '))
+  T 'MUST FIRE  an alias onto an id NO COMMODITY NAMESPACE carries either is refused - an alias is a claim about an EXISTING id' `
+    ($null -eq $resAB.doc -and (@($resAB.findings) -join ' ') -match 'carries either') ((@($resAB.findings) -join '; '))
 
   # ---- FIXTURE A4. THE FIVE WAYS A LINE IS NOT SETTLED, each refusing the WHOLE file. -------------
   # Nothing is written on any of them. Half a decision file on disk is worse than none: the half that
@@ -1341,16 +1542,16 @@ if ($runSelfTest) {
   T 'MUST FIRE  a RESIDUAL line the mapper said nothing about refuses the file - that line is exactly what it was dispatched to settle' `
     ($null -eq $noRuling.doc -and (@($noRuling.findings) -join ' ') -match 'returned no ruling') ((@($noRuling.findings) -join '; '))
   $noGrams = New-MappedDecisionFile (New-Tbl $baseRows 4) ([pscustomobject]@{ lines=$baseLines
-    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item='Sumac'; bid=$null; decision='mapped'; grams=$null; evidence='' }) }) $stateRow $known 14
+    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item='Sumac'; bid=$null; decision='mapped'; grams_source=$null; evidence='' }) }) $stateRow $known 14
   T 'MUST FIRE  a purchasable line with NO grams from the engine and none from a ruling is a refusal, never a silent zero - a zero-gram line is food the reader buys and the card ignores' `
     ($null -eq $noGrams.doc -and (@($noGrams.findings) -join ' ') -match 'no gram weight') ((@($noGrams.findings) -join '; '))
   $noBuy = New-MappedDecisionFile (New-Tbl $baseRows 4) ([pscustomobject]@{
     lines=@([pscustomobject]@{ raw='x'; buy='1 lb'; notes='' }, [pscustomobject]@{ raw='y'; buy=''; notes='' }, [pscustomobject]@{ raw='z'; buy='2 tbsp'; notes='' })
-    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item='Sumac'; bid=$null; decision='mapped'; grams=20; evidence='' }) }) $stateRow $known 14
+    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item='Sumac'; bid=$null; decision='mapped'; grams_source=6; evidence='' }) }) $stateRow $known 14
   T 'MUST FIRE  a line with no BUY string is a refusal - that string is printed verbatim in the reader''s Ingredients section and D8 locks it, so there would be nothing to lock' `
     ($null -eq $noBuy.doc -and (@($noBuy.findings) -join ' ') -match 'no buy string') ((@($noBuy.findings) -join '; '))
   $rejected = New-MappedDecisionFile (New-Tbl $baseRows 4) ([pscustomobject]@{ lines=$baseLines
-    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item=''; bid=$null; decision='rejected'; grams=$null; evidence='no Omaha store carries a tteok that is not a snack cake' }) }) $stateRow $known 14
+    rulings=@([pscustomobject]@{ raw='z'; term='z'; canon_item=''; bid=$null; decision='rejected'; grams_source=$null; evidence='no Omaha store carries a tteok that is not a snack cake' }) }) $stateRow $known 14
   T 'MUST FIRE  a line the mapper REJECTED refuses the file and quotes its reason - the honest no is a STUCK, not a hole' `
     ($null -eq $rejected.doc -and (@($rejected.findings) -join ' ') -match 'snack cake') ((@($rejected.findings) -join '; '))
   $unbidRows = @((New-Row 'x' 'x' 'Cauliflower' 'cauliflower' 'resolved' 100.0),
@@ -1415,6 +1616,63 @@ if ($runSelfTest) {
 }
 
 # ---------------------------------------------------------------------------------------------------
+# -NewBids (A4, added 2026-08-24 from the phase-6a gate drill).
+#
+# WHICH BIDS IN A RULINGS PAYLOAD HAS db\ingredients.json NEVER HEARD OF? That is the question the
+# registrar exists to answer, and the daemon needs it BEFORE it dispatches - but the daemon must not
+# read the vocabulary itself, because the assembler already reads it for the same question and two
+# readers of one file is how two answers appear.
+#
+# MEASURED ON THE GATE DRILL: the live mapper ruled `dry brown lentils` onto the id `brown-lentils`,
+# which the vocabulary does not wire, and returned `new_commodity_proposals: []`. The assembler
+# correctly refused the file. But depending on a model to DECLARE that it minted an id is depending on
+# bookkeeping to enforce a gate, and this estate's rule is the opposite: read the authority. So the
+# proposal list is DERIVED here and unioned with whatever the mapper declared. The gate does not
+# weaken - a new id still needs an approve or an alias - it just stops being skippable by omission.
+if ($runNewBids) {
+  if (-not $RulingsFile) { Write-Output 'map-preresolve -NewBids: -RulingsFile is required'; exit 2 }
+  if (-not (Test-Path $RulingsFile)) { Write-Output ("map-preresolve -NewBids: no payload at {0}" -f $RulingsFile); exit 2 }
+  $pay = $null
+  try { $pay = Read-Json $RulingsFile } catch { Write-Output ("map-preresolve -NewBids: {0} will not parse: {1}" -f $RulingsFile, $_.Exception.Message); exit 2 }
+  if (-not $pay) { Write-Output ("map-preresolve -NewBids: {0} is empty" -f $RulingsFile); exit 2 }
+  $wired = @{}
+  try { $wired = Get-CommodityIds $repo }
+  catch { Write-Output ("map-preresolve -NewBids: BLOCKED - the commodity namespaces would not load: {0}" -f $_.Exception.Message); exit 2 }
+  if (@($wired.Keys).Count -lt 300) {
+    # The same plausibility floor the assembler applies, for the same reason: a load-bearing file read
+    # at a few percent of its scale is a parse error, and here it would report EVERY id as new.
+    Write-Output ("map-preresolve -NewBids: BLOCKED - read only {0} commodity id(s) across the three namespaces, which is implausibly small." -f @($wired.Keys).Count)
+    exit 2
+  }
+
+  $declared = @{}
+  foreach ($d in (As-Array $pay.new_commodity_proposals)) {
+    $db = [string]$d.proposed_bid
+    if ($db) { $declared[$db] = [string]$d.evidence }
+  }
+  $out = New-Object System.Collections.Generic.List[object]
+  $seenBid = @{}
+  foreach ($r in (As-Array $pay.rulings)) {
+    $b = [string]$r.bid
+    if (-not $b -or $wired.ContainsKey($b) -or $seenBid.ContainsKey($b)) { continue }
+    $seenBid[$b] = $true
+    $ev = ''
+    if ($declared.ContainsKey($b)) { $ev = $declared[$b] }
+    if (-not $ev) { $ev = [string]$r.evidence }
+    $out.Add([pscustomobject]@{ term = [string]$r.term; proposed_bid = $b; evidence = $ev
+                                declared = $declared.ContainsKey($b) }) | Out-Null
+  }
+  # ...and a declared proposal for a bid no ruling used is still a proposal worth ruling on.
+  foreach ($db in @($declared.Keys)) {
+    if ($wired.ContainsKey($db) -or $seenBid.ContainsKey($db)) { continue }
+    $seenBid[$db] = $true
+    $out.Add([pscustomobject]@{ term = ''; proposed_bid = $db; evidence = $declared[$db]; declared = $true }) | Out-Null
+  }
+  ([pscustomobject]@{ slug = [string]$pay.slug; count = $out.Count; proposals = $out.ToArray() } | ConvertTo-Json -Depth 6)
+  exit 0
+}
+
+# ---------------------------------------------------------------------------------------------------
 # THE -Assemble LIVE PATH (A1 / pins P2-P6). One slug, one writer, no mutex - see the header.
 # ---------------------------------------------------------------------------------------------------
 if ($runAssemble) {
@@ -1433,20 +1691,18 @@ if ($runAssemble) {
   if (-not $table -or -not $table.rows) { Write-Output ("map-preresolve -Assemble: BLOCKED - {0} carries no rows" -f $tablePath); exit 2 }
   if (-not $payload) { Write-Output ("map-preresolve -Assemble: BLOCKED - {0} is empty" -f $RulingsFile); exit 2 }
 
-  # THE VOCABULARY IS READ FOR ONE QUESTION ONLY: which bids db\ingredients.json actually wires. That
-  # is what tells a reused id from a NEW one, and a new one needs the registrar (pin P6). The same
-  # plausibility floor applies as on the pre-resolve path - a load-bearing file read at a few percent
-  # of its known scale is a parse error, not data, and here it would silently wave every new id through.
+  # THE THREE COMMODITY NAMESPACES ARE READ FOR ONE QUESTION: which ids already price a food. That is
+  # what tells a reused id from a NEW one, and a new one needs the registrar (pin P6). NOT the recipe
+  # vocabulary - see Get-CommodityIds' correction note; asking the wrong file refused a live board id
+  # on the gate drill. The plausibility floor is the same rule the pre-resolve path applies: a
+  # load-bearing file read at a few percent of its scale is a parse error, not data, and here it would
+  # report every id as new and stop every recipe.
   $known = @{}
-  try {
-    $vp = As-Array (Read-Json $VocabFile)
-    if (@($vp).Count -lt 200) {
-      Write-Output ("map-preresolve -Assemble: BLOCKED - read only {0} vocabulary rows from {1}, which is implausibly small. Every new commodity id would sail past the registrar gate on a parse error." -f @($vp).Count, $VocabFile)
-      exit 2
-    }
-    foreach ($v in $vp) { if ($v.bid) { $known[[string]$v.bid] = $v } }
-  } catch {
-    Write-Output ("map-preresolve -Assemble: BLOCKED - the vocabulary would not load: {0}" -f $_.Exception.Message); exit 2
+  try { $known = Get-CommodityIds $repo }
+  catch { Write-Output ("map-preresolve -Assemble: BLOCKED - the commodity namespaces would not load: {0}" -f $_.Exception.Message); exit 2 }
+  if (@($known.Keys).Count -lt 300) {
+    Write-Output ("map-preresolve -Assemble: BLOCKED - read only {0} commodity id(s) across the three namespaces, which is implausibly small. Every ruled id would read as NEW and every recipe would stop." -f @($known.Keys).Count)
+    exit 2
   }
 
   $stateRow = $null

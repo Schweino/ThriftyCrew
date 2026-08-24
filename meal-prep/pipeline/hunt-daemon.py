@@ -81,7 +81,24 @@ DEFAULT_BAND = {"calMin": 400, "calMax": 650, "carbMax": 35}
 
 
 def say(m):
-    print(m, flush=True)
+    r"""MEASURED ON THE PHASE-6A GATE DRILL, 2026-08-24, and it killed the run.
+
+    A STUCK message quoted an ingredient line carrying U+FFFD - the replacement character an
+    extraction picks up from a mojibake'd source page ("1 pound boneless (skinless chicken breasts,
+    cut into �-inch strips)"). Windows' console encoding is cp1252, `print` raised
+    UnicodeEncodeError inside the log call, the exception escaped through asyncio.gather, and the
+    daemon died AFTER a live 15-minute mapper dispatch had already been paid for - with the second
+    recipe of the batch never assembled.
+
+    A LOG LINE MUST NOT BE ABLE TO END A RUN. The recipe corpus is full of source text this estate
+    does not control, and the whole point of the STUCK message is to be readable when something has
+    gone wrong. So the undrawable characters are replaced and the sentence still gets printed.
+    """
+    try:
+        print(m, flush=True)
+    except UnicodeEncodeError:
+        enc = getattr(sys.stdout, "encoding", None) or "ascii"
+        print(str(m).encode(enc, errors="replace").decode(enc, errors="replace"), flush=True)
 
 
 # =====================================================================================================
@@ -374,6 +391,15 @@ class Daemon(object):
                 "%s/%s: this dispatch billed MORE than its own session - %d out across %s vs %d for "
                 "the main agent. That difference is delegation, and it used to appear in no ledger."
                 % (lane_name, label, all_out, "/".join(models) or "?", res.tokens_out))
+        # A RE-ASK THAT SUCCEEDS COSTS A WHOLE SECOND SESSION AND USED TO LEAVE NO RECORD OF WHY.
+        # Measured on the phase-6a gate drill: a live mapper batch came back `re-asked; ok`, and the
+        # violation that caused it - "payload is missing required field `results`" - existed only in a
+        # headless transcript nobody keeps. That is the single most expensive RECOVERABLE defect in
+        # this pipeline and it was invisible, which is exactly what C1 exists to end.
+        if res.reasked and res.ok and res.problems:
+            self.findings.append(
+                "%s/%s: RE-ASKED and then succeeded, at the price of a second session. The first "
+                "answer's violations were: %s" % (lane_name, label, "; ".join(res.problems)[:400]))
         for f in res.findings:
             self.findings.append("%s/%s: %s" % (lane_name, label, f))
         if not res.ok:
@@ -1295,14 +1321,35 @@ class Daemon(object):
             "a recipe that had just been settled cleanly - because a prompt said \"unchanged contract\"\n"
             "without naming one field. Now the shape is not yours to get wrong. Return, per slug:\n"
             "  lines    - EVERY purchasable line: {raw, buy, notes}. `raw` is the extraction's own line,\n"
-            "             copied exactly - it is the key everything is joined on. Add `grams` ONLY when\n"
-            "             your buy string quantizes off the exact scale (14 oz x 3.5 is 1389 g; printed\n"
-            "             as \"3 lb\" it is 1361 g, and the grams must agree with what you printed).\n"
-            "             Leave `grams` out and the orchestrator uses the computed weight above, scaled.\n"
-            "  rulings  - the RESIDUAL lines only: {raw, term, canon_item, bid, decision, grams,\n"
-            "             evidence}. `decision` is a CLOSED SET: %s. Free text here produced 21\n"
-            "             distinct values across 550 lines and silently dropped 1588 g of chicken out\n"
-            "             of a recipe, so anything outside that set refuses the whole file.\n\n"
+            "             copied EXACTLY - it is the key everything is joined on, so copy it, do not\n"
+            "             retype it. Add `grams_source` where you weighed the line yourself.\n"
+            "  rulings  - the RESIDUAL lines only: {raw, term, canon_item, bid, decision,\n"
+            "             grams_source, evidence}. `decision` is a CLOSED SET: %s. Free text here\n"
+            "             produced 21 distinct values across 550 lines and silently dropped 1588 g of\n"
+            "             chicken out of a recipe, so anything outside that set refuses the whole file.\n\n"
+            "EVERY GRAM YOU STATE IS AT THE SOURCE RECIPE'S OWN SCALE, exactly like the\n"
+            "`grams_source_basis` figures above, and the field is called `grams_source` so there is\n"
+            "nothing to remember. DO NOT scale anything: the orchestrator multiplies by the scale\n"
+            "factor exactly once, for every line, from both roads. On 2026-08-24 this field was called\n"
+            "`grams` and specified as the TARGET weight, and ten lines across two recipes came back at\n"
+            "source scale - every one of them off by exactly the recipe's own factor, which would have\n"
+            "retired two good dishes at 212 and 217 calories against a 400 floor. Your BUY STRING is\n"
+            "still the target-scale prose a cook reads (\"3 lb, sliced into thin rounds\"); only the\n"
+            "number is source basis.\n\n"
+            "A `mapped-null` LINE STILL NEEDS A NAME. No commodity id is a fine and often correct\n"
+            "answer - pantry-static pricing is safe, and refusing to bridge dry mustard powder onto a\n"
+            "prepared-mustard id is exactly right. But `canon_item` null as well leaves a line with no\n"
+            "food on it, and a line with no food cannot be costed or weighed. Name the food.\n\n"
+            "ANY `bid` NOT ALREADY SHOWN ABOVE IS A NEW COMMODITY ID, whether or not you list it. The\n"
+            "orchestrator checks the three commodity namespaces itself and sends every genuinely new\n"
+            "one to the registrar, so you cannot skip that gate by omission - but you CAN make it\n"
+            "cheap by putting your case in `new_commodity_proposals` where the registrar will read it.\n"
+            "Note the reverse too: an id that already prices a food is a REUSE, not a proposal.\n\n"
+            "KEEP `evidence` AND `notes` TO ONE OR TWO SENTENCES - the decisive fact, not the whole\n"
+            "argument. Output is the most expensive thing you produce, at five times the price of\n"
+            "input, and a two-recipe batch returned 38,000 output tokens of it on 2026-08-24. A form\n"
+            "flip needs \"dry ground seed, not the prepared condiment: different price class and\n"
+            "different gram weight\", not a paragraph.\n\n"
             "A NEW COMMODITY ID GOES IN `new_commodity_proposals`, NOT THROUGH A SUBAGENT. You no longer\n"
             "have the Agent tool. Put {term, proposed_bid, evidence} there and the orchestrator\n"
             "dispatches the commodity-registrar itself and applies its verdict. An id nothing approves\n"

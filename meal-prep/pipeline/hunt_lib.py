@@ -667,11 +667,16 @@ STAGE = {"type": "object", "properties": {
 # into the intake, and locked-means-locked is where the prose-number defect died. A mechanical assembler
 # cannot invent those, so the mapper still speaks on every purchasable line - just in a compact array
 # rather than a whole file.
-#   lines    {raw, buy, notes, grams?} for EVERY purchasable line. `grams` is optional and states the
-#            TARGET weight when the buy string quantizes off the exact scale (2 of 7 lines on the v2
-#            file: 14 oz x 3.5 = 1389 g printed as "3 lb" = 1361 g).
-#   rulings  {raw, term, canon_item, bid, decision, grams, evidence} for the RESIDUAL lines only.
+#   lines    {raw, buy, notes, grams_source?} for EVERY purchasable line.
+#   rulings  {raw, term, canon_item, bid, decision, grams_source, evidence} for the RESIDUAL lines only.
 #            `decision` is a CLOSED set - free text produced 21 distinct values across 550 v2 lines.
+#
+# `grams_source` IS SOURCE BASIS, AND THE NAME IS THE CORRECTION (phase-6a gate drill, 2026-08-24).
+# The field was called `grams` and specified as TARGET weight, and the live mapper returned SOURCE
+# grams on all ten lines it weighed across two recipes - the ratio was EXACTLY each recipe's own scale
+# factor every time ("3 1/2 lb chicken breast" carrying 454 g). That is the only sensible reading of
+# its inputs: every gram it is shown is source basis. So every road is source basis now and
+# map-preresolve applies the scale exactly once, which is where it always belonged.
 # `raw` is the join key on both: it is the extraction's own line, and it is what the pre-resolve table
 # is keyed by.
 MAPPED_RULING_DECISIONS = ("mapped", "mapped-null", "mapped-optional", "not-purchased", "rejected")
@@ -685,20 +690,30 @@ MAPPED = {"type": "object", "properties": {
                          "description": "blocking terms enqueued for the pricer"},
         "optional_absent": {"type": "array", "items": {"type": "string"}},
         "lines": {"type": "array", "description":
-                  "EVERY purchasable line: {raw, buy, notes} plus `grams` ONLY where your buy string "
-                  "quantizes off the exact scale. `raw` is the extraction's own line, verbatim",
+                  "EVERY purchasable line: {raw, buy, notes} plus `grams_source` where you weighed it "
+                  "yourself. `raw` is the extraction's own line, copied verbatim - it is the join key",
                   "items": {"type": "object", "properties": {
                       "raw": {"type": "string"}, "buy": {"type": "string"},
-                      "notes": {"type": "string"}, "grams": {"type": "number"}},
+                      "notes": {"type": "string"},
+                      "grams_source": {"type": "number", "description":
+                                       "grams AT THE SOURCE RECIPE'S OWN SCALE, exactly like the "
+                                       "table's grams_source_basis. The orchestrator scales it"}},
                       "required": ["raw", "buy"]}},
         "rulings": {"type": "array", "description":
                     "the RESIDUAL lines only - the ones the pre-resolve table could not settle",
                     "items": {"type": "object", "properties": {
                         "raw": {"type": "string"}, "term": {"type": "string"},
-                        "canon_item": {"type": "string"}, "bid": {"type": "string"},
+                        "canon_item": {"type": "string",
+                                       "description": "the food's name. Required even on mapped-null "
+                                                      "- no id is fine, no name is not"},
+                        "bid": {"type": "string"},
                         "decision": {"type": "string",
                                      "description": "one of: " + " | ".join(MAPPED_RULING_DECISIONS)},
-                        "grams": {"type": "number"}, "evidence": {"type": "string"}},
+                        "grams_source": {"type": "number", "description":
+                                         "grams AT THE SOURCE RECIPE'S OWN SCALE. The orchestrator "
+                                         "scales it exactly once"},
+                        "evidence": {"type": "string",
+                                     "description": "ONE or two sentences naming the decisive fact"}},
                         "required": ["raw", "decision"]}},
         "new_commodity_proposals": {"type": "array", "items": {"type": "object", "properties": {
             "term": {"type": "string"}, "proposed_bid": {"type": "string"},

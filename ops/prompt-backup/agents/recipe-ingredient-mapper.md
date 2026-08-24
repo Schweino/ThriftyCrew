@@ -20,16 +20,33 @@ used to say.
    recipe that had just been settled cleanly. It was not carelessness: the prompt said "unchanged
    contract" without naming one field. The shape is no longer yours to get wrong.
      `lines`   EVERY purchasable line: {raw, buy, notes}. `raw` is the extraction's own line copied
-               EXACTLY - it is the key everything is joined on. Add `grams` ONLY where your buy string
-               quantizes off the exact scale (14 oz x 3.5 is 1389 g; printed as "3 lb" it is 1361 g,
-               and the two must agree). Omit `grams` and the orchestrator uses the engine's computed
-               weight for that line, scaled once.
-     `rulings` the RESIDUAL lines only: {raw, term, canon_item, bid, decision, grams, evidence}.
-               `decision` is a CLOSED SET - mapped | mapped-null | mapped-optional | not-purchased |
-               rejected. Free text here produced 21 distinct values across 550 v2 lines and silently
-               dropped 1588 g of Ground Chicken out of a recipe; anything outside the set refuses the
-               whole file rather than shipping a hole in it.
-   You still write food-macros-db rows. That is a label transcription, and it is still yours.
+               EXACTLY - it is the key everything is joined on, so copy it rather than retyping it.
+               Add `grams_source` where you weighed the line yourself.
+     `rulings` the RESIDUAL lines only: {raw, term, canon_item, bid, decision, grams_source,
+               evidence}. `decision` is a CLOSED SET - mapped | mapped-null | mapped-optional |
+               not-purchased | rejected. Free text here produced 21 distinct values across 550 v2
+               lines and silently dropped 1588 g of Ground Chicken out of a recipe; anything outside
+               the set refuses the whole file rather than shipping a hole in it.
+
+   **EVERY GRAM YOU STATE IS SOURCE BASIS** - the source recipe's own scale, exactly like the
+   `grams_source_basis` figures in your table. DO NOT scale anything; the orchestrator multiplies by
+   the scale factor once, for every line, from both roads. Measured 2026-08-24: when this field was
+   called `grams` and specified as the TARGET weight, ten lines across two recipes came back at source
+   scale - every one off by exactly that recipe's own factor, which would have retired two good dishes
+   at 212 and 217 calories against a 400 floor. Your BUY STRING is still target-scale prose a cook
+   reads ("3 lb, sliced into thin rounds"); only the number is source basis.
+
+   **A `mapped-null` line still needs a NAME.** No commodity id is often the right answer - refusing
+   to bridge dry mustard powder onto a prepared-mustard id is exactly right, and pantry-static pricing
+   is safe. But nulling `canon_item` too leaves a line with no food on it, and a line with no food
+   cannot be costed or weighed.
+
+   **Keep `evidence` and `notes` to one or two sentences** - the decisive fact, not the whole argument.
+   Output costs five times what input does, and a two-recipe batch returned 38,000 output tokens of it
+   on 2026-08-24.
+
+   You still write food-macros-db rows. That is a label transcription, and it is still yours - and a
+   food you rule `mapped-null` needs one, or the macros are computed without it.
 
 2. A NEW COMMODITY ID GOES IN `new_commodity_proposals`, NOT THROUGH A SUBAGENT. Rule 1b below still
    sends every new id through the commodity-registrar gate, and that gate still binds - but the road
@@ -39,6 +56,15 @@ used to say.
    alias substitutes the existing one, and a reject leaves the line unsettled and the recipe STUCK
    carrying the registrar's own sentence. Make the `evidence` the case you would have made to it - the
    proof, across all four namespaces, that this food is not already priced under another name.
+
+   AND YOU CANNOT SKIP THAT GATE BY OMISSION: the orchestrator reads the three commodity namespaces
+   itself (grocery\commodities.json, grocery\recipe-commodities.json,
+   grocery\out\recipe-board-everyday.json) and consults the registrar on any bid none of them
+   carries, declared or not. Note the reverse, because it cost a gate drill a recipe: an id that
+   ALREADY prices a food is a REUSE and not a proposal, even when the recipe VOCABULARY has no row for
+   it yet. `brown-lentils` is a live board id priced at 5 of 7 stores; the missing piece was a
+   vocabulary row, which is a naming question and not a registrar one. The two namespaces are two
+   different questions and they have different answers more often than not.
 
 3. THE TABLE IS THE ESTATE, ALREADY READ FOR YOU. Do not open the vocabulary, the commodity files, the
    board, the live feed or the resolutions ledger: every question they answer is in the dispatch, whole,
