@@ -329,7 +329,7 @@ class Daemon(object):
 
     async def lane(self, lane_name, label, items, by, event, tokens_in=-1, tokens_out=-1,
                    detail="", cache_read=-1, cache_creation=-1, calls=-1,
-                   all_in=-1, all_out=-1, models=""):
+                   all_in=-1, all_out=-1, models="", api_turns=-1):
         """A lane-log line. BOTH ENDS, always: the daemon owns a real clock, so start/end pairing is
         what finally makes stage duration measurable. Section 4.5's completeness rule covers local
         work too - a page settled by the local ladder is work done, not work skipped."""
@@ -339,6 +339,9 @@ class Daemon(object):
                 # C1: turns and the cache split, so no future run needs transcript archaeology to
                 # answer "where did the money go". -1 stays "not reported", which is not 0.
                 "-CacheRead", cache_read, "-CacheCreation", cache_creation, "-Calls", calls,
+                # F (2026-08-24): the API ROUND TRIPS, which is what actually drives cost - each one
+                # re-reads the whole conversation. `-Calls` is billed CLI invocations and stays that.
+                "-ApiTurns", api_turns,
                 "-AllModelsIn", all_in, "-AllModelsOut", all_out]
         if models:
             args += ["-Models", models]
@@ -392,7 +395,8 @@ class Daemon(object):
         await self.lane(lane_name, label, items, stage or lane_name, "end",
                         tokens_in=res.tokens_in, tokens_out=res.tokens_out,
                         cache_read=res.cache_read, cache_creation=res.cache_creation,
-                        calls=res.calls, all_in=all_in, all_out=all_out,
+                        calls=res.calls, api_turns=res.api_turns,
+                        all_in=all_in, all_out=all_out,
                         models=",".join(models),
                         detail=("re-asked; " if res.reasked else "")
                         + (res.failure or "ok"))

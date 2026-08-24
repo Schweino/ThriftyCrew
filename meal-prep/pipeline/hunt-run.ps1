@@ -43,6 +43,12 @@ param(
   # per-message-id dedup, and DispatchResult ALREADY carried all three of these - lane() just did not
   # stamp them. -1 keeps its meaning: "not reported", which is not 0.
   [int]$CacheRead = -1, [int]$CacheCreation = -1, [int]$Calls = -1,
+  # F (2026-08-24, off the 6b run). API ROUND TRIPS, which is NOT $Calls. $Calls counts BILLED CLI
+  # INVOCATIONS - a re-ask makes it 2 - and criterion 1 depends on that meaning. But cost is driven by
+  # round trips: each one re-reads the entire conversation, so a 47-round-trip session billed ~500k
+  # tokens while $Calls read 1, and diagnosing that needed transcript archaeology OUTSIDE the pipeline,
+  # which is the very thing C1 was built to end. The CLI envelope has carried num_turns all along.
+  [int]$ApiTurns = -1,
   # ...and the SUBAGENT-INCLUSIVE totals, summed off the CLI envelope's modelUsage map. The phase-5
   # mapper spawned a 21-turn Opus subagent that appeared in NO lane stamp - $1.64 of invisible spend -
   # because `usage` covers the main agent only. When these differ from the main-agent numbers beside
@@ -375,7 +381,7 @@ function Split-LaneItems {
 function New-LaneLine {
   param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At,
         [int]$In = -1, [int]$Out = -1, [string]$Event = '',
-        [int]$CacheRead = -1, [int]$CacheCreation = -1, [int]$Calls = -1,
+        [int]$CacheRead = -1, [int]$CacheCreation = -1, [int]$Calls = -1, [int]$ApiTurns = -1,
         [int]$AllIn = -1, [int]$AllOut = -1, [string]$Models = '')
   $rows = @(Split-LaneItems $ItemList)
   # in/out are the agent's reported token usage for THIS invocation. -1 means "not reported" and is
@@ -391,6 +397,9 @@ function New-LaneLine {
     # which is what makes a working-set problem tellable from an output problem without a transcript.
     # `calls` is turns - the first lever in the cost law (turns x working set, plus output at 5x).
     cache_read = $CacheRead; cache_creation = $CacheCreation; calls = $Calls
+    # F. The ROUND TRIPS behind those tokens. `calls` is billed invocations; this is how many times the
+    # agent went and looked something up, which is the number that explains the working set.
+    api_turns = $ApiTurns
     # and the subagent-inclusive totals. all_in/all_out >= in/out whenever a dispatch delegated.
     all_in = $AllIn; all_out = $AllOut; models = $Models
   }
@@ -731,7 +740,7 @@ if ($runSelfTest) {
     $lg3 = Join-Path $lt3 'lane-log.jsonl'
     # convention 1: a daemon pair - tokens, turns, cache split and delegation all on the END line
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map:2x' -ItemList @('a','b') -By 'mapper' -Detail '' -At '2026-08-24T10:00:00' -Event 'start')
-    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map:2x' -ItemList @('a','b') -By 'mapper' -Detail 're-asked; ok' -At '2026-08-24T10:15:00' -Event 'end' -In 245806 -Out 76728 -CacheRead 159299 -CacheCreation 86495 -Calls 2 -AllIn 258197 -AllOut 76758)
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map:2x' -ItemList @('a','b') -By 'mapper' -Detail 're-asked; ok' -At '2026-08-24T10:15:00' -Event 'end' -In 245806 -Out 76728 -CacheRead 159299 -CacheCreation 86495 -Calls 2 -ApiTurns 47 -AllIn 258197 -AllOut 76758)
     # convention 2: a v2-era single line, tokens on its only row
     Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'qa:x' -ItemList @('x') -By 'qa' -Detail '' -At '2026-08-24T10:16:00' -In 1000 -Out 200)
     # and a local-ladder zero-token line, which is work done, not work unmeasured
@@ -750,6 +759,19 @@ if ($runSelfTest) {
       ($(if ($mapRow) { 'turns=' + $mapRow.turns + ' cr=' + $mapRow.cache_read + ' reasks=' + $mapRow.reasks } else { 'no map row' }))
     T 'MUST FIRE  a start/end pair is ONE invocation, never two' `
       ($null -ne $mapRow -and [long]$mapRow.calls -eq 1) ($(if ($mapRow) { [string]$mapRow.calls } else { 'no row' }))
+    # ---- F (2026-08-24): API ROUND TRIPS ARE NOT BILLED INVOCATIONS, and the reader must keep them
+    # apart. The 6b run's own numbers are the case: one mapper session made 47 round trips and billed
+    # ~500k tokens while `calls` read 1, because `calls` counts CLI invocations (a re-ask makes it 2)
+    # and criterion 1 depends on exactly that. Diagnosing 6b therefore needed transcript archaeology
+    # outside the pipeline, which is the thing C1 was built to end. Three assertions: the trips land,
+    # they do NOT overwrite turns, and a log written before this field reports NOT-MEASURED rather
+    # than a fake zero - the quiet-wrongness class this fixture family exists for.
+    T 'MUST FIRE  the API round trips land on the lane, and do NOT collide with `turns`' `
+      ($null -ne $mapRow -and [long]$mapRow.api_turns -eq 47 -and [long]$mapRow.turns -eq 2) `
+      ($(if ($mapRow) { 'api_turns=' + $mapRow.api_turns + ' turns=' + $mapRow.turns } else { 'no map row' }))
+    T 'CLEAN TWIN a lane whose lines predate the field reports NOT-MEASURED, never a fake 0 trips' `
+      ($null -ne $qaRow -and [long]$qaRow.api_turns -eq 0) `
+      ($(if ($qaRow) { [string]$qaRow.api_turns } else { 'no qa row' }))
     T 'CLEAN TWIN the v2 single-line convention still reads exactly as before' `
       ($null -ne $qaRow -and [long]$qaRow.calls -eq 1 -and [long]$qaRow.in -eq 1000 -and [long]$qaRow.out -eq 200) `
       ($(if ($qaRow) { 'in=' + $qaRow.in } else { 'no qa row' }))
@@ -916,7 +938,7 @@ if ($runLaneSummary) {
     if (-not $agg.ContainsKey($ln)) {
       $agg[$ln] = [pscustomobject]@{ lane=$ln; calls=0; items=0; in=0; out=0; measured=0
                                      turns=0; cache_read=0; cache_creation=0; all_in=0; all_out=0
-                                     reasks=0 }
+                                     reasks=0; api_turns=0 }
     }
     $a = $agg[$ln]
     # ONE INVOCATION IS COUNTED ONCE: from its start line (daemon pairs) or from its only line (the
@@ -939,7 +961,7 @@ if ($runLaneSummary) {
       }
       foreach ($pair in @(@('calls','turns'), @('cache_read','cache_read'),
                           @('cache_creation','cache_creation'), @('all_in','all_in'),
-                          @('all_out','all_out'))) {
+                          @('all_out','all_out'), @('api_turns','api_turns'))) {
         $v = Get-NumField $r $pair[0]
         if ($v -gt 0) { $a.($pair[1]) += $v }
       }
@@ -953,7 +975,10 @@ if ($runLaneSummary) {
     exit 0
   }
   Write-Output ("hunt-run lane summary: {0}" -f (Split-Path $RunDir -Leaf))
-  Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12} {5,12} {6,12} {7,7} {8,7} {9,9} {10,9}" -f 'lane','calls','turns','items','input','output','total','share','re-asks','mean_sec','total_min')
+  # F: `trips` is the API ROUND TRIPS, the number that explains the working set. `turns` beside it is
+  # billed CLI invocations, which is what criterion 1 counts. They are different questions and this is
+  # the first reader that can answer the second one without leaving the pipeline.
+  Write-Output ("  {0,-9} {1,6} {2,6} {3,6} {4,7} {5,12} {6,12} {7,12} {8,7} {9,7} {10,9} {11,9}" -f 'lane','calls','turns','trips','items','input','output','total','share','re-asks','mean_sec','total_min')
   foreach ($a in ($agg.Values | Sort-Object { -($_.in + $_.out) })) {
     $lt = $a.in + $a.out
     $share = if ($tot -gt 0) { '{0:N1}%' -f (100.0 * $lt / $tot) } else { '-' }
@@ -965,13 +990,14 @@ if ($runLaneSummary) {
     $d = @($durations[$a.lane])
     $mean = if ($d.Count) { '{0:N0}' -f (($d | Measure-Object -Average).Average) } else { '-' }
     $tmin = if ($d.Count) { '{0:N1}' -f ((($d | Measure-Object -Sum).Sum) / 60.0) } else { '-' }
-    Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12:N0} {5,12:N0} {6,12:N0} {7,7} {8,7} {9,9} {10,9}{11}" -f $a.lane,$a.calls,$a.turns,$a.items,$a.in,$a.out,$lt,$share,$a.reasks,$mean,$tmin,$note)
+    $trips = if ($a.api_turns -gt 0) { [string]$a.api_turns } else { '-' }
+    Write-Output ("  {0,-9} {1,6} {2,6} {3,6} {4,7} {5,12:N0} {6,12:N0} {7,12:N0} {8,7} {9,7} {10,9} {11,9}{12}" -f $a.lane,$a.calls,$a.turns,$trips,$a.items,$a.in,$a.out,$lt,$share,$a.reasks,$mean,$tmin,$note)
   }
   $unfinished = @($starts.Keys)
   if ($unfinished.Count -gt 0) {
     Write-Output ("  {0} invocation(s) logged a start with no end - still running, or died: {1}" -f $unfinished.Count, (($unfinished | Select-Object -First 4) -join ', '))
   }
-  Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12} {5,12} {6,12:N0}" -f 'TOTAL',(($agg.Values|Measure-Object -Property calls -Sum).Sum),(($agg.Values|Measure-Object -Property turns -Sum).Sum),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
+  Write-Output ("  {0,-9} {1,6} {2,6} {3,6} {4,7} {5,12} {6,12} {7,12:N0}" -f 'TOTAL',(($agg.Values|Measure-Object -Property calls -Sum).Sum),(($agg.Values|Measure-Object -Property turns -Sum).Sum),(($agg.Values|Measure-Object -Property api_turns -Sum).Sum),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
   # start lines carry -1 BY CONVENTION (the stamp lands on the end line), so only non-start rows can
   # be honestly called unmeasured - counting starts made every daemon run read as half-unmeasured.
   $unmeasured = @($rows | Where-Object {
@@ -996,7 +1022,7 @@ if ($runLane) {
   if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
   $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) `
                        -In $InputTokens -Out $OutputTokens -Event $Event `
-                       -CacheRead $CacheRead -CacheCreation $CacheCreation -Calls $Calls `
+                       -CacheRead $CacheRead -CacheCreation $CacheCreation -Calls $Calls -ApiTurns $ApiTurns `
                        -AllIn $AllModelsIn -AllOut $AllModelsOut -Models $Models
   Add-LaneLine -Path (Join-Path $RunDir 'lane-log.jsonl') -Line $line
   Write-Output ("hunt-run lane: {0}  {1} item(s){2}" -f $ln, $line.count, $(if ($Label) { "   ($Label)" } else { '' }))

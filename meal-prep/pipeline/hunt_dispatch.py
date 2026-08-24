@@ -146,7 +146,7 @@ class DispatchResult(object):
 
     __slots__ = ("agent", "payload", "text", "failure", "detail", "problems", "reasked",
                  "tokens_in", "tokens_out", "cache_read", "cache_creation", "cost_usd",
-                 "seconds", "calls", "model_usage", "session_id", "denials", "findings")
+                 "seconds", "calls", "api_turns", "model_usage", "session_id", "denials", "findings")
 
     def __init__(self, agent):
         self.agent = agent
@@ -163,6 +163,13 @@ class DispatchResult(object):
         self.cost_usd = 0.0
         self.seconds = 0.0
         self.calls = 0
+        # F (2026-08-24, off the 6b run). `calls` counts BILLED CLI INVOCATIONS - a re-ask makes it 2 -
+        # and criterion 1 depends on it meaning exactly that. It is NOT the number of API round trips,
+        # and the round trips are what actually drive cost: every one re-reads the whole conversation,
+        # so a session that made 47 of them billed ~500k tokens while `calls` read 1. Diagnosing the 6b
+        # run therefore needed transcript archaeology outside the pipeline - the very thing C1 was built
+        # to end. The envelope has carried `num_turns` all along and nothing read it.
+        self.api_turns = 0
         self.model_usage = {}
         self.session_id = ""
         self.denials = []
@@ -184,7 +191,7 @@ class DispatchResult(object):
                 "tokens_in": self.tokens_in, "tokens_out": self.tokens_out,
                 "cache_read": self.cache_read, "cache_creation": self.cache_creation,
                 "cost_usd": round(self.cost_usd, 6), "seconds": round(self.seconds, 2),
-                "calls": self.calls, "model_usage": self.model_usage,
+                "calls": self.calls, "api_turns": self.api_turns, "model_usage": self.model_usage,
                 "all_models_in": self.all_models[0], "all_models_out": self.all_models[1],
                 "all_models_cost_usd": self.all_models[2], "models": self.all_models[3],
                 "denials": self.denials, "findings": list(self.findings),
@@ -336,6 +343,10 @@ def _absorb(res, env):
     res.cache_creation += int(u.get("cache_creation_input_tokens") or 0)
     res.cost_usd += float(env.get("total_cost_usd") or 0.0)
     res.calls += 1
+    # ACCUMULATED, like calls and tokens: a re-asked dispatch made round trips in BOTH sessions and
+    # the cost of both is real. 0 when the envelope omits it, which reads as "not reported" downstream
+    # rather than as a session that somehow made no calls.
+    res.api_turns += int(env.get("num_turns") or 0)
     # MERGED, NOT OVERWRITTEN (C1, 2026-08-24). A re-ask is a SECOND billed call, and `res.calls`,
     # `tokens_in` and `cost_usd` all accumulate across the pair. Replacing the map here made the
     # subagent-inclusive total report only the LAST call's models, which on a re-asked dispatch is the
