@@ -2028,6 +2028,48 @@ class Daemon(object):
         except Exception as e:                                    # noqa: BLE001
             return None, "the -Status JSON did not parse (%s)" % e
 
+    async def reseed_absent_terms(self):
+        """B5 / pin P7. Returns (terms_added, why_not) - the terms this seed put back on the price lane.
+
+        THE QUEUE IS THE AUTHORITY AND NOTHING HERE RE-DERIVES IT. `-List -Status pending -Json` is
+        verified as the road (2026-08-24, against the live queue): it binds, and each item carries
+        `term` and `recipes`. A term is ours if any recipe waiting on it is a recipe THIS run has at
+        `pricing` or `parked` - which is precisely `self.pricing_slugs`, already populated above by the
+        row loop, the unhold and the parked loop. Queue order is preserved, because that is the order
+        the map lane enqueued them in and there is no better one.
+
+        A QUEUE THAT WILL NOT ANSWER IS A FINDING, NEVER A SILENT EMPTY. An empty absent_terms and an
+        unreadable queue produce the identical park message, and the phase-5 drill spent a person's
+        afternoon on that ambiguity.
+        """
+        rc, out, err = await self.ps(INGREDIENT_QUEUE_PS,
+                                     ["-List", "-Status", "pending", "-Json"], timeout=300)
+        text = (out or "").strip()
+        if rc != hunt_lib.EXIT_CLEAN:
+            return [], "ingredient-queue exited %s: %s" % (rc, ((text + (err or "")).strip())[:200])
+        i = text.find("{")
+        if i < 0:
+            return [], "the queue printed no JSON object: %s" % text[:200]
+        try:
+            doc = json.loads(text[i:])
+        except Exception as e:                                    # noqa: BLE001
+            return [], "the queue's -Json output would not parse (%s): %s" % (e, text[:200])
+        added = []
+        for it in (doc.get("items") or []):
+            term = str(it.get("term") or "").strip()
+            if not term:
+                continue
+            recipes = [str(r) for r in (it.get("recipes") or []) if r]
+            if not any(r in self.pricing_slugs for r in recipes):
+                continue
+            # The same two guards the map lane applies: a term already queued for this process, and a
+            # term this run has already sent to the pricer, are never sent twice.
+            if term in self.absent_terms or term in self.priced_terms:
+                continue
+            self.absent_terms.append(term)
+            added.append(term)
+        return added, ""
+
     async def seed(self):
         """Section 4.5's resume seed table, NORMATIVE so nobody re-derives it. A recipe enters at the
         lane matching the state it actually stopped at, and flows down from there under its own steam."""
@@ -2081,6 +2123,23 @@ class Daemon(object):
             self.pricing_slugs.add(slug)
             self.ch["price_wake"].push(slug)
             counts["price"] = counts.get("price", 0) + 1
+        # ---- B5 / PIN P7: absent_terms COME BACK FROM THE QUEUE. -----------------------------
+        # Gate finding 3, measured on the phase-5 drill: a resumed run puts every pricing/parked
+        # recipe back on the lane by pushing price_wake, and then the lane wakes with NOTHING to
+        # drain, because `absent_terms` lived in the memory of the process that mapped them. So it
+        # parks every one of them with "a blocking ingredient is still PENDING" and the run cannot
+        # re-price at all. The gate drill had to seed absent_terms by hand for exactly this reason.
+        # The QUEUE is the durable handoff - its own header says so - and it already knows which
+        # terms are pending and which recipes wait on each one. So it is read back here.
+        if self.pricing_slugs:
+            terms, why = await self.reseed_absent_terms()
+            if why:
+                self.findings.append("seed: absent_terms could not be repopulated from the queue "
+                                     "(%s) - the price lane will park every pricing recipe" % why)
+            if terms:
+                counts["reseeded_terms"] = len(terms)
+                self.log("seed: repopulated %d pending term(s) from the ingredient queue: %s"
+                         % (len(terms), ", ".join(terms)))
         for slug in (st.get("held") or []):
             self.held.append((slug, "held: a live page that was taken down - never auto-republished"))
         # published-but-not-verified: a post-publish review is pending, and it is not a lane.

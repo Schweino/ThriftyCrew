@@ -544,6 +544,12 @@ def run():
     for name, ok, got in _resume_seed_table():
         T(name, ok, got)
 
+    # =================================================================================================
+    H("B5 / pin P7 - a resumed run repopulates absent_terms from the QUEUE")
+    # =================================================================================================
+    for name, ok, got in _b5_reseed_from_queue():
+        T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -2165,6 +2171,162 @@ def _wip_gates_pops():
         return arun(drill())
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
+
+
+class QueueScopedPS(object):
+    """REAL ps_invoke for every call, with -QueueFile pinned to a scratch file for ingredient-queue.
+
+    The estate's standing rule is that no drill touches the live worklist. The DAEMON has no
+    queue-file seam and must not grow one - a real run wants the real queue, and a production switch
+    that only fixtures ever flip is a switch nobody exercises - so the seam lives here, at the
+    injection point the daemon already has. Everything else runs for real, which is the point: what
+    is under test is whether this code can read what ingredient-queue.ps1 ACTUALLY emits.
+    """
+
+    def __init__(self, queue_file):
+        self.queue_file = queue_file
+        self.calls = []
+
+    def __call__(self, script, args, timeout=600):
+        name = os.path.basename(script)
+        a = list(args)
+        if "ingredient-queue" in name:
+            a += ["-QueueFile", self.queue_file]
+        self.calls.append({"script": name, "args": a})
+        if "hunt-run" in name and "-Derive" in a:
+            # -Derive IS NOT SKIPPED TO MAKE THE FIXTURE PASS - it is skipped because it reads the
+            # LIVE ingredient queue by its own internal path, which no -QueueFile of ours reaches.
+            # Run for real it would rule these drill recipes off the price lane on the strength of a
+            # worklist that has never heard of them, and the state under test here is "still pricing".
+            # -Derive's own behaviour is fixtured where it belongs, in hunt-run.ps1's suite.
+            return 0, "", ""
+        return hunt_lib.ps_invoke(script, a, timeout)
+
+
+def _b5_reseed_from_queue():
+    """B5 / pin P7 - gate finding 3, and the fixture is in two halves on purpose.
+
+    THE DEFECT, measured on the phase-5 gate drill. `seed()` puts a `pricing`/`parked` recipe back on
+    the lane by pushing price_wake, and NOTHING ever repopulated `absent_terms` - those lived in the
+    memory of the process that mapped them. So the price lane woke, found no terms, drained nothing,
+    and parked every pricing recipe with "a blocking ingredient is still PENDING". The drill had to
+    seed absent_terms by hand.
+
+    HALF ONE runs the REAL ingredient-queue.ps1 against a scratch -QueueFile, because what is under
+    test is whether this code can read what that script actually emits (verified 2026-08-24:
+    `-List -Status pending -Json` binds and each item carries `term` and `recipes`).
+    HALF TWO replays half one's REAL BYTES through an injected shell to prove the consequence at the
+    lane - that the pricer is dispatched with exactly those terms. Two halves rather than one live
+    lane run, because the lane's own pre-pass shells a browser driver and this is a fixture.
+
+    FOUR queue items, not two: two pending terms wanted by THIS run's pricing recipes, one pending
+    term wanted by somebody else's recipe, and one already resolved. Every collection trap this estate
+    has paid for was invisible at size one, and the two extra rows are the two ways this selection can
+    be wrong in the expensive direction (re-pricing a settled term, or pricing a term for a run that
+    is not ours).
+    """
+    out = []
+    tmp = tempfile.mkdtemp(prefix="daemon-b5-reseed-")
+    try:
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        qf = os.path.join(tmp, "scratch-queue.json")
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
+                                                    "drill", "-Stop", "2 accepted", "-WaveSize", "2"])
+        if rc != 0:
+            return [("the B5 drill can init a scratch run dir", False, o.strip()[:200])]
+
+        def q(args):
+            return hunt_lib.ps_invoke(INGREDIENT_QUEUE_PS, list(args) + ["-QueueFile", qf])
+
+        # two pending terms this run waits on, in queue order...
+        q(["-Add", "-Term", "gochujang", "-Recipe", "r-pricing-a", "-Why", "drill"])
+        q(["-Add", "-Term", "doubanjiang", "-Recipe", "r-pricing-b", "-Why", "drill"])
+        # ...one pending term that belongs to a recipe this run has never heard of...
+        q(["-Add", "-Term", "tteok", "-Recipe", "somebody-elses-recipe", "-Why", "drill"])
+        # ...and one already RESOLVED (Rule B: one carrying store settles it).
+        q(["-Add", "-Term", "ground sage", "-Recipe", "r-pricing-a", "-Why", "drill"])
+        q(["-Record", "-Term", "ground sage", "-Store", "Baker's", "-State", "carried",
+           "-Price", "2.49", "-Size", "0.62 oz", "-Item", "Tone's Ground Sage", "-Evidence", "drill"])
+
+        def advance(slug, states):
+            for i, st in enumerate(states):
+                args = ["-Advance", "-RunDir", run_dir, "-Slug", slug, "-To", st, "-By", "drill",
+                        "-Detail", "drill"]
+                if i == 0:
+                    args += ["-Title", slug, "-SourceUrl", "https://d/%s" % slug, "-Protein", "beef"]
+                if st == "pricing":
+                    args += ["-Terms", ["gochujang"] if slug.endswith("-a") else ["doubanjiang"]]
+                r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+                if r != 0:
+                    return oo + ee
+            return ""
+
+        chain = ["sourced", "selected", "extracted", "mapped", "pricing"]
+        for slug in ("r-pricing-a", "r-pricing-b"):
+            err = advance(slug, chain)
+            if err:
+                out.append(("the B5 drill can stage %s at pricing" % slug, False, err.strip()[:200]))
+
+        # ---- HALF ONE: the real script, the real parse ------------------------------------------
+        ps = QueueScopedPS(qf)
+        d = HD.Daemon(run_dir, "b5-drill", quiet=True, ps=ps)
+        ok, err = arun(d.seed())
+        if not ok:
+            return out + [("the B5 daemon can seed", False, err)]
+        out.append(("MUST FIRE  a resumed run repopulates absent_terms from the QUEUE - exactly the "
+                    "two pending terms its own pricing recipes wait on, in queue order",
+                    d.absent_terms == ["gochujang", "doubanjiang"], json.dumps(d.absent_terms)))
+        out.append(("MUST FIRE  ...and the seed SAYS how many it put back, so a resume that "
+                    "repopulated nothing is visible rather than silent",
+                    d.seed_counts.get("reseeded_terms") == 2, json.dumps(d.seed_counts)))
+        out.append(("CLEAN TWIN a RESOLVED term is never re-dispatched - an answered question is not "
+                    "asked again, and re-pricing it would spend a whole pricer session",
+                    "ground sage" not in d.absent_terms, json.dumps(d.absent_terms)))
+        out.append(("CLEAN TWIN a pending term wanted only by SOMEBODY ELSE'S recipe is not ours to "
+                    "price - the queue dedupes by term across runs, so the intersection is the filter",
+                    "tteok" not in d.absent_terms, json.dumps(d.absent_terms)))
+        out.append(("the reseed read the queue through -List -Status pending -Json, which is verified "
+                    "to bind and to carry `recipes` per item",
+                    any(c["script"].startswith("ingredient-queue") and "-Status" in c["args"]
+                        and "pending" in c["args"] and "-Json" in c["args"] for c in ps.calls),
+                    json.dumps([c["args"] for c in ps.calls
+                                if c["script"].startswith("ingredient-queue")])[:300]))
+
+        # capture the REAL bytes for half two - a canned shape is a shape that drifts
+        _rc, real_json, _err = q(["-List", "-Status", "pending", "-Json"])
+
+        # ---- HALF TWO: the consequence at the lane ----------------------------------------------
+        # Everything shelled is injected here; the queue's answer is the real script's own output,
+        # replayed. What is under test is the LANE: does the pricer get dispatched, and with what.
+        fd = FakeDispatch({"recipe-hunter-pricer": [{"ok": True}]})
+        fps = FakePS(replies={"ingredient-queue": (0, real_json, ""),
+                              "hunt-run": (0, "", "")})
+        d2 = HD.Daemon(run_dir, "b5-drill", quiet=True, ps=fps, dispatcher=fd)
+        d2.pricing_slugs = set(["r-pricing-a", "r-pricing-b"])
+        terms, _why = arun(d2.reseed_absent_terms())
+
+        async def _no_gather(_terms, _n):
+            return "", None                # the pre-pass shells a browser driver; not in a fixture
+        d2.gather_price_evidence = _no_gather
+        d2.ch["price_wake"].push("resume")
+        d2.ch["price_wake"].close()
+        arun(d2.price_lane())
+        prompts = fd.prompts("recipe-hunter-pricer")
+        out.append(("MUST FIRE  ...and the RESUMED PRICE LANE actually dispatches the pricer on those "
+                    "terms. Without this the lane wakes, drains nothing, and parks every pricing "
+                    "recipe - which is what the phase-5 drill measured",
+                    len(prompts) == 1 and "gochujang" in prompts[0] and "doubanjiang" in prompts[0],
+                    "dispatches=%d terms=%s" % (len(prompts), json.dumps(terms))))
+        out.append(("CLEAN TWIN and the term nobody in this run waits on never reaches the pricer's "
+                    "prompt", len(prompts) == 1 and "tteok" not in prompts[0],
+                    (prompts[0][:200] if prompts else "no dispatch at all")))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return out
 
 
 def _resume_seed_table():
