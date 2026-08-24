@@ -102,13 +102,51 @@ from thigh rows - exactly the mispricing its own note forbids.
 **Proposed check (mechanical, cheap):** if a ruling's `notes` say it refused / rejected an id, that id
 may not be the `bid`. A string check over the decision file, no model needed.
 
-### 2.7 The commodity include pattern conflates three cuts
-`chicken-thighs` carries `/chicken\s+(thigh|drumstick|leg)/`, so `price-ingredient.ps1 -Name 'chicken
-drumsticks'` answers with seven stores of THIGH products and not one drumstick. The 6b pricer read that
-correctly and recorded `blocked` at the three browserless stores rather than harvesting thigh rows as
-`carried` - the fabrication case NOT happening, and the criteria's required capture-road spot-check
-therefore passes for a better reason than matching numbers. But the pattern remains a trap for anything
-bid to that id. Owner: the commodity layer, not the Recipe Hunter.
+### 2.7 CORRECTED same day: the thigh/drumstick grouping is DELIBERATE, and the real defect is
+### an EXCLUDE pattern that removes the food the id claims to carry
+
+**My first write-up of this item was wrong, and it would have sent someone at the wrong file.** I read
+`chicken-thighs` include pattern `/chicken\s+(thigh|drumstick|leg)/` as an accidental conflation of three
+cuts. It is not accidental - the commodity is LABELLED **"Chicken Thighs / Drumsticks"**, so the board
+means to carry both under one id. That is a pricing-policy choice, not a bug.
+
+The actual defect is one line further down, in the same row:
+
+```
+"id":      "chicken-thighs",
+"label":   "Chicken Thighs / Drumsticks",
+"include": ["chicken\\s+(thigh|drumstick|leg)", "(thigh|drumstick)s?[^,]*chicken"],
+"exclude": ["\\bdrumsticks?\\b", "boneless skinless.*breast", "breaded", ... "\\bsoda\\b",
+            "kombucha", "gatorade", "powerade", "body\\s*armor", ...]
+```
+
+**`exclude: "\bdrumsticks?\b"` removes every drumstick product from an id whose own label says it carries
+drumsticks.** The company it keeps in that list - soda, kombucha, gatorade, powerade, body armor - says
+what it was for: the Nestle **Drumstick ice cream cone**. It is unanchored to that context, so it takes
+the chicken with it.
+
+**Measured.** `price-ingredient.ps1 -Name 'chicken drumsticks'` returns seven stores and NOT ONE
+drumstick - all thigh products. Meanwhile the 6b pre-pass, which reads the captures directly rather than
+through the commodity, found real drumstick products (`Tyson Chicken Drumsticks 2.5 lb $5.99`). The
+products are in the captures and the commodity excludes them, so anything bid to `chicken-thighs` for a
+drumstick recipe is priced from thigh rows only.
+
+**This does not change the 6b pricer behaviour, which was right either way:** it recorded `blocked` at the
+three browserless stores rather than harvesting thigh rows as `carried`, so the capture-road spot-check
+still passes and no fabricated visit occurred.
+
+**Proposed fix:** anchor the exclusion to the ice cream (near cone / ice cream / frozen dessert, or an
+explicit brand exclusion) instead of excluding the word outright. Owner: the commodity layer, not the
+Recipe Hunter. **And the pattern deserves a sweep** - an exclude that removes a food its own id claims to
+carry is invisible to every per-file guard, which is the same shape as 2.6.
+
+### 2.8 A related but SEPARATE defect: `rice` swallows cauliflower rice
+`rice` includes a bare `\brice\b` and its exclude list - which already carries arborio, ready-rice, pouch,
+cake, cereal, pudding, pilaf - does **not** exclude cauliflower. So `price-ingredient.ps1 -Name
+'cauliflower rice'` maps to commodity `rice` and returns white-rice prices at 7 of 7 stores. Unlike 2.7
+there is no label claiming to cover it: this one is a plain miss. It bears directly on OPEN Q 4.1,
+because "price the cheapest alternative" is only safe if the matcher is not silently substituting a
+different food.
 
 ---
 
