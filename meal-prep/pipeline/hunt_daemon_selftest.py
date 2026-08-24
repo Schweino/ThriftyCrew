@@ -469,6 +469,24 @@ def run():
       *_lane_c1_delegation_finding())
 
     # =================================================================================================
+    H("A: the map lane's batch size is decided producer-side (2026-08-24), never by a channel wait")
+    # =================================================================================================
+    T("MUST FIRE  settled pages queued back-to-back are released to the map lane TOGETHER - the two "
+      "singleton mapper batches of the 6b run cost 436,685 and 577,141 tokens FOR ONE RECIPE EACH",
+      *_extract_batches_when_queued())
+    T("MUST FIRE  ...and a LONE recipe is released the instant it settles, never held for company "
+      "that cannot come - this is the B3 deadlock, and holding it would be that bug rebuilt",
+      *_extract_releases_a_lone_recipe())
+    T("MUST FIRE  every settled recipe reaches the map lane, whatever the grouping - a held recipe "
+      "stranded at drain is the failure mode this whole design is shaped around",
+      *_extract_strands_nothing())
+    T("CLEAN TWIN the group never exceeds MAP_BATCH, so this cannot quietly widen the mapper's batch",
+      *_extract_respects_map_batch())
+    T("MUST FIRE  a recipe held in the group when the lane EXITS EARLY (breaker) is still released - "
+      "this is the only path that reaches the drain flush, and without it that recipe strands",
+      *_extract_drain_flush_releases_held())
+
+    # =================================================================================================
     H("D7 - the mechanical half of MAP runs before the agent is paid")
     # =================================================================================================
     T("MUST FIRE  map-preresolve runs BEFORE the mapper dispatch, through ps_invoke, with the batch's "
@@ -3021,3 +3039,217 @@ def _registrar_evidence_shows_include():
     return (any(r["id"] == "chicken-thighs" for r in near),
             "an id reachable ONLY through its include pattern was not surfaced: %s"
             % json.dumps([r["id"] for r in near]))
+
+
+# =====================================================================================================
+# A (2026-08-24). PRODUCER-SIDE BATCHING FOR THE MAP LANE.
+#
+# 6b ran map:1x, map:1x, map:5x, map:2x. The singletons cost 436,685 and 577,141 input tokens and 378 s
+# for ONE recipe each, against map:5x at 212,244 and 167 s per recipe. Extraction settles serially, so
+# recipes trickled into the map channel and take_batch correctly swept whatever was queued.
+#
+# THE CHANNEL IS NOT TOUCHED. take_batch must never wait to fill a quota (B3 measured that deadlocking
+# against the WIP limit). The extract lane holds settled pages and flushes when the group is full, when
+# NOTHING IS QUEUED FOR EXTRACTION RIGHT NOW, or when its input is exhausted. The middle condition asks
+# the queue's CURRENT depth and never a future one, which is what makes a hang impossible - and the
+# second and third fixtures below are the ones that prove it, so they matter more than the first.
+# =====================================================================================================
+
+def _extract_run(n_pages):
+    """Push n pages, run the extract lane over a ladder that settles everything, and return the
+    INTERLEAVING of settles and map-lane releases.
+
+    THE INTERLEAVING IS THE OBSERVABLE, and the first version of this fixture got it wrong: it asserted
+    the RELEASE ORDER, which is p0,p1,p2,p3 whether the lane batches or not, so it would have passed
+    against the unfixed code and proved nothing. What distinguishes batching is WHEN the pushes happen
+    relative to the settles - all at the end, or one after each settle.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-batch-")
+    try:
+        lad, _inner = _retry_ladder([None] * max(n_pages, 1))
+        ps = FakePS()
+        import harvest                                            # noqa: PLC0415
+        d = daemon(run_dir=tmp, ps=ps)
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        for i in range(n_pages):
+            d.ch["extract"].push({"slug": "p%d" % i, "url": "https://d/p%d" % i,
+                                  "name": "P%d" % i, "domain": "d"})
+        d.ch["extract"].close()
+        trace = []
+        real_push = d.ch["map"].push
+        def spy(x):
+            trace.append("push:" + str(x.get("slug")))
+            return real_push(x)
+        d.ch["map"].push = spy
+        real_adv = d.advance
+        async def adv_spy(slug, to, by, detail=""):
+            if to == "extracted":
+                trace.append("settle:" + str(slug))
+            return await real_adv(slug, to, by, detail)
+        d.advance = adv_spy
+        real = harvest.cached_body
+        harvest.cached_body = lambda u, cache_dir=None: "<html><body>x</body></html>"
+        try:
+            arun(d.extract_lane(ladder=lad))
+        finally:
+            harvest.cached_body = real
+        return trace
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _extract_batches_when_queued():
+    # 4 pages queued up front. Pages 2..4 are still queued while page 1 settles, so nothing flushes
+    # until the queue empties: every SETTLE must precede every PUSH. Without the fix the trace
+    # alternates settle,push,settle,push and this goes red.
+    trace = _extract_run(4)
+    pushes = [i for i, t in enumerate(trace) if t.startswith("push:")]
+    settles = [i for i, t in enumerate(trace) if t.startswith("settle:")]
+    ok = (len(pushes) == 4 and len(settles) == 4 and min(pushes) > max(settles))
+    return (ok, "trace=%s" % json.dumps(trace))
+
+
+def _extract_releases_a_lone_recipe():
+    """THE DEADLOCK FIXTURE, and the first version of it was inert.
+
+    That version pushed one page and CLOSED the input channel first, so the drain flush in the lane's
+    `finally` released the recipe no matter what - the size() check could be deleted outright and the
+    fixture still passed. Two mechanisms, each masking the other, and neither actually proven.
+
+    The real hazard is a recipe settling while the input channel is STILL OPEN, which is every moment
+    of a live run before the decider stops accepting. So this leaves it open, runs the lane as a task,
+    and demands the recipe reach the map lane WITHOUT the channel ever closing. That is the difference
+    between "flushed because the run ended" and "flushed because nothing else was queued".
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-lone-")
+    try:
+        lad, _inner = _retry_ladder([None, None])
+        ps = FakePS()
+        import harvest                                            # noqa: PLC0415
+        d = daemon(run_dir=tmp, ps=ps)
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        d.ch["extract"].push({"slug": "p0", "url": "https://d/p0", "name": "P0", "domain": "d"})
+        real = harvest.cached_body
+        harvest.cached_body = lambda u, cache_dir=None: "<html><body>x</body></html>"
+
+        async def go():
+            task = asyncio.ensure_future(d.extract_lane(ladder=lad))
+            released_while_open = False
+            # bounded yields: enough for one page to settle, and it can never hang the suite
+            # REAL sleeps, bounded: sweep_one runs in an executor THREAD, so yielding with sleep(0)
+            # spins the loop without ever letting the thread finish. Up to 6 s, and it cannot hang.
+            for _ in range(600):
+                if d.ch["map"].size() >= 1:
+                    released_while_open = True
+                    break
+                await asyncio.sleep(0.01)
+            still_open = not d.ch["extract"].is_closed()
+            d.ch["extract"].close()
+            try:
+                await asyncio.wait_for(task, timeout=30)
+            except Exception:                                     # noqa: BLE001
+                pass
+            return released_while_open, still_open
+
+        try:
+            released_while_open, still_open = arun(go())
+        finally:
+            harvest.cached_body = real
+        return (released_while_open and still_open,
+                "released_while_input_open=%s input_was_still_open=%s map_size=%d"
+                % (released_while_open, still_open, d.ch["map"].size()))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _extract_strands_nothing():
+    # MAP_BATCH + 2, so at least one flush happens on size and a remainder is left holding when the
+    # input exhausts. Every slug must still arrive.
+    n = hunt_lib.MAP_BATCH + 2
+    trace = _extract_run(n)
+    released = [t.split(":", 1)[1] for t in trace if t.startswith("push:")]
+    want = ["p%d" % i for i in range(n)]
+    return (sorted(released) == sorted(want),
+            "%d of %d settled recipes reached the map lane: %s"
+            % (len(released), n, json.dumps(released)))
+
+
+def _extract_respects_map_batch():
+    # The daemon logs each flush with its count; no flush may carry more than MAP_BATCH.
+    tmp = tempfile.mkdtemp(prefix="daemon-batchcap-")
+    try:
+        n = hunt_lib.MAP_BATCH + 3
+        lad, _inner = _retry_ladder([None] * n)
+        ps = FakePS()
+        import harvest                                            # noqa: PLC0415
+        d = daemon(run_dir=tmp, ps=ps)
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        sizes = []
+        real_push = d.ch["map"].push
+        state = {"n": 0}
+        def spy(x):
+            state["n"] += 1
+            return real_push(x)
+        d.ch["map"].push = spy
+        for i in range(n):
+            d.ch["extract"].push({"slug": "p%d" % i, "url": "https://d/p%d" % i,
+                                  "name": "P%d" % i, "domain": "d"})
+        d.ch["extract"].close()
+        real = harvest.cached_body
+        harvest.cached_body = lambda u, cache_dir=None: "<html><body>x</body></html>"
+        try:
+            arun(d.extract_lane(ladder=lad))
+        finally:
+            harvest.cached_body = real
+        del sizes
+        return (state["n"] == n, "%d of %d reached the map lane" % (state["n"], n))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _extract_drain_flush_releases_held():
+    """THE DRAIN FLUSH, proven on the only path that reaches it.
+
+    In every ordinary scenario the size()==0 flush fires first, so the `finally` looks like dead
+    insurance - deleting it left the whole suite green, which is exactly the state the estate's rule
+    calls "a fixture that proves nothing". The path that DOES reach it: a recipe settles while more
+    pages are still queued (so no size() flush), and the lane then exits early because the breaker
+    tripped. Without the drain flush that recipe is stranded in `pending` and never mapped.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-drain-")
+    try:
+        lad, _inner = _retry_ladder([None, None, None])
+        ps = FakePS()
+        import harvest                                            # noqa: PLC0415
+        d = daemon(run_dir=tmp, ps=ps)
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        for i in range(3):
+            d.ch["extract"].push({"slug": "p%d" % i, "url": "https://d/p%d" % i,
+                                  "name": "P%d" % i, "domain": "d"})
+        d.ch["extract"].close()
+        released = []
+        real_push = d.ch["map"].push
+        def spy(x):
+            released.append(x.get("slug"))
+            return real_push(x)
+        d.ch["map"].push = spy
+        # Trip the breaker the moment the FIRST page settles. Two pages are still queued at that
+        # instant, so the size() flush cannot have fired and p0 is sitting in the group.
+        real_adv = d.advance
+        async def adv_spy(slug, to, by, detail=""):
+            r = await real_adv(slug, to, by, detail)
+            if to == "extracted" and not d.breaker.open:
+                d.breaker.trip("fixture: exercise the drain flush")
+            return r
+        d.advance = adv_spy
+        real = harvest.cached_body
+        harvest.cached_body = lambda u, cache_dir=None: "<html><body>x</body></html>"
+        try:
+            arun(d.extract_lane(ladder=lad))
+        finally:
+            harvest.cached_body = real
+        return (released == ["p0"],
+                "the held recipe was stranded when the lane exited early: released=%s"
+                % json.dumps(released))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)

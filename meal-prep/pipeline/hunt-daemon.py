@@ -770,6 +770,38 @@ class Daemon(object):
                     "rung 2 available" if rung2_fits else
                     "RUNG 2 UNAVAILABLE, escalations will accumulate (see --status)"))
 
+        # A (2026-08-24, off the 6b run). THE MAP LANE'S BATCH SIZE IS DECIDED HERE, ON THE PRODUCER
+        # SIDE, AND NEVER BY MAKING THE CHANNEL WAIT.
+        #
+        # MEASURED: 6b's mapper ran map:1x, map:1x, map:5x, map:2x. The two singletons cost 436,685 and
+        # 577,141 input tokens and 378 s FOR ONE RECIPE EACH, against map:5x at 212,244 and 167 s per
+        # recipe. Cause: extraction settles pages SERIALLY by design, so they trickled into the map
+        # channel one at a time and take_batch correctly swept whatever was queued.
+        #
+        # THE TRAP, AND WHY THIS IS NOT IT. `Chan.take_batch` must NEVER wait to fill a quota - that
+        # policy was measured (B3) deadlocking against the WIP limit and adding 8-10 minutes to first
+        # flow, and its docstring says so. Nothing here changes the channel. This holds settled pages on
+        # the PRODUCER side and flushes on three conditions, one of which is always eventually true:
+        #
+        #   1. the group reaches MAP_BATCH                        - the batch is as big as it may be
+        #   2. NOTHING IS QUEUED FOR EXTRACTION RIGHT NOW         - the anti-deadlock condition
+        #   3. the input channel is exhausted (the finally below) - the run is draining
+        #
+        # (2) is the one that makes a hang impossible. It asks the queue's CURRENT depth, never a
+        # future one, so a lone recipe is flushed the instant it settles and behaves exactly as today.
+        # Waiting only ever happens while pages are ALREADY queued behind this one, which is precisely
+        # the case that produced the two singletons. No promise, no timer, nothing to wake.
+        pending = []
+
+        async def flush_pending(why):
+            if not pending:
+                return
+            for rec in pending:
+                self.ch["map"].push(rec)
+            self.log("extract: released %d settled recipe(s) to the map lane (%s)"
+                     % (len(pending), why))
+            pending.clear()
+
         async def local_worker():
             """The local ladder, serial over pages by design: one page settles at a time and its lines
             fan across the server's slots. The daemon never starts or stops llama-server."""
@@ -802,7 +834,13 @@ class Daemon(object):
                         await self.advance(rec["slug"], "extracted", "local",
                                            "extraction ladder rung %d, every line verified"
                                            % rec["rung"])
-                        self.ch["map"].push(self.record(rec["slug"], {"state": "extracted"}))
+                        pending.append(self.record(rec["slug"], {"state": "extracted"}))
+                        # Flush on size, or the instant nothing else is queued behind this one. Asking
+                        # the CURRENT depth is what keeps this from ever being a wait.
+                        if len(pending) >= hunt_lib.MAP_BATCH:
+                            await flush_pending("batch full")
+                        elif self.ch["extract"].size() == 0:
+                            await flush_pending("nothing else queued for extraction")
                     elif rec["blocked"]:
                         # Could-not-run is BLOCKED, never an escalation and never a pass. A down
                         # server or an uncached page is not a page the Claude extractor should be
@@ -814,6 +852,10 @@ class Daemon(object):
                             self.escalations_blocked.append(rec["slug"])
                         esc_q.push(rec["slug"])
             finally:
+                # THE THIRD FLUSH, AND THE ONE THAT MAKES A HELD RECIPE IMPOSSIBLE TO STRAND. Every
+                # exit from the loop above runs this - input exhausted, breaker open, or an exception -
+                # so a settled recipe can never be left holding in `pending` while the run drains.
+                await flush_pending("extraction lane closing")
                 esc_q.close()
 
         async def claude_worker(_i):
