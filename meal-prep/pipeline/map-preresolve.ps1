@@ -745,6 +745,25 @@ function Get-MacroPrecheck {
 # mode exit 1 with the line named rather than shipping a file with a hole in it.
 $script:ASM_RULING_DECISIONS = @('mapped', 'mapped-null', 'mapped-optional', 'not-purchased', 'rejected')
 
+# GARNISH PHRASING. Matched as PHRASES rather than on the bare word "garnish", because a line may
+# legitimately BE the garnish and still be bought in a stated quantity ("1/4 cup parsley, for garnish"),
+# and those never reach the caller anyway - the qty engine weighs them. See the call site for why the
+# absence of a weight is the quantity test.
+#
+# `to serve` / `for serving` are IN: "warm tortillas, to serve" and "sour cream, for serving" are the
+# same shape - a serving suggestion with no measure - and they park recipes the same way.
+$script:GARNISH_PHRASES = @('to garnish', 'for garnish', 'for garnishing', 'as garnish',
+                            'as a garnish', 'to serve', 'for serving', 'for topping', 'to top')
+
+function Test-IsGarnishLine([string]$Raw) {
+  if (-not $Raw) { return $false }
+  $s = $Raw.ToLower()
+  foreach ($p in $script:GARNISH_PHRASES) { if ($s.Contains($p)) { return $true } }
+  # trailing bare ", garnish" - the same statement with the preposition dropped
+  if ($s -match ',\s*garnish(es)?\s*$') { return $true }
+  return $false
+}
+
 function Get-AssembledDecision {
   <# The ruling enum (or a pre-resolved line's absence of one) onto Get-LineClass's vocabulary. #>
   param([string]$Ruling, [bool]$Optional)
@@ -1000,6 +1019,28 @@ function New-MappedDecisionFile {
       }
     }
     if ($null -eq $grams -or $grams -le 0) {
+      # A QUANTITY-LESS GARNISH IS NOT A PURCHASABLE LINE (Brad's ruling 2026-08-24, after the 6b
+      # proving run parked `cheese-stuffed-chicken-parmesan` on "Fresh parsley (to garnish)").
+      #
+      # The estate already has the right ruling for this shape - `not-purchased` -> `optional-note`,
+      # whose own comment above names "water, a garnish, a sub-recipe" - and an optional-note line is
+      # NAMED in the file rather than dropped, so the reader still sees the garnish and the cost and
+      # macros are untouched. The mapper simply did not reach for it, and the estate's standing rule
+      # is that a rule a model must remember is a rule it sometimes forgets. So it is mechanical here.
+      #
+      # PLACED DELIBERATELY INSIDE THE REFUSAL, NOT BEFORE IT. The trigger is "neither the qty engine
+      # nor the mapper could weigh this line", which IS the quantity test: a garnish that states a
+      # measure ("2 tablespoons chopped parsley, for garnish") gets grams from the engine and never
+      # reaches here. So this can only ever fire where the recipe dies today, and it cannot change a
+      # single line that currently works.
+      if (Test-IsGarnishLine $raw) {
+        $ings.Add([pscustomobject]@{
+          source_raw = $raw; item = $(if ($item) { $item } else { $null }); bid = $null; board = $null
+          grams = 0; buy = ''; optional = $true; decision = 'optional-note'
+          notes = ("garnish with no stated quantity - nothing to buy, weigh or cost; recorded so the reader still sees it") }) | Out-Null
+        $paraphrased.Add(("'{0}' reads as a garnish with no stated quantity, so it is recorded as an optional note rather than costed" -f $raw)) | Out-Null
+        continue
+      }
       # NEVER A SILENT ZERO. A zero-gram line is an ingredient the reader buys and the card ignores,
       # and it is the fabricated-band defect from D8's own header arriving one stage earlier.
       $findings.Add(("'{0}' has no gram weight from the engine or from a ruling - a purchasable line with no weight cannot be costed and its macros would be computed as if the food were not there" -f $raw)) | Out-Null
@@ -1451,6 +1492,64 @@ if ($runSelfTest) {
     (($resA.doc.PSObject.Properties.Name) -join ',')
   T 'MUST FIRE  `protein` comes off the RUN STATE FILE, which has carried it since sourcing - D8 refuses to build without it and the wave manifest is built out of it' `
     ($resA.doc.protein -eq 'pork') ([string]$resA.doc.protein)
+
+  # ---- FIXTURE A1g. A QUANTITY-LESS GARNISH IS AN OPTIONAL NOTE, NOT A PARKED RECIPE -------------
+  # FROZEN FIXTURE (Brad's ruling 2026-08-24). The 6b proving run parked
+  # `cheese-stuffed-chicken-parmesan` on "Fresh parsley (to garnish)": no stated quantity, so no gram
+  # weight from the engine or a ruling, so the never-a-silent-zero refusal fired and the recipe died
+  # after map, registrar and pricing had all been paid. The estate already had the right shape for it -
+  # optional-note, whose own comment names "water, a garnish, a sub-recipe" - and the mapper simply did
+  # not reach for it.
+  #
+  # THE OVER-REACH TWINS ARE THE POINT. A garnish that STATES a measure still costs and weighs like any
+  # other line (it gets grams from the qty engine and never reaches the refusal), and a quantity-less
+  # line that is NOT a garnish must still park. Three garnish shapes, because a collection fixture takes
+  # at least three.
+  $rowsG = @((New-Row 'g1' 'g1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+             (New-Row 'g2' 'parsley' 'Fresh Parsley' 'parmesan' 'resolved' $null),
+             (New-Row 'g3' 'cilantro' 'Fresh Cilantro' 'onions' 'resolved' $null),
+             (New-Row 'g4' 'sour cream' 'Sour Cream' 'cream-cheese' 'resolved' $null),
+             (New-Row 'g5' 'chopped parsley' 'Fresh Parsley' 'parmesan' 'resolved' 10.0))
+  $payG = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='g1'; buy='1 lb chicken breast'; notes='' },
+              [pscustomobject]@{ raw='g2'; buy=''; notes='' },
+              [pscustomobject]@{ raw='g3'; buy=''; notes='' },
+              [pscustomobject]@{ raw='g4'; buy=''; notes='' },
+              [pscustomobject]@{ raw='g5'; buy='1/4 cup chopped parsley'; notes='' }); rulings=@() }
+  # the raw strings ARE the ingredient lines the reader sees, so they carry the garnish phrasing
+  $tblG = New-Tbl $rowsG 4
+  @($tblG.rows)[1].raw = 'Fresh parsley (to garnish)'
+  @($tblG.rows)[2].raw = 'Chopped cilantro, for serving'
+  @($tblG.rows)[3].raw = 'Sour cream, garnish'
+  @($tblG.rows)[4].raw = '1/4 cup chopped parsley, for garnish'
+  @($payG.lines)[1].raw = 'Fresh parsley (to garnish)'
+  @($payG.lines)[2].raw = 'Chopped cilantro, for serving'
+  @($payG.lines)[3].raw = 'Sour cream, garnish'
+  @($payG.lines)[4].raw = '1/4 cup chopped parsley, for garnish'
+  $resG = New-MappedDecisionFile $tblG $payG $stateRow $known 14
+  $gNotes = @(@($resG.doc.ingredients) | Where-Object { $_.decision -eq 'optional-note' })
+  T 'MUST FIRE  three quantity-less garnish shapes become optional-notes instead of parking the recipe' `
+    ($gNotes.Count -eq 3 -and @($resG.findings).Count -eq 0) `
+    ("optional-notes=" + $gNotes.Count + " findings=" + (@($resG.findings) -join '; '))
+  T 'MUST FIRE  ...and each is NAMED in the file with zero grams and nothing to buy, so the reader still sees the garnish and the cost is untouched' `
+    ((@($gNotes | Where-Object { $_.grams -eq 0 -and -not $_.buy -and $_.optional }).Count) -eq 3) `
+    (($gNotes | ForEach-Object { [string]$_.source_raw + ' g=' + [string]$_.grams }) -join ' | ')
+  T 'CLEAN TWIN a garnish that STATES a measure is costed like any other line, never demoted' `
+    ((@(@($resG.doc.ingredients) | Where-Object { $_.source_raw -like '*1/4 cup*' -and $_.decision -ne 'optional-note' }).Count) -eq 1) `
+    ((@($resG.doc.ingredients) | ForEach-Object { [string]$_.source_raw + '=' + [string]$_.decision }) -join ' | ')
+  # AND THE REFUSAL ITSELF MUST SURVIVE: a weightless line that is not a garnish still parks.
+  $rowsG2 = @((New-Row 'n1' 'n1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+              (New-Row 'n2' 'rice blend' 'Rice Blend' 'cauliflower' 'resolved' $null))
+  $payG2 = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='n1'; buy='1 lb chicken breast'; notes='' },
+              [pscustomobject]@{ raw='n2'; buy=''; notes='' }); rulings=@() }
+  $tblG2 = New-Tbl $rowsG2 4
+  @($tblG2.rows)[1].raw = 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice'
+  @($payG2.lines)[1].raw = 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice'
+  $resG2 = New-MappedDecisionFile $tblG2 $payG2 $stateRow $known 14
+  T 'MUST FIRE  a weightless line that is NOT a garnish still parks - the never-a-silent-zero refusal is untouched' `
+    ((@($resG2.findings) -join ' ') -match 'has no gram weight') `
+    ("findings=" + (@($resG2.findings) -join '; '))
 
   # ---- FIXTURE A2. THE DECISION VOCABULARY IS Get-LineClass's (pin P4). ---------------------------
   # Free-texting this field produced 21 distinct values across 550 v2 lines, and the ones the builder
