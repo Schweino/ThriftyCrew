@@ -1,0 +1,148 @@
+{
+ "slug": "stuffed-chicken-breast",
+ "lines": [
+  {
+   "raw": "4 boneless skinless chicken breasts",
+   "buy": "7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each)",
+   "grams_source": 908,
+   "notes": "Each-weight 227 g. Large breasts are needed to hold the stuffing, and the source's own protein figure confirms this size."
+  },
+  {
+   "raw": "Salt and pepper (to taste)",
+   "buy": "About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste",
+   "grams_source": 6,
+   "notes": "Source gives no quantity; this is my estimate."
+  },
+  {
+   "raw": "½ teaspoon paprika",
+   "buy": "1 3/4 teaspoons paprika",
+   "notes": "Sprinkled over the stuffed breasts before searing."
+  },
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "3 1/2 tablespoons olive oil",
+   "notes": "For searing. The sun-dried tomato oil works here too."
+  },
+  {
+   "raw": "2 teaspoons olive oil",
+   "buy": "2 tablespoons plus 1 teaspoon olive oil",
+   "notes": "For wilting the spinach and garlic."
+  },
+  {
+   "raw": "3 cups packed spinach (roughly chopped)",
+   "buy": "10 1/2 cups packed spinach, roughly chopped (about 11 oz)",
+   "grams_source": 90,
+   "notes": "Weighed by me - the table had no computed weight. 30 g per packed cup."
+  },
+  {
+   "raw": "4 cloves garlic (minced)",
+   "buy": "14 cloves garlic, minced",
+   "notes": "Wilted with the spinach."
+  },
+  {
+   "raw": "1/3 cup sun-dried tomatoes (drained/chopped)",
+   "buy": "1 1/4 cups sun-dried tomatoes, drained and chopped",
+   "notes": "Reserve the oil for searing."
+  },
+  {
+   "raw": "4 oz. cream cheese (softened)",
+   "buy": "14 oz. 1/3-less-fat cream cheese, softened",
+   "notes": "The whole amount goes into the filling."
+  },
+  {
+   "raw": "1 cup shredded mozzarella (see notes)",
+   "buy": "3 1/2 cups shredded mozzarella",
+   "notes": "Shred from a block if you can; pre-shredded works."
+  },
+  {
+   "raw": "1/3 cup Parmesan (grated)",
+   "buy": "1 1/4 cups grated Parmesan",
+   "grams_source": 33,
+   "notes": "1 cup grated = 100 g."
+  },
+  {
+   "raw": "½ teaspoon EACH: dried basil, dried oregano",
+   "buy": "1 3/4 teaspoons EACH dried basil and dried oregano",
+   "grams_source": 0.5,
+   "notes": "Composite line; grams are the oregano only."
+  },
+  {
+   "raw": "¼ teaspoon onion powder",
+   "buy": "scant 1 teaspoon onion powder",
+   "notes": "In the filling."
+  },
+  {
+   "raw": "1 pinch red pepper flakes",
+   "buy": "1/2 teaspoon red pepper flakes",
+   "notes": "In the filling."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "4 boneless skinless chicken breasts",
+   "term": "boneless skinless chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 908,
+   "evidence": "Exact vocabulary match; the different-form flag is only a breasts/breast token artifact. EACH-WEIGHT is the real ruling: 4 x 8 oz (227 g), because a breast must be big enough to pocket, and the check validates it at 63 g protein/serving against the source's 61 (the Chicken Florentine cutlet error in reverse)."
+  },
+  {
+   "raw": "Salt and pepper (to taste)",
+   "term": "Salt and pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped-optional",
+   "grams_source": 6,
+   "evidence": "'To taste' with no quantity, so the 1 tsp salt booked here is MY estimate for four stuffed breasts, with the matching black pepper on the buy string. Marked optional to preserve the source's own framing."
+  },
+  {
+   "raw": "1 cup shredded mozzarella (see notes)",
+   "term": "shredded mozzarella",
+   "canon_item": "Mozzarella Cheese",
+   "bid": "mozzarella-cheese",
+   "decision": "mapped",
+   "grams_source": 112,
+   "evidence": "REUSE, NOT a new id - and this one nearly went the other way. The board search reported no commodity for the phrase, but mozzarella-cheese is live on the everyday board with captured part-skim shredded cells at Walmart, Kroger, Hy-Vee, Aldi, Our Family and Sam's Club. NOT reduced-fat-mozzarella (70 vs 304 cal per equal weight) and not the Daiya vegan shreds."
+  },
+  {
+   "raw": "1/3 cup Parmesan (grated)",
+   "term": "Parmesan",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 33,
+   "evidence": "REUSE: parmesan is a live 7 of 7 id with grated-cheese cells at every store, and Parmesan Cheese is an existing label row. Only the vocabulary row is missing, which is a naming question and not a registrar one. 1/3 cup grated = 33 g."
+  },
+  {
+   "raw": "½ teaspoon EACH: dried basil, dried oregano",
+   "term": "dried basil, dried oregano",
+   "canon_item": "Dried Oregano",
+   "bid": "dried-oregano",
+   "decision": "mapped",
+   "grams_source": 0.5,
+   "evidence": "Composite line booked on dried oregano (1 tsp = 1 g); the matching 1/2 tsp dried basil rides the buy string uncosted at about 0.5 g. Both are explicitly dried, so there is no fresh flip to adjudicate."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published": {
+   "calories": 559,
+   "carbs_g": 10,
+   "protein_g": 61
+  },
+  "computed_per_serving": {
+   "calories": 519,
+   "carbs_g": 9,
+   "protein_g": 63
+  },
+  "delta_protein_pct": 3.3,
+  "delta_calories_pct": -7.2,
+  "verdict": "PASS, cleanly, on all three figures - protein within 3.3%, carbohydrate within 1 g, calories 7.2% under. That agreement is what validates the 8 oz each-weight on the main protein line: at the catalog-average 167 g the dish would fall about 12 g of protein short of the source, and at a 6 oz breast it would miss the calorie floor logic entirely. Comfortably inside both run conditions (519 cal, 9 g carb)."
+ }
+}

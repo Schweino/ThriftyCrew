@@ -1,0 +1,82 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-24T12:43:11",
+    "slug":  "beef-back-ribs",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Cayenne Pepper\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Beef Back Ribs",
+                   "slug":  "beef-back-ribs",
+                   "protein":  "beef",
+                   "cuisine":  "",
+                   "source_url":  "https://www.wellplated.com/beef-back-ribs/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Beef Back Ribs",
+                                           "grams":  6349,
+                                           "buy":  "14 lb beef back ribs (about 3 1/2 racks)"
+                                       },
+                                       {
+                                           "item":  "Smoked Paprika",
+                                           "grams":  36,
+                                           "buy":  "1/3 cup smoked paprika"
+                                       },
+                                       {
+                                           "item":  "Cayenne Pepper",
+                                           "grams":  6,
+                                           "buy":  "1 3/4 teaspoons cayenne (or less, to taste)"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  11,
+                                           "buy":  "1 tablespoon plus 1/2 teaspoon garlic powder"
+                                       },
+                                       {
+                                           "item":  "Onion Powder",
+                                           "grams":  13,
+                                           "buy":  "1 3/4 tablespoons onion powder"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  42,
+                                           "buy":  "2 tablespoons plus 1 teaspoon kosher salt"
+                                       },
+                                       {
+                                           "item":  "BBQ Sauce",
+                                           "grams":  998,
+                                           "buy":  "3 1/2 cups BBQ sauce"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  585,
+                                              "protein_g":  41.6,
+                                              "carbs_g":  31.2,
+                                              "fat_g":  31.7
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT4H15M",
+                                "totalTime":  "PT4H30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

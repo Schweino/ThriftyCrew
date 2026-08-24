@@ -1,0 +1,213 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "slow-cooker-pork-loin-roast-or-pork-shoulder",
+  "generated": "2026-08-24T12:48:25",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\slow-cooker-pork-loin-roast-or-pork-shoulder.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-24-v3-phase6b\\extracted\\slow-cooker-pork-loin-roast-or-pork-shoulder.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 12,
+        "source_ingredients": 14,
+        "matched": 10,
+        "invented": [
+          "Paprika",
+          "Garlic Powder"
+        ],
+        "dropped": [
+          "paprika, thyme",
+          "garlic powder, onion powder"
+        ],
+        "consolidated": [
+          "salt (from 'salt and pepper')",
+          "pepper (from 'salt and pepper')"
+        ]
+      },
+      "detail": "INVENTED: 'Paprika' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Garlic Powder' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'paprika, thyme' and the built recipe has nothing that denotes it; DROPPED: the source lists 'garlic powder, onion powder' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states \"salt (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states \"pepper (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Paprika' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Garlic Powder' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'paprika, thyme' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'garlic powder, onion powder' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states \"salt (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states \"pepper (from 'salt and pepper')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 5,
+        "unrated": 7,
+        "exempt": 0,
+        "recipe_ratio": 1.75,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "1.5 tbsp",
+            "spec": "2.5 tablespoon",
+            "ratio": 1.6667,
+            "deviation": 0.0476,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "2 tsp",
+            "spec": "1 tablespoon",
+            "ratio": 1.5,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Honey",
+            "source": "0.75 cup",
+            "spec": "1.33333 cup",
+            "ratio": 1.7778,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic",
+            "source": "5 clove",
+            "spec": "9 clove",
+            "ratio": 1.8,
+            "deviation": 0.0286,
+            "quantization_explained": false,
+            "severity": "pass"
+          },
+          {
+            "item": "Cornstarch",
+            "source": "3 tsp",
+            "spec": "1.75 tablespoon",
+            "ratio": 1.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Pork Loin",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Paprika",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Garlic Powder",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Cayenne Pepper",
+            "why": "could not read a leading amount from 'scant 1 teaspoon cayenne pepper (optional)' / '1/2 tsp'"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "could not read a leading amount from 'scant 1 teaspoon black pepper' / '1/2 tsp'"
+          },
+          {
+            "item": "Butter",
+            "why": "could not read a leading amount from 'scant 1 cup (2 sticks) unsalted butter' / '125g / 1/2 cup'"
+          },
+          {
+            "item": "Apple Cider Vinegar",
+            "why": "could not read a leading amount from 'scant 1/2 cup apple cider vinegar' / '1/4 cup'"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Salt scaled 1.5x while the recipe scaled 1.75x (14.3% off): the source says 2 tsp and the spec buys 1 tablespoon, where the exact scale is 1.17 tablespoon. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Salt scaled 1.5x while the recipe scaled 1.75x (14.3% off): the source says 2 tsp and the spec buys 1 tablespoon, where the exact scale is 1.17 tablespoon. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (4 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+        "spec_source_url": "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+        "transcription_source_url": "https://www.recipetineats.com/slow-cooker-pork-loin-roast/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 8,
+        "claimed_ratio": 1.75,
+        "measured_ratio": 1.75
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

@@ -1,0 +1,207 @@
+﻿{
+    "slug":  "slow-cooker-pork-loin-roast-or-pork-shoulder",
+    "title":  "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+    "source_url":  "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-24",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1.75 - 2.5 kg / 3.5 - 5lb pork loin OR shoulder/boston butt ( ,or scotch fillet, skinless (Note 1))",
+                            "item":  "Pork Loin",
+                            "bid":  "pork-loin",
+                            "board":  null,
+                            "grams":  3719,
+                            "buy":  "8 1/4 lb boneless pork loin roast, trimmed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Midpoint of the source range (1.75-2.5 kg). Booked as loin, not shoulder: the macro check fits loin almost exactly and shoulder would push the dish to 738 cal/serving. REUSE, not a new id: pork-loin is live on the everyday board (Member\u0027s Mark whole boneless pork loin, priced per lb, plus Kroger cells). Loin is the title\u0027s first option and the macro check settles it - loin gives 55 g protein/serving against the source\u0027s 56, while pork-shoulder gives 46 g and 738 cal.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1.5 tbsp olive oil (, separated)",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  35,
+                            "buy":  "2 1/2 tablespoons olive oil, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tsp of it rubs the pork, the rest sears it.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tsp EACH paprika, thyme",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  null,
+                            "grams":  8,
+                            "buy":  "3 1/2 teaspoons EACH paprika and dried thyme",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Composite line; grams are the paprika only. Rub thyme is dried, not fresh. Composite line booked on the larger food: 2 tsp paprika at 2.4 g/tsp. The 2 tsp of thyme in a dry rub is DRIED thyme (not the fresh-thyme id) and rides the buy string uncosted at about 2 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp EACH garlic powder, onion powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  null,
+                            "grams":  5,
+                            "buy":  "1 3/4 teaspoons EACH garlic powder and onion powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Composite line; grams are the garlic powder only. Composite line booked on garlic powder (1 tsp = 3.1 g, existing macro row); the matching 1 tsp onion powder (2.4 g) rides the buy string. Both foods already exist, neither is a new id.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp cayenne pepper (, optional)",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon cayenne pepper (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Optional heat in the rub.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  null,
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Bare \u0027pepper\u0027 in a rub is ground black pepper. Black Pepper is an exact vocabulary row and the bell-pepper near-misses are a token artifact; unqualified \u0027pepper\u0027 in a spice rub is ground black pepper. 2.3 g/tsp label basis.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Rub salt.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3/4 cup honey",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  445,
+                            "buy":  "1 1/3 cups honey",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The sauce carries essentially all of this dish\u0027s carbohydrate.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "125g / 1/2 cup butter (, unsalted)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  219,
+                            "buy":  "scant 1 cup (2 sticks) unsalted butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Honey butter sauce.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "5 cloves garlic (, minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  26,
+                            "buy":  "9 cloves garlic, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Countable rounded up from 8.75 cloves.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 cup cider vinegar",
+                            "item":  "Apple Cider Vinegar",
+                            "bid":  "apple-cider-vinegar",
+                            "board":  null,
+                            "grams":  104,
+                            "buy":  "scant 1/2 cup apple cider vinegar",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Water-like at 29.57 g/floz. Cider vinegar IS apple cider vinegar. REUSE: apple-cider-vinegar is a live commodity with captured cells (Great Value, Kroger, Bragg) on the everyday board. NOT apple-cider, which is the drink - form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp salt and pepper (, each)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  null,
+                            "grams":  5,
+                            "buy":  "scant 1 teaspoon EACH salt and black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Sauce seasoning, separate from the rub salt. Composite line; grams are the salt only. 1/2 tsp each: salt booked at 3 g (matching the settled 2 tsp = 12 g basis), the matching 1/2 tsp black pepper rides the buy string. Sauce seasoning, distinct from the rub salt line.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 tsp cornflour/cornstarch mixed with splash of water",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  null,
+                            "grams":  14,
+                            "buy":  "1 3/4 tablespoons cornstarch, mixed with a splash of cold water",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Cornflour is the British name for cornstarch. 2.6 g/tsp. Cornflour is the British name for the same food; exact vocabulary row and a 7 of 7 board id. Not wheat flour, which the word means in no US context here.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_added":  [
+
+                         ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published":  {
+                                                       "calories":  561,
+                                                       "carbs_g":  28,
+                                                       "protein_g":  56
+                                                   },
+                              "computed_per_serving":  {
+                                                           "calories":  606,
+                                                           "carbs_g":  27.6,
+                                                           "protein_g":  55
+                                                       },
+                              "delta_protein_pct":  -1.8,
+                              "delta_calories_pct":  8.0,
+                              "verdict":  "PASS - the closest match in the batch. Protein within 2% and carbohydrate within 1.4% both confirm the two judgement calls: the cut is LEAN LOIN (shoulder would land at 46 g protein and 738 cal) and the 2125 g midpoint of the source\u0027s own 1.75-2.5 kg range is right. The carbohydrate agreement also proves the source counts the WHOLE honey butter sauce, not a served fraction, which is why calories run 8% high rather than the sauce being over-booked. In band on both run conditions (606 cal, 27.6 g carb)."
+                          }
+}

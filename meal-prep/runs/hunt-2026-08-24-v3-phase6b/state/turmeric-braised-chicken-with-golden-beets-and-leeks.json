@@ -1,0 +1,62 @@
+{
+    "slug":  "turmeric-braised-chicken-with-golden-beets-and-leeks",
+    "title":  "Turmeric Braised Chicken with Golden Beets and Leeks",
+    "source_url":  "https://www.skinnytaste.com/turmeric-braised-chicken-with-golden-beets-and-leeks/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-24T12:09:53",
+    "updated":  "2026-08-24T12:25:08",
+    "terms":  [
+                  {
+                      "term":  "golden beets",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "chicken drumsticks",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "golden beets"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:53",
+                        "by":  "harvest",
+                        "detail":  "https://www.skinnytaste.com/turmeric-braised-chicken-with-golden-beets-and-leeks/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:09:53",
+                        "by":  "decider",
+                        "detail":  "Distinct turmeric/ginger/lemon/white-wine braise with golden beets and leeks; no live or backlog neighbour shares this flavour-vegetable profile, verified band 527cal/16.5c."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:10:14",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:18:38",
+                        "by":  "mapper",
+                        "detail":  "{\"counts\": {\"residual_lines_ruled\": 7, \"rejected\": 0, \"board_suggestions_refused\": 2, \"food_db_rows_added\": 4, \"new_commodity_proposals\": 2, \"vocabulary_rows_needed_no_registrar\": 3}, \"board_suggestions_refused\": [\"canned-beets for fresh golden beets with greens - form flip on price class and gram basis, and it carries no greens\", \"chicken-thighs for drumsticks - different cut, different price cla"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:20:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-24T12:25:08",
+                        "by":  "derive",
+                        "detail":  "waiting on: golden beets"
+                    }
+                ]
+}

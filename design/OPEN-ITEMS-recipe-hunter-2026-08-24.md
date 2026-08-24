@@ -80,6 +80,36 @@ came from an alternate cut the recipe is not built as, with the writer's own fla
 offers both cuts. The auditor: needs either its own rule or a prose rephrase, and if the lib rule is
 judged too risky the fallback owner is the WRITER stage (give each rider its own display line).
 
+### 2.6 A MAPPER BID THAT CONTRADICTS ITS OWN WRITTEN RULING (found in the 6b post-run read)
+`mapped/turmeric-braised-chicken-with-golden-beets-and-leeks.json`:
+
+```
+"item":  "Bone-In Skinless Chicken Drumstick",
+"bid":   "chicken-thighs",
+"notes": "...Refused the chicken-thighs bridge on the standing 'leg quarters are not thighs'
+          precedent: drumsticks are a distinct cut ... so the thigh id would overprice and mis-weigh."
+```
+
+The prose refuses `chicken-thighs`; the machine-readable field IS `chicken-thighs`. The SAME mapper got
+it right on `hawaiian-chicken` (`bid: chicken-drumsticks`) with the same reasoning, so this is a slip,
+not a policy. **Nothing in the pipeline checks that a bid AGREES with its own evidence** - the evidence
+gate makes the ruling auditable by a human and no machine reads it.
+
+It did not publish, but only by luck: the recipe parked for an unrelated pricing gap (golden beets
+PENDING), not because any gate caught the contradiction. Had it priced, the dish would have been costed
+from thigh rows - exactly the mispricing its own note forbids.
+
+**Proposed check (mechanical, cheap):** if a ruling's `notes` say it refused / rejected an id, that id
+may not be the `bid`. A string check over the decision file, no model needed.
+
+### 2.7 The commodity include pattern conflates three cuts
+`chicken-thighs` carries `/chicken\s+(thigh|drumstick|leg)/`, so `price-ingredient.ps1 -Name 'chicken
+drumsticks'` answers with seven stores of THIGH products and not one drumstick. The 6b pricer read that
+correctly and recorded `blocked` at the three browserless stores rather than harvesting thigh rows as
+`carried` - the fabrication case NOT happening, and the criteria's required capture-road spot-check
+therefore passes for a better reason than matching numbers. But the pattern remains a trap for anything
+bid to that id. Owner: the commodity layer, not the Recipe Hunter.
+
 ---
 
 ## 3. Found and NOT yet written down anywhere else

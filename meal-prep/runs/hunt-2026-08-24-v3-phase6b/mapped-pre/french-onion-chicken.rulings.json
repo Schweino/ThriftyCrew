@@ -1,0 +1,163 @@
+{
+ "slug": "french-onion-chicken",
+ "lines": [
+  {
+   "raw": "1 jumbo yellow onion (thinly sliced (about 12 ounces or 3 1/2 cups))",
+   "buy": "2 1/2 lb yellow onions, thinly sliced (about 12 cups)",
+   "grams_source": 340,
+   "notes": "The source states its own weight, 12 oz, so no each-weight guess was needed."
+  },
+  {
+   "raw": "8 ounces good-quality sourdough bread (whole grain if possible, cut into 1 1/2-inch cubes (about 3 1/2 heaped cups))",
+   "buy": "1 3/4 lb sourdough bread, cut into 1 1/2-inch cubes (about 12 cups)",
+   "grams_source": 226.8,
+   "notes": "The croutons roast in the pan. This line is the reason the recipe sits at the carbohydrate ceiling."
+  },
+  {
+   "raw": "8 cloves garlic (peeled and left whole)",
+   "buy": "28 cloves garlic, peeled and left whole",
+   "notes": "About 3 heads."
+  },
+  {
+   "raw": "2 tablespoons unsalted butter",
+   "buy": "7 tablespoons unsalted butter",
+   "notes": "Melted and whisked with the oil and mustard."
+  },
+  {
+   "raw": "2 tablespoons extra-virgin olive oil",
+   "buy": "7 tablespoons extra-virgin olive oil",
+   "notes": "Part of the dressing that coats the onions and bread."
+  },
+  {
+   "raw": "1 tablespoon Dijon mustard",
+   "buy": "3 1/2 tablespoons Dijon mustard",
+   "notes": "Whisked into the butter and oil."
+  },
+  {
+   "raw": "2 teaspoons kosher salt (divided)",
+   "buy": "2 tablespoons plus 1 teaspoon kosher salt, divided",
+   "notes": "Half in the dressing, half on the chicken."
+  },
+  {
+   "raw": "2 1/4 pounds bone-in, skin-on chicken breasts",
+   "buy": "7 3/4 lb bone-in, skin-on chicken breasts",
+   "grams_source": 1020.6,
+   "notes": "As purchased, bone in. About 28% of that weight is bone."
+  },
+  {
+   "raw": "1/2 teaspoon ground black pepper",
+   "buy": "1 3/4 teaspoons ground black pepper",
+   "notes": "On the chicken."
+  },
+  {
+   "raw": "1 1/2 tablespoons chopped fresh thyme",
+   "buy": "1/3 cup chopped fresh thyme",
+   "grams_source": 3.6,
+   "notes": "Fresh, scattered at the end. 2.4 g per tbsp chopped leaves."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 jumbo yellow onion (thinly sliced (about 12 ounces or 3 1/2 cups))",
+   "term": "jumbo yellow onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 340,
+   "evidence": "Exact vocabulary row Yellow Onion [onions], 7 of 7 board. The source publishes its own 12 oz weight, so this is a measured line rather than an each-weight estimate."
+  },
+  {
+   "raw": "8 ounces good-quality sourdough bread (whole grain if possible, cut into 1 1/2-inch cubes (about 3 1/2 heaped cups))",
+   "term": "good-quality sourdough bread",
+   "canon_item": "Sourdough Bread",
+   "bid": "sourdough-bread",
+   "decision": "mapped",
+   "grams_source": 226.8,
+   "evidence": "REFUSED the bread near-miss: the bread commodity is a $1.69 sandwich loaf, a different product and price class from a bakery sourdough, and the vocabulary already splits Rye Bread from Sandwich Bread, so variety splits are the standing convention here. No sourdough id exists in any namespace; new id proposed."
+  },
+  {
+   "raw": "2 tablespoons unsalted butter",
+   "term": "unsalted butter",
+   "canon_item": "Butter",
+   "bid": "butter",
+   "decision": "mapped",
+   "grams_source": 28,
+   "evidence": "Salted and unsalted butter are the same price class and the same macros, and the pre-resolver itself settled an unsalted butter line onto [butter] elsewhere in this same batch. The peanut-butter near-miss is a token artifact."
+  },
+  {
+   "raw": "2 tablespoons extra-virgin olive oil",
+   "term": "extra-virgin olive oil",
+   "canon_item": "Olive Oil",
+   "bid": "olive-oil",
+   "decision": "mapped",
+   "grams_source": 27,
+   "evidence": "Extra-virgin is the grade the olive-oil commodity is captured at across the board; same food, same price class, no gram-weight difference. 13.5 g/tbsp."
+  },
+  {
+   "raw": "2 1/4 pounds bone-in, skin-on chicken breasts",
+   "term": "bone-in, skin-on chicken breasts",
+   "canon_item": "Bone-In Skin-On Chicken Breast",
+   "bid": "bone-in-chicken-breast",
+   "decision": "mapped",
+   "grams_source": 1020.6,
+   "evidence": "REFUSED chicken-breast (boneless skinless): a split bone-in breast sells well below the boneless per-lb price AND carries about 28% bone, so bridging it would misprice and misweigh at once - the leg-quarters-are-not-thighs precedent. The estate already splits bone-in thigh and drumstick from their boneless rows. New id proposed."
+  },
+  {
+   "raw": "1 1/2 tablespoons chopped fresh thyme",
+   "term": "fresh thyme",
+   "canon_item": "Fresh Thyme",
+   "bid": "fresh-thyme",
+   "decision": "mapped",
+   "grams_source": 3.6,
+   "evidence": "Fresh, not dried - a form flip that is both a different price class and roughly a threefold difference in strength per gram. fresh-thyme is a live id at 4 of 7 stores."
+  }
+ ],
+ "absent_terms": [
+  "sourdough bread",
+  "bone-in skin-on chicken breasts"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "sourdough bread",
+   "proposed_bid": "sourdough-bread",
+   "evidence": "Searched by food across all four namespaces for sourdough and every obvious variant (sour dough, artisan loaf, bakery bread): nothing carries it. What exists is bread (label 'Sandwich Bread', a $1.69 sliced loaf, 4 of 7 stores) and rye-bread - and that pair is itself the precedent, because the estate already treats a bread VARIETY as its own id rather than folding it into the sandwich loaf. A bakery sourdough loaf runs two to three times the sandwich-loaf price, so folding this line into bread would underprice a card whose whole selling point is being cheap. Macros also differ (281 vs 266 cal per 100 g), though that is the lesser reason."
+  },
+  {
+   "term": "bone-in, skin-on chicken breasts",
+   "proposed_bid": "bone-in-chicken-breast",
+   "evidence": "Checked by food, not string, across all four namespaces: chicken-breast is explicitly the BONELESS SKINLESS product (7 of 7, $1.99 at Hy-Vee), rotisserie-chicken is cooked, whole-chicken is the entire bird, and no split-breast or bone-in-breast id exists under any spelling (searched split chicken breast, bone-in breast, chicken breast halves). The estate has already ruled this exact question the other way round for the dark meat: on 2026-08-24 it minted Bone-In Skinless Chicken Thigh and Bone-In Skinless Chicken Drumstick rows precisely because a bone-in cut is a different price class and cannot share the boneless row's grams. Split breasts typically sell at roughly half the boneless per-pound price and carry about 28% bone, so this is a genuine second food, not a spelling of the first."
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "sourdough-bread",
+   "verdict": "approve",
+   "bid": "sourdough-bread",
+   "reason": "No sourdough id, label, or crown exists in commodities.json, recipe-commodities.json, the recipe board, or the live feed - the nearest rows are bread (crown 'Corner Store Bread Original White', $1.69) and french-bread (crown 'French Bakery Bread Loaf', $1.25), neither of which is a sourdough product, while real ad items ('Bakery-fresh sourdough bread $4.99', Aldi 'Sliced Sourdough Round') show the variety sells under its own name at 2-3x the sandwich loaf, matching the rye-bread variety precedent. REQUIRED EDITS with the mint: (1) add 'sourdough' to the exclude lists of bread and french-bread, whose includes (\\bbread\\b, 'bakery bread loaf') would otherwise claim sourdough products; (2) add allowlist pairs sourdough-bread/bread and sourdough-bread/french-bread with reason 'distinct bread variety, 2-3x price' so the audit never re-flags them; (3) namespace is recipe-only (recipe-board baseline + recipe-commodities.json, since sourdough appears in weekly ads and can go on sale); (4) build its include/exclude at neighboring-commodity rigor (~150 excludes - at minimum crumb/crust/pizza/english muffin/pretzel/starter/mix/dough); (5) SEPARATELY, the ingredient vocabulary needs a new row 'Sourdough Bread' -> sourdough-bread - it is not a rename of Sandwich Bread."
+  },
+  {
+   "proposed_bid": "bone-in-chicken-breast",
+   "verdict": "approve",
+   "bid": "bone-in-chicken-breast",
+   "reason": "No bone-in/split breast id exists in any namespace: commodities.json's only breast ids are chicken-breast (label 'Boneless Skinless Chicken Breast', whose exclude list explicitly rejects 'bone[\\s-]*in' and 'split' at lines 34-35, so its 7/7 $1.99 Hy-Vee row can never price this cut) and canned-chicken; recipe-commodities.json has only boneless-skinless-chicken-thigh; the recipe board, smp-feed (only 'bone' ids are boneless-skinless-chicken-thigh and boneless-beef-short-ribs; the lone 'Split' in the feed is fork-split English muffins), floor-id-map, and dupe-allowlist all come up empty. The id is not new to the estate: staples500/approved.json already vetted this exact id as 'Bone-In Split Chicken Breast' (lb, agent-2) with the note that the boneless matcher excludes it, and 2026-08-24's Bone-In Skinless Chicken Thigh/Drumstick rulings set the precedent that bone-in is a different price class (~28% bone, roughly half the boneless $/lb — pricing it off chicken-breast would overcharge the recipe ~2x). FOLLOW-UPS: (1) mint via add-commodity-rule.ps1 in the recipe-only namespace (recipe-board baseline; promote to weekly staples later per the staples500 slate), unit lb, include patterns requiring bone-in|split alongside chicken breast, and build the exclude list to neighboring rigor (start from chicken-breast's ~150: boneless, skinless-only, tender/strip/nugget/breaded/canned/cooked/thin-sliced, thigh/drumstick/wing, whole chicken); (2) add the allowlist pair bone-in-chicken-breast vs chicken-breast with reason 'same food different form: bone-in skin-on split breast vs boneless skinless, different price class' because the suffix sweep WILL flag the contained string; (3) separately, the ingredient NAME needs its own vocabulary row ('Bone-In Skin-On Chicken Breast') plus the food-macros-db transcription with a bone/skin yield factor like the 8/24 thigh (0.78) and drumstick (0.63) rows — the id ruling does not create it."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published": {
+   "calories": 583,
+   "carbs_g": 35,
+   "protein_g": 61
+  },
+  "computed_per_serving": {
+   "calories": 631,
+   "carbs_g": 42,
+   "protein_g": 44.5
+  },
+  "delta_protein_pct": -27.0,
+  "delta_calories_pct": 8.2,
+  "verdict": "CALORIES PASS, CARBOHYDRATE FAILS, PROTEIN FLAGGED. Calories agree within 8.2%, so the portions are right. Two problems, and the carbohydrate one is the serious one: 8 oz of sourdough alone is about 120 g of carbohydrate, and with the 12 oz of onion the dish computes to 42 g per serving against the run's 35 g ceiling - the source's own published 35 sits exactly ON that ceiling, so any honest recompute pushes it over. I am reporting this rather than trimming the bread, because the croutons are the dish. The 27% protein shortfall is the same bone-yield artifact as beef-back-ribs: 61 g/serving x 4 = 244 g needs about 1.2 kg of boneless meat, which is the full as-purchased weight of a 2 1/4 lb BONE-IN order, so the source counted bone as meat. My 44.5 g is computed after removing about 28% bone."
+ }
+}

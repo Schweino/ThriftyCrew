@@ -1,0 +1,31 @@
+{
+    "slug":  "pork-roast-recipe",
+    "title":  "Pork Roast Recipe",
+    "source_url":  "https://www.wellplated.com/pork-roast/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:17",
+    "updated":  "2026-08-24T12:13:17",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Oven-roasted center-cut pork loin roast duplicates live dutch-oven-pork-loin-roast-gravy (same cut, protein, oven-roast method) and stacks on the slow-cooker-pork-loin-roast accepted earlier THIS run — a third pork loin roast; apples vs gravy is a garnish nuance, not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:17",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/pork-roast/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:13:17",
+                        "by":  "decider",
+                        "detail":  "Oven-roasted center-cut pork loin roast duplicates live dutch-oven-pork-loin-roast-gravy (same cut, protein, oven-roast method) and stacks on the slow-cooker-pork-loin-roast accepted earlier THIS run — a third pork loin roast; apples vs gravy is a garnish nuance, not a distinct plate."
+                    }
+                ]
+}

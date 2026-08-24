@@ -1,0 +1,152 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+  "source_url": "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+  "servings": 8,
+  "time_total": "610 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1.75 - 2.5 kg / 3.5 - 5lb pork loin OR shoulder/boston butt ( ,or scotch fillet, skinless (Note 1))",
+      "item": "pork loin OR shoulder/boston butt ,or scotch fillet, skinless",
+      "qty": "1.75 - 2.5 kg / 3.5 - 5lb",
+      "unit": null,
+      "prep": "Note 1",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5 tbsp olive oil (, separated)",
+      "item": "olive oil",
+      "qty": "1.5",
+      "unit": "tbsp",
+      "prep": "separated",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp EACH paprika, thyme",
+      "item": "paprika, thyme",
+      "qty": "2 tsp EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp EACH garlic powder, onion powder",
+      "item": "garlic powder, onion powder",
+      "qty": "1 tsp EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp cayenne pepper (, optional)",
+      "item": "cayenne pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": "optional",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp pepper",
+      "item": "pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp salt",
+      "item": "salt",
+      "qty": "2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 cup honey",
+      "item": "honey",
+      "qty": "3/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "125g / 1/2 cup butter (, unsalted)",
+      "item": "butter",
+      "qty": "125g / 1/2 cup",
+      "unit": null,
+      "prep": "unsalted",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "5 cloves garlic (, minced)",
+      "item": "garlic",
+      "qty": "5",
+      "unit": "cloves",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup cider vinegar",
+      "item": "cider vinegar",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp salt and pepper (, each)",
+      "item": "salt and pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": "(, each)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tsp cornflour/cornstarch mixed with splash of water",
+      "item": "cornflour/cornstarch",
+      "qty": "3",
+      "unit": "tsp",
+      "prep": "mixed with splash of water",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Spice Rub: Rub pork with about 1 tsp oil. Mix Rub together then sprinkle over pork. Pat to adhere all over.",
+    "Brown: Heat 1 tbsp oil in a large skillet over medium heat. Add pork and sear all around until deep golden brown (don't let spices burn). Place pork in slow cooker.",
+    "Honey Butter Sauce: Wipe pan. Add butter and melt. Add garlic and cook for 1 minute until golden. Add remaining Sauce ingredients, mix, simmer rapidly for 30 seconds.",
+    "Pour Sauce over pork. Cover slow cooker.",
+    "Pork loin - Cook on LOW for 4 to 5 hours (see Note 2 for cook times for different sizes)",
+    "Pork Shoulder - Cook on LOW for 10 hours (see Note 2 for cook times for different sizes, and Note 4 for oven, InstantPot and pressure cooker methods).",
+    "Remove pork onto serving platter, cover loosely with foil (10 - 20 minutes rest). (See Note 6 on Doneness)",
+    "Pour all juices in slow cooker into large saucepan. Add cornflour water mixture, mix.",
+    "Thicken Sauce: Simmer on medium high for 5 minutes or until it reduces down to a syrupy consistency (Note 3).",
+    "Slice pork into thick slices (1.5 - 2 cm / 3/5 - 4/5\" thick). Serve with PLENTY of Honey Butter Sauce!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

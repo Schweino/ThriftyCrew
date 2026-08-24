@@ -338,15 +338,26 @@ function Get-PhantomIngredients($spec, $vocab) {
   $hay = ((($steps.ToLower() -replace '[^a-z ]', ' ') -replace '\s+', ' ')).Trim()
   if (-not $hay) { return $hits }
 
-  # What this recipe actually buys, read from all three parallel arrays: the scaler item, its canonical
-  # name when the card renames an ingredient for the reader (the japchae glass noodles), and the display
-  # key. Any one of them accounting for the word is enough.
+  # What this recipe actually buys, read from every place a bought food is named: the scaler item, its
+  # canonical name when the card renames an ingredient for the reader (the japchae glass noodles), the
+  # scaler BUY string, and the WHOLE de-HTML'd display line - not just the display key before the colon.
+  #
+  # THE KEY-ONLY READING WAS A HOLE (2026-08-24). A COMPOSITE buy line names two foods on one costed row -
+  # "Paprika: 3 1/2 teaspoons EACH paprika and dried thyme", "Garlic Powder: ...garlic powder and onion
+  # powder", "Salt: ...scant 1 teaspoon EACH salt and black pepper". The rider food (dried thyme, onion
+  # powder, the sauce's second black pepper, dried basil) lives AFTER the colon, is genuinely bought, and is
+  # on the reader-facing ingredient list - but $own read only the pre-colon key, so a step that named the
+  # rider looked like a phantom. Five false findings across two slugs reached the gate this way. Reading the
+  # full line and the buy string closes it. A food named in NO line and NO buy string still fires: the
+  # dr-pepper soda twin in the self-test proves the coverage did not go slack.
   $own = New-Object System.Collections.Generic.List[object]
   foreach ($sc in @($spec.scaler.ing)) {
-    foreach ($v in @([string]$sc.item, [string]$sc.canon)) { if ($v) { $own.Add(@(Get-FoodStemTokens $v)) } }
+    $buy = if (($sc.PSObject.Properties.Name -contains 'buy') -and $sc.buy) { [string]$sc.buy } else { '' }
+    foreach ($v in @([string]$sc.item, [string]$sc.canon, $buy)) { if ($v) { $own.Add(@(Get-FoodStemTokens $v)) } }
   }
   foreach ($li in @($spec.ingredients_display)) {
     $s = ([string]$li) -replace '<[^>]+>', ''
+    if ($s.Trim()) { $own.Add(@(Get-FoodStemTokens $s)) }          # whole line: covers riders in the buy string after the colon
     $m = [regex]::Match($s, '^\s*([^:]+?)\s*:')
     if ($m.Success) { $own.Add(@(Get-FoodStemTokens $m.Groups[1].Value)) }
   }

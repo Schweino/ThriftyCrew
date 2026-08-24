@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-and-guinness-stew",
+    "title":  "Beef and Guinness Stew",
+    "source_url":  "https://www.recipetineats.com/irish-beef-and-guinness-stew/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:10:01",
+    "updated":  "2026-08-24T12:10:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same dish as live irish-beef-and-guinness-stew (same RecipeTinEats source; word-overlap 30, bge 0.94) - beef chuck, bacon, Guinness, root veg stew.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:10:01",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/irish-beef-and-guinness-stew/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:10:02",
+                        "by":  "decider",
+                        "detail":  "Same dish as live irish-beef-and-guinness-stew (same RecipeTinEats source; word-overlap 30, bge 0.94) - beef chuck, bacon, Guinness, root veg stew."
+                    }
+                ]
+}

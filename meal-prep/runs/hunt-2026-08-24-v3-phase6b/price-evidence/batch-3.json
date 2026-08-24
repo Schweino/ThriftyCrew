@@ -1,0 +1,584 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-24-v3-phase6b",
+ "batch": 3,
+ "generated": "2026-08-24T12:43:39",
+ "batch_terms": [
+  "sourdough bread",
+  "bone-in skin-on chicken breasts"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "sourdough bread",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "sourdough bread",
+     "attempts": [
+      {
+       "term": "sourdough bread",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Artesano Sourdough Bread",
+       "price": 4.79,
+       "size": "20 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0007016295978"
+      },
+      {
+       "item": "Schar Gluten Free Sourdough Bread",
+       "price": 6.49,
+       "size": "8.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0081075701037"
+      },
+      {
+       "item": "Sara Lee Sourdough Bread, Half Loaf",
+       "price": 2.69,
+       "size": "12 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0007294576614"
+      },
+      {
+       "item": "Pepperidge Farm® Farmhouse Sourdough Bread",
+       "price": 3.79,
+       "size": "24 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001410007467"
+      },
+      {
+       "item": "Private Selection® Sourdough Bread Wide Pan",
+       "price": 3.49,
+       "size": "24 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111008504"
+      },
+      {
+       "item": "The Rustik Oven Artisan Style Sourdough Bread",
+       "price": 5.04,
+       "size": "16 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0007313203111"
+      },
+      {
+       "item": "Goldminer Sourdough Boule Bread",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0003967707225"
+      },
+      {
+       "item": "Rudi's Gluten Free Sourdough White Bread",
+       "price": 5.99,
+       "size": "18 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0085675000207"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "sourdough bread",
+     "attempts": [
+      {
+       "term": "sourdough bread",
+       "state": "OK",
+       "hits": 11
+      }
+     ],
+     "hits": [
+      {
+       "item": "The Rustik Oven Sourdough Bread 1 Lb",
+       "price": 5.49,
+       "size": "1 lb",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/the_rustik_oven_sourdough_bread_1_lb/p/1564405684703734135"
+      },
+      {
+       "item": "Pepperidge Farm® Sourdough Bread 24.000 Oz",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/sourdough_bread/pepperidge_farm_sourdough_bread_24_000_oz/p/15446"
+      },
+      {
+       "item": "Fresh & Finest San Francisco Sourdough Bread",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/fresh_baked_breads/fresh_finest_san_francisco_sourdough_bread/p/1564405684713022867"
+      },
+      {
+       "item": "Izzio Artisan Bakery Rustic Potato Sourdough Bread",
+       "price": 6.99,
+       "size": "24 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/artisan_rustic_breads/izzio_artisan_bakery_rustic_potato_sourdough_bread/p/1564405684712196007"
+      },
+      {
+       "item": "Izzio Artisan Bakery San Francisco Sourdough Bread",
+       "price": 6.99,
+       "size": "24 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/artisan_rustic_breads/izzio_artisan_bakery_san_francisco_sourdough_bread/p/1564405684704265758"
+      },
+      {
+       "item": "Izzio Artisan Bakery Everything Sourdough Bread",
+       "price": 6.99,
+       "size": "24 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/artisan_rustic_breads/izzio_artisan_bakery_everything_sourdough_bread/p/1564405684712558315"
+      },
+      {
+       "item": "Schar Bread, Gluten Free, Sourdough, Deli Style 8.5 Oz",
+       "price": 8.99,
+       "size": "8.5 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/other_breads/schar_bread_gluten_free_sourdough_deli_style_8_5_oz/p/57374"
+      },
+      {
+       "item": "Izzio Artisan Bakery Bread, Sourdough, San Francisco Style 14 Oz",
+       "price": 4.99,
+       "size": "14 oz",
+       "relevance": 84,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/take_bake_breads/izzio_artisan_bakery_bread_sourdough_san_francisco_style_14_oz/p/8211680"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "sourdough bread",
+     "attempts": [
+      {
+       "term": "sourdough bread",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Izzio Artisan Bakery San Francisco Style Sourdough",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19007668-izzio-artisan-bakery-bread-sourdough-san-francisco-style-24-oz"
+      },
+      {
+       "item": "Bakery Fresh Sourdough Bread",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389228-bakery-fresh-sourdough-bread-16-oz"
+      },
+      {
+       "item": "Pepperidge Farm Farmhouse Sourdough Bread",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/306958-pepperidge-farm-farmhouse-sourdough-bread-24-oz"
+      },
+      {
+       "item": "The Rustik Oven Sourdough Bread",
+       "price": 4.97,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19119077-the-rustik-oven-sourdough-bread-16-oz"
+      },
+      {
+       "item": "Izzio Artisan Bakery Sourdough, San Francisco Style",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28073245-izzio-artisan-bakery-sourdough-san-francisco-style-24-oz"
+      },
+      {
+       "item": "Village Hearth Cottage Bread, Sourdough",
+       "price": 3.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68850-village-hearth-bread-sourdough-cottage-24-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "sourdough bread",
+     "attempts": [
+      {
+       "term": "sourdough bread",
+       "state": "MATCHES",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "King's Hawaiian Original Sweet Soft Pretzel Bites, 20.8 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.43/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15LH3OP78Y1W"
+      },
+      {
+       "item": "Artesano Hawaiian Bakery Buns, 16 ct.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1900O28YC7JR"
+      },
+      {
+       "item": "Village Hearth Sourdough Bread 24. oz. 2 pk.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$2.74/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7JZ1I32N8WW5"
+      },
+      {
+       "item": "Member's Mark Sliced Sourdough Bread, 23 oz.",
+       "price": 3.96,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5N5SHHB4LVA9"
+      },
+      {
+       "item": "Wildgrain Frozen Bake-at-Home Variety Box, 8 pcs.",
+       "price": 99.0,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1GZG4A07M2W1"
+      },
+      {
+       "item": "Member's Mark Sliced Sourdough, Frozen, Case, 12 ct.",
+       "price": 41.57,
+       "size": "",
+       "unit_price": "$3.46/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/25BXKXUDSK14"
+      },
+      {
+       "item": "Brownberry Superior Keto Bread 20 oz., 2 pk.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5RKFNN0M8BMW"
+      },
+      {
+       "item": "Sara Lee Soft & Smooth Whole Grain White Bread  20 oz., 2 pk.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6XR5ZGXT0606"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "bone-in skin-on chicken breasts",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "bone-in skin-on chicken breasts",
+     "attempts": [
+      {
+       "term": "bone-in skin-on chicken breasts",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Boneless Skinless Chicken Breasts",
+       "price": 13.99,
+       "size": "5 lb",
+       "relevance": 40,
+       "url": "https://www.bakersplus.com/p/0001111067941"
+      },
+      {
+       "item": "Tyson® Boneless Skinless Diced Chicken Breasts",
+       "price": null,
+       "size": "2.5 lb",
+       "relevance": 38,
+       "url": "https://www.bakersplus.com/p/0002370005952"
+      },
+      {
+       "item": "Heritage Farm® Boneless Skinless Chicken Breasts",
+       "price": 2.59,
+       "size": "1 lb",
+       "relevance": 38,
+       "url": "https://www.bakersplus.com/p/0028334900000"
+      },
+      {
+       "item": "Heritage Farm® Bone In Skin On Split Chicken Breasts",
+       "price": 2.29,
+       "size": "1 lb",
+       "relevance": 37,
+       "url": "https://www.bakersplus.com/p/0025313450000"
+      },
+      {
+       "item": "Kroger® Frozen Raw Boneless Skinless Chicken Breasts",
+       "price": 9.99,
+       "size": "3 lb",
+       "relevance": 37,
+       "url": "https://www.bakersplus.com/p/0001111097860"
+      },
+      {
+       "item": "Tyson® Thin Sliced Boneless Skinless Chicken Breasts",
+       "price": 10,
+       "size": "40 oz",
+       "relevance": 37,
+       "url": "https://www.bakersplus.com/p/0002370016220"
+      },
+      {
+       "item": "Tyson® All Natural Fresh Boneless Skinless Chicken Breasts",
+       "price": 2.99,
+       "size": "1 lb",
+       "relevance": 36,
+       "url": "https://www.bakersplus.com/p/0026082900000"
+      },
+      {
+       "item": "Heritage Farm® Boneless Skinless Thin Sliced Chicken Breasts",
+       "price": 4.89,
+       "size": "1 lb",
+       "relevance": 35,
+       "url": "https://www.bakersplus.com/p/0025313700000"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "boneinskinonchickenbreasts",
+     "attempts": [
+      {
+       "term": "bone-in skin-on chicken breasts",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "bone in skin on chicken breasts",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "boneinskinonchickenbreasts",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 3 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "bone-in skin-on chicken breasts",
+     "attempts": [
+      {
+       "term": "bone-in skin-on chicken breasts",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bone-In Chicken Breast",
+       "price": 7.48,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89325297-bonein-chicken-breast"
+      },
+      {
+       "item": "Boneless Skinless Chicken Breast",
+       "price": 7.8,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+      },
+      {
+       "item": "Boneless Trimmed Chicken Breast",
+       "price": 5.68,
+       "size": "$6.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388188-boneless-trimmed-chicken-breast"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "bone-in skin-on chicken breasts",
+     "attempts": [
+      {
+       "term": "bone-in skin-on chicken breasts",
+       "state": "MATCHES",
+       "hits": 14
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Bone-In Chicken Thighs, priced per pound",
+       "price": 7.88,
+       "size": "",
+       "unit_price": "$1.28/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6OTZLEIQJDT2"
+      },
+      {
+       "item": "Member's Mark Organic Boneless and Skinless Chicken Breasts, priced per pound",
+       "price": 28.14,
+       "size": "",
+       "unit_price": "$5.36/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/30ETHLWJUNY8"
+      },
+      {
+       "item": "Boneless Skinless Chicken Breast, Case, priced per pound",
+       "price": 114.13,
+       "size": "",
+       "unit_price": "$2.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/343CZSF2UZNQ"
+      },
+      {
+       "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
+       "price": 27.08,
+       "size": "",
+       "unit_price": "$6.77/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
+      },
+      {
+       "item": "Member's Mark Boneless and Skinless Chicken Breast, priced per pound",
+       "price": 14.11,
+       "size": "",
+       "unit_price": "$2.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3507EF7ZC0N5"
+      },
+      {
+       "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
+       "price": 108.67,
+       "size": "",
+       "unit_price": "$2.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+      },
+      {
+       "item": "Member's Mark Organic Boneless Skinless Chicken Breasts, Case, priced per pound",
+       "price": 254.5,
+       "size": "",
+       "unit_price": "$5.09/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3KDXXC9WSMK2"
+      },
+      {
+       "item": "Member's Mark Organic Boneless Skinless Chicken Thighs, Case, priced per pound",
+       "price": 254.5,
+       "size": "",
+       "unit_price": "$5.09/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3O6688Y0K2O7"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

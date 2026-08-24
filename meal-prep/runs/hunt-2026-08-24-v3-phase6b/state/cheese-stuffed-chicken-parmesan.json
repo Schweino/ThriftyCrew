@@ -1,0 +1,43 @@
+{
+    "slug":  "cheese-stuffed-chicken-parmesan",
+    "title":  "Cheese-Stuffed Chicken Parmesan",
+    "source_url":  "https://thecozycook.com/baked-chicken-parmesan/",
+    "protein":  "chicken",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:15",
+    "updated":  "2026-08-24T12:35:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:15",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/baked-chicken-parmesan/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:13:15",
+                        "by":  "decider",
+                        "detail":  "Baked cheese-stuffed chicken parmesan; the only live chicken-parm is chicken-parmesan-PASTA (different format/starch) and the backlog chicken-parmesan-recipe is unruled, so no collision — an iconic Italian-American cutlet that widens spread, band verified 567/24/50."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:14:03",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:35:55",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled: 6 mapped, 1 mapped-null (seasoned salt), 0 rejected outright. 14 buy strings written, 7 for settled lines. New food-macros-db row added: Seasoned Salt. Two lines needed a board match overturned: shredded Parmesan off shredded-cheese (price class) and Italian breadcrumbs off french-bread (wrong product). One duplicate garnish line flagged so the parsley is not bought twice."
+                    }
+                ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "stuffed-chicken-breast",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "ingredient-coverage", "severity": "note",
+      "detail": "Battery's INVENTED 'Mozzarella Cheese'/'Parmesan Cheese' beside DROPPED 'shredded mozzarella'/'Parmesan' is the head-noun rule reporting a naming pairing, not missing food: same cheeses, scaled at the recipe's own 3.5x (1 cup -> 3.5 cups mozzarella; 1/3 cup -> 1.25 cups Parmesan, same quantization as the sun-dried tomatoes line). 'Dropped' pepper rides the Salt buy line ('1 1/2 teaspoons black pepper') and is named in the seasoning step. CONSOLIDATED olive oil is the sum: source 5 tsp x 3.5 = 17.5 tsp = spec's 3 1/2 tbsp + 2 tbsp + 1 tsp.",
+      "owner": "mapper" },
+    { "check": "ingredient-coverage", "severity": "note",
+      "detail": "Deliberate substitution: source 'cream cheese' -> spec '1/3-less-fat cream cheese', disclosed on the card (shop_smart) and defensible for week-long meal-prep holds; same dish.",
+      "owner": "mapper" },
+    { "check": "prose-numbers", "severity": "note",
+      "detail": "Battery flagged 'intro/head say 10g carbs, stat says 10' - the values are equal (comparator quirk). Prose says 'under 10 grams of carbs' while the stat rounds 9.6 to 10; literal matches the stat, no drift.",
+      "owner": "writer" }
+  ],
+  "notes": "Both anchors reached: transcription and live page (thecozycook.com fetched clean) agree line-for-line on 14 source ingredients, 4 servings, and the method. Spec is the same dish scaled 4 -> 14 servings at one consistent 3.5x ratio (battery scale-ratio pass, servings-claim pass). Method survives intact: wilt spinach/garlic, mix filling, pocket and stuff, season tops with salt/pepper/paprika, sear 2-3 min/side, bake 375F 17-20 min to 165F, rest 5 min. Title, credit and URL match. Both battery 'fail' checks resolve to naming/comparator artifacts on inspection; no invented, dropped or drifted ingredient or step."
+}

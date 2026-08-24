@@ -1,0 +1,207 @@
+﻿{
+    "slug":  "ina-garten-s-roast-chicken",
+    "title":  "Ina Garten\u0027s Roast Chicken",
+    "source_url":  "https://thecozycook.com/ina-gartens-roast-chicken/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-24",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "6 lb. whole chicken",
+                            "item":  "Whole Chicken",
+                            "bid":  "whole-chicken",
+                            "board":  null,
+                            "grams":  4763,
+                            "buy":  "10 1/2 lb whole chicken (two birds)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "As purchased, giblets removed. Two birds roast in the same pan at this scale. REUSE, not a proposal: whole-chicken is a live commodity id at 7 of 7 stores. The missing vocabulary row is a naming question, not a registrar one (brown-lentils precedent). NOT rotisserie-chicken, which is cooked pulled meat, and not any breast row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Salt/Pepper",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  null,
+                            "grams":  21,
+                            "buy":  "About 1 tablespoon salt and 2 teaspoons black pepper, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Source gives no quantity (\u0027season generously\u0027); this is my estimate for two birds plus the vegetables. No quantity is given by the source, so the 2 tsp salt booked here is MY estimate for a 6 lb bird plus a pan of vegetables, with the matching black pepper on the buy string. Marked optional because the source treats it as season-to-taste.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 large bunch thyme (plus 20 sprigs)",
+                            "item":  "Fresh Thyme",
+                            "bid":  "fresh-thyme",
+                            "board":  null,
+                            "grams":  70,
+                            "buy":  "2 1/2 oz fresh thyme (about 3 large bunches), 35 sprigs of it left whole for the vegetables",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Fresh, not dried. Most of it is stuffed in the cavity and discarded. A bunch and sprigs is unambiguously FRESH thyme; the board\u0027s dried-thyme near-miss is a form flip with a different price class and about three times the strength per gram. fresh-thyme is a live id at 4 of 7 stores. Bunch about 25 g plus 20 sprigs at ~1 g each.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 head garlic (cut in half crosswise)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "2 heads garlic, cut in half crosswise",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Stuffed in the cavity.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 lemon (halved)",
+                            "item":  "Lemon",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  175,
+                            "buy":  "2 lemons, halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Aromatic, stuffed and discarded. Rounded up from 1.75 to whole fruit. lemons is a live each-priced commodity. NOT lemon-juice, which is the bottled form flip and a different price class. House each-weight 100 g for a medium lemon; halved, stuffed and discarded, so its macros are near-immaterial.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons butter (melted)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons butter, melted",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Brushed over the skin.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 large yellow onion (sliced into large chunks)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  298,
+                            "buy":  "2 large yellow onions, cut into large chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "House large-onion each-weight 170 g. Exact vocabulary row Yellow Onion [onions], 7 of 7 board. Not red-onion, which is a separate variety price class. House large-onion each-weight 170 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 whole carrots (sliced into 4-inch chunks)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  427,
+                            "buy":  "7 whole carrots, cut into 4-inch chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Roasting bed.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 bulb of fennel (tops removed, cut into wedges)",
+                            "item":  "Fennel Bulb",
+                            "bid":  "fennel",
+                            "board":  null,
+                            "grams":  402,
+                            "buy":  "2 fennel bulbs, tops removed, cut into wedges",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Trimmed bulb weight. Fennel is stocked at only 1 of 7 stores - a carriage question, not a mapping one. Fresh bulb, NOT Ground Fennel seed (form flip, 345 vs 31 cal per 100 g and a spice-jar price class). The fennel commodity\u0027s unit is \u0027each\u0027, which is the fresh bulb, matching the existing Fennel Bulb macro row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2-3 Tablespoons Olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  59,
+                            "buy":  "4 1/2 tablespoons olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drizzled over the vegetables.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2/3 cup chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  280,
+                            "buy":  "1 cup plus 3 tablespoons chicken broth",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Topped off with pan drippings to make the gravy liquid.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 tablespoons butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  74,
+                            "buy":  "1/3 cup butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Gravy roux.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 tablespoons flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  41,
+                            "buy":  "1/3 cup all-purpose flour",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Gravy roux. 7.8 g/tbsp. Exact vocabulary row; unqualified \u0027flour\u0027 in a butter roux is AP wheat flour, 7 of 7 board. Explicitly NOT the almond flour row, whose notes warn the flour commodity include pattern over-claims the bare term.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_added":  [
+
+                         ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published":  {
+                                                       "calories":  641,
+                                                       "carbs_g":  8,
+                                                       "protein_g":  54
+                                                   },
+                              "computed_per_serving":  {
+                                                           "calories":  668,
+                                                           "carbs_g":  12,
+                                                           "protein_g":  46
+                                                       },
+                              "delta_protein_pct":  -14.8,
+                              "delta_calories_pct":  4.2,
+                              "verdict":  "PASS AT THE EDGE, flagged twice. Calories agree within 4.2% and protein sits at -14.8%, just inside the 15% tolerance, so the 6 lb portion is right and no line needs re-examining. Both gaps run the same direction and have the same cause: I book the bird on an as-purchased basis with 30% bone removed, while the source appears to count more of the carcass as edible. FLAG 1: at 668 cal the computed figure is 18 cal over the run\u0027s 650 ceiling, even though the source\u0027s own 641 is inside it - and a roast bird leaves a great deal of rendered fat in the pan that this basis still counts, so the true value is likely at or under the source\u0027s. FLAG 2: the whole-chicken yield is a disclosed estimate. Carbohydrate is comfortable at 12 g against a 35 g ceiling."
+                          }
+}

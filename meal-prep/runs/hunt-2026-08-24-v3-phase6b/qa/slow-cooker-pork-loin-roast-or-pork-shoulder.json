@@ -1,0 +1,26 @@
+﻿{
+  "slug": "slow-cooker-pork-loin-roast-or-pork-shoulder",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    {
+      "check": "ingredient-coverage",
+      "severity": "note",
+      "detail": "Battery's INVENTED Paprika / Garlic Powder beside DROPPED 'paprika, thyme' / 'garlic powder, onion powder' are the same lines: the spec carries composite buy lines ('3 1/2 teaspoons EACH paprika and dried thyme' = 2 tsp EACH x 1.75; '1 3/4 teaspoons EACH garlic powder and onion powder' = 1 tsp EACH x 1.75). Both riders (dried thyme, onion powder) are named in the buy string and in rub step 2. Nothing invented, nothing dropped; live page confirms all 14 source lines are present.",
+      "owner": "mapper"
+    },
+    {
+      "check": "scaling",
+      "severity": "note",
+      "detail": "Battery's Salt 1.5x fail paired only the first clause. The Salt line is itself consolidated: rub 2 tsp x 1.75 = 3.5 tsp = '1 tablespoon plus 1/2 teaspoon' AND sauce 1/2 tsp x 1.75 = 0.875 tsp = 'scant 1 teaspoon EACH salt and black pepper'. Full line = 4.375 tsp salt ~ 26 g, exactly 1.75x the source's 2.5 tsp total. CONSOLIDATED salt and pepper amounts ARE the sum. All other rated and unrated lines check at 1.75x (butter 125g x 1.75 = 219g; ACV 1/4 cup x 1.75 = scant 1/2 cup / 104g; cayenne and black pepper 0.5 tsp x 1.75 = scant 1 tsp; pork 3719g = 2125g x 1.75, source range 1750-2500g).",
+      "owner": "mapper"
+    },
+    {
+      "check": "method",
+      "severity": "note",
+      "detail": "head.cookTime PT10H / totalTime PT10H10M is the SHOULDER path while the booked, priced, macro'd cut is LOIN (4-5 h LOW). It matches the transcription's own time_total (610 min) and the source offers both cuts, so it is not a source-fidelity defect, but the writer already recommended resetting cookTime to the loin path (~PT4H30M) to match the booked cut. Steps correctly lead with loin 4-5 h and note the 10 h shoulder alternate.",
+      "owner": "writer"
+    }
+  ],
+  "notes": "Both anchors reached: extraction and live page (recipetineats.com fetched clean) agree line for line, including servings 8 and the two-cut cook times. Spec is the same dish, same method (rub, sear, honey butter sauce, LOW cook, rest, cornstarch-thickened glaze, slice), one consistent 1.75x ratio to 14 servings, credit links the exact source URL, and prose numbers pass. Both battery FAILs are false positives from composite buy lines; the sauce pepper (~2 g) rides the Salt line's buy string rather than the Black Pepper grams, which is a gram-attribution nicety, not a fidelity defect."
+}

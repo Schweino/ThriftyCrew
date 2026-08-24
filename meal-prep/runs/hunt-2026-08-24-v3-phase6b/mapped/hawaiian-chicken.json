@@ -1,0 +1,340 @@
+﻿{
+    "slug":  "hawaiian-chicken",
+    "title":  "Hawaiian Chicken",
+    "source_url":  "https://www.recipetineats.com/hawaiian-chicken-with-coconut-rice/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-24",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1.5 kg / 3lb chicken drumsticks",
+                            "item":  "Bone-In Skin-On Chicken Drumstick",
+                            "bid":  "chicken-drumsticks",
+                            "board":  null,
+                            "grams":  5250,
+                            "buy":  "11 1/2 lb (about 34 drumsticks)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weight is stated by the source, not assumed. Bone-in skin-on as purchased; house each-weight 155 g. REJECTED the board\u0027s chicken-thighs match under the standing leg-quarters-are-not-thighs precedent: a different cut, a different per-pound price and a different bone fraction. New bid proposed to the registrar; food-DB row added for the skin-on cut because the skinless drumstick row added earlier today understates fat by two thirds.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "440 g / 15 oz can crushed pineapple in natural juice ((about 1.5 cups) (see notes))",
+                            "item":  "Crushed Pineapple in Juice",
+                            "bid":  "canned-pineapple",
+                            "board":  null,
+                            "grams":  1540,
+                            "buy":  "5 1/4 cups crushed pineapple with its juice, undrained",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Undrained: the juice is the glaze base, so the fruit-and-juice macro basis is the right one. Board pineapple could not be confirmed as the canned product rather than fresh fruit, and fresh-against-canned is a standing rejection, so the id goes to the registrar with an explicit alias path. Grams are the undrained can, since the juice becomes the glaze.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup tomato sauce or ketchup",
+                            "item":  "Ketchup",
+                            "bid":  "ketchup",
+                            "board":  null,
+                            "grams":  420,
+                            "buy":  "1 3/4 cups ketchup",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "USDA cup weight for ketchup is 240 g. The line offers either; ketchup is the one with a vocabulary row and it is the sweeter, correct choice for this glaze. REJECTED the board\u0027s tomatoes match outright - fresh produce priced against a shelf-stable condiment is the clearest form flip on the list. Ketchup is an exact vocabulary row and an existing food-DB row, and the line names it as an accepted option.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup light soy sauce ((see notes))",
+                            "item":  "Soy Sauce",
+                            "bid":  "soy-sauce",
+                            "board":  null,
+                            "grams":  448,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "USDA cup weight for soy sauce is 255 g. Chinese light soy sauce IS ordinary all-purpose soy sauce; it is not reduced-sodium lite and not the Sweet Soy Sauce row, which is a thick sweetened product. A naming variant, not a form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 tbsp brown sugar",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  "recipe",
+                            "grams":  189,
+                            "buy":  "3/4 cup plus 2 tablespoons, packed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp malt vinegar ((see notes))",
+                            "item":  "Malt Vinegar",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  105,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "15 g per tablespoon. Board reports no commodity and no capture match, so there is nothing to reuse. Refused to bridge onto white, cider or rice vinegar: barley-malt brewed vinegar is its own product and price. Pantry-static on 30 g is safe and the term is enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp fresh ginger (, grated)",
+                            "item":  "Ginger",
+                            "bid":  "fresh-ginger",
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon, grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2 g per teaspoon grated. The vocabulary row Ginger carries the id fresh-ginger, so the DIFFERENT FORM flag is a label wording artefact, not a flip. Explicitly not Ground Ginger, which is a different price and a different gram weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 garlic cloves (, minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  null,
+                            "grams":  32,
+                            "buy":  "10 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "3 g per clove, the estate each-noun convention. The Ground Cloves near-miss is the matcher catching the word cloves; these are garlic cloves. garlic is board-proven at 6 of 7 stores and Garlic is an existing food-DB row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tbsp paprika powder",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  null,
+                            "grams":  24,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "6.8 g per tablespoon. Paprika powder is plain paprika - powder is how the spice is sold, not a form flip. Deliberately not Smoked Paprika, which is a distinct product at a higher price.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tbsp dried onion flakes",
+                            "item":  "Dried Onion Flakes",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "4.8 g per tablespoon of dehydrated flakes. REJECTED the board\u0027s onions match: a spice-jar dehydrated product against fresh bulbs is both a different price class and a gram weight that differs by an order of magnitude per equivalent onion. New food-DB row added; term enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 tbsp cumin powder",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  null,
+                            "grams":  10,
+                            "buy":  "1 tablespoon plus 2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2.1 g per teaspoon ground. Powder and ground are the same thing for cumin; exact match to the vocabulary row, board-proven at 7 of 7 stores.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp chili powder ((or cayenne powder). Adjust to taste.)",
+                            "item":  "Chili Powder",
+                            "bid":  "chili-powder",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 teaspoons, or to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Settled line; optional in the source.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line at 4 g source basis, which is 14 g scaled, about 6 teaspoons.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup long grain or medium grain rice (, uncooked)",
+                            "item":  "Rice",
+                            "bid":  "rice",
+                            "board":  null,
+                            "grams":  648,
+                            "buy":  "3 1/2 cups uncooked long grain rice",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "185 g per cup dry, matching the estate density and the long-grain basis the Rice food-DB row was re-pointed to. Exact vocabulary row, same form, and the board\u0027s rice commodity is long grain white at all seven stores - which is one of the two grains the line names.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup coconut milk ((see notes))",
+                            "item":  "Coconut Milk",
+                            "bid":  "coconut-milk-canned",
+                            "board":  "recipe",
+                            "grams":  840,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; canned full-fat, not the carton drink.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water. No commodity, no cost, no macros, but it stays in the printed ingredient list because it is half the cooking liquid for the rice."
+                        },
+                        {
+                            "source_raw":  "1/2 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3/4 tsp sugar",
+                            "item":  "Sugar",
+                            "bid":  "sugar",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "2 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Lime wedges (, to serve)",
+                            "item":  "Lime",
+                            "bid":  "limes",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "4 limes, cut into wedges",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "70 g per lime; optional, served on the side. Board limes is priced at 5 of 7 stores and the food DB already carries a Lime row; the missing vocabulary row is a naming question, not a registrar one. Served on the side, so optional.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Coriander/cilantro leaves (, for garnish on rice and chicken)",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  null,
+                            "grams":  42,
+                            "buy":  "1 large bunch, leaves chopped, to garnish",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "42 g of leaves at 14 servings, which is one large bunch picked. Optional. Coriander leaf is cilantro; the Bay Leaves near-miss is the matcher catching the word leaves. Explicitly NOT the Ground Coriander row, which is the dried seed - a different food, price and weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Toasted desiccated coconut (, for garnish on rice)",
+                            "item":  "Desiccated Coconut",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  28,
+                            "buy":  "1/3 cup, toasted, to garnish",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "28 g scaled; desiccated coconut runs about 80 g per cup. Optional. The board\u0027s coconut (2 of 7, 3.49) cannot be confirmed as unsweetened desiccated rather than a whole coconut or sweetened flake, and sweetened flake is a different food at double the carbs. Optional 8 g garnish, so pantry-static null is safe rather than guessing.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "chicken drumsticks",
+                                 "malt vinegar",
+                                 "dried onion flakes",
+                                 "canned crushed pineapple"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_added":  [
+
+                         ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "chicken drumsticks",
+                                        "proposed_bid":  "chicken-drumsticks",
+                                        "evidence":  "The board offered chicken-thighs; the estate\u0027s standing rejection that leg quarters are not thighs binds here too - a drumstick is a distinct bone-in cut, typically 30 to 60 cents per pound cheaper than thighs, with a different bone fraction (33% against 20%). Searched by food and not by string: the only near names are chicken-thighs, chicken-breast and rotisserie-chicken, none of which price a drumstick. The food DB already carries two drumstick rows added today (skinless, and the skin-on row I added), so the estate recognises the cut as its own food. If a chicken-legs or drumsticks id already exists, alias to it - this is the main protein of the recipe and 1.5 kg of it, so a null bid would misprice the dish badly."
+                                    },
+                                    {
+                                        "term":  "crushed pineapple in natural juice",
+                                        "proposed_bid":  "crushed-pineapple-canned",
+                                        "evidence":  "No vocabulary row shares a core word with pineapple at all, so nothing exists to reuse on that side. The board carries pineapple (5 of 7, 1.68 at Fareway) but nothing in the table establishes whether that is the fresh whole fruit or a can, and fresh-against-canned is a standing form rejection. ALIAS TO pineapple IF THAT ID IS THE CANNED FRUIT - I could not confirm it from the table and refuse to bridge on a guess."
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "chicken-drumsticks",
+                                  "verdict":  "approve",
+                                  "bid":  "chicken-drumsticks",
+                                  "reason":  "No drumstick id exists in any of the three namespaces or the live feed, and the only near id, chicken-thighs (labeled \u0027Chicken Thighs / Drumsticks\u0027), actively EXCLUDES \\bdrumsticks?\\b under the standing 2026-07-17 soundness ruling (commit 75cf58d7) with three 2026-08-06 known-wrong entries holding drumstick rows out because admitting them would move the crown from Sam\u0027s $1.28 thighs to Aldi $1.09 drumsticks - so the cut is a distinct, cheaper purchase priced nowhere today; carriage.json shows it CARRIED at 4+ stores (Baker\u0027s Heritage Farm $1.49/lb, Aldi $1.09/lb, Sam\u0027s $0.98/lb), so the id will fill. Mint chicken-drumsticks in the recipe namespace (recipe-board-everyday.json baseline + recipe-commodities.json), unit lb, include patterns requiring chicken+drumstick/leg while excluding thigh, leg quarter, wing, boneless-skinless, breaded/cooked/fried/seasoned/deli, and the Drumstick ice-cream novelty (cone|sundae|Nestle) - borrow chicken-thighs\u0027 ~150-pattern exclude block minus its drumstick line; and add the allowlist pair chicken-drumsticks\u003c-\u003echicken-thighs (reason: distinct bone-in cuts held apart by the 75cf58d7 ruling) so the daily audit never re-flags what is already adjudicated. Flag to Brad that this ruling makes the chicken-thighs label\u0027s \u0027/ Drumsticks\u0027 suffix formally wrong and it should be renamed to plain \u0027Chicken Thighs\u0027, closing his plan-2026-08-06-3 open question in the keep-separate direction."
+                              },
+                              {
+                                  "proposed_bid":  "crushed-pineapple-canned",
+                                  "verdict":  "alias",
+                                  "bid":  "canned-pineapple",
+                                  "reason":  "The mapper\u0027s sweep stopped at `pineapple` (\u0027Pineapple (whole)\u0027, each — correctly rejected as the fresh fruit), but commodities.json also carries `canned-pineapple` (\u0027Canned Pineapple\u0027, oz) whose include rules already list \u0027crushed\\s+pineapple\u0027 explicitly, and smp-feed.json shows it live-priced at 6 of 7 stores ($0.081/oz Hy-Vee, That\u0027s Smart pineapple chunks 20oz) with the relax_global already tolerating \u0027juice\u0027 in product names — so \u0027crushed pineapple in natural juice\u0027 is the same canned-fruit purchase, and the feed even has precedent for this exact treatment (`pineapple-chunks` is alias_of canned-pineapple). Do NOT mint crushed-pineapple-canned; add the recipe spelling -\u003e canned-pineapple pair to recipe-floor-id-map.json (units match, oz), and separately the vocabulary side still needs its own name ruling since ingredients.json has no pineapple row — that name row, if added, resolves to this existing id, not a new one."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  504.0,
+                                                                   "carbs_g":  19.6,
+                                                                   "protein_g":  69.3
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  930,
+                                                               "carbs_g":  83,
+                                                               "protein_g":  54
+                                                           },
+                              "protein_gap_pct":  -22.4,
+                              "calorie_gap_pct":  84.5,
+                              "carb_gap_pct":  323.0,
+                              "verdict":  "PROTEIN GAP DIAGNOSED EXACTLY, AND NO PORTION IS WRONG. The chicken weight is not an assumption - the source states 1.5 kg. Multiplying that whole bone-in weight by boneless-meat protein (18.4 g per 100 g) gives 69.0 g per serving, which reproduces the source\u0027s 69.3 to within half a percent: their calculator treated bone as meat. Our figure discounts the 33% bone per the food-DB drumstick construction, giving 45.8 g from the chicken and 54 g in total. The gap is a basis difference, not a portion error, and it is evidence the new skin-on drumstick row is built correctly.",
+                              "band_warning":  "RECOMMEND RETIRE. The published 19.6 g of carbs is arithmetically impossible against this ingredient list: 4 tbsp brown sugar (53 g carb), a 440 g can of pineapple (57 g), 1/2 cup ketchup (32 g) and 1 cup of dry rice (148 g) total 290 g of carbohydrate for 4 servings, or 72 g per serving, before anything else is counted. Full basis is 930 cal and 83 g carbs per serving. I tested every narrower basis I could justify: drop the coconut rice entirely and it is still 644 cal and 43 g carbs; assume half the marinade is left in the dish and it is still over 35 g. There is no basis on which this recipe meets the 35 g carb condition.",
+                              "uncertainty":  "The bone yield (0.67) is a disclosed estimate, flagged needs_verify on the new row. It moves calories, not the carb verdict."
+                          }
+}

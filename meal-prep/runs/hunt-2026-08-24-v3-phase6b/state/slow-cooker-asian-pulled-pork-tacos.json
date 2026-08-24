@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-asian-pulled-pork-tacos",
+    "title":  "Slow Cooker Asian Pulled Pork Tacos",
+    "source_url":  "https://www.wellplated.com/asian-pulled-pork-tacos/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:18",
+    "updated":  "2026-08-24T12:13:18",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Hoisin/soy braised shredded pork served over rice matches live Asian slow-cooker pork bowls on all four axes (pork + braised + sweet-soy + rice); teriyaki and korean shredded pork bowls already cover this exact structure, and the pulled-pork region is crowded (10 live matches).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:18",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/asian-pulled-pork-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:13:18",
+                        "by":  "decider",
+                        "detail":  "Hoisin/soy braised shredded pork served over rice matches live Asian slow-cooker pork bowls on all four axes (pork + braised + sweet-soy + rice); teriyaki and korean shredded pork bowls already cover this exact structure, and the pulled-pork region is crowded (10 live matches)."
+                    }
+                ]
+}

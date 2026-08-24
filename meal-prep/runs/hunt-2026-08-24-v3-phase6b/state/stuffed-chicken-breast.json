@@ -1,0 +1,79 @@
+{
+    "slug":  "stuffed-chicken-breast",
+    "title":  "Stuffed Chicken Breast",
+    "source_url":  "https://thecozycook.com/stuffed-chicken-breast/",
+    "protein":  "chicken",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-24T12:13:13",
+    "updated":  "2026-08-24T12:49:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:13",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/stuffed-chicken-breast/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:13:14",
+                        "by":  "decider",
+                        "detail":  "Tuscan cream-cheese/spinach/sun-dried-tomato stuffed baked breast; no live stuffed-tuscan-chicken surfaced and its cream sauce identity is distinct from the chicken-parm candidate in this batch; band verified 559/10/61."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:13:52",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:38:20",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled, 0 rejected, 0 new ids - the mozzarella line was one hand-check away from becoming a duplicate id proposal, since the pre-resolve table reported no commodity claims it while mozzarella-cheese is in fact live and priced at six stores. No food-macros-db rows needed; every food here already had one. Best-matching recipe in the batch."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:38:21",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "all 0 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-24T12:48:05",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-24T12:48:06",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-24T12:49:06",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-24T12:49:26",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

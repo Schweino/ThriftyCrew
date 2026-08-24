@@ -1,0 +1,31 @@
+{
+    "slug":  "authentic-birria",
+    "title":  "Authentic Birria",
+    "source_url":  "https://www.isabeleats.com/authentic-birria/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:10:00",
+    "updated":  "2026-08-24T12:10:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Beef birria (chuck + guajillo/ancho/arbol chile braise) is the same core dinner already live as beef-birria-rice-bowls and beef-birria-burrito; region saturated, no new distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:10:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/authentic-birria/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:10:01",
+                        "by":  "decider",
+                        "detail":  "Beef birria (chuck + guajillo/ancho/arbol chile braise) is the same core dinner already live as beef-birria-rice-bowls and beef-birria-burrito; region saturated, no new distinguishing plate."
+                    }
+                ]
+}

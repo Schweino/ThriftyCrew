@@ -1,0 +1,98 @@
+{
+ "slug": "beef-back-ribs",
+ "lines": [
+  {
+   "raw": "3-4 pounds beef back ribs* (1 rack)",
+   "buy": "14 lb beef back ribs (about 3 1/2 racks)",
+   "grams_source": 1814,
+   "notes": "Top of the source's 3-4 lb range, as purchased bone-in. Bone is roughly half the weight of this cut."
+  },
+  {
+   "raw": "1 ½ tablespoons smoked paprika",
+   "buy": "1/3 cup smoked paprika",
+   "notes": "The bulk of the rub."
+  },
+  {
+   "raw": "1 teaspoon cayenne (or less, to taste)",
+   "buy": "1 3/4 teaspoons cayenne (or less, to taste)",
+   "grams_source": 1.8,
+   "notes": "1 tsp = 1.8 g on the existing label row."
+  },
+  {
+   "raw": "1 teaspoon garlic powder",
+   "buy": "1 tablespoon plus 1/2 teaspoon garlic powder",
+   "notes": "Rub."
+  },
+  {
+   "raw": "1 ½ teaspoons onion powder",
+   "buy": "1 3/4 tablespoons onion powder",
+   "notes": "Rub."
+  },
+  {
+   "raw": "2 teaspoons kosher salt",
+   "buy": "2 tablespoons plus 1 teaspoon kosher salt",
+   "notes": "Rub."
+  },
+  {
+   "raw": "1 cup BBQ sauce",
+   "buy": "3 1/2 cups BBQ sauce",
+   "notes": "Half brushed on at the 3 hour mark, the rest halfway through the final hour."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3-4 pounds beef back ribs* (1 rack)",
+   "term": "beef back ribs",
+   "canon_item": "Beef Back Ribs",
+   "bid": "beef-back-ribs",
+   "decision": "mapped",
+   "grams_source": 1814,
+   "evidence": "REFUSED the board's near-miss baby-back-ribs: that is a PORK loin rib, a different species and a different price class, and it is the same class of error as mapping tteok onto rice-cakes. Boneless beef short ribs is a different primal with no bone in its grams. No beef rib id exists in any namespace, so a new id is proposed."
+  },
+  {
+   "raw": "1 teaspoon cayenne (or less, to taste)",
+   "term": "cayenne",
+   "canon_item": "Cayenne Pepper",
+   "bid": "cayenne-pepper",
+   "decision": "mapped",
+   "grams_source": 1.8,
+   "evidence": "'Cayenne' unqualified in a spice rub is cayenne pepper; cayenne-pepper is a live id at 6 of 7 stores with an existing label row. Not a new food - the new-food-suspect flag is only because the bare word shares no token with the vocabulary name."
+  }
+ ],
+ "absent_terms": [
+  "beef back ribs"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "beef back ribs",
+   "proposed_bid": "beef-back-ribs",
+   "evidence": "Checked by food, not by string, across all four namespaces: commodities.json carries baby-back-ribs (label 'Baby Back Ribs' - PORK loin rib, wrong species and a different price class), recipe-commodities.json carries no rib id, and the everyday board's only beef rib item is 'Boneless Short Beef Ribs (About 4 per Pack)' under boneless-beef-short-ribs, which is the CHUCK cut, boneless, and sold at a premium per pound. Beef back ribs are the bone-in rack left after the ribeye is lifted, sell as a cheap bone-in rack, and carry roughly half their weight as bone - so the grams basis differs as sharply as the price. Word-order and synonym variants searched: back ribs, beef ribs, rib rack. Nothing prices this food today."
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "beef-back-ribs",
+   "verdict": "approve",
+   "bid": "beef-back-ribs",
+   "reason": "No id prices this food: baby-back-ribs is the pork loin rack, beef-short-ribs (live at Baker's) and boneless-beef-short-ribs (board, chuck, boneless premium) are the short-rib cut, and the feed/alias-map/allowlist/vocab hold nothing for the bone-in beef rack, so beef-back-ribs is a genuine new id — but mint it with THREE guards or it collides on day one: (1) baby-back-ribs' include pattern \\bback\\s+ribs\\b will claim 'Beef Back Ribs' product names, so add \\bbeef\\b to baby-back-ribs' excludes and anchor the new include on beef\\s+back\\s+ribs; (2) record allowlist pairs vs baby-back-ribs (different species) and beef-short-ribs/boneless-beef-short-ribs (different cut/form) so the dupe audit never re-flags them; (3) it also needs a NEW vocabulary row 'Beef Back Ribs' (vocab returned UNKNOWN, and the boneless-short-rib neighbor is a different form/grams basis) — the name and the id are separate mints. Namespace: recipe-only (recipe-board baseline + recipe-commodities.json), unit lb, with excludes at neighboring-commodity rigor (sauce/seasoned/fully-cooked/pork at minimum, ~150-pattern class)."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published": {
+   "calories": 524,
+   "carbs_g": 32,
+   "protein_g": 57
+  },
+  "computed_per_serving": {
+   "calories": 563,
+   "carbs_g": 27,
+   "protein_g": 41
+  },
+  "delta_protein_pct": -28.1,
+  "delta_calories_pct": 7.4,
+  "verdict": "CALORIES PASS, PROTEIN FLAGGED. Calories land within 7.4% and carbohydrate within 16% on the low side, which says the portion itself is right. The 28% protein shortfall is NOT a portion error and I am confident of that: 57 g/serving x 4 needs 228 g of protein, which would take about 1.2 kg of pure edible meat - roughly 70% of a 4 lb rack - and beef back ribs are the boniest common rib cut. The source appears to have costed the bone as meat. I took the TOP of the stated 3-4 lb range specifically to close as much of that gap as the recipe honestly allows. Recipe still passes both run conditions (563 cal, 27 g carb). Caveat stated plainly: the ribs macro row rests on two disclosed estimates, a 45% edible yield and a lean-only basis chosen because the recipe directs draining the rendered fat, and both are flagged needs_verify."
+ }
+}

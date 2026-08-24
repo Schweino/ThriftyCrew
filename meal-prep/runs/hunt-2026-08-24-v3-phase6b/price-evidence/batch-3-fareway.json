@@ -1,0 +1,102 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-24T12:43:39",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "sourdough bread",
+   "state": "MATCHES",
+   "term_used": "sourdough bread",
+   "attempts": [
+    {
+     "term": "sourdough bread",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Izzio Artisan Bakery San Francisco Style Sourdough",
+     "price": 4.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19007668-izzio-artisan-bakery-bread-sourdough-san-francisco-style-24-oz"
+    },
+    {
+     "item": "Bakery Fresh Sourdough Bread",
+     "price": 4.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389228-bakery-fresh-sourdough-bread-16-oz"
+    },
+    {
+     "item": "Pepperidge Farm Farmhouse Sourdough Bread",
+     "price": 4.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/306958-pepperidge-farm-farmhouse-sourdough-bread-24-oz"
+    },
+    {
+     "item": "The Rustik Oven Sourdough Bread",
+     "price": 4.97,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19119077-the-rustik-oven-sourdough-bread-16-oz"
+    },
+    {
+     "item": "Izzio Artisan Bakery Sourdough, San Francisco Style",
+     "price": 4.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28073245-izzio-artisan-bakery-sourdough-san-francisco-style-24-oz"
+    },
+    {
+     "item": "Village Hearth Cottage Bread, Sourdough",
+     "price": 3.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68850-village-hearth-bread-sourdough-cottage-24-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "bone-in skin-on chicken breasts",
+   "state": "MATCHES",
+   "term_used": "bone-in skin-on chicken breasts",
+   "attempts": [
+    {
+     "term": "bone-in skin-on chicken breasts",
+     "state": "OK",
+     "hits": 3
+    }
+   ],
+   "hits": [
+    {
+     "item": "Bone-In Chicken Breast",
+     "price": 7.48,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89325297-bonein-chicken-breast"
+    },
+    {
+     "item": "Boneless Skinless Chicken Breast",
+     "price": 7.8,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+    },
+    {
+     "item": "Boneless Trimmed Chicken Breast",
+     "price": 5.68,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388188-boneless-trimmed-chicken-breast"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

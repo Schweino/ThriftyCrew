@@ -1,0 +1,165 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Ina Garten's Roast Chicken",
+  "source_url": "https://thecozycook.com/ina-gartens-roast-chicken/",
+  "servings": 8,
+  "time_total": "125 minutes",
+  "time_active": "20 minutes",
+  "ingredients": [
+    {
+      "raw": "6 lb. whole chicken",
+      "item": "whole chicken",
+      "qty": "6",
+      "unit": "lb.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/Pepper",
+      "item": "Salt/Pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 large bunch thyme (plus 20 sprigs)",
+      "item": "large bunch thyme",
+      "qty": "1",
+      "unit": null,
+      "prep": "plus 20 sprigs",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 head garlic (cut in half crosswise)",
+      "item": "garlic",
+      "qty": "1",
+      "unit": "head",
+      "prep": "cut in half crosswise",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lemon (halved)",
+      "item": "lemon",
+      "qty": "1",
+      "unit": null,
+      "prep": "halved",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tablespoons butter (melted)",
+      "item": "butter",
+      "qty": "2",
+      "unit": "Tablespoons",
+      "prep": "melted",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large yellow onion (sliced into large chunks)",
+      "item": "large yellow onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "sliced into large chunks",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 whole carrots (sliced into 4-inch chunks)",
+      "item": "carrots",
+      "qty": "4",
+      "unit": "whole",
+      "prep": "sliced into 4-inch chunks",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 bulb of fennel (tops removed, cut into wedges)",
+      "item": "fennel",
+      "qty": "1",
+      "unit": "bulb",
+      "prep": "tops removed, cut into wedges",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2-3 Tablespoons Olive oil",
+      "item": "Olive oil",
+      "qty": "2-3",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2/3 cup chicken broth",
+      "item": "chicken broth",
+      "qty": "2/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons butter",
+      "item": "butter",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons flour",
+      "item": "flour",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Note: An easy rule of thumb is that chicken takes about 15 minutes/pound to roast at 425° F.",
+    "Unwrap the chicken and remove the giblets and/or the neck (if included). Pat the chicken dry with paper towels.",
+    "If possible, let the chicken sit at room temperature for 30-60 minutes to allow for more even cooking.",
+    "Preheat the oven to  425° F.",
+    "Seasoning the entire chicken generously with salt and pepper.",
+    "Stuff the chicken with the thyme, garlic, and lemon.",
+    "Brush the outside of the chicken with the 2 TBS melted butter and season again with salt/pepper.",
+    "Use kitchen twine to tie the legs together. Tuck the wings underneath the body of the chicken.",
+    "Place the sliced onions, carrots, and fennel bulb on the bottom of a roasting pan.",
+    "Sprinkle the vegetables with salt, pepper, 20 sprigs of thyme, and drizzle generously with olive oil. Use your hands to toss to evenly coat the vegetables.",
+    "Place the chicken on top of the vegetables. This prevents the chicken from sitting in its own juice while it cooks and elevates the chicken for even cooking.",
+    "Roast (uncovered), for 1 ½ hours. Halfway through, use a spoon to drizzle the chicken with some drippings from the bottom of the pan. Rotate the pan 180 degrees and place it back in the oven.",
+    "The chicken is done when the juices run clear and the internal temperature reads 165° F. (Place a meat thermometer into the thigh to check the temperature.)",
+    "Let the chicken rest, uncovered, for 15-20 minutes to allow the juices to reabsorb before you cut into it!",
+    "Slice and serve with the roasted vegetables.",
+    "Pour the chicken drippings into a large measuring cup.",
+    "Top it off with chicken broth to make 2 cups.",
+    "Melt 3 tablespoons of butter in a saucepan over medium heat.",
+    "Add 3 tablespoons flour. Whisk for 1 minute.",
+    "Add half of the gravy juice/broth. Whisk until there are no lumps.",
+    "Add remaining liquid. Whisk for 2 minutes. The gravy will continue to thicken more and more.",
+    "Season with salt/pepper if desired. Done!",
+    "Note: If your chicken needs a touch more color, increase the heat to 500° and use foil to cover up any parts that are already sufficiently browned. Roast for an additional 5 minutes or so. Keep a close eye on it."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

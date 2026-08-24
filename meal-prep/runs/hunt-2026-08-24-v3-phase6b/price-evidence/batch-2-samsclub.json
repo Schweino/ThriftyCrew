@@ -1,0 +1,325 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-24T12:38:27",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "beef back ribs",
+   "state": "MATCHES",
+   "term_used": "beef back ribs",
+   "attempts": [
+    {
+     "term": "beef back ribs",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+    },
+    {
+     "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
+     "price": 28.64,
+     "size": "",
+     "unit_price": "$7.16/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+    },
+    {
+     "item": "90%/10% Ground Beef Chub, Case, priced per pound",
+     "price": 442.71,
+     "size": "",
+     "unit_price": "$5.22/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/740SBJFV7YFB"
+    },
+    {
+     "item": "USDA Choice Angus Beef Top Butt Boneless Center Cut, Case, priced per pound",
+     "price": 662.71,
+     "size": "",
+     "unit_price": "$9.74/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/65M2XLQ1VI4L"
+    },
+    {
+     "item": "Sirloin Tip, Case  priced per pound",
+     "price": 414.73,
+     "size": "",
+     "unit_price": "$6.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OCWZYGPSEHZ"
+    },
+    {
+     "item": "USDA Choice Beef Cheek Meat, Case, priced per pound",
+     "price": 146.82,
+     "size": "",
+     "unit_price": "$4.94/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/54HKBE6SI6VN"
+    },
+    {
+     "item": "Whole Beef Chuck Roll, Case, priced per pound",
+     "price": 505.77,
+     "size": "",
+     "unit_price": "$6.64/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2MLNNSAI1WGQ"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Whole Beef Special Trim, Cryovac, priced per pound",
+     "price": 104.23,
+     "size": "",
+     "unit_price": "$6.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7L32XW8Q5R0M"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "malt vinegar",
+   "state": "MATCHES",
+   "term_used": "malt vinegar",
+   "attempts": [
+    {
+     "term": "malt vinegar",
+     "state": "MATCHES",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Carrington Farms Liquid Coconut Cooking Oil, 40 oz.",
+     "price": 16.98,
+     "size": "",
+     "unit_price": "$0.42/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27E3J39AUTUU"
+    },
+    {
+     "item": "Carrington Farms Ghee, Clarified Butter, 54 oz.",
+     "price": 20.98,
+     "size": "",
+     "unit_price": "$0.39/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5QHK0EQ5HQQD"
+    },
+    {
+     "item": "Bragg Organic Apple Cider Vinegar, 32 oz., 2 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JT9BNL5H1TH"
+    },
+    {
+     "item": "Member's Mark Clear Frying Oil 35 lbs.",
+     "price": 39.98,
+     "size": "",
+     "unit_price": "$0.07/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6ITEQVDEI609"
+    },
+    {
+     "item": "Member's Mark Distilled White Vinegar, 1 gal., 2 pk.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.02/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/60JHSKP6738J"
+    },
+    {
+     "item": "Filippo Berio Extra Virgin Olive Oil, 67.6 oz.",
+     "price": 18.98,
+     "size": "",
+     "unit_price": "$0.28/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/481WJWUZPNHA"
+    },
+    {
+     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar, 128 fl. oz.",
+     "price": 16.98,
+     "size": "",
+     "unit_price": "$0.13/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2E5K6II8HHV7"
+    },
+    {
+     "item": "Member's Mark Canola Oil, 192 fl. oz.",
+     "price": 13.88,
+     "size": "",
+     "unit_price": "$0.07/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3IOIUS59BY8W"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "dried onion flakes",
+   "state": "MATCHES",
+   "term_used": "dried onion flakes",
+   "attempts": [
+    {
+     "term": "dried onion flakes",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.70/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+    },
+    {
+     "item": "Member's Mark Minced Onion, 15 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.53/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0XPU85B6UZOD"
+    },
+    {
+     "item": "Mrs. Dash Original Seasoning, 10 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.70/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+    },
+    {
+     "item": "Dan-O's Original Seasoning, 8.9 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.78/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+    },
+    {
+     "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.56/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+    },
+    {
+     "item": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.66/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4KBPWOZW3WU1"
+    },
+    {
+     "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$1.16/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "canned crushed pineapple",
+   "state": "MATCHES",
+   "term_used": "canned crushed pineapple",
+   "attempts": [
+    {
+     "term": "canned crushed pineapple",
+     "state": "MATCHES",
+     "hits": 15
+    }
+   ],
+   "hits": [
+    {
+     "item": "Del Monte Sweet Peas, 105 oz.",
+     "price": 7.12,
+     "size": "",
+     "unit_price": "$0.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3WTTXI3YJUV4"
+    },
+    {
+     "item": "Del Monte Whole Kernel Corn, 106 oz.",
+     "price": 5.76,
+     "size": "",
+     "unit_price": "$0.05/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2CLHKQS2F6MO"
+    },
+    {
+     "item": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
+     "price": 7.86,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0V8BGXDOBK9P"
+    },
+    {
+     "item": "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
+     "price": 8.42,
+     "size": "",
+     "unit_price": "$1.05/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IS6C9JATZ5E"
+    },
+    {
+     "item": "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
+     "price": 12.98,
+     "size": "",
+     "unit_price": "$1.08/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15T8I1MC50OK"
+    },
+    {
+     "item": "Le Sueur Very Young Small Sweet Peas, 15 oz., 8 ct.",
+     "price": 12.98,
+     "size": "",
+     "unit_price": "$1.62/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4OUEK2V3VO10"
+    },
+    {
+     "item": "Terra Verde Marinated Quartered Artichoke Hearts, 34 oz.",
+     "price": 5.51,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2PBJW1G43NUS"
+    },
+    {
+     "item": "Allens Italian Style Green Beans, 28 oz., 6 pk.",
+     "price": 12.78,
+     "size": "",
+     "unit_price": "$2.13/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/52T1MCWNTSW5"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

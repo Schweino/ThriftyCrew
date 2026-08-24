@@ -121,6 +121,7 @@ if ($SelfTest) {
     'Zero-Sugar Soda', 'Soda', 'Sugar', 'Brown Sugar', 'Olives', 'Olive Oil', 'Rice', 'Rice Vinegar',
     'Potato', 'Sweet Potatoes', 'Peas', 'Frozen Green Peas', 'Cheddar Cheese, Shredded', 'Fries',
     'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper',
+    'Paprika', 'Dried Thyme', 'Garlic Powder', 'Onion Powder',   # the composite-rider pair below needs the riders to be known foods
     'Tomato', 'Marinara Sauce'   # the constituent-rule pair - without Tomato in this vocab both its fixtures are vacuous
   )
   $r = @(Get-SpecContradictions $bad $vocabFx)
@@ -291,6 +292,33 @@ if ($SelfTest) {
   }
   $ph5 = @(Get-SpecContradictions $noise $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
   Chk 'CLEAN TWIN the eight live false-positive shapes all stay silent' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
+
+  # ---- PHANTOM composite-rider (2026-08-24): a food named only in a buy string AFTER the colon IS bought --
+  # FROZEN FIXTURE - slow-cooker-pork-loin-roast-or-pork-shoulder and stuffed-chicken-breast reached the gate
+  # carrying COMPOSITE buy lines: one costed row, two foods ("3 1/2 teaspoons EACH paprika and dried thyme",
+  # "1 3/4 teaspoons EACH garlic powder and onion powder"). Until $own read the WHOLE display line and the
+  # scaler buy string - not just the display key before the colon - the rider (dried thyme, onion powder)
+  # looked unbought and fired a phantom: 5 false findings across two slugs. The rider is genuinely bought and
+  # on the reader's list, so the class must go silent on it. Its MUST-FIRE twin is IN THE SAME SPEC: a
+  # zero-sugar soda that appears in no line and no buy string still fires, so the widening did not go slack.
+  $phantomRider = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 600; protein = 55; cost_ps = '1.70' }
+    ingredients_display = @(
+      '<strong>Paprika:</strong> 3 1/2 teaspoons EACH paprika and dried thyme (8 g)',
+      '<strong>Garlic Powder:</strong> 1 3/4 teaspoons EACH garlic powder and onion powder (5 g)',
+      '<strong>Pork Loin:</strong> 8 lb boneless pork loin roast, trimmed (3400 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Paprika'; canon = 'Paprika'; buy = '3 1/2 teaspoons EACH paprika and dried thyme'; grams = 8 },
+      [pscustomobject]@{ item = 'Garlic Powder'; canon = 'Garlic Powder'; buy = '1 3/4 teaspoons EACH garlic powder and onion powder'; grams = 5 },
+      [pscustomobject]@{ item = 'Pork Loin'; canon = 'Pork Loin'; buy = '8 lb boneless pork loin roast, trimmed'; grams = 3400 }) }
+    make_it = @(
+      'Mix the paprika, dried thyme, garlic powder, and onion powder into a rub and pat it onto the pork loin.',
+      'Then pour the zero-sugar soda over the pork until it is halfway up the sides.')
+  }
+  $rider = @(Get-SpecContradictions $phantomRider $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN composite rider "dried thyme" (rides the paprika buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Dried Thyme' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'CLEAN TWIN composite rider "onion powder" (rides the garlic-powder buy line) is not a phantom' (@($rider | Where-Object { $_.why -match 'Onion Powder' }).Count -eq 0) (($rider | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST FIRE  PHANTOM     a zero-sugar soda in the SAME spec (no line, no buy string) still fires' (@($rider | Where-Object { $_.why -match 'Zero-Sugar Soda' }).Count -eq 1) (($rider | ForEach-Object { $_.why }) -join ' | ')
 
   # ---- BUY-COVERAGE -------------------------------------------------------------------------------
   # FROZEN FIXTURE (2026-08-15) - country-captain-chicken exactly as it shipped. This spec is the founding

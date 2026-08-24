@@ -1,0 +1,64 @@
+{
+    "slug":  "beef-back-ribs",
+    "title":  "Beef Back Ribs",
+    "source_url":  "https://www.wellplated.com/beef-back-ribs/",
+    "protein":  "beef",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-24T12:09:58",
+    "updated":  "2026-08-24T12:43:12",
+    "terms":  [
+                  {
+                      "term":  "beef back ribs",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 41.6g protein below the 50 floor",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:58",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/beef-back-ribs/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:09:58",
+                        "by":  "decider",
+                        "detail":  "BBQ-rubbed baked beef back ribs; no dupe in catalog (neighbours are Korean/Indian beef bowls and stews), fills a bare oven-BBQ-rib slot, verified band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:10:43",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:34:11",
+                        "by":  "mapper",
+                        "detail":  "2 residual lines ruled, 0 rejected, 1 new id proposed (beef-back-ribs, enqueued as an absent term for pricing). 1 food-macros-db row added. This is the recipe in the batch I am least confident about, entirely because of the bone yield on the main protein line."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:35:19",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-24T12:43:12",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 41.6g protein below the 50 floor"
+                    }
+                ]
+}

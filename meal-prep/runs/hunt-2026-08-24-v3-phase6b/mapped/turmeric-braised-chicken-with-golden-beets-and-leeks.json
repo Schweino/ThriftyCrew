@@ -1,0 +1,217 @@
+﻿{
+    "slug":  "turmeric-braised-chicken-with-golden-beets-and-leeks",
+    "title":  "Turmeric Braised Chicken with Golden Beets and Leeks",
+    "source_url":  "https://www.skinnytaste.com/turmeric-braised-chicken-with-golden-beets-and-leeks/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-24",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 leeks (white and light green parts only)",
+                            "item":  "Leeks",
+                            "bid":  "leeks",
+                            "board":  null,
+                            "grams":  623,
+                            "buy":  "7 leeks, white and light green parts only, halved lengthwise, rinsed well and sliced into thin half-moons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "USDA each-weight 89 g trimmed per leek. Grams are the trimmed usable weight, not the whole leek; the purchase is 7 whole leeks. REUSE, not a new id: `leeks` is already a live board commodity (2 of 7 stores, cheapest 3.99 at Family Fare). The only thing missing is a vocabulary row, which is a naming question and not a registrar one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 bunch (4 golden beets with their greens, scrubbed)",
+                            "item":  "Golden Beets with Greens",
+                            "bid":  "beets",
+                            "board":  null,
+                            "grams":  1925,
+                            "buy":  "14 golden beets with their greens (about 3 to 4 bunches), scrubbed, beets cut into wedges and greens coarsely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "4 roots at 100 g plus about 150 g of attached greens; both parts are eaten here, so the grams and the macro row cover the bunch, not the roots alone. Rejected the board\u0027s canned-beets suggestion: canned drained beets are a form flip in both price class and gram weight, and they carry no greens at all. Fresh beets appear under no id in the pre-resolve sweep, so a new id is proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 garlic cloves (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  null,
+                            "grams":  21,
+                            "buy":  "7 garlic cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "3 g per clove, the existing Garlic food-DB each-weight. The Ground Cloves near-miss is a token collision, not a form flip - clove the spice is a different plant from a garlic clove. Board `garlic` is live at 6 of 7 stores and the Garlic food-DB row already carries the 3 g clove weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons ground turmeric (divided)",
+                            "item":  "Ground Turmeric",
+                            "bid":  "ground-turmeric",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "2 tablespoons plus 1 teaspoon ground turmeric, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; divided use, half with the vegetables and half with the chicken.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground ginger",
+                            "item":  "Ground Ginger",
+                            "bid":  "ground-ginger",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon ground ginger",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1-1/2 teaspoons kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "1 tablespoon plus 2 1/4 teaspoons kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 5 1/4 tsp at the table\u0027s 6 g/tsp kosher basis agrees with 31.5 g at target scale.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 cup freshly squeezed lemon juice",
+                            "item":  "Lemon Juice",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  214,
+                            "buy":  "3/4 cup plus 2 tablespoons freshly squeezed lemon juice (from about 5 lemons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "244 g/cup water-like density. Grams are juice in the pot; the purchase is whole lemons, which understates cost by roughly a dime per serving. The recipe specifies freshly squeezed, so the purchase is whole lemons (live id, 5 of 7 stores), not bottled concentrate. Macros are label-equivalent at 3 cal/tbsp, so the existing Lemon Juice food-DB row stands.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "1/4 cup plus 3 tablespoons olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 7 tbsp at 13.5 g = 94.5 g at target scale.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 skinless chicken drumsticks (on the bone)",
+                            "item":  "Bone-In Skinless Chicken Drumstick",
+                            "bid":  "chicken-thighs",
+                            "board":  null,
+                            "grams":  1372,
+                            "buy":  "14 skinless chicken drumsticks on the bone (about 3 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "98 g per skinless bone-in drumstick as purchased (USDA 62 g meat at a 63% bone-in yield). One drumstick per serving, matching the source\u0027s own serving-size string. Refused the chicken-thighs bridge on the standing \u0027leg quarters are not thighs\u0027 precedent: drumsticks are a distinct cut, a distinct price class (usually the cheapest bone-in cut) and a distinct bone fraction, so the thigh id would overprice and mis-weigh.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 skinless chicken thighs (on the bone)",
+                            "item":  "Bone-In Skinless Chicken Thigh",
+                            "bid":  "chicken-thighs",
+                            "board":  null,
+                            "grams":  1680,
+                            "buy":  "14 skinless bone-in chicken thighs (about 3 3/4 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "120 g per skinless bone-in thigh as purchased, yielding about 94 g meat. One thigh per serving. REUSE of the live bone-in `chicken-thighs` id (7 of 7 stores), which is the right price class. Explicitly NOT boneless-skinless-chicken-thigh: boneless is a higher price class and its grams carry no bone. New vocabulary row needed, but no registrar question.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup white wine (swap for chicken broth for whole30/paleo)",
+                            "item":  "Dry White Wine",
+                            "bid":  "white-wine",
+                            "board":  null,
+                            "grams":  413,
+                            "buy":  "1 3/4 cups dry white wine (or chicken broth for a whole30/paleo batch)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "235 g/cup, the density basis already carried on the Dry White Wine food-DB row. Exact same-form vocabulary row, and this is the very pair the 2026-08-16 dupe lesson names: Dry White Wine IS `white-wine` (4 of 7 stores), so no new id. The two vinegar near-misses are form flips and were refused.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "golden beets",
+                                 "chicken drumsticks"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_added":  [
+
+                         ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "golden beets",
+                                        "proposed_bid":  "golden-beets",
+                                        "evidence":  "Fresh raw beets sold in bunches with their greens. The only beet id the pre-resolve board sweep surfaced is canned-beets, which is a form flip: drained shelf-stable roots at roughly 0.05, no greens, different gram basis. Registrar please confirm across all four namespaces that no fresh `beets`/`beetroot`/`red-beets` id exists - I am barred from opening them this stage and the sweep only reports per-term hits. If a generic fresh beet id does exist, alias to it rather than minting; I propose the variety-specific slug only because golden beets price above red on the red-onion-is-not-onions precedent."
+                                    },
+                                    {
+                                        "term":  "skinless chicken drumsticks",
+                                        "proposed_bid":  "chicken-drumsticks",
+                                        "evidence":  "Bone-in drumsticks are a separate retail cut from thighs, priced lower per pound and carrying more bone per gram (63% meat yield vs 78% for a thigh). The standing \u0027leg quarters are not thighs\u0027 rejection binds this bridge too. The sweep returned only chicken-thighs for this term; registrar please check for `drumsticks`, `chicken-legs` and `chicken-leg-quarters` spellings before minting, and note leg quarters would be a different id again, not an alias."
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "golden-beets",
+                                  "verdict":  "alias",
+                                  "bid":  "beets",
+                                  "reason":  "A fresh-beet id already exists and is live-priced: commodities.json id \u0027beets\u0027, label \u0027Beets (fresh)\u0027, unit lb, whose include rules EXPLICITLY match \u0027golden\\s+beets?\u0027 alongside red/organic/bunched (commodities.json:58828-58838), and smp-feed.json prices it at $2.49/lb everyday at Baker\u0027s (crown is an organic red-beets bunch URL); canned-beets ($0.052/oz Walmart) is the confirmed form-flip and irrelevant. The red-onion precedent fails here because that split exists as two ids with disjoint rules, whereas minting \u0027golden-beets\u0027 would double-claim products the existing \u0027beets\u0027 include set already captures - the exact bread-crumbs seam. If golden\u0027s price premium over red ever matters, that is a future variant-split of the \u0027beets\u0027 row\u0027s rules, not a mint at this gate. Follow-up edits for the caller: (1) add recipe-floor-id-map.json alias golden-beets -\u003e beets (units compatible: fresh lb purchase); (2) separately, meal-prep\\db\\ingredients.json has NO beet row at all, so \u0027golden beets\u0027 needs a NEW vocabulary NAME row - that is a name mint, not an id mint, and it must not create an id as a side effect. No dupe-allowlist entry needed since no new id is born."
+                              },
+                              {
+                                  "proposed_bid":  "chicken-drumsticks",
+                                  "verdict":  "alias",
+                                  "bid":  "chicken-thighs",
+                                  "reason":  "Already priced: the existing chicken-thighs commodity is labeled \u0027Chicken Thighs / Drumsticks\u0027, its include rules match \u0027chicken drumstick\u0027 by pattern, and its live 7/7 row (cheapest 1.28/lb Sam\u0027s Club) contains an actual drumstick cell (Hy-Vee: \u0027Fresh chicken drumsticks or thighs, $1.77 lb\u0027) - stores co-price the two cuts as one bone-in dark-meat purchase, so a new id would put the same food under two prices. Follow-up: add \u0027chicken-drumsticks\u0027 -\u003e \u0027chicken-thighs\u0027 to recipe-floor-id-map.json (units match, lb); handle the 63%-vs-78% meat yield in the recipe\u0027s per-gram math, not the id namespace; separately, the ingredient NAME \u0027chicken drumsticks\u0027 has no ingredients.json row and needs its own vocabulary decision - this ruling does not mint one. Note for maintenance: the commodity\u0027s exclude \u0027\\bdrumsticks?\\b\u0027 (ice-cream-cone guard) conflicts with its own include and should be narrowed."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "precomputed_by_table":  false,
+                              "source_published_per_serving":  {
+                                                                   "calories":  527,
+                                                                   "carbs_g":  16.5,
+                                                                   "protein_g":  64.0,
+                                                                   "fat_g":  19.7,
+                                                                   "serving_size":  "1 drumstick, 1 thigh and vegetables",
+                                                                   "servings":  4
+                                                               },
+                              "computed_per_serving":  {
+                                                           "calories":  358,
+                                                           "carbs_g":  21.1,
+                                                           "protein_g":  33.9,
+                                                           "fat_g":  13.3
+                                                       },
+                              "recipe_totals_source_basis":  {
+                                                                 "calories":  1431,
+                                                                 "protein_g":  135.6,
+                                                                 "carbs_g":  84.6,
+                                                                 "fat_g":  53.2
+                                                             },
+                              "protein_delta_pct":  -47.0,
+                              "calorie_delta_pct":  -32.1,
+                              "verdict":  "fail - gap far exceeds the 15% protein bar, and I am confident the SOURCE figure is the wrong one, not my portions",
+                              "reasoning":  "The source\u0027s own serving-size string fixes the portion at 1 drumstick + 1 thigh, which is about 155 g of edible meat per serving. Dark chicken meat is ~19.5 g protein per 100 g, so that portion cannot exceed ~30 g of chicken protein; 64 g would require roughly 310 g of meat per person, i.e. bone-in pieces weighing about 400 g each. The published fat is impossible the same way: 19.7 g/serving means 79 g total, but 27 g of olive oil plus skinless dark meat supplies only ~53 g. Likely cause, and it is the exact each-weight trap in reverse: USDA\u0027s meat-only entries list household rows of \u00271 drumstick with skin = 130 g\u0027 and \u00271 thigh without skin = 149 g\u0027, which are yields from 1 lb ready-to-cook chicken, not per-piece meat weights. Feeding those to a nutrition calculator reproduces 57.6 g protein per serving, right next to the published 64. The source made the each-weight error; our portions match the label.",
+                              "band_check":  "FAILS THIS RUN\u0027S CALORIE FLOOR AND I WANT THIS READ LOUDLY. Computed 358 cal/serving against a 400-650 band. Carbs pass comfortably at 21.1 g (limit 35). I ran the generous sensitivity too - 115 g drumsticks and 145 g thighs, the top of mainstream retail - and it still only reaches about 394 cal and 40 g protein. The dish is skinless dark meat plus low-calorie vegetables with just 2 tbsp of oil, so there is no plausible each-weight that lifts it into band. The band ruling is not mine to make and I have left state at `mapped` with mapping complete, but do not let the source\u0027s 527 cal carry this recipe forward: an unverified acceptance would publish a 358-calorie dinner as a 527-calorie one."
+                          }
+}

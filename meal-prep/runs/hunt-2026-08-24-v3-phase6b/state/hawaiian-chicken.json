@@ -1,0 +1,84 @@
+{
+    "slug":  "hawaiian-chicken",
+    "title":  "Hawaiian Chicken",
+    "source_url":  "https://www.recipetineats.com/hawaiian-chicken-with-coconut-rice/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:38",
+    "updated":  "2026-08-24T12:43:11",
+    "terms":  [
+                  {
+                      "term":  "chicken drumsticks",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "malt vinegar",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "dried onion flakes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "canned crushed pineapple",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Bone-In Skin-On Chicken Drumstick",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Desiccated Coconut",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Bone-In Skin-On Chicken Drumstick",
+                      "Desiccated Coconut",
+                      "Water"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:38",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/hawaiian-chicken-with-coconut-rice/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:13:38",
+                        "by":  "decider",
+                        "detail":  "Hawaiian pineapple-soy glazed baked drumsticks with coconut rice is a distinct Polynesian dinner; no neighbour shares its sauce family (bge-m3 twins are cajun/hainanese/peruvian/greek/peach chicken, all different flavour profiles), verified band fits (504 cal, 19.6g carbs), and it widens the catalog\u0027s cuisine spread."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:14:21",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:35:56",
+                        "by":  "mapper",
+                        "detail":  "15 residual lines ruled: 10 mapped, 3 mapped-optional, 3 mapped-null (malt vinegar, dried onion flakes, desiccated coconut - one of which is also the optional coconut), 1 not-purchased (water), 0 rejected outright. Three board matches overturned as form flips or wrong price class: chicken-thighs for drumsticks, tomatoes for ketchup, onions for dried onion flakes. 22 buy strings written. Two new co"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:37:45",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "waiting on: Bone-In Skin-On Chicken Drumstick, Desiccated Coconut, Water"
+                    }
+                ]
+}

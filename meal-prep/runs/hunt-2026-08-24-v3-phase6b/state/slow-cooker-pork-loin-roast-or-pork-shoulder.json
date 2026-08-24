@@ -1,0 +1,79 @@
+{
+    "slug":  "slow-cooker-pork-loin-roast-or-pork-shoulder",
+    "title":  "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+    "source_url":  "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+    "protein":  "pork",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-24T12:09:56",
+    "updated":  "2026-08-24T12:49:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:56",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/slow-cooker-pork-loin-roast/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:09:56",
+                        "by":  "decider",
+                        "detail":  "Honey-butter-cider-vinegar glazed slow-cooker pork roast; distinct sweet-tangy glaze from live dutch-oven gravy roast, mustard-gravy Senfbraten and blackberry pork loin, and unrelated to in-flight fennel-tomato braise."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:10:36",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:34:09",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled, 0 rejected, 0 new ids. Every residual resolved to an already-priced commodity, so nothing here needs the pricer. Two composite EACH lines leave dried thyme (~2 g) and onion powder (~2.4 g) named in the buy string but uncosted."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:34:10",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "all 0 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-24T12:48:24",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-24T12:48:25",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-24T12:49:26",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-24T12:49:26",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

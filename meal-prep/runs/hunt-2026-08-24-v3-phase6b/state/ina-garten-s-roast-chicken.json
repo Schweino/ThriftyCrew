@@ -1,0 +1,61 @@
+{
+    "slug":  "ina-garten-s-roast-chicken",
+    "title":  "Ina Garten\u0027s Roast Chicken",
+    "source_url":  "https://thecozycook.com/ina-gartens-roast-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:11",
+    "updated":  "2026-08-24T12:43:12",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate (pre-write): 667 cal above the 650 ceiling",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:11",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/ina-gartens-roast-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:13:12",
+                        "by":  "decider",
+                        "detail":  "No whole roast chicken exists live (the 6 live matches are generic \u0027chicken\u0027 word-overlap only; the roast-chicken/lemon-roasted-chicken twins are unruled backlog, not accepted); a classic whole-bird roast with root veg widens the catalog away from its slow-cooker-bowl skew, band verified 641/8/54, batch-scalable at 8 servings."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:13:32",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:35:19",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled, 0 rejected, 0 new ids - every one was an existing priced commodity (whole-chicken, fresh-thyme, lemons, onions, fennel, flour, salt), so nothing needs the pricer. 2 food-macros-db rows added (Whole Chicken, Lemon). Carriage note, not a gate I am running: fennel is stocked at only 1 of 7 stores (Baker\u0027s, $3.99), which is a real availability wrinkle for a budget card even tho"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:35:20",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "all 0 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-24T12:43:12",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 667 cal above the 650 ceiling"
+                    }
+                ]
+}

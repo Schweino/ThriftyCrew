@@ -1,0 +1,235 @@
+{
+ "slug": "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+ "lines": [
+  {
+   "raw": "1 tablespoon extra-virgin olive oil",
+   "buy": "3 1/2 tablespoons",
+   "grams_source": 13.5,
+   "notes": "1 tbsp = 13.5 g on the estate's existing Olive Oil row."
+  },
+  {
+   "raw": "2 medium sweet potatoes (scrubbed, peeled, and cut into 1/2-inch dice)",
+   "buy": "7 medium (about 2 lb), peeled and cut into 1/2-inch dice",
+   "notes": "Settled line, 260 g source basis carried through untouched."
+  },
+  {
+   "raw": "3/4 teaspoon kosher salt",
+   "buy": "2 3/4 teaspoons kosher salt",
+   "notes": "Settled line, 4.5 g source basis (6 g/tsp kosher)."
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "1 teaspoon ground black pepper",
+   "notes": "Settled line, 0.6 g source basis."
+  },
+  {
+   "raw": "1 large bunch kale (stemmed and roughly chopped (about 8 cups))",
+   "buy": "28 cups stemmed and roughly chopped (about 1 1/2 lb)",
+   "notes": "Settled line, 200 g source basis. Cup measure used instead of the package noun 'bunch' because bunch size is not a fixed weight."
+  },
+  {
+   "raw": "1 tablespoon minced garlic (about 3 cloves)",
+   "buy": "3 1/2 tablespoons minced garlic (about 10 cloves)",
+   "grams_source": 9,
+   "notes": "The source states its own equivalence, 1 tbsp = about 3 cloves, so 9 g at 3 g/clove."
+  },
+  {
+   "raw": "2 chicken breasts",
+   "buy": "7 3/4 lb boneless skinless chicken breasts, cooked and shredded or diced (about 10 1/2 cups cooked)",
+   "grams_source": 1020,
+   "notes": "The source page's own parenthetical is 'about 2 1/4 pound raw chicken or 3 cups cooked' - 1020 g raw, not 2 each-weights. This line is pre-cooked chicken stirred in at the end."
+  },
+  {
+   "raw": "1 1/2 tablespoons balsamic vinegar",
+   "buy": "5 1/4 tablespoons balsamic vinegar",
+   "notes": "Settled line, 24 g source basis."
+  },
+  {
+   "raw": "1 tablespoon chopped fresh sage**",
+   "buy": "3 1/2 tablespoons chopped fresh sage",
+   "grams_source": 2,
+   "notes": "Fresh leaves, chopped; 1 tbsp chopped fresh soft-leaf herb = 2 g."
+  },
+  {
+   "raw": "1 tablespoon chopped fresh thyme or rosemary**",
+   "buy": "3 1/2 tablespoons chopped fresh thyme (or fresh rosemary)",
+   "grams_source": 2.4,
+   "notes": "Fresh, not dried - a dried substitution would be 1/3 the volume and a different price class, so the printed measure only holds for fresh."
+  },
+  {
+   "raw": "1/4 cup dried cranberries or fresh pomegranate seeds",
+   "buy": "3/4 cup plus 2 tablespoons dried cranberries",
+   "grams_source": 40,
+   "notes": "First branch taken. 1/4 cup = 40 g on the Craisins/USDA sweetened-dried panel."
+  },
+  {
+   "raw": "4 ounces goat cheese",
+   "buy": "14 oz crumbled, divided",
+   "grams_source": 113,
+   "notes": "Divided is real here: half is stirred in to melt, half sprinkled over at the end."
+  },
+  {
+   "raw": "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice",
+   "buy": "optional, for serving",
+   "grams_source": 0,
+   "notes": "Serving suggestion with no quantity in the source, and the source's own nutrition block is stated 'without rice'. Carried at zero grams so it cannot inflate carbs against this run's 35 g cap."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 tablespoon extra-virgin olive oil",
+   "term": "extra-virgin olive oil",
+   "canon_item": "Olive Oil",
+   "bid": "olive-oil",
+   "decision": "mapped",
+   "grams_source": 13.5,
+   "evidence": "Extra-virgin is the default grade the board id already prices (7 of 7 stores, 0.1879 cheapest is bulk-EVOO class, not refined-pomace class), so this is a grade word, not a form flip. Macro row 'Olive Oil' already exists - the table's no-row flag was keyed on the intake term."
+  },
+  {
+   "raw": "1 tablespoon minced garlic (about 3 cloves)",
+   "term": "minced garlic",
+   "canon_item": "Minced Garlic",
+   "bid": "minced-garlic",
+   "decision": "mapped",
+   "grams_source": 9,
+   "evidence": "minced-garlic is a live board id at 7 of 7 stores, so this is a REUSE and not a proposal; the missing piece is a vocabulary row, which is a naming question. Not garlic-powder (dehydrated, different weight and price class)."
+  },
+  {
+   "raw": "2 chicken breasts",
+   "term": "chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 1020,
+   "evidence": "The source line in full is '2 chicken breasts, cooked and shredded or diced (about 2 1/4 pound raw chicken or 3 cups cooked)' - the recipe states its own raw weight, 1020 g. Not rotisserie-chicken (different cut mix and price class) and not thighs."
+  },
+  {
+   "raw": "1 tablespoon chopped fresh sage**",
+   "term": "sage",
+   "canon_item": "Fresh Sage",
+   "bid": "fresh-sage",
+   "decision": "mapped",
+   "grams_source": 2,
+   "evidence": "No commodity in any namespace claims sage in any form per the table, and today's captures carry matching products, so this is a genuine new id proposed through the registrar (fresh-parsley is the standing fresh-herb precedent). Fresh leaf, never the ground/dried spice."
+  },
+  {
+   "raw": "1 tablespoon chopped fresh thyme or rosemary**",
+   "term": "chopped fresh thyme or rosemary",
+   "canon_item": "Fresh Thyme",
+   "bid": "fresh-thyme",
+   "decision": "mapped",
+   "grams_source": 2.4,
+   "evidence": "Refusing the dried-thyme bridge on the standing fresh-is-not-dried rule: 1 tbsp fresh is 2.4 g of leaf against about 1 g dried, and the two are different price classes. The 'Fresh Thyme' macro row already exists on the Fresh Parsley USDA precedent."
+  },
+  {
+   "raw": "1/4 cup dried cranberries or fresh pomegranate seeds",
+   "term": "dried cranberries or fresh pomegranate seeds",
+   "canon_item": "Dried Cranberries",
+   "bid": "dried-cranberries",
+   "decision": "mapped",
+   "grams_source": 40,
+   "evidence": "First branch taken because it is the pantry-stable one and the only one the source's photos use. Deliberately NOT pomegranates (the alternate branch, and only 2 of 7 carriage); the seed-family vocabulary near-misses the table offered are string noise, not food matches."
+  },
+  {
+   "raw": "4 ounces goat cheese",
+   "term": "goat cheese",
+   "canon_item": "Goat Cheese",
+   "bid": "goat-cheese",
+   "decision": "mapped",
+   "grams_source": 113,
+   "evidence": "No commodity claims it and the nearest vocabulary rows are ricotta/provolone/parmesan - three different milks, textures and price classes, so every one of them is a stretched map. Captures carry chevre logs, so a new id is the honest answer."
+  },
+  {
+   "raw": "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice",
+   "term": "brown and wild rice blend, brown rice, quinoa, or cauliflower rice",
+   "canon_item": "Brown Rice",
+   "bid": null,
+   "decision": "mapped-optional",
+   "grams_source": 0,
+   "evidence": "A four-way 'for serving' suggestion with no quantity, and the source's own nutrition block is explicitly 'approximately 2 cups without rice'. Left unpriced and unweighed rather than bridged onto the white-rice id, which is a different grain form."
+  }
+ ],
+ "absent_terms": [
+  "goat cheese",
+  "dried cranberries",
+  "fresh sage",
+  "fresh thyme"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "goat cheese",
+   "proposed_bid": "goat-cheese",
+   "evidence": "Soft fresh chevre log. The three namespaces carry ricotta, provolone and parmesan (per the pre-resolve's near-miss list) but nothing claiming goat's-milk cheese; searched by food, not string - chevre, goat log, goat crumbles are all absent from the table's board answer, which reports 'no commodity claims it'. Price class is its own: a 4 oz chevre log runs 3 to 5 dollars, several times any cow-milk soft cheese per ounce, so no existing id can price it without publishing a wrong number."
+  },
+  {
+   "term": "dried cranberries",
+   "proposed_bid": "dried-cranberries",
+   "evidence": "Sweetened dried cranberries (Craisins class), a shelf-stable dried fruit. The only board answer the pre-resolve found for this line was pomegranates, which is the line's ALTERNATE branch and a different food entirely. Checked for the obvious spellings by food rather than slug (craisins, sweetened dried cranberry, cranberries dried); none surfaced. Not raisins - different fruit, different price. If a dried-cranberry id already exists under another spelling this is a REUSE and the id should be substituted, not minted."
+  },
+  {
+   "term": "fresh sage",
+   "proposed_bid": "fresh-sage",
+   "evidence": "Fresh sage leaves in a produce clamshell. The table reports no vocabulary row shares a core word with sage in any form and no commodity claims it, while today's captures carry matching products - the exact signature of a real, stocked, unpriced food. fresh-parsley is the standing precedent that fresh soft herbs get their own ids rather than being bridged onto the dried spice, which is a different weight per spoon and a different price class."
+  },
+  {
+   "term": "fresh thyme",
+   "proposed_bid": "fresh-thyme",
+   "evidence": "Fresh thyme sprigs, produce aisle. dried-thyme is already a live id at 5 of 7 stores, and that is precisely why this cannot be an alias: the standing fresh-is-not-dried rejection makes the bridge both a wrong gram weight (2.4 g fresh per tbsp vs about 1 g dried) and a wrong price. The estate already books the two apart on the macro side - separate 'Fresh Thyme' and 'Dried Thyme' rows exist in food-macros-db - so the commodity side should match."
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "goat-cheese",
+   "verdict": "approve",
+   "bid": "goat-cheese",
+   "reason": "Swept all three id namespaces plus recipe-floor-id-map, dupe-allowlist, and the live feed for goat/chevre: zero ids and zero labels claim goat's-milk cheese (the only 'goat' hits are goat-MILK infant-formula routing history and a milk-commodity exclude pattern '\\bgoat\\b'), smp-feed.json prices nothing goat, and the existing cheese ids (ricotta, provolone-cheese, parmesan, feta, 1-3-fat-cream-cheese, mozzarella, cheddar) are all cow/sheep-milk foods whose board rows would publish a wrong number for a ~$1/oz chevre log — mint goat-cheese as a recipe-only id (recipe-board baseline + recipe-commodities.json), with real include rules ('goat cheese', 'chevre', which survive contiguously in the already-captured 'Montchevre goat cheese log, 4 oz., $4.48' ad row) and excludes rigorous enough to reject goat MILK, goat-milk formula, goat-milk soap/lotion, and flavored dessert logs; separately, ingredient-vocab has no 'Goat Cheese' row (exit 3, nearest rows are ricotta/provolone/parmesan — all different foods), so the vocabulary needs a new name row too, minted as its own act, and no dupe-allowlist entry is needed since the audit's rules share no stem between goat-cheese and any existing id."
+  },
+  {
+   "proposed_bid": "dried-cranberries",
+   "verdict": "alias",
+   "bid": "dried-cranberries",
+   "reason": "dried-cranberries ALREADY EXISTS verbatim as a weekly-staples id in commodities.json (label 'Dried Cranberries', include rules explicitly cover 'craisins' and 'cranberries, dried') and is LIVE PRICED in smp-feed.json across six stores — cheapest Sam's Club $0.1588/oz (48 oz Craisins club pack, url samsclub.com/ip/3120000678; ack'd as real bulk economics 2026-07-31), with Walmart/Hy-Vee/Fareway/Baker's/Family Fare at $0.25–$0.42/oz. It is exactly the Craisins-class sweetened shelf-stable dried fruit the mapper describes, and categories.json also carries the distinct fresh-cranberries id, so no fresh/dried form conflation. Nothing to mint: substitute the existing id dried-cranberries on the ingredient line (add a recipe-floor-id-map.json alias only if the recipe spelling needs its own key), and the pomegranates pre-resolve hit is correctly the ALTERNATE branch, a different food."
+  },
+  {
+   "proposed_bid": "fresh-sage",
+   "verdict": "alias",
+   "bid": "fresh-sage",
+   "reason": "The mapper's sweep was wrong: fresh-sage ALREADY EXISTS as a weekly-staples commodity in commodities.json (label 'Fresh Sage', unit oz, full include/exclude rules covering fresh/organic sage clamshells and excluding dried/ground/rubbed/sausage/stuffing), is listed in categories.json (produce, line 175) and commodity-search.json, and is LIVE-PRICED in out\\smp-feed.json — crown Baker's Simple Truth Organic Sage 0.5 oz at $2.49 = $4.98/oz, with Family Fare at $5.98/oz as a second cell. Do not mint anything; map the recipe line 'fresh sage' onto the existing id fresh-sage (add the recipe-floor-id-map.json alias pair only if the recipe spelling needs its own key — units already match, oz). Separately, meal-prep\\db\\ingredients.json shows no 'sage' vocabulary row (only sausage hits), so the NAME 'fresh sage' may still need a vocab row — that is a distinct act and must not re-mint the id."
+  },
+  {
+   "proposed_bid": "fresh-thyme",
+   "verdict": "alias",
+   "bid": "fresh-thyme",
+   "reason": "No new id may be minted because fresh-thyme ALREADY EXISTS and is ALREADY PRICED: commodities.json line 65559 carries id fresh-thyme (label 'Fresh Thyme', includes fresh\\s+thyme / sprig-bunch-clamshell / Local Roots-Crazy Fresh-Gotham Greens patterns), and smp-feed.json prices it live at 4 of 7 stores (Aldi $3.18/oz cheapest, Walmart $3.56, Hy-Vee $3.99, Family Fare $5.98) with support rows in product-urls.json, categories.json, commodity-search.json, a Fareway not-carried record, and a reviewed UNIT-MISMATCH coverage-gap entry — so the mapper's fresh-vs-dried case is correct (different form, different gram weight, different price: dried-thyme sits at $0.88/oz vs fresh at $3.18/oz) but the conclusion 'mint' is wrong; resolve the recipe line 'fresh thyme' to the existing id fresh-thyme, do NOT bridge it to dried-thyme, and on the separate NAME namespace note that meal-prep\\db\\ingredients.json holds only 'Dried Thyme'->dried-thyme, so a 'Fresh Thyme' vocabulary row bound to bid fresh-thyme still needs adding via the sanctioned editor (a name gap, not an id gap)."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 509,
+   "protein_g": 59,
+   "carbs_g": 35,
+   "fat_g": 16,
+   "servings": 4,
+   "basis_note": "source states its block is for 1 of 4 servings, approximately 2 cups, WITHOUT rice"
+  },
+  "computed_per_serving": {
+   "calories": 515,
+   "protein_g": 64.9,
+   "carbs_g": 25.5,
+   "fat_g": 16.6
+  },
+  "deltas": {
+   "calories": "+1.2%",
+   "protein": "+10.0%",
+   "carbs": "-27%",
+   "fat": "+4%"
+  },
+  "verdict": "PASS. Protein is the sharp instrument and it lands at +10%, inside the 15% gate; calories land at +1.2%. Computed over the 12 costed lines at source basis, rice excluded exactly as the source excludes it.",
+  "the_catch_this_run": "The extraction had truncated the chicken line to '2 chicken breasts'. Taken as two each-weights of about 200 g that is 400 g raw, which recomputes to 30 g protein per serving against the published 59 - a -49% miss and a flat fail. The source page's own parenthetical, 'about 2 1/4 pound raw chicken or 3 cups cooked', gives 1020 g, and at 1020 g the protein reproduces the published figure to within 10%. This is the each-weight-on-the-main-protein mistake the rule warns about, caught by the source's own label.",
+  "carb_gap_explained": "Our 25.5 g against the published 35 g is almost entirely the sweet potato basis: the settled line books 2 medium at 260 g total (130 g each, the USDA medium), while the source's arithmetic implies nearer 400 g. Left settled and unchanged - it is not mine to re-derive, calories still land at +1.2%, and BOTH readings sit under this run's 35 g carb cap, so the gate is not in question either way.",
+  "run_conditions": "PASS on all four: 515 cal per serving (400-650 band), 25.5 g carbs (35 g cap), scales cleanly to 14 servings at factor 3.5, no seafood."
+ }
+}

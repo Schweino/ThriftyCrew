@@ -1,0 +1,167 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-24T12:43:35",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "sourdough bread",
+   "state": "MATCHES",
+   "term_used": "sourdough bread",
+   "attempts": [
+    {
+     "term": "sourdough bread",
+     "state": "MATCHES",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "King's Hawaiian Original Sweet Soft Pretzel Bites, 20.8 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.43/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15LH3OP78Y1W"
+    },
+    {
+     "item": "Artesano Hawaiian Bakery Buns, 16 ct.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1900O28YC7JR"
+    },
+    {
+     "item": "Village Hearth Sourdough Bread 24. oz. 2 pk.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$2.74/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7JZ1I32N8WW5"
+    },
+    {
+     "item": "Member's Mark Sliced Sourdough Bread, 23 oz.",
+     "price": 3.96,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5N5SHHB4LVA9"
+    },
+    {
+     "item": "Wildgrain Frozen Bake-at-Home Variety Box, 8 pcs.",
+     "price": 99.0,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1GZG4A07M2W1"
+    },
+    {
+     "item": "Member's Mark Sliced Sourdough, Frozen, Case, 12 ct.",
+     "price": 41.57,
+     "size": "",
+     "unit_price": "$3.46/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/25BXKXUDSK14"
+    },
+    {
+     "item": "Brownberry Superior Keto Bread 20 oz., 2 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5RKFNN0M8BMW"
+    },
+    {
+     "item": "Sara Lee Soft & Smooth Whole Grain White Bread  20 oz., 2 pk.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$0.14/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6XR5ZGXT0606"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "bone-in skin-on chicken breasts",
+   "state": "MATCHES",
+   "term_used": "bone-in skin-on chicken breasts",
+   "attempts": [
+    {
+     "term": "bone-in skin-on chicken breasts",
+     "state": "MATCHES",
+     "hits": 14
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Bone-In Chicken Thighs, priced per pound",
+     "price": 7.88,
+     "size": "",
+     "unit_price": "$1.28/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6OTZLEIQJDT2"
+    },
+    {
+     "item": "Member's Mark Organic Boneless and Skinless Chicken Breasts, priced per pound",
+     "price": 28.14,
+     "size": "",
+     "unit_price": "$5.36/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/30ETHLWJUNY8"
+    },
+    {
+     "item": "Boneless Skinless Chicken Breast, Case, priced per pound",
+     "price": 114.13,
+     "size": "",
+     "unit_price": "$2.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/343CZSF2UZNQ"
+    },
+    {
+     "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
+     "price": 27.08,
+     "size": "",
+     "unit_price": "$6.77/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
+    },
+    {
+     "item": "Member's Mark Boneless and Skinless Chicken Breast, priced per pound",
+     "price": 14.11,
+     "size": "",
+     "unit_price": "$2.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3507EF7ZC0N5"
+    },
+    {
+     "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
+     "price": 108.67,
+     "size": "",
+     "unit_price": "$2.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+    },
+    {
+     "item": "Member's Mark Organic Boneless Skinless Chicken Breasts, Case, priced per pound",
+     "price": 254.5,
+     "size": "",
+     "unit_price": "$5.09/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3KDXXC9WSMK2"
+    },
+    {
+     "item": "Member's Mark Organic Boneless Skinless Chicken Thighs, Case, priced per pound",
+     "price": 254.5,
+     "size": "",
+     "unit_price": "$5.09/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3O6688Y0K2O7"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

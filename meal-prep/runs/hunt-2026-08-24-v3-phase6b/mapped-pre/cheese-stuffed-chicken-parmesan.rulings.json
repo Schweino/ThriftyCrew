@@ -1,0 +1,175 @@
+{
+ "slug": "cheese-stuffed-chicken-parmesan",
+ "lines": [
+  {
+   "raw": "4 boneless skinless chicken breasts",
+   "buy": "14 breasts (about 6 1/4 lb), each cut with a pocket",
+   "grams_source": 800,
+   "notes": "Each-weight is a DISCLOSED ASSUMPTION: 200 g (7 oz) per breast, the size that will hold a 2-3 tbsp cheese pocket. Catalog average is 167 g per serving; this recipe is one breast per serving."
+  },
+  {
+   "raw": "2 ½ cups shredded mozzarella cheese (separated)",
+   "buy": "8 3/4 cups shredded, divided",
+   "grams_source": 280,
+   "notes": "1 cup shredded = 112 g, confirmed by the food-DB mozzarella rows (1/4 cup = 28 g). Stuffing plus topping."
+  },
+  {
+   "raw": "1/2 cup shredded Parmesan Cheese (separated)",
+   "buy": "1 3/4 cups shredded, divided",
+   "grams_source": 45,
+   "notes": "SHREDDED parmesan at about 22 g per 1/4 cup, not the finer grated basis the food-DB row uses for its serving (28 g per 1/4 cup)."
+  },
+  {
+   "raw": "½ cup flour",
+   "buy": "1 3/4 cups",
+   "grams_source": 60,
+   "notes": "Label basis 1/4 cup = 30 g. Dredge; a substantial fraction is discarded, see macro_cross_check."
+  },
+  {
+   "raw": "1 ¼ teaspoons seasoned salt",
+   "buy": "1 tablespoon plus 1 1/2 teaspoons",
+   "grams_source": 7.5,
+   "notes": "Lawrys label 1/4 tsp = 1.5 g, so 1 tsp = 6 g."
+  },
+  {
+   "raw": "¼ teaspoon pepper",
+   "buy": "1 teaspoon",
+   "grams_source": 0.7,
+   "notes": "Ground black pepper at 2.3 g per tsp; scaled 1/4 tsp is 7/8 tsp, printed as 1 tsp."
+  },
+  {
+   "raw": "2 eggs",
+   "buy": "7 large eggs, whisked",
+   "notes": "Settled line; 50 g per large egg matches the table's 100 g for 2."
+  },
+  {
+   "raw": "½ teaspoon garlic powder",
+   "buy": "1 3/4 teaspoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 cup Italian breadcrumbs",
+   "buy": "3 1/2 cups Italian seasoned breadcrumbs",
+   "grams_source": 108,
+   "notes": "Italian dry crumbs weigh about 108 g per cup, roughly double panko - the gram figure is stated here rather than derived from any panko density."
+  },
+  {
+   "raw": "2 Tablespoons butter",
+   "buy": "7 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "3 Tablespoons olive oil",
+   "buy": "2/3 cup, for frying in batches",
+   "notes": "Settled line. Much of this stays in the pan; it is still purchased."
+  },
+  {
+   "raw": "Fresh parsley (to garnish)",
+   "buy": "1/2 cup chopped, to garnish",
+   "grams_source": 8,
+   "notes": "The table computed no weight for this garnish, so I weighed it: 28 g chopped at 14 servings, about 1/2 cup at 60 g per cup."
+  },
+  {
+   "raw": "2 cups marinara sauce",
+   "buy": "7 cups",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "Fresh Parsley (to garnish)",
+   "buy": "from the parsley above, scattered over at serving",
+   "notes": "DUPLICATE LINE: the source lists the parsley garnish twice and the extraction carried both. No weight assigned here, or the garnish is bought twice."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "4 boneless skinless chicken breasts",
+   "term": "boneless skinless chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 800,
+   "evidence": "The table's DIFFERENT FORM flag is a plural, breasts against breast, not a form flip. Board-proven at 7 of 7 stores and the food-macros-db row already exists under this exact canon name."
+  },
+  {
+   "raw": "2 ½ cups shredded mozzarella cheese (separated)",
+   "term": "shredded mozzarella cheese",
+   "canon_item": "Mozzarella Cheese",
+   "bid": "mozzarella-cheese",
+   "decision": "mapped",
+   "grams_source": 280,
+   "evidence": "The existing Mozzarella Cheese food-DB row IS the shredded low-moisture part-skim form and its note cites a priced 8 oz bag package row, so this is a reuse, not a new id. Preferred over the generic shredded-cheese blend the table matched; if mozzarella-cheese turns out not to be carried, shredded-cheese (7 of 7, same price class) is the safe fallback."
+  },
+  {
+   "raw": "1/2 cup shredded Parmesan Cheese (separated)",
+   "term": "shredded Parmesan Cheese",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 45,
+   "evidence": "REJECTED the table's shredded-cheese match on price class: generic bagged mozzarella/cheddar blend runs about a quarter of parmesan per ounce. Parmesan Cheese is an existing vocabulary row and an existing food-DB row (Great Value label), so parmesan is a reuse."
+  },
+  {
+   "raw": "½ cup flour",
+   "term": "flour",
+   "canon_item": "All-Purpose Flour",
+   "bid": "flour",
+   "decision": "mapped",
+   "grams_source": 60,
+   "evidence": "Exact vocabulary row, same form, board-proven at 7 of 7 stores."
+  },
+  {
+   "raw": "1 ¼ teaspoons seasoned salt",
+   "term": "seasoned salt",
+   "canon_item": "Seasoned Salt",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 7.5,
+   "evidence": "A Lawrys-style blend of salt, sugar, paprika, turmeric, onion and garlic, not table salt: about 3 dollars for 8 oz against 1 dollar for 26 oz, a different price class. Refused the salt bridge; pantry-static pricing on 7.5 g is safe and the term is enqueued."
+  },
+  {
+   "raw": "¼ teaspoon pepper",
+   "term": "pepper",
+   "canon_item": "Black Pepper",
+   "bid": "black-pepper",
+   "decision": "mapped",
+   "grams_source": 0.7,
+   "evidence": "Bare pepper on a flour dredge beside seasoned salt is ground black pepper; the bell-pepper rows the matcher offered are noise. black-pepper is live - the sibling recipe in this same batch carries it as a settled line."
+  },
+  {
+   "raw": "1 cup Italian breadcrumbs",
+   "term": "Italian breadcrumbs",
+   "canon_item": "Bread Crumbs",
+   "bid": "bread-crumbs",
+   "decision": "mapped",
+   "grams_source": 108,
+   "evidence": "REJECTED the board's french-bread match: a bakery loaf is not dry crumbs. Mapped to the generic dry-crumb row rather than Panko Breadcrumbs, which the food DB deliberately keeps separate at a different density, and the gram weight is stated directly so no panko density is used."
+  }
+ ],
+ "absent_terms": [
+  "seasoned salt",
+  "italian breadcrumbs"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 567.0,
+   "carbs_g": 24.0,
+   "protein_g": 50.0
+  },
+  "our_computed_per_serving": {
+   "calories": 895,
+   "carbs_g": 47,
+   "protein_g": 75
+  },
+  "protein_gap_pct": 50.6,
+  "calorie_gap_pct": 57.9,
+  "carb_gap_pct": 96.0,
+  "verdict": "GAP IS REAL AND IT IS NOT A PORTION ERROR. The source's own figures cannot be reconciled with its own ingredient list: 2 1/2 cups of shredded mozzarella alone is 280 g, 851 cal and 66 g protein for 4 servings, which is 213 cal and 16.5 g protein per serving before any chicken. Adding a 200 g breast per serving lands protein at 75 g, so 50 g is unreachable unless the cheese was counted at roughly one third. Halving the chicken to a 100 g breast would still leave protein at 53 g and calories at 780, so no plausible chicken each-weight closes the gap.",
+  "band_warning": "RECOMMEND RETIRE OR RE-BAND. At full purchased basis this is 895 cal and 47 g carbs per serving against the run's 400-650 cal and 35 g carb conditions - it fails both. Sensitivity: dredging discards roughly 40% of the flour, egg and crumb; discounting that fraction gives 818 cal and 34.7 g carbs, so carbs could just squeak under 35 but calories miss the ceiling by 170 under every basis I can construct. This recipe entered the pool on a published figure that its own ingredients do not support.",
+  "uncertainty": "The chicken each-weight (200 g) is my assumption and the highest-cost one here, but it is not what breaks the band - cheese and breading are."
+ }
+}

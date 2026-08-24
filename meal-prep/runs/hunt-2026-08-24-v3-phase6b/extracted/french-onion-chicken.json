@@ -1,0 +1,122 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "French Onion Chicken",
+  "source_url": "https://www.wellplated.com/french-onion-chicken/",
+  "servings": 4,
+  "time_total": "60 minutes",
+  "time_active": "25 minutes",
+  "ingredients": [
+    {
+      "raw": "1 jumbo yellow onion (thinly sliced (about 12 ounces or 3 1/2 cups))",
+      "item": "jumbo yellow onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "thinly sliced (about 12 ounces or 3 1/2 cups)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces good-quality sourdough bread (whole grain if possible, cut into 1 1/2-inch cubes (about 3 1/2 heaped cups))",
+      "item": "good-quality sourdough bread",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": "whole grain if possible, cut into 1 1/2-inch cubes (about 3 1/2 heaped cups)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 cloves garlic (peeled and left whole)",
+      "item": "garlic",
+      "qty": "8",
+      "unit": "cloves",
+      "prep": "peeled and left whole",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons unsalted butter",
+      "item": "unsalted butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon Dijon mustard",
+      "item": "Dijon mustard",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons kosher salt (divided)",
+      "item": "kosher salt",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 1/4 pounds bone-in, skin-on chicken breasts",
+      "item": "bone-in, skin-on chicken breasts",
+      "qty": "2 1/4",
+      "unit": "pounds",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tablespoons chopped fresh thyme",
+      "item": "fresh thyme",
+      "qty": "1 1/2",
+      "unit": "tablespoons",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Place a rack in the center of the oven and preheat the oven to 400 degrees F. For easy cleanup, line a large, rimmed baking sheet with aluminum foil, parchment paper, or a silicone baking mat.",
+    "Place the onions, bread cubes, and garlic cloves in a large bowl.",
+    "In a small heatproof bowl or liquid measuring cup, melt the butter. Whisk the olive oil, mustard, and 1 teaspoon kosher salt with the butter.",
+    "Pour the mixture over the onions and bread. Toss to coat as evenly as possible. Turn the mixture out onto the prepared baking sheet. Spread into an even layer.",
+    "Nestle the chicken pieces into the onion mixture. It can overlap the onions a little, but make sure it does not cover the bread. Sprinkle the chicken with the remaining 1 teaspoon of salt and pepper.",
+    "Bake for 15 minutes, then remove the pan from the oven and carefully turn the bread cubes. Return to the oven and bake until the bread is deeply golden and the chicken registers 160 degrees F on an instant-read thermometer inserted at the thickest part, about 15 additional minutes for smaller pieces and 20 to 25 minutes for larger pieces. (If some chicken pieces cook more quickly than others, remove the cooked pieces to a plate and cover to keep them warm, then return the pan to the oven and continue baking until all of the chicken is cooked through.)",
+    "Sprinkle everything with fresh thyme. Transfer the chicken to plates. Serve hot with the croutons and a spoonful of the roasted onions and garlic over the top."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

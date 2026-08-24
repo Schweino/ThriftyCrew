@@ -1,0 +1,31 @@
+{
+    "slug":  "mushroom-pork-chops",
+    "title":  "Mushroom Pork Chops",
+    "source_url":  "https://www.spendwithpennies.com/mushroom-pork-chops/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:19",
+    "updated":  "2026-08-24T12:13:19",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same creamy-mushroom pork chop dinner as live creamy-mushroom-pork-chops-over-mashed-potatoes (word-overlap 30, bge 0.90) — pork + bake + cream-of-mushroom sauce all match; breaded-vs-mashed serving is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:19",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/mushroom-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:13:19",
+                        "by":  "decider",
+                        "detail":  "Same creamy-mushroom pork chop dinner as live creamy-mushroom-pork-chops-over-mashed-potatoes (word-overlap 30, bge 0.90) — pork + bake + cream-of-mushroom sauce all match; breaded-vs-mashed serving is not a distinct plate."
+                    }
+                ]
+}

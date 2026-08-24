@@ -1,0 +1,94 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Beef Back Ribs",
+  "source_url": "https://www.wellplated.com/beef-back-ribs/",
+  "servings": 4,
+  "time_total": "270 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "3-4 pounds beef back ribs* (1 rack)",
+      "item": "beef back ribs",
+      "qty": "3-4 pounds",
+      "unit": null,
+      "prep": "(1 rack)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ tablespoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "1 ½",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon cayenne (or less, to taste)",
+      "item": "cayenne",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": "(or less, to taste)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ teaspoons onion powder",
+      "item": "onion powder",
+      "qty": "1 ½",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons kosher salt",
+      "item": "kosher salt",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup BBQ sauce",
+      "item": "BBQ sauce",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Let the ribs come to room temperature. Place racks in the upper and lower thirds of your oven and preheat to 275°F. Line a large rimmed baking sheet with aluminum foil.",
+    "In a small bowl, combine the smoked paprika, cayenne, garlic powder, onion powder, and salt.",
+    "Place the ribs on the prepared baking sheet and rub all over with the spice mixture. Flip the ribs bone side up and cover the entire baking sheet with aluminum foil, crimping the edges for a tight seal.",
+    "Bake the beef ribs for 3 hours on the lower oven rack, then remove the ribs from the oven, uncover the baking sheet (hang onto the foil), and carefully drain away any rendered fat. Flip the ribs meat side up and brush with half of the BBQ sauce.",
+    "Re-cover the ribs and bake for another hour, brushing on the remaining BBQ sauce halfway through, until the ribs are super tender and nearly falling off the bone (you can test by poking one with a pairing knife, it should slide right in with no resistance).",
+    "Remove the baking sheet from the oven, transfer the ribs to a cutting board, and rest for 5 to 10 minutes before slicing and serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 7,
+    "verified": 7,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

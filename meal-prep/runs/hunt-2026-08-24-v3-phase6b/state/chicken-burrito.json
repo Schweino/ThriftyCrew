@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-burrito",
+    "title":  "Chicken Burrito",
+    "source_url":  "https://www.spendwithpennies.com/chicken-burritos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:09:59",
+    "updated":  "2026-08-24T12:10:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Generic salsa/green-chile rotisserie-chicken burrito with no distinguishing hook the catalog lacks; sits inside a saturated chicken-burrito cluster (bge 0.94-0.96 to bbq/ranch/buffalo/bean chicken burritos).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:59",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/chicken-burritos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:10:00",
+                        "by":  "decider",
+                        "detail":  "Generic salsa/green-chile rotisserie-chicken burrito with no distinguishing hook the catalog lacks; sits inside a saturated chicken-burrito cluster (bge 0.94-0.96 to bbq/ranch/buffalo/bean chicken burritos)."
+                    }
+                ]
+}

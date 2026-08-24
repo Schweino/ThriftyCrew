@@ -1,0 +1,68 @@
+{
+    "slug":  "french-onion-chicken",
+    "title":  "French Onion Chicken",
+    "source_url":  "https://www.wellplated.com/french-onion-chicken/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:12",
+    "updated":  "2026-08-24T12:43:11",
+    "terms":  [
+                  {
+                      "term":  "sourdough bread",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "bone-in skin-on chicken breasts",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Bone-In Skin-On Chicken Breast",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "sourdough bread",
+                      "bone-in skin-on chicken breasts",
+                      "Bone-In Skin-On Chicken Breast"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:12",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/french-onion-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:13:13",
+                        "by":  "decider",
+                        "detail":  "Bone-in skin-on chicken breasts baked over sourdough cubes with caramelized onion is a distinct plate/format from slow-cooker-french-onion-chicken-bowls (shredded chicken over rice) — shares protein and french-onion flavor but differs on method and starch (2 of 4 axes), a genuine baked take the catalog does not yet hold."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:13:41",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:35:20",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled, 0 rejected, 2 new ids proposed (sourdough-bread, bone-in-chicken-breast), both enqueued as absent terms. 2 food-macros-db rows added. THIS RECIPE NEEDS A BAND DECISION IT MAY NOT SURVIVE: computed carbohydrate is 42 g against the run\u0027s 35 g maximum. Note also that both new ids are on this one recipe, so a registrar rejection of either leaves it stuck."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T12:38:20",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-24T12:43:11",
+                        "by":  "derive",
+                        "detail":  "waiting on: sourdough bread, bone-in skin-on chicken breasts, Bone-In Skin-On Chicken Breast"
+                    }
+                ]
+}

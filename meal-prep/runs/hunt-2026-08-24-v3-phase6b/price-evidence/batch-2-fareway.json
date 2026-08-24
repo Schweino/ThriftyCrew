@@ -1,0 +1,230 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-24T12:38:32",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "beef back ribs",
+   "state": "MATCHES",
+   "term_used": "beef back ribs",
+   "attempts": [
+    {
+     "term": "beef back ribs",
+     "state": "OK",
+     "hits": 3
+    }
+   ],
+   "hits": [
+    {
+     "item": "USDA Choice Whole Bone-In Beef Short Ribs",
+     "price": 99.9,
+     "size": "$9.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388391-usda-choice-bonein-beef-short-ribs-1-each"
+    },
+    {
+     "item": "Baby Back Pork Ribs",
+     "price": 14.97,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387478-baby-back-pork-ribs"
+    },
+    {
+     "item": "Hand-Cut Extra Meaty Baby Back Pork Ribs",
+     "price": 14.97,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387836-hand-cut-extra-meaty-baby-back-pork-ribs-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "malt vinegar",
+   "state": "MATCHES",
+   "term_used": "malt vinegar",
+   "attempts": [
+    {
+     "term": "malt vinegar",
+     "state": "OK",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Bertolli Balsamic Glaze Vinegar",
+     "price": 4.48,
+     "size": "6.76 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/149551-bertolli-balsamic-glaze-6-76-oz"
+    },
+    {
+     "item": "Bragg Apple Cider Vinegar, Organic",
+     "price": 6.99,
+     "size": "32 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218713-bragg-apple-cider-vinegar-organic-32-fl-oz"
+    },
+    {
+     "item": "Heinz All Natural Apple Cider Vinegar",
+     "price": 3.99,
+     "size": "32 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71065-heinz-all-natural-apple-cider-vinegar-32-oz"
+    },
+    {
+     "item": "Bertolli Balsamic Vinegar of Modena",
+     "price": 4.48,
+     "size": "16.9 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27987867-bertolli-balsamic-vinegar-of-modena-16-9-fl-oz"
+    },
+    {
+     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar",
+     "price": 4.69,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218717-bragg-organic-raw-unfiltered-apple-cider-vinegar-16-oz"
+    },
+    {
+     "item": "Alessi Balsamic Reduction, Premium, Traditional",
+     "price": 5.39,
+     "size": "8.5 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/100665-alessi-balsamic-reduction-premium-8-5-oz"
+    },
+    {
+     "item": "Marukan Seasoned Gourmet Rice Vinegar",
+     "price": 3.69,
+     "size": "12 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16884141-marukan-seasoned-gourmet-rice-vinegar-12-0-fl-oz"
+    },
+    {
+     "item": "Ken's Steak House Simply Vinaigrette Balsamic",
+     "price": 2.99,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17069414-ken-s-steak-house-dressing-balsamic-16-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "dried onion flakes",
+   "state": "MATCHES",
+   "term_used": "dried onion flakes",
+   "attempts": [
+    {
+     "term": "dried onion flakes",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Badia Spices Minced Onion",
+     "price": 7.99,
+     "size": "17 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21522194-badia-spices-onion-minced-17-oz"
+    },
+    {
+     "item": "Badia Spices Chopped Onion",
+     "price": 3.99,
+     "size": "5.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458675-badia-spices-onion-chopped-5-5-oz"
+    },
+    {
+     "item": "Tone's Onion, Chopped",
+     "price": 2.99,
+     "size": "1.1 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16983161-tone-s-chopped-onion-1-1-oz"
+    },
+    {
+     "item": "Tone's Onion, Minced",
+     "price": 2.99,
+     "size": "1.88 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2650230-tone-s-minced-onion-1-88-oz"
+    },
+    {
+     "item": "McCormick Minced Onions",
+     "price": 3.99,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72849-mccormick-minced-onions-2-oz"
+    },
+    {
+     "item": "McCormick Minced Onions",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72860-mccormick-minced-onions-3-5-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "canned crushed pineapple",
+   "state": "MATCHES",
+   "term_used": "canned crushed pineapple",
+   "attempts": [
+    {
+     "term": "canned crushed pineapple",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Crushed Pineapple",
+     "price": 1.68,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23976254-fareway-pineapple-crushed-20-oz"
+    },
+    {
+     "item": "Dole Pineapple, Crushed",
+     "price": 2.67,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3405695-dole-crushed-pineapple-in-100-pineapple-juice-20-oz"
+    },
+    {
+     "item": "Fareway Crushed Pineapple in Natural Juice",
+     "price": 0.88,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25857776-fareway-pineapple-in-natural-juice-crushed-8-oz"
+    },
+    {
+     "item": "Fareway Crushed Pineapple in Heavy Syrup",
+     "price": 1.68,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720244-fareway-pineapple-in-heavy-syrup-crushed-20-oz"
+    },
+    {
+     "item": "Dole Pineapple, Crushed",
+     "price": 1.64,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69914-dole-crushed-pineapple-in-100-pineapple-juice-8-oz"
+    },
+    {
+     "item": "Dole Pineapple, Crushed",
+     "price": 1.64,
+     "size": "8.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/80632-dole-crushed-pineapple-in-heavy-syrup-8-25-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

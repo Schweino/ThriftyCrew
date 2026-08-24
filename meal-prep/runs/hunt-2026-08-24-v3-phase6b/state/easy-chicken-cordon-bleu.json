@@ -1,0 +1,31 @@
+{
+    "slug":  "easy-chicken-cordon-bleu",
+    "title":  "Easy Chicken Cordon Bleu",
+    "source_url":  "https://www.recipetineats.com/chicken-cordon-bleu-easy-fancy/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:20",
+    "updated":  "2026-08-24T12:13:20",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same chicken cordon bleu flavor identity (ham + swiss + dijon) as live chicken-cordon-bleu-casserole; catalog already carries both chicken and turkey cordon-bleu casseroles, so the cutlet format is a format variant of an already-saturated dinner (3 of 4 axes).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:20",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/chicken-cordon-bleu-easy-fancy/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:13:20",
+                        "by":  "decider",
+                        "detail":  "Same chicken cordon bleu flavor identity (ham + swiss + dijon) as live chicken-cordon-bleu-casserole; catalog already carries both chicken and turkey cordon-bleu casseroles, so the cutlet format is a format variant of an already-saturated dinner (3 of 4 axes)."
+                    }
+                ]
+}

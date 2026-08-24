@@ -1,0 +1,145 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+  "source_url": "https://www.wellplated.com/chicken-sweet-potato-kale-skillet/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tablespoon extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 medium sweet potatoes (scrubbed, peeled, and cut into 1/2-inch dice)",
+      "item": "sweet potatoes",
+      "qty": "2",
+      "unit": null,
+      "prep": "medium (scrubbed, peeled, and cut into 1/2-inch dice)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "3/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 large bunch kale (stemmed and roughly chopped (about 8 cups))",
+      "item": "kale",
+      "qty": "1",
+      "unit": "bunch",
+      "prep": "large, stemmed and roughly chopped (about 8 cups)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon minced garlic (about 3 cloves)",
+      "item": "minced garlic",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "(about 3 cloves)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 chicken breasts",
+      "item": "chicken breasts",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tablespoons balsamic vinegar",
+      "item": "balsamic vinegar",
+      "qty": "1 1/2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon chopped fresh sage**",
+      "item": "sage",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "chopped fresh",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon chopped fresh thyme or rosemary**",
+      "item": "chopped fresh thyme or rosemary",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup dried cranberries or fresh pomegranate seeds",
+      "item": "dried cranberries or fresh pomegranate seeds",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 ounces goat cheese",
+      "item": "goat cheese",
+      "qty": "4",
+      "unit": "ounces",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice",
+      "item": "brown and wild rice blend, brown rice, quinoa, or cauliflower rice",
+      "qty": null,
+      "unit": null,
+      "prep": "Prepared",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the olive oil in a very large, very deep skillet or Dutch oven over medium high. Add the sweet potatoes, salt, and pepper and cook, stirring often, until beginning to soften and turn golden, about 3 to 4 minutes.",
+    "Stir in the kale a few handfuls at a time, until it is all wilted and fits in the skillet (this may take a few minutes). Let cook, stirring very frequently, until the kale is tender, about 6 additional minutes. Stir in the garlic and cook 1 additional minute.",
+    "Stir in the chicken. Next, stir in the balsamic vinegar, sage, thyme, and cranberries. Crumble half of the goat cheese over the top, then stir so that it melts and becomes creamy. Taste and adjust seasonings as desired. Sprinkle the remaining goat cheese over the top, then serve hot over rice."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

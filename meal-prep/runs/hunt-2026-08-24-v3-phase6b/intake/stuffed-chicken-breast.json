@@ -1,0 +1,141 @@
+﻿{
+    "name":  "Stuffed Chicken Breast",
+    "slug":  "stuffed-chicken-breast",
+    "protein":  "chicken",
+    "cuisine":  "Italian-American",
+    "source_url":  "https://thecozycook.com/stuffed-chicken-breast/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  3178,
+                            "buy":  "7 lb boneless skinless chicken breasts (14 large breasts, about 8 oz each)"
+                        },
+                        {
+                            "item":  "Salt",
+                            "grams":  21,
+                            "buy":  "About 1 tablespoon salt and 1 1/2 teaspoons black pepper, to taste"
+                        },
+                        {
+                            "item":  "Paprika",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons paprika"
+                        },
+                        {
+                            "item":  "Olive Oil",
+                            "grams":  79,
+                            "buy":  "3 1/2 tablespoons olive oil; 2 tablespoons plus 1 teaspoon olive oil"
+                        },
+                        {
+                            "item":  "Spinach",
+                            "grams":  315,
+                            "buy":  "10 1/2 cups packed spinach, roughly chopped (about 11 oz)"
+                        },
+                        {
+                            "item":  "Garlic",
+                            "grams":  42,
+                            "buy":  "14 cloves garlic, minced"
+                        },
+                        {
+                            "item":  "Sun-Dried Tomatoes",
+                            "grams":  63,
+                            "buy":  "1 1/4 cups sun-dried tomatoes, drained and chopped"
+                        },
+                        {
+                            "item":  "1/3 Fat Cream Cheese",
+                            "grams":  397,
+                            "buy":  "14 oz. 1/3-less-fat cream cheese, softened"
+                        },
+                        {
+                            "item":  "Mozzarella Cheese",
+                            "grams":  392,
+                            "buy":  "3 1/2 cups shredded mozzarella"
+                        },
+                        {
+                            "item":  "Parmesan Cheese",
+                            "grams":  116,
+                            "buy":  "1 1/4 cups grated Parmesan"
+                        },
+                        {
+                            "item":  "Dried Oregano",
+                            "grams":  2,
+                            "buy":  "1 3/4 teaspoons EACH dried basil and dried oregano"
+                        },
+                        {
+                            "item":  "Onion Powder",
+                            "grams":  2,
+                            "buy":  "scant 1 teaspoon onion powder"
+                        },
+                        {
+                            "item":  "Red Pepper Flakes",
+                            "grams":  1,
+                            "buy":  "1/2 teaspoon red pepper flakes"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  524,
+                               "protein_g":  63.8,
+                               "carbs_g":  9.6,
+                               "fat_g":  25.6
+                           },
+    "writer_notes":  [
+                         "Completed slug: stuffed-chicken-breast. All 13 bought lines are used by a step; no step calls for anything unbought. Filling = cream cheese, mozzarella, parmesan, dried basil, dried oregano, onion powder, red pepper flakes, folded with the wilted spinach/garlic and chopped sun-dried tomatoes. Tops seasoned with salt, black pepper, paprika. Both olive-oil lines used (searing and wilting).",
+                         "Basil rides the dried-oregano buy string uncosted (about 0.5 g per the mapper); it is on the shopper's list, so I name it in the filling. Black pepper rides the salt buy string (1 1/2 tsp) uncosted; it is bought, so I name it in the seasoning step. Neither is a computed prose number, just a named ingredient.",
+                         "No shop_smart bullet makes a checkable per-package arithmetic claim (no cheaper-per-ounce, no lasts-N-batches, no nothing-left). All bullets are qualitative shopping logic, so none needs a cost_lines trace. I did NOT claim block cheese beats pre-shredded, because the mapper resolved mozzarella-cheese and parmesan to shredded/grated cells (the build buys the bag and the tub); the 2026-08-15 block-vs-tub trap is avoided by design.",
+                         "DATA SANITY (all plausible, none blocking): macros land 524 cal / 63.8 g protein / 9.6 g carb / 25.6 g fat per serving, cleanly inside this run's band (400-650 cal AND <=35 g carb). Mapper macro cross-check PASSED (protein +3.3%, carb within 1 g, cal -7.2% vs source). Chicken is 3178 g = 14 breasts at ~227 g (8 oz) each, i.e. one stuffed breast per serving, which matches the mapper's each-weight ruling and the source's own protein figure. No title ingredient missing from the build; no note-vs-build contradiction; no single cost line looks like it should dominate a 14-serving batch. Herb/cheese/aromatic profile is consistent with an Italian-American spinach-and-sun-dried-tomato stuffed chicken."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "breadcrumbs",
+                                  "panko",
+                                  "rice",
+                                  "pasta",
+                                  "shrimp",
+                                  "feta",
+                                  "bacon"
+                              ],
+    "prose":  {
+                  "intro_html":  "Stuffed chicken breast looks like you fussed over it and plates like a restaurant special, but it is really just a paring knife, a bowl of filling, and a hot pan. Each big breast gets a pocket packed with spinach, sun-dried tomatoes, cream cheese, mozzarella, and parmesan, seared golden and finished in the oven. Every serving carries <strong>{{protein}} grams of protein</strong> and {{cal}} calories with under 10 grams of carbs, for about <strong>${{cost_ps}}</strong> a serving (at everyday cost). That is a steakhouse-looking dinner for the price of a side salad.",
+                  "shop_smart":  [
+                                     "<strong>Buy the big pack of breasts.</strong> You want large breasts here, since a small one has no room for a pocket. The value pack is cheaper per pound than the tidy tray of two, and when breast hits a sale price, grab extra and freeze it in batch-size bags.",
+                                     "<strong>Let the sun-dried tomatoes do double duty.</strong> Buy the kind packed in oil, chop them for the filling, and use the drained oil to sear the chicken. That is free flavor you already paid for, and it stretches the olive oil.",
+                                     "<strong>Grab the shredded bag and the grated tub.</strong> The mozzarella and parmesan melt into the filling, so whichever bag and tub are on sale is the right call. No need to chase a fancy wedge to hide it inside a chicken breast.",
+                                     "<strong>Spinach shrinks to almost nothing.</strong> That pile of leaves looks like a lot in the cart, but it wilts down to a fraction in the pan, so do not talk yourself into buying less than the recipe calls for.",
+                                     "<strong>The 1/3-less-fat cream cheese is not a diet dodge.</strong> It is what keeps the filling creamy without turning greasy in the fridge over a week of lunches. Buy whichever bricks are cheapest and soften them on the counter first."
+                                 ],
+                  "make_it":  [
+                                  "Weigh your empty baking dish and write the number down. That is how you portion 14 even servings at the end instead of eyeballing it.",
+                                  "Preheat the oven to 375F. Warm a teaspoon or two of the oil in a large skillet over medium heat, add the chopped spinach and minced garlic, and cook 3 to 4 minutes until the spinach wilts down. Pull it off the heat and let it cool.",
+                                  "In a big bowl, stir together the softened cream cheese, mozzarella, parmesan, dried basil, dried oregano, onion powder, and red pepper flakes. Fold in the cooled spinach and garlic and the chopped sun-dried tomatoes until it is one even filling.",
+                                  "Pat the chicken breasts dry. With a sharp paring knife, cut a deep pocket into the thick side of each breast, going most of the way through but not out the other side.",
+                                  "Pack each pocket full of the filling. Sprinkle the tops of the stuffed breasts with salt, black pepper, and paprika.",
+                                  "Heat the rest of the oil in a large oven-safe skillet over medium-high heat. Working two or three breasts at a time so the pan stays hot, sear each side 2 to 3 minutes until golden. Use two spatulas to turn them gently so the filling stays put.",
+                                  "Slide the seared breasts into your weighed baking dish, or leave them in the oven-safe skillet, and bake uncovered at 375F for 17 to 20 minutes, until the thickest part reaches 165F.",
+                                  "Rest the chicken 5 minutes so the juices settle, then portion."
+                              ],
+                  "portion_html":  "Line up 14 containers. Because this batch is 14 breasts across 14 servings, one stuffed breast per container is your portion. To keep it honest, weigh the finished dish, subtract the empty dish weight from Step 1, and divide by 14, then even things out if one breast came out heavier than the rest. Each serving lands near <strong>{{cal}} calories</strong> and {{protein}} grams of protein.",
+                  "cost_closing_html":  "About <strong>${{cost_ps}} a serving</strong> (at everyday cost). Chicken breast, a little dairy, and a handful of pantry herbs is a cheap way to eat something that tastes expensive. The cream cheese and two cheeses are the splurge, and they are exactly what turn plain chicken into dinner.",
+                  "upsell_html":  "A steakhouse-looking chicken dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month."
+              },
+    "head":  {
+                 "description":  "Spinach and sun-dried tomato stuffed chicken breast, seared and baked for meal prep. Fourteen servings at {{cal}} calories, {{protein}} grams of protein, and under 10 grams of carbs for about ${{cost_ps}} each (at everyday cost).",
+                 "keywords":  "stuffed chicken breast, high protein meal prep, low carb meal prep, spinach sun-dried tomato chicken, budget chicken dinner, keto chicken meal prep, cheap high protein dinner",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "steps":  [
+                               "Wilt the chopped spinach and minced garlic in a little oil, then let cool.",
+                               "Mix the cream cheese, mozzarella, parmesan, basil, oregano, onion powder, and red pepper flakes, then fold in the spinach, garlic, and sun-dried tomatoes.",
+                               "Cut a deep pocket in each chicken breast and pack it with the filling.",
+                               "Sprinkle the tops with salt, black pepper, and paprika, then sear each breast golden in a hot oiled skillet.",
+                               "Bake uncovered at 375F for 17 to 20 minutes until the chicken reaches 165F, rest 5 minutes, and portion into 14 containers."
+                           ],
+                 "step_names":  [
+                                    "Wilt the spinach",
+                                    "Mix the filling",
+                                    "Stuff the chicken",
+                                    "Season and sear",
+                                    "Bake and portion"
+                                ]
+             }
+}

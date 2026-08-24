@@ -1,0 +1,31 @@
+{
+    "slug":  "carne-en-su-jugo",
+    "title":  "Carne en su Jugo",
+    "source_url":  "https://www.isabeleats.com/carne-en-su-jugo/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:09:57",
+    "updated":  "2026-08-24T12:09:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same dinner as live carne-en-su-jugo-bowls: identical bacon + steak + tomatillo-serrano-cilantro braise with pinto beans (bge 0.89, name match).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:57",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/carne-en-su-jugo/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:09:57",
+                        "by":  "decider",
+                        "detail":  "Same dinner as live carne-en-su-jugo-bowls: identical bacon + steak + tomatillo-serrano-cilantro braise with pinto beans (bge 0.89, name match)."
+                    }
+                ]
+}

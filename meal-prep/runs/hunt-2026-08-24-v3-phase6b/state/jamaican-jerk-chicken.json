@@ -1,0 +1,31 @@
+{
+    "slug":  "jamaican-jerk-chicken",
+    "title":  "Jamaican Jerk Chicken",
+    "source_url":  "https://www.wellplated.com/jamaican-jerk-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T12:13:16",
+    "updated":  "2026-08-24T12:13:16",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same jerk-chicken dinner identity as live one-pot-jerk-chicken-and-rice (jerk chicken is the plate, rice is the default side it drops); the caribbean/jerk chicken region is saturated (pressure 9) with jerk rice, jerk burrito and Jamaican brown stew already live.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:13:16",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/jamaican-jerk-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T12:13:16",
+                        "by":  "decider",
+                        "detail":  "Same jerk-chicken dinner identity as live one-pot-jerk-chicken-and-rice (jerk chicken is the plate, rice is the default side it drops); the caribbean/jerk chicken region is saturated (pressure 9) with jerk rice, jerk burrito and Jamaican brown stew already live."
+                    }
+                ]
+}

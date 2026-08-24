@@ -1,0 +1,24 @@
+{
+    "wave":  1,
+    "run":  "hunt-2026-08-24-v3-phase6b",
+    "batch":  "hunt-2026-08-24-v3-phase6b-w1",
+    "created":  "2026-08-24T12:49:26",
+    "slugs":  [
+                  "stuffed-chicken-breast",
+                  "slow-cooker-pork-loin-roast-or-pork-shoulder"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "stuffed-chicken-breast",
+                        "title":  "Stuffed Chicken Breast",
+                        "source_url":  "https://thecozycook.com/stuffed-chicken-breast/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "slow-cooker-pork-loin-roast-or-pork-shoulder",
+                        "title":  "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+                        "source_url":  "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
+                        "protein":  "pork"
+                    }
+                ]
+}

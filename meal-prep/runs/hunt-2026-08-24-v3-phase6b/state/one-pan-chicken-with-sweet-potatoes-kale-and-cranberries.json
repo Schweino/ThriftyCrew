@@ -1,0 +1,43 @@
+{
+    "slug":  "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+    "title":  "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+    "source_url":  "https://www.wellplated.com/chicken-sweet-potato-kale-skillet/",
+    "protein":  "chicken",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-24T12:09:54",
+    "updated":  "2026-08-24T12:16:48",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T12:09:54",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/chicken-sweet-potato-kale-skillet/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T12:09:55",
+                        "by":  "decider",
+                        "detail":  "Harvest chicken-sweet potato skillet with balsamic, kale, cranberries and goat cheese; distinct method and flavour from live sheet-pan-chicken-sweet-potato-brussels (different veg, roasted vs skillet, no goat-cheese/balsamic), verified band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T12:10:25",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T12:16:48",
+                        "by":  "mapper",
+                        "detail":  "{\"counts\": {\"residual_lines_ruled\": 8, \"mapped\": 6, \"mapped_optional\": 1, \"mapped_null\": 0, \"rejected\": 0, \"reuses_not_proposals\": 1, \"new_commodity_proposals\": 4, \"settled_lines_given_buy_strings\": 5, \"food_db_rows_added\": 2, \"food_db_rows_refused\": 2}, \"rejections\": \"No line was rejected outright. Four bridges were refused on the evidence gate and routed to new ids instead: fresh thyme off dried"
+                    }
+                ]
+}

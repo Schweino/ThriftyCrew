@@ -1,0 +1,163 @@
+{
+ "slug": "slow-cooker-pork-loin-roast-or-pork-shoulder",
+ "lines": [
+  {
+   "raw": "1.75 - 2.5 kg / 3.5 - 5lb pork loin OR shoulder/boston butt ( ,or scotch fillet, skinless (Note 1))",
+   "buy": "8 1/4 lb boneless pork loin roast, trimmed",
+   "grams_source": 2125,
+   "notes": "Midpoint of the source range (1.75-2.5 kg). Booked as loin, not shoulder: the macro check fits loin almost exactly and shoulder would push the dish to 738 cal/serving."
+  },
+  {
+   "raw": "1.5 tbsp olive oil (, separated)",
+   "buy": "2 1/2 tablespoons olive oil, divided",
+   "notes": "1 tsp of it rubs the pork, the rest sears it."
+  },
+  {
+   "raw": "2 tsp EACH paprika, thyme",
+   "buy": "3 1/2 teaspoons EACH paprika and dried thyme",
+   "grams_source": 4.8,
+   "notes": "Composite line; grams are the paprika only. Rub thyme is dried, not fresh."
+  },
+  {
+   "raw": "1 tsp EACH garlic powder, onion powder",
+   "buy": "1 3/4 teaspoons EACH garlic powder and onion powder",
+   "grams_source": 3.1,
+   "notes": "Composite line; grams are the garlic powder only."
+  },
+  {
+   "raw": "1/2 tsp cayenne pepper (, optional)",
+   "buy": "scant 1 teaspoon cayenne pepper (optional)",
+   "notes": "Optional heat in the rub."
+  },
+  {
+   "raw": "1/2 tsp pepper",
+   "buy": "scant 1 teaspoon black pepper",
+   "grams_source": 1.2,
+   "notes": "Bare 'pepper' in a rub is ground black pepper."
+  },
+  {
+   "raw": "2 tsp salt",
+   "buy": "1 tablespoon plus 1/2 teaspoon salt",
+   "notes": "Rub salt."
+  },
+  {
+   "raw": "3/4 cup honey",
+   "buy": "1 1/3 cups honey",
+   "notes": "The sauce carries essentially all of this dish's carbohydrate."
+  },
+  {
+   "raw": "125g / 1/2 cup butter (, unsalted)",
+   "buy": "scant 1 cup (2 sticks) unsalted butter",
+   "notes": "Honey butter sauce."
+  },
+  {
+   "raw": "5 cloves garlic (, minced)",
+   "buy": "9 cloves garlic, minced",
+   "notes": "Countable rounded up from 8.75 cloves."
+  },
+  {
+   "raw": "1/4 cup cider vinegar",
+   "buy": "scant 1/2 cup apple cider vinegar",
+   "grams_source": 59.7,
+   "notes": "Water-like at 29.57 g/floz."
+  },
+  {
+   "raw": "1/2 tsp salt and pepper (, each)",
+   "buy": "scant 1 teaspoon EACH salt and black pepper",
+   "grams_source": 3,
+   "notes": "Sauce seasoning, separate from the rub salt. Composite line; grams are the salt only."
+  },
+  {
+   "raw": "3 tsp cornflour/cornstarch mixed with splash of water",
+   "buy": "1 3/4 tablespoons cornstarch, mixed with a splash of cold water",
+   "grams_source": 7.8,
+   "notes": "Cornflour is the British name for cornstarch. 2.6 g/tsp."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1.75 - 2.5 kg / 3.5 - 5lb pork loin OR shoulder/boston butt ( ,or scotch fillet, skinless (Note 1))",
+   "term": "pork loin OR shoulder/boston butt",
+   "canon_item": "Pork Loin",
+   "bid": "pork-loin",
+   "decision": "mapped",
+   "grams_source": 2125,
+   "evidence": "REUSE, not a new id: pork-loin is live on the everyday board (Member's Mark whole boneless pork loin, priced per lb, plus Kroger cells). Loin is the title's first option and the macro check settles it - loin gives 55 g protein/serving against the source's 56, while pork-shoulder gives 46 g and 738 cal."
+  },
+  {
+   "raw": "2 tsp EACH paprika, thyme",
+   "term": "paprika, thyme",
+   "canon_item": "Paprika",
+   "bid": "paprika",
+   "decision": "mapped",
+   "grams_source": 4.8,
+   "evidence": "Composite line booked on the larger food: 2 tsp paprika at 2.4 g/tsp. The 2 tsp of thyme in a dry rub is DRIED thyme (not the fresh-thyme id) and rides the buy string uncosted at about 2 g."
+  },
+  {
+   "raw": "1 tsp EACH garlic powder, onion powder",
+   "term": "garlic powder, onion powder",
+   "canon_item": "Garlic Powder",
+   "bid": "garlic-powder",
+   "decision": "mapped",
+   "grams_source": 3.1,
+   "evidence": "Composite line booked on garlic powder (1 tsp = 3.1 g, existing macro row); the matching 1 tsp onion powder (2.4 g) rides the buy string. Both foods already exist, neither is a new id."
+  },
+  {
+   "raw": "1/2 tsp pepper",
+   "term": "pepper",
+   "canon_item": "Black Pepper",
+   "bid": "black-pepper",
+   "decision": "mapped",
+   "grams_source": 1.2,
+   "evidence": "Black Pepper is an exact vocabulary row and the bell-pepper near-misses are a token artifact; unqualified 'pepper' in a spice rub is ground black pepper. 2.3 g/tsp label basis."
+  },
+  {
+   "raw": "1/4 cup cider vinegar",
+   "term": "cider vinegar",
+   "canon_item": "Apple Cider Vinegar",
+   "bid": "apple-cider-vinegar",
+   "decision": "mapped",
+   "grams_source": 59.7,
+   "evidence": "Cider vinegar IS apple cider vinegar. REUSE: apple-cider-vinegar is a live commodity with captured cells (Great Value, Kroger, Bragg) on the everyday board. NOT apple-cider, which is the drink - form flip."
+  },
+  {
+   "raw": "1/2 tsp salt and pepper (, each)",
+   "term": "salt and pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "1/2 tsp each: salt booked at 3 g (matching the settled 2 tsp = 12 g basis), the matching 1/2 tsp black pepper rides the buy string. Sauce seasoning, distinct from the rub salt line."
+  },
+  {
+   "raw": "3 tsp cornflour/cornstarch mixed with splash of water",
+   "term": "cornflour/cornstarch",
+   "canon_item": "Cornstarch",
+   "bid": "cornstarch",
+   "decision": "mapped",
+   "grams_source": 7.8,
+   "evidence": "Cornflour is the British name for the same food; exact vocabulary row and a 7 of 7 board id. Not wheat flour, which the word means in no US context here."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published": {
+   "calories": 561,
+   "carbs_g": 28,
+   "protein_g": 56
+  },
+  "computed_per_serving": {
+   "calories": 606,
+   "carbs_g": 27.6,
+   "protein_g": 55
+  },
+  "delta_protein_pct": -1.8,
+  "delta_calories_pct": 8.0,
+  "verdict": "PASS - the closest match in the batch. Protein within 2% and carbohydrate within 1.4% both confirm the two judgement calls: the cut is LEAN LOIN (shoulder would land at 46 g protein and 738 cal) and the 2125 g midpoint of the source's own 1.75-2.5 kg range is right. The carbohydrate agreement also proves the source counts the WHOLE honey butter sauce, not a served fraction, which is why calories run 8% high rather than the sauce being over-booked. In band on both run conditions (606 cal, 27.6 g carb)."
+ }
+}
