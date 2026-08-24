@@ -95,7 +95,15 @@ $script:NEXT = @{
   # advances that each claim work nobody did, on a recipe no writer was ever paid for. Same
   # reasoning as the 2026-08-16 addition above: a verdict a state machine cannot express is a
   # verdict that gets faked or lost.
-  'priced'     = @('spec-built', 'rejected-macros')
+  # `priced` -> `rejected-qa` added 2026-08-24 (v3 D8), and it was ALREADY BEING FAKED before
+  # this edit. Two ordered routes retire a recipe from `priced` on the writer's account: an
+  # explicit writer rejection, and a locked-field drift the writer would not correct after its
+  # one re-ask. Both advanced `priced -> rejected-qa` and both were REFUSED here, so the recipe
+  # sat at `priced` on disk while the orchestrator counted it rejected. Caught by the daemon's
+  # real-state-machine fixture; every injected fixture accepted it, which is the same blind spot
+  # that hid the band route in phase 3. The writer's failure is a QA-class verdict on a recipe
+  # nobody could write, and that is a verdict this machine should be able to express.
+  'priced'     = @('spec-built', 'rejected-macros', 'rejected-qa')
   'spec-built' = @('written', 'spec-built', 'rejected-qa')
   # the QA repair routes. A source-QA failure is owner-routed, so a genuine transcription defect really
   # does send the recipe back to extraction; what stays refused is skipping FORWARD past qa-passed.
@@ -494,6 +502,14 @@ if ($runSelfTest) {
   T 'MUST FIRE  a macro rejection is reachable from priced (the pre-write band gate)' (Test-LegalTransition 'priced' 'rejected-macros') 'refused'
   T 'CLEAN TWIN the normal exit from priced still stands'                             (Test-LegalTransition 'priced' 'spec-built') 'refused'
   T 'MUST FIRE  priced still cannot skip the spec and go straight to written'         (-not (Test-LegalTransition 'priced' 'written')) 'allowed'
+
+  # ---- FIXTURE 4b-iii. THE WRITER'S OWN FAILURE (v3 D8, 2026-08-24). A writer that rejects a
+  # recipe outright, and a writer that drifts a LOCKED field twice, both retire it from `priced` -
+  # and both were advancing to a state this graph refused, so the recipe stayed at `priced` on disk
+  # while the orchestrator counted it rejected. The injected fixtures accepted it; the real machine
+  # did not. Third instance of that blind spot, and the reason the daemon keeps real-machine twins.
+  T 'MUST FIRE  a QA-class rejection is reachable from priced (a writer that will not conform)' (Test-LegalTransition 'priced' 'rejected-qa') 'refused'
+  T 'MUST FIRE  and it is still terminal, like every other rejection'                        (-not (Test-LegalTransition 'rejected-qa' 'spec-built')) 'allowed'
 
   # ---- FIXTURE 4c. THE DOUBLE-BOOKED WAVE, frozen. A trim returns recipes to `qa-passed` so they can be
   # repaired, but -WaveClose only ever mints a NEW wave and cannot rewrite the old manifest, so the next

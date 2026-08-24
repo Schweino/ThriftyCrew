@@ -164,28 +164,126 @@ function New-HeadTimes {
 }
 
 # ---------------------------------------------------------------------------------------------------
+# WHICH MAPPER LINES ARE INTAKE LINES.
+#
+# THIS WAS BUILT ON A GUESS AND THE GUESS WAS WRONG, MEASURED 2026-08-24 ON THE PHASE-4 GATE RUN. The
+# first build kept a line only when `decision` was the exact string "mapped". `decision` is FREE TEXT
+# in the mapper's contract: 21 distinct values across 550 lines in the run dirs on disk. So on
+# turkey-parmesan-meatball-bake the builder silently dropped 1588 g of Ground Chicken
+# (`unresolved-hold`) and three `mapped-optional` lines, computed 250 cal per serving over what was
+# left, and the pre-write band gate retired a real recipe at "250 cal below the 400 floor". A gate
+# ruling on a fabricated number is worse than no gate: it fails CLOSED and looks like rigour.
+#
+# The classes below are derived from what v2's own shipped intakes actually did with each decision
+# word, recipe by recipe, not from what the word sounds like:
+#   INCLUDED   mapped, mapped-null, mapped-null-pending-registrar, mapped-pending-price,
+#              mapped-ruled-addition, mapped-with-conflict, mapped-precedent, ruled-substitution,
+#              flagged-no-label-and-no-commodity   (all present in the v2 intakes)
+#   OPTIONAL   mapped-optional - v2 kept 6 and dropped 5 of these BY WRITER JUDGMENT, and the writer no
+#              longer touches ingredients. The mechanical default is to COUNT them, because a line with
+#              a gram weight that the card ignores is a shopper buying food the macros do not describe,
+#              and because the direction that drops a line is the one that just fabricated a recipe.
+#              Every one is NAMED in the snapshot so QA and the auditor can see the call that was made.
+#   NOT-PURCHASED  optional-pantry / optional-null / optional-note / optional-unquantified (v2 dropped
+#              14 of 14), sub-recipe, alternative-not-mapped, mapped-free (water). Excluded, and named.
+#   UNSETTLED  anything saying `unresolved`. There is no intake to build over a line the mapper did not
+#              settle, so this is a FINDING and the recipe stops.
+#   UNKNOWN    anything else, on a line carrying an item and grams: INCLUDED and NAMED. A new
+#              vocabulary word must surface, not change behaviour silently, and including is the
+#              direction that cannot lose a protein.
+# ---------------------------------------------------------------------------------------------------
+function Get-LineClass {
+  param([string]$Decision)
+  $d = ([string]$Decision).Trim().ToLower()
+  if (-not $d) { return 'included' }                       # no verdict recorded: the mapper's default
+  if ($d -match 'unresolved') { return 'unsettled' }
+  if ($d -match '^optional-' -or $d -match 'sub-recipe' -or $d -match 'alternative-not-mapped' -or
+      $d -eq 'mapped-free') { return 'not-purchased' }
+  if ($d -eq 'mapped-optional') { return 'optional' }
+  if ($d -match '^mapped' -or $d -eq 'ruled-substitution' -or $d -eq 'flagged-no-label-and-no-commodity') {
+    return 'included'
+  }
+  return 'unknown'
+}
+
+# ---------------------------------------------------------------------------------------------------
 # THE SKELETON. Pure over the two decision files plus the food DB, so the whole assembly is fixturable
 # without a run dir.
 # ---------------------------------------------------------------------------------------------------
 function New-IntakeSkeleton {
   param($Mapped, $Extraction, $FoodDb, [int]$Servings)
   $findings = New-Object System.Collections.Generic.List[string]
+  $notes    = New-Object System.Collections.Generic.List[string]
 
   $ings = New-Object System.Collections.Generic.List[object]
   foreach ($i in (As-Array $Mapped.ingredients)) {
-    # A REJECTED LINE IS NOT AN INGREDIENT. The mapper marks its verdict per line; only mapped lines
-    # carry grams and a buy string, and putting a rejected one in the intake would price a food the
-    # mapper refused.
-    $decision = [string]$i.decision
-    if ($decision -and $decision -ne 'mapped') { continue }
-    if (-not $i.item) { continue }
+    $decision = ([string]$i.decision).Trim()
+    $item     = [string]$i.item
     $g = 0
     if ($null -ne $i.grams) { $g = [int][Math]::Round([double]$i.grams, 0) }
-    if ($g -le 0) { $findings.Add(("'{0}' has no grams in the mapper decision file" -f [string]$i.item)) | Out-Null }
-    $ings.Add([pscustomobject]@{ item = [string]$i.item; grams = $g; buy = [string]$i.buy }) | Out-Null
-    if (-not $i.buy) { $findings.Add(("'{0}' has no buy string" -f [string]$i.item)) | Out-Null }
+    $cls = Get-LineClass $decision
+
+    if ($cls -eq 'unsettled') {
+      # THE MAPPER DID NOT SETTLE THIS LINE, so there is no intake to build over it. Dropping it
+      # silently is what this build did on its first day and it is the defect this whole check exists
+      # for - see the header note on turkey-parmesan-meatball-bake.
+      $findings.Add(("'{0}' is `"{1}`" in the mapper decision file - the intake cannot be built over an unsettled line" -f $item, $decision)) | Out-Null
+      continue
+    }
+    if ($cls -eq 'not-purchased') {
+      $notes.Add(("excluded '{0}' ({1}) - not something the shopper buys" -f $item, $decision)) | Out-Null
+      continue
+    }
+    if (-not $item) {
+      $notes.Add(("excluded a line with no item name (decision `"{0}`")" -f $decision)) | Out-Null
+      continue
+    }
+    if ($g -le 0) {
+      # A line the mapper INCLUDED but gave no weight is a real gap: build-v2-spec prices and computes
+      # macros off grams, so a zero-gram line is an ingredient the reader buys and the card ignores.
+      $findings.Add(("'{0}' is included ({1}) but carries no grams" -f $item, $decision)) | Out-Null
+      continue
+    }
+    if ($cls -eq 'unknown') {
+      # A NEW VOCABULARY WORD SURFACES, IT DOES NOT CHANGE BEHAVIOUR SILENTLY. `decision` is free text
+      # in the mapper's contract (21 distinct values measured across 550 lines), so an unrecognised one
+      # is INCLUDED - the mapper gave it both an item and a weight, and the direction that loses a
+      # protein is the one that already cost this build a fabricated 250-cal recipe - and NAMED here.
+      $notes.Add(("included '{0}' on an unrecognised decision `"{1}`" - check it" -f $item, $decision)) | Out-Null
+    }
+    if ($cls -eq 'optional') {
+      $notes.Add(("'{0}' is optional in the source ({1}) and IS counted in the macros" -f $item, $decision)) | Out-Null
+    }
+    $ings.Add([pscustomobject]@{ item = $item; grams = $g; buy = [string]$i.buy }) | Out-Null
+    if (-not $i.buy) { $findings.Add(("'{0}' has no buy string" -f $item)) | Out-Null }
   }
-  $ingArr = $ings.ToArray()
+  # ONE LINE PER CANON ITEM. The mapper splits a food that is used twice into two lines - "3/4 cup plus
+  # 2 tbsp shredded cheddar" for the mix and "1/4 cup plus 3 tbsp (topping)" - and v2's WRITER merged
+  # them by hand into "1 1/3 cups shredded cheddar, divided". The writer no longer touches ingredients,
+  # so the merge has to happen here or it does not happen at all. It is not a style choice: ZERO of the
+  # 570 live specs carry a duplicate ingredient item, and build-v2-spec builds ingredients_display,
+  # ingredients_grams and scaler.ing strictly parallel to these lines, so a duplicate would put the
+  # same food on a card twice with two different amounts. Measured on the phase-4 gate corpus, where
+  # three of nine recipes carried duplicate lines (jalapeno-popper-chicken-casserole split cheddar,
+  # bacon bits AND jalapenos). Grams sum; the buy strings are JOINED rather than picked between,
+  # because "where each part goes" is information the reader needs and nothing downstream re-derives.
+  $merged = New-Object System.Collections.Generic.List[object]
+  $seen = @{}
+  foreach ($row in $ings.ToArray()) {
+    $key = [string]$row.item
+    if ($seen.ContainsKey($key)) {
+      $prev = $seen[$key]
+      $prev.grams = [int]($prev.grams + $row.grams)
+      if ($row.buy -and ($prev.buy -ne [string]$row.buy)) {
+        $prev.buy = (@($prev.buy, [string]$row.buy) | Where-Object { $_ }) -join '; '
+      }
+      $notes.Add(("merged a second '{0}' line into the first - {1} g total" -f $key, $prev.grams)) | Out-Null
+      continue
+    }
+    $seen[$key] = $row
+    $merged.Add($row) | Out-Null
+  }
+  $ingArr = $merged.ToArray()
   if (-not $ingArr.Count) { $findings.Add('the mapper decision file names no mapped ingredient') | Out-Null }
 
   $rc = Get-MacroRecompute $ingArr $FoodDb $Servings
@@ -236,7 +334,7 @@ function New-IntakeSkeleton {
       steps = @()
     }
   }
-  return [pscustomobject]@{ intake = $intake; findings = @($findings.ToArray()) }
+  return [pscustomobject]@{ intake = $intake; findings = @($findings.ToArray()); notes = @($notes.ToArray()) }
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -341,16 +439,18 @@ if ($runSelfTest) {
       [pscustomobject]@{ item = 'Yellow Onion'; grams = 220; buy = '2 medium'; decision = 'mapped' },
       [pscustomobject]@{ item = 'Heavy Cream'; grams = 150; buy = '2/3 cup'; decision = 'mapped' },
       [pscustomobject]@{ item = 'Cheddar Cheese, Shredded'; grams = 224; buy = '2 cups'; decision = 'mapped' },
-      [pscustomobject]@{ item = 'Ras El Hanout'; grams = 12; buy = '4 tsp'; decision = 'rejected'; notes = 'no board id' }
+      [pscustomobject]@{ item = 'Salt and Pepper (to taste)'; grams = 0; buy = ''; decision = 'optional-pantry' }
     )
   }
   $extraction = [pscustomobject]@{ title = 'Drill Dish'; source_url = 'https://d/x'; servings = 4
                                    time_total = '40 minutes'; time_active = '15 minutes' }
   $built = New-IntakeSkeleton $mapped $extraction $foodDb 14
   $sk = $built.intake
-  T 'MUST FIRE  a line the mapper REJECTED is not an ingredient - four of five lines land' `
-    (@($sk.ingredients).Count -eq 4 -and (@($sk.ingredients) | ForEach-Object { $_.item }) -notcontains 'Ras El Hanout') `
-    ("count=" + @($sk.ingredients).Count)
+  T 'MUST FIRE  a NOT-PURCHASED line is not an ingredient - four of five lines land, and it is NAMED' `
+    (@($sk.ingredients).Count -eq 4 -and
+     (@($sk.ingredients) | ForEach-Object { $_.item }) -notcontains 'Salt and Pepper (to taste)' -and
+     (@($built.notes) -join ' ') -match 'excluded .Salt and Pepper') `
+    ("count=" + @($sk.ingredients).Count + " notes=" + ((@($built.notes)) -join ' | '))
   T 'MUST FIRE  the machine fields come straight from the decision files, none of them typed' `
     ($sk.name -eq 'Drill Dish' -and $sk.slug -eq 'drill-dish' -and $sk.protein -eq 'chicken' -and
      $sk.source_url -eq 'https://d/x' -and $sk.visibility -eq 'paid') `
@@ -368,6 +468,89 @@ if ($runSelfTest) {
   T 'CLEAN TWIN a complete decision file produces NO findings' (@($built.findings).Count -eq 0) `
     ((@($built.findings)) -join ' | ')
 
+  # ---- FIXTURE 2b. THE DECISION VOCABULARY, over the words that are ACTUALLY on disk. `decision` is
+  # free text in the mapper's contract - 21 distinct values across 550 lines in the run dirs - and the
+  # first build of this script kept only the exact string 'mapped'. On turkey-parmesan-meatball-bake
+  # that silently dropped 1588 g of Ground Chicken (`unresolved-hold`) plus three `mapped-optional`
+  # lines, computed 250 cal per serving over what was left, and the pre-write band gate retired a real
+  # recipe at "250 cal below the 400 floor". A gate ruling on a fabricated number fails CLOSED and
+  # looks like rigour, which is the worst way for a gate to be wrong.
+  foreach ($w in @('mapped', 'mapped-null', 'mapped-null-pending-registrar', 'mapped-pending-price',
+                   'mapped-ruled-addition', 'mapped-with-conflict', 'mapped-precedent',
+                   'ruled-substitution', 'flagged-no-label-and-no-commodity', '')) {
+    T ("CLEAN TWIN decision '" + $w + "' is an INCLUDED line (v2's own intakes carried it)") `
+      ((Get-LineClass $w) -eq 'included') (Get-LineClass $w)
+  }
+  foreach ($w in @('optional-pantry', 'optional-null', 'optional-note', 'optional-unquantified',
+                   'sub-recipe', 'sub-recipe-reference', 'alternative-not-mapped', 'mapped-free')) {
+    T ("MUST FIRE  decision '" + $w + "' is NOT PURCHASED (v2 dropped 14 of 14 of the optional-* family)") `
+      ((Get-LineClass $w) -eq 'not-purchased') (Get-LineClass $w)
+  }
+  T 'MUST FIRE  `unresolved-hold` is UNSETTLED - there is no intake to build over it' `
+    ((Get-LineClass 'unresolved-hold') -eq 'unsettled') (Get-LineClass 'unresolved-hold')
+  T 'MUST FIRE  `mapped-optional` is its own class - counted, and named, never silently dropped' `
+    ((Get-LineClass 'mapped-optional') -eq 'optional') (Get-LineClass 'mapped-optional')
+  T 'MUST FIRE  a word nobody has seen before is UNKNOWN, so it surfaces instead of changing behaviour' `
+    ((Get-LineClass 'ruled-by-brad-on-a-tuesday') -eq 'unknown') (Get-LineClass 'ruled-by-brad-on-a-tuesday')
+
+  # ...and end to end through the builder, because the classes only matter as line counts and macros.
+  $vocabMapped = [pscustomobject]@{ slug='v'; title='V'; source_url='https://d/v'; protein='chicken'
+    ingredients = @(
+      [pscustomobject]@{ item='Boneless Skinless Chicken Thigh'; grams=2240; buy='5 lb'; decision='mapped' },
+      [pscustomobject]@{ item='Yellow Onion'; grams=220; buy='2 medium'; decision='mapped-null' },
+      [pscustomobject]@{ item='Heavy Cream'; grams=150; buy='2/3 cup'; decision='mapped-optional' },
+      [pscustomobject]@{ item='Cheddar Cheese, Shredded'; grams=224; buy='2 cups'; decision='ruled-by-brad-on-a-tuesday' },
+      [pscustomobject]@{ item='Salt and Pepper (to taste)'; grams=0; buy=''; decision='optional-pantry' },
+      [pscustomobject]@{ item='Chimichurri (sub-recipe)'; grams=0; buy=''; decision='sub-recipe' })
+  }
+  $bv = New-IntakeSkeleton $vocabMapped $extraction $foodDb 14
+  T 'MUST FIRE  FOUR of six lines are intake lines, and the optional one is COUNTED not dropped' `
+    (@($bv.intake.ingredients).Count -eq 4 -and
+     (@($bv.intake.ingredients) | ForEach-Object { $_.item }) -contains 'Heavy Cream') `
+    ("count=" + @($bv.intake.ingredients).Count)
+  T 'MUST FIRE  ...the optional line and the unrecognised word are both NAMED in the notes' `
+    ((@($bv.notes) -join ' ') -match "'Heavy Cream' is optional" -and
+     (@($bv.notes) -join ' ') -match 'unrecognised decision') ((@($bv.notes)) -join ' | ')
+  T 'CLEAN TWIN and none of that is a FINDING - the recipe is buildable' (@($bv.findings).Count -eq 0) `
+    ((@($bv.findings)) -join ' | ')
+
+  $heldMapped = [pscustomobject]@{ slug='h'; title='H'; source_url='https://d/h'; protein='chicken'
+    ingredients = @(
+      [pscustomobject]@{ item='Ground Chicken'; grams=1588; buy='3 1/2 lb'; decision='unresolved-hold' },
+      [pscustomobject]@{ item='Yellow Onion'; grams=220; buy='2 medium'; decision='mapped' },
+      [pscustomobject]@{ item='Heavy Cream'; grams=150; buy='2/3 cup'; decision='mapped' })
+  }
+  $bh = New-IntakeSkeleton $heldMapped $extraction $foodDb 14
+  T 'MUST FIRE  THE FOUNDING CASE: an UNSETTLED protein line is a FINDING, never a quiet subtraction' `
+    ((@($bh.findings) -join ' ') -match "'Ground Chicken' is .unresolved-hold." -and
+     (@($bh.intake.ingredients) | ForEach-Object { $_.item }) -notcontains 'Ground Chicken') `
+    ((@($bh.findings)) -join ' | ')
+  T 'MUST FIRE  ...so the band gate is never handed the macros of a dish missing its protein' `
+    (@($bh.findings).Count -ge 1) 'no finding raised'
+
+  # ---- FIXTURE 2c. ONE LINE PER CANON ITEM. The mapper splits a food used in two places; v2's WRITER
+  # merged those by hand, and the writer no longer touches ingredients. ZERO of the 570 live specs
+  # carry a duplicate ingredient item, and build-v2-spec builds three parallel arrays off these lines,
+  # so a duplicate puts the same food on a card twice. THREE lines collapsing to TWO, because a
+  # two-into-one fixture cannot tell a merge from a drop.
+  $dupMapped = [pscustomobject]@{ slug='d2'; title='D2'; source_url='https://d/d2'; protein='chicken'
+    ingredients = @(
+      [pscustomobject]@{ item='Cheddar Cheese, Shredded'; grams=99; buy='3/4 cup plus 2 tbsp shredded cheddar'; decision='mapped' },
+      [pscustomobject]@{ item='Yellow Onion'; grams=220; buy='2 medium'; decision='mapped' },
+      [pscustomobject]@{ item='Cheddar Cheese, Shredded'; grams=49; buy='1/4 cup plus 3 tbsp shredded cheddar (topping)'; decision='mapped' })
+  }
+  $bd = New-IntakeSkeleton $dupMapped $extraction $foodDb 14
+  $cheddar = @(@($bd.intake.ingredients) | Where-Object { $_.item -eq 'Cheddar Cheese, Shredded' })
+  T 'MUST FIRE  three lines over two foods produce TWO ingredient lines, never a duplicate item' `
+    (@($bd.intake.ingredients).Count -eq 2 -and @($cheddar).Count -eq 1) `
+    ("lines=" + @($bd.intake.ingredients).Count + " cheddar=" + @($cheddar).Count)
+  T 'MUST FIRE  the grams SUM - a merge that picked one side would lose 49 g of cheese' `
+    ($cheddar[0].grams -eq 148) ("grams=" + [string]$cheddar[0].grams)
+  T 'MUST FIRE  and BOTH buy strings survive, so the reader still learns where each part goes' `
+    ($cheddar[0].buy -match 'plus 2 tbsp' -and $cheddar[0].buy -match 'topping') $cheddar[0].buy
+  T 'CLEAN TWIN the merge is NAMED in the notes rather than happening quietly' `
+    ((@($bd.notes) -join ' ') -match "merged a second 'Cheddar Cheese, Shredded' line") ((@($bd.notes)) -join ' | ')
+
   # ---- FIXTURE 3. AN INCOMPLETE SKELETON SAYS SO. build-v2-spec THROWS on a missing food-DB row, and
   # the band gate would otherwise rule on a number computed over a subset of the dish.
   $partialDb = @{}
@@ -381,9 +564,12 @@ if ($runSelfTest) {
                     [pscustomobject]@{ item='Heavy Cream'; grams=0; buy='2/3 cup'; decision='mapped' },
                     [pscustomobject]@{ item='Cheddar Cheese, Shredded'; grams=224; buy='2 cups'; decision='mapped' }) }
   $b3 = New-IntakeSkeleton $noBuy $extraction $foodDb 14
-  T 'MUST FIRE  a missing buy string and a zero-gram line are both named' `
-    ((@($b3.findings) -join ' ') -match 'no buy string' -and (@($b3.findings) -join ' ') -match 'no grams') `
+  T 'MUST FIRE  a missing buy string and an INCLUDED line with no grams are both named' `
+    ((@($b3.findings) -join ' ') -match 'no buy string' -and (@($b3.findings) -join ' ') -match 'carries no grams') `
     ((@($b3.findings)) -join ' | ')
+  T 'CLEAN TWIN a zero-gram NOT-PURCHASED line is a note, not a finding - "to taste" is not a defect' `
+    (@($built.findings).Count -eq 0 -and (@($built.notes) -join ' ') -match 'Salt and Pepper') `
+    ((@($built.findings)) -join ' | ')
 
   # ---- FIXTURE 4. THE LOCKED-FIELD DIFF, which is the whole enforcement mechanism. The writer must be
   # able to fill its own fields freely and unable to move a machine one.
@@ -486,8 +672,15 @@ if ($runSelfTest) {
     T 'MUST FIRE  the intake on disk carries FOUR ingredient lines, not one composite row' `
       (@($onDisk.ingredients).Count -eq 4) ("count=" + @($onDisk.ingredients).Count)
 
+    # AN UNTOUCHED INTAKE IS A WRITER THAT WROTE NOTHING, and that is a refusal rather than a clean
+    # diff. Found live on the phase-4 gate run: a writer returned `status: "blocked"` with a careful
+    # paragraph of reasons and touched no field. `blocked` is not `rejected`, so the lane read it as a
+    # success; the locked-field diff saw no drift because nothing LOCKED had moved, and a spec would
+    # have been built with every prose field empty. The check is a postcondition over the artifact,
+    # which is the only kind this estate trusts - a `status` string is a claim about it.
     $v0 = Child @('-Verify', '-InFile', $intakePath, '-Skeleton', $snapPath)
-    T 'CLEAN TWIN -Verify on an untouched intake exits 0' ($v0.rc -eq 0) ("rc=" + $v0.rc + " " + $v0.text.Trim())
+    T 'MUST FIRE  an intake the writer never touched exits 1 - "no prose at all" is a refusal, not a pass' `
+      ($v0.rc -eq 1 -and $v0.text -match 'returned NO prose at all') ("rc=" + $v0.rc + " " + $v0.text.Trim())
 
     # the writer fills its own fields and moves one it may not
     $doc = Read-Json $intakePath
@@ -564,6 +757,14 @@ if ($runVerify) {
   # reads 1 forever - measured here, it reported a drift on an untouched intake. The fifth PS
   # collection trap, in the one place where getting it wrong fails CLOSED and looks like rigour.
   $drift = Get-LockedDrift $intake $snap
+  # AND DID ANY PROSE ARRIVE. A postcondition over the artifact, not a claim about it: the writer's
+  # whole job is the prose, so "is there prose" is checkable and a `status` field is not. Found live on
+  # 2026-08-24 - a writer returned `status: "blocked"` with a paragraph of reasons and wrote nothing;
+  # `blocked` is not `rejected`, so the lane read it as a success and would have built a spec whose
+  # every prose field was empty. The locked-field diff cannot see that, because nothing LOCKED moved.
+  if (-not (Test-HasProse $intake) -and -not ([string]$intake.head.description)) {
+    $drift = @($drift) + @("prose: the writer returned NO prose at all - every prose.* field and head.description is empty, so nothing it was dispatched for arrived")
+  }
   if ($runJson) { ([pscustomobject]@{ slug = [string]$intake.slug; drift = $drift } | ConvertTo-Json -Depth 5) }
   if ($drift.Count) {
     Write-Output ("build-intake-skeleton: {0} LOCKED FIELD(S) DRIFTED in {1}" -f $drift.Count, [string]$intake.slug)
@@ -621,6 +822,7 @@ if ((Test-Path $intakePath) -and -not $runForce) {
 if (-not $mappedDoc.slug) { $mappedDoc | Add-Member -NotePropertyName 'slug' -NotePropertyValue $Slug -Force }
 $built = New-IntakeSkeleton $mappedDoc $extDoc $foodDb $Servings
 $findings = @($built.findings)
+$notes    = @($built.notes)
 
 ($built.intake | ConvertTo-Json -Depth 12) | Set-Content -Path $intakePath -Encoding utf8
 # The SNAPSHOT is a separate file on purpose: the intake is about to be edited in place by the writer,
@@ -628,7 +830,7 @@ $findings = @($built.findings)
 ([pscustomobject]@{
   _doc = 'The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.'
   built_at = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); slug = $Slug
-  findings = $findings; intake = $built.intake } | ConvertTo-Json -Depth 12) |
+  findings = $findings; notes = $notes; intake = $built.intake } | ConvertTo-Json -Depth 12) |
   Set-Content -Path $snapPath -Encoding utf8
 
 $m = $built.intake.macros_per_serving
@@ -637,6 +839,7 @@ Write-Output ("build-intake-skeleton: {0} - {1} ingredient line(s), {2} cal / {3
 Write-Output ("build-intake-skeleton: intake {0}" -f $intakePath)
 Write-Output ("build-intake-skeleton: snapshot {0}" -f $snapPath)
 if ($runJson) { ($built.intake | ConvertTo-Json -Depth 12) }
+foreach ($n in $notes)    { Write-Output ("    note     " + $n) }
 foreach ($f in $findings) { Write-Output ("    FINDING  " + $f) }
 
 Write-GuardComplete -Name 'build-intake-skeleton' -Summary ("{0}: {1} finding(s)" -f $Slug, $findings.Count)

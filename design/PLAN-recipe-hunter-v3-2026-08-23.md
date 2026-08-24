@@ -1648,8 +1648,8 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 0 | D1 + D2 (batteries) | batteries green on the real lowcarb-100 wave dirs; a re-audit of one repaired slug costs seconds + one scoped sign-off |
 | 1 **DONE 2026-08-23** | D3 + D4 + D5 (harvest + decider) | a harvest of >=200 in-band candidates from >=6 publishers with dupe-dossier spot-check; decider ruling on dossiers alone matches a hand check on 20 candidates; front-end token share re-measured on a mini-run |
 | 2 **DONE 2026-08-23** | D6 (extraction ladder) | rung-1/2 settle rate and escalation rate measured on 50 cached pages; zero unverified lines pass |
-| 3 | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
-| 4 | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
+| 3 **DONE 2026-08-24** | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
+| 4 **DONE 2026-08-24** | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
 | 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
 | 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
@@ -2005,6 +2005,101 @@ pending narrow pass is named; re-entry is `-Status`-seeded per section 4.5's tab
 daemon resumes by being started again with the same arguments. Nothing schedules the daemon;
 install-nightly-task.ps1 remains the only scheduler in the estate.
 
+**Phase 4 gate: PASSED 2026-08-24** (commits f9b53257, 408d5e91, a7cc3c0e and the gate commit).
+Evidence, so the next session does not re-earn it.
+
+*Gate half 1 - the mapper residual rate, measured on never-mapped recipes.* The corpus is the four
+rung-1 extractions in `runs\hunt-2026-08-23-v3-phase1-mini` - pool candidates the phase-2 ladder
+settled and NOBODY has ever mapped, so the prior-rulings ledger contributes nothing and what is being
+measured is the pre-resolver rather than the cache. Over **73 ingredient lines: 42 pre-resolved
+(57.5%), 31 residual, 0 holds, 5.5 s wall-clock** with the board pass and the parse-compute
+cross-check both live. The residual is almost entirely describing-word lines - "boneless skinless
+chicken breasts", "small yellow onion", "extra-virgin olive oil", "medium head broccoli" - which is
+the pinned phase-2 fact arriving exactly as predicted, and it means the ceiling rises with every
+alias Brad rules rather than with any further code here. A fresh `harvest.py --dossier --count 5` pop
+(5 candidates, 63 verbatim lines, taken off a COPY of the pool so the live one is untouched) confirms
+the backlog is live; those five cannot be measured this session because rung 1 needs llama-server,
+which phase 4 neither needs nor schedules.
+
+*Gate half 2 - one wave written from skeletons, guards green.* The write lane ran end to end over the
+ten recipes at `priced` in `runs\hunt-2026-08-15-lowcarb-100`, on a COPY, with `--specs` and
+`--costed` pointed at scratch and publish left in DryRun. **Ten skeletons built; three stopped AT the
+skeleton with named findings and no writer paid** (`basque-chicken-peppers-chilindron`: no food-DB row
+for Kosher Salt; `pork-chile-verde-stew`: none for Chipotle Powder; `turkey-parmesan-meatball-bake`:
+1588 g of Ground Chicken sitting at `unresolved-hold`); **one retired PRE-WRITE**
+(`low-carb-beef-meatloaf`, "macro gate (pre-write): 309 cal below the 400 floor", `priced ->
+rejected-macros` in one advance, **zero writer dispatches**); **six were written by real writers**,
+every one filling only `prose.*` and `cuisine` and passing the locked-field diff. build-v2-spec then
+REFUSED all six on UNKNOWN INGREDIENT NAME, and all six landed STUCK at `priced` with the guard's own
+sentence in `--status`. Six agent calls, twelve lane-log lines (six pairs), the live estate untouched.
+
+*And the green path, end to end, because the corpus cannot show one.* `skillet-beef-and-rice-drill` -
+nine canon names that all resolve in both the vocabulary and the food DB - ran skeleton (468 cal /
+31.1 g carbs, zero findings) -> pre-write band gate -> ONE writer dispatch -> locked-field verify
+clean with no re-ask -> the REAL build-v2-spec into a scratch spec store -> post-build `spec_band` in
+band -> `spec-built` -> `written`. The built spec carries `stat` cal 468 / protein 41 / carbs 31: the
+skeleton's own numbers, unchanged, through a writer that never touched them.
+
+*The D8 cost drill.* The REAL cost pass through `Daemon.cost_engine` against a scratch costed.json:
+rc 0, 570 recipes costed, 0 flags, one pass recorded under the process-wide lock, the scratch file
+rewritten, and the LIVE `db\costed.json` hash unchanged (282f4a35e124 before and after).
+`d8_cost_drill.py` is the script.
+
+*Suites, all green:* build-intake-skeleton 67, map-preresolve 43, hunt-run 72, hunt-daemon 72,
+hunt_dispatch 47, wave-preaudit 48, ingredient-resolutions, hunt_lib self-test and the 58/58 parity
+vectors.
+
+**SEVEN LIVE DEFECTS THE GATE RUN FOUND, every one fixed and fixtured in the same session.** They are
+listed because five of them were invisible to injected fixtures and three were in phase-4's own new
+code, which is the argument for running the gate against the real machine rather than declaring it
+from a green suite.
+
+1. **THE DISPATCH ADAPTER NEVER TOLD AN AGENT THE SHAPE IT WANTED.** It validated against the stage
+   schema and re-asked once quoting the violations, while the FIRST call carried nothing about the
+   contract at all. Every daemon prompt was therefore carrying its own return contract or, as here,
+   not carrying one: six writers each returned a rich report of their own design with no `status`
+   field, burned the one re-ask, came back NO VERDICT at ~259k input tokens per refusal, and the
+   breaker opened after five - the breaker doing its job on a defect that was ours. `hunt_dispatch`
+   now DERIVES a required-field contract from the schema it was handed and appends it to the first
+   call. A prompt is the wrong home for it: seven lanes means seven copies means six that drift.
+2. **`priced -> rejected-qa` was being faked by TWO routes.** An explicit writer rejection and a
+   twice-drifted locked field both advance from `priced`, and the graph allowed neither, so the recipe
+   sat at `priced` while the orchestrator counted it rejected. Third instance of exactly the blind
+   spot phase 3 found in the band route, and again only the real-state-machine fixture saw it. The
+   edge is added, with fixtures both sides.
+3. **The write lane ignored build-v2-spec's exit code.** All six refusals advanced to `written`
+   anyway; the band read then found no spec, and `hunt_lib.in_band` answers "not reported -> ok" BY
+   DESIGN (v2 parity - a band nobody reported is not a rejection), so a REFUSED BUILD READ AS A PASS.
+   The predicate is right and the lane was wrong: a refused build is a could-not-look. Both the exit
+   code and an unreadable spec are now STUCK.
+4. **build-intake-skeleton kept a line only when `decision` was the exact string "mapped".**
+   `decision` is free text - 21 distinct values across 550 lines on disk - so on
+   `turkey-parmesan-meatball-bake` it silently dropped 1588 g of Ground Chicken plus three
+   `mapped-optional` lines, computed 250 cal per serving over what was left, and the pre-write band
+   gate retired a real recipe at "250 cal below the 400 floor". A gate ruling on a fabricated number
+   fails CLOSED and looks like rigour. The classes are now derived from what v2's own shipped intakes
+   did with each word, an unsettled line is a finding, and an unrecognised word is included and named.
+5. **Duplicate ingredient lines.** The mapper splits a food used twice ("3/4 cup plus 2 tbsp shredded
+   cheddar" and "1/4 cup plus 3 tbsp (topping)") and v2's WRITER merged them by hand. The writer no
+   longer touches ingredients, and ZERO of the 570 live specs carry a duplicate item, so the merge is
+   mechanical now: grams sum, both buy strings survive, each merge is named.
+6. **A writer that returned `status: "blocked"` and wrote nothing read as a success.** `blocked` is
+   not `rejected`, and the locked-field diff saw no drift because nothing locked had moved. `-Verify`
+   now also asserts that SOME prose arrived - a postcondition over the artifact, where `status` is a
+   claim about it.
+7. **The daemon's own real-machine band fixture was writing the LIVE estate.** It ran the real
+   build-v2-spec `-RunCost`, so every green run of the suite put a `band-drill` spec into
+   `db\recipes` and rewrote `db\costed.json`. Same class as the phase-3 drain drill writing two
+   stalled rows into the live batch ledger, and found the same way: by reading `git status` after a
+   green suite. It now uses the scratch spec store and cost ledger the daemon gained for exactly this.
+
+**Two smaller things recorded rather than fixed.** (a) `hunt-run -WaveClose` could not write
+`waves\wave-1.json.tmp` under the gate's very long scratch path; the daemon correctly reported it as
+a BLOCKED wave rather than an empty one. It is a path-length artifact of the drill's location, not a
+wave-lane defect, and a shorter scratch root avoids it. (b) The `--status` header used to count "9
+stuck" and name none of them; it now lists every stuck recipe with its reason, because a count is not
+a report.
+
 **Phase-4 pickup (2026-08-24, so the next session starts building instead of hunting):** read, in
 order, section 4.5 (the mapped-pre and skeleton contracts, the locked-vs-writer-fillable field
 split, and the thresholds), the D7 and D8 bullets WITH their pinned blocks, `hunt-daemon.py`'s
@@ -2019,7 +2114,20 @@ needed for phase 4 (map and write touch no GPU); the card question only arises i
 in the same sitting. **The gate corpus is already on disk, verified 2026-08-24:** the 10 recipes at
 `priced` in `runs\hunt-2026-08-15-lowcarb-100` all carry both their `extracted\<slug>.json` and
 `mapped\<slug>.json` files, so "one wave written from skeletons" needs zero extraction and zero
-mapping work - seed from that run dir's -Status exactly as the drain drill does, on a COPY, with
+mapping work
+**CORRECTED 2026-08-24 BY THE PHASE-4 GATE RUN ITSELF: those files are enough for the SKELETON and
+not enough for the SPEC.** Nine of the ten carry canon names `db\ingredients.json` does not have -
+14 distinct across the corpus: Marsala Wine, Bacon Bits (twice), Fennel Bulb, String Cheese, Fresh
+Thyme (twice), Kosher Salt, Chipotle Powder, Blanched Almond Flour, 90/10 Ground Beef, Quick Oats,
+Unsweetened Ketchup, Chicken Thighs (bone-in, skin-on, raw) - because they were mapped on 2026-08-16,
+before the closed vocabulary was enforced end to end. build-v2-spec REFUSES every one of them on
+UNKNOWN INGREDIENT NAME, which is the guard doing its job. The tenth,
+`turkey-parmesan-meatball-bake`, is the only one whose names all resolve and it carries an
+`unresolved-hold` on 1588 g of Ground Chicken, so the mapper never settled its protein. The corpus
+can therefore demonstrate the write lane and the pre-write band gate on real data, and it CANNOT
+demonstrate a green spec build without being re-mapped through D7's map lane. That is a fact about
+the corpus, not about D8, and it is the strongest single argument for D7 that the phase produced:
+every one of those 14 names is a line map-preresolve now enumerates BEFORE the mapper is paid - seed from that run dir's -Status exactly as the drain drill does, on a COPY, with
 the daemon's `--ledger` scratch path and publish left in -DryRun unless Brad orders the wave live.
 For the residual-rate half of the gate, dossier-pop a fresh batch from the pool instead - those 10
 recipes are already mapped, so measuring D7's residual on them would measure the cache, not the

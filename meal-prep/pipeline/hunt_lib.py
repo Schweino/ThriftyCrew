@@ -472,6 +472,25 @@ def repair_claim_holds(claimed_changed, mtimes_before, mtimes_after):
 # computing to 390. Recipes are never adjusted to fit - that would make the card a false claim.
 # ---------------------------------------------------------------------------------------------------
 
+def first_guard_line(out, err):
+    """The sentence a refusing PowerShell guard actually wanted the caller to read.
+
+    build-v2-spec and its siblings `throw`, so the useful line is the first one naming the guard, and
+    PowerShell then wraps it in six lines of ErrorRecord noise plus a repeat inside
+    FullyQualifiedErrorId. Picking the first line that reads like a verdict keeps a STUCK detail
+    readable instead of turning it into a stack trace.
+    """
+    text = ((out or "") + "\n" + (err or "")).replace("\r", "")
+    lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
+    for ln in lines:
+        if ln.startswith(("At ", "+ ", "~", "CategoryInfo", "FullyQualifiedErrorId")):
+            continue
+        if ln.startswith("+ Category") or ln.startswith("+ Fully"):
+            continue
+        return ln[:300]
+    return (lines[0][:300] if lines else "no output")
+
+
 def in_band(cal, carbs, band):
     cal_min, cal_max = band.get("calMin"), band.get("calMax")
     carb_max = band.get("carbMax")

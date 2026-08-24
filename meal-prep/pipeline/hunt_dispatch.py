@@ -292,6 +292,49 @@ def _absorb(res, env):
         res.denials.append(d if isinstance(d, str) else json.dumps(d)[:200])
 
 
+RETURN_CONTRACT = """
+
+-------------------------------------------------------------------------------
+RETURN CONTRACT for this stage. Answer with ONE JSON object and nothing else
+after it. Required fields (the answer is REFUSED WHOLE without them):
+%s
+The full shape, optional fields included:
+%s
+Everything you would otherwise write as a report goes in the free-text field of
+that object. A rich report in any other shape is not an answer.
+-------------------------------------------------------------------------------
+"""
+
+
+def contract_text(schema):
+    """The required-field contract, DERIVED from the schema the caller passed.
+
+    WHY THE ADAPTER APPENDS THIS AND NOT EACH PROMPT (added 2026-08-24, found live by the phase-4 gate
+    run). The adapter validates against the stage schema and re-asks once quoting the violations - but
+    on the FIRST call it was telling the agent nothing about the shape at all. Every daemon prompt was
+    therefore carrying its own return contract or, more often, not carrying one: the phase-4 write lane
+    dispatched six writers and every one returned its own rich report shape
+    ({blockers, data_flags, recommended_next_action, ...}) with no `status` field, burned the one
+    re-ask, and came back NO VERDICT. 259k input tokens for a refusal, five times, until the breaker
+    opened - which is the breaker doing its job on a defect that was ours.
+
+    A prompt is the wrong home for it. There are seven lanes, each with its own prompt, and a contract
+    that lives in seven places is a contract that drifts in six of them; the schema is already the
+    single authority and this is read straight off it. Derived, never quoted.
+    """
+    if not schema:
+        return ""
+    props = (schema.get("properties") or {})
+    req = list(schema.get("required") or [])
+    lines = []
+    for k in req:
+        d = (props.get(k) or {}).get("description") or (props.get(k) or {}).get("type") or ""
+        lines.append("  - %s%s" % (k, ("   (%s)" % d) if d else ""))
+    if not lines:
+        lines.append("  (none named, but the answer must still be one JSON object)")
+    return RETURN_CONTRACT % ("\n".join(lines), json.dumps(schema, indent=2)[:1200])
+
+
 REASK_PREAMBLE = """Your previous answer did not conform to the schema this stage requires, so it was
 REFUSED WHOLE and nothing was written. Nothing has been coerced or half-applied on your behalf.
 
@@ -327,7 +370,8 @@ def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reco
     call = runner or _run
     argv = build_argv(agent, reconstruct=reconstruct)
 
-    env, failure, detail, secs = call(argv, prompt, timeout, cwd)
+    # THE CONTRACT RIDES WITH THE FIRST CALL, not only with the re-ask. See contract_text().
+    env, failure, detail, secs = call(argv, prompt + contract_text(schema), timeout, cwd)
     res.seconds += secs
     if failure:
         res.failure, res.detail = failure, detail
@@ -363,7 +407,7 @@ def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reco
     res.reasked = True
     res.problems = list(problems)
     reask = (REASK_PREAMBLE % ("\n".join("  - " + p for p in problems), res.text[:4000])
-             + "\n\nTHE ORIGINAL REQUEST FOLLOWS.\n\n" + prompt)
+             + "\n\nTHE ORIGINAL REQUEST FOLLOWS.\n\n" + prompt + contract_text(schema))
     env2, failure2, detail2, secs2 = call(argv, reask, timeout, cwd)
     res.seconds += secs2
     if failure2:
@@ -520,8 +564,18 @@ def selftest():
           r.tokens_in == 12 + 21142 + 10235 and r.tokens_out == 340,
           "in=%d out=%d" % (r.tokens_in, r.tokens_out))
         T("the prompt travels on stdin, never in argv (Windows caps a command line at 32,767 chars)",
-          fr.calls[0]["prompt"] == "go" and "go" not in fr.calls[0]["argv"],
+          fr.calls[0]["prompt"].startswith("go") and "go" not in fr.calls[0]["argv"],
           " ".join(fr.calls[0]["argv"]))
+        # THE RETURN CONTRACT RIDES WITH THE FIRST CALL (added 2026-08-24, found live). The adapter
+        # validated against the schema and re-asked quoting the violations, while the first call told
+        # the agent nothing about the shape at all. The phase-4 write lane dispatched six writers,
+        # every one returned its own rich report shape with no `status`, burned the one re-ask and
+        # came back NO VERDICT - 259k input tokens per refusal until the breaker opened.
+        T("MUST FIRE  the FIRST call carries the required-field contract, derived from the schema",
+          "RETURN CONTRACT" in fr.calls[0]["prompt"] and "- slug" in fr.calls[0]["prompt"],
+          fr.calls[0]["prompt"][:200])
+        T("CLEAN TWIN a dispatch with NO schema gets no contract appended - nothing to derive one from",
+          contract_text(None) == "", contract_text(None)[:80])
         T("the call runs at the repo root, so the estate's settings and CLAUDE.md apply",
           fr.calls[0]["cwd"] == REPO, str(fr.calls[0]["cwd"]))
 
@@ -554,7 +608,7 @@ def selftest():
           bad_then_good.calls[1]["prompt"][:160])
         T("MUST FIRE  the re-ask carries the ORIGINAL request too - a correction with no question "
           "attached is a different question",
-          bad_then_good.calls[1]["prompt"].endswith("go"), "the original prompt was dropped")
+          ("\n\ngo" in bad_then_good.calls[1]["prompt"]), "the original prompt was dropped")
         T("MUST FIRE  the re-ask shows the agent what it actually returned",
           '"slug": "s"' in bad_then_good.calls[1]["prompt"]
           or '"slug":"s"' in bad_then_good.calls[1]["prompt"],

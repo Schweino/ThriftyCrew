@@ -1193,7 +1193,14 @@ class Daemon(object):
                                      ["-RunDir", self.run_dir, "-Slug", slug], timeout=600)
         detail = ((out or "") + (err or "")).strip()
         if rc != hunt_lib.EXIT_CLEAN:
-            return False, None, detail[-400:]
+            # THE FINDINGS, NOT THE TAIL. The script prints two path lines after its summary, so a
+            # blind `detail[-400:]` handed the operator half a file path where the reason should be -
+            # seen on the phase-4 gate run, where "the intake cannot be built over an unsettled line"
+            # was pushed off the end by the snapshot's own filename.
+            found = [ln.strip() for ln in detail.replace("\r", "").split("\n")
+                     if ln.strip().startswith("FINDING")
+                     or ln.strip().startswith("build-intake-skeleton: BLOCKED")]
+            return False, None, ("; ".join(found)[:400] if found else detail[-400:])
         path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
         try:
             with open(path, "r", encoding="utf-8-sig") as f:
@@ -1312,8 +1319,28 @@ class Daemon(object):
                         await self.advance(slug, "rejected-qa", "writer", detail[:200])
                         continue
                 # THE COST PASS IS SERIALIZED. Spec assembly stayed parallel; this does not.
-                await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug))
+                rc_spec, sp_out, sp_err = await self.cost_engine(BUILD_V2_SPEC_PS,
+                                                                 self.spec_args(slug))
+                if rc_spec != 0:
+                    # THE SPEC BUILD'S OWN GUARDS ARE GATES, AND THIS LANE WAS NOT READING THEM.
+                    # Measured on the phase-4 gate run: six writers were paid, build-v2-spec REFUSED
+                    # all six on UNKNOWN INGREDIENT NAME (v2-era canon names the closed vocabulary no
+                    # longer carries - "Marsala Wine", "Bacon Bits"), no spec was written, and the
+                    # lane advanced every one of them to `written` anyway. The band read then found no
+                    # spec, and hunt_lib.in_band answers "not reported -> ok" by design (v2 parity: a
+                    # band nobody reported is not a rejection), so a refused build read as a pass.
+                    # The predicate is right and the lane was wrong: a build that refused is a
+                    # could-not-look, and could-not-look is never a clean bill.
+                    self.stuck(slug, "write",
+                               "the spec build REFUSED this recipe (rc %d): %s"
+                               % (rc_spec, hunt_lib.first_guard_line(sp_out, sp_err)))
+                    continue
                 cal, carbs = self.spec_band(slug, specs_dir=self.specs_dir or None)
+                if cal is None and carbs is None:
+                    self.stuck(slug, "write",
+                               "the spec build reported success but no spec could be read for the "
+                               "band - the band may not be ruled on a spec nobody can find")
+                    continue
                 verdict = hunt_lib.in_band(cal, carbs, self.band)
                 if not verdict["ok"]:
                     # THE POST-BUILD READ STAYS, and D8 does not get to "simplify" it away. The
@@ -1926,6 +1953,14 @@ class Daemon(object):
                       "  (serve.ps1 -Slots 1) and drain them, or rule the batch straight to rung 3:"]
             for s in self.escalations_blocked:
                 lines.append("    %s" % s)
+        # THE STUCK LIST, NAMED (added 2026-08-24, phase-4 gate run). The header counted "9 stuck" and
+        # said not one word about WHICH or WHY, so the only way to learn that six writers had been paid
+        # and every spec build refused was to go and read the run dir. A count is not a report.
+        stuck = [o for o in self.outcomes if o.get("status") == "stuck"]
+        if stuck:
+            lines += ["", "  STUCK (no verdict was rendered - resumable, and each one says why):"]
+            for o in stuck:
+                lines.append("    %-38s %s" % (o["slug"], (o.get("detail") or "")[:150]))
         if self.held:
             lines += ["", "  HELD (reported, never auto-dispatched):"]
             for slug, why in self.held:

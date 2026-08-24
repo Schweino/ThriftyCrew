@@ -451,6 +451,9 @@ def run():
     T("MUST FIRE  a SECOND drift is rejected-qa with the fields in the detail - one correction, "
       "never a loop, never a silent daemon-side revert",
       *_second_drift_is_rejected())
+    T("MUST FIRE  and against the REAL state machine that rejection LANDS - `priced -> rejected-qa` "
+      "was being faked until D8 added the edge, and only a real-machine fixture could see it",
+      *_second_drift_real_machine())
     T("CLEAN TWIN a clean prose-only fill passes with no re-dispatch at all",
       *_clean_fill_no_reask())
     T("MUST FIRE  a -Verify that could not RUN is STUCK, never a pass and never a drift",
@@ -458,6 +461,17 @@ def run():
     T("MUST FIRE  a scratch cost ledger reaches build-v2-spec as -CostedFile, and the live run still "
       "gets -RunCost (the drill that wrote the live batch ledger is why this is a flag, not a habit)",
       *_scratch_cost_args())
+    T("MUST FIRE  --status NAMES every stuck recipe and its reason - the gate run's header counted "
+      "nine and said which of none",
+      *_status_names_stuck())
+    T("MUST FIRE  a spec build that REFUSES is STUCK with the guard's own sentence - never `written`, "
+      "and never an in-band pass over a spec that does not exist",
+      *_spec_build_refusal_is_stuck())
+    T("MUST FIRE  a build that claims success but leaves no readable spec is STUCK too - `not "
+      "reported` is in_band's v2 answer and it is not a verdict this lane may accept",
+      *_unreadable_spec_is_stuck())
+    T("CLEAN TWIN a spec that builds and reads in band advances to written and reaches QA",
+      *_spec_build_clean())
 
     # =================================================================================================
     H("The band gate, read off the built spec")
@@ -1314,7 +1328,7 @@ def _unhold_between_seeds():
     already on disk. The whole claim is in the last assertion: ZERO dispatches on the second seed.
 
     The scratch vocabulary is the thing being edited between the seeds, which is what "the bid is
-    wired" means mechanically - a row in db\ingredients.json gaining a bid.
+    wired" means mechanically - a row in db\\ingredients.json gaining a bid.
     """
     tmp = tempfile.mkdtemp(prefix="daemon-unhold-")
     try:
@@ -1470,12 +1484,23 @@ def _prewrite_band_passes():
 def _skeleton_incomplete_is_stuck():
     tmp = tempfile.mkdtemp(prefix="daemon-skel4-")
     try:
-        ps = FakePS({"build-intake-skeleton.ps1":
-                     lambda a: (1, "    FINDING  no food-macros-db row for 'Heavy Cream'", "")})
+        # The real script prints its summary, then TWO path lines, then the findings - so a blind
+        # `detail[-400:]` handed the operator half a file path where the reason should be. Measured on
+        # the phase-4 gate run. The fixture reproduces that shape.
+        # The real script prints its summary, then TWO path lines, then the findings - so a blind
+        # `detail[-400:]` handed the operator half a file path where the reason should be. Measured
+        # on the phase-4 gate run. The fixture reproduces that shape.
+        _skel_out = (
+            "build-intake-skeleton: s1 - 8 line(s), 500 cal\n"
+            "    FINDING  no food-macros-db row for 'Heavy Cream'\n"
+            "build-intake-skeleton: intake C:\\a\\very\\long\\path\\s1.json\n"
+            "build-intake-skeleton: snapshot C:\\a\\very\\long\\path\\s1.skeleton.json")
+        ps = FakePS({"build-intake-skeleton.ps1": lambda a: (1, _skel_out, "")})
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
         return (not fd.prompts("recipe-writer") and d.outcomes
                 and d.outcomes[0]["status"] == "stuck"
-                and "Heavy Cream" in d.outcomes[0]["detail"],
+                and "Heavy Cream" in d.outcomes[0]["detail"]
+                and "skeleton.json" not in d.outcomes[0]["detail"],
                 "dispatches=%d outcomes=%s" % (len(fd.prompts("recipe-writer")),
                                                json.dumps(d.outcomes)))
     finally:
@@ -1564,6 +1589,131 @@ def _second_drift_is_rejected():
                 and "ingredients[0].buy" in d.outcomes[0]["detail"],
                 "dispatches=%d advances=%s outcome=%s"
                 % (len(fd.prompts("recipe-writer")), to, json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _second_drift_real_machine():
+    """The double-drift retirement, against the REAL hunt-run.ps1 on a scratch run dir.
+
+    THE INJECTED TWIN ABOVE PASSED WHILE THIS ROUTE WAS ILLEGAL. `priced` allowed only `spec-built`
+    and `rejected-macros`, so `priced -> rejected-qa` was REFUSED and the recipe stayed at `priced`
+    on disk while the daemon counted it rejected - the same shape as phase 3's band-route trap, found
+    the same way and by the same kind of fixture. D8 added the edge; this is what keeps it honest.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-drift-real-")
+    try:
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
+                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+        if rc != 0:
+            return False, "could not init: %s" % o.strip()[:150]
+        for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
+            args = ["-Advance", "-RunDir", run_dir, "-Slug", "drift-drill", "-To", st,
+                    "-By", "drill", "-Detail", "drill"]
+            if i == 0:
+                args += ["-Title", "Drift Drill", "-SourceUrl", "https://d/x", "-Protein", "beef"]
+            rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+            if rc != 0:
+                return False, "staging refused at %s: %s" % (st, o.strip()[:150])
+        skeletoned(run_dir, ["drift-drill"])
+        drifted = ["ingredients[0].grams: issued '1568', returned '1900'",
+                   "macros_per_serving.calories: issued '500', returned '640'",
+                   "name: issued 'drift-drill', returned 'Drift Drill Deluxe'"]
+        body = ("build-intake-skeleton: 3 LOCKED FIELD(S) DRIFTED in drift-drill\n"
+                + "\n".join("    " + d for d in drifted) + "\nBUILD-INTAKE-SKELETON-COMPLETE")
+        real_ps = hunt_lib.ps_invoke
+
+        def ps(script, args, timeout=180):
+            # the REAL hunt-run.ps1 for every state move; only the skeleton surface is scripted, so the
+            # fixture can force a second drift without inventing a writer that makes one
+            if "build-intake-skeleton" in os.path.basename(script):
+                return (1, body, "") if "-Verify" in args else (0, "", "")
+            return real_ps(script, args, timeout)
+
+        fd = FakeDispatch({"recipe-writer": [{"slug": "drift-drill", "status": "ok",
+                                              "state": "written"},
+                                             {"slug": "drift-drill", "status": "ok",
+                                              "state": "written"}]})
+        d = HD.Daemon(run_dir, "drift-drill-run", dispatcher=fd, ps=ps, quiet=True)
+        d.ch["write"].push({"slug": "drift-drill"})
+        d.ch["write"].close()
+        arun(d.run(("write",)))
+        final = d.state_of("drift-drill")
+        return (final == "rejected-qa" and len(fd.prompts("recipe-writer")) == 2 and not d.findings,
+                "on-disk state=%s dispatches=%d findings=%s"
+                % (final, len(fd.prompts("recipe-writer")), json.dumps(d.findings)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _status_names_stuck():
+    tmp = tempfile.mkdtemp(prefix="daemon-statusstuck-")
+    try:
+        ps = FakePS({"build-v2-spec.ps1": lambda a: (1, "", "UNKNOWN INGREDIENT NAME: Marsala Wine")})
+        d, _fd = _write_daemon(tmp, ["s1", "s2", "s3"],
+                               [_ok_write("s1"), _ok_write("s2"), _ok_write("s3")], ps=ps)
+        rep = d.status_report()
+        return ("STUCK (no verdict was rendered" in rep
+                and all(("    %s" % s) in rep for s in ("s1", "s2", "s3"))
+                and "Marsala Wine" in rep,
+                rep[-400:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _spec_build_refusal_is_stuck():
+    """MEASURED ON THE PHASE-4 GATE RUN. Six writers were paid; build-v2-spec REFUSED all six on
+    UNKNOWN INGREDIENT NAME (v2-era canon names the closed vocabulary no longer carries - "Marsala
+    Wine", "Bacon Bits"); no spec was written; and the lane advanced every one of them to `written`.
+    The band read then found no spec, and hunt_lib.in_band answers "not reported -> ok" BY DESIGN
+    (v2 parity: a band nobody reported is not a rejection), so a refused build read as a pass.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-specrc-")
+    try:
+        refusal = ("UNKNOWN INGREDIENT NAME: Marsala Wine are not in the ingredient vocabulary "
+                   "(db\\ingredients.json). THE PRICE IS PROBABLY NOT MISSING - THE NAME IS WRONG.\n"
+                   "At C:\\...\\build-v2-spec.ps1:261 char:3\n"
+                   "    + CategoryInfo          : OperationStopped")
+        ps = FakePS({"build-v2-spec.ps1": lambda a: (1, "", refusal)})
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (not to and d.outcomes and d.outcomes[0]["status"] == "stuck"
+                and "UNKNOWN INGREDIENT NAME: Marsala Wine" in d.outcomes[0]["detail"]
+                and "CategoryInfo" not in d.outcomes[0]["detail"],
+                "advances=%s outcomes=%s" % (to, json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _unreadable_spec_is_stuck():
+    tmp = tempfile.mkdtemp(prefix="daemon-specnone-")
+    try:
+        ps = FakePS()
+        skeletoned(tmp, ["s1"])
+        fd = FakeDispatch({"recipe-writer": [_ok_write()]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.spec_band = lambda slug, specs_dir=None: (None, None)   # the spec is not there
+        d.ch["write"].push({"slug": "s1"})
+        d.ch["write"].close()
+        arun(d.run(("write",)))
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (not to and d.outcomes and d.outcomes[0]["status"] == "stuck"
+                and "no spec could be read" in d.outcomes[0]["detail"],
+                "advances=%s outcomes=%s" % (to, json.dumps(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _spec_build_clean():
+    tmp = tempfile.mkdtemp(prefix="daemon-specok-")
+    try:
+        ps = FakePS()
+        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (to == ["spec-built", "written"] and not d.outcomes,
+                "advances=%s outcomes=%s" % (to, json.dumps(d.outcomes)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -1663,8 +1813,26 @@ def _band_gate_real_machine():
             rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
             if rc != 0:
                 return False, "staging refused at %s: %s" % (st, o.strip()[:150])
-        fd = FakeDispatch({"recipe-writer": [{"slug": "band-drill", "status": "ok",
-                                              "state": "written"}]})
+        # A WRITER THAT ACTUALLY WRITES. The REAL -Verify runs in this fixture, and it now refuses an
+        # intake carrying no prose at all - which is exactly what a scripted FakeDispatch leaves
+        # behind. So the scripted reply comes with the side effect a real writer would have had.
+        class ProseWriter(FakeDispatch):
+            def __call__(self, agent, prompt, **kw):
+                ip = os.path.join(run_dir, "intake", "band-drill.json")
+                try:
+                    with open(ip, "r", encoding="utf-8-sig") as fh:
+                        doc = json.load(fh)
+                    doc["cuisine"] = "American"
+                    doc["prose"] = {"intro_html": "The dinner."}
+                    doc["head"]["description"] = "A drill."
+                    with open(ip, "w", encoding="utf-8") as fh:
+                        json.dump(doc, fh)
+                except Exception:                                 # noqa: BLE001
+                    pass
+                return FakeDispatch.__call__(self, agent, prompt, **kw)
+
+        fd = ProseWriter({"recipe-writer": [{"slug": "band-drill", "status": "ok",
+                                             "state": "written"}]})
         # THE REAL build-intake-skeleton.ps1 RUNS HERE, over real decision files and the live food DB,
         # and so does its real -Verify. The grams are chosen so the skeleton lands squarely IN band
         # (3000 g of 93/7 beef, 400 g dry rice, 240 g onion = 431 cal / 24.4 carbs against 400-650 and
@@ -1684,7 +1852,17 @@ def _band_gate_real_machine():
             json.dump(mapped_doc, f)
         with open(os.path.join(run_dir, "extracted", "band-drill.json"), "w", encoding="utf-8") as f:
             json.dump(ext_doc, f)
-        d = HD.Daemon(run_dir, "band-drill-run", dispatcher=fd, quiet=True)   # REAL ps_invoke
+        # SCRATCH SPEC STORE AND SCRATCH COST LEDGER, and this fixture is why the daemon has them.
+        # Without them it ran the REAL build-v2-spec -RunCost against the live estate: a band-drill
+        # spec appeared in db\recipes and db\costed.json was rewritten, every time the suite ran.
+        # Same class as the phase-3 drain drill writing two stalled rows into the live batch ledger,
+        # and found the same way - by looking at git status after a green suite.
+        os.makedirs(os.path.join(tmp, "specs"), exist_ok=True)
+        shutil.copyfile(os.path.join(HD.MP, "db", "costed.json"),
+                        os.path.join(tmp, "costed.json"))
+        d = HD.Daemon(run_dir, "band-drill-run", dispatcher=fd, quiet=True,   # REAL ps_invoke
+                      specs_dir=os.path.join(tmp, "specs"),
+                      costed_path=os.path.join(tmp, "costed.json"))
         d.spec_band = lambda slug, specs_dir=None: (700, 20)
         d.ch["write"].push({"slug": "band-drill"})
         d.ch["write"].close()
