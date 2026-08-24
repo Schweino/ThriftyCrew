@@ -114,6 +114,22 @@ class Stand(object):
         return res
 
 
+def queue_redirected_ps(scratch_queue):
+    """Real ps_invoke for everything, with ingredient-queue calls pointed at a SCRATCH -QueueFile.
+
+    ADDED 2026-08-24 (phase-4 aftercare, measured): the fresh-lane drill ran with NO ps injection, so
+    its map lane's real -Add calls wrote `drill term one..four` into the LIVE grocery worklist on
+    every run - four pending rows a real pricer would have driven seven stores to answer. The same
+    class as the drill that opened w5/w6 in the live batch ledger, found the same way: by reading the
+    live file after a green drill. The script grew -QueueFile for fixtures; this drill uses it too.
+    """
+    def ps(script, args, timeout=180):
+        if "ingredient-queue" in os.path.basename(script):
+            args = list(args) + ["-QueueFile", scratch_queue]
+        return hunt_lib.ps_invoke(script, args, timeout)
+    return ps
+
+
 def filtered_ps(stub_scripts):
     """Real ps_invoke for everything except the named scripts, which are stood in for."""
     calls = []
@@ -447,6 +463,26 @@ async def fresh_lane_log_drill(scratch):
             if to == "sourced":
                 args += ["-Title", s, "-SourceUrl", "https://d/%s" % s, "-Protein", "beef"]
             hunt_lib.ps_invoke(os.path.join(HERE, "hunt-run.ps1"), args)
+    # EXTRACTION FILES, because D7 put map-preresolve in front of the mapper dispatch and it exits 2
+    # BLOCKED on a slug with no extraction. Before these were written this drill went VACUOUS after
+    # D7: the map batch blocked, ZERO lane lines were written, and audit-lane-shape passed on an
+    # empty log - the exact could-not-look-wearing-a-rosette failure this function's own docstring
+    # warns about. The drill terms are not in the closed vocabulary, so the REAL pre-resolver reads
+    # them as residual (exit 1, the normal case) and the dispatch proceeds - which is also a live run
+    # of D7's mechanical pass inside this drill, for free.
+    os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
+    for i, s in enumerate(slugs):
+        with open(os.path.join(run_dir, "extracted", "%s.json" % s), "w", encoding="utf-8") as fh:
+            json.dump({"state": "ok", "title": s, "source_url": "https://d/%s" % s, "servings": 4,
+                       "time_total": "30 minutes", "time_active": "10 minutes",
+                       "ingredients": [{"raw": "1 cup %s" % terms[i], "item": terms[i],
+                                        "qty": "1", "unit": "cup", "prep": None,
+                                        "optional": False, "section": None},
+                                       {"raw": "1 tsp %s" % terms[3], "item": terms[3],
+                                        "qty": "1", "unit": "tsp", "prep": None,
+                                        "optional": False, "section": None}],
+                       "instructions": ["Combine.", "Simmer.", "Portion."],
+                       "concerns": []}, fh)
 
     # A mapper that reports one micro-batch of three, each with absent terms, and a pricer that
     # drains those terms in ONE batch across recipes - the shape the audit exists to enforce.
@@ -468,11 +504,18 @@ async def fresh_lane_log_drill(scratch):
             return r
 
     d = HD.Daemon(run_dir, "daemon-fresh", dispatcher=FreshStand(), quiet=True,
-                  ledger_path=os.path.join(scratch, "fresh-ledger.json"))
+                  ledger_path=os.path.join(scratch, "fresh-ledger.json"),
+                  ps=queue_redirected_ps(os.path.join(scratch, "fresh-queue.json")))
     for s in slugs:
         d.ch["map"].push({"slug": s})
     d.ch["map"].close()
     await d.run(("map", "price"))
+    # VACUITY IS A FAILURE, NOT A PASS. An empty lane log satisfies audit-lane-shape by having
+    # nothing in it, and this function exists precisely because that is not a clean bill. Post-D7 the
+    # honest floor is 4 lines: one start/end pair for the map micro-batch and one for the price batch.
+    if d.lane_lines < 4:
+        return 2, "", ("VACUOUS: only %d lane-log line(s) were written - the lanes never actually "
+                       "ran, so the audit below would be judging an empty log" % d.lane_lines)
     rc, out, _e = hunt_lib.ps_invoke(AUDIT_LANE_SHAPE_PS, ["-RunDir", run_dir], timeout=600)
     detail = ("3 recipes through map (one micro-batch) and their %d distinct terms through price "
               "(one batch); %d lane-log line(s)" % (len(terms), d.lane_lines))

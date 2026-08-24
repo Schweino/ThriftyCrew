@@ -1406,6 +1406,24 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     "medium head broccoli" - which is the phase-2 fact pinned above arriving exactly as predicted, and
     it means the pre-resolver's ceiling rises with every alias Brad rules rather than with any code
     change here.
+
+  **THE MAP LANE'S SINGLE-FILE-LEDGER ENUMERATION, COMPLETED 2026-08-24 (phase-4 aftercare cold
+  read), because S4's audit rule says to enumerate and the enumeration had a hole in it.** The map
+  lane at cap 2 writes: `mapped-pre\<slug>.json` and `<slug>.hold.json` (per-slug, distinct slugs
+  per worker - no mutex, headers say so), `db\ingredient-resolutions.json` (named mutex since phase
+  3, fixture proven to fail neutered), the run's per-slug state files (hunt-run's pen, per-slug),
+  and `grocery\ingredient-queue.json` - which had NO LOCK. Two cap-2 map workers `-Add`ing at once,
+  or a map `-Add` landing while the singleton pricer's `-Record` was mid-write, was last-writer-wins
+  on the worklist: a lost `-Add` is a recipe parked FOREVER (the daemon consumes `absent_terms`
+  destructively and never re-queues the term), and a lost `-Record` is a store verdict the pricer
+  paid browser minutes for. FIXED 2026-08-24 with ingredient-resolutions' exact pattern: a named
+  system mutex keyed by the queue file's path, the WHOLE read-modify-write inside it with a re-read
+  under the lock, tmp+move writes so `-Derive`'s readers can never catch a half-written file, and
+  the same lock (keyed on carriage.json's path) around `-Promote`'s ledger write. The barrier
+  fixture - 4 writers, 400-item seeded store, same-UTC-instant start - measured **"landed 1 of 4"**
+  with the lock neutered and loses nothing with it in place. The audit rule's transferable half:
+  when a plan says "enumerate every ledger", the enumeration is not done until someone lists the
+  files BY NAME and finds the one the last enumeration missed.
 - **D8 `build-intake-skeleton.ps1`** - machine-complete intake skeleton; the pre-write band gate;
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
@@ -1573,6 +1591,53 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   own driver profile - the puller owns the session and is the only honest source on it. The daemon
   never opens a browser to find out, and a report it cannot get is UNUSABLE for the batch, which
   reads PENDING and hands Sam's to the attending pricer.
+  **PINNED FOR THE PHASE-5 BUILDER (2026-08-24, from the phase-4 build - facts, not guesses):**
+  - **The dispatch adapter now auto-appends a RETURN CONTRACT derived from the schema, and the
+    pricer dispatch passes NO schema ON PURPOSE - do not "fix" either half.** Phase 4's gate run
+    measured what happens when an agent is never told the shape: six writers each invented a rich
+    report with no `status`, burned the one re-ask, and the breaker opened at ~259k input tokens per
+    refusal. The fix lives in `hunt_dispatch.contract_text` - derived from the `schema=` argument,
+    appended to the FIRST call - so a prompt must NEVER carry a hand-written return contract (seven
+    lanes means seven copies means six that drift). The pricer is the standing exception: its
+    evidence contract is enforced at the SCRIPT layer (`ingredient-queue -Record`:
+    carried-requires-a-price, exact store names, PENDING-never-promotes), it returns free text, and
+    `contract_text(None)` is deliberately empty. Adding a schema to the pricer dispatch would make
+    the daemon refuse the free-text reports the pricer has always returned - that is a behaviour
+    change for Brad to order, never a tidy-up.
+  - **The evidence pre-gather's concurrency answer, so nobody re-derives it:** the price lane is a
+    singleton by architecture (`hunt_lib.LANE_CAPS` marks it, a fixture asserts it), so
+    `<RunDir>\price-evidence\batch-<n>.json` has ONE writer per distinct n and needs NO mutex -
+    SAY SO in the writer's header, exactly as map-preresolve's does. `ingredient-queue.json` and
+    `carriage.json` are already behind the named mutex (see D7's enumeration above), so the pricer's
+    own `-Record`/`-Promote` and the map lane's `-Add` can no longer race. If D10 ever aggregates
+    evidence into ONE run-level file, that file takes the mutex pattern WITH a barrier fixture
+    proven to fail neutered - the fourth PS trap does not care what phase it is.
+  - **`pull-browser-stores.py` runs via `sys.executable` subprocess wrapped in
+    `loop.run_in_executor` (the same shape as `Daemon._ps`), NEVER via ps_invoke** - ps_invoke is
+    for PowerShell surfaces only. A CDP sweep that dies, times out, or cannot report its driver
+    profile is UNUSABLE for the batch, which reads PENDING; the daemon writes that state into the
+    evidence file rather than retrying a wall (a wall stops the lane - S5's own rule).
+  - **Useful phase-4 machinery, so it is reused rather than re-invented:** `hunt_lib.first_guard_line`
+    turns a refusing guard's stderr into the one sentence a STUCK detail should carry; the daemon's
+    `--specs`/`--costed` scratch flags exist but D10 needs NEITHER (the price lane touches no spec
+    store and no cost ledger) and `--ledger` only if a drill reaches the wave lane; `--status` now
+    names every stuck recipe with its reason, so a D10 drill's evidence is readable off the header.
+  - **Keep drill scratch roots SHORT.** The phase-4 gate's wave close failed on a 130-character
+    scratch path (`waves\wave-1.json.tmp` would not write) - a path-length artifact, not a wave
+    defect, and a `C:\tmp\...`-depth root avoids it entirely.
+  - **Fixture duties, unchanged from D7/D8's discipline:** every new lane behaviour gets an injected
+    FakeDispatch/FakePS twin in `hunt_daemon_selftest.py` AND at least one fixture against the real
+    surface (the real state machine, or the real evidence file on disk), because phase 3 and phase 4
+    each caught a route the injected fixtures accepted and the real machine refused - three
+    instances now. Must-fire is proven by NEUTERING the code, not by asserting the fixture exists.
+    The named must-fire D10 owes: the MECHANICAL pre-pass emits UNUSABLE-as-PENDING (the agent half
+    is already proven, per the phase-3 pin above).
+  - **The first real absent-term batch is already sitting in the queue.** Three genuinely pending
+    terms survive in `grocery\ingredient-queue.json` - `guacamole`, `pico de gallo`,
+    `korean-rice-cakes` (0 of 7 stores checked, queued 2026-08-16) - and mapping the four phase-2
+    mini-run recipes through the REAL D7 map lane will yield more, which doubles as D7's first live
+    mapper dispatch. The gate's "one real absent-term batch priced with pre-gathered evidence" can
+    be met from those without inventing a synthetic term list.
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
@@ -2100,6 +2165,57 @@ wave-lane defect, and a shorter scratch root avoids it. (b) The `--status` heade
 stuck" and name none of them; it now lists every stuck recipe with its reason, because a count is not
 a report.
 
+**Phase-4 aftercare, the six-dimension check (2026-08-24, Fable cold read of the Opus build).**
+Each dimension verified against the code as shipped, not against the commit messages; the two live
+defects it surfaced are fixed and fixtured in the aftercare commit, same-day.
+
+- **CONCURRENCY - one defect found, one vacuous drill found, both fixed.** (1)
+  `grocery\ingredient-queue.json` was an UNLOCKED read-modify-write with concurrent writers under
+  the v3 daemon (map cap 2 `-Add` x2, plus the pricer's `-Record` in parallel) - the barrier fixture
+  measured "landed 1 of 4" with no lock. Named mutex + re-read-inside-the-lock + tmp/move writes
+  now, on both the queue and carriage.json; the full enumeration is recorded in D7's pinned block.
+  (2) The drain drill's fresh-lane section had been writing `drill term one..four` into the LIVE
+  queue on every run (no ps injection - the same class as the w5/w6 ledger rows, found the same
+  way), and after D7 it went VACUOUS instead: no extractions on disk meant map-preresolve exited 2,
+  zero lane lines were written, and audit-lane-shape passed on an empty log - the
+  could-not-look-wearing-a-rosette failure its own docstring warns about. It now writes real
+  extractions (so the REAL pre-resolver runs inside the drill), redirects queue writes to a scratch
+  `-QueueFile`, and treats fewer than 4 lane lines as a FAILURE; the live queue was byte-identical
+  across the re-run, and the four debris rows were removed from the live worklist under the queue's
+  own mutex. Verified sound elsewhere: per-slug files carry no locks by design and their headers say
+  so; the cost-engine mutex fixture proves serialization; macro-precheck uses a GUID scratch dir per
+  invocation; ingredient-resolutions' fixture still fails neutered.
+- **MULTI-CORE (CPU).** The estate's measured rule stands (PS 5.1 parallelises only across
+  PROCESSES, never runspaces): map cap 2 and write cap 3 are separate powershell.exe children, so
+  the cores are used exactly where the caps allow. map-preresolve makes ONE bulk child call per
+  surface per batch (one vocab `-Missing`, one board query, one parse-compute) instead of per-term,
+  which is where its 5.5 s/4-slug figure comes from. The write lane parallelises skeleton assembly
+  and serializes only the cost pass, per the D8 pin. Nothing further is ordered; the price lane is a
+  singleton by architecture and D10 must not parallelise around it.
+- **MULTI-PORT / GPU.** Phases 4 AND 5 touch no GPU: map, write and price are CPU + network.
+  llama-server (section 4.4, hand-started, slot-context rules unchanged) matters again only when
+  extraction runs - the phase-6 proving run - and `--status` still names the pending narrow pass.
+  Nothing about the daemon got scheduled, per the standing rule.
+- **SPEED.** Measured this phase: pre-resolve 5.5 s per 4-slug batch (board + cross-check live);
+  skeleton build ~2 s/slug; the locked-field `-Verify` sub-second; the D8 cost drill's full 570-spec
+  pass minutes-scale under the one lock, unchanged from v2's cost engine. The write lane's
+  wall-clock is writer-dominated (~90 s/recipe on the gate run), which is the §7 model's assumption
+  arriving as measured.
+- **EFFICIENCY.** The mapper dispatch now carries the residual (31 lines instead of 73 on the
+  measured batch, 57.5% pre-resolved) and the writer dispatch carries a fill-in-place contract
+  instead of a build-everything one; the out-of-band and incomplete-skeleton recipes now cost ZERO
+  writer tokens (four of ten on the gate corpus never reached a writer). The adapter's derived
+  return contract adds ~1 KB per dispatch and removed the 259k-tokens-per-refusal failure mode,
+  which is the trade stated in numbers. Further prompt slimming (constants into agent definitions,
+  prefix-cache alignment) stays D11's, not smuggled here.
+- **ACCURACY.** Both band gates rule through the one parity-covered `hunt_lib.in_band`; the
+  locked-field diff plus the no-prose postcondition close the writer's two remaining silent-failure
+  routes; a refused spec build and an unreadable spec are STUCK, never a pass; the skeleton refuses
+  to build over an unsettled line and names every excluded/merged/unknown decision word; and the
+  queue's Rule B surfaces (UNUSABLE/blocked/error read PENDING) are untouched, with their fixtures
+  still green. The macro cross-check ships numbers only at total line coverage - a partial figure is
+  handed to nobody.
+
 **Phase-4 pickup (2026-08-24, so the next session starts building instead of hunting):** read, in
 order, section 4.5 (the mapped-pre and skeleton contracts, the locked-vs-writer-fillable field
 split, and the thresholds), the D7 and D8 bullets WITH their pinned blocks, `hunt-daemon.py`'s
@@ -2127,7 +2243,28 @@ UNKNOWN INGREDIENT NAME, which is the guard doing its job. The tenth,
 can therefore demonstrate the write lane and the pre-write band gate on real data, and it CANNOT
 demonstrate a green spec build without being re-mapped through D7's map lane. That is a fact about
 the corpus, not about D8, and it is the strongest single argument for D7 that the phase produced:
-every one of those 14 names is a line map-preresolve now enumerates BEFORE the mapper is paid - seed from that run dir's -Status exactly as the drain drill does, on a COPY, with
+every one of those 14 names is a line map-preresolve now enumerates BEFORE the mapper is paid
+
+**Phase-5 pickup (2026-08-24, so the next session starts building instead of hunting):** read, in
+order, S5 and the D10 bullet WITH BOTH its pinned blocks (the phase-3 one names the hook points and
+the Sam's-session rule; the phase-4 one names the adapter's return-contract behaviour, the
+concurrency answers, and the machinery to reuse), section 4.5's price-evidence shape (the
+search-verdict-lib serialization, cap 8 hits per store), `hunt-daemon.py`'s `price_lane` /
+`price_prompt` / `reap_priced` (the daemon is built; extend it, never re-derive it - the greedy
+exhaustive service loop and the one-wake-per-micro-batch rule are both measured decisions),
+`grocery\probe-ingredient.ps1` and `grocery\pull-browser-stores.py` headers (the surfaces being
+composed - composed, never re-implemented), `grocery\search-verdict-lib.ps1` (the 3-state ladder
+the evidence file serializes), and `ingredient-queue.ps1`'s header including the new mutex block.
+The gate corpus: the three genuinely pending queue terms (`guacamole`, `pico de gallo`,
+`korean-rice-cakes`) plus whatever absent terms fall out of running the four phase-2 mini-run
+recipes through the REAL D7 map lane - which is also D7's first live mapper dispatch and should be
+reported as such. llama-server is NOT needed for phase 5 (the price pre-pass is CPU + network);
+browser surfaces follow the estate's standing constraints (the Chrome debug port is blocked on the
+default profile, so Walmart/Aldi stay attended by the pricer - D10 changes what the pricer reads,
+never which stores it must attend). The pricer dispatch carries no schema and must keep carrying
+none; its lane-log pairing, the singleton cap, and `-Derive`-as-orchestrator-call are all already
+built and fixtured - D10 inserts the pre-gather between the wake and the dispatch and rewrites
+`price_prompt` to adjudicate-and-attend, and that is the whole surface area. - seed from that run dir's -Status exactly as the drain drill does, on a COPY, with
 the daemon's `--ledger` scratch path and publish left in -DryRun unless Brad orders the wave live.
 For the residual-rate half of the gate, dossier-pop a fresh batch from the pool instead - those 10
 recipes are already mapped, so measuring D7's residual on them would measure the cache, not the
