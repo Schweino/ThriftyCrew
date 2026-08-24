@@ -334,3 +334,70 @@ scope - it is fuller waves.** See item A and OPEN Q 4.5.
 target and 6a's 453 s / ~227 s per-recipe map figures are not comparable to it, because this run never
 reached a steady state (criterion 3 is unreportable for the same reason). Treat 32 min/recipe as a
 CEILING measured on a starved pipeline, not as the pipeline's speed.
+
+---
+
+## 7. THE 5-MINUTE TARGET (Brad, 2026-08-24: "it needs to get under 5 minutes per recipe")
+
+Modelled from this run's own per-stage seconds. 6b measured **~32 wall minutes per published recipe**.
+The target is a 6.4x improvement, and **it is reachable - but not by optimising tokens.**
+
+### 7.1 Where the 98 minutes of work went
+
+| lane | dispatch-seconds | share | normalised |
+|---|---|---|---|
+| map | 2,794 | 47.5% | 310 s per ACCEPTED recipe |
+| audit | 1,307 | 22.2% | 1,307 s per WAVE -> 131 s/recipe at wave size 10 |
+| price | 754 | 12.8% | 84 s per accepted |
+| write | 600 | 10.2% | 300 s per written |
+| select | 301 | 5.1% | 14 s per candidate |
+| qa | 120 | 2.0% | 60 s per written |
+| extract | 3 | 0.1% | local, free |
+
+### 7.2 The model
+
+```
+THIS RUN (yield 22%, no fixes, starved)     work 2327 s/published  @1.5x -> 25.2 min
+this run's cost/yield, concurrency 3        work 2327 s/published  @3.0x -> 12.9 min
+yield 80%, map unchanged, concurrency 3     work 1001 s/published  @3.0x ->  5.6 min
+yield 80% + map fixes (A/B/C/D), conc 3     work  838 s/published  @3.0x ->  4.7 min
+yield 90% + map fixes, concurrency 3.5      work  800 s/published  @3.5x ->  3.8 min
+```
+
+### 7.3 THE DOMINANT TERM IS YIELD, AND IT IS NOT IN THIS WORKLIST
+
+9 accepted, 2 published: **22%**. Concurrency alone takes 25.2 min to 12.9 and stops. Yield alone,
+with no token work whatsoever, takes it to 5.6. Where the 7 losses went:
+
+- **3 parked** on a line with no gram weight - the alternatives line and the garnish line
+  (OPEN-ITEMS 2.1, 2.2). Every one had already been paid for through map, registrar and pricing.
+  **Blocked on Brad's answers to OPEN Q 4.1 and 4.2 - nothing can be built until those land.**
+- **2 retired at the band gate.** CORRECT losses - but wasted ones. The pop passed them on the source
+  page's own claims and the gate ruled on our recompute (OPEN-ITEMS 3.1); both died after the most
+  expensive stages had run. Moving that rejection earlier is pure win with no gate touched.
+- **2 unfinished** at `mapped` when the run ended.
+
+**So the largest single speed lever in the pipeline is three parked recipes and a pre-filter that
+trusts source numbers.** Neither is a token problem, and neither appears anywhere in sections 2-6.
+
+### 7.4 Three multiplicative parts. None alone gets there.
+
+1. **YIELD 22% -> 80%+.** Answer 4.1/4.2, fixture the two park classes, and close the pop/gate
+   divergence in 3.1. Biggest factor by a wide margin.
+2. **CONCURRENCY 1.54x -> ~3x.** This run STARVED - the lanes had nothing to overlap. It needs a deeper
+   qualifying backlog, which is OPEN-ITEMS 5.1 (re-qualify the pool against the run band) plus enough
+   harvest to keep it fed. No new scheduling machinery is implied; v2 section 2.4 already permits 3
+   extractors, 2 mappers, 3 writers, 2 QA.
+3. **ROUND TRIPS - items A, B, C/J, D.** Worth ~130 s/recipe off the map lane on the modelled numbers.
+   The smallest of the three, and the only one anybody has been working on.
+
+### 7.5 Two constraints that bound this, and one wall
+
+- **Full waves are load-bearing.** The audit costs 1,307 s per wave whatever the wave holds: 131 s per
+  recipe at size 10, but **653 s per recipe at size 2**, which is what 6b actually paid. A thin wave
+  cannot hit 5 minutes no matter what else is fixed.
+- **The write lane is 300 s/recipe** and the auditor is protected by section 11. Neither is a target.
+- **THE WALL: the price lane is a singleton and section 10 forbids widening it.** At 84 s per accepted
+  recipe it has real headroom today - roughly 43 accepted/hour against one lane's 3,600 s - so it is not
+  the bottleneck at 5 minutes. But it is the one lane that cannot be widened, so it is where scaling
+  eventually stops, and any target below ~90 s/recipe needs that conversation first.
