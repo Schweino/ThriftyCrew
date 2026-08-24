@@ -4208,6 +4208,51 @@
                       "carbs_g":  68.9,
                       "fat_g":  4.3,
                       "note":  "USDA SR \"Oregano, fresh\" per 100 g. Same basis as the Fresh Parsley row added the same day, so the two herbs stand on one footing. DISTINCT from Dried Oregano, which is a Great Value label per tsp."
+                  },
+                  {
+                      "item":  "Brown Lentils",
+                      "brand":  "dry (USDA)",
+                      "serving_grams":  100,
+                      "serving_qty":  100,
+                      "serving_unit":  "g",
+                      "calories":  352,
+                      "protein_g":  24.6,
+                      "carbs_g":  63.4,
+                      "fat_g":  1.06,
+                      "needs_verify":  false,
+                      "verify_source":  "USDA SR Lentils, raw (FDC 172420 / SR 16069), fetched from the FDC search API 2026-08-24: 352 cal / 24.6 P / 63.4 C / 1.06 F, fiber 10.7 per 100 g. Retail bag labels (1/4 cup = 50 g: ~180 cal, ~12 P) agree per gram. FDC BRANDED brown-lentil entries were fetched and REJECTED as corrupt (720-791 kcal/100 g dry lentils is physically impossible - serving-size entry errors); do not swap this row for one of them.",
+                      "notes":  "DRY (raw) basis, per 100 g; 1 cup dry = 192 g (densities row added same day). Board commodity brown-lentils, 5 of 7 stores. Added 2026-08-24 (p5 micro-batch, lentil-sausage-soup).",
+                      "source":  "USDA FDC 172420 (SR Legacy) Lentils, raw"
+                  },
+                  {
+                      "item":  "Chicken Bouillon",
+                      "brand":  "Tone's (B&G Foods)",
+                      "serving_grams":  4,
+                      "serving_qty":  1,
+                      "serving_unit":  "cube",
+                      "calories":  5,
+                      "protein_g":  0,
+                      "carbs_g":  1,
+                      "fat_g":  0,
+                      "needs_verify":  false,
+                      "verify_source":  "USDA FDC Branded 'BOUILLON CUBES, CHICKEN' (Tone's / B&G Foods North America), fetched from the FDC search API 2026-08-24: 1 cube = 4 g; per-100g fields 125 kcal / 0 P / 25 C / 0 F / 27,500 mg Na scale to 5 cal / 0 P / 1 C / 0 F / ~1,100 mg Na per cube. Four independent store-brand cube entries in the same fetch print the identical 4-g/5-cal class.",
+                      "notes":  "Dry chicken bouillon CUBE, per cube (4 g); ~1,100 mg sodium per cube is the real load, macros are negligible. Distinct from the Better Than Bouillon paste row (beef base, 6 g/tsp) - different product and concentration. Board commodity bouillon (cubes/granules/base), 6 of 7 stores. Added 2026-08-24 (p5 micro-batch, jalapeno-popper-chicken).",
+                      "source":  "USDA FDC Branded, Tone's chicken bouillon cubes"
+                  },
+                  {
+                      "item":  "Farfalle Pasta",
+                      "brand":  "Great Value",
+                      "serving_grams":  56,
+                      "serving_qty":  1,
+                      "serving_unit":  "3/4 cup (56g) dry",
+                      "calories":  200,
+                      "protein_g":  7,
+                      "carbs_g":  42,
+                      "fat_g":  1,
+                      "needs_verify":  false,
+                      "verify_source":  "Same enriched-semolina panel as the verified Great Value Ziti row (R100 labels-P3.json): every GV dry semolina cut prints the identical 56 g / 200 cal / 7 P / 42 C / 1 F panel - shape does not change the label. FDC Branded farfalle entries were fetched 2026-08-24 and REJECTED as corrupt (637-670 kcal/100 g dry pasta is impossible; the values are 1.79x the true 357, a serving-size entry error).",
+                      "notes":  "Dry farfalle (bow-tie), booked on the GV dry-pasta panel; bid pasta (same commodity as Ziti/Fettuccine/Spaghetti rows). Added 2026-08-24 (p5 micro-batch, mushroom-chicken-pasta).",
+                      "source":  "Great Value dry pasta panel (via verified GV Ziti label, R100 labels-P3.json)"
                   }
               ]
 }
