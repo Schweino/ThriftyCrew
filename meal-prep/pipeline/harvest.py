@@ -123,6 +123,26 @@ SEAFOOD = ("shrimp", "prawn", "salmon", "tuna", "cod fillet", "tilapia", "halibu
            "catfish", "trout", "swordfish", "mahi", "squid", "calamari", "octopus")
 GROUND_CHICKEN = ("ground chicken",)
 
+# RIB CUTS - a STANDING EXCLUSION (Brad's ruling 2026-08-24, after the 6b proving run).
+#
+# WHY. Rib racks are calorie-dense against their edible protein, so the protein-per-serving a
+# high-protein band asks for cannot be reached inside the same band's calorie ceiling. 6b paid for
+# `beef-back-ribs` through map, registrar AND pricing before the pre-write band gate retired it at
+# 41.6 g protein against a 50 g floor - and the run's own reading of that closure turned on our
+# food-DB row's `needs_verify: true` 0.45 edible-yield estimate, which is exactly the argument nobody
+# should have to relitigate per recipe. Brad's ruling settles the class instead: rib recipes do not
+# enter. Excluding at INGEST is the cheap place - it costs one substring pass and saves an entire
+# paid pipeline per candidate.
+#
+# WHAT IS IN, AND WHAT IS DELIBERATELY NOT. These are the RACK cuts, matched as PHRASES so the filter
+# cannot act on a guess (the standing rule the seafood list above already follows). `ribeye`,
+# `rib eye` and `prime rib` are NOT excluded: they are different cuts with different fat and yield,
+# and a bare "rib" substring would take them along with the racks - which is the class of silent
+# over-rejection this file's own comments warn about. If Brad wants those out too, they are one
+# phrase each.
+RIB_CUTS = ("back ribs", "baby back", "spare ribs", "spareribs", "short ribs", "shortribs",
+            "riblet", "rib tips", "country style ribs", "country-style ribs", "rack of ribs")
+
 # ---------------------------------------------------------------------------------------------------
 # Protein detection. WEIGHTED, not first-substring-wins, because first-substring-wins was measured
 # wrong on 2026-08-23 over the first real 20-candidate dossier: "Chicken Madeira" read as BEEF (its
@@ -613,10 +633,20 @@ def detect_starch(lines):
     return "none"
 
 
-def exclusions(lines):
-    """The run conditions' standing exclusions, matched on ingredient nouns. Returns a list of reasons."""
+def exclusions(lines, name=""):
+    """The run conditions' standing exclusions, matched on ingredient nouns. Returns a list of reasons.
+
+    `name` IS LOAD-BEARING FOR THE RIB CUTS, and the reason is measured (2026-08-24). The pool does not
+    always hold ingredient lines: 254 of 661 available candidates carry none, and `beef-back-ribs` - the
+    very recipe whose retirement prompted this exclusion - is one of them, so an ingredient-only filter
+    could not fire on it at all. A rib recipe names itself in its title essentially always, so the rib
+    check reads BOTH. Seafood deliberately still reads ingredients only: its whole point is catching a
+    dinner whose title does not advertise the fish, and a title-side seafood match would take
+    "Chicken Puttanesca" with it.
+    """
     out = []
     blob = " ; ".join(lines).lower()
+    rib_blob = (blob + " ; " + str(name or "")).lower()
     for w in SEAFOOD:
         if w in blob:
             # Worcestershire lists anchovy in its own ingredients; it is a condiment, not a seafood
@@ -628,6 +658,10 @@ def exclusions(lines):
     for w in GROUND_CHICKEN:
         if w in blob:
             out.append("board exclusion: " + w)
+    for w in RIB_CUTS:
+        if w in rib_blob:
+            out.append("rib cut: " + w)
+            break
     return out
 
 
@@ -822,7 +856,7 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
     entry["band"] = read_band(node)
     entry["last_verified"] = now_stamp()
 
-    excl = exclusions(lines)
+    excl = exclusions(lines, entry.get("name") or "")
     if excl:
         entry["status"] = "ruled:excluded"
         entry["exclusion"] = "; ".join(excl)
@@ -1942,6 +1976,39 @@ def cmd_selftest(_a):
       str(exclusions(["2 lb chuck roast", "2 tbsp worcestershire sauce (anchovy)"])))
     T("MUST FIRE  ground chicken is a standing board exclusion",
       exclusions(["1 lb ground chicken"]) != [], "not excluded")
+
+    # ---- RIB CUTS (Brad's ruling 2026-08-24, after the 6b proving run) -----------------------------
+    # FROZEN FIXTURE. 6b paid for `beef-back-ribs` through map, registrar AND pricing before the
+    # pre-write band gate retired it at 41.6 g protein against a 50 g floor. Rib racks cannot reach a
+    # high-protein floor inside the same band's calorie ceiling, so the class does not enter.
+    #
+    # THE NAME IS LOAD-BEARING AND THIS IS THE FIXTURE THAT PROVES IT: the pool held ZERO ingredient
+    # lines for that very candidate (254 of 661 available candidates carry none), so an
+    # ingredient-only filter could not have fired on the recipe that motivated the rule.
+    T("MUST FIRE  a rib recipe with NO ingredient lines is excluded on its NAME - the pool held no "
+      "lines for beef-back-ribs, so an ingredient-only filter would have missed the motivating case",
+      exclusions([], "Beef Back Ribs") != [], "not excluded")
+    T("MUST FIRE  ...and the ingredient side still catches ribs a title does not advertise",
+      exclusions(["14 lb beef back ribs (about 3 1/2 racks)"], "Mystery Dinner") != [], "not excluded")
+    T("MUST FIRE  three more rack cuts, because a collection fixture takes at least three",
+      (exclusions([], "Slow Cooker Baby Back Ribs") != []
+       and exclusions(["3 lb boneless beef short ribs"], "Braised Beef") != []
+       and exclusions(["2 lb pork spare ribs"], "Grill Night") != []),
+      "one of baby back / short ribs / spare ribs was not excluded")
+    # The over-rejection twins. A bare "rib" substring would take these with the racks, which is the
+    # silent-over-rejection class this file's own comments warn about.
+    T("CLEAN TWIN a ribeye is NOT a rib rack - different cut, different fat and yield",
+      exclusions(["2 lb ribeye steak"], "Garlic Butter Ribeye") == [],
+      str(exclusions(["2 lb ribeye steak"], "Garlic Butter Ribeye")))
+    T("CLEAN TWIN prime rib is not excluded either",
+      exclusions([], "Prime Rib Roast") == [], str(exclusions([], "Prime Rib Roast")))
+    T("CLEAN TWIN and an ordinary beef dinner is untouched",
+      exclusions(["2 lb beef chuck roast"], "Pot Roast") == [],
+      str(exclusions(["2 lb beef chuck roast"], "Pot Roast")))
+    # SEAFOOD STAYS INGREDIENT-ONLY. Its job is catching a dinner whose title hides the fish; a
+    # title-side seafood match would take "Chicken Puttanesca" with it.
+    T("CLEAN TWIN the name side is RIBS-ONLY - a seafood title with no seafood ingredient is not excluded",
+      exclusions([], "Shrimp Scampi") == [], str(exclusions([], "Shrimp Scampi")))
 
     # ---- protein / method ordering ----------------------------------------------------------------
     T("MUST FIRE  'ground turkey' reads as turkey, not as an accidental beef",

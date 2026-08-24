@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-23T19:35:08",
+ "updated": "2026-08-24T13:36:23",
  "count": 2162,
  "candidates": [
   {
@@ -1430,7 +1430,6 @@
    "url": "https://thecozycook.com/baked-chicken-parmesan/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:05:16",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -1445,152 +1444,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "4 boneless skinless chicken breasts",
-    "2 ½ cups shredded mozzarella cheese (separated)",
-    "1/2 cup shredded Parmesan Cheese (separated)",
-    "½ cup flour",
-    "1 ¼ teaspoons seasoned salt",
-    "¼ teaspoon pepper",
-    "2 eggs",
-    "½ teaspoon garlic powder",
-    "1 cup Italian breadcrumbs",
-    "2 Tablespoons butter",
-    "3 Tablespoons olive oil",
-    "Fresh parsley (to garnish)",
-    "2 cups marinara sauce",
-    "Fresh Parsley (to garnish)"
-   ],
-   "neighbours": [
-    {
-     "slug": "chicken-parmesan-pasta",
-     "name": "Chicken Parmesan Pasta",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "parmesan"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "parmesan-garlic-sheet-pan-chicken-potatoes",
-     "name": "Parmesan Garlic Sheet-Pan Chicken Thighs and Potatoes",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "parmesan"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "hunters-chicken-bbq-bacon-bake",
-     "name": "Hunter's Chicken (BBQ Bacon Cheese Bake)",
-     "score": 20,
-     "shared": [
-      "cheese",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-divan-broccoli-bake",
-     "name": "Chicken Divan (Broccoli Cheese Bake)",
-     "score": 20,
-     "shared": [
-      "cheese",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-parmesan-recipe",
-     "name": "Chicken Parmesan Recipe",
-     "score": 0.9087,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-parmesan-pasta",
-     "name": "Chicken Parmesan Pasta",
-     "score": 0.9082,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "stuffed-chicken-breast",
-     "name": "Stuffed Chicken Breast",
-     "score": 0.8598,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pepperoni-stuffed-chicken",
-     "name": "Pepperoni Stuffed Chicken",
-     "score": 0.8522,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-parmesan-sliders",
-     "name": "Chicken Parmesan Sliders",
-     "score": 0.8256,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "any|any|cheese",
-     "slug": "crustless-bacon-gruyere-quiche",
-     "name": "Crustless Bacon Gruyere Quiche",
-     "protein": "any",
-     "method": "any",
-     "verdict": "rejected-qa",
-     "reason": "macro gate: 369 cal / 2g carbs per serving",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "any|any|cheese",
-     "slug": "crustless-ham-gruyere-quiche",
-     "name": "Crustless Ham Gruyere Quiche",
-     "protein": "any",
-     "method": "any",
-     "verdict": "rejected-dupe",
-     "reason": "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 2,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Baked cheese-stuffed chicken parmesan; the only live chicken-parm is chicken-parmesan-PASTA (different format/starch) and the backlog chicken-parmesan-recipe is unruled, so no collision — an iconic Italian-American cutlet that widens spread, band verified 567/24/50.",
+   "ruled_at": "2026-08-24T12:13:15"
   },
   {
    "slug": "cilantro-lime-beer-can-chicken-tacos",
@@ -1770,7 +1627,6 @@
    "url": "https://www.wellplated.com/asian-pulled-pork-tacos/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:05:14",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "braised",
@@ -1785,127 +1641,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "4 pounds pork tenderloin (trimmed of excess fat)",
-    "1 teaspoon kosher salt",
-    "1/2 teaspoon ground black pepper",
-    "6 whole garlic cloves (smashed and peeled)",
-    "2 tablespoons fresh ginger (minced)",
-    "14 ounces hoisin sauce",
-    "flour or corn tortillas (for serving)",
-    "1 bag broccoli slaw ((12 ounces))",
-    "1 cup dry roasted unsalted peanuts (chopped)",
-    "1 bunch green onions (chopped)",
-    "1 cup fresh cilantro (chopped)",
-    "1/4 cup extra-virgin olive oil",
-    "2 tablespoons rice vinegar",
-    "1 tablespoon honey",
-    "1 tablespoon low-sodium soy sauce"
-   ],
-   "neighbours": [
-    {
-     "slug": "pulled-pork-shepherds-pie",
-     "name": "Pulled Pork Shepherd's Pie",
-     "score": 20,
-     "shared": [
-      "pulled",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pulled-pork-enchilada-bake",
-     "name": "Pulled Pork Enchilada Bake",
-     "score": 20,
-     "shared": [
-      "pulled",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-root-beer-pulled-pork-bowls",
-     "name": "Slow Cooker Root Beer Pulled Pork Bowls",
-     "score": 20,
-     "shared": [
-      "pulled",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-pulled-pork-bowl",
-     "name": "BBQ Pulled Pork Rice Bowl",
-     "score": 20,
-     "shared": [
-      "pulled",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-dr-pepper-pulled-pork-bowls",
-     "name": "Slow Cooker Dr Pepper Pulled Pork Bowls",
-     "score": 20,
-     "shared": [
-      "pulled",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-root-beer-pulled-pork-bowls",
-     "name": "Slow Cooker Root Beer Pulled Pork Bowls",
-     "score": 0.8505,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-teriyaki-pork-bowls",
-     "name": "Slow Cooker Teriyaki Pork Bowls",
-     "score": 0.8359,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-korean-shredded-pork-bowls",
-     "name": "Slow Cooker Korean Shredded Pork Bowls",
-     "score": 0.8306,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-dr-pepper-pulled-pork-bowls",
-     "name": "Slow Cooker Dr Pepper Pulled Pork Bowls",
-     "score": 0.829,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-tacos-rice-bowls",
-     "name": "Slow Cooker Chicken Taco Rice Bowls",
-     "score": 0.8276,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 3,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Hoisin/soy braised shredded pork served over rice matches live Asian slow-cooker pork bowls on all four axes (pork + braised + sweet-soy + rice); teriyaki and korean shredded pork bowls already cover this exact structure, and the pulled-pork region is crowded (10 live matches).",
+   "ruled_at": "2026-08-24T12:13:18"
   },
   {
    "slug": "thai-coconut-curry-chicken-thighs",
@@ -4988,7 +4727,6 @@
    "url": "https://www.skinnytaste.com/burma-superstar-chicken-dal-curry/",
    "domain": "skinnytaste.com",
    "first_seen": "2026-08-23T17:06:15",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "chicken",
     "method": "braised",
@@ -5003,140 +4741,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1/2 cup yellow split peas",
-    "2 1/2 lbs (8) bone-in chicken thighs, skin removed",
-    "1 tablespoon paprika",
-    "1/2 teaspoon turmeric",
-    "1 3/4 teaspoon kosher salt",
-    "1 tablespoon olive oil",
-    "1 ounce piece ginger",
-    "2 1/2 cups minced yellow onion",
-    "1/3 cup minced garlic",
-    "1 to 3 Thai chiles (optional)",
-    "2 bay leaves",
-    "2 1/4 cups water",
-    "1 teaspoon Madras curry",
-    "1/2 teaspoon Garam Masala",
-    "1 cup cilantro sprigs for garnish",
-    "1 lime (cut into wedges for garnish)"
-   ],
-   "neighbours": [
-    {
-     "slug": "thai-green-curry-chicken",
-     "name": "Thai Green Curry Chicken",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "curry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-madras-curry",
-     "name": "Chicken Madras Curry",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "curry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "thai-red-curry-chicken-rice-bowls",
-     "name": "Thai Red Curry Chicken Rice Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "curry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "curry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "panang-chicken-curry",
-     "name": "Panang Chicken Curry",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "curry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "thai-chicken-curry",
-     "name": "Thai Chicken Curry",
-     "score": 0.8987,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "panang-chicken-curry",
-     "name": "Panang Chicken Curry",
-     "score": 0.877,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jamaican-curry-chicken",
-     "name": "Jamaican Curry Chicken",
-     "score": 0.8748,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cape-malay-chicken-curry",
-     "name": "Cape Malay Chicken Curry",
-     "score": 0.8746,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "thai-green-curry-chicken",
-     "name": "Thai Green Curry Chicken",
-     "score": 0.8657,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|any|curry",
-     "slug": "burmese-chicken-dal-curry",
-     "name": "Burmese Chicken Dal Curry",
-     "protein": "chicken",
-     "method": "any",
-     "verdict": "rejected-not-carried",
-     "reason": "not carried in Omaha: yellow split peas",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 15,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Prior ruling flags yellow split peas as not carried in Omaha for this exact Burma Superstar chicken dal curry, and the chicken-curry region is heavily saturated (pressure 15).",
+   "ruled_at": "2026-08-24T12:10:03"
   },
   {
    "slug": "chicken-and-broccoli-pasta-bake",
@@ -8790,7 +8398,6 @@
    "url": "https://www.wellplated.com/chicken-sweet-potato-kale-skillet/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:06:48",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "chicken",
     "method": "braised",
@@ -8805,124 +8412,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 tablespoon extra-virgin olive oil",
-    "2 medium sweet potatoes (scrubbed, peeled, and cut into 1/2-inch dice)",
-    "3/4 teaspoon kosher salt",
-    "1/4 teaspoon ground black pepper",
-    "1 large bunch kale (stemmed and roughly chopped (about 8 cups))",
-    "1 tablespoon minced garlic (about 3 cloves)",
-    "2 chicken breasts",
-    "1 1/2 tablespoons balsamic vinegar",
-    "1 tablespoon chopped fresh sage**",
-    "1 tablespoon chopped fresh thyme or rosemary**",
-    "1/4 cup dried cranberries or fresh pomegranate seeds",
-    "4 ounces goat cheese",
-    "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice"
-   ],
-   "neighbours": [
-    {
-     "slug": "sheet-pan-chicken-sweet-potato-brussels",
-     "name": "Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts",
-     "score": 30,
-     "shared": [
-      "chicken",
-      "sweet",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-braised-chicken-potatoes-dakdoritang",
-     "name": "Korean Braised Chicken and Potatoes (Dakdoritang)",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "baked-sweet-and-sour-chicken-rice-bowls",
-     "name": "Baked Sweet and Sour Chicken Rice Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "sweet"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "parmesan-garlic-sheet-pan-chicken-potatoes",
-     "name": "Parmesan Garlic Sheet-Pan Chicken Thighs and Potatoes",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "sheet-pan-sausage-meatballs-kale-potatoes",
-     "name": "Sheet-Pan Sausage Meatballs with Kale and Potatoes",
-     "score": 20,
-     "shared": [
-      "potatoes",
-      "kale"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "prosciutto-wrapped-chicken-and-scalloped-potatoes-one-pan",
-     "name": "Prosciutto Wrapped Chicken and Scalloped Potatoes (One Pan!)",
-     "score": 0.768,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "loaded-chicken-and-potato-casserole",
-     "name": "Loaded Chicken and Potato Casserole",
-     "score": 0.7577,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-sweet-potatoes",
-     "name": "Slow Cooker Buffalo Chicken Sweet Potatoes",
-     "score": 0.7574,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-italian-chicken-with-potatoes",
-     "name": "Baked Italian Chicken with Potatoes",
-     "score": 0.7533,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "panang-chicken-curry",
-     "name": "Panang Chicken Curry",
-     "score": 0.7523,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 2,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Harvest chicken-sweet potato skillet with balsamic, kale, cranberries and goat cheese; distinct method and flavour from live sheet-pan-chicken-sweet-potato-brussels (different veg, roasted vs skillet, no goat-cheese/balsamic), verified band.",
+   "ruled_at": "2026-08-24T12:09:55"
   },
   {
    "slug": "curry-roasted-carrots",
@@ -9520,7 +9013,6 @@
    "url": "https://www.recipetineats.com/braised-beef-short-ribs-in-red-wine-sauce/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:06:52",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "beef",
     "method": "braised",
@@ -9535,133 +9027,10 @@
     "reason": ""
    },
    "servings": 5,
-   "ingredients_verbatim": [
-    "5 - 6 beef short ribs (, 300-400g/10-14oz each (Note 1))",
-    "1.5 tsp each salt and pepper",
-    "2 tbsp olive oil",
-    "3 garlic cloves (, crushed)",
-    "1 large onion (, chopped (brown, yellow or white))",
-    "2 celery ribs (, chopped)",
-    "2 carrots (, chopped)",
-    "2 tbsp tomato paste",
-    "2 cups (500ml) dry red wine ((Note 2))",
-    "2 cups (500ml) beef stock/broth, low sodium",
-    "2 sprigs thyme ((optional))",
-    "2 bay leaves"
-   ],
-   "neighbours": [
-    {
-     "slug": "beef-honey-black-pepper-sauce-bowls",
-     "name": "Chinese Beef with Honey Black Pepper Sauce",
-     "score": 20,
-     "shared": [
-      "beef",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "youvarlakia-avgolemono-greek-meatball-bowls",
-     "name": "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-japchae-noodle-bowls",
-     "name": "Korean Beef Japchae Noodle Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "braised-beef-short-ribs-red-wine-sauce-3-jpg",
-     "name": "Braised Beef Short Ribs Red Wine Sauce_3.Jpg",
-     "score": 0.8973,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-back-ribs",
-     "name": "Beef Back Ribs",
-     "score": 0.7862,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-4-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_4.Jpg",
-     "score": 0.7765,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-3-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_3.Jpg",
-     "score": 0.7764,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-2-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_2.Jpg",
-     "score": 0.7763,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|any|wine",
-     "slug": "slow-cooker-red-wine-beef-cheeks",
-     "name": "Slow Cooker Red Wine Beef Cheeks",
-     "protein": "beef",
-     "method": "any",
-     "verdict": "rejected-dupe",
-     "reason": "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 5,
-   "status": "available",
+   "status": "ruled:excluded",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "rib cut: standing exclusion (Brad 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling",
+   "ruled_at": "2026-08-24T13:36:23"
   },
   {
    "slug": "garlic-lovers-roast-beef",
@@ -12790,7 +12159,6 @@
    "url": "https://www.spendwithpennies.com/mushroom-pork-chops/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:07:12",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "bake",
@@ -12805,123 +12173,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "2 pounds pork steaks",
-    "salt and black pepper (to taste)",
-    "⅔ cup Panko bread crumbs",
-    "⅔ cup seasoned bread crumbs",
-    "2 tablespoons chopped fresh parsley (divided)",
-    "1 teaspoon garlic powder",
-    "2 eggs (beaten)",
-    "1 tablespoon olive oil (or as needed)",
-    "8 ounces mushrooms (white or cremini, sliced ½-inch thick)",
-    "21 ounces condensed cream of mushroom soup (2 x 10.5 ounce cans)"
-   ],
-   "neighbours": [
-    {
-     "slug": "creamy-mushroom-pork-chops-over-mashed-potatoes",
-     "name": "Creamy Mushroom Pork Chops over Mashed Potatoes",
-     "score": 30,
-     "shared": [
-      "mushroom",
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "southern-smothered-pork-chops-and-rice",
-     "name": "Southern Smothered Pork Chops and Rice",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-chops-scalloped-potatoes-casserole",
-     "name": "Pork Chops and Scalloped Potatoes Casserole",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "panseared-pork-chops-with-cajun-dirty-rice",
-     "name": "Pan-Seared Pork Chops with Cajun Dirty Rice",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "countryfried-pork-chops-with-bacon-gravy",
-     "name": "Country-Fried Pork Chops with Bacon Gravy",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-mushroom-pork-chops-over-mashed-potatoes",
-     "name": "Creamy Mushroom Pork Chops over Mashed Potatoes",
-     "score": 0.9036,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "baked-pork-chops",
-     "name": "Baked Pork Chops",
-     "score": 0.8646,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "ranch-pork-chops",
-     "name": "Ranch Pork Chops",
-     "score": 0.8587,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "air-fryer-stuffed-mushrooms",
-     "name": "Air Fryer Stuffed Mushrooms",
-     "score": 0.8493,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "crock-pot-pork-chops",
-     "name": "Crock Pot Pork Chops",
-     "score": 0.8474,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 6,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Same creamy-mushroom pork chop dinner as live creamy-mushroom-pork-chops-over-mashed-potatoes (word-overlap 30, bge 0.90) — pork + bake + cream-of-mushroom sauce all match; breaded-vs-mashed serving is not a distinct plate.",
+   "ruled_at": "2026-08-24T12:13:19"
   },
   {
    "slug": "lemon-garlic-roasted-chicken",
@@ -14574,7 +13829,6 @@
    "url": "https://www.recipetineats.com/irish-beef-and-guinness-stew/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:07:29",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "beef",
     "method": "stew",
@@ -14589,139 +13843,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "2 tbsp olive oil",
-    "2.5 lb / 1.25 kg beef chuck (, boneless short rib or any other slow cooking beef (no bone))",
-    "3/4 tsp each salt and black pepper",
-    "3 garlic cloves (, minced)",
-    "2 onions (, chopped (brown, white or yellow))",
-    "6 oz / 180g bacon (, speck or pancetta, diced)",
-    "3 tbsp flour ((all purpose/plain, Note 3 for GF))",
-    "440ml / 14.9 oz Guinness Beer ((Note 1))",
-    "4 tbsp tomato paste",
-    "3 cups (750 ml) chicken stock/broth ((or beef broth - Note 4))",
-    "3 carrots (, peeled and cut into 1.25 cm / 1/2\" thick pieces)",
-    "2 large celery stalks (, cut into 2cm / 1\" pieces)",
-    "2 bay leaves",
-    "3 sprigs thyme ((or sub with 1 tsp dried thyme leaves))"
-   ],
-   "neighbours": [
-    {
-     "slug": "irish-beef-and-guinness-stew",
-     "name": "Irish Beef and Guinness Stew",
-     "score": 30,
-     "shared": [
-      "beef",
-      "guinness",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "picadinho-de-carne-brazilian-beef-stew",
-     "name": "Picadinho de Carne (Brazilian Beef and Vegetable Stew)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ghanaian-shoko-beef-spinach-stew",
-     "name": "Ghanaian Shoko (Beef and Spinach Stew)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "carne-guisada-beef-potato-stew",
-     "name": "Carne Guisada (Tex-Mex Beef and Potato Stew)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "nigerian-beef-stew-rice-bowls",
-     "name": "Nigerian Beef Stew over Rice",
-     "score": 20,
-     "shared": [
-      "beef",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "irish-beef-and-guinness-stew",
-     "name": "Irish Beef and Guinness Stew",
-     "score": 0.9386,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-stew",
-     "name": "Pork Stew",
-     "score": 0.8713,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "guinness-beef-stew-ingredients-jpg",
-     "name": "Guinness Beef Stew Ingredients.Jpg",
-     "score": 0.8495,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "irish-beef-guinness-stew-5-jpg",
-     "name": "Irish Beef Guinness Stew_5.Jpg",
-     "score": 0.832,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.8309,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|stew|plain",
-     "slug": "jamaican-brown-stew-beef",
-     "name": "Jamaican Brown Stew Beef",
-     "protein": "beef",
-     "method": "stew",
-     "verdict": "rejected-unreadable",
-     "reason": "Source URL 404s; no matching recipe found on thespruceeats.com via site search or external search",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 5,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Same dish as live irish-beef-and-guinness-stew (same RecipeTinEats source; word-overlap 30, bge 0.94) - beef chuck, bacon, Guinness, root veg stew.",
+   "ruled_at": "2026-08-24T12:10:02"
   },
   {
    "slug": "peanut-braised-chicken-breasts",
@@ -14752,7 +13877,6 @@
    "url": "https://thecozycook.com/ina-gartens-roast-chicken/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:07:30",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -14767,158 +13891,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "6 lb. whole chicken",
-    "Salt/Pepper",
-    "1 large bunch thyme (plus 20 sprigs)",
-    "1 head garlic (cut in half crosswise)",
-    "1 lemon (halved)",
-    "2 Tablespoons butter (melted)",
-    "1 large yellow onion (sliced into large chunks)",
-    "4 whole carrots (sliced into 4-inch chunks)",
-    "1 bulb of fennel (tops removed, cut into wedges)",
-    "2-3 Tablespoons Olive oil",
-    "2/3 cup chicken broth",
-    "3 tablespoons butter",
-    "3 tablespoons flour"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "roast-chicken",
-     "name": "Roast Chicken",
-     "score": 0.893,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "lemon-roasted-chicken",
-     "name": "Lemon Roasted Chicken",
-     "score": 0.848,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-chicken",
-     "name": "Instant Pot Chicken",
-     "score": 0.827,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-fried-rice-skillet",
-     "name": "Chicken Fried Rice",
-     "score": 0.8228,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-roast-recipe",
-     "name": "Pork Roast Recipe",
-     "score": 0.8147,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 3,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "No whole roast chicken exists live (the 6 live matches are generic 'chicken' word-overlap only; the roast-chicken/lemon-roasted-chicken twins are unruled backlog, not accepted); a classic whole-bird roast with root veg widens the catalog away from its slow-cooker-bowl skew, band verified 641/8/54, batch-scalable at 8 servings.",
+   "ruled_at": "2026-08-24T12:13:12"
   },
   {
    "slug": "avocado-egg-bake-baked-eggs-in-avocado",
@@ -15373,7 +14349,6 @@
    "url": "https://www.wellplated.com/pork-roast/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:07:36",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "bake",
@@ -15388,119 +14363,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 3- to 5-pound center cut boneless pork loin roast (NOT pork tenderloin)",
-    "2 teaspoons chopped fresh rosemary (plus 2 to 3 sprigs)",
-    "2 to 3 teaspoons kosher salt (use 2 for smaller cuts and 3 for larger cuts)",
-    "1 teaspoons ground cumin",
-    "½ teaspoon ground black pepper",
-    "¼ teaspoon ground cinnamon",
-    "2 large tart apples (cored, halved and cut into ½-inch slices, no need to peel)",
-    "1 large onion (halved and cut into ¼-inch slices)",
-    "6 garlic cloves (smashed and peeled)",
-    "1 cup reduced sodium chicken broth (divided)"
-   ],
-   "neighbours": [
-    {
-     "slug": "senfbraten-german-mustard-pork-roast",
-     "name": "Senfbraten (German Mustard-Gravy Pork Roast)",
-     "score": 20,
-     "shared": [
-      "pork",
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "dutch-oven-pork-loin-roast-gravy",
-     "name": "Dutch Oven Pork Loin Roast with Potatoes and Gravy",
-     "score": 20,
-     "shared": [
-      "pork",
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-cuban-mojo-pork-bowls",
-     "name": "Slow Cooker Cuban Mojo Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-balsamic-pork-bowls",
-     "name": "Slow Cooker Balsamic Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "roast-turkey-recipe",
-     "name": "Roast Turkey Recipe",
-     "score": 0.911,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pot-roast-recipe",
-     "name": "Pot Roast Recipe",
-     "score": 0.9028,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "roast-chicken",
-     "name": "Roast Chicken",
-     "score": 0.8948,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.886,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-stew",
-     "name": "Pork Stew",
-     "score": 0.869,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 1,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Oven-roasted center-cut pork loin roast duplicates live dutch-oven-pork-loin-roast-gravy (same cut, protein, oven-roast method) and stacks on the slow-cooker-pork-loin-roast accepted earlier THIS run — a third pork loin roast; apples vs gravy is a garnish nuance, not a distinct plate.",
+   "ruled_at": "2026-08-24T12:13:17"
   },
   {
    "slug": "salsa-chicken-casserole",
@@ -18495,7 +17361,6 @@
    "url": "https://thecozycook.com/roast-turkey-recipe/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:07:54",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "turkey",
     "method": "bake",
@@ -18510,116 +17375,10 @@
     "reason": ""
    },
    "servings": 15,
-   "ingredients_verbatim": [
-    "1 turkey (10-15 lbs.)",
-    "1 stick unsalted butter (at room temp)",
-    "4 tablespoons olive oil",
-    "1 ½ cups chicken broth (reduced sodium or sodium free*)",
-    "1 tablespoon Butter",
-    "1/2 lemon",
-    "2 sprigs fresh rosemary",
-    "1 bunch fresh thyme",
-    "1 bulb garlic (cut in half crosswise)",
-    "¾ teaspoons EACH: Dred rosemary, oregano, thyme, sage",
-    "1/8 teaspoon EACH: Nutmeg, pepper"
-   ],
-   "neighbours": [
-    {
-     "slug": "turkey-kofta-rice-bowl-with-tahini-sauce",
-     "name": "Turkey Kofta Bowls with Tahini Sauce",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-keema-curry-with-peas",
-     "name": "Turkey Keema Curry with Peas",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-mac-and-cheese-bake",
-     "name": "Turkey Mac and Cheese Bake",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-lasagna-soup",
-     "name": "Turkey Lasagna Soup",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-florentine-rice-bake",
-     "name": "Turkey Florentine Rice Bake",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "herb-roast-turkey-recipe",
-     "name": "Herb Roast Turkey Recipe",
-     "score": 0.916,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-roast-recipe",
-     "name": "Pork Roast Recipe",
-     "score": 0.911,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "how-to-roast-a-brined-turkey",
-     "name": "How to Roast a Brined Turkey",
-     "score": 0.888,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "roast-chicken",
-     "name": "Roast Chicken",
-     "score": 0.8864,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "turkey-nasi-goreng",
-     "name": "Turkey Nasi Goreng",
-     "score": 0.8553,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 2,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Whole 10-15 lb roast turkey at 15 servings is a holiday-centerpiece roast, not a weeknight batch-scalable dinner format; also twins the backlog herb-roast-turkey/how-to-roast-a-brined-turkey plainly.",
+   "ruled_at": "2026-08-24T12:09:55"
   },
   {
    "slug": "beef-taquitos-baked-or-fried",
@@ -22710,7 +21469,6 @@
    "url": "https://www.recipetineats.com/slow-cooker-pork-loin-roast/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:08:30",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "braised",
@@ -22725,122 +21483,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "1.75 - 2.5 kg / 3.5 - 5lb pork loin OR shoulder/boston butt ( ,or scotch fillet, skinless (Note 1))",
-    "1.5 tbsp olive oil (, separated)",
-    "2 tsp EACH paprika, thyme",
-    "1 tsp EACH garlic powder, onion powder",
-    "1/2 tsp cayenne pepper (, optional)",
-    "1/2 tsp pepper",
-    "2 tsp salt",
-    "3/4 cup honey",
-    "125g / 1/2 cup butter (, unsalted)",
-    "5 cloves garlic (, minced)",
-    "1/4 cup cider vinegar",
-    "1/2 tsp salt and pepper (, each)",
-    "3 tsp cornflour/cornstarch mixed with splash of water"
-   ],
-   "neighbours": [
-    {
-     "slug": "dutch-oven-pork-loin-roast-gravy",
-     "name": "Dutch Oven Pork Loin Roast with Potatoes and Gravy",
-     "score": 30,
-     "shared": [
-      "pork",
-      "loin",
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "colombian-pork-loin-blackberry-sauce",
-     "name": "Colombian Pork Loin with Blackberry Sauce",
-     "score": 20,
-     "shared": [
-      "pork",
-      "loin"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "senfbraten-german-mustard-pork-roast",
-     "name": "Senfbraten (German Mustard-Gravy Pork Roast)",
-     "score": 20,
-     "shared": [
-      "pork",
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-brown-sugar-sesame-pork-bowls",
-     "name": "Slow Cooker Brown Sugar Sesame Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-root-beer-pulled-pork-bowls",
-     "name": "Slow Cooker Root Beer Pulled Pork Bowls",
-     "score": 0.8028,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-jerk-pork-bowls",
-     "name": "Slow Cooker Jerk Pork Bowls",
-     "score": 0.795,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-sweet-and-sour-pork-bowls",
-     "name": "Slow Cooker Sweet and Sour Pork Bowls",
-     "score": 0.7839,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-teriyaki-pork-bowls",
-     "name": "Slow Cooker Teriyaki Pork Bowls",
-     "score": 0.7775,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "balsamic-beef-pot-roast-bowls",
-     "name": "Slow Cooker Balsamic Beef Pot Roast Bowls",
-     "score": 0.775,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 5,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Honey-butter-cider-vinegar glazed slow-cooker pork roast; distinct sweet-tangy glaze from live dutch-oven gravy roast, mustard-gravy Senfbraten and blackberry pork loin, and unrelated to in-flight fennel-tomato braise.",
+   "ruled_at": "2026-08-24T12:09:56"
   },
   {
    "slug": "turkey-taco-spaghetti-squash-boats",
@@ -23451,7 +22097,6 @@
    "url": "https://www.skinnytaste.com/turmeric-braised-chicken-with-golden-beets-and-leeks/",
    "domain": "skinnytaste.com",
    "first_seen": "2026-08-23T17:08:38",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "chicken",
     "method": "braised",
@@ -23466,119 +22111,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "2 leeks (white and light green parts only)",
-    "1 bunch (4 golden beets with their greens, scrubbed)",
-    "2 garlic cloves (minced)",
-    "2 teaspoons ground turmeric (divided)",
-    "1 teaspoon ground ginger",
-    "1-1/2 teaspoons kosher salt",
-    "1/4 cup freshly squeezed lemon juice",
-    "2 tbsp olive oil",
-    "4 skinless chicken drumsticks (on the bone)",
-    "4 skinless chicken thighs (on the bone)",
-    "1/2 cup white wine (swap for chicken broth for whole30/paleo)"
-   ],
-   "neighbours": [
-    {
-     "slug": "chicken-normandy-apple-cider",
-     "name": "Chicken Normandy (Apple Cider Braised Chicken)",
-     "score": 20,
-     "shared": [
-      "braised",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-braised-chicken-potatoes-dakdoritang",
-     "name": "Korean Braised Chicken and Potatoes (Dakdoritang)",
-     "score": 20,
-     "shared": [
-      "braised",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "andong-jjimdak-braised-chicken",
-     "name": "Andong Jjimdak (Korean Soy-Braised Chicken with Noodles)",
-     "score": 20,
-     "shared": [
-      "braised",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "braised-chicken-and-peaches",
-     "name": "Braised Chicken and Peaches",
-     "score": 0.8074,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "braised-chicken-thighs-with-mushrooms-and-leeks",
-     "name": "Braised Chicken Thighs with Mushrooms and Leeks",
-     "score": 0.7838,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "balsamic-chicken",
-     "name": "Balsamic Chicken",
-     "score": 0.7806,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "lemon-roasted-chicken",
-     "name": "Lemon Roasted Chicken",
-     "score": 0.7653,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "creamy-lemon-chicken",
-     "name": "Creamy Lemon Chicken",
-     "score": 0.7584,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 1,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Distinct turmeric/ginger/lemon/white-wine braise with golden beets and leeks; no live or backlog neighbour shares this flavour-vegetable profile, verified band 527cal/16.5c.",
+   "ruled_at": "2026-08-24T12:09:54"
   },
   {
    "slug": "chicken-bacon-ranch-pasta",
@@ -35500,7 +34036,6 @@
    "url": "https://www.wellplated.com/beef-back-ribs/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:09:54",
-   "last_verified": "2026-08-23T17:43:47",
    "signature": {
     "protein": "beef",
     "method": "bake",
@@ -35515,128 +34050,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "3-4 pounds beef back ribs* (1 rack)",
-    "1 ½ tablespoons smoked paprika",
-    "1 teaspoon cayenne (or less, to taste)",
-    "1 teaspoon garlic powder",
-    "1 ½ teaspoons onion powder",
-    "2 teaspoons kosher salt",
-    "1 cup BBQ sauce"
-   ],
-   "neighbours": [
-    {
-     "slug": "korean-beef-japchae-noodle-bowls",
-     "name": "Korean Beef Japchae Noodle Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kerala-beef-ularthiyathu-rice-bowls",
-     "name": "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-burritos",
-     "name": "Beef Burritos",
-     "score": 0.8615,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-and-noodles",
-     "name": "Beef and Noodles",
-     "score": 0.8416,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-stew-recipe",
-     "name": "Beef Stew Recipe",
-     "score": 0.8387,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.8368,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-chili-mac",
-     "name": "Beef Chili Mac",
-     "score": 0.8329,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|bake|plain",
-     "slug": "swedish-meatballs",
-     "name": "Swedish Meatballs",
-     "protein": "beef",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Same Swedish-gravy meatball dinner as live swedish-meatball-potato-bowls.",
-     "dupe_of": [
-      "swedish-meatball-potato-bowls"
-     ],
-     "run": "hunt-2026-08-23-v3-phase1-mini",
-     "by": "decider",
-     "at": "2026-08-23T18:20:21"
-    }
-   ],
-   "saturation_pressure": 2,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "BBQ-rubbed baked beef back ribs; no dupe in catalog (neighbours are Korean/Indian beef bowls and stews), fills a bare oven-BBQ-rib slot, verified band.",
+   "ruled_at": "2026-08-24T12:09:59"
   },
   {
    "slug": "fragrant-coconut-pot-roasted-chicken-1-150x150-jpg",
@@ -37961,7 +36378,6 @@
    "url": "https://www.spendwithpennies.com/chicken-burritos/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:10:10",
-   "last_verified": "2026-08-23T17:43:47",
    "signature": {
     "protein": "chicken",
     "method": "casserole",
@@ -37976,136 +36392,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "6 large flour tortillas (12-inch)",
-    "1 (16 ounce) jar salsa",
-    "2 cups shredded Monterey jack cheese (divided)",
-    "1 small rotisserie chicken",
-    "2 (8 ounce each) can mild diced green chilies",
-    "1 (24 ounce) can fire-roasted diced tomatoes (or canned tomatoes with green chiles)",
-    "1 chipotle pepper in adobo sauce (seeded and minced)",
-    "1 tablespoon chili powder",
-    "2 teaspoons cumin",
-    "1 teaspoon red pepper flakes",
-    "½ teaspoon kosher salt",
-    "1 teaspoon dried oregano"
-   ],
-   "neighbours": [
-    {
-     "slug": "chicken-bean-burrito",
-     "name": "Chicken and Bean Burrito",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "burrito"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-refried-bean-burrito",
-     "name": "Chicken and Refried Bean Burrito",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "burrito"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-bacon-ranch-burrito",
-     "name": "Chicken Bacon Ranch Burrito",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "burrito"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-al-pastor-burrito",
-     "name": "Chicken Al Pastor Burrito",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "burrito"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jerk-chicken-mango-burrito",
-     "name": "Jerk Chicken Burrito with Mango Salsa",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "burrito"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "bbq-chicken-burrito",
-     "name": "BBQ Chicken Burrito",
-     "score": 0.9586,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ranch-chicken-burrito",
-     "name": "Ranch Chicken Burrito",
-     "score": 0.9494,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "buffalo-chicken-burrito",
-     "name": "Buffalo Chicken Burrito",
-     "score": 0.9441,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-bean-burrito",
-     "name": "Chicken and Bean Burrito",
-     "score": 0.9372,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-shawarma-burrito",
-     "name": "Chicken Shawarma Burrito",
-     "score": 0.9292,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|casserole|plain",
-     "slug": "buffalo-chicken-cauliflower-casserole",
-     "name": "Buffalo Chicken Cauliflower Casserole",
-     "protein": "chicken",
-     "method": "casserole",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: chicken+cauliflower+creamy-cheese-bacon bake, only sauce differs (buffalo vs ranch)",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 4,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Generic salsa/green-chile rotisserie-chicken burrito with no distinguishing hook the catalog lacks; sits inside a saturated chicken-burrito cluster (bge 0.94-0.96 to bbq/ranch/buffalo/bean chicken burritos).",
+   "ruled_at": "2026-08-24T12:10:00"
   },
   {
    "slug": "blt-chopped-salad",
@@ -51336,7 +49626,6 @@
    "url": "https://www.recipetineats.com/tachyon/2019/02/Slow-Cooked-Braised-Beef-Short-Ribs_3.jpg?resize=150%2C150",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:11:52",
-   "last_verified": "2026-08-23T17:11:52",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -51351,103 +49640,10 @@
     "reason": "no JSON-LD Recipe block on the page"
    },
    "servings": null,
-   "ingredients_verbatim": [],
-   "neighbours": [
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "lebanese-hashweh",
-     "name": "Lebanese Hashweh (Spiced Beef and Rice)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-2-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_2.Jpg",
-     "score": 0.9606,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-4-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_4.Jpg",
-     "score": 0.9559,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "braised-beef-short-ribs-red-wine-sauce-3-jpg",
-     "name": "Braised Beef Short Ribs Red Wine Sauce_3.Jpg",
-     "score": 0.8922,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-pork-chops-3-jpg",
-     "name": "Baked Pork Chops_3.Jpg",
-     "score": 0.8112,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-roasted-crispy-pork-belly-0-jpg",
-     "name": "Slow Roasted Crispy Pork Belly_0.Jpg",
-     "score": 0.8111,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
-   "entered_by": "crawl"
+   "status": "ruled:excluded",
+   "entered_by": "crawl",
+   "ruled_reason": "rib cut: standing exclusion (Brad 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling",
+   "ruled_at": "2026-08-24T13:36:23"
   },
   {
    "slug": "honey-balsamic-grilled-chicken-and-vegetables",
@@ -65186,7 +63382,6 @@
    "url": "https://www.spendwithpennies.com/how-to-cook-the-perfect-steak/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:16:31",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "beef",
     "method": "skillet",
@@ -65201,140 +63396,10 @@
     "reason": ""
    },
    "servings": 2,
-   "ingredients_verbatim": [
-    "2 Ribeye Steaks (1-inch thick)",
-    "salt and pepper to taste (or steak spice)",
-    "1 stick salted butter (½ cup, softened)",
-    "1 ½ teaspoons fresh lemon juice",
-    "1 clove garlic (minced)",
-    "3 tablespoons fresh herbs (chopped)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-steak-and-onions-rice",
-     "name": "Slow Cooker Steak and Onions over Rice",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-swiss-steak-rice",
-     "name": "Slow Cooker Swiss Steak with Rice",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "steak-fajita-rice-bowls",
-     "name": "Steak Fajita Rice Bowls",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "salisbury-steak-potato-bowls",
-     "name": "Salisbury Steak and Potato Bowls",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chipotle-steak-burrito",
-     "name": "Chipotle-Style Steak Burrito",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.8638,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-stew-recipe",
-     "name": "Beef Stew Recipe",
-     "score": 0.8498,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-stew",
-     "name": "Pork Stew",
-     "score": 0.8329,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cube-steak-recipe",
-     "name": "Cube Steak Recipe",
-     "score": 0.8326,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-beef-stew",
-     "name": "Instant Pot Beef Stew",
-     "score": 0.826,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|skillet|plain",
-     "slug": "low-carb-cheesy-beef-broccoli-skillet",
-     "name": "Low Carb Cheesy Beef Broccoli Skillet",
-     "protein": "beef",
-     "method": "skillet",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "beef|skillet|plain",
-     "slug": "low-carb-unstuffed-cabbage-beef-skillet",
-     "name": "Low Carb Unstuffed Cabbage Beef Skillet",
-     "protein": "beef",
-     "method": "skillet",
-     "verdict": "rejected-dupe",
-     "reason": "Dupe of catalog unstuffed-cabbage-roll-bowls: same ground-beef + cabbage + tomato deconstructed cabbage-roll skillet; dropping rice + adding cheddar-jack are formulation tweaks. Also pool-dupe of beef-unstuffed-cabbage-skillet.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "A technique post for cooking 2 ribeye steaks with herb butter, not a composed batch-scalable dinner; ribeye at 2 servings is cost-implausible for a thrifty meal-prep catalog.",
+   "ruled_at": "2026-08-24T12:13:20"
   },
   {
    "slug": "stuffed-spaghetti-squash",
@@ -69964,7 +68029,6 @@
    "url": "https://www.wellplated.com/french-onion-chicken/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:17:09",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -69979,160 +68043,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 jumbo yellow onion (thinly sliced (about 12 ounces or 3 1/2 cups))",
-    "8 ounces good-quality sourdough bread (whole grain if possible, cut into 1 1/2-inch cubes (about 3 1/2 heaped cups))",
-    "8 cloves garlic (peeled and left whole)",
-    "2 tablespoons unsalted butter",
-    "2 tablespoons extra-virgin olive oil",
-    "1 tablespoon Dijon mustard",
-    "2 teaspoons kosher salt (divided)",
-    "2 1/4 pounds bone-in, skin-on chicken breasts",
-    "1/2 teaspoon ground black pepper",
-    "1 1/2 tablespoons chopped fresh thyme"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-french-onion-chicken-bowls",
-     "name": "Slow Cooker French Onion Chicken Bowls",
-     "score": 30,
-     "shared": [
-      "french",
-      "onion",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "smothered-chicken-onion-gravy",
-     "name": "Smothered Chicken Thighs with Onion Gravy",
-     "score": 20,
-     "shared": [
-      "onion",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "senegalese-chicken-yassa",
-     "name": "Senegalese Chicken Yassa (Lemon Onion Chicken)",
-     "score": 20,
-     "shared": [
-      "onion",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "french-onion-pot-roast-bowls",
-     "name": "Slow Cooker French Onion Pot Roast Bowls",
-     "score": 20,
-     "shared": [
-      "french",
-      "onion"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "french-onion-pork-chops",
-     "name": "French Onion Pork Chops",
-     "score": 0.896,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooker-french-onion-chicken-bowls",
-     "name": "Slow Cooker French Onion Chicken Bowls",
-     "score": 0.8719,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "greek-chicken",
-     "name": "Greek Chicken",
-     "score": 0.8568,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-cordon-bleu",
-     "name": "Chicken Cordon Bleu",
-     "score": 0.8503,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-florentine",
-     "name": "Chicken Florentine",
-     "score": 0.8396,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 3,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Bone-in skin-on chicken breasts baked over sourdough cubes with caramelized onion is a distinct plate/format from slow-cooker-french-onion-chicken-bowls (shredded chicken over rice) — shares protein and french-onion flavor but differs on method and starch (2 of 4 axes), a genuine baked take the catalog does not yet hold.",
+   "ruled_at": "2026-08-24T12:13:13"
   },
   {
    "slug": "pulled-pork-tacos-1-landscape-jpg",
@@ -79695,7 +77609,6 @@
    "url": "https://www.recipetineats.com/uploads/2019/02/Braised-Beef-Short-Ribs-Red-Wine-Sauce_3.jpg",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:18:30",
-   "last_verified": "2026-08-23T17:18:30",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -79710,145 +77623,10 @@
     "reason": "no JSON-LD Recipe block on the page"
    },
    "servings": null,
-   "ingredients_verbatim": [],
-   "neighbours": [
-    {
-     "slug": "youvarlakia-avgolemono-greek-meatball-bowls",
-     "name": "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-honey-black-pepper-sauce-bowls",
-     "name": "Chinese Beef with Honey Black Pepper Sauce",
-     "score": 20,
-     "shared": [
-      "beef",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "machaca-beef-burrito",
-     "name": "Machaca Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "loobia-polo-persian-beef-green-bean-rice",
-     "name": "Loobia Polo (Persian Beef and Green Bean Rice)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "loaded-beef-taco-skillet-bowls",
-     "name": "Loaded Beef Taco Skillet Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "braised-beef-short-ribs-in-red-wine-sauce",
-     "name": "Braised Beef Short Ribs in Red Wine Sauce",
-     "score": 0.8973,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-3-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_3.Jpg",
-     "score": 0.8922,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-4-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_4.Jpg",
-     "score": 0.8509,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-2-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_2.Jpg",
-     "score": 0.8503,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "braised-red-cabbage",
-     "name": "Braised Red Cabbage",
-     "score": 0.8048,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|any|wine",
-     "slug": "chicken-chasseur",
-     "name": "Chicken Chasseur",
-     "protein": "chicken",
-     "method": "any",
-     "verdict": "rejected-not-carried",
-     "reason": "not carried in Omaha: fresh tarragon",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|braised|wine",
-     "slug": "coq-au-vin-braised-chicken",
-     "name": "Coq Au Vin Braised Chicken",
-     "protein": "chicken",
-     "method": "braised",
-     "verdict": "rejected-dupe",
-     "reason": "Catalog dup of coq-au-vin: same chicken-thigh + bacon + mushroom + carrot red-wine braise, near-identical name.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "beef|any|wine",
-     "slug": "slow-cooker-red-wine-beef-cheeks",
-     "name": "Slow Cooker Red Wine Beef Cheeks",
-     "protein": "beef",
-     "method": "any",
-     "verdict": "rejected-dupe",
-     "reason": "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 0,
-   "status": "available",
-   "entered_by": "crawl"
+   "status": "ruled:excluded",
+   "entered_by": "crawl",
+   "ruled_reason": "rib cut: standing exclusion (Brad 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling",
+   "ruled_at": "2026-08-24T13:36:23"
   },
   {
    "slug": "fried-chicken-wings-chinese-style",
@@ -80094,7 +77872,6 @@
    "url": "https://www.recipetineats.com/uploads/2019/02/Slow-Cooked-Braised-Beef-Short-Ribs_2.jpg",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:18:33",
-   "last_verified": "2026-08-23T17:18:33",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -80109,103 +77886,10 @@
     "reason": "no JSON-LD Recipe block on the page"
    },
    "servings": null,
-   "ingredients_verbatim": [],
-   "neighbours": [
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "lebanese-hashweh",
-     "name": "Lebanese Hashweh (Spiced Beef and Rice)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-3-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_3.Jpg",
-     "score": 0.9606,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-4-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_4.Jpg",
-     "score": 0.9547,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "braised-beef-short-ribs-red-wine-sauce-3-jpg",
-     "name": "Braised Beef Short Ribs Red Wine Sauce_3.Jpg",
-     "score": 0.8503,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooker-honey-garlic-pork-roast-2-jpg",
-     "name": "Slow Cooker Honey Garlic Pork Roast_2.Jpg",
-     "score": 0.8076,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-roasted-crispy-pork-belly-2-copy-jpg",
-     "name": "Slow Roasted Crispy Pork Belly_2 Copy.Jpg",
-     "score": 0.8038,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
-   "entered_by": "crawl"
+   "status": "ruled:excluded",
+   "entered_by": "crawl",
+   "ruled_reason": "rib cut: standing exclusion (Brad 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling",
+   "ruled_at": "2026-08-24T13:36:23"
   },
   {
    "slug": "garlic-parmesan-chicken-pasta",
@@ -80646,7 +78330,6 @@
    "url": "https://www.recipetineats.com/uploads/2019/02/Slow-Cooked-Braised-Beef-Short-Ribs_4.jpg",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:18:39",
-   "last_verified": "2026-08-23T17:18:39",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -80661,103 +78344,10 @@
     "reason": "no JSON-LD Recipe block on the page"
    },
    "servings": null,
-   "ingredients_verbatim": [],
-   "neighbours": [
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "lebanese-hashweh",
-     "name": "Lebanese Hashweh (Spiced Beef and Rice)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-3-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_3.Jpg",
-     "score": 0.9559,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-cooked-braised-beef-short-ribs-2-jpg",
-     "name": "Slow Cooked Braised Beef Short Ribs_2.Jpg",
-     "score": 0.9547,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "braised-beef-short-ribs-red-wine-sauce-3-jpg",
-     "name": "Braised Beef Short Ribs Red Wine Sauce_3.Jpg",
-     "score": 0.8509,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-pork-chops-4-jpg",
-     "name": "Baked Pork Chops_4.Jpg",
-     "score": 0.8157,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "slow-roasted-crispy-pork-belly-0-jpg",
-     "name": "Slow Roasted Crispy Pork Belly_0.Jpg",
-     "score": 0.8001,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
-   "entered_by": "crawl"
+   "status": "ruled:excluded",
+   "entered_by": "crawl",
+   "ruled_reason": "rib cut: standing exclusion (Brad 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling",
+   "ruled_at": "2026-08-24T13:36:23"
   },
   {
    "slug": "roasted-kohlrabi",
@@ -81448,7 +79038,6 @@
    "url": "https://www.isabeleats.com/authentic-birria/",
    "domain": "isabeleats.com",
    "first_seen": "2026-08-23T17:18:43",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "beef",
     "method": "stew",
@@ -81463,118 +79052,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "4 to 5 pounds chuck roast, (cut into large 4-inch chunks)",
-    "½ tablespoon kosher salt",
-    "½ tablespoon black pepper",
-    "1 ½ tablespoon olive oil",
-    "12 guajillo chiles, (rinsed, stemmed, and seeded (about 2.5 oz))",
-    "5 ancho chiles, (rinsed, stemmed, and seeded (about 2 oz))",
-    "5 árbol chiles, (rinsed and stemmed (about 0.1 oz))",
-    "2 large Roma tomatoes",
-    "½ medium yellow onion",
-    "1 4-inch Mexican cinnamon stick*",
-    "3 bay leaves",
-    "½ teaspoon whole black peppercorns",
-    "water, (as needed)",
-    "2 cups beef broth",
-    "¼ cup distilled white vinegar",
-    "5 cloves garlic",
-    "1 teaspoon ground cumin",
-    "1 teaspoon dried Mexican oregano*",
-    "½ teaspoon ground cloves"
-   ],
-   "neighbours": [
-    {
-     "slug": "beef-birria-rice-bowls",
-     "name": "Beef Birria Rice Bowls",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-birria-burrito",
-     "name": "Beef Birria Burrito",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-pork-birria-bowls",
-     "name": "Slow Cooker Pork Birria Bowls",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-birria-burrito",
-     "name": "Beef Birria Burrito",
-     "score": 0.8616,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-birria-rice-bowls",
-     "name": "Beef Birria Rice Bowls",
-     "score": 0.8137,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-biryani",
-     "name": "Beef Biryani",
-     "score": 0.7919,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-burritos",
-     "name": "Beef Burritos",
-     "score": 0.7901,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "burrito-casserole",
-     "name": "Burrito Casserole",
-     "score": 0.7772,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|stew|plain",
-     "slug": "jamaican-brown-stew-beef",
-     "name": "Jamaican Brown Stew Beef",
-     "protein": "beef",
-     "method": "stew",
-     "verdict": "rejected-unreadable",
-     "reason": "Source URL 404s; no matching recipe found on thespruceeats.com via site search or external search",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 5,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Beef birria (chuck + guajillo/ancho/arbol chile braise) is the same core dinner already live as beef-birria-rice-bowls and beef-birria-burrito; region saturated, no new distinguishing plate.",
+   "ruled_at": "2026-08-24T12:10:01"
   },
   {
    "slug": "turkey-picadillo-stuffed-sweet-plantains",
@@ -83093,7 +80574,6 @@
    "url": "https://www.wellplated.com/jamaican-jerk-chicken/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:18:55",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -83108,162 +80588,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "5 to 6 pounds bone-in, skin on chicken pieces (or 3 pounds boneless, skinless chicken breasts or thighs)",
-    "4 green onions",
-    "6 cloves garlic (roughly chopped)",
-    "2 jalapeño peppers (seeded and cut into a few big pieces)",
-    "1/4 cup freshly squeezed lime juice",
-    "3 tablespoons extra virgin olive oil",
-    "1 tablespoon brown sugar",
-    "2 teaspoons dried thyme",
-    "2 teaspoons ground nutmeg",
-    "2 teaspoons ground cinnamon",
-    "2 teaspoons ground allspice",
-    "2 teaspoons ground ginger",
-    "2 teaspoons kosher salt",
-    "1 1/2 teaspoons ground black pepper"
-   ],
-   "neighbours": [
-    {
-     "slug": "one-pot-jerk-chicken-and-rice",
-     "name": "One Pot Caribbean Jerk Chicken and Rice",
-     "score": 20,
-     "shared": [
-      "jerk",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jamaican-brown-stew-chicken",
-     "name": "Jamaican Brown Stew Chicken",
-     "score": 20,
-     "shared": [
-      "jamaican",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jerk-chicken-mango-burrito",
-     "name": "Jerk Chicken Burrito with Mango Salsa",
-     "score": 20,
-     "shared": [
-      "jerk",
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "jamaican-curry-chicken",
-     "name": "Jamaican Curry Chicken",
-     "score": 0.9294,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "jamaican-brown-stew-chicken",
-     "name": "Jamaican Brown Stew Chicken",
-     "score": 0.878,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "cajun-chicken",
-     "name": "Cajun Chicken",
-     "score": 0.8772,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "balsamic-chicken",
-     "name": "Balsamic Chicken",
-     "score": 0.8599,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "hawaiian-chicken",
-     "name": "Hawaiian Chicken",
-     "score": 0.8586,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 9,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Same jerk-chicken dinner identity as live one-pot-jerk-chicken-and-rice (jerk chicken is the plate, rice is the default side it drops); the caribbean/jerk chicken region is saturated (pressure 9) with jerk rice, jerk burrito and Jamaican brown stew already live.",
+   "ruled_at": "2026-08-24T12:13:16"
   },
   {
    "slug": "guinness-beef-stew-ingredients-jpg",
@@ -95538,7 +92866,6 @@
    "url": "https://www.isabeleats.com/carne-en-su-jugo/",
    "domain": "isabeleats.com",
    "first_seen": "2026-08-23T17:22:11",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "beef",
     "method": "braised",
@@ -95553,135 +92880,10 @@
     "reason": ""
    },
    "servings": 6,
-   "ingredients_verbatim": [
-    "12 ounces bacon, (chopped)",
-    "2 ½ pounds beef strip steak ((or top round steak, or top sirloin steak), sliced into bite-sized pieces)",
-    "3 teaspoons kosher salt, (divided)",
-    "6 tomatillos, (husked and rinsed)",
-    "3 serrano peppers, (stemmed and seeded)",
-    "1 cup packed cilantro, (chopped, divided, plus more for topping)",
-    "3 cloves garlic",
-    "½ teaspoon ground cumin",
-    "½ teaspoon ground black pepper",
-    "3 cups water",
-    "2 (15-ounce) cans pinto beans, (drained and rinsed)",
-    "Chopped white onion",
-    "Chopped cilantro",
-    "Thinly sliced radishes",
-    "Lime wedges"
-   ],
-   "neighbours": [
-    {
-     "slug": "carne-en-su-jugo-bowls",
-     "name": "Carne en su Jugo Bowls",
-     "score": 20,
-     "shared": [
-      "carne",
-      "jugo"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "picadinho-de-carne-brazilian-beef-stew",
-     "name": "Picadinho de Carne (Brazilian Beef and Vegetable Stew)",
-     "score": 10,
-     "shared": [
-      "carne"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "peruvian-tallarines-verdes-con-carne",
-     "name": "Peruvian Tallarines Verdes con Carne (Green Spaghetti with Beef)",
-     "score": 10,
-     "shared": [
-      "carne"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-carne-asada-rice-bowls",
-     "name": "Slow Cooker Carne Asada Rice Bowls",
-     "score": 10,
-     "shared": [
-      "carne"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "sopa-de-fideo-con-carne-molida",
-     "name": "Sopa de Fideo con Carne Molida (Mexican Beef and Noodle Skillet)",
-     "score": 10,
-     "shared": [
-      "carne"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "carne-en-su-jugo-bowls",
-     "name": "Carne en su Jugo Bowls",
-     "score": 0.8949,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-steak",
-     "name": "Pork Steak",
-     "score": 0.8142,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pork-stew",
-     "name": "Pork Stew",
-     "score": 0.8006,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "carne-con-papas",
-     "name": "Carne con Papas",
-     "score": 0.8002,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "jamaican-jerk-chicken",
-     "name": "Jamaican Jerk Chicken",
-     "score": 0.7891,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|braised|plain",
-     "slug": "sauerbraten-german-braised-beef",
-     "name": "Sauerbraten German Braised Beef",
-     "protein": "beef",
-     "method": "braised",
-     "verdict": "rejected-dupe",
-     "reason": "Catalog dupe of slow-cooker-sauerbraten-bowls: same German sweet-sour red-wine-vinegar/gingersnap braised beef chuck.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Same dinner as live carne-en-su-jugo-bowls: identical bacon + steak + tomatillo-serrano-cilantro braise with pinto beans (bge 0.89, name match).",
+   "ruled_at": "2026-08-24T12:09:57"
   },
   {
    "slug": "baked-beef-quasadillas-51224-jpg",
@@ -105514,7 +102716,6 @@
    "url": "https://www.recipetineats.com/chicken-cordon-bleu-easy-fancy/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:23:40",
-   "last_verified": "2026-08-23T17:43:49",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -105529,165 +102730,10 @@
     "reason": ""
    },
    "servings": 2,
-   "ingredients_verbatim": [
-    "Panko breadcrumbs - 1/2 cup for Super Easy or 1 cup for Quick Dredge",
-    "Oil spray",
-    "2 small chicken breasts, (around 6-7oz/180-210g each)",
-    "Salt and pepper",
-    "4 slices swiss cheese ((Note 1))",
-    "4 to 6 slices of ham, (about 2.5oz/75g (Note 2))",
-    "3 tbsp mayonnaise",
-    "1 1/2 tbsp Dijon mustard",
-    "1 egg",
-    "2 tsp plain flour",
-    "1 1/2 tbsp butter",
-    "1 1/2 tbsp flour",
-    "1 1/4 cups milk ((Note 3))",
-    "2 tbsp Dijon mustard",
-    "3 tbsp parmesan cheese, finely grated"
-   ],
-   "neighbours": [
-    {
-     "slug": "chicken-cordon-bleu-casserole",
-     "name": "Chicken Cordon Bleu Casserole",
-     "score": 30,
-     "shared": [
-      "chicken",
-      "cordon",
-      "bleu"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-cordon-bleu-casserole",
-     "name": "Turkey Cordon Bleu Casserole",
-     "score": 20,
-     "shared": [
-      "cordon",
-      "bleu"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-korma-rice-bowls",
-     "name": "Slow Cooker Chicken Korma Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chicken-cordon-bleu",
-     "name": "Chicken Cordon Bleu",
-     "score": 0.9432,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "chicken-cordon-bleu-casserole",
-     "name": "Chicken Cordon Bleu Casserole",
-     "score": 0.9098,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-cordon-bleu-casserole",
-     "name": "Turkey Cordon Bleu Casserole",
-     "score": 0.8362,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "easy-chinese-honey-sesame-chicken",
-     "name": "Easy Chinese Honey Sesame Chicken",
-     "score": 0.8113,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cajun-chicken",
-     "name": "Cajun Chicken",
-     "score": 0.8061,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 2,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Same chicken cordon bleu flavor identity (ham + swiss + dijon) as live chicken-cordon-bleu-casserole; catalog already carries both chicken and turkey cordon-bleu casseroles, so the cutlet format is a format variant of an already-saturated dinner (3 of 4 axes).",
+   "ruled_at": "2026-08-24T12:13:21"
   },
   {
    "slug": "caramelized-onion-red-pepper-and-zucchini-frittata",
@@ -115726,7 +112772,6 @@
    "url": "https://www.recipetineats.com/hawaiian-chicken-with-coconut-rice/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-23T17:25:04",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -115741,169 +112786,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1.5 kg / 3lb chicken drumsticks",
-    "2 tbsp olive oil",
-    "440 g / 15 oz can crushed pineapple in natural juice ((about 1.5 cups) (see notes))",
-    "1/2 cup tomato sauce or ketchup",
-    "1/2 cup light soy sauce ((see notes))",
-    "4 tbsp brown sugar",
-    "2 tbsp malt vinegar ((see notes))",
-    "1 tsp fresh ginger (, grated)",
-    "3 garlic cloves (, minced)",
-    "1 tbsp paprika powder",
-    "1 tbsp dried onion flakes",
-    "1/2 tbsp cumin powder",
-    "1/2 tsp chili powder ((or cayenne powder). Adjust to taste.)",
-    "Black pepper",
-    "1 cup long grain or medium grain rice (, uncooked)",
-    "1 cup coconut milk ((see notes))",
-    "1 cup water",
-    "1/2 tsp salt",
-    "3/4 tsp sugar",
-    "Lime wedges (, to serve)",
-    "Coriander/cilantro leaves (, for garnish on rice and chicken)",
-    "Toasted desiccated coconut (, for garnish on rice)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "cajun-chicken",
-     "name": "Cajun Chicken",
-     "score": 0.8864,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "hainanese-chicken-rice",
-     "name": "Hainanese Chicken Rice",
-     "score": 0.8843,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "peruvian-chicken",
-     "name": "Peruvian Chicken",
-     "score": 0.8825,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "greek-chicken",
-     "name": "Greek Chicken",
-     "score": 0.8647,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "peach-chicken",
-     "name": "Peach Chicken",
-     "score": 0.8629,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 4,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": [
-    "cold-plate"
-   ]
+   "ruled_reason": "Hawaiian pineapple-soy glazed baked drumsticks with coconut rice is a distinct Polynesian dinner; no neighbour shares its sauce family (bge-m3 twins are cajun/hainanese/peruvian/greek/peach chicken, all different flavour profiles), verified band fits (504 cal, 19.6g carbs), and it widens the catalog's cuisine spread.",
+   "ruled_at": "2026-08-24T12:13:38"
   },
   {
    "slug": "chocolate",
@@ -126779,7 +123665,6 @@
    "url": "https://thecozycook.com/stuffed-chicken-breast/",
    "domain": "thecozycook.com",
    "first_seen": "2026-08-23T17:26:45",
-   "last_verified": "2026-08-23T17:43:50",
    "signature": {
     "protein": "chicken",
     "method": "bake",
@@ -126794,159 +123679,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "4 boneless skinless chicken breasts",
-    "Salt and pepper (to taste)",
-    "½ teaspoon paprika",
-    "1 tablespoon olive oil",
-    "2 teaspoons olive oil",
-    "3 cups packed spinach (roughly chopped)",
-    "4 cloves garlic (minced)",
-    "1/3 cup sun-dried tomatoes (drained/chopped)",
-    "4 oz. cream cheese (softened)",
-    "1 cup shredded mozzarella (see notes)",
-    "1/3 cup Parmesan (grated)",
-    "½ teaspoon EACH: dried basil, dried oregano",
-    "¼ teaspoon onion powder",
-    "1 pinch red pepper flakes"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "smoked-chicken-breasts",
-     "name": "Smoked Chicken Breasts",
-     "score": 0.9027,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "pepperoni-stuffed-chicken",
-     "name": "Pepperoni Stuffed Chicken",
-     "score": 0.8823,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "beef-stuffed-shells",
-     "name": "Beef Stuffed Shells",
-     "score": 0.8641,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "butter-chicken",
-     "name": "Butter Chicken",
-     "score": 0.8634,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "cheese-stuffed-chicken-parmesan",
-     "name": "Cheese-Stuffed Chicken Parmesan",
-     "score": 0.8598,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|bake|plain",
-     "slug": "jalapeno-popper-chicken-cauliflower-bake",
-     "name": "Jalapeno Popper Chicken Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
-     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    },
-    {
-     "key": "chicken|bake|plain",
-     "slug": "spinach-artichoke-chicken-bake",
-     "name": "Spinach Artichoke Chicken Bake",
-     "protein": "chicken",
-     "method": "bake",
-     "verdict": "rejected-dupe",
-     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 5,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Tuscan cream-cheese/spinach/sun-dried-tomato stuffed baked breast; no live stuffed-tuscan-chicken surfaced and its cream sauce identity is distinct from the chicken-parm candidate in this batch; band verified 559/10/61.",
+   "ruled_at": "2026-08-24T12:13:14"
   },
   {
    "slug": "blueberry-crepes",
