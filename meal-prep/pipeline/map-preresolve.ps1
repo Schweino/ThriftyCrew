@@ -113,6 +113,7 @@ $runAssemble = [bool]$Assemble; $runNewBids = [bool]$NewBids
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = Split-Path -Parent $here                      # ...\meal-prep
 $repo = Split-Path -Parent $mp                        # ...\ThriftyCrew
+$script:repoRoot = $repo
 . (Join-Path $repo 'lib\guard-contract.ps1')
 
 $script:VOCAB_PS   = Join-Path $here 'ingredient-vocab.ps1'
@@ -755,6 +756,91 @@ $script:ASM_RULING_DECISIONS = @('mapped', 'mapped-null', 'mapped-optional', 'no
 $script:GARNISH_PHRASES = @('to garnish', 'for garnish', 'for garnishing', 'as garnish',
                             'as a garnish', 'to serve', 'for serving', 'for topping', 'to top')
 
+# ALTERNATIVES LINES (D5, Brad's ruling 2026-08-24). A source line that offers a CHOICE of foods -
+# "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice" - names no single food
+# and so has no single weight or price. 6b parked a recipe on exactly that line after map, registrar
+# and pricing had all been paid.
+#
+# THE RULING: price the alternatives, take the CHEAPEST, and disclose it - but ONLY alternatives that
+# resolve through a board id or label. An include-pattern substitution NEVER counts.
+#
+# WHY THAT GUARD IS NOT PAPERWORK, measured on this very line:
+#     brown and wild rice blend   include pattern   $0.4396/lb   <- that is WHITE rice
+#     brown rice                  board id/label    $0.88/lb     <- the only exact match
+#     quinoa                      search term       $0.1372/oz
+#     cauliflower rice            include pattern   $0.4396/lb   <- white rice again
+# Two of the four resolve to a different food entirely. Without the guard the "cheapest alternative"
+# is a substitution wearing the right name.
+#
+# AND UNITS ARE THE SECOND TRAP. quinoa's $0.1372 is per OUNCE - $2.20/lb, the dearest of the four -
+# so comparing the raw `cheapest` figures across alternatives ranks it FIRST. Anything comparing prices
+# here must normalise, and where it cannot it must refuse to rank rather than guess.
+$script:ALT_EXACT_ROADS = @('exact commodity id', 'commodity label', 'board id/label')
+
+function Split-AlternativeFoods([string]$Raw) {
+  <#
+    The candidate foods in an alternatives line, or an empty list when the line is not one.
+    Requires a comma-separated list with a trailing " or " - the shape a recipe writes a choice in.
+    A bare "salt or pepper" is NOT an alternatives line by this test, and that is deliberate: two foods
+    joined by `or` with no list punctuation is more often a phrase than a menu.
+  #>
+  if (-not $Raw) { return @() }
+  $s = ($Raw -replace '\s+', ' ').Trim()
+  if ($s -notmatch ',\s*or\s+') { return @() }
+  # a leading state word ("Prepared", "Cooked") applies to the whole list, not to one option
+  $lead = ''
+  if ($s -match '^(prepared|cooked|uncooked|dry)\s+(.*)$') { $lead = $Matches[1]; $s = $Matches[2] }
+  $parts = @()
+  foreach ($p in ($s -split ',\s*or\s+|,\s*|\s+or\s+')) {
+    $t = ([string]$p).Trim().TrimEnd('.')
+    if ($t) { $parts += $t }
+  }
+  if ($parts.Count -lt 2) { return @() }
+  return @($parts)
+}
+
+function Get-PerLbPrice($Result) {
+  # lb and oz are the only units the board uses for these foods, and 1 lb is 16 oz. Anything else is
+  # NOT normalised - it returns $null and the caller refuses to rank rather than comparing nonsense.
+  if ($null -eq $Result.cheapest) { return $null }
+  switch ([string]$Result.unit) {
+    'lb' { return [double]$Result.cheapest }
+    'oz' { return ([double]$Result.cheapest) * 16.0 }
+    default { return $null }
+  }
+}
+
+function Select-CheapestAlternative {
+  <#
+    Returns @{ term; commodity; per_lb; evidence } for the cheapest EXACTLY-MATCHED alternative, or
+    $null when none of them resolves exactly. Mechanical: one price-ingredient call, no model.
+  #>
+  param([string[]]$Foods, [string]$PriceScript = '')
+  if (-not $Foods -or $Foods.Count -lt 2) { return $null }
+  if (-not $PriceScript) { $PriceScript = Join-Path $script:repoRoot 'grocery\price-ingredient.ps1' }
+  if (-not (Test-Path $PriceScript)) { return $null }
+  # NO 2>&1 HERE. In PS 5.1 redirecting a native command's stderr wraps each line in an ErrorRecord,
+  # which lands non-JSON text in $raw and makes ConvertFrom-Json fail - measured while building this:
+  # every alternative came back "no exact match" while price-ingredient was answering correctly.
+  $raw = & powershell -NoProfile -ExecutionPolicy Bypass -File $PriceScript -Json @Foods
+  $doc = $null
+  try { $doc = (@($raw | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch { return $null }
+  if (-not $doc -or -not $doc.results) { return $null }
+  $best = $null
+  foreach ($r in @($doc.results)) {
+    if ([string]$r.tier -ne 'MAPPED') { continue }
+    if ($script:ALT_EXACT_ROADS -notcontains [string]$r.resolved_by) { continue }
+    $per = Get-PerLbPrice $r
+    if ($null -eq $per) { continue }
+    if ($null -eq $best -or $per -lt $best.per_lb) {
+      $best = @{ term = [string]$r.term; commodity = [string]$r.commodity; per_lb = $per
+                 evidence = ("cheapest of {0} stated alternatives that resolve exactly: '{1}' -> {2} at {3}/lb ({4})" -f `
+                             $Foods.Count, [string]$r.term, [string]$r.commodity, [Math]::Round($per, 4), [string]$r.resolved_by) }
+    }
+  }
+  return $best
+}
+
 function Test-IsGarnishLine([string]$Raw) {
   if (-not $Raw) { return $false }
   $s = $Raw.ToLower()
@@ -1033,6 +1119,31 @@ function New-MappedDecisionFile {
       # measure ("2 tablespoons chopped parsley, for garnish") gets grams from the engine and never
       # reaches here. So this can only ever fire where the recipe dies today, and it cannot change a
       # single line that currently works.
+      # D5: AN ALTERNATIVES LINE NAMES A CHOICE, SO CHOOSE - cheapest exact match, disclosed.
+      #
+      # SCOPE, STATED HONESTLY. This settles the line's IDENTITY, not its weight. The motivating line
+      # ("Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice") states no
+      # quantity at all - it is a serving base, the same shape as a garnish - so once the food is
+      # chosen there is still nothing to weigh, and the line becomes an optional note naming ONE food
+      # instead of a menu. That is strictly better for the shopper and it invents no number.
+      # An alternatives line that DOES state a measure is not handled here: it would need the qty
+      # engine re-run against the chosen food, which is a bigger change and is recorded as such.
+      $altFoods = @(Split-AlternativeFoods $raw)
+      if ($altFoods.Count -ge 2) {
+        $pick = Select-CheapestAlternative -Foods $altFoods
+        if ($pick) {
+          $ings.Add([pscustomobject]@{
+            source_raw = $raw; item = $pick.term; bid = $null; board = $null
+            grams = 0; buy = ''; optional = $true; decision = 'optional-note'
+            notes = ("serving base, no quantity stated by the source. " + $pick.evidence) }) | Out-Null
+          $paraphrased.Add(("'{0}' offers a CHOICE of foods and states no quantity; {1}" -f $raw, $pick.evidence)) | Out-Null
+          continue
+        }
+        # NONE of them resolved exactly. That is not a licence to guess - an include-pattern match is
+        # how 'cauliflower rice' prices as white rice - so the line falls through to the refusal below
+        # and the recipe parks, which is the honest outcome.
+        $paraphrased.Add(("'{0}' offers a CHOICE of foods but none of them resolves to a board id or label, so none was chosen" -f $raw)) | Out-Null
+      }
       if (Test-IsGarnishLine $raw) {
         $ings.Add([pscustomobject]@{
           source_raw = $raw; item = $(if ($item) { $item } else { $null }); bid = $null; board = $null
@@ -1544,12 +1655,71 @@ if ($runSelfTest) {
     lines = @([pscustomobject]@{ raw='n1'; buy='1 lb chicken breast'; notes='' },
               [pscustomobject]@{ raw='n2'; buy=''; notes='' }); rulings=@() }
   $tblG2 = New-Tbl $rowsG2 4
-  @($tblG2.rows)[1].raw = 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice'
-  @($payG2.lines)[1].raw = 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice'
+  # CHANGED 2026-08-24 when D5 landed: this line USED to be the rice-blend alternatives line, which D5
+  # now settles by choosing a food - so it stopped parking and this fixture went red. The fixture is
+  # about the never-a-silent-zero refusal surviving, so it needs a weightless line that is NEITHER a
+  # garnish NOR a menu. A plain food with no quantity is exactly that.
+  @($tblG2.rows)[1].raw = 'Prepared brown rice'
+  @($payG2.lines)[1].raw = 'Prepared brown rice'
   $resG2 = New-MappedDecisionFile $tblG2 $payG2 $stateRow $known 14
   T 'MUST FIRE  a weightless line that is NOT a garnish still parks - the never-a-silent-zero refusal is untouched' `
     ((@($resG2.findings) -join ' ') -match 'has no gram weight') `
     ("findings=" + (@($resG2.findings) -join '; '))
+
+  # ---- FIXTURE A1d. D5: AN ALTERNATIVES LINE NAMES A CHOICE, SO CHOOSE ---------------------------
+  # FROZEN FIXTURE (Brad's ruling 2026-08-24). 6b parked a recipe on
+  # "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice" after map, registrar
+  # AND pricing had been paid. The ruling: take the cheapest, but ONLY alternatives resolving through a
+  # board id or label - an include-pattern match is how `cauliflower rice` prices as WHITE RICE.
+  $altSplit = (@(Split-AlternativeFoods 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice')) -join '|'
+  T 'MUST FIRE  an alternatives line splits into its stated foods, with the leading state word stripped' `
+    ($altSplit -eq 'brown and wild rice blend|brown rice|quinoa|cauliflower rice') $altSplit
+  T 'CLEAN TWIN an ordinary line is not an alternatives line' `
+    ((@(Split-AlternativeFoods '2 cups brown rice')).Count -eq 0) 'split a plain line'
+  T 'CLEAN TWIN a bare "a or b" with no list punctuation is a phrase, not a menu' `
+    ((@(Split-AlternativeFoods 'salt or pepper')).Count -eq 0) 'split a bare or-phrase'
+  # THE UNIT TRAP, and it is the reason this ranks per POUND rather than on the raw figure. quinoa
+  # prices per OUNCE at 0.1372, which is 2.20/lb - the DEAREST of the four - yet a naive comparison
+  # ranks it first.
+  T 'MUST FIRE  prices are normalised to a common unit before ranking - an oz price is 16x its number' `
+    ((Get-PerLbPrice ([pscustomobject]@{ cheapest = 0.1372; unit = 'oz' })) -gt `
+     (Get-PerLbPrice ([pscustomobject]@{ cheapest = 0.88;   unit = 'lb' }))) `
+    'an ounce price outranked a pound price'
+  T 'MUST FIRE  a unit this cannot normalise returns NULL and is refused, never ranked on its number' `
+    ($null -eq (Get-PerLbPrice ([pscustomobject]@{ cheapest = 0.5; unit = 'ea' }))) 'ranked an each price'
+  # The exact-road guard, over a stubbed price result set: two include-pattern rows are CHEAPER and
+  # must both lose to the one board id/label row.
+  $altStub = Join-Path $env:TEMP ('altstub-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.ps1')
+  try {
+    @'
+param([switch]$Json, [Parameter(ValueFromRemainingArguments = $true)][string[]]$Name = @())
+$r = @(
+  [pscustomobject]@{ term='brown and wild rice blend'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.4396 }
+  [pscustomobject]@{ term='brown rice';                tier='MAPPED'; commodity='brown-rice'; resolved_by='board id/label'; unit='lb'; cheapest=0.88 }
+  [pscustomobject]@{ term='quinoa';                    tier='MAPPED'; commodity='quinoa-uncooked'; resolved_by="search term 'quinoa'"; unit='oz'; cheapest=0.1372 }
+  [pscustomobject]@{ term='cauliflower rice';          tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.4396 })
+[pscustomobject]@{ results = $r } | ConvertTo-Json -Depth 6
+'@ | Set-Content -Path $altStub -Encoding utf8
+    $pick = Select-CheapestAlternative -Foods @('brown and wild rice blend','brown rice','quinoa','cauliflower rice') -PriceScript $altStub
+    T 'MUST FIRE  the CHEAPEST EXACT match wins, and two cheaper include-pattern rows both lose - that is the guard that stops cauliflower rice pricing as white rice' `
+      ($null -ne $pick -and $pick.term -eq 'brown rice' -and $pick.commodity -eq 'brown-rice') `
+      ($(if ($pick) { $pick.term + ' / ' + $pick.commodity } else { 'nothing chosen' }))
+    T 'MUST FIRE  ...and the choice is DISCLOSED - the evidence names the food, the id and the road' `
+      ($null -ne $pick -and $pick.evidence -match 'brown rice' -and $pick.evidence -match 'board id/label') `
+      ($(if ($pick) { $pick.evidence } else { 'nothing chosen' }))
+  } finally { Remove-Item $altStub -Force -ErrorAction SilentlyContinue }
+  # AND WHEN NOTHING RESOLVES EXACTLY, NOTHING IS CHOSEN. Guessing here is the whole defect.
+  $altStub2 = Join-Path $env:TEMP ('altstub2-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.ps1')
+  try {
+    @'
+param([switch]$Json, [Parameter(ValueFromRemainingArguments = $true)][string[]]$Name = @())
+$r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by='include pattern /rice/'; unit='lb'; cheapest=0.10 },
+       [pscustomobject]@{ term='b'; tier='ABSENT'; commodity=$null; resolved_by='no commodity claims this term'; unit='lb'; cheapest=$null })
+[pscustomobject]@{ results = $r } | ConvertTo-Json -Depth 6
+'@ | Set-Content -Path $altStub2 -Encoding utf8
+    T 'MUST FIRE  no exact match means NO choice - the recipe parks rather than pricing a substitution' `
+      ($null -eq (Select-CheapestAlternative -Foods @('a','b') -PriceScript $altStub2)) 'chose a non-exact match'
+  } finally { Remove-Item $altStub2 -Force -ErrorAction SilentlyContinue }
 
   # ---- FIXTURE A2. THE DECISION VOCABULARY IS Get-LineClass's (pin P4). ---------------------------
   # Free-texting this field produced 21 distinct values across 550 v2 lines, and the ones the builder
