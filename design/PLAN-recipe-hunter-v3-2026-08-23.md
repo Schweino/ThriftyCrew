@@ -899,7 +899,7 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | extraction sweep report (ADDED 2026-08-23, D6) | `<RunDir>\extracted\sweep-report.json` | extract_sweep.py -> the phase gate, and `--from-report` for the narrow rung-2 pass |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
 | map HOLD record (ADDED 2026-08-24, D7) | `<RunDir>\mapped-pre\<slug>.hold.json` | the daemon -> the next seed's unhold. The routing a held recipe WOULD have taken (`absent_terms`, `optional_absent`, the mapper's state). It exists because the unhold advances "exactly as it would have on first pass" and first pass's routing came from the MAPPER, which a held recipe never reached and a fresh daemon process cannot remember. Without it the only ways to resume a repaired recipe are to re-dispatch the mapper (paying twice for a judgment already rendered) or to guess the routing (which is how a recipe skips pricing) |
-| mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
+| mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (v2 contract; CORRECTED 2026-08-24 - the real v2 shape on disk is richer than any shorthand in this plan: top-level `source_servings`/`target_servings`/`scale_factor`/`protein`/`rejected`/`ruled_substitutions`/`db_entries_added`/`new_commodity_proposals`/`pricing_terms_needed` + per-line `source_raw`/`item`/`bid`/`board`/`grams`(TARGET-scaled)/`buy`/`optional`/`decision`/`notes`. Under phase-6's A1 the producer becomes the daemon via `map-preresolve -Assemble` - see the phase-6 cold read, pins P2-P5) -> skeleton builder, auditor |
 | intake skeleton snapshot | `<RunDir>\intake\<slug>.skeleton.json` | build-intake-skeleton.ps1 -> the post-write diff |
 | intake (writer-completed) | `<RunDir>\intake\<slug>.json` | skeleton builder writes machine fields; writer completes prose IN PLACE -> build-v2-spec |
 | QA battery report | `<RunDir>\qa\<slug>.battery.json` | QA battery -> QA dispatch, daemon |
@@ -2578,8 +2578,14 @@ per-token price on top).
 **A. The mapper (biggest lever - ~60% of its cost is output tokens and turn count):**
 - **A1. The daemon assembles `mapped\<slug>.json`; the mapper stops writing files.** The mapper
   returns ONLY its residual rulings as a schema'd payload; the daemon merges them with the
-  pre-resolve table mechanically. Kills ~80k output tokens per batch (the $50/M kind), removes the
-  per-file Write turns, and fixes gate finding 1 (the wrong-shaped decision file) BY CONSTRUCTION -
+  pre-resolve table mechanically. **CORRECTED BY THE COLD READ (2026-08-24, measured against
+  `hunt-2026-08-15-lowcarb-100\mapped\*` on disk): the mapper still speaks on EVERY purchasable
+  line, because the mapped file carries a mapper-authored `buy` string per line ("3 lb, sliced into
+  thin rounds (about three and a half 14 oz ropes)") that the skeleton LOCKS into the intake - a
+  mechanical assembler cannot invent those.** So the saving is ~50-70k output tokens per batch, not
+  ~80k: the mapper returns compact per-line arrays instead of whole files, and the assembler builds
+  everything else. Still removes the per-file Write turns, and still fixes gate finding 1 (the
+  wrong-shaped decision file) BY CONSTRUCTION -
   the daemon holds the pen, which is the whole v3 direction. **This adds per-line rulings to the
   MAPPED schema - a THIRD schema delta, RATIFIED BY BRAD 2026-08-24** (the "only two deltas" rule
   bends here by his order, and this sentence is the dated record). D8's `-Verify` remains the
@@ -2653,11 +2659,117 @@ per-token price on top).
   token drop; DECIDE_BATCH=10 amortizes); extract is local-first with Claude only on escalations
   (phase 2's whole point); the wave lane's auditor reads residue + report (S8). No items.
 
-*Sequencing for the phase-6 builder:* B1 and B4 are one-liners with fixtures - do them first and
-every subsequent gate run is cheaper. Then A1+A2 together (one contract, one prompt, one merge
-function), then B2+B3 together (one script surface, one prompt), then C1, then the rest as the
-proving run's own measurements justify. The mapper pin is ALREADY LIVE (frontmatter edited
-2026-08-24); its compare-batch checkpoint is in 4.4a.
+*Sequencing for the phase-6 builder (CORRECTED by the cold read):* phase 6 is TWO halves - 6a the
+fix batch, 6b the proving run - and 6a lands FIRST so 6b measures the improved pipeline, not the
+old one. Order inside 6a: B1 and B4 (one-liners with fixtures; every later gate run gets cheaper),
+then B5 (the reseed - without it any resumed run parks everything), then the A-package (A1+A2+A4
+together: one contract, one prompt, one assembler, one registrar road), then B2+B3 together (one
+script surface, one prompt), then C1. C2-C9 as 6b's own measurements justify. The mapper pin is
+ALREADY LIVE (frontmatter edited 2026-08-24); its compare-batch checkpoint is FOLDED INTO the 6a
+gate (pin P11). llama-server is NOT needed for 6a (no extraction) and IS needed for 6b (fresh
+recipes enter at the extraction ladder) - Brad hand-starts it, per section 4.4, as always.
+
+**PHASE-6 COLD READ (2026-08-24, Fable, against the code and the v2 artifacts on disk - eleven
+guess-traps closed before Opus builds the addendum above). Each pin below exists because the
+addendum's prose, read cold, would have let a builder guess - and in three cases the obvious guess
+is measurably WRONG.**
+
+- **P1. B1's obvious implementation BREAKS THE PRICE LANE - the payload trap.** `DispatchResult.ok`
+  is `payload is not None` (hunt_dispatch.py ~line 172), `Daemon.dispatch` returns `res.payload`,
+  and `with_retry` treats None as NO VERDICT: up to MAX_STAGE_RETRIES fresh pricer sessions, then
+  STUCK, with the breaker counting every one as a failure. So "skip extraction when schema-less"
+  turns every prose answer into a retry storm costing MORE than the re-ask it removes. THE FIX:
+  when `schema is None and validator is None`, the text IS the verdict - set
+  `res.payload = {"text": res.text}` and return before the problems check. `ok` stays
+  payload-based; nothing upstream changes. Fixtures live in hunt_dispatch's own suite (FakeRunner
+  is already there): must-fire - a schema-less dispatch answering pure prose returns ok with ONE
+  call and `reasked` False, proven by neutering the branch; clean twin - a schema'd dispatch with a
+  malformed answer still re-asks exactly once.
+- **P2. A1's scope: the mapper speaks on every purchasable line, because of the `buy` string.**
+  Measured against `hunt-2026-08-15-lowcarb-100\mapped\baked-cauliflower-mac-smoked-sausage.json`:
+  every line carries a mapper-authored `buy` ("an 8 oz brick minus 2 tbsp") that D8 LOCKS into the
+  intake, and locked-means-locked is the prose-number defect's grave - it cannot move to the
+  writer. So the ruling payload is TWO arrays per slug: `lines` - `{raw, buy, notes}` for EVERY
+  purchasable line (compact; this is where the buy strings live) - and `rulings` -
+  `{raw, term, canon_item, bid, decision, grams_source, evidence}` for the RESIDUAL lines only.
+  Everything else (title, source_url, servings block, scaling, decisions for pre-resolved lines,
+  the report blocks) is assembled mechanically. Freeze the exact payload shape against the v2
+  files at build time and fix this paragraph in the same commit if reality disagrees again.
+- **P3. Grams: the table has none today, and the file's are TARGET-scaled.** The pre-resolve rows
+  carry no `grams` field; map-preresolve's macro_precheck engine already computes per-line grams
+  internally (it could not compute per-serving macros otherwise) - EMIT them per row, at
+  SOURCE-recipe basis. The mapped file's grams are TARGET grams: v2 measured, 16 oz at 4 source
+  servings = 454 g x scale_factor 3.5 = 1588 g on disk. The assembler applies
+  `14 / source_servings` EXACTLY ONCE, writes `source_servings` / `target_servings` /
+  `scale_factor` top-level, and that v2 row is the frozen fixture vector. A purchasable line with
+  no grams from either the engine or a ruling is STUCK, named - never a silent zero (a zero-gram
+  line is the fabricated-band defect from the D8 header, upstream).
+- **P4. The decision vocabulary is Get-LineClass's, and nothing else's.** build-intake-skeleton.ps1
+  ~line 166 enumerates the classes measured from v2's own shipped intakes (INCLUDED: `mapped`,
+  `mapped-optional` variants, `mapped-pending-price`, `mapped-ruled-addition`...; UNSETTLED:
+  anything matching `unresolved`; UNKNOWN: everything else). The assembler emits ONLY strings that
+  class as included / optional / not-purchased, and its fixture DOT-SOURCES THE REAL Get-LineClass
+  to prove it - a string classing `unknown` or `unsettled` out of the assembler is a must-fire.
+  Free-texting decisions is what produced 21 distinct values across 550 lines in v2.
+- **P5. The assembler lives in map-preresolve.ps1 as `-Assemble`, not in Python.** The grams
+  engine, the qty parser and the five-PS-trap discipline are already there; a Python re-derivation
+  is the forked-taxonomy defect with a .py extension. `-Assemble -Slug <s> -RulingsFile <payload>`
+  writes `mapped\<slug>.json`. ONE writer per slug file (the map lane's workers never share a
+  slug), so NO mutex - say so in the header, exactly as the evidence writer does. The minimal
+  field set is not guessed either: grep build-intake-skeleton.ps1 AND wave-preaudit.ps1 for every
+  `$Mapped.`/mapped-file read, freeze the union in section 4.5, and fix 4.5's row in that commit.
+- **P6. A3 severs the registrar road unless A4 rebuilds it daemon-side.** The mapper's def orders
+  new ids "through the commodity-registrar gate" - a consult that today rides the Agent tool, the
+  very tool A3 strips (frontmatter `tools:` cannot scope WHICH subagents are reachable). A4: the
+  ruling payload's new-id proposals go to the DAEMON, which dispatches commodity-registrar itself
+  (fable/medium per its pin) with the proposal + evidence, schema'd
+  `{verdict: approve|reject|alias, bid, reason}`; only an approve lets the assembler mint the
+  decision, a reject leaves the line unsettled and the recipe STUCK with the registrar's own
+  sentence. That schema is a NEW dispatch, not a delta to the inherited set - name it in the A1
+  commit as part of Brad's 2026-08-24 ratification. Must-fire: with the registrar returning
+  reject, the assembled file NEVER carries the proposed bid.
+- **P7. B5 (gate finding 3, absent from the original worklist): seed() repopulates absent_terms
+  from the QUEUE, the durable handoff that already knows.** After seed()'s existing -Derive pass:
+  for recipes still `pricing`/`parked`, call `ingredient-queue.ps1 -List -Status pending -Json` -
+  and VERIFY FIRST what `-List -Json` actually emits (if items lack `recipes` or -Json does not
+  bind to -List, extend the script rather than parsing prose). absent_terms := pending terms whose
+  `recipes` intersect the run's pricing slugs, queue order. Fixtures against a scratch -QueueFile
+  with 3+ items (two pending, one resolved): must-fire - the resumed daemon dispatches the pricer
+  with exactly the two pending terms, proven by neutering the reseed (everything parks); clean
+  twin - resolved terms are never re-dispatched.
+- **P8. B2 is ATOMIC.** `-RecordBatch -File <json array of {term, store, state, price, size, item,
+  evidence}>`: every row validated FIRST under exactly -Record's rules (exact store names,
+  carried-requires-a-price, the state enum), and ANY invalid row means NOTHING is written, exit 1,
+  every violation named with its row - the pricer gets one correction pass instead of a silent
+  hole in its evidence. One mutex take for the whole batch. `-Verdict` and `-Promote` stay
+  per-term, unchanged. Fixture per the estate rule: a 3-row batch with one bad row writes zero
+  rows, proven by neutering the validation.
+- **P9. B3 needs NO flag plumbing: price_prompt is daemon-only by construction.** The attended
+  path is a human invoking the agent interactively, and no human path ever renders price_prompt.
+  So the prompt states the headless truth UNCONDITIONALLY: no browser exists in this session;
+  record Hy-Vee/Walmart/Aldi as `blocked - no browser in this session` inside the same
+  -RecordBatch; never re-probe a store the evidence marks UNUSABLE-throttled. The agent definition
+  keeps its attended instructions for the human entry point - two entry points, one agent, zero
+  conditionals.
+- **P10. C1's stamps: extend, verify the envelope, do not guess key names.** hunt-run.ps1 -Lane
+  gains optional `-CacheRead` / `-CacheCreation` / `-Calls` (int, default -1) emitted into the
+  jsonl line; the daemon passes them from DispatchResult, which ALREADY carries all three. For the
+  subagent-inclusive total, `res.model_usage` holds the CLI envelope's `modelUsage` map - READ ONE
+  REAL ENVELOPE from a gate transcript to confirm its per-model key names before coding, then
+  stamp the summed totals beside the main-agent numbers. Fixture: a FakeRunner envelope carrying
+  TWO models proves the subagent's tokens land in the stamp (the class of the mapper's invisible
+  $1.64).
+- **P11. The 6a gate is ONE combined drill, and it already has a corpus.** Re-map the same four
+  phase-2 recipes on a fresh COPY of the phase-1 mini run dir (short scratch root; db-side writes
+  land live by design, and they are idempotent here - the food-DB rows already exist). That single
+  run is simultaneously: (i) the 4.4a pin checkpoint - ruling-level diff, Opus vs the committed
+  Fable batch, same pre-resolve inputs, reviewed by Brad; (ii) A1's end-to-end proof -
+  build-intake-skeleton.ps1 exits 0 over every ASSEMBLED file, which is gate finding 1 dying on
+  the same corpus that exposed it; (iii) the cost measurement - turns, cache split and wall clock
+  via C1's stamps, recorded against the baseline table above. The B-package gate rides the same
+  session: one real price batch (korean-rice-cakes plus whatever the re-map enqueues), lane log
+  showing NO `re-asked`, exactly one -RecordBatch write in the queue history, turns counted. 6b's
+  success criteria are then written BEFORE the proving run, per row 6's own rule.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
