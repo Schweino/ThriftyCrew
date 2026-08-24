@@ -263,6 +263,9 @@ def run():
       _repair_claim_refused(), "it paid for a second audit")
     T("CLEAN TWIN a repair that really touched a spec does buy its re-audit",
       _repair_claim_holds(), "a real repair was refused")
+    T("MUST FIRE  a wave closes MID-RUN the moment the pool reaches wave_size, while other lanes "
+      "still run - v2's waveChain, ported, not an end-of-run sweep",
+      *_wave_mid_run())
 
     # =================================================================================================
     H("The cost-engine mutex (section 4.5)")
@@ -491,6 +494,43 @@ def _repair_claim_holds():
         return len(prompts) == 2 and "scope: a" in prompts[1]
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _wave_mid_run():
+    """The six-dimension check caught the first daemon build closing waves only after every lane
+    drained. This pins the ported behavior: the SECOND qa-pass at wave_size 2 schedules wave 1 while
+    the qa channel is still open, drain=False; the drain then force-closes the remainder."""
+    fd = FakeDispatch({"recipe-source-qa": [{"slug": "s1", "verdict": "PASS"},
+                                            {"slug": "s2", "verdict": "PASS"},
+                                            {"slug": "s3", "verdict": "PASS"}]})
+    d = daemon(dispatcher=fd, wave_size=2)
+    seen = []
+
+    async def fake_wave(k, drain=False):
+        seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
+    d.run_wave = fake_wave
+
+    async def drill():
+        task = asyncio.ensure_future(d.qa_lane())
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].push({"slug": "s2"})
+        for _ in range(600):
+            if seen:
+                break
+            await asyncio.sleep(0.01)
+        mid = list(seen)                       # what had closed while the lane was still open
+        d.ch["qa"].push({"slug": "s3"})
+        d.ch["qa"].close()
+        await task
+        d.schedule_wave(True)                  # the drain, as run() performs it
+        if d._wave_chain is not None:
+            await d._wave_chain
+        return mid, list(seen)
+
+    mid, all_waves = arun(drill())
+    ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
+          and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
+    return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
 
 
 def _cost_mutex():

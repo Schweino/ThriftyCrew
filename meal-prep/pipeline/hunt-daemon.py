@@ -222,6 +222,7 @@ class Daemon(object):
         self.qa_passed = []
         self.wave_results = []
         self.wave_no = 0
+        self._wave_chain = None     # the ported waveChain: serial waves, concurrent with the lanes
         self.held = []               # mapped-with-open-holds and `held`: reported, never dispatched
         self.review_pending = []
         self.escalations_blocked = []   # rung-2-needing pages the live server shape cannot take
@@ -1049,6 +1050,8 @@ class Daemon(object):
                 await self.advance(slug, "qa-passed", "source-qa", "")
                 self.finish(slug, "qa-passed", "qa-passed", "")
                 self.qa_passed.append(slug)
+                # the ported maybeCloseWave(false): a full pool closes a wave NOW, mid-run
+                self.schedule_wave(False)
         await self.pool_worker(hunt_lib.LANE_CAPS["qa"], worker)
 
     @staticmethod
@@ -1102,6 +1105,32 @@ class Daemon(object):
     # WAVE - serial. A PORT of runWave/trimWave, decision-for-decision. The agent-as-shell steps
     # inside it become direct calls; everything else keeps its order and its refusal conditions.
     # ---------------------------------------------------------------------------------------------
+
+    def schedule_wave(self, force=False):
+        """THE PORTED waveChain (CORRECTED 2026-08-24 - the six-dimension check caught the first
+        build of this file deviating from the port here). v2 closed a wave THE MOMENT the qa-passed
+        pool reached wave_size and chained it onto `waveChain`, so wave 1 was being audited while
+        wave 3's recipes were still in QA. The first daemon build closed waves only AFTER every lane
+        drained, which is the same work at a strictly worse wall clock: on a 100-recipe run it would
+        serialize ten audits behind the last QA verdict. Waves stay SERIAL among themselves (the
+        chain), concurrent with everything else (the task)."""
+        k = self.maybe_close_wave(force)
+        if k is None:
+            return None
+        prev = self._wave_chain
+
+        async def _next():
+            if prev is not None:
+                await prev
+            try:
+                await self.run_wave(k, drain=bool(force))
+            except Exception as e:                                # noqa: BLE001
+                # v2's `.catch(e => log(...))`: a wave that throws is a finding, never a crashed run.
+                self.findings.append("wave %d threw: %s" % (k, str(e)[:300]))
+                self.log("wave %d threw: %s" % (k, str(e)[:300]))
+
+        self._wave_chain = asyncio.ensure_future(_next())
+        return k
 
     def maybe_close_wave(self, force=False):
         if not force and len(self.qa_passed) < self.wave_size:
@@ -1530,12 +1559,16 @@ class Daemon(object):
                 for ch in self.CLOSES[name]:
                     self.ch[ch].close()
         await asyncio.gather(*tasks)
-        # Waves close after the lanes drain, then again for any remainder - the workflow's own order.
-        while True:
-            k = self.maybe_close_wave(force=True)
-            if k is None:
-                break
-            await self.run_wave(k, drain=True)
+        # The drain, ported VERBATIM from the workflow's ending: force-close, await the chain, and
+        # one more round if a trim returned clean recipes to the pool. Mid-run waves already ran -
+        # the qa lane schedules one whenever the pool fills (see schedule_wave).
+        self.schedule_wave(force=True)
+        if self._wave_chain is not None:
+            await self._wave_chain
+        if self.qa_passed:
+            self.schedule_wave(force=True)
+            if self._wave_chain is not None:
+                await self._wave_chain
 
 
 class RetryLadder(object):
@@ -1599,6 +1632,9 @@ def main(argv=None):
     ap.add_argument("--cal-max", dest="cal_max", type=int, default=DEFAULT_BAND["calMax"])
     ap.add_argument("--carb-max", dest="carb_max", type=int, default=DEFAULT_BAND["carbMax"])
     ap.add_argument("--wave-size", dest="wave_size", type=int, default=hunt_lib.WAVE_SIZE)
+    ap.add_argument("--target", type=int, default=0,
+                    help="stop popping the pool after N acceptances; 0 pops until the backlog runs "
+                         "dry or the WIP limit parks the lane")
     ap.add_argument("--lanes", default="pool,decide,extract,map,price,write,qa")
     ap.add_argument("--ledger", default="",
                     help="a scratch batch ledger, for a drill. Empty means the live one.")
@@ -1619,7 +1655,7 @@ def main(argv=None):
 
     d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions,
                {"calMin": a.cal_min, "calMax": a.cal_max, "carbMax": a.carb_max},
-               a.wave_size, dry_run_publish=not a.publish, ledger_path=a.ledger)
+               a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger)
 
     async def go():
         ok, err = await d.seed()

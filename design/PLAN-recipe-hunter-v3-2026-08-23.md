@@ -1267,10 +1267,59 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   Composed surfaces, by path so nobody greps for them: `meal-prep\pipeline\ingredient-vocab.ps1`,
   `meal-prep\pipeline\ingredient-resolutions.ps1`, `grocery\price-ingredient.ps1`,
   `meal-prep\db\densities.json`, `meal-prep\db\each-nouns.json`.
+  **PINNED FOR THE PHASE-4 BUILDER (2026-08-24, from the phase-3 build - facts, not guesses):**
+  - **The daemon is BUILT; D7 extends it, never re-derives it.** The integration point is
+    `Daemon.map_lane` in `meal-prep\pipeline\hunt-daemon.py`: it takes micro-batches of <=5 off the
+    map channel and dispatches the mapper with `Daemon.map_prompt`. D7 inserts the
+    `map-preresolve.ps1` call BEFORE that dispatch, invoked through `hunt_lib.ps_invoke` with the
+    batch's slugs as a real list (never a second invocation style - the daemon's own selftest greps
+    for one), exit convention 0/1/2 where 2 means the batch is BLOCKED and NOT dispatched. The table
+    lands per slug at `<RunDir>\mapped-pre\<slug>.json` (section 4.5); the mapper prompt then
+    carries the table and shrinks to the residual lines, and the vocabulary lecture leaves the
+    prompt in the same commit that ships the table (D11's sync duty applies).
+  - **THE UNBID HOLD IS THE DAEMON'S AND IT IS MECHANICAL, and phase 3 measured exactly why.** The
+    adapter drill asked the mapper its own standing rule - resolved ingredient, no bid wired,
+    advance or hold? - twice, same prompt, same model, and got ADVANCE once and HOLD once. A rule a
+    model must remember is a rule it sometimes forgets, and this one gates whether a writer gets
+    paid. The pre-resolve rows carry `bid_exists` (ingredient-resolutions is the source and is now
+    behind its named mutex); the daemon reads it and holds the recipe at `mapped` itself. The resume
+    seed table already handles the other end: `mapped` with open holds goes to the HELD list in
+    `--status`, reported and never dispatched.
+  - **Every new lane behavior gets an injected fixture in `hunt_daemon_selftest.py`** - the
+    FakeDispatch/FakePS pattern there runs the whole suite for zero tokens, and the fixtures that
+    genuinely need the state machine drive hunt-run.ps1 against a scratch run dir (the resume
+    fixtures are the template). Must-fire + clean twin in the same commit, as always.
+  - **map-preresolve.ps1 writes per-slug files, so it needs NO concurrency mutex - and say so in its
+    header** rather than leaving the next reader to wonder. If any part of it ever aggregates into
+    ONE file written by the cap-2 map lane, that file takes the named-mutex pattern WITH a
+    concurrency fixture proven to fail with the lock removed (the fourth PS trap, this section).
 - **D8 `build-intake-skeleton.ps1`** - machine-complete intake skeleton; the pre-write band gate;
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
   retires before any writer dispatch; a clean prose-only fill passes untouched.
+  **PINNED FOR THE PHASE-4 BUILDER (2026-08-24, from the phase-3 build):**
+  - **The integration point is `Daemon.write_lane`**, whose current shape is: dispatch the writer
+    (`Daemon.write_prompt`), run `build-v2-spec -RunCost` through `Daemon.cost_engine` (the
+    process-wide cost mutex - NOT optional, its fixture proves two concurrent completions
+    serialize), then read `stat.cal`/`stat.carbs` off the BUILT spec via `Daemon.spec_band` and rule
+    with `hunt_lib.in_band`. D8 inserts the skeleton build BEFORE the writer dispatch - the
+    pre-write band gate, so an out-of-band recipe retires before any prose is paid for - and the
+    `-Verify -InFile <intake> -Skeleton <RunDir>\intake\<slug>.skeleton.json` diff AFTER the
+    writer returns, exit 1 naming the drifted locked fields.
+  - **The locked-field re-dispatch mirrors the adapter's one re-ask, and only one.** On a named
+    drift the daemon re-dispatches the writer ONCE quoting the drifted fields verbatim (never a
+    silent daemon-side revert - the writer must see what it did); a second drift is `rejected-qa`
+    with the fields in the detail. Same discipline, same reason: one correction, never a loop,
+    never a coercion.
+  - **The post-build `spec_band` read STAYS after the pre-write gate lands.** It is a mechanical
+    postcondition over the artifact where the pre-write gate is a prediction about it; both call
+    the same parity-covered `in_band`, and keeping both costs one file read. Do not "simplify" the
+    postcondition away.
+  - **Skeleton assembly may run in parallel across the write lane's cap of 3; any cost pass inside
+    it may not** - route every cost-engine invocation through `Daemon.cost_engine`, which is the one
+    lock. And the phase-3 drain drill stands `build-v2-spec -RunCost` in for exactly this reason
+    (it rewrites the live `db\costed.json`); the D8 drill should instead run the real cost pass
+    against a scratch costed.json the way wave-publish's own gate drill does with `-LedgerPath`.
 - **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - **BUILT 2026-08-24;
   the phase-3 gate record is in section 6.** The port, under §4.2's
   parity gate; daemon-owned state writes and lane-log start/end pairs with token stamping; the wave
@@ -1344,6 +1393,18 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   `grocery\ingredient-queue.ps1`) - probe + unattended CDP gathering wired into the price lane's
   dossier; pricer prompt rewritten to adjudicate-and-attend. Fixture: an UNUSABLE sweep state reads
   as PENDING, never not-carried (the founding rule, mechanized).
+  **PINNED FOR THE PHASE-5 BUILDER (2026-08-24, from the phase-3 build):** the integration point is
+  `Daemon.price_lane` + `Daemon.price_prompt` in hunt-daemon.py. The evidence pre-gather runs IN THE
+  DAEMON before the pricer dispatch: `probe-ingredient.ps1` through `hunt_lib.ps_invoke`;
+  `pull-browser-stores.py` through a `sys.executable` subprocess (it is Python - ps_invoke is only
+  ever for PowerShell surfaces); output to `<RunDir>\price-evidence\batch-<n>.json` in the
+  search-verdict-lib shape section 4.5 already specifies. The pricer keeps `-Record`/`-Promote`
+  (the standing pen-ownership exception) and the daemon keeps `-Derive` and every state move. Two
+  measured facts to build against: the adapter drill already showed the pricer AGENT rules PENDING
+  on a five-EMPTY/one-UNUSABLE/one-unreached hypothetical, so D10's must-fire is about the
+  MECHANICAL pre-pass emitting UNUSABLE-as-PENDING, not about re-teaching the agent; and the
+  singleton cap is architecture (hunt_lib.LANE_CAPS marks it), so the pre-gather also runs one
+  batch at a time.
 - **D11 SKILL.md v3 rewrite + agent-prompt slimming** - constants out of per-call prompts into the
   agent definitions (prefix-cache friendly), stage contracts updated to dossier-in/ruling-out, the
   v3 lane diagram, and the run-budget practice (fresh session per phase; ask Brad for the usage %
@@ -1358,6 +1419,14 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   **Every agent-prompt or skill edit in D5/D6/D7/D8/D10/D11 must be followed by
   `ops\audit-prompt-backup.ps1 -Sync` with `ops\prompt-backup` committed** - the estate audits live
   prompts against that mirror and flags unsynced drift as a finding.
+  **ADDED 2026-08-24 (phase 3): an agent-definition edit reaches the daemon with ZERO daemon
+  changes.** The adapter dispatches `claude -p --agent <name>` and the CLI re-reads
+  `.claude\agents\<name>.md` on every call, so D11's slimming is pure agent-file work plus the
+  sync duty above - no code to touch, and a model/effort/tools change lands on the next dispatch.
+  The daemon's own per-call prompts (`map_prompt`, `write_prompt`, `qa_prompt`, `audit_prompt`,
+  `price_prompt`, `rung3_prompt` in hunt-daemon.py) are in D11's slimming scope too: they already
+  carry only per-call facts, and any standing constant found in one belongs in the agent
+  definition, where the prefix cache pays for it once.
 
 ## 6. Build order, with gates and stop-rules
 
@@ -1697,6 +1766,61 @@ micro-batch before waking the pricer once (waking per slug turned the cross-reci
 per-recipe stage), and a term already sent to the pricer this run is never sent again (`absent_terms`
 is consumed destructively, so the second recipe wanting a shared term re-queued it behind a pricer
 that had already ruled).
+
+*Six-dimension check (2026-08-24, recorded so nobody re-audits from guesses).* **Concurrency** -
+one asyncio process; lane caps live in hunt_lib (extract's cap of 3 counts CLAUDE escalations only,
+fixtured; the local ladder holds one page at a time, phase 2's measured shape); the channel
+semantics are B9's, proven on both implementations by the parity gate; every single-writer file
+kept exactly one writer (the pool through harvest.py's verbs, considered-dishes through
+decide_apply, ingredient-resolutions behind its new named mutex, costed.json behind the cost-engine
+lock - two 0.2 s passes measured serializing, never interleaving); at the caps, at most 12
+dispatches run at once, inside the executor's default bounds. **CPU cores** - the daemon is
+IO-bound and adds no fan-out of its own; the 8-core budget stays with harvest/battery work
+unchanged; the QA battery is one subprocess per recipe inside qa's cap of 2. **GPU slots** - the
+extract lane reads the live per-slot context from `/props` at lane start (never assumes `-c`), fans
+rung-1 lines across jobs <= Slots, refuses rung 2 on a too-small slot, and accumulates + NAMES the
+pending narrow pass; the daemon never touches serve.ps1, fixtured by execution rather than by
+grep; the rung-1 re-roll spends ~10 GPU-seconds only on coverage >= 0.85 near-misses. **Speed** -
+7.3 s mean per headless dispatch at 2.6x less context than the Workflow road; no barrier anywhere
+(takeBatch streams); and the check itself caught the one port deviation: the first daemon build
+closed waves only AFTER every lane drained, where v2's waveChain closed them mid-run as the pool
+filled - on a 100-recipe run that would serialize ten audits behind the last QA verdict. CORRECTED
+same day: `Daemon.schedule_wave` is the ported chain (waves serial among themselves, concurrent
+with the lanes; the qa lane schedules one the moment the pool fills), with a must-fire fixture
+proving a wave closes while the qa channel is still open. **Efficiency** - dossiers pop pre-ranked
+for zero agents; a term dispatched to the pricer once is never dispatched again and the map lane
+wakes the pricer once per micro-batch (both drill-earned fixes; audit-lane-shape clean); locally
+settled pages still cost 0 tokens and are lane-logged as work done. **Accuracy** - B5 nulls stay
+STUCK with the state machine untouched; enum violations refuse whole with one quoted re-ask, never
+coercion; the band is read off the built artifact; rung-3 verification is computed from the
+stripped cached page and recorded; exit 2 is BLOCKED everywhere - a down server or uncached page
+never becomes a Claude dispatch or a pass.
+
+**How a run is launched now (operator notes, so phase 6 does not guess):** llama-server by hand
+first (section 4.4 unchanged - serve.ps1, off the card before 07:00/08:00), then
+
+    C:\Codex\Python312\python.exe meal-prep\pipeline\hunt-daemon.py --run-dir <dir> --run <id>
+        [--target N] [--lanes pool,decide,extract,map,price,write,qa] [--publish] [--ledger <scratch>]
+
+Without `--publish` the wave lane runs `wave-publish -DryRun` - the safe default. `--ledger` names a
+scratch batch ledger for drills (empty = the live one; the first drain drill wrote two stalled rows
+into the live ledger before this existed). `--status` is the resume surface and the ONLY place the
+pending narrow pass is named; re-entry is `-Status`-seeded per section 4.5's table, so a killed
+daemon resumes by being started again with the same arguments. Nothing schedules the daemon;
+install-nightly-task.ps1 remains the only scheduler in the estate.
+
+**Phase-4 pickup (2026-08-24, so the next session starts building instead of hunting):** read, in
+order, section 4.5 (the mapped-pre and skeleton contracts, the locked-vs-writer-fillable field
+split, and the thresholds), the D7 and D8 bullets WITH their pinned blocks, `hunt-daemon.py`'s
+`map_lane`/`write_lane` (the hook points - the daemon is built; extend it, never re-derive it),
+`hunt_daemon_selftest.py`'s FakeDispatch/FakePS pattern (every new lane behavior gets an injected
+zero-token fixture there), and the FOUR PS collection traps in this section before any new PS
+collection code. build-v2-spec.ps1's intake schema is the authority on locked vs writer-fillable.
+The phase-4 gate's "mapper residual rate measured" means: over one real batch, count the lines
+map-preresolve settled from cache/vocab/alias against the lines that reached the mapper dispatch -
+the mapped-pre tables and the mapper's decision files carry both numbers. llama-server is NOT
+needed for phase 4 (map and write touch no GPU); the card question only arises if extraction runs
+in the same sitting.
 
 *Three things a phase-4 builder should carry forward.* **(a) The drill wrote to the live batch
 ledger before anyone noticed** - two open w5/w6 rows that `batch-ledger -Verify` would have called
