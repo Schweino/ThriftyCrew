@@ -1119,6 +1119,14 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   itself raises is expressed through the EXISTING MAPPED fields (`status`/`state`/`detail` naming
   the follow-up), not a new schema field. If the D7 build finds that inadequate, the fix is a third
   NAMED delta recorded in §4.5 in the same commit - never an implicit field.
+  **ADDED 2026-08-24, a phase-2 fact the D7 builder must not guess around: rung-1 `item` fields
+  KEEP their describing words.** The round-trip check demands every non-glue word of the line land
+  in some field, so a verified rung-1 extraction says "boneless skinless chicken thighs", "small
+  onion", "extra virgin olive oil" - NOT the stripped noun the v2 Claude extractor tended to
+  return. Any normalisation toward the vocabulary happens inside map-preresolve's matching (where
+  it is evidence-checked), never by asking extraction to pre-strip; an extraction that dropped
+  "boneless skinless" would be a WORSE extraction and D6's checker now refuses it. Expect the
+  cache/vocab/alias lookups to see the richer strings and measure the residual rate against them.
   Composed surfaces, by path so nobody greps for them: `meal-prep\pipeline\ingredient-vocab.ps1`,
   `meal-prep\pipeline\ingredient-resolutions.ps1`, `grocery\price-ingredient.ps1`,
   `meal-prep\db\densities.json`, `meal-prep\db\each-nouns.json`.
@@ -1147,6 +1155,42 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
   writes the decide lane-log lines natively with real token stamps - the bridge cannot (no shell in
   the sandbox), so until D9 lands every bridge run ends with the operator recording them by hand,
   as the mini-run's were.
+  **PINNED FOR THE PHASE-3 BUILDER (2026-08-24, from the phase-2 build - facts, not guesses):**
+  - **The extract lane's mechanics already exist; import them.** `extract_sweep.py` carries the
+    ladder (`Ladder`, `sweep_one`), the contract writer (`write_record`, with the one-way cleanup
+    rule and its must-fire fixtures both directions), the corpus report (`report`), and the
+    slot-context probe (`local_extract.slot_context`, reading llama-server's `/props`). The daemon
+    calls `run_sweep(..., do_lane_log=False, do_advance=False)` and performs the advances and lane
+    lines through its own pen per section 4.1a - it does NOT re-derive the ladder, for the same
+    reason D6 imported harvest's parsers instead of writing a third one.
+  - **The daemon never starts or stops llama-server.** Section 4.4 stands unchanged. At extract-lane
+    start it reads the live slot context: rung 1 fits any shape (a split call is ~100-200 tokens in,
+    256 out); rung 2 requires `local_extract.RUNG2_MIN_SLOT_CTX` (~11,465), which only the 1-slot
+    shape provides. When the live shape cannot fit rung 2, escalation files ACCUMULATE and the
+    daemon's `-Status` output names the pending narrow pass - the operator then either restarts the
+    server narrow and lets the daemon drain rung 2 via the `--from-report` shape, or rules the batch
+    straight to rung 3. Rung-1-failed pages ARE legitimate rung-3 work (rung 3 exists for pages the
+    local pass failed on), so skipping an unavailable rung 2 by OPERATOR RULING is within doctrine;
+    doing it silently or automatically is not.
+  - **One cheap retry before paying anything more.** Rung 1 at temp 0.1 is not deterministic
+    (measured: a page escalated at 88% coverage settled on re-run with zero code change). Before a
+    page whose rung-1 failure was a SINGLE line at >=85% coverage costs a ~50 s rung-2 attempt or a
+    Claude dispatch, one rung-1 retry (~10 GPU-seconds) is the obvious spend. Named constants in
+    hunt_lib (e.g. `RUNG1_RETRY_MAX_FAILED_LINES = 1`, `RUNG1_RETRY_MIN_COVERAGE = 0.85`), daemon
+    config, with a fixture proving a second identical failure still escalates - one retry, never a
+    loop.
+  - **The rung-3 dispatch and its landing.** The `<slug>.escalation.json` file IS the dispatch
+    payload (S3: the failure reason and unverified lines travel with the page; the extractor is
+    told not to re-run the local script). The daemon writes the extractor's returned JSON through
+    the SAME section 4.5 contract, `extracted_by: "claude"`, computes the `verification` block
+    mechanically with `local_extract.verify()` against the CACHED page - RECORDING, not gating:
+    rung 3 is the last rung, so a low verified_rate there is surfaced to source-QA as a concern
+    rather than escalated to nowhere - and deletes the escalation file on settle (the one-way
+    cleanup rule; leaving it would double-dispatch a settled page).
+  - **The economics to plan the lane around (all measured on the 50-page gate corpus):** rung 1
+    settles 92-94% at 9.5 s/page fanned; rung 2 settles 3 of 16 attempts (~19%) at ~50 s/page on
+    the narrow server; the residue is ~6%. The ladder's value sits almost entirely in rung 1 -
+    budget the card and the operator asks accordingly.
 - **D10 price evidence pre-pass** (paths, so nothing is guessed: `grocery\probe-ingredient.ps1`,
   `grocery\pull-browser-stores.py`, `grocery\search-verdict-lib.ps1`, `grocery\price-ingredient.ps1`,
   `grocery\ingredient-queue.ps1`) - probe + unattended CDP gathering wired into the price lane's
@@ -1410,6 +1454,23 @@ That is four Claude extractor invocations the run did not pay for, and the lane 
 
 *Also done in the same sitting, per the phase-2 pickup block:* `harvest.py --classify` ran while
 the card was hot and filled the pool's sauce-family nulls that phase 1 could never reach.
+
+*Six-dimension check (2026-08-24, numbers from the gate corpus, recorded so nobody re-audits from
+guesses):* **Concurrency** - one shared ThreadPoolExecutor at jobs <= Slots for rung-1 lines; the
+sweep's own writes are serial (one page settles at a time), lane-log lines go through hunt-run.ps1
+one at a time, and the one-way file cleanup is fixtured both directions, so no single-writer file
+gained a second writer. **CPU cores** - the lane is GPU-bound by design; CPU sits idle during a
+sweep and that is correct, not waste (the 8-core budget is for harvest/battery fan-out, which this
+lane does not touch). **GPU slots** - 3.4x measured against the 4x ideal (595 line-splits at a
+2.74 s serial baseline would be ~1,630 s; the fanned sweep ran 476 s), i.e. ~85% slot utilisation;
+the missing 15% is each page's tail lines idling slots, and cross-page packing would recover ~1.4
+s/page - a deferred lever, measured before built, not worth complexity at today's corpus sizes.
+**Speed** - 9.5 s/page mean against the 7-14 s envelope; 50 pages in 8 minutes where serial would
+be ~27. **Efficiency** - 47 of 50 pages settled for 0 Claude tokens; the 4 accepted recipes cost
+the run zero extractor dispatches; classify filled 370 nulls in the same GPU sitting. **Accuracy**
+- zero unverified lines in any settled extraction (mechanical, both reports), every settle carries
+its verifier block, and the failure direction is preserved everywhere: uncached page, down server
+and too-small slot are all exit-2 BLOCKED, never a silent pass or a silent Claude dispatch.
 
 Two things a phase-3 builder should carry forward. **(a) Rung 1 is not deterministic.**
 `jalape-o-popper-chicken` escalated at 88% coverage on one pass and settled on the next with no
