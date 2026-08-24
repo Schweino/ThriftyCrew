@@ -62,8 +62,41 @@ NEVER HEADLESS - IT ADVERTISES ITSELF IN THE USER-AGENT (measured 2026-08-22)
       conclusion as expensive as "the IP is burned, wait days" needs a control - Brad's working tab
       was the control I never thought to ask for, and it took ten seconds.
 
+LOOKUP MODE (added 2026-08-24, PLAN-recipe-hunter-v3 D10 - the price-evidence pre-pass)
+  `--lookup-terms-file <json array of terms> --lookup-out <path>` sweeps an AD-HOC term list and
+  writes per-term SEARCH VERDICTS instead of a capture. It is the Recipe Hunter's unattended
+  browser pre-pass: the hunt daemon gathers evidence for a batch of never-priced terms so the
+  pricer agent spends its minutes adjudicating rows rather than driving five browsers.
+
+  WHAT IT REUSES, UNTOUCHED: the store's existing agent, its pacing profile, its identity
+  assertion, and its wall handling. Nothing about how this driver talks to a store changes.
+
+  WHAT IT MUST NOT TOUCH, AND WHY THE FLAGS ARE NARROW:
+    * it reads NO worklist and writes NO capture file. Pointing the daily surfaces at hunter terms
+      would destroy the day's real worklist AND land hunter rows in the capture files the board
+      builders parse. The daily capture estate is load-bearing; this is a different question asked
+      of the same store.
+    * the paced lane writes its verdicts under a SEPARATE localStorage key (LOOKUP_STORAGE_KEY),
+      never the store's capture key. sweepToCsv() exports every MATCHES term it finds under that
+      key, so a lookup term left in the capture key would be published as a captured price by the
+      next morning's run.
+    * legal only WITH BOTH FLAGS and only for `--store fareway` or `--store samsclub`. Walmart is
+      refused with its own pause note quoted: it is captured through Brad's Chrome, and retrying it
+      from here is his call to make, never a side effect of a hunter batch.
+
+  ONE RUNG, NOT A LADDER. Each term is searched exactly ONCE, as given. search-verdict-lib's retry
+  ladder is not walked here - widening a term is a judgment the pricer makes with the whole
+  evidence file in front of it, and a driver that ladders would multiply requests against exactly
+  the stores that wall us. So an EMPTY in a lookup file is a RUNG-1 EMPTY and says so in its
+  reason: it permits `not-carried` only after the pricer completes the ladder.
+
+  DEGRADING IS THE POINT. NEEDS-SEEDING, a wall, a dead CDP or a crash all end as UNUSABLE for
+  every term of the batch, written to `--lookup-out` with the failure as the reason. Could-not-look
+  never reads as EMPTY, and the caller is never handed silence.
+
 EXIT CODES  0 = every requested store captured. 1 = at least one store failed or was walled.
-            2 = nothing could run (no Chrome, no worklists).
+            2 = nothing could run (no Chrome, no worklists). Unchanged by lookup mode - existing
+            scripts keep their own exit codes, in both directions.
 """
 import argparse
 import datetime
@@ -153,6 +186,12 @@ STORES = {
         "verdicts": "samsSweepVerdicts",
         "storage_key": "TC_SAMS_SWEEP",
         "identity": "samsIdentity()",
+        # The page-global agent object runPacedSweep takes. Lookup mode clones it with a different
+        # storageKey so a hunter sweep can never land in the capture key (see LOOKUP MODE above).
+        # Declared here rather than derived from a name, for the same reason `identity` is: a
+        # derived handle that misses does not fail loudly, it substitutes something harmless-looking
+        # and the guard quietly stops guarding (see _identity_call).
+        "lookup_agent": "samsAgent",
         # samsSweepToCsv emits [term, n, lp, up, id, was] - six columns. The captures before
         # 2026-08-21 had five (no `was`); `was` arrived with the rollback-TTL work. A stale
         # five-name header over six-column data does not error, it SHIFTS every field one place.
@@ -440,6 +479,43 @@ def corroborate_multipack_sizes(rows):
     return dropped
 
 
+def navigate_probe(browser, cfg, term, agent_src, retries=3):
+    """ONE term through the navigate lane: go to the search url, read the page's own Apollo cache.
+    Returns (rows, why) - rows is None when the page could never be read, which is BLINDNESS and
+    must never be recorded as an empty shelf.
+
+    Factored out of run_navigate_lane 2026-08-24 so the D10 lookup lane asks the store the exact
+    same question the daily capture asks. Two copies of "navigate, inject, retry, scroll, extract"
+    would drift, and the half that drifted would be the one nobody watches every morning.
+    """
+    url = cfg["search_url"].format(term=quote_plus(term))
+    rows, why = None, ""
+    for attempt in range(retries):
+        try:
+            browser.goto(url, wait_ms=3500)
+            ensure_agent(browser, agent_src, cfg["extract"])
+            # Results lazy-load, and the cache fills as they do. Give hydration a few chances
+            # before believing the page: an extract attempted too early throws for the same
+            # reason an empty store would, and the two must not be confused.
+            for _ in range(8):
+                raw = browser.js(
+                    "(function(){ try { return JSON.stringify(%s(%s)); } "
+                    "catch(e){ return 'ERR:' + String((e&&e.message)||e); } })()"
+                    % (cfg["extract"], json.dumps(term)))
+                if raw and not raw.startswith("ERR:"):
+                    rows = json.loads(raw)
+                    break
+                why = (raw or "no response")[:160]
+                browser.js("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(1.2)
+            if rows is not None:
+                break
+        except Exception as e:
+            why = f"threw: {e}"
+        time.sleep(2 + attempt * 3)
+    return rows, why
+
+
 def run_navigate_lane(browser, cfg, pairs, out_path, agent_src):
     """Fareway's lane: navigate per term, then read the page's own Apollo cache.
 
@@ -463,31 +539,7 @@ def run_navigate_lane(browser, cfg, pairs, out_path, agent_src):
     lines, errors = [], []
 
     for i, (term, cid) in enumerate(pairs, 1):
-        url = cfg["search_url"].format(term=quote_plus(term))
-        rows, why = None, ""
-        for attempt in range(retries):
-            try:
-                browser.goto(url, wait_ms=3500)
-                ensure_agent(browser, agent_src, cfg["extract"])
-                # Results lazy-load, and the cache fills as they do. Give hydration a few chances
-                # before believing the page: an extract attempted too early throws for the same
-                # reason an empty store would, and the two must not be confused.
-                for _ in range(8):
-                    raw = browser.js(
-                        "(function(){ try { return JSON.stringify(%s(%s)); } "
-                        "catch(e){ return 'ERR:' + String((e&&e.message)||e); } })()"
-                        % (cfg["extract"], json.dumps(term)))
-                    if raw and not raw.startswith("ERR:"):
-                        rows = json.loads(raw)
-                        break
-                    why = (raw or "no response")[:160]
-                    browser.js("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(1.2)
-                if rows is not None:
-                    break
-            except Exception as e:
-                why = f"threw: {e}"
-            time.sleep(2 + attempt * 3)
+        rows, why = navigate_probe(browser, cfg, term, agent_src, retries)
 
         if rows is None:
             errors.append(f"{term}: {why}")
@@ -523,6 +575,58 @@ def run_navigate_lane(browser, cfg, pairs, out_path, agent_src):
     return True, note
 
 
+def drive_paced_sweep(browser, cfg, name, terms, skey, timeout_min, sweep_expr=None):
+    """Kick the store's own paced sweep off, poll it, and answer a wall. Returns (done, walled).
+
+    Factored out of run_store 2026-08-24 for the D10 lookup lane, which differs from a capture in
+    exactly ONE way - which localStorage key the sweep writes to - and in no way at all in how it
+    talks to the store. A second copy of the wall handling is a second copy that can stop noticing
+    a wall.
+    """
+    payload = json.dumps(list(terms))
+    expr = sweep_expr or f"{cfg['sweep']}({payload}, {{}})"
+    # Kick the sweep off WITHOUT awaiting it over the socket. awaitPromise would hold the
+    # connection for the whole sweep, and a wall pause is unbounded - the driver has to stay
+    # responsive enough to notice the wall and answer it.
+    browser.js(
+        "window.__tcRun = {done:false, err:null, summary:null};"
+        f"(async () => {{ try {{ window.__tcRun.summary = await {expr}; }}"
+        "  catch (e) { window.__tcRun.err = String((e && e.message) || e); }"
+        "  finally { window.__tcRun.done = true; } })();"
+    )
+
+    deadline = time.time() + timeout_min * 60
+    walled = False
+    last_report = 0
+    while time.time() < deadline:
+        if browser.js("!!(window.__tcRun && window.__tcRun.done)"):
+            break
+
+        wall = browser.js("window.__tcWall ? JSON.stringify(window.__tcWall) : ''")
+        if wall:
+            w = json.loads(wall)
+            detail = f"walled on term '{w.get('term')}' ({w.get('why')})"
+            print(f"  WALL: {detail} - notifying Brad and stopping this store")
+            notify_wall(name, detail)
+            # Unattended: STOP rather than hang. Everything settled is already in localStorage,
+            # so a later run (after he clears it) resumes at this exact term.
+            browser.js("window.__tcResume = 'stop';")
+            walled = True
+
+        now = time.time()
+        if now - last_report > 60:
+            last_report = now
+            try:
+                key = json.dumps(skey)
+                n = browser.js(f"Object.keys(JSON.parse(localStorage.getItem({key}) || '{{}}')).length")
+                print(f"  ... {n} of {len(terms)} term(s) settled")
+            except Exception:
+                pass
+        time.sleep(3)
+
+    return bool(browser.js("!!(window.__tcRun && window.__tcRun.done)")), walled
+
+
 def storage_key_of(cfg):
     """Read the agent's localStorage key OUT OF THE AGENT, and prove it matches what we expect.
 
@@ -544,13 +648,248 @@ def storage_key_of(cfg):
     return found
 
 
-def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slot=None):
+# =====================================================================================================
+# LOOKUP MODE (D10) - the same stores, asked a different question, writing nowhere near the capture
+# estate. Read the LOOKUP MODE block in this file's header before changing anything below.
+# =====================================================================================================
+
+# The paced lane's verdicts go HERE, never under a store's capture key. sweepToCsv() exports every
+# MATCHES term it finds under the capture key, so a hunter term left there would be published as a
+# captured price by the next morning's run - the drill-writes-live class in a different costume.
+LOOKUP_STORAGE_KEY = "TC_LOOKUP_SWEEP"
+
+# Section 4.5's price-evidence contract caps hits at 8, the same cap probe-ingredient.ps1 applies.
+LOOKUP_HIT_CAP = 8
+
+# Stores this driver can actually look up for. Walmart is refused rather than paused-and-skipped,
+# because a hunter asking for Walmart evidence must be TOLD the answer comes from Brad's Chrome.
+LOOKUP_STORES = ("fareway", "samsclub")
+
+
+def validate_lookup_args(store_keys, terms_file, out_path):
+    """The flag contract, as a pure function so it can be proven without a browser.
+
+    Returns (ok, message). Both flags or neither; exactly one store; that store must be lookup-able.
+    """
+    want = bool(terms_file) or bool(out_path)
+    if not want:
+        return True, ""
+    if not (terms_file and out_path):
+        return False, ("--lookup-terms-file and --lookup-out are legal ONLY together: one without "
+                       "the other would either sweep with nowhere to report or report nothing swept.")
+    if len(store_keys) != 1:
+        return False, ("lookup mode needs exactly one explicit --store (got: "
+                       f"{', '.join(store_keys) if store_keys else 'none - it does not default to all'}). "
+                       "A lookup is a question about ONE store's shelf and its answer is filed per store.")
+    k = store_keys[0]
+    if k not in STORES:
+        return False, f"unknown store '{k}'. Known: {', '.join(STORES)}"
+    if k not in LOOKUP_STORES:
+        cfg = STORES[k]
+        paused = cfg.get("paused")
+        if paused:
+            return False, (f"{cfg['name']} is not looked up from this driver: PAUSED - {paused}. "
+                           "Ask the pricer to attend it through Brad's Chrome; retrying it from here "
+                           "is his call to make, never a side effect of a hunter batch.")
+        return False, f"{cfg['name']} has no lookup lane here. Lookup-able: {', '.join(LOOKUP_STORES)}"
+    return True, ""
+
+
+def read_lookup_terms(path):
+    """A JSON array of term strings. Returns (terms, why)."""
+    try:
+        with open(path, "r", encoding="utf-8-sig") as fh:
+            doc = json.load(fh)
+    except Exception as e:
+        return None, f"could not read the lookup term list at {path}: {e}"
+    if not isinstance(doc, list):
+        return None, f"{path} must hold a JSON ARRAY of term strings, got {type(doc).__name__}"
+    terms = [str(t).strip() for t in doc if str(t).strip()]
+    if not terms:
+        return None, f"{path} holds no terms"
+    return terms, None
+
+
+def lookup_verdict(term, state, term_used="", attempts=None, hits=None, reason=""):
+    """search-verdict-lib.ps1's New-SearchVerdict, serialized. Same three states, same field names -
+    this is a SERIALIZATION of that contract, never a second definition of it."""
+    assert state in ("MATCHES", "EMPTY", "UNUSABLE"), f"not a search state: {state}"
+    return {"term": term, "state": state, "term_used": term_used or term,
+            "attempts": list(attempts or []), "hits": list(hits or [])[:LOOKUP_HIT_CAP],
+            "reason": reason}
+
+
+def _num(v):
+    """A price as a number, or None. NEVER 0 for 'no price' - a zero sorts cheapest and wins a cell."""
+    try:
+        t = str(v).replace("$", "").replace(",", "").strip()
+        return float(t) if t else None
+    except Exception:
+        return None
+
+
+def _fareway_hits(rows):
+    """farewayShopExtract rows -> section 4.5 hits.
+
+    `relevance` is deliberately null: probe-ingredient's relevance is a PowerShell sort hint and
+    porting its formula here would fork a heuristic across two languages. These rows arrive in the
+    store's own ranking, which is the honest hint, and relevance is never a verdict anyway.
+    """
+    out = []
+    for r in rows or []:
+        out.append({"item": str(r.get("name") or "").strip(),
+                    "price": _num(r.get("price")),
+                    "size": str(r.get("size") or r.get("unit") or ""),
+                    "relevance": None,
+                    "url": str(r.get("url") or "")})
+    return out[:LOOKUP_HIT_CAP]
+
+
+def _sams_hits(rows):
+    """samsProbe rows (n/lp/up/id/was) -> section 4.5 hits, plus the club's own unit price.
+
+    `unit_price` is the one field beyond the five: Sam's rows carry no pack size at all, and its
+    unit price is exactly what an adjudicator compares a club pack against. Evidence, never a
+    verdict (AS-BUILT note in section 4.5).
+    """
+    out = []
+    for r in rows or []:
+        out.append({"item": str(r.get("n") or "").strip(),
+                    "price": _num(r.get("lp")),
+                    "size": "",
+                    "unit_price": str(r.get("up") or ""),
+                    "relevance": None,
+                    "url": (f"https://www.samsclub.com/p/-/{r.get('id')}" if r.get("id") else "")})
+    return out[:LOOKUP_HIT_CAP]
+
+
+RUNG1 = ("rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's "
+         "retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.")
+
+
+def write_lookup(out_path, store_key, verdicts, note=""):
+    """The lookup output file. One writer, one path, per store per batch - no lock needed."""
+    cfg = STORES[store_key]
+    doc = {"store": cfg["name"], "store_key": store_key,
+           "generated": datetime.datetime.now().isoformat(timespec="seconds"),
+           "ladder": RUNG1, "note": note, "results": list(verdicts)}
+    d = os.path.dirname(os.path.abspath(out_path))
+    if d:
+        os.makedirs(d, exist_ok=True)
+    with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh, ensure_ascii=False, indent=1)
+    return doc
+
+
+def write_lookup_unusable(out_path, store_key, terms, reason):
+    """The degrade path, and the whole reason lookup mode can be trusted by a caller that must not
+    block: NEEDS-SEEDING, a wall, a dead CDP or a crash all reach the caller as UNUSABLE for every
+    term, with the failure as the reason. Could-not-look never reads as EMPTY."""
+    return write_lookup(out_path, store_key,
+                        [lookup_verdict(t, "UNUSABLE", reason=reason) for t in terms],
+                        note="store UNUSABLE for the whole batch")
+
+
+def run_lookup_navigate(browser, cfg, terms, agent_src):
+    """Fareway: navigate per term, read the Apollo cache, one rung, no capture file.
+
+    FAREWAY RARELY REPORTS EMPTY, AND THAT IS CORRECT. farewayShopExtract THROWS when the cache
+    holds no priced nodes, which is the same signal as "has not hydrated yet" - the extractor
+    refuses to tell blindness and emptiness apart, so this lane does not either, and the honest
+    state for an unreadable page is UNUSABLE (which reads PENDING). Its MATCHES rows come from the
+    whole page cache and may include suggestion tiles, which is exactly what the pricer adjudicates.
+    """
+    delay = cfg.get("delay_ms", 900) / 1000.0
+    jitter = cfg.get("jitter_ms", 600) / 1000.0
+    retries = cfg.get("retries", 3)
+    out = []
+    for i, term in enumerate(terms, 1):
+        rows, why = navigate_probe(browser, cfg, term, agent_src, retries)
+        if rows is None:
+            out.append(lookup_verdict(term, "UNUSABLE",
+                                      attempts=[{"term": term, "state": "UNUSABLE", "hits": 0}],
+                                      reason=f"could not read the page: {why[:160]}"))
+            print(f"  [{i}/{len(terms)}] {term!r}: UNUSABLE - {why[:80]}")
+        else:
+            hits = _fareway_hits(rows)
+            out.append(lookup_verdict(term, "MATCHES" if hits else "EMPTY",
+                                      attempts=[{"term": term, "state": "OK", "hits": len(rows)}],
+                                      hits=hits,
+                                      reason=(RUNG1 + " Rows are the page's priced Apollo nodes and may "
+                                              "include suggestion tiles - adjudicate.")))
+            print(f"  [{i}/{len(terms)}] {term!r}: {len(rows)} candidate(s)")
+        time.sleep(delay + random.uniform(0, jitter))
+    return out
+
+
+def run_lookup_paced(browser, cfg, name, terms, timeout_min):
+    """Sam's Club: the store's OWN paced sweep, pointed at a lookup-scoped localStorage key.
+
+    THE SAM'S PRECONDITION IS THIS RUN. There is no separate session probe and there must not be
+    one: an unseeded or logged-out profile fails samsIdentity() upstream of here and the store ends
+    NEEDS-SEEDING with nothing captured. The puller owns the session and is the only honest source
+    on it.
+    """
+    handle = cfg.get("lookup_agent")
+    if not handle:
+        # Same discipline as _identity_call: a driver that cannot name what it is about to run
+        # refuses, rather than substituting something that cannot fail.
+        raise RuntimeError(f"no lookup_agent declared for {name} - refusing to guess the agent object")
+    key = json.dumps(LOOKUP_STORAGE_KEY)
+    # Start clean. The key is on a PERSISTENT profile, so last batch's verdicts would otherwise be
+    # resumed as this batch's evidence, and stale evidence is worse than none.
+    browser.js(f"localStorage.removeItem({key});")
+    expr = (f"runPacedSweep(Object.assign({{}}, {handle}, {{storageKey: {key}}}), "
+            f"{json.dumps(list(terms))}, {{}})")
+    done, walled = drive_paced_sweep(browser, cfg, name, terms, LOOKUP_STORAGE_KEY, timeout_min,
+                                     sweep_expr=expr)
+    raw = browser.js(f"localStorage.getItem({key}) || '{{}}'")
+    try:
+        res = json.loads(raw)
+    except Exception:
+        res = {}
+    err = browser.js("(window.__tcRun && window.__tcRun.err) || ''") or ""
+    # Leave nothing behind: this key lives on the persistent capture profile.
+    browser.js(f"localStorage.removeItem({key});")
+
+    out = []
+    for t in terms:
+        r = res.get(t)
+        if not r:
+            why = "the sweep never reached this term"
+            if walled:
+                why += " (stopped by a bot wall)"
+            elif not done:
+                why += f" (timed out after {timeout_min} min)"
+            elif err:
+                why += f" ({err[:120]})"
+            out.append(lookup_verdict(t, "UNUSABLE", attempts=[], reason=why))
+            continue
+        v = str(r.get("v") or "UNUSABLE")
+        if v not in ("MATCHES", "EMPTY", "UNUSABLE"):
+            v = "UNUSABLE"
+        rows = r.get("rows") or []
+        reason = str(r.get("why") or "")
+        out.append(lookup_verdict(t, v, attempts=[{"term": t, "state": v, "hits": len(rows)}],
+                                  hits=_sams_hits(rows) if v == "MATCHES" else [],
+                                  reason=(reason + "  " + RUNG1) if v != "UNUSABLE"
+                                  else (reason or "blocked")))
+    return out
+
+
+def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slot=None,
+              lookup=None):
     """Capture one store. Returns (ok: bool, note: str).
 
     slot: when several stores run at once, the index of this lane. It only decides where the
     window is parked - each lane is otherwise fully independent already (its own persistent
     profile, its own OS-assigned debug port, its own worklist and its own output file), which
     is what makes running them together safe rather than merely faster.
+
+    lookup: {"terms": [...], "out": <path>} puts this store in LOOKUP MODE (see the header block).
+    Everything up to and including the identity assertion is IDENTICAL - same profile, same seeded
+    check, same agent, same patience. Only the question and the destination change: no worklist is
+    read and no capture file is written.
     """
     cfg = STORES[store_key]
     name = cfg["name"]
@@ -578,6 +917,11 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
     pairs = None
     if seed:
         terms, why = None, None
+    elif lookup:
+        # THE DAILY WORKLIST IS NOT READ IN LOOKUP MODE. It is not merely unnecessary: a lookup that
+        # fell back to the worklist would sweep today's capture terms and file them as hunter
+        # evidence, and one that WROTE one would destroy the day's real worklist.
+        terms, why = list(lookup["terms"]), None
     elif navigate_lane:
         pairs, why = read_worklist_pairs(store_key, date_s)
         terms = [t for t, _ in pairs] if pairs else None
@@ -588,7 +932,8 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
 
     print(f"\n=== {name} ===")
     if not seed:
-        print(f"  worklist: {len(terms)} term(s)" + ("  [navigate lane]" if navigate_lane else ""))
+        kind = "lookup" if lookup else "worklist"
+        print(f"  {kind}: {len(terms)} term(s)" + ("  [navigate lane]" if navigate_lane else ""))
 
     # Prove the agent/driver contract BEFORE launching a browser: a drift here is a code defect and
     # should cost nothing to discover. The navigate lane has no localStorage sweep, so no key.
@@ -702,51 +1047,32 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
         if not ok:
             return False, f"identity check failed - {verdict}"
 
+        # LOOKUP MODE BRANCHES HERE - AFTER the identity assertion and before anything that
+        # touches the capture estate. Everything above this line is the daily capture's own
+        # preparation, unchanged, which is the point: the hunter gets the same proven approach to
+        # the store, not a second one written beside it.
+        if lookup:
+            if navigate_lane:
+                verdicts = run_lookup_navigate(browser, cfg, terms, agent_src)
+            else:
+                verdicts = run_lookup_paced(browser, cfg, name, terms, timeout_min)
+            write_lookup(lookup["out"], store_key, verdicts)
+            tally = {}
+            for v in verdicts:
+                tally[v["state"]] = tally.get(v["state"], 0) + 1
+            note = (f"lookup wrote {os.path.basename(lookup['out'])} ("
+                    + ", ".join(f"{k} {n}" for k, n in sorted(tally.items())) + ")")
+            # A batch nobody could read is a FAILED store even though the file was written: the
+            # caller degrades on it, and the run's own exit code must still say it went wrong.
+            ok = any(v["state"] != "UNUSABLE" for v in verdicts)
+            return ok, note if ok else note + " - every term UNUSABLE"
+
         if navigate_lane:
             out_path = os.path.join(ROOT, cfg["capture"].format(date=date_s))
             return run_navigate_lane(browser, cfg, pairs, out_path, agent_src)
 
-        # Kick the sweep off WITHOUT awaiting it over the socket. awaitPromise would hold the
-        # connection for the whole sweep, and a wall pause is unbounded - the driver has to stay
-        # responsive enough to notice the wall and answer it.
-        payload = json.dumps(terms)
-        browser.js(
-            "window.__tcRun = {done:false, err:null, summary:null};"
-            f"(async () => {{ try {{ window.__tcRun.summary = await {cfg['sweep']}({payload}, {{}}); }}"
-            "  catch (e) { window.__tcRun.err = String((e && e.message) || e); }"
-            "  finally { window.__tcRun.done = true; } })();"
-        )
-
-        deadline = time.time() + timeout_min * 60
-        walled = False
-        last_report = 0
-        while time.time() < deadline:
-            if browser.js("!!(window.__tcRun && window.__tcRun.done)"):
-                break
-
-            wall = browser.js("window.__tcWall ? JSON.stringify(window.__tcWall) : ''")
-            if wall:
-                w = json.loads(wall)
-                detail = f"walled on term '{w.get('term')}' ({w.get('why')})"
-                print(f"  WALL: {detail} - notifying Brad and stopping this store")
-                notify_wall(name, detail)
-                # Unattended: STOP rather than hang. Everything settled is already in localStorage,
-                # so a later run (after he clears it) resumes at this exact term.
-                browser.js("window.__tcResume = 'stop';")
-                walled = True
-
-            now = time.time()
-            if now - last_report > 60:
-                last_report = now
-                try:
-                    key = json.dumps(skey)
-                    n = browser.js(f"Object.keys(JSON.parse(localStorage.getItem({key}) || '{{}}')).length")
-                    print(f"  ... {n} of {len(terms)} term(s) settled")
-                except Exception:
-                    pass
-            time.sleep(3)
-
-        if not browser.js("!!(window.__tcRun && window.__tcRun.done)"):
+        done, walled = drive_paced_sweep(browser, cfg, name, terms, skey, timeout_min)
+        if not done:
             return False, f"timed out after {timeout_min} min (partial results kept for the next run)"
 
         err = browser.js("window.__tcRun.err || ''")
@@ -827,6 +1153,150 @@ def run_store(store_key, date_s, headless=False, seed=False, timeout_min=40, slo
             pass
 
 
+def lookup_self_test():
+    """LOOKUP MODE's own fixtures. HERMETIC: no Chrome, no network, no capture file, no profile.
+
+    What it proves is the set of things that, if they broke, would break quietly:
+      * the flag contract refuses every illegal shape, and refuses Walmart WITH its pause note;
+      * a lookup verdict is search-verdict-lib's three states and nothing else;
+      * the lookup storage key is not any store's capture key (a lookup term left under a capture
+        key is published as a captured price by the next morning's run);
+      * the degrade path writes a readable all-UNUSABLE file rather than nothing;
+      * lookup mode reads NO worklist, proven by making the worklist readers throw.
+    """
+    import tempfile
+    print("lookup-mode self-test (hermetic: no browser, no network, no capture)")
+    bad = []
+
+    def T(name, ok, got=""):
+        if ok:
+            print("    ok    " + name)
+        else:
+            print("    X     %s   got: %s" % (name, got))
+            bad.append(name)
+
+    # ---- the flag contract -------------------------------------------------------------------
+    ok, why = validate_lookup_args(["fareway"], "t.json", "")
+    T("MUST FIRE  --lookup-terms-file without --lookup-out is refused",
+      not ok and "ONLY together" in why, why)
+    ok, why = validate_lookup_args(["fareway"], "", "o.json")
+    T("MUST FIRE  --lookup-out without --lookup-terms-file is refused",
+      not ok and "ONLY together" in why, why)
+    ok, why = validate_lookup_args([], "t.json", "o.json")
+    T("MUST FIRE  lookup with NO explicit --store is refused - it never defaults to all",
+      not ok and "exactly one explicit --store" in why, why)
+    ok, why = validate_lookup_args(["fareway", "samsclub"], "t.json", "o.json")
+    T("MUST FIRE  lookup with two stores is refused - one file, one store's shelf",
+      not ok and "exactly one explicit --store" in why, why)
+    ok, why = validate_lookup_args(["walmart"], "t.json", "o.json")
+    T("MUST FIRE  Walmart is refused WITH its own pause note quoted, not silently skipped",
+      not ok and "PAUSED" in why and "Brad's own Chrome" in why, why)
+    ok, why = validate_lookup_args(["hyvee"], "t.json", "o.json")
+    T("MUST FIRE  a store that has no driver lane at all (Hy-Vee) is refused as unknown",
+      not ok and "unknown store" in why, why)
+    for k in LOOKUP_STORES:
+        ok, why = validate_lookup_args([k], "t.json", "o.json")
+        T(f"CLEAN TWIN {k} with both flags is accepted", ok, why)
+    ok, why = validate_lookup_args(["fareway"], "", "")
+    T("CLEAN TWIN neither flag is a normal capture run, not a refusal", ok and not why, why)
+
+    # ---- the verdict contract ----------------------------------------------------------------
+    v = lookup_verdict("guacamole", "EMPTY", reason="none")
+    T("a verdict carries exactly the search-verdict fields",
+      sorted(v) == ["attempts", "hits", "reason", "state", "term", "term_used"], sorted(v))
+    T("term_used defaults to the term as given (rung 1)", v["term_used"] == "guacamole", v["term_used"])
+    try:
+        lookup_verdict("x", "PENDING")
+        T("MUST FIRE  a state outside MATCHES/EMPTY/UNUSABLE is refused", False, "accepted PENDING")
+    except AssertionError:
+        T("MUST FIRE  a state outside MATCHES/EMPTY/UNUSABLE is refused", True)
+    T("MUST FIRE  hits are capped at 8 (section 4.5's cap, probe-ingredient's cap)",
+      len(lookup_verdict("x", "MATCHES", hits=[{"item": str(i)} for i in range(20)])["hits"]) == 8)
+
+    # ---- the key that must never collide -----------------------------------------------------
+    clash = [k for k, c in STORES.items() if c.get("storage_key") == LOOKUP_STORAGE_KEY]
+    T("MUST FIRE  the lookup storage key is NO store's capture key - sweepToCsv exports every "
+      "MATCHES term under a capture key, so a hunter term left there would publish as a price",
+      not clash, str(clash))
+
+    # ---- row -> hit conversion (3+ rows, per the estate's collection-fixture rule) ------------
+    fw = _fareway_hits([
+        {"name": "Fareway Guacamole 8 oz", "price": "3.99", "size": "8 oz", "url": "u1"},
+        {"name": "Wholly Guacamole Minis", "price": "5.49", "size": "", "unit": "$3.99 / lb", "url": "u2"},
+        {"name": "No Price Row", "price": "", "size": "12 oz", "url": "u3"}])
+    T("fareway rows become hits with a numeric price", fw[0]["price"] == 3.99, str(fw[0]))
+    T("a rate lands in size when there is no pack size", fw[1]["size"] == "$3.99 / lb", str(fw[1]))
+    T("MUST FIRE  a row with no honest price is None, NEVER 0 - a zero sorts cheapest and wins",
+      fw[2]["price"] is None, str(fw[2]))
+    sm = _sams_hits([
+        {"n": "Member's Mark Guacamole", "lp": "$14.98", "up": "$0.09/oz", "id": "980123"},
+        {"n": "Wholly Guacamole", "lp": "$12.48", "up": "", "id": "980124"},
+        {"n": "Broken", "lp": "", "up": "", "id": ""}])
+    T("sam's rows parse '$14.98' into a number", sm[0]["price"] == 14.98, str(sm[0]))
+    T("sam's rows keep the club's own unit price as evidence", sm[0]["unit_price"] == "$0.09/oz", str(sm[0]))
+    T("MUST FIRE  a sam's row with no line price is None, never 0", sm[2]["price"] is None, str(sm[2]))
+
+    # ---- the degrade path --------------------------------------------------------------------
+    tmp = tempfile.mkdtemp(prefix="lookup-selftest-")
+    out = os.path.join(tmp, "deep", "batch-1-samsclub.json")
+    write_lookup_unusable(out, "samsclub", ["a", "b", "c"], "NEEDS SEEDING: no seeded profile")
+    doc = json.load(open(out, encoding="utf-8"))
+    T("MUST FIRE  a store that could not be looked at writes every term UNUSABLE, with the reason",
+      len(doc["results"]) == 3
+      and all(r["state"] == "UNUSABLE" for r in doc["results"])
+      and all("NEEDS SEEDING" in r["reason"] for r in doc["results"]),
+      json.dumps(doc["results"])[:200])
+    T("MUST FIRE  and never as EMPTY - could-not-look is not an empty shelf",
+      not any(r["state"] == "EMPTY" for r in doc["results"]))
+    T("the lookup file names the ladder it did NOT walk", "rung 1 only" in doc["ladder"], doc["ladder"])
+
+    # ---- lookup mode reads no worklist -------------------------------------------------------
+    global read_worklist, read_worklist_pairs, profile_dir, Chrome
+    _rw, _rwp, _pd, _ch = read_worklist, read_worklist_pairs, profile_dir, Chrome
+
+    def _boom(*a, **k):
+        raise AssertionError("THE WORKLIST WAS READ IN LOOKUP MODE")
+
+    class _DeadChrome(object):
+        def __init__(self, *a, **k):
+            pass
+
+        def start(self):
+            raise RuntimeError("stub: no browser in a hermetic fixture")
+
+    prof = tempfile.mkdtemp(prefix="lookup-profile-")
+    with open(os.path.join(prof, ".tc-seeded"), "w", encoding="utf-8") as fh:
+        fh.write("fixture\n")
+    read_worklist = _boom
+    read_worklist_pairs = _boom
+    profile_dir = lambda k: prof                                          # noqa: E731
+    Chrome = _DeadChrome
+    try:
+        got = ""
+        try:
+            ok2, note = run_store("fareway", "2026-01-01", lookup={"terms": ["a", "b", "c"],
+                                                                  "out": os.path.join(tmp, "x.json")})
+            got = note
+            fired = (not ok2) and "could not start Chrome" in note
+        except AssertionError as e:
+            fired, got = False, str(e)
+        T("MUST FIRE  lookup mode reads NO worklist file - the readers throw and it never calls them",
+          fired, got)
+        try:
+            run_store("fareway", "2026-01-01")
+            T("CLEAN TWIN a normal capture run DOES read the worklist (so the fixture above can fire)",
+              False, "the capture path did not read a worklist either")
+        except AssertionError:
+            T("CLEAN TWIN a normal capture run DOES read the worklist (so the fixture above can fire)",
+              True)
+    finally:
+        read_worklist, read_worklist_pairs, profile_dir, Chrome = _rw, _rwp, _pd, _ch
+
+    print(f"  LOOKUP-SELFTEST-COMPLETE checks={len(bad)}failed" if bad else
+          "  LOOKUP-SELFTEST-COMPLETE failed=0")
+    return len(bad)
+
+
 def self_test(headless=False):
     r"""Prove the DRIVER<->AGENT plumbing without capturing anything.
 
@@ -843,7 +1313,8 @@ def self_test(headless=False):
     PASSING: refusal on an unverified profile is the whole safety property.
     """
     print("driver self-test - injection, contract and identity refusal (captures nothing)")
-    failures = 0
+    failures = lookup_self_test()
+    print("")
     for key, cfg in STORES.items():
         print(f"\n  --- {cfg['name']} ---")
         try:
@@ -908,7 +1379,7 @@ def self_test(headless=False):
             except Exception:
                 pass
 
-    print(f"\nDRIVER-SELFTEST-COMPLETE stores={len(STORES)} failed={failures}")
+    print(f"\nDRIVER-SELFTEST-COMPLETE stores={len(STORES)} lookup=hermetic failed={failures}")
     return 1 if failures else 0
 
 
@@ -954,10 +1425,20 @@ def main():
     ap.add_argument("--headless", action="store_true",
                     help="run headless. NOT recommended - these stores detect it and have walled us before.")
     ap.add_argument("--timeout-min", type=int, default=40)
+    ap.add_argument("--lookup-terms-file", default="",
+                    help="LOOKUP MODE (see the header): a JSON array of terms to search. Legal only "
+                         "with --lookup-out and an explicit --store fareway|samsclub. Reads no "
+                         "worklist and writes no capture file.")
+    ap.add_argument("--lookup-out", default="",
+                    help="LOOKUP MODE: where the per-term search verdicts are written.")
     ap.add_argument("--selftest", action="store_true",
                     help="prove the driver<->agent plumbing on a throwaway profile. Captures nothing.")
+    ap.add_argument("--selftest-lookup", action="store_true",
+                    help="lookup mode's hermetic fixtures only - no browser, no network at all.")
     args = ap.parse_args()
 
+    if args.selftest_lookup:
+        return 1 if lookup_self_test() else 0
     if args.selftest:
         return self_test(headless=args.headless)
 
@@ -968,13 +1449,35 @@ def main():
         print(f"unknown store(s): {', '.join(bad)}. Known: {', '.join(STORES)}")
         return 2
 
+    # LOOKUP MODE IS REFUSED BEFORE ANYTHING OPENS. A malformed lookup must never fall through to a
+    # capture run: the flags that separate the two are the only thing standing between a hunter
+    # batch and the day's real worklist.
+    lookup = None
+    lok, lwhy = validate_lookup_args(args.store or [], args.lookup_terms_file, args.lookup_out)
+    if not lok:
+        print(f"REFUSED: {lwhy}")
+        return 2
+    if args.lookup_terms_file:
+        lterms, lwhy = read_lookup_terms(args.lookup_terms_file)
+        if lterms is None:
+            print(f"FATAL: {lwhy}")
+            return 2
+        lookup = {"terms": lterms, "out": args.lookup_out}
+
     try:
         find_chrome()
     except Exception as e:
         print(f"FATAL: {e}")
+        if lookup:
+            # Degrade, never go silent: the caller reads UNUSABLE and hands the store to a human.
+            write_lookup_unusable(lookup["out"], keys[0], lookup["terms"], f"no Chrome: {e}")
         return 2
 
-    print(f"browser pull  -  {date_s}  -  stores: {', '.join(keys)}")
+    if lookup:
+        print(f"browser LOOKUP  -  {STORES[keys[0]]['name']}  -  {len(lookup['terms'])} term(s)  "
+              f"-  out: {args.lookup_out}")
+    else:
+        print(f"browser pull  -  {date_s}  -  stores: {', '.join(keys)}")
 
     # ONE THREAD PER STORE (2026-08-23). This was a sequential loop, so the browser stage cost the
     # SUM of its lanes when it only ever needed to cost the slowest one. Nothing about a lane is
@@ -995,7 +1498,7 @@ def main():
     def _one(k, slot):
         try:
             return run_store(k, date_s, headless=args.headless, seed=args.seed,
-                             timeout_min=args.timeout_min, slot=slot)
+                             timeout_min=args.timeout_min, slot=slot, lookup=lookup)
         except Exception as e:
             return False, f"threw: {e}"
 
@@ -1008,6 +1511,16 @@ def main():
     else:
         for k in keys:
             results[k] = _one(k, None)
+
+    # THE LOOKUP FILE ALWAYS EXISTS WHEN THIS RETURNS. NEEDS-SEEDING, a wall before the first
+    # term, a Chrome that would not start, a crash inside the lane - every one of them lands here
+    # with the failure as the reason for every term, because a caller that must not block needs to
+    # read UNUSABLE rather than to guess at silence. (A process killed outright leaves no file at
+    # all; that case belongs to the caller, and the daemon reads a missing file as UNUSABLE too.)
+    if lookup and not os.path.exists(lookup["out"]):
+        _ok, _note = results[keys[0]]
+        write_lookup_unusable(lookup["out"], keys[0], lookup["terms"], _note)
+        print(f"  wrote an all-UNUSABLE lookup file: {_note}")
 
     # PRINTED IN THE ORDER ASKED FOR, NOT THE ORDER FINISHED. Concurrent lanes interleave their own
     # progress output, so this summary is the one stable thing a reader (and capture-run's parser)
