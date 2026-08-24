@@ -811,7 +811,24 @@ function Split-AlternativeFoods([string]$Raw) {
     joined by `or` with no list punctuation is more often a phrase than a menu.
   #>
   if (-not $Raw) { return @() }
-  $s = ($Raw -replace '\s+', ' ').Trim()
+  # PARENTHETICALS ARE STRIPPED FIRST, AND THAT IS NOT TIDINESS - IT IS THE WHOLE TEST.
+  # Found 2026-08-24, the day D5 shipped, by asking how common a quantity-bearing alternatives line
+  # actually is. It is not: of 201 lines in the pool carrying `, or `, 155 state a quantity and almost
+  # every one of those is a VARIETY NOTE in brackets, not a menu -
+  #     "1 bell pepper (red, yellow, or orange, chopped)"
+  #     "1 lb. Italian sausage (hot, mild, or sweet)"
+  #     "1 cup dry red wine (such as Cabernet Sauvignon, Merlot, or Pinot Noir)"
+  #     "10 small corn tortillas (6-inch, or flour tortillas)"
+  # The main food is stated once and IS weighable. Splitting on the bracketed `or` produced
+  # `[1 bell pepper (red] [yellow] [orange] [chopped)]` - four foods, none of them real. Those lines
+  # never reached D5 because their quantity gets them a weight, so this was luck rather than design:
+  # a bracketed line with NO weight ("Fresh herbs (parsley, dill, or chives)") would have reached the
+  # refusal, mis-split, and gone shopping for the wrong food.
+  #
+  # So a menu has to be a menu at the TOP LEVEL of the line. If removing the brackets removes the
+  # `, or `, the line was never offering a choice of ingredient in the first place.
+  $s = ($Raw -replace '\([^)]*\)', ' ') -replace '\[[^\]]*\]', ' '
+  $s = ($s -replace '\s+', ' ').Trim().TrimEnd(',')
   if ($s -notmatch ',\s*or\s+') { return @() }
   # a leading state word ("Prepared", "Cooked") applies to the whole list, not to one option
   $lead = ''
@@ -1772,6 +1789,23 @@ if ($runSelfTest) {
     ((@(Split-AlternativeFoods '2 cups brown rice')).Count -eq 0) 'split a plain line'
   T 'CLEAN TWIN a bare "a or b" with no list punctuation is a phrase, not a menu' `
     ((@(Split-AlternativeFoods 'salt or pepper')).Count -eq 0) 'split a bare or-phrase'
+  # A PARENTHETICAL IS NOT A MENU (found 2026-08-24, the day D5 shipped). Of 201 pool lines carrying
+  # `, or `, 155 state a quantity and nearly all of those are VARIETY NOTES in brackets. The first
+  # splitter turned "1 bell pepper (red, yellow, or orange, chopped)" into four foods, none real. Those
+  # lines never reached D5 because their quantity earns them a weight - luck, not design, since a
+  # bracketed line with NO weight would have mis-split and gone shopping for the wrong food.
+  T 'MUST FIRE  a bracketed VARIETY note is not an alternatives line - the food is stated once' `
+    ((@(Split-AlternativeFoods '1 bell pepper (red, yellow, or orange, chopped)')).Count -eq 0) `
+    ((@(Split-AlternativeFoods '1 bell pepper (red, yellow, or orange, chopped)')) -join ' | ')
+  T 'MUST FIRE  ...and neither is a bracketed SUBSTITUTION note' `
+    ((@(Split-AlternativeFoods '10 small corn tortillas (6-inch, or flour tortillas)')).Count -eq 0) `
+    ((@(Split-AlternativeFoods '10 small corn tortillas (6-inch, or flour tortillas)')) -join ' | ')
+  T 'MUST FIRE  ...nor a bracketed list on a line with NO quantity, which is the one that could reach D5' `
+    ((@(Split-AlternativeFoods 'Fresh herbs (parsley, dill, or chives)')).Count -eq 0) `
+    ((@(Split-AlternativeFoods 'Fresh herbs (parsley, dill, or chives)')) -join ' | ')
+  T 'CLEAN TWIN and a genuine TOP-LEVEL menu still splits' `
+    ((@(Split-AlternativeFoods 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice')).Count -eq 4) `
+    ((@(Split-AlternativeFoods 'Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice')) -join ' | ')
   # THE UNIT TRAP, and it is the reason this ranks per POUND rather than on the raw figure. quinoa
   # prices per OUNCE at 0.1372, which is 2.20/lb - the DEAREST of the four - yet a naive comparison
   # ranks it first.
