@@ -597,6 +597,15 @@ def run():
       *_band_pair_has_both_sides())
 
     # =================================================================================================
+    H("B4: a gate may fail closed on a number we stand behind, not on one we called an estimate")
+    # =================================================================================================
+    T("MUST FIRE  a band REJECTION over macros resting on a needs_verify food-DB row PARKS the recipe "
+      "for verification instead of killing it - beef-back-ribs died on an estimated 0.45 edible yield",
+      *_needs_verify_parks_not_retires())
+    T("CLEAN TWIN ...and a rejection over VERIFIED rows still retires, exactly as before",
+      *_verified_rows_still_retire())
+
+    # =================================================================================================
     H("The band gate, read off the built spec")
     # =================================================================================================
     T("MUST FIRE  a spec outside the band is retired and never reaches QA, in ONE advance "
@@ -3372,3 +3381,53 @@ def _any_limit_restores_verification():
                    "unverified-with-macros": (520.0, 20.0, 60.0, False),
                    "verified": (520.0, 20.0, 60.0, True)}, band=band)
     return (got == ["verified"], "expected only the verified row, got %s" % json.dumps(got))
+
+
+# =====================================================================================================
+# B4 (Brad's ruling 2026-08-24). needs_verify ROWS MAY NOT KILL A RECIPE.
+#
+# 11 of 345 food-DB rows carry the flag, and six of the eleven are bone-in cuts failing the same way:
+# USDA states the EDIBLE portion, the board needs AS-PURCHASED, and the bridge is an estimated edible
+# yield. 6b retired beef-back-ribs at 41.6 g protein against a 50 g floor and the entire 15 g gap was
+# that one estimate. Same class as B2's density guess, one stage later, with a recipe's life on it.
+# =====================================================================================================
+
+def _bandgate_run(protein, food_rows):
+    tmp = tempfile.mkdtemp(prefix="daemon-nv-")
+    try:
+        fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
+        ps = FakePS()
+        skeletoned(tmp, ["s1"], cal=560, carbs=20, protein=protein)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, band=dict(_BAND_RUN))
+        d._food_db = dict(food_rows)
+        d.spec_band = lambda slug, specs_dir=None: (560, 20, protein)
+        d.ch["write"].push({"slug": "s1"})
+        d.ch["write"].close()
+        arun(d.run(("write",)))
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return d, to
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# skeletoned() writes these three items; the first is the one we flag
+_NV_ROWS = {"93/7 Ground Beef": {"item": "93/7 Ground Beef", "needs_verify": True,
+                                 "verify_source": "USDA lean-only x an estimated 0.45 edible yield"},
+            "Rice": {"item": "Rice"}, "Yellow Onion": {"item": "Yellow Onion"}}
+_OK_ROWS = {"93/7 Ground Beef": {"item": "93/7 Ground Beef", "needs_verify": False},
+            "Rice": {"item": "Rice"}, "Yellow Onion": {"item": "Yellow Onion"}}
+
+
+def _needs_verify_parks_not_retires():
+    # 41.6 g against the 50 g floor - the ribs shape
+    d, to = _bandgate_run(41.6, _NV_ROWS)
+    parked = [x for x in d.outcomes if x.get("state") == "stuck"] or [x for x in d.stucks]         if hasattr(d, "stucks") else []
+    said = " ".join(d.findings)
+    return ("rejected-macros" not in to and "needs_verify" in said and "93/7 Ground Beef" in said,
+            "advances=%s findings=%s" % (json.dumps(to), said[:220]))
+
+
+def _verified_rows_still_retire():
+    d, to = _bandgate_run(41.6, _OK_ROWS)
+    return ("rejected-macros" in to,
+            "expected a retirement, advances=%s" % json.dumps(to))

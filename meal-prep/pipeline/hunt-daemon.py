@@ -1982,10 +1982,68 @@ class Daemon(object):
             # A calibration LOG may never break a run. It is evidence for later, not a gate.
             self.findings.append("%s: the band pair could not be recorded (%s)" % (slug, e))
 
+    def unverified_foods(self, slug):
+        """Food-DB rows THIS recipe's macros rest on that we ourselves flagged `needs_verify`.
+
+        B4 (Brad's ruling 2026-08-24). 11 of 345 rows carry the flag - 3.2% - and six of the eleven are
+        BONE-IN CUTS failing the same way: USDA states the EDIBLE portion, the board needs
+        AS-PURCHASED, and the bridge is an estimated edible-yield factor. `Beef Back Ribs` is
+        9 g protein per 100 g as-purchased via `USDA lean-only x 0.45 edible yield`, and its own note
+        says "TWO DISCLOSED ESTIMATES". 6b retired that recipe at 41.6 g against a 50 g floor, and the
+        entire 15 g gap was that one estimate.
+        """
+        out = []
+        try:
+            with open(os.path.join(self.run_dir, "intake", "%s.json" % slug),
+                      "r", encoding="utf-8-sig") as f:
+                items = [str(i.get("item") or "") for i in ((json.load(f) or {}).get("ingredients") or [])]
+        except Exception:                                         # noqa: BLE001
+            return out
+        for name in items:
+            row = self.food_db().get(name)
+            if isinstance(row, dict) and row.get("needs_verify"):
+                out.append(name)
+        return out
+
+    def food_db(self):
+        if getattr(self, "_food_db", None) is not None:
+            return self._food_db
+        idx = {}
+        try:
+            with open(os.path.join(MP, "food-macros-db.json"), "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            rows = doc.get("foods") or doc.get("items") or doc
+            if isinstance(rows, dict):
+                rows = list(rows.values())
+            for r in (rows if isinstance(rows, list) else []):
+                if isinstance(r, dict) and r.get("item"):
+                    idx[str(r["item"])] = r
+        except Exception:                                         # noqa: BLE001
+            pass
+        self._food_db = idx
+        return idx
+
     async def retire_out_of_band(self, slug, verdict, where):
         """priced -> rejected-macros, in ONE advance. Both band gates land the same way: the pre-write
         one because no prose was ever paid for, and the post-build one because the state advances
-        happen after it, so the recipe is still at `priced` when it rules."""
+        happen after it, so the recipe is still at `priced` when it rules.
+
+        B4: A GATE MAY FAIL CLOSED ON A NUMBER WE STAND BEHIND. It may not KILL a dish on one we have
+        ourselves labelled an estimate - that is the same class as the qty engine guessing a density
+        (B2), one stage later and with a recipe's life on it. When the macros rest on a `needs_verify`
+        row the recipe PARKS for verification instead, resumable, saying which row and why.
+        """
+        unverified = self.unverified_foods(slug)
+        if unverified:
+            why = ("the band would retire this recipe (%s), but its macros rest on food-DB row(s) we "
+                   "flagged needs_verify: %s. A gate may fail closed on a number we stand behind; it "
+                   "may not kill a dish on one we called an estimate. Verify the row (fetch the FDC "
+                   "panel, cross-check by Atwater, record it) and resume."
+                   % (verdict["reason"], ", ".join(sorted(set(unverified)))))
+            self.log("macro gate (%s): %s PARKED for verification - %s" % (where, slug, ", ".join(sorted(set(unverified)))))
+            self.findings.append("%s: %s" % (slug, why))
+            self.stuck(slug, "macro-gate", why[:400])
+            return
         self.log("macro gate (%s): %s at %s - retiring" % (where, slug, verdict["reason"]))
         await self.advance(slug, "rejected-macros", "macro-gate",
                            "macro gate (%s): %s" % (where, verdict["reason"]))
