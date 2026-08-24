@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-08-23",
-    "updated":  "2026-08-23T08:23:05",
+    "week_of":  "2026-08-24",
+    "updated":  "2026-08-24T08:17:06",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -25,25 +25,25 @@
                      "per_serving":  1.97
                  },
                  {
-                     "slug":  "chicken-pot-pie-biscuit-casserole",
+                     "slug":  "slow-cooker-salsa-chicken-bowl",
                      "protein":  "chicken",
                      "rank":  4,
-                     "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  2.01
+                     "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
+                     "per_serving":  1.97
                  },
                  {
-                     "slug":  "chicken-bulgogi-rice-bowls",
+                     "slug":  "chicken-pot-pie-biscuit-casserole",
                      "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Chicken Bulgogi Rice Bowls",
-                     "per_serving":  2.02
+                     "name":  "Chicken Pot Pie Casserole with Biscuits",
+                     "per_serving":  2.01
                  },
                  {
                      "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
                      "rank":  1,
                      "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.8
+                     "per_serving":  1.85
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -53,25 +53,25 @@
                      "per_serving":  1.89
                  },
                  {
-                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
-                     "protein":  "turkey",
-                     "rank":  3,
-                     "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  1.99
-                 },
-                 {
                      "slug":  "turkey-alfredo-rotini-bake",
                      "protein":  "turkey",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Turkey Alfredo Rotini Bake",
                      "per_serving":  2
+                 },
+                 {
+                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
+                     "protein":  "turkey",
+                     "rank":  4,
+                     "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
+                     "per_serving":  2.02
                  },
                  {
                      "slug":  "turkey-maqluba-upside-down-rice-bake",
                      "protein":  "turkey",
                      "rank":  5,
                      "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.07
+                     "per_serving":  2.1
                  },
                  {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
@@ -92,14 +92,14 @@
                      "protein":  "beef",
                      "rank":  3,
                      "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.26
+                     "per_serving":  2.3
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  4,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.36
+                     "per_serving":  2.39
                  },
                  {
                      "slug":  "john-wayne-casserole",
@@ -120,7 +120,7 @@
                      "protein":  "pork",
                      "rank":  2,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.61
+                     "per_serving":  1.64
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
@@ -134,7 +134,7 @@
                      "protein":  "pork",
                      "rank":  4,
                      "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.83
+                     "per_serving":  1.85
                  },
                  {
                      "slug":  "pork-egg-roll-in-a-bowl",
