@@ -833,7 +833,7 @@ prompts is what source-domains.ps1 was built to retire.)
 | recipe-sourcer | opus-4-8 / high | volume collapses to rare top-up + new-publisher discovery | HOLD - rarer, but each call is open-ended research, the hardest shape there is |
 | recipe-dedup-selector (DECIDE) | opus-4-8 / high | absorbs the adjudicators' work; rules over dossiers | HOLD - it now carries the whole dedup ruling alone; if anything this pin matters MORE |
 | recipe-hunter-extractor | fable / medium | escalation-only: the pages local could not settle | **HOLD, and explicitly do not cheapen** - see the residue principle below |
-| recipe-ingredient-mapper | fable / high | residual-only: the judgment lines, pre-resolved table supplied | HOLD |
+| recipe-ingredient-mapper | fable / high | residual-only: the judgment lines, pre-resolved table supplied | **CHANGED 2026-08-24 -> opus-5 / high**, ordered by Brad against the phase-5 measurement (note below) |
 | recipe-hunter-pricer | opus-5 / medium | adjudicates pre-gathered rows; attends the walled stores | HOLD - carriage rulings are unrecoverable downstream |
 | recipe-writer | opus-4-8 / high | prose only, over a machine-locked skeleton | HOLD - what remains is exactly the part that needs the voice |
 | recipe-source-qa | fable / medium | judgment residue over the battery report | HOLD |
@@ -864,6 +864,19 @@ hardest inputs at the point where the net has the widest holes.
 Model-tier changes therefore stay OUT of this plan entirely (§11), exactly as Group E held them:
 each is its own measured experiment against a baseline, ordered by Brad, never a build-time
 convenience.
+
+**CORRECTED 2026-08-24: the mapper pin moved fable -> opus-5 / high, BY BRAD'S ORDER, against the
+phase-5 gate measurement.** The measurement: one live 4-recipe batch cost 19m07s and ~$12.70 on
+Fable (deduped: 13,001 uncached in / 323,820 cache write / 3,802,874 cache read / 93,903 out over
+30 turns) plus an unstamped $1.64 Opus subagent - the most expensive single dispatch in the
+pipeline, and Fable is exactly 2x Opus-5 per token. The residue principle above was weighed and
+stated to Brad in as many words before he ordered the change; it argues the other way, and the
+frontmatter now says `claude-opus-5` because the person the paragraph reserves the decision for
+made it. **The phase-6 checkpoint this creates:** the first Opus-mapped batch gets a ruling-level
+diff against a Fable-mapped batch of comparable residue (a scratch copy re-map is enough). If Opus
+misrules identities Fable would have caught, the pin goes back and this paragraph gets a second
+date. The extractor's pin is untouched - the anti-cheapening argument above is about invented
+transcriptions and remains in force.
 
 ### 4.5 Contracts (normative - the no-guessing appendix)
 
@@ -2542,6 +2555,109 @@ per term at rung 1, and "korean-rice-cakes" came back with Lundberg snack rice c
 bleu while "mustard powder" came back with Montreal steak seasoning. If phase 6 measures the pricer
 spending its session sorting obvious non-matches, S5's deferred adversarial row-ordering signal is the
 thing to build - and only then.
+
+**Phase-6 efficiency addendum (2026-08-24, ordered by Brad after reviewing the phase-5 cost data:
+"greatly reduce the time being spent + the number of tokens"). The whole pipeline was re-reviewed,
+not just the two lanes the gate exercised. The cost law every item below follows: a dispatch costs
+turns x working-set (each turn re-reads the accumulated context as cache) plus output tokens at 5x
+input price - so the levers are turn count, output size, and working-set size, in that order.**
+
+*Measured baseline (phase-5 gate, deduped per message id; the lane log's stamps were verified
+correct against the transcripts):*
+
+| dispatch | model | turns | uncached in | cache write | cache read | out | wall | cost |
+|---|---|---|---|---|---|---|---|---|
+| mapper, 4 recipes | fable | 30 (+21 subagent) | 13,001 | 323,820 | 3,802,874 | 93,903 | 19m07s | ~$12.70 + $1.64 unstamped |
+| pricer, 5 terms | opus-5 | 50 + 15 re-ask | 130 | 136,463 | 4,099,768 | 47,710 | 13m26s | ~$4.10 |
+| pre-pass, 5 terms | none | n/a | 0 | 0 | 0 | 0 | 62s | ~$0 |
+
+At this shape, 200 recipes cost roughly 10-12 hours and ~$800 on these two lanes alone. The items
+below target ~3.5-4.5 hours and ~$250-300 (before the opus-5 mapper pin, which halves the mapper's
+per-token price on top).
+
+**A. The mapper (biggest lever - ~60% of its cost is output tokens and turn count):**
+- **A1. The daemon assembles `mapped\<slug>.json`; the mapper stops writing files.** The mapper
+  returns ONLY its residual rulings as a schema'd payload; the daemon merges them with the
+  pre-resolve table mechanically. Kills ~80k output tokens per batch (the $50/M kind), removes the
+  per-file Write turns, and fixes gate finding 1 (the wrong-shaped decision file) BY CONSTRUCTION -
+  the daemon holds the pen, which is the whole v3 direction. **This adds per-line rulings to the
+  MAPPED schema - a THIRD schema delta, RATIFIED BY BRAD 2026-08-24** (the "only two deltas" rule
+  bends here by his order, and this sentence is the dated record). D8's `-Verify` remains the
+  downstream check that the assembled file is buildable.
+- **A2. Inline the residual dossier; forbid estate re-reads.** map_prompt already carries the
+  residual lines; it must also carry the table's near-miss evidence per line (already computed -
+  "White Wine Vinegar, DIFFERENT FORM: vinegar" is sitting in the table) and restrict Reads to
+  genuine label lookups for NEW foods. Phase 1 measured inline beating tool-call reads; 30 turns
+  should land near 10-12.
+- **A3. Strip `Agent` from the mapper's tool list** (D11's minimal-tools rule, applied early). The
+  phase-5 batch spawned a 21-turn Opus subagent that appears in NO lane stamp - $1.64 of invisible
+  spend. Delegation ends; the work happens in-line, stamped.
+
+**B. The pricer (~50-60% cut, all four items small and certain):**
+- **B1. The re-ask defect, hunt_dispatch.py ~line 395: no schema + no validator must mean PROSE IS
+  THE ANSWER.** Today `extract_payload` returning None triggers a full second session on every
+  single pricer call ("the answer carried no JSON object at all" - but nobody wants one; the price
+  lane derives state from the queue, never from the payload). Measured: 15 turns and ~$0.61 per
+  batch, 15% of the lane, for nothing. Must-fire: a schema-less dispatch answering pure prose is
+  accepted without a re-ask, proven by neutering; clean twin: a schema'd dispatch still re-asks.
+- **B2. `-RecordBatch` on ingredient-queue.ps1.** 7 stores x 5 terms = ~35 separate `-Record`
+  invocations = ~35 turns, the single largest turn sink in the lane. One call carrying N records as
+  a JSON file, the script enforcing the evidence contract PER ROW exactly as it does per call
+  (carried-requires-a-price, exact store names, PENDING-never-promotes) - the pen stays with the
+  pricer, the enforcement stays at the script layer. Fixture: a batch with one contract-violating
+  row rejects that row with it named, and the mutex still guards the whole write.
+- **B3. price_prompt tells the dispatched pricer the truth about its hands** (gate finding 2's
+  remediation): a daemon dispatch is headless, so the prompt says NO browser exists in this
+  session, instructs one batched `blocked - no browser in this session` record for
+  Hy-Vee/Walmart/Aldi, and forbids re-probing any store the evidence already marks
+  UNUSABLE-throttled (Family Fare ate 3 futile retries). Kills the discovery turns and closes the
+  fabrication window in the same edit. The agent definition keeps the attended-run instructions for
+  when a HUMAN runs the pricer interactively - two entry points, one agent.
+- **B4. The hyphen ladder fix in search-verdict-lib** (gate finding 4): count words on `[\s\-_]+`
+  and make the hyphen-to-space swap one real rung. 110 probe requests for one term becomes ~15,
+  and the pre-pass gets faster for free.
+
+**C. Estate-wide (from the whole-pipeline review):**
+- **C1. Turn and cache telemetry in the lane stamps.** Today's analysis required transcript
+  archaeology with per-message-id dedup. DispatchResult ALREADY carries cache_read /
+  cache_creation / calls; lane() just does not stamp them. Add turns, cache split, and the
+  modelUsage-derived subagent-inclusive total to every end stamp, so every future run measures
+  this for free. (The unstamped-subagent gap is real: the mapper's $1.64 appeared in no ledger.)
+- **C2. The N-shell-calls audit across every agent prompt.** The -Record pattern generalizes: any
+  instruction that implies N serial script invocations is N turns. The pricer was the worst; check
+  the writer's in-place field fills (instruct ONE edit pass over the fillable set, not one Edit
+  per field) and any registrar/consult loops. QA writes one verdict file and is fine.
+- **C3. Seed FULL batches.** MAP_BATCH=5 and PRICE_BATCH=10 amortize the fixed working set per
+  recipe; the gate ran 4 and 5. Free money at scale - the seeding side just needs to prefer full
+  slices when the backlog allows.
+- **C4. Measure the lane-log spawn tax, then maybe move the pen.** Every lane event spawns
+  powershell.exe (~1s under PS 5.1) via hunt-run.ps1 -Lane. At 200 recipes that is on the order of
+  2,000 spawns - potentially tens of minutes of pure process startup. The daemon owns a real clock
+  already; if the measurement is material, it appends lane-log.jsonl lines directly and
+  hunt-run.ps1 stays the reader/contract owner. Measure first (C1 makes this visible).
+- **C5. D11 early wins now instead of later:** minimal tool lists per agent (A3 is the first), and
+  standing constants OUT of per-call prompts INTO agent definitions where the prefix cache pays
+  once per session instead of per dispatch.
+- **C6. Effort tuning is measure-first and per-lane.** The mapper stays `high` through the pin
+  change (accuracy stage). Writer/QA at `medium` are candidates ONLY with an A/B against a
+  baseline - the residue principle in 4.4a applies to effort exactly as it does to tiers.
+- **C7. Do NOT batch QA.** Fidelity is per recipe and accuracy-sensitive; the per-dispatch
+  overhead is the price of the verdict being about ONE recipe. Reviewed and rejected, recorded so
+  nobody re-derives it as an optimization.
+- **C8. Pricing self-shrinks at scale - no work, just the note:** 4 of the gate's 5 terms are now
+  CARRIED in carriage.json forever, and the queue dedupes by term across recipes and runs. The
+  marginal new-term rate falls as the vocabulary saturates, so the $82/200-recipes pricing
+  estimate is a ceiling, not a run rate.
+- **C9. The already-lean lanes were reviewed and left alone:** harvest/pool and decide are
+  mechanical-plus-one-dispatch by construction (phase 1 measured the dossier inlining at a 37%
+  token drop; DECIDE_BATCH=10 amortizes); extract is local-first with Claude only on escalations
+  (phase 2's whole point); the wave lane's auditor reads residue + report (S8). No items.
+
+*Sequencing for the phase-6 builder:* B1 and B4 are one-liners with fixtures - do them first and
+every subsequent gate run is cheaper. Then A1+A2 together (one contract, one prompt, one merge
+function), then B2+B3 together (one script surface, one prompt), then C1, then the rest as the
+proving run's own measurements justify. The mapper pin is ALREADY LIVE (frontmatter edited
+2026-08-24); its compare-batch checkpoint is in 4.4a.
 
 **Stop-rules.** Re-measure with lane-tokens/harvest-lane-tokens after phases 1, 3 and 6; if the
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
