@@ -832,7 +832,7 @@ def slim_ruled(entry):
 
 
 def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_CAL_MAX,
-            carb_max=BAND_CARB_MAX):
+            carb_max=BAND_CARB_MAX, band_at_ingest=False):
     """The band + structure + signature pass. ONE code path, so an --ingest candidate from a top-up
     sourcer is treated exactly like a crawled one (section 3 S1 item 5: one road into the pool).
 
@@ -870,7 +870,18 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
         "starch": detect_starch(lines),
     }
 
-    verdict = in_band(entry["band"], cal_min, cal_max, carb_max)
+    # THE INGEST BAND IS GONE (Brad's ruling 2026-08-24). harvest RECORDS what the page says; the RUN
+    # decides what is acceptable. That is what band-as-run-parameter established this morning, and this
+    # was the last place a second, hidden band survived: qualify() ruled candidates out at CRAWL time
+    # against hard-coded 400-650 cal / <= 35 carbs, so 1,556 candidates - 64% of the pool - were buried
+    # by a constraint no run had asked for, and every publisher's apparent "yield" was really a
+    # measurement of that constant. An ingest band NARROWER than a run band can be is a candidate the
+    # run would accept and can never reach.
+    #
+    # The numbers are still read and still recorded on entry["band"], so the run's pop filter and the
+    # two macro gates work exactly as before on whatever band a prompt states. Nothing is weakened:
+    # a band that IS stated still rejects, one stage later and where it can be seen.
+    verdict = in_band(entry["band"], cal_min, cal_max, carb_max) if band_at_ingest else None
     if verdict is False:
         # FILTERED - and the numbers that filtered it are RECORDED, so the judgment is auditable and
         # the page is never re-fetched to re-earn the same answer. A filtered candidate stays in the
@@ -878,7 +889,14 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
         entry["status"] = "ruled:out-of-band"
         return slim_ruled(entry), "out-of-band"
     entry["status"] = "available"
-    return entry, ("in-band" if verdict is True else "band-unverified")
+    # DISPOSITION TRACKS THE NUMBERS, NOT A BAND RULING. With no ingest band, `verdict` is None for
+    # every page, and calling them all "band-unverified" would lie about pages whose macros read
+    # perfectly - dossier_rank reads this distinction to pop candidates whose band we can defend first.
+    if verdict is None:
+        disp = "in-band" if entry["band"].get("verified") else "band-unverified"
+    else:
+        disp = "in-band" if verdict is True else "band-unverified"
+    return entry, disp
 
 
 # =====================================================================================================
@@ -1617,6 +1635,45 @@ def cmd_mark_taken(a):
     return 0
 
 
+def cmd_reingredients(a):
+    """Restore ingredient lines to pooled candidates from the PAGE CACHE. No network, no model.
+
+    WHY THIS EXISTS (2026-08-24). `slim_ruled` strips `ingredients_verbatim` from a ruled entry to keep
+    the pool small - correct while the entry is buried. When the ingest band was dropped and 1,555
+    band-ruled candidates came back to `available`, they came back WITHOUT their lines, and lines are
+    load-bearing: the exclusions filter reads them (a rib recipe whose title hides the cut is caught
+    only there), the decider's dossier is built from them, and the mapper's table starts from them.
+    Their pages are already in the content-addressed cache, so this is a re-parse, not a re-fetch:
+    measured 95% of a 250-candidate sample recoverable.
+    """
+    pool = read_pool(a.pool or POOL)
+    targets = [c for c in pool["candidates"]
+               if c.get("status") == "available" and not c.get("ingredients_verbatim")]
+    if a.limit:
+        targets = targets[:a.limit]
+    say("harvest --reingredients: %d available candidate(s) carry no ingredient lines" % len(targets))
+    fixed = uncached = nojson = 0
+    for c in targets:
+        body = cached_body(c.get("url") or "")
+        if body is None:
+            uncached += 1
+            continue
+        node = recipe_jsonld(body)
+        lines = ingredient_lines(node) if node else []
+        if not lines:
+            nojson += 1
+            continue
+        c["ingredients_verbatim"] = lines
+        fixed += 1
+    if a.dry_run:
+        say("  DRY RUN - nothing written")
+    else:
+        write_pool(pool, a.pool or POOL)
+    say("  restored %d, no cached page %d, no JSON-LD ingredients %d" % (fixed, uncached, nojson))
+    say("HARVEST-COMPLETE")
+    return 0
+
+
 def cmd_mark_ruled(a):
     pool = read_pool(a.pool or POOL)
     by_slug, _ = pool_index(pool)
@@ -1954,21 +2011,32 @@ def cmd_selftest(_a):
       e["signature"] == {"protein": "chicken", "method": "skillet", "sauce_family": "cream",
                          "starch": "none"}, json.dumps(e["signature"]))
 
+    # CHANGED 2026-08-24 (Brad: drop the ingest band). harvest RECORDS what the page says; the RUN
+    # decides what is acceptable. This was the last place a second, hidden band survived - it buried
+    # 1,556 candidates, 64% of the pool, against hard-coded constants no run had asked for.
     e2, disp2 = qualify(new_entry("y", "Y", "https://d/y", "d", "crawl"), node("980 kcal", "9 g"),
                         fams, meths)
-    T("MUST FIRE  an out-of-band page is FILTERED with the numbers recorded",
-      disp2 == "out-of-band" and e2["status"] == "ruled:out-of-band" and e2["band"]["cal"] == 980,
+    T("MUST FIRE  a 980-cal page is RECORDED and left AVAILABLE - ingest does not bury it, the run rules",
+      disp2 != "out-of-band" and e2["status"] == "available" and e2["band"]["cal"] == 980,
       "%s %s" % (disp2, e2["status"]))
-    T("MUST FIRE  a ruled entry keeps the numbers that ruled it and loses the scoring apparatus",
-      "band" in e2 and e2["band"]["cal"] == 980 and "neighbours" not in e2
-      and "prior_rulings" not in e2 and "ingredients_verbatim" not in e2, ",".join(sorted(e2)))
+    T("CLEAN TWIN ...and it keeps the scoring apparatus, because it is a candidate now",
+      "neighbours" in e2 and "ingredients_verbatim" in e2, ",".join(sorted(e2)))
+    # THE MACHINERY IS NOT DELETED, only defaulted off: asked for a band, ingest still filters and
+    # still slims the ruled entry down to the numbers that ruled it.
+    e2f, disp2f = qualify(new_entry("yf", "Yf", "https://d/yf", "d", "crawl"), node("980 kcal", "9 g"),
+                          fams, meths, band_at_ingest=True)
+    T("MUST FIRE  band_at_ingest=True still filters, and a ruled entry keeps its numbers and loses the apparatus",
+      disp2f == "out-of-band" and e2f["status"] == "ruled:out-of-band" and e2f["band"]["cal"] == 980
+      and "neighbours" not in e2f and "ingredients_verbatim" not in e2f,
+      "%s %s %s" % (disp2f, e2f["status"], ",".join(sorted(e2f))))
     T("CLEAN TWIN an AVAILABLE entry keeps all of it - it is about to become a dossier",
       "neighbours" in e and "ingredients_verbatim" in e and len(e["ingredients_verbatim"]) == 3,
       ",".join(sorted(e)))
     e2b, disp2b = qualify(new_entry("y2", "Y2", "https://d/y2", "d", "crawl"), node("512 kcal", "61 g"),
                           fams, meths)
-    T("MUST FIRE  an over-carb page is filtered on carbs, with the carb figure recorded",
-      disp2b == "out-of-band" and e2b["band"]["carbs"] == 61, "%s %s" % (disp2b, e2b["band"]))
+    T("MUST FIRE  a 61 g carb page is RECORDED and available - the carb figure is kept for the run to rule on",
+      disp2b != "out-of-band" and e2b["status"] == "available" and e2b["band"]["carbs"] == 61,
+      "%s %s" % (disp2b, e2b["band"]))
     e2c, _ = qualify(new_entry("y3", "Y3", "https://d/y3", "d", "crawl"), node("400 kcal", "35 g"),
                      fams, meths)
     T("CLEAN TWIN the band is INCLUSIVE on both edges (400 cal / 35 g carbs is in)",
@@ -2204,8 +2272,8 @@ def cmd_selftest(_a):
     # ---- --ingest gets the SAME treatment as a crawl ------------------------------------------------
     ing = new_entry("i", "I", "https://d/i", "d", "ingest")
     ing, dispi = qualify(ing, node("980 kcal", "9 g"), fams, meths)
-    T("MUST FIRE  an --ingest candidate is band-filtered exactly like a crawled one",
-      dispi == "out-of-band" and ing["status"] == "ruled:out-of-band" and ing["entered_by"] == "ingest",
+    T("MUST FIRE  an --ingest candidate gets exactly the crawl treatment - recorded, not buried",
+      dispi != "out-of-band" and ing["status"] == "available" and ing["entered_by"] == "ingest",
       "%s %s %s" % (dispi, ing["status"], ing["entered_by"]))
     ing2, dispi2 = qualify(new_entry("i2", "I2", "https://d/i2", "d", "ingest"), node("512 kcal", "9 g"),
                            fams, meths)
@@ -2293,6 +2361,9 @@ def main(argv=None):
     ap.add_argument("--dossier", action="store_true")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--rescore", action="store_true")
+    ap.add_argument("--reingredients", action="store_true",
+                    help="restore ingredient lines to available candidates from the page cache. "
+                         "No network and no model - a re-parse of pages already fetched.")
     ap.add_argument("--resignature", action="store_true")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--run", default="")
@@ -2327,6 +2398,8 @@ def main(argv=None):
         return cmd_dossier(a)
     if a.resignature:
         return cmd_resignature(a)
+    if a.reingredients:
+        return cmd_reingredients(a)
     if a.rescore:
         return cmd_rescore(a)
     if a.status:
