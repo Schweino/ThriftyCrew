@@ -56,6 +56,7 @@ import local_extract                                             # noqa: E402
 
 HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
 INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
+MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
 WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
 WAVE_PUBLISH_PS = os.path.join(HERE, "wave-publish.ps1")
 BATCH_LEDGER_PS = os.path.join(HERE, "batch-ledger.ps1")
@@ -190,7 +191,7 @@ class Daemon(object):
 
     def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
-                 quiet=False, ledger_path=""):
+                 quiet=False, ledger_path="", preresolve_args=()):
         self.run_dir = run_dir
         self.run_id = run_id
         self.conditions = conditions
@@ -207,6 +208,13 @@ class Daemon(object):
         self.ledger_path = ledger_path
         self.pool_path = pool_path or harvest.POOL
         self.quiet = quiet
+        # A TEST SEAM, and the ONLY thing it may ever carry is a path: extra arguments appended to
+        # every map-preresolve call so a fixture can point its composed lookups (vocabulary, prior
+        # rulings, board) at scratch files instead of the live estate. No production caller passes it.
+        # It exists because the unhold fixture has to WIRE A BID between two seeds and watch the hold
+        # clear, and doing that against db\ingredients.json would mean a fixture that edits the live
+        # vocabulary. Behaviour is never switched here - only where the lookups live.
+        self.preresolve_args = list(preresolve_args or ())
 
         # INJECTED, so every fixture below runs for zero tokens and zero shell.
         self._dispatch = dispatcher or hunt_dispatch.dispatch
@@ -763,6 +771,140 @@ class Daemon(object):
     # MAP - cap 2, micro-batches of up to 5 (section S4)
     # ---------------------------------------------------------------------------------------------
 
+    # ---------------------------------------------------------------------------------------------
+    # D7: THE MECHANICAL HALF OF MAP. map-preresolve.ps1 answers everything that does not need
+    # judgment BEFORE the agent is paid, and the daemon reads its table.
+    # ---------------------------------------------------------------------------------------------
+
+    async def preresolve(self, slugs):
+        """Run map-preresolve over a micro-batch and read back its per-slug tables.
+
+        THE EXIT CODES MEAN WHAT SECTION 4.5 SAYS AND NOTHING ELSE, and 1 is the NORMAL case:
+          0  every line pre-resolved. The mapper is STILL dispatched - the macro cross-check is its
+             job on every recipe, so this shrinks the dispatch, it never skips the judge.
+          1  residual lines exist. Dispatch proceeds over the residual. A healthy batch looks like this.
+          2  BLOCKED. The batch is NOT dispatched. Could-not-look is never a clean bill.
+        Returns (ok, tables, detail).
+        """
+        rc, out, err = await self.ps(MAP_PRERESOLVE_PS,
+                                     ["-RunDir", self.run_dir, "-Slugs", list(slugs)]
+                                     + self.preresolve_args, timeout=1200)
+        detail = ((out or "") + (err or "")).strip()
+        if rc == hunt_lib.EXIT_CANNOT_RUN:
+            return False, {}, detail[-400:]
+        tables = {}
+        for slug in slugs:
+            path = os.path.join(self.run_dir, "mapped-pre", "%s.json" % slug)
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    tables[slug] = json.load(f)
+            except Exception as e:                                # noqa: BLE001
+                # The script said it ran and the table is not there. That is not a clean bill either.
+                return False, {}, "no pre-resolve table for %s (%s)" % (slug, e)
+        return True, tables, detail[-400:]
+
+    HOLD_FILE_DOC = ("The mapper's routing for a recipe the daemon HELD at `mapped`. Written by the "
+                     "daemon, read by the next seed's unhold. Without it a repaired recipe could only "
+                     "be re-mapped, which is paying an agent twice for one judgment.")
+
+    def write_hold_record(self, slug, res, holds):
+        """The routing a held recipe would have taken, parked where the next seed can find it.
+
+        WHY THIS FILE EXISTS AT ALL. The unhold path re-runs map-preresolve at seed time and advances a
+        cleared recipe "exactly as it would have on first pass" - but first pass's routing came from the
+        MAPPER's absent_terms, and a held recipe never reached the branch that consumes them. A fresh
+        daemon process has no memory of it. Without this record the only ways to resume a repaired
+        recipe are to re-dispatch the mapper (paying twice for a judgment already rendered) or to guess
+        its routing from the decision file (which is how a recipe skips pricing). So the daemon writes
+        down what it was about to do, and the seed does it.
+        """
+        path = os.path.join(self.run_dir, "mapped-pre", "%s.hold.json" % slug)
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"_doc": self.HOLD_FILE_DOC, "slug": slug,
+                           "held_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                           "absent_terms": [t for t in (res.get("absent_terms") or []) if t],
+                           "optional_absent": [t for t in (res.get("optional_absent") or []) if t],
+                           "mapper_state": hunt_lib.norm_state(res.get("state")),
+                           "mapper_detail": (res.get("detail") or "")[:400],
+                           "holds": holds}, f, indent=2)
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("%s: could not write the hold record (%s) - a repaired recipe would "
+                                 "have to be re-mapped" % (slug, e))
+
+    def read_hold_record(self, slug):
+        path = os.path.join(self.run_dir, "mapped-pre", "%s.hold.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                return json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return None
+
+    async def unhold_mapped(self, slugs):
+        """THE UNHOLD PATH (D7's pin). At seed time the daemon re-runs map-preresolve over the recipes
+        sitting at `mapped` - mechanical, zero agents, seconds - and a hold that has CLEARED advances
+        through the mapper decision file that is already on disk. Its term set was ruled once and is
+        not re-ruled: no agent is paid twice for one judgment.
+
+        The seed table alone would strand a repaired recipe forever. It seeds `mapped`-with-holds to
+        the HELD list, which is right while the hold stands and a trap the moment Brad wires the
+        missing bid: on the next resume the recipe lands back on the held list with nobody re-checking
+        anything. This is the re-check.
+        """
+        if not slugs:
+            return 0
+        ok, tables, detail = await self.preresolve(sorted(slugs))
+        if not ok:
+            for slug in sorted(slugs):
+                self.held.append((slug, "mapped, and the hold could not be re-checked: %s" % detail[:160]))
+            return 0
+        advanced = 0
+        for slug in sorted(slugs):
+            holds = (tables.get(slug) or {}).get("holds") or []
+            if holds:
+                self.held.append((slug, holds[0].get("why") or "an unbid ingredient still has no bid"))
+                continue
+            decision = os.path.join(self.run_dir, "mapped", "%s.json" % slug)
+            if not os.path.exists(decision):
+                # The unhold advances ON the mapper's ruling. No ruling file, no advance: a recipe at
+                # `mapped` whose decision file is missing was never actually mapped, and advancing it
+                # would be inventing the judgment this path exists to avoid re-buying.
+                self.held.append((slug, "mapped, but there is no mapper decision file at "
+                                        "mapped\\%s.json - the ruling this would advance on does not "
+                                        "exist" % slug))
+                continue
+            rec = self.read_hold_record(slug)
+            if rec is None:
+                # NEVER GUESS THE ROUTING. A recipe at `mapped` with no hold record is a recipe this
+                # daemon did not hold - a hand-advanced state, or a run from before this file existed.
+                # Re-dispatching the mapper would pay twice and inventing a route could skip pricing.
+                self.held.append((slug, "mapped with no hold record - nothing on disk says whether its "
+                                        "terms were all answered, so it needs a look, not a guess"))
+                continue
+            absent = [t for t in (rec.get("absent_terms") or []) if t]
+            optional = [t for t in (rec.get("optional_absent") or []) if t]
+            self.log("unhold: %s - the bid is wired, advancing on the mapper ruling already on disk "
+                     "(zero dispatches)" % slug)
+            if not absent and rec.get("mapper_state") == "priced":
+                await self.advance(slug, "priced", "unhold",
+                                   "hold cleared: every term answered from the board")
+                self.ch["write"].push(self.record(slug, {"state": "priced"}))
+            else:
+                for t in absent:
+                    await self.ps(INGREDIENT_QUEUE_PS,
+                                  ["-Add", "-Term", t, "-Recipe", slug,
+                                   "-Why", "%s needs it" % slug], timeout=180)
+                    if t not in self.absent_terms and t not in self.priced_terms:
+                        self.absent_terms.append(t)
+                await self.advance(slug, "pricing", "unhold", "hold cleared",
+                                   terms=absent, optional_terms=optional)
+                self.pricing_slugs.add(slug)
+                self.record(slug, {"state": "pricing", "absent": absent})
+                self.ch["price_wake"].push("unhold of %s" % slug)
+            advanced += 1
+        return advanced
+
     async def map_lane(self):
         async def worker(_i):
             while True:
@@ -774,8 +916,17 @@ class Daemon(object):
                 slugs = [b["slug"] for b in batch]
                 woke = False
                 self.log("map: micro-batch of %d (%s)" % (len(slugs), ", ".join(slugs)))
+                # D7: THE MECHANICAL PASS RUNS FIRST, AND EXIT 2 BLOCKS THE BATCH.
+                ok, tables, why = await self.preresolve(slugs)
+                if not ok:
+                    for b in batch:
+                        self.stuck(b["slug"], "map",
+                                   "map-preresolve exit 2 - BLOCKED, never dispatched: %s" % why[:200])
+                    self.findings.append("map: a micro-batch of %d was blocked by map-preresolve (%s)"
+                                         % (len(slugs), why[:160]))
+                    continue
                 r = await self.with_retry(
-                    lambda: self.dispatch("recipe-ingredient-mapper", self.map_prompt(slugs),
+                    lambda: self.dispatch("recipe-ingredient-mapper", self.map_prompt(slugs, tables),
                                           "map", "map:%dx" % len(slugs), slugs,
                                           schema=hunt_lib.MAPPED, stage="mapper"),
                     slugs, "map")
@@ -814,6 +965,21 @@ class Daemon(object):
                     absent = [t for t in (res.get("absent_terms") or []) if t]
                     optional = [t for t in (res.get("optional_absent") or []) if t]
                     await self.advance(b["slug"], "mapped", "mapper", res.get("detail") or "")
+                    # THE UNBID HOLD IS THE DAEMON'S AND IT IS MECHANICAL, and phase 3 measured exactly
+                    # why. The adapter drill asked the mapper its own standing rule - resolved
+                    # ingredient, no bid wired, advance or hold? - twice, same prompt and same model,
+                    # and got ADVANCE once and HOLD once. A rule a model must remember is a rule it
+                    # sometimes forgets, and this one gates whether a writer gets paid. So the rule
+                    # lives here, over map-preresolve's `holds` rows, and the mapper is never asked.
+                    holds = (tables.get(b["slug"]) or {}).get("holds") or []
+                    if holds:
+                        self.write_hold_record(b["slug"], res, holds)
+                        self.held.append((b["slug"], holds[0].get("why")
+                                          or "an unbid ingredient has no bid wired"))
+                        self.record(b["slug"], {"state": "mapped", "holds": holds})
+                        self.log("map: %s HELD at mapped - %d unbid line(s); nothing unbid reaches the "
+                                 "writer" % (b["slug"], len(holds)))
+                        continue
                     if not absent and hunt_lib.norm_state(res.get("state")) == "priced":
                         await self.advance(b["slug"], "priced", "mapper",
                                            "every term answered from the board")
@@ -850,23 +1016,80 @@ class Daemon(object):
         await self.pool_worker(hunt_lib.LANE_CAPS["map"], worker)
         self.ch["price_wake"].close()
 
-    def map_prompt(self, slugs):
+    def map_prompt(self, slugs, tables=None):
+        """THE RESIDUAL CONTRACT (D7). The vocabulary lecture left this prompt in the same commit that
+        shipped the pre-resolve table, because the table IS the lecture, answered. What is left is what
+        map-preresolve could not answer: identity judgments, form flips, each-weight calls, label
+        transcription, and the macro cross-check.
+
+        The pre-computed macro numbers travel HERE, in the prompt, as inputs to verify. They are not a
+        schema field - section 4.5's two named deltas (SEL->DECIDE, WRITE drops its macro fields) stay
+        the only two, and adding a third by accident is how a contract stops being a contract.
+        """
+        tables = tables or {}
+        blocks = []
+        for slug in slugs:
+            t = tables.get(slug) or {}
+            rows = t.get("rows") or []
+            resid = [r for r in rows if r.get("resolution") in
+                     ("unresolved", "different-form", "new-food-suspect")]
+            lines = ["%s  (%d line(s): %d pre-resolved, %d for you)"
+                     % (slug, t.get("line_count", len(rows)), t.get("resolved_count", 0), len(resid))]
+            for r in resid:
+                lines.append("    [%s] %s   <- %s" % (r.get("resolution"), r.get("term"),
+                                                      (r.get("evidence") or "")[:220]))
+            if not resid:
+                lines.append("    (every line pre-resolved - the cross-check below is the whole job)")
+            mp = t.get("macro_precheck") or {}
+            src = mp.get("source") or {}
+            if mp.get("state") == "computed":
+                c = mp.get("computed_per_serving") or {}
+                lines.append("    MACRO CROSS-CHECK, pre-computed over all %d lines by parse-compute.ps1:"
+                             % mp.get("lines_total", 0))
+                lines.append("      ours   %s cal / %s carbs / %s protein / %s fat per serving"
+                             % (c.get("cal"), c.get("carbs"), c.get("protein_g"), c.get("fat_g")))
+                lines.append("      source %s cal / %s carbs / %s protein  (%s)"
+                             % (src.get("cal"), src.get("carbs"), src.get("protein_g"), src.get("from")))
+                if mp.get("missing_db_items"):
+                    lines.append("      food-DB rows missing: %s" % ", ".join(mp["missing_db_items"]))
+                lines.append("      VERIFY it, do not re-derive it. If the two disagree by more than the"
+                             " dish can explain, say so in `detail`.")
+            else:
+                lines.append("    MACRO CROSS-CHECK: NOT pre-computed (%s). Source published %s cal / "
+                             "%s carbs / %s protein (%s). Do the check yourself over the lines you rule."
+                             % (mp.get("reason") or mp.get("state") or "no table",
+                                src.get("cal"), src.get("carbs"), src.get("protein_g"),
+                                src.get("from") or "unknown"))
+            blocks.append("\n".join(lines))
+
         return (
-            "Map this MICRO-BATCH of %d recipe(s). Section S4 batches up to %d per invocation.\n"
-            "Slugs: %s\n"
+            "Map the RESIDUAL of this micro-batch of %d recipe(s). Section S4 batches up to %d.\n\n"
+            "map-preresolve.ps1 has already run. It resolved every line it could from the prior-rulings\n"
+            "ledger, the closed vocabulary and its adjudicated aliases, and it checked the board, the\n"
+            "densities, the each-nouns and the food DB for each one. Its table per slug is at\n"
+            "%s\\mapped-pre\\<slug>.json, and it is the input you work from - do not re-derive it.\n"
+            "Every line it settled is settled. What is below is what it could not settle:\n\n"
+            "%s\n\n"
+            "Your job is exactly these lines plus the cross-check: rule identity, rule a form flip on its\n"
+            "merits (a form word is a different price AND a different gram weight - never bridge one with\n"
+            "an alias), call each-weights, transcribe a label for a new food-DB row, and reject with\n"
+            "evidence where the honest answer is no. `null` is safe; a plausible wrong match is not.\n\n"
             "Transcriptions: %s\\extracted\\<slug>.json\n"
-            "Write:          %s\\mapped\\<slug>.json\n\n"
-            "Resolve every ingredient against the CLOSED vocabulary first, map it to a canonical board\n"
-            "commodity id or reject it with evidence, mark each line blocking or optional, and ask the\n"
-            "cheap board pricing question for every term. Report per slug.\n\n"
+            "Write:          %s\\mapped\\<slug>.json   (the full decision file, every line, unchanged\n"
+            "                contract - the pre-resolved lines carry their canon_item and bid straight\n"
+            "                through from the table)\n\n"
+            "DO NOT rule on whether an ingredient with no bid should hold the recipe. That is mechanical\n"
+            "and the orchestrator does it from the table's `holds` rows: asked the same question twice\n"
+            "with the same prompt and the same model, this stage answered ADVANCE once and HOLD once,\n"
+            "and it gates whether a writer gets paid.\n\n"
             "DO NOT run hunt-run.ps1 and DO NOT add anything to the ingredient queue. Return the terms\n"
             "the board could not answer in `absent_terms` as a JSON ARRAY and the orchestrator will\n"
             "enqueue them and move the state itself. That is not a courtesy: -Terms 'a,b' binds as ONE\n"
             "composite string in PowerShell and parked two recipes forever on 2026-08-16, and a JSON\n"
             "array cannot be comma-joined by accident.\n\n"
             "This run's conditions: %s\n"
-            % (len(slugs), hunt_lib.MAP_BATCH, ", ".join(slugs), self.run_dir, self.run_dir,
-               self.conditions))
+            % (len(slugs), hunt_lib.MAP_BATCH, self.run_dir, "\n\n".join(blocks),
+               self.run_dir, self.run_dir, self.conditions))
 
     # ---------------------------------------------------------------------------------------------
     # PRICE - SINGLETON, self-looping queue drainer. ARCHITECTURE, not config (section 4.1a).
@@ -1455,6 +1678,7 @@ class Daemon(object):
         rows = [(r["slug"], hunt_lib.norm_state(r["state"])) for r in (st.get("in_flight") or [])]
         parked = [p["slug"] for p in (st.get("parked") or [])]
         counts = {}
+        mapped_holds = []
 
         # `pricing` / `parked`: run -Derive FIRST, then read the state again. Derived counts are the
         # only thing that moves a recipe out of pricing, and seeding off a stale state file would put
@@ -1474,8 +1698,10 @@ class Daemon(object):
             elif state == "extracted":
                 self.ch["map"].push(self.rec[slug]); counts["map"] = counts.get("map", 0) + 1
             elif state == "mapped":
-                # mapped with open holds: the held list, NOT dispatched.
-                self.held.append((slug, "mapped with open holds (unbid or vocabulary follow-ups)"))
+                # NOT the held list yet - the hold gets RE-CHECKED first (D7's unhold path). Collected
+                # here and handled in one mechanical map-preresolve pass below, because seeding
+                # straight to the held list is what strands a recipe whose bid has since been wired.
+                mapped_holds.append(slug)
             elif state == "pricing":
                 self.pricing_slugs.add(slug)
                 self.ch["price_wake"].push(slug); counts["price"] = counts.get("price", 0) + 1
@@ -1487,6 +1713,11 @@ class Daemon(object):
                 self.qa_passed.append(slug); counts["wave"] = counts.get("wave", 0) + 1
             elif state == "waved":
                 counts["waved"] = counts.get("waved", 0) + 1
+        # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
+        if mapped_holds:
+            n = await self.unhold_mapped(mapped_holds)
+            if n:
+                counts["unheld"] = n
         for slug in parked:
             self.pricing_slugs.add(slug)
             self.ch["price_wake"].push(slug)

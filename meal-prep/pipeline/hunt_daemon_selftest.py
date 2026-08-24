@@ -117,6 +117,47 @@ class FakePS(object):
             return None
 
 
+MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
+
+
+def preresolved(tmp, slugs, holds=None, residual=None):
+    """Write the map-preresolve tables the real script would have written, so a map-lane fixture has
+    its mechanical half without shelling PowerShell. Same injection philosophy as FakePS: the daemon's
+    OWN behaviour over the table is what these fixtures are about, and map-preresolve's behaviour is
+    fixtured in its own suite (which is where wiring a bid and watching the hold clear belongs).
+    """
+    out = os.path.join(tmp, "mapped-pre")
+    os.makedirs(out, exist_ok=True)
+    for slug in slugs:
+        h = (holds or {}).get(slug) or []
+        r = (residual or {}).get(slug) or []
+        rows = [{"raw": "1 lb chicken", "term": "chicken", "canon_item": "Chicken", "bid": "chicken",
+                 "board": "weekly", "resolution": "resolved", "gpu_known": True, "density_known": True,
+                 "fooddb_known": True, "evidence": "exact vocabulary row", "source": "vocab"}]
+        for t in r:
+            rows.append({"raw": t, "term": t, "canon_item": None, "bid": None, "board": None,
+                         "resolution": "unresolved", "gpu_known": False, "density_known": False,
+                         "fooddb_known": False, "evidence": "no vocabulary row shares a core word",
+                         "source": None})
+        for x in h:
+            rows.append({"raw": x["term"], "term": x["term"], "canon_item": x.get("canon_item"),
+                         "bid": x.get("bid"), "board": "recipe", "resolution": "unbid",
+                         "gpu_known": False, "density_known": True, "fooddb_known": True,
+                         "evidence": "NO BID wired for this row", "source": "vocab"})
+        with open(os.path.join(out, "%s.json" % slug), "w", encoding="utf-8") as f:
+            json.dump({"slug": slug, "title": slug, "source_url": "https://d/%s" % slug, "servings": 4,
+                       "line_count": len(rows), "resolved_count": 1, "residual_count": len(r),
+                       "hold_count": len(h), "residual_terms": list(r), "holds": h, "rows": rows,
+                       "macro_precheck": {"state": "partial", "reason": "fixture",
+                                          "source": {"from": "candidate-pool.band", "cal": 500,
+                                                     "carbs": 20, "protein_g": 35, "fat_g": None},
+                                          "lines_covered": 1, "lines_total": len(rows),
+                                          "uncovered_lines": list(r), "computed_per_serving": None,
+                                          "portion_factor": None, "tuning": [],
+                                          "missing_db_items": []}}, f)
+    return tmp
+
+
 def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
     return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
@@ -223,7 +264,8 @@ def run():
         {"results": [{"slug": "s1", "status": "ok", "state": "pricing", "absent_terms": terms,
                       "optional_absent": ["cilantro"]}]}]})
     ps = FakePS()
-    d = daemon(dispatcher=fd, ps=ps)
+    _b8tmp = tempfile.mkdtemp(prefix="daemon-b8map-")
+    d = daemon(run_dir=preresolved(_b8tmp, ["s1"]), dispatcher=fd, ps=ps)
     d.ch["map"].push({"slug": "s1"})
     d.ch["map"].close()
     arun(d.run(("map",)))
@@ -332,6 +374,30 @@ def run():
       *_lane_local())
 
     # =================================================================================================
+    H("D7 - the mechanical half of MAP runs before the agent is paid")
+    # =================================================================================================
+    T("MUST FIRE  map-preresolve runs BEFORE the mapper dispatch, through ps_invoke, with the batch's "
+      "slugs as a REAL LIST (never a second invocation style, never a comma-joined string)",
+      *_preresolve_runs_first())
+    T("MUST FIRE  exit 2 BLOCKS the batch: no mapper dispatch, every slug STUCK and resumable - "
+      "could-not-look is never a clean bill",
+      *_preresolve_two_blocks())
+    T("CLEAN TWIN exit 0 (zero residual) STILL dispatches the mapper - the macro cross-check is its "
+      "job on every recipe, so a full table shrinks the dispatch, it never skips the judge",
+      *_preresolve_zero_still_dispatches())
+    T("MUST FIRE  the dispatch carries the RESIDUAL lines and their evidence, not the vocabulary "
+      "lecture the table has already answered",
+      *_map_prompt_is_residual())
+    T("MUST FIRE  an UNBID line holds the recipe at `mapped`: never priced, never queued, never "
+      "pushed to the writer, and NAMED on the held list",
+      *_unbid_holds())
+    T("CLEAN TWIN with no unbid line the same batch routes to pricing exactly as before",
+      *_no_hold_routes_normally())
+    T("MUST FIRE  THE UNHOLD, against the REAL state machine and the REAL map-preresolve: the bid is "
+      "wired between two seeds, and the second seed advances the recipe with ZERO dispatches",
+      *_unhold_between_seeds())
+
+    # =================================================================================================
     H("The band gate, read off the built spec")
     # =================================================================================================
     T("MUST FIRE  a spec outside the band is retired and never reaches QA, in ONE advance "
@@ -369,11 +435,15 @@ def _rejects_explicitly():
     fd = FakeDispatch({"recipe-ingredient-mapper": [
         {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-not-carried",
                       "detail": "nobody carries it"}]}]})
-    d = daemon(dispatcher=fd)
-    d.ch["map"].push({"slug": "s1"})
-    d.ch["map"].close()
-    arun(d.run(("map",)))
-    return bool(d.outcomes) and d.outcomes[0]["status"] == "rejected"
+    tmp = tempfile.mkdtemp(prefix="daemon-mapreject-")
+    try:
+        d = daemon(run_dir=preresolved(tmp, ["s1"]), dispatcher=fd)
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        return bool(d.outcomes) and d.outcomes[0]["status"] == "rejected"
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _ps_array_roundtrip(terms):
@@ -1050,6 +1120,217 @@ def _lane_local():
                 and adv and FakePS.value_after(adv[0]["args"], "-To") == "extracted",
                 "by=%s tokens=%s" % (by, FakePS.value_after(end[0]["args"], "-InputTokens")
                                      if end else "none"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# D7 - map-preresolve, the unbid hold, and the unhold
+# =====================================================================================================
+
+def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None, **kw):
+    preresolved(tmp, slugs, holds=holds, residual=residual)
+    fd = FakeDispatch({"recipe-ingredient-mapper": [mapper_result]})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps or FakePS(), **kw)
+    for slug in slugs:
+        d.ch["map"].push({"slug": slug})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    return d, fd
+
+
+def _preresolve_runs_first():
+    tmp = tempfile.mkdtemp(prefix="daemon-pre1-")
+    try:
+        ps = FakePS()
+        d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
+                            {"results": [{"slug": s, "status": "ok", "state": "priced"}
+                                         for s in ("s1", "s2", "s3")]}, ps=ps)
+        calls = ps.find("map-preresolve.ps1")
+        slugs = FakePS.value_after(calls[0]["args"], "-Slugs") if calls else None
+        # Ordering is the claim: the table has to exist BEFORE the prompt is built, or the dispatch
+        # carries a lecture instead of a residual. FakePS records calls in order and FakeDispatch
+        # records its own, so the proof is that the mapper prompt names the pre-resolved counts at all.
+        prompt = fd.prompts("recipe-ingredient-mapper")[0] if fd.prompts("recipe-ingredient-mapper") else ""
+        return (len(calls) == 1 and isinstance(slugs, list) and slugs == ["s1", "s2", "s3"]
+                and "map-preresolve.ps1 has already run" in prompt,
+                "calls=%d slugs=%s" % (len(calls), json.dumps(slugs)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _preresolve_two_blocks():
+    tmp = tempfile.mkdtemp(prefix="daemon-pre2-")
+    try:
+        ps = FakePS({"map-preresolve.ps1": lambda a: (2, "map-preresolve: BLOCKED - no extraction", "")})
+        d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
+                            {"results": [{"slug": "s1", "status": "ok", "state": "priced"}]}, ps=ps)
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        return (not fd.prompts("recipe-ingredient-mapper") and len(stuck) == 3
+                and all("BLOCKED" in o["detail"] for o in stuck) and d.findings,
+                "dispatches=%d stuck=%d" % (len(fd.prompts("recipe-ingredient-mapper")), len(stuck)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _preresolve_zero_still_dispatches():
+    tmp = tempfile.mkdtemp(prefix="daemon-pre0-")
+    try:
+        ps = FakePS({"map-preresolve.ps1": lambda a: (0, "map-preresolve: 3 slug(s), 0 residual", "")})
+        d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
+                            {"results": [{"slug": s, "status": "ok", "state": "priced"}
+                                         for s in ("s1", "s2", "s3")]}, ps=ps)
+        return (len(fd.prompts("recipe-ingredient-mapper")) == 1 and not d.outcomes,
+                "dispatches=%d outcomes=%d" % (len(fd.prompts("recipe-ingredient-mapper")),
+                                               len(d.outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _map_prompt_is_residual():
+    tmp = tempfile.mkdtemp(prefix="daemon-preP-")
+    try:
+        d, fd = _map_daemon(tmp, ["s1"], {"results": [{"slug": "s1", "status": "ok", "state": "priced"}]},
+                            residual={"s1": ["ras el hanout", "dry white wine", "gochujang"]})
+        prompt = fd.prompts("recipe-ingredient-mapper")[0]
+        named = all(t in prompt for t in ("ras el hanout", "dry white wine", "gochujang"))
+        # The v2 prompt's standing instruction was "Resolve every ingredient against the CLOSED
+        # vocabulary first" - the lecture the table has now answered. It leaves in the same commit.
+        return (named and "[unresolved]" in prompt
+                and "Resolve every ingredient against the CLOSED vocabulary first" not in prompt
+                and "MACRO CROSS-CHECK" in prompt,
+                "named=%s lecture_gone=%s" % (named,
+                    "Resolve every ingredient against the CLOSED vocabulary first" not in prompt))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _unbid_holds():
+    tmp = tempfile.mkdtemp(prefix="daemon-hold-")
+    try:
+        ps = FakePS()
+        holds = {"s1": [{"term": "sumac", "canon_item": "Sumac", "bid": "",
+                         "why": "'sumac' resolves to Sumac [(no commodity id)] but no bid is wired"}]}
+        d, _fd = _map_daemon(tmp, ["s1"],
+                             {"results": [{"slug": "s1", "status": "ok", "state": "priced",
+                                           "absent_terms": []}]},
+                             ps=ps, holds=holds)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        wrote = os.path.exists(os.path.join(tmp, "mapped-pre", "s1.hold.json"))
+        return (to == ["mapped"] and len(d.held) == 1 and "no bid is wired" in d.held[0][1]
+                and not ps.find("ingredient-queue.ps1") and d.ch["write"]._items.__len__() == 0 and wrote,
+                "advances=%s held=%s wrote_record=%s" % (to, json.dumps(d.held), wrote))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _no_hold_routes_normally():
+    tmp = tempfile.mkdtemp(prefix="daemon-nohold-")
+    try:
+        ps = FakePS()
+        d, _fd = _map_daemon(tmp, ["s1"],
+                             {"results": [{"slug": "s1", "status": "ok", "state": "pricing",
+                                           "absent_terms": ["sumac"]}]}, ps=ps)
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return (to == ["mapped", "pricing"] and not d.held
+                and len(ps.find("ingredient-queue.ps1", "-Add")) == 1,
+                "advances=%s held=%s" % (to, json.dumps(d.held)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _unhold_between_seeds():
+    """THE UNHOLD, end to end, against the REAL hunt-run.ps1 and the REAL map-preresolve.ps1.
+
+    The seed table alone would strand a repaired recipe forever: it seeds `mapped`-with-holds to the
+    HELD list, which is right while the hold stands and a trap the moment the missing bid is wired -
+    on the next resume the recipe lands back on the held list with nobody re-checking anything. So the
+    seed RE-RUNS map-preresolve over the `mapped` recipes, and a cleared hold advances on the ruling
+    already on disk. The whole claim is in the last assertion: ZERO dispatches on the second seed.
+
+    The scratch vocabulary is the thing being edited between the seeds, which is what "the bid is
+    wired" means mechanically - a row in db\ingredients.json gaining a bid.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-unhold-")
+    try:
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
+        os.makedirs(os.path.join(run_dir, "mapped"), exist_ok=True)
+
+        def write_vocab(sumac_bid):
+            rows = [{"item": "Yellow Onion", "bid": "onions", "unit": "lb", "board": "weekly",
+                     "gpu": 453.592},
+                    {"item": "Sumac", "bid": sumac_bid, "unit": "oz", "board": "recipe", "gpu": 28.3495}]
+            rows += [{"item": "Filler %d" % i, "bid": "filler-%d" % i, "unit": "oz", "board": "recipe",
+                      "gpu": 28.3495} for i in range(1, 206)]
+            with open(os.path.join(tmp, "vocab.json"), "w", encoding="utf-8") as f:
+                json.dump(rows, f)
+
+        write_vocab("")                       # the bid is NOT wired yet
+        with open(os.path.join(tmp, "resolutions.json"), "w", encoding="utf-8") as f:
+            json.dump({"count": 0, "resolutions": []}, f)
+        with open(os.path.join(run_dir, "extracted", "unhold-drill.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "Unhold Drill", "source_url": "https://d/u", "servings": 4,
+                       "ingredients": [{"raw": "1 Yellow Onion", "item": "Yellow Onion", "qty": "1",
+                                        "unit": None, "optional": False},
+                                       {"raw": "1 tsp Sumac", "item": "Sumac", "qty": "1",
+                                        "unit": "teaspoon", "optional": False}]}, f)
+        # the mapper's decision file: the ruling the unhold advances ON, and never re-buys
+        with open(os.path.join(run_dir, "mapped", "unhold-drill.json"), "w", encoding="utf-8") as f:
+            json.dump({"slug": "unhold-drill", "ingredients": []}, f)
+
+        seam = ["-NoBoard", "-NoPrecheck", "-VocabFile", os.path.join(tmp, "vocab.json"),
+                "-ResolutionsFile", os.path.join(tmp, "resolutions.json")]
+
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
+                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+        if rc != 0:
+            return False, "could not init: %s" % o.strip()[:150]
+        for i, st in enumerate(["sourced", "selected", "extracted"]):
+            args = ["-Advance", "-RunDir", run_dir, "-Slug", "unhold-drill", "-To", st,
+                    "-By", "drill", "-Detail", "drill"]
+            if i == 0:
+                args += ["-Title", "Unhold Drill", "-SourceUrl", "https://d/u", "-Protein", "beef"]
+            rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+            if rc != 0:
+                return False, "staging refused at %s: %s" % (st, o.strip()[:150])
+
+        # ---- the map lane, once. The mapper rules; the DAEMON holds on the unbid line.
+        fd = FakeDispatch({"recipe-ingredient-mapper": [
+            {"results": [{"slug": "unhold-drill", "status": "ok", "state": "priced",
+                          "absent_terms": []}]}]})
+        d0 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd, quiet=True, preresolve_args=seam)
+        d0.ch["map"].push({"slug": "unhold-drill"})
+        d0.ch["map"].close()
+        arun(d0.run(("map",)))
+        if d0.state_of("unhold-drill") != "mapped" or len(d0.held) != 1:
+            return False, "first pass: state=%s held=%s" % (d0.state_of("unhold-drill"),
+                                                            json.dumps(d0.held))
+
+        # ---- SEED 1: the bid is still missing, so the hold still stands and nothing is dispatched.
+        fd1 = FakeDispatch({})
+        d1 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd1, quiet=True, preresolve_args=seam)
+        ok1, err1 = arun(d1.seed())
+        if not ok1:
+            return False, "seed 1 failed: %s" % err1
+        if len(d1.held) != 1 or d1.state_of("unhold-drill") != "mapped" or fd1.calls:
+            return False, "seed 1: held=%s state=%s dispatches=%d" % (
+                json.dumps(d1.held), d1.state_of("unhold-drill"), len(fd1.calls))
+
+        # ---- THE BID IS WIRED. One row in the vocabulary gains a bid; nothing else changes.
+        write_vocab("sumac")
+
+        # ---- SEED 2: the hold clears, the recipe advances on the ruling already on disk, ZERO agents.
+        fd2 = FakeDispatch({})
+        d2 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd2, quiet=True, preresolve_args=seam)
+        ok2, err2 = arun(d2.seed())
+        if not ok2:
+            return False, "seed 2 failed: %s" % err2
+        return (not d2.held and d2.state_of("unhold-drill") == "priced" and not fd2.calls
+                and d2.ch["write"]._items.__len__() == 1,
+                "seed 2: held=%s state=%s dispatches=%d write_q=%d"
+                % (json.dumps(d2.held), d2.state_of("unhold-drill"), len(fd2.calls),
+                   d2.ch["write"]._items.__len__()))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

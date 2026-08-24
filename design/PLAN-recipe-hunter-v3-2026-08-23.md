@@ -863,6 +863,7 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | extraction ESCALATION (ADDED 2026-08-23, D6) | `<RunDir>\extracted\<slug>.escalation.json` | the sweep -> the rung-3 extractor dispatch. Same contract with `state: "escalate"` plus the failure reason and the unverified lines S3 says the dispatch must carry. A DIFFERENT filename on purpose: a half-settled extraction sitting under the settled name is how a run publishes a recipe nothing verified. A later rung settling the page DELETES the escalation file, so a stale one can never be dispatched |
 | extraction sweep report (ADDED 2026-08-23, D6) | `<RunDir>\extracted\sweep-report.json` | extract_sweep.py -> the phase gate, and `--from-report` for the narrow rung-2 pass |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
+| map HOLD record (ADDED 2026-08-24, D7) | `<RunDir>\mapped-pre\<slug>.hold.json` | the daemon -> the next seed's unhold. The routing a held recipe WOULD have taken (`absent_terms`, `optional_absent`, the mapper's state). It exists because the unhold advances "exactly as it would have on first pass" and first pass's routing came from the MAPPER, which a held recipe never reached and a fresh daemon process cannot remember. Without it the only ways to resume a repaired recipe are to re-dispatch the mapper (paying twice for a judgment already rendered) or to guess the routing (which is how a recipe skips pricing) |
 | mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
 | intake skeleton snapshot | `<RunDir>\intake\<slug>.skeleton.json` | build-intake-skeleton.ps1 -> the post-write diff |
 | intake (writer-completed) | `<RunDir>\intake\<slug>.json` | skeleton builder writes machine fields; writer completes prose IN PLACE -> build-v2-spec |
@@ -1353,6 +1354,48 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     first pass, and no agent is re-paid for a judgment already rendered. A hold still standing
     stays on the held list, named. This is a D7 fixture: a scratch run dir with an unbid hold, the
     bid wired between two seeds, the second seed advancing it with ZERO dispatches.
+
+  **BUILT 2026-08-24 (phase 4).** `meal-prep\pipeline\map-preresolve.ps1`, 30 fixtures in its own
+  -SelfTest, plus seven daemon-level fixtures under "D7 - the mechanical half of MAP runs before the
+  agent is paid" in `hunt_daemon_selftest.py`. It composes ingredient-resolutions (`-Json`, the whole
+  ledger in one read), ingredient-vocab (`-Missing -Json`, ONE bulk call that classifies the entire
+  batch through the road where the head-noun and FORM_WORDS scoring already lives - nothing is forked),
+  price-ingredient (`-Name <array> -Json`, one call for every term), densities, each-nouns and the food
+  DB. It writes per slug, so it takes no mutex, and its header says why. The daemon holds the unbid
+  hold off the table's `holds` rows and never asks the mapper. The unhold re-runs the script at seed
+  time and advances a cleared recipe on the ruling already on disk, with zero dispatches, guarded on
+  BOTH the hold record and the mapper decision file - a recipe at `mapped` with neither goes to the
+  held list named, because the one thing this path may never do is invent a routing.
+
+  **THREE THINGS THE BUILD MEASURED THAT THIS BULLET DID NOT PREDICT.**
+  - **The pre-computed macro cross-check is only available on a FULLY pre-resolved recipe, and a
+    partial one must ship no numbers at all.** The bullet above says the arithmetic travels in the
+    prompt as pre-computed inputs to verify. It can - but parse-compute needs a CANON name per line, so
+    it reaches exactly the lines the pre-resolver settled. Measured on the four never-mapped phase-2
+    extractions: it reached 9-12 lines of 17-20, and the line it missed was the PROTEIN every single
+    time, because "boneless skinless chicken breasts" is residual precisely for carrying the describing
+    words the closed vocabulary has not ruled on. The numbers came back at 9.6-13.6 g protein per
+    serving against a catalog floor of 25, and parse-compute's 550-gate tuner then injected an auto
+    Rice base into recipes that have none, pushing carbs to 108-116 g on low-carb dinners. Every one of
+    those figures is the arithmetic doing exactly what it was told over a line set that is not the
+    recipe. Handing it over as "the pre-computed cross-check" would be handing the mapper a plausible
+    wrong number to verify. So: `computed` only when coverage is total (which is the exit-0 case),
+    otherwise `partial` with the uncovered lines NAMED and the mapper doing the check over what it
+    rules. Two fixtures, both directions.
+  - **The source's published macros are on disk in TWO shapes and neither is the extraction contract.**
+    A v2 extraction carries `nutrition_per_serving` (strings, "10g"); a v3 candidate carries the
+    harvester's `band` block (numbers) in `db\candidate-pool.json`, which is `{_doc, updated, count,
+    candidates}` and NOT a bare array. Reading the wrapper as the array is how a lookup answers "nobody
+    published macros for this dish" about a dish whose macros are sitting right there - measured, 4 for
+    4, before the fix. A dish nobody published macros for now says `none published`, which is a
+    different claim from a zero.
+  - **The residual rate is a real number and it is not small.** Over the four never-mapped phase-2
+    extractions (73 lines): **57.5% pre-resolved, 31 lines residual, 0 holds, 5.5 s wall-clock** with
+    the board pass and the cross-check both live. The residual is almost entirely describing-word
+    lines - "boneless skinless chicken breasts", "small yellow onion", "extra-virgin olive oil",
+    "medium head broccoli" - which is the phase-2 fact pinned above arriving exactly as predicted, and
+    it means the pre-resolver's ceiling rises with every alias Brad rules rather than with any code
+    change here.
 - **D8 `build-intake-skeleton.ps1`** - machine-complete intake skeleton; the pre-write band gate;
   writer prompt rewritten to prose-only; the orchestrator's post-write machine-field diff (S6).
   Fixtures: a skeleton field the writer changed is refused by the diff; an out-of-band skeleton
@@ -1699,6 +1742,8 @@ Two clarifications recorded for the phase-1 builder, so neither becomes a mid-bu
   `find-similar.ps1 -SelfTest` and `considered-dishes.ps1 -SelfTest`. **D7's map-preresolve.ps1 and
   D8's build-intake-skeleton.ps1 are the next new PS collection code this plan orders; their builders
   read all three traps first, and any fixture over a collection uses at least three elements.**
+  (D7 was built 2026-08-24 and found a FIFTH trap in the process - the return-boundary unroll, below.
+  There are now five, and the count moving twice in two phases is itself the argument for reading them.)
   **A FOURTH TRAP, and this one is about the fixtures rather than the code (2026-08-24, D9,
   measured). A CONCURRENCY FIXTURE THAT CANNOT LOSE A ROW PROVES NOTHING, and the estate had one.**
   `source-domains.ps1 -SelfTest`'s "8 concurrent -Record calls all land" test - the very fixture this
@@ -1714,6 +1759,32 @@ Two clarifications recorded for the phase-1 builder, so neither becomes a mid-bu
   place, both are green. The locks were always right; only their fixtures were asleep. **Every
   concurrent-writers fixture this plan orders - ingredient-resolutions is the one D9 built, and any
   later ledger a cap>1 lane writes - must be PROVEN to fail with its lock removed before it counts.**
+
+  **A FIFTH TRAP, found by D7's build on 2026-08-24 and the mirror image of the third one: the RETURN
+  BOUNDARY UNROLLS.** The estate's answer to trap three is "assign first, then wrap" - and a helper
+  that does exactly that, `function As-Array { $a = $Value; return @($a) }`, hands the CALLER a bare
+  element whenever the array holds one thing, because a PowerShell function unrolls an array on the way
+  out. `.Count` on a bare PSCustomObject is `$null` in PS 5.1 - not 1, not an error - so `if
+  ($c.Count)` reads FALSE and the branch silently does not run. In map-preresolve that dropped the
+  vocabulary's near-miss candidates out of the evidence for every single-candidate line: the row still
+  read `different-form`, but the WHY - "White Wine Vinegar, DIFFERENT FORM: vinegar" - was gone, which
+  is the one thing the mapper is handed the table for. `return ,@($a)` fixes it.
+  **And the comma has a price the caller pays, which is the part worth writing down**: an array
+  returned that way enters a PIPELINE as ONE object. `As-Array $x | Where-Object {...}` filters a
+  collection of one - measured, it made an `uncovered_lines` list come back empty on a table with eight
+  uncovered lines. **`@()` around the CALL does NOT fix it** (`@(cmd)` collects the command's output
+  objects, so an array arriving as one output object becomes an array holding one array); only
+  PARENTHESISING the call - `(As-Array $x) | Where-Object` - or assigning first hands the pipeline the
+  array itself. All three forms are frozen as fixtures in `map-preresolve.ps1 -SelfTest`, and the two
+  wrong ones are must-fire.
+
+  **And the `-File` array trap turned up one level down, inside a PowerShell caller (2026-08-24,
+  D7).** hunt_lib.ps_invoke exists because `powershell -File` cannot bind a multi-element `[string[]]`
+  from argv. map-preresolve's first build shelled its own child processes with `-File` and
+  `-Slugs clean nosuchslug` bound ONE slug: the missing extraction it was supposed to be BLOCKED on was
+  never looked for, so the drill asserting exit 2 got a cheerful exit 0 and a table on disk for half
+  the batch. Same family, same fix - one marshalling road per language, and in PowerShell that means
+  building a `-Command` string with real array literals, exactly as ps_invoke does on the Python side.
 
 **Phase 2 gate: PASSED 2026-08-23.** Evidence, so the next session does not re-earn it.
 
