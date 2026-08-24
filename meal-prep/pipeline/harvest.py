@@ -1018,7 +1018,34 @@ def reliable_domains(path=SOURCE_DOMAINS_JSON):
 
 SKIP_PATH = ("/category/", "/tag/", "/author/", "/web-stories/", "/page/", "/wp-content/",
              "/about", "/contact", "/privacy", "/shop", "/product", "/course/", "/cookbook",
-             "/recipe-index", "/feed")
+             "/recipe-index", "/feed", "/attachment/")
+
+# IMAGE ATTACHMENT PAGES (Brad's ruling 2026-08-24, after the no-band drill).
+#
+# WordPress mints a PAGE for every uploaded image, and sitemaps list them. They are not recipes and
+# never can be - they carry no JSON-LD Recipe block, which is exactly why they piled up in the
+# ingredient-less corner of the pool. MEASURED: 187 of the 280 available candidates with no JSON-LD
+# were these, 67% - `baked-pork-chops-2-jpg`, `chicken-stir-fry-chop-suey-5-landscape-jpg`,
+# `close-up-of-baked-pork-chops-with-potato-jpg`. Each one had already cost a fetch from a 60-a-day
+# politeness budget, and with the band dropped they became poppable, so each could also cost a
+# dossier slot in front of a paid decider.
+#
+# MATCHED ON THE SLUG'S TAIL, not on a bare "jpg" anywhere. A real recipe can legitimately be
+# `air-fryer-jpg-chicken` in some parallel universe, and more plausibly can carry digits
+# (`5-ingredient-chili`); the clean twins pin both. The tail patterns are how WordPress actually
+# names these: a trailing extension word, a dimension pair, or a photo-orientation suffix.
+IMAGE_TAIL = re.compile(
+    r"(?:-(?:jpg|jpeg|png|webp|gif|scaled)"          # trailing extension word, WP's slugified upload
+    r"|\.(?:jpg|jpeg|png|webp|gif)"                  # or a real file extension
+    r"|-\d+x\d+"                                     # or a dimension pair, 1200x628
+    r"|-(?:landscape|portrait|overhead|closeup|close-up|thumb|thumbnail))"
+    r"/?$", re.I)
+
+
+def is_image_page(url):
+    """True for a WordPress image attachment page. Reads the URL's TAIL only - see IMAGE_TAIL."""
+    path = urllib.parse.urlparse(str(url or "")).path or str(url or "")
+    return bool(IMAGE_TAIL.search(path.rstrip("/")))
 PRIORITY_WORDS = ("chicken", "beef", "pork", "turkey", "sausage", "steak", "keto", "low-carb",
                   "lowcarb", "skillet", "casserole", "bake", "stew", "braised", "sheet-pan",
                   "meatball", "chop", "roast", "curry", "taco", "stir-fry")
@@ -1091,6 +1118,8 @@ def enumerate_domain(domain, robots, want=600, getter=None):
         if domain not in low:
             continue
         if any(sk in low for sk in SKIP_PATH):
+            continue
+        if is_image_page(u):
             continue
         if low.rstrip("/").endswith(domain):
             continue
@@ -1976,6 +2005,28 @@ def cmd_selftest(_a):
       str(exclusions(["2 lb chuck roast", "2 tbsp worcestershire sauce (anchovy)"])))
     T("MUST FIRE  ground chicken is a standing board exclusion",
       exclusions(["1 lb ground chicken"]) != [], "not excluded")
+
+    # ---- IMAGE ATTACHMENT PAGES (Brad's ruling 2026-08-24) -----------------------------------------
+    # FROZEN FIXTURE. WordPress mints a page per uploaded image and sitemaps list them. MEASURED on the
+    # live pool: 187 of the 280 available candidates with no JSON-LD block were these - 67% - each one
+    # already paid for out of a 60-a-day politeness budget, and each one poppable in front of a paid
+    # decider once the band came off. They are not recipes and never can be.
+    T("MUST FIRE  a WordPress image attachment page is not a recipe URL",
+      is_image_page("https://d/baked-pork-chops-2-jpg/"), "not detected")
+    T("MUST FIRE  ...and the other shapes the sitemaps actually served",
+      (is_image_page("https://d/chicken-stir-fry-chop-suey-5-landscape-jpg/")
+       and is_image_page("https://d/close-up-of-baked-pork-chops-with-potato-jpg")
+       and is_image_page("https://d/photo-1200x628/")
+       and is_image_page("https://d/hero.jpg")),
+      "one of the four measured shapes was missed")
+    # THE OVER-REJECTION TWINS. Matching a bare "jpg" or any digit anywhere would take real recipes.
+    T("CLEAN TWIN a recipe slug carrying DIGITS is not an image page",
+      not is_image_page("https://d/5-ingredient-chili/"), "excluded a real recipe")
+    T("CLEAN TWIN and neither are the real recipes this drill actually wanted",
+      (not is_image_page("https://d/chicken-tinga-tacos/")
+       and not is_image_page("https://d/one-pot-sausage-meatball-pasta/")
+       and not is_image_page("https://d/creamy-tuscan-chicken-pasta-bake/")),
+      "excluded a real recipe")
 
     # ---- RIB CUTS (Brad's ruling 2026-08-24, after the 6b proving run) -----------------------------
     # FROZEN FIXTURE. 6b paid for `beef-back-ribs` through map, registrar AND pricing before the
