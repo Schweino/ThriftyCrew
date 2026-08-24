@@ -26,7 +26,7 @@
 # Rule B here would be a second copy of a rule, which is how two copies of the same rule start disagreeing.
 #
 # Usage:
-#   .\hunt-run.ps1 -Init -RunDir <p> -Conditions '20 high-protein slow cooker' -Stop '20 accepted' [-WaveSize 10]
+#   .\hunt-run.ps1 -Init -RunDir <p> -Conditions '...' -Stop '...' -CalMin 500 -CalMax 650 -CarbMax 40 -ProteinMin 50 [-WaveSize 10]
 #   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To selected -By dedup-selector [-Detail '...']
 #   .\hunt-run.ps1 -Advance -RunDir <p> -Slug <s> -To pricing -By mapper -Terms 'saffron','achiote paste' -OptionalTerms 'cilantro'
 #     ^ EACH term its own quoted string. -Terms 'saffron,achiote paste' is ONE element to PowerShell and is REFUSED.
@@ -54,6 +54,12 @@ param(
   [string[]]$Terms = @(), [string[]]$OptionalTerms = @(),
   [string]$LaneName = '', [string]$Label = '', [string[]]$Items = @(),
   [string]$Conditions = '', [string]$Stop = '', [int]$WaveSize = 10,
+  # THE BAND IS A RUN PARAMETER (Brad's ruling 2026-08-24, before the 6b proving run). The calorie
+  # window, the carb ceiling and the protein floor all change run to run, so -Init REFUSES to mint a
+  # run dir until every one of them is STATED. -1 means "not stated" and is the only reason a default
+  # is not offered: a band nobody typed is a band nobody agreed to, and it would be enforced silently
+  # by two gates for the whole run. -ProteinMin 0 is how you say "no protein floor" out loud.
+  [double]$CalMin = -1, [double]$CalMax = -1, [double]$CarbMax = -1, [double]$ProteinMin = -1,
   [string]$QueueScript = '', [switch]$Drain, [switch]$NoLedger, [switch]$Json
 )
 $ErrorActionPreference = 'Stop'
@@ -669,6 +675,50 @@ if ($runSelfTest) {
     T 'a missing lane log reads as empty, not as an error' ((@(Read-LaneLog (Join-Path $env:TEMP 'no-such-lane-log.jsonl'))).Count -eq 0) 'threw'
   } finally { if (Test-Path $lt2) { Remove-Item $lt2 -Force -ErrorAction SilentlyContinue } }
 
+  # ---- FIXTURE 7c. THE BAND IS A RUN PARAMETER AND -Init DEMANDS IT (2026-08-24, Brad's ruling). ---
+  # Before this, the calorie window and carb ceiling were constants in TWO places (harvest.py's module
+  # globals, hunt-daemon's DEFAULT_BAND) and there was NO protein floor anywhere in the estate - so a
+  # run whose stated conditions said "50 g protein or more" was enforced by nothing, and no reader of
+  # the run dir could tell afterwards which band the gates had actually applied. -Init now refuses to
+  # mint a run dir until the band is typed, and writes it into run.json for the daemon to read back.
+  # -ProteinMin 0 is how "no floor" is said out loud, which is not the same as never saying it.
+  $bt = Join-Path $env:TEMP ('huntrun-band-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $noBand = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r1') -Conditions 'fixture' -Stop 'fixture' 2>&1
+    $noBandTxt = (@($noBand | ForEach-Object { [string]$_ }) -join ' ')
+    T 'MUST FIRE  -Init REFUSES to mint a run dir when the band is not stated' `
+      (($noBandTxt -match 'RUN PARAMETER') -and -not (Test-Path (Join-Path $bt 'r1\run.json'))) $noBandTxt
+    T '   and it NAMES every missing edge rather than only the first' `
+      (($noBandTxt -match '-CalMin') -and ($noBandTxt -match '-CalMax') -and
+       ($noBandTxt -match '-CarbMax') -and ($noBandTxt -match '-ProteinMin')) $noBandTxt
+
+    $partial = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r2') -Conditions 'fixture' -Stop 'fixture' -CalMin 500 -CalMax 650 -CarbMax 40 2>&1
+    T 'MUST FIRE  a band missing ONLY the protein floor is still refused - the floor is not optional, saying 0 is' `
+      ((@($partial | ForEach-Object { [string]$_ }) -join ' ') -match '-ProteinMin') ($partial -join ' ')
+
+    $inverted = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r3') -Conditions 'fixture' -Stop 'fixture' -CalMin 700 -CalMax 500 -CarbMax 40 -ProteinMin 0 2>&1
+    T 'MUST FIRE  a floor above its own ceiling is refused - it admits nothing and would source zero recipes silently' `
+      ((@($inverted | ForEach-Object { [string]$_ }) -join ' ') -match 'above -CalMax') ($inverted -join ' ')
+
+    $good = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r4') -Conditions 'fixture' -Stop 'fixture' -CalMin 500 -CalMax 650 -CarbMax 40 -ProteinMin 50 2>&1
+    $rj = $null
+    $rjp = Join-Path $bt 'r4\run.json'
+    if (Test-Path $rjp) { $rj = (Get-Content $rjp -Raw -Encoding utf8 | ConvertFrom-Json) }
+    T 'CLEAN TWIN a stated band mints the run dir and lands in run.json, so a report months later can say what the gates enforced' `
+      ($null -ne $rj -and $null -ne $rj.band -and [double]$rj.band.calMin -eq 500 -and
+       [double]$rj.band.calMax -eq 650 -and [double]$rj.band.carbMax -eq 40 -and
+       [double]$rj.band.proteinMin -eq 50) `
+      ($(if ($rj) { ($rj.band | ConvertTo-Json -Compress) } else { ($good -join ' ') }))
+
+    $zero = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r5') -Conditions 'fixture' -Stop 'fixture' -CalMin 400 -CalMax 650 -CarbMax 35 -ProteinMin 0 2>&1
+    $rj5 = $null
+    $rjp5 = Join-Path $bt 'r5\run.json'
+    if (Test-Path $rjp5) { $rj5 = (Get-Content $rjp5 -Raw -Encoding utf8 | ConvertFrom-Json) }
+    T 'CLEAN TWIN -ProteinMin 0 records a NULL floor - "no floor", said out loud and readable afterwards' `
+      ($null -ne $rj5 -and $null -eq $rj5.band.proteinMin) `
+      ($(if ($rj5) { ($rj5.band | ConvertTo-Json -Compress) } else { ($zero -join ' ') }))
+  } finally { Remove-Item $bt -Recurse -Force -ErrorAction SilentlyContinue }
+
   # ---- FIXTURE 7b. THE LANE SUMMARY READS BOTH WRITER CONVENTIONS (CORRECTED 2026-08-24). --------
   # The daemon writes start/end PAIRS with every token figure on the END line; the v2 orchestrator
   # wrote ONE event-less line per invocation with the tokens on it. The old aggregation skipped end
@@ -768,6 +818,25 @@ if (-not $QueueScript) { $QueueScript = Join-Path $repo 'grocery\ingredient-queu
 
 # ---- -Init ----------------------------------------------------------------------------------------
 if ($runInit) {
+  # THE BAND IS DEMANDED, NOT DEFAULTED. Before this, the calorie window and the carb ceiling lived as
+  # constants in TWO places (harvest.py's module globals and hunt-daemon's DEFAULT_BAND) and there was
+  # no protein floor at all, so a run whose conditions said "50 g protein or more" was enforced by
+  # nothing and nobody could tell from the run dir what band had actually been applied. The band now
+  # arrives here, gets written into run.json, and the daemon reads it back.
+  $missing = @()
+  if ($CalMin -lt 0)     { $missing += '-CalMin' }
+  if ($CalMax -lt 0)     { $missing += '-CalMax' }
+  if ($CarbMax -lt 0)    { $missing += '-CarbMax' }
+  if ($ProteinMin -lt 0) { $missing += '-ProteinMin (pass 0 for no floor)' }
+  if ($missing.Count) {
+    Write-Output ("hunt-run -Init: the macro band is a RUN PARAMETER and must be stated. Missing: {0}" -f ($missing -join ', '))
+    Write-Output "  e.g. -CalMin 500 -CalMax 650 -CarbMax 40 -ProteinMin 50"
+    exit 1
+  }
+  if ($CalMin -gt $CalMax) {
+    Write-Output ("hunt-run -Init: -CalMin {0} is above -CalMax {1}. A band with its floor over its ceiling admits nothing, and the run would source zero recipes without ever saying why." -f $CalMin, $CalMax)
+    exit 1
+  }
   foreach ($d in @('', 'state', 'candidates', 'selected', 'extracted', 'mapped', 'intake', 'qa', 'waves')) {
     $p = if ($d) { Join-Path $RunDir $d } else { $RunDir }
     if (-not (Test-Path $p)) { New-Item -ItemType Directory -Force $p | Out-Null }
@@ -781,12 +850,18 @@ if ($runInit) {
   $doc = [pscustomobject]@{
     run = $runId; created = (Get-Stamp); conditions = $Conditions; stop = $Stop; wave_size = $WaveSize
     auto_publish = $true
+    # The band the run was STARTED under, in the run dir, so a report months later can say what the
+    # gates were actually enforcing rather than what today's constants happen to be.
+    band = [ordered]@{ calMin = $CalMin; calMax = $CalMax; carbMax = $CarbMax
+                       proteinMin = $(if ($ProteinMin -gt 0) { $ProteinMin } else { $null }) }
     catalog_digest = $digest; catalog_digest_written = $digestDate
     board_file = $(if ($board.Count) { $board[0].Name } else { $null })
     board_written = $(if ($board.Count) { $board[0].LastWriteTime.ToString('yyyy-MM-ddTHH:mm:ss') } else { $null })
   }
   Write-JsonAtomic -Path (Join-Path $RunDir 'run.json') -Obj $doc
   Write-Output ("hunt-run: initialised {0}  (wave size {1})" -f $runId, $WaveSize)
+  Write-Output ("  band: {0}-{1} cal, carbs <= {2}, protein {3}" -f $CalMin, $CalMax, $CarbMax,
+                $(if ($ProteinMin -gt 0) { ">= $ProteinMin" } else { 'no floor (stated)' }))
   if (-not $digestDate) { Write-Output '  WARNING no pipeline\catalog-digest.json - run make-catalog-digest.ps1 before sourcing' }
   if (-not $board.Count) { Write-Output '  WARNING no grocery\out\comparison-*.json - pricing reads it' }
   else { Write-Output ("  board: {0} (written {1})" -f $board[0].Name, $board[0].LastWriteTime.ToString('yyyy-MM-dd HH:mm')) }

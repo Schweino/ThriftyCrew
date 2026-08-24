@@ -7,211 +7,1160 @@
   "chan": "a NAMED async scenario, because channel semantics are not expressible as data. Both runners implement the same five scenario bodies under the same names - this is the one place the suite exists twice, so a change here means changing both."
  },
  "vectors": [
-
-  {"id": "B7-lowercase-pass", "kind": "call", "fn": "isPass", "args": ["pass"], "expect": true,
-   "must_fire": true, "note": "lowercase 'pass' IS a pass - the bug that stalled every wave"},
-  {"id": "B7-uppercase-pass", "kind": "call", "fn": "isPass", "args": ["PASS"], "expect": true,
-   "must_fire": false, "note": "uppercase PASS is a pass"},
-  {"id": "B7-pass-with-notes", "kind": "call", "fn": "isPass", "args": ["PASS (with notes)"], "expect": true,
-   "must_fire": false, "note": "'PASS (with notes)' is a pass"},
-  {"id": "B7-fail-is-not-pass", "kind": "call", "fn": "isPass", "args": ["FAIL"], "expect": false,
-   "must_fire": true, "note": "'FAIL' is not a pass"},
-  {"id": "B7-nogo-is-not-go", "kind": "call", "fn": "isGo", "args": ["NO-GO"], "expect": false,
-   "must_fire": true, "note": "'NO-GO' is NEVER read as GO - its first token is NO-GO"},
-  {"id": "B7-nogo-lower-is-not-go", "kind": "call", "fn": "isGo", "args": ["no-go"], "expect": false,
-   "must_fire": true, "note": "and neither is 'no-go'"},
-  {"id": "B7-go-is-go", "kind": "call", "fn": "isGo", "args": ["GO"], "expect": true,
-   "must_fire": false, "note": "'GO' is GO"},
-  {"id": "B7-go-lower-is-go", "kind": "call", "fn": "isGo", "args": ["go"], "expect": true,
-   "must_fire": false, "note": "and so is 'go'"},
-  {"id": "B7-null-not-pass", "kind": "call", "fn": "isPass", "args": [null], "expect": false,
-   "must_fire": true, "note": "a null verdict is not a pass"},
-  {"id": "B7-null-not-go", "kind": "call", "fn": "isGo", "args": [null], "expect": false,
-   "must_fire": true, "note": "a null verdict is not a GO"},
-  {"id": "B7-empty-not-go", "kind": "call", "fn": "isGo", "args": [""], "expect": false,
-   "must_fire": true, "note": "an empty verdict is not a GO"},
-  {"id": "B7-firstToken-pass", "kind": "call", "fn": "firstToken", "args": ["pass"], "expect": "PASS",
-   "must_fire": false, "note": "the token itself, so a disagreement points at the splitter"},
-  {"id": "B7-firstToken-nogo", "kind": "call", "fn": "firstToken", "args": ["NO-GO on 3 slugs"], "expect": "NO-GO",
-   "must_fire": true, "note": "the hyphen stays inside the token - that is what keeps NO-GO out of GO"},
-  {"id": "B7-firstToken-null", "kind": "call", "fn": "firstToken", "args": [null], "expect": "",
-   "must_fire": false, "note": "null yields the empty token, never the string 'null'"},
-  {"id": "B7-firstToken-punct", "kind": "call", "fn": "firstToken", "args": ["  ...GO!  "], "expect": "GO",
-   "must_fire": false, "note": "leading punctuation is not a token"},
-  {"id": "B7-rejected", "kind": "call", "fn": "isRejected", "args": ["rejected - not carried"], "expect": true,
-   "must_fire": false, "note": "isRejected reads the same way"},
-  {"id": "B7-rejected-negative", "kind": "call", "fn": "isRejected", "args": ["ok"], "expect": false,
-   "must_fire": true, "note": "'ok' is not a rejection"},
-  {"id": "B7-normState", "kind": "call", "fn": "normState", "args": ["  Priced "], "expect": "priced",
-   "must_fire": false, "note": "state strings are compared normalised, never raw"},
-  {"id": "B7-normState-null", "kind": "call", "fn": "normState", "args": [null], "expect": "",
-   "must_fire": false, "note": "a null state is the empty string, not 'null'"},
-
-  {"id": "B8-comma-inside-term", "kind": "call", "fn": "termHasComma",
-   "args": ["green bell pepper,shaved beef steak"], "expect": true,
-   "must_fire": true, "note": "a comma inside a single term is detected"},
-  {"id": "B8-normal-term", "kind": "call", "fn": "termHasComma", "args": ["bacon bits"], "expect": false,
-   "must_fire": false, "note": "a normal term carries no comma"},
-  {"id": "B8-two-terms-quote-as-two", "kind": "call", "fn": "quoteTerms",
-   "args": [["green bell pepper", "shaved beef steak"]],
-   "expect": "'green bell pepper','shaved beef steak'",
-   "must_fire": true, "note": "two terms quote as TWO arguments, not one joined string"},
-  {"id": "B8-apostrophe-escaped", "kind": "call", "fn": "quoteTerms", "args": [["hy-vee's own"]],
-   "expect": "'hy-vee''s own'",
-   "must_fire": false, "note": "an apostrophe is doubled - the only escape a single-quoted PS string has"},
-  {"id": "B8-three-terms", "kind": "call", "fn": "quoteTerms", "args": [["a", "b,with,commas", "c"]],
-   "expect": "'a','b,with,commas','c'",
-   "must_fire": true, "note": "three elements, one of them carrying commas - the PS 5.1 collection rule says fixtures over collections use at least three"},
-  {"id": "B8-empty-and-falsy-dropped", "kind": "call", "fn": "quoteTerms", "args": [["a", "", null, "b"]],
-   "expect": "'a','b'",
-   "must_fire": false, "note": "an empty term is dropped rather than quoted into an empty argument"},
-
-  {"id": "B6-retries-across-batch-shapes", "kind": "retries",
-   "args": [[["a", "b"], "map"], [["a", "x"], "map"], [["a"], "write"]],
-   "expect": {"counts": {"map:a": 2, "map:b": 1, "map:x": 1, "write:a": 1}, "returns": [1, 2, 1]},
-   "must_fire": true,
-   "note": "a slug carries its retries across DIFFERENT batch shapes, and retries are per STAGE - the two halves of B6's 657 failed calls"},
-
-  {"id": "B6-four-failures-do-not-trip", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 900,
-            "ops": [["note", false], ["note", false], ["note", false], ["note", false]]},
-   "expect": {"open": false, "calls": 0},
-   "must_fire": false, "note": "four failures do not trip the breaker"},
-  {"id": "B6-success-resets-the-streak", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 900,
-            "ops": [["note", false], ["note", false], ["note", false], ["note", false],
-                    ["note", true], ["note", false], ["note", false]]},
-   "expect": {"open": false, "calls": 0},
-   "must_fire": false, "note": "a success resets the streak, so per-recipe flakiness never trips it"},
-  {"id": "B6-five-consecutive-trip", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 900,
-            "ops": [["note", false], ["note", false], ["note", false], ["note", false],
-                    ["note", true],
-                    ["note", false], ["note", false], ["note", false], ["note", false], ["note", false]]},
-   "expect": {"open": true, "calls": 0},
-   "must_fire": true, "note": "five consecutive failures trip the breaker - a wall, not flakiness"},
-  {"id": "B6-call-budget-trips", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 3,
-            "ops": [["countCall"], ["countCall"], ["countCall"], ["checkBudget"]]},
-   "expect": {"open": true, "calls": 3},
-   "must_fire": true, "note": "the call budget trips before a runaway loop can eat the run"},
-  {"id": "B6-budget-not-reached", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 3, "ops": [["countCall"], ["countCall"], ["checkBudget"]]},
-   "expect": {"open": false, "calls": 2},
-   "must_fire": false, "note": "under budget, the breaker stays shut"},
-  {"id": "B6-explicit-trip", "kind": "breaker",
-   "args": {"threshold": 5, "maxCalls": 900, "ops": [["trip", "operator stop"]]},
-   "expect": {"open": true, "calls": 0},
-   "must_fire": false, "note": "an explicit trip opens it without any failure at all"},
-
-  {"id": "B10-clean-not-held-hostage", "kind": "call", "fn": "planTrim",
-   "args": [["a", "b", "c"], {"a": "BLOCK", "b": "GO", "c": "GO"}, false],
-   "expect": {"clean": ["b", "c"], "blocked": ["a"], "toReject": [], "toRepair": ["a"],
-              "canPublishClean": true},
-   "must_fire": true,
-   "note": "clean recipes are NOT held hostage by a blocked neighbour, and the blocker goes back for its one repair"},
-  {"id": "B10-repaired-blocker-is-terminal", "kind": "call", "fn": "planTrim",
-   "args": [["a", "b", "c"], {"a": "BLOCK", "b": "GO", "c": "GO"}, true],
-   "expect": {"clean": ["b", "c"], "blocked": ["a"], "toReject": ["a"], "toRepair": [],
-              "canPublishClean": true},
-   "must_fire": true, "note": "after its repair cycle a blocker is terminal, never re-repaired"},
-  {"id": "B10-all-blocked-publishes-nothing", "kind": "call", "fn": "planTrim",
-   "args": [["a", "b"], {"a": "BLOCK", "b": "BLOCK"}, true],
-   "expect": {"clean": [], "blocked": ["a", "b"], "toReject": ["a", "b"], "toRepair": [],
-              "canPublishClean": false},
-   "must_fire": true, "note": "an all-blocked wave publishes NOTHING"},
-  {"id": "B10-blocked-prefix-match", "kind": "call", "fn": "planTrim",
-   "args": [["a", "b", "c"], {"a": "BLOCKED: cost drift", "b": "go", "c": "GO"}, false],
-   "expect": {"clean": ["b", "c"], "blocked": ["a"], "toReject": [], "toRepair": ["a"],
-              "canPublishClean": true},
-   "must_fire": false, "note": "the per-slug verdict is matched on the BLOCK prefix, case-insensitively"},
-  {"id": "B10-unlisted-slug-is-clean", "kind": "call", "fn": "planTrim",
-   "args": [["a", "b", "c"], {"a": "BLOCK"}, false],
-   "expect": {"clean": ["b", "c"], "blocked": ["a"], "toReject": [], "toRepair": ["a"],
-              "canPublishClean": true},
-   "must_fire": false, "note": "a slug the auditor said nothing about is clean, not blocked"},
-
-  {"id": "B4-shared-data-forces-whole-wave", "kind": "call", "fn": "chooseScope",
-   "args": ["shared-data", ["a"]],
-   "expect": {"scope": "whole-wave",
-              "why": "the fix moved shared data, so every recipe in the wave has new numbers"},
-   "must_fire": true, "note": "shared-data blockers force a whole-wave re-audit"},
-  {"id": "B4-recipe-local-scopes-narrow", "kind": "call", "fn": "chooseScope",
-   "args": ["recipe-local", ["a", "b"]],
-   "expect": {"scope": "a,b",
-              "why": "the blocker was recipe-local, so nothing outside the repaired slugs moved"},
-   "must_fire": false, "note": "recipe-local blockers scope to the repaired slugs only"},
-  {"id": "B4-no-repaired-slugs-is-whole-wave", "kind": "call", "fn": "chooseScope",
-   "args": ["recipe-local", []],
-   "expect": {"scope": "whole-wave",
-              "why": "the fix moved shared data, so every recipe in the wave has new numbers"},
-   "must_fire": true, "note": "an empty repair list cannot justify a narrow scope"},
-  {"id": "B4-narrow-on-shared-is-illegal", "kind": "call", "fn": "scopeIsLegal",
-   "args": ["a,b", "shared-data"], "expect": false,
-   "must_fire": true, "note": "a narrow scope on a shared-data fix is ILLEGAL"},
-  {"id": "B4-whole-wave-legal-on-shared", "kind": "call", "fn": "scopeIsLegal",
-   "args": ["whole-wave", "shared-data"], "expect": true,
-   "must_fire": false, "note": "whole-wave is always legal"},
-  {"id": "B4-whole-wave-legal-on-local", "kind": "call", "fn": "scopeIsLegal",
-   "args": ["whole-wave", "recipe-local"], "expect": true,
-   "must_fire": false, "note": "and a shared-data-sized audit of a local fix is merely expensive, not illegal"},
-
-  {"id": "B11-untouched-file-refused", "kind": "call", "fn": "repairClaimHolds",
-   "args": [["a.json"], {"a.json": 100, "b.json": 100}, {"a.json": 100}],
-   "expect": {"ok": false, "reason": "claimed to change but did not: a.json", "untouched": ["a.json"]},
-   "must_fire": true, "note": "a repair claiming a file it never touched is refused"},
-  {"id": "B11-real-repair-passes", "kind": "call", "fn": "repairClaimHolds",
-   "args": [["a.json"], {"a.json": 100, "b.json": 100}, {"a.json": 200}],
-   "expect": {"ok": true, "reason": "every claimed file changed"},
-   "must_fire": false, "note": "a real repair passes"},
-  {"id": "B11-nothing-needed-changing", "kind": "call", "fn": "repairClaimHolds",
-   "args": [[], {"a.json": 100}, {"a.json": 100}],
-   "expect": {"ok": true, "reason": "no change claimed"},
-   "must_fire": false,
-   "note": "'nothing needed changing' is a legitimate answer, treated differently from a false claim"},
-  {"id": "B11-one-untouched-among-three", "kind": "call", "fn": "repairClaimHolds",
-   "args": [["a.json", "b.json", "c.json"], {"a.json": 100, "b.json": 100, "c.json": 100},
-            {"a.json": 200, "b.json": 100, "c.json": 300}],
-   "expect": {"ok": false, "reason": "claimed to change but did not: b.json", "untouched": ["b.json"]},
-   "must_fire": true, "note": "one untouched file among three is still caught"},
-
-  {"id": "band-below-floor", "kind": "call", "fn": "inBand",
-   "args": [390, 10, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": false, "reason": "390 cal below the 400 floor"},
-   "must_fire": true, "note": "below the floor fails"},
-  {"id": "band-above-ceiling", "kind": "call", "fn": "inBand",
-   "args": [660, 10, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": false, "reason": "660 cal above the 650 ceiling"},
-   "must_fire": true, "note": "above the CEILING fails - a band has two edges"},
-  {"id": "band-over-carbs", "kind": "call", "fn": "inBand",
-   "args": [500, 36, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": false, "reason": "36g carbs above the 35 limit"},
-   "must_fire": true, "note": "over the carb limit fails"},
-  {"id": "band-mid", "kind": "call", "fn": "inBand",
-   "args": [500, 20, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": true, "reason": ""},
-   "must_fire": false, "note": "mid-band passes"},
-  {"id": "band-edges-inclusive", "kind": "call", "fn": "inBand",
-   "args": [400, 35, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": true, "reason": ""},
-   "must_fire": false, "note": "the exact edges are inside the band"},
-  {"id": "band-not-reported", "kind": "call", "fn": "inBand",
-   "args": [null, 10, {"calMin": 400, "calMax": 650, "carbMax": 35}],
-   "expect": {"ok": true, "reason": "not reported"},
-   "must_fire": false,
-   "note": "an unreported macro is not a band failure - the band gate rules on numbers, and a missing number is a different problem for a different stage"},
-
-  {"id": "B9-takeBatch-sweeps", "kind": "chan", "scenario": "takeBatch-sweeps", "expect": 3,
-   "must_fire": false, "note": "takeBatch sweeps what is queued without waiting to fill"},
-  {"id": "B9-closed-empty-returns-null", "kind": "chan", "scenario": "closed-empty-returns-null",
+  {
+   "id": "B7-lowercase-pass",
+   "kind": "call",
+   "fn": "isPass",
+   "args": [
+    "pass"
+   ],
    "expect": true,
-   "must_fire": false, "note": "a closed empty channel returns null rather than hanging"},
-  {"id": "B9-lone-item-immediate", "kind": "chan", "scenario": "lone-item-immediate", "expect": 1,
    "must_fire": true,
-   "note": "a lone item is taken alone, immediately - streaming, not batching (B3 cost 8-10 minutes to the first flowing recipe)"},
-  {"id": "B9-close-releases-parked", "kind": "chan", "scenario": "close-releases-parked", "expect": true,
-   "must_fire": true, "note": "close() releases a producer parked on backpressure - the hang bug itself"},
-  {"id": "B9-drain-before-close", "kind": "chan", "scenario": "drain-before-close", "expect": "a,b",
-   "must_fire": false, "note": "items pushed before close are drained, not discarded"}
+   "note": "lowercase 'pass' IS a pass - the bug that stalled every wave"
+  },
+  {
+   "id": "B7-uppercase-pass",
+   "kind": "call",
+   "fn": "isPass",
+   "args": [
+    "PASS"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "uppercase PASS is a pass"
+  },
+  {
+   "id": "B7-pass-with-notes",
+   "kind": "call",
+   "fn": "isPass",
+   "args": [
+    "PASS (with notes)"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "'PASS (with notes)' is a pass"
+  },
+  {
+   "id": "B7-fail-is-not-pass",
+   "kind": "call",
+   "fn": "isPass",
+   "args": [
+    "FAIL"
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "'FAIL' is not a pass"
+  },
+  {
+   "id": "B7-nogo-is-not-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    "NO-GO"
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "'NO-GO' is NEVER read as GO - its first token is NO-GO"
+  },
+  {
+   "id": "B7-nogo-lower-is-not-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    "no-go"
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "and neither is 'no-go'"
+  },
+  {
+   "id": "B7-go-is-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    "GO"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "'GO' is GO"
+  },
+  {
+   "id": "B7-go-lower-is-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    "go"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "and so is 'go'"
+  },
+  {
+   "id": "B7-null-not-pass",
+   "kind": "call",
+   "fn": "isPass",
+   "args": [
+    null
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "a null verdict is not a pass"
+  },
+  {
+   "id": "B7-null-not-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    null
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "a null verdict is not a GO"
+  },
+  {
+   "id": "B7-empty-not-go",
+   "kind": "call",
+   "fn": "isGo",
+   "args": [
+    ""
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "an empty verdict is not a GO"
+  },
+  {
+   "id": "B7-firstToken-pass",
+   "kind": "call",
+   "fn": "firstToken",
+   "args": [
+    "pass"
+   ],
+   "expect": "PASS",
+   "must_fire": false,
+   "note": "the token itself, so a disagreement points at the splitter"
+  },
+  {
+   "id": "B7-firstToken-nogo",
+   "kind": "call",
+   "fn": "firstToken",
+   "args": [
+    "NO-GO on 3 slugs"
+   ],
+   "expect": "NO-GO",
+   "must_fire": true,
+   "note": "the hyphen stays inside the token - that is what keeps NO-GO out of GO"
+  },
+  {
+   "id": "B7-firstToken-null",
+   "kind": "call",
+   "fn": "firstToken",
+   "args": [
+    null
+   ],
+   "expect": "",
+   "must_fire": false,
+   "note": "null yields the empty token, never the string 'null'"
+  },
+  {
+   "id": "B7-firstToken-punct",
+   "kind": "call",
+   "fn": "firstToken",
+   "args": [
+    "  ...GO!  "
+   ],
+   "expect": "GO",
+   "must_fire": false,
+   "note": "leading punctuation is not a token"
+  },
+  {
+   "id": "B7-rejected",
+   "kind": "call",
+   "fn": "isRejected",
+   "args": [
+    "rejected - not carried"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "isRejected reads the same way"
+  },
+  {
+   "id": "B7-rejected-negative",
+   "kind": "call",
+   "fn": "isRejected",
+   "args": [
+    "ok"
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "'ok' is not a rejection"
+  },
+  {
+   "id": "B7-normState",
+   "kind": "call",
+   "fn": "normState",
+   "args": [
+    "  Priced "
+   ],
+   "expect": "priced",
+   "must_fire": false,
+   "note": "state strings are compared normalised, never raw"
+  },
+  {
+   "id": "B7-normState-null",
+   "kind": "call",
+   "fn": "normState",
+   "args": [
+    null
+   ],
+   "expect": "",
+   "must_fire": false,
+   "note": "a null state is the empty string, not 'null'"
+  },
+  {
+   "id": "B8-comma-inside-term",
+   "kind": "call",
+   "fn": "termHasComma",
+   "args": [
+    "green bell pepper,shaved beef steak"
+   ],
+   "expect": true,
+   "must_fire": true,
+   "note": "a comma inside a single term is detected"
+  },
+  {
+   "id": "B8-normal-term",
+   "kind": "call",
+   "fn": "termHasComma",
+   "args": [
+    "bacon bits"
+   ],
+   "expect": false,
+   "must_fire": false,
+   "note": "a normal term carries no comma"
+  },
+  {
+   "id": "B8-two-terms-quote-as-two",
+   "kind": "call",
+   "fn": "quoteTerms",
+   "args": [
+    [
+     "green bell pepper",
+     "shaved beef steak"
+    ]
+   ],
+   "expect": "'green bell pepper','shaved beef steak'",
+   "must_fire": true,
+   "note": "two terms quote as TWO arguments, not one joined string"
+  },
+  {
+   "id": "B8-apostrophe-escaped",
+   "kind": "call",
+   "fn": "quoteTerms",
+   "args": [
+    [
+     "hy-vee's own"
+    ]
+   ],
+   "expect": "'hy-vee''s own'",
+   "must_fire": false,
+   "note": "an apostrophe is doubled - the only escape a single-quoted PS string has"
+  },
+  {
+   "id": "B8-three-terms",
+   "kind": "call",
+   "fn": "quoteTerms",
+   "args": [
+    [
+     "a",
+     "b,with,commas",
+     "c"
+    ]
+   ],
+   "expect": "'a','b,with,commas','c'",
+   "must_fire": true,
+   "note": "three elements, one of them carrying commas - the PS 5.1 collection rule says fixtures over collections use at least three"
+  },
+  {
+   "id": "B8-empty-and-falsy-dropped",
+   "kind": "call",
+   "fn": "quoteTerms",
+   "args": [
+    [
+     "a",
+     "",
+     null,
+     "b"
+    ]
+   ],
+   "expect": "'a','b'",
+   "must_fire": false,
+   "note": "an empty term is dropped rather than quoted into an empty argument"
+  },
+  {
+   "id": "B6-retries-across-batch-shapes",
+   "kind": "retries",
+   "args": [
+    [
+     [
+      "a",
+      "b"
+     ],
+     "map"
+    ],
+    [
+     [
+      "a",
+      "x"
+     ],
+     "map"
+    ],
+    [
+     [
+      "a"
+     ],
+     "write"
+    ]
+   ],
+   "expect": {
+    "counts": {
+     "map:a": 2,
+     "map:b": 1,
+     "map:x": 1,
+     "write:a": 1
+    },
+    "returns": [
+     1,
+     2,
+     1
+    ]
+   },
+   "must_fire": true,
+   "note": "a slug carries its retries across DIFFERENT batch shapes, and retries are per STAGE - the two halves of B6's 657 failed calls"
+  },
+  {
+   "id": "B6-four-failures-do-not-trip",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 900,
+    "ops": [
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ]
+    ]
+   },
+   "expect": {
+    "open": false,
+    "calls": 0
+   },
+   "must_fire": false,
+   "note": "four failures do not trip the breaker"
+  },
+  {
+   "id": "B6-success-resets-the-streak",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 900,
+    "ops": [
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      true
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ]
+    ]
+   },
+   "expect": {
+    "open": false,
+    "calls": 0
+   },
+   "must_fire": false,
+   "note": "a success resets the streak, so per-recipe flakiness never trips it"
+  },
+  {
+   "id": "B6-five-consecutive-trip",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 900,
+    "ops": [
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      true
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ],
+     [
+      "note",
+      false
+     ]
+    ]
+   },
+   "expect": {
+    "open": true,
+    "calls": 0
+   },
+   "must_fire": true,
+   "note": "five consecutive failures trip the breaker - a wall, not flakiness"
+  },
+  {
+   "id": "B6-call-budget-trips",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 3,
+    "ops": [
+     [
+      "countCall"
+     ],
+     [
+      "countCall"
+     ],
+     [
+      "countCall"
+     ],
+     [
+      "checkBudget"
+     ]
+    ]
+   },
+   "expect": {
+    "open": true,
+    "calls": 3
+   },
+   "must_fire": true,
+   "note": "the call budget trips before a runaway loop can eat the run"
+  },
+  {
+   "id": "B6-budget-not-reached",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 3,
+    "ops": [
+     [
+      "countCall"
+     ],
+     [
+      "countCall"
+     ],
+     [
+      "checkBudget"
+     ]
+    ]
+   },
+   "expect": {
+    "open": false,
+    "calls": 2
+   },
+   "must_fire": false,
+   "note": "under budget, the breaker stays shut"
+  },
+  {
+   "id": "B6-explicit-trip",
+   "kind": "breaker",
+   "args": {
+    "threshold": 5,
+    "maxCalls": 900,
+    "ops": [
+     [
+      "trip",
+      "operator stop"
+     ]
+    ]
+   },
+   "expect": {
+    "open": true,
+    "calls": 0
+   },
+   "must_fire": false,
+   "note": "an explicit trip opens it without any failure at all"
+  },
+  {
+   "id": "B10-clean-not-held-hostage",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b",
+     "c"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "GO",
+     "c": "GO"
+    },
+    false
+   ],
+   "expect": {
+    "clean": [
+     "b",
+     "c"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [],
+    "toRepair": [
+     "a"
+    ],
+    "canPublishClean": true
+   },
+   "must_fire": true,
+   "note": "clean recipes are NOT held hostage by a blocked neighbour, and the blocker goes back for its one repair"
+  },
+  {
+   "id": "B10-repaired-blocker-is-terminal",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b",
+     "c"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "GO",
+     "c": "GO"
+    },
+    true
+   ],
+   "expect": {
+    "clean": [
+     "b",
+     "c"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [
+     "a"
+    ],
+    "toRepair": [],
+    "canPublishClean": true
+   },
+   "must_fire": true,
+   "note": "after its repair cycle a blocker is terminal, never re-repaired"
+  },
+  {
+   "id": "B10-all-blocked-publishes-nothing",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "BLOCK"
+    },
+    true
+   ],
+   "expect": {
+    "clean": [],
+    "blocked": [
+     "a",
+     "b"
+    ],
+    "toReject": [
+     "a",
+     "b"
+    ],
+    "toRepair": [],
+    "canPublishClean": false
+   },
+   "must_fire": true,
+   "note": "an all-blocked wave publishes NOTHING"
+  },
+  {
+   "id": "B10-blocked-prefix-match",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b",
+     "c"
+    ],
+    {
+     "a": "BLOCKED: cost drift",
+     "b": "go",
+     "c": "GO"
+    },
+    false
+   ],
+   "expect": {
+    "clean": [
+     "b",
+     "c"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [],
+    "toRepair": [
+     "a"
+    ],
+    "canPublishClean": true
+   },
+   "must_fire": false,
+   "note": "the per-slug verdict is matched on the BLOCK prefix, case-insensitively"
+  },
+  {
+   "id": "B10-unlisted-slug-is-clean",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b",
+     "c"
+    ],
+    {
+     "a": "BLOCK"
+    },
+    false
+   ],
+   "expect": {
+    "clean": [
+     "b",
+     "c"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [],
+    "toRepair": [
+     "a"
+    ],
+    "canPublishClean": true
+   },
+   "must_fire": false,
+   "note": "a slug the auditor said nothing about is clean, not blocked"
+  },
+  {
+   "id": "B4-shared-data-forces-whole-wave",
+   "kind": "call",
+   "fn": "chooseScope",
+   "args": [
+    "shared-data",
+    [
+     "a"
+    ]
+   ],
+   "expect": {
+    "scope": "whole-wave",
+    "why": "the fix moved shared data, so every recipe in the wave has new numbers"
+   },
+   "must_fire": true,
+   "note": "shared-data blockers force a whole-wave re-audit"
+  },
+  {
+   "id": "B4-recipe-local-scopes-narrow",
+   "kind": "call",
+   "fn": "chooseScope",
+   "args": [
+    "recipe-local",
+    [
+     "a",
+     "b"
+    ]
+   ],
+   "expect": {
+    "scope": "a,b",
+    "why": "the blocker was recipe-local, so nothing outside the repaired slugs moved"
+   },
+   "must_fire": false,
+   "note": "recipe-local blockers scope to the repaired slugs only"
+  },
+  {
+   "id": "B4-no-repaired-slugs-is-whole-wave",
+   "kind": "call",
+   "fn": "chooseScope",
+   "args": [
+    "recipe-local",
+    []
+   ],
+   "expect": {
+    "scope": "whole-wave",
+    "why": "the fix moved shared data, so every recipe in the wave has new numbers"
+   },
+   "must_fire": true,
+   "note": "an empty repair list cannot justify a narrow scope"
+  },
+  {
+   "id": "B4-narrow-on-shared-is-illegal",
+   "kind": "call",
+   "fn": "scopeIsLegal",
+   "args": [
+    "a,b",
+    "shared-data"
+   ],
+   "expect": false,
+   "must_fire": true,
+   "note": "a narrow scope on a shared-data fix is ILLEGAL"
+  },
+  {
+   "id": "B4-whole-wave-legal-on-shared",
+   "kind": "call",
+   "fn": "scopeIsLegal",
+   "args": [
+    "whole-wave",
+    "shared-data"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "whole-wave is always legal"
+  },
+  {
+   "id": "B4-whole-wave-legal-on-local",
+   "kind": "call",
+   "fn": "scopeIsLegal",
+   "args": [
+    "whole-wave",
+    "recipe-local"
+   ],
+   "expect": true,
+   "must_fire": false,
+   "note": "and a shared-data-sized audit of a local fix is merely expensive, not illegal"
+  },
+  {
+   "id": "B11-untouched-file-refused",
+   "kind": "call",
+   "fn": "repairClaimHolds",
+   "args": [
+    [
+     "a.json"
+    ],
+    {
+     "a.json": 100,
+     "b.json": 100
+    },
+    {
+     "a.json": 100
+    }
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "claimed to change but did not: a.json",
+    "untouched": [
+     "a.json"
+    ]
+   },
+   "must_fire": true,
+   "note": "a repair claiming a file it never touched is refused"
+  },
+  {
+   "id": "B11-real-repair-passes",
+   "kind": "call",
+   "fn": "repairClaimHolds",
+   "args": [
+    [
+     "a.json"
+    ],
+    {
+     "a.json": 100,
+     "b.json": 100
+    },
+    {
+     "a.json": 200
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "reason": "every claimed file changed"
+   },
+   "must_fire": false,
+   "note": "a real repair passes"
+  },
+  {
+   "id": "B11-nothing-needed-changing",
+   "kind": "call",
+   "fn": "repairClaimHolds",
+   "args": [
+    [],
+    {
+     "a.json": 100
+    },
+    {
+     "a.json": 100
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "reason": "no change claimed"
+   },
+   "must_fire": false,
+   "note": "'nothing needed changing' is a legitimate answer, treated differently from a false claim"
+  },
+  {
+   "id": "B11-one-untouched-among-three",
+   "kind": "call",
+   "fn": "repairClaimHolds",
+   "args": [
+    [
+     "a.json",
+     "b.json",
+     "c.json"
+    ],
+    {
+     "a.json": 100,
+     "b.json": 100,
+     "c.json": 100
+    },
+    {
+     "a.json": 200,
+     "b.json": 100,
+     "c.json": 300
+    }
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "claimed to change but did not: b.json",
+    "untouched": [
+     "b.json"
+    ]
+   },
+   "must_fire": true,
+   "note": "one untouched file among three is still caught"
+  },
+  {
+   "id": "band-below-floor",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    390,
+    10,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "390 cal below the 400 floor"
+   },
+   "must_fire": true,
+   "note": "below the floor fails"
+  },
+  {
+   "id": "band-above-ceiling",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    660,
+    10,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "660 cal above the 650 ceiling"
+   },
+   "must_fire": true,
+   "note": "above the CEILING fails - a band has two edges"
+  },
+  {
+   "id": "band-over-carbs",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    500,
+    36,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "36g carbs above the 35 limit"
+   },
+   "must_fire": true,
+   "note": "over the carb limit fails"
+  },
+  {
+   "id": "band-mid",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    500,
+    20,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "reason": ""
+   },
+   "must_fire": false,
+   "note": "mid-band passes"
+  },
+  {
+   "id": "band-edges-inclusive",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    400,
+    35,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "reason": ""
+   },
+   "must_fire": false,
+   "note": "the exact edges are inside the band"
+  },
+  {
+   "id": "band-not-reported",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    null,
+    10,
+    {
+     "calMin": 400,
+     "calMax": 650,
+     "carbMax": 35
+    }
+   ],
+   "expect": {
+    "ok": true,
+    "reason": "not reported"
+   },
+   "must_fire": false,
+   "note": "an unreported macro is not a band failure - the band gate rules on numbers, and a missing number is a different problem for a different stage"
+  },
+  {
+   "id": "band-protein-below-floor",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    520,
+    20,
+    {
+     "calMin": 500,
+     "calMax": 650,
+     "carbMax": 40,
+     "proteinMin": 50
+    },
+    47
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "47g protein below the 50 floor"
+   },
+   "must_fire": true,
+   "note": "a run band may state a protein FLOOR (Brad 2026-08-24, the band is a run parameter) and a dish under it is out of band"
+  },
+  {
+   "id": "band-protein-at-floor",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    520,
+    20,
+    {
+     "calMin": 500,
+     "calMax": 650,
+     "carbMax": 40,
+     "proteinMin": 50
+    },
+    50
+   ],
+   "expect": {
+    "ok": true,
+    "reason": ""
+   },
+   "must_fire": false,
+   "note": "the floor is inclusive, exactly as the cal floor is"
+  },
+  {
+   "id": "band-protein-not-reported",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    520,
+    20,
+    {
+     "calMin": 500,
+     "calMax": 650,
+     "carbMax": 40,
+     "proteinMin": 50
+    },
+    null
+   ],
+   "expect": {
+    "ok": true,
+    "reason": "protein not reported"
+   },
+   "must_fire": false,
+   "note": "an unread protein number PASSES and says so - this is a retirement gate, and retiring a good dish on a number nobody read is D8 worse-than-no-gate in the other direction"
+  },
+  {
+   "id": "band-no-protein-rule",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    520,
+    20,
+    {
+     "calMin": 500,
+     "calMax": 650,
+     "carbMax": 40
+    },
+    12
+   ],
+   "expect": {
+    "ok": true,
+    "reason": ""
+   },
+   "must_fire": true,
+   "note": "a band that states NO floor must not invent one - this is what keeps every pre-2026-08-24 band vector green"
+  },
+  {
+   "id": "band-carbs-judged-before-protein",
+   "kind": "call",
+   "fn": "inBand",
+   "args": [
+    520,
+    45,
+    {
+     "calMin": 500,
+     "calMax": 650,
+     "carbMax": 40,
+     "proteinMin": 50
+    },
+    30
+   ],
+   "expect": {
+    "ok": false,
+    "reason": "45g carbs above the 40 limit"
+   },
+   "must_fire": true,
+   "note": "clause ORDER is part of the contract. This dish fails BOTH clauses (45g carbs over 40, 30g protein under 50) so only the ORDER decides the reason - the first shape of this vector used 90g protein, cleared the floor, and proved nothing."
+  },
+  {
+   "id": "B9-takeBatch-sweeps",
+   "kind": "chan",
+   "scenario": "takeBatch-sweeps",
+   "expect": 3,
+   "must_fire": false,
+   "note": "takeBatch sweeps what is queued without waiting to fill"
+  },
+  {
+   "id": "B9-closed-empty-returns-null",
+   "kind": "chan",
+   "scenario": "closed-empty-returns-null",
+   "expect": true,
+   "must_fire": false,
+   "note": "a closed empty channel returns null rather than hanging"
+  },
+  {
+   "id": "B9-lone-item-immediate",
+   "kind": "chan",
+   "scenario": "lone-item-immediate",
+   "expect": 1,
+   "must_fire": true,
+   "note": "a lone item is taken alone, immediately - streaming, not batching (B3 cost 8-10 minutes to the first flowing recipe)"
+  },
+  {
+   "id": "B9-close-releases-parked",
+   "kind": "chan",
+   "scenario": "close-releases-parked",
+   "expect": true,
+   "must_fire": true,
+   "note": "close() releases a producer parked on backpressure - the hang bug itself"
+  },
+  {
+   "id": "B9-drain-before-close",
+   "kind": "chan",
+   "scenario": "drain-before-close",
+   "expect": "a,b",
+   "must_fire": false,
+   "note": "items pushed before close are drained, not discarded"
+  }
  ]
 }

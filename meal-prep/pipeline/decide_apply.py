@@ -409,7 +409,7 @@ def cmd_selftest(_a):
         store_path = os.path.join(tmp, "considered-dishes.json")
         os.makedirs(run_dir, exist_ok=True)
         rc, out, _e = run_ps(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                           "drill", "-Stop", "2 accepted", "-WaveSize", "2"])
+                                           "drill", "-Stop", "2 accepted", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         T("the drill can init a scratch run dir", rc == 0, out.strip()[:160])
 
         pool = {"candidates": [

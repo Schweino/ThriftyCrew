@@ -564,6 +564,27 @@ class Daemon(object):
         finally:
             self.ch["decide"].close()
 
+    def candidate_in_band(self, cand):
+        """Does THIS candidate's harvested nutrition meet THIS RUN's band? Selection, not retirement:
+        a number that is missing or unverified cannot confirm the band, so the candidate waits. The
+        pool records `verified` False whenever any macro had to be inferred, and an inferred number is
+        not evidence that a dish clears a 50 g protein floor."""
+        b = cand.get("band") or {}
+        if not b.get("verified"):
+            return False
+        cal, carbs, prot = b.get("cal"), b.get("carbs"), b.get("protein_g")
+        if not _is_num(cal) or not _is_num(carbs):
+            return False
+        if cal < self.band["calMin"] or cal > self.band["calMax"]:
+            return False
+        if carbs > self.band["carbMax"]:
+            return False
+        floor = self.band.get("proteinMin")
+        if floor:
+            if not _is_num(prot) or prot < floor:
+                return False
+        return True
+
     def pop_dossiers(self, n):
         """Build the next N dossiers, in harvest's own pop order. READ-ONLY: harvest.py is the pool's
         sole writer, and `--mark-taken` is a separate act performed at dispatch time. A dossier that
@@ -571,6 +592,23 @@ class Daemon(object):
         pool = harvest.read_pool(self.pool_path)
         avail = [c for c in pool["candidates"] if c.get("status") == "available"
                  and c["slug"] not in self.seen_candidates]
+        if not avail:
+            return []
+        # THE POP IS FILTERED BY THE RUN'S OWN BAND (found 2026-08-24, before the 6b proving run, and
+        # it would have wrecked the run's headline number). `available` means "passed the band that was
+        # HARD-CODED IN harvest.py AT INGEST TIME" - 400-650 cal, <= 35 carbs, no protein rule at all.
+        # It does NOT mean "passes the band this run stated". This pop ignored the run band entirely, so
+        # a run at 500-650 cal / <= 40 carbs / >= 50 g protein would have popped in dossier_rank order
+        # and let the DECIDER discover the mismatch - measured against the live pool: 2 of the first 10
+        # and 3 of the first 20 pops qualified, so reaching 20 acceptances meant paying an Opus decider
+        # roughly 66 times to reject candidates one line of arithmetic kills. Section 2's PLANE 1 puts
+        # band filtering in mechanics, "instant"; this is that line.
+        #
+        # STRICTER THAN THE GATE, AND DELIBERATELY SO. hunt_lib.in_band passes an unreported macro,
+        # because it is a RETIREMENT gate and must never retire a dish on a number nobody read. This is
+        # a SELECTION filter over a backlog of hundreds: a candidate whose numbers cannot confirm it
+        # meets the run's band is simply not the next one to spend a decider on.
+        avail = [c for c in avail if self.candidate_in_band(c)]
         if not avail:
             return []
         avail.sort(key=harvest.dossier_rank)
@@ -1767,7 +1805,16 @@ class Daemon(object):
                 # THE PRE-WRITE BAND GATE. v2 checked the band on the WRITE result - after the most
                 # expensive per-recipe stage had already run. The skeleton carries macros_per_serving,
                 # so an out-of-band recipe retires before a single word of prose is paid for.
-                verdict = hunt_lib.in_band(macros.get("calories"), macros.get("carbs_g"), self.band)
+                verdict = hunt_lib.in_band(macros.get("calories"), macros.get("carbs_g"), self.band,
+                                           macros.get("protein_g"))
+                if verdict["reason"] == "protein not reported":
+                    # A STATED FLOOR THAT COULD NOT BE READ IS A FINDING, NOT A QUIET PASS. The
+                    # skeleton always carries macros_per_serving.protein_g, so this firing means the
+                    # skeleton changed shape under the gate - and the gate passing on the number it
+                    # could not find is exactly the failure this run is supposed to be able to see.
+                    self.findings.append("%s: the band states a %s g protein floor and the skeleton "
+                                         "reported no protein - the floor did not rule on this recipe"
+                                         % (slug, self.band.get("proteinMin")))
                 if not verdict["ok"]:
                     await self.retire_out_of_band(slug, verdict, "pre-write")
                     continue
@@ -1827,13 +1874,17 @@ class Daemon(object):
                                "the spec build REFUSED this recipe (rc %d): %s"
                                % (rc_spec, hunt_lib.first_guard_line(sp_out, sp_err)))
                     continue
-                cal, carbs = self.spec_band(slug, specs_dir=self.specs_dir or None)
+                cal, carbs, prot = self.spec_band(slug, specs_dir=self.specs_dir or None)
                 if cal is None and carbs is None:
                     self.stuck(slug, "write",
                                "the spec build reported success but no spec could be read for the "
                                "band - the band may not be ruled on a spec nobody can find")
                     continue
-                verdict = hunt_lib.in_band(cal, carbs, self.band)
+                verdict = hunt_lib.in_band(cal, carbs, self.band, prot)
+                if verdict["reason"] == "protein not reported":
+                    self.findings.append("%s: the band states a %s g protein floor and the BUILT SPEC "
+                                         "reported no stat.protein - the floor did not rule on this "
+                                         "recipe" % (slug, self.band.get("proteinMin")))
                 if not verdict["ok"]:
                     # THE POST-BUILD READ STAYS, and D8 does not get to "simplify" it away. The
                     # pre-write gate is a PREDICTION about the artifact; this is a mechanical
@@ -1872,9 +1923,9 @@ class Daemon(object):
             with open(p, "r", encoding="utf-8-sig") as f:
                 spec = json.load(f)
         except Exception:                                         # noqa: BLE001
-            return None, None
+            return None, None, None
         stat = spec.get("stat") or {}
-        return stat.get("cal"), stat.get("carbs")
+        return stat.get("cal"), stat.get("carbs"), stat.get("protein")
 
     # The fields the writer owns, named once so the prompt and the re-ask cannot drift apart.
     WRITER_FILLABLE = ("prose.* (intro_html, shop_smart, make_it, portion_html, cost_closing_html, "
@@ -2613,14 +2664,66 @@ class RetryLadder(object):
 # main
 # =====================================================================================================
 
+def _is_num(x):
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def read_run_band(run_dir):
+    """The band the run dir was MINTED with. hunt-run.ps1 -Init refuses to create one without it, so
+    a run dir carrying no band block is either pre-2026-08-24 or was made by hand."""
+    try:
+        with open(os.path.join(run_dir, "run.json"), "r", encoding="utf-8-sig") as f:
+            return (json.load(f) or {}).get("band") or None
+    except Exception:                                             # noqa: BLE001
+        return None
+
+
+def resolve_band(run_dir, cal_min, cal_max, carb_max, protein_min):
+    """Returns (band, why). The run dir states the band; a flag overrides one field for a drill.
+    NOTHING supplies a default - a band nobody typed is a band nobody agreed to, and two gates would
+    enforce it silently for the whole run."""
+    stated = read_run_band(run_dir) or {}
+    band = {}
+    for key, flag in (("calMin", cal_min), ("calMax", cal_max),
+                      ("carbMax", carb_max), ("proteinMin", protein_min)):
+        v = flag if flag is not None else stated.get(key)
+        band[key] = v
+    missing = [k for k in ("calMin", "calMax", "carbMax") if not isinstance(band[k], (int, float))]
+    if missing:
+        return None, ("the macro band is a RUN PARAMETER and nothing states it: %s. Mint the run dir "
+                      "with `hunt-run.ps1 -Init -RunDir %s ... -CalMin N -CalMax N -CarbMax N "
+                      "-ProteinMin N`, or pass the flags here for a drill."
+                      % (", ".join(missing), run_dir))
+    if band["calMin"] > band["calMax"]:
+        return None, ("the band's floor (%s cal) is above its ceiling (%s cal), so it admits nothing "
+                      "and the run would source zero recipes without saying why"
+                      % (band["calMin"], band["calMax"]))
+    # A floor of 0 is how "no protein floor" is said out loud; in_band reads absence as "no rule", so
+    # the two must mean the same thing here or a stated 0 would behave like an unstated band.
+    if not isinstance(band["proteinMin"], (int, float)) or band["proteinMin"] <= 0:
+        band["proteinMin"] = None
+    return band, ""
+
+
+def describe_band(band):
+    return ("%s-%s cal, carbs <= %s, protein %s"
+            % (band["calMin"], band["calMax"], band["carbMax"],
+               ">= %s" % band["proteinMin"] if band.get("proteinMin") else "no floor"))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="the Recipe Hunter daemon (PLAN v3 section 4.1)")
     ap.add_argument("--run-dir", dest="run_dir", default="")
     ap.add_argument("--run", default="")
     ap.add_argument("--conditions", default=DEFAULT_COND)
-    ap.add_argument("--cal-min", dest="cal_min", type=int, default=DEFAULT_BAND["calMin"])
-    ap.add_argument("--cal-max", dest="cal_max", type=int, default=DEFAULT_BAND["calMax"])
-    ap.add_argument("--carb-max", dest="carb_max", type=int, default=DEFAULT_BAND["carbMax"])
+    # THE BAND IS A RUN PARAMETER AND IS NEVER DEFAULTED HERE (Brad's ruling 2026-08-24). It is stated
+    # once, at `hunt-run.ps1 -Init`, written into run.json, and read back below. A flag overrides it for
+    # a drill; a run dir whose run.json states no band CANNOT RUN, because the alternative is two gates
+    # silently enforcing a constant nobody agreed to. `--protein-min 0` means "no floor", stated out loud.
+    ap.add_argument("--cal-min", dest="cal_min", type=float, default=None)
+    ap.add_argument("--cal-max", dest="cal_max", type=float, default=None)
+    ap.add_argument("--carb-max", dest="carb_max", type=float, default=None)
+    ap.add_argument("--protein-min", dest="protein_min", type=float, default=None)
     ap.add_argument("--wave-size", dest="wave_size", type=int, default=hunt_lib.WAVE_SIZE)
     ap.add_argument("--target", type=int, default=0,
                     help="stop popping the pool after N acceptances; 0 pops until the backlog runs "
@@ -2650,8 +2753,14 @@ def main(argv=None):
         say("HUNT-DAEMON-COMPLETE")
         return hunt_lib.EXIT_CANNOT_RUN
 
-    d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions,
-               {"calMin": a.cal_min, "calMax": a.cal_max, "carbMax": a.carb_max},
+    band, why = resolve_band(a.run_dir, a.cal_min, a.cal_max, a.carb_max, a.protein_min)
+    if band is None:
+        say("hunt-daemon: CANNOT RUN - %s" % why)
+        say("HUNT-DAEMON-COMPLETE")
+        return hunt_lib.EXIT_CANNOT_RUN
+    say("hunt-daemon: band %s" % describe_band(band))
+
+    d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions, band,
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
                specs_dir=a.specs, costed_path=a.costed)
 

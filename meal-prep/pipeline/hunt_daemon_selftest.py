@@ -416,6 +416,28 @@ def run():
       *_rung3_records_not_gates())
 
     # =================================================================================================
+    H("The band is a RUN PARAMETER (2026-08-24), and the pop obeys it")
+    # =================================================================================================
+    T("MUST FIRE  the pop offers the decider ONLY candidates that meet THIS RUN's band - `available` "
+      "means it passed harvest's ingest constants, never that it passes the run's band",
+      *_pop_filters_by_run_band())
+    T("MUST FIRE  ...and the protein FLOOR filters too, which is the half no code had at all",
+      *_pop_filters_by_protein_floor())
+    T("MUST FIRE  a candidate whose nutrition is UNVERIFIED cannot confirm the band, so it waits - an "
+      "inferred number is not evidence a dish clears a 50 g floor",
+      *_pop_refuses_unverified())
+    T("MUST FIRE  a run dir stating no band CANNOT RUN - nothing supplies a default, because a band "
+      "nobody typed would be enforced silently by two gates for the whole run",
+      *_band_must_be_stated())
+    T("CLEAN TWIN the band comes off run.json, and a flag overrides one field for a drill",
+      *_band_read_from_run_json())
+    T("MUST FIRE  a floor above its own ceiling is refused, not run - it admits nothing and would "
+      "source zero recipes without saying why",
+      *_band_inverted_refused())
+    T("CLEAN TWIN -ProteinMin 0 means NO FLOOR, said out loud, and reads the same as an absent one",
+      *_band_zero_floor_is_no_floor())
+
+    # =================================================================================================
     H("Lane-log completeness and the token stamp (section 4.5)")
     # =================================================================================================
     T("MUST FIRE  every judgment dispatch writes a start AND an end line",
@@ -993,7 +1015,7 @@ def _cost_mutex():
                                              {"slug": "s2", "status": "ok", "state": "written"}]})
         skeletoned(tmp, ["s1", "s2"])
         d = daemon(run_dir=tmp, dispatcher=fd, ps=slow_cost)
-        d.spec_band = lambda slug, specs_dir=None: (500, 20)      # in band, so the lane completes
+        d.spec_band = lambda slug, specs_dir=None: (500, 20, 40)      # in band, so the lane completes
         d.ch["write"].push({"slug": "s1"})
         d.ch["write"].push({"slug": "s2"})
         d.ch["write"].close()
@@ -1013,10 +1035,19 @@ def _cost_mutex():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _decide_pool(tmp, slugs):
+def _decide_pool(tmp, slugs, band=None):
+    """Every fixture candidate carries a VERIFIED in-band nutrition block. new_entry() alone makes one
+    with all-None macros, and since 2026-08-24 the pop filters by the RUN's band - an unverified
+    candidate cannot confirm it meets the band, so a poolful of them pops nothing and every decide
+    fixture downstream goes quiet. Fixture candidates now say what they are."""
     import harvest                                               # noqa: PLC0415
-    pool = {"candidates": [harvest.new_entry(s, s.replace("-", " ").title(),
-                                             "https://d/%s" % s, "d", "drill") for s in slugs]}
+    band = band or {"cal": 500.0, "carbs": 20.0, "protein_g": 40.0, "verified": True, "reason": ""}
+    cands = []
+    for s in slugs:
+        e = harvest.new_entry(s, s.replace("-", " ").title(), "https://d/%s" % s, "d", "drill")
+        e["band"] = dict(band)
+        cands.append(e)
+    pool = {"candidates": cands}
     p = os.path.join(tmp, "pool.json")
     harvest.write_pool(pool, p)
     return p
@@ -1427,7 +1458,7 @@ def _lane_daemon():
     tmp = tempfile.mkdtemp(prefix="daemon-lane-")
     skeletoned(tmp, ["s1"])
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
-    d.spec_band = lambda slug, specs_dir=None: (500, 20)
+    d.spec_band = lambda slug, specs_dir=None: (500, 20, 40)
     d.ch["write"].push({"slug": "s1"})
     d.ch["write"].close()
     arun(d.run(("write",)))
@@ -1851,7 +1882,7 @@ def _unhold_between_seeds():
                 "-ResolutionsFile", os.path.join(tmp, "resolutions.json")]
 
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+                                                     "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return False, "could not init: %s" % o.strip()[:150]
         for i, st in enumerate(["sourced", "selected", "extracted"]):
@@ -1912,7 +1943,7 @@ def _write_daemon(tmp, slugs, writer_results, ps=None, cal=500, carbs=20, skelet
         skeletoned(tmp, slugs, cal=cal, carbs=carbs)
     fd = FakeDispatch({"recipe-writer": list(writer_results)})
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps or FakePS(), **kw)
-    d.spec_band = lambda slug, specs_dir=None: (500, 20)          # in band, so the lane completes
+    d.spec_band = lambda slug, specs_dir=None: (500, 20, 40)          # in band, so the lane completes
     for slug in slugs:
         d.ch["write"].push({"slug": slug})
     d.ch["write"].close()
@@ -2095,7 +2126,7 @@ def _second_drift_real_machine():
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+                                                     "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return False, "could not init: %s" % o.strip()[:150]
         for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
@@ -2183,7 +2214,7 @@ def _unreadable_spec_is_stuck():
         skeletoned(tmp, ["s1"])
         fd = FakeDispatch({"recipe-writer": [_ok_write()]})
         d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
-        d.spec_band = lambda slug, specs_dir=None: (None, None)   # the spec is not there
+        d.spec_band = lambda slug, specs_dir=None: (None, None, None)   # the spec is not there
         d.ch["write"].push({"slug": "s1"})
         d.ch["write"].close()
         arun(d.run(("write",)))
@@ -2248,7 +2279,7 @@ def _scratch_cost_args():
             "live=%s drill=%s" % (json.dumps(a_live), json.dumps(a_drill)))
 
 
-def _band(cal, carbs):
+def _band(cal, carbs, prot=40):
     """The POST-BUILD band read. The skeleton is deliberately IN band (500/20) so the pre-write gate
     passes and these fixtures exercise the postcondition over the BUILT SPEC, which D8 keeps."""
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
@@ -2256,7 +2287,7 @@ def _band(cal, carbs):
     tmp = tempfile.mkdtemp(prefix="daemon-band-")
     skeletoned(tmp, ["s1"], cal=500, carbs=20)
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
-    d.spec_band = lambda slug, specs_dir=None: (cal, carbs)
+    d.spec_band = lambda slug, specs_dir=None: (cal, carbs, prot)
     d.ch["write"].push({"slug": "s1"})
     d.ch["write"].close()
     arun(d.run(("write",)))
@@ -2291,7 +2322,7 @@ def _band_gate_real_machine():
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                     "drill", "-Stop", "1", "-WaveSize", "2"])
+                                                     "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return False, "could not init: %s" % o.strip()[:150]
         for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
@@ -2352,7 +2383,7 @@ def _band_gate_real_machine():
         d = HD.Daemon(run_dir, "band-drill-run", dispatcher=fd, quiet=True,   # REAL ps_invoke
                       specs_dir=os.path.join(tmp, "specs"),
                       costed_path=os.path.join(tmp, "costed.json"))
-        d.spec_band = lambda slug, specs_dir=None: (700, 20)
+        d.spec_band = lambda slug, specs_dir=None: (700, 20, 40)
         d.ch["write"].push({"slug": "band-drill"})
         d.ch["write"].close()
         arun(d.run(("write",)))
@@ -2480,7 +2511,7 @@ def _b5_reseed_from_queue():
         os.makedirs(run_dir, exist_ok=True)
         qf = os.path.join(tmp, "scratch-queue.json")
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                    "drill", "-Stop", "2 accepted", "-WaveSize", "2"])
+                                                    "drill", "-Stop", "2 accepted", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return [("the B5 drill can init a scratch run dir", False, o.strip()[:200])]
 
@@ -2757,7 +2788,7 @@ def _resume_seed_table():
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                     "drill", "-Stop", "2 accepted", "-WaveSize", "2"])
+                                                     "drill", "-Stop", "2 accepted", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return [("the resume drill can init a scratch run dir", False, o.strip()[:200])]
 
@@ -2815,3 +2846,112 @@ def _resume_seed_table():
 
 if __name__ == "__main__":
     sys.exit(run())
+
+
+# =====================================================================================================
+# THE BAND AS A RUN PARAMETER (Brad's ruling 2026-08-24, before the 6b proving run).
+#
+# THE DEFECT THESE FREEZE. `pop_dossiers` popped from `status == "available"` in dossier_rank order and
+# never looked at the run's band. "available" means "passed the band HARD-CODED IN harvest.py at ingest
+# time" - 400-650 cal, <= 35 carbs, and no protein rule anywhere in the estate. Measured against the
+# live 661-candidate pool under a 500-650 / <= 40 / >= 50 g band: 2 of the first 10 pops qualified and
+# 3 of the first 20, so reaching 20 acceptances meant paying an Opus decider ~66 times to reject
+# candidates one line of arithmetic kills. Section 2's PLANE 1 puts band filtering in mechanics.
+# =====================================================================================================
+
+_BAND_RUN = {"calMin": 500, "calMax": 650, "carbMax": 40, "proteinMin": 50}
+
+
+def _band_pool(tmp, spec):
+    """spec: {slug: (cal, carbs, protein_g, verified)}."""
+    import harvest                                               # noqa: PLC0415
+    cands = []
+    for slug, (cal, carbs, prot, ver) in spec.items():
+        e = harvest.new_entry(slug, slug.title(), "https://d/%s" % slug, "d", "drill")
+        e["band"] = {"cal": cal, "carbs": carbs, "protein_g": prot, "verified": ver, "reason": ""}
+        cands.append(e)
+    p = os.path.join(tmp, "pool.json")
+    harvest.write_pool({"candidates": cands}, p)
+    return p
+
+
+def _popped(spec, band=None):
+    tmp = tempfile.mkdtemp(prefix="daemon-popband-")
+    try:
+        p = _band_pool(tmp, spec)
+        d = daemon(run_dir=os.path.join(tmp, "run"), pool_path=p,
+                   band=dict(band or _BAND_RUN))
+        os.makedirs(d.run_dir, exist_ok=True)
+        return sorted(x["slug"] for x in d.pop_dossiers(10))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pop_filters_by_run_band():
+    got = _popped({"in-band": (520.0, 20.0, 60.0, True),
+                   "too-few-cal": (430.0, 20.0, 60.0, True),
+                   "too-many-cal": (700.0, 20.0, 60.0, True),
+                   "too-many-carbs": (520.0, 45.0, 60.0, True)})
+    return got == ["in-band"], "popped %s" % got
+
+
+def _pop_filters_by_protein_floor():
+    got = _popped({"clears-floor": (520.0, 20.0, 50.0, True),
+                   "under-floor": (520.0, 20.0, 49.0, True),
+                   "no-protein-number": (520.0, 20.0, None, True)})
+    return got == ["clears-floor"], "popped %s" % got
+
+
+def _pop_refuses_unverified():
+    got = _popped({"verified": (520.0, 20.0, 60.0, True),
+                   "unverified": (520.0, 20.0, 60.0, False),
+                   "unverified-2": (600.0, 10.0, 80.0, False)})
+    return got == ["verified"], "popped %s" % got
+
+
+def _band_must_be_stated():
+    tmp = tempfile.mkdtemp(prefix="daemon-bandstate-")
+    try:
+        os.makedirs(tmp, exist_ok=True)
+        with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
+            json.dump({"run": "r", "conditions": "c"}, f)
+        band, why = HD.resolve_band(tmp, None, None, None, None)
+        return (band is None and "RUN PARAMETER" in why,
+                "band=%s why=%s" % (json.dumps(band), why[:120]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _band_read_from_run_json():
+    tmp = tempfile.mkdtemp(prefix="daemon-bandread-")
+    try:
+        with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
+            json.dump({"band": {"calMin": 500, "calMax": 650, "carbMax": 40, "proteinMin": 50}}, f)
+        stated, _w = HD.resolve_band(tmp, None, None, None, None)
+        overridden, _w2 = HD.resolve_band(tmp, None, None, 25.0, None)
+        return (stated == {"calMin": 500, "calMax": 650, "carbMax": 40, "proteinMin": 50}
+                and overridden["carbMax"] == 25.0 and overridden["calMin"] == 500,
+                "stated=%s overridden=%s" % (json.dumps(stated), json.dumps(overridden)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _band_inverted_refused():
+    tmp = tempfile.mkdtemp(prefix="daemon-bandinv-")
+    try:
+        band, why = HD.resolve_band(tmp, 700.0, 500.0, 40.0, 0.0)
+        return band is None and "above its ceiling" in why, "band=%s why=%s" % (json.dumps(band), why[:120])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _band_zero_floor_is_no_floor():
+    tmp = tempfile.mkdtemp(prefix="daemon-bandzero-")
+    try:
+        band, _w = HD.resolve_band(tmp, 500.0, 650.0, 40.0, 0.0)
+        # ...and the predicate agrees: a 12 g dish is in band when the floor was stated as 0
+        v = hunt_lib.in_band(520, 20, band, 12)
+        return (band["proteinMin"] is None and v["ok"],
+                "proteinMin=%s verdict=%s" % (band["proteinMin"], json.dumps(v)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)

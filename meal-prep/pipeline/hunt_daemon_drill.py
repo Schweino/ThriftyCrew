@@ -309,7 +309,7 @@ async def drill(source, keep):
     for c in picked:
         d.ch["write"].push(c)
     d.ch["write"].close()
-    d.spec_band = lambda slug, specs_dir=None: (520, 12)   # the cost engine is stood in for
+    d.spec_band = lambda slug, specs_dir=None: (520, 12, 40)   # the cost engine is stood in for
     # The skeleton the stood-in builder would have written, so the pre-write band gate has real
     # numbers to rule on. In band on purpose: this drill is about lane shape, and the band gate's own
     # behaviour has its fixtures elsewhere.
@@ -450,7 +450,7 @@ async def fresh_lane_log_drill(scratch):
     os.makedirs(run_dir, exist_ok=True)
     rc, out, err = hunt_lib.ps_invoke(os.path.join(HERE, "hunt-run.ps1"),
                                       ["-Init", "-RunDir", run_dir, "-Conditions", "drain drill",
-                                       "-Stop", "3 accepted", "-WaveSize", "3"])
+                                       "-Stop", "3 accepted", "-WaveSize", "3", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
     if rc != 0:
         return 2, "", "could not init the fresh run dir: %s" % (out + err)[:200]
 

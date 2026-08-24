@@ -146,11 +146,19 @@ export function repairClaimHolds({ claimedChanged, mtimesBefore, mtimesAfter }) 
 // MACRO BAND. A band has a ceiling as well as a floor: a recipe computing to 660 fails exactly like one
 // computing to 390. Recipes are never adjusted to fit - that would make the card a false claim.
 // -----------------------------------------------------------------------------------------------------
-export function inBand(cal, carbs, { calMin, calMax, carbMax }) {
+// THE BAND IS A RUN PARAMETER, AND PROTEIN IS PART OF IT (Brad's ruling 2026-08-24). `proteinMin` is
+// optional - a band that does not state one has no protein rule, which keeps every older vector green.
+// An absent protein number passes and says so: this is a retirement gate, and retiring a good dish on
+// a number nobody read is the mirror of D8's worse-than-no-gate case.
+export function inBand(cal, carbs, { calMin, calMax, carbMax, proteinMin }, protein) {
   if (typeof cal !== 'number' || typeof carbs !== 'number') return { ok: true, reason: 'not reported' }
   if (cal < calMin) return { ok: false, reason: `${cal} cal below the ${calMin} floor` }
   if (cal > calMax) return { ok: false, reason: `${cal} cal above the ${calMax} ceiling` }
   if (carbs > carbMax) return { ok: false, reason: `${carbs}g carbs above the ${carbMax} limit` }
+  if (typeof proteinMin === 'number') {
+    if (typeof protein !== 'number') return { ok: true, reason: 'protein not reported' }
+    if (protein < proteinMin) return { ok: false, reason: `${protein}g protein below the ${proteinMin} floor` }
+  }
   return { ok: true, reason: '' }
 }
 
@@ -278,6 +286,19 @@ export async function selfTest(log = console.log) {
   T('MUST FIRE  over the carb limit fails', !inBand(500, 36, { calMin: 400, calMax: 650, carbMax: 35 }).ok, 'passed')
   T('CLEAN TWIN mid-band passes', inBand(500, 20, { calMin: 400, calMax: 650, carbMax: 35 }).ok, 'failed')
   T('CLEAN TWIN the exact edges are inside the band', inBand(400, 35, { calMin: 400, calMax: 650, carbMax: 35 }).ok, 'edge rejected')
+
+  // ---- macro band: the PROTEIN FLOOR (2026-08-24, the band is a run parameter)
+  {
+    const b = { calMin: 500, calMax: 650, carbMax: 40, proteinMin: 50 }
+    T('MUST FIRE  under the protein floor fails', !inBand(520, 20, b, 47).ok, 'passed')
+    T('CLEAN TWIN the protein floor is inclusive', inBand(520, 20, b, 50).ok, 'edge rejected')
+    T('CLEAN TWIN unread protein passes and SAYS SO', inBand(520, 20, b, null).reason === 'protein not reported', 'wrong reason')
+    T('MUST FIRE  a band stating no floor does not invent one', inBand(520, 20, { calMin: 500, calMax: 650, carbMax: 40 }, 12).ok, 'invented a floor')
+    // Fails BOTH clauses (45g carbs over 40, 30g protein under 50), so only the ORDER decides the
+    // reason. The first shape of this assertion used 90g protein, cleared the floor, and proved nothing.
+    T('MUST FIRE  carbs are judged BEFORE protein - clause order is the contract',
+      inBand(520, 45, b, 30).reason === '45g carbs above the 40 limit', 'wrong clause fired first')
+  }
 
   // ---- B9 channel
   {

@@ -3025,6 +3025,53 @@ one gets softened.*
 - **C2's N-shell-calls audit across the remaining agent prompts** (the writer's in-place field fills,
   any consult loop). B2 fixed the worst instance; the pattern was never swept.
 
+**CORRECTED 2026-08-24, BEFORE the run, by Brad's ruling and by measurement against the live pool.
+THE MACRO BAND IS A RUN PARAMETER, AND PROTEIN IS PART OF IT.**
+
+Asked for 6b's conditions, Brad answered that they change every run - calories, carbs and protein all
+move - and that the system must ASK for them before a run rather than carry them as constants. Three
+things were then measured, and all three are now code:
+
+1. **The pop was deaf to the run's band, and it would have wrecked criterion 1.** `hunt-daemon`'s
+   `--cal-min/--cal-max/--carb-max` reached only the decide PROMPT TEXT and the two band gates.
+   `pop_dossiers` popped from `status == "available"` in `dossier_rank` order and never looked at the
+   band at all - and `available` means "passed the band HARD-CODED IN harvest.py at ingest", 400-650
+   cal and <= 35 carbs. Measured against the live 661-candidate pool under Brad's 6b band: **2 of the
+   first 10 pops qualified, and 3 of the first 20**, so reaching 20 acceptances meant paying an Opus
+   decider roughly 66 times to reject candidates one line of arithmetic kills. Section 2's PLANE 1
+   already says band filtering is mechanical and instant; the pop now filters there. It is
+   deliberately STRICTER than the gate: an unverified or unreported macro cannot CONFIRM the band, and
+   a selection filter over a backlog of hundreds should pass over what it cannot confirm, while a
+   RETIREMENT gate must never retire a dish on a number nobody read.
+2. **No protein floor existed anywhere in the estate.** Not in `harvest.in_band` (cal and carbs only),
+   not in `hunt_lib.in_band` - which IS both band gates - and not as a daemon flag. A run whose stated
+   conditions read "50 g protein or more per serving" was enforced by nothing. `in_band` /`inBand` now
+   take an optional `proteinMin` plus the recipe's protein, in all three implementations, with five
+   new shared parity vectors. The clause is LAST, so every pre-existing band vector's reason string is
+   byte-identical; a band that states no floor does not invent one; and an unread protein number
+   passes and SAYS SO (`"protein not reported"`), which the daemon raises as a finding at both gates
+   rather than swallowing. Both roads carry the number already - the skeleton's
+   `macros_per_serving.protein_g` and the built spec's `stat.protein`.
+3. **`hunt-run.ps1 -Init` now REFUSES to mint a run dir until the band is typed** (`-CalMin -CalMax
+   -CarbMax -ProteinMin`, where `-ProteinMin 0` is how "no floor" is said out loud) and writes it into
+   `run.json`; the daemon reads it back and CANNOT RUN when nothing states it. That is the enforceable
+   form of "ask me before a run": the band a run was judged under is now readable off the run dir
+   months later instead of inferred from whatever the constants happen to say that day.
+
+Every one of these is fixtured with a neuter proof (removing the pop filter revives all four bad
+pops; removing the protein clause kills two must-fire vectors; defaulting the band in `resolve_band`
+kills the refusal; neutering the `-Init` guard mints a run dir reading `band: -1--1 cal, carbs <= -1`).
+
+*Two things this correction does NOT do, both deliberately.* **The ingest pre-filter was left alone.**
+harvest.py still qualifies at its own 400-650 / <= 35 constants, which are NARROWER than a run band may
+be, so a candidate the run's band would admit can sit at `ruled:out-of-band` and never be reachable -
+measured: 3 candidates at 36-40 carbs meet the 6b band and are unreachable. It does not block 6b (21
+qualifying candidates remain available) and the fix is a re-qualify pass over stored numbers, so it is
+recorded here as a PROPOSAL for Brad, not a build. **And "add more meat to hit the protein target" was
+not built.** No stage modifies a sourced recipe; it collides with section 10's "extraction is
+transcription" and with source-QA's whole purpose, and it proved unnecessary - 21 pool candidates
+already publish >= 50 g protein inside 500-650 cal and <= 40 g carbs with nothing added.
+
 *What would make 6b a NO.* Any of: invocations per published recipe above 8; a gate weakened to make a
 number; a recipe published whose macros were computed over a partial line set; a fabricated store
 visit of any kind; or a defect class found and not fixtured the same day.

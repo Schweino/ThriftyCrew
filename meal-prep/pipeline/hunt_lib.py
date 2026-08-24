@@ -513,9 +513,19 @@ def first_guard_line(out, err):
     return (lines[0][:300] if lines else "no output")
 
 
-def in_band(cal, carbs, band):
+def in_band(cal, carbs, band, protein=None):
+    """THE BAND IS A RUN PARAMETER, AND PROTEIN IS PART OF IT (Brad's ruling 2026-08-24, before the
+    6b proving run). Calories, carbs and protein all move run to run, so the band arrives as data and
+    the predicate reads whatever the run stated rather than a constant somebody has to remember to
+    edit. `proteinMin` is OPTIONAL: a band that does not state one has no protein rule, which is what
+    keeps every pre-2026-08-24 vector green.
+
+    The cal/carb clauses are evaluated FIRST and their reason strings are unchanged, byte for byte,
+    because six parity vectors assert them.
+    """
     cal_min, cal_max = band.get("calMin"), band.get("calMax")
     carb_max = band.get("carbMax")
+    protein_min = band.get("proteinMin")
     if not _is_number(cal) or not _is_number(carbs):
         return {"ok": True, "reason": "not reported"}
     if cal < cal_min:
@@ -524,6 +534,17 @@ def in_band(cal, carbs, band):
         return {"ok": False, "reason": "%s cal above the %s ceiling" % (_num(cal), _num(cal_max))}
     if carbs > carb_max:
         return {"ok": False, "reason": "%sg carbs above the %s limit" % (_num(carbs), _num(carb_max))}
+    if _is_number(protein_min):
+        # AN ABSENT PROTEIN NUMBER IS NOT A BAND FAILURE, exactly as an absent cal/carb is not: this
+        # is a retirement gate, and retiring a good dish on a number nobody read is the mirror of D8's
+        # named worse-than-no-gate case. It passes and SAYS SO, so the run can report it. Both live
+        # call sites carry protein (the skeleton's macros_per_serving.protein_g, the built spec's
+        # stat.protein), so this reason firing at all is itself worth hearing about.
+        if not _is_number(protein):
+            return {"ok": True, "reason": "protein not reported"}
+        if protein < protein_min:
+            return {"ok": False, "reason": "%sg protein below the %s floor"
+                                           % (_num(protein), _num(protein_min))}
     return {"ok": True, "reason": ""}
 
 

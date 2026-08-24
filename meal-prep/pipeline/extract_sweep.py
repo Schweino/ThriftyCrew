@@ -631,7 +631,9 @@ def selftest():
     # ---- the lane-log line, against the REAL hunt-run.ps1 in a scratch run dir --------------------
     run_dir = os.path.join(td, "run-scratch")
     rc, out, err = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir,
-                                                    "-Conditions", "fixture", "-Stop", "fixture"],
+                                                    "-Conditions", "fixture", "-Stop", "fixture",
+                                                    "-CalMin", "400", "-CalMax", "650",
+                                                    "-CarbMax", "35", "-ProteinMin", "0"],
                                       timeout=180)
     if rc != 0:
         T("DRILL     hunt-run -Init built a scratch run dir", False, (out or "") + (err or ""))
