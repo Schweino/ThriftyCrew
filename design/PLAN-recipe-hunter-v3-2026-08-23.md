@@ -1920,7 +1920,8 @@ Workflow orchestrator** - none of them is inert while phase 3 waits:
 | 3 **DONE 2026-08-24** | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
 | 4 **DONE 2026-08-24** | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
 | 5 | D10 (price pre-pass) - **PASSED 2026-08-24**, mechanical half clean (5 terms x 7 stores, 62 s, states honest per store; 4 CARRIED, 1 PENDING on a blocked store, 4 recipes to `priced`). The AGENT half exposed finding 2 in the phase-6 pickup: a dispatched pricer has no browser and wrote store visits it had not made before correcting itself | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store. HONESTY, NOT COVERAGE (pinned 2026-08-24): the attended stores (Walmart, Aldi - Brad's Chrome) and the pricer-tab stores may remain UNCHECKED if Brad is not present or does not order them, terms may therefore end PENDING, and that is a PASSING gate provided every recorded state is honest - Rule B's whole point is that an unfinished check is a fine thing to say out loud |
-| 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
+| 6a | **the efficiency fix batch** (A1-A4, B1-B5, C1) - **PASSED 2026-08-24**. One combined drill per pin P11: a live Opus mapper batch on a fresh scratch copy of the phase-1 mini run, its registrar consult, and one real price batch against the live queue. (i) the 4.4a pin checkpoint is CLEAN - 37 of 37 identity rulings agree with the committed Fable batch, zero divergences; (ii) gate finding 1 is dead - `build-intake-skeleton.ps1` exits **0** with zero findings over the assembled file, 505 cal / 41.6 g protein per serving against the source page's published 514; (iii) per recipe the mapper's input tokens fell **8.4x** (1,034,924 -> 122,903) and its turns **7.5x** (8 -> 1), and the price lane went from 13 turns and 161 s per term to **1 turn and 64 s**, with NO re-ask, exactly one `-RecordBatch` write (all seven store records share one timestamp) and Walmart recorded `blocked - no browser in this session`. The drill also found eight defects no fixture could have - the worst a silent 3.5x grams-basis error - all fixed and fixtured same-day; see the phase-6a gate record below | one combined drill: the pin diff, D8 over every assembled file, the cost measurement off C1's own stamps, and one live price batch |
+| 6b | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
 | E (optional) | 27B LoRA (extraction/line-split), cross-encoder dish-dedup fine-tune | only after 6; >=3 seeds per arm; detached LoRA never a merged GGUF |
 
 **Phase 0 gate: PASSED 2026-08-23** (commit d0d8af5c). Evidence, so the next session does not re-earn
@@ -2824,6 +2825,143 @@ is measurably WRONG.**
 remaining spend concentrates somewhere this plan did not predict, the measurement wins and the order
 changes. If phase 3's parity gate cannot be made green, ship the §4.2 fallback and stop there - the
 plan still captures the large wins.
+
+**PHASE-6A GATE RECORD (2026-08-24, PASSED). Evidence, so the next session does not re-earn it.**
+
+*The drill.* Two live runs on short scratch roots, off fresh copies of
+`meal-prep\runs\hunt-2026-08-23-v3-phase1-mini` (the original still holds its recipes at `extracted`;
+phase 5's `C:\tmp\p5` copy is spent). Run one mapped two recipes and exposed the defect list below;
+run two, after the fixes, mapped one recipe end to end and drove the registrar and the price lane.
+Db-side writes landed live by design. Scope was trimmed from pin P11's four recipes to two-then-one by
+Brad's order (weekly budget at 65%), which is recorded here rather than glossed: the pin diff is over
+37 lines rather than ~70, and the other two mini-run recipes are still at `extracted` for 6b.
+
+*The three things the one run proves.*
+- **(i) The 4.4a pin checkpoint: CLEAN.** 37 of 37 identity rulings agree with the committed Fable
+  batch over the same pre-resolve inputs - `0 differ`, `0 dropped`. Opus additionally argued two
+  rulings in writing that Fable had settled silently (refusing to bridge dry mustard powder onto the
+  prepared-mustard id, and refusing to propose `brown-lentils` as new because it is already a live
+  board id). The pin stands at `claude-opus-5`.
+- **(ii) Gate finding 1 is dead by construction.** `build-intake-skeleton.ps1 -RunDir <copy> -Slug
+  chicken-broccoli-ziti` exits **0** with zero findings over the daemon-assembled file - the same
+  script, the same recipe, that exited 1 with "the mapper decision file names no mapped ingredient" on
+  the phase-5 run. Macros 505 cal / 41.6 g protein / 46.4 g carbs at 14 servings, in band, and within
+  1.7% of the 514 cal the source page publishes.
+- **(iii) The cost measurement, read straight off C1's stamps** (which is what C1 bought - phase 5
+  needed transcript archaeology with per-message-id dedup for the same numbers):
+
+| dispatch | model | turns | uncached in | cache write | cache read | out | wall |
+|---|---|---|---|---|---|---|---|
+| mapper, 1 recipe | opus-5 | 2 (one re-ask) | 12 | 30,287 | 120,152 | 30,806 | 6m02s |
+| commodity-registrar | fable | 1 | 11 | 27,862 | 115,164 | 3,026 | 0m44s |
+| pre-pass, 1 term | none | n/a | 0 | 0 | 0 | 0 | 0m19s |
+| pricer, 1 term | opus-5 | 1 | 14 | 26,797 | 136,455 | 4,115 | 1m04s |
+
+  Against the phase-5 baseline, per recipe: **input tokens 1,034,924 -> 122,903 (8.4x lower)**, **turns
+  8 -> 1 (7.5x lower)**, cache read 950,718 -> 79,650 (12x lower). Output rose 23,476 -> 38,364, and
+  that number is honestly re-ask-inflated (the whole answer was produced twice) and prose-inflated;
+  the per-line `evidence` bound landed after this measurement and is 6b's to verify. The price lane
+  went from 13 turns and 161 s per term to **1 turn and 64 s**.
+
+*The B-package, on the same session, against the live queue.* One real batch on `grated Parmesan
+cheese`, the term the re-map enqueued. Lane detail `ok` and **not** `re-asked` (B1 live - phase 5's
+pricer re-asked on every batch). All seven store records carry the **identical** `checked` timestamp,
+which is one `-RecordBatch` take of the write lock (B2 live). Walmart recorded
+`blocked - no browser in this session`, verbatim (B3 live). Verdict CARRIED, 6 of 7 checked.
+
+*And the B-package gate found something worth keeping.* For Hy-Vee and Aldi the pricer did NOT record
+`blocked` as the prompt instructed - it recorded `carried` with "no browser this session; ruled from
+disk instead - price-ingredient.ps1 ...". That is the exact shape of gate finding 2's fabrication, so
+it was checked: `price-ingredient.ps1 -Name 'grated Parmesan cheese'` really does return
+`Aldi $2.79 8 oz Reggano Grated Parmesan Cheese` and `Hy-Vee $3.49 8 oz Hy Vee Grated Parmesan Cheese`
+in today's captures. The claim is true, cited and re-runnable, and it is strictly better than
+`blocked`. **So the prompt was wrong, not the pricer**, and it now names that road: a capture HIT at
+one of the three browserless stores may support `carried` with the product and price cited; a capture
+MISS is NEVER `not-carried`, because the captures are a weekly publish sweep and not a shelf audit.
+This materially softens the phase-6 pickup's biggest structural worry - that under the daemon only the
+FOUR pre-pass stores can ever answer and every other term parks forever.
+
+*The eight defects the drill found, none of which a fixture could have.* All fixed, fixtured and
+committed the same day. 1. The grams basis: the mapper returned SOURCE grams in a field specified as
+TARGET on ten of ten lines, the ratio exactly each recipe's own scale factor, and split the two bases
+WITHIN one answer. Field renamed `grams_source`, every road source basis, scale applied once, and an
+engine cross-check now names any disagreement past 50%. 2. `say()` died on U+FFFD from a mojibake'd
+source line and killed a run after a paid dispatch. 3. The `raw` join key: 32 of 33 copied exactly,
+one truncated - now falls back to the term where it is unique in both payload and table, and every
+fallback is named in the file. 4. The registrar gate read the recipe VOCABULARY instead of the three
+COMMODITY namespaces and refused a live board id. 5. It was skippable by omission; `-NewBids` now
+derives the proposal list. 6. A sub-half-gram line rounded to zero past the never-a-silent-zero
+refusal, floored at 1 g. 7. A `mapped-null` ruling nulled the food's NAME along with the id. 8. The
+schema constrained two report fields to strings that the model naturally returns as objects, buying a
+whole second session; and the delegation finding fired on every dispatch at deltas of 18-37 tokens,
+which is the CLI's own housekeeping haiku call, not delegation.
+
+**PHASE 6B SUCCESS CRITERIA (written 2026-08-24, BEFORE the proving run, per gate row 6's own rule -
+"success criteria written before the run" - and against the phase-6a gate's measurements rather than
+against an impression).**
+
+*What the run is.* ~20 recipes, wave size 10, Brad-directed conditions, on the pipeline as 6a left it.
+llama-server IS needed (fresh recipes enter at the extraction ladder) and Brad hand-starts it, per
+section 4.4. 6a's fix batch has already landed, so this measures the improved pipeline - which was
+the whole reason phase 6 was split in two.
+
+*The five numbers, and every one is read off C1's lane stamps rather than reconstructed from
+transcripts. That is what C1 bought and 6b is the first run to spend it.*
+
+1. **Claude invocations per PUBLISHED recipe: <= 5**, against the 27 front-end + ~10 downstream
+   measured in v2. Row 6 asks for >=5x fewer than 27; 5 is that, and it is countable directly - every
+   dispatch writes a start and an end line, and `calls` on the end line is its turn count.
+2. **Billed tokens per published recipe: <= 150k median**, section 7's target, measured as
+   lane-tokens.ps1 measures it (uncached input + cache read + cache write, plus output). Report the
+   MEDIAN and the spread, not the mean: one pathological recipe should be visible as a tail, not
+   averaged into a pass.
+3. **Steady-state wall clock per published recipe**, reported against section 7 and against 6a's own
+   map measurement (453 s/recipe on a re-asked 2-recipe batch, ~227 s/recipe with the re-ask
+   removed). "Steady state" excludes the first wave: the pool, the vocabulary and the prior-rulings
+   ledger all warm up.
+4. **Re-ask rate: <= 10% of dispatches, and every one of them named.** 6a's own gate drill re-asked
+   on its single mapper batch - a whole second session, at the price of the first - and the violation
+   ("payload is missing required field `results`") existed only in a headless transcript nobody keeps.
+   The daemon now records it as a finding, so this is countable for the first time. A run whose
+   mapper re-asks every time has not halved its cost; it has doubled a smaller one.
+5. **Zero unstamped delegation.** `all_out` must equal `out` on every dispatch, or the difference must
+   be an explained finding. The phase-5 mapper's 21-turn Opus subagent cost $1.64 that appeared in no
+   ledger; A3 removed the tool and C1 made the gap visible, and 6b is where that stays true under load.
+
+*The four gates that may not move, restated because a proving run under time pressure is exactly when
+one gets softened.*
+
+- **Zero gate weakened**, per row 6. Specifically: Rule B (unchecked is never not-carried), the
+  pre-write band gate ruling on hunt_lib.in_band, D8's locked-field postcondition, the wave auditor's
+  GO, and the commodity-registrar's approve-or-alias before any new id. A gate that could not be met
+  is a STOP and a conversation, never an edit.
+- **The band gate must be shown FAILING CLOSED at least once, and every closure inspected.** 6a's
+  drill produced 212 and 217 cal per serving from a grams-basis error, and the band gate would have
+  retired two good dishes on those numbers. It failing closed is correct; it failing closed on a
+  FABRICATED number is D8's own named worse-than-no-gate case. So every `rejected-macros` in 6b gets
+  looked at rather than counted.
+- **Every honest PENDING stays PENDING.** Under the daemon only the four pre-pass stores can answer,
+  so terms will park. That is a passing outcome (phase 5's gate pinned it) and rounding one up is the
+  one thing that cannot be undone downstream.
+- **Every new defect class frozen as a fixture SAME-DAY**, per row 6, with a neuter proof - the estate
+  rule that a fixture which cannot be made to fail proves nothing.
+
+*The three things 6a measured but did not settle, which 6b inherits and must report on.*
+
+- **The corrected `grams_source` basis under load.** 6a caught the mapper returning source grams in a
+  target field on ten of ten lines, renamed the field and moved the scale to one place. 6b is the
+  first run where that contract meets a batch it has not seen. The assembler's engine cross-check is
+  the instrument; report how often it fires and on what.
+- **Output size per dispatch.** 6a measured 38k output tokens on a two-recipe mapper batch, most of it
+  per-line argument prose, and bounded `evidence`/`notes` to one or two sentences in the prompt and
+  the agent definition. Whether that bound holds is a measurement, not an assumption - report output
+  per recipe against 6a's 38,364.
+- **C2's N-shell-calls audit across the remaining agent prompts** (the writer's in-place field fills,
+  any consult loop). B2 fixed the worst instance; the pattern was never swept.
+
+*What would make 6b a NO.* Any of: invocations per published recipe above 8; a gate weakened to make a
+number; a recipe published whose macros were computed over a partial line set; a fabricated store
+visit of any kind; or a defect class found and not fixtured the same day.
 
 ## 7. Cost and speed model (targets to measure, not promises)
 

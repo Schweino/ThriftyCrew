@@ -80,6 +80,19 @@ DEFAULT_COND = ("between 400 and 650 calories per serving AND 35 g carbohydrate 
 DEFAULT_BAND = {"calMin": 400, "calMax": 650, "carbMax": 35}
 
 
+def as_text(v, cap=0):
+    """A report field the schema no longer constrains, rendered for a place that needs text.
+
+    `detail` and `macro_cross_check` arrive as prose or as an object (see hunt_lib.MAPPED's note - a
+    live batch bought a whole second session over that shape check). Every consumer here wants a
+    string for a log line or a state-file detail, so the conversion happens once, in one place.
+    """
+    if v is None:
+        return ""
+    t = v if isinstance(v, str) else json.dumps(v, ensure_ascii=False)
+    return t[:cap] if cap else t
+
+
 def say(m):
     r"""MEASURED ON THE PHASE-6A GATE DRILL, 2026-08-24, and it killed the run.
 
@@ -386,11 +399,21 @@ class Daemon(object):
         # THE UNSTAMPED-SUBAGENT GAP, MADE VISIBLE RATHER THAN LEFT TO ARCHAEOLOGY. The phase-5 mapper
         # delegated to a 21-turn Opus subagent that appeared in no ledger at all. It is a FINDING, not
         # a refusal: delegation may be legitimate, and what was wrong was that nobody could see it.
-        if all_out > 0 and res.tokens_out > 0 and all_out > res.tokens_out:
+        #
+        # THE THRESHOLD IS THE CORRECTION, and the phase-6a gate drill earned it: this fired on ALL
+        # THREE dispatches of a clean run, at deltas of 37, 19 and 18 tokens. That is not delegation,
+        # it is the auxiliary haiku call the CLI bills alongside every headless invocation for its own
+        # housekeeping - hunt_dispatch's own header measures it at ~450 input tokens. A finding on
+        # every call is noise, and noise is what a reader learns to skip, which would have buried the
+        # $1.64 subagent this exists to surface. A real delegation is a SESSION, not a rounding error:
+        # the phase-5 one was 21 turns and thousands of output tokens.
+        delegated = all_out - res.tokens_out
+        if all_out > 0 and res.tokens_out > 0 and delegated > max(500, 0.05 * res.tokens_out):
             self.findings.append(
-                "%s/%s: this dispatch billed MORE than its own session - %d out across %s vs %d for "
-                "the main agent. That difference is delegation, and it used to appear in no ledger."
-                % (lane_name, label, all_out, "/".join(models) or "?", res.tokens_out))
+                "%s/%s: this dispatch billed %d output tokens MORE than its own session (%d across %s "
+                "vs %d for the main agent). That difference is delegation, and it used to appear in "
+                "no ledger." % (lane_name, label, int(delegated), all_out,
+                                "/".join(models) or "?", res.tokens_out))
         # A RE-ASK THAT SUCCEEDS COSTS A WHOLE SECOND SESSION AND USED TO LEAVE NO RECORD OF WHY.
         # Measured on the phase-6a gate drill: a live mapper batch came back `re-asked; ok`, and the
         # violation that caused it - "payload is missing required field `results`" - existed only in a
@@ -1073,6 +1096,8 @@ class Daemon(object):
             "ruled_substitutions": res.get("ruled_substitutions") or [],
             "new_commodity_proposals": proposals,
             "registrar_rulings": rulings,
+            # kept in whatever shape it arrived: the mapped file is read by people and by the
+            # auditor, and an object is the richer artifact. Only the log lines need text.
             "macro_cross_check": res.get("macro_cross_check") or res.get("detail") or "",
         }
         # ONE WRITER PER SLUG - the map lane's workers never share a slug - so no mutex, exactly as
@@ -1152,13 +1177,13 @@ class Daemon(object):
                     if hunt_lib.is_rejected(res.get("status")):
                         state = res.get("state") or "rejected-not-carried"
                         self.finish(b["slug"], "rejected", state,
-                                    res.get("detail") or "mapper rejected")
+                                    as_text(res.get("detail")) or "mapper rejected")
                         await self.advance(b["slug"], state, "mapper",
-                                           (res.get("detail") or "")[:200])
+                                           as_text(res.get("detail"), 200))
                         continue
                     absent = [t for t in (res.get("absent_terms") or []) if t]
                     optional = [t for t in (res.get("optional_absent") or []) if t]
-                    await self.advance(b["slug"], "mapped", "mapper", res.get("detail") or "")
+                    await self.advance(b["slug"], "mapped", "mapper", as_text(res.get("detail"), 400))
                     # THE UNBID HOLD IS THE DAEMON'S AND IT IS MECHANICAL, and phase 3 measured exactly
                     # why. The adapter drill asked the mapper its own standing rule - resolved
                     # ingredient, no bid wired, advance or hold? - twice, same prompt and same model,
@@ -1593,6 +1618,18 @@ class Daemon(object):
             "State `blocked`, evidence exactly `%s`. That is not a defeat - blocked is honest and it\n"
             "keeps the term PENDING, which is what an unchecked store is meant to do. Brad checks\n"
             "those three in an attended run.\n\n"
+            "WITH ONE EXCEPTION, AND A DISPATCHED PRICER FOUND IT BEFORE THIS PROMPT DID: the estate\n"
+            "already has those stores on disk. `grocery\\price-ingredient.ps1 -Name \'<term>\'` reads\n"
+            "today\'s captures across all seven, and a capture row is a product a store really put on\n"
+            "its own shelf listing - checkable, re-runnable, and a great deal better than `blocked`.\n"
+            "So: if price-ingredient names a product at one of those three that IS this ingredient,\n"
+            "record it `carried` with the product, the price and `no browser this session; ruled from\n"
+            "disk instead - price-ingredient.ps1 ...` as the evidence, exactly as you would cite a\n"
+            "page. Adjudicate it as hard as any other row: a capture row is a candidate, never a\n"
+            "carriage ruling.\n"
+            "  BUT A CAPTURE MISS IS NEVER `not-carried`. The captures are a weekly sweep of what a\n"
+            "  store chose to publish, not a shelf audit, and absence from them is not absence from\n"
+            "  the store. No row means `blocked`, and the term stays PENDING for an attended run.\n\n"
             "AND DO NOT RE-PROBE A STORE THE EVIDENCE ALREADY MARKS UNUSABLE AT THE SERVER OR DRIVER\n"
             "TIER%s. That is a transport refusal, not an empty shelf: on 2026-08-24 Family Fare\n"
             "answered (400) Bad Request to all five terms of a batch (Freshop is search-budget bound\n"

@@ -721,8 +721,19 @@ MAPPED = {"type": "object", "properties": {
         "db_entries_added": {"type": "array", "items": {"type": "string"}},
         "rejected": {"type": "array", "items": {"type": "string"}},
         "ruled_substitutions": {"type": "array", "items": {"type": "string"}},
-        "macro_cross_check": {"type": "string"},
-        "registrar_rulings": {"type": "string"}, "detail": {"type": "string"}},
+        # NO `type` ON THESE THREE, AND IT IS DELIBERATE (phase-6a gate drill, 2026-08-24).
+        # A live batch re-asked - a whole second session at the price of the first - over exactly
+        # this: "payload.results[0].macro_cross_check should be a string, got dict" and the same for
+        # `detail`. The model was right and the schema was wrong. The v2 decision files carry
+        # macro_cross_check as an OBJECT ({source_published_per_serving, computed_per_serving,
+        # protein_gap_pct, verdict}), which is the better shape for a number-bearing cross-check, and
+        # a rich `detail` is a report rather than a sentence. These are report fields nothing branches
+        # on, so constraining their shape bought nothing and cost the most expensive recoverable thing
+        # in the pipeline. A property with no `type` is not validated for shape - see validate_schema -
+        # and the daemon renders whichever arrives.
+        "macro_cross_check": {"description": "the cross-check, as prose or as an object"},
+        "registrar_rulings": {"description": "free-form; the daemon dispatches the registrar itself"},
+        "detail": {"description": "your report for this slug, as prose or as an object"}},
         "required": ["slug", "status", "state"]}}},
     "required": ["results"]}
 

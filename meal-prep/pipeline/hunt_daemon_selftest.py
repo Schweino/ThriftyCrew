@@ -2712,7 +2712,7 @@ def _lane_c1_delegation_finding():
                             "costUSD": 1.64}}
     d, ps, tmp = _c1_daemon(mu, tokens_in=13001, tokens_out=93903, calls=30)
     try:
-        said = [f for f in d.findings if "billed MORE than its own session" in f]
+        said = [f for f in d.findings if "MORE than its own session" in f and "8800" in f]
         ends = [c for c in ps.find("hunt-run.ps1", "-Lane")
                 if FakePS.value_after(c["args"], "-Event") == "end"]
         all_out = FakePS.value_after(ends[0]["args"], "-AllModelsOut") if ends else None
@@ -2727,12 +2727,26 @@ def _lane_c1_delegation_finding():
                               "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0}}
     d2, _ps2, tmp2 = _c1_daemon(mu1, tokens_in=100, tokens_out=50, calls=1)
     try:
-        quiet = not [f for f in d2.findings if "billed MORE than its own session" in f]
+        quiet = not [f for f in d2.findings if "MORE than its own session" in f]
     finally:
         shutil.rmtree(tmp2, ignore_errors=True)
-    return (delegated and quiet,
-            "delegated_reported=%s quiet_when_not=%s findings=%s"
-            % (delegated, quiet, json.dumps(d.findings)[:220]))
+    # CLEAN TWIN 2, AND THE PHASE-6A GATE DRILL EARNED IT: the CLI bills an auxiliary haiku call
+    # alongside EVERY headless dispatch for its own housekeeping (~450 input tokens - hunt_dispatch's
+    # own header measures it). Before the threshold, this finding fired on all three dispatches of a
+    # clean run at deltas of 37, 19 and 18 tokens. A finding on every call is noise, and noise is what
+    # a reader learns to skip - which would have buried the $1.64 subagent this exists to surface.
+    mu2 = {"claude-opus-5": {"inputTokens": 13001, "outputTokens": 30806,
+                             "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0},
+           "claude-haiku-4-5-20251001": {"inputTokens": 450, "outputTokens": 37,
+                                         "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0}}
+    d3, _ps3, tmp3 = _c1_daemon(mu2, tokens_in=13001, tokens_out=30806, calls=1)
+    try:
+        housekeeping_quiet = not [f for f in d3.findings if "MORE than its own session" in f]
+    finally:
+        shutil.rmtree(tmp3, ignore_errors=True)
+    return (delegated and quiet and housekeeping_quiet,
+            "delegated_reported=%s quiet_when_none=%s quiet_on_housekeeping=%s findings=%s"
+            % (delegated, quiet, housekeeping_quiet, json.dumps(d.findings)[:200]))
 
 
 def _resume_seed_table():
