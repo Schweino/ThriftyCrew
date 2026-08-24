@@ -623,7 +623,13 @@ class Daemon(object):
             self.seen_candidates.add(c["slug"])
             d = harvest.build_dossier(c, catalog_n)
             out.append({"slug": c["slug"], "name": c.get("name"), "url": c.get("url"),
-                        "domain": c.get("domain"), "dossier": d})
+                        "domain": c.get("domain"), "dossier": d,
+                        # D7: the SOURCE PAGE'S OWN CLAIM, carried so the band gate can record it
+                        # beside our recompute. It is the pool's harvested `band` verbatim - the
+                        # publisher's numbers at the publisher's serving count - and nothing rules on
+                        # it downstream. See record_band_pair.
+                        "source_band": dict(c.get("band") or {}),
+                        "source_servings": c.get("servings")})
         return out
 
     # ---------------------------------------------------------------------------------------------
@@ -1921,6 +1927,41 @@ class Daemon(object):
             args += ["-RunCost"]
         return args
 
+    def record_band_pair(self, slug, where, verdict, cal, carbs, protein):
+        """D7 (Brad's ruling 2026-08-24). Append the (SOURCE CLAIM, OUR RECOMPUTE) pair for every band
+        ruling - pass or fail - to `<RunDir>\\band-pairs.jsonl`.
+
+        WHY, MEASURED ON 6b. The pop filter selects on the pool's band, which is the SOURCE PAGE'S own
+        claim at the source's serving count. The band gate rules on OUR label-accurate recompute at 14
+        servings. They disagreed by up to 15 g of protein - beef-back-ribs advertised 57 g and computed
+        to 41.6 - so 2 of 9 accepted recipes died at the gate AFTER the mapper, the registrar and the
+        pricer had been paid. There is no cheap fix, because the gate needs the skeleton and the
+        skeleton needs the map; every lever is on the pre-filter side and every one needs a margin
+        nobody can honestly pick yet.
+
+        So this picks NO margin and changes NO gate. It only stops throwing the evidence away: 6b
+        produced three of these pairs and recorded none of them. Enough runs of this and a margin can be
+        derived from measurement instead of from a guess.
+        """
+        rec = self.rec.get(slug) or {}
+        src = dict(rec.get("source_band") or {})
+        line = {"at": time.strftime("%Y-%m-%dT%H:%M:%S"), "run": self.run_id, "slug": slug,
+                "where": where,
+                "ok": bool(verdict.get("ok")), "reason": verdict.get("reason") or "",
+                "band": {k: self.band.get(k) for k in ("calMin", "calMax", "carbMax", "proteinMin")},
+                "source": {"cal": src.get("cal"), "carbs": src.get("carbs"),
+                           "protein_g": src.get("protein_g"),
+                           "verified": src.get("verified"),
+                           "servings": rec.get("source_servings")},
+                "ours": {"cal": cal, "carbs": carbs, "protein_g": protein,
+                         "servings": hunt_lib.TARGET_SERVINGS}}
+        try:
+            with open(os.path.join(self.run_dir, "band-pairs.jsonl"), "a", encoding="utf-8") as f:
+                f.write(json.dumps(line, ensure_ascii=False) + "\n")
+        except Exception as e:                                    # noqa: BLE001
+            # A calibration LOG may never break a run. It is evidence for later, not a gate.
+            self.findings.append("%s: the band pair could not be recorded (%s)" % (slug, e))
+
     async def retire_out_of_band(self, slug, verdict, where):
         """priced -> rejected-macros, in ONE advance. Both band gates land the same way: the pre-write
         one because no prose was ever paid for, and the post-build one because the state advances
@@ -1956,6 +1997,10 @@ class Daemon(object):
                 # so an out-of-band recipe retires before a single word of prose is paid for.
                 verdict = hunt_lib.in_band(macros.get("calories"), macros.get("carbs_g"), self.band,
                                            macros.get("protein_g"))
+                # D7: EVERY ruling, pass or fail. A pass is as much calibration data as a failure -
+                # more of it, in fact, since the passes are the recipes the pre-filter got right.
+                self.record_band_pair(slug, "pre-write", verdict, macros.get("calories"),
+                                      macros.get("carbs_g"), macros.get("protein_g"))
                 if verdict["reason"] == "protein not reported":
                     # A STATED FLOOR THAT COULD NOT BE READ IS A FINDING, NOT A QUIET PASS. The
                     # skeleton always carries macros_per_serving.protein_g, so this firing means the
@@ -2030,6 +2075,7 @@ class Daemon(object):
                                "band - the band may not be ruled on a spec nobody can find")
                     continue
                 verdict = hunt_lib.in_band(cal, carbs, self.band, prot)
+                self.record_band_pair(slug, "post-build", verdict, cal, carbs, prot)
                 if verdict["reason"] == "protein not reported":
                     self.findings.append("%s: the band states a %s g protein floor and the BUILT SPEC "
                                          "reported no stat.protein - the floor did not rule on this "

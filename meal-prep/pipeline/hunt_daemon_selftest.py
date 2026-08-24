@@ -181,7 +181,7 @@ def preresolved(tmp, slugs, holds=None, residual=None):
     return tmp
 
 
-def skeletoned(tmp, slugs, cal=500, carbs=20):
+def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
     """Write the intake + snapshot build-intake-skeleton.ps1 would have written, so a write-lane
     fixture has its machine half without shelling PowerShell. Same injection philosophy as
     preresolved(): the daemon's behaviour OVER the skeleton is what these fixtures are about, and the
@@ -194,7 +194,7 @@ def skeletoned(tmp, slugs, cal=500, carbs=20):
                "ingredients": [{"item": "93/7 Ground Beef", "grams": 1568, "buy": "3 1/2 lb"},
                                {"item": "Rice", "grams": 630, "buy": "3 cups dry"},
                                {"item": "Yellow Onion", "grams": 220, "buy": "2 medium"}],
-               "macros_per_serving": {"calories": cal, "protein_g": 35.0, "carbs_g": carbs, "fat_g": 20.0},
+               "macros_per_serving": {"calories": cal, "protein_g": protein, "carbs_g": carbs, "fat_g": 20.0},
                "writer_notes": [], "forbidden_prose_terms": [], "prose": {},
                "head": {"description": "", "keywords": "", "image": "", "prepTime": "PT15M",
                         "cookTime": "PT25M", "totalTime": "PT40M", "steps": []}}
@@ -575,6 +575,18 @@ def run():
       *_unreadable_spec_is_stuck())
     T("CLEAN TWIN a spec that builds and reads in band advances to written and reaches QA",
       *_spec_build_clean())
+
+    # =================================================================================================
+    H("D7: the (source claim, our recompute) pair is recorded on every band ruling")
+    # =================================================================================================
+    T("MUST FIRE  a band ruling that RETIRES a recipe records the pair - beef-back-ribs advertised "
+      "57 g protein and computed to 41.6, and 6b threw that evidence away",
+      *_band_pair_on_retire())
+    T("MUST FIRE  ...and a PASSING ruling records one too - the passes are the recipes the pre-filter "
+      "got RIGHT, which is the half of the calibration data a failures-only log would lose",
+      *_band_pair_on_pass())
+    T("CLEAN TWIN the pair carries BOTH sides with their serving counts, or it calibrates nothing",
+      *_band_pair_has_both_sides())
 
     # =================================================================================================
     H("The band gate, read off the built spec")
@@ -3253,3 +3265,60 @@ def _extract_drain_flush_releases_held():
                 % json.dumps(released))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# D7 (Brad's ruling 2026-08-24). THE (SOURCE CLAIM, OUR RECOMPUTE) PAIR.
+#
+# The pop selects on the source page's claim; the band gate rules on our label-accurate recompute. On
+# 6b they disagreed by up to 15 g of protein and 2 of 9 accepted recipes died at the gate after the
+# mapper, registrar and pricer had been paid. No margin is applied and no gate behaviour changes here -
+# this only stops throwing the evidence away, so a margin can one day be measured rather than guessed.
+# =====================================================================================================
+
+def _band_pair_run(cal, carbs, prot, source_band, band=None):
+    tmp = tempfile.mkdtemp(prefix="daemon-pair-")
+    try:
+        fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
+        ps = FakePS()
+        skeletoned(tmp, ["s1"], cal=cal, carbs=carbs, protein=prot)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, band=dict(band or _BAND_RUN))
+        d.record("s1", {"source_band": dict(source_band), "source_servings": 4})
+        d.spec_band = lambda slug, specs_dir=None: (cal, carbs, prot)
+        d.ch["write"].push({"slug": "s1"})
+        d.ch["write"].close()
+        arun(d.run(("write",)))
+        path = os.path.join(tmp, "band-pairs.jsonl")
+        if not os.path.exists(path):
+            return []
+        with open(path, "r", encoding="utf-8") as f:
+            return [json.loads(ln) for ln in f if ln.strip()]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _band_pair_on_retire():
+    # the ribs shape: source says 57 g protein, we compute 41.6, floor is 50
+    rows = _band_pair_run(585, 31, 41.6, {"cal": 524, "carbs": 32, "protein_g": 57, "verified": True})
+    hit = [r for r in rows if r.get("where") == "pre-write"]
+    return (bool(hit) and hit[0]["ok"] is False
+            and hit[0]["source"]["protein_g"] == 57 and hit[0]["ours"]["protein_g"] == 41.6,
+            "rows=%s" % json.dumps(rows)[:400])
+
+
+def _band_pair_on_pass():
+    rows = _band_pair_run(560, 20, 62, {"cal": 559, "carbs": 10, "protein_g": 61, "verified": True})
+    hit = [r for r in rows if r.get("where") == "pre-write"]
+    return (bool(hit) and hit[0]["ok"] is True and hit[0]["ours"]["protein_g"] == 62,
+            "rows=%s" % json.dumps(rows)[:400])
+
+
+def _band_pair_has_both_sides():
+    rows = _band_pair_run(560, 20, 62, {"cal": 559, "carbs": 10, "protein_g": 61, "verified": True})
+    if not rows:
+        return False, "no pair was written at all"
+    r = rows[0]
+    need_src = all(r["source"].get(k) is not None for k in ("cal", "carbs", "protein_g", "servings"))
+    need_ours = all(r["ours"].get(k) is not None for k in ("cal", "carbs", "protein_g", "servings"))
+    return (need_src and need_ours and r["source"]["servings"] == 4 and r["ours"]["servings"] == 14,
+            "source=%s ours=%s" % (json.dumps(r["source"]), json.dumps(r["ours"])))
