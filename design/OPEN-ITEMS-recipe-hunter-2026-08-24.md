@@ -24,6 +24,7 @@ needs Brad's order | **OPEN Q** a decision Brad owes before anything can be buil
 | 1.6 | 6b run dir minted, deviations recorded BEFORE the run per section 10 | 70600d10 |
 | 1.7 | Token-cost worklist written from measured data | 7163b3df |
 | 1.8 | Qwen-offload analysis against the 1.4 doctrine | f0cdb541 |
+| 1.9 | **G - wall clock is now ATTRIBUTED, not merely covered.** The seven mechanical stages emit lane start/end pairs (`ps_timed`/`py_timed`, tokens 0, the local ladder's convention so no reader changed); `hunt-run -StageSummary` ranks every stage in the log by total time and marks it mechanical / local / judgment. 7 neuter proofs, two of which found real defects - see 3.x below | (this commit) |
 
 ---
 
@@ -151,6 +152,57 @@ different food.
 ---
 
 ## 3. Found and NOT yet written down anywhere else
+
+### 3.0 TWO DEFECTS THE NEUTER PROOFS FOUND IN THE LOGGING WORK ITSELF (2026-08-24)
+
+Both were found by trying to make a green fixture fail, and neither would have been found by reading
+the code - which is the argument for the neuter discipline in one paragraph.
+
+**(a) An inert ranking assertion, caused by a duplicated sort.** `-StageSummary` sorted its rows
+twice: once for the text table and once inside the `-Json` payload. Fixture 7d reads JSON, so
+reversing the TEXT sort left the whole battery green. Two orderings of the same ranking is two things
+that can disagree, and the untested one is the one that drifts. Fixed by sorting ONCE, before either
+reader touches the rows; the neuter now fires.
+
+**(b) Four judgment fixtures were reading a population they did not name.** `_lane_pairs`,
+`_lane_tokens` and the two C1 stamp fixtures each assert something about "every judgment dispatch"
+and were reading EVERY lane line. That was the same set right up until the write lane started logging
+build-intake-skeleton, skeleton verify and build-v2-spec around the writer - then all four went red
+against correct behaviour. Scoped to `-By != mechanical` via a `judgment_lanes()` helper. The
+assertions are untouched; only the population is now the one they always claimed.
+
+**A third thing, not a defect but worth writing down:** `-StageSummary -Json` first emitted valid
+JSON followed by the `HUNT-RUN-COMPLETE` guard line, which made the joined stdout unparseable. Every
+reader saw `null` while the payload was correct. `-LaneSummary -Json` exits without the guard line
+for exactly this reason; the stage path now matches it.
+
+### 3.0b MEASURED: the spawn tax, and what the real 6b log says
+
+The tax is **251 ms per lane spawn** (12 spawns, 3.02 s, this machine, through `hunt_lib.ps_invoke`;
+C4 measured 310 ms for the same thing). Per recipe the daemon adds roughly four mechanical stages -
+pre-resolve verify, the skeleton, the skeleton verify, the spec build - at two spawns each, so about
+**2.0 s per recipe**, plus ~1 s per wave for the preaudit and publish pairs. Against the 32 min/recipe
+the run actually costs that is 0.1%, and against the 5 min/recipe target it is 0.7%.
+
+Run through the real 6b log (which PREDATES this change, so every row is judgment or local and no
+mechanical row appears - that absence is the gap being closed):
+
+```
+  lane      stage                              n  total_min  mean_sec   share  kind
+  map       map:2x                             1       15.0       898   14.8%  judgment
+  map       map:5x                             1       14.0       837   13.8%  judgment
+  audit     wave-1:repair                      1       12.0       717   11.8%  judgment
+  map       map:1x                             1        6.3       378    6.2%  judgment
+  audit     wave-1:reaudit                     1        5.4       325    5.3%  judgment
+  ...
+  measured 101.4 min across 29 stage(s)
+```
+
+The three mapper dispatches alone are 35.3 of 101.4 measured minutes (34.8%), and the registrar
+consults add ~9 more. **Share is of MEASURED time, not of the run**: lanes overlap by design, so 101.4
+measured minutes sit inside 63.5 wall minutes. It ranks; it does not budget.
+
+
 
 ### 3.1 THE POP FILTER TRUSTS SOURCE NUMBERS; THE GATE USES OURS. THEY DISAGREE BY UP TO 15 g.
 **This is a limitation of the work landed in 1.2 today, and it cost this run real money.**

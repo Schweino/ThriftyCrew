@@ -514,13 +514,51 @@ class Daemon(object):
             self.wip_waiters.append(fut)
             await fut
 
+    # ---- MECHANICAL STAGE TIMING (2026-08-24) ---------------------------------------------------
+    #
+    # WHY. Token burn was fully instrumented; wall clock was not. Measured on the 6b run, 99% of the
+    # 63.5-minute span had SOMETHING logged in flight and only 49 s sat in gaps - but that is
+    # COVERAGE, not ATTRIBUTION. Every mechanical stage - map-preresolve, the skeleton, the spec
+    # build, build-card2, the preaudit battery, wave-publish - emitted nothing, so its time either
+    # fell in a gap or hid underneath a concurrent lane. Two of the three gaps over 5 s were the
+    # preaudit battery, which self-times in its own report and tells the lane log nothing. At 9
+    # recipes that is invisible; at 200 those stages scale and stay invisible.
+    #
+    # THE CONVENTION IS THE LOCAL LADDER'S, so no reader changes: a start/end pair with tokens 0,
+    # which -LaneSummary already reads as work done rather than work unmeasured.
+    #
+    # THE RECURSION TRAP, NAMED SO NOBODY REBUILDS IT: `lane()` itself calls `ps()`. Timing every
+    # ps() call would make each lane line spawn two more, forever. So this is a SEPARATE verb that
+    # call sites opt into, and lane() keeps using plain ps().
+    async def ps_timed(self, lane_name, label, items, script, args, timeout=600, by="mechanical"):
+        await self.lane(lane_name, label, items, by, "start")
+        t0 = time.time()
+        try:
+            return await self.ps(script, args, timeout)
+        finally:
+            await self.lane(lane_name, label, items, by, "end", 0, 0,
+                            "%.1fs" % (time.time() - t0))
+
+    async def py_timed(self, lane_name, label, items, script, args, timeout=600, by="mechanical"):
+        await self.lane(lane_name, label, items, by, "start")
+        t0 = time.time()
+        try:
+            return await self.py(script, args, timeout)
+        finally:
+            await self.lane(lane_name, label, items, by, "end", 0, 0,
+                            "%.1fs" % (time.time() - t0))
+
     # ---- the cost engine, serialized ------------------------------------------------------------
 
-    async def cost_engine(self, script, args, timeout=1800):
+    async def cost_engine(self, script, args, timeout=1800, lane=None, stage=None, items=None):
         """EVERY cost-engine invocation goes through here and nowhere else."""
         async with self.cost_lock:
             t0 = time.time()
             try:
+                # TIMED, AND THE TIMING NO LONGER THROWN AWAY. cost_passes existed only so a fixture
+                # could prove the passes never overlap; the durations were collected and discarded.
+                if stage:
+                    return await self.ps_timed(lane or "write", stage, items or [], script, args, timeout)
                 return await self.ps(script, args, timeout)
             finally:
                 self.cost_passes.append((t0, time.time()))
@@ -996,9 +1034,9 @@ class Daemon(object):
           2  BLOCKED. The batch is NOT dispatched. Could-not-look is never a clean bill.
         Returns (ok, tables, detail).
         """
-        rc, out, err = await self.ps(MAP_PRERESOLVE_PS,
-                                     ["-RunDir", self.run_dir, "-Slugs", list(slugs)]
-                                     + self.preresolve_args, timeout=1200)
+        rc, out, err = await self.ps_timed(
+            "map", "map-preresolve", list(slugs), MAP_PRERESOLVE_PS,
+            ["-RunDir", self.run_dir, "-Slugs", list(slugs)] + self.preresolve_args, timeout=1200)
         detail = ((out or "") + (err or "")).strip()
         if rc == hunt_lib.EXIT_CANNOT_RUN:
             return False, {}, detail[-400:]
@@ -1326,7 +1364,8 @@ class Daemon(object):
             return False, "the mapper's rulings could not be written to disk (%s)" % e
         args = ["-Assemble", "-RunDir", self.run_dir, "-Slug", slug, "-RulingsFile", path]
         args += list(self.preresolve_args)
-        rc, out, err = await self.ps(MAP_PRERESOLVE_PS, args, timeout=600)
+        rc, out, err = await self.ps_timed("map", "map-preresolve verify", [slug],
+                                          MAP_PRERESOLVE_PS, args, timeout=600)
         text = ((out or "") + (err or "")).strip()
         if rc == hunt_lib.EXIT_CLEAN:
             return True, ""
@@ -1894,8 +1933,9 @@ class Daemon(object):
         build-v2-spec would throw on it downstream anyway). Unlike map-preresolve, exit 1 here is NOT
         the normal case: a skeleton is either complete or it is not.
         """
-        rc, out, err = await self.ps(BUILD_SKELETON_PS,
-                                     ["-RunDir", self.run_dir, "-Slug", slug], timeout=600)
+        rc, out, err = await self.ps_timed("write", "build-intake-skeleton", [slug],
+                                          BUILD_SKELETON_PS,
+                                          ["-RunDir", self.run_dir, "-Slug", slug], timeout=600)
         detail = ((out or "") + (err or "")).strip()
         if rc != hunt_lib.EXIT_CLEAN:
             # THE FINDINGS, NOT THE TAIL. The script prints two path lines after its summary, so a
@@ -1920,7 +1960,7 @@ class Daemon(object):
         THE SKELETON IS A POSTCONDITION, NOT A SUGGESTION. Exit 1 names the fields, and the daemon
         quotes them verbatim back to the writer for its ONE re-ask.
         """
-        rc, out, err = await self.ps(BUILD_SKELETON_PS, [
+        rc, out, err = await self.ps_timed("write", "skeleton verify", [slug], BUILD_SKELETON_PS, [
             "-Verify",
             "-InFile", os.path.join(self.run_dir, "intake", "%s.json" % slug),
             "-Skeleton", os.path.join(self.run_dir, "intake", "%s.skeleton.json" % slug),
@@ -2130,8 +2170,9 @@ class Daemon(object):
                         await self.advance(slug, "rejected-qa", "writer", detail[:200])
                         continue
                 # THE COST PASS IS SERIALIZED. Spec assembly stayed parallel; this does not.
-                rc_spec, sp_out, sp_err = await self.cost_engine(BUILD_V2_SPEC_PS,
-                                                                 self.spec_args(slug))
+                rc_spec, sp_out, sp_err = await self.cost_engine(
+                    BUILD_V2_SPEC_PS, self.spec_args(slug),
+                    lane="write", stage="build-v2-spec", items=[slug])
                 if rc_spec != 0:
                     # THE SPEC BUILD'S OWN GUARDS ARE GATES, AND THIS LANE WAS NOT READING THEM.
                     # Measured on the phase-4 gate run: six writers were paid, build-v2-spec REFUSED
@@ -2486,7 +2527,8 @@ class Daemon(object):
             pub_args.append("-DryRun")
         if self.ledger_path:
             pub_args += ["-LedgerPath", self.ledger_path]
-        rc, out, err = await self.ps(WAVE_PUBLISH_PS, pub_args, timeout=3600)
+        rc, out, err = await self.ps_timed("publish", "wave-publish", list(slugs),
+                                          WAVE_PUBLISH_PS, pub_args, timeout=3600)
         if rc != 0:
             refusal = ((out or "") + (err or "")).strip()[-800:]
             self.log("WAVE %d: publish refused (exit %d)" % (wk, rc))
@@ -2554,8 +2596,9 @@ class Daemon(object):
         return await self.ps(BATCH_LEDGER_PS, args, timeout)
 
     async def preaudit(self, wk):
-        rc, _o, _e = await self.cost_engine(WAVE_PREAUDIT_PS,
-                                            ["-RunDir", self.run_dir, "-Wave", wk], timeout=1800)
+        rc, _o, _e = await self.cost_engine(
+            WAVE_PREAUDIT_PS, ["-RunDir", self.run_dir, "-Wave", wk], timeout=1800,
+            lane="audit", stage="wave-preaudit w%d" % wk, items=[])
         if rc == hunt_lib.EXIT_CANNOT_RUN:
             self.findings.append("wave %d: the preaudit battery could not run (exit 2) - a BLOCKED "
                                  "stage, never a pass" % wk)

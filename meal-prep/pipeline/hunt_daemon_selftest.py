@@ -672,6 +672,11 @@ def run():
     for name, ok, got in _b5_reseed_from_queue():
         T(name, ok, got)
 
+    # =================================================================================================
+    H("G - the mechanical stages are lane events, and lane() does not recurse")
+    for name, ok, got in _mechanical_lane_events():
+        T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -1512,6 +1517,20 @@ def _rung3_records_not_gates():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def judgment_lanes(ps):
+    """The lane lines a JUDGMENT dispatch wrote - mechanical stages filtered out.
+
+    NEEDED FROM 2026-08-24, when the mechanical stages started emitting their own start/end pairs so
+    wall clock could be ATTRIBUTED rather than merely covered. These fixtures each say `judgment
+    dispatch` in their own name and were reading EVERY line, which was the same thing right up until
+    it was not: the write lane now logs build-intake-skeleton, skeleton verify and build-v2-spec
+    around the writer. `-By mechanical` is the discriminator, and the assertions below are unchanged -
+    only the population they are asserted over is now the one they always named.
+    """
+    return [c for c in ps.find("hunt-run.ps1", "-Lane")
+            if FakePS.value_after(c["args"], "-By") != "mechanical"]
+
+
 def _lane_daemon():
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
@@ -1527,20 +1546,20 @@ def _lane_daemon():
 
 def _lane_pairs():
     d, ps = _lane_daemon()
-    lanes = ps.find("hunt-run.ps1", "-Lane")
+    lanes = judgment_lanes(ps)
     events = [FakePS.value_after(c["args"], "-Event") for c in lanes]
     return (events == ["start", "end"], json.dumps(events))
 
 
 def _lane_tokens():
     d, ps = _lane_daemon()
-    end = [c for c in ps.find("hunt-run.ps1", "-Lane")
+    end = [c for c in judgment_lanes(ps)
            if FakePS.value_after(c["args"], "-Event") == "end"]
     if not end:
         return False, "no end line"
     tin = FakePS.value_after(end[0]["args"], "-InputTokens")
     tout = FakePS.value_after(end[0]["args"], "-OutputTokens")
-    start = [c for c in ps.find("hunt-run.ps1", "-Lane")
+    start = [c for c in judgment_lanes(ps)
              if FakePS.value_after(c["args"], "-Event") == "start"][0]
     return (tin == 1234 and tout == 56
             and FakePS.value_after(start["args"], "-InputTokens") == -1,
@@ -2776,7 +2795,7 @@ def _lane_c1_stamps():
     d, ps, tmp = _c1_daemon(mu, tokens_in=4139695, tokens_out=93903,
                             cache_read=3802874, cache_creation=323820, calls=30)
     try:
-        ends = [c for c in ps.find("hunt-run.ps1", "-Lane")
+        ends = [c for c in judgment_lanes(ps)
                 if FakePS.value_after(c["args"], "-Event") == "end"]
         if not ends:
             return False, "no end stamp at all"
@@ -2804,7 +2823,7 @@ def _lane_c1_delegation_finding():
     d, ps, tmp = _c1_daemon(mu, tokens_in=13001, tokens_out=93903, calls=30)
     try:
         said = [f for f in d.findings if "MORE than its own session" in f and "8800" in f]
-        ends = [c for c in ps.find("hunt-run.ps1", "-Lane")
+        ends = [c for c in judgment_lanes(ps)
                 if FakePS.value_after(c["args"], "-Event") == "end"]
         all_out = FakePS.value_after(ends[0]["args"], "-AllModelsOut") if ends else None
         models = FakePS.value_after(ends[0]["args"], "-Models") if ends else ""
@@ -3431,3 +3450,81 @@ def _verified_rows_still_retire():
     d, to = _bandgate_run(41.6, _OK_ROWS)
     return ("rejected-macros" in to,
             "expected a retirement, advances=%s" % json.dumps(to))
+
+
+# =====================================================================================================
+# G (2026-08-24). Mechanical stages log start/end pairs so wall clock is ATTRIBUTED, not merely covered.
+def _lane_lines(ps):
+    """Every -Lane invocation the daemon made, as (lane, label, event)."""
+    out = []
+    for c in ps.calls:
+        a = c["args"]
+        if "hunt-run" not in c["script"] or "-Lane" not in a:
+            continue
+        def g(flag):
+            return a[a.index(flag) + 1] if flag in a else ""
+        out.append((g("-LaneName"), g("-Label"), g("-Event")))
+    return out
+
+
+def _mechanical_lane_events():
+    res = []
+
+    # ---- THE RECURSION TRAP, FIRST. lane() calls ps(). If ps() itself were timed, every lane line
+    # would spawn two more lane lines, each of which spawns two more. This is the fixture that makes
+    # the separate-verb design load-bearing rather than a style choice: it fails with an infinite
+    # recursion (or a runaway count), not with a wrong number.
+    d = daemon()
+    arun(d.lane("map", "a plain lane line", ["x"], "mechanical", "start"))
+    n = len([c for c in d._ps.calls if "hunt-run" in c["script"]])
+    res.append(("MUST FIRE  logging ONE lane line spawns exactly ONE call - lane() must not be timed, "
+                "or every line spawns two more, forever", n == 1, "spawned %d calls" % n))
+
+    # ---- the pre-resolve pre-pass, the biggest mechanical stage in the map lane
+    d2 = daemon()
+    arun(d2.ps_timed("map", "map-preresolve", ["a", "b"], HD.MAP_PRERESOLVE_PS,
+                     ["-RunDir", "R"], timeout=30))
+    lines = _lane_lines(d2._ps)
+    res.append(("a timed mechanical stage emits a start AND an end, so its duration is measurable",
+                lines == [("map", "map-preresolve", "start"), ("map", "map-preresolve", "end")],
+                json.dumps(lines)))
+
+    # ---- MUST FIRE: the end line carries tokens 0, NOT -1. -1 is "not reported" in this log and would
+    # make a mechanical stage read as unmeasured Claude work - the exact confusion this closes.
+    end = None
+    for c in d2._ps.calls:
+        a = c["args"]
+        if "-Lane" in a and "-Event" in a and a[a.index("-Event") + 1] == "end":
+            end = a
+    got_in = end[end.index("-InputTokens") + 1] if end else None
+    got_out = end[end.index("-OutputTokens") + 1] if end else None
+    res.append(("MUST FIRE  the end line reports tokens 0, never -1 - a mechanical stage burned "
+                "nothing, which is not the same as nobody having looked",
+                got_in == 0 and got_out == 0, "in=%r out=%r" % (got_in, got_out)))
+
+    # ---- MUST FIRE: a stage that THREW still closes its pair. An unclosed start is worse than no
+    # start at all: -LaneSummary would carry the stage as still running and swallow the whole tail of
+    # the run into it. This is the `finally` doing the work, and it fails without it.
+    class Boom(object):
+        def __init__(self):
+            self.calls = []
+
+        def __call__(self, script, args, timeout=180):
+            self.calls.append({"script": os.path.basename(script), "args": list(args),
+                               "timeout": timeout})
+            if "hunt-run" in os.path.basename(script):
+                return 0, "", ""
+            raise RuntimeError("the stage died")
+
+    b = Boom()
+    d3 = daemon(ps=b)
+    threw = False
+    try:
+        arun(d3.ps_timed("write", "build-v2-spec", ["s"], HD.BUILD_V2_SPEC_PS, ["-RunDir", "R"]))
+    except RuntimeError:
+        threw = True
+    lines3 = _lane_lines(b)
+    res.append(("MUST FIRE  a stage that THREW still closes its start/end pair, and the throw still "
+                "reaches the caller", threw and [x[2] for x in lines3] == ["start", "end"],
+                "threw=%s lines=%s" % (threw, json.dumps(lines3))))
+    return res

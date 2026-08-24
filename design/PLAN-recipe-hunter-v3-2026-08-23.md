@@ -2703,6 +2703,25 @@ per-token price on top).
   both the contract owner and the reader, and a daemon that appends lane lines directly makes TWO
   writers of one format - the drift this estate keeps designing out. Brad closed it 2026-08-24.
   The measurement is the deliverable; C4 asked for one and the answer is no.
+- **C4a. G, 2026-08-24: the mechanical stages are lane events, so wall clock is ATTRIBUTED.**
+  C4 settled that the daemon must not take the pen from hunt-run.ps1, and that stands. What it did
+  not settle is that six of the seven MECHANICAL stages emitted nothing at all, so their time either
+  fell into a gap or hid underneath a concurrent lane. Measured on the 6b log: 99% of the 63.5-minute
+  span had SOMETHING in flight and only 49 s sat in gaps - which is COVERAGE, not attribution. Two of
+  the three gaps over 5 s were the preaudit battery, which self-times in its own report and tells the
+  lane log nothing.
+  `ps_timed`/`py_timed` wrap each mechanical call with a start/end pair at tokens 0, the convention
+  the local extraction ladder already used, so `-LaneSummary` reads them with no reader change. The
+  RECURSION TRAP is named in the code and fixtured: `lane()` itself calls `ps()`, so timing every
+  `ps()` call would make each lane line spawn two more, forever. It is a separate verb that call
+  sites opt into.
+  `hunt-run.ps1 -StageSummary` (`-Json` too) ranks every start/end pair in a log by total time and
+  marks it mechanical / local / judgment. **Share is of MEASURED time, not of the run** - lanes
+  overlap, so the 6b log's 29 stages sum to 101.4 minutes inside 63.5 wall minutes. It ranks; it does
+  not budget.
+  THE TAX, MEASURED rather than carried over from C4: **251 ms per lane spawn**, about **2.0 s per
+  recipe** (four mechanical stages, two spawns each) plus ~1 s per wave. That is 0.1% of the 32
+  min/recipe the run actually costs and 0.7% of the 5 min/recipe target.
 - **C5. D11 early wins now instead of later:** minimal tool lists per agent (A3 is the first), and
   standing constants OUT of per-call prompts INTO agent definitions where the prefix cache pays
   once per session instead of per dispatch.

@@ -37,7 +37,7 @@
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
-  [switch]$Lane, [switch]$LaneSummary, [switch]$WaveSync, [int]$Wave = 0,
+  [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
   # C1 (added 2026-08-24, phase 6a). Analysing the phase-5 run's cost took transcript archaeology with
   # per-message-id dedup, and DispatchResult ALREADY carried all three of these - lane() just did not
@@ -73,7 +73,10 @@ $ErrorActionPreference = 'Stop'
 # CAPTURE EVERY SWITCH BEFORE DOT-SOURCING ANYTHING. A dot-sourced script runs its own param() block in
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
 # migrate-prose-tokens' first -SelfTest run execute the LIVE path instead of its fixtures.
-$runLaneSummary = [bool]$LaneSummary
+$runStageSummary = [bool]$StageSummary
+# -StageSummary rides the -LaneSummary reader: it is the same log, the same pairing, a different
+# GROUPING. A second reader over the same file is a second place for the two to disagree.
+$runLaneSummary = [bool]$LaneSummary -or $runStageSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
 $runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
@@ -792,6 +795,32 @@ if ($runSelfTest) {
     T 'CLEAN TWIN the run total sums BOTH conventions' `
       ($null -ne $sum -and [long]$sum.total_tokens -eq (245806 + 76728 + 1000 + 200)) `
       ($(if ($sum) { [string]$sum.total_tokens } else { 'no json' }))
+
+    # ---- FIXTURE 7d. -StageSummary (G, 2026-08-24). The lane roll-up says the map lane took 15
+    # minutes; it cannot say WHICH stage in it, and until the mechanical stages started emitting
+    # start/end pairs the honest answer for half of them was 'we do not know'. Same log, same
+    # pairing, different grouping - so the two readers cannot drift apart.
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map-preresolve' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:20:00' -Event 'start')
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map-preresolve' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:21:00' -Event 'end' -In 0 -Out 0)
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'write' -Label 'never-finished' -ItemList @('z') -By 'mechanical' -Detail '' -At '2026-08-24T10:22:00' -Event 'start')
+    $stgOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt3 -Json 2>&1
+    $stg = $null
+    try { $stg = (@($stgOut | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
+    $top = $null; $mech = $null
+    if ($stg) { $top = @($stg.stages)[0]; $mech = @($stg.stages | Where-Object { $_.stage -eq 'map-preresolve' })[0] }
+    T 'MUST FIRE  -StageSummary ranks by STAGE, longest first - map:2x at 15 min outranks a 1 min pre-resolve' `
+      ($null -ne $top -and [string]$top.stage -eq 'map:2x' -and [long]$top.total_sec -eq 900) `
+      ($(if ($top) { $top.stage + ' ' + $top.total_sec + 's' } else { ($stgOut -join ' ')[0..200] -join '' }))
+    T 'MUST FIRE  a MECHANICAL stage is timed and named as mechanical - the whole point is that it stopped being invisible' `
+      ($null -ne $mech -and [long]$mech.total_sec -eq 60 -and [string]$mech.kind -eq 'mechanical') `
+      ($(if ($mech) { $mech.kind + ' ' + $mech.total_sec + 's' } else { 'no map-preresolve row' }))
+    T 'MUST FIRE  a stage that started and never ended is reported UNFINISHED, never counted as instant' `
+      ($null -ne $stg -and (@($stg.unfinished) -join ',') -like '*never-finished*' -and
+       @($stg.stages | Where-Object { $_.stage -eq 'never-finished' }).Count -eq 0) `
+      ($(if ($stg) { 'unfinished=' + (@($stg.unfinished) -join ',') } else { 'no json' }))
+    T 'CLEAN TWIN -StageSummary does NOT print the lane table - it was asked for stages' `
+      (-not ((@($stgOut | ForEach-Object { [string]$_ }) -join ' ') -match 'lane summary')) `
+      (($stgOut -join ' ')[0..120] -join '')
   } finally { Remove-Item $lt3 -Recurse -Force -ErrorAction SilentlyContinue }
 
   # ---- FIXTURE 8. THE COMPOSITE TERM. Founding bug 2026-08-16, run hunt-2026-08-15-lowcarb-100:
@@ -940,6 +969,8 @@ if ($runLaneSummary) {
   # with no end line is either still running or died - counted as unfinished, never as instant.
   $starts = @{}
   $durations = @{}
+  $stageSecs = @{}
+  $stageBy = @{}
   foreach ($r in ($rows | Sort-Object at)) {
     $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
     if (-not $ev) { continue }
@@ -950,10 +981,78 @@ if ($runLaneSummary) {
       if ($sec -ge 0) {
         if (-not $durations.ContainsKey([string]$r.lane)) { $durations[[string]$r.lane] = @() }
         $durations[[string]$r.lane] += $sec
+        # G (2026-08-24): the SAME pairing, kept at STAGE granularity too. The lane roll-up answers
+        # 'which lane is slow'; -StageSummary answers 'which stage in it', which is the question that
+        # was actually being asked when the mechanical stages were emitting nothing at all.
+        if (-not $stageSecs.ContainsKey($key)) { $stageSecs[$key] = @() }
+        $stageSecs[$key] += $sec
+        $stageBy[$key] = $(if ($r.PSObject.Properties.Name -contains 'by') { [string]$r.by } else { '' })
       }
       $starts.Remove($key)
     }
   }
+  # ---- -StageSummary: the SAME pairing, ranked by stage --------------------------------------------
+  #
+  # WHY THIS EXISTS. The lane roll-up says the map lane took 20 minutes. It cannot say whether that was
+  # map-preresolve, the mapper agent, or the assemble verify - and until 2026-08-24 the mechanical two
+  # of those three logged nothing at all, so the honest answer was 'we do not know'. This ranks every
+  # start/end pair in the log by total time, longest first, and marks which are mechanical.
+  #
+  # SHARE IS OF MEASURED TIME, NOT OF THE RUN. Lanes overlap by design, so these seconds sum to more
+  # than the wall clock. A stage at '30%' held a third of the time SOMETHING was in flight - it is a
+  # ranking, and reading it as a third of the run would overstate every row on the page.
+  if ($runStageSummary) {
+    if (-not $stageSecs.Count) {
+      Write-Output 'hunt-run stage summary: no start/end pair in this lane log - nothing is timed yet'
+      Write-GuardComplete -Name 'hunt-run' -Summary 'stage-summary stages=0'; exit 0
+    }
+    $stageRows = @(foreach ($k in $stageSecs.Keys) {
+      $secs = @($stageSecs[$k]); $parts = $k -split '\|', 2
+      [pscustomobject]@{ lane = $parts[0]; label = $parts[1]; n = $secs.Count
+                         total = (($secs | Measure-Object -Sum).Sum)
+                         mean = (($secs | Measure-Object -Average).Average)
+                         by = [string]$stageBy[$k] }
+    })
+    $grand = (($stageRows | Measure-Object -Property total -Sum).Sum)
+    # SORTED ONCE, SHARED. The text table and the -Json payload each used to sort for themselves, and
+    # a neuter proof caught it: reversing the TEXT sort left every fixture green, because the fixture
+    # reads JSON. Two orderings of the same ranking is two things that can disagree, and the one
+    # nobody asserts on is the one that drifts.
+    $stageRows = @($stageRows | Sort-Object total -Descending)
+    # -Json is honoured HERE rather than ignored. -LaneSummary has a machine road and a reader that
+    # silently dropped the flag would hand a caller the text table to parse, which is how the v2
+    # summary got parsed by regex in the first place.
+    if ($Json) {
+      $payload = [pscustomobject]@{
+        run = (Split-Path -Leaf $RunDir); measured_sec = $grand; stages = @($stageRows |
+          ForEach-Object {
+            [pscustomobject]@{ lane = $_.lane; stage = $_.label; n = $_.n; total_sec = $_.total
+                               mean_sec = $_.mean; by = $_.by
+                               kind = $(if ($_.by -eq 'mechanical') { 'mechanical' }
+                                        elseif ($_.by -eq 'local') { 'local' } else { 'judgment' }) } })
+        unfinished = @($starts.Keys)
+      }
+      # NO guard line after the payload, matching -LaneSummary -Json two screens down: a trailing
+      # HUNT-RUN-COMPLETE makes the joined stdout unparseable, which is exactly how fixture 7d first
+      # failed - the JSON was correct and every reader of it saw null.
+      Write-Output ($payload | ConvertTo-Json -Depth 6)
+      exit 0
+    }
+    Write-Output ("hunt-run stage summary: {0}" -f (Split-Path -Leaf $RunDir))
+    Write-Output ("  {0,-9} {1,-30} {2,5} {3,10} {4,9} {5,7}  {6}" -f 'lane','stage','n','total_min','mean_sec','share','kind')
+    foreach ($r in $stageRows) {
+      $share = if ($grand -gt 0) { '{0:N1}%' -f (100.0 * $r.total / $grand) } else { '-' }
+      $kind = if ($r.by -eq 'mechanical') { 'mechanical' } elseif ($r.by -eq 'local') { 'local' } else { 'judgment' }
+      Write-Output ("  {0,-9} {1,-30} {2,5} {3,10:N1} {4,9:N0} {5,7}  {6}" -f $r.lane, $r.label.Substring(0, [Math]::Min(30, $r.label.Length)), $r.n, ($r.total / 60.0), $r.mean, $share, $kind)
+    }
+    $unf = @($starts.Keys)
+    if ($unf.Count -gt 0) {
+      Write-Output ("  {0} stage(s) logged a start with no end - still running, or died: {1}" -f $unf.Count, (($unf | Select-Object -First 4) -join ', '))
+    }
+    Write-Output ("  measured {0:N1} min across {1} stage(s). Lanes OVERLAP, so this exceeds wall clock - it ranks, it does not budget." -f ($grand / 60.0), $stageRows.Count)
+    Write-GuardComplete -Name 'hunt-run' -Summary ("stage-summary stages={0} measured_min={1:N1}" -f $stageRows.Count, ($grand / 60.0)); exit 0
+  }
+
 
   $agg = @{}
   function Get-NumField($row, [string]$name) {
@@ -1034,6 +1133,7 @@ if ($runLaneSummary) {
   if ($unmeasured -gt 0) {
     Write-Output ("  NOTE {0} row(s) carry no token figures - treat every number above as a LOWER BOUND." -f $unmeasured)
   }
+
   Write-GuardComplete -Name 'hunt-run' -Summary ("lane-summary lanes={0} tokens={1}" -f $agg.Count, $tot)
   exit 0
 }
