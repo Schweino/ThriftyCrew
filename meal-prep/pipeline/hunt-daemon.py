@@ -298,13 +298,20 @@ class Daemon(object):
         return await loop.run_in_executor(None, lambda: self._py(script, args, timeout))
 
     async def lane(self, lane_name, label, items, by, event, tokens_in=-1, tokens_out=-1,
-                   detail=""):
+                   detail="", cache_read=-1, cache_creation=-1, calls=-1,
+                   all_in=-1, all_out=-1, models=""):
         """A lane-log line. BOTH ENDS, always: the daemon owns a real clock, so start/end pairing is
         what finally makes stage duration measurable. Section 4.5's completeness rule covers local
         work too - a page settled by the local ladder is work done, not work skipped."""
         args = ["-Lane", "-RunDir", self.run_dir, "-LaneName", lane_name, "-Label", label,
                 "-Items", list(items or []), "-By", by, "-Event", event,
-                "-InputTokens", tokens_in, "-OutputTokens", tokens_out]
+                "-InputTokens", tokens_in, "-OutputTokens", tokens_out,
+                # C1: turns and the cache split, so no future run needs transcript archaeology to
+                # answer "where did the money go". -1 stays "not reported", which is not 0.
+                "-CacheRead", cache_read, "-CacheCreation", cache_creation, "-Calls", calls,
+                "-AllModelsIn", all_in, "-AllModelsOut", all_out]
+        if models:
+            args += ["-Models", models]
         if detail:
             args += ["-Detail", detail]
         rc, out, err = await self.ps(HUNT_RUN_PS, args, timeout=120)
@@ -351,10 +358,22 @@ class Daemon(object):
         loop = asyncio.get_event_loop()
         res = await loop.run_in_executor(
             None, lambda: self._dispatch(agent, prompt, schema=schema, validator=validator))
+        all_in, all_out, _cost, models = res.all_models
         await self.lane(lane_name, label, items, stage or lane_name, "end",
                         tokens_in=res.tokens_in, tokens_out=res.tokens_out,
+                        cache_read=res.cache_read, cache_creation=res.cache_creation,
+                        calls=res.calls, all_in=all_in, all_out=all_out,
+                        models=",".join(models),
                         detail=("re-asked; " if res.reasked else "")
                         + (res.failure or "ok"))
+        # THE UNSTAMPED-SUBAGENT GAP, MADE VISIBLE RATHER THAN LEFT TO ARCHAEOLOGY. The phase-5 mapper
+        # delegated to a 21-turn Opus subagent that appeared in no ledger at all. It is a FINDING, not
+        # a refusal: delegation may be legitimate, and what was wrong was that nobody could see it.
+        if all_out > 0 and res.tokens_out > 0 and all_out > res.tokens_out:
+            self.findings.append(
+                "%s/%s: this dispatch billed MORE than its own session - %d out across %s vs %d for "
+                "the main agent. That difference is delegation, and it used to appear in no ledger."
+                % (lane_name, label, all_out, "/".join(models) or "?", res.tokens_out))
         for f in res.findings:
             self.findings.append("%s/%s: %s" % (lane_name, label, f))
         if not res.ok:

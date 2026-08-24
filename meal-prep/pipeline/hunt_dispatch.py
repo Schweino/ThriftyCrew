@@ -172,6 +172,12 @@ class DispatchResult(object):
     def ok(self):
         return self.payload is not None
 
+    @property
+    def all_models(self):
+        """C1: (all_in, all_out, cost, names) across EVERY model this dispatch billed, subagents
+        included. Derived rather than stored, so it can never disagree with model_usage."""
+        return model_usage_totals(self.model_usage)
+
     def as_dict(self):
         return {"agent": self.agent, "ok": self.ok, "failure": self.failure, "detail": self.detail,
                 "problems": list(self.problems), "reasked": self.reasked,
@@ -179,8 +185,52 @@ class DispatchResult(object):
                 "cache_read": self.cache_read, "cache_creation": self.cache_creation,
                 "cost_usd": round(self.cost_usd, 6), "seconds": round(self.seconds, 2),
                 "calls": self.calls, "model_usage": self.model_usage,
+                "all_models_in": self.all_models[0], "all_models_out": self.all_models[1],
+                "all_models_cost_usd": self.all_models[2], "models": self.all_models[3],
                 "denials": self.denials, "findings": list(self.findings),
                 "payload": self.payload, "text": self.text[:2000]}
+
+
+# C1 (added 2026-08-24, phase 6a / pin P10). THE PER-MODEL KEY NAMES ARE READ OFF A REAL ENVELOPE, NOT
+# GUESSED. Taken from a phase-5 gate transcript on 2026-08-24, verbatim:
+#
+#   "modelUsage":{"claude-haiku-4-5-20251001":{"inputTokens":447,"outputTokens":12,
+#                 "cacheReadInputTokens":0,"cacheCreationInputTokens":0,"webSearchRequests":0,
+#                 "costUSD":0.000507,"contextWindow":200000,"maxOutputTokens":32000},
+#                 "claude-fable-5":{"inputTokens":1,"outputTokens":4,...}}
+#
+# camelCase per model, snake_case in the top-level `usage` block - the two blocks do NOT share a
+# spelling, which is exactly the sort of thing a guess gets wrong in a way nothing notices.
+#
+# WHY IT MATTERS. Top-level `usage` covers the MAIN AGENT ONLY. The phase-5 mapper batch spawned a
+# 21-turn Opus subagent that appeared in no lane stamp and no ledger - $1.64 of invisible spend - and
+# `modelUsage` is the one place in the envelope where it shows up at all.
+MODEL_USAGE_KEYS = ("inputTokens", "outputTokens", "cacheReadInputTokens", "cacheCreationInputTokens")
+
+
+def model_usage_totals(model_usage):
+    """Sum a modelUsage map into (all_in, all_out, cost, model_names).
+
+    `all_in` follows lane-tokens.ps1's rule exactly as DispatchResult.tokens_in does: input plus cache
+    read plus cache write. A total that counted only uncached input would read as a rounding error next
+    to the real bill.
+    """
+    all_in = all_out = 0
+    cost = 0.0
+    names = []
+    for name, u in sorted((model_usage or {}).items()):
+        if not isinstance(u, dict):
+            continue
+        names.append(str(name))
+        all_in += (int(u.get("inputTokens") or 0)
+                   + int(u.get("cacheReadInputTokens") or 0)
+                   + int(u.get("cacheCreationInputTokens") or 0))
+        all_out += int(u.get("outputTokens") or 0)
+        try:
+            cost += float(u.get("costUSD") or 0.0)
+        except (TypeError, ValueError):
+            pass
+    return all_in, all_out, round(cost, 6), names
 
 
 def build_argv(agent, reconstruct=False, extra=None):
@@ -286,7 +336,25 @@ def _absorb(res, env):
     res.cache_creation += int(u.get("cache_creation_input_tokens") or 0)
     res.cost_usd += float(env.get("total_cost_usd") or 0.0)
     res.calls += 1
-    res.model_usage = env.get("modelUsage") or res.model_usage
+    # MERGED, NOT OVERWRITTEN (C1, 2026-08-24). A re-ask is a SECOND billed call, and `res.calls`,
+    # `tokens_in` and `cost_usd` all accumulate across the pair. Replacing the map here made the
+    # subagent-inclusive total report only the LAST call's models, which on a re-asked dispatch is the
+    # cheaper half - a stamp that understates exactly the dispatches worth looking at.
+    for _m, _u in (env.get("modelUsage") or {}).items():
+        if not isinstance(_u, dict):
+            continue
+        prev = res.model_usage.get(_m)
+        if not isinstance(prev, dict):
+            res.model_usage[_m] = dict(_u)
+            continue
+        merged = dict(prev)
+        for _k in MODEL_USAGE_KEYS:
+            merged[_k] = int(prev.get(_k) or 0) + int(_u.get(_k) or 0)
+        try:
+            merged["costUSD"] = float(prev.get("costUSD") or 0.0) + float(_u.get("costUSD") or 0.0)
+        except (TypeError, ValueError):
+            pass
+        res.model_usage[_m] = merged
     res.session_id = env.get("session_id") or res.session_id
     for d in env.get("permission_denials") or []:
         res.denials.append(d if isinstance(d, str) else json.dumps(d)[:200])
@@ -471,14 +539,29 @@ def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reco
 # exists and why its measurement is recorded in the drill report rather than asserted here.
 # =====================================================================================================
 
+def _model_row(in_tok, out_tok, cache_read=0, cache_creation=0, cost=0.01):
+    """One modelUsage value, in the REAL envelope's own spelling. Frozen 2026-08-24 from a phase-5 gate
+    transcript: camelCase per model, snake_case in the top-level `usage` block, and the two do not
+    share a spelling - which is exactly the sort of thing a guess gets wrong in a way nothing notices.
+    """
+    return {"inputTokens": in_tok, "outputTokens": out_tok,
+            "cacheReadInputTokens": cache_read, "cacheCreationInputTokens": cache_creation,
+            "webSearchRequests": 0, "costUSD": cost,
+            "contextWindow": 200000, "maxOutputTokens": 32000}
+
+
 def _env(result_text, in_tok=100, out_tok=50, cache_read=0, cache_creation=0, model="claude-fable-5",
-         is_error=False):
+         is_error=False, extra_models=None):
+    mu = {model: _model_row(in_tok, out_tok, cache_read, cache_creation)}
+    for name, row in (extra_models or {}).items():
+        mu[name] = row
     return {"type": "result", "subtype": "success", "is_error": is_error, "result": result_text,
             "session_id": "s1", "total_cost_usd": 0.01, "num_turns": 1, "permission_denials": [],
+            # `usage` covers THE MAIN AGENT ONLY. That is the whole reason C1 also reads modelUsage.
             "usage": {"input_tokens": in_tok, "output_tokens": out_tok,
                       "cache_read_input_tokens": cache_read,
                       "cache_creation_input_tokens": cache_creation},
-            "modelUsage": {model: {"inputTokens": in_tok, "outputTokens": out_tok}}}
+            "modelUsage": mu}
 
 
 class FakeRunner(object):
@@ -726,6 +809,57 @@ def selftest():
           "never the test",
           r.payload is None and r.reasked and r.calls == 2,
           "payload=%s reasked=%s calls=%d" % (r.payload, r.reasked, r.calls))
+
+        # ---- C1 / PIN P10: THE SUBAGENT'S TOKENS LAND IN THE STAMP ------------------------------
+        # The phase-5 mapper batch delegated to a 21-turn Opus subagent that appeared in NO lane stamp
+        # and no ledger - $1.64 of invisible spend. Top-level `usage` covers the main agent only;
+        # `modelUsage` is the one place in the envelope where a subagent shows up at all. The key names
+        # below are read off a REAL envelope rather than guessed - see MODEL_USAGE_KEYS.
+        print("")
+        two = _env(good, in_tok=13001, out_tok=93903, cache_read=3802874, cache_creation=323820,
+                   model="claude-fable-5",
+                   extra_models={"claude-opus-5": _model_row(4200, 8800, 210000, 15000, cost=1.64)})
+        r = dispatch("t-full", "map these", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("env", two)]))
+        all_in, all_out, cost, names = r.all_models
+        T("MUST FIRE  a TWO-MODEL envelope: the subagent's tokens land in the subagent-inclusive "
+          "total, which is what the phase-5 mapper's invisible $1.64 was missing from",
+          all_out == 93903 + 8800 and all_in == (13001 + 3802874 + 323820) + (4200 + 210000 + 15000),
+          "all_in=%d all_out=%d" % (all_in, all_out))
+        T("MUST FIRE  ...and the MAIN-AGENT stamp beside it is unchanged, so the DIFFERENCE between "
+          "the two is the delegation - a single merged number would hide exactly what this exposes",
+          r.tokens_out == 93903 and r.tokens_in == 13001 + 3802874 + 323820,
+          "in=%d out=%d" % (r.tokens_in, r.tokens_out))
+        T("MUST FIRE  the subagent-inclusive input follows lane-tokens.ps1's rule too - input plus "
+          "cache read plus cache write, never uncached input alone",
+          all_in == 4368895, "all_in=%d" % all_in)
+        T("the roll-up names every model it summed, and adds their costUSD",
+          names == ["claude-fable-5", "claude-opus-5"] and abs(cost - 1.65) < 0.001,
+          "names=%s cost=%s" % (json.dumps(names), cost))
+        T("CLEAN TWIN a single-model dispatch reports the SAME numbers on both sides - no delegation, "
+          "no gap",
+          model_usage_totals(_env(good, in_tok=12, out_tok=340, cache_read=21142,
+                                  cache_creation=10235)["modelUsage"])[:2]
+          == (12 + 21142 + 10235, 340),
+          str(model_usage_totals(_env(good)["modelUsage"])))
+        T("the cache split rides on the result, so a working-set problem is tellable from an output "
+          "problem without opening a transcript",
+          r.cache_read == 3802874 and r.cache_creation == 323820 and r.calls == 1,
+          "read=%d write=%d calls=%d" % (r.cache_read, r.cache_creation, r.calls))
+        # A RE-ASK IS A SECOND BILLED CALL, so the map must MERGE rather than be replaced. Overwriting
+        # made the subagent-inclusive total report only the LAST call's models - on a re-asked
+        # dispatch, the cheaper half, which understates exactly the dispatches worth looking at.
+        reask = FakeRunner([
+            ("env", _env(json.dumps({"slug": "s", "status": "ok"}), in_tok=1000, out_tok=2000)),
+            ("env", _env(good, in_tok=1500, out_tok=2500,
+                         extra_models={"claude-opus-5": _model_row(100, 200)}))])
+        r2 = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=reask)
+        a_in, a_out, _c, a_names = r2.all_models
+        T("MUST FIRE  a RE-ASKED dispatch sums BOTH calls into the subagent-inclusive total - the map "
+          "is merged, never overwritten",
+          r2.calls == 2 and a_out == 2000 + 2500 + 200 and a_in == 1000 + 1500 + 100
+          and a_names == ["claude-fable-5", "claude-opus-5"],
+          "calls=%d all_in=%d all_out=%d names=%s" % (r2.calls, a_in, a_out, json.dumps(a_names)))
 
         # ---- the model pin is checked, and a drop is REPORTED -----------------------------------
         print("")

@@ -426,6 +426,12 @@ def run():
     T("MUST FIRE  a page settled by the LOCAL ladder is lane-logged too, -By local with tokens 0 - "
       "work done, not work skipped",
       *_lane_local())
+    T("MUST FIRE  C1: the end stamp carries TURNS and the CACHE SPLIT, and the subagent-inclusive "
+      "totals off modelUsage - so no future run needs transcript archaeology",
+      *_lane_c1_stamps())
+    T("MUST FIRE  C1: a dispatch that DELEGATED is reported as a finding, because the phase-5 "
+      "mapper's 21-turn subagent appeared in no ledger at all",
+      *_lane_c1_delegation_finding())
 
     # =================================================================================================
     H("D7 - the mechanical half of MAP runs before the agent is paid")
@@ -2640,6 +2646,93 @@ def _price_prompt_one_batch():
     return (asks_batch and atomic and counts and keeps,
             "batch=%s atomic=%s counts=%s verdict_promote=%s"
             % (asks_batch, atomic, counts, keeps))
+
+
+def _c1_daemon(model_usage, tokens_in=1234, tokens_out=56, cache_read=900, cache_creation=100,
+               calls=1):
+    """A daemon whose one dispatch returns a chosen usage shape, with the shell injected."""
+    class UsagePS(FakePS):
+        pass
+    ps = UsagePS()
+
+    def dispatcher(agent, prompt, schema=None, validator=None, **kw):
+        res = HD.hunt_dispatch.DispatchResult(agent)
+        res.payload = {"slug": "s1", "status": "ok", "state": "priced"}
+        res.text = "{}"
+        res.tokens_in, res.tokens_out = tokens_in, tokens_out
+        res.cache_read, res.cache_creation, res.calls = cache_read, cache_creation, calls
+        res.model_usage = model_usage
+        return res
+
+    tmp = tempfile.mkdtemp(prefix="daemon-c1-")
+    preresolved(tmp, ["s1"])
+    d = HD.Daemon(tmp, "c1-drill", dispatcher=dispatcher, ps=ps, quiet=True)
+    d.ch["map"].push({"slug": "s1"})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    return d, ps, tmp
+
+
+def _lane_c1_stamps():
+    r"""C1 / pin P10. Analysing the phase-5 run's cost took transcript archaeology with per-message-id
+    dedup, and DispatchResult ALREADY carried cache_read, cache_creation and calls - lane() just did
+    not stamp them. The key names in modelUsage are read off a REAL envelope (frozen 2026-08-24 from a
+    phase-5 transcript: camelCase per model against snake_case in the top-level `usage` block).
+    """
+    mu = {"claude-opus-5": {"inputTokens": 13001, "outputTokens": 93903,
+                            "cacheReadInputTokens": 3802874, "cacheCreationInputTokens": 323820,
+                            "costUSD": 6.35}}
+    d, ps, tmp = _c1_daemon(mu, tokens_in=4139695, tokens_out=93903,
+                            cache_read=3802874, cache_creation=323820, calls=30)
+    try:
+        ends = [c for c in ps.find("hunt-run.ps1", "-Lane")
+                if FakePS.value_after(c["args"], "-Event") == "end"]
+        if not ends:
+            return False, "no end stamp at all"
+        a = ends[0]["args"]
+        got = {k: FakePS.value_after(a, k) for k in
+               ("-Calls", "-CacheRead", "-CacheCreation", "-AllModelsIn", "-AllModelsOut", "-Models")}
+        return (got["-Calls"] == 30 and got["-CacheRead"] == 3802874
+                and got["-CacheCreation"] == 323820
+                and got["-AllModelsIn"] == 13001 + 3802874 + 323820
+                and got["-AllModelsOut"] == 93903
+                and got["-Models"] == "claude-opus-5",
+                json.dumps(got))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _lane_c1_delegation_finding():
+    """The unstamped-subagent gap, made visible. It is a FINDING and not a refusal: delegation may be
+    legitimate, and what was wrong was that nobody could see it."""
+    mu = {"claude-fable-5": {"inputTokens": 13001, "outputTokens": 93903,
+                             "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0},
+          "claude-opus-5": {"inputTokens": 4200, "outputTokens": 8800,
+                            "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0,
+                            "costUSD": 1.64}}
+    d, ps, tmp = _c1_daemon(mu, tokens_in=13001, tokens_out=93903, calls=30)
+    try:
+        said = [f for f in d.findings if "billed MORE than its own session" in f]
+        ends = [c for c in ps.find("hunt-run.ps1", "-Lane")
+                if FakePS.value_after(c["args"], "-Event") == "end"]
+        all_out = FakePS.value_after(ends[0]["args"], "-AllModelsOut") if ends else None
+        models = FakePS.value_after(ends[0]["args"], "-Models") if ends else ""
+        delegated = (bool(said) and all_out == 93903 + 8800
+                     and models == "claude-fable-5,claude-opus-5")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    # CLEAN TWIN: a dispatch that did NOT delegate says nothing. A finding on every call is noise, and
+    # noise is what a reader learns to skip.
+    mu1 = {"claude-fable-5": {"inputTokens": 100, "outputTokens": 50,
+                              "cacheReadInputTokens": 0, "cacheCreationInputTokens": 0}}
+    d2, _ps2, tmp2 = _c1_daemon(mu1, tokens_in=100, tokens_out=50, calls=1)
+    try:
+        quiet = not [f for f in d2.findings if "billed MORE than its own session" in f]
+    finally:
+        shutil.rmtree(tmp2, ignore_errors=True)
+    return (delegated and quiet,
+            "delegated_reported=%s quiet_when_not=%s findings=%s"
+            % (delegated, quiet, json.dumps(d.findings)[:220]))
 
 
 def _resume_seed_table():

@@ -39,6 +39,15 @@ param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
   [switch]$Lane, [switch]$LaneSummary, [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
+  # C1 (added 2026-08-24, phase 6a). Analysing the phase-5 run's cost took transcript archaeology with
+  # per-message-id dedup, and DispatchResult ALREADY carried all three of these - lane() just did not
+  # stamp them. -1 keeps its meaning: "not reported", which is not 0.
+  [int]$CacheRead = -1, [int]$CacheCreation = -1, [int]$Calls = -1,
+  # ...and the SUBAGENT-INCLUSIVE totals, summed off the CLI envelope's modelUsage map. The phase-5
+  # mapper spawned a 21-turn Opus subagent that appeared in NO lane stamp - $1.64 of invisible spend -
+  # because `usage` covers the main agent only. When these differ from the main-agent numbers beside
+  # them, that difference IS the delegation.
+  [int]$AllModelsIn = -1, [int]$AllModelsOut = -1, [string]$Models = '',
   [ValidateSet('', 'start', 'end')][string]$Event = '',   # pair start/end on the same lane+label to get duration
   [string]$RunDir = '', [string]$Slug = '', [string]$To = '', [string]$By = '', [string]$Detail = '',
   [string]$Title = '', [string]$SourceUrl = '', [string]$Protein = '',
@@ -359,7 +368,9 @@ function Split-LaneItems {
 
 function New-LaneLine {
   param([string]$LaneName, [string]$Label, $ItemList, [string]$By, [string]$Detail, [string]$At,
-        [int]$In = -1, [int]$Out = -1, [string]$Event = '')
+        [int]$In = -1, [int]$Out = -1, [string]$Event = '',
+        [int]$CacheRead = -1, [int]$CacheCreation = -1, [int]$Calls = -1,
+        [int]$AllIn = -1, [int]$AllOut = -1, [string]$Models = '')
   $rows = @(Split-LaneItems $ItemList)
   # in/out are the agent's reported token usage for THIS invocation. -1 means "not reported" and is
   # kept distinct from 0: a stage that genuinely returned nothing is not the same as a stage whose
@@ -370,6 +381,12 @@ function New-LaneLine {
   return [pscustomobject]@{
     at = $At; lane = $LaneName; label = $Label; count = $rows.Count; items = @($rows)
     by = $By; detail = $Detail; in = $In; out = $Out; event = $Event
+    # C1. `in` above is the lane-tokens.ps1 total (input + cache read + cache write); these SPLIT it,
+    # which is what makes a working-set problem tellable from an output problem without a transcript.
+    # `calls` is turns - the first lever in the cost law (turns x working set, plus output at 5x).
+    cache_read = $CacheRead; cache_creation = $CacheCreation; calls = $Calls
+    # and the subagent-inclusive totals. all_in/all_out >= in/out whenever a dispatch delegated.
+    all_in = $AllIn; all_out = $AllOut; models = $Models
   }
 }
 
@@ -825,7 +842,10 @@ if ($runLane) {
     Write-Output ("hunt-run: '{0}' is not a lane. One of: {1}" -f $LaneName, (@($script:LANES) -join ', ')); exit 1
   }
   if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
-  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) -In $InputTokens -Out $OutputTokens -Event $Event
+  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) `
+                       -In $InputTokens -Out $OutputTokens -Event $Event `
+                       -CacheRead $CacheRead -CacheCreation $CacheCreation -Calls $Calls `
+                       -AllIn $AllModelsIn -AllOut $AllModelsOut -Models $Models
   Add-LaneLine -Path (Join-Path $RunDir 'lane-log.jsonl') -Line $line
   Write-Output ("hunt-run lane: {0}  {1} item(s){2}" -f $ln, $line.count, $(if ($Label) { "   ($Label)" } else { '' }))
   if ($line.count -eq 0) {
