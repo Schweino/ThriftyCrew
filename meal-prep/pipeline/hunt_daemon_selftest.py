@@ -416,6 +416,19 @@ def run():
       *_rung3_records_not_gates())
 
     # =================================================================================================
+    H("B: the registrar is handed its evidence (2026-08-24)")
+    # =================================================================================================
+    T("MUST FIRE  the prompt carries the near-miss ROWS off the three commodity namespaces, so the "
+      "registrar does not pay a turn to grep what the daemon already read",
+      *_registrar_gets_evidence())
+    T("MUST FIRE  ...and it is handed ROWS, never a conclusion - the block says in as many words that "
+      "it is not exhaustive, so a food priced under an unrelated NAME is still the registrar's to find",
+      *_registrar_evidence_is_not_a_verdict())
+    T("MUST FIRE  an include-pattern match is surfaced too - that is how the board absorbs a food "
+      "under another id, and it is the thing the gate exists to catch",
+      *_registrar_evidence_shows_include())
+
+    # =================================================================================================
     H("The band is a RUN PARAMETER (2026-08-24), and the pop obeys it")
     # =================================================================================================
     T("MUST FIRE  the pop offers the decider ONLY candidates that meet THIS RUN's band - `available` "
@@ -2955,3 +2968,56 @@ def _band_zero_floor_is_no_floor():
                 "proteinMin=%s verdict=%s" % (band["proteinMin"], json.dumps(v)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# B (2026-08-24). THE REGISTRAR IS HANDED ITS EVIDENCE.
+#
+# 8 registrar dispatches on the 6b run cost ~797,000 tokens at 7-16 tool calls each, dominated by Grep
+# 4-9 times over the three commodity namespaces - which the orchestrator had ALREADY read to derive the
+# proposal list, and then thrown away. These fixtures pin both halves: the rows are handed over, AND the
+# block stops at rows rather than at an answer.
+# =====================================================================================================
+
+_REG_ROWS = [
+    {"id": "chicken-thighs", "label": "Chicken Thighs / Drumsticks", "ns": "commodities",
+     "include": "['chicken\s+(thigh|drumstick|leg)']"},
+    {"id": "brown-rice", "label": "Brown Rice", "ns": "commodities", "include": "['brown\s+rice']"},
+    {"id": "block-cheese", "label": "Block Cheese", "ns": "commodities", "include": "['block\s+cheese']"},
+    {"id": "yellow-onion", "label": "Yellow Onion", "ns": "commodities", "include": ""},
+]
+
+
+def _reg_daemon():
+    d = daemon(run_dir="R")
+    d._commodity_rows = list(_REG_ROWS)
+    return d
+
+
+def _registrar_gets_evidence():
+    d = _reg_daemon()
+    p = d.registrar_prompt("some-dish", "chicken drumsticks", "chicken-drumsticks", "the mapper's case")
+    return ("chicken-thighs" in p and "ALREADY READ FOR YOU" in p,
+            "near-miss row absent from the prompt: %s" % p[-400:])
+
+
+def _registrar_evidence_is_not_a_verdict():
+    d = _reg_daemon()
+    p = d.registrar_prompt("some-dish", "chicken drumsticks", "chicken-drumsticks", "case")
+    return ("NOT exhaustive" in p and "approve" in p and "alias" in p,
+            "the block reads as a verdict rather than as leads: %s" % p[-300:])
+
+
+def _registrar_evidence_shows_include():
+    d = _reg_daemon()
+    # `goat cheese` shares NO id/label word with block-cheese... it shares "cheese", so use a term whose
+    # ONLY route to a row is the include pattern: nothing here is labelled "drumstick" except via include.
+    rows = [r for r in _REG_ROWS if r["id"] != "chicken-thighs"]
+    rows.append({"id": "chicken-thighs", "label": "Poultry Dark Meat", "ns": "commodities",
+                 "include": "['chicken\s+(thigh|drumstick|leg)']"})
+    d = daemon(run_dir="R")
+    d._commodity_rows = rows
+    near = d.commodity_near_misses("drumstick", "drumsticks")
+    return (any(r["id"] == "chicken-thighs" for r in near),
+            "an id reachable ONLY through its include pattern was not surfaced: %s"
+            % json.dumps([r["id"] for r in near]))

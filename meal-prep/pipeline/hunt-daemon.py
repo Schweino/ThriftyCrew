@@ -1092,6 +1092,109 @@ class Daemon(object):
                         "reason": str(payload.get("reason") or "")})
         return out
 
+    # -----------------------------------------------------------------------------------------------
+    # B (2026-08-24, off the 6b run). THE REGISTRAR IS HANDED ITS EVIDENCE, exactly as the decider is
+    # handed its dossier - and for exactly the reason the decider is the cheapest agent in the estate.
+    #
+    # MEASURED: 8 registrar dispatches on the 6b run cost ~797,000 tokens, 58k-227k each, at 7-16 tool
+    # calls each, dominated by Grep 4-9 times over the three commodity namespaces. Meanwhile the
+    # ORCHESTRATOR has already read all three - that is how the new-id proposal list is derived and how
+    # the gate became unskippable-by-omission in 6a. It read the files, threw the read away, and paid a
+    # Fable session to grep them again. The mapper's own definition already states the principle this
+    # violated: "THE TABLE IS THE ESTATE, ALREADY READ FOR YOU... Each re-read costs a turn, and a turn
+    # re-reads the entire accumulated context with it."
+    #
+    # ROWS AND NEAR-MISSES, NEVER A CONCLUSION. This hands over candidate rows and says they are a
+    # starting point; the registrar keeps its tools, still rules, and is told in as many words that the
+    # list is not exhaustive. Giving a gate MORE evidence is the opposite of weakening it - handing it
+    # an ANSWER would be - so this deliberately stops at the rows.
+    # -----------------------------------------------------------------------------------------------
+
+    COMMODITY_FILES = (("grocery/commodities.json", "commodities"),
+                       ("grocery/recipe-commodities.json", "recipe-commodities"),
+                       ("grocery/out/recipe-board-everyday.json", "recipe-board-everyday"))
+
+    def commodity_rows(self):
+        """Every id across the three namespaces, with its label and where it lives. Cached per run -
+        these files do not change under a hunt, and re-reading 816 rows per registrar call is the very
+        waste this exists to remove."""
+        if getattr(self, "_commodity_rows", None) is not None:
+            return self._commodity_rows
+        out = []
+        for rel, ns in self.COMMODITY_FILES:
+            path = os.path.join(REPO, rel.replace("/", os.sep))
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+            except Exception:                                     # noqa: BLE001
+                continue
+            rows = doc
+            if isinstance(doc, dict):
+                for k in ("commodities", "comparison", "items", "rows"):
+                    if isinstance(doc.get(k), list):
+                        rows = doc[k]
+                        break
+            for r in (rows if isinstance(rows, list) else []):
+                if not isinstance(r, dict):
+                    continue
+                rid = str(r.get("id") or r.get("bid") or r.get("commodity_id") or "").strip()
+                if not rid:
+                    continue
+                out.append({"id": rid,
+                            "label": str(r.get("label") or r.get("commodity") or "").strip(),
+                            "ns": ns,
+                            "include": str(r.get("include") or "")})
+        self._commodity_rows = out
+        return out
+
+    @staticmethod
+    def _id_tokens(text):
+        return set(t for t in re.split(r"[^a-z0-9]+", str(text or "").lower()) if len(t) > 2)
+
+    def commodity_near_misses(self, term, bid, cap=12):
+        """Rows whose id, label or include-pattern shares a food word with the proposal, ranked by
+        overlap. A LEAD LIST, not a verdict."""
+        want = self._id_tokens(term) | self._id_tokens(bid)
+        if not want:
+            return []
+        scored = []
+        for r in self.commodity_rows():
+            have = self._id_tokens(r["id"]) | self._id_tokens(r["label"])
+            n = len(want & have)
+            if not n:
+                # An include pattern that literally names the term still counts: it is how the board
+                # silently absorbs a food under another id (chicken-thighs matching 'drumstick'), and
+                # that is precisely what the registrar is here to catch.
+                inc = str(r.get("include") or "").lower()
+                if inc and any(w in inc for w in want):
+                    n = 1
+            if n:
+                scored.append((n, r))
+        scored.sort(key=lambda x: (-x[0], x[1]["id"]))
+        return [r for _n, r in scored[:cap]]
+
+    NOT_EXHAUSTIVE = (
+        "This list is mechanical and NOT exhaustive: it matches on shared words, so a food priced under\n"
+        "an unrelated NAME will not appear here, and an include-pattern match is a LEAD rather than a\n"
+        "ruling - the board's `chicken-thighs` include pattern matches 'drumstick' and prices a different\n"
+        "cut. Look further whenever the food could plausibly be carried under another word.\n")
+
+    def registrar_evidence_block(self, term, bid):
+        near = self.commodity_near_misses(term, bid)
+        head = ("\nWHAT THE THREE COMMODITY NAMESPACES ALREADY CARRY - ALREADY READ FOR YOU.\n"
+                "%d ids across %s. Below are the rows whose id, label or include-pattern shares a food\n"
+                "word with this proposal, ranked by overlap. Re-reading these files costs you a turn, and\n"
+                "a turn re-reads your whole context, so start here.\n"
+                % (len(self.commodity_rows()), ", ".join(ns for _f, ns in self.COMMODITY_FILES)))
+        if not near:
+            return head + ("    (nothing in any namespace shares a food word with this term - which is\n"
+                           "     EVIDENCE FOR a new id, not proof of one)\n") + self.NOT_EXHAUSTIVE
+        lines = "".join("    %-34s %-30s [%s]%s\n"
+                        % (r["id"][:34], (r["label"] or "(no label)")[:30], r["ns"],
+                           ("  include=" + r["include"][:44]) if r["include"] else "")
+                        for r in near)
+        return head + lines + self.NOT_EXHAUSTIVE
+
     def registrar_prompt(self, slug, term, bid, evidence, row=None):
         near = ""
         if row:
@@ -1101,7 +1204,7 @@ class Daemon(object):
             "Rule on ONE proposed new grocery commodity id, for the recipe `%s`.\n\n"
             "  ingredient line : %s\n"
             "  proposed id     : %s\n"
-            "  the mapper's case: %s\n%s\n"
+            "  the mapper's case: %s\n%s%s\n"
             "This is the gate before the id is born. Prove the food is not already priced under\n"
             "another name across all three id namespaces and the live feed, rule variant-vs-duplicate\n"
             "on the evidence, and answer:\n"
@@ -1113,7 +1216,7 @@ class Daemon(object):
             "the recipe STUCK carrying your sentence - which is the right outcome when the honest\n"
             "answer is no, and an expensive one when it is guesswork.\n"
             % (slug, term or "(the mapper did not name the term)", bid,
-               evidence or "(none given)", near))
+               evidence or "(none given)", near, self.registrar_evidence_block(term, bid)))
 
     async def assemble_mapped(self, slug, res, tables=None):
         """A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
