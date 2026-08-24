@@ -449,6 +449,11 @@ def run():
       *_band_inverted_refused())
     T("CLEAN TWIN -ProteinMin 0 means NO FLOOR, said out loud, and reads the same as an absent one",
       *_band_zero_floor_is_no_floor())
+    T("MUST FIRE  a band that constrains NOTHING admits an UNVERIFIED candidate - the verification "
+      "requirement is about trusting a number we rely on, and a no-limit run relies on none",
+      *_no_band_admits_unverified())
+    T("CLEAN TWIN ...and the moment ANY limit is stated, verification is required again",
+      *_any_limit_restores_verification())
 
     # =================================================================================================
     H("Lane-log completeness and the token stamp (section 4.5)")
@@ -3322,3 +3327,25 @@ def _band_pair_has_both_sides():
     need_ours = all(r["ours"].get(k) is not None for k in ("cal", "carbs", "protein_g", "servings"))
     return (need_src and need_ours and r["source"]["servings"] == 4 and r["ours"]["servings"] == 14,
             "source=%s ours=%s" % (json.dumps(r["source"]), json.dumps(r["ours"])))
+
+
+def _no_band_admits_unverified():
+    """A no-band run must see the WHOLE pool. Measured 2026-08-24: 280 of 720 available candidates are
+    unverified because their page carries no JSON-LD block at all, and those are precisely the ones a
+    local re-extraction drill exists to exercise. Demanding verification when nothing is being checked
+    would hide them behind a technicality."""
+    wide = {"calMin": 0, "calMax": 100000, "carbMax": 100000, "proteinMin": None}
+    got = _popped({"unverified-no-jsonld": (None, None, None, False),
+                   "unverified-with-macros": (520.0, 20.0, 60.0, False),
+                   "verified": (520.0, 20.0, 60.0, True)}, band=wide)
+    return (sorted(got) == ["unverified-no-jsonld", "unverified-with-macros", "verified"],
+            "a no-limit band still filtered the pool: %s" % json.dumps(got))
+
+
+def _any_limit_restores_verification():
+    # one real limit - a protein floor - and the unverified rows must wait again
+    band = {"calMin": 0, "calMax": 100000, "carbMax": 100000, "proteinMin": 50}
+    got = _popped({"unverified-no-jsonld": (None, None, None, False),
+                   "unverified-with-macros": (520.0, 20.0, 60.0, False),
+                   "verified": (520.0, 20.0, 60.0, True)}, band=band)
+    return (got == ["verified"], "expected only the verified row, got %s" % json.dumps(got))

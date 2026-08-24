@@ -568,12 +568,32 @@ class Daemon(object):
         finally:
             self.ch["decide"].close()
 
+    # "Beyond any real dish" thresholds. A band stated wider than these cannot reject anything, so it
+    # is not a constraint - it is a run saying out loud that it has no limit. Named rather than
+    # inlined so the two places that ask "is this band actually limiting anything" cannot drift.
+    NO_CAL_LIMIT = 10000        # cal per serving
+    NO_CARB_LIMIT = 1000        # g per serving
+
+    def band_constrains_anything(self):
+        return (self.band.get("calMin", 0) > 0
+                or self.band.get("calMax", 0) < self.NO_CAL_LIMIT
+                or self.band.get("carbMax", 0) < self.NO_CARB_LIMIT
+                or bool(self.band.get("proteinMin")))
+
     def candidate_in_band(self, cand):
         """Does THIS candidate's harvested nutrition meet THIS RUN's band? Selection, not retirement:
         a number that is missing or unverified cannot confirm the band, so the candidate waits. The
         pool records `verified` False whenever any macro had to be inferred, and an inferred number is
         not evidence that a dish clears a 50 g protein floor."""
         b = cand.get("band") or {}
+        # A BAND THAT CONSTRAINS NOTHING VERIFIES NOTHING (2026-08-24). The `verified` requirement
+        # exists because an inferred number is not evidence that a dish clears a 50 g floor - it is
+        # about TRUSTING a number we are about to rely on. A run stated with no effective limits relies
+        # on no number, so demanding verification would exclude 280 candidates on a technicality while
+        # nothing was being checked. Those 280 are exactly the pages with no JSON-LD block at all, so
+        # this is the difference between a no-band run seeing the whole pool and seeing half of it.
+        if not self.band_constrains_anything():
+            return True
         if not b.get("verified"):
             return False
         cal, carbs, prot = b.get("cal"), b.get("carbs"), b.get("protein_g")
@@ -2933,6 +2953,11 @@ def main(argv=None):
     ap.add_argument("--costed", default="",
                     help="a scratch db\\costed.json, for a drill that runs the REAL cost pass. Empty "
                          "means the live one.")
+    ap.add_argument("--pool", default="",
+                    help="a scratch candidate pool, for a drill. Empty means the live "
+                         "db\candidate-pool.json. Same seam as --ledger / --specs / --costed: it "
+                         "exists so a drill can aim the run at a chosen corpus without editing the "
+                         "live pool, which harvest.py is the sole writer of.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--status", action="store_true")
@@ -2957,7 +2982,7 @@ def main(argv=None):
 
     d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions, band,
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
-               specs_dir=a.specs, costed_path=a.costed)
+               specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None))
 
     async def go():
         ok, err = await d.seed()
