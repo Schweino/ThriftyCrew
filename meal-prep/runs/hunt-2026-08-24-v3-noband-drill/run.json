@@ -1,0 +1,18 @@
+{
+    "run":  "hunt-2026-08-24-v3-noband-drill",
+    "created":  "2026-08-24T15:30:53",
+    "conditions":  "NO BAND - drill. Any calories, any carbs, any protein. 3 recipes end to end to exercise the LOCAL extraction ladder (rung 2 full-page transcription + rung 1 line-splitting).",
+    "stop":  "3 accepted",
+    "wave_size":  3,
+    "auto_publish":  true,
+    "band":  {
+                 "calMin":  0,
+                 "calMax":  100000,
+                 "carbMax":  100000,
+                 "proteinMin":  null
+             },
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-22T18:40:56",
+    "board_file":  "comparison-2026-08-24.json",
+    "board_written":  "2026-08-24T08:11:18"
+}
