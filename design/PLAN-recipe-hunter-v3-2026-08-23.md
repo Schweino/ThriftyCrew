@@ -1170,7 +1170,7 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     + the line + 256 out, ~750/slot total - still under half of even an 8-slot 2,048-token split);
     rung 2 requires `local_extract.RUNG2_MIN_SLOT_CTX` (~11,465), which only the 1-slot
     shape provides. When the live shape cannot fit rung 2, escalation files ACCUMULATE and the
-    daemon's `-Status` output names the pending narrow pass - the operator then either restarts the
+    daemon's own status surface (its analogue of hunt-run's -Status) names the pending narrow pass - the operator then either restarts the
     server narrow and lets the daemon drain rung 2 via the `--from-report` shape, or rules the batch
     straight to rung 3. Rung-1-failed pages ARE legitimate rung-3 work (rung 3 exists for pages the
     local pass failed on), so skipping an unavailable rung 2 by OPERATOR RULING is within doctrine;
@@ -1183,13 +1183,19 @@ Each ships with its must-fire fixture and clean twin in the same commit, per the
     coverage (the `coverage` field in the escalation's `failures[]`) is >=
     `RUNG1_RETRY_MIN_COVERAGE` (= 0.85) - near-misses only; a qty/unit substring failure or a
     low-coverage mangle goes straight down the ladder. ~10 GPU-seconds against a ~50 s rung-2
-    attempt or a Claude dispatch. Constants live in hunt_lib as daemon config, with a fixture
-    proving a second identical failure still escalates - one retry, never a loop.
+    attempt or a Claude dispatch. D9 ADDS these constants to hunt_lib as daemon config (they do
+    not exist yet - the failures[] coverage field they read does), with a fixture proving a
+    second identical failure still escalates - one retry, never a loop.
   - **The rung-3 dispatch and its landing.** The `<slug>.escalation.json` file IS the dispatch
     payload (S3: the failure reason and unverified lines travel with the page; the extractor is
     told not to re-run the local script). The daemon writes the extractor's returned JSON through
     the SAME section 4.5 contract, `extracted_by: "claude"`, computes the `verification` block
-    mechanically with `local_extract.verify()` against the CACHED page - RECORDING, not gating:
+    mechanically with `local_extract.verify()` against
+    `local_extract.page_text_from_html(<cached HTML>)` - NOT against the raw HTML: an ingredient
+    line interleaved with inline tags ("1 lb <strong>chicken</strong>") never substring-matches
+    raw markup, so skipping the strip would smear honest Claude extractions with a false-low
+    verified_rate. (Rung 2 itself feeds verify() through the same function.) RECORDING, not
+    gating:
     rung 3 is the last rung, so a low verified_rate there is surfaced to source-QA as a concern
     rather than escalated to nowhere - and deletes the escalation file on settle (the one-way
     cleanup rule; leaving it would double-dispatch a settled page).
