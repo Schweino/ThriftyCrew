@@ -50,6 +50,18 @@ conjure the server. The dispatch prompt says so explicitly; believe it. Record H
 as `blocked` with the evidence the prompt gives you, do not check `list_connected_browsers`, and spend
 the session on the four stores the pre-pass actually reached.
 
+WITH ONE EXCEPTION, and a dispatched run found it before this file did (2026-08-24): the estate's OWN
+CAPTURES are a road into those three stores that needs no browser. `grocery\price-ingredient.ps1
+-Name '<term>'` reads today's captures across all seven stores, and a capture row is a product the
+store really put on its own shelf listing - checkable and re-runnable. If it names a product at
+Hy-Vee, Walmart or Aldi that IS this ingredient, record `carried` with the product, the price, and the
+command you ran as the evidence (the dispatch prompt shows the exact citation form). Adjudicate a
+capture row as hard as any other candidate. BUT A CAPTURE MISS IS NEVER `not-carried`: the captures
+are a weekly publish sweep, not a shelf audit, so no row means `blocked` and the term stays PENDING
+for an attended run. This is the honest middle between "blocked because headless" and the invented
+store visits the paragraph below exists to prevent - the difference is that a capture citation can be
+re-run by anyone, and a described page cannot.
+
 **AND DO NOT DESCRIBE A PAGE YOU DID NOT LOAD.** On 2026-08-24 a dispatched run wrote, into the live
 queue, `Walmart not-carried "walmart.com in Chrome, store verified 'Omaha L St Supercenter', 12812 S
 38TH St"` and two more like it. None of those visits happened, and that street address is not the

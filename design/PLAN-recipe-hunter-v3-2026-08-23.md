@@ -2881,6 +2881,13 @@ MISS is NEVER `not-carried`, because the captures are a weekly publish sweep and
 This materially softens the phase-6 pickup's biggest structural worry - that under the daemon only the
 FOUR pre-pass stores can ever answer and every other term parks forever.
 
+*Aftercare, same day:* the 6b criteria's own reader was then audited and found blind -
+`hunt-run.ps1 -LaneSummary` aggregated tokens from START lines and skipped END lines whole, so it
+reported zero tokens over any daemon run (the stamps live on the end lines). Corrected, extended with
+`turns`/`re-asks`/cache-split/`[+N delegated out]` columns, fixtured with both writer conventions and
+neuter-proven (reverting the end-line merge kills 3 must-fires); and the pricer's agent definition
+gained the capture road its dispatch prompt already carried, so the two entry points cannot disagree.
+
 *The eight defects the drill found, none of which a fixture could have.* All fixed, fixtured and
 committed the same day. 1. The grams basis: the mapper returned SOURCE grams in a field specified as
 TARGET on ten of ten lines, the ratio exactly each recipe's own scale factor, and split the two bases
@@ -2905,12 +2912,58 @@ llama-server IS needed (fresh recipes enter at the extraction ladder) and Brad h
 section 4.4. 6a's fix batch has already landed, so this measures the improved pipeline - which was
 the whole reason phase 6 was split in two.
 
+*THE RUNBOOK (added 2026-08-24 aftercare cold read, so the 6b builder starts from commands rather
+than from guesses). Every path below exists today; nothing is to be invented.*
+
+- **Before anything:** `git pull`. Ask Brad for the weekly usage % (the 80% stop rule) and for the
+  run's conditions and stop condition. Other sessions write `grocery\*` and `graph\*` - normal
+  noise, never chase it, never `git add -A`.
+- **The GPU, per sections 4.3/4.4 and not re-derived:** Brad hand-starts llama-server. The
+  extraction sweep is TWO passes on TWO server shapes - rung 1 fanned at the default `-Slots 4`,
+  rung 2 narrow at `-Slots 1` (same `-c 16384`; the 1-slot shape measured LESS VRAM, 14,688 MiB) -
+  and `extract_sweep.py --from-report` exists precisely so pass 2 targets only what pass 1
+  escalated. Brad restarts the server between shapes; nothing in the daemon ever starts or stops it
+  (a fixture enforces this). The run must be off the card before the 07:00 ad pull and 08:00
+  capture, and the nightly chain owns 21:30-06:30.
+- **Mint the run dir with `hunt-run.ps1 -Init -RunDir <dir> -Conditions '<Brad's>' -Stop
+  '<Brad's>' -WaveSize 10`,** then drive it with
+  `C:\Codex\Python312\python.exe meal-prep\pipeline\hunt-daemon.py --run-dir <dir> --run <id>
+  --wave-size 10 [--target N]`. The flag decisions, spelled out: a PROVING run uses the LIVE
+  ledger, spec store and costed.json, which means LEAVING `--ledger`, `--specs` and `--costed`
+  EMPTY (the scratch seams exist for drills; a scratch spec store means an UNCOSTED spec).
+  `--publish` is Brad's call at run start: without it the wave lane runs `wave-publish -DryRun`,
+  which still exercises the auditor and is a legitimate first wave; with it, publishes are real.
+  `--lanes` defaults to all seven - do not trim it for a proving run.
+- **The measurements come from ONE reader:** `hunt-run.ps1 -LaneSummary -RunDir <dir> [-Json]`,
+  which since 2026-08-24 reads the daemon's end-line stamps (calls/invocations, `turns`, the cache
+  split, `re-asks`, and the `[+N delegated out]` note from the subagent-inclusive totals). Do NOT
+  hand-roll a lane-log reader - the previous one silently reported zero tokens on every daemon
+  lane, and that class of quiet wrongness is exactly what the fixture now pins. Published counts
+  and per-recipe states come from `hunt-run.ps1 -Status -RunDir <dir>`; the two re-ask and
+  delegation FINDINGS are printed in the daemon's own status report and match the strings quoted
+  in criteria 4 and 5 below.
+- **THE C3 TRAP, pinned before somebody builds it wrong:** the addendum's C3 ("seed FULL batches")
+  is a MEASUREMENT note, not a build item. `Chan.take_batch` already sweeps up to MAP_BATCH /
+  PRICE_BATCH greedily, and its docstring records why it must NEVER wait to fill a quota: the
+  wait-for-full-batch policy was measured (B3) deadlocking against the WIP limit and adding 8-10
+  minutes to first flow. If 6b's batches run small, the lever is seeding order and backlog depth,
+  never a fill-wait in the channel.
+- **The corpus on disk, so nobody re-derives it:** the ORIGINAL
+  `meal-prep\runs\hunt-2026-08-23-v3-phase1-mini` still holds all four phase-2 recipes at
+  `extracted`, untouched - a future drill corpus, NOT part of 6b's ~20. The `C:\tmp\p5`,
+  `C:\tmp\g6a` and `C:\tmp\g6b` copies are all spent (g6a's saved rulings payloads predate the
+  `grams_source` contract and must not be re-assembled). 6b sources its recipes fresh through
+  harvest/decide under Brad's conditions.
+
 *The five numbers, and every one is read off C1's lane stamps rather than reconstructed from
 transcripts. That is what C1 bought and 6b is the first run to spend it.*
 
 1. **Claude invocations per PUBLISHED recipe: <= 5**, against the 27 front-end + ~10 downstream
-   measured in v2. Row 6 asks for >=5x fewer than 27; 5 is that, and it is countable directly - every
-   dispatch writes a start and an end line, and `calls` on the end line is its turn count.
+   measured in v2. Row 6 asks for >=5x fewer than 27; 5 is that. Count INVOCATIONS from
+   -LaneSummary's `calls` column (one start/end pair = one invocation; the fixture pins this) and
+   keep TURNS separate - they are its `turns` column, summed from the end lines' own `calls` field.
+   An invocation that re-asked is one invocation with two turns, and conflating the two flattered
+   the number in v2's accounting.
 2. **Billed tokens per published recipe: <= 150k median**, section 7's target, measured as
    lane-tokens.ps1 measures it (uncached input + cache read + cache write, plus output). Report the
    MEDIAN and the spread, not the mean: one pathological recipe should be visible as a tail, not
@@ -2922,11 +2975,20 @@ transcripts. That is what C1 bought and 6b is the first run to spend it.*
 4. **Re-ask rate: <= 10% of dispatches, and every one of them named.** 6a's own gate drill re-asked
    on its single mapper batch - a whole second session, at the price of the first - and the violation
    ("payload is missing required field `results`") existed only in a headless transcript nobody keeps.
-   The daemon now records it as a finding, so this is countable for the first time. A run whose
-   mapper re-asks every time has not halved its cost; it has doubled a smaller one.
-5. **Zero unstamped delegation.** `all_out` must equal `out` on every dispatch, or the difference must
-   be an explained finding. The phase-5 mapper's 21-turn Opus subagent cost $1.64 that appeared in no
-   ledger; A3 removed the tool and C1 made the gap visible, and 6b is where that stays true under load.
+   The daemon now records it as a finding, so this is countable for the first time - TWO
+   instruments, and they must agree: -LaneSummary's `re-asks` column (end-line `detail` beginning
+   `re-asked; `) and the daemon findings matching `RE-ASKED and then succeeded`, which quote the
+   violations verbatim. A run whose mapper re-asks every time has not halved its cost; it has
+   doubled a smaller one. 6a's two re-asks were both SCHEMA bugs on our side (a missing top-level
+   `results` wrapper once, over-constrained report fields once, both fixed) - so a 6b re-ask is
+   evidence about the contract before it is evidence about the model.
+5. **Zero unstamped delegation.** Every dispatch where `all_out` exceeds `out` by more than
+   max(500 tokens, 5%) must carry the daemon's `output tokens MORE than its own session` finding and
+   an explanation - that threshold is the code's own (hunt-daemon lane()), because the CLI bills an
+   auxiliary haiku call of ~18-37 output tokens alongside EVERY headless dispatch and flagging those
+   is noise that buries the real thing. -LaneSummary shows the per-lane delta as `[+N delegated
+   out]`. The phase-5 mapper's 21-turn Opus subagent cost $1.64 that appeared in no ledger; A3
+   removed the tool and C1 made the gap visible, and 6b is where that stays true under load.
 
 *The four gates that may not move, restated because a proving run under time pressure is exactly when
 one gets softened.*
@@ -2940,9 +3002,13 @@ one gets softened.*
   retired two good dishes on those numbers. It failing closed is correct; it failing closed on a
   FABRICATED number is D8's own named worse-than-no-gate case. So every `rejected-macros` in 6b gets
   looked at rather than counted.
-- **Every honest PENDING stays PENDING.** Under the daemon only the four pre-pass stores can answer,
-  so terms will park. That is a passing outcome (phase 5's gate pinned it) and rounding one up is the
-  one thing that cannot be undone downstream.
+- **Every honest PENDING stays PENDING.** Under the daemon the four pre-pass stores answer live, and
+  since the 6a gate the pricer may also rule Hy-Vee/Walmart/Aldi from the estate's OWN CAPTURES via
+  price-ingredient.ps1 - a capture HIT supports `carried` with the command cited, and a capture MISS
+  is NEVER `not-carried` (a weekly publish sweep is not a shelf audit). Terms will still park on
+  genuine gaps. That is a passing outcome (phase 5's gate pinned it) and rounding one up is the one
+  thing that cannot be undone downstream. Spot-check at least one capture-road `carried` by
+  re-running the cited command, exactly as the 6a gate did.
 - **Every new defect class frozen as a fixture SAME-DAY**, per row 6, with a neuter proof - the estate
   rule that a fixture which cannot be made to fail proves nothing.
 

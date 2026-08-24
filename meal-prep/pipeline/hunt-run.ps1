@@ -669,6 +669,45 @@ if ($runSelfTest) {
     T 'a missing lane log reads as empty, not as an error' ((@(Read-LaneLog (Join-Path $env:TEMP 'no-such-lane-log.jsonl'))).Count -eq 0) 'threw'
   } finally { if (Test-Path $lt2) { Remove-Item $lt2 -Force -ErrorAction SilentlyContinue } }
 
+  # ---- FIXTURE 7b. THE LANE SUMMARY READS BOTH WRITER CONVENTIONS (CORRECTED 2026-08-24). --------
+  # The daemon writes start/end PAIRS with every token figure on the END line; the v2 orchestrator
+  # wrote ONE event-less line per invocation with the tokens on it. The old aggregation skipped end
+  # lines whole, so a summary over any daemon run reported zero tokens on every lane - measured on a
+  # log holding a fully-stamped 245k-token dispatch ('lane-summary lanes=0 tokens='). Three lanes,
+  # both conventions, and the C1 fields, because the phase-6b criteria are read off exactly this.
+  $lt3 = Join-Path $env:TEMP ('huntrun-lsum-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    New-Item -ItemType Directory -Path $lt3 -Force | Out-Null
+    $lg3 = Join-Path $lt3 'lane-log.jsonl'
+    # convention 1: a daemon pair - tokens, turns, cache split and delegation all on the END line
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map:2x' -ItemList @('a','b') -By 'mapper' -Detail '' -At '2026-08-24T10:00:00' -Event 'start')
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'map' -Label 'map:2x' -ItemList @('a','b') -By 'mapper' -Detail 're-asked; ok' -At '2026-08-24T10:15:00' -Event 'end' -In 245806 -Out 76728 -CacheRead 159299 -CacheCreation 86495 -Calls 2 -AllIn 258197 -AllOut 76758)
+    # convention 2: a v2-era single line, tokens on its only row
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'qa' -Label 'qa:x' -ItemList @('x') -By 'qa' -Detail '' -At '2026-08-24T10:16:00' -In 1000 -Out 200)
+    # and a local-ladder zero-token line, which is work done, not work unmeasured
+    Add-LaneLine -Path $lg3 -Line (New-LaneLine -LaneName 'extract' -Label 'local rung 1' -ItemList @('y') -By 'local' -Detail '' -At '2026-08-24T10:17:00' -In 0 -Out 0)
+    $sumOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -LaneSummary -RunDir $lt3 -Json 2>&1
+    $sum = $null
+    try { $sum = (@($sumOut | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
+    $mapRow = $null; $qaRow = $null
+    if ($sum) { $mapRow = @($sum.lanes | Where-Object { $_.lane -eq 'map' })[0]; $qaRow = @($sum.lanes | Where-Object { $_.lane -eq 'qa' })[0] }
+    T 'MUST FIRE  the summary reads the DAEMON pair convention - the end line''s tokens land on the lane, not zero' `
+      ($null -ne $mapRow -and [long]$mapRow.in -eq 245806 -and [long]$mapRow.out -eq 76728) `
+      ($(if ($mapRow) { 'in=' + $mapRow.in + ' out=' + $mapRow.out } else { ($sumOut -join ' ')[0..160] -join '' }))
+    T 'MUST FIRE  ...and the C1 fields ride with it: turns, the cache split, the subagent-inclusive totals and the re-ask count' `
+      ($null -ne $mapRow -and [long]$mapRow.turns -eq 2 -and [long]$mapRow.cache_read -eq 159299 -and
+       [long]$mapRow.cache_creation -eq 86495 -and [long]$mapRow.all_out -eq 76758 -and [long]$mapRow.reasks -eq 1) `
+      ($(if ($mapRow) { 'turns=' + $mapRow.turns + ' cr=' + $mapRow.cache_read + ' reasks=' + $mapRow.reasks } else { 'no map row' }))
+    T 'MUST FIRE  a start/end pair is ONE invocation, never two' `
+      ($null -ne $mapRow -and [long]$mapRow.calls -eq 1) ($(if ($mapRow) { [string]$mapRow.calls } else { 'no row' }))
+    T 'CLEAN TWIN the v2 single-line convention still reads exactly as before' `
+      ($null -ne $qaRow -and [long]$qaRow.calls -eq 1 -and [long]$qaRow.in -eq 1000 -and [long]$qaRow.out -eq 200) `
+      ($(if ($qaRow) { 'in=' + $qaRow.in } else { 'no qa row' }))
+    T 'CLEAN TWIN the run total sums BOTH conventions' `
+      ($null -ne $sum -and [long]$sum.total_tokens -eq (245806 + 76728 + 1000 + 200)) `
+      ($(if ($sum) { [string]$sum.total_tokens } else { 'no json' }))
+  } finally { Remove-Item $lt3 -Recurse -Force -ErrorAction SilentlyContinue }
+
   # ---- FIXTURE 8. THE COMPOSITE TERM. Founding bug 2026-08-16, run hunt-2026-08-15-lowcarb-100:
   # `-Terms 'green bell pepper,shaved beef steak'` binds to ONE element, went into the state file as one
   # term row, and could never match an ingredient-queue entry - so -Derive scored it PENDING on every pass
@@ -792,16 +831,46 @@ if ($runLaneSummary) {
   }
 
   $agg = @{}
+  function Get-NumField($row, [string]$name) {
+    if ($row.PSObject.Properties.Name -contains $name -and $null -ne $row.$name) { return [long]$row.$name }
+    return -1
+  }
   foreach ($r in $rows) {
     $ln = [string]$r.lane
-    # only count a call ONCE - an end line is the same invocation as its start, not a second one
     $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
-    if ($ev -eq 'end') { continue }
-    if (-not $agg.ContainsKey($ln)) { $agg[$ln] = [pscustomobject]@{ lane=$ln; calls=0; items=0; in=0; out=0; measured=0 } }
-    $a = $agg[$ln]; $a.calls++; $a.items += [int]$r.count
-    $ri = if ($r.PSObject.Properties.Name -contains 'in') { [int]$r.in } else { -1 }
-    $ro = if ($r.PSObject.Properties.Name -contains 'out') { [int]$r.out } else { -1 }
-    if ($ri -ge 0 -or $ro -ge 0) { $a.measured++; if ($ri -gt 0) { $a.in += $ri }; if ($ro -gt 0) { $a.out += $ro } }
+    if (-not $agg.ContainsKey($ln)) {
+      $agg[$ln] = [pscustomobject]@{ lane=$ln; calls=0; items=0; in=0; out=0; measured=0
+                                     turns=0; cache_read=0; cache_creation=0; all_in=0; all_out=0
+                                     reasks=0 }
+    }
+    $a = $agg[$ln]
+    # ONE INVOCATION IS COUNTED ONCE: from its start line (daemon pairs) or from its only line (the
+    # v2 orchestrator's event-less rows, and the local ladder's).
+    if ($ev -ne 'end') { $a.calls++; $a.items += [int]$r.count }
+    # BUT THE TOKENS LIVE ON THE END LINE, AND THE OLD READER SKIPPED END LINES WHOLE. CORRECTED
+    # 2026-08-24 (phase-6a aftercare, measured): the daemon stamps in/out - and since C1 the turns,
+    # the cache split and the subagent-inclusive totals - on the END line of each start/end pair,
+    # while the start line carries -1s. This block aggregated from starts and dropped ends, so a
+    # summary over any daemon run reported ZERO tokens on every lane ('lane-summary lanes=0 tokens='
+    # on a log holding a fully-stamped 245k-token dispatch). It read correctly only for the v2
+    # orchestrator's one-line-per-invocation convention, which no live writer uses any more. The
+    # duration pairing above always knew about the pairs; the token pass now does too.
+    if ($ev -ne 'start') {
+      $ri = Get-NumField $r 'in'; $ro = Get-NumField $r 'out'
+      if ($ri -ge 0 -or $ro -ge 0) {
+        $a.measured++
+        if ($ri -gt 0) { $a.in += $ri }
+        if ($ro -gt 0) { $a.out += $ro }
+      }
+      foreach ($pair in @(@('calls','turns'), @('cache_read','cache_read'),
+                          @('cache_creation','cache_creation'), @('all_in','all_in'),
+                          @('all_out','all_out'))) {
+        $v = Get-NumField $r $pair[0]
+        if ($v -gt 0) { $a.($pair[1]) += $v }
+      }
+      $det = if ($r.PSObject.Properties.Name -contains 'detail') { [string]$r.detail } else { '' }
+      if ($det -like 're-asked*') { $a.reasks++ }
+    }
   }
   $tot = ($agg.Values | Measure-Object -Property in -Sum).Sum + ($agg.Values | Measure-Object -Property out -Sum).Sum
   if ($runJson) {
@@ -809,24 +878,32 @@ if ($runLaneSummary) {
     exit 0
   }
   Write-Output ("hunt-run lane summary: {0}" -f (Split-Path $RunDir -Leaf))
-  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12} {6,7} {7,9} {8,9}" -f 'lane','calls','items','input','output','total','share','mean_sec','total_min')
+  Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12} {5,12} {6,12} {7,7} {8,7} {9,9} {10,9}" -f 'lane','calls','turns','items','input','output','total','share','re-asks','mean_sec','total_min')
   foreach ($a in ($agg.Values | Sort-Object { -($_.in + $_.out) })) {
     $lt = $a.in + $a.out
     $share = if ($tot -gt 0) { '{0:N1}%' -f (100.0 * $lt / $tot) } else { '-' }
     $note = if ($a.measured -lt $a.calls) { (' [{0}/{1} tok]' -f $a.measured, $a.calls) } else { '' }
+    # A DELEGATION NOTE, off C1's subagent-inclusive totals: all_out above out means a dispatch
+    # billed models beyond its own session, and the difference is the number that used to live in
+    # no ledger at all (the phase-5 mapper's invisible $1.64).
+    if ($a.all_out -gt $a.out) { $note += (' [+{0} delegated out]' -f ($a.all_out - $a.out)) }
     $d = @($durations[$a.lane])
     $mean = if ($d.Count) { '{0:N0}' -f (($d | Measure-Object -Average).Average) } else { '-' }
     $tmin = if ($d.Count) { '{0:N1}' -f ((($d | Measure-Object -Sum).Sum) / 60.0) } else { '-' }
-    Write-Output ("  {0,-9} {1,6} {2,7} {3,12:N0} {4,12:N0} {5,12:N0} {6,7} {7,9} {8,9}{9}" -f $a.lane,$a.calls,$a.items,$a.in,$a.out,$lt,$share,$mean,$tmin,$note)
+    Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12:N0} {5,12:N0} {6,12:N0} {7,7} {8,7} {9,9} {10,9}{11}" -f $a.lane,$a.calls,$a.turns,$a.items,$a.in,$a.out,$lt,$share,$a.reasks,$mean,$tmin,$note)
   }
   $unfinished = @($starts.Keys)
   if ($unfinished.Count -gt 0) {
     Write-Output ("  {0} invocation(s) logged a start with no end - still running, or died: {1}" -f $unfinished.Count, (($unfinished | Select-Object -First 4) -join ', '))
   }
-  Write-Output ("  {0,-9} {1,6} {2,7} {3,12} {4,12} {5,12:N0}" -f 'TOTAL',($rows.Count),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
-  $unmeasured = @($rows | Where-Object { -not ($_.PSObject.Properties.Name -contains 'in') -or [int]$_.in -lt 0 }).Count
+  Write-Output ("  {0,-9} {1,6} {2,6} {3,7} {4,12} {5,12} {6,12:N0}" -f 'TOTAL',(($agg.Values|Measure-Object -Property calls -Sum).Sum),(($agg.Values|Measure-Object -Property turns -Sum).Sum),(($agg.Values|Measure-Object -Property items -Sum).Sum),'','',$tot)
+  # start lines carry -1 BY CONVENTION (the stamp lands on the end line), so only non-start rows can
+  # be honestly called unmeasured - counting starts made every daemon run read as half-unmeasured.
+  $unmeasured = @($rows | Where-Object {
+      $e = if ($_.PSObject.Properties.Name -contains 'event') { [string]$_.event } else { '' }
+      ($e -ne 'start') -and (-not ($_.PSObject.Properties.Name -contains 'in') -or [int]$_.in -lt 0) }).Count
   if ($unmeasured -gt 0) {
-    Write-Output ("  NOTE {0} of {1} invocations carry no token figures - treat every number above as a LOWER BOUND." -f $unmeasured, $rows.Count)
+    Write-Output ("  NOTE {0} row(s) carry no token figures - treat every number above as a LOWER BOUND." -f $unmeasured)
   }
   Write-GuardComplete -Name 'hunt-run' -Summary ("lane-summary lanes={0} tokens={1}" -f $agg.Count, $tot)
   exit 0
