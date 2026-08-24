@@ -53,9 +53,18 @@ import harvest                                                   # noqa: E402
 import hunt_dispatch                                             # noqa: E402
 import hunt_lib                                                  # noqa: E402
 import local_extract                                             # noqa: E402
+import price_evidence                                            # noqa: E402
 
 HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
 INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
+PROBE_INGREDIENT_PS = os.path.join(REPO, "grocery", "probe-ingredient.ps1")
+PULL_BROWSER_STORES_PY = os.path.join(REPO, "grocery", "pull-browser-stores.py")
+# 25 s/request x ladder rungs x 2 stores x up to 10 terms. One call for the whole batch.
+PROBE_TIMEOUT = 900
+# The driver's OWN --timeout-min default. Pacing dominates a browser sweep and that is the price of
+# not tripping a wall; a subprocess timeout under it would kill a healthy lane mid-sweep.
+LOOKUP_TIMEOUT_MIN = 40
+LOOKUP_TIMEOUT = LOOKUP_TIMEOUT_MIN * 60 + 300
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
 BUILD_SKELETON_PS = os.path.join(HERE, "build-intake-skeleton.ps1")
 WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
@@ -193,7 +202,7 @@ class Daemon(object):
     def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
-                 costed_path=""):
+                 costed_path="", pyrun=None):
         self.run_dir = run_dir
         self.run_id = run_id
         self.conditions = conditions
@@ -231,6 +240,10 @@ class Daemon(object):
         # INJECTED, so every fixture below runs for zero tokens and zero shell.
         self._dispatch = dispatcher or hunt_dispatch.dispatch
         self._ps = ps or hunt_lib.ps_invoke
+        # And one for PYTHON surfaces. pull-browser-stores.py is Python, so it goes through
+        # sys.executable, never through ps_invoke - ps_invoke is for PowerShell and its whole reason
+        # for existing (array marshalling through -Command) does not apply and would not survive.
+        self._py = pyrun or hunt_lib.py_invoke
 
         self.breaker = hunt_lib.make_breaker()
         self.retry_counts = {}
@@ -276,6 +289,13 @@ class Daemon(object):
         both broken shapes are frozen as must-fire fixtures in decide_apply's suite."""
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: self._ps(script, args, timeout))
+
+    async def py(self, script, args, timeout=600):
+        """EVERY Python surface goes through hunt_lib.py_invoke, for the same one-road reason `ps`
+        exists - and never through ps_invoke, which would try to marshal a Python script as a
+        PowerShell command line."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, lambda: self._py(script, args, timeout))
 
     async def lane(self, lane_name, label, items, by, event, tokens_in=-1, tokens_out=-1,
                    detail=""):
@@ -1127,11 +1147,16 @@ class Daemon(object):
                 n += 1
                 self.log("price lane [singleton] invocation %d: %d term(s) across %d recipe(s)"
                          % (n, len(terms), len(self.pricing_slugs)))
+                # THE PRE-PASS RUNS HERE, BETWEEN THE SLICE AND THE DISPATCH (D10). It gathers; it
+                # never rules. Whatever it could not reach is UNUSABLE in the evidence and the
+                # pricer is dispatched anyway - see gather_price_evidence.
+                ev_path, ev_doc = await self.gather_price_evidence(terms, n)
                 await self.with_retry(
-                    lambda t=terms, k=n: self.dispatch("recipe-hunter-pricer",
-                                                       self.price_prompt(t),
-                                                       "price", "queue batch %d" % k, t,
-                                                       stage="pricer"),
+                    lambda t=terms, k=n, e=ev_doc, p=ev_path: self.dispatch(
+                        "recipe-hunter-pricer",
+                        self.price_prompt(t, e, p),
+                        "price", "queue batch %d" % k, t,
+                        stage="pricer"),
                     terms, "price")
                 # Derived counts are the ONLY thing that moves a recipe out of pricing/parked, and
                 # -Derive is a script call now, not an agent asked to run one.
@@ -1157,21 +1182,169 @@ class Daemon(object):
                             "no Omaha store carries a blocking ingredient")
             # parked stays in pricing_slugs; a later batch may resolve it
 
-    def price_prompt(self, terms):
-        return (
+    async def gather_price_evidence(self, terms, n):
+        r"""THE PRICE-EVIDENCE PRE-PASS (D10). Returns (path, doc).
+
+        THREE GATHERERS, ONE FILE:
+          1. ONE probe-ingredient.ps1 call for the WHOLE batch (Baker's + Family Fare), through
+             ps_invoke with -Term as a NAMED real array - the -File-binding family is why ps_invoke
+             exists, and a comma-joined term list is B8 with a Python accent.
+          2. pull-browser-stores.py --lookup-terms-file, one subprocess PER DRIVABLE STORE (Fareway,
+             Sam's Club), through sys.executable. The two run concurrently for the same reason the
+             daily capture runs its lanes concurrently - separate profiles, separate ports, separate
+             outputs - and that is not "parallelising around the singleton": the singleton is one
+             PRICER at a time, and this is one batch's gathering.
+          3. the join, into <RunDir>\price-evidence\batch-<n>.json. `n` is the lane's own invocation
+             counter, so this path has exactly ONE writer and needs NO mutex (price_evidence.py's
+             header carries the argument in full).
+
+        DEGRADE, NEVER BLOCK - the explicit OPPOSITE of map-preresolve's exit 2. A mapper ruling on
+        unreadable inputs would be a guess, so that lane refuses. This is EVIDENCE for a judge who
+        can also go and look: a failed probe, a walled sweep or a missing lookup output makes those
+        STORES UNUSABLE and the pricer is dispatched anyway. Could-not-look never reads as EMPTY,
+        and the daemon never skips the judge. The one thing that holds this lane is the singleton
+        cap, which is architecture.
+
+        AND IT NEVER WRITES A QUEUE RECORD. Search states (MATCHES/EMPTY/UNUSABLE) and queue states
+        (carried/not-carried/blocked/error) never mix; only the PRICER converts.
+        """
+        ev_dir = os.path.join(self.run_dir, "price-evidence")
+        path = os.path.join(ev_dir, "batch-%d.json" % n)
+        await self.lane("price", "pre-pass batch %d" % n, terms, "pre-pass", "start")
+        findings = []
+        probe_by_term, units, lookups = {}, {}, {}
+        try:
+            os.makedirs(ev_dir, exist_ok=True)
+
+            rc, out, err = await self.ps(PROBE_INGREDIENT_PS, ["-Term", list(terms), "-Json"],
+                                         timeout=PROBE_TIMEOUT)
+            doc, why = price_evidence.parse_probe_stdout(out)
+            if rc != 0 or doc is None:
+                # A NONZERO EXIT'S OWN SENTENCE OUTRANKS THE PARSER'S. parse_probe_stdout answers
+                # "probe printed nothing" for an empty stdout, which is true and useless; the guard
+                # line on stderr is the one that says WHY (measured: a 401 from Get-KrogerToken was
+                # being reported as "printed nothing" until a fixture asked for the 401 by name).
+                if rc != 0:
+                    why = hunt_lib.first_guard_line(out, err) or why or ("probe exited %s" % rc)
+                else:
+                    why = why or "the probe returned no readable JSON"
+                probe_by_term = price_evidence.probe_failed(price_evidence.SERVER_STORES, terms, why)
+                findings.append("price pre-pass: the server probe did not answer (%s) - Baker's and "
+                                "Family Fare are UNUSABLE for this batch" % why[:160])
+                self.log("  pre-pass: server probe UNUSABLE - %s" % why[:120])
+            else:
+                probe_by_term, units = price_evidence.from_probe(doc)
+
+            got = await asyncio.gather(*[self.store_lookup(k, name, terms, n)
+                                         for k, name in price_evidence.DRIVER_STORES])
+            for store_name, ldoc, lwhy in got:
+                lookups[store_name] = price_evidence.from_lookup(store_name, ldoc, terms, lwhy)
+                if ldoc is None:
+                    findings.append("price pre-pass: %s is UNUSABLE for this batch (%s)"
+                                    % (store_name, lwhy[:160]))
+        except Exception as e:
+            # A pre-pass that THREW still produces a file and still dispatches. The alternative is a
+            # judge that never runs because its briefing crashed.
+            findings.append("price pre-pass threw (%s) - every gathered store is UNUSABLE for this "
+                            "batch" % e)
+            self.log("  pre-pass THREW: %s" % e)
+            if not probe_by_term:
+                probe_by_term = price_evidence.probe_failed(price_evidence.SERVER_STORES, terms,
+                                                            "the pre-pass threw: %s" % e)
+            for k, name in price_evidence.DRIVER_STORES:
+                lookups.setdefault(name, price_evidence.from_lookup(
+                    name, None, terms, "the pre-pass threw: %s" % e))
+
+        roster, roster_why = price_evidence.read_store_roster()
+        doc = price_evidence.build(self.run_id, n, terms, probe_by_term, units, lookups,
+                                   roster, roster_why, findings,
+                                   generated=time.strftime("%Y-%m-%dT%H:%M:%S"))
+        try:
+            price_evidence.write(path, doc)
+        except Exception as e:
+            # The file is a courtesy to the reader; the prompt carries the evidence inline, so a
+            # write failure must not cost the batch its judge.
+            doc["findings"].append("could not write the evidence file (%s)" % e)
+            self.log("  pre-pass: could not write %s (%s)" % (path, e))
+        tal = price_evidence.tally(doc)
+        self.log("  pre-pass batch %d: %s" % (n, ", ".join("%s %d" % kv for kv in sorted(tal.items()))))
+        for f in doc.get("findings") or []:
+            self.findings.append(f)
+        await self.lane("price", "pre-pass batch %d" % n, terms, "pre-pass", "end",
+                        detail=", ".join("%s %d" % kv for kv in sorted(tal.items())))
+        return path, doc
+
+    async def store_lookup(self, store_key, store_name, terms, n):
+        """One drivable store's lookup. Returns (store_name, doc or None, why).
+
+        THE SAM'S PRECONDITION IS THIS CALL, and there is no separate session probe to build: an
+        unseeded or logged-out profile fails the driver's own seeded check / samsIdentity(), the
+        store ends NEEDS-SEEDING, and the lookup file comes back all-UNUSABLE with that as the
+        reason. The puller owns the session and is the only honest source on it; the daemon never
+        opens a browser to find out.
+        """
+        ev_dir = os.path.join(self.run_dir, "price-evidence")
+        tf = os.path.join(ev_dir, "batch-%d-%s.terms.json" % (n, store_key))
+        out = os.path.join(ev_dir, "batch-%d-%s.json" % (n, store_key))
+        try:
+            with open(tf, "w", encoding="utf-8", newline="\n") as fh:
+                json.dump(list(terms), fh, ensure_ascii=False)
+        except Exception as e:
+            return store_name, None, "could not write the lookup term list (%s)" % e
+        rc, so, se = await self.py(PULL_BROWSER_STORES_PY,
+                                   ["--store", store_key, "--lookup-terms-file", tf,
+                                    "--lookup-out", out], timeout=LOOKUP_TIMEOUT)
+        why = ""
+        doc = None
+        if os.path.exists(out):
+            try:
+                with open(out, "r", encoding="utf-8-sig") as fh:
+                    doc = json.load(fh)
+            except Exception as e:
+                doc, why = None, "the lookup output did not parse (%s)" % e
+        else:
+            tail = ((so or "") + (se or "")).strip().splitlines()
+            why = ("the lookup produced no output file (exit %s): %s"
+                   % (rc, tail[-1][:160] if tail else "no output"))
+        if doc is not None and rc != 0:
+            # A partial answer is still evidence - the file says per term which of it is UNUSABLE.
+            self.log("  pre-pass: %s lookup exited %s (partial evidence kept)" % (store_name, rc))
+        return store_name, doc, why
+
+    def price_prompt(self, terms, evidence=None, path=""):
+        body = (
             "Price this batch of %d term(s) the board has never carried. They come from SEVERAL\n"
             "recipes at once - the ingredient queue is keyed by term and dedupes across recipes,\n"
-            "which is exactly why this lane batches.\n\n"
+            "which is exactly why this lane batches. You are the ONLY pricer alive right now, by\n"
+            "design.\n\n"
             "TERMS: %s\n\n"
-            "You are the ONLY pricer alive right now, by design. Open your proven-safe shape: the two\n"
-            "server stores plus ONE tab per browser store, in-store mode verified per store, one\n"
-            "search per term. Throughput comes from batching terms inside THIS invocation.\n\n"
-            "A candidate row is not a price - probe-ingredient gathers, you adjudicate. Record every\n"
-            "verdict with evidence through ingredient-queue.ps1 -Record, which stays yours: it is a\n"
-            "script-enforced evidence contract, not bookkeeping. A store you could not reach is\n"
-            "blocked or error, which reads as PENDING and never as not-carried. Do not write board\n"
-            "cells and do not move any recipe state - the orchestrator derives that from the queue.\n"
+            "THE MECHANICAL PRE-PASS HAS ALREADY RUN, and its result is below. Your minutes go to\n"
+            "the two things only you can do: ADJUDICATE what was gathered, and ATTEND the stores no\n"
+            "pre-pass reaches.\n\n"
+            "ADJUDICATE. MATCHES is a pile of candidates, never a carriage ruling. Ask of each row\n"
+            "whether it is THE INGREDIENT, in a form a cook would buy for this recipe.\n\n"
+            "ATTEND, in this order:\n"
+            "  * Hy-Vee, in your own browser tab. It has no driver lane and never had one, so a new\n"
+            "    term there is browser work every time.\n"
+            "  * any store the file shows UNUSABLE. That is 'we could not look', not 'nothing there'.\n"
+            "  * Walmart and Aldi ONLY if Brad is at the keyboard - they answer his own Chrome\n"
+            "    through the extension and not an automated one. Check list_connected_browsers\n"
+            "    first; an empty array means say so plainly and leave those two PENDING.\n\n"
+            "READ THE STATES AS THEY ARE WRITTEN. MATCHES / EMPTY / UNUSABLE are SEARCH states.\n"
+            "carried / not-carried / blocked / error are what YOU record, and you are the only one\n"
+            "who converts between them. An EMPTY from the two server stores is a FULL LADDER empty;\n"
+            "an EMPTY from Fareway or Sam's Club is RUNG 1 ONLY and does not support not-carried\n"
+            "until you have walked the ladder yourself. UNUSABLE is never not-carried.\n\n"
+            "You still hold the pen: ingredient-queue.ps1 -Record per store with evidence a reviewer\n"
+            "could check, then -Verdict, then -Promote when a term settles. Do not write board cells\n"
+            "and do not move any recipe state - the orchestrator derives that from the queue.\n"
             % (len(terms), ", ".join(terms)))
+        if evidence:
+            body += "\n" + price_evidence.render(evidence, path=path) + "\n"
+        else:
+            body += ("\nNO EVIDENCE FILE WAS GATHERED for this batch - treat every store as\n"
+                     "unchecked and look for yourself.\n")
+        return body
 
     # ---------------------------------------------------------------------------------------------
     # WRITE - cap 3, plus the band gate read off the BUILT SPEC (section 4.5's D9/D8 note)

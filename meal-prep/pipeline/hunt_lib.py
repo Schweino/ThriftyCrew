@@ -27,6 +27,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 
 EXIT_CLEAN = 0          # ran, nothing to report
 EXIT_FINDINGS = 1       # ran, has findings - the machine report is STILL written
@@ -255,6 +256,27 @@ def ps_invoke(script, args, timeout=180):
     try:
         p = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", cmd],
                            capture_output=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return EXIT_CANNOT_RUN, "", "timed out after %ss" % timeout
+    return (p.returncode,
+            (p.stdout or b"").decode("utf-8", errors="replace"),
+            (p.stderr or b"").decode("utf-8", errors="replace"))
+
+
+def py_invoke(script, args, timeout=600):
+    """Call a PYTHON surface. Returns (rc, stdout, stderr).
+
+    ONE ROAD PER LANGUAGE, and this is the Python one. ps_invoke exists because `-File` cannot carry
+    a multi-element array; this exists for a different hazard with the same shape - a Python surface
+    must be run by THIS interpreter, `sys.executable`. Bare `python` on this box is the Windows Store
+    shim, which exits 49 without running anything, and a daemon that shelled it would report a
+    could-not-run for a script that is perfectly fine. argv carries strings straight through, so
+    there is no marshalling problem here and none is invented: a list argument would be a defect in
+    the CALLER, which is why every element is stringified rather than joined.
+    """
+    cmd = [sys.executable, script] + [str(a) for a in args]
+    try:
+        p = subprocess.run(cmd, capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:
         return EXIT_CANNOT_RUN, "", "timed out after %ss" % timeout
     return (p.returncode,

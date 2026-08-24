@@ -38,6 +38,7 @@ REPO = os.path.dirname(MP)
 sys.path.insert(0, HERE)
 
 import hunt_lib                                                  # noqa: E402
+import price_evidence                                            # noqa: E402
 
 
 def load_daemon():
@@ -65,7 +66,7 @@ class FakeDispatch(object):
         self.calls = []
 
     def __call__(self, agent, prompt, schema=None, validator=None, **kw):
-        self.calls.append({"agent": agent, "prompt": prompt})
+        self.calls.append({"agent": agent, "prompt": prompt, "schema": schema})
         q = self.script.get(agent)
         payload = q.pop(0) if q else {}
         res = HD.hunt_dispatch.DispatchResult(agent)
@@ -115,6 +116,28 @@ class FakePS(object):
             return args[args.index(flag) + 1]
         except (ValueError, IndexError):
             return None
+
+
+class FakePy(object):
+    """The PYTHON subprocess seam - pull-browser-stores.py is Python, so it never goes through
+    ps_invoke. A reply may be a CALLABLE that receives the argument list, which is how a fixture
+    makes the driver "write" its lookup output without a browser existing anywhere."""
+
+    def __init__(self, replies=None):
+        self.calls = []
+        self.replies = replies or {}
+
+    def __call__(self, script, args, timeout=600):
+        name = os.path.basename(script)
+        self.calls.append({"script": name, "args": list(args), "timeout": timeout})
+        for key, val in self.replies.items():
+            if key in name:
+                return val(args) if callable(val) else val
+        return 0, "", ""
+
+    def find(self, script_part, flag=None):
+        return [c for c in self.calls
+                if script_part in c["script"] and (flag is None or flag in c["args"])]
 
 
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
@@ -488,6 +511,34 @@ def run():
       *_wip_gates_pops())
 
     # =================================================================================================
+    H("D10 - the price-evidence pre-pass: gather, degrade, dispatch anyway")
+    # =================================================================================================
+    T("MUST FIRE  a probe transport ERROR lands in the evidence as UNUSABLE with the exception text, "
+      "and NEVER as EMPTY - probe carries TWO state-like fields and the ladder one is `verdict`",
+      *_pregather_transport_error())
+    T("MUST FIRE  an UNUSABLE store reaches the evidence file as UNUSABLE and the pricer is STILL "
+      "dispatched - degrade, never block (the OPPOSITE of map-preresolve's exit 2)",
+      *_pregather_degrades_and_dispatches())
+    T("CLEAN TWIN every gatherable store answers: two server stores and two driver stores land "
+      "MATCHES/EMPTY, and only the tiers no pre-pass reaches stay UNUSABLE",
+      *_pregather_clean_twin())
+    T("MUST FIRE  ONE probe call for the whole batch, -Term bound as a REAL LIST and NAMED - a "
+      "comma-joined term list is B8 with a Python accent",
+      *_pregather_one_probe_named_array())
+    T("MUST FIRE  the driver lookup goes down the PYTHON road (sys.executable), never ps_invoke, and "
+      "carries --lookup-terms-file/--lookup-out for exactly one --store",
+      *_pregather_lookup_is_python())
+    T("MUST FIRE  the daemon writes NO queue record from evidence - search states and queue states "
+      "never mix - while -Derive still runs, because that stays the orchestrator's",
+      *_pregather_never_records())
+    T("MUST FIRE  the pricer dispatch carries NO schema, so the adapter appends no return contract "
+      "and its free-text report stays legal",
+      *_pregather_no_schema())
+    T("MUST FIRE  the evidence is INLINE in the prompt and the file is batch-<n>.json under the run "
+      "dir, with n the lane's own invocation counter",
+      *_pregather_inline_and_numbered())
+
+    # =================================================================================================
     H("Resume, against a real scratch run dir")
     # =================================================================================================
     for name, ok, got in _resume_seed_table():
@@ -506,6 +557,193 @@ def run():
 # =====================================================================================================
 # the fixture bodies
 # =====================================================================================================
+
+# =====================================================================================================
+# D10 - the price-evidence pre-pass.
+#
+# The injected probe reply is price_evidence.PROBE_JSON_SAMPLE, which is a literal frozen from
+# probe-ingredient.ps1's own -Json emitter on 2026-08-24 and carries the field-mapping trap on
+# purpose: guacamole at Family Fare is transport ERROR (a Freshop 400), and pico de gallo at Family
+# Fare is NO-CREDENTIALS. It is READ from price_evidence rather than copied here, because two
+# copies of a frozen shape are two copies that drift apart.
+# =====================================================================================================
+
+PRICE_TERMS = ["guacamole", "pico de gallo", "korean-rice-cakes"]
+
+
+def _probe_ok(args):
+    return 0, json.dumps(price_evidence.PROBE_JSON_SAMPLE), ""
+
+
+def _probe_dead(args):
+    return 1, "", "Get-KrogerToken : The remote server returned an error: (401) Unauthorized."
+
+
+def _lookup_writer(states):
+    """Stand in for the driver: write the lookup file the real one would have written.
+
+    `states` is {term: state}. A term the map does not name is left out of the file entirely, which
+    is the 'the sweep never reached it' case.
+    """
+    def w(args):
+        out = FakePS.value_after(args, "--lookup-out")
+        tf = FakePS.value_after(args, "--lookup-terms-file")
+        key = FakePS.value_after(args, "--store")
+        name = dict(price_evidence.DRIVER_STORES).get(key, key)
+        with open(tf, "r", encoding="utf-8-sig") as fh:
+            terms = json.load(fh)
+        results = []
+        for t in terms:
+            st = states.get(t)
+            if not st:
+                continue
+            results.append({"term": t, "state": st, "term_used": t,
+                            "attempts": [{"term": t, "state": st, "hits": 1 if st == "MATCHES" else 0}],
+                            "hits": ([{"item": "%s house %s" % (name, t), "price": 3.99,
+                                       "size": "8 oz", "relevance": None, "url": "u"}]
+                                     if st == "MATCHES" else []),
+                            "reason": "rung 1 only"})
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        with open(out, "w", encoding="utf-8") as fh:
+            json.dump({"store": name, "store_key": key, "generated": "", "ladder": "rung 1 only",
+                       "note": "", "results": results}, fh)
+        return 0, "", ""
+    return w
+
+
+def _price_daemon(terms=None, probe=None, py=None, run_dir=None):
+    """The price lane, driven end to end with every shell and every dispatch injected."""
+    tmp = run_dir or tempfile.mkdtemp(prefix="daemon-price-")
+    ps = FakePS({"probe-ingredient": probe or _probe_ok})
+    d = daemon(run_dir=tmp, ps=ps, pyrun=py or FakePy(),
+               dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"note": "free text"}]}))
+    d.absent_terms = list(terms or PRICE_TERMS)
+    d.ch["price_wake"].push({"wake": 1})
+    d.ch["price_wake"].close()
+    arun(d.run(("price",)))
+    return d, tmp
+
+
+def _evidence(tmp, n=1):
+    with open(os.path.join(tmp, "price-evidence", "batch-%d.json" % n), "r",
+              encoding="utf-8-sig") as fh:
+        return json.load(fh)
+
+
+def _stores_for(doc, term):
+    for t in doc["terms"]:
+        if t["term"] == term:
+            return {s["store"]: s for s in t["stores"]}
+    return {}
+
+
+def _pregather_transport_error():
+    d, tmp = _price_daemon()
+    doc = _evidence(tmp)
+    ff = _stores_for(doc, "guacamole")["Family Fare"]
+    nc = _stores_for(doc, "pico de gallo")["Family Fare"]
+    bk = _stores_for(doc, "guacamole")["Baker's"]
+    ok = (ff["state"] == "UNUSABLE" and "400" in ff["reason"] and "ERROR" in ff["reason"]
+          and nc["state"] == "UNUSABLE" and "krogerkey" in nc["reason"]
+          and bk["state"] == "MATCHES")
+    return ok, json.dumps([ff, nc, bk])[:300]
+
+
+def _pregather_degrades_and_dispatches():
+    """Everything mechanical fails: the probe dies and neither driver writes an output file."""
+    py = FakePy({"pull-browser-stores": (1, "", "NEEDS SEEDING: no seeded Chrome profile")})
+    d, tmp = _price_daemon(probe=_probe_dead, py=py)
+    doc = _evidence(tmp)
+    every = [s for t in doc["terms"] for s in t["stores"]]
+    dispatched = [c for c in d._dispatch.calls if c["agent"] == "recipe-hunter-pricer"]
+    ok = (all(s["state"] == "UNUSABLE" for s in every)
+          and not any(s["state"] == "EMPTY" for s in every)
+          and any("401" in s["reason"] for s in every)
+          and any("NEEDS SEEDING" in s["reason"] or "no output file" in s["reason"] for s in every)
+          and len(dispatched) == 1)
+    return ok, "states=%s dispatched=%d" % (
+        json.dumps(sorted({s["state"] for s in every})), len(dispatched))
+
+
+def _pregather_clean_twin():
+    py = FakePy({"pull-browser-stores": _lookup_writer(
+        {"guacamole": "MATCHES", "pico de gallo": "EMPTY", "korean-rice-cakes": "MATCHES"})})
+    d, tmp = _price_daemon(py=py)
+    doc = _evidence(tmp)
+    g = _stores_for(doc, "guacamole")
+    p = _stores_for(doc, "pico de gallo")
+    gathered_ok = (g["Baker's"]["state"] == "MATCHES"
+                   and g["Fareway"]["state"] == "MATCHES"
+                   and g["Sam's Club"]["state"] == "MATCHES"
+                   and p["Fareway"]["state"] == "EMPTY"
+                   and p["Baker's"]["state"] == "EMPTY")
+    tiers_ok = (g["Hy-Vee"]["state"] == "UNUSABLE" and g["Hy-Vee"]["tier"] == "pricer-tab"
+                and g["Walmart"]["tier"] == "attended" and g["Aldi"]["tier"] == "attended")
+    dispatched = [c for c in d._dispatch.calls if c["agent"] == "recipe-hunter-pricer"]
+    return (gathered_ok and tiers_ok and len(dispatched) == 1 and not d.findings,
+            json.dumps({k: v["state"] for k, v in g.items()}) + " findings=%s" % d.findings)
+
+
+def _pregather_one_probe_named_array():
+    d, tmp = _price_daemon()
+    calls = d._ps.find("probe-ingredient")
+    if len(calls) != 1:
+        return False, "%d probe call(s) for one batch" % len(calls)
+    args = calls[0]["args"]
+    term = FakePS.value_after(args, "-Term")
+    return (isinstance(term, list) and term == PRICE_TERMS and "-Json" in args
+            and calls[0]["timeout"] >= 900,
+            "term=%r timeout=%s" % (term, calls[0]["timeout"]))
+
+
+def _pregather_lookup_is_python():
+    py = FakePy()
+    d, tmp = _price_daemon(py=py)
+    calls = py.find("pull-browser-stores")
+    stores = sorted(FakePS.value_after(c["args"], "--store") for c in calls)
+    flags_ok = all(("--lookup-terms-file" in c["args"] and "--lookup-out" in c["args"]
+                    and c["args"].count("--store") == 1) for c in calls)
+    on_ps = d._ps.find("pull-browser-stores")
+    return (len(calls) == 2 and stores == ["fareway", "samsclub"] and flags_ok and not on_ps
+            and all(c["timeout"] >= 40 * 60 for c in calls),
+            "py=%s ps=%s" % (json.dumps(stores), json.dumps(on_ps)))
+
+
+def _pregather_never_records():
+    d, tmp = _price_daemon()
+    recorded = d._ps.find("ingredient-queue", "-Record") + d._ps.find("ingredient-queue", "-Promote")
+    derived = d._ps.find("hunt-run.ps1", "-Derive")
+    return (not recorded and len(derived) == 1,
+            "records=%d derives=%d" % (len(recorded), len(derived)))
+
+
+def _pregather_no_schema():
+    d, tmp = _price_daemon()
+    call = [c for c in d._dispatch.calls if c["agent"] == "recipe-hunter-pricer"][0]
+    return (call["schema"] is None and HD.hunt_dispatch.contract_text(None) == "",
+            "schema=%r contract=%r" % (call["schema"], HD.hunt_dispatch.contract_text(None)))
+
+
+def _pregather_inline_and_numbered():
+    """12 terms is two batches at PRICE_BATCH=10, which is what proves n is the LANE's counter."""
+    terms = ["guacamole", "pico de gallo", "korean-rice-cakes"] + ["t%d" % i for i in range(9)]
+    tmp = tempfile.mkdtemp(prefix="daemon-price-n-")
+    ps = FakePS({"probe-ingredient": _probe_ok})
+    d = daemon(run_dir=tmp, ps=ps, pyrun=FakePy(),
+               dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"a": 1}, {"a": 2}]}))
+    d.absent_terms = list(terms)
+    d.ch["price_wake"].push({"wake": 1})
+    d.ch["price_wake"].close()
+    arun(d.run(("price",)))
+    files = sorted(os.listdir(os.path.join(tmp, "price-evidence")))
+    prompts = d._dispatch.prompts("recipe-hunter-pricer")
+    inline = (len(prompts) == 2
+              and "TERM 'guacamole'" in prompts[0] and "UNUSABLE" in prompts[0]
+              and "batch-1.json" in prompts[0] and "batch-2.json" in prompts[1]
+              and "TERM 't8'" in prompts[1])
+    return ("batch-1.json" in files and "batch-2.json" in files and inline,
+            json.dumps(files) + " prompts=%d" % len(prompts))
+
 
 def _rejects_explicitly():
     fd = FakeDispatch({"recipe-ingredient-mapper": [
