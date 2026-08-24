@@ -866,6 +866,10 @@ def refuse_entry(slug, url, pub_slugs, by_slug, by_url):
     guard a crawled one has to clear. An exact already-published slug never enters: the catalog
     already carries that dinner, and re-offering it to a decider is the churn this plane exists to end.
     """
+    if is_asset_url(url):
+        # Not a dedup rule - a judgement that this is not a page. See _locs for the 185 rows that
+        # taught it. A candidate with no page has no JSON-LD, no ingredients and no dish behind it.
+        return "not a recipe page - the URL names an asset file"
     if slug in pub_slugs:
         return "already published"
     if slug in by_slug:
@@ -1090,6 +1094,22 @@ def reliable_domains(path=SOURCE_DOMAINS_JSON):
     return [r["domain"] for r in (d.get("domains") or []) if r.get("status") == "reliable"]
 
 
+# An asset is not a page, whichever road offered it. This is the SECOND belt for the sitemap defect
+# _locs describes: the parser fix stops image URLs being enumerated, and this stops one entering the
+# pool at all - from --crawl, from --ingest, or from a sitemap shape nobody has met yet. A URL is not
+# a recipe because a sourcer found it; the same predicate judges both roads (refuse_entry).
+SKIP_EXT = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg", ".bmp", ".ico",
+            ".mp4", ".webm", ".mov", ".mp3", ".pdf", ".zip", ".css", ".js", ".xml", ".json")
+
+
+def is_asset_url(url):
+    """True when the URL names a FILE rather than a page. Query and fragment are stripped first -
+    recipetineats serves its images as .../Baked-Pork-Chops_2.jpg?resize=150%2C150, and a naive
+    endswith on the whole URL sees '2c150' and lets it straight through."""
+    path = re.sub(r"[#?].*$", "", (url or "")).lower().rstrip("/")
+    return path.endswith(SKIP_EXT)
+
+
 SKIP_PATH = ("/category/", "/tag/", "/author/", "/web-stories/", "/page/", "/wp-content/",
              "/about", "/contact", "/privacy", "/shop", "/product", "/course/", "/cookbook",
              "/recipe-index", "/feed")
@@ -1099,13 +1119,33 @@ PRIORITY_WORDS = ("chicken", "beef", "pork", "turkey", "sausage", "steak", "keto
 
 
 def _locs(xml_text):
+    """(root tag, the URLs a sitemap actually declares as pages).
+
+    ONLY THE DIRECT <loc> CHILDREN OF <url> / <sitemap>. A sitemap that carries the image extension
+    nests <image:loc> inside <image:image> inside <url>, and both elements have the LOCAL name 'loc' -
+    so a namespace-blind `root.iter()` reads every hero shot, step photo and collage as a page to
+    crawl. Measured 2026-08-24: that put 185 recipetineats.com image URLs into the pool as candidates,
+    28% of everything available, about 107 dishes enrolled up to 8 times each under names derived from
+    the filename ("Baked Pork Chops_2.Jpg"). None of them had a JSON-LD Recipe block, so all 185 came
+    through qualify()'s no-node path with protein 'any' and no ingredients, and every one of them was
+    then handed to the local classifier, which is where the bbq bucket came from.
+
+    Reading the PARENT rather than the namespace is deliberate: it also excludes <video:*> and
+    <news:*> children without this function having to know their namespace URIs.
+    """
     try:
         root = ET.fromstring(xml_text.encode("utf-8", errors="replace"))
     except Exception:
         return None, []
     tag = root.tag.split("}")[-1]
-    return tag, [e.text.strip() for e in root.iter()
-                 if e.tag.split("}")[-1] == "loc" and e.text and e.text.strip()]
+    out = []
+    for parent in root.iter():
+        if parent.tag.split("}")[-1] not in ("url", "sitemap"):
+            continue
+        for e in list(parent):
+            if e.tag.split("}")[-1] == "loc" and e.text and e.text.strip():
+                out.append(e.text.strip())
+    return tag, out
 
 
 def enumerate_domain(domain, robots, want=600, getter=None):
@@ -1164,7 +1204,7 @@ def enumerate_domain(domain, robots, want=600, getter=None):
         low = u.lower()
         if domain not in low:
             continue
-        if any(sk in low for sk in SKIP_PATH):
+        if any(sk in low for sk in SKIP_PATH) or is_asset_url(u):
             continue
         if low.rstrip("/").endswith(domain):
             continue
@@ -1492,13 +1532,16 @@ def cmd_crawl(a):
     for domain, p in plan.items():
         state.setdefault("cursor", {})[domain] =             int((state.get("cursor") or {}).get(domain, 0)) + len(p["urls"])
 
-    added, skipped_pub, skipped_dupe = 0, 0, 0
+    added, skipped_pub, skipped_dupe, skipped_asset = 0, 0, 0, 0
     for entry, disp in results:
         # An exact already-published slug never enters the pool. The catalog already carries that
         # dinner; re-offering it to a decider is the churn this whole plane exists to stop.
         why = refuse_entry(entry["slug"], entry["url"], pub_slugs, by_slug, by_url)
         if why == "already published":
             skipped_pub += 1
+            continue
+        if why and why.startswith("not a recipe page"):
+            skipped_asset += 1
             continue
         if why:
             skipped_dupe += 1
@@ -1524,7 +1567,8 @@ def cmd_crawl(a):
                                                             counters["failed"]))
     say("  new pool entries %d  (available %d, ruled on entry %d)" % (added, counters["kept"],
                                                                       counters["ruled"]))
-    say("  already published, never entered: %d ; already in pool: %d" % (skipped_pub, skipped_dupe))
+    say("  already published, never entered: %d ; already in pool: %d ; not a page (asset URL): %d"
+        % (skipped_pub, skipped_dupe, skipped_asset))
     say("  POOL now: %d entries, %d available (%d band-verified) from %d publisher(s)"
         % (len(pool["candidates"]), len(avail), len(verified), len(doms)))
     for f in findings:
@@ -1771,30 +1815,67 @@ def cmd_mark_taken(a):
 
 
 def cmd_mark_ruled(a):
+    """Record a ruling on one candidate, or on a comma-separated list of them.
+
+    The LIST form exists because a crawl defect is ruled on in bulk or not at all: 185 rows entered
+    the pool on 2026-08-24 as sitemap image URLs, and 185 separate invocations would each re-read and
+    re-write the whole 70,000-line pool. One writer, one read, one write - the ruling itself is the
+    same code path for one slug or for all of them, so the list form cannot drift from the single.
+    """
     pool = read_pool(a.pool or POOL)
     by_slug, _ = pool_index(pool)
-    c = by_slug.get(a.mark_ruled)
-    if c is None:
-        say("harvest --mark-ruled: CANNOT RUN - %s is not in the pool" % a.mark_ruled)
+    want = [x.strip() for x in str(a.mark_ruled).split(",") if x.strip()]
+    missing = [x for x in want if x not in by_slug]
+    if missing:
+        say("harvest --mark-ruled: CANNOT RUN - %d slug(s) are not in the pool: %s"
+            % (len(missing), ", ".join(missing[:5]) + (" ..." if len(missing) > 5 else "")))
+        say("  Nothing was ruled and nothing was written - a partial bulk ruling is worse than none.")
         say("HARVEST-COMPLETE")
         return 2
     if not a.verdict:
         say("harvest --mark-ruled: CANNOT RUN - a ruling needs --verdict")
         say("HARVEST-COMPLETE")
         return 2
-    if a.verdict == "deferred":
-        # DEFERRED is not a ruling. The decider looked and did not decide, so the candidate goes back
-        # on the shelf rather than being buried; burying it would lose a candidate nobody rejected.
-        c["status"] = "available"
-    else:
-        c["status"] = "ruled:%s" % a.verdict
-    c["ruled_reason"] = a.reason or ""
-    c["ruled_at"] = now_stamp()
-    if c["status"].startswith("ruled:"):
-        pool["candidates"] = [slim_ruled(x) if x["slug"] == c["slug"] else x
+    ruled = set()
+    for slug in want:
+        c = by_slug[slug]
+        if a.verdict == "deferred":
+            # DEFERRED is not a ruling. The decider looked and did not decide, so the candidate goes
+            # back on the shelf rather than being buried; burying it would lose a candidate nobody
+            # rejected.
+            c["status"] = "available"
+        else:
+            c["status"] = "ruled:%s" % a.verdict
+            ruled.add(slug)
+        c["ruled_reason"] = a.reason or ""
+        c["ruled_at"] = now_stamp()
+    # A RULED ROW IS NOT A NEIGHBOUR ANY MORE. score_pool writes backlog neighbours from the pool
+    # itself, so every ruling leaves the rows that cited it pointing at a candidate that no longer
+    # exists - and the dossier hands that to the decider as live evidence of duplication. Measured
+    # 2026-08-24 on the 185 asset rows: 35 available candidates carried 75 such references, and
+    # braised-beef-short-ribs-in-red-wine-sauce cited four "backlog neighbours" that were photographs
+    # of itself. Dropping them is not editing a score, it is deleting a pointer to nothing. Only
+    # BACKLOG neighbours are touched: a live-catalog neighbour is a published recipe and was never a
+    # pool row.
+    dropped = 0
+    if ruled:
+        for x in pool["candidates"]:
+            if x.get("slug") in ruled or not x.get("neighbours"):
+                continue
+            keep = [nb for nb in x["neighbours"]
+                    if not (nb.get("slug") in ruled and nb.get("side") != "live-catalog")]
+            if len(keep) != len(x["neighbours"]):
+                dropped += len(x["neighbours"]) - len(keep)
+                x["neighbours"] = keep
+        pool["candidates"] = [slim_ruled(x) if x["slug"] in ruled else x
                               for x in pool["candidates"]]
     write_pool(pool, a.pool or POOL)
-    say("harvest --mark-ruled: %s -> %s" % (c["slug"], c["status"]))
+    if dropped:
+        say("  dropped %d stale backlog neighbour reference(s) to the rows just ruled" % dropped)
+    if len(want) == 1:
+        say("harvest --mark-ruled: %s -> %s" % (want[0], by_slug[want[0]]["status"]))
+    else:
+        say("harvest --mark-ruled: %d candidate(s) -> %s" % (len(want), by_slug[want[0]]["status"]))
     say("HARVEST-COMPLETE")
     return 0
 
@@ -2370,6 +2451,77 @@ def cmd_selftest(_a):
     # ---- llama-server refusal ------------------------------------------------------------------------
     T("MUST FIRE  --classify's health probe is a real probe, not an assumption",
       llama_up("http://127.0.0.1:1", timeout=1) is False, "claimed up")
+
+    # ---- a ruling takes the row out of everyone else's neighbour block -----------------------------
+    tmpr = os.path.join(os.environ.get("TEMP", "."), "harvest-ruled-selftest-%d.json" % os.getpid())
+    try:
+        keeper = new_entry("keeper", "Keeper", "https://d/keeper", "d", "crawl")
+        keeper["neighbours"] = [
+            {"slug": "junk", "name": "Junk_2.Jpg", "score": 0.93, "side": "backlog"},
+            {"slug": "live-one", "name": "A Published Dinner", "score": 0.8, "side": "live-catalog"},
+            {"slug": "other", "name": "Other", "score": 0.7, "side": "backlog"}]
+        write_pool({"candidates": [keeper,
+                                   new_entry("junk", "Junk_2.Jpg", "https://d/j.jpg", "d", "crawl")]},
+                   tmpr)
+        cmd_mark_ruled(argparse.Namespace(pool=tmpr, mark_ruled="junk", verdict="not-a-recipe",
+                                          reason="asset URL"))
+        after = dict((c["slug"], c) for c in read_pool(tmpr)["candidates"])
+        T("MUST FIRE  a ruled row stops being a backlog neighbour - the dossier would otherwise show "
+          "the decider a duplicate that is not a candidate",
+          [n["slug"] for n in after["keeper"]["neighbours"]] == ["live-one", "other"],
+          str([n["slug"] for n in after["keeper"]["neighbours"]]))
+        T("MUST FIRE  the ruling itself still lands", after["junk"]["status"] == "ruled:not-a-recipe",
+          after["junk"]["status"])
+        T("MUST FIRE  a bulk ruling with ONE unknown slug rules NOTHING - a partial bulk ruling is "
+          "worse than none",
+          cmd_mark_ruled(argparse.Namespace(pool=tmpr, mark_ruled="keeper,nope",
+                                            verdict="rejected-not-fit", reason="")) == 2
+          and read_pool(tmpr)["candidates"][0]["status"] == "available", "partially ruled")
+    finally:
+        for suffix in ("", ".tmp"):
+            try:
+                os.remove(tmpr + suffix)
+            except OSError:
+                pass
+
+    # ---- a sitemap's image extension is not a list of pages ----------------------------------------
+    #
+    # 2026-08-24: 185 recipetineats.com image URLs sat in the pool as candidates - 28% of everything
+    # available, ~107 dishes enrolled up to 8 times each under names read off the filename. <image:loc>
+    # has the LOCAL name 'loc', so a namespace-blind root.iter() collected every hero shot and collage
+    # as a page to crawl. None had a Recipe block, so all 185 came through qualify()'s no-node path
+    # with no ingredients - and were then handed to the local classifier.
+    smap = ('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+            'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">'
+            '<url><loc>https://r.com/baked-pork-chops/</loc>'
+            '<image:image><image:loc>https://r.com/tachyon/Baked-Pork-Chops_2.jpg</image:loc>'
+            '</image:image>'
+            '<image:image><image:loc>https://r.com/tachyon/Baked-Pork-Chops_3.jpg</image:loc>'
+            '</image:image></url>'
+            '<url><loc>https://r.com/baked-chicken-legs/</loc></url></urlset>')
+    stag, slocs = _locs(smap)
+    T("MUST FIRE  a sitemap's <image:loc> entries are NOT pages to crawl",
+      slocs == ["https://r.com/baked-pork-chops/", "https://r.com/baked-chicken-legs/"],
+      ", ".join(slocs))
+    T("CLEAN TWIN and the pages it does declare all survive", stag == "urlset" and len(slocs) == 2,
+      "%s/%d" % (stag, len(slocs)))
+    itag, ilocs = _locs('<?xml version="1.0"?><sitemapindex '
+                        'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                        '<sitemap><loc>https://r.com/post-sitemap.xml</loc></sitemap></sitemapindex>')
+    T("CLEAN TWIN a sitemap INDEX still parses, or the crawler loses every publisher",
+      itag == "sitemapindex" and ilocs == ["https://r.com/post-sitemap.xml"],
+      "%s/%s" % (itag, ilocs))
+
+    T("MUST FIRE  an image URL is an asset however it is dressed up with a query string",
+      is_asset_url("https://www.recipetineats.com/tachyon/2016/09/Baked-Pork-Chops_2.jpg"
+                   "?resize=150%2C150"), "let through")
+    T("CLEAN TWIN a recipe page is not an asset",
+      not is_asset_url("https://www.recipetineats.com/juiciest-easiest-roast-chicken-ever/"),
+      "refused a real page")
+    T("MUST FIRE  and the ONE entry predicate refuses it, so --crawl and --ingest agree",
+      (refuse_entry("baked-pork-chops-2-jpg", "https://r.com/Baked-Pork-Chops_2.jpg", set(), {}, {})
+       or "").startswith("not a recipe page"),
+      str(refuse_entry("baked-pork-chops-2-jpg", "https://r.com/x.jpg", set(), {}, {})))
 
     # ---- a lane that could not look leaves its field alone -----------------------------------------
     #
