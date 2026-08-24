@@ -1,4 +1,4 @@
-<#
+﻿<#
   search-verdict-lib.ps1 - the ONE definition of what a store search actually answered.
 
   THE DEFECT THIS EXISTS FOR. Every search lane used to return a row count, and a row count cannot tell
@@ -40,6 +40,17 @@ $script:SV_QUALIFIERS = @('powder', 'ground', 'dried', 'whole', 'seeds', 'seed',
                           'sliced', 'raw', 'chile', 'chiles', 'chilies', 'flakes')
 $script:SV_QUALIFIERS_CONDITIONAL = @('sauce', 'oil', 'mix')
 
+# WHAT COUNTS AS A WORD BOUNDARY (B4 / gate finding 4, MEASURED 2026-08-24 on the live phase-5 pricer
+# batch). It is not whitespace. `Get-RetryLadder 'korean-rice-cakes'` returned ELEVEN rungs, ten of them
+# character mutilations - 'kore an-rice-cakes', 'korea n-rice-cakes', 'korean -rice-cakes' ... - because
+# the term carries no SPACE, so it read as one 17-character word and the compound splitter fired at
+# every position >= 4. That is the 'purple unicorn fruit' trap the header documents, arriving through a
+# separator this lib did not consider. Eleven rungs x 2 server stores x ~25 s is up to nine minutes of
+# real network probing for ONE term, and the pricer caught it by hand.
+# A hyphen and an underscore separate words exactly as a space does; the ladder counts on all three, and
+# the hyphen-to-space swap ('korean rice cakes') is a REAL rung instead of ten pieces of nonsense.
+$script:SV_WORD_SEP = '[\s\-_]+'
+
 # R1: a no-results banner outranks any number of product tiles rendered beneath it. Aldi renders 29
 # suggestion tiles under the literal text 'No results for "fennel"'; parsley and green onions appeared as
 # "results" for bean-sprouts, fennel AND chili-garlic-sauce. Counting tiles said 29; the truth was 0.
@@ -61,9 +72,11 @@ function Test-NoResultsPhrase([string]$PageText) {
 # in 12.9s during the 2026-08-15 verification. A derived join is a leaf, not a new trunk.
 function Get-SpacingVariants([string]$Term, [bool]$AllowSplit = $true) {
   $out = New-Object System.Collections.ArrayList
-  $words = @($Term -split '\s+' | Where-Object { $_ })
+  # SEPARATORS, not spaces (B4). 'corn-meal' is two words and joins to 'cornmeal'; it is not one
+  # nine-letter word to be sliced apart at every position >= 4.
+  $words = @($Term -split $script:SV_WORD_SEP | Where-Object { $_ })
   if ($words.Count -gt 1) {
-    [void]$out.Add(($words -join ''))            # 'corn meal' -> 'cornmeal'
+    [void]$out.Add(($words -join ''))            # 'corn meal' / 'corn-meal' -> 'cornmeal'
   } elseif ($words.Count -eq 1 -and $AllowSplit) {
     $w = $words[0]
     for ($i = 4; $i -le ($w.Length - 4); $i++) { [void]$out.Add($w.Substring(0, $i) + ' ' + $w.Substring($i)) }
@@ -86,7 +99,14 @@ function Get-RetryLadder([string]$Term) {
   }
 
   Add-Rung $Term
-  $words = @($Term -split '\s+' | Where-Object { $_ })
+  $words = @($Term -split $script:SV_WORD_SEP | Where-Object { $_ })
+
+  # rung 1b - THE SEPARATOR SWAP (B4). A hyphenated or underscored term said with spaces is the same
+  # query every store's search box expects: 'korean-rice-cakes' -> 'korean rice cakes'. It is ONE rung,
+  # and it replaces the ten character mutilations that used to arrive here because a hyphenated term
+  # counted as a single word. Add-Rung de-duplicates, so a term already spelled with spaces gains
+  # nothing.
+  if ($words.Count -gt 1) { Add-Rung ($words -join ' ') }
 
   # rung 2 - strip qualifiers
   if ($words.Count -gt 1) {
@@ -185,6 +205,39 @@ if ($SearchVerdictSelfTest) {
   # the 2-word head-noun rung IS still wanted
   $l = L 'brown lentils'
   if (-not (Has $l 'lentils')) { Write-Output "  X a 2-word term lost its head noun -> $($l -join ', ')"; $bad++ }
+
+  # ---- B4 / GATE FINDING 4: A HYPHENATED TERM IS WORDS, NOT ONE LONG WORD. ---------------------
+  # MEASURED 2026-08-24 on the live phase-5 pricer batch: Get-RetryLadder 'korean-rice-cakes' returned
+  # ELEVEN rungs, ten of them character mutilations ('kore an-rice-cakes' ... 'korean-rice-c akes'),
+  # because the term carries no space and the compound splitter fired at every position >= 4. Every
+  # rung is a real network call: 11 x 2 server stores x ~25 s is up to nine minutes for ONE term.
+  $l = L 'korean-rice-cakes'
+  if (-not (Has $l 'korean rice cakes')) { Write-Output "  X B4: the hyphen-to-space swap is not a rung -> $($l -join ', ')"; $bad++ }
+  if ($l.Count -gt 3) { Write-Output "  X B4 MUST FIRE: 'korean-rice-cakes' exploded to $($l.Count) rungs -> $($l -join ', ')"; $bad++ }
+  foreach ($r in $l) {
+    # WHAT A MUTILATION LOOKS LIKE, said precisely so this can never pass by accident: every one of the
+    # ten measured rungs carried a space AND a surviving hyphen ('kore an-rice-cakes'), because the
+    # splitter cut INSIDE a word while the term's real separators stayed put. No legitimate rung of a
+    # hyphenated term does that - the swap replaces every hyphen, the join removes them all.
+    if ($r -match '\s' -and $r -match '-') {
+      Write-Output "  X B4 MUST FIRE: a character mutilation survived -> '$r'"; $bad++
+    }
+  }
+  # CLEAN TWIN 1: a GENUINELY single word still splits - that is the rung 'cornmeal' -> 'corn meal'
+  # was built for, and it is the half of this behaviour that must not move.
+  $l = L 'cornmeal'
+  if (-not (Has $l 'corn meal')) { Write-Output "  X B4 CLEAN TWIN: single-word splitting broke -> $($l -join ', ')"; $bad++ }
+  if ($l.Count -ne 2) { Write-Output "  X B4 CLEAN TWIN: 'cornmeal' should be exactly 2 rungs -> $($l -join ', ')"; $bad++ }
+  # CLEAN TWIN 2: a hyphen now joins exactly as a space does
+  $l = L 'corn-meal'
+  if (-not (Has $l 'cornmeal') -or -not (Has $l 'corn meal')) { Write-Output "  X B4: 'corn-meal' lost the join or the swap -> $($l -join ', ')"; $bad++ }
+  # CLEAN TWIN 3: an underscore is a separator too, and the qualifier strip now reaches through it
+  $l = L 'sun_dried_tomatoes'
+  if (-not (Has $l 'sun dried tomatoes')) { Write-Output "  X B4: underscores are not word boundaries -> $($l -join ', ')"; $bad++ }
+  if ($l.Count -gt 4) { Write-Output "  X B4: an underscored term exploded ($($l.Count) rungs) -> $($l -join ', ')"; $bad++ }
+  # CLEAN TWIN 4: a hyphenated TWO-word term gains its head noun, exactly as the spaced form does
+  $l = L 'brown-lentils'
+  if (-not (Has $l 'lentils')) { Write-Output "  X B4: a hyphenated 2-word term lost its head noun -> $($l -join ', ')"; $bad++ }
 
   # MUST-FIRE R1: the exact Aldi capture, frozen
   $aldi = 'Skip Navigation 0 fennel View Pricing Policy No results for "fennel" Browse related items or try another search. Related items Current price: $0.95 Parsley, each'

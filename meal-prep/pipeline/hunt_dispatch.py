@@ -390,6 +390,32 @@ def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reco
         return res
 
     res.text = str(env.get("result") or "")
+
+    # ---- B1 / PIN P1: NO SCHEMA AND NO VALIDATOR MEANS THE TEXT *IS* THE VERDICT. ----------------
+    # Measured on the phase-5 gate run: the price lane passes neither, so extract_payload returned
+    # None on every single pricer call, `problems` read "the answer carried no JSON object at all",
+    # and a WHOLE SECOND SESSION was bought to demand an object nobody wanted - 15 turns and ~$0.61
+    # per batch, 15% of the lane, for a payload the lane never reads (the price lane derives every
+    # recipe state from the QUEUE, never from the answer).
+    #
+    # AND THE OBVIOUS FIX IS THE ONE THAT BREAKS THE LANE, so it is written out here rather than left
+    # to be re-derived. "Skip extraction when schema-less" leaves `payload` None; `ok` is
+    # `payload is not None`; Daemon.dispatch returns `res.payload`; and with_retry reads None as NO
+    # VERDICT - up to MAX_STAGE_RETRIES fresh pricer sessions, then STUCK, with the breaker counting
+    # every one as a failure. That costs far more than the re-ask it removes. So the text is PROMOTED
+    # to a payload instead: `ok` stays payload-based and nothing upstream changes shape.
+    #
+    # An EMPTY answer is still nothing. With no schema there is no second thing to check, so an empty
+    # result is `empty` - a named kind of nothing (B5), never a verdict made of a blank string.
+    if schema is None and validator is None:
+        if not res.text.strip():
+            res.failure = "empty"
+            res.detail = ("the answer was empty, and with no schema the text IS the verdict - so there "
+                          "is no verdict here")
+            return res
+        res.payload = {"text": res.text}
+        return res
+
     payload = extract_payload(res.text)
     problems = []
     if payload is None:
@@ -651,6 +677,55 @@ def selftest():
           "nothing legal is written in its place",
           r.payload is None and r.failure == "schema"
           and any("turkey/beef" in p for p in r.problems), str(r.problems)[:200])
+
+        # ---- B1 / PIN P1: A SCHEMA-LESS DISPATCH IS ANSWERED BY PROSE, AND PROSE IS THE ANSWER ---
+        # The price lane passes neither a schema nor a validator, and it reads its state from the
+        # QUEUE rather than from the answer. Before this, every pricer call bought a second session
+        # demanding a JSON object nobody wanted: 15 turns and ~$0.61 a batch on the phase-5 gate run.
+        print("")
+        prose = ("I checked all seven stores. korean-rice-cakes: Baker's not-carried, Family Fare "
+                 "UNUSABLE (Freshop 400), the three attended stores blocked. Verdict PENDING.")
+        pf = FakeRunner([("env", _env(prose))])
+        r = dispatch("t-full", "price these", agent_dir=tmp, runner=pf)
+        T("MUST FIRE  a SCHEMA-LESS dispatch answering pure prose is OK on ONE call, with no re-ask",
+          r.ok and r.calls == 1 and not r.reasked and r.failure is None,
+          "ok=%s calls=%d reasked=%s failure=%s" % (r.ok, r.calls, r.reasked, r.failure))
+        T("MUST FIRE  ...and the TEXT is what lands in the payload, verbatim, uncoerced",
+          r.payload == {"text": prose}, json.dumps(r.payload)[:160])
+        T("MUST FIRE  ...and the runner was called exactly ONCE - the second session is what this "
+          "fixture exists to keep from ever coming back",
+          len(pf.calls) == 1, "calls=%d" % len(pf.calls))
+        T("CLEAN TWIN and no return contract was appended, because there is no schema to derive one "
+          "from - asking for a shape and then accepting prose would be two contracts",
+          "RETURN CONTRACT" not in pf.calls[0]["prompt"], pf.calls[0]["prompt"][:120])
+        # A schema-less answer that HAPPENS to contain JSON is still delivered as text. The lane asked
+        # for no shape, so this adapter invents none - a payload that is sometimes an object and
+        # sometimes a wrapper is the shape-drift class, one layer down.
+        r = dispatch("t-full", "price these", agent_dir=tmp,
+                     runner=FakeRunner([("env", _env('Ruled: {"term": "x", "verdict": "PENDING"}'))]))
+        T("CLEAN TWIN a schema-less answer that happens to contain JSON still lands as TEXT, not as a "
+          "quietly-parsed object", r.ok and list(r.payload.keys()) == ["text"], json.dumps(r.payload)[:120])
+        # ...and nothing is still nothing. An empty result with no schema has no second thing to
+        # check, so it is `empty` - a named kind of nothing (B5), never a verdict made of a blank.
+        r = dispatch("t-full", "price these", agent_dir=tmp,
+                     runner=FakeRunner([("env", _env(" \n \t "))]))
+        T("MUST FIRE  an EMPTY schema-less answer is `empty`, never a verdict made of a blank string",
+          r.payload is None and r.failure == "empty" and not r.reasked,
+          "failure=%s payload=%s" % (r.failure, r.payload))
+        # CLEAN TWIN, and it is the half that must NOT move: a stage that DID ask for a shape still
+        # re-asks exactly once when the shape does not arrive.
+        twin = FakeRunner([("env", _env("I could not do this.")), ("env", _env(good))])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=twin)
+        T("CLEAN TWIN a SCHEMA'D dispatch answered with prose still re-asks exactly once, and the "
+          "corrected answer lands - B1 narrowed the rule, it did not delete it",
+          r.ok and r.reasked and r.calls == 2, "ok=%s reasked=%s calls=%d" % (r.ok, r.reasked, r.calls))
+        vtwin = FakeRunner([("env", _env("prose")), ("env", _env("prose again"))])
+        r = dispatch("t-full", "go", validator=lambda p: [] if p else ["nothing"], agent_dir=tmp,
+                     runner=vtwin)
+        T("CLEAN TWIN a VALIDATOR with no schema still demands an object - `schema is None` alone was "
+          "never the test",
+          r.payload is None and r.reasked and r.calls == 2,
+          "payload=%s reasked=%s calls=%d" % (r.payload, r.reasked, r.calls))
 
         # ---- the model pin is checked, and a drop is REPORTED -----------------------------------
         print("")
