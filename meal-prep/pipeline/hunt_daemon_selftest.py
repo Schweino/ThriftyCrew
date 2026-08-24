@@ -452,6 +452,27 @@ def run():
       *_unhold_between_seeds())
 
     # =================================================================================================
+    H("A-package - the DAEMON holds the pen on mapped\\<slug>.json (A1-A4 / pins P2-P6)")
+    # =================================================================================================
+    T("MUST FIRE  the mapper's two arrays are written to a rulings file and handed to "
+      "map-preresolve -Assemble, per slug, through ps_invoke",
+      *_assemble_is_the_daemons())
+    T("MUST FIRE  an assembly that finds anything unsettled STUCKS the recipe with the lines NAMED, "
+      "and it never reaches pricing or the writer",
+      *_assemble_failure_is_stuck())
+    T("MUST FIRE  a NEW commodity id is dispatched to the commodity-registrar BY THE DAEMON, on its "
+      "own schema, and the verdict rides into the rulings file",
+      *_registrar_is_dispatched())
+    T("CLEAN TWIN a batch proposing no new id dispatches no registrar at all",
+      *_no_proposal_no_registrar())
+    T("MUST FIRE  a registrar that returns NO VERDICT is not an approval - no ruling is recorded and "
+      "the finding says so",
+      *_registrar_null_is_not_approval())
+    T("MUST FIRE  the map prompt inlines the table's NEAR-MISS evidence whole, forbids estate "
+      "re-reads except label lookups, and states the two-array contract",
+      *_map_prompt_inlines_and_bans_reads())
+
+    # =================================================================================================
     H("D8 - the intake skeleton, the pre-write band gate, and the locked-field postcondition")
     # =================================================================================================
     T("MUST FIRE  the skeleton is built BEFORE the writer is dispatched, per slug, through ps_invoke",
@@ -1469,15 +1490,20 @@ def _preresolve_runs_first():
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
                             {"results": [{"slug": s, "status": "ok", "state": "priced"}
                                          for s in ("s1", "s2", "s3")]}, ps=ps)
-        calls = ps.find("map-preresolve.ps1")
+        # -Slugs, NOT every map-preresolve call. Since A1 the same script is ALSO invoked once per slug
+        # as `-Assemble` to write mapped\<slug>.json, so an unfiltered count reads 4 for a 3-slug batch
+        # and says nothing about the claim under test - which is that the mechanical PRE-RESOLVE pass
+        # runs ONCE, for the whole batch, before a single token is spent.
+        calls = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
+        asm = [c for c in ps.find("map-preresolve.ps1") if "-Assemble" in c["args"]]
         slugs = FakePS.value_after(calls[0]["args"], "-Slugs") if calls else None
         # Ordering is the claim: the table has to exist BEFORE the prompt is built, or the dispatch
         # carries a lecture instead of a residual. FakePS records calls in order and FakeDispatch
         # records its own, so the proof is that the mapper prompt names the pre-resolved counts at all.
         prompt = fd.prompts("recipe-ingredient-mapper")[0] if fd.prompts("recipe-ingredient-mapper") else ""
         return (len(calls) == 1 and isinstance(slugs, list) and slugs == ["s1", "s2", "s3"]
-                and "map-preresolve.ps1 has already run" in prompt,
-                "calls=%d slugs=%s" % (len(calls), json.dumps(slugs)))
+                and "map-preresolve.ps1 has already run" in prompt and len(asm) == 3,
+                "preresolve=%d assemble=%d slugs=%s" % (len(calls), len(asm), json.dumps(slugs)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -1524,6 +1550,206 @@ def _map_prompt_is_residual():
                 and "MACRO CROSS-CHECK" in prompt,
                 "named=%s lecture_gone=%s" % (named,
                     "Resolve every ingredient against the CLOSED vocabulary first" not in prompt))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _asm_ps(rc=0, out=""):
+    """A FakePS whose map-preresolve -Assemble call answers with a chosen exit code. The pre-resolve
+    road must keep answering 0, or the batch is blocked before the mapper is ever dispatched."""
+    def reply(args):
+        if "-Assemble" in args:
+            return rc, out, ""
+        return 0, "", ""
+    return FakePS(replies={"map-preresolve": reply})
+
+
+def _mapper_result(slug, proposals=None):
+    return {"slug": slug, "status": "ok", "state": "priced",
+            "lines": [{"raw": "1 lb chicken", "buy": "3 1/2 lb, cut into 1-inch pieces",
+                       "notes": "exact 3.5x"},
+                      {"raw": "gochujang", "buy": "1 cup plus 2 tbsp", "notes": "", "grams": 300},
+                      {"raw": "tteok", "buy": "2 lb", "notes": ""}],
+            "rulings": [{"raw": "gochujang", "term": "gochujang", "canon_item": "Gochujang",
+                         "bid": "gochujang", "decision": "mapped", "grams": 300,
+                         "evidence": "the Korean fermented chili paste, not a sauce"},
+                        {"raw": "tteok", "term": "tteok", "canon_item": "Rice Cakes",
+                         "bid": "korean-rice-cakes", "decision": "mapped", "grams": 900,
+                         "evidence": "cylindrical tteok, NOT the Quaker snack cake the rice-cakes id "
+                                     "prices"}],
+            "new_commodity_proposals": list(proposals or [])}
+
+
+def _assemble_is_the_daemons():
+    r"""A1 / pin P2. The mapper returns two compact arrays; the DAEMON writes the file.
+
+    On the phase-5 gate run the mapper wrote mapped\<slug>.json itself, in the pre-resolve TABLE'S
+    shape, and build-intake-skeleton.ps1 exited 1 with "the mapper decision file names no mapped
+    ingredient" over a recipe it had just settled cleanly. With the pen here, that shape is not
+    reachable.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-asm1-")
+    try:
+        ps = _asm_ps(0)
+        d, fd = _map_daemon(tmp, ["s1"], {"results": [_mapper_result("s1")]}, ps=ps,
+                            residual={"s1": ["gochujang", "tteok"]})
+        asm = [c for c in ps.find("map-preresolve.ps1") if "-Assemble" in c["args"]]
+        if len(asm) != 1:
+            return False, "assemble calls=%d" % len(asm)
+        rf = FakePS.value_after(asm[0]["args"], "-RulingsFile")
+        slug = FakePS.value_after(asm[0]["args"], "-Slug")
+        if not rf or not os.path.exists(rf):
+            return False, "no rulings file at %r" % rf
+        with open(rf, "r", encoding="utf-8") as f:
+            pay = json.load(f)
+        return (slug == "s1" and len(pay.get("lines") or []) == 3
+                and len(pay.get("rulings") or []) == 2
+                and pay["rulings"][1]["bid"] == "korean-rice-cakes"
+                and "-Slug" in asm[0]["args"] and "," not in slug,
+                "slug=%r lines=%d rulings=%d" % (slug, len(pay.get("lines") or []),
+                                                 len(pay.get("rulings") or [])))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _assemble_failure_is_stuck():
+    """A1. Nothing partly-settled advances. The old failure was an exit 1 a whole stage later, after
+    the prose had been paid for; this is a STUCK at the map lane with the lines named."""
+    tmp = tempfile.mkdtemp(prefix="daemon-asm2-")
+    try:
+        findings = ("map-preresolve -Assemble: 1 finding(s) - NOTHING was written\n"
+                    "    FINDING  'tteok' has no gram weight from the engine or from a ruling\n")
+        ps = _asm_ps(1, findings)
+        d, fd = _map_daemon(tmp, ["s1"], {"results": [_mapper_result("s1")]}, ps=ps,
+                            residual={"s1": ["gochujang", "tteok"]})
+        outcomes = [o for o in d.outcomes if o["slug"] == "s1"]
+        stuck = bool(outcomes) and outcomes[0]["status"] == "stuck"
+        named = bool(outcomes) and "no gram weight" in (outcomes[0].get("detail") or "")
+        advanced = [c for c in ps.find("hunt-run.ps1", "-Advance")
+                    if FakePS.value_after(c["args"], "-To") == "pricing"]
+        pushed = len(d.ch["write"].items) if hasattr(d.ch["write"], "items") else 0
+        return (stuck and named and not advanced and not pushed,
+                "stuck=%s named=%s advanced_to_pricing=%d detail=%s"
+                % (stuck, named, len(advanced),
+                   (outcomes[0].get("detail") if outcomes else "no outcome")))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _registrar_is_dispatched():
+    """A4 / pin P6. A3 strips `Agent` from the mapper, which severs the road its own definition orders
+    new ids down. The daemon rebuilds it - and as a STAMPED dispatch, not the invisible 21-turn
+    subagent that cost $1.64 in no ledger on the phase-5 run."""
+    tmp = tempfile.mkdtemp(prefix="daemon-reg1-")
+    try:
+        ps = _asm_ps(0)
+        res = _mapper_result("s1", proposals=[
+            {"term": "tteok", "proposed_bid": "korean-rice-cakes",
+             "evidence": "rice-cakes is priced from Quaker snack cakes; this is a different food"}])
+        fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}],
+                           "commodity-registrar": [{"verdict": "approve", "bid": "korean-rice-cakes",
+                                                    "reason": "no id in any namespace prices tteok"}]})
+        preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        calls = [c for c in fd.calls if c["agent"] == "commodity-registrar"]
+        if len(calls) != 1:
+            return False, "registrar dispatches=%d" % len(calls)
+        schema_ok = calls[0]["schema"] is hunt_lib.REGISTRAR
+        asked = "korean-rice-cakes" in calls[0]["prompt"] and "tteok" in calls[0]["prompt"]
+        asm = [c for c in ps.find("map-preresolve.ps1") if "-Assemble" in c["args"]]
+        rf = FakePS.value_after(asm[0]["args"], "-RulingsFile") if asm else None
+        with open(rf, "r", encoding="utf-8") as f:
+            pay = json.load(f)
+        rulings = pay.get("registrar_rulings") or []
+        return (schema_ok and asked and len(rulings) == 1
+                and rulings[0]["verdict"] == "approve"
+                and rulings[0]["proposed_bid"] == "korean-rice-cakes",
+                "schema=%s asked=%s rulings=%s" % (schema_ok, asked, json.dumps(rulings)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _no_proposal_no_registrar():
+    tmp = tempfile.mkdtemp(prefix="daemon-reg2-")
+    try:
+        fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [_mapper_result("s1")]}]})
+        preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=_asm_ps(0))
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        calls = [c for c in fd.calls if c["agent"] == "commodity-registrar"]
+        return not calls, "registrar dispatches=%d" % len(calls)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _registrar_null_is_not_approval():
+    """SILENCE IS NOT CONSENT about whether a commodity is born. A duplicate id lets the same food
+    carry two disagreeing prices while every per-file guard reads green - bread-crumbs vs breadcrumbs
+    sat 2.9x apart across two boards until somebody spotted it by eye."""
+    tmp = tempfile.mkdtemp(prefix="daemon-reg3-")
+    try:
+        ps = _asm_ps(0)
+        res = _mapper_result("s1", proposals=[{"term": "tteok", "proposed_bid": "korean-rice-cakes",
+                                               "evidence": "different food"}])
+        fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}],
+                           "commodity-registrar": [None]})          # a transport failure: NO verdict
+        preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        asm = [c for c in ps.find("map-preresolve.ps1") if "-Assemble" in c["args"]]
+        rf = FakePS.value_after(asm[0]["args"], "-RulingsFile") if asm else None
+        with open(rf, "r", encoding="utf-8") as f:
+            pay = json.load(f)
+        said = any("commodity-registrar returned no verdict" in f for f in d.findings)
+        return (not (pay.get("registrar_rulings") or []) and said,
+                "rulings=%s findings=%s" % (json.dumps(pay.get("registrar_rulings")),
+                                            json.dumps(d.findings)[:220]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _map_prompt_inlines_and_bans_reads():
+    """A2. Phase 1 measured inlining beating tool-call reads, and the evidence was being TRUNCATED at
+    220 characters - which cut the near-miss list off the end, the single most useful sentence in the
+    table. A prompt that hides what it already knows sends the model back to the estate to re-derive
+    it, and every one of those reads is a turn that re-reads the accumulated context with it."""
+    tmp = tempfile.mkdtemp(prefix="daemon-preQ-")
+    try:
+        long_ev = ("prior ruling: none; nearest vocabulary rows: White Wine Vinegar "
+                   "[white-wine-vinegar] DIFFERENT FORM: vinegar | Rice Vinegar [rice-vinegar] "
+                   "DIFFERENT FORM: vinegar | Sherry [sherry] same form; no densities.json row and no "
+                   "each-noun; no food-macros-db row - a label needs transcribing; board NONE: no "
+                   "commodity and no capture match")
+        preresolved(tmp, ["s1"], residual={"s1": ["dry white wine"]})
+        tpath = os.path.join(tmp, "mapped-pre", "s1.json")
+        with open(tpath, "r", encoding="utf-8") as f:
+            tbl = json.load(f)
+        for row in tbl["rows"]:
+            if row["term"] == "dry white wine":
+                row["evidence"] = long_ev
+                row["fooddb_known"] = False
+        tbl["rows"][0]["grams_source_basis"] = 453.592
+        with open(tpath, "w", encoding="utf-8") as f:
+            json.dump(tbl, f)
+        d = daemon(run_dir=tmp, ps=_asm_ps(0))
+        prompt = d.map_prompt(["s1"], {"s1": tbl})
+        whole = long_ev in prompt                       # not truncated at 220 chars
+        bans = "Do NOT open the vocabulary" in prompt and "nutrition LABEL" in prompt
+        contract = ("lines" in prompt and "rulings" in prompt
+                    and "YOU DO NOT WRITE" in prompt
+                    and " | ".join(hunt_lib.MAPPED_RULING_DECISIONS) in prompt)
+        settled = "453.592" in prompt or "453.6" in prompt or "source-basis" in prompt
+        registrar = "new_commodity_proposals" in prompt and "no longer\nhave the Agent tool" in prompt
+        return (whole and bans and contract and settled and registrar,
+                "whole=%s bans=%s contract=%s settled_weights=%s registrar=%s"
+                % (whole, bans, contract, settled, registrar))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

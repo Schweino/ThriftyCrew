@@ -899,7 +899,8 @@ build time, fix THIS document in the same commit rather than deviating silently.
 | extraction sweep report (ADDED 2026-08-23, D6) | `<RunDir>\extracted\sweep-report.json` | extract_sweep.py -> the phase gate, and `--from-report` for the narrow rung-2 pass |
 | map pre-resolve table | `<RunDir>\mapped-pre\<slug>.json` | map-preresolve -> mapper dispatch, daemon |
 | map HOLD record (ADDED 2026-08-24, D7) | `<RunDir>\mapped-pre\<slug>.hold.json` | the daemon -> the next seed's unhold. The routing a held recipe WOULD have taken (`absent_terms`, `optional_absent`, the mapper's state). It exists because the unhold advances "exactly as it would have on first pass" and first pass's routing came from the MAPPER, which a held recipe never reached and a fresh daemon process cannot remember. Without it the only ways to resume a repaired recipe are to re-dispatch the mapper (paying twice for a judgment already rendered) or to guess the routing (which is how a recipe skips pricing) |
-| mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (v2 contract; CORRECTED 2026-08-24 - the real v2 shape on disk is richer than any shorthand in this plan: top-level `source_servings`/`target_servings`/`scale_factor`/`protein`/`rejected`/`ruled_substitutions`/`db_entries_added`/`new_commodity_proposals`/`pricing_terms_needed` + per-line `source_raw`/`item`/`bid`/`board`/`grams`(TARGET-scaled)/`buy`/`optional`/`decision`/`notes`. Under phase-6's A1 the producer becomes the daemon via `map-preresolve -Assemble` - see the phase-6 cold read, pins P2-P5) -> skeleton builder, auditor |
+| mapper decision file | `<RunDir>\mapped\<slug>.json` | **AS-BUILT 2026-08-24 (phase 6a, A1). THE PRODUCER IS NOW THE DAEMON**, via `map-preresolve.ps1 -Assemble -RunDir <d> -Slug <s> -RulingsFile <p>`; the mapper agent no longer writes it at all. ONE writer per slug file, so no mutex - said in map-preresolve's own header, as the evidence writer says it. Shape as below -> skeleton builder, auditor |
+| mapper rulings payload (ADDED 2026-08-24, phase 6a A1) | `<RunDir>\mapped-pre\<slug>.rulings.json` | the daemon (from the MAPPED dispatch payload plus the registrar's verdicts) -> `map-preresolve -Assemble`. One writer per slug, transient-but-kept: it is the record of what the model actually returned, beside the file that was built from it |
 | intake skeleton snapshot | `<RunDir>\intake\<slug>.skeleton.json` | build-intake-skeleton.ps1 -> the post-write diff |
 | intake (writer-completed) | `<RunDir>\intake\<slug>.json` | skeleton builder writes machine fields; writer completes prose IN PLACE -> build-v2-spec |
 | QA battery report | `<RunDir>\qa\<slug>.battery.json` | QA battery -> QA dispatch, daemon |
@@ -931,6 +932,46 @@ build time, fix THIS document in the same commit rather than deviating silently.
   protein_g, fat_g}, lines_covered, lines_total, uncovered_lines, computed_per_serving,
   portion_factor, tuning, missing_db_items}` with `computed` legal ONLY at total line coverage
   (a partial figure ships no numbers - the D7 built record says why, measured).
+- **Mapper decision file, THE FROZEN FIELD SET (AS-BUILT 2026-08-24, phase 6a A1 / pin P5).** The
+  minimal set was not guessed: `build-intake-skeleton.ps1` and `hunt-run.ps1` were grepped for every
+  read of this file, and the union is exactly **top-level `slug`, `title`, `source_url`, `protein`;
+  per line `item`, `grams`, `buy`, `decision`, `bid`**. Everything else the assembler writes is
+  provenance a person reads, and it is written because the v2 files carried it and dropping it would
+  make the two eras unreadable side by side: top-level `source_servings` / `target_servings` /
+  `scale_factor` / `mapped_by` / `assembled_by` / `mapped_at` / `conventions` /
+  `pricing_terms_needed` / `ruled_substitutions` / `rejected` / `db_entries_added` /
+  `new_commodity_proposals` / `registrar_rulings` / `macro_cross_check`, and per line `source_raw` /
+  `board` / `optional` / `notes` / `grams_from`.
+  - **`decision` IS A CLOSED SET OF FOUR STRINGS, and they are `Get-LineClass`'s, not new ones**:
+    `mapped` (included), `mapped-null` (included - a real food with no commodity id, priced
+    pantry-static), `mapped-optional` (optional, counted in the macros and named in the snapshot),
+    `optional-note` (not-purchased - water, a garnish, a sub-recipe). Nothing the assembler emits may
+    class `unknown` or `unsettled`, and its fixture reads the REAL `Get-LineClass` out of
+    build-intake-skeleton.ps1 at test time to prove it. Free-texting this field produced 21 distinct
+    values across 550 v2 lines and cost a real recipe a fabricated 250-cal band ruling.
+  - **The mapper's own ruling enum is `mapped | mapped-null | mapped-optional | not-purchased |
+    rejected`.** `rejected` never becomes a decision string: it refuses the whole file, exit 1, line
+    named, recipe STUCK.
+  - **`grams` are TARGET-scaled and the scale is applied EXACTLY ONCE.** Precedence: the mapper's
+    stated grams (from `rulings[].grams`, else `lines[].grams`) win, because grams and the buy string
+    must agree by construction and the buy string is the mapper's; otherwise the pre-resolve row's
+    `grams_source_basis` times `scale_factor`. **CORRECTED against the addendum's first draft, and
+    measured on `hunt-2026-08-15-lowcarb-100\mapped\baked-cauliflower-mac-smoked-sausage.json`: 5 of
+    its 7 lines are the exact scale and 2 are not, both because the mapper quantized its printed
+    measure (14 oz x 3.5 = 1389 g shipped as "3 lb" = 1361 g; 1/3 cup x 3.5 shipped as "1 cup plus
+    3 tbsp" = 134 g rather than 132 g). So `lines[]` carries an OPTIONAL `grams`, which pin P2's
+    two-array shape did not name.** A purchasable line with grams from neither source is STUCK,
+    named - never a silent zero.
+  - **Per-line source-basis grams are a NEW pre-resolve row field, `grams_source_basis`** (pin P3 said
+    the table has none, and it now does). They come from `parse-compute.ps1`'s new additive
+    `ingredients_source_basis` output: a snapshot of the per-line weights taken after the qty parser
+    and any reviewed manual override, and BEFORE the 550-gate tuner, the auto-staples and the target
+    scaling - all three of which are legitimate for a macro estimate and fiction on a shopping list.
+    Positional alignment with the engine's input is checked, not assumed; a length disagreement
+    records no grams for that slug, which is the safe direction.
+  - **A new commodity id may only be minted with the commodity-registrar's approve or alias**, and
+    the check reads `db\ingredients.json` for which bids are actually wired rather than trusting the
+    payload to declare its own proposals. Silence is not approval.
 - **Skeleton locked vs writer-fillable** (from the intake schema in build-v2-spec): LOCKED - name,
   slug, protein, source_url, visibility, `ingredients[]` (item/grams/buy),
   `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`, `cuisine`,
@@ -2691,10 +2732,18 @@ is measurably WRONG.**
   intake, and locked-means-locked is the prose-number defect's grave - it cannot move to the
   writer. So the ruling payload is TWO arrays per slug: `lines` - `{raw, buy, notes}` for EVERY
   purchasable line (compact; this is where the buy strings live) - and `rulings` -
-  `{raw, term, canon_item, bid, decision, grams_source, evidence}` for the RESIDUAL lines only.
+  `{raw, term, canon_item, bid, decision, grams, evidence}` for the RESIDUAL lines only.
   Everything else (title, source_url, servings block, scaling, decisions for pre-resolved lines,
   the report blocks) is assembled mechanically. Freeze the exact payload shape against the v2
   files at build time and fix this paragraph in the same commit if reality disagrees again.
+  **CORRECTED 2026-08-24 AT BUILD TIME, exactly as that last sentence instructs, and measured
+  against the frozen v2 file: `lines` ALSO carries an optional `grams`, and the ruling field is
+  `grams` rather than `grams_source`.** Two of that file's seven lines do not carry the exact
+  3.5x weight, both because the mapper QUANTIZED its own printed measure (14 oz x 3.5 = 1389 g
+  shipped as "3 lb" = 1361 g), and the file's own `conventions` field says grams are derived
+  FROM the printed measure so the two agree by construction. A shape with no grams on `lines`
+  would therefore have shipped a buy string and a weight that disagree on every quantized line.
+  Section 4.5 carries the frozen field set and the precedence rule.
 - **P3. Grams: the table has none today, and the file's are TARGET-scaled.** The pre-resolve rows
   carry no `grams` field; map-preresolve's macro_precheck engine already computes per-line grams
   internally (it could not compute per-serving macros otherwise) - EMIT them per row, at

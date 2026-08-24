@@ -937,6 +937,123 @@ class Daemon(object):
             advanced += 1
         return advanced
 
+    async def registrar_rulings(self, slug, proposals, tables=None):
+        """A4 / pin P6. Dispatch commodity-registrar on each NEW-id proposal; return its rulings.
+
+        WHY THE DAEMON HOLDS THIS ROAD NOW. A3 strips the `Agent` tool from the mapper (the phase-5
+        batch spawned a 21-turn Opus subagent that appears in NO lane stamp - $1.64 of invisible
+        spend, which is exactly the class C1 exists to end). But the mapper's own definition orders
+        every new commodity id "through the commodity-registrar gate", and that consult rides the
+        Agent tool: frontmatter `tools:` cannot scope WHICH subagents are reachable, so stripping
+        Agent severs the road. Rebuilding it here makes the consult a STAMPED dispatch on its own
+        pin (fable/medium, read from the frontmatter as every dispatch is) instead of an invisible
+        one, which is a gain rather than a workaround.
+
+        A REGISTRAR THAT DOES NOT ANSWER IS NOT AN APPROVAL. A null comes back as no ruling at all,
+        and the assembler refuses a new id nothing approved - silence is not consent about whether a
+        commodity is born, and a duplicate id lets the same food carry two disagreeing prices while
+        every per-file guard reads green (bread-crumbs vs breadcrumbs, 2.9x apart across two boards).
+        """
+        out = []
+        seen = set()
+        table = (tables or {}).get(slug) or {}
+        rows = table.get("rows") or []
+        for prop in (proposals or []):
+            bid = str((prop or {}).get("proposed_bid") or "").strip()
+            term = str((prop or {}).get("term") or "").strip()
+            if not bid or bid in seen:
+                continue
+            seen.add(bid)
+            row = next((r for r in rows if str(r.get("term") or "") == term), None)
+            payload = await self.dispatch(
+                "commodity-registrar",
+                self.registrar_prompt(slug, term, bid, str((prop or {}).get("evidence") or ""), row),
+                "map", "registrar:%s" % bid, [slug],
+                schema=hunt_lib.REGISTRAR, validator=hunt_lib.validate_registrar,
+                stage="registrar")
+            if payload is None:
+                self.findings.append("map/%s: the commodity-registrar returned no verdict on the "
+                                     "proposed id '%s' - the line stays unsettled, which is the safe "
+                                     "direction" % (slug, bid))
+                continue
+            out.append({"proposed_bid": bid,
+                        "verdict": str(payload.get("verdict") or "").strip().lower(),
+                        "bid": str(payload.get("bid") or "").strip(),
+                        "reason": str(payload.get("reason") or "")})
+        return out
+
+    def registrar_prompt(self, slug, term, bid, evidence, row=None):
+        near = ""
+        if row:
+            near = "\nWhat the mechanical pre-resolve found for this line:\n    %s\n" % (
+                (row.get("evidence") or "")[:600])
+        return (
+            "Rule on ONE proposed new grocery commodity id, for the recipe `%s`.\n\n"
+            "  ingredient line : %s\n"
+            "  proposed id     : %s\n"
+            "  the mapper's case: %s\n%s\n"
+            "This is the gate before the id is born. Prove the food is not already priced under\n"
+            "another name across all three id namespaces and the live feed, rule variant-vs-duplicate\n"
+            "on the evidence, and answer:\n"
+            "  approve  a genuinely new id, and `bid` is the id to mint\n"
+            "  alias    it is already priced under another id, and `bid` is THAT EXISTING id\n"
+            "  reject   it should not be minted and no existing id fits either\n\n"
+            "`reason` is the sentence a person reads when this blocks a recipe, so make it the\n"
+            "evidence rather than the conclusion. A reject leaves the ingredient line UNSETTLED and\n"
+            "the recipe STUCK carrying your sentence - which is the right outcome when the honest\n"
+            "answer is no, and an expensive one when it is guesswork.\n"
+            % (slug, term or "(the mapper did not name the term)", bid,
+               evidence or "(none given)", near))
+
+    async def assemble_mapped(self, slug, res, tables=None):
+        """A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
+        arrays. Returns (ok, why_not).
+
+        THE DAEMON HOLDS THE PEN, and that is the whole point rather than a tidy-up. On the phase-5
+        gate run the mapper wrote that file itself, in the PRE-RESOLVE TABLE'S shape, and
+        build-intake-skeleton.ps1 exited 1 with "the mapper decision file names no mapped ingredient"
+        over a recipe it had just settled cleanly. The daemon routed correctly regardless (it reads
+        the dispatch payload, not the file), so the defect was invisible until something tried to READ
+        the file - a whole stage later, with the prose already paid for.
+        """
+        proposals = res.get("new_commodity_proposals") or []
+        rulings = await self.registrar_rulings(slug, proposals, tables)
+        payload = {
+            "slug": slug,
+            "lines": res.get("lines") or [],
+            "rulings": res.get("rulings") or [],
+            "absent_terms": [t for t in (res.get("absent_terms") or []) if t],
+            "db_entries_added": res.get("db_entries_added") or [],
+            "rejected": res.get("rejected") or [],
+            "ruled_substitutions": res.get("ruled_substitutions") or [],
+            "new_commodity_proposals": proposals,
+            "registrar_rulings": rulings,
+            "macro_cross_check": res.get("macro_cross_check") or res.get("detail") or "",
+        }
+        # ONE WRITER PER SLUG - the map lane's workers never share a slug - so no mutex, exactly as
+        # map-preresolve's own header says about the table beside it.
+        out_dir = os.path.join(self.run_dir, "mapped-pre")
+        try:
+            if not os.path.isdir(out_dir):
+                os.makedirs(out_dir, exist_ok=True)
+            path = os.path.join(out_dir, "%s.rulings.json" % slug)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False, indent=1)
+        except Exception as e:                                    # noqa: BLE001
+            return False, "the mapper's rulings could not be written to disk (%s)" % e
+        args = ["-Assemble", "-RunDir", self.run_dir, "-Slug", slug, "-RulingsFile", path]
+        args += list(self.preresolve_args)
+        rc, out, err = await self.ps(MAP_PRERESOLVE_PS, args, timeout=600)
+        text = ((out or "") + (err or "")).strip()
+        if rc == hunt_lib.EXIT_CLEAN:
+            return True, ""
+        found = [ln.strip() for ln in text.replace("\r", "").split("\n")
+                 if ln.strip().startswith("FINDING")]
+        why = "; ".join(found)[:500] if found else text[-400:]
+        if rc == hunt_lib.EXIT_CANNOT_RUN:
+            return False, ("mapped\\%s.json could not be assembled at all (exit 2): %s" % (slug, why))
+        return False, ("the mapper's rulings do not assemble into a decision file: %s" % why)
+
     async def map_lane(self):
         async def worker(_i):
             while True:
@@ -1012,6 +1129,16 @@ class Daemon(object):
                         self.log("map: %s HELD at mapped - %d unbid line(s); nothing unbid reaches the "
                                  "writer" % (b["slug"], len(holds)))
                         continue
+                    # ---- A1: THE DECISION FILE IS ASSEMBLED HERE, BY THE DAEMON. ------------------
+                    # Gate finding 1 dies by construction: the mapper no longer holds this pen, so it
+                    # can no longer write the wrong shape into it. An assembly that finds anything
+                    # unsettled writes NOTHING and the recipe is STUCK with the lines NAMED - a state
+                    # a person can act on, where the old failure was an exit 1 a whole stage later.
+                    ok_asm, why_asm = await self.assemble_mapped(b["slug"], res, tables)
+                    if not ok_asm:
+                        self.stuck(b["slug"], "map", why_asm)
+                        self.log("  map: %s STUCK - %s" % (b["slug"], why_asm[:200]))
+                        continue
                     if not absent and hunt_lib.norm_state(res.get("state")) == "priced":
                         await self.advance(b["slug"], "priced", "mapper",
                                            "every term answered from the board")
@@ -1068,10 +1195,34 @@ class Daemon(object):
             lines = ["%s  (%d line(s): %d pre-resolved, %d for you)"
                      % (slug, t.get("line_count", len(rows)), t.get("resolved_count", 0), len(resid))]
             for r in resid:
-                lines.append("    [%s] %s   <- %s" % (r.get("resolution"), r.get("term"),
-                                                      (r.get("evidence") or "")[:220]))
+                # THE RAW LINE IS THE JOIN KEY, so it travels with the residual rather than being
+                # looked up: the return contract below is keyed by `raw`, and the assembler matches
+                # the mapper's arrays to the table's rows on exactly this string.
+                lines.append("    [%s] %s" % (r.get("resolution"), r.get("term")))
+                lines.append("        raw: %s" % (r.get("raw") or ""))
+                # A2: THE EVIDENCE TRAVELS WHOLE. It was truncated at 220 characters, which cut the
+                # near-miss list - "White Wine Vinegar [white-wine-vinegar] DIFFERENT FORM: vinegar" is
+                # the single most useful sentence in the table and it sits at the END of that string,
+                # after the prior-ruling and board notes. Truncating it sent the mapper back to the
+                # estate to re-derive what the table had already computed. Phase 1 measured inlining
+                # beating tool-call reads by a wide margin; this is that finding applied here.
+                lines.append("        evidence: %s" % (r.get("evidence") or "(none gathered)"))
+                if r.get("fooddb_known") is False:
+                    lines.append("        NO food-macros-db row - this is the one thing a label "
+                                 "lookup is still for")
             if not resid:
-                lines.append("    (every line pre-resolved - the cross-check below is the whole job)")
+                lines.append("    (every line pre-resolved - the buy strings and the cross-check "
+                             "below are the whole job)")
+            settled = [r for r in rows if r.get("resolution") in ("resolved",)]
+            if settled:
+                lines.append("  SETTLED lines - identity is DONE, do not re-derive it. You owe each "
+                             "one a `buy` string and nothing else:")
+                for r in settled:
+                    g = r.get("grams_source_basis")
+                    lines.append("    %s  [%s]  raw: %s%s"
+                                 % (r.get("canon_item") or r.get("term"), r.get("bid") or "no bid",
+                                    r.get("raw") or "",
+                                    ("   source-basis %sg" % g) if g else "   (no weight computed)"))
             mp = t.get("macro_precheck") or {}
             src = mp.get("source") or {}
             if mp.get("state") == "computed":
@@ -1098,18 +1249,45 @@ class Daemon(object):
             "Map the RESIDUAL of this micro-batch of %d recipe(s). Section S4 batches up to %d.\n\n"
             "map-preresolve.ps1 has already run. It resolved every line it could from the prior-rulings\n"
             "ledger, the closed vocabulary and its adjudicated aliases, and it checked the board, the\n"
-            "densities, the each-nouns and the food DB for each one. Its table per slug is at\n"
-            "%s\\mapped-pre\\<slug>.json, and it is the input you work from - do not re-derive it.\n"
-            "Every line it settled is settled. What is below is what it could not settle:\n\n"
+            "densities, the each-nouns and the food DB for each one. EVERYTHING IT FOUND IS BELOW, in\n"
+            "full - the residual lines with the whole of their evidence, and the settled lines with\n"
+            "their ids and their computed source-basis weights. Do not re-derive any of it.\n\n"
             "%s\n\n"
-            "Your job is exactly these lines plus the cross-check: rule identity, rule a form flip on its\n"
-            "merits (a form word is a different price AND a different gram weight - never bridge one with\n"
-            "an alias), call each-weights, transcribe a label for a new food-DB row, and reject with\n"
-            "evidence where the honest answer is no. `null` is safe; a plausible wrong match is not.\n\n"
-            "Transcriptions: %s\\extracted\\<slug>.json\n"
-            "Write:          %s\\mapped\\<slug>.json   (the full decision file, every line, unchanged\n"
-            "                contract - the pre-resolved lines carry their canon_item and bid straight\n"
-            "                through from the table)\n\n"
+            "YOUR JOB IS THREE THINGS AND NOTHING ELSE.\n"
+            "  1. Rule the RESIDUAL lines: identity, form flips on their merits (a form word is a\n"
+            "     different price AND a different gram weight - never bridge one with an alias),\n"
+            "     each-weights, and an honest rejection where the answer is no. `null` is safe; a\n"
+            "     plausible wrong match is not.\n"
+            "  2. Write a `buy` string for EVERY purchasable line, settled ones included. That string is\n"
+            "     printed verbatim in the reader's Ingredients section and the skeleton builder LOCKS it,\n"
+            "     which is what makes it impossible for the writer to introduce a number. It states what\n"
+            "     goes IN THE POT at the %d-serving batch scale, not what a package is called: \"3 lb,\n"
+            "     sliced into thin rounds\", \"an 8 oz brick minus 2 tbsp\", \"5 1/4 cups grated, divided\".\n"
+            "  3. The macro cross-check, per recipe, as described in each block above.\n\n"
+            "READS. The table above is the estate, already read for you. Do NOT open the vocabulary, the\n"
+            "commodity files, the board, the feed or the resolutions ledger - every question they answer\n"
+            "is answered above, and a re-read costs a turn that re-reads the whole accumulated context\n"
+            "with it. The ONE read still worth a turn is a nutrition LABEL for a food the table marks as\n"
+            "having no food-macros-db row, because that transcription has to be label-accurate and\n"
+            "nothing here can supply it. Add those rows as you always have.\n\n"
+            "YOU DO NOT WRITE %s\\mapped\\<slug>.json ANY MORE, and this is the change to read twice.\n"
+            "The ORCHESTRATOR assembles that file from the table plus your two arrays. On 2026-08-24 a\n"
+            "live batch wrote it in the pre-resolve TABLE'S shape and the skeleton builder exited 1 over\n"
+            "a recipe that had just been settled cleanly - because a prompt said \"unchanged contract\"\n"
+            "without naming one field. Now the shape is not yours to get wrong. Return, per slug:\n"
+            "  lines    - EVERY purchasable line: {raw, buy, notes}. `raw` is the extraction's own line,\n"
+            "             copied exactly - it is the key everything is joined on. Add `grams` ONLY when\n"
+            "             your buy string quantizes off the exact scale (14 oz x 3.5 is 1389 g; printed\n"
+            "             as \"3 lb\" it is 1361 g, and the grams must agree with what you printed).\n"
+            "             Leave `grams` out and the orchestrator uses the computed weight above, scaled.\n"
+            "  rulings  - the RESIDUAL lines only: {raw, term, canon_item, bid, decision, grams,\n"
+            "             evidence}. `decision` is a CLOSED SET: %s. Free text here produced 21\n"
+            "             distinct values across 550 lines and silently dropped 1588 g of chicken out\n"
+            "             of a recipe, so anything outside that set refuses the whole file.\n\n"
+            "A NEW COMMODITY ID GOES IN `new_commodity_proposals`, NOT THROUGH A SUBAGENT. You no longer\n"
+            "have the Agent tool. Put {term, proposed_bid, evidence} there and the orchestrator\n"
+            "dispatches the commodity-registrar itself and applies its verdict. An id nothing approves\n"
+            "never reaches the file, so make the evidence the case you would have made to it.\n\n"
             "DO NOT rule on whether an ingredient with no bid should hold the recipe. That is mechanical\n"
             "and the orchestrator does it from the table's `holds` rows: asked the same question twice\n"
             "with the same prompt and the same model, this stage answered ADVANCE once and HOLD once,\n"
@@ -1119,9 +1297,11 @@ class Daemon(object):
             "enqueue them and move the state itself. That is not a courtesy: -Terms 'a,b' binds as ONE\n"
             "composite string in PowerShell and parked two recipes forever on 2026-08-16, and a JSON\n"
             "array cannot be comma-joined by accident.\n\n"
+            "Transcriptions, if you need a line's full context: %s\\extracted\\<slug>.json\n"
             "This run's conditions: %s\n"
-            % (len(slugs), hunt_lib.MAP_BATCH, self.run_dir, "\n\n".join(blocks),
-               self.run_dir, self.run_dir, self.conditions))
+            % (len(slugs), hunt_lib.MAP_BATCH, "\n\n".join(blocks), hunt_lib.TARGET_SERVINGS,
+               self.run_dir, " | ".join(hunt_lib.MAPPED_RULING_DECISIONS),
+               self.run_dir, self.conditions))
 
     # ---------------------------------------------------------------------------------------------
     # PRICE - SINGLETON, self-looping queue drainer. ARCHITECTURE, not config (section 4.1a).

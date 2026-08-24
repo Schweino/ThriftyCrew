@@ -652,6 +652,30 @@ STAGE = {"type": "object", "properties": {
     "state": {"type": "string"}, "detail": {"type": "string"}},
     "required": ["slug", "status", "state"]}
 
+# THE THIRD SCHEMA DELTA, RATIFIED BY BRAD 2026-08-24 (phase 6a, A1 / cold-read pin P2). The "only two
+# deltas" rule bends here by his order, and this comment is the dated record.
+#
+# WHAT CHANGED AND WHY. The mapper no longer writes `<RunDir>\mapped\<slug>.json`; the daemon assembles
+# it through `map-preresolve.ps1 -Assemble`. On the phase-5 gate run the mapper wrote that file in the
+# PRE-RESOLVE TABLE'S shape and build-intake-skeleton.ps1 exited 1 over a recipe it had just settled
+# cleanly - not carelessness, but a prompt that said "unchanged contract" without naming one field.
+# With the daemon holding the pen, the wrong shape becomes impossible by construction.
+#
+# TWO ARRAYS PER SLUG, and the first one is why this is a delta rather than a deletion. Measured against
+# hunt-2026-08-15-lowcarb-100\mapped\baked-cauliflower-mac-smoked-sausage.json: EVERY line carries a
+# mapper-authored `buy` string ("7 oz, room temperature (an 8 oz brick minus 2 tbsp)") that D8 LOCKS
+# into the intake, and locked-means-locked is where the prose-number defect died. A mechanical assembler
+# cannot invent those, so the mapper still speaks on every purchasable line - just in a compact array
+# rather than a whole file.
+#   lines    {raw, buy, notes, grams?} for EVERY purchasable line. `grams` is optional and states the
+#            TARGET weight when the buy string quantizes off the exact scale (2 of 7 lines on the v2
+#            file: 14 oz x 3.5 = 1389 g printed as "3 lb" = 1361 g).
+#   rulings  {raw, term, canon_item, bid, decision, grams, evidence} for the RESIDUAL lines only.
+#            `decision` is a CLOSED set - free text produced 21 distinct values across 550 v2 lines.
+# `raw` is the join key on both: it is the extraction's own line, and it is what the pre-resolve table
+# is keyed by.
+MAPPED_RULING_DECISIONS = ("mapped", "mapped-null", "mapped-optional", "not-purchased", "rejected")
+
 MAPPED = {"type": "object", "properties": {
     "results": {"type": "array", "items": {"type": "object", "properties": {
         "slug": {"type": "string"},
@@ -660,9 +684,66 @@ MAPPED = {"type": "object", "properties": {
         "absent_terms": {"type": "array", "items": {"type": "string"},
                          "description": "blocking terms enqueued for the pricer"},
         "optional_absent": {"type": "array", "items": {"type": "string"}},
+        "lines": {"type": "array", "description":
+                  "EVERY purchasable line: {raw, buy, notes} plus `grams` ONLY where your buy string "
+                  "quantizes off the exact scale. `raw` is the extraction's own line, verbatim",
+                  "items": {"type": "object", "properties": {
+                      "raw": {"type": "string"}, "buy": {"type": "string"},
+                      "notes": {"type": "string"}, "grams": {"type": "number"}},
+                      "required": ["raw", "buy"]}},
+        "rulings": {"type": "array", "description":
+                    "the RESIDUAL lines only - the ones the pre-resolve table could not settle",
+                    "items": {"type": "object", "properties": {
+                        "raw": {"type": "string"}, "term": {"type": "string"},
+                        "canon_item": {"type": "string"}, "bid": {"type": "string"},
+                        "decision": {"type": "string",
+                                     "description": "one of: " + " | ".join(MAPPED_RULING_DECISIONS)},
+                        "grams": {"type": "number"}, "evidence": {"type": "string"}},
+                        "required": ["raw", "decision"]}},
+        "new_commodity_proposals": {"type": "array", "items": {"type": "object", "properties": {
+            "term": {"type": "string"}, "proposed_bid": {"type": "string"},
+            "evidence": {"type": "string"}}, "required": ["proposed_bid"]}},
+        "db_entries_added": {"type": "array", "items": {"type": "string"}},
+        "rejected": {"type": "array", "items": {"type": "string"}},
+        "ruled_substitutions": {"type": "array", "items": {"type": "string"}},
+        "macro_cross_check": {"type": "string"},
         "registrar_rulings": {"type": "string"}, "detail": {"type": "string"}},
         "required": ["slug", "status", "state"]}}},
     "required": ["results"]}
+
+# A NEW DISPATCH SCHEMA, RATIFIED BY BRAD 2026-08-24 (phase 6a, A4 / cold-read pin P6). Not a delta to
+# an inherited stage - the commodity-registrar has never been dispatched by the daemon before.
+#
+# WHY IT EXISTS. A3 strips the `Agent` tool from the mapper (D11's minimal-tools rule, applied early:
+# the phase-5 batch spawned a 21-turn Opus subagent that appears in NO lane stamp, $1.64 of invisible
+# spend). But the mapper's own definition orders every new commodity id "through the commodity-registrar
+# gate", and that consult rides the Agent tool - frontmatter `tools:` cannot scope WHICH subagents are
+# reachable, so stripping Agent severs the road. So the DAEMON dispatches the registrar itself, on the
+# proposals the mapper returns, and only an approve or an alias lets the assembler mint the id. A reject
+# leaves the line unsettled and the recipe STUCK with the registrar's own sentence attached.
+REGISTRAR = {"type": "object", "properties": {
+    "verdict": {"type": "string", "description": "approve | reject | alias"},
+    "bid": {"type": "string",
+            "description": "on approve, the id to mint; on alias, the EXISTING id it resolves to"},
+    "reason": {"type": "string",
+               "description": "the evidence, in a sentence a person can act on"}},
+    "required": ["verdict", "reason"]}
+
+REGISTRAR_VERDICTS = ("approve", "reject", "alias")
+
+
+def validate_registrar(payload):
+    """The closed verdict set, checked as the DECIDE enums are - an invented value mints an identity
+    nothing downstream will ever match again, and here it would decide whether a commodity is born."""
+    problems = []
+    v = str((payload or {}).get("verdict") or "").strip().lower()
+    if v not in REGISTRAR_VERDICTS:
+        problems.append("verdict %r is not one of: %s" % ((payload or {}).get("verdict"),
+                                                          ", ".join(REGISTRAR_VERDICTS)))
+    if v == "alias" and not str((payload or {}).get("bid") or "").strip():
+        problems.append("an `alias` verdict must name the EXISTING id in `bid` - an alias with no "
+                        "target is not an alias")
+    return problems
 
 DERIVE = {"type": "object", "properties": {
     "resolved": {"type": "array", "items": {"type": "object", "properties": {
@@ -775,6 +856,9 @@ def validate_schema(payload, schema, where="payload"):
 # DAEMON CONFIG - caps, budgets and thresholds. Section 4.1a: these are CONFIG, not architecture, with
 # the one exception marked as such in LANE_CAPS. Changing one is a measured decision for Brad.
 # =====================================================================================================
+TARGET_SERVINGS = 14       # the house batch size. Named here so the mapper's prompt, the assembler's
+                           # -TargetServings default and the scale in every mapped file cannot drift
+                           # apart - the same reason section 4.5 has one contract per artifact.
 MAP_BATCH = 5              # section S4: mapper micro-batches of up to 5 recipes
 PRICE_BATCH = 10           # section 2.4: up to 10 absent terms per pricer invocation, across recipes
 DECIDE_TAKE_BATCH = 5      # the decide channel's greedy sweep; DECIDE_BATCH caps the dispatch itself

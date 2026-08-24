@@ -418,6 +418,23 @@ foreach($r in $rc){
     }
     $ings += [pscustomobject]@{ item=$i.canon; grams_src=[Math]::Round($totalG,1); flags=@($lineFlags | Where-Object {$_}) }
   }
+  # ---- THE SOURCE-BASIS SNAPSHOT (ADDED 2026-08-24, phase-6a A-package / pin P3). --------------------
+  # PURELY ADDITIVE: a new output field, nothing above or below it changed. It exists because
+  # map-preresolve's -Assemble needs THIS recipe's per-line gram weights at the SOURCE recipe's own
+  # scale, and the only other per-line grams this file publishes (`ingredients`, below) are the wrong
+  # number for that job in three separate ways:
+  #   1. they are TARGET-scaled by $fFinal, and the assembler applies the 14/source_servings scale
+  #      EXACTLY ONCE - scaling something already scaled is how a 1588 g line becomes 5558 g;
+  #   2. the 550-gate TUNER has already moved them - it injects a Rice base into recipes that have
+  #      none, walks a base line up or down 5% at a time, and lifts the protein toward a floor. Every
+  #      one of those is legitimate arithmetic for a MACRO estimate and a fiction on a shopping list;
+  #   3. the auto-staple block appends Salt and Black Pepper lines the recipe never listed.
+  # Taken HERE, the snapshot is one entry per input ingredient, in input order, after the qty parser and
+  # any reviewed manual override and before all three of those. Positional alignment with the caller's
+  # own `ingredients` array is exact: the inner `continue` above skips a SOURCE, never an ingredient, so
+  # this loop appends exactly once per entry.
+  $srcBasis = @($ings | ForEach-Object {
+    [pscustomobject]@{ item=$_.item; grams_src=$_.grams_src; flags=@($_.flags) } })
   # R300 TUNING: '<recipe>::+<Item>' overrides ADD a line the canon lacks (title protein absent from a
   # cross-protein source; rice base absent from a "rice bowl" source). Reviewed by hand, rationale in file.
   $addPrefix = $r.proposed_name + '::+'
@@ -574,6 +591,7 @@ foreach($r in $rc){
     scale_factor=[Math]::Round($fFinal,4); portion_factor=$pf
     tuning=@($tuning)
     ingredients=@($scaled)
+    ingredients_source_basis=@($srcBasis)   # see the snapshot note above: untuned, unstapled, source scale
     per_serving=@{ calories=[Math]::Round($ps.cal,0); protein_g=[Math]::Round($ps.p,1); carbs_g=[Math]::Round($ps.c,1); fat_g=[Math]::Round($ps.fat,1) }
     missing_db_items=@($missing | Select-Object -Unique)
     gate_550 = ($ps.cal -ge 550)
