@@ -2829,6 +2829,75 @@
                                  },
                       "verdict":  "CARRIED",
                       "notes":  null
+                  },
+                  {
+                      "term":  "grated Parmesan cheese",
+                      "recipes":  [
+                                      "chicken-broccoli-ziti"
+                                  ],
+                      "added":  "2026-08-24T11:23:10",
+                      "why":  "chicken-broccoli-ziti needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-24T11:24:14"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "8 oz",
+                                                     "item":  "Fareway Grated Parmesan Cheese",
+                                                     "evidence":  "driver rung 1 \u0027grated Parmesan cheese\u0027, 6 priced Apollo nodes, no no-results banner; Fareway Grated Parmesan Cheese 8 oz $2.99 (own label) and 16 oz $5.88 are plain grated parmesan; BelGioioso row is SHREDDED, ruled out",
+                                                     "checked":  "2026-08-24T11:24:14"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.69,
+                                                         "size":  "8 oz",
+                                                         "item":  "Our Family Grated Cheese, Parmesan 8 Oz",
+                                                         "evidence":  "pre-pass rung 1 \u0027grated Parmesan cheese\u0027, 5 hits, no no-results banner; Our Family Grated Cheese Parmesan 8 oz $3.69 is plain grated parmesan, corroborated by Kraft Grated Parmesan 8 oz $6.79 and Our Family 16 oz $6.49",
+                                                         "checked":  "2026-08-24T11:24:14"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.49,
+                                                    "size":  "8 oz",
+                                                    "item":  "Hy Vee Grated Parmesan Cheese",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 \u0027grated Parmesan cheese\u0027 returns Hy-Vee capture rows Hy Vee Grated Parmesan Cheese 8 oz $3.49 as_of 2026-08-24 (today) and Hy-Vee Grated Parmesan Cheese 3 oz $2.29 as_of 2026-08-21. Both are the store\u0027s own grated parmesan; captured store rows, not a browser visit",
+                                                    "checked":  "2026-08-24T11:24:14"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.42,
+                                                             "size":  "24 oz",
+                                                             "item":  "Member\u0027s Mark Grated Parmesan Cheese, 24 oz.",
+                                                             "evidence":  "driver rung 1 \u0027grated Parmesan cheese\u0027, 23 hits; Member\u0027s Mark Grated Parmesan Cheese 24 oz $7.42 ($0.31/oz) is the base grated parmesan; shredded/shaved, Babybel, Laughing Cow, Balanced Breaks and the 15 lb wheel ruled out as not grated parmesan",
+                                                             "checked":  "2026-08-24T11:24:14"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.79,
+                                                  "size":  "8 oz",
+                                                  "item":  "Reggano Grated Parmesan Cheese 8 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 \u0027grated Parmesan cheese\u0027 returns Aldi capture row Reggano Grated Parmesan Cheese 8 OZ $2.79 as_of 2026-08-22. Reggano is Aldi\u0027s base private-label grated parmesan; captured store row, not a browser visit",
+                                                  "checked":  "2026-08-24T11:24:14"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.99,
+                                                          "size":  "8 oz",
+                                                          "item":  "Kraft Grated Parmesan Cheese",
+                                                          "evidence":  "pre-pass rung 1 \u0027grated Parmesan cheese\u0027, 25 hits, no no-results banner; Kraft Grated Parmesan Cheese 8 oz $5.99 rel 133 is the shaker of grated parm itself, plus Kroger 16 oz $5.99 and Cello 10 oz $8.99; flavored variants (basil/oregano, red pepper) ruled out as not plain parmesan",
+                                                          "checked":  "2026-08-24T11:24:14"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
                   }
               ]
 }
