@@ -2903,12 +2903,17 @@ def resolve_band(run_dir, cal_min, cal_max, carb_max, protein_min):
                       ("carbMax", carb_max), ("proteinMin", protein_min)):
         v = flag if flag is not None else stated.get(key)
         band[key] = v
-    missing = [k for k in ("calMin", "calMax", "carbMax") if not isinstance(band[k], (int, float))]
-    if missing:
-        return None, ("the macro band is a RUN PARAMETER and nothing states it: %s. Mint the run dir "
-                      "with `hunt-run.ps1 -Init -RunDir %s ... -CalMin N -CalMax N -CarbMax N "
-                      "-ProteinMin N`, or pass the flags here for a drill."
-                      % (", ".join(missing), run_dir))
+    # EVERY EDGE IS OPTIONAL, SEPARATELY (Brad 2026-08-24 evening). An unstated edge is UNBOUNDED, not
+    # a refusal. -Init used to demand the whole band because a CONSTRAINT nobody typed is enforced
+    # silently by two gates for a run; the ABSENCE of one cannot wrongly reject anything, so the
+    # refusal bought nothing here. What it did buy - a reader knowing what the gates enforced - is kept
+    # by run.json and by the effective band this logs on every run.
+    if not isinstance(band["calMin"], (int, float)):
+        band["calMin"] = 0
+    if not isinstance(band["calMax"], (int, float)):
+        band["calMax"] = float("inf")
+    if not isinstance(band["carbMax"], (int, float)):
+        band["carbMax"] = float("inf")
     if band["calMin"] > band["calMax"]:
         return None, ("the band's floor (%s cal) is above its ceiling (%s cal), so it admits nothing "
                       "and the run would source zero recipes without saying why"
@@ -2920,10 +2925,19 @@ def resolve_band(run_dir, cal_min, cal_max, carb_max, protein_min):
     return band, ""
 
 
+def _edge(v, unbounded_when):
+    return "any" if (v is None or unbounded_when) else v
+
+
 def describe_band(band):
-    return ("%s-%s cal, carbs <= %s, protein %s"
-            % (band["calMin"], band["calMax"], band["carbMax"],
-               ">= %s" % band["proteinMin"] if band.get("proteinMin") else "no floor"))
+    lo, hi, cm = band["calMin"], band["calMax"], band["carbMax"]
+    cal = "any" if (lo <= 0 and hi == float("inf")) else "%s-%s" % (
+        lo if lo > 0 else "any", "any" if hi == float("inf") else hi)
+    carbs = "any" if cm == float("inf") else "<= %s" % cm
+    prot = ">= %s" % band["proteinMin"] if band.get("proteinMin") else "any"
+    if cal == "any" and carbs == "any" and prot == "any":
+        return "NONE - no calorie, carb or protein limit"
+    return "cal %s, carbs %s, protein %s" % (cal, carbs, prot)
 
 
 def main(argv=None):

@@ -439,9 +439,12 @@ def run():
     T("MUST FIRE  a candidate whose nutrition is UNVERIFIED cannot confirm the band, so it waits - an "
       "inferred number is not evidence a dish clears a 50 g floor",
       *_pop_refuses_unverified())
-    T("MUST FIRE  a run dir stating no band CANNOT RUN - nothing supplies a default, because a band "
-      "nobody typed would be enforced silently by two gates for the whole run",
-      *_band_must_be_stated())
+    T("MUST FIRE  a run dir stating NO band runs with NO limits - an unstated edge is unbounded, not "
+      "a refusal, because the absence of a constraint cannot wrongly reject anything",
+      *_band_absent_is_unbounded())
+    T("MUST FIRE  ...and each edge is optional SEPARATELY - a protein floor alone is a protein floor "
+      "with no calorie or carb limit",
+      *_band_partial_is_honoured())
     T("CLEAN TWIN the band comes off run.json, and a flag overrides one field for a drill",
       *_band_read_from_run_json())
     T("MUST FIRE  a floor above its own ceiling is refused, not run - it admits nothing and would "
@@ -2957,15 +2960,35 @@ def _pop_refuses_unverified():
     return got == ["verified"], "popped %s" % got
 
 
-def _band_must_be_stated():
+def _band_absent_is_unbounded():
+    """CHANGED 2026-08-24 evening (Brad: "drop the band in code"). This used to assert that an unstated
+    band was a CANNOT RUN. That refusal existed because a CONSTRAINT nobody typed gets enforced silently
+    by two gates for a whole run - a real failure mode. The ABSENCE of a constraint has none: it cannot
+    wrongly reject anything. So an unstated band now runs with no limits, and what the refusal bought
+    (a reader knowing what the gates enforced) is kept by run.json and by the logged effective band."""
     tmp = tempfile.mkdtemp(prefix="daemon-bandstate-")
     try:
-        os.makedirs(tmp, exist_ok=True)
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"run": "r", "conditions": "c"}, f)
         band, why = HD.resolve_band(tmp, None, None, None, None)
-        return (band is None and "RUN PARAMETER" in why,
-                "band=%s why=%s" % (json.dumps(band), why[:120]))
+        d = HD.describe_band(band) if band else ""
+        return (band is not None and band["proteinMin"] is None and "NONE" in d,
+                "band=%s why=%s desc=%s" % (json.dumps(band, default=str), why[:80], d))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _band_partial_is_honoured():
+    tmp = tempfile.mkdtemp(prefix="daemon-bandpart-")
+    try:
+        with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
+            json.dump({"band": {"calMin": None, "calMax": None, "carbMax": None, "proteinMin": 45}}, f)
+        band, _w = HD.resolve_band(tmp, None, None, None, None)
+        # the floor applies; the unstated edges reject nothing
+        v_low = hunt_lib.in_band(9000, 900, band, 20)     # absurd cal/carbs, protein under the floor
+        v_ok = hunt_lib.in_band(9000, 900, band, 60)      # same absurd cal/carbs, protein over it
+        return (band["proteinMin"] == 45 and not v_low["ok"] and v_ok["ok"],
+                "floor=%s low=%s ok=%s" % (band["proteinMin"], json.dumps(v_low), json.dumps(v_ok)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

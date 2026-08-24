@@ -693,17 +693,31 @@ if ($runSelfTest) {
   # -ProteinMin 0 is how "no floor" is said out loud, which is not the same as never saying it.
   $bt = Join-Path $env:TEMP ('huntrun-band-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   try {
+    # CHANGED 2026-08-24 evening (Brad: "drop the band in code - however, be prepared for me to give
+    # a band during prompts"). These three used to assert that -Init REFUSED an unstated band. That
+    # refusal existed because a CONSTRAINT nobody typed gets enforced silently by two gates for a whole
+    # run - a real failure mode. The ABSENCE of a constraint has none: it cannot wrongly reject
+    # anything. So an unstated edge is now UNBOUNDED, and what the refusal bought - a reader knowing
+    # what the gates enforced - is kept in run.json and in the line -Init prints.
     $noBand = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r1') -Conditions 'fixture' -Stop 'fixture' 2>&1
     $noBandTxt = (@($noBand | ForEach-Object { [string]$_ }) -join ' ')
-    T 'MUST FIRE  -Init REFUSES to mint a run dir when the band is not stated' `
-      (($noBandTxt -match 'RUN PARAMETER') -and -not (Test-Path (Join-Path $bt 'r1\run.json'))) $noBandTxt
-    T '   and it NAMES every missing edge rather than only the first' `
-      (($noBandTxt -match '-CalMin') -and ($noBandTxt -match '-CalMax') -and
-       ($noBandTxt -match '-CarbMax') -and ($noBandTxt -match '-ProteinMin')) $noBandTxt
+    $rj1 = $null
+    if (Test-Path (Join-Path $bt 'r1\run.json')) { $rj1 = (Get-Content (Join-Path $bt 'r1\run.json') -Raw -Encoding utf8 | ConvertFrom-Json) }
+    T 'MUST FIRE  an UNSTATED band mints the run dir with NO limits, and SAYS so rather than refusing' `
+      (($noBandTxt -match 'band: NONE') -and $null -ne $rj1 -and $null -eq $rj1.band.calMin -and `
+       $null -eq $rj1.band.calMax -and $null -eq $rj1.band.carbMax -and $null -eq $rj1.band.proteinMin) `
+      $noBandTxt
+    T '   and run.json records that NOTHING was stated, so a later reader is not left guessing' `
+      ($null -ne $rj1 -and (@($rj1.band_stated)).Count -eq 0) `
+      ($(if ($rj1) { 'stated=' + ((@($rj1.band_stated)) -join ',') } else { 'no run.json' }))
 
     $partial = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r2') -Conditions 'fixture' -Stop 'fixture' -CalMin 500 -CalMax 650 -CarbMax 40 2>&1
-    T 'MUST FIRE  a band missing ONLY the protein floor is still refused - the floor is not optional, saying 0 is' `
-      ((@($partial | ForEach-Object { [string]$_ }) -join ' ') -match '-ProteinMin') ($partial -join ' ')
+    $rj2 = $null
+    if (Test-Path (Join-Path $bt 'r2\run.json')) { $rj2 = (Get-Content (Join-Path $bt 'r2\run.json') -Raw -Encoding utf8 | ConvertFrom-Json) }
+    T 'MUST FIRE  a PARTIAL band is honoured - stated edges apply, the unstated protein floor is unbounded' `
+      ($null -ne $rj2 -and [double]$rj2.band.calMin -eq 500 -and [double]$rj2.band.carbMax -eq 40 -and `
+       $null -eq $rj2.band.proteinMin -and ((@($partial | ForEach-Object { [string]$_ }) -join ' ') -match 'protein any')) `
+      ($partial -join ' ')
 
     $inverted = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Init -RunDir (Join-Path $bt 'r3') -Conditions 'fixture' -Stop 'fixture' -CalMin 700 -CalMax 500 -CarbMax 40 -ProteinMin 0 2>&1
     T 'MUST FIRE  a floor above its own ceiling is refused - it admits nothing and would source zero recipes silently' `
@@ -840,22 +854,26 @@ if (-not $QueueScript) { $QueueScript = Join-Path $repo 'grocery\ingredient-queu
 
 # ---- -Init ----------------------------------------------------------------------------------------
 if ($runInit) {
-  # THE BAND IS DEMANDED, NOT DEFAULTED. Before this, the calorie window and the carb ceiling lived as
-  # constants in TWO places (harvest.py's module globals and hunt-daemon's DEFAULT_BAND) and there was
-  # no protein floor at all, so a run whose conditions said "50 g protein or more" was enforced by
-  # nothing and nobody could tell from the run dir what band had actually been applied. The band now
-  # arrives here, gets written into run.json, and the daemon reads it back.
-  $missing = @()
-  if ($CalMin -lt 0)     { $missing += '-CalMin' }
-  if ($CalMax -lt 0)     { $missing += '-CalMax' }
-  if ($CarbMax -lt 0)    { $missing += '-CarbMax' }
-  if ($ProteinMin -lt 0) { $missing += '-ProteinMin (pass 0 for no floor)' }
-  if ($missing.Count) {
-    Write-Output ("hunt-run -Init: the macro band is a RUN PARAMETER and must be stated. Missing: {0}" -f ($missing -join ', '))
-    Write-Output "  e.g. -CalMin 500 -CalMax 650 -CarbMax 40 -ProteinMin 50"
-    exit 1
-  }
-  if ($CalMin -gt $CalMax) {
+  # THE BAND IS OPTIONAL, AND EVERY EDGE IS OPTIONAL SEPARATELY (Brad's ruling 2026-08-24, evening:
+  # "drop the band in code - however, be prepared for me to give a band during prompts").
+  #
+  # THIS RELAXES A GUARD ADDED THIS MORNING, AND THE REASON IT IS SAFE IS WORTH WRITING DOWN. -Init
+  # used to REFUSE an unstated band, because a CONSTRAINT nobody typed gets enforced silently by two
+  # gates for a whole run - that was the failure mode, and it is a real one. The ABSENCE of a
+  # constraint has no such failure mode: it cannot wrongly reject anything. So defaulting to no limit
+  # is safe in a way that defaulting to 400-650 / <= 35 never was. What the refusal bought - "a reader
+  # months later can see what the gates were enforcing" - is kept, and kept in the two places that
+  # actually get read: run.json records exactly what was stated, and the daemon logs the effective
+  # band on every run.
+  #
+  # Unstated (-1) means UNBOUNDED for that edge alone. State only what you want limited: -ProteinMin 50
+  # on its own is a protein floor with no calorie or carb limit, and reads that way in run.json.
+  $stated = @()
+  if ($CalMin -ge 0)     { $stated += 'CalMin' }
+  if ($CalMax -ge 0)     { $stated += 'CalMax' }
+  if ($CarbMax -ge 0)    { $stated += 'CarbMax' }
+  if ($ProteinMin -gt 0) { $stated += 'ProteinMin' }
+  if ($CalMin -ge 0 -and $CalMax -ge 0 -and $CalMin -gt $CalMax) {
     Write-Output ("hunt-run -Init: -CalMin {0} is above -CalMax {1}. A band with its floor over its ceiling admits nothing, and the run would source zero recipes without ever saying why." -f $CalMin, $CalMax)
     exit 1
   }
@@ -874,16 +892,26 @@ if ($runInit) {
     auto_publish = $true
     # The band the run was STARTED under, in the run dir, so a report months later can say what the
     # gates were actually enforcing rather than what today's constants happen to be.
-    band = [ordered]@{ calMin = $CalMin; calMax = $CalMax; carbMax = $CarbMax
+    band = [ordered]@{ calMin = $(if ($CalMin -ge 0) { $CalMin } else { $null })
+                       calMax = $(if ($CalMax -ge 0) { $CalMax } else { $null })
+                       carbMax = $(if ($CarbMax -ge 0) { $CarbMax } else { $null })
                        proteinMin = $(if ($ProteinMin -gt 0) { $ProteinMin } else { $null }) }
+    band_stated = @($stated)
     catalog_digest = $digest; catalog_digest_written = $digestDate
     board_file = $(if ($board.Count) { $board[0].Name } else { $null })
     board_written = $(if ($board.Count) { $board[0].LastWriteTime.ToString('yyyy-MM-ddTHH:mm:ss') } else { $null })
   }
   Write-JsonAtomic -Path (Join-Path $RunDir 'run.json') -Obj $doc
   Write-Output ("hunt-run: initialised {0}  (wave size {1})" -f $runId, $WaveSize)
-  Write-Output ("  band: {0}-{1} cal, carbs <= {2}, protein {3}" -f $CalMin, $CalMax, $CarbMax,
-                $(if ($ProteinMin -gt 0) { ">= $ProteinMin" } else { 'no floor (stated)' }))
+  if ($stated.Count) {
+    Write-Output ("  band: cal {0}, carbs {1}, protein {2}   (stated: {3})" -f `
+      $(if ($CalMin -ge 0 -or $CalMax -ge 0) { ("{0}-{1}" -f $(if ($CalMin -ge 0) { $CalMin } else { 'any' }), $(if ($CalMax -ge 0) { $CalMax } else { 'any' })) } else { 'any' }),
+      $(if ($CarbMax -ge 0) { "<= $CarbMax" } else { 'any' }),
+      $(if ($ProteinMin -gt 0) { ">= $ProteinMin" } else { 'any' }),
+      ($stated -join ', '))
+  } else {
+    Write-Output '  band: NONE - no calorie, carb or protein limit. Every candidate the pool holds is eligible.'
+  }
   if (-not $digestDate) { Write-Output '  WARNING no pipeline\catalog-digest.json - run make-catalog-digest.ps1 before sourcing' }
   if (-not $board.Count) { Write-Output '  WARNING no grocery\out\comparison-*.json - pricing reads it' }
   else { Write-Output ("  board: {0} (written {1})" -f $board[0].Name, $board[0].LastWriteTime.ToString('yyyy-MM-dd HH:mm')) }
