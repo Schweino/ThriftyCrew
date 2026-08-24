@@ -1,0 +1,1104 @@
+{
+ "generated": "2026-08-24T03:39:56",
+ "what": "section 4.1a adapter drill: every agent type once, both roads, same prompts",
+ "headless_road": "agent-flag",
+ "dispatches": 10,
+ "overhead": {
+  "headless_tokens_in": {
+   "n": 10,
+   "min": 7220,
+   "median": 15470,
+   "max": 30942,
+   "mean": 18050.4
+  },
+  "headless_cache_creation": {
+   "n": 10,
+   "min": 1895,
+   "median": 7564,
+   "max": 23514,
+   "mean": 9391.2
+  },
+  "headless_cache_read": {
+   "n": 3,
+   "min": 20044,
+   "median": 20044,
+   "max": 23268,
+   "mean": 21118.7
+  },
+  "headless_seconds": {
+   "n": 10,
+   "min": 5.18,
+   "median": 7.51,
+   "max": 10.35,
+   "mean": 7.3
+  },
+  "headless_cost_usd": {
+   "n": 10,
+   "min": 0.083005,
+   "median": 0.169749,
+   "max": 0.26981,
+   "mean": 0.2
+  },
+  "twin_tokens_in": {
+   "n": 10,
+   "min": 18452,
+   "median": 49624,
+   "max": 78624,
+   "mean": 46572.0
+  },
+  "twin_tokens_out": {
+   "n": 10,
+   "min": 188,
+   "median": 312,
+   "max": 909,
+   "mean": 404.0
+  }
+ },
+ "rows": [
+  {
+   "agent": "recipe-sourcer",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "unverified_macros": "KEEP"
+   },
+   "twin_keys": {
+    "unverified_macros": "KEEP"
+   },
+   "headless_tokens_in": 7553,
+   "headless_tokens_out": 274,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 7551,
+   "headless_seconds": 7.51,
+   "headless_cost_usd": 0.083005,
+   "twin_tokens_in": 18864,
+   "twin_tokens_out": 282,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-dedup-selector",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "decisions.0.slug": "drill-garlic-butter-chicken-thighs"
+   },
+   "twin_keys": {
+    "decisions.0.slug": "drill-garlic-butter-chicken-thighs"
+   },
+   "headless_tokens_in": 7220,
+   "headless_tokens_out": 405,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 7218,
+   "headless_seconds": 8.42,
+   "headless_cost_usd": 0.083271,
+   "twin_tokens_in": 18452,
+   "twin_tokens_out": 537,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-hunter-extractor",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "state": "ok",
+    "ingredients.length": 5,
+    "instructions.length": 3
+   },
+   "twin_keys": {
+    "state": "ok",
+    "ingredients.length": 5,
+    "instructions.length": 3
+   },
+   "headless_tokens_in": 7566,
+   "headless_tokens_out": 483,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 7564,
+   "headless_seconds": 8.0,
+   "headless_cost_usd": 0.17623,
+   "twin_tokens_in": 18996,
+   "twin_tokens_out": 601,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-ingredient-mapper",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true
+   },
+   "twin_keys": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true
+   },
+   "headless_tokens_in": 30942,
+   "headless_tokens_out": 389,
+   "headless_cache_read": 23268,
+   "headless_cache_creation": 1895,
+   "headless_seconds": 9.18,
+   "headless_cost_usd": 0.139062,
+   "twin_tokens_in": 78624,
+   "twin_tokens_out": 909,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-hunter-pricer",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "verdict": "PENDING"
+   },
+   "twin_keys": {
+    "verdict": "PENDING"
+   },
+   "headless_tokens_in": 15470,
+   "headless_tokens_out": 96,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 15468,
+   "headless_seconds": 5.33,
+   "headless_cost_usd": 0.157739,
+   "twin_tokens_in": 49624,
+   "twin_tokens_out": 188,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-writer",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "computes_numbers": false
+   },
+   "twin_keys": {
+    "computes_numbers": false
+   },
+   "headless_tokens_in": 29293,
+   "headless_tokens_out": 205,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 23514,
+   "headless_seconds": 7.46,
+   "headless_cost_usd": 0.26981,
+   "twin_tokens_in": 75294,
+   "twin_tokens_out": 405,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-source-qa",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS"
+   },
+   "twin_keys": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS"
+   },
+   "headless_tokens_in": 12181,
+   "headless_tokens_out": 131,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 12179,
+   "headless_seconds": 5.18,
+   "headless_cost_usd": 0.250797,
+   "twin_tokens_in": 28280,
+   "twin_tokens_out": 215,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "recipe-batch-auditor",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "verdict": "NO-GO"
+   },
+   "twin_keys": {
+    "verdict": "NO-GO"
+   },
+   "headless_tokens_in": 30066,
+   "headless_tokens_out": 150,
+   "headless_cache_read": 20044,
+   "headless_cache_creation": 4135,
+   "headless_seconds": 6.27,
+   "headless_cost_usd": 0.169749,
+   "twin_tokens_in": 76606,
+   "twin_tokens_out": 287,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "post-publish-reviewer",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false
+   },
+   "twin_keys": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false
+   },
+   "headless_tokens_in": 28804,
+   "headless_tokens_out": 235,
+   "headless_cache_read": 20044,
+   "headless_cache_creation": 2981,
+   "headless_seconds": 10.35,
+   "headless_cost_usd": 0.149846,
+   "twin_tokens_in": 74304,
+   "twin_tokens_out": 312,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  },
+  {
+   "agent": "commodity-registrar",
+   "headless_ok": true,
+   "twin_ok": true,
+   "headless_keys": {
+    "edits_catalog": false,
+    "mechanisms.length": 3
+   },
+   "twin_keys": {
+    "edits_catalog": false,
+    "mechanisms.length": 3
+   },
+   "headless_tokens_in": 11409,
+   "headless_tokens_out": 90,
+   "headless_cache_read": 0,
+   "headless_cache_creation": 11407,
+   "headless_seconds": 5.31,
+   "headless_cost_usd": 0.233257,
+   "twin_tokens_in": 26676,
+   "twin_tokens_out": 304,
+   "headless_reasked": false,
+   "twin_reasked": false,
+   "headless_findings": [],
+   "disagreements": []
+  }
+ ],
+ "findings": [],
+ "headless_detail": [
+  {
+   "agent": "recipe-sourcer",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 7553,
+   "tokens_out": 274,
+   "cache_read": 0,
+   "cache_creation": 7551,
+   "cost_usd": 0.083005,
+   "seconds": 7.51,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 555,
+     "outputTokens": 16,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000635,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-opus-4-8": {
+     "inputTokens": 2,
+     "outputTokens": 274,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 7551,
+     "webSearchRequests": 0,
+     "costUSD": 0.08237000000000001,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "excluded_protein_class": "seafood",
+    "unverified_macros": "KEEP",
+    "why": "Unverifiable macros are kept but flagged with honest low confidence rather than fabricated or dropped, since the selector culls and honest gaps beat invented numbers."
+   },
+   "text": "{\"excluded_protein_class\": \"seafood\", \"unverified_macros\": \"KEEP\", \"why\": \"Unverifiable macros are kept but flagged with honest low confidence rather than fabricated or dropped, since the selector culls and honest gaps beat invented numbers.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "unverified_macros": "KEEP"
+   }
+  },
+  {
+   "agent": "recipe-dedup-selector",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 7220,
+   "tokens_out": 405,
+   "cache_read": 0,
+   "cache_creation": 7218,
+   "cost_usd": 0.083271,
+   "seconds": 8.42,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 881,
+     "outputTokens": 15,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.0009559999999999999,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-opus-4-8": {
+     "inputTokens": 2,
+     "outputTokens": 405,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 7218,
+     "webSearchRequests": 0,
+     "costUSD": 0.082315,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "decisions": [
+     {
+      "slug": "drill-garlic-butter-chicken-thighs",
+      "verdict": "accepted",
+      "reason": "Distinct garlic-butter sauce family with verified low-carb band (512 cal, 6g carbs); only neighbour is a creamy Tuscan skillet sharing just protein+method, not the same dinner.",
+      "dupe_of": [],
+      "record": {
+       "name": "Garlic Butter Chicken Thighs",
+       "protein": "chicken",
+       "method": "skillet",
+       "verdict": "accepted",
+       "reason": "Simple 5-ingredient garlic-butter chicken thighs, verified band, batch-scalable, no true duplicate in catalog (nearest is a creamy Tuscan skillet, different sauce family)."
+      }
+     }
+    ],
+    "note": "Single-candidate drill; only one live neighbour (creamy Tuscan) which differs in sauce family, so no collision. Saturation pressure low (2). Accepted on cost plausibility, verified low-carb band, and format fit."
+   },
+   "text": "{\"decisions\": [{\"slug\": \"drill-garlic-butter-chicken-thighs\", \"verdict\": \"accepted\", \"reason\": \"Distinct garlic-butter sauce family with verified low-carb band (512 cal, 6g carbs); only neighbour is a creamy Tuscan skillet sharing just protein+method, not the same dinner.\", \"dupe_of\": [], \"record\": {\"name\": \"Garlic Butter Chicken Thighs\", \"protein\": \"chicken\", \"method\": \"skillet\", \"verdict\": \"accepted\", \"reason\": \"Simple 5-ingredient garlic-butter chicken thighs, verified band, batch-scalable, no true duplicate in catalog (nearest is a creamy Tuscan skillet, different sauce family).\"}}], \"note\": \"Single-candidate drill; only one live neighbour (creamy Tuscan) which differs in sauce family, so no collision. Saturation pressure low (2). Accepted on cost plausibility, verified low-carb band, and format fit.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "decisions.0.slug": "drill-garlic-butter-chicken-thighs"
+   }
+  },
+  {
+   "agent": "recipe-hunter-extractor",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 7566,
+   "tokens_out": 483,
+   "cache_read": 0,
+   "cache_creation": 7564,
+   "cost_usd": 0.17623,
+   "seconds": 8.0,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 700,
+     "outputTokens": 16,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.00078,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 2,
+     "outputTokens": 483,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 7564,
+     "webSearchRequests": 0,
+     "costUSD": 0.17545,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "state": "ok",
+    "title": "Skillet Paprika Chicken",
+    "servings": 4,
+    "time_total": "35 minutes",
+    "time_active": "15 minutes",
+    "ingredients": [
+     {
+      "raw": "1 1/2 pounds boneless skinless chicken thighs",
+      "item": "chicken thighs",
+      "qty": "1 1/2",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "2 tablespoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "2",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1 large onion, thinly sliced",
+      "item": "onion",
+      "qty": "1",
+      "unit": "each",
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1/2 cup heavy cream",
+      "item": "heavy cream",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "chopped parsley (optional)",
+      "item": "parsley",
+      "qty": null,
+      "unit": null,
+      "prep": "chopped",
+      "optional": true,
+      "section": null
+     }
+    ],
+    "instructions": [
+     "Sear the chicken.",
+     "Soften the onion, add the paprika.",
+     "Stir in the cream and simmer."
+    ],
+    "concerns": []
+   },
+   "text": "{\"state\": \"ok\", \"title\": \"Skillet Paprika Chicken\", \"servings\": 4, \"time_total\": \"35 minutes\", \"time_active\": \"15 minutes\", \"ingredients\": [{\"raw\": \"1 1/2 pounds boneless skinless chicken thighs\", \"item\": \"chicken thighs\", \"qty\": \"1 1/2\", \"unit\": \"pound\", \"prep\": null, \"optional\": false, \"section\": null}, {\"raw\": \"2 tablespoons smoked paprika\", \"item\": \"smoked paprika\", \"qty\": \"2\", \"unit\": \"tablespoon\", \"prep\": null, \"optional\": false, \"section\": null}, {\"raw\": \"1 large onion, thinly sliced\", \"item\": \"onion\", \"qty\": \"1\", \"unit\": \"each\", \"prep\": \"thinly sliced\", \"optional\": false, \"section\": null}, {\"raw\": \"1/2 cup heavy cream\", \"item\": \"heavy cream\", \"qty\": \"1/2\", \"unit\": \"cup\", \"prep\": null, \"optional\": false, \"section\": null}, {\"raw\": \"chopped parsley (optional)\", \"item\": \"parsley\", \"qty\": null, \"unit\": null, \"prep\": \"chopped\", \"optional\": true, \"section\": null}], \"instructions\": [\"Sear the chicken.\", \"Soften the onion, add the paprika.\", \"Stir in the cream and simmer.\"], \"concerns\": []}",
+   "road": "agent-flag",
+   "keys": {
+    "state": "ok",
+    "ingredients.length": 5,
+    "instructions.length": 3
+   }
+  },
+  {
+   "agent": "recipe-ingredient-mapper",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 30942,
+   "tokens_out": 389,
+   "cache_read": 23268,
+   "cache_creation": 1895,
+   "cost_usd": 0.139062,
+   "seconds": 9.18,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 574,
+     "outputTokens": 16,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000654,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 5779,
+     "outputTokens": 389,
+     "cacheReadInputTokens": 23268,
+     "cacheCreationInputTokens": 1895,
+     "webSearchRequests": 0,
+     "costUSD": 0.138408,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true,
+    "why": "A vocabulary resolution only names the food, not a priced board cell, so the recipe holds at mapped until pricing wires a bid, and when nothing in the closed namespace matches, item_id = null is the sanctioned safe outcome (pantry-static pricing) versus a stretched mapping that publishes a wrong price."
+   },
+   "text": "{\"unbid_ingredient\": \"HOLD\", \"no_match_item_id_is_null\": true, \"why\": \"A vocabulary resolution only names the food, not a priced board cell, so the recipe holds at mapped until pricing wires a bid, and when nothing in the closed namespace matches, item_id = null is the sanctioned safe outcome (pantry-static pricing) versus a stretched mapping that publishes a wrong price.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true
+   }
+  },
+  {
+   "agent": "recipe-hunter-pricer",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 15470,
+   "tokens_out": 96,
+   "cache_read": 0,
+   "cache_creation": 15468,
+   "cost_usd": 0.157739,
+   "seconds": 5.33,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 564,
+     "outputTokens": 17,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.0006490000000000001,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-opus-5": {
+     "inputTokens": 2,
+     "outputTokens": 96,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 15468,
+     "webSearchRequests": 0,
+     "costUSD": 0.15709,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "verdict": "PENDING",
+    "why": "NOT-CARRIED requires all seven stores CHECKED with none carrying, and here one store is UNUSABLE (bot wall -> blocked) and one was never reached, so two remain unchecked and unchecked is never not-carried."
+   },
+   "text": "{\"verdict\": \"PENDING\", \"why\": \"NOT-CARRIED requires all seven stores CHECKED with none carrying, and here one store is UNUSABLE (bot wall -> blocked) and one was never reached, so two remain unchecked and unchecked is never not-carried.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "verdict": "PENDING"
+   }
+  },
+  {
+   "agent": "recipe-writer",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 29293,
+   "tokens_out": 205,
+   "cache_read": 0,
+   "cache_creation": 23514,
+   "cost_usd": 0.26981,
+   "seconds": 7.46,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 565,
+     "outputTokens": 17,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.00065,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-opus-4-8": {
+     "inputTokens": 5779,
+     "outputTokens": 205,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 23514,
+     "webSearchRequests": 0,
+     "costUSD": 0.26916,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "intro": "This Skillet Paprika Chicken lands at 512 calories with just 6 grams of carbs a serving, so you get a warm, smoky plate that treats your wallet and your waistline with the same respect.",
+    "forbidden_punctuation": "em dash (—)",
+    "computes_numbers": false
+   },
+   "text": "{\"intro\": \"This Skillet Paprika Chicken lands at 512 calories with just 6 grams of carbs a serving, so you get a warm, smoky plate that treats your wallet and your waistline with the same respect.\", \"forbidden_punctuation\": \"em dash (—)\", \"computes_numbers\": false}",
+   "road": "agent-flag",
+   "keys": {
+    "computes_numbers": false
+   }
+  },
+  {
+   "agent": "recipe-source-qa",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 12181,
+   "tokens_out": 131,
+   "cache_read": 0,
+   "cache_creation": 12179,
+   "cost_usd": 0.250797,
+   "seconds": 5.18,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 562,
+     "outputTokens": 17,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000647,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 2,
+     "outputTokens": 131,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 12179,
+     "webSearchRequests": 0,
+     "costUSD": 0.25015000000000004,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS",
+    "why": "An unfetchable page is never a finding against the recipe — the extraction is the anchor of record, the recipe matches it line for line, and I judge from that single anchor (anchors: [\"extraction\"]) rather than penalize the recipe for its publisher's network behavior."
+   },
+   "text": "{\"blocked_domain_is_a_finding\": false, \"verdict\": \"PASS\", \"why\": \"An unfetchable page is never a finding against the recipe — the extraction is the anchor of record, the recipe matches it line for line, and I judge from that single anchor (anchors: [\\\"extraction\\\"]) rather than penalize the recipe for its publisher's network behavior.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS"
+   }
+  },
+  {
+   "agent": "recipe-batch-auditor",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 30066,
+   "tokens_out": 150,
+   "cache_read": 20044,
+   "cache_creation": 4135,
+   "cost_usd": 0.169749,
+   "seconds": 6.27,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 550,
+     "outputTokens": 17,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000635,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 5887,
+     "outputTokens": 150,
+     "cacheReadInputTokens": 20044,
+     "cacheCreationInputTokens": 4135,
+     "webSearchRequests": 0,
+     "costUSD": 0.169114,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "verdict": "NO-GO",
+    "exit_two_means": "could-not-run, a blocked stage - never a pass",
+    "why": "Exit 2 means the mechanical battery produced no evidence at all, so nothing has been checked and an unrun audit cannot support a GO; the missing manifest is itself the blocking finding."
+   },
+   "text": "{\"verdict\": \"NO-GO\", \"exit_two_means\": \"could-not-run, a blocked stage - never a pass\", \"why\": \"Exit 2 means the mechanical battery produced no evidence at all, so nothing has been checked and an unrun audit cannot support a GO; the missing manifest is itself the blocking finding.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "verdict": "NO-GO"
+   }
+  },
+  {
+   "agent": "post-publish-reviewer",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 28804,
+   "tokens_out": 235,
+   "cache_read": 20044,
+   "cache_creation": 2981,
+   "cost_usd": 0.149846,
+   "seconds": 10.35,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 557,
+     "outputTokens": 17,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000642,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 5779,
+     "outputTokens": 235,
+     "cacheReadInputTokens": 20044,
+     "cacheCreationInputTokens": 2981,
+     "webSearchRequests": 0,
+     "costUSD": 0.149204,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false,
+    "why": "Propagate rewrote live cost blocks on 17 already-published recipes alongside the 8 new slugs, so all 25 pages changed in front of readers and the collateral must be sampled for cost-transcription fidelity too."
+   },
+   "text": "{\"recipes_shipped\": 25, \"wave_only_review_sufficient\": false, \"why\": \"Propagate rewrote live cost blocks on 17 already-published recipes alongside the 8 new slugs, so all 25 pages changed in front of readers and the collateral must be sampled for cost-transcription fidelity too.\"}",
+   "road": "agent-flag",
+   "keys": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false
+   }
+  },
+  {
+   "agent": "commodity-registrar",
+   "ok": true,
+   "failure": null,
+   "detail": "",
+   "problems": [],
+   "reasked": false,
+   "tokens_in": 11409,
+   "tokens_out": 90,
+   "cache_read": 0,
+   "cache_creation": 11407,
+   "cost_usd": 0.233257,
+   "seconds": 5.31,
+   "calls": 1,
+   "model_usage": {
+    "claude-haiku-4-5-20251001": {
+     "inputTokens": 522,
+     "outputTokens": 15,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 0,
+     "webSearchRequests": 0,
+     "costUSD": 0.000597,
+     "contextWindow": 200000,
+     "maxOutputTokens": 32000
+    },
+    "claude-fable-5": {
+     "inputTokens": 2,
+     "outputTokens": 90,
+     "cacheReadInputTokens": 0,
+     "cacheCreationInputTokens": 11407,
+     "webSearchRequests": 0,
+     "costUSD": 0.23266,
+     "contextWindow": 1000000,
+     "maxOutputTokens": 64000
+    }
+   },
+   "denials": [],
+   "findings": [],
+   "payload": {
+    "mechanisms": [
+     "reuse an existing id",
+     "add an alias pair to recipe-floor-id-map.json",
+     "approve a new id (with allowlist pair in commodity-dupe-allowlist.json when a near-match exists)"
+    ],
+    "edits_catalog": false
+   },
+   "text": "{\"mechanisms\": [\"reuse an existing id\", \"add an alias pair to recipe-floor-id-map.json\", \"approve a new id (with allowlist pair in commodity-dupe-allowlist.json when a near-match exists)\"], \"edits_catalog\": false}",
+   "road": "agent-flag",
+   "keys": {
+    "edits_catalog": false,
+    "mechanisms.length": 3
+   }
+  }
+ ],
+ "twin_detail": [
+  {
+   "agent": "recipe-sourcer",
+   "ok": true,
+   "keys": {
+    "unverified_macros": "KEEP"
+   },
+   "payload": {
+    "excluded_protein_class": "Seafood",
+    "unverified_macros": "KEEP",
+    "why": "Seafood is the standing no-exception exclusion, while unverifiable macros are kept and honestly flagged as null/low-confidence for a later stage rather than dropped, since honest gaps beat fabrication and the selector culls."
+   },
+   "tokens_in": 18864,
+   "tokens_out": 282,
+   "reasked": false,
+   "agent_id": "a6e0a35eaadbf4ea7"
+  },
+  {
+   "agent": "recipe-dedup-selector",
+   "ok": true,
+   "keys": {
+    "decisions.0.slug": "drill-garlic-butter-chicken-thighs"
+   },
+   "payload": {
+    "decisions": [
+     {
+      "slug": "drill-garlic-butter-chicken-thighs",
+      "verdict": "accepted",
+      "reason": "Garlic-butter skillet chicken thighs with a verified 6g-carb band; the only neighbour is a creamy Tuscan (cream/sun-dried-tomato) skillet, a different sauce family and dinner.",
+      "dupe_of": [],
+      "record": {
+       "name": "Garlic Butter Chicken Thighs",
+       "protein": "chicken",
+       "method": "skillet",
+       "verdict": "accepted",
+       "reason": "Distinct garlic-butter thigh skillet, verified low-carb band (512 cal / 6g carb / 38g protein), no catalog twin (nearest is creamy Tuscan chicken, a different sauce family)."
+      }
+     }
+    ],
+    "note": "Single-candidate drill. Only neighbour (creamy-tuscan-chicken-skillet, bge-m3 0.71) shares protein+method but not sauce family, so no duplicate. Verified structurally-low-carb band, uncrowded region (saturation 2). Accepted."
+   },
+   "tokens_in": 18452,
+   "tokens_out": 537,
+   "reasked": false,
+   "agent_id": "a13c76930a01ac26f"
+  },
+  {
+   "agent": "recipe-hunter-extractor",
+   "ok": true,
+   "keys": {
+    "state": "ok",
+    "ingredients.length": 5,
+    "instructions.length": 3
+   },
+   "payload": {
+    "state": "ok",
+    "title": "Skillet Paprika Chicken",
+    "ingredients": [
+     {
+      "raw": "1 1/2 pounds boneless skinless chicken thighs",
+      "item": "chicken thighs",
+      "qty": "1 1/2",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "2 tablespoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "2",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1 large onion, thinly sliced",
+      "item": "onion",
+      "qty": "1",
+      "unit": "each",
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1/2 cup heavy cream",
+      "item": "heavy cream",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "chopped parsley (optional)",
+      "item": "parsley",
+      "qty": null,
+      "unit": null,
+      "prep": "chopped",
+      "optional": true,
+      "section": null
+     }
+    ],
+    "instructions": [
+     "Sear the chicken.",
+     "Soften the onion, add the paprika.",
+     "Stir in the cream and simmer."
+    ]
+   },
+   "tokens_in": 18996,
+   "tokens_out": 601,
+   "reasked": false,
+   "agent_id": "ae6753a460ce019f7"
+  },
+  {
+   "agent": "recipe-ingredient-mapper",
+   "ok": true,
+   "keys": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true
+   },
+   "payload": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true,
+    "why": "A resolved name with no bid wired is pending pricing work (the report can only ADD to the pricing worklist, never bypass it), so the recipe holds at mapped until the price lane wires a bid; when nothing in the closed namespace matches, item_id = null is the correct, safe answer (pantry-static pricing) because a stretched mapping publishes a wrong price."
+   },
+   "tokens_in": 78624,
+   "tokens_out": 909,
+   "reasked": false,
+   "agent_id": "ae519ab2ec2e74641"
+  },
+  {
+   "agent": "recipe-hunter-pricer",
+   "ok": true,
+   "keys": {
+    "verdict": "PENDING"
+   },
+   "payload": {
+    "verdict": "PENDING",
+    "why": "Only five of seven stores were actually checked and came back EMPTY; the bot-walled store is `blocked` and the seventh was never reached, and unchecked is never not-carried, so no absence verdict can be issued until both are searched (or a hit at either flips it to CARRIED)."
+   },
+   "tokens_in": 49624,
+   "tokens_out": 188,
+   "reasked": false,
+   "agent_id": "adaee611ea9f4e719"
+  },
+  {
+   "agent": "recipe-writer",
+   "ok": true,
+   "keys": {
+    "computes_numbers": false
+   },
+   "payload": {
+    "intro": "Here is the quiet truth about Skillet Paprika Chicken: it lands at 512 calories with just 6 grams of carbs a serving, so it feeds you well without wrecking your plan or your wallet.",
+    "forbidden_punctuation": "the em dash (and its cousin the en dash)",
+    "computes_numbers": false
+   },
+   "tokens_in": 75294,
+   "tokens_out": 405,
+   "reasked": false,
+   "agent_id": "a7afd03bd1c41f742"
+  },
+  {
+   "agent": "recipe-source-qa",
+   "ok": true,
+   "keys": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS"
+   },
+   "payload": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS",
+    "why": "The anchor rule says an unfetchable page is never a finding against the recipe; the extraction is ground truth, the spec matches it line for line, so the recipe passes with anchors recorded as [\"extraction\"] only."
+   },
+   "tokens_in": 28280,
+   "tokens_out": 215,
+   "reasked": false,
+   "agent_id": "ae31dc437f72357bd"
+  },
+  {
+   "agent": "recipe-batch-auditor",
+   "ok": true,
+   "keys": {
+    "verdict": "NO-GO"
+   },
+   "payload": {
+    "verdict": "NO-GO",
+    "exit_two_means": "could-not-run: a blocked stage, never a pass",
+    "why": "Exit 2 means the mechanical battery never ran (missing input manifest), so no mechanical bill of health exists and none of the checklist has any evidence behind it; a GO requires at minimum exit 0 with the WAVE-PREAUDIT-COMPLETE line plus my own review of the residue, and an unrunnable stage is itself a blocking finding to repair before re-audit."
+   },
+   "tokens_in": 76606,
+   "tokens_out": 287,
+   "reasked": false,
+   "agent_id": "aab53ad45f012681d"
+  },
+  {
+   "agent": "post-publish-reviewer",
+   "ok": true,
+   "keys": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false
+   },
+   "payload": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false,
+    "why": "Propagate republishes the 17 collateral recipes with changed cost numbers to the live site alongside the 8 wave slugs, so all 25 pages changed in front of readers and the collateral pages need the same live number-match verification as the wave."
+   },
+   "tokens_in": 74304,
+   "tokens_out": 312,
+   "reasked": false,
+   "agent_id": "aac298761781baa2a"
+  },
+  {
+   "agent": "commodity-registrar",
+   "ok": true,
+   "keys": {
+    "edits_catalog": false,
+    "mechanisms.length": 3
+   },
+   "payload": {
+    "mechanisms": [
+     "Reuse the existing id (same food, same form - never a new id)",
+     "Add an alias pair to recipe-floor-id-map.json (recipe spelling -> weekly id, when units match)",
+     "Approve a new id (with proper include/exclude rules and namespace assignment), paired with a commodity-dupe-allowlist.json entry when a near-match pair was adjudicated as different-purchase/deliberate-variant"
+    ],
+    "edits_catalog": false
+   },
+   "tokens_in": 26676,
+   "tokens_out": 304,
+   "reasked": false,
+   "agent_id": "afe8183bc49956b93"
+  }
+ ]
+}

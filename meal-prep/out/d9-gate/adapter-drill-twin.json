@@ -1,0 +1,241 @@
+{
+ "impl": "workflow-twin",
+ "run_id": "wf_399d33cb-ee5",
+ "what": "The Workflow twin half of the adapter drill. Rows rebuilt MECHANICALLY from the run transcript dir - journal.jsonl result lines, agent-*.meta.json for the agent type, per-agent usage summed the lane-tokens.ps1 way (input + cache_read + cache_creation) - never transcribed by hand. The dir holds two runs (the spec was corrected mid-drill); the NEWEST transcript per agent type is the one kept.",
+ "dispatches": 10,
+ "ok": 10,
+ "rows": [
+  {
+   "agent": "recipe-sourcer",
+   "ok": true,
+   "keys": {
+    "unverified_macros": "KEEP"
+   },
+   "payload": {
+    "excluded_protein_class": "Seafood",
+    "unverified_macros": "KEEP",
+    "why": "Seafood is the standing no-exception exclusion, while unverifiable macros are kept and honestly flagged as null/low-confidence for a later stage rather than dropped, since honest gaps beat fabrication and the selector culls."
+   },
+   "tokens_in": 18864,
+   "tokens_out": 282,
+   "reasked": false,
+   "agent_id": "a6e0a35eaadbf4ea7"
+  },
+  {
+   "agent": "recipe-dedup-selector",
+   "ok": true,
+   "keys": {
+    "decisions.0.slug": "drill-garlic-butter-chicken-thighs"
+   },
+   "payload": {
+    "decisions": [
+     {
+      "slug": "drill-garlic-butter-chicken-thighs",
+      "verdict": "accepted",
+      "reason": "Garlic-butter skillet chicken thighs with a verified 6g-carb band; the only neighbour is a creamy Tuscan (cream/sun-dried-tomato) skillet, a different sauce family and dinner.",
+      "dupe_of": [],
+      "record": {
+       "name": "Garlic Butter Chicken Thighs",
+       "protein": "chicken",
+       "method": "skillet",
+       "verdict": "accepted",
+       "reason": "Distinct garlic-butter thigh skillet, verified low-carb band (512 cal / 6g carb / 38g protein), no catalog twin (nearest is creamy Tuscan chicken, a different sauce family)."
+      }
+     }
+    ],
+    "note": "Single-candidate drill. Only neighbour (creamy-tuscan-chicken-skillet, bge-m3 0.71) shares protein+method but not sauce family, so no duplicate. Verified structurally-low-carb band, uncrowded region (saturation 2). Accepted."
+   },
+   "tokens_in": 18452,
+   "tokens_out": 537,
+   "reasked": false,
+   "agent_id": "a13c76930a01ac26f"
+  },
+  {
+   "agent": "recipe-hunter-extractor",
+   "ok": true,
+   "keys": {
+    "state": "ok",
+    "ingredients.length": 5,
+    "instructions.length": 3
+   },
+   "payload": {
+    "state": "ok",
+    "title": "Skillet Paprika Chicken",
+    "ingredients": [
+     {
+      "raw": "1 1/2 pounds boneless skinless chicken thighs",
+      "item": "chicken thighs",
+      "qty": "1 1/2",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "2 tablespoons smoked paprika",
+      "item": "smoked paprika",
+      "qty": "2",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1 large onion, thinly sliced",
+      "item": "onion",
+      "qty": "1",
+      "unit": "each",
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "1/2 cup heavy cream",
+      "item": "heavy cream",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+     },
+     {
+      "raw": "chopped parsley (optional)",
+      "item": "parsley",
+      "qty": null,
+      "unit": null,
+      "prep": "chopped",
+      "optional": true,
+      "section": null
+     }
+    ],
+    "instructions": [
+     "Sear the chicken.",
+     "Soften the onion, add the paprika.",
+     "Stir in the cream and simmer."
+    ]
+   },
+   "tokens_in": 18996,
+   "tokens_out": 601,
+   "reasked": false,
+   "agent_id": "ae6753a460ce019f7"
+  },
+  {
+   "agent": "recipe-ingredient-mapper",
+   "ok": true,
+   "keys": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true
+   },
+   "payload": {
+    "unbid_ingredient": "HOLD",
+    "no_match_item_id_is_null": true,
+    "why": "A resolved name with no bid wired is pending pricing work (the report can only ADD to the pricing worklist, never bypass it), so the recipe holds at mapped until the price lane wires a bid; when nothing in the closed namespace matches, item_id = null is the correct, safe answer (pantry-static pricing) because a stretched mapping publishes a wrong price."
+   },
+   "tokens_in": 78624,
+   "tokens_out": 909,
+   "reasked": false,
+   "agent_id": "ae519ab2ec2e74641"
+  },
+  {
+   "agent": "recipe-hunter-pricer",
+   "ok": true,
+   "keys": {
+    "verdict": "PENDING"
+   },
+   "payload": {
+    "verdict": "PENDING",
+    "why": "Only five of seven stores were actually checked and came back EMPTY; the bot-walled store is `blocked` and the seventh was never reached, and unchecked is never not-carried, so no absence verdict can be issued until both are searched (or a hit at either flips it to CARRIED)."
+   },
+   "tokens_in": 49624,
+   "tokens_out": 188,
+   "reasked": false,
+   "agent_id": "adaee611ea9f4e719"
+  },
+  {
+   "agent": "recipe-writer",
+   "ok": true,
+   "keys": {
+    "computes_numbers": false
+   },
+   "payload": {
+    "intro": "Here is the quiet truth about Skillet Paprika Chicken: it lands at 512 calories with just 6 grams of carbs a serving, so it feeds you well without wrecking your plan or your wallet.",
+    "forbidden_punctuation": "the em dash (and its cousin the en dash)",
+    "computes_numbers": false
+   },
+   "tokens_in": 75294,
+   "tokens_out": 405,
+   "reasked": false,
+   "agent_id": "a7afd03bd1c41f742"
+  },
+  {
+   "agent": "recipe-source-qa",
+   "ok": true,
+   "keys": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS"
+   },
+   "payload": {
+    "blocked_domain_is_a_finding": false,
+    "verdict": "PASS",
+    "why": "The anchor rule says an unfetchable page is never a finding against the recipe; the extraction is ground truth, the spec matches it line for line, so the recipe passes with anchors recorded as [\"extraction\"] only."
+   },
+   "tokens_in": 28280,
+   "tokens_out": 215,
+   "reasked": false,
+   "agent_id": "ae31dc437f72357bd"
+  },
+  {
+   "agent": "recipe-batch-auditor",
+   "ok": true,
+   "keys": {
+    "verdict": "NO-GO"
+   },
+   "payload": {
+    "verdict": "NO-GO",
+    "exit_two_means": "could-not-run: a blocked stage, never a pass",
+    "why": "Exit 2 means the mechanical battery never ran (missing input manifest), so no mechanical bill of health exists and none of the checklist has any evidence behind it; a GO requires at minimum exit 0 with the WAVE-PREAUDIT-COMPLETE line plus my own review of the residue, and an unrunnable stage is itself a blocking finding to repair before re-audit."
+   },
+   "tokens_in": 76606,
+   "tokens_out": 287,
+   "reasked": false,
+   "agent_id": "aab53ad45f012681d"
+  },
+  {
+   "agent": "post-publish-reviewer",
+   "ok": true,
+   "keys": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false
+   },
+   "payload": {
+    "recipes_shipped": 25,
+    "wave_only_review_sufficient": false,
+    "why": "Propagate republishes the 17 collateral recipes with changed cost numbers to the live site alongside the 8 wave slugs, so all 25 pages changed in front of readers and the collateral pages need the same live number-match verification as the wave."
+   },
+   "tokens_in": 74304,
+   "tokens_out": 312,
+   "reasked": false,
+   "agent_id": "aac298761781baa2a"
+  },
+  {
+   "agent": "commodity-registrar",
+   "ok": true,
+   "keys": {
+    "edits_catalog": false,
+    "mechanisms.length": 3
+   },
+   "payload": {
+    "mechanisms": [
+     "Reuse the existing id (same food, same form - never a new id)",
+     "Add an alias pair to recipe-floor-id-map.json (recipe spelling -> weekly id, when units match)",
+     "Approve a new id (with proper include/exclude rules and namespace assignment), paired with a commodity-dupe-allowlist.json entry when a near-match pair was adjudicated as different-purchase/deliberate-variant"
+    ],
+    "edits_catalog": false
+   },
+   "tokens_in": 26676,
+   "tokens_out": 304,
+   "reasked": false,
+   "agent_id": "afe8183bc49956b93"
+  }
+ ]
+}

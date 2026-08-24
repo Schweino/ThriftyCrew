@@ -44,6 +44,45 @@ function Read-Store { param([string]$P)
   if ($d -and ($d.PSObject.Properties.Name -contains 'resolutions')) { return @($d.resolutions) }
   return @() }
 
+# ---------------------------------------------------------------------------------------------------
+# THE WRITE LOCK (added 2026-08-24, PLAN-recipe-hunter-v3 D9's phase-1 obligation: "any single-file
+# ledger written by a lane whose cap exceeds 1 takes the source-domains named-mutex pattern, with a
+# concurrent-writers fixture PER LEDGER").
+#
+# This ledger is a read-modify-write of one JSON file, and until today its only writer was one mapper
+# agent at a time. The v3 daemon runs the MAP LANE AT CAP 2 and holds the pen itself, so two mapper
+# completions can land a -Record at the same moment: both read the same rows, both add their own, and
+# the last one wins - the other resolution is simply gone, and the next mapper re-derives an answer
+# this ledger exists to have already given. The measured cost of skipping exactly this on
+# source-domains was 2,293 outcomes recorded as 65, a 97% loss.
+#
+# A NAMED SYSTEM MUTEX, not a lock file: the OS releases it if a writer dies, so a crashed lane cannot
+# wedge the ledger for every future run. The WHOLE read-modify-write happens inside it - locking only
+# the write would still lose the row that was read before the lock was taken.
+# ---------------------------------------------------------------------------------------------------
+$script:LOCK_TIMEOUT_MS = 15000
+
+function Invoke-Locked {
+  param([scriptblock]$Body, [string]$Path)
+  # Named after the store, so a scratch store in a fixture cannot block the live one.
+  $key = 'Global\tc-ingredient-resolutions-' + ([Math]::Abs($Path.ToLower().GetHashCode())).ToString()
+  $mx = New-Object System.Threading.Mutex($false, $key)
+  $held = $false
+  try {
+    try { $held = $mx.WaitOne($script:LOCK_TIMEOUT_MS) }
+    catch [System.Threading.AbandonedMutexException] { $held = $true }   # a dead writer, not a wedge
+    if (-not $held) {
+      # Could-not-write is never a silent pass: say so and exit non-zero so the caller sees it.
+      Write-Output ("ingredient-resolutions: could not take the write lock within {0} ms - resolution NOT recorded" -f $script:LOCK_TIMEOUT_MS)
+      exit 2
+    }
+    & $Body
+  } finally {
+    if ($held) { $mx.ReleaseMutex() | Out-Null }
+    $mx.Dispose()
+  }
+}
+
 if ($runSelfTest) {
   $bad=0
   function T([string]$n,[bool]$ok,[string]$got){ if($ok){Write-Output ("  ok    "+$n)}else{Write-Output ("  X     "+$n+"   got: "+$got); $script:bad++} }
@@ -58,6 +97,55 @@ if ($runSelfTest) {
     T 'the store round-trips' ($b.Count -eq 1 -and $b[0].key -eq 'sumac') ([string]$b.Count)
     T 'MUST FIRE  bid_exists=false survives the round-trip as FALSE, not as absent' ($b[0].bid_exists -eq $false) ([string]$b[0].bid_exists)
     T 'a missing store reads as empty' ((@(Read-Store (Join-Path $env:TEMP 'nope-ir.json'))).Count -eq 0) 'not empty'
+
+    # MUST FIRE: CONCURRENT WRITERS DO NOT LOSE ROWS (added 2026-08-24, D9's phase-1 obligation).
+    #
+    # The v3 daemon runs the MAP LANE AT CAP 2 and holds the pen itself, so two mapper completions can
+    # land a -Record at the same instant. Without the mutex both read the same rows, both add their
+    # own, and the last write wins - the measured cost of exactly this on source-domains was 2,293
+    # outcomes recorded as 65, a 97% loss.
+    #
+    # A FIXTURE THAT CANNOT LOSE A ROW PROVES NOTHING, and the first build of this one could not.
+    # MEASURED 2026-08-24: four Start-Job children each spawning their own powershell.exe passed
+    # WITH THE LOCK NEUTERED, because process startup costs ~1 s and the read-modify-write costs
+    # ~2 ms - the four writers never overlapped, so there was no race to lose. Two things fix that,
+    # and both are needed:
+    #   1. A START BARRIER. Every child is handed the same UTC instant and spins until it arrives, so
+    #      they enter the critical section together instead of a second apart.
+    #   2. A STORE BIG ENOUGH TO BE SLOW. The scratch store is seeded with 400 rows, which puts the
+    #      read-modify-write in the tens of milliseconds - wide enough for four barriered writers to
+    #      sit inside it at once.
+    # With both, the neutered run loses rows every time and the locked run loses none. Four writers
+    # and not two on purpose: the PS 5.1 collection traps say a fixture over a collection uses at
+    # least three elements, and losing one of four is unmistakable where losing one of two reads as a
+    # coin flip.
+    $ctmp = Join-Path $env:TEMP ('ir-conc-' + [guid]::NewGuid().ToString('N') + '.json')
+    $seed = @(1..400 | ForEach-Object {
+      [pscustomobject]@{ key="seed $_"; term="seed $_"; item_id="seed-$_"; bid_exists=$true
+                         evidence='a row that must survive four concurrent writers'; by='fixture'
+                         at='2026-08-24T00:00:00' } })
+    ([pscustomobject]@{ count=$seed.Count; resolutions=$seed } | ConvertTo-Json -Depth 6) | Set-Content $ctmp -Encoding utf8
+    $barrier = (Get-Date).ToUniversalTime().AddSeconds(4).ToString('o')
+    $jobs = @()
+    foreach ($i in 1..4) {
+      $jobs += Start-Job -ScriptBlock {
+        param($script, $store, $n, $go)
+        $t = [datetime]::Parse($go, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
+        while ((Get-Date).ToUniversalTime() -lt $t) { Start-Sleep -Milliseconds 2 }
+        & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Record -Term ("conc term $n") -ItemId ("conc-$n") -BidExists -By 'fixture' -Store $store | Out-Null
+      } -ArgumentList $PSCommandPath, $ctmp, $i, $barrier
+    }
+    $jobs | Wait-Job -Timeout 180 | Out-Null
+    $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
+    $got = @(Read-Store $ctmp)
+    $conc = @(@($got | Where-Object { [string]$_.key -like 'conc term *' } | ForEach-Object { [string]$_.key }) | Sort-Object)
+    $seedKept = @($got | Where-Object { [string]$_.key -like 'seed *' }).Count
+    Remove-Item $ctmp -Force -ErrorAction SilentlyContinue
+    T 'MUST FIRE  4 barriered concurrent -Record calls all land (the map lane writes 2-wide and the daemon holds the pen)' `
+      (@($conc).Count -eq 4 -and ($conc -join ',') -eq 'conc term 1,conc term 2,conc term 3,conc term 4') `
+      ("kept " + @($conc).Count + " of 4: " + ($conc -join ','))
+    T 'MUST FIRE  and not one of the 400 rows already in the ledger was dropped on the way' `
+      ($seedKept -eq 400) ("kept $seedKept of 400")
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
   if ($bad -gt 0) { Write-Output ("ingredient-resolutions SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'ingredient-resolutions SELF-TEST PASS'
@@ -78,18 +166,28 @@ function Save-Rows { param($R)
 if ($runRecord) {
   $k = Get-TermKey $Term
   if (-not $k) { Write-Output 'ingredient-resolutions: -Record needs -Term'; exit 1 }
-  $keep = @($rows | Where-Object { [string]$_.key -ne $k })
-  $row = [pscustomobject]@{ key=$k; term=$Term; item_id=$ItemId; bid_exists=$runBid; evidence=$Evidence; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss') }
-  Save-Rows @($keep + $row)
+  # RE-READ INSIDE THE LOCK. $rows above was read before the mutex was taken, and using it here would
+  # keep the exact race the mutex exists to close - a writer that merges into a snapshot older than
+  # its own turn drops whatever landed in between.
+  Invoke-Locked -Path $Store -Body {
+    $fresh = @(Read-Store $Store)
+    $keep = @($fresh | Where-Object { [string]$_.key -ne $k })
+    $row = [pscustomobject]@{ key=$k; term=$Term; item_id=$ItemId; bid_exists=$runBid; evidence=$Evidence; by=$By; at=(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss') }
+    Save-Rows @($keep + $row)
+  }
   Write-Output ("ingredient-resolutions: {0} -> {1}{2}" -f $k, $(if($ItemId){$ItemId}else{'(null)'}), $(if($runBid){' [bid wired]'}else{' [NO BID - recipe must hold at mapped]'}))
   exit 0
 }
 if ($runInv) {
   if (-not $ItemId) { Write-Output 'ingredient-resolutions: -Invalidate needs -ItemId'; exit 1 }
-  $before = @($rows).Count
-  $keep = @($rows | Where-Object { [string]$_.item_id -ne $ItemId })
-  Save-Rows $keep
-  Write-Output ("ingredient-resolutions: invalidated {0} row(s) for item_id '{1}'" -f ($before - @($keep).Count), $ItemId)
+  $script:invalidated = 0
+  Invoke-Locked -Path $Store -Body {
+    $fresh = @(Read-Store $Store)
+    $keep = @($fresh | Where-Object { [string]$_.item_id -ne $ItemId })
+    $script:invalidated = @($fresh).Count - @($keep).Count
+    Save-Rows $keep
+  }
+  Write-Output ("ingredient-resolutions: invalidated {0} row(s) for item_id '{1}'" -f $script:invalidated, $ItemId)
   exit 0
 }
 if ($runQuery) {

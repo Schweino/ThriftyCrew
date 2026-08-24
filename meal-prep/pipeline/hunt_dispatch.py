@@ -1,0 +1,685 @@
+"""
+hunt_dispatch.py - the judgment-call dispatch adapter (PLAN-recipe-hunter-v3 section 4.1a, D9).
+
+    python hunt_dispatch.py --selftest
+    python hunt_dispatch.py --agent recipe-source-qa --prompt-file p.txt [--reconstruct] [--json]
+
+WHAT THIS IS. The daemon owns mechanics; judgment still goes to a Claude agent. This is the one road
+those calls take: a headless `claude -p` invocation whose agent, model, effort and tool list come from
+`.claude\\agents\\<name>.md` and from nowhere else (section 4.4a: the frontmatter is the single
+authority, and nothing in v3 hardcodes a model).
+
+THE ROAD, CORRECTED 2026-08-24 AND MEASURED ON CLI 2.1.173.
+Section 4.1a was written on the premise that "`claude -p` cannot invoke a named subagent as its
+top-level agent - subagents in `.claude\\agents\\` are things a running session delegates to, not
+entry points", and therefore ordered the adapter to RECONSTRUCT each agent from its definition file
+(--model + --append-system-prompt <body> + --allowedTools <list>). That premise is false on this CLI,
+and the measurement is in the drill report:
+
+    echo <prompt> | claude -p --agent recipe-source-qa --output-format json
+      -> result "WebFetch, Read, Grep, Glob, Bash, PowerShell" when asked to name its own tools,
+         which is that agent's frontmatter list EXACTLY;
+      -> modelUsage carries claude-fable-5, which is that agent's frontmatter model;
+      -> num_turns 1, one context. Nothing delegates to anything.
+
+So `--agent` is the PRIMARY road, and it is better than the reconstruction the plan ordered for a
+reason beyond convenience: reconstruction makes this file a SECOND reader of the frontmatter, and two
+readers of one authority is how the estate's forked-taxonomy defects start. With --agent the CLI reads
+the file and this adapter cannot disagree with it.
+
+The reconstruction road is still built, still fixtured, and still one flag away (`reconstruct=True`).
+It is the fallback if a future CLI drops --agent, and it is what the drill diffs the primary road
+against.
+
+WHAT IS STILL THIS FILE'S JOB, unchanged from 4.1a:
+  * parse the frontmatter anyway - for `effort` (passed explicitly; the same value the file states, so
+    it cannot disagree) and to CHECK that the model which actually ran is the model the file pins;
+  * parse the JSON result envelope;
+  * validate the payload against the stage schema HERE, in the daemon's own process;
+  * re-ask ONCE on schema failure, quoting every named violation, and NEVER auto-coerce. On the
+    phase-1 gate run a decider whose prompt spelled out the closed enums still returned nine invented
+    values; silently coercing an invented taxonomy into a legal one is how a ledger stops noticing it
+    is being forked;
+  * a transport or timeout failure is a null - STUCK, never a verdict (B5).
+
+EXIT CODES (section 4.5): 0 clean / 1 findings / 2 could-not-run. Marker HUNT-DISPATCH-COMPLETE.
+INTERPRETER: C:\\Codex\\Python312\\python.exe.
+"""
+from __future__ import annotations
+
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+MP = os.path.dirname(HERE)
+REPO = os.path.dirname(MP)
+sys.path.insert(0, HERE)
+
+import hunt_lib                                                  # noqa: E402
+
+AGENT_DIR = os.path.join(REPO, ".claude", "agents")
+CLAUDE_BIN = os.environ.get("TC_CLAUDE_BIN", "claude")
+
+
+# =====================================================================================================
+# The agent definition file is the authority. This reads it; it never overrides it.
+# =====================================================================================================
+
+class AgentDef(object):
+    __slots__ = ("name", "model", "effort", "tools", "body", "path", "description")
+
+    def __init__(self, name, model, effort, tools, body, path, description):
+        self.name = name
+        self.model = model
+        self.effort = effort
+        self.tools = tools          # [] means the frontmatter declared none, i.e. ALL tools
+        self.body = body
+        self.path = path
+        self.description = description
+
+    def as_dict(self):
+        return {"name": self.name, "model": self.model, "effort": self.effort,
+                "tools": list(self.tools), "body_bytes": len(self.body.encode("utf-8")),
+                "path": self.path}
+
+
+def parse_agent(name, agent_dir=None):
+    """Read `.claude\\agents\\<name>.md`. Raises if it is missing - a dispatch to an agent nobody
+    defined must never fall back to 'the default agent', which would run the wrong model silently."""
+    path = os.path.join(agent_dir or AGENT_DIR, "%s.md" % name)
+    if not os.path.exists(path):
+        raise FileNotFoundError("no agent definition at %s" % path)
+    with open(path, "r", encoding="utf-8-sig") as f:
+        text = f.read().replace("\r\n", "\n")
+    if not text.startswith("---\n"):
+        raise ValueError("%s has no frontmatter block" % path)
+    end = text.find("\n---\n", 3)
+    if end < 0:
+        raise ValueError("%s has an unterminated frontmatter block" % path)
+    fm_text, body = text[4:end + 1], text[end + 5:]
+    fm = {}
+    for line in fm_text.split("\n"):
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)$", line)
+        if m:
+            fm[m.group(1).strip()] = m.group(2).strip()
+    tools = [t.strip() for t in (fm.get("tools") or "").split(",") if t.strip()]
+    return AgentDef(name=fm.get("name") or name, model=fm.get("model") or "",
+                    effort=fm.get("effort") or "", tools=tools, body=body.strip(), path=path,
+                    description=fm.get("description") or "")
+
+
+def model_matches(pinned, model_usage_keys):
+    """Did the model the frontmatter pins actually run?
+
+    Alias-aware, because the frontmatter legitimately writes `fable` where the API reports
+    `claude-fable-5`. Deliberately NOT a prefix match: `opus-5` must not be satisfied by
+    `claude-opus-4-8`, which is exactly the confusion a silent tier drop would hide behind.
+
+    A headless invocation also bills a small auxiliary model call (measured: ~450 input tokens of
+    haiku alongside every dispatch, for the CLI's own housekeeping). That is why this asks whether the
+    pinned model is PRESENT rather than whether it is the only one.
+    """
+    want = str(pinned or "").strip().lower()
+    if not want:
+        return True, "the frontmatter pins no model, so nothing was overridden"
+    want = want[len("claude-"):] if want.startswith("claude-") else want
+    keys = [str(k).lower() for k in (model_usage_keys or [])]
+    for k in keys:
+        bare = k[len("claude-"):] if k.startswith("claude-") else k
+        if bare == want or bare.startswith(want + "-") or bare == want.replace("claude-", ""):
+            return True, k
+    return False, ("the frontmatter pins %r and the call billed %s - the pin was dropped"
+                   % (pinned, ", ".join(keys) or "nothing"))
+
+
+# =====================================================================================================
+# The dispatch
+# =====================================================================================================
+
+class DispatchResult(object):
+    """What the daemon gets back. `payload` is None whenever no usable verdict exists, and `failure`
+    says which kind of nothing it is - the distinction B5 exists to preserve."""
+
+    __slots__ = ("agent", "payload", "text", "failure", "detail", "problems", "reasked",
+                 "tokens_in", "tokens_out", "cache_read", "cache_creation", "cost_usd",
+                 "seconds", "calls", "model_usage", "session_id", "denials", "findings")
+
+    def __init__(self, agent):
+        self.agent = agent
+        self.payload = None
+        self.text = ""
+        self.failure = None        # None | transport | timeout | empty | schema
+        self.detail = ""
+        self.problems = []
+        self.reasked = False
+        self.tokens_in = 0         # input + cache_read + cache_creation, the lane-tokens.ps1 rule
+        self.tokens_out = 0
+        self.cache_read = 0
+        self.cache_creation = 0
+        self.cost_usd = 0.0
+        self.seconds = 0.0
+        self.calls = 0
+        self.model_usage = {}
+        self.session_id = ""
+        self.denials = []
+        self.findings = []
+
+    @property
+    def ok(self):
+        return self.payload is not None
+
+    def as_dict(self):
+        return {"agent": self.agent, "ok": self.ok, "failure": self.failure, "detail": self.detail,
+                "problems": list(self.problems), "reasked": self.reasked,
+                "tokens_in": self.tokens_in, "tokens_out": self.tokens_out,
+                "cache_read": self.cache_read, "cache_creation": self.cache_creation,
+                "cost_usd": round(self.cost_usd, 6), "seconds": round(self.seconds, 2),
+                "calls": self.calls, "model_usage": self.model_usage,
+                "denials": self.denials, "findings": list(self.findings),
+                "payload": self.payload, "text": self.text[:2000]}
+
+
+def build_argv(agent, reconstruct=False, extra=None):
+    """The exact argv. Kept separate from the call so the fixtures can assert its SHAPE without
+    spending a token - the shape is what carries the model pin and the tool contract."""
+    argv = [CLAUDE_BIN, "-p", "--output-format", "json"]
+    if reconstruct:
+        # THE FALLBACK ROAD - section 4.1a as originally written. Every field re-stated by this
+        # process rather than read by the CLI.
+        if agent.model:
+            argv += ["--model", agent.model]
+        argv += ["--append-system-prompt", agent.body]
+        if agent.tools:
+            argv += ["--allowedTools", ",".join(agent.tools)]
+    else:
+        argv += ["--agent", agent.name]
+    if agent.effort:
+        argv += ["--effort", agent.effort]
+    argv += list(extra or [])
+    return argv
+
+
+def _run(argv, prompt, timeout, cwd=None):
+    """One headless invocation. The prompt goes on STDIN, never in argv: Windows caps a command line
+    at 32,767 characters and a dossier batch alone can approach that, and `--tools`-style variadic
+    flags will happily swallow a positional prompt (measured 2026-08-24: `--tools "" <prompt>` exits
+    with 'Input must be provided either through stdin or as a prompt argument')."""
+    t0 = time.time()
+    try:
+        p = subprocess.run(argv, input=prompt.encode("utf-8"), capture_output=True,
+                           timeout=timeout, cwd=cwd or REPO)
+    except subprocess.TimeoutExpired:
+        return None, "timeout", "no answer within %ss" % timeout, round(time.time() - t0, 2)
+    except OSError as e:
+        return None, "transport", "could not start %s (%s)" % (argv[0], e), round(time.time() - t0, 2)
+    secs = round(time.time() - t0, 2)
+    out = (p.stdout or b"").decode("utf-8", errors="replace")
+    err = (p.stderr or b"").decode("utf-8", errors="replace")
+    if p.returncode != 0 and not out.strip():
+        return None, "transport", ("claude exited %d: %s" % (p.returncode, (err or "").strip()[:300])), secs
+    try:
+        env = json.loads(out)
+    except Exception:
+        return None, "transport", "the result envelope did not parse: %s" % out.strip()[:300], secs
+    return env, None, "", secs
+
+
+_FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.S)
+
+
+def extract_payload(text):
+    """Pull the JSON object out of an agent's answer. A model that wraps its verdict in a fence or in
+    a sentence has still answered; a model that returned prose has not, and that must read as a schema
+    failure rather than as a transport one - the two get different treatment (re-ask vs STUCK)."""
+    if not text:
+        return None
+    for m in _FENCE.finditer(text):
+        try:
+            return json.loads(m.group(1).strip())
+        except Exception:
+            continue
+    s = text.strip()
+    try:
+        return json.loads(s)
+    except Exception:
+        pass
+    # last resort: the outermost balanced {...}
+    start = s.find("{")
+    while start >= 0:
+        depth, in_str, esc = 0, False, False
+        for i in range(start, len(s)):
+            c = s[i]
+            if in_str:
+                if esc:
+                    esc = False
+                elif c == "\\":
+                    esc = True
+                elif c == '"':
+                    in_str = False
+                continue
+            if c == '"':
+                in_str = True
+            elif c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        return json.loads(s[start:i + 1])
+                    except Exception:
+                        break
+        start = s.find("{", start + 1)
+    return None
+
+
+def _absorb(res, env):
+    u = (env or {}).get("usage") or {}
+    res.tokens_in += (int(u.get("input_tokens") or 0)
+                      + int(u.get("cache_read_input_tokens") or 0)
+                      + int(u.get("cache_creation_input_tokens") or 0))
+    res.tokens_out += int(u.get("output_tokens") or 0)
+    res.cache_read += int(u.get("cache_read_input_tokens") or 0)
+    res.cache_creation += int(u.get("cache_creation_input_tokens") or 0)
+    res.cost_usd += float(env.get("total_cost_usd") or 0.0)
+    res.calls += 1
+    res.model_usage = env.get("modelUsage") or res.model_usage
+    res.session_id = env.get("session_id") or res.session_id
+    for d in env.get("permission_denials") or []:
+        res.denials.append(d if isinstance(d, str) else json.dumps(d)[:200])
+
+
+REASK_PREAMBLE = """Your previous answer did not conform to the schema this stage requires, so it was
+REFUSED WHOLE and nothing was written. Nothing has been coerced or half-applied on your behalf.
+
+The named violations, every one of them:
+%s
+
+What you returned:
+%s
+
+Return the SAME judgment again, corrected against those violations and nothing else. Do not soften a
+verdict to make it fit, and do not invent a value to fill a field - if a legal value does not describe
+what you found, say so in the reason and pick the closest legal one, because a value outside the
+closed set mints an identity nothing downstream will ever match again.
+
+Answer with the JSON object only.
+"""
+
+
+def dispatch(agent_name, prompt, schema=None, validator=None, timeout=None, reconstruct=False,
+             agent_dir=None, cwd=None, runner=None):
+    """One judgment call. Returns a DispatchResult; `payload is None` means NO VERDICT (B5).
+
+    `validator` is an extra check run after the schema one - hunt_lib.validate_decide is the caller
+    the DECIDE enums exist for. Both feed the SAME single re-ask, so an answer with a missing field
+    and an invented enum value is corrected once rather than twice.
+    """
+    timeout = hunt_lib.DISPATCH_TIMEOUT if timeout is None else timeout
+    # Resolved HERE rather than inside _run, so an injected runner sees the same working directory the
+    # real one would. A default that only the real path applies is a default the fixtures cannot check.
+    cwd = cwd or REPO
+    agent = parse_agent(agent_name, agent_dir)
+    res = DispatchResult(agent_name)
+    call = runner or _run
+    argv = build_argv(agent, reconstruct=reconstruct)
+
+    env, failure, detail, secs = call(argv, prompt, timeout, cwd)
+    res.seconds += secs
+    if failure:
+        res.failure, res.detail = failure, detail
+        return res
+    _absorb(res, env)
+
+    ok_model, why = model_matches(agent.model, (env.get("modelUsage") or {}).keys())
+    if not ok_model:
+        # RECORDED, not refused. The pin is the frontmatter's to state and the CLI's to honor; this
+        # adapter noticing a disagreement is worth more than this adapter overriding one.
+        res.findings.append("MODEL PIN: " + why)
+
+    if env.get("is_error"):
+        res.failure = "transport"
+        res.detail = "the CLI reported is_error (%s)" % (env.get("api_error_status") or "no status")
+        return res
+
+    res.text = str(env.get("result") or "")
+    payload = extract_payload(res.text)
+    problems = []
+    if payload is None:
+        problems = ["the answer carried no JSON object at all"]
+    else:
+        if schema:
+            problems += hunt_lib.validate_schema(payload, schema)
+        if validator:
+            problems += list(validator(payload) or [])
+    if not problems:
+        res.payload = payload
+        return res
+
+    # ---- ONE re-ask, quoting every named violation. Never a coercion, never a second re-ask. -------
+    res.reasked = True
+    res.problems = list(problems)
+    reask = (REASK_PREAMBLE % ("\n".join("  - " + p for p in problems), res.text[:4000])
+             + "\n\nTHE ORIGINAL REQUEST FOLLOWS.\n\n" + prompt)
+    env2, failure2, detail2, secs2 = call(argv, reask, timeout, cwd)
+    res.seconds += secs2
+    if failure2:
+        res.failure, res.detail = failure2, detail2
+        return res
+    _absorb(res, env2)
+    if env2.get("is_error"):
+        res.failure = "transport"
+        res.detail = "the re-ask reported is_error"
+        return res
+    res.text = str(env2.get("result") or "")
+    payload2 = extract_payload(res.text)
+    problems2 = []
+    if payload2 is None:
+        problems2 = ["the re-ask carried no JSON object either"]
+    else:
+        if schema:
+            problems2 += hunt_lib.validate_schema(payload2, schema)
+        if validator:
+            problems2 += list(validator(payload2) or [])
+    if problems2:
+        res.failure = "schema"
+        res.problems = list(problems2)
+        res.detail = ("the re-ask still does not conform (%d violation(s)); NOTHING was written - "
+                      "half a verdict on disk is worse than none" % len(problems2))
+        return res
+    res.payload = payload2
+    return res
+
+
+# =====================================================================================================
+# FIXTURES. The dispatch itself is INJECTED (`runner`), so everything below runs for zero tokens. What
+# is under test is the adapter: the argv it builds, the envelope it reads, what it re-asks, and what it
+# refuses. The one thing a fixture cannot prove is that the CLI honors --agent, which is why the drill
+# exists and why its measurement is recorded in the drill report rather than asserted here.
+# =====================================================================================================
+
+def _env(result_text, in_tok=100, out_tok=50, cache_read=0, cache_creation=0, model="claude-fable-5",
+         is_error=False):
+    return {"type": "result", "subtype": "success", "is_error": is_error, "result": result_text,
+            "session_id": "s1", "total_cost_usd": 0.01, "num_turns": 1, "permission_denials": [],
+            "usage": {"input_tokens": in_tok, "output_tokens": out_tok,
+                      "cache_read_input_tokens": cache_read,
+                      "cache_creation_input_tokens": cache_creation},
+            "modelUsage": {model: {"inputTokens": in_tok, "outputTokens": out_tok}}}
+
+
+class FakeRunner(object):
+    """Returns a scripted envelope per call and records the argv and prompt it was given."""
+
+    def __init__(self, script):
+        self.script = list(script)
+        self.calls = []
+
+    def __call__(self, argv, prompt, timeout, cwd):
+        self.calls.append({"argv": list(argv), "prompt": prompt, "timeout": timeout, "cwd": cwd})
+        step = self.script.pop(0) if self.script else ("env", _env("{}"))
+        kind, val = step
+        if kind == "env":
+            return val, None, "", 0.5
+        return None, kind, val, 0.5
+
+
+def selftest():
+    import shutil                                                # noqa: PLC0415
+    import tempfile                                              # noqa: PLC0415
+    bad = []
+
+    def T(name, ok, got=""):
+        if ok:
+            print("  ok    " + name)
+        else:
+            print("  X     %s   got: %s" % (name, got))
+            bad.append(name)
+
+    print("hunt_dispatch self-test  (every dispatch is injected: zero tokens)")
+    print("")
+
+    # ---- the frontmatter is the authority, and it is READ, never restated ------------------------
+    tmp = tempfile.mkdtemp(prefix="agentdefs-")
+    try:
+        def write_agent(name, fm, body="You are a test agent.\n\nRAILS:\n- do the thing"):
+            with open(os.path.join(tmp, name + ".md"), "w", encoding="utf-8") as f:
+                f.write("---\n" + fm + "\n---\n\n" + body + "\n")
+
+        write_agent("t-full", "name: t-full\nmodel: claude-opus-4-8\neffort: high\n"
+                              "tools: Read, Grep, Glob")
+        write_agent("t-notools", "name: t-notools\nmodel: fable\neffort: medium")
+        a = parse_agent("t-full", tmp)
+        T("the frontmatter's model, effort and tool list are read verbatim",
+          a.model == "claude-opus-4-8" and a.effort == "high" and a.tools == ["Read", "Grep", "Glob"],
+          json.dumps(a.as_dict()))
+        T("the body is everything after the frontmatter block",
+          a.body.startswith("You are a test agent.") and "RAILS" in a.body, a.body[:60])
+        b = parse_agent("t-notools", tmp)
+        T("CLEAN TWIN an agent declaring no tools yields an EMPTY list, which means all tools - not "
+          "an invented default",
+          b.tools == [], str(b.tools))
+        threw = False
+        try:
+            parse_agent("t-missing", tmp)
+        except FileNotFoundError:
+            threw = True
+        T("MUST FIRE  a dispatch to an agent nobody defined raises rather than silently running the "
+          "default agent on the wrong model", threw, "it fell back")
+
+        # ---- the argv, both roads --------------------------------------------------------------
+        primary = build_argv(a)
+        T("MUST FIRE  the primary road names the AGENT and never a model - the CLI reads the pin, so "
+          "this adapter cannot disagree with it",
+          "--agent" in primary and "t-full" in primary and "--model" not in primary,
+          " ".join(primary))
+        T("the frontmatter's effort rides along (--effort exists on CLI 2.1.173; section 4.1a "
+          "predates it)",
+          primary[primary.index("--effort") + 1] == "high", " ".join(primary))
+        T("every dispatch asks for the JSON envelope",
+          primary[primary.index("--output-format") + 1] == "json", " ".join(primary))
+        recon = build_argv(a, reconstruct=True)
+        T("CLEAN TWIN the fallback road restates model, body and tools (section 4.1a as written)",
+          recon[recon.index("--model") + 1] == "claude-opus-4-8"
+          and recon[recon.index("--allowedTools") + 1] == "Read,Grep,Glob"
+          and recon[recon.index("--append-system-prompt") + 1].startswith("You are a test agent."),
+          " ".join(x[:30] for x in recon))
+        recon2 = build_argv(b, reconstruct=True)
+        T("MUST FIRE  the fallback road omits --allowedTools for an agent that declares none, rather "
+          "than passing an empty list and disabling every tool",
+          "--allowedTools" not in recon2, " ".join(recon2))
+
+        # ---- B5: a transport failure is a null, never a verdict --------------------------------
+        print("")
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("transport", "claude exited 1: auth expired")]))
+        T("MUST FIRE  B5 - a transport failure is a null, never a verdict",
+          r.payload is None and r.failure == "transport" and not r.reasked, str(r.as_dict())[:200])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("timeout", "no answer within 3600s")]))
+        T("MUST FIRE  B5 - a timeout is a null too, and it says which kind of nothing it was",
+          r.payload is None and r.failure == "timeout", str(r.failure))
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("env", _env("", is_error=True))]))
+        T("MUST FIRE  is_error in the envelope is a transport failure, not an empty verdict",
+          r.payload is None and r.failure == "transport", str(r.failure))
+
+        # ---- the happy path, and the token stamp ------------------------------------------------
+        print("")
+        good = json.dumps({"slug": "s", "status": "ok", "state": "extracted"})
+        fr = FakeRunner([("env", _env(good, in_tok=12, out_tok=340, cache_read=21142,
+                                      cache_creation=10235))])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=fr)
+        T("CLEAN TWIN a conforming answer lands with no re-ask",
+          r.ok and not r.reasked and r.payload["slug"] == "s", str(r.as_dict())[:200])
+        T("MUST FIRE  the input stamp counts cache reads and cache writes as input, exactly as "
+          "lane-tokens.ps1 does - a lane log that reported 12 here would be a fiction",
+          r.tokens_in == 12 + 21142 + 10235 and r.tokens_out == 340,
+          "in=%d out=%d" % (r.tokens_in, r.tokens_out))
+        T("the prompt travels on stdin, never in argv (Windows caps a command line at 32,767 chars)",
+          fr.calls[0]["prompt"] == "go" and "go" not in fr.calls[0]["argv"],
+          " ".join(fr.calls[0]["argv"]))
+        T("the call runs at the repo root, so the estate's settings and CLAUDE.md apply",
+          fr.calls[0]["cwd"] == REPO, str(fr.calls[0]["cwd"]))
+
+        # ---- payload extraction -----------------------------------------------------------------
+        print("")
+        for label, text in (("a bare object", good),
+                            ("a fenced object", "Here it is:\n```json\n%s\n```\n" % good),
+                            ("an object inside prose", "I ruled as follows: %s  - done." % good)):
+            r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                         runner=FakeRunner([("env", _env(text))]))
+            T("the verdict is found when the model returns %s" % label, r.ok, str(r.problems))
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("env", _env("I could not do this.")),
+                                        ("env", _env("Still no."))]))
+        T("MUST FIRE  prose with no JSON is a SCHEMA failure (one re-ask), not a transport failure "
+          "(straight to STUCK) - the two get different treatment on purpose",
+          r.payload is None and r.failure == "schema" and r.reasked, str(r.failure))
+
+        # ---- THE ONE RE-ASK, and the refusal to coerce -------------------------------------------
+        print("")
+        bad_then_good = FakeRunner([
+            ("env", _env(json.dumps({"slug": "s", "status": "ok"}))),          # `state` missing
+            ("env", _env(good))])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=bad_then_good)
+        T("MUST FIRE  a schema failure buys exactly ONE re-ask, and the corrected answer lands",
+          r.ok and r.reasked and r.calls == 2, "calls=%d ok=%s" % (r.calls, r.ok))
+        T("MUST FIRE  the re-ask QUOTES the named violation back to the agent",
+          "state" in bad_then_good.calls[1]["prompt"]
+          and "REFUSED WHOLE" in bad_then_good.calls[1]["prompt"],
+          bad_then_good.calls[1]["prompt"][:160])
+        T("MUST FIRE  the re-ask carries the ORIGINAL request too - a correction with no question "
+          "attached is a different question",
+          bad_then_good.calls[1]["prompt"].endswith("go"), "the original prompt was dropped")
+        T("MUST FIRE  the re-ask shows the agent what it actually returned",
+          '"slug": "s"' in bad_then_good.calls[1]["prompt"]
+          or '"slug":"s"' in bad_then_good.calls[1]["prompt"],
+          "the prior answer was not quoted")
+        twice_bad = FakeRunner([("env", _env(json.dumps({"slug": "s", "status": "ok"}))),
+                                ("env", _env(json.dumps({"slug": "s"})))])
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp, runner=twice_bad)
+        T("MUST FIRE  a second failure is NOT a second re-ask - one, then refuse whole",
+          r.payload is None and r.failure == "schema" and r.calls == 2 and not twice_bad.script,
+          "calls=%d" % r.calls)
+        T("MUST FIRE  and the refusal names every surviving violation rather than the first",
+          len(r.problems) == 2, json.dumps(r.problems))
+
+        # ---- enum violations ARE schema failures, and are never coerced -------------------------
+        print("")
+        invented = {"decisions": [{"slug": "a", "verdict": "accepted", "reason": "r",
+                                   "record": {"name": "A", "protein": "turkey/beef",
+                                              "method": "soup/stew", "verdict": "accepted",
+                                              "reason": "r"}}]}
+        legal = {"decisions": [{"slug": "a", "verdict": "accepted", "reason": "r",
+                                "record": {"name": "A", "protein": "turkey", "method": "any",
+                                           "verdict": "accepted", "reason": "r"}}]}
+        methods = {"skillet", "bake", "any"}
+        enum_run = FakeRunner([("env", _env(json.dumps(invented))),
+                               ("env", _env(json.dumps(legal)))])
+        r = dispatch("t-full", "rule on these", schema=hunt_lib.DECIDE,
+                     validator=lambda p: hunt_lib.validate_decide(p, methods=methods),
+                     agent_dir=tmp, runner=enum_run)
+        T("MUST FIRE  an invented enum value is a schema failure and the re-ask names BOTH of them "
+          "(`turkey/beef` and `soup/stew` were really returned on 2026-08-23)",
+          "turkey/beef" in enum_run.calls[1]["prompt"] and "soup/stew" in enum_run.calls[1]["prompt"],
+          enum_run.calls[1]["prompt"][:200])
+        T("CLEAN TWIN the corrected verdict lands",
+          r.ok and r.payload["decisions"][0]["record"]["protein"] == "turkey", str(r.problems))
+        never = FakeRunner([("env", _env(json.dumps(invented))), ("env", _env(json.dumps(invented)))])
+        r = dispatch("t-full", "rule", schema=hunt_lib.DECIDE,
+                     validator=lambda p: hunt_lib.validate_decide(p, methods=methods),
+                     agent_dir=tmp, runner=never)
+        T("MUST FIRE  the daemon NEVER auto-coerces - an invented taxonomy twice is a refusal, and "
+          "nothing legal is written in its place",
+          r.payload is None and r.failure == "schema"
+          and any("turkey/beef" in p for p in r.problems), str(r.problems)[:200])
+
+        # ---- the model pin is checked, and a drop is REPORTED -----------------------------------
+        print("")
+        T("CLEAN TWIN the frontmatter alias `fable` is satisfied by claude-fable-5",
+          model_matches("fable", ["claude-fable-5"])[0], str(model_matches("fable", ["claude-fable-5"])))
+        T("MUST FIRE  `claude-opus-5` is NOT satisfied by claude-opus-4-8",
+          not model_matches("claude-opus-5", ["claude-opus-4-8"])[0],
+          str(model_matches("claude-opus-5", ["claude-opus-4-8"])))
+        T("CLEAN TWIN the auxiliary haiku call every headless dispatch bills does not read as a "
+          "dropped pin",
+          model_matches("claude-opus-4-8", ["claude-haiku-4-5-20251001", "claude-opus-4-8"])[0],
+          "read as a drop")
+        r = dispatch("t-full", "go", schema=hunt_lib.STAGE, agent_dir=tmp,
+                     runner=FakeRunner([("env", _env(good, model="claude-haiku-4-5-20251001"))]))
+        T("MUST FIRE  a silently downgraded model is a FINDING on the result, not a refusal - the "
+          "pin is the frontmatter's to state and the CLI's to honor, and this adapter's job is to "
+          "notice",
+          r.ok and any("MODEL PIN" in f for f in r.findings), json.dumps(r.findings))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # ---- the live agent definitions parse, and their pins are the ones section 4.4a ratified -----
+    print("")
+    print("the estate's own agent definitions:")
+    for name in sorted(os.path.splitext(f)[0] for f in os.listdir(AGENT_DIR) if f.endswith(".md")):
+        try:
+            a = parse_agent(name)
+            T("  %-26s model=%-18s effort=%-7s tools=%s"
+              % (a.name, a.model or "(none)", a.effort or "(none)",
+                 (str(len(a.tools)) + " declared") if a.tools else "all"),
+              bool(a.model) and bool(a.body), a.path)
+        except Exception as e:                                    # noqa: BLE001
+            T("  %s parses" % name, False, str(e))
+
+    print("")
+    if bad:
+        print("hunt_dispatch SELF-TEST FAIL (%d)" % len(bad))
+        print("HUNT-DISPATCH-COMPLETE")
+        return hunt_lib.EXIT_CANNOT_RUN
+    print("hunt_dispatch SELF-TEST PASS")
+    print("HUNT-DISPATCH-COMPLETE")
+    return hunt_lib.EXIT_CLEAN
+
+
+def main(argv=None):
+    import argparse                                              # noqa: PLC0415
+    ap = argparse.ArgumentParser(description="the section 4.1a judgment dispatch adapter")
+    ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--agent", default="")
+    ap.add_argument("--prompt-file", dest="prompt_file", default="")
+    ap.add_argument("--prompt", default="")
+    ap.add_argument("--reconstruct", action="store_true",
+                    help="use section 4.1a's original road instead of --agent")
+    ap.add_argument("--timeout", type=int, default=hunt_lib.DISPATCH_TIMEOUT)
+    ap.add_argument("--json", action="store_true")
+    a = ap.parse_args(argv)
+    if a.selftest:
+        return selftest()
+    if not a.agent:
+        ap.print_help()
+        return hunt_lib.EXIT_CANNOT_RUN
+    prompt = a.prompt
+    if a.prompt_file:
+        with open(a.prompt_file, "r", encoding="utf-8-sig") as f:
+            prompt = f.read()
+    if not prompt.strip():
+        print("hunt_dispatch: CANNOT RUN - no prompt")
+        print("HUNT-DISPATCH-COMPLETE")
+        return hunt_lib.EXIT_CANNOT_RUN
+    r = dispatch(a.agent, prompt, timeout=a.timeout, reconstruct=a.reconstruct)
+    if a.json:
+        print(json.dumps(r.as_dict(), indent=1, ensure_ascii=False))
+    else:
+        print(r.text)
+        print("")
+        print("  %s  in=%d out=%d  %.1fs  $%.4f  %s"
+              % (a.agent, r.tokens_in, r.tokens_out, r.seconds, r.cost_usd,
+                 "OK" if r.ok else ("FAILED: %s - %s" % (r.failure, r.detail))))
+        for f in r.findings:
+            print("  FINDING  " + f)
+    print("HUNT-DISPATCH-COMPLETE")
+    return hunt_lib.EXIT_CLEAN if r.ok else hunt_lib.EXIT_FINDINGS
+
+
+if __name__ == "__main__":
+    sys.exit(main())

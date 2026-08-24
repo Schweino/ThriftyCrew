@@ -122,21 +122,42 @@ if ($runSelfTest) {
     # MUST FIRE: CONCURRENT WRITERS DO NOT LOSE INCREMENTS. Measured 2026-08-23 - before the mutex,
     # the v3 harvester's 8 parallel fetches turned 2,293 real outcomes into 65 recorded ones, which
     # would have kept a genuinely walled publisher below the three-failure block threshold forever.
-    # Eight child processes, eight -Record calls at the same domain, on a scratch store.
+    #
+    # REBUILT 2026-08-24 (D9), because THIS FIXTURE DID NOT FIRE. Measured: with the mutex neutered,
+    # the eight-job version below still reported ok=8 and the suite still passed - it proved nothing,
+    # and PLAN-recipe-hunter-v3 D9 names it as the pattern every other ledger's fixture should copy,
+    # so an inert reference would have propagated. The reason it could not race: each child spawns its
+    # own powershell.exe at ~1 s apiece while the read-modify-write costs ~2 ms, so no two writers were
+    # ever inside the critical section together. Two changes fix it, and both are needed:
+    #   1. A START BARRIER - every child is handed the same UTC instant and spins until it arrives.
+    #   2. A STORE BIG ENOUGH TO BE SLOW - seeded with 400 domains, which puts the read-modify-write
+    #      in the tens of milliseconds, wide enough for eight barriered writers to overlap.
+    # With both, the neutered run loses increments every time. The lock was always right; only its
+    # fixture was asleep.
     $ctmp = Join-Path $env:TEMP ('sd-conc-' + [guid]::NewGuid().ToString('N') + '.json')
+    $seed = @(1..400 | ForEach-Object {
+      [pscustomobject]@{ domain="seed$_.test"; ok=1; fail=0; status='reliable'
+                         last='2026-08-24T00:00:00'; note='a row that must survive eight writers' } })
+    ([pscustomobject]@{ count=$seed.Count; domains=$seed } | ConvertTo-Json -Depth 6) | Set-Content $ctmp -Encoding utf8
+    $barrier = (Get-Date).ToUniversalTime().AddSeconds(5).ToString('o')
     $jobs = @()
     foreach ($i in 1..8) {
       $jobs += Start-Job -ScriptBlock {
-        param($script, $store)
+        param($script, $store, $go)
+        $t = [datetime]::Parse($go, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::RoundtripKind)
+        while ((Get-Date).ToUniversalTime() -lt $t) { Start-Sleep -Milliseconds 2 }
         & powershell -NoProfile -ExecutionPolicy Bypass -File $script -Record -Domain 'conc.test' -Outcome ok -Store $store | Out-Null
-      } -ArgumentList $PSCommandPath, $ctmp
+      } -ArgumentList $PSCommandPath, $ctmp, $barrier
     }
-    $jobs | Wait-Job -Timeout 120 | Out-Null
+    $jobs | Wait-Job -Timeout 180 | Out-Null
     $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
     $got = @(Read-Store $ctmp)
-    $okCount = if (@($got).Count) { [int](@($got | Where-Object { $_.domain -eq 'conc.test' })[0].ok) } else { -1 }
+    $row = @($got | Where-Object { $_.domain -eq 'conc.test' })
+    $okCount = if (@($row).Count) { [int]$row[0].ok } else { -1 }
+    $seedKept = @($got | Where-Object { [string]$_.domain -like 'seed*' }).Count
     Remove-Item $ctmp -Force -ErrorAction SilentlyContinue
-    T 'MUST FIRE  8 concurrent -Record calls all land (the harvest lane writes 8-wide)' ($okCount -eq 8) ("ok=$okCount of 8")
+    T 'MUST FIRE  8 barriered concurrent -Record calls all land (the harvest lane writes 8-wide)' ($okCount -eq 8) ("ok=$okCount of 8")
+    T 'MUST FIRE  and not one of the 400 domains already in the ledger was dropped on the way' ($seedKept -eq 400) ("kept $seedKept of 400")
     T 'a missing store reads as empty' ((@(Read-Store (Join-Path $env:TEMP 'nope.json'))).Count -eq 0) 'not empty'
   } finally { if (Test-Path $tmp) { Remove-Item $tmp -Force } }
 
