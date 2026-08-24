@@ -612,6 +612,7 @@ function Get-MacroPrecheck {
   param($Tables, $Extractions, $PoolRows)
   $out = @{}
   $grams = @{}          # slug -> (raw -> source-basis grams). A-package / pin P3.
+  $basis = @{}          # slug -> (raw -> the engine's fallback flag) for lines it could NOT ground
   $rawOrder = @{}       # slug -> the raw strings, in the order they were handed to the engine
   $rows = New-Object System.Collections.Generic.List[object]
   $covered = @{}
@@ -632,6 +633,7 @@ function Get-MacroPrecheck {
     $covered[$slug] = $ings.Count
     $rawOrder[$slug] = $order.ToArray()
     $grams[$slug] = @{}
+    $basis[$slug] = @{}
     $pool = $null
     if ($PoolRows.ContainsKey($slug)) { $pool = $PoolRows[$slug] }
     $out[$slug] = [pscustomobject]@{
@@ -649,7 +651,7 @@ function Get-MacroPrecheck {
       ingredients = $ings.ToArray() }) | Out-Null
   }
   $rowArr = $rows.ToArray()
-  if (-not $rowArr.Count) { return [pscustomobject]@{ precheck = $out; grams = $grams } }
+  if (-not $rowArr.Count) { return [pscustomobject]@{ precheck = $out; grams = $grams; basis = $basis } }
 
   $scratch = Join-Path $env:TEMP ('mpre-pc-' + [guid]::NewGuid().ToString('N'))
   try {
@@ -658,7 +660,7 @@ function Get-MacroPrecheck {
     $r = Invoke-Child $script:PARSE_COMPUTE_PS @('-RunDir', $scratch)
     if ($r.rc -ne 0) {
       foreach ($k in @($out.Keys)) { $out[$k].reason = ("parse-compute exited {0}: {1}" -f $r.rc, $r.text.Trim()) }
-      return [pscustomobject]@{ precheck = $out; grams = $grams }
+      return [pscustomobject]@{ precheck = $out; grams = $grams; basis = $basis }
     }
     $parsed = Read-Json (Join-Path $scratch 'recipes-computed.json')
     # ASSIGN FIRST, THEN WRAP. A ONE-recipe batch comes back as a bare object and a many-recipe batch as
@@ -687,7 +689,22 @@ function Get-MacroPrecheck {
       } else {
         for ($gi = 0; $gi -lt @($ord).Count; $gi++) {
           $gv = $sb[$gi].grams_src
-          if ($null -ne $gv -and [double]$gv -gt 0) { $grams[$cs][[string]$ord[$gi]] = [double]$gv }
+          if ($null -ne $gv -and [double]$gv -gt 0) {
+            $grams[$cs][[string]$ord[$gi]] = [double]$gv
+            # B2 (2026-08-24): CARRY THE ENGINE'S OWN ACCOUNT OF HOW IT GOT THE NUMBER.
+            # parse-compute already flags every derivation it could not ground in the food's own data
+            # - `default tbsp` falls back to densities.json defaults.sauce_tbsp (16 g), `default tsp`
+            # to sauce_tsp, `handful w/o density` to a flat 10 g, and the no-qty family to house
+            # staples. Those flags reached here and were DISCARDED, so a guess and a grounded weight
+            # were indistinguishable downstream and the cross-check compared them as equals. Measured:
+            # "3 tablespoons chopped fresh parsley" has no Fresh Parsley density row, so the engine
+            # returned 3 x 16 = 48 g at SAUCE density (chopped parsley is ~3.8 g/tbsp), the mapper's
+            # correct 40 g at target read as a 0.24x disagreement, and a good recipe parked.
+            $fl = @($sb[$gi].flags) | Where-Object { $_ }
+            if (@($fl | Where-Object { $script:ENGINE_FALLBACK_FLAGS -contains [string]$_ }).Count) {
+              $basis[$cs][[string]$ord[$gi]] = ($fl -join '+')
+            }
+          }
         }
       }
       # A PARTIAL CROSS-CHECK IS NOT A CROSS-CHECK, AND SHIPPING ONE WOULD BE WORSE THAN SHIPPING NONE.
@@ -718,10 +735,10 @@ function Get-MacroPrecheck {
       $out[$cs].tuning = (As-Array $c.tuning)
       $out[$cs].missing_db_items = (As-Array $c.missing_db_items)
     }
-    return [pscustomobject]@{ precheck = $out; grams = $grams }
+    return [pscustomobject]@{ precheck = $out; grams = $grams; basis = $basis }
   } catch {
     foreach ($k in @($out.Keys)) { $out[$k].reason = ("the cross-check would not run: " + $_.Exception.Message) }
-    return [pscustomobject]@{ precheck = $out; grams = $grams }
+    return [pscustomobject]@{ precheck = $out; grams = $grams; basis = $basis }
   } finally { Remove-Item $scratch -Recurse -Force -ErrorAction SilentlyContinue }
 }
 
@@ -753,6 +770,15 @@ $script:ASM_RULING_DECISIONS = @('mapped', 'mapped-null', 'mapped-optional', 'no
 #
 # `to serve` / `for serving` are IN: "warm tortillas, to serve" and "sour cream, for serving" are the
 # same shape - a serving suggestion with no measure - and they park recipes the same way.
+# B2 (2026-08-24). THE ENGINE'S OWN NAMES FOR "I COULD NOT GROUND THIS".
+# Every one of these is parse-compute telling the truth about a weight it did not derive from the
+# food's own densities.json row or each-noun. They are its strings, copied verbatim - see GramsFor's
+# tbsp/tsp branches and the no-qty family. A weight carrying one of these is a GUESS, and comparing a
+# guess against the mapper's grounded ruling is a cross-check firing on noise.
+$script:ENGINE_FALLBACK_FLAGS = @('default tbsp', 'default tsp', 'handful w/o density',
+                                  'no-qty->house staple', 'no-qty->serve-default',
+                                  'no-qty zero (minor item)')
+
 $script:GARNISH_PHRASES = @('to garnish', 'for garnish', 'for garnishing', 'as garnish',
                             'as a garnish', 'to serve', 'for serving', 'for topping', 'to top')
 
@@ -936,6 +962,10 @@ function New-MappedDecisionFile {
 
   $ings = New-Object System.Collections.Generic.List[object]
   $terms = New-Object System.Collections.Generic.List[string]
+  # B2: lines the qty engine could not ground. Returned so the caller can append them to the run's
+  # density-gaps list - the densities.json worklist, built from what recipes ACTUALLY use rather
+  # than from someone guessing which 232 foods matter.
+  $gapRows = New-Object System.Collections.Generic.List[object]
   foreach ($row in (As-Array $Table.rows)) {
     $raw = [string]$row.raw
     $optional = [bool]$row.optional
@@ -1092,7 +1122,29 @@ function New-MappedDecisionFile {
     # THE CROSS-CHECK, on every line where BOTH the engine and the mapper weighed the same food. A
     # quantized buy string moves a few percent; a basis error moves by the scale factor. Anything past
     # 50% is not rounding, and it is NAMED rather than quietly averaged away.
-    if ($gramsFrom -ne 'engine' -and $null -ne $grams -and $null -ne $row.grams_source_basis -and $scale -gt 0) {
+    # B2 (2026-08-24): A CROSS-CHECK BETWEEN A GROUNDED NUMBER AND A GUESS IS NOISE, NOT EVIDENCE.
+    # The engine says so itself: `grams_basis_fallback` carries its own flag for any weight it could
+    # not derive from the food's densities.json row or each-noun. Comparing the mapper's grounded
+    # ruling against that guess and PARKING the recipe is a guard firing on the engine's own admitted
+    # ignorance - measured on fresh parsley, where 3 x sauce-density 16 g = 48 g made a correct 40 g
+    # ruling look like a 0.24x error. The check keeps its FULL force wherever both sides are grounded,
+    # which is where a disagreement means something.
+    #
+    # WHAT THIS COSTS, SAID PLAINLY: on an ungrounded line nothing now cross-checks the mapper. Three
+    # things blunt it - the line is RECORDED to the run's density-gaps file below, so it is visible
+    # rather than silent; the mapper's ruling is evidence-gated already; and the band gate plus the
+    # macro recompute still catch a gross error downstream.
+    $engineGuessed = ($row.PSObject.Properties.Name -contains 'grams_basis_fallback' -and $row.grams_basis_fallback)
+    if ($engineGuessed -and $null -ne $row.grams_source_basis) {
+      $gapRows.Add([pscustomobject]@{
+        slug = [string]$Table.slug; raw = $raw; item = $item
+        engine_grams_source = [double]$row.grams_source_basis
+        engine_basis = [string]$row.grams_basis_fallback
+        ruling_grams_target = $(if ($gramsFrom -ne 'engine' -and $null -ne $grams) { [Math]::Round([double]$grams, 1) } else { $null })
+      }) | Out-Null
+      $paraphrased.Add(("'{0}': the qty engine could not ground this weight ({1}), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list" -f $raw, [string]$row.grams_basis_fallback)) | Out-Null
+    }
+    if (-not $engineGuessed -and $gramsFrom -ne 'engine' -and $null -ne $grams -and $null -ne $row.grams_source_basis -and $scale -gt 0) {
       $engineTarget = [double]$row.grams_source_basis * $scale
       # A SUB-GRAM REFERENCE IS NOT A REFERENCE. Below 1 g the ratio is dominated by rounding on both
       # sides - a dried-parsley line the engine makes 0.4 g reads as a 2.5x disagreement against a
@@ -1198,7 +1250,7 @@ function New-MappedDecisionFile {
     $findings.Add('no protein: the run state file names none and the mapper returned none. D8 refuses to build a skeleton without it, and the wave manifest is built out of exactly this field') | Out-Null
   }
 
-  if ($findings.Count) { return [pscustomobject]@{ doc = $null; findings = $findings.ToArray() } }
+  if ($findings.Count) { return [pscustomobject]@{ doc = $null; findings = $findings.ToArray(); density_gaps = $gapRows.ToArray() } }
 
   $doc = [ordered]@{
     slug            = [string]$Table.slug
@@ -1225,7 +1277,7 @@ function New-MappedDecisionFile {
     join_fallbacks       = @($paraphrased.ToArray())
     macro_cross_check    = $Payload.macro_cross_check
   }
-  return [pscustomobject]@{ doc = [pscustomobject]$doc; findings = @() }
+  return [pscustomobject]@{ doc = [pscustomobject]$doc; findings = @(); density_gaps = $gapRows.ToArray() }
 }
 
 # ---------------------------------------------------------------------------------------------------
@@ -1604,6 +1656,48 @@ if ($runSelfTest) {
   T 'MUST FIRE  `protein` comes off the RUN STATE FILE, which has carried it since sourcing - D8 refuses to build without it and the wave manifest is built out of it' `
     ($resA.doc.protein -eq 'pork') ([string]$resA.doc.protein)
 
+  # ---- FIXTURE A1e. B2: A GUESS IS NOT A CROSS-CHECK --------------------------------------------
+  # FROZEN FIXTURE, and the founding case is verbatim from the 2026-08-24 no-band drill.
+  # "3 tablespoons chopped fresh parsley": densities.json carries Dried Parsley but not FRESH parsley,
+  # so parse-compute's tbsp branch fell to defaults.sauce_tbsp = 16 g and returned 3 x 16 = 48 g at
+  # source basis (chopped fresh parsley is ~3.8 g/tbsp). Scaled 3.5x that is 168 g against the mapper's
+  # correct 40 g - a 0.24x "disagreement" - and the recipe PARKED on the engine's own admitted guess.
+  # parse-compute had flagged it `default tbsp` all along; map-preresolve discarded the flag.
+  $rowsD = @((New-Row 'p1' 'p1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+             (New-Row 'p2' 'parsley' 'Fresh Parsley' 'parmesan' 'resolved' 48.0))
+  $payD = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='p1'; buy='1 lb kielbasa'; notes='' },
+              [pscustomobject]@{ raw='p2'; buy='3 tablespoons chopped fresh parsley'; notes='' })
+    rulings = @([pscustomobject]@{ raw='p2'; decision='mapped'; canon_item='Fresh Parsley'; bid='parmesan'
+                                   grams_source=11.4; evidence='3 tbsp chopped parsley' }) }
+  $tblD = New-Tbl $rowsD 4
+  @($tblD.rows)[1].raw = '3 tablespoons chopped fresh parsley'
+  @($payD.lines)[1].raw = '3 tablespoons chopped fresh parsley'
+  @($payD.rulings)[0].raw = '3 tablespoons chopped fresh parsley'
+  # the engine could NOT ground this weight, and says so - exactly as parse-compute flags it
+  @($tblD.rows)[1] | Add-Member -NotePropertyName 'grams_basis_fallback' -NotePropertyValue 'default tbsp' -Force
+  $resD = New-MappedDecisionFile $tblD $payD $stateRow $known 14
+  T 'MUST FIRE  a grounded ruling is NOT cross-checked against a weight the engine admits it guessed - the parsley park' `
+    (@($resD.findings).Count -eq 0) ("findings=" + (@($resD.findings) -join '; '))
+  T 'MUST FIRE  ...and the guessed line is RECORDED as a density gap, so the worklist builds itself from real recipes' `
+    (@($resD.density_gaps).Count -eq 1 -and [string]@($resD.density_gaps)[0].engine_basis -eq 'default tbsp') `
+    ("gaps=" + (@($resD.density_gaps) | ForEach-Object { [string]$_.item + '/' + [string]$_.engine_basis }) -join ', ')
+  T 'MUST FIRE  ...and the MAPPER''s weight is what ships, not the guess (11.4 g source x 3.5 = 40 g)' `
+    ((@($resD.doc.ingredients) | Where-Object { $_.source_raw -like '*parsley*' }).grams -eq 40) `
+    ((@($resD.doc.ingredients) | ForEach-Object { [string]$_.item + '=' + [string]$_.grams }) -join ' | ')
+  # THE GUARD KEEPS ITS FULL FORCE WHERE BOTH SIDES ARE GROUNDED. Same numbers, no fallback flag.
+  $rowsE = @((New-Row 'e1' 'e1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+             (New-Row 'e2' 'parsley' 'Fresh Parsley' 'parmesan' 'resolved' 48.0))
+  $payE = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='e1'; buy='1 lb'; notes='' }, [pscustomobject]@{ raw='e2'; buy='3 tbsp'; notes='' })
+    rulings = @([pscustomobject]@{ raw='e2'; decision='mapped'; canon_item='Fresh Parsley'; bid='parmesan'
+                                   grams_source=11.4; evidence='x' }) }
+  $resE = New-MappedDecisionFile (New-Tbl $rowsE 4) $payE $stateRow $known 14
+  T 'MUST FIRE  a GROUNDED engine weight still cross-checks the ruling and still finds the 0.24x disagreement' `
+    ((@($resE.findings) -join ' ') -match 'disagreement') ("findings=" + (@($resE.findings) -join '; '))
+  T 'CLEAN TWIN a grounded line with no disagreement records NO density gap' `
+    (@($resE.density_gaps).Count -eq 0) ("gaps=" + @($resE.density_gaps).Count)
+
   # ---- FIXTURE A1g. A QUANTITY-LESS GARNISH IS AN OPTIONAL NOTE, NOT A PARKED RECIPE -------------
   # FROZEN FIXTURE (Brad's ruling 2026-08-24). The 6b proving run parked
   # `cheese-stuffed-chicken-parmesan` on "Fresh parsley (to garnish)": no stated quantity, so no gram
@@ -1979,6 +2073,24 @@ if ($runAssemble) {
   if (Test-Path $statePath) { try { $stateRow = Read-Json $statePath } catch { $stateRow = $null } }
 
   $res = New-MappedDecisionFile $table $payload $stateRow $known $TargetServings
+
+  # B2 (2026-08-24): APPEND THE DENSITY GAPS, WHATEVER ELSE HAPPENS. Written BEFORE the findings check
+  # because a recipe that parks is exactly the one whose gaps are worth knowing about, and this file is
+  # evidence for later rather than a gate. Append-only JSONL: it is the densities.json worklist, built
+  # from what recipes ACTUALLY use and rankable by how often each food turns up.
+  foreach ($gap in @($res.density_gaps)) {
+    try {
+      $line = ([pscustomobject]@{
+        at = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); run = (Split-Path $RunDir -Leaf)
+        slug = $gap.slug; item = $gap.item; raw = $gap.raw
+        engine_basis = $gap.engine_basis; engine_grams_source = $gap.engine_grams_source
+        ruling_grams_target = $gap.ruling_grams_target } | ConvertTo-Json -Compress -Depth 4)
+      Add-Content -Path (Join-Path $RunDir 'density-gaps.jsonl') -Value $line -Encoding utf8
+    } catch {
+      # A worklist may never break an assembly. It is evidence, not a gate.
+    }
+  }
+
   if (@($res.findings).Count) {
     # NOTHING IS WRITTEN. Half a decision file on disk is worse than none: the half that landed looks
     # settled, and D8 builds an intake over it.
@@ -2114,17 +2226,20 @@ if (-not $runNoPrecheck) {
 }
 $precheck = @{}
 $lineGrams = @{}
+$lineBasis = @{}
 if ($runNoPrecheck) {
   foreach ($slug in $slugList) {
     $precheck[$slug] = [pscustomobject]@{ state='skipped'; reason='-NoPrecheck'; source=$null
                                           lines_covered=0; lines_total=0; computed_per_serving=$null
                                           portion_factor=$null; tuning=@(); missing_db_items=@() }
     $lineGrams[$slug] = @{}
+    $lineBasis[$slug] = @{}
   }
 } else {
   $mp = Get-MacroPrecheck $tblArr $extractions $pool
   $precheck = $mp.precheck
   $lineGrams = $mp.grams
+  $lineBasis = $mp.basis
 }
 foreach ($t in $tblArr) {
   $t | Add-Member -NotePropertyName 'macro_precheck' -NotePropertyValue $precheck[[string]$t.slug] -Force
@@ -2133,8 +2248,14 @@ foreach ($t in $tblArr) {
   # null and their grams come from the mapper's ruling, or the assembly is STUCK and says which line.
   $g = @{}
   if ($lineGrams.ContainsKey([string]$t.slug)) { $g = $lineGrams[[string]$t.slug] }
+  $bs = @{}
+  if ($lineBasis.ContainsKey([string]$t.slug)) { $bs = $lineBasis[[string]$t.slug] }
   foreach ($row in (As-Array $t.rows)) {
     if ($g.ContainsKey([string]$row.raw)) { $row.grams_source_basis = [double]$g[[string]$row.raw] }
+    # B2: and WHETHER the engine could ground it. Null means grounded; a string names the fallback.
+    if ($bs.ContainsKey([string]$row.raw)) {
+      $row | Add-Member -NotePropertyName 'grams_basis_fallback' -NotePropertyValue ([string]$bs[[string]$row.raw]) -Force
+    }
   }
   ($t | ConvertTo-Json -Depth 9) | Set-Content -Path (Join-Path $outDir ("{0}.json" -f $t.slug)) -Encoding utf8
 }

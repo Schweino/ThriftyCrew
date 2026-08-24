@@ -1287,7 +1287,7 @@ class Daemon(object):
                evidence or "(none given)", near, self.registrar_evidence_block(term, bid)))
 
     async def assemble_mapped(self, slug, res, tables=None):
-        """A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
+        r"""A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
         arrays. Returns (ok, why_not).
 
         THE DAEMON HOLDS THE PEN, and that is the whole point rather than a tidy-up. On the phase-5
@@ -2969,7 +2969,7 @@ def main(argv=None):
                          "means the live one.")
     ap.add_argument("--pool", default="",
                     help="a scratch candidate pool, for a drill. Empty means the live "
-                         "db\candidate-pool.json. Same seam as --ledger / --specs / --costed: it "
+                         "db/candidate-pool.json. Same seam as --ledger / --specs / --costed: it "
                          "exists so a drill can aim the run at a chosen corpus without editing the "
                          "live pool, which harvest.py is the sole writer of.")
     ap.add_argument("--publish", action="store_true",
