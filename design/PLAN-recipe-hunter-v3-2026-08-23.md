@@ -1041,6 +1041,46 @@ duplicate, and the raw lines are shown to be exactly what used to fire it. **Thi
 lane-shape findings on the v2 lowcarb-100 log are partly an artifact and should be re-read, not
 quoted.**
 
+**RE-READ 2026-08-24, measured. All three findings survive; one number moves.** The corrected audit was
+run against `meal-prep\runs\hunt-2026-08-15-lowcarb-100` and the before/after was taken by running the
+pre-fix script (commit `70843818`) over the same log:
+
+| | pre-fix | corrected |
+|---|---|---|
+| map lane | 30 invocations, 45 distinct, mean 3.2 | **28** invocations, 45 distinct, mean 3.14 |
+| price lane | 28 invocations, 24 distinct, mean 2.21 | **22** invocations, 24 distinct, mean 2.27 |
+| `map-lane-duplicate-items` | 29 slugs | **29 slugs, identical list** |
+| `price-lane-not-batched` | 28 invocations for 24 distinct | **22 invocations for 24 distinct** (still fires) |
+| `price-lane-duplicate-items` | 17 terms | **17 terms, identical list** |
+
+The doubling barely touched this run, because this run mostly predates the field that caused it. It ran
+2026-08-15T20:04 to 2026-08-16T12:35, and only its tail is after the 08-16 `event` change: 139 of its 834
+lines carry `event`, and in the two judged lanes only 4 map lines (2 pairs) and 12 price lines (6 pairs).
+Eight dispatches were being double-counted, not all of them - hence 30->28 and 28->22, not a halving.
+
+**The duplicate-items findings are real, and the history may keep quoting them.** `chicken-chasseur` went
+to the map lane at 01:25:17 and again at 06:07:36, both times inside a full 5-recipe micro-batch hours
+apart; 10 of the 28 map invocations re-sent only slugs already mapped, and 10 of the 29 repeated slugs went
+3 or 4 times. On the price lane 13 of the 17 repeated terms repeat across separate `queue batch N`
+dispatches (`dry white wine` 4x, `green bell pepper` 4x, `90/10 ground beef` 3x, `bacon bits` 3x). That is
+the cross-recipe dedup being discarded, exactly as the finding says.
+
+**Two smaller artifacts the re-read did surface, both write-side and both still uncorrected.** (1) The
+price lane also logs a `derive-after-batch-N` line carrying the same items as the batch it follows.
+`Get-Invocations` keys on lane + label + items, so a different label does not collapse - which inflates the
+price lane by 3 invocations and makes 4 of the 17 "duplicates" (`chipotle powder`, `ground chicken`, and two
+fragments) a dispatch paired with its own derive step. Excluding `derive-after` lines the price lane is 19
+invocations over 24 distinct terms, mean 2.32 - `price-lane-not-batched` still fires (floor 3), and the
+honest duplicate count is 13, not 17. (2) Two of the 17 "terms" are not terms: a prose aside was passed to
+`-Items` unquoted and split on its commas into `green bell pepper (enqueued for attribution; queue deduped
+onto the existing item` and `which the pricer has since resolved CARRIED at 6 of 7 stores)`. A caller
+quoting defect, not an audit defect, but it means that finding's term list was never 17 real terms.
+
+**And one residual in the audit itself, reported not fixed** (this was a re-read, not a re-fix):
+`Get-Invocations` is applied only inside the judged-lane loop. The header total and the `no batch size
+declared` per-lane counts still print raw LINE counts - 834 here against 826 collapsed. On a v3 daemon log,
+where every line is paired, that header will read double.
+
 **And one thing the pen-ownership rule moves that this document did not name (ADDED 2026-08-24, found
 by the drain drill).** v2's audit dispatch told the auditor, in prose, to run `batch-ledger.ps1
 -Stamp -Stage audit` on a GO, and wave-publish's P2 gate refuses to publish a batch with no audit
