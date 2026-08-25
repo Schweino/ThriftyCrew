@@ -4513,7 +4513,12 @@ def _f1_tables(residual=("ras el hanout", "gochujang", "parsley leaves")):
 
 def _f1_fill_list_is_the_unresolved_terms():
     """MUST FIRE: exactly the unresolved / food-DB-missing terms reach cache_fill, deduped through
-    fdc_lookup's own key function, with the settled-and-known line excluded."""
+    fdc_lookup's own key function, with the settled-and-known line excluded.
+
+    PAGE_SIZE 4 SINCE M1 (2026-08-25), because the shelf renders four candidates and the cache could
+    only ever hold three. It costs no extra request. NEUTER PROOF, RUN AND REVERTED 2026-08-25:
+    putting page_size=3 back in fill_fdc_shelf turned this case red with page_size=3 in its got line.
+    """
     d = daemon()
     seen = {}
 
@@ -4532,7 +4537,7 @@ def _f1_fill_list_is_the_unresolved_terms():
     got = seen.get("terms") or []
     ok = (got == ["labneh", "ras el hanout", "gochujang", "parsley leaves"]
           # the case variant deduped away, and the settled+known line never asked about
-          and "chicken" not in got and seen.get("page_size") == 3 and seen.get("pause") == 0.5)
+          and "chicken" not in got and seen.get("page_size") == 4 and seen.get("pause") == 0.5)
     return ok, "terms=%s page_size=%s pause=%s" % (json.dumps(got), seen.get("page_size"),
                                                    seen.get("pause"))
 

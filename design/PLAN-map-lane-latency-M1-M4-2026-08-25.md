@@ -73,6 +73,16 @@ head-noun cache keying - that fork stayed closed in PLAN-latency 3.2 and stays c
 
 1. Render **4** candidates, not 3 (`Select-Object -First 4`). Four is the shelf's whole job: FDC's
    curated tiers rarely return more than a handful and the fourth row is often the right form.
+
+   **CORRECTED 2026-08-25 (M1 build, measured against the live meal-prep\db\fdc-cache.json).** The
+   cache could not hold a fourth row. `cache_fill` defaulted to `page_size=3` and `fill_fdc_shelf`
+   passed `page_size=3` explicitly, with its own docstring calling that deliberate for api.data.gov's
+   rate limit. Measured over the 170 cached terms: 109 carry 3 candidates, 45 carry 2, 15 carry 1, 1
+   carries 0, and NOTHING carries 4. `-First 4` would have rendered three rows forever. Brad ruled on
+   2026-08-25: bump the fill to 4. It costs ZERO extra requests - one search returns N rows - so the
+   rate-limit reasoning is untouched, and the docstring at hunt-daemon.py:1204 was corrected in the
+   same commit. The 170 terms already cached KEEP their 3, because cache_fill never re-asks a term it
+   has seen; only terms new to the cache render four.
 2. Render, per candidate, in this order and with these exact labels:
    `fdc:{fdc_id} {description} [{data_type}] per 100 g: {cal} cal, {P} P, {C} C, {F} F, {fiber} fiber`
    - `fdc:{fdc_id}` FIRST and rendered as the literal citation string the mapper must copy into
@@ -85,7 +95,18 @@ head-noun cache keying - that fork stayed closed in PLAN-latency 3.2 and stays c
 3. Append the stated household portions when FDC carries them, as
    `portions: 1 tbsp=3.8g, 1 cup chopped=60g` (cap at 3). The food DB wants a serving in BOTH a
    household measure and grams (fdc_lookup.py:102-112 exists for exactly this), and without them the
-   mapper must invent `serving_qty`/`serving_unit` or go find a label.
+   mapper must invent `serving_qty`/`serving_unit` or go find a label.
+
+   **CORRECTED 2026-08-25 (M1 build, measured against the live cache).** This clause is BUILT and
+   FIXTURED but DORMANT, and the reason is upstream of the renderer: `_portions` reads `foodPortions`,
+   which the `/foods/search` endpoint fdc_lookup calls does not return - only the `/food/{id}` detail
+   endpoint does. Measured: **0 of 170 cached terms, across roughly 420 candidates, carry a single
+   portion.** So the justification stated here - that without portions the mapper must invent
+   `serving_qty`/`serving_unit` or go find a label - STANDS AS A GAP, and M1 does not close it. Brad
+   ruled on 2026-08-25: build the clause with its fixture so the shelf carries portions the day the
+   data exists, report the dormancy, and leave the detail-fetch road (3-4x the API calls per term, a
+   new fetch nobody specced) as a proposal rather than an M1 improvisation.
+
 4. Nothing else in the file changes. The `$evidence.Add(...)` wording at 512-515 stays verbatim - it
    is the marker `Daemon.FDC_SHELF_MARKER` matches on, and changing it silently breaks
    `shelf_coverage`. If you must touch it, change the constant in the same commit and say so.

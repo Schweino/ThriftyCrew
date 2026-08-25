@@ -260,7 +260,7 @@ def cache_get(term, path=None, cache=None):
     return (c.get("terms") or {}).get(_cache_key(term))
 
 
-def cache_fill(terms, path=None, page_size=3, opener=None, key=None, pause=0.0, log=None):
+def cache_fill(terms, path=None, page_size=4, opener=None, key=None, pause=0.0, log=None):
     """Ask FDC about terms the cache has not seen, and store the CANDIDATES it returns.
 
     STORES CANDIDATES, NEVER A CHOICE. Which row is the food is an identity call and stays frontier -
@@ -269,6 +269,11 @@ def cache_fill(terms, path=None, page_size=3, opener=None, key=None, pause=0.0, 
 
     A LOOKUP THAT COULD NOT RUN IS NOT STORED. A transport failure or a missing key leaves the term
     absent so the next run retries it, rather than freezing "FDC has nothing" into the cache.
+
+    FOUR ROWS, NOT THREE (M1, 2026-08-25). The shelf renders four candidates because FDC's curated
+    tiers rarely return more than a handful and the fourth row is often the right form. It costs NO
+    extra request - one search returns N rows - so the rate-limit reasoning that set this to 3 is
+    untouched. Terms already cached keep their 3: cache_fill never re-asks a term it has seen.
     """
     import time                                                   # noqa: PLC0415
     c = cache_read(path)

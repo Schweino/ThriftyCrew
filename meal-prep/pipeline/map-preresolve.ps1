@@ -939,6 +939,29 @@ function Test-BidContradictsNotes {
 # reaches the network, so a cold cache simply means the mapper works the way it always did.
 $script:FdcCache = $null
 
+function Get-FdcMacro {
+  <#
+    One macro off a cached FDC candidate, or '?'.
+
+    A MACRO FDC DID NOT STATE RENDERS `?`, NEVER 0. A missing number and a zero are different claims
+    about a food - salt and water are honestly 0/0/0 and the row schema treats an absent macro
+    differently - and 29 of the live cache's candidates are missing at least one macro today. Handles
+    both a ConvertFrom-Json object and a hashtable, because a fixture builds one and the cache the
+    other.
+  #>
+  param($Macros, [string]$Field)
+  if ($null -eq $Macros) { return '?' }
+  $val = $null
+  if ($Macros -is [System.Collections.IDictionary]) {
+    if ($Macros.Contains($Field)) { $val = $Macros[$Field] }
+  } else {
+    $prop = $Macros.PSObject.Properties[$Field]
+    if ($prop) { $val = $prop.Value }
+  }
+  if ($null -eq $val -or ([string]$val).Trim() -eq '') { return '?' }
+  return [string]$val
+}
+
 function Get-FdcCandidates {
   param([string]$Term)
   if (-not $Term) { return '' }
@@ -959,11 +982,34 @@ function Get-FdcCandidates {
   $rows = @($script:FdcCache[$key].candidates)
   if (-not $rows.Count) { return '' }
   $parts = @()
-  foreach ($r in ($rows | Select-Object -First 3)) {
+  # FOUR CANDIDATES, EACH A WHOLE ROW, AND THE ID THAT CITES IT (M1, 2026-08-25). The three-number
+  # form this replaced rendered neither the fdc_id nor fat nor fibre, while map_prompt requires six
+  # fields and write_food_db_rows REFUSES a row citing neither an id nor a URL - so a mapper obeying
+  # the contract could not build a row off the shelf and went and re-acquired the food. Measured on
+  # the lf1 round-1 transcript: 6 direct api.nal.usda.gov calls with DEMO_KEY for foods the shelf had
+  # already covered, plus 5 turns discovering fdc_lookup.py itself.
+  foreach ($r in ($rows | Select-Object -First 4)) {
     $m = $r.macros
-    $parts += ("{0} [{1}] per 100 g: {2} cal, {3} P, {4} C" -f `
-               [string]$r.description, [string]$r.data_type,
-               [string]$m.calories, [string]$m.protein_g, [string]$m.carbs_g)
+    # `fdc:` FIRST and rendered as the literal citation string: the prompt asks for `fdc:<id>` in
+    # `source` and the shelf had never once shown one. Fibre is rendered because atwater_check credits
+    # it at 2 kcal/g (fdc_lookup.py's own comment), so a legitimate high-fibre row FAILS the gate
+    # without it.
+    $line = ("fdc:{0} {1} [{2}] per 100 g: {3} cal, {4} P, {5} C, {6} F, {7} fiber" -f `
+             [string]$r.fdc_id, [string]$r.description, [string]$r.data_type,
+             (Get-FdcMacro $m 'calories'), (Get-FdcMacro $m 'protein_g'), (Get-FdcMacro $m 'carbs_g'),
+             (Get-FdcMacro $m 'fat_g'), (Get-FdcMacro $m 'fiber_g'))
+    # THE STATED PORTIONS, NEVER AN INVENTED ONE. The food DB wants a serving in BOTH a household
+    # measure and grams (fdc_lookup._portions exists for exactly this), and without them the mapper
+    # must invent serving_qty/serving_unit or go find a label. Capped at 3.
+    $ports = @()
+    foreach ($pt in (@($r.portions) | Select-Object -First 3)) {
+      if ($null -eq $pt) { continue }
+      $measure = [string]$pt.measure
+      if (-not $measure -or $null -eq $pt.grams) { continue }
+      $ports += ("{0}={1}g" -f $measure, [string]$pt.grams)
+    }
+    if ($ports.Count) { $line = $line + (' portions: ' + ($ports -join ', ')) }
+    $parts += $line
   }
   return ($parts -join ' | ')
 }
@@ -2131,6 +2177,105 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
     T 'MUST FIRE  a COMMA in -Slug is exit 2 - that is ONE composite string, the -Terms ''a,b'' family arriving one level down' `
       ($rComma.rc -eq 2 -and $rComma.text -match 'composite') ("rc=" + $rComma.rc)
   } finally { Remove-Item $asm -Recurse -Force -ErrorAction SilentlyContinue }
+
+  # ---- FIXTURE A6. THE FDC SHELF RENDERS A WHOLE ROW, AND THE ID THAT CITES IT (M1, 2026-08-25). --
+  # THE DEADLOCK THIS CLOSES, measured on the lf1 transcripts: the shelf rendered description,
+  # data_type, calories, protein and carbs - three of the six fields map_prompt requires - and never
+  # the fdc_id, while write_food_db_rows REFUSES a row whose source is neither `fdc:` nor a URL. A
+  # mapper obeying the contract could not build a row off the shelf, so round 1 re-acquired six foods
+  # by querying api.nal.usda.gov itself with DEMO_KEY, five of them already on the shelf.
+  #
+  # NEUTER PROOF, RUN AND REVERTED 2026-08-25: reverting the render to the three-number form
+  # ("{0} [{1}] per 100 g: {2} cal, {3} P, {4} C" over description/data_type/cal/P/C, First 3) turned
+  # FIVE cases red, not the two this section was written expecting - the four-row/fdc: case, the `?`
+  # case, the honest-zero case, the portions case, and the assembled-evidence case. All five are the
+  # same defect seen from five sides, and the count is recorded rather than the prediction. The four
+  # that stayed GREEN are exactly the twins: the asked-and-empty shelf, the never-asked shelf, the
+  # marker wording, and a food-DB-known row carrying no shelf at all.
+  $script:FdcCache = @{
+    'ras el hanout' = [pscustomobject]@{ asked=$true; candidates=@(
+      [pscustomobject]@{ fdc_id=171322; description='Spices, ras el hanout'; data_type='SR Legacy'; brand=$null; basis='per 100 g'
+                         macros=[pscustomobject]@{ calories=347.0; protein_g=11.1; carbs_g=55.4; fat_g=13.9; fiber_g=25.5 }
+                         portions=@([pscustomobject]@{ measure='1 tbsp'; grams=6.8 },
+                                    [pscustomobject]@{ measure='1 tsp'; grams=2.3 },
+                                    [pscustomobject]@{ measure='1 cup'; grams=109.0 },
+                                    [pscustomobject]@{ measure='1 jar'; grams=42.0 }) },
+      # THE MISSING-MACRO CASE, and it is not hypothetical: 29 of the live cache's candidates are
+      # missing at least one macro today, all-purpose flour and granulated sugar among them.
+      [pscustomobject]@{ fdc_id=789890; description='Ras el hanout blend, no fat stated'; data_type='Foundation'; brand=$null; basis='per 100 g'
+                         macros=[pscustomobject]@{ calories=330.0; protein_g=10.0; carbs_g=60.0; fiber_g=20.0 }
+                         portions=@() },
+      # ...AND THE HONEST ZERO BESIDE IT. Salt and water really are 0/0/0, so a zero must render as 0
+      # and only an ABSENT number as `?`. The two are different claims about a food.
+      [pscustomobject]@{ fdc_id=173468; description='Salt, table'; data_type='SR Legacy'; brand=$null; basis='per 100 g'
+                         macros=[pscustomobject]@{ calories=0.0; protein_g=0.0; carbs_g=0.0; fat_g=0.0; fiber_g=0.0 }
+                         portions=@() },
+      [pscustomobject]@{ fdc_id=999001; description='RAS EL HANOUT'; data_type='Branded'; brand='A Brand'; basis='per 100 g'
+                         macros=[pscustomobject]@{ calories=300.0; protein_g=9.0; carbs_g=50.0; fat_g=12.0; fiber_g=18.0 }
+                         portions=@() },
+      [pscustomobject]@{ fdc_id=999002; description='A FIFTH ROW THE SHELF MUST NOT SHOW'; data_type='Branded'; brand='B Brand'; basis='per 100 g'
+                         macros=[pscustomobject]@{ calories=1.0; protein_g=1.0; carbs_g=1.0; fat_g=1.0; fiber_g=1.0 }
+                         portions=@() }
+    ) }
+    'labneh' = [pscustomobject]@{ asked=$true; candidates=@() }
+  }
+  $shelf = Get-FdcCandidates 'Ras El Hanout'
+  $shelfRows = @($shelf -split ' \| ')
+  T 'MUST FIRE  the shelf renders FOUR whole rows and every one of them opens with the literal `fdc:<id>` the prompt asks for in `source`' `
+    ($shelfRows.Count -eq 4 -and @($shelfRows | Where-Object { $_ -match '^fdc:\d+ ' }).Count -eq 4 -and
+     $shelf -notmatch 'A FIFTH ROW' -and $shelfRows[0] -match '^fdc:171322 Spices, ras el hanout \[SR Legacy\] per 100 g: 347 cal, 11\.1 P, 55\.4 C, 13\.9 F, 25\.5 fiber') `
+    ("rows=" + [string]$shelfRows.Count + ' :: ' + $shelf)
+  T 'MUST FIRE  a macro FDC DID NOT STATE renders `?` and never 0 - a missing number and a zero are different claims about a food' `
+    ($shelfRows[1] -match 'per 100 g: 330 cal, 10 P, 60 C, \? F, 20 fiber') $shelfRows[1]
+  T 'CLEAN TWIN an HONEST zero still renders 0 - salt is really 0/0/0, and turning that into `?` would be the same lie backwards' `
+    ($shelfRows[2] -match 'per 100 g: 0 cal, 0 P, 0 C, 0 F, 0 fiber') $shelfRows[2]
+  T 'MUST FIRE  the STATED portions ride along in both a household measure and grams, capped at three' `
+    ($shelfRows[0] -match 'portions: 1 tbsp=6\.8g, 1 tsp=2\.3g, 1 cup=109g$' -and $shelfRows[0] -notmatch '1 jar') $shelfRows[0]
+  T 'CLEAN TWIN a candidate with NO stated portions carries no portions clause at all, rather than an empty one' `
+    ($shelfRows[1] -notmatch 'portions:') $shelfRows[1]
+  T 'CLEAN TWIN a term FDC was asked about and had nothing for is still an empty shelf' `
+    ((Get-FdcCandidates 'labneh') -eq '') (Get-FdcCandidates 'labneh')
+  T 'CLEAN TWIN a term NOBODY has asked about is an empty shelf too - a cold cache must still look exactly like a cold cache' `
+    ((Get-FdcCandidates 'gochujang') -eq '') (Get-FdcCandidates 'gochujang')
+
+  # ...AND THROUGH THE REAL EVIDENCE ASSEMBLY, not the renderer alone. The marker wording is what
+  # Daemon.FDC_SHELF_MARKER matches on to compute shelf_coverage, so it is asserted here byte for byte
+  # rather than trusted: changing it silently breaks the coverage line and nothing else complains.
+  # ITS OWN LOOKUPS, under names no earlier fixture takes: this suite reassigns $extraction, $classes
+  # and $vocab several times on the way down, and a positional call binding a STRING where $Classes
+  # belongs throws on .ContainsKey rather than failing an assertion.
+  $fdcVocab = @(
+    [pscustomobject]@{ item='Yellow Onion'; bid='onions'; unit='lb'; board='weekly'; gpu=453.592 },
+    [pscustomobject]@{ item='Boneless Skinless Chicken Thigh'; bid='chicken-thighs'; unit='lb'; board='weekly'; gpu=453.592 },
+    [pscustomobject]@{ item='Sumac'; bid='sumac'; unit='oz'; board='recipe'; gpu=28.35 }
+  )
+  $fdcExtraction = [pscustomobject]@{
+    title='Drill Dish'; source_url='https://d/x'; servings=4
+    ingredients=@(
+      [pscustomobject]@{ raw='1 tablespoon ras el hanout'; item='ras el hanout'; qty='1'; unit='tablespoon'; optional=$false },
+      [pscustomobject]@{ raw='1 small yellow onion, chopped'; item='Yellow Onion'; qty='1'; unit=$null; optional=$false },
+      [pscustomobject]@{ raw='1 teaspoon sumac'; item='Sumac'; qty='1'; unit='teaspoon'; optional=$false }
+    ) }
+  $fdcClasses = @{
+    'ras el hanout' = [pscustomobject]@{ name='ras el hanout'; class='GENUINE-GAP'; candidates=@() }
+    'Yellow Onion'  = [pscustomobject]@{ name='Yellow Onion'; class='RESOLVES'; resolves_to='Yellow Onion'; candidates=@() }
+    'Sumac'         = [pscustomobject]@{ name='Sumac'; class='RESOLVES'; resolves_to='Sumac'; candidates=@() }
+  }
+  $fdcDens = @{ 'Yellow Onion'=1; 'Sumac'=1 }
+  $fdcEach = @{ 'Yellow Onion'=1 }
+  $fdcFoodDb = @{ 'Yellow Onion'=1; 'Sumac'=1; 'Boneless Skinless Chicken Thigh'=1 }
+  $tblFdc = New-PreResolveTable 'drill-dish' $fdcExtraction $fdcVocab $fdcClasses @{} @{} $fdcDens $fdcEach $fdcFoodDb
+  $rowFdc = @($tblFdc.rows | Where-Object { [string]$_.term -eq 'ras el hanout' })[0]
+  $rowKnown = @($tblFdc.rows | Where-Object { [string]$_.term -eq 'Yellow Onion' })[0]
+  T 'MUST FIRE  the assembled row still carries the `USDA FDC rows that MENTION this term` marker Daemon.FDC_SHELF_MARKER counts on' `
+    ([string]$rowFdc.evidence -match 'USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer\.') `
+    ([string]$rowFdc.evidence)
+  T 'MUST FIRE  ...and the four whole rows arrive WITH it, so the mapper can cite one without re-acquiring the food' `
+    ([string]$rowFdc.evidence -match 'fdc:171322' -and [string]$rowFdc.evidence -match '13\.9 F, 25\.5 fiber') `
+    ([string]$rowFdc.evidence)
+  T 'CLEAN TWIN a term the food DB already knows gets no shelf line at all - the attach only ever runs where a label is missing' `
+    ([string]$rowKnown.evidence -notmatch 'USDA FDC') ([string]$rowKnown.evidence)
+  $script:FdcCache = $null
 
   if ($bad -gt 0) { Write-Output ("map-preresolve SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'map-preresolve SELF-TEST PASS'

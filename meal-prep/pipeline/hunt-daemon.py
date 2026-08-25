@@ -1201,7 +1201,8 @@ class Daemon(object):
 
         NOT PARALLELISED, DELIBERATELY. api.data.gov rate limits, and a throttled key reads as "FDC
         has nothing" - which fdc_lookup's own header calls the worst possible lie for a nutrition
-        lookup to tell. page_size 3 with a 0.5s pause over a micro-batch's residual is ~30-60s.
+        lookup to tell. page_size 4 with a 0.5s pause over a micro-batch's residual is ~30-60s - four
+        rows per term rather than three costs no extra request, only a longer reply (M1).
         """
         terms = self.fdc_fill_terms(tables)
         if not terms:
@@ -1214,7 +1215,7 @@ class Daemon(object):
             loop = asyncio.get_event_loop()
             async with self.fdc_lock:
                 st = await loop.run_in_executor(
-                    None, lambda: fdc_lookup.cache_fill(terms, page_size=3, pause=0.5))
+                    None, lambda: fdc_lookup.cache_fill(terms, page_size=4, pause=0.5))
         except Exception as e:                                    # noqa: BLE001
             self.findings.append("F1: the FDC fill could not run (%s) - the mapper will acquire "
                                  "labels itself for %d term(s)" % (str(e)[:160], len(terms)))
