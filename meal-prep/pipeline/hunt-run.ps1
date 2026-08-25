@@ -37,7 +37,8 @@
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
-  [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$WaveSync, [int]$Wave = 0,
+  [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$RecipeSummary,
+  [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
   # C1 (added 2026-08-24, phase 6a). Analysing the phase-5 run's cost took transcript archaeology with
   # per-message-id dedup, and DispatchResult ALREADY carried all three of these - lane() just did not
@@ -80,6 +81,7 @@ $ErrorActionPreference = 'Stop'
 # THIS scope, so a lib declaring [switch]$SelfTest silently resets ours to $false - that PS 5.1 trap made
 # migrate-prose-tokens' first -SelfTest run execute the LIVE path instead of its fixtures.
 $runStageSummary = [bool]$StageSummary
+$runRecipeSummary = [bool]$RecipeSummary
 # -StageSummary rides the -LaneSummary reader: it is the same log, the same pairing, a different
 # GROUPING. A second reader over the same file is a second place for the two to disagree.
 $runLaneSummary = [bool]$LaneSummary -or $runStageSummary
@@ -858,6 +860,77 @@ if ($runSelfTest) {
         ($null -ne $plain -and ([datetime]::Parse($plain.at) -gt (Get-Date).AddMinutes(-5))) `
         ($(if ($plain) { [string]$plain.at } else { 'no plain line' }))
     } finally { Remove-Item -Recurse -Force $lt5 -ErrorAction SilentlyContinue }
+    # ---- T4 NEUTER PROOFS, ALL RUN AND REVERTED 2026-08-25, counts as the suite printed them:
+    #   * fold the divided batch into `own`, hiding the estimate  -> 2 red;
+    #   * attribute the price lane by dividing it across recipes  -> 4 red;
+    #   * report a missing history as 0 minutes instead of UNKNOWN -> 2 red;
+    #   * drop the divided-not-measured disclosure line           -> 1 red.
+    #
+    # AND TWO LESSONS PAID FOR HERE. The -Json cases ALL PASSED while the human table threw: the
+    # header used '{2,>10}' and '>' is not a .NET alignment token, so the text case exists and is
+    # asserted separately - a summary nobody can read is not a summary. Second, this suite marks a
+    # failure with FAIL and not with X, so a neuter harness copied from the daemon's counted zero
+    # reds and flagged its own valid proofs as INVALID. Check the marker before believing a count.
+    #
+    # ---- T4 (2026-08-25): -RecipeSummary. The question neither other summary can answer - what did
+    # ONE recipe cost, and how long did it take. The three honesty rules are each their own assertion,
+    # because a per-recipe number is the easiest place in this estate to lie: attributable and shared
+    # stay separate columns, the price lane is never divided into a recipe, and a missing history is
+    # UNKNOWN rather than zero.
+    $lt6 = Join-Path ([IO.Path]::GetTempPath()) ("hr-recsum-" + [Guid]::NewGuid().ToString('N'))
+    try {
+      New-Item -ItemType Directory -Path (Join-Path $lt6 'state') -Force | Out-Null
+      $lg6 = Join-Path $lt6 'lane-log.jsonl'
+      # a SINGLE-slug dispatch (fully attributable), a THREE-slug batch (divided), a PRICE line whose
+      # items are TERMS, and a preaudit line with no items at all
+      Add-LaneLine -Path $lg6 -Line (New-LaneLine -LaneName 'write' -Label 'w:a' -ItemList @('a') -By 'writer' -Detail '' -At '2026-08-25T10:00:00' -Event 'end' -In 900 -Out 100)
+      Add-LaneLine -Path $lg6 -Line (New-LaneLine -LaneName 'map' -Label 'map:3x' -ItemList @('a','b','c') -By 'mapper' -Detail '' -At '2026-08-25T10:05:00' -Event 'end' -In 2700 -Out 300)
+      Add-LaneLine -Path $lg6 -Line (New-LaneLine -LaneName 'price' -Label 'batch 1' -ItemList @('harissa','tteok') -By 'pricer' -Detail '' -At '2026-08-25T10:10:00' -Event 'end' -In 5000 -Out 500)
+      Add-LaneLine -Path $lg6 -Line (New-LaneLine -LaneName 'audit' -Label 'wave-preaudit w1' -ItemList @() -By 'mechanical' -Detail '' -At '2026-08-25T10:12:00' -Event 'end' -In 0 -Out 0)
+      foreach ($s in @('a', 'b', 'c')) {
+        Write-JsonAtomic -Path (Join-Path $lt6 ('state\{0}.json' -f $s)) -Obj ([pscustomobject]@{
+          slug = $s; state = 'qa-passed'; history = @(
+            [pscustomobject]@{ state = 'sourced'; at = '2026-08-25T10:00:00'; by = 't'; detail = '' },
+            [pscustomobject]@{ state = 'qa-passed'; at = '2026-08-25T10:30:00'; by = 't'; detail = '' }) })
+      }
+      # ...and one recipe with NO history at all, which must read UNKNOWN rather than 0 minutes
+      Write-JsonAtomic -Path (Join-Path $lt6 'state\d.json') -Obj ([pscustomobject]@{
+        slug = 'd'; state = 'mapped'; history = @() })
+      $ro6 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecipeSummary -RunDir $lt6 -Json 2>&1
+      $rs6 = $null
+      try { $rs6 = (@($ro6 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
+      $ra = $null; $rb = $null; $rd = $null; $pr = $null
+      if ($rs6) {
+        $ra = @($rs6.recipes | Where-Object { $_.slug -eq 'a' })[0]
+        $rb = @($rs6.recipes | Where-Object { $_.slug -eq 'b' })[0]
+        $rd = @($rs6.recipes | Where-Object { $_.slug -eq 'd' })[0]
+        $pr = @($rs6.unattributed | Where-Object { $_.lane -eq 'price' })[0]
+      }
+      T 'MUST FIRE  a single-slug dispatch is ATTRIBUTABLE and a 3-slug batch is SHARED - the two never merge into one total' `
+        ($null -ne $ra -and [long]$ra.attributable -eq 1000 -and [long]$ra.shared -eq 1000 -and [long]$ra.total -eq 2000 -and [int]$ra.shared_lines -eq 1) `
+        ($(if ($ra) { 'attrib=' + $ra.attributable + ' shared=' + $ra.shared + ' lines=' + $ra.shared_lines } else { ($ro6 -join ' ') }))
+      T 'MUST FIRE  ...and a recipe that only ever rode the batch carries NO attributable spend at all' `
+        ($null -ne $rb -and [long]$rb.attributable -eq 0 -and [long]$rb.shared -eq 1000) `
+        ($(if ($rb) { 'attrib=' + $rb.attributable + ' shared=' + $rb.shared } else { 'no row' }))
+      T 'MUST FIRE  the PRICE lane lands UNATTRIBUTED whole - its items are terms deduped across recipes, so dividing it would invent a number the architecture does not have' `
+        ($null -ne $pr -and [long]$pr.total -eq 5500 -and @($rs6.recipes | Where-Object { $_.lanes -contains 'price' }).Count -eq 0) `
+        ($(if ($pr) { 'price=' + $pr.total } else { 'price never surfaced' }))
+      T 'MUST FIRE  the wall-clock spine comes from the state history - 30 minutes, from a file no summary read before' `
+        ($null -ne $ra -and [int]$ra.wall_sec -eq 1800) `
+        ($(if ($ra) { 'wall_sec=' + $ra.wall_sec } else { 'no row' }))
+      T 'CLEAN TWIN a recipe with no history reports wall_sec -1 (UNKNOWN), never 0 - zero and unknown are different claims' `
+        ($null -ne $rd -and [int]$rd.wall_sec -eq -1) `
+        ($(if ($rd) { 'wall_sec=' + $rd.wall_sec } else { 'no row' }))
+      # THE TEXT TABLE IS ITS OWN CASE, and it is here because the -Json cases above ALL PASSED while
+      # the human table threw: the header used '{2,>10}', and '>' is not a .NET alignment token. A
+      # summary nobody can read is not a summary, and only rendering it catches that.
+      $txt6 = (@(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecipeSummary -RunDir $lt6 2>&1) | ForEach-Object { [string]$_ }) -join "`n"
+      T 'MUST FIRE  the human table RENDERS, names the unattributed price lane and says plainly that `shared` is divided rather than measured' `
+        ($txt6 -match 'attrib' -and $txt6 -notmatch 'Error formatting' -and
+         $txt6 -match 'UNATTRIBUTED' -and $txt6 -match 'structural' -and
+         $txt6 -match 'DIVIDED BY ITS BATCH SIZE' -and $txt6 -match 'wall clock is UNKNOWN, not zero') `
+        ($txt6.Substring(0, [Math]::Min(240, $txt6.Length)))
+    } finally { Remove-Item -Recurse -Force $lt6 -ErrorAction SilentlyContinue }
     # ---- F (2026-08-24): API ROUND TRIPS ARE NOT BILLED INVOCATIONS, and the reader must keep them
     # apart. The 6b run's own numbers are the case: one mapper session made 47 round trips and billed
     # ~500k tokens while `calls` read 1, because `calls` counts CLI invocations (a re-ask makes it 2)
@@ -1032,6 +1105,125 @@ if ($runInit) {
 # ---- -Lane ----------------------------------------------------------------------------------------
 # Record ONE agent invocation. Call it as the invocation is dispatched, once per agent, with the items
 # that invocation actually took: terms for `price`, slugs for `map` / `extract` / `write` / `qa`.
+# ---- -RecipeSummary (T4, 2026-08-25) --------------------------------------------------------------
+#
+# THE QUESTION NEITHER EXISTING SUMMARY CAN ANSWER: "what did ONE recipe cost, and how long did it
+# take from enqueue to published?" -LaneSummary groups by lane, -StageSummary by lane+label, and
+# `items[]` - which has carried the slugs since the log's first line - was used only to make the
+# pairing key unique. The wall-clock spine was on disk the whole time too: every state file carries
+# history[{state, at, by}], and -Status drops it.
+#
+# THREE HONESTY RULES, because a per-recipe number is the easiest place in this estate to lie.
+#
+# 1. ATTRIBUTABLE AND SHARED ARE DIFFERENT COLUMNS, never one total. A dispatch naming ONE slug is
+#    that slug's cost. A map:3x naming three is divided by three, which is an ESTIMATE - the three
+#    recipes did not cost the same, and nothing in the log says how the session actually split. The
+#    division is shown in its own column with the line count beside it, so a reader can see how much
+#    of a recipe's number is arithmetic rather than measurement.
+# 2. THE PRICE LANE IS STRUCTURALLY UNATTRIBUTABLE and is reported as such, never divided. Its lines
+#    carry TERMS, not slugs, because the queue dedupes across recipes by design - one lookup of
+#    `harissa` serves every recipe waiting on it. Dividing that by recipe would invent a number the
+#    architecture deliberately does not have. It lands in the UNATTRIBUTED block with its lane named.
+# 3. A RECIPE WITH NO HISTORY IS ANNOUNCED, not rendered as 0 minutes. Zero and unknown are different
+#    claims, which is the same rule the lane log's -1 exists for.
+if ($runRecipeSummary) {
+  $lp = Join-Path $RunDir 'lane-log.jsonl'
+  if (-not (Test-Path $lp)) { Write-Output ("hunt-run: no lane log at {0}" -f $lp); exit 1 }
+  $rows = @()
+  foreach ($l in (Get-Content $lp -Encoding utf8)) {
+    if (-not $l -or -not $l.Trim()) { continue }
+    try { $rows += ($l | ConvertFrom-Json) } catch { }
+  }
+  $entries = @(Read-Entries -Dir $RunDir)
+  if (-not $entries.Count) { Write-Output 'hunt-run recipe summary: no state files in this run'; exit 0 }
+
+  $acc = @{}
+  foreach ($e in $entries) {
+    $acc[[string]$e.slug] = [pscustomobject]@{
+      slug = [string]$e.slug; state = [string]$e.state; own = 0.0; shared = 0.0
+      shared_lines = 0; lanes = @(); first_at = $null; last_at = $null; wall_sec = -1 }
+  }
+  $unattributed = @{}
+  foreach ($r in $rows) {
+    $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
+    if ($ev -eq 'start') { continue }             # tokens ride the END line; a start would double-count
+    $tin = [double]$r.in; $tout = [double]$r.out
+    if ($tin -lt 0) { $tin = 0 }                  # -1 is "not reported", which is not zero cost
+    if ($tout -lt 0) { $tout = 0 }
+    $tot = $tin + $tout
+    if ($tot -le 0) { continue }
+    $all = @(@($r.items) | ForEach-Object { [string]$_ })
+    $mine = @($all | Where-Object { $acc.ContainsKey($_) })
+    if (-not $mine.Count) {
+      $ln = [string]$r.lane
+      if (-not $unattributed.ContainsKey($ln)) { $unattributed[$ln] = 0.0 }
+      $unattributed[$ln] += $tot
+      continue
+    }
+    foreach ($s in $mine) {
+      if ($all.Count -le 1) { $acc[$s].own += $tot }
+      else {
+        $acc[$s].shared += ($tot / $all.Count)
+        $acc[$s].shared_lines += 1
+      }
+      if ($acc[$s].lanes -notcontains [string]$r.lane) { $acc[$s].lanes += [string]$r.lane }
+    }
+  }
+  # the WALL-CLOCK SPINE, from the state files' own history
+  foreach ($e in $entries) {
+    $h = @($e.history) | Where-Object { $_ -and $_.at }
+    if (-not $h.Count) { continue }
+    $ats = @($h | ForEach-Object { [datetime]$_.at } | Sort-Object)
+    $a = $acc[[string]$e.slug]
+    $a.first_at = $ats[0].ToString('yyyy-MM-ddTHH:mm:ss')
+    $a.last_at = $ats[$ats.Count - 1].ToString('yyyy-MM-ddTHH:mm:ss')
+    $a.wall_sec = [int](($ats[$ats.Count - 1] - $ats[0]).TotalSeconds)
+  }
+  $out = @($acc.Values | Sort-Object -Property @{ Expression = { $_.own + $_.shared } } -Descending)
+
+  if ($Json) {
+    $payload = [pscustomobject]@{
+      run = Split-Path $RunDir -Leaf
+      recipes = @($out | ForEach-Object {
+        [pscustomobject]@{ slug = $_.slug; state = $_.state
+                           attributable = [long]$_.own; shared = [long]$_.shared
+                           total = [long]($_.own + $_.shared); shared_lines = $_.shared_lines
+                           lanes = @($_.lanes); first_at = $_.first_at; last_at = $_.last_at
+                           wall_sec = $_.wall_sec } })
+      unattributed = @($unattributed.Keys | Sort-Object | ForEach-Object {
+        [pscustomobject]@{ lane = $_; total = [long]$unattributed[$_] } })
+    }
+    Write-Output ($payload | ConvertTo-Json -Depth 6)
+    exit 0
+  }
+
+  Write-Output ("hunt-run recipe summary: {0}" -f (Split-Path $RunDir -Leaf))
+  Write-Output ("  {0,-42} {1,-16} {2,10} {3,10} {4,10} {5,6} {6,9}  {7}" -f `
+                'slug', 'state', 'attrib', 'shared', 'total', 'sh_ln', 'wall_min', 'lanes')
+  foreach ($r in $out) {
+    $wall = if ($r.wall_sec -lt 0) { '   no hist' } else { ('{0,9:N1}' -f ($r.wall_sec / 60.0)) }
+    Write-Output ("  {0,-42} {1,-16} {2,10:N0} {3,10:N0} {4,10:N0} {5,6} {6}  {7}" -f `
+                  $r.slug.Substring(0, [Math]::Min(42, $r.slug.Length)),
+                  ([string]$r.state).Substring(0, [Math]::Min(16, ([string]$r.state).Length)),
+                  $r.own, $r.shared, ($r.own + $r.shared), $r.shared_lines, $wall,
+                  (@($r.lanes) -join ','))
+  }
+  if ($unattributed.Count) {
+    Write-Output '  UNATTRIBUTED - real spend that belongs to no single recipe, never divided into one:'
+    foreach ($k in @($unattributed.Keys | Sort-Object)) {
+      $why = if ($k -eq 'price') { '  (lines carry TERMS, deduped across recipes - this one is structural)' } else { '' }
+      Write-Output ("    {0,-12} {1,12:N0}{2}" -f $k, $unattributed[$k], $why)
+    }
+  }
+  $noHist = @($out | Where-Object { $_.wall_sec -lt 0 })
+  if ($noHist.Count) {
+    Write-Output ("  {0} recipe(s) carry no history and their wall clock is UNKNOWN, not zero: {1}" -f `
+                  $noHist.Count, ((@($noHist | ForEach-Object { $_.slug })) -join ', '))
+  }
+  Write-Output '  `shared` is a batched dispatch DIVIDED BY ITS BATCH SIZE - an estimate, not a measurement.'
+  Write-GuardComplete -Name 'hunt-run' -Summary ("recipe-summary recipes={0}" -f $out.Count); exit 0
+}
+
 # ---- -LaneSummary ---------------------------------------------------------------------------------
 # The cost breakdown this estate has never actually seen. v2.1 section 5.2 asked for usage.jsonl written
 # at the END of a run; no run has ever reached its final phase, so the number was never produced. This
