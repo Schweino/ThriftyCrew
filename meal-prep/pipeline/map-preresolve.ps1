@@ -803,6 +803,32 @@ $script:ENGINE_FALLBACK_FLAGS = @('default tbsp', 'default tsp', 'handful w/o de
 $script:GARNISH_PHRASES = @('to garnish', 'for garnish', 'for garnishing', 'as garnish',
                             'as a garnish', 'to serve', 'for serving', 'for topping', 'to top')
 
+# A PANTRY SEASONING STATED "TO TASTE" IS NOT A PURCHASABLE LINE (T1, Brad's ruling 2026-08-25,
+# after the m1 drill parked a recipe in EACH of its two batches on "salt and pepper to taste").
+#
+# MEASURED: 2 of the 6 recipes the m1 drill sent down the pipe died here. Both times the mapper
+# ruled the line purchasable, and the refusal below correctly refused the file - "a purchasable line
+# with no weight cannot be costed". The extraction already marks 'to taste' optional
+# (local_extract.py:233), so the mapper is overriding a call that was already made, which is the
+# standing argument for settling it mechanically: a rule a model must remember is a rule it
+# sometimes forgets. This is the garnish ruling one food class over.
+#
+# BRAD RULED THE NARROW VERSION, and the width is the whole design. A blanket "any line saying to
+# taste" rule would silently drop `harissa, to taste` from cost AND macros - a real ingredient, a
+# real price, and the reader never told. So the line qualifies only when EVERY word of its food half
+# is a seasoning word AND at least one is salt or pepper. `harissa` is in neither list, so
+# `harissa, to taste` falls through to the refusal and the recipe parks, which is the honest outcome
+# and the same one it gets today.
+#
+# INHERITS THE GARNISH RULE'S SAFETY PROPERTY EXACTLY: it lives INSIDE the zero-weight refusal, so
+# it can only ever fire where the recipe dies today and cannot change a line that currently works.
+# "1 tsp salt, to taste" gets grams from the qty engine and never reaches here.
+$script:TO_TASTE_SEASONING_CORE = @('salt', 'pepper', 'peppercorn', 'peppercorns')
+$script:TO_TASTE_SEASONING_MODIFIERS = @('black', 'white', 'kosher', 'sea', 'ground', 'freshly',
+                                         'fresh', 'cracked', 'coarse', 'coarsely', 'fine', 'finely',
+                                         'table', 'flaky', 'flake', 'flakes', 'pink', 'himalayan',
+                                         'iodized', 'and')
+
 # ALTERNATIVES LINES (D5, Brad's ruling 2026-08-24). A source line that offers a CHOICE of foods -
 # "Prepared brown and wild rice blend, brown rice, quinoa, or cauliflower rice" - names no single food
 # and so has no single weight or price. 6b parked a recipe on exactly that line after map, registrar
@@ -1021,6 +1047,32 @@ function Test-IsGarnishLine([string]$Raw) {
   # trailing bare ", garnish" - the same statement with the preposition dropped
   if ($s -match ',\s*garnish(es)?\s*$') { return $true }
   return $false
+}
+
+function Test-IsPantrySeasoningToTaste([string]$Raw) {
+  <#
+    True only for a line that says "to taste" AND whose food half is nothing but seasoning words,
+    at least one of them salt or pepper. Every unknown word is a REFUSAL, which is what keeps
+    `harissa, to taste` and `salt and harissa to taste` out of this branch.
+  #>
+  if (-not $Raw) { return $false }
+  $s = $Raw.ToLower()
+  if ($s -notmatch '\bto\s+taste\b') { return $false }
+  # the FOOD half: drop the to-taste clause, then anything that is not a letter or a space. A digit
+  # or a unit surviving here means the line states a measure, and a stated measure is not this rule's
+  # business - the word test below refuses it, because `tsp` is in neither list.
+  $food = [regex]::Replace($s, '\bto\s+taste\b', ' ')
+  $food = [regex]::Replace($food, '[^a-z ]', ' ')
+  $food = ([regex]::Replace($food, '\s+', ' ')).Trim()
+  if (-not $food) { return $false }
+  $hasCore = $false
+  foreach ($w in @($food -split ' ')) {
+    if (-not $w) { continue }
+    if ($script:TO_TASTE_SEASONING_CORE -contains $w) { $hasCore = $true; continue }
+    if ($script:TO_TASTE_SEASONING_MODIFIERS -contains $w) { continue }
+    return $false
+  }
+  return $hasCore
 }
 
 function Get-AssembledDecision {
@@ -1349,6 +1401,14 @@ function New-MappedDecisionFile {
           grams = 0; buy = ''; optional = $true; decision = 'optional-note'
           notes = ("garnish with no stated quantity - nothing to buy, weigh or cost; recorded so the reader still sees it") }) | Out-Null
         $paraphrased.Add(("'{0}' reads as a garnish with no stated quantity, so it is recorded as an optional note rather than costed" -f $raw)) | Out-Null
+        continue
+      }
+      if (Test-IsPantrySeasoningToTaste $raw) {
+        $ings.Add([pscustomobject]@{
+          source_raw = $raw; item = $(if ($item) { $item } else { $null }); bid = $null; board = $null
+          grams = 0; buy = ''; optional = $true; decision = 'optional-note'
+          notes = ("pantry seasoning stated 'to taste' - no quantity to buy, weigh or cost; recorded so the reader still sees it") }) | Out-Null
+        $paraphrased.Add(("'{0}' is a pantry seasoning stated 'to taste', so it is recorded as an optional note rather than costed" -f $raw)) | Out-Null
         continue
       }
       # NEVER A SILENT ZERO. A zero-gram line is an ingredient the reader buys and the card ignores,
@@ -1948,6 +2008,74 @@ if ($runSelfTest) {
   T 'MUST FIRE  a weightless line that is NOT a garnish still parks - the never-a-silent-zero refusal is untouched' `
     ((@($resG2.findings) -join ' ') -match 'has no gram weight') `
     ("findings=" + (@($resG2.findings) -join '; '))
+
+  # ---- FIXTURE A1t. T1: A PANTRY SEASONING "TO TASTE" IS AN OPTIONAL NOTE, NOT A PARKED RECIPE ----
+  # FROZEN FIXTURE (Brad's ruling 2026-08-25). The m1 drill sent 6 recipes down the pipe and parked one
+  # in EACH of its two batches on "salt and pepper to taste": the mapper ruled the line purchasable and
+  # the never-a-silent-zero refusal correctly refused the file. This is the garnish ruling one food
+  # class over, and it fires in the same place - INSIDE the zero-weight refusal - so it cannot touch a
+  # line that works today.
+  #
+  # BRAD RULED THE NARROW VERSION AND THE OVER-REACH TWINS ARE WHY. A blanket "any to taste line" rule
+  # would drop `harissa, to taste` from cost AND macros with the reader never told, so one unknown word
+  # refuses the whole line.
+  #
+  # NEUTER PROOFS, BOTH RUN AND REVERTED 2026-08-25, with the counts the suite actually printed:
+  #   * delete the branch from the assembler          -> 2 red, the two end-to-end MUST FIREs. The
+  #     predicate cases stay green, correctly: the function still exists, only its caller went.
+  #   * WIDEN the predicate to Brad's rejected option (any line saying "to taste" qualifies)
+  #                                                   -> 4 red: all three narrowness twins AND the
+  #     end-to-end harissa park. That is the pair of rulings pinned in both directions - the rule
+  #     cannot be deleted and it cannot be widened without a case going red.
+  $rowsT = @((New-Row 't1' 't1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+             (New-Row 't2' 'salt and pepper' 'Salt' 'parmesan' 'resolved' $null),
+             (New-Row 't3' 'kosher salt' 'Salt' 'onions' 'resolved' $null),
+             (New-Row 't4' 'black pepper' 'Black Pepper' 'cream-cheese' 'resolved' $null))
+  $payT = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='t1'; buy='1 lb chicken breast'; notes='' },
+              [pscustomobject]@{ raw='t2'; buy=''; notes='' },
+              [pscustomobject]@{ raw='t3'; buy=''; notes='' },
+              [pscustomobject]@{ raw='t4'; buy=''; notes='' }); rulings=@() }
+  $tblT = New-Tbl $rowsT 4
+  @($tblT.rows)[1].raw = 'Salt and pepper to taste'
+  @($tblT.rows)[2].raw = 'Kosher salt, to taste'
+  @($tblT.rows)[3].raw = 'Freshly ground black pepper, to taste'
+  @($payT.lines)[1].raw = 'Salt and pepper to taste'
+  @($payT.lines)[2].raw = 'Kosher salt, to taste'
+  @($payT.lines)[3].raw = 'Freshly ground black pepper, to taste'
+  $resT = New-MappedDecisionFile $tblT $payT $stateRow $known 14
+  $tNotes = @(@($resT.doc.ingredients) | Where-Object { $_.decision -eq 'optional-note' })
+  T 'MUST FIRE  three pantry-seasoning "to taste" shapes become optional-notes instead of parking - this killed 2 of the m1 drill''s 6 recipes' `
+    ($tNotes.Count -eq 3 -and @($resT.findings).Count -eq 0) `
+    ("optional-notes=" + $tNotes.Count + " findings=" + (@($resT.findings) -join '; '))
+  T 'MUST FIRE  ...and each is NAMED with zero grams and nothing to buy, so the reader still sees the seasoning and the cost is untouched' `
+    ((@($tNotes | Where-Object { $_.grams -eq 0 -and -not $_.buy -and $_.optional }).Count) -eq 3) `
+    (($tNotes | ForEach-Object { [string]$_.source_raw + ' g=' + [string]$_.grams }) -join ' | ')
+  T 'MUST FIRE  the seasoning vocabulary covers the phrasings recipes actually print' `
+    ((Test-IsPantrySeasoningToTaste 'Salt and pepper to taste') -and
+     (Test-IsPantrySeasoningToTaste 'sea salt and cracked black pepper, to taste') -and
+     (Test-IsPantrySeasoningToTaste 'Freshly ground black pepper to taste')) 'a real phrasing was refused'
+  T 'CLEAN TWIN "harissa, to taste" is no pantry seasoning - a real ingredient keeps its price and macros' `
+    (-not (Test-IsPantrySeasoningToTaste 'harissa, to taste')) 'harissa was swallowed'
+  T 'CLEAN TWIN one unknown word refuses the WHOLE line - "salt and harissa to taste" is not a seasoning line' `
+    (-not (Test-IsPantrySeasoningToTaste 'salt and harissa to taste')) 'a mixed line was swallowed'
+  T 'CLEAN TWIN no "to taste" clause, no rule - a bare seasoning line is untouched' `
+    (-not (Test-IsPantrySeasoningToTaste 'Kosher salt')) 'a bare seasoning was swallowed'
+  T 'CLEAN TWIN a STATED measure is not this rule''s business - "1 tsp salt, to taste" is refused by the word test' `
+    (-not (Test-IsPantrySeasoningToTaste '1 tsp salt, to taste')) 'a measured line was swallowed'
+  # AND END TO END: the refusal itself must survive for a real food, or the narrow rule is not narrow.
+  $rowsT2 = @((New-Row 'h1' 'h1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+              (New-Row 'h2' 'harissa' 'Harissa' 'cauliflower' 'resolved' $null))
+  $payT2 = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='h1'; buy='1 lb chicken breast'; notes='' },
+              [pscustomobject]@{ raw='h2'; buy=''; notes='' }); rulings=@() }
+  $tblT2 = New-Tbl $rowsT2 4
+  @($tblT2.rows)[1].raw = 'Harissa, to taste'
+  @($payT2.lines)[1].raw = 'Harissa, to taste'
+  $resT2 = New-MappedDecisionFile $tblT2 $payT2 $stateRow $known 14
+  T 'MUST FIRE  end to end, a REAL ingredient stated "to taste" still parks the recipe - no price or macro is silently dropped' `
+    ((@($resT2.findings) -join ' ') -match 'has no gram weight') `
+    ("findings=" + (@($resT2.findings) -join '; '))
 
   # ---- FIXTURE A1d. D5: AN ALTERNATIVES LINE NAMES A CHOICE, SO CHOOSE ---------------------------
   # FROZEN FIXTURE (Brad's ruling 2026-08-24). 6b parked a recipe on
