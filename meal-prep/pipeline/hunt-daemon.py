@@ -517,6 +517,26 @@ class Daemon(object):
             self.wip_waiters.append(fut)
             await fut
 
+    # ---- THE FREE END LINE (2026-08-25) ---------------------------------------------------------
+    #
+    # A STAGE THAT BILLED NOTHING SAYS ZERO IN EVERY TOKEN FIELD, NOT IN TWO OF THEM. -1 means "not
+    # reported" in this log, and the difference matters: -LaneSummary and every future reader treat
+    # -1 as unmeasured Claude work and 0 as work that cost the run nothing.
+    #
+    # MEASURED on hunt-2026-08-24-v3-phase6b's lane-log.jsonl: every mechanical end line carries
+    # in=0 out=0 (which the G fixture asserted) and cache_read=-1, cache_creation=-1, calls=-1,
+    # api_turns=-1, all_in=-1, all_out=-1 (which nothing asserted). The pre-pass road stamped -1 in
+    # all eight. The instrument that Thursday's wide run gets measured with was reporting its own
+    # free stages as unmeasured.
+    #
+    # ONE ROAD, so the contract cannot fork across the three call sites that need it: ps_timed /
+    # py_timed (mechanical), the local extraction ladder (local), and the price pre-pass (pre-pass).
+    async def lane_free_end(self, lane_name, label, items, by, detail=""):
+        return await self.lane(lane_name, label, items, by, "end",
+                               tokens_in=0, tokens_out=0, detail=detail,
+                               cache_read=0, cache_creation=0, calls=0,
+                               api_turns=0, all_in=0, all_out=0)
+
     # ---- MECHANICAL STAGE TIMING (2026-08-24) ---------------------------------------------------
     #
     # WHY. Token burn was fully instrumented; wall clock was not. Measured on the 6b run, 99% of the
@@ -539,8 +559,8 @@ class Daemon(object):
         try:
             return await self.ps(script, args, timeout)
         finally:
-            await self.lane(lane_name, label, items, by, "end", 0, 0,
-                            "%.1fs" % (time.time() - t0))
+            await self.lane_free_end(lane_name, label, items, by,
+                                     "%.1fs" % (time.time() - t0))
 
     async def py_timed(self, lane_name, label, items, script, args, timeout=600, by="mechanical"):
         await self.lane(lane_name, label, items, by, "start")
@@ -548,8 +568,8 @@ class Daemon(object):
         try:
             return await self.py(script, args, timeout)
         finally:
-            await self.lane(lane_name, label, items, by, "end", 0, 0,
-                            "%.1fs" % (time.time() - t0))
+            await self.lane_free_end(lane_name, label, items, by,
+                                     "%.1fs" % (time.time() - t0))
 
     # ---- the cost engine, serialized ------------------------------------------------------------
 
@@ -895,9 +915,9 @@ class Daemon(object):
                         # DONE. -By local, tokens 0, which is the point - it cost the run nothing.
                         await self.lane("extract", "local rung %d" % rec["rung"], [rec["slug"]],
                                         "local", "start")
-                        await self.lane("extract", "local rung %d" % rec["rung"], [rec["slug"]],
-                                        "local", "end", 0, 0,
-                                        "settled in %.1fs" % rec["seconds"])
+                        await self.lane_free_end("extract", "local rung %d" % rec["rung"],
+                                                 [rec["slug"]], "local",
+                                                 "settled in %.1fs" % rec["seconds"])
                         await self.advance(rec["slug"], "extracted", "local",
                                            "extraction ladder rung %d, every line verified"
                                            % rec["rung"])
@@ -1849,8 +1869,8 @@ class Daemon(object):
         self.log("  pre-pass batch %d: %s" % (n, ", ".join("%s %d" % kv for kv in sorted(tal.items()))))
         for f in doc.get("findings") or []:
             self.findings.append(f)
-        await self.lane("price", "pre-pass batch %d" % n, terms, "pre-pass", "end",
-                        detail=", ".join("%s %d" % kv for kv in sorted(tal.items())))
+        await self.lane_free_end("price", "pre-pass batch %d" % n, terms, "pre-pass",
+                                 ", ".join("%s %d" % kv for kv in sorted(tal.items())))
         return path, doc
 
     async def store_lookup(self, store_key, store_name, terms, n):

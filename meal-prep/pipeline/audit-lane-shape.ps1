@@ -79,6 +79,11 @@ $script:LANE_KNOWN = @('hunt', 'select', 'extract', 'map', 'price', 'write', 'qa
 # unpaired line and stands on its own, which is what keeps this readable against historical logs.
 function Get-Invocations {
   param($Lines)
+  # PS 5.1: an EMPTY array arriving through an if-expression or a pipeline arrives as $null, and
+  # `foreach ($l in @($null))` iterates ONCE over $null - so an empty lane would count as one
+  # invocation and the `price-lane-unlogged` catch would never fire on the run that needs it.
+  # Caught 2026-08-25 by the new zero-lane CLEAN TWIN, which is what a clean twin is for.
+  if ($null -eq $Lines) { return @() }
   $out = @(); $seen = @{}
   foreach ($l in @($Lines)) {
     $ev = [string]$l.event
@@ -93,6 +98,23 @@ function Get-Invocations {
     $out += $l
   }
   return @($out)
+}
+
+# HOW MANY INVOCATIONS, EVERYWHERE THIS SCRIPT PRINTS A NUMBER (added 2026-08-25).
+#
+# The 2026-08-24 fix taught the SHAPE-JUDGED lanes to collapse start/end pairs and stopped there.
+# Three places kept counting raw LINES and calling them invocations: the headline total, the -Json
+# `invocations` field, and the counted-not-judged lanes - which are extract, qa, select, write and
+# audit, i.e. most of the run. Measured on hunt-2026-08-24-v3-phase6b: the header said 161 lane
+# invocations over a log holding 72, and printed extract 24, write 22, audit 14, qa 10, select 8
+# where 12, 11, 8, 5 and 4 invocations exist. Every one of those numbers was exactly doubled except
+# where an unpaired line survived. Thursday's wide run is measured with this instrument, so a
+# doubled count is a doubled cost story.
+function Get-InvocationCount {
+  param($Lines, [string]$Lane = '')
+  $sel = @($Lines)
+  if ($Lane) { $sel = @($sel | Where-Object { [string]$_.lane -eq $Lane }) }
+  return @(Get-Invocations $sel).Count
 }
 
 # The headline: how many invocations did this lane take, against how many the batch size needed?
@@ -302,6 +324,39 @@ if ($runSelfTest) {
     ((@(Get-Invocations @((PairInv 'batch 1' @('a') 'start' -1), (PairInv 'batch 1' @('b') 'start' -1)))).Count -eq 2) `
     'collapsed two invocations that carried different items'
 
+  # ---- FIXTURE 3c. THE COUNTS THIS SCRIPT PRINTS ARE INVOCATIONS TOO (added 2026-08-25).
+  # 3b taught the shape-judged lanes to collapse pairs. The headline total, the -Json field and the
+  # counted-not-judged lanes were left counting raw lines, which is most of what a reader actually
+  # looks at. Measured on hunt-2026-08-24-v3-phase6b before this fix: header 161 for a 72-invocation
+  # log, extract 24 for 12.
+  # NEUTER PROOF, run 2026-08-25: point Get-InvocationCount back at @($Lines).Count (or at the raw
+  # Where-Object counts the three call sites used) and the two MUST FIRE cases below go red at
+  # exactly double, while the CLEAN TWIN on unpaired lines stays green - which is the whole point,
+  # an old log must still read correctly.
+  function XInv([string]$Lane, [string]$Label, $Items, [string]$Event) {
+    return [pscustomobject]@{ lane = $Lane; label = $Label; items = @($Items); count = @($Items).Count
+                              by = 'local'; event = $Event; in = 0; out = 0 }
+  }
+  $mixed = @((XInv 'extract' 'local rung 1' @('slug-a') 'start'), (XInv 'extract' 'local rung 1' @('slug-a') 'end'),
+             (XInv 'extract' 'local rung 1' @('slug-b') 'start'), (XInv 'extract' 'local rung 1' @('slug-b') 'end'),
+             (XInv 'extract' 'local rung 2' @('slug-c') 'start'), (XInv 'extract' 'local rung 2' @('slug-c') 'end'),
+             (XInv 'qa' 'slug-a' @('slug-a') 'start'), (XInv 'qa' 'slug-a' @('slug-a') 'end'))
+  T 'MUST FIRE  a counted-not-judged lane counts INVOCATIONS, not lines - 6 extract lines are 3 invocations' `
+    ((Get-InvocationCount $mixed 'extract') -eq 3) ("got " + (Get-InvocationCount $mixed 'extract'))
+  T 'MUST FIRE  and the headline total is invocations across every lane - 8 lines are 4 invocations' `
+    ((Get-InvocationCount $mixed) -eq 4) ("got " + (Get-InvocationCount $mixed))
+  T '   and the raw line counts, uncollapsed, are exactly the doubled numbers this replaces' `
+    ((@($mixed | Where-Object { [string]$_.lane -eq 'extract' }).Count -eq 6) -and (@($mixed).Count -eq 8)) `
+    'the fixture is not reproducing the defect it fixes'
+  T 'CLEAN TWIN an OLD unpaired log (no event field) still counts every line, because each line IS an invocation' `
+    ((Get-InvocationCount @((Inv 'b1' @('a')), (Inv 'b2' @('b')), (Inv 'b3' @('c')))) -eq 3) `
+    ('got ' + (Get-InvocationCount @((Inv 'b1' @('a')), (Inv 'b2' @('b')), (Inv 'b3' @('c')))))
+  T 'MUST FIRE  Get-Invocations over $null is ZERO invocations, not one - PS 5.1 iterates once over
+        $null, and a phantom invocation is what would let price-lane-unlogged pass on the run it exists for' `
+    ((@(Get-Invocations $null)).Count -eq 0) ('got ' + (@(Get-Invocations $null)).Count)
+  T 'CLEAN TWIN a lane with no lines at all counts zero, so the map-lane-unlogged catch still fires' `
+    ((Get-InvocationCount $mixed 'map') -eq 0) ('got ' + (Get-InvocationCount $mixed 'map'))
+
   # ---- FIXTURE 4. THE PER-RECIPE FINGERPRINT, independent of any threshold. Every invocation confined to
   # a single recipe while several recipes were waiting is the defect itself, not a symptom of it.
   $owners = @{ 'mascarpone' = @('chicken-florentine'); 'kewpie mayo' = @('loco-moco')
@@ -465,21 +520,21 @@ elseif ($priceInv.Count) {
   }
 }
 $mapped = @($entries | Where-Object { @($_.history | ForEach-Object { [string]$_.state }) -contains 'mapped' })
-if ($mapped.Count -and -not @($log | Where-Object { [string]$_.lane -eq 'map' }).Count) {
+if ($mapped.Count -and -not (Get-InvocationCount $log 'map')) {
   $warnings += [pscustomobject]@{ code = 'map-lane-unlogged'; lane = 'map'
     detail = ("{0} recipe(s) were mapped and the lane log records no mapper invocation, so the S4 micro-batch shape cannot be judged." -f $mapped.Count) }
 }
 
 if ($runJson) {
   ([pscustomobject]@{
-    run = (Split-Path $RunDir -Leaf); invocations = $log.Count; recipes = $entries.Count
+    run = (Split-Path $RunDir -Leaf); invocations = (Get-InvocationCount $log); recipes = $entries.Count
     lanes = @($lanes); findings = @($findings); warnings = @($warnings)
   } | ConvertTo-Json -Depth 10)
   Write-GuardComplete -Name 'lane-shape' -Summary ("findings={0} warnings={1}" -f $findings.Count, $warnings.Count)
   exit $(if ($findings.Count) { 1 } else { 0 })
 }
 
-Write-Output ("audit-lane-shape: {0}   {1} lane invocation(s) over {2} recipe(s)" -f (Split-Path $RunDir -Leaf), $log.Count, $entries.Count)
+Write-Output ("audit-lane-shape: {0}   {1} lane invocation(s) over {2} recipe(s)" -f (Split-Path $RunDir -Leaf), (Get-InvocationCount $log), $entries.Count)
 Write-Output ''
 foreach ($x in $lanes) {
   $s = $x.shape
@@ -488,7 +543,7 @@ foreach ($x in $lanes) {
 }
 foreach ($l in @($seenLanes | Where-Object { -not $script:LANE_BATCH.ContainsKey($_) })) {
   Write-Output ("  {0,-6} {1,3} invocation(s)   (no batch size declared in the plan - counted, not judged)" -f
-                $l, @($log | Where-Object { [string]$_.lane -eq $l }).Count)
+                $l, (Get-InvocationCount $log $l))
 }
 Write-Output ''
 if ($findings.Count) {

@@ -3668,11 +3668,91 @@ def _mechanical_lane_events():
         a = c["args"]
         if "-Lane" in a and "-Event" in a and a[a.index("-Event") + 1] == "end":
             end = a
-    got_in = end[end.index("-InputTokens") + 1] if end else None
-    got_out = end[end.index("-OutputTokens") + 1] if end else None
-    res.append(("MUST FIRE  the end line reports tokens 0, never -1 - a mechanical stage burned "
-                "nothing, which is not the same as nobody having looked",
-                got_in == 0 and got_out == 0, "in=%r out=%r" % (got_in, got_out)))
+    # EXTENDED 2026-08-25. This asserted TWO of the eight token fields, and production was stamping
+    # -1 in the other six on every mechanical end line it ever wrote. Measured on
+    # hunt-2026-08-24-v3-phase6b: `in=0 out=0 cache_read=-1 cache_creation=-1 calls=-1 api_turns=-1
+    # all_in=-1 all_out=-1`. The fixture was green the whole time because it only ever looked at the
+    # two fields the 2026-08-24 build remembered to pass. Every field the line CARRIES is asserted
+    # now, so a future field added to lane() cannot slip back to -1 unnoticed on a free stage.
+    FREE_FIELDS = ("-InputTokens", "-OutputTokens", "-CacheRead", "-CacheCreation", "-Calls",
+                   "-ApiTurns", "-AllModelsIn", "-AllModelsOut")
+
+    def _free_stamp(end_args):
+        return dict((f, (end_args[end_args.index(f) + 1] if f in end_args else None))
+                    for f in FREE_FIELDS)
+
+    got = _free_stamp(end) if end else {}
+    res.append(("MUST FIRE  the end line reports 0 in EVERY token field, never -1 - a mechanical "
+                "stage burned nothing, which is not the same as nobody having looked",
+                bool(got) and all(v == 0 for v in got.values()),
+                json.dumps(dict((k, repr(v)) for k, v in sorted(got.items())))))
+
+    # ---- the PYTHON mechanical road takes the same line. py_timed is a separate verb with its own
+    # end-line call site, so it is its own way to regress.
+    psb = FakePS()
+    d2b = daemon(ps=psb, pyrun=FakePy())
+    arun(d2b.py_timed("price", "pull-browser-stores", ["a", "b", "c"],
+                      HD.PULL_BROWSER_STORES_PY, ["--lookup-terms-file", "T"], timeout=30))
+    endb = None
+    for c in psb.calls:
+        a = c["args"]
+        if "-Lane" in a and "-Event" in a and a[a.index("-Event") + 1] == "end":
+            endb = a
+    gotb = _free_stamp(endb) if endb else {}
+    res.append(("MUST FIRE  py_timed's end line stamps 0 in every token field too - the python "
+                "mechanical road is not exempt from the contract",
+                bool(gotb) and all(v == 0 for v in gotb.values()),
+                json.dumps(dict((k, repr(v)) for k, v in sorted(gotb.items())))))
+
+    # ---- THE FREE ROAD IS THE ONLY ROAD. The local extraction ladder and the price pre-pass write
+    # end lines too, and driving either one here would mean a GPU sweep or a store probe. So this
+    # asserts the same thing by SOURCE, in the _one_marshalling_road idiom the estate already trusts
+    # for exactly this shape of guarantee: after `dispatch` (the judgment road, which stamps REAL
+    # numbers), no call site in the daemon may write an end line except through lane_free_end.
+    #
+    # NEUTER PROOF, RUN 2026-08-25: revert the production change - point ps_timed, py_timed, the
+    # local ladder and the pre-pass back at `self.lane(..., "end", 0, 0, ...)` - and this case names
+    # all four bypassing call sites while the two stamp cases above go red on six fields each.
+    with open(os.path.join(HERE, "hunt-daemon.py"), "r", encoding="utf-8") as f:
+        srclines = f.read().splitlines()
+    # The enclosing METHOD is tracked, not a line window: a fixed lookback would have exempted
+    # whatever happened to sit under an allowed def, which is how a scan like this quietly stops
+    # scanning. (Measured 2026-08-25 while writing it - a 40-line window swallowed ps_timed.)
+    bypass, method = [], ""
+    for i, line in enumerate(srclines):
+        for head in ("    def ", "    async def "):
+            if line.startswith(head):
+                method = line[len(head):].split("(")[0].strip()
+        if "self.lane(" not in line:
+            continue
+        blob = " ".join(srclines[i:i + 4])
+        if '"end"' not in blob:
+            continue
+        # the two roads that are ALLOWED to write an end line: dispatch() stamps the session's real
+        # usage and must NOT be free, and lane_free_end IS the free road's own body.
+        if method in ("dispatch", "lane_free_end"):
+            continue
+        bypass.append("%s line %d: %s" % (method, i + 1, line.strip()[:70]))
+    res.append(("MUST FIRE  every end line outside the judgment dispatch goes through "
+                "lane_free_end - one road, so the zero-stamp contract cannot fork across call sites",
+                not bypass, "; ".join(bypass)))
+
+    # ---- CLEAN TWIN: the judgment road is UNTOUCHED by all of this. A dispatch that really did burn
+    # tokens still stamps them, and a free-stamping dispatch would be the worse bug in the other
+    # direction - a lane log that reports the expensive lanes as free.
+    fd = FakeDispatch({"decider": [{"slug": "s1"}]})
+    d2c = daemon(dispatcher=fd)
+    arun(d2c.dispatch("decider", "p", "select", "decide:1x", ["s1"]))
+    endc = None
+    for c in d2c._ps.calls:
+        a = c["args"]
+        if "-Lane" in a and "-Event" in a and a[a.index("-Event") + 1] == "end":
+            endc = a
+    gotc = _free_stamp(endc) if endc else {}
+    res.append(("CLEAN TWIN  a JUDGMENT dispatch still stamps its real usage - the free road did "
+                "not swallow the road that carries the money",
+                bool(gotc) and any(v not in (0, None) for v in gotc.values()),
+                json.dumps(dict((k, repr(v)) for k, v in sorted(gotc.items())))))
 
     # ---- MUST FIRE: a stage that THREW still closes its pair. An unclosed start is worse than no
     # start at all: -LaneSummary would carry the stage as still running and swallow the whole tail of

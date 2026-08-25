@@ -285,6 +285,43 @@ proof is reverting the production change and watching the extended fixture fail.
 audit-lane-shape.ps1's counted-not-judged lanes to count INVOCATIONS (start/end pairs), not raw
 lines - it currently reports extract 18 where 9 invocations exist.
 
+**CORRECTED 2026-08-25 (build session, measured on `meal-prepuns\hunt-2026-08-24-v3-phase6b`).**
+Three claims in the paragraphs above were wrong or short, and the fix is wider than they describe.
+
+1. *"the fixture is exercising a different code path than ps_timed/py-road mechanical stages take"* -
+   **it is not.** `_mechanical_lane_events` in hunt_daemon_selftest.py drives `ps_timed` directly and
+   always did. The divergence is narrower and duller: the fixture asserted `-InputTokens` and
+   `-OutputTokens` only, and `lane()` carries EIGHT token fields. Production passed 0 for the two
+   that were asserted and defaulted the other six to -1. Measured end line, `by=mechanical`:
+   `in=0 out=0 cache_read=-1 cache_creation=-1 calls=-1 api_turns=-1 all_in=-1 all_out=-1`. There
+   was no second code path to find. FIXED by a single free road, `Daemon.lane_free_end`, used by
+   `ps_timed`, `py_timed`, the local extraction ladder and the price pre-pass, plus a source-scan
+   fixture in the `_one_marshalling_road` idiom asserting no other call site writes an end line.
+2. *"the mechanical roads"* undercounts who was affected. The price pre-pass (`by=pre-pass`) stamped
+   -1 in ALL EIGHT fields including `in`/`out`, and the local ladder (`by=local`) matched the
+   mechanical shape. All three roads are on the free road now.
+3. *"extract 18 where 9 invocations exist"* - the ratio is right, the numbers are from another
+   snapshot. On 6b, BEFORE the fix: header `161 lane invocation(s)` over a log holding 72, and
+   `extract 24, write 22, audit 14, qa 10, select 8` where 12, 11, 8, 5 and 4 invocations exist.
+   AFTER: header 72, `extract 12, write 11, audit 8, qa 5, select 4`. The defect was also wider than
+   "the counted-not-judged lanes": the headline total and the `-Json` `invocations` field counted
+   raw lines too, and both are fixed through one predicate, `Get-InvocationCount`.
+
+**One defect found in passing, fixed in the same commit.** `Get-Invocations` over `$null` returned
+ONE invocation, because PS 5.1 delivers an empty array through an if-expression or a pipeline as
+`$null` and `foreach ($l in @($null))` iterates once. That phantom invocation sat directly under the
+`price-lane-unlogged` catch, which asks `-not $priceInv.Count` - the catch would have passed on
+exactly the run it exists to fail. Guarded in `Get-Invocations` itself, with a MUST FIRE case. It
+was the new zero-lane CLEAN TWIN that surfaced it.
+
+**One observation, NOT fixed, because it is outside this section's scope.** 6b still reports
+`map-lane-not-batched` (22 invocations for 12 items) and `map-lane-duplicate-items` (9 slugs). The
+map lane now carries three kinds of line under one lane name - `mapper` dispatches, `registrar`
+gates and `mechanical` pre-resolve passes - so `Get-BatchShape` is measuring a mixed population and
+the duplicate-items finding fires by construction on any slug that took a pre-resolve, a mapper and
+a registrar. That is the same class of defect the 2026-08-24 pairing fix addressed, one level up,
+and it is a proposal for Brad rather than a build-time convenience.
+
 ## 8. Build order, gates, and the drill
 
 Order: 7 (instrument) -> M -> W -> A. One verified unit per commit; commit and push as each lands.
