@@ -1564,6 +1564,25 @@ class Daemon(object):
     #
     # THE CONFLICT RULE IS THE MEAL-MACRO SKILL'S, arriving here unchanged: "When a label conflicts
     # with the DB, STOP and surface it. Do NOT silently overwrite." An existing row always stands.
+    # H1: the tolerances the conflict rule forgives, and only within one identical serving basis.
+    # 5 CALORIES is the estate's own macro-recompute tolerance, arriving here unchanged. 0.5 g is
+    # TIGHTER than the 2 g recompute tolerance ON PURPOSE: a food-DB row is a SOURCE OF TRUTH that
+    # every spec build and every macro recompute reads, not a derived figure that a chain of
+    # arithmetic has already blurred. Forgiving 2 g here would forgive a real label disagreement.
+    FOOD_DB_CAL_TOLERANCE = 5.0
+    FOOD_DB_MACRO_TOLERANCE = 0.5
+
+    def _rounding_apart(self, new, old, field):
+        """True when two values for the same field are the same number rounded differently.
+
+        A missing or non-numeric value on either side is NOT rounding - it is a difference nobody
+        can measure, so it stays a conflict and a person rules on it.
+        """
+        if not isinstance(new, (int, float)) or not isinstance(old, (int, float)):
+            return False
+        tol = self.FOOD_DB_CAL_TOLERANCE if field == "calories" else self.FOOD_DB_MACRO_TOLERANCE
+        return abs(float(new) - float(old)) <= tol
+
     async def write_food_db_rows(self, slug, rows):
         r"""Returns (written_names, findings). Never raises on a bad row - a bad row is a FINDING.
 
@@ -1648,9 +1667,25 @@ class Daemon(object):
                     continue
                 prior = by_name.get(name.lower())
                 if prior is not None:
-                    diff = [k for k in ("serving_grams", "serving_qty", "serving_unit", "calories",
-                                        "protein_g", "carbs_g", "fat_g")
-                            if k in row and row.get(k) != prior.get(k)]
+                    # H1 (2026-08-25): DISAGREEMENT AND ROUNDING ARE NOT THE SAME CLAIM.
+                    # Measured on the jc1 drill: 5 conflict findings, of which 2 were pure rounding
+                    # (Spinach protein 2.9 vs 2.86, Fresh Parsley 3 vs 2.97 - same serving basis,
+                    # hundredths apart) and 3 were real (Pork Chops on a 112 g basis against a 100 g
+                    # one). At width the noise buries the saves, and a finding nobody reads is a gate
+                    # nobody has.
+                    # THE BASIS IS JUDGED FIRST AND ABSOLUTELY. A different serving basis is a
+                    # different claim about the food no matter how close the macros look - that IS
+                    # the Pork Chops save - so any basis difference stays a full conflict.
+                    basis = [k for k in ("serving_grams", "serving_qty", "serving_unit")
+                             if k in row and row.get(k) != prior.get(k)]
+                    macro = [k for k in ("calories", "protein_g", "carbs_g", "fat_g")
+                             if k in row and row.get(k) != prior.get(k)]
+                    if macro and not basis and all(
+                            self._rounding_apart(row.get(k), prior.get(k), k) for k in macro):
+                        # The identical-row case, reached through rounding: silent skip, no finding,
+                        # and the existing row stands exactly as it does for a byte-identical row.
+                        macro = []
+                    diff = basis + macro
                     if diff:
                         # NEVER OVERWRITE ON A CONFLICT. Both rows are quoted so a person can rule;
                         # the recipe proceeds on the row that is already there.

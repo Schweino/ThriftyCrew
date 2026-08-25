@@ -471,6 +471,15 @@ the road, in this order, per row:
 - **Conflict.** The meal-macro skill's standing rule arriving here unchanged: if the item already
   exists with different macros, nothing is written, BOTH rows are quoted in the finding, and the
   existing row stands. The recipe proceeds on the existing row. An identical row is skipped silently.
+  **REFINED 2026-08-25 (H1, PLAN-latency-F1-F7 section 8, measured on jc1).** "Different macros" was
+  taken byte-for-byte and filed 2 of jc1's 5 conflicts on pure rounding noise - Spinach protein 2.9
+  against 2.86, Fresh Parsley 3 against 2.97, same serving basis, hundredths apart. A finding nobody
+  reads at width is a gate nobody has. So: an EXACT serving-basis match (serving_grams, serving_qty,
+  serving_unit) plus every macro within 5 calories / 0.5 g is the identical-row case - silent skip.
+  ANY serving-basis difference stays a full conflict however close the macros look, because a
+  different basis is a different claim about the food; that is the Pork Chops save (112 g against
+  100 g), which is 3 of those same 5 findings. 0.5 g is deliberately tighter than the estate's 2 g
+  recompute tolerance: a DB row is a source of truth, not a derived figure.
 
 Writes are serialized under `Daemon.food_db_lock`, because the map lane runs two workers and this is
 the second single-file ledger the paragraph above already warned about. **The disk I/O runs in the

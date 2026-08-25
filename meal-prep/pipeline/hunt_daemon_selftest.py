@@ -743,6 +743,12 @@ def run():
       *_fooddb_conflict_never_overwrites())
     T("CLEAN TWIN an identical existing row is skipped silently - no write, no finding, no noise",
       *_fooddb_identical_is_silent())
+    T("MUST FIRE  H1: same serving basis and macros a ROUNDING apart is the identical-row case - "
+      "silent skip, no finding, the existing row stands (jc1 filed 2 of 5 conflicts on this noise)",
+      *_fooddb_rounding_is_not_a_conflict())
+    T("CLEAN TWIN H1: ...and ANY serving-basis difference is a full conflict however close the "
+      "macros look - a different basis is a different claim about the food (the Pork Chops save)",
+      *_fooddb_a_different_basis_is_always_a_conflict())
     T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
       "agree with each other, never that they are this food's numbers",
       *_fooddb_needs_a_source())
@@ -3922,6 +3928,78 @@ def _fooddb_identical_is_silent():
               and names.count("Fixture Chicken") == 1
               and sorted(written) == ["Fixture Beef", "Fixture Pork"])
         return ok, "written=%s findings=%s items=%s" % (written, json.dumps(findings), json.dumps(names))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# H1 - the conflict rule learns the difference between disagreement and ROUNDING (2026-08-25)
+#
+# Measured on jc1: 5 conflict findings, 2 of them pure rounding on an identical serving basis
+# (Spinach protein 2.9 vs 2.86, Fresh Parsley 3 vs 2.97) and 3 of them real (Pork Chops, 112 g basis
+# against 100 g). At width the noise buries the saves.
+#
+# NEUTER PROOF, RUN 2026-08-25 and reverted: set FOOD_DB_CAL_TOLERANCE and FOOD_DB_MACRO_TOLERANCE
+# to 0 and the rounding case goes red on all three rows (three findings where none belong), while the
+# Pork Chops twin stays green - which is the shape that says the twin is judging the BASIS and not
+# the size of the tolerance.
+# =====================================================================================================
+
+def _spinach(**over):
+    """A coherent small-number row: 4*2.86 + 4*(3.63-2.2) + 2*2.2 + 9*0.39 = 25.1 against a stated
+    23, inside the Atwater absolute floor, so nothing here turns on that gate."""
+    row = _good_row("Fixture Spinach", calories=23, protein_g=2.86, carbs_g=3.63, fat_g=0.39,
+                    fiber_g=2.2)
+    row.update(over)
+    return row
+
+
+def _fooddb_rounding_is_not_a_conflict():
+    """MUST FIRE: identical serving basis, macros a rounding apart - the identical-row case. Silent
+    skip, no finding, and the row already on disk stands untouched."""
+    priors = [_spinach(),
+              _good_row("Fixture Parsley", calories=36, protein_g=2.97, carbs_g=6.33, fat_g=0.79,
+                        fiber_g=3.3),
+              _good_row("Fixture Chicken")]
+    d, path, tmp = _food_db_run(None, existing=priors)
+    try:
+        rows = [_spinach(protein_g=2.9),                                   # 0.04 g apart
+                _good_row("Fixture Parsley", calories=36, protein_g=3.0, carbs_g=6.3, fat_g=0.8,
+                          fiber_g=3.3),                                    # hundredths, every field
+                _good_row("Fixture Chicken", calories=158)]                # 3 cal apart
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        spinach = [r for r in doc["items"] if r.get("item") == "Fixture Spinach"]
+        ok = (not findings and not written and len(doc["items"]) == 3
+              # the EXISTING row stands: 2.86, not the 2.9 that arrived
+              and len(spinach) == 1 and spinach[0].get("protein_g") == 2.86)
+        return ok, "written=%s findings=%s protein=%s" % (
+            written, json.dumps(findings)[:300], spinach[0].get("protein_g") if spinach else None)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_a_different_basis_is_always_a_conflict():
+    """CLEAN TWIN: the Pork Chops shape. The macros sit inside every rounding tolerance, and the
+    SERVING BASIS does not match - which is a different claim about the food, and is precisely the
+    save this rule exists to keep."""
+    prior = _good_row("Fixture Pork Chops", serving_grams=100, calories=155, protein_g=25)
+    prior["brand"] = "The Row That Was Already There"
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        clash = _good_row("Fixture Pork Chops", serving_grams=112, calories=155, protein_g=25.2)
+        rows = [clash, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        chops = [r for r in doc["items"] if r.get("item") == "Fixture Pork Chops"]
+        named = [f for f in findings if "Fixture Pork Chops" in f and "DIFFERS" in f]
+        ok = (len(named) == 1 and "serving_grams" in named[0]
+              # BOTH bases quoted, or a person cannot rule on it from the finding alone
+              and "100" in named[0] and "112" in named[0]
+              and len(chops) == 1 and chops[0].get("serving_grams") == 100
+              and chops[0].get("brand") == "The Row That Was Already There"
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, "written=%s finding=%s" % (written, json.dumps(named)[:400])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
