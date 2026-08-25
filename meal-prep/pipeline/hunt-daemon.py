@@ -3400,12 +3400,13 @@ class Daemon(object):
             audit_path = os.path.join(self.run_dir, "waves", "wave-%d.audit.md" % wk)
             before = self.mtimes(slugs, audit_path)
             road = hunt_lib.repair_road(audit.get("blocker_kind"))
+            repair_delta = {}
             if road == "patch" and blockers:
                 # THE PATCH ROAD. A recipe-local defect lives in this recipe's own fillable fields,
                 # so it is a field patch through the writer's own road: same payload shape, same
                 # validator, same patcher. Per blocked slug, and the spec is rebuilt for exactly the
                 # slugs that actually changed - not the wave.
-                await self.repair_by_patch(wk, blockers, audit)
+                repair_delta = await self.repair_by_patch(wk, blockers, audit) or {}
             else:
                 await self.dispatch(owner, self.repair_prompt(wk, blockers, audit), "audit",
                                     "wave-%d:repair" % wk, blockers or slugs, stage=owner)
@@ -3436,7 +3437,7 @@ class Daemon(object):
             await self.preaudit(wk)
             audit = await self.dispatch("recipe-batch-auditor",
                                         self.audit_prompt(wk, slugs, batch, scope["scope"],
-                                                          scope["why"]),
+                                                          scope["why"], delta=repair_delta),
                                         "audit", "wave-%d:reaudit" % wk, slugs,
                                         schema=hunt_lib.AUDIT, stage="auditor")
 
@@ -3499,8 +3500,12 @@ class Daemon(object):
         The findings are split per slug from the auditor's summary where it names one, and every
         blocked slug gets the whole summary otherwise - an under-informed repair is worse than a
         verbose one, and this block costs input tokens, not turns.
+
+        F4 (2026-08-25): RETURNS THE DELTA - {slug: {fields:[...], no_change:"reason"}} - so the
+        scoped re-audit can be told what the repair actually touched instead of diffing blind.
         """
         summary = str((audit or {}).get("summary") or "")
+        delta = {}
         for slug in blockers:
             findings = [ln.strip() for ln in summary.replace("\r", "").split("\n")
                         if slug in ln and ln.strip()]
@@ -3515,6 +3520,7 @@ class Daemon(object):
             if r is None:
                 self.findings.append("wave %d: the recipe-local repair of %s returned NO VERDICT, so "
                                      "nothing was patched" % (wk, slug))
+                delta[slug] = {"fields": [], "no_change": "the repair returned NO VERDICT"}
                 continue
             if r.get("no_change") or not r.get("fields"):
                 # A LEGAL ANSWER, and it feeds the changed-nothing guard rather than bypassing it:
@@ -3523,18 +3529,24 @@ class Daemon(object):
                          % (wk, slug, as_text(r.get("reason"), 160)))
                 self.findings.append("wave %d: the repair of %s changed nothing BY ITS OWN ACCOUNT: %s"
                                      % (wk, slug, as_text(r.get("reason"), 300)))
+                delta[slug] = {"fields": [],
+                               "no_change": as_text(r.get("reason"), 300) or "no reason given"}
                 continue
             ok, why = self.apply_writer_fields(slug, r.get("fields"))
             if not ok:
                 self.findings.append("wave %d: the recipe-local repair of %s was REFUSED and nothing "
                                      "was patched - %s" % (wk, slug, why))
+                delta[slug] = {"fields": [], "no_change": "the patch was REFUSED: %s" % why[:200]}
                 continue
+            delta[slug] = {"fields": sorted(str(k) for k in (r.get("fields") or {})),
+                           "no_change": ""}
             rc, out, err = await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug),
                                                   lane="audit", stage="repair-spec-build",
                                                   items=[slug])
             if rc != 0:
                 self.findings.append("wave %d: %s was patched but its spec build REFUSED (rc %d): %s"
                                      % (wk, slug, rc, hunt_lib.first_guard_line(out, err)))
+        return delta
 
     async def trim_wave(self, wk, slugs, audit, repair_spent):
         """A wave that cannot publish must NOT strand its recipes. On 2026-08-16 a double NO-GO left
@@ -3708,7 +3720,37 @@ class Daemon(object):
                       "read it before you rule." % self.AUDIT_DOSSIER_CAP)
         return text
 
-    def audit_prompt(self, wk, slugs, batch, scope, why):
+    def repair_delta_block(self, delta):
+        """F4: WHAT THE REPAIR CHANGED, for a re-audit only.
+
+        The auditor was re-reading a wave it had already read and diffing it blind against its own
+        memory of the first pass. The daemon holds the repair's payload, so it can simply say which
+        fields moved on which slug - and which slugs the repair says it deliberately left alone. The
+        auditor then VERIFIES the delta against the refreshed battery numbers, which is a much
+        smaller job than rebuilding the comparison.
+
+        EVIDENCE, NEVER A VERDICT: a repair that says it changed nothing is still the auditor's to
+        disbelieve, and the changed-nothing mtime guard has already run independently of this.
+        """
+        if not delta:
+            return ""
+        lines = ["WHAT THE REPAIR CHANGED, from the repair's own payload - the orchestrator applied",
+                 "it, so this is what LANDED rather than what was promised:"]
+        for slug in sorted(delta):
+            d = delta.get(slug) or {}
+            fields = [f for f in (d.get("fields") or []) if f]
+            if fields:
+                lines.append("  %-38s patched %d field(s): %s"
+                             % (slug, len(fields), ", ".join(fields)))
+            else:
+                lines.append("  %-38s CHANGED NOTHING - %s"
+                             % (slug, as_text(d.get("no_change"), 240) or "no reason given"))
+        lines.append("Verify that delta against the refreshed numbers below rather than re-deriving "
+                     "the whole")
+        lines.append("wave. Anything NOT listed above was not touched by the repair.")
+        return "\n".join(lines) + "\n\n"
+
+    def audit_prompt(self, wk, slugs, batch, scope, why, delta=None):
         return (
             "Audit wave %d of run %s before it publishes.\n"
             "Run dir: %s\nWave file: %s\\waves\\wave-%d.json\nSlugs: %s\n"
@@ -3717,7 +3759,7 @@ class Daemon(object):
             "%s\\waves\\wave-%d.preaudit.json. Exit 2 there is a BLOCKED stage, never a pass. It does\n"
             "not audit and it cannot issue a GO - you remain the authority and may re-derive anything\n"
             "in it.\n\n"
-            "%s\n\n"
+            "%s%s\n\n"
             "The arithmetic is shown so you can verify the CHAINS rather than rebuild them; spend your\n"
             "turns where a chain is absent, suspicious, or where external reality (a price that smells\n"
             "wrong, a claim no gate covers) needs eyes. That discretionary look is the half of your job\n"
@@ -3729,7 +3771,11 @@ class Daemon(object):
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
             % (wk, self.run_id, self.run_dir, self.run_dir, wk, ", ".join(slugs), scope,
                ("\nReason: " + why) if why else "  (first audit of this wave)",
-               self.run_dir, wk, self.render_audit_dossier(wk),
+               self.run_dir, wk,
+               # THE DELTA RIDES ON RE-AUDITS ONLY, and `why` is non-empty exactly then: a first
+               # audit has no repair behind it, so a block there would be describing nothing.
+               (self.repair_delta_block(delta) if why else ""),
+               self.render_audit_dossier(wk),
                self.conditions, self.run_dir, wk, scope))
 
     def repair_prompt(self, wk, blockers, audit):

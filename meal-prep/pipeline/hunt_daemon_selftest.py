@@ -728,6 +728,12 @@ def run():
     T("MUST FIRE  a shared-data NO-GO takes the UNCHANGED road - the old prompt, the full agent, and "
       "the daemon patches nothing itself",
       *_shared_data_takes_the_unchanged_road())
+    T("MUST FIRE  F4: the SCOPED RE-AUDIT names the fields the repair actually patched, and the "
+      "FIRST audit of the same wave carries no delta block at all",
+      *_reaudit_carries_the_repair_delta())
+    T("MUST FIRE  F4: a repair that changed nothing says so in the delta WITH its reason - evidence "
+      "for the auditor, never a verdict, and the mtime guard still runs independently",
+      *_reaudit_delta_reports_a_no_change())
     T("CLEAN TWIN a missing blocker_kind defaults to the SHARED road - the expensive-but-safe "
       "direction, because a patch road cannot fix what it cannot reach",
       *_unknown_kind_takes_the_shared_road())
@@ -4707,6 +4713,64 @@ def _recipe_local_takes_the_patch_road():
                 % (len(wp), json.dumps(built), json.dumps(got.get("prose"))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# F4 - the scoped re-audit carries the repair's field delta (2026-08-25)
+#
+# The auditor was re-reading a wave it had already read and diffing it blind against its own memory of
+# the first pass. The daemon holds the repair payload, so it can say which fields moved on which slug.
+#
+# NEUTER PROOFS, RUN 2026-08-25 and reverted:
+#   * make repair_by_patch return None -> the delta case goes red (the re-audit names no field).
+#   * render the block on every audit (drop the `if why` gate) -> the first-audit clean twin goes red.
+# =====================================================================================================
+
+def _reaudit_carries_the_repair_delta():
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        skeletoned(tmp, ["a", "b", "c"])
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                     "wave-publish.ps1": lambda a: (0, "== DRY RUN - every gate above passed", "")})
+        script = {"recipe-batch-auditor": [{"verdict": "NO-GO", "blocking_slugs": ["a"],
+                                            "blocker_kind": "recipe-local", "owner": "writer",
+                                            "summary": "a: the make_it prose contradicts step 3"},
+                                           {"verdict": "GO"}],
+                  "recipe-writer": [{"slug": "a", "fields": {
+                      "prose.make_it": "<p>Fixed.</p>", "cuisine": "American",
+                      "head.steps": ["One.", "Two.", "Three."]}}],
+                  "post-publish-reviewer": [{}]}
+        fd = FakeDispatch(script)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        prompts = fd.prompts("recipe-batch-auditor")
+        first, re_audit = prompts[0], prompts[1]
+        named = ("WHAT THE REPAIR CHANGED" in re_audit
+                 and "prose.make_it" in re_audit and "cuisine" in re_audit
+                 and "head.steps" in re_audit and "patched 3 field(s)" in re_audit)
+        # CLEAN TWIN, in the same run: the FIRST audit has no repair behind it and carries no block.
+        clean = "WHAT THE REPAIR CHANGED" not in first
+        return (named and clean, "named=%s first-audit-clean=%s" % (named, clean))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _reaudit_delta_reports_a_no_change():
+    """MUST FIRE: a repair that says it changed nothing says so IN THE RE-AUDIT, with its reason. The
+    delta is evidence, not a verdict - the auditor may still disbelieve it, and the changed-nothing
+    mtime guard has already run separately."""
+    d = daemon()
+    block = d.repair_delta_block({
+        "a": {"fields": ["prose.make_it", "cuisine"], "no_change": ""},
+        "b": {"fields": [], "no_change": "the finding describes a cost basis, which is not mine"},
+        "c": {"fields": [], "no_change": "the patch was REFUSED: unknown key `stat.calories`"}})
+    return (("a" in block and "patched 2 field(s)" in block
+             and "b" in block and "CHANGED NOTHING" in block
+             and "not mine" in block and "unknown key" in block
+             and "what LANDED rather than what was promised" in block),
+            "block=%r" % block[:400])
 
 
 def _shared_data_takes_the_unchanged_road():
