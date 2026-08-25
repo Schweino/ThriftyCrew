@@ -345,11 +345,10 @@ try {
 # the point the message is made; it is housekeeping, not the signal.
 $flags = @(Get-ChildItem (Join-Path $OutDir 'browser-capture-due-*.flag') -EA SilentlyContinue)
 $staleFlags = @($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDays -gt 1.5 })
-if ($staleFlags.Count) {
-  $oldest = ($staleFlags | Sort-Object LastWriteTime | Select-Object -First 1)
-  $oldestAge = [int]((Get-Date) - $oldest.LastWriteTime).TotalDays
-  [void]$findings.Add(("BROWSER WORK STALE: {0} unworked capture flag(s), oldest {1} at {2} day(s). The walled stores are not being captured by anything - open a Chrome tab per store and work out\worklists\." -f $staleFlags.Count, $oldest.Name, $oldestAge))
-}
+# THE FINDING ITSELF NOW LIVES BELOW CHECK 7 (moved 2026-08-25). A flag is a TODO, and whether the todo
+# is DONE can only be answered by the per-store freshness scan, which has not run yet at this point in
+# the file. $staleFlags is carried down to it. Only the pruning stays here, because that is housekeeping
+# and needs nothing but the file dates.
 foreach ($f in ($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDays -gt 45 })) {
   try { Remove-Item $f.FullName -Force -ErrorAction SilentlyContinue } catch { }
 }
@@ -527,6 +526,39 @@ if (-not $newestByStore.Count) {
         [void]$ok.Add(("{0}: {1} fresh row(s) today, newest {2} ({3}d of {4}d carry)" -f $st, $fresh, $newest, $age, $CARRY_DAYS))
       }
     }
+  }
+}
+
+# ---- 6b (deferred from check 6). BROWSER WORK: is the todo actually still outstanding? ---------------
+# A flag records what the 08:00 driver could NOT capture, and NOTHING ever deletes one - so the finding
+# was purely "a file exists and is older than a day". It stayed lit after the work was done, and on
+# 2026-08-25 it was the only finding left standing at the end of a day on which every store it named had
+# been captured: Walmart 193 rows and Aldi 264, both dated today, both through Brad's Chrome. A watchdog
+# that cannot see the work it asked for being finished is asking for it forever, which is the fourth
+# alarm-that-accuses-healthy-things found that day.
+#
+# So ask the question the flag is really posing: do the stores this flag names have fresh rows TODAY? A
+# flag whose stores are all fresh is a completed todo and is reported as ok. One with a store still cold
+# is a real finding, and so is one whose store list cannot be read - unprovable is not the same as done,
+# and this check must never excuse itself on a file it failed to parse.
+if ($staleFlags.Count) {
+  $unworked = @()
+  foreach ($ff in $staleFlags) {
+    $fstores = @()
+    try { $fstores = @((Get-Content $ff.FullName -Raw -Encoding UTF8 | ConvertFrom-Json).stores) } catch { $fstores = @() }
+    if (-not $fstores.Count) { $unworked += $ff; continue }
+    $coldOnes = @($fstores | Where-Object { [int]$freshByStore[[string]$_] -le 0 })
+    if ($coldOnes.Count) { $unworked += $ff }
+  }
+  if ($unworked.Count) {
+    $oldest = ($unworked | Sort-Object LastWriteTime | Select-Object -First 1)
+    $oldestAge = [int]((Get-Date) - $oldest.LastWriteTime).TotalDays
+    $still = @()
+    try { $still = @((Get-Content $oldest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json).stores | Where-Object { [int]$freshByStore[[string]$_] -le 0 }) } catch { }
+    $who = if ($still.Count) { ' still cold: ' + ($still -join ', ') } else { '' }
+    [void]$findings.Add(("BROWSER WORK STALE: {0} unworked capture flag(s), oldest {1} at {2} day(s).{3} The walled stores are not being captured by anything - open a Chrome tab per store and work out\worklists\." -f $unworked.Count, $oldest.Name, $oldestAge, $who))
+  } else {
+    [void]$ok.Add(("browser work: {0} capture flag(s) on disk, and every store each one names has fresh rows dated {1} - the work behind them is done" -f $staleFlags.Count, $todayS))
   }
 }
 # ---- report ------------------------------------------------------------------
