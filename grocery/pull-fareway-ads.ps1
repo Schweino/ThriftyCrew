@@ -227,3 +227,33 @@ if ($weekly.install_failed -or $monthly.install_failed) {
   Write-Output 'FAILED: the pages on disk do not match the ad. Re-run; if it persists the CDN is serving an incomplete set.'
   exit 2
 }
+
+# DOWNLOADING THE PAGES IS NOT CAPTURING THE AD (2026-08-25). The flyer is an IMAGE set; the rows the
+# board actually prices come from a vision read into out/fareway/fareway-deals-<captured>.json, and
+# nothing in this script can do that step. For three days it exited 0 on a perfect 16-page pull while
+# the newest deals file still described an ad that had CLOSED on 2026-08-22 - so 32 Fareway sale rows
+# sat excluded from the board while every rc in the chain reported success, and the only place the
+# problem surfaced was an AD STALE line nobody could tie back to this lane. A green exit code that
+# means "pages fetched" when the reader hears "ad captured" is worse than a red one: it is the
+# `reported success is not verified success` class. An ad whose pages are on disk but whose deals
+# were never extracted is NOT captured, and this lane now says so in its exit code.
+if (-not $weekly.blocked -and -not $weekly.install_failed -and $weekly.to) {
+  $covered = $false
+  foreach ($f in @(Get-ChildItem (Join-Path $fwDir 'fareway-deals-*.json') -ErrorAction SilentlyContinue)) {
+    try { $d = Get-Content $f.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
+    # BOTH ENDS, and this is not belt-and-braces. Testing only "does some file reach this ad's end
+    # date" is defeated by a LONG-RUNNING file: fareway-deals-2026-08-03.json carries
+    # ad_from 2026-08-03 / ad_to 2026-08-29 - the MONTHLY ad stored under the weekly file's name - and
+    # it alone would satisfy an ad_to-only test every week until 2026-08-29, which is exactly the
+    # silent pass this gate exists to stop. Requiring ad_from to be at or after the current ad's start
+    # makes the file prove it describes THIS ad. String compare is intended: yyyy-MM-dd sorts lexically.
+    if ([string]$d.ad_to -ge [string]$weekly.to -and [string]$d.ad_from -ge [string]$weekly.from) { $covered = $true; break }
+  }
+  if (-not $covered) {
+    Write-Output ''
+    Write-Output ("NOT TRANSCRIBED: weekly pages for $($weekly.from)..$($weekly.to) are installed in $($weekly.dir), but no fareway-deals-*.json reaches $($weekly.to).")
+    Write-Output '  The board prices Fareway ad rows from the DEALS file, never from the images, so until the vision read runs those sale rows stay EXCLUDED from the board.'
+    Write-Output "  Fix: vision-read weekly-1..N.jpg, write out\fareway\fareway-deals-$asofS.json (window from the ad's OWN printed footer, not the filename), then advance Fareway's current/next_pull in ad-schedule.json."
+    exit 3
+  }
+}

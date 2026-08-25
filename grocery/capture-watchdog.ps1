@@ -254,16 +254,29 @@ if (Test-Path $adsc) {
 # rollback-ttl-lib anchors a 30-day window to first detection and the builders revert the price when
 # it lapses. That revert is invisible until it happens: a wave of cells quietly gets more expensive.
 # Reported as a COUNT with the nearest date, not per item - it is a heads-up, never a failure.
+#
+# WHAT THIS CHECK MEASURES, AND WHY IT CHANGED (2026-08-25). It used to report the number of LEDGER
+# entries past their TTL and say "if this count does not fall after the next capture, the revert is
+# not running". THAT TEST CAN NEVER PASS. rollback-first-seen.json is append-only by design - see
+# rollback-ttl-lib.ps1: first_seen is "written ONCE per (store, item) and is NEVER advanced", and
+# nothing prunes an entry - so once a window passes day 30 it stays past day 30 forever and the count
+# only ever climbs. It sat at exactly 47 for four days while the board was in fact reverting every
+# one of them, which is a false alarm that teaches the reader to skip this section - the failure mode
+# a watchdog can least afford. The FAILURE the finding was reaching for is a board that still SELLS
+# an expired promo, so that is what is counted now: live cells whose ad window closed before this
+# board's date. That number can fall, and zero is provable. The ledger count is kept, demoted to an
+# ok line, and labelled cumulative so its flatness is never read as a stall again.
 try {
   $rbLedger = Join-Path $root 'rollback-first-seen.json'
   if (Test-Path $rbLedger) {
     $rb = Get-Content $rbLedger -Raw -Encoding UTF8 | ConvertFrom-Json
     $ttl = if ($rb.ttl_days) { [int]$rb.ttl_days } else { $ROLLBACK_TTL }
-    $expired = 0; $soon = 0; $nextDate = ''
+    $expired = 0; $soon = 0; $nextDate = ''; $ledgerTotal = 0
     foreach ($e in @($rb.entries)) {
       $fs = [string]$e.first_seen
       if ($fs.Length -lt 10) { continue }
       try { $exp = ([datetime]::ParseExact($fs, 'yyyy-MM-dd', $null)).AddDays($ttl) } catch { continue }
+      $ledgerTotal++
       $daysLeft = [int]($exp - (Get-Date $todayS)).TotalDays
       if ($daysLeft -lt 0) { $expired++ }
       elseif ($daysLeft -le 7) {
@@ -271,10 +284,42 @@ try {
         if (-not $nextDate -or $exp.ToString('yyyy-MM-dd') -lt $nextDate) { $nextDate = $exp.ToString('yyyy-MM-dd') }
       }
     }
+
+    # THE HALF THAT CAN ACTUALLY FAIL: an expired window still priced on the board readers see.
+    # price-table-<today>.json is the per-cell artifact that carries ad_to, so it is what gets asked.
+    $ptf = Join-Path $OutDir "price-table-$todayS.json"
+    if (Test-Path $ptf) {
+      $boardDate = Get-Date $todayS
+      $staleCells = 0; $adCells = 0; $oldestClosed = ''
+      $pt = Get-Content $ptf -Raw -Encoding UTF8 | ConvertFrom-Json
+      foreach ($it in @($pt.items)) {
+        foreach ($sp in $it.stores.PSObject.Properties) {
+          $cell = $sp.Value
+          if ($null -eq $cell.ad) { continue }
+          $adCells++
+          $at = [string]$cell.ad_to
+          if ($at -notmatch '^\d{4}-\d{2}-\d{2}$') { continue }
+          try { $atd = [datetime]::ParseExact($at, 'yyyy-MM-dd', $null) } catch { continue }
+          if ($atd -lt $boardDate) {
+            $staleCells++
+            if (-not $oldestClosed -or $at -lt $oldestClosed) { $oldestClosed = $at }
+          }
+        }
+      }
+      if ($staleCells -gt 0) {
+        [void]$findings.Add(("ROLLBACK NOT REVERTING: {0} of {1} live board cell(s) still serve a promo price whose window has closed (oldest closed {2}). The builders should have reverted these to everyday pricing - THIS is the count that must fall after the next capture." -f $staleCells, $adCells, $oldestClosed))
+      } else {
+        [void]$ok.Add(("rollback revert: 0 of {0} live ad cell(s) carry a closed window - every lapsed promo reverted to everyday pricing" -f $adCells))
+      }
+    } else {
+      # Say so rather than pass silently: an unrun check must never read as a clean one.
+      [void]$ok.Add(("rollback revert: NOT CHECKED - price-table-$todayS.json is not present"))
+    }
+
     if ($expired -gt 0) {
-      # Past TTL means the builders should ALREADY have reverted these to the everyday price. A
-      # non-zero count that persists across days is the tell that a revert is not happening.
-      [void]$findings.Add(("ROLLBACK PAST TTL: {0} promo window(s) are past their {1}-day TTL. The builders should have reverted these to everyday pricing - if this count does not fall after the next capture, the revert is not running." -f $expired, $ttl))
+      # DELIBERATELY an ok line and not a finding, for the reason set out in the header: this number
+      # is cumulative and does not fall, so on its own it can never be a regression signal.
+      [void]$ok.Add(("rollback ledger: {0} of {1} window(s) past their {2}-day TTL - cumulative, and NOT expected to fall (first_seen never advances, entries are never pruned); what matters is whether any reach the board, checked above" -f $expired, $ledgerTotal, $ttl))
     }
     if ($soon -gt 0) {
       [void]$ok.Add(("rollback windows: {0} expire within 7 days (first {1}) - those cells revert to everyday pricing" -f $soon, $nextDate))
