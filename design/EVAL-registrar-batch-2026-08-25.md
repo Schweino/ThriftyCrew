@@ -53,7 +53,18 @@ Two accounting facts pinned first, because the review turns on them:
 The m1 drill's histogram for this session - 20 assistant messages, 5 thinking blocks, 11 tool
 calls: 8 Grep, 2 Read, 1 Glob, zero web calls - is confirmed exactly. One addition it did not
 state: **all 5 thinking blocks are EMPTY (0 characters), in all three sessions** - the same
-zero-thinking shape the drill reported for the mapper. Every second of these sessions is tool
+zero-thinking shape the drill reported for the mapper.
+
+**CORRECTED 2026-08-25 (same day, from the T-shakedown mapper transcript).** This eval repeated the
+m1 drill's misreading rather than checking it. A thinking block here carries a `signature` running to
+tens of thousands of characters with its `thinking` text redacted to `""` in the local transcript, so
+"0 characters" means unreadable, never absent. The registrar sessions were therefore reasoning too,
+and this section's closing claim below - that every second is tool round trips plus generation - is
+not supported by the evidence it cites. It does not change this eval's VERDICT (the batch road is
+still innocent, and the friction decomposition is unaffected), but it does mean the registrar's own
+wall clock has a reasoning component nobody has measured.
+
+Every second of these sessions is tool
 round trips plus generation.
 
 ## 2. The 2-proposal session (m1b), tool call by tool call

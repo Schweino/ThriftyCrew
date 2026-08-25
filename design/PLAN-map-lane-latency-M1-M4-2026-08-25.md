@@ -29,6 +29,18 @@ hole the drill hit, M4 is prompt-only hygiene.
 Read from the lf1 transcripts at `~/.claude/projects/C--Codex-ThriftyCrew/`:
 `167dfff7-...jsonl` (round-1 mapper, 631 s, 22 turns) and `2694a670-...jsonl` (round-2 mapper, 368 s,
 22 turns). Both sessions: **35 assistant messages, 21 tool calls, ZERO thinking blocks.** The wall is
+
+**CORRECTED 2026-08-25 (the T-shakedown run, measured on its mapper transcript).** "ZERO thinking
+blocks" is a MISREADING of the transcript, and it is the premise the next sentence rests on. A
+thinking block in these files carries `signature` (tens of thousands of characters) with its
+`thinking` text redacted to `""`. The blocks are not empty; their content is simply not stored in
+plaintext locally. Measured on the T-shakedown mapper: 38,489 output tokens of which only ~6,400 are
+visible payload, so **~83% is reasoning**, and two reasoning blocks alone account for 169 s and 135 s
+of a 469 s dispatch. So the sentence below - "the wall is tool round-trips plus generation, which is
+why no pin or effort change appears anywhere in this plan" - rests on a fact that is not true, and
+the pin/effort question was never actually examined. Brad ruled on 2026-08-25 that Opus 5 at high
+effort IS the right setting for this stage and that the real question is architectural: one dispatch
+is asked to do five jobs at once (see EVAL-registrar-batch and the T-shakedown findings).
 tool round-trips plus generation, which is why no pin or effort change appears anywhere in this plan.
 
 **Round 1, 21 tool calls.** 6 x WebFetch to `api.nal.usda.gov/fdc/v1/foods/search?...api_key=DEMO_KEY`
@@ -95,7 +107,7 @@ head-noun cache keying - that fork stayed closed in PLAN-latency 3.2 and stays c
 3. Append the stated household portions when FDC carries them, as
    `portions: 1 tbsp=3.8g, 1 cup chopped=60g` (cap at 3). The food DB wants a serving in BOTH a
    household measure and grams (fdc_lookup.py:102-112 exists for exactly this), and without them the
-   mapper must invent `serving_qty`/`serving_unit` or go find a label.
+   mapper must invent `serving_qty`/`serving_unit` or go find a label.
 
    **CORRECTED 2026-08-25 (M1 build, measured against the live cache).** This clause is BUILT and
    FIXTURED but DORMANT, and the reason is upstream of the renderer: `_portions` reads `foodPortions`,

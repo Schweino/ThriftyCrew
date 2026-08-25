@@ -139,6 +139,13 @@ This is the half the lf1 drill left for somebody else, so it is done here for bo
 **Batch A mapper** (`1ca191fa-...jsonl`, 3.7 min): **7 assistant messages, 3 thinking blocks (all of
 them EMPTY - 0 characters, so the plan's zero-thinking finding stands), 3 tool calls.**
 
+**CORRECTED 2026-08-25 (the T-shakedown run).** "EMPTY - 0 characters" is a misreading, and it
+propagated from here into the plan and into EVAL-registrar-batch. These blocks carry a `signature`
+of tens of thousands of characters with the `thinking` text redacted out of the local transcript;
+they are not empty, they are unreadable. On the T-shakedown mapper ~83% of output tokens were
+reasoning rather than payload. Every "zero thinking" claim in this estate's design docs traces to
+this line and none of them is evidence about how much the models reason.
+
 1. `WebSearch` "Johnsonville Andouille Smoked Sausage nutrition facts label serving size grams calories protein"
 2. `WebSearch` "Kraft shredded sharp cheddar cheese nutrition facts label 1/4 cup 28g calories protein fat"
 3. `Read` `C:\tmp\m1\food-db.json` (limit 40)

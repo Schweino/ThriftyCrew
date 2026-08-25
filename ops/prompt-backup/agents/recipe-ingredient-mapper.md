@@ -1,6 +1,6 @@
 ---
 name: recipe-ingredient-mapper
-description: FABLE-pinned accuracy stage of a recipe run. Maps every NEW ingredient in a recipe batch to a canonical board commodity id (or evidence-rejects it) and adds label-accurate food-DB entries. Use for the mapping/DB step of any recipe expansion; never for prose or build steps.
+description: OPUS-5-pinned accuracy stage of a recipe run. Maps every NEW ingredient in a recipe batch to a canonical board commodity id (or evidence-rejects it) and adds label-accurate food-DB entries. Use for the mapping/DB step of any recipe expansion; never for prose or build steps.
 model: claude-opus-5
 effort: high
 tools: Read, Grep, Glob, Edit, Write, Bash, PowerShell, WebFetch, WebSearch
