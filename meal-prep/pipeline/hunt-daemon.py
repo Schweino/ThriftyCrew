@@ -38,9 +38,11 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import datetime as dt
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -292,6 +294,7 @@ class Daemon(object):
         self.slot_ctx = None
         self.lane_lines = 0
         self.findings = []
+        self.lane_deaths = {}           # lane -> why, for any lane `contained` caught
 
         self.ch = {k: hunt_lib.chan() for k in
                    ("decide", "extract", "map", "write", "qa", "price_wake")}
@@ -1170,10 +1173,11 @@ class Daemon(object):
         commodity is born, and a duplicate id lets the same food carry two disagreeing prices while
         every per-file guard reads green (bread-crumbs vs breadcrumbs, 2.9x apart across two boards).
         """
-        out = []
-        seen = set()
         table = (tables or {}).get(slug) or {}
         rows = table.get("rows") or []
+
+        work = []
+        seen = set()
         for prop in (proposals or []):
             bid = str((prop or {}).get("proposed_bid") or "").strip()
             term = str((prop or {}).get("term") or "").strip()
@@ -1181,9 +1185,12 @@ class Daemon(object):
                 continue
             seen.add(bid)
             row = next((r for r in rows if str(r.get("term") or "") == term), None)
+            work.append((bid, term, str((prop or {}).get("evidence") or ""), row))
+
+        async def rule(bid, term, evidence, row, siblings=()):
             payload = await self.dispatch(
                 "commodity-registrar",
-                self.registrar_prompt(slug, term, bid, str((prop or {}).get("evidence") or ""), row),
+                self.registrar_prompt(slug, term, bid, evidence, row, siblings=siblings),
                 "map", "registrar:%s" % bid, [slug],
                 schema=hunt_lib.REGISTRAR, validator=hunt_lib.validate_registrar,
                 stage="registrar")
@@ -1191,11 +1198,50 @@ class Daemon(object):
                 self.findings.append("map/%s: the commodity-registrar returned no verdict on the "
                                      "proposed id '%s' - the line stays unsettled, which is the safe "
                                      "direction" % (slug, bid))
-                continue
-            out.append({"proposed_bid": bid,
-                        "verdict": str(payload.get("verdict") or "").strip().lower(),
-                        "bid": str(payload.get("bid") or "").strip(),
-                        "reason": str(payload.get("reason") or "")})
+                return None
+            return {"proposed_bid": bid,
+                    "verdict": str(payload.get("verdict") or "").strip().lower(),
+                    "bid": str(payload.get("bid") or "").strip(),
+                    "reason": str(payload.get("reason") or "")}
+
+        # ---- PASS 1: concurrent. Each proposal is a ruling about a DIFFERENT id, so they do not need
+        # to see each other to rule against the ESTATE - the three namespaces they check are on disk
+        # and immutable under a hunt. Measured on 6b: 11 serial rulings took 10.4 min of a 64-min run,
+        # 0.6-1.9 min each, and they blocked the mappers queued behind them.
+        settled = await asyncio.gather(*[rule(*w) for w in work])
+        out = [r for r in settled if r is not None]
+
+        # ---- PASS 2: THE COLLISION RE-CHECK, which is what makes pass 1 safe to run concurrently.
+        # The one thing a concurrent ruling CANNOT see is its siblings in the same batch. Two
+        # near-duplicate proposals - `bread-crumbs` and `breadcrumbs`, the exact pair the registrar
+        # exists to prevent - would each check the estate, each correctly find no clash there, and each
+        # be approved, minting the duplicate the gate is for. Serial rulings never saw each other
+        # either (nothing told a later ruling about an earlier one), so this closes a hole that
+        # predates the concurrency rather than one the concurrency opened.
+        #
+        # Only `approve` mints a NEW id, so only approvals can collide. An `alias` resolves to an
+        # id that already exists, and two aliases onto the same target are correct, not a clash.
+        groups = {}
+        for r in out:
+            if r["verdict"] == "approve":
+                groups.setdefault(hunt_lib.collision_key(r["bid"] or r["proposed_bid"]), []).append(r)
+        clashes = {k: v for k, v in groups.items() if len(v) > 1}
+        if clashes:
+            bybid = {w[0]: w for w in work}
+            for _key, group in clashes.items():
+                names = [g["bid"] or g["proposed_bid"] for g in group]
+                self.findings.append(
+                    "map/%s: %d proposals in ONE batch normalise to the same commodity (%s) - "
+                    "re-adjudicated serially, each told about the others" % (slug, len(group),
+                                                                            ", ".join(names)))
+                for g in group:
+                    w = bybid.get(g["proposed_bid"])
+                    if not w:
+                        continue
+                    sib = [n for n in names if n != (g["bid"] or g["proposed_bid"])]
+                    redo = await rule(w[0], w[1], w[2], w[3], siblings=sib)
+                    if redo is not None:
+                        g.update(redo)
         return out
 
     # -----------------------------------------------------------------------------------------------
@@ -1301,11 +1347,21 @@ class Daemon(object):
                         for r in near)
         return head + lines + self.NOT_EXHAUSTIVE
 
-    def registrar_prompt(self, slug, term, bid, evidence, row=None):
+    def registrar_prompt(self, slug, term, bid, evidence, row=None, siblings=()):
         near = ""
         if row:
             near = "\nWhat the mechanical pre-resolve found for this line:\n    %s\n" % (
                 (row.get("evidence") or "")[:600])
+        if siblings:
+            near += (
+                "\nRE-ADJUDICATION. Another proposal in this SAME batch normalises to the same\n"
+                "commodity as yours: %s. Neither of you could see the other the first time round, and\n"
+                "you were both approved, which would mint the same food twice under two ids - the\n"
+                "bread-crumbs / breadcrumbs failure, where one food carried two disagreeing prices\n"
+                "while every per-file guard read green. Rule again knowing this. If they are one food,\n"
+                "exactly one id may be born: `alias` yours onto the better name, or `approve` yours\n"
+                "and say plainly why the other is the alias. If they are genuinely different foods,\n"
+                "`approve` and say what distinguishes them.\n" % ", ".join(siblings))
         return (
             "Rule on ONE proposed new grocery commodity id, for the recipe `%s`.\n\n"
             "  ingredient line : %s\n"
@@ -2696,13 +2752,23 @@ class Daemon(object):
 
     # ---- resume --------------------------------------------------------------------------------
 
-    def state_of(self, slug):
+    def state_row(self, slug):
+        """The WHOLE state file, not just its state. `hunt-run.ps1 -Status -Json` emits only
+        {slug, state} per in_flight row, so a resume that seeds from the status alone hands the
+        extract lane a recipe with no URL - and extract_sweep reports that as "the state file
+        carries no source_url", which is a lie about the data: the state file has it, the seed
+        never read it. Measured 2026-08-24: three recipes STUCK at `selected` on a resumed 6b run,
+        all three with a good source_url on disk. Only resumes are affected, which is why the
+        original pass never saw it."""
         p = os.path.join(self.run_dir, "state", "%s.json" % slug)
         try:
             with open(p, "r", encoding="utf-8-sig") as f:
-                return (json.load(f) or {}).get("state")
+                return json.load(f) or {}
         except Exception:                                         # noqa: BLE001
-            return None
+            return {}
+
+    def state_of(self, slug):
+        return self.state_row(slug).get("state")
 
     async def status_json(self):
         rc, out, err = await self.ps(HUNT_RUN_PS, ["-Status", "-RunDir", self.run_dir, "-Json"],
@@ -2779,7 +2845,15 @@ class Daemon(object):
             parked = [p["slug"] for p in (st.get("parked") or [])]
 
         for slug, state in rows:
-            self.record(slug, {"slug": slug, "state": state})
+            # The status row is {slug, state} and nothing else, so carry the identity fields off the
+            # state file itself. Without this the extract lane gets a stub with no url and blames the
+            # data for it (see state_row). `state` stays the STATUS's value: -Derive above may have
+            # moved it, and the file on disk can be the staler of the two.
+            row = self.state_row(slug)
+            self.record(slug, {"slug": slug, "state": state,
+                               "url": row.get("source_url") or row.get("url"),
+                               "source_url": row.get("source_url") or row.get("url"),
+                               "title": row.get("title"), "protein": row.get("protein")})
             if state in ("sourced", "selected"):
                 self.ch["extract"].push(self.rec[slug]); counts["extract"] = counts.get("extract", 0) + 1
             elif state == "extracted":
@@ -2853,6 +2927,14 @@ class Daemon(object):
         lines.append("  agent calls     %d" % self.breaker.calls)
         if self.breaker.open:
             lines.append("  BREAKER OPEN    %s" % self.breaker.reason)
+        # A CONTAINED DEATH IS NOT A CLEAN RUN. Containment keeps the other lanes draining; it must
+        # never make the death quiet, or a run that lost a whole lane reads as a run that finished.
+        if self.lane_deaths:
+            lines.append("")
+            lines.append("  LANES THAT DIED (contained - the rest kept draining, but this run is NOT "
+                         "a clean bill):")
+            for lane, why in sorted(self.lane_deaths.items()):
+                lines.append("    %-9s %s" % (lane, why))
         # THE PENDING NARROW PASS. The daemon never starts or stops llama-server, so when the live
         # server shape cannot fit rung 2 the escalations ACCUMULATE and this surface names them. The
         # operator then either restarts the server narrow and lets the daemon drain rung 2 through
@@ -2906,16 +2988,59 @@ class Daemon(object):
                "map": "map_lane", "price": "price_lane", "write": "write_lane",
                "qa": "qa_lane"}
 
+    async def contained(self, name, coro):
+        """One lane, wrapped so its death is ITS death and not the run's.
+
+        THE DEFECT THIS CLOSES, measured 2026-08-24. `run` gathered the lanes bare, so the first lane
+        to raise cancelled every sibling. The extract lane hit an unreachable llama-server
+        (`127.0.0.1:8080`, connection refused - the server is started by hand and had gone down with
+        the previous session) and took the whole run with it, including a PRICER that was mid-session:
+        that dispatch has a start line in the lane log and no end line, and nobody ever ruled on its
+        terms. A dependency one lane needs is not a verdict on the other six.
+
+        Containment is not swallowing. The lane's exception becomes a FINDING with the traceback's
+        last line, which makes the daemon exit non-clean, and the recipes behind it are recorded by
+        the drain as STUCK - never rejected, because nobody ruled on them.
+
+        THE CHANNELS STILL CLOSE, and that is the load-bearing half. Every lane closes the channel
+        feeding the next one when its own input drains; a lane that dies without closing leaves the
+        lane downstream waiting on a channel nobody will ever shut, so the run HANGS instead of
+        exiting - B9 wearing a different hat. That is strictly worse than the crash this replaces,
+        which is why the close happens in a `finally` and not on the success path."""
+        try:
+            return await coro
+        except asyncio.CancelledError:
+            raise
+        except Exception as e:                                    # noqa: BLE001
+            detail = "%s: %s" % (type(e).__name__, str(e).strip().splitlines()[-1][:300]
+                                 if str(e).strip() else "(no message)")
+            self.findings.append(
+                "LANE DIED: the %s lane raised and was contained - the other lanes kept draining, and "
+                "anything waiting on this one is STUCK, not rejected: %s" % (name, detail))
+            self.log("lane %s DIED (contained, the run continues): %s" % (name, detail))
+            self.lane_deaths[name] = detail
+            return None
+        finally:
+            for ch in self.CLOSES.get(name, ()):                  # or the next lane waits forever
+                self.ch[ch].close()
+
     async def run(self, lanes=None):
         lanes = tuple(lanes or self.LANE_ORDER)
         tasks = []
         for name in self.LANE_ORDER:
             if name in lanes:
-                tasks.append(getattr(self, self.LANE_FN[name])())
+                tasks.append(self.contained(name, getattr(self, self.LANE_FN[name])()))
             else:
                 for ch in self.CLOSES[name]:
                     self.ch[ch].close()
-        await asyncio.gather(*tasks)
+        # return_exceptions as a BACKSTOP, not as the mechanism: `contained` already catches, so a
+        # raise reaching here means the containment itself failed and that must be visible, not fatal.
+        for name, res in zip([n for n in self.LANE_ORDER if n in lanes],
+                             await asyncio.gather(*tasks, return_exceptions=True)):
+            if isinstance(res, BaseException) and not isinstance(res, asyncio.CancelledError):
+                self.findings.append("LANE DIED OUTSIDE CONTAINMENT: %s raised %s past its own "
+                                     "guard - the guard has a hole in it"
+                                     % (name, type(res).__name__))
         # The drain, ported VERBATIM from the workflow's ending: force-close, await the chain, and
         # one more round if a trim returned clean recipes to the pool. Mid-run waves already ran -
         # the qa lane schedules one whenever the pool fills (see schedule_wave).
@@ -3041,6 +3166,79 @@ def describe_band(band):
     return "cal %s, carbs %s, protein %s" % (cal, carbs, prot)
 
 
+SERVE_PS1 = os.path.join(REPO, "tools", "local-llm", "serve.ps1")
+
+
+def card_is_owned(now):
+    """Is the GPU somebody else's right now? Section 4.4 is the authority, not this function.
+
+    The nightly chain owns 21:30-06:30, and a hunt must be OFF the card before the 07:00 ad pull and
+    the 08:00 capture, whose sweeps go blind without it. Returns the owner's name, or None if the
+    card is free for a hunt. `now` is passed in rather than read so this is testable."""
+    hm = now.hour * 60 + now.minute
+    if hm >= 21 * 60 + 30 or hm < 6 * 60 + 30:
+        return "the nightly chain (21:30-06:30)"
+    if hm >= 6 * 60 + 30:
+        # 06:30-07:00 is the changeover: nightly is off, but a hunt started here cannot finish and
+        # release the card before the ad pull, so it is not free either.
+        if hm < 7 * 60:
+            return "the 07:00 ad pull, which this run could not clear in time"
+    return None
+
+
+def ensure_local_model(now=None, start=True, wait_sec=300, log=say):
+    """Preflight the local model, and START it if the card is free. Returns (ok, why_not).
+
+    THE DEFECT THIS CLOSES, measured 2026-08-24. The daemon depended on a service it never checked:
+    llama-server had been started by hand for an earlier session and went down with it, so the extract
+    lane raised `connection refused` and (before containment) took the whole run with it. Every other
+    prerequisite in this flow is preflighted - five self-tests, board freshness, digest date, feed
+    liveness - and the one the extract lane cannot run a single recipe without was checked by crashing
+    on it.
+
+    IT REFUSES RATHER THAN COMPETING FOR THE CARD. Auto-start is not a licence to take the GPU from
+    whoever owns it; section 4.4 gives the nightly chain 21:30-06:30 and requires a hunt to be off the
+    card before the 07:00 ad pull. Starting a server inside those windows would make the ad pull and
+    the capture sweeps go blind, which is a far worse outcome than a hunt that waits."""
+    now = now or dt.datetime.now()
+    import urllib.request                                        # noqa: PLC0415
+    endpoint = os.environ.get("TC_LLM_ENDPOINT", "http://127.0.0.1:8080/v1")
+    base = endpoint.rsplit("/v1", 1)[0]
+
+    def healthy():
+        try:
+            with urllib.request.urlopen(base + "/health", timeout=5) as r:
+                return b'"ok"' in r.read()
+        except Exception:                                        # noqa: BLE001
+            return False
+
+    if healthy():
+        return True, ""
+    owner = card_is_owned(now)
+    if owner:
+        return False, ("llama-server is down and the GPU belongs to %s right now. Not starting one - "
+                       "competing for the card is how the 07:00 ad pull and the 08:00 capture go "
+                       "blind. Start it by hand if you mean to override that." % owner)
+    if not start:
+        return False, ("llama-server is not answering at %s. Start it with: pwsh %s"
+                       % (base, SERVE_PS1))
+    if not os.path.isfile(SERVE_PS1):
+        return False, "llama-server is down and there is no serve.ps1 at %s to start" % SERVE_PS1
+    log("preflight: llama-server is down and the card is free - starting %s" % SERVE_PS1)
+    spawned, why = hunt_lib.ps_spawn_detached(SERVE_PS1)          # the one marshalling road
+    if not spawned:
+        return False, "could not launch serve.ps1: %s" % why
+    waited = 0
+    while waited < wait_sec:
+        time.sleep(5)
+        waited += 5
+        if healthy():
+            log("preflight: llama-server answered after %ds" % waited)
+            return True, ""
+    return False, ("llama-server did not answer within %ds of being started - the model may still be "
+                   "loading, or the start failed. Nothing was extracted." % wait_sec)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="the Recipe Hunter daemon (PLAN v3 section 4.1)")
     ap.add_argument("--run-dir", dest="run_dir", default="")
@@ -3075,6 +3273,9 @@ def main(argv=None):
                          "live pool, which harvest.py is the sole writer of.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
+    ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
+                    help="preflight llama-server but never START one - refuse instead. For when you "
+                         "want to own the card yourself.")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args(argv)
@@ -3107,6 +3308,15 @@ def main(argv=None):
         if a.status:
             say(d.status_report())
             return hunt_lib.EXIT_FINDINGS if d.findings else hunt_lib.EXIT_CLEAN
+        # The extract lane cannot run a recipe without the local model, so preflight it BEFORE any
+        # agent is dispatched - a run that spends on decide and map and then dies at extract has
+        # bought nothing. Only when the extract lane is actually switched on: a --lanes run without
+        # it has no business holding the card.
+        if "extract" in a.lanes.split(","):
+            ok, why = ensure_local_model(start=not a.no_start_model)
+            if not ok:
+                say("hunt-daemon: CANNOT RUN - %s" % why)
+                return hunt_lib.EXIT_CANNOT_RUN
         say("hunt-daemon: %s  lanes %s  publish %s"
             % (d.run_id, a.lanes, "LIVE" if a.publish else "DRY RUN"))
         await d.run(tuple(x.strip() for x in a.lanes.split(",") if x.strip()))

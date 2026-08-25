@@ -132,7 +132,16 @@ LANE_CAPS = {
     "extract": 3,
     "map": 2,
     "price": 1,      # ARCHITECTURE, not config. The price lane stays a singleton, full stop.
-    "write": 3,
+    # 5 as of 2026-08-24, raised from 3 by Brad against a measurement rather than a hunch. WRITE IS
+    # THE BOTTLENECK LANE: measured 5.0 min per recipe per writer, so at cap 3 the whole pipeline's
+    # steady-state ceiling was 1.67 min/recipe - the slowest lane sets throughput, and every other
+    # lane was faster (map 1.39, price 1.19, audit 1.04, qa 0.50). At 5 it is 1.00 and MAP becomes
+    # the binding lane at 1.39. Raising it further buys nothing until map moves.
+    #
+    # There is room: these caps now total 13 of the global min(16, cpus-2) = 16 on this 32-core box.
+    # Nothing about quality changes - each writer still takes ONE recipe and writes prose over a
+    # machine-built skeleton; this only allows more of them to be in flight at once.
+    "write": 5,
     "qa": 2,
     "wave": 1,       # serial
 }
@@ -261,6 +270,28 @@ def ps_invoke(script, args, timeout=180):
     return (p.returncode,
             (p.stdout or b"").decode("utf-8", errors="replace"),
             (p.stderr or b"").decode("utf-8", errors="replace"))
+
+
+def ps_spawn_detached(script):
+    """Start a long-running PowerShell script and DO NOT wait for it. Returns (ok, why_not).
+
+    The sibling of ps_invoke, and it lives here for the same reason ps_invoke does: the daemon's
+    `_one_marshalling_road` fixture greps hunt-daemon.py for hand-built PowerShell command lines, so
+    there is exactly ONE module that knows how to marshal a call. That guard caught this function
+    being written inline in the daemon on 2026-08-24 and it was right to - the answer is to put the
+    second invocation style next to the first, not to exempt the daemon from its own rule.
+
+    SEPARATE FROM ps_invoke BECAUSE WAITING IS THE DIFFERENCE. ps_invoke runs a script to completion
+    and reads its output; this starts a SERVER, which by definition never completes, and whose output
+    must not be piped into a buffer nobody drains. The only caller today is the llama-server
+    preflight."""
+    try:
+        subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                         stdin=subprocess.DEVNULL)
+    except Exception as e:                                       # noqa: BLE001
+        return False, str(e)
+    return True, ""
 
 
 def py_invoke(script, args, timeout=600):
@@ -777,6 +808,25 @@ REGISTRAR = {"type": "object", "properties": {
     "required": ["verdict", "reason"]}
 
 REGISTRAR_VERDICTS = ("approve", "reject", "alias")
+
+
+def collision_key(bid):
+    """Normalise a commodity id far enough that two SPELLINGS of one food collide.
+
+    This exists so registrar rulings can run concurrently. A concurrent ruling checks the estate,
+    which is on disk and immutable under a hunt, but it cannot see the other proposals in its own
+    batch - so `bread-crumbs` and `breadcrumbs` would each be approved against a clean estate and
+    mint the duplicate the gate exists to prevent (that pair really shipped, and carried two
+    disagreeing prices while every per-file guard read green).
+
+    Deliberately CRUDE, and deliberately biased toward false positives: separators die, case dies,
+    and one trailing plural `s` dies. A false collision costs one extra re-adjudication; a missed
+    one costs a duplicate commodity nobody notices for weeks. This is not a duplicate DETECTOR -
+    the registrar is - it only decides which pairs must look at each other before being minted."""
+    s = "".join(ch for ch in str(bid or "").lower() if ch.isalnum())
+    if len(s) > 4 and s.endswith("s"):
+        s = s[:-1]
+    return s
 
 
 def validate_registrar(payload):

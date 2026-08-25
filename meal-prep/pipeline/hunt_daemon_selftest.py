@@ -23,6 +23,7 @@ B11 (the repair-claim mtime check) and the cost-engine mutex, plus the five phas
 from __future__ import annotations
 
 import asyncio
+import datetime as dt
 import importlib.util
 import json
 import os
@@ -427,6 +428,18 @@ def run():
     T("MUST FIRE  an include-pattern match is surfaced too - that is how the board absorbs a food "
       "under another id, and it is the thing the gate exists to catch",
       *_registrar_evidence_shows_include())
+
+    # =================================================================================================
+    H("A lane's death is ITS death (2026-08-24), and the card belongs to whoever owns it")
+    # =================================================================================================
+    for name, ok, got in _lane_containment():
+        T(name, ok, got)
+
+    # =================================================================================================
+    H("Registrar rulings run CONCURRENTLY, and the collision re-check is what makes that safe")
+    # =================================================================================================
+    for name, ok, got in _registrar_collision_recheck():
+        T(name, ok, got)
 
     # =================================================================================================
     H("The band is a RUN PARAMETER (2026-08-24), and the pop obeys it")
@@ -2909,6 +2922,25 @@ def _resume_seed_table():
                     and seeded.get("write") == 1 and seeded.get("qa") == 1
                     and seeded.get("wave") == 1,
                     json.dumps(seeded)))
+        # ---- MUST FIRE: the seeded record carries the SOURCE URL off the state file.
+        # `hunt-run.ps1 -Status -Json` emits {slug, state} per in_flight row and nothing else. A seed
+        # built from that alone hands the extract lane a stub, and extract_sweep then reports "the
+        # state file carries no source_url" - blaming the data for a read the seed never did.
+        # Measured 2026-08-24 on a resumed 6b run: three recipes STUCK at `selected`, every one of
+        # them with a good source_url sitting on disk. Only RESUMES are affected, which is exactly
+        # why the first pass of that run never saw it and why it needs a fixture rather than a memory.
+        seeded_url = (d.rec.get("r-selected") or {}).get("url")
+        out.append(("MUST FIRE  a seeded recipe carries its source_url from the STATE FILE, because "
+                    "-Status -Json does not carry one - the extract lane cannot fetch a stub",
+                    seeded_url == "https://d/r-selected",
+                    "url=%r" % (seeded_url,)))
+        out.append(("CLEAN TWIN and the title and protein ride along with it, so nothing downstream "
+                    "has to re-open the same file",
+                    (d.rec.get("r-selected") or {}).get("title") == "r-selected"
+                    and (d.rec.get("r-selected") or {}).get("protein") == "beef",
+                    json.dumps({k: v for k, v in (d.rec.get("r-selected") or {}).items()
+                                if k in ("title", "protein")})))
+
         out.append(("MUST FIRE  `mapped` with open holds goes to the HELD LIST and is NOT dispatched",
                     any(s == "r-mapped" for s, _w in d.held) and seeded.get("map") == 1,
                     "held=%s" % json.dumps(d.held)))
@@ -3078,6 +3110,146 @@ def _reg_daemon():
     d = daemon(run_dir="R")
     d._commodity_rows = list(_REG_ROWS)
     return d
+
+
+def _lane_containment():
+    """A lane's death is ITS death, not the run's - and it still closes what it owes."""
+    out = []
+
+    d = daemon()
+
+    async def boom():
+        raise RuntimeError("cannot reach local endpoint http://127.0.0.1:8080/v1")
+
+    # ---- MUST FIRE: the raise is caught, recorded, and does NOT propagate.
+    res = arun(d.contained("extract", boom()))
+    out.append(("MUST FIRE  a lane that raises is CONTAINED - the exception does not escape and kill "
+                "the run (an unreachable llama-server took the whole 6b resume down, pricer included)",
+                res is None and bool(d.lane_deaths.get("extract")),
+                "deaths=%s" % json.dumps(d.lane_deaths)))
+    out.append(("MUST FIRE  ...and it is recorded as a FINDING, so a run that lost a lane can never "
+                "exit clean",
+                any("LANE DIED" in f for f in d.findings), json.dumps(d.findings)[:300]))
+    out.append(("MUST FIRE  ...and the status report NAMES it - containment must not make the death "
+                "quiet",
+                "LANES THAT DIED" in d.status_report() and "extract" in d.status_report(),
+                d.status_report()[:200]))
+
+    # ---- MUST FIRE: the channel the dead lane feeds is CLOSED. This is the load-bearing half: a
+    # lane that dies without closing leaves the next lane waiting forever, and a HANG is strictly
+    # worse than the crash containment replaces.
+    d2 = daemon()
+
+    async def boom2():
+        raise RuntimeError("boom")
+
+    arun(d2.contained("extract", boom2()))
+    closed = d2.ch["map"].is_closed()
+    out.append(("MUST FIRE  a dead lane still CLOSES the channel it feeds - containment that leaves "
+                "the next lane waiting forever is worse than the crash it replaced",
+                bool(closed), "map channel closed=%r" % (closed,)))
+
+    # ---- CLEAN TWIN: a lane that returns normally is untouched, and closes the same channel.
+    d3 = daemon()
+
+    async def fine():
+        return "done"
+
+    r3 = arun(d3.contained("extract", fine()))
+    out.append(("CLEAN TWIN a lane that finishes normally returns its value and records no death",
+                r3 == "done" and not d3.lane_deaths, "%r %s" % (r3, json.dumps(d3.lane_deaths))))
+
+    # ---- the GPU ownership window, which is why auto-start is not a licence to take the card
+    owned = HD.card_is_owned
+    out.append(("MUST FIRE  the daemon will NOT start a model inside the nightly chain's window "
+                "(21:30-06:30) - competing for the card is how the 07:00 ad pull goes blind",
+                bool(owned(dt.datetime(2026, 8, 25, 23, 0)))
+                and bool(owned(dt.datetime(2026, 8, 25, 3, 0))),
+                "23:00=%r 03:00=%r" % (owned(dt.datetime(2026, 8, 25, 23, 0)),
+                                       owned(dt.datetime(2026, 8, 25, 3, 0)))))
+    out.append(("MUST FIRE  nor in the 06:30-07:00 changeover, which a run could not clear before "
+                "the ad pull",
+                bool(owned(dt.datetime(2026, 8, 25, 6, 45))),
+                "06:45=%r" % (owned(dt.datetime(2026, 8, 25, 6, 45)),)))
+    out.append(("CLEAN TWIN and the card IS free in the working day, or the preflight would never "
+                "start anything at all",
+                owned(dt.datetime(2026, 8, 25, 13, 0)) is None
+                and owned(dt.datetime(2026, 8, 25, 19, 0)) is None,
+                "13:00=%r 19:00=%r" % (owned(dt.datetime(2026, 8, 25, 13, 0)),
+                                       owned(dt.datetime(2026, 8, 25, 19, 0)))))
+    return out
+
+
+def _registrar_collision_recheck():
+    r"""Pass 1 runs the rulings CONCURRENTLY; pass 2 is what makes that safe.
+
+    A concurrent ruling can check the estate (on disk, immutable under a hunt) but cannot see its
+    siblings in the same batch. These freeze the property that matters: two spellings of one food
+    do not both get minted just because they were ruled on at the same time."""
+    out = []
+
+    def props(*bids):
+        return [{"proposed_bid": b, "term": b.replace("-", " "), "evidence": "case"} for b in bids]
+
+    # ---- MUST FIRE: two spellings of ONE food, both approved in pass 1, force a serial re-check.
+    fd = FakeDispatch({"commodity-registrar": [
+        {"verdict": "approve", "bid": "bread-crumbs", "reason": "new"},
+        {"verdict": "approve", "bid": "breadcrumbs", "reason": "new"},
+        # pass 2, each told about the other:
+        {"verdict": "approve", "bid": "bread-crumbs", "reason": "the canonical spelling"},
+        {"verdict": "alias", "bid": "bread-crumbs", "reason": "same food, aliased"}]})
+    d = daemon(dispatcher=fd)
+    d._commodity_rows = list(_REG_ROWS)
+    res = arun(d.registrar_rulings("dish", props("bread-crumbs", "breadcrumbs")))
+    n = len(fd.prompts("commodity-registrar"))
+    out.append(("MUST FIRE  two proposals that normalise to the SAME commodity are re-adjudicated "
+                "serially - concurrency must not let one food be minted twice",
+                n == 4, "registrar dispatches=%d (expected 4: 2 concurrent + 2 re-checks)" % n))
+    out.append(("MUST FIRE  ...and the re-adjudication prompt NAMES the sibling, so the second "
+                "ruling is made knowing what the first could not see",
+                any("breadcrumbs" in p and "RE-ADJUDICATION" in p
+                    for p in fd.prompts("commodity-registrar")),
+                "no re-adjudication prompt names the sibling"))
+    verdicts = sorted((r["verdict"], r["bid"]) for r in res)
+    out.append(("MUST FIRE  ...and the re-check's verdict REPLACES the pass-1 approval, so exactly "
+                "one id is born",
+                sum(1 for r in res if r["verdict"] == "approve") == 1,
+                json.dumps(verdicts)))
+
+    # ---- CLEAN TWIN: genuinely different foods are ruled once each and never re-litigated.
+    fd2 = FakeDispatch({"commodity-registrar": [
+        {"verdict": "approve", "bid": "harissa", "reason": "new"},
+        {"verdict": "approve", "bid": "gochujang", "reason": "new"}]})
+    d2 = daemon(dispatcher=fd2)
+    d2._commodity_rows = list(_REG_ROWS)
+    res2 = arun(d2.registrar_rulings("dish", props("harissa", "gochujang")))
+    n2 = len(fd2.prompts("commodity-registrar"))
+    out.append(("CLEAN TWIN two genuinely different foods cost ONE ruling each - the re-check must "
+                "not tax the common case",
+                n2 == 2 and len(res2) == 2, "registrar dispatches=%d" % n2))
+
+    # ---- CLEAN TWIN: an ALIAS mints nothing, so two aliases onto one target are not a clash.
+    fd3 = FakeDispatch({"commodity-registrar": [
+        {"verdict": "alias", "bid": "block-cheese", "reason": "already priced"},
+        {"verdict": "alias", "bid": "block-cheese", "reason": "already priced"}]})
+    d3 = daemon(dispatcher=fd3)
+    d3._commodity_rows = list(_REG_ROWS)
+    arun(d3.registrar_rulings("dish", props("shredded-cheese", "grated-cheese")))
+    n3 = len(fd3.prompts("commodity-registrar"))
+    out.append(("CLEAN TWIN two ALIASES onto the same existing id are correct, not a collision - "
+                "only `approve` mints anything",
+                n3 == 2, "registrar dispatches=%d (expected 2, no re-check)" % n3))
+
+    # ---- the normaliser itself
+    ck = hunt_lib.collision_key
+    out.append(("MUST FIRE  collision_key folds separators, case and one trailing plural together",
+                ck("bread-crumbs") == ck("breadcrumbs") == ck("Bread Crumbs") == ck("breadcrumb"),
+                "%r %r %r %r" % (ck("bread-crumbs"), ck("breadcrumbs"), ck("Bread Crumbs"),
+                                 ck("breadcrumb"))))
+    out.append(("CLEAN TWIN and it does NOT fold two genuinely different foods together",
+                ck("harissa") != ck("gochujang") and ck("pork-loin") != ck("pork-shoulder"),
+                "%r %r" % (ck("pork-loin"), ck("pork-shoulder"))))
+    return out
 
 
 def _registrar_gets_evidence():
