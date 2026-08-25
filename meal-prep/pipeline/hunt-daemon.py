@@ -2670,8 +2670,16 @@ class Daemon(object):
                 if not hunt_lib.is_pass(q.get("verdict")):
                     owner = self.owner_agent(q.get("owner"))
                     self.log("QA FAIL %s -> one repair cycle by %s" % (slug, owner))
-                    await self.dispatch(owner, self.qa_repair_prompt(slug, q), "qa",
-                                        "repair:%s" % slug, [slug], stage=owner)
+                    # CHANGE A (section 5.3): THE SAME SPLIT, ONE LANE OVER. A QA finding the WRITER
+                    # owns lives in the fillable fields, so it is a field patch through the same
+                    # road. A finding owned by the extractor or the mapper needs re-extraction or
+                    # re-mapping and keeps its current owner and its current prompt, unchanged - the
+                    # owner routing above is what decides, and it decided this before CHANGE A too.
+                    if owner == "recipe-writer":
+                        await self.qa_repair_by_patch(slug, q)
+                    else:
+                        await self.dispatch(owner, self.qa_repair_prompt(slug, q), "qa",
+                                            "repair:%s" % slug, [slug], stage=owner)
                     q = await self.with_retry(
                         lambda: self.dispatch("recipe-source-qa", self.qa_prompt(slug, 2),
                                               "qa", "re-qa:%s" % slug, [slug],
@@ -2711,6 +2719,73 @@ class Daemon(object):
             # a reason to skip the QA agent.
             self.findings.append("%s: the QA battery could not run (exit 2)" % slug)
         return p.returncode
+
+    async def qa_repair_by_patch(self, slug, q):
+        """The QA lane's patch road. Same payload shape, same validator, same patcher as the wave
+        lane's - and the ONE-REPAIR RULE is untouched: this consumes the single cycle exactly as the
+        full-agent road did, and the caller re-QAs once regardless of what happened here."""
+        r = await self.dispatch("recipe-writer",
+                                self.qa_repair_patch_prompt(slug, q),
+                                "qa", "repair-patch:%s" % slug, [slug],
+                                schema=hunt_lib.REPAIRPATCH,
+                                validator=hunt_lib.validate_writer_fields,
+                                stage="recipe-writer")
+        if r is None:
+            self.findings.append("%s: the QA repair returned NO VERDICT, so nothing was patched"
+                                 % slug)
+            return
+        if r.get("no_change") or not r.get("fields"):
+            self.findings.append("%s: the QA repair changed nothing BY ITS OWN ACCOUNT: %s"
+                                 % (slug, as_text(r.get("reason"), 300)))
+            return
+        ok, why = self.apply_writer_fields(slug, r.get("fields"))
+        if not ok:
+            self.findings.append("%s: the QA repair was REFUSED and nothing was patched - %s"
+                                 % (slug, why))
+            return
+        rc, out, err = await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug),
+                                              lane="qa", stage="repair-spec-build", items=[slug])
+        if rc != 0:
+            self.findings.append("%s: the QA repair patched the intake but the spec build REFUSED "
+                                 "(rc %d): %s" % (slug, rc, hunt_lib.first_guard_line(out, err)))
+
+    def qa_repair_patch_prompt(self, slug, q):
+        def read(*parts):
+            try:
+                with open(os.path.join(self.run_dir, *parts), "r", encoding="utf-8-sig") as f:
+                    return json.load(f) or {}
+            except Exception:                                     # noqa: BLE001
+                return {}
+
+        cur = read("intake", "%s.json" % slug)
+        shown = []
+        for key in hunt_lib.WRITER_FIELDS:
+            head, sep, tail = key.partition(".")
+            val = (cur.get(head) or {}).get(tail) if sep else cur.get(key)
+            if isinstance(val, list):
+                shown.append("  %s (array of %d):" % (key, len(val)))
+                for x in val:
+                    shown.append("      - %s" % as_text(x, 300))
+            else:
+                shown.append("  %s: %s" % (key, as_text(val, 700)))
+        return (
+            "Source-QA failed recipe %s and routed the repair to you. This is the ONE repair cycle it\n"
+            "gets; a second failure is terminal, so fix the actual finding rather than papering over\n"
+            "it.\n\nFINDINGS:\n%s\n\n"
+            "THE FIELDS AS THEY STAND RIGHT NOW:\n%s\n\n"
+            "Return a `fields` object carrying ONLY the fields you are changing, keyed by the same\n"
+            "literal dotted names. The ORCHESTRATOR patches the intake and rebuilds the spec; you have\n"
+            "no files to open and none to write, and you must not run build-v2-spec or hunt-run\n"
+            "yourself. Any key outside the fillable set refuses the whole payload.\n\n"
+            "IF NOTHING NEEDED CHANGING, SAY SO: return `no_change: true` with a reason and no\n"
+            "`fields`. That is a legitimate answer and it is treated differently from claiming a change\n"
+            "that did not happen. Never weaken a gate. If the finding is NOT reachable from these\n"
+            "fields - if it needs the recipe re-extracted or re-mapped - say that plainly with\n"
+            "`no_change: true` rather than patching something adjacent to it.\n"
+            % (slug, "\n".join("  - %s" % x for x in
+                               (str(q.get("findings") or "").replace("\r", "").split("\n") or [])
+                               if x.strip()) or "  (source-QA named no finding)",
+               "\n".join(shown)))
 
     def qa_prompt(self, slug, attempt):
         return (
@@ -2832,8 +2907,16 @@ class Daemon(object):
             owner = self.owner_agent(audit.get("owner"))
             audit_path = os.path.join(self.run_dir, "waves", "wave-%d.audit.md" % wk)
             before = self.mtimes(slugs, audit_path)
-            await self.dispatch(owner, self.repair_prompt(wk, blockers, audit), "audit",
-                                "wave-%d:repair" % wk, blockers or slugs, stage=owner)
+            road = hunt_lib.repair_road(audit.get("blocker_kind"))
+            if road == "patch" and blockers:
+                # THE PATCH ROAD. A recipe-local defect lives in this recipe's own fillable fields,
+                # so it is a field patch through the writer's own road: same payload shape, same
+                # validator, same patcher. Per blocked slug, and the spec is rebuilt for exactly the
+                # slugs that actually changed - not the wave.
+                await self.repair_by_patch(wk, blockers, audit)
+            else:
+                await self.dispatch(owner, self.repair_prompt(wk, blockers, audit), "audit",
+                                    "wave-%d:repair" % wk, blockers or slugs, stage=owner)
             repair_spent = True
 
             # THE B11 POSTCONDITION, and the daemon computes it itself. On 2026-08-16 a repair agent
@@ -2917,6 +3000,49 @@ class Daemon(object):
         await self.ledger(["-Close", "-Batch", batch])
         self.wave_results.append({"wave": wk, "slugs": slugs, "published": published, "held": held,
                                   "verdict": "GO", "collateral": collateral})
+
+    async def repair_by_patch(self, wk, blockers, audit):
+        """One patch dispatch per blocked slug, then a spec rebuild for the slugs that changed.
+
+        The findings are split per slug from the auditor's summary where it names one, and every
+        blocked slug gets the whole summary otherwise - an under-informed repair is worse than a
+        verbose one, and this block costs input tokens, not turns.
+        """
+        summary = str((audit or {}).get("summary") or "")
+        for slug in blockers:
+            findings = [ln.strip() for ln in summary.replace("\r", "").split("\n")
+                        if slug in ln and ln.strip()]
+            if not findings:
+                findings = [summary[:1500]] if summary else []
+            r = await self.dispatch("recipe-writer",
+                                    self.repair_patch_prompt(wk, slug, findings),
+                                    "audit", "wave-%d:repair-patch:%s" % (wk, slug), [slug],
+                                    schema=hunt_lib.REPAIRPATCH,
+                                    validator=hunt_lib.validate_writer_fields,
+                                    stage="recipe-writer")
+            if r is None:
+                self.findings.append("wave %d: the recipe-local repair of %s returned NO VERDICT, so "
+                                     "nothing was patched" % (wk, slug))
+                continue
+            if r.get("no_change") or not r.get("fields"):
+                # A LEGAL ANSWER, and it feeds the changed-nothing guard rather than bypassing it:
+                # the guard still reads the mtimes, and this is the second, independent answer.
+                self.log("wave %d: %s repair returned no_change - %s"
+                         % (wk, slug, as_text(r.get("reason"), 160)))
+                self.findings.append("wave %d: the repair of %s changed nothing BY ITS OWN ACCOUNT: %s"
+                                     % (wk, slug, as_text(r.get("reason"), 300)))
+                continue
+            ok, why = self.apply_writer_fields(slug, r.get("fields"))
+            if not ok:
+                self.findings.append("wave %d: the recipe-local repair of %s was REFUSED and nothing "
+                                     "was patched - %s" % (wk, slug, why))
+                continue
+            rc, out, err = await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug),
+                                                  lane="audit", stage="repair-spec-build",
+                                                  items=[slug])
+            if rc != 0:
+                self.findings.append("wave %d: %s was patched but its spec build REFUSED (rc %d): %s"
+                                     % (wk, slug, rc, hunt_lib.first_guard_line(out, err)))
 
     async def trim_wave(self, wk, slugs, audit, repair_spent):
         """A wave that cannot publish must NOT strand its recipes. On 2026-08-16 a double NO-GO left
@@ -3009,6 +3135,87 @@ class Daemon(object):
         published = [] if dry else [s for s in slugs if s not in held]
         return (slugs if dry else published), held, collateral, dry
 
+    # ---- CHANGE A: THE BATTERY SHOWS ITS ARITHMETIC ----------------------------------------------
+    #
+    # wave-preaudit.ps1 already COMPUTES the chains and carries the numbers - macro-recompute holds
+    # `recompute` and `stat` per macro, cost-engine-consistency holds cost_batch / cost_batch_true /
+    # cost_per_serving / cost_first_run / lines / lines_unpriced, protein-derivation holds claimed vs
+    # derived vs the tally. But audit_prompt only POINTED at the file. The 6b re-audit's own report
+    # says it "re-summed both engine rows by hand" and hand-recomputed macros: 28 turns re-deriving
+    # what the battery had already derived, because a pass/fail without shown work is - rightly - not
+    # taken on faith.
+    #
+    # SO THE NUMBERS GO INLINE. This is NOT a trim of the audit tier: the authority language below is
+    # unchanged word for word, the auditor keeps every tool it had, and the discretionary half of its
+    # job is now stated out loud rather than left implied.
+    AUDIT_DOSSIER_CAP = 6000
+
+    def render_audit_dossier(self, wk):
+        """The preaudit report as a compact numbers block. Returns text, or a plain sentence saying
+        the report could not be read - which is a thing the auditor must be TOLD, never left to infer
+        from an absence."""
+        path = os.path.join(self.run_dir, "waves", "wave-%d.preaudit.json" % wk)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception as e:                                    # noqa: BLE001
+            return ("THE BATTERY REPORT COULD NOT BE READ (%s). Nothing below is available to you, "
+                    "so derive everything yourself and say in your report that the battery was "
+                    "unreadable - a missing check is never a passed one." % e)
+
+        def flat(numbers, prefix=""):
+            out = []
+            for k in sorted(numbers or {}):
+                v = numbers[k]
+                if isinstance(v, dict):
+                    out.extend(flat(v, "%s%s." % (prefix, k)))
+                elif isinstance(v, list):
+                    out.append("%s%s=[%s]" % (prefix, k, ", ".join(as_text(x, 40) for x in v)))
+                else:
+                    out.append("%s%s=%s" % (prefix, k, as_text(v, 60)))
+            return out
+
+        lines = ["THE BATTERY'S ARITHMETIC, SHOWN. Report: %s" % os.path.basename(path),
+                 "  battery %s v%s, scope %s, %s check(s) over %s slug(s), %s FAILED, %.1fs"
+                 % (doc.get("battery"), doc.get("version"), doc.get("scope"),
+                    (doc.get("summary") or {}).get("checks"),
+                    (doc.get("summary") or {}).get("slugs"),
+                    (doc.get("summary") or {}).get("failed"), float(doc.get("elapsed_sec") or 0))]
+        inputs = doc.get("inputs") or {}
+        if inputs:
+            lines.append("  inputs: %s" % ", ".join(flat(inputs)))
+        for slug in (doc.get("wave_slugs") or doc.get("slugs") or []):
+            lines.append("")
+            lines.append("  %s" % slug)
+            for chk in ((doc.get("slug_checks") or {}).get(slug) or []):
+                nums = flat(chk.get("numbers"))
+                lines.append("    %-26s %-4s %s" % (chk.get("check"), chk.get("verdict"),
+                                                    "  ".join(nums)))
+                if str(chk.get("verdict")).lower() != "pass":
+                    lines.append("        %s" % as_text(chk.get("detail"), 400))
+        shared = doc.get("shared_checks") or []
+        if shared:
+            lines.append("")
+            lines.append("  SHARED (%d)" % len(shared))
+            for chk in shared:
+                lines.append("    %-26s %-4s %s"
+                             % (chk.get("check"), chk.get("verdict"),
+                                as_text(chk.get("detail"), 160)))
+        nc = doc.get("not_checked") or []
+        if nc:
+            lines.append("")
+            lines.append("  THE BATTERY DID NOT LOOK AT (its own list, and it is your half of the job):")
+            for x in nc:
+                lines.append("    - %s" % as_text(x, 200))
+        text = "\n".join(lines)
+        if len(text) > self.AUDIT_DOSSIER_CAP:
+            # TRUNCATION IS ANNOUNCED, NEVER SILENT. An auditor reading a quietly cut block would
+            # believe it had seen every check, which is worse than not showing it the numbers at all.
+            text = (text[:self.AUDIT_DOSSIER_CAP]
+                    + "\n  ... THIS BLOCK WAS TRUNCATED at %d chars. The rest is in the report file; "
+                      "read it before you rule." % self.AUDIT_DOSSIER_CAP)
+        return text
+
     def audit_prompt(self, wk, slugs, batch, scope, why):
         return (
             "Audit wave %d of run %s before it publishes.\n"
@@ -3018,6 +3225,11 @@ class Daemon(object):
             "%s\\waves\\wave-%d.preaudit.json. Exit 2 there is a BLOCKED stage, never a pass. It does\n"
             "not audit and it cannot issue a GO - you remain the authority and may re-derive anything\n"
             "in it.\n\n"
+            "%s\n\n"
+            "The arithmetic is shown so you can verify the CHAINS rather than rebuild them; spend your\n"
+            "turns where a chain is absent, suspicious, or where external reality (a price that smells\n"
+            "wrong, a claim no gate covers) needs eyes. That discretionary look is the half of your job\n"
+            "no battery can do.\n\n"
             "This run's conditions: %s\nVerify each recipe's per-serving macros against that in\n"
             "addition to your normal battery.\n\n"
             "Report to %s\\waves\\wave-%d.audit.md. FIRST line exactly GO or NO-GO. SECOND line\n"
@@ -3025,7 +3237,8 @@ class Daemon(object):
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
             % (wk, self.run_id, self.run_dir, self.run_dir, wk, ", ".join(slugs), scope,
                ("\nReason: " + why) if why else "  (first audit of this wave)",
-               self.run_dir, wk, self.conditions, self.run_dir, wk, scope))
+               self.run_dir, wk, self.render_audit_dossier(wk),
+               self.conditions, self.run_dir, wk, scope))
 
     def repair_prompt(self, wk, blockers, audit):
         return (
@@ -3039,6 +3252,62 @@ class Daemon(object):
             "the files themselves before it pays for a re-audit.\n"
             % (wk, self.run_id, self.run_dir, wk, ", ".join(blockers) or "(whole wave)",
                ((audit or {}).get("summary") or "")[:1500], self.run_dir))
+
+    # ---- THE REPAIR SPLIT (CHANGE A, section 5.3) ------------------------------------------------
+    #
+    # Repair writers across both lanes were 22.0% of the 6b run - the single largest consumer - at 20
+    # turns and 61k of context per turn, tree-walking a repair the auditor had already described. The
+    # AUDIT schema already returns `blocker_kind`, so route on it:
+    #
+    #   recipe-local -> this prompt: the findings plus the intake's CURRENT fillable values inline,
+    #                   and the SAME `fields` payload the writer returns, through the SAME patcher and
+    #                   the SAME validator. A prose defect is a field patch.
+    #   shared-data  -> the UNCHANGED road. A moved cost basis or a lib defect is genuinely not
+    #                   patch-shaped, and repair_prompt keeps its tools and its full agent.
+    #
+    # AND AN ABSENT OR UNKNOWN KIND TAKES THE SHARED ROAD. That is the conservative direction: a
+    # whole-wave re-audit is the expensive-but-safe default, and a patch road asked to fix something
+    # it cannot reach would report success over an unrepaired defect.
+    PATCH_ROAD_KIND = "recipe-local"
+
+    def repair_patch_prompt(self, wk, slug, findings):
+        def read(*parts):
+            try:
+                with open(os.path.join(self.run_dir, *parts), "r", encoding="utf-8-sig") as f:
+                    return json.load(f) or {}
+            except Exception:                                     # noqa: BLE001
+                return {}
+
+        cur = read("intake", "%s.json" % slug)
+        shown = []
+        for key in hunt_lib.WRITER_FIELDS:
+            head, sep, tail = key.partition(".")
+            val = (cur.get(head) or {}).get(tail) if sep else cur.get(key)
+            if isinstance(val, list):
+                shown.append("  %s (array of %d):" % (key, len(val)))
+                for x in val:
+                    shown.append("      - %s" % as_text(x, 300))
+            else:
+                shown.append("  %s: %s" % (key, as_text(val, 700)))
+        return (
+            "The batch auditor returned NO-GO on wave %d of run %s and blocked %s on a RECIPE-LOCAL\n"
+            "defect - one that lives in this recipe's own fillable fields.\n\n"
+            "WHAT IT BLOCKS ON:\n%s\n\n"
+            "THE FIELDS AS THEY STAND RIGHT NOW:\n%s\n\n"
+            "Return a `fields` object carrying ONLY the fields you are changing, keyed by the same\n"
+            "literal dotted names. The ORCHESTRATOR patches the intake and rebuilds the spec; you have\n"
+            "no files to open and none to write, and you must not run build-v2-spec or hunt-run\n"
+            "yourself. Any key outside the fillable set refuses the whole payload.\n\n"
+            "IF NOTHING NEEDED CHANGING, SAY SO: return `no_change: true` with a reason and no\n"
+            "`fields`. That is a legitimate answer and it is treated differently from claiming a change\n"
+            "that did not happen - the orchestrator checks the files themselves before it pays for a\n"
+            "re-audit, and it has done since a repair on 2026-08-24 changed nothing at all.\n"
+            "Never weaken a gate. If the defect is NOT reachable from these fields, say that plainly\n"
+            "with `no_change: true` rather than patching something adjacent to it.\n"
+            % (wk, self.run_id, slug,
+               "\n".join("  - %s" % as_text(f, 900) for f in (findings or ["(the auditor named no "
+                                                                          "finding for this slug)"])),
+               "\n".join(shown)))
 
     def review_prompt(self, wk, published, held, collateral, batch):
         return (

@@ -695,6 +695,40 @@ def run():
         T(name, ok, got)
 
     # =================================================================================================
+    H("CHANGE A - the battery shows its arithmetic, and recipe-local repairs are patches (2026-08-25)")
+    # =================================================================================================
+    T("MUST FIRE  the audit dispatch CONTAINS the battery's numbers - cost_per_serving, the macro "
+      "recompute vs stat, the protein derivation - and the authority language is verbatim",
+      *_audit_dossier_carries_the_numbers())
+    T("CLEAN TWIN an unreadable battery report is ANNOUNCED as unreadable, never rendered as an "
+      "empty block an auditor would read as nothing to say",
+      *_audit_dossier_unreadable_is_announced())
+    T("MUST FIRE  a block over the cap says so and says to read the file - a quietly cut dossier "
+      "would have the auditor believe it saw every check",
+      *_audit_dossier_truncation_is_announced())
+    T("MUST FIRE  blocker_kind routes: recipe-local to the patch road, shared-data and anything "
+      "unrecognised to the agent road",
+      *_repair_road_routes())
+    T("MUST FIRE  a recipe-local NO-GO takes the PATCH road - the field prompt, the intake actually "
+      "patched, and the spec rebuilt for exactly the blocked slug",
+      *_recipe_local_takes_the_patch_road())
+    T("MUST FIRE  a shared-data NO-GO takes the UNCHANGED road - the old prompt, the full agent, and "
+      "the daemon patches nothing itself",
+      *_shared_data_takes_the_unchanged_road())
+    T("CLEAN TWIN a missing blocker_kind defaults to the SHARED road - the expensive-but-safe "
+      "direction, because a patch road cannot fix what it cannot reach",
+      *_unknown_kind_takes_the_shared_road())
+    T("MUST FIRE  a patch-road `no_change: true` still hits the changed-nothing guard: no re-audit "
+      "is paid for, no spec is rebuilt, and the reason is a finding",
+      *_patch_road_no_change_still_guards())
+    T("MUST FIRE  a QA failure owned by the WRITER is a field patch, and the one-repair rule is "
+      "untouched - one repair, exactly one re-QA",
+      *_qa_writer_repair_is_a_patch())
+    T("CLEAN TWIN a QA failure owned by the MAPPER keeps its current owner and its current prompt - "
+      "no field patch reaches a mapping defect",
+      *_qa_mapper_repair_keeps_its_road())
+
+    # =================================================================================================
     H("CHANGE M - the mapper returns food-DB rows and the DAEMON writes them (2026-08-25)")
     # =================================================================================================
     T("MUST FIRE  a payload carrying food_db_rows makes the DAEMON write them, and the file keeps "
@@ -3996,6 +4030,288 @@ def _fooddb_prompt_moved_the_pen():
              and "Add those rows as you always have" not in pr),
             "food_db_rows=%s old-sentence=%s" % ("food_db_rows" in pr,
                                                  "Add those rows as you always have" in pr))
+
+
+# =====================================================================================================
+# CHANGE A - THE BATTERY SHOWS ITS ARITHMETIC, AND RECIPE-LOCAL REPAIRS ARE PATCHES (2026-08-25)
+# =====================================================================================================
+
+def _preaudited(tmp, wk=1, slugs=("a", "b", "c"), failed=0):
+    """A wave-preaudit report in the shape wave-preaudit.ps1 actually writes, read off
+    meal-prep\runs\hunt-2026-08-24-v3-phase6b\waves\wave-1.preaudit.json: slug_checks is a DICT of
+    slug -> LIST of {check, verdict, numbers, detail}, and shared_checks is a flat list."""
+    os.makedirs(os.path.join(tmp, "waves"), exist_ok=True)
+    doc = {"battery": "wave-preaudit", "version": 1, "run": "drill-run", "wave": wk,
+           "batch": "drill-run-w%d" % wk, "scope": "whole-wave",
+           "generated": "2026-08-25T09:00:00", "elapsed_sec": 14.5,
+           "wave_slugs": list(slugs), "slugs": list(slugs),
+           "inputs": {"costed_mtime": "2026-08-25T08:00:00", "food_db": "345 rows"},
+           "slug_checks": {}, "shared_checks": [], "not_checked": [
+               "mapping soundness and the precedents behind a substitution",
+               "price-class plausibility (is this the right FORM of the ingredient)",
+               "cross-recipe checks and dish identity"],
+           "summary": {"slugs": len(slugs), "checks": len(slugs) * 3 + 3, "failed": failed}}
+    for i, sl in enumerate(slugs):
+        doc["slug_checks"][sl] = [
+            {"check": "macro-recompute", "verdict": "pass",
+             "numbers": {"servings": 14, "recompute": {"cal": 524.4, "protein": 63.8},
+                         "stat": {"cal": 524, "protein": 64}, "missing_fooddb_rows": []},
+             "detail": "all four macros recompute within tolerance"},
+            {"check": "cost-engine-consistency", "verdict": "pass",
+             "numbers": {"cost_batch": 27.54, "cost_batch_true": 31.46,
+                         "cost_per_serving": 1.97 + i, "cost_first_run": 45.36, "lines": 13,
+                         "lines_unpriced": 0},
+             "detail": "the engine row is internally coherent"},
+            {"check": "protein-derivation", "verdict": "pass",
+             "numbers": {"claimed": "chicken", "derived": "chicken", "derived_grams": 3178},
+             "detail": "matches the heaviest protein ingredient"}]
+    for name in ("audit-spec-contradictions", "audit-store-integrity", "audit-vocab-integrity"):
+        doc["shared_checks"].append({"check": name, "verdict": "pass", "numbers": {"rc": 0},
+                                     "detail": "clean"})
+    with open(os.path.join(tmp, "waves", "wave-%d.preaudit.json" % wk), "w", encoding="utf-8") as f:
+        json.dump(doc, f)
+    return doc
+
+
+def _audit_dossier_carries_the_numbers():
+    """MUST FIRE. The 6b re-audit "re-summed both engine rows by hand" and hand-recomputed macros -
+    28 turns re-deriving what the battery had already derived - because audit_prompt only POINTED at
+    the report. A pass/fail without shown work is rightly not taken on faith."""
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        d = daemon(run_dir=tmp)
+        pr = d.audit_prompt(1, ["a", "b", "c"], "drill-run-w1", "whole-wave", None)
+        return (("cost_per_serving=1.97" in pr and "cost_batch_true=31.46" in pr
+                 and "recompute.cal=524.4" in pr and "stat.cal=524" in pr
+                 and "derived_grams=3178" in pr
+                 and "audit-spec-contradictions" in pr
+                 # every slug, not just the first
+                 and all(("  %s" % sl) in pr for sl in ("a", "b", "c"))
+                 # the battery's own not-checked list is the auditor's half of the job
+                 and "dish identity" in pr
+                 # THE AUTHORITY LANGUAGE IS VERBATIM AND THE DISCRETIONARY MANDATE IS EXPLICIT
+                 and "you remain the authority and may re-derive anything" in pr
+                 and "verify the CHAINS rather than rebuild them" in pr
+                 and "no battery can do" in pr
+                 # and the report file is still named, because the auditor may still open it
+                 and "wave-1.preaudit.json" in pr),
+                pr[pr.find("THE BATTERY'S ARITHMETIC"):][:400])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _audit_dossier_unreadable_is_announced():
+    """CLEAN TWIN, and it is the safety half. An auditor handed an EMPTY block would read it as a
+    battery that found nothing to say. It is TOLD, in as many words, that it must derive everything."""
+    tmp = _wave_scratch()
+    try:
+        d = daemon(run_dir=tmp)                       # no preaudit.json written at all
+        pr = d.audit_prompt(1, ["a", "b", "c"], "drill-run-w1", "whole-wave", None)
+        return ("COULD NOT BE READ" in pr and "derive everything yourself" in pr
+                and "a missing check is never a passed one" in pr,
+                pr[pr.find("THE BATTERY"):][:250])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _audit_dossier_truncation_is_announced():
+    """MUST FIRE. A quietly cut block is worse than no block: the auditor would believe it had seen
+    every check. 40 slugs is well past the cap and nothing about it is silent."""
+    tmp = _wave_scratch()
+    try:
+        many = tuple("slug-%02d" % i for i in range(40))
+        _preaudited(tmp, slugs=many)
+        d = daemon(run_dir=tmp)
+        block = d.render_audit_dossier(1)
+        return ("THIS BLOCK WAS TRUNCATED" in block and "read it before you rule" in block
+                and len(block) <= d.AUDIT_DOSSIER_CAP + 200,
+                "len=%d cap=%d" % (len(block), d.AUDIT_DOSSIER_CAP))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _repair_road_routes():
+    """The router alone, so the direction of the default is pinned independently of any wave run."""
+    got = {k: hunt_lib.repair_road(k) for k in
+           ("recipe-local", "Recipe-Local", "shared-data", "", None, "something-invented")}
+    return (got["recipe-local"] == "patch" and got["Recipe-Local"] == "patch"
+            and got["shared-data"] == "agent" and got[""] == "agent" and got[None] == "agent"
+            and got["something-invented"] == "agent"), json.dumps(got)
+
+
+def _recipe_local_takes_the_patch_road():
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        skeletoned(tmp, ["a", "b", "c"])
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                     "wave-publish.ps1": lambda a: (0, "== DRY RUN - every gate above passed", "")})
+        script = {"recipe-batch-auditor": [{"verdict": "NO-GO", "blocking_slugs": ["a"],
+                                            "blocker_kind": "recipe-local", "owner": "writer",
+                                            "summary": "a: the make_it prose contradicts step 3"},
+                                           {"verdict": "GO"}],
+                  "recipe-writer": [{"slug": "a", "fields": {
+                      "prose.make_it": "<p>Fixed.</p>", "cuisine": "American",
+                      "head.steps": ["One.", "Two.", "Three."]}}],
+                  "post-publish-reviewer": [{}]}
+        fd = FakeDispatch(script)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        wp = fd.prompts("recipe-writer")
+        got = _read_intake(tmp, "a")
+        specs = [c for c in ps.find("build-v2-spec.ps1")]
+        built = [FakePS.value_after(c["args"], "-InFile") for c in specs]
+        return ((len(wp) == 1
+                 # the PATCH prompt, not the old tree-walking one
+                 and "THE FIELDS AS THEY STAND RIGHT NOW" in wp[0]
+                 and "Read %s\\waves" % tmp not in wp[0]
+                 and "no_change" in wp[0]
+                 # it actually patched
+                 and (got.get("prose") or {}).get("make_it") == "<p>Fixed.</p>"
+                 # and rebuilt the spec for EXACTLY the blocked slug, not the wave
+                 and len(specs) == 1 and built[0].endswith("a.json")),
+                "writer-dispatches=%d specs=%s prose=%s"
+                % (len(wp), json.dumps(built), json.dumps(got.get("prose"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shared_data_takes_the_unchanged_road():
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        skeletoned(tmp, ["a", "b", "c"])
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                     "wave-publish.ps1": lambda a: (0, "== DRY RUN - every gate above passed", "")})
+        d, fd = _wave_daemon([{"verdict": "NO-GO", "blocking_slugs": ["a"],
+                               "blocker_kind": "shared-data", "owner": "writer",
+                               "summary": "the cost basis moved under the whole wave"},
+                              {"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        wp = fd.prompts("recipe-writer")
+        before = _read_intake(tmp, "a")
+        return ((len(wp) == 1
+                 # the OLD prompt, word for word where it counts
+                 and "repair EXACTLY what it blocks on" in wp[0]
+                 and "build-v2-spec.ps1 -InFile" in wp[0]
+                 and "THE FIELDS AS THEY STAND RIGHT NOW" not in wp[0]
+                 # and the daemon patched nothing itself
+                 and before.get("prose") == {}),
+                wp[0][:200] if wp else "no dispatch")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _unknown_kind_takes_the_shared_road():
+    """CLEAN TWIN, and the conservative direction. A whole-agent repair can fix anything the patch
+    road can and the reverse is not true, so an absent or invented kind must NOT get the patch road."""
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        skeletoned(tmp, ["a", "b", "c"])
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", ""),
+                     "wave-publish.ps1": lambda a: (0, "== DRY RUN - every gate above passed", "")})
+        d, fd = _wave_daemon([{"verdict": "NO-GO", "blocking_slugs": ["a"], "owner": "writer",
+                               "summary": "x"},                  # no blocker_kind at all
+                              {"verdict": "GO"}], tmp, ps)
+        d.mtimes = _mtimes_with(d, changed=["a"])
+        arun(d.run_wave(1))
+        wp = fd.prompts("recipe-writer")
+        return (len(wp) == 1 and "repair EXACTLY what it blocks on" in wp[0]
+                and "THE FIELDS AS THEY STAND RIGHT NOW" not in wp[0],
+                wp[0][:160] if wp else "no dispatch")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _patch_road_no_change_still_guards():
+    """MUST FIRE. `no_change: true` is a LEGAL return, and it must not become a way past the
+    changed-nothing guard. The guard reads the mtimes as it always did; the payload is the SECOND,
+    independent answer, and the proof is that no re-audit is paid for."""
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        skeletoned(tmp, ["a", "b", "c"])
+        ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", "")})
+        script = {"recipe-batch-auditor": [{"verdict": "NO-GO", "blocking_slugs": ["a"],
+                                            "blocker_kind": "recipe-local", "owner": "writer",
+                                            "summary": "a: something"},
+                                           {"verdict": "GO"}],
+                  "recipe-writer": [{"slug": "a", "no_change": True,
+                                     "reason": "the defect is in the mapping, not the prose"}],
+                  "post-publish-reviewer": [{}]}
+        fd = FakeDispatch(script)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.mtimes = _mtimes_with(d, changed=[])       # nothing on disk moved either
+        arun(d.run_wave(1))
+        specs = ps.find("build-v2-spec.ps1")
+        return ((len(fd.prompts("recipe-batch-auditor")) == 1      # NO re-audit paid for
+                 and not specs                                     # and no spec rebuilt
+                 and any("changed nothing BY ITS OWN ACCOUNT" in f for f in d.findings)
+                 and any("not the prose" in f for f in d.findings)),
+                "audits=%d specs=%d findings=%s"
+                % (len(fd.prompts("recipe-batch-auditor")), len(specs), json.dumps(d.findings)[:300]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_writer_repair_is_a_patch():
+    tmp = tempfile.mkdtemp(prefix="daemon-qapatch-")
+    try:
+        skeletoned(tmp, ["s1"])
+        script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "writer",
+                                        "findings": "the intro claims a number the spec does not"},
+                                       {"slug": "s1", "verdict": "pass"}],
+                  "recipe-writer": [{"slug": "s1", "fields": {
+                      "prose.intro_html": "<p>Fixed.</p>", "cuisine": "American",
+                      "writer_notes": ["one", "two", "three"]}}]}
+        fd = FakeDispatch(script)
+        ps = FakePS()
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+        d.qa_battery = lambda slug: _immediate(0)
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.run(("qa",)))
+        wp = fd.prompts("recipe-writer")
+        got = _read_intake(tmp, "s1")
+        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
+        return ((len(wp) == 1 and "THE FIELDS AS THEY STAND RIGHT NOW" in wp[0]
+                 and "This is the ONE repair cycle" in wp[0]
+                 and (got.get("prose") or {}).get("intro_html") == "<p>Fixed.</p>"
+                 # THE ONE-REPAIR RULE IS UNTOUCHED: one repair, then exactly one re-QA
+                 and len(fd.prompts("recipe-source-qa")) == 2
+                 and to == ["qa-passed"]),
+                "writer=%d qa=%d advances=%s" % (len(wp), len(fd.prompts("recipe-source-qa")), to))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_mapper_repair_keeps_its_road():
+    """CLEAN TWIN. A QA finding owned by the mapper needs re-mapping, which no field patch reaches.
+    Its owner routing and its prompt are both unchanged."""
+    tmp = tempfile.mkdtemp(prefix="daemon-qamapper-")
+    try:
+        skeletoned(tmp, ["s1"])
+        script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "mapper",
+                                        "findings": "the mapping bridged two different foods"},
+                                       {"slug": "s1", "verdict": "pass"}],
+                  "recipe-ingredient-mapper": [{}]}
+        fd = FakeDispatch(script)
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=FakePS())
+        d.qa_battery = lambda slug: _immediate(0)
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.run(("qa",)))
+        mp = fd.prompts("recipe-ingredient-mapper")
+        return (len(mp) == 1 and "QA file:" in mp[0]
+                and "THE FIELDS AS THEY STAND RIGHT NOW" not in mp[0]
+                and not fd.prompts("recipe-writer"),
+                "mapper=%d writer=%d" % (len(mp), len(fd.prompts("recipe-writer"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _mechanical_lane_events():

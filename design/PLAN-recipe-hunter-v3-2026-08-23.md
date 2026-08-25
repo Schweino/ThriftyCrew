@@ -663,6 +663,42 @@ nearly free: re-run the battery on the repaired slugs (seconds) + a scoped sign-
 This attacks the shakedown's 31% directly and makes the third-round-full-re-audit mistake cheap even
 when it happens.
 
+**CORRECTED 2026-08-25 (CHANGE A, from design\PLAN-hunter-judge-contract-2026-08-25.md section 5).**
+"The recipe-batch-auditor receives that report" was true only in the sense that the dispatch named the
+file. The battery's numbers are now RENDERED INLINE into the audit dispatch by
+`Daemon.render_audit_dossier` - per slug, each check's name, verdict and its `numbers` dict flattened
+to key=value pairs, then the shared checks, then the report's own `not_checked` list.
+
+Why: on 6b the re-audit's own report says it "re-summed both engine rows by hand" and hand-recomputed
+macros. 28 turns and 1,006,166 raw tokens re-deriving what the battery had already derived - because a
+pass/fail with no work shown is, correctly, not taken on faith. Showing the work is the fix.
+
+**Nothing about the audit tier is cheapened, and each of these is a fixture rather than an intention.**
+The authority language is byte-identical ("you remain the authority and may re-derive anything in it"),
+the auditor keeps every tool it had, the report file is still named so it can still be opened, and the
+discretionary mandate is now stated out loud: verify the CHAINS rather than rebuild them, and spend the
+turns where a chain is absent, suspicious, or where external reality needs eyes. Two failure modes are
+handled explicitly because both would read as a clean battery: an UNREADABLE report is announced as
+unreadable with an instruction to derive everything, and a block over the 6,000-char cap says it was
+truncated and says to read the file. A silently empty or silently cut dossier is worse than no dossier.
+
+**Repairs split on `blocker_kind`, which the AUDIT schema already returned.** `recipe-local` goes to
+`repair_patch_prompt`: the findings plus the intake's current fillable values inline, returning the
+SAME `fields` payload the writer returns, through the SAME `validate_writer_fields` and the SAME
+`apply_writer_fields`, after which the daemon rebuilds the spec for exactly the blocked slugs and
+proceeds to the existing scoped re-audit. `shared-data` keeps the CURRENT road unchanged - a moved cost
+basis or a lib defect is genuinely not patch-shaped. An absent or unrecognised kind takes the shared
+road, which is the conservative direction rather than an unconsidered default: a whole-agent repair can
+fix anything the patch road can and the reverse is not true. Repair writers were 22.0% of the 6b run,
+the single largest consumer, at 20 turns and 61k of context per turn.
+
+`no_change: true` with a reason is a LEGAL return and it does NOT bypass the changed-nothing guard: the
+guard still reads the mtimes exactly as it did, and the payload is a second independent answer. Belt
+and braces, because that guard exists precisely because a repair once reported a change it had not
+made. The QA lane takes the same split on the same owner routing it already used - a writer-owned
+finding is a field patch, an extractor- or mapper-owned finding keeps its current owner and its current
+prompt - and QA's one-repair rule is untouched: one repair, then exactly one re-QA.
+
 ### S9 PUBLISH / REVIEW - unchanged
 
 wave-publish.ps1 exactly as built (P1-P8, E6/E7, held, scoped git adds, push-is-deploy). The

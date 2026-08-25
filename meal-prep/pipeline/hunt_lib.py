@@ -940,6 +940,35 @@ AUDIT = {"type": "object", "properties": {
     "blocker_kind": {"type": "string"}, "owner": {"type": "string"}, "summary": {"type": "string"}},
     "required": ["verdict"]}
 
+# CHANGE A (2026-08-25): THE RECIPE-LOCAL REPAIR RETURNS THE WRITER'S OWN PAYLOAD SHAPE, so it goes
+# through apply_writer_fields and validate_writer_fields unchanged - one patcher, one validator, one
+# fillable set. `no_change: true` with a reason is a LEGAL return and feeds the existing
+# changed-nothing guard, which now has two independent answers rather than one: the payload says so,
+# and the mtimes say so. Belt and braces, because the guard exists precisely because an agent once
+# reported a change it had not made.
+REPAIRPATCH = {"type": "object", "properties": {
+    "slug": {"type": "string"},
+    "no_change": {"type": "boolean", "description":
+                  "true if nothing needed changing, or if the defect is NOT reachable from the "
+                  "fillable fields. Say which in `reason`"},
+    "reason": {"type": "string"},
+    "fields": {"type": "object", "description":
+               "ONLY the fields you are changing, keyed by the literal dotted names: " +
+               ", ".join(WRITER_FIELDS)}},
+    "required": ["slug"]}
+
+
+def repair_road(blocker_kind):
+    """Which repair road a NO-GO takes. Returns 'patch' or 'agent'.
+
+    AN ABSENT OR UNKNOWN KIND TAKES THE AGENT ROAD, and that is the conservative direction rather
+    than a default nobody thought about: a whole-agent repair with tools can fix anything the patch
+    road can, and the reverse is not true. A patch road asked to repair a moved cost basis would
+    report success over an unrepaired defect.
+    """
+    return "patch" if str(blocker_kind or "").strip().lower() == "recipe-local" else "agent"
+
+
 REPAIRCHECK = {"type": "object", "properties": {
     "changed_count": {"type": "number",
                       "description": "how many wave specs are NEWER than the audit file"},

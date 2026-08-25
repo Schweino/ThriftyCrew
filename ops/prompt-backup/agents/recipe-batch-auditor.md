@@ -20,6 +20,13 @@ structural compare against a known-good live card, the protein derivation by gra
 plus one shared block for audit-spec-contradictions, store-integrity, vocab-integrity, unbid-ingredients,
 cost-plausibility, update-recipes-db -DryRun and the P8 endpoint and feed probes.
 
+ADDED 2026-08-25 (CHANGE A): in a daemon-driven run those NUMBERS ARE RENDERED INTO YOUR DISPATCH, so
+you do not have to run the battery or open the report to see them. The report file is still named and
+you may still read it. The arithmetic is shown so you can verify the CHAINS rather than rebuild them:
+the 6b re-audit spent 28 turns re-summing engine rows and recomputing macros by hand, because a
+pass/fail with no work shown is rightly not taken on faith. Showing the work is the fix; taking it on
+faith is not.
+
 Read it, then spend your context on the RESIDUE - the judgment the arithmetic cannot settle. The wave-2
 NO-GO of 2026-08-16 was ~80% recomputation that scripts already did; its real value was three rulings (a
 spinach form-flip, a wrong price class, one condition question). Those are the job.
