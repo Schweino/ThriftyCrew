@@ -115,6 +115,47 @@ def say(m):
     except UnicodeEncodeError:
         enc = getattr(sys.stdout, "encoding", None) or "ascii"
         print(str(m).encode(enc, errors="replace").decode(enc, errors="replace"), flush=True)
+    _tee(m)
+
+
+# ---- T2: THE RUN'S NARRATIVE OUTLIVES ITS TERMINAL (2026-08-25) ---------------------------------
+#
+# MEASURED: say() printed to stdout and nowhere else, and run.json carried `created` with no
+# `finished`. The lane log records what every stage COST; the narrative records what happened to it -
+# every finding, every park, every STUCK message, every degrade notice. On a multi-hour attended run
+# that is the half a person actually reads, and it existed only in scrollback: close the window, or
+# let it scroll past the buffer, and the run is unreviewable while its own artifacts still sit on
+# disk looking complete.
+#
+# UTC-STAMPED PER LINE, because the console had no timestamps at all and the lane log's own `at` is
+# second-resolution local time with no zone - correlating a finding against a lane line meant
+# guessing. The file is opened per line and appended: a run this long cannot hold a handle across
+# hours of subprocess churn, and an append-per-line survives a kill -9 with everything up to the last
+# line intact.
+#
+# IT CAN NEVER RAISE. This is the say() lesson exactly - a log line must not be able to end a run -
+# so every failure here is swallowed, including the failure to open the file. A narrative that
+# refuses to write is a lost narrative; a narrative that throws is a lost RUN, and one of those has
+# already happened to this estate.
+_LOG_PATH = [None]
+
+
+def set_log_file(path):
+    """Point say() at a file. Called once the run dir is known; before that, stdout only."""
+    _LOG_PATH[0] = path
+    return path
+
+
+def _tee(m):
+    path = _LOG_PATH[0]
+    if not path:
+        return
+    try:
+        stamp = dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        with open(path, "a", encoding="utf-8", errors="replace", newline="\n") as fh:
+            fh.write("%s %s\n" % (stamp, m))
+    except Exception:                                             # noqa: BLE001
+        pass
 
 
 # =====================================================================================================
@@ -239,6 +280,10 @@ class Daemon(object):
                  carriage_path="", considered_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
+        # T2: the narrative gets a file the moment the run dir is known. A QUIET daemon is a fixture
+        # and never writes one - the same guard self.log already uses, so no suite grows a side effect.
+        if not quiet:
+            set_log_file(os.path.join(run_dir, "daemon.log"))
         self.conditions = conditions
         self.band = dict(band or DEFAULT_BAND)
         self.wave_size = wave_size or hunt_lib.WAVE_SIZE

@@ -1499,6 +1499,83 @@ def _pregather_lookup_is_python():
             "py=%s ps=%s" % (json.dumps(stores), json.dumps(on_ps)))
 
 
+def _t2_narrative_is_written_and_stamped():
+    """MUST FIRE (T2). say() printed to stdout and nowhere else, so the run's findings, parks and
+    STUCK messages lived only in scrollback while the lane log and the artifacts sat on disk looking
+    complete."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t2-")
+    try:
+        path = os.path.join(tmp, "daemon.log")
+        HD.set_log_file(path)
+        try:
+            HD.say("pre-pass batch 1: MATCHES 3")
+            HD.say("map/harissa-traybake: parked on an unbid line")
+        finally:
+            HD.set_log_file(None)
+        # READ DEFENSIVELY. A neuter that stops the tee must make this case go RED, not make it
+        # THROW: an exception here escapes the section helper and takes every case in it with it,
+        # which reports as "0 red" and reads exactly like a fixture that proved nothing. Measured
+        # 2026-08-25 - the first neuter of this unit did precisely that and lost 13 cases.
+        if not os.path.exists(path):
+            return False, "no narrative was written at all"
+        body = io.open(path, encoding="utf-8").read()
+        lines = [l for l in body.splitlines() if l.strip()]
+        stamped = bool(lines) and all(
+            re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z ", l) for l in lines)
+        return (len(lines) == 2 and stamped and "parked on an unbid line" in body,
+                "lines=%d stamped=%s body=%r" % (len(lines), stamped, body[:160]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t2_a_log_line_can_never_end_a_run():
+    """MUST FIRE, and this is the case that matters. The phase-6a gate drill died because a log line
+    raised inside asyncio.gather AFTER a 15-minute mapper dispatch had been paid for. A file sink is
+    a second way for the same class of death to happen, so an unwritable path must be swallowed - and
+    the sentence must still reach stdout."""
+    HD.set_log_file(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "no-such-dir-t2", "daemon.log"))
+    try:
+        HD.say("this must not raise")
+        undrawable = True
+    except Exception:                                             # noqa: BLE001
+        undrawable = False
+    finally:
+        HD.set_log_file(None)
+    # and the U+FFFD line that actually killed 6a still survives, now through the tee as well
+    tmp = tempfile.mkdtemp(prefix="daemon-t2b-")
+    try:
+        path = os.path.join(tmp, "daemon.log")
+        HD.set_log_file(path)
+        try:
+            HD.say("cut into �-inch strips")
+            mojibake = True
+        except Exception:                                         # noqa: BLE001
+            mojibake = False
+        finally:
+            HD.set_log_file(None)
+        wrote = (os.path.exists(path)
+                 and "-inch strips" in io.open(path, encoding="utf-8").read())
+        return (undrawable and mojibake and wrote,
+                "unwritable_ok=%s mojibake_ok=%s wrote=%s" % (undrawable, mojibake, wrote))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t2_a_quiet_daemon_writes_no_narrative():
+    """CLEAN TWIN: every fixture in this suite builds a quiet daemon, and none of them may start
+    writing a log into a temp dir as a side effect of being constructed."""
+    HD.set_log_file(None)
+    tmp = tempfile.mkdtemp(prefix="daemon-t2c-")
+    try:
+        daemon(run_dir=tmp)
+        return (HD._LOG_PATH[0] is None
+                and not os.path.exists(os.path.join(tmp, "daemon.log")),
+                "sink=%r" % (HD._LOG_PATH[0],))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _t3_store_lookup_is_timed():
     """MUST FIRE (T3, 2026-08-25). LOOKUP_TIMEOUT is 45 minutes and this call logged NOTHING - the
     single longest block a run can execute was the one block no summary could see, so it either fell
@@ -5993,6 +6070,27 @@ def _mechanical_lane_events():
     #   * drop the `at=` passthrough out of lane()        -> 1 red, the backdate case alone.
     #   * drop the max(0.0, seconds) clamp in _stamp_ago  -> 1 red, the stamp case, on its negative
     #     twin - a start line stamped in the FUTURE pairs to a negative duration.
+    # ---- T2 NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as the suite printed them:
+    #   * drop the _tee call out of say()          -> 2 red (the narrative case and the survival case);
+    #   * let _tee RAISE instead of swallowing     -> 1 red, the survival case - which is the whole
+    #     point of the unit: a second way for the 6a death to happen would be a regression, not a
+    #     feature;
+    #   * drop the UTC stamp from each line        -> 1 red, the narrative case;
+    #   * write the narrative even when quiet      -> 1 red, the clean twin.
+    #
+    # AND A FIXTURE LESSON PAID FOR IN THIS UNIT. The first attempt at neuter 1 reported 0 red while
+    # silently running only 207 of 220 cases: the narrative fixture opened the log file without
+    # checking it existed, the FileNotFoundError escaped the section helper, and every case in that
+    # helper vanished. A neuter harness must assert the FULL case count, not just look for reds - a
+    # lost case and a passing case are indistinguishable in a count of failures.
+    res.append(("MUST FIRE  T2: the run's narrative is written to a file and every line is UTC "
+                "stamped - it used to exist only in scrollback",
+                *_t2_narrative_is_written_and_stamped()))
+    res.append(("MUST FIRE  T2: an unwritable log path and a U+FFFD line both fail SILENTLY - a log "
+                "line must not be able to end a run, which is how the 6a gate drill died",
+                *_t2_a_log_line_can_never_end_a_run()))
+    res.append(("CLEAN TWIN T2: a QUIET daemon writes no narrative, so no fixture grows a side "
+                "effect from being constructed", *_t2_a_quiet_daemon_writes_no_narrative()))
     res.append(("MUST FIRE  the 45-minute browser store lookup emits a timed pair per store - it is "
                 "the longest block a run can execute and it used to log nothing",
                 *_t3_store_lookup_is_timed()))
