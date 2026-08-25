@@ -238,6 +238,12 @@ as a hypothesis: the cap counts READS, and a WebSearch is not a label read - two
 whole allowance without ever fetching a page to transcribe. Plan section 8 named this trade in advance
 ("M4's cap could stop a legitimate third read"); this is what it cost, measured.
 
+   **BUILT 2026-08-25 as unit T5 (commit 23a52c3d), on Brad's order.** The hypothesis above was
+   right and is now written into the sentence so the model cannot hold the other reading: the cap
+   counts LABEL READS, a WebSearch finds the label and never spends the allowance, two fruitless
+   searches leave both reads unspent, and a row nobody even looked for is not a cap working. Suite
+   213 -> 214, neuter run.
+
 **4. The FDC cache is the one live file a seamed drill still writes.** See section 7. Whether it wants
 a seam is Brad's call; the argument against one is that a warm cache is the whole point of F1 and
 these are public USDA facts, not estate rulings.
@@ -247,6 +253,13 @@ as a purchasable line and the assembler correctly refused the file: "a purchasab
 cannot be costed". It is the same class as the garnish-line rule map-preresolve already has
 (`Test-IsGarnishLine`) and it is a mechanical call, not a judgment one - which is the argument for
 handling it the way the unbid hold is handled. Not touched: nobody ordered it.
+
+**BUILT 2026-08-25 as unit T1 (commit ac8ce6e4).** Brad ordered it and ruled the NARROW version: a
+line qualifies only when every word of its food half is a seasoning word and at least one is salt or
+pepper, so `harissa, to taste` keeps its price and macros and still parks. It fires inside the
+zero-weight refusal, exactly where the garnish rule fires, so it cannot touch a line that works
+today. map-preresolve -SelfTest 113 -> 121; both neuters run (deleting the branch is 2 red, widening
+it to the rejected any-to-taste option is 4 red).
 
 **6. The spec build refused philly-cheesesteak-stuffed-peppers on a costed-row disagreement** -
 "Yellow Onion ceil(385g/453.592g)=1 != engine buy_n 4 - spec grams and costed row disagree" - which is

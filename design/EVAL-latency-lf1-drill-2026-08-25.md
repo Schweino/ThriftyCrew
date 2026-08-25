@@ -221,6 +221,15 @@ that already exists live. It produced a real NO-GO on a real disagreement, so no
 a drill on a fresh slug would never have surfaced it, and Thursday's run at width will read live specs
 during audit whatever --specs says.
 
+**BUILT 2026-08-25 as unit T6 (commit c99a505f), on Brad's order - so Thursday will NOT read live
+specs during audit.** There were FOUR readers of the live store, not one: wave-preaudit.ps1 (which
+gained -SpecsDir, because -Root moves the whole meal-prep tree and is far too blunt for a drill
+wanting scratch specs beside a live food DB), the QA battery, the staleness mtimes, and the auditor
+itself, which is now told which store is this run's - the half no argument can reach, because an
+agent that opens the file itself has to be told. Daemon suite 220 -> 223. One neuter of this unit
+exposed a hole in its own fixtures: reverting the QA battery gave ZERO red, because the fixture's
+name claimed the battery and its body only tested mtimes. Fixed, and recorded in the suite.
+
 **5. Pre-qualified candidates are RARE: 2 of 51.** Across every extraction the estate has kept, only
 two recipes have a fully resolved, fully bid ingredient list. That is worth knowing before Thursday:
 the tail this build optimised is reached by a small minority of candidates, and the price lane is what
