@@ -1,0 +1,112 @@
+{
+ "slug": "italian-sausage-stuffed-peppers-bake",
+ "lines": [
+  {
+   "raw": "1 Onions",
+   "buy": "2 2/3 cups sliced (about 3 medium)",
+   "grams_source": 110,
+   "notes": "'1 Onions' reads as one medium onion = 110 g."
+  },
+  {
+   "raw": "8 ounces Green Bell Pepper green, red, yellow or orange cut into slices",
+   "buy": "1 lb 6 oz bell peppers (about 5 medium), cut into slices",
+   "grams_source": 226.8,
+   "notes": null
+  },
+  {
+   "raw": "5 Italian Sausage links, about 1.5-2 pounds",
+   "buy": "14 links (about 4 1/4 lb)",
+   "grams_source": 680,
+   "notes": "5 links at the printed low end of 1.5 lb = 136 g per link; see macro_cross_check before trusting the upper end."
+  },
+  {
+   "raw": "5 Cheese Stick",
+   "buy": "14 sticks (1 oz each)",
+   "grams_source": 140,
+   "notes": "Instructions call it a mozzarella stick; 1 stick = 28 g."
+  },
+  {
+   "raw": "1 cup marinara sauce",
+   "buy": "2 3/4 cups",
+   "grams_source": 250,
+   "notes": null
+  },
+  {
+   "raw": "1 cup mozzarella cheese",
+   "buy": "2 3/4 cups shredded",
+   "grams_source": 112,
+   "notes": "1 cup shredded mozzarella = 112 g; the table computed no weight for this line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 Onions",
+   "term": "onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "RENAME to Yellow Onion [onions], same form, priced 7 of 7. Not red-onion: the recipe names no variety and variety pricing is a standing rejection."
+  },
+  {
+   "raw": "8 ounces Green Bell Pepper green, red, yellow or orange cut into slices",
+   "term": "bell pepper",
+   "canon_item": "Bell Pepper",
+   "bid": "bell-peppers",
+   "decision": "mapped",
+   "grams_source": 226.8,
+   "evidence": "REUSE of the live generic id `bell-peppers` (5 of 7, 0.77 at Fareway); only a vocabulary row is missing. The line explicitly permits green, red, yellow or orange, so the generic is correct and red-bell-pepper would be a variety-price stretch."
+  },
+  {
+   "raw": "5 Italian Sausage links, about 1.5-2 pounds",
+   "term": "Italian sausage links",
+   "canon_item": "Italian Sausage",
+   "bid": "italian-sausage",
+   "decision": "mapped",
+   "grams_source": 680,
+   "evidence": "REUSE of the live board id `italian-sausage` (6 of 7, 2.4842 at Aldi); the vocabulary row is what is new. Fresh raw links, not smoked or summer sausage."
+  },
+  {
+   "raw": "5 Cheese Stick",
+   "term": "cheese stick",
+   "canon_item": "String Cheese",
+   "bid": "string-cheese",
+   "decision": "mapped",
+   "grams_source": 140,
+   "evidence": "No commodity claims it and captures exist today. Individually wrapped 1 oz snack sticks are a different product and price class from mozzarella-cheese (shredded bag or block), and the recipe needs the stick shape to stuff the sausage - proposed to the registrar as a new id."
+  }
+ ],
+ "absent_terms": [
+  "string cheese"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 561,
+   "protein_g": 28,
+   "fat_g": 46,
+   "carbs_g": 8,
+   "servings": 5
+  },
+  "our_totals": {
+   "calories": 3173,
+   "protein_g": 185.7,
+   "fat_g": 231.4,
+   "carbs_g": 78.5
+  },
+  "our_per_serving": {
+   "calories": 635,
+   "protein_g": 37.1,
+   "fat_g": 46.3,
+   "carbs_g": 15.7
+  },
+  "protein_delta_pct": 32.5,
+  "calorie_delta_pct": 13.2,
+  "verdict": "flagged - protein is over the 15% gate, but the source's own block is internally inconsistent and the portion is defended below"
+ }
+}

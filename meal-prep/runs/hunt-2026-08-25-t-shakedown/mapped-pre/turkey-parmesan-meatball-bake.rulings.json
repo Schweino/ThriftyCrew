@@ -1,0 +1,155 @@
+{
+ "slug": "turkey-parmesan-meatball-bake",
+ "lines": [
+  {
+   "raw": "1 pound ground chicken (or chicken breast or thighs in a food processor)",
+   "buy": "3 1/2 lb",
+   "grams_source": 453.6,
+   "notes": null
+  },
+  {
+   "raw": "1 large egg",
+   "buy": "4 large eggs, beaten, minus about 2 tablespoons",
+   "grams_source": 50,
+   "notes": "1 large egg, shelled = 50 g; 14 servings needs 3 1/2 eggs, hence the held-back 2 tbsp."
+  },
+  {
+   "raw": "2 cloves fresh garlic minced",
+   "buy": "7 cloves, minced",
+   "grams_source": 6,
+   "notes": null
+  },
+  {
+   "raw": "1 teaspoon onion powder",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "grams_source": 2.4,
+   "notes": null
+  },
+  {
+   "raw": "1/4 cup grated parmesan cheese",
+   "buy": "3/4 cup plus 2 tablespoons, grated",
+   "grams_source": 28,
+   "notes": null
+  },
+  {
+   "raw": "3 tablespoon almonds ground (Optional, if frying)",
+   "buy": "1 1/4 cups almonds, ground (optional, only if frying)",
+   "grams_source": 48,
+   "notes": null
+  },
+  {
+   "raw": "1/4 cup parsley fresh, chopped",
+   "buy": "3/4 cup plus 2 tablespoons, chopped",
+   "grams_source": 15,
+   "notes": "1/4 cup chopped parsley = 15 g; the table computed no weight for this line."
+  },
+  {
+   "raw": "2 teaspoon dried Italian seasoning",
+   "buy": "2 tablespoons plus 1 teaspoon",
+   "grams_source": 2.8,
+   "notes": null
+  },
+  {
+   "raw": "1 teaspoon salt kosher",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "grams_source": 6,
+   "notes": null
+  },
+  {
+   "raw": "1/2 teaspoon black pepper",
+   "buy": "1 3/4 teaspoons",
+   "grams_source": 1.2,
+   "notes": null
+  },
+  {
+   "raw": "2 tablespoon olive oil (Optional, if frying)",
+   "buy": "7 tablespoons (optional, only if frying)",
+   "grams_source": 27,
+   "notes": null
+  },
+  {
+   "raw": "16 ounces low carb homemade marinara sauce",
+   "buy": "6 1/2 cups",
+   "grams_source": 453.6,
+   "notes": null
+  },
+  {
+   "raw": "1.5 cup mozzarella cheese shredded",
+   "buy": "5 1/4 cups shredded",
+   "grams_source": 168,
+   "notes": "1 cup shredded mozzarella = 112 g; the table computed no weight for this line."
+  },
+  {
+   "raw": "2 tablespoons fresh herbs, like fresh basil or fresh parsley chopped, to serve",
+   "buy": "scant 1/2 cup chopped fresh parsley or basil, to serve",
+   "grams_source": 8,
+   "notes": "Garnish, off the same bunch bought for the 1/4 cup parsley line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 pound ground chicken (or chicken breast or thighs in a food processor)",
+   "term": "ground chicken",
+   "canon_item": "Ground Chicken",
+   "bid": "ground-chicken",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "No commodity claims it; captures exist today. Ground is a real form flip from chicken-breast or boneless-skinless-chicken-thigh - different price class and different gram basis - and it is not ground-turkey (different bird), so it goes to the registrar as a new id rather than onto any existing chicken row."
+  },
+  {
+   "raw": "1 large egg",
+   "term": "egg",
+   "canon_item": "Eggs",
+   "bid": "eggs",
+   "decision": "mapped",
+   "grams_source": 50,
+   "evidence": "REUSE of the live board id `eggs` (7 of 7, 1.00 at Hy-Vee); only the vocabulary row was missing. Whole egg, 50 g shelled."
+  },
+  {
+   "raw": "2 tablespoons fresh herbs, like fresh basil or fresh parsley chopped, to serve",
+   "term": "fresh herbs (basil or parsley)",
+   "canon_item": "Fresh Parsley",
+   "bid": "fresh-parsley",
+   "decision": "mapped-optional",
+   "grams_source": 8,
+   "evidence": "Optional to-serve garnish that the line itself lets you satisfy with parsley, which this recipe already buys as a settled fresh-parsley line; 'fresh herbs' reads board-ABSENT only as a generic string, so no new id is warranted."
+  }
+ ],
+ "absent_terms": [
+  "ground chicken"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 466,
+   "protein_g": 35,
+   "fat_g": 33,
+   "carbs_g": 9,
+   "servings": 4
+  },
+  "our_totals_bake_route": {
+   "calories": 1640,
+   "protein_g": 143.6,
+   "fat_g": 91,
+   "carbs_g": 56.9
+  },
+  "our_per_serving_bake_route": {
+   "calories": 410,
+   "protein_g": 35.9,
+   "fat_g": 22.7,
+   "carbs_g": 14.2
+  },
+  "our_per_serving_fry_route": {
+   "calories": 539,
+   "protein_g": 38.5
+  },
+  "protein_delta_pct": 2.6,
+  "calorie_delta_pct": -12,
+  "verdict": "pass - protein within 3%, which confirms the 1 lb ground chicken and the 50 g egg"
+ }
+}

@@ -1,0 +1,135 @@
+{
+ "slug": "braised-pork-shoulder-fennel-tomato",
+ "lines": [
+  {
+   "raw": "Pork roast, shoulder, fresh, visible fat eaten - 28 ounce",
+   "buy": "8 lb boneless pork shoulder, cut into 3 or 4 large chunks",
+   "grams_source": 793.8,
+   "notes": "28 oz x 28.3495. Target prose assumes 3 source servings (see detail): the source page states no yield."
+  },
+  {
+   "raw": "Chicken broth, bouillon or consomme, homemade - 2 cup",
+   "buy": "9 1/3 cups",
+   "grams_source": 480,
+   "notes": null
+  },
+  {
+   "raw": "Tomato paste - 1.5 tablespoon",
+   "buy": "7 tablespoons",
+   "grams_source": 24,
+   "notes": null
+  },
+  {
+   "raw": "Apple cider vinegar - 1 tablespoon",
+   "buy": "4 1/2 tablespoons",
+   "grams_source": 15,
+   "notes": null
+  },
+  {
+   "raw": "Thyme, dried - 1 teaspoon",
+   "buy": "1 1/2 tablespoons",
+   "grams_source": 1,
+   "notes": null
+  },
+  {
+   "raw": "Mustard - 1 teaspoon",
+   "buy": "1 1/2 tablespoons",
+   "grams_source": 5,
+   "notes": "1 tsp prepared yellow mustard = 5 g, the label serving."
+  },
+  {
+   "raw": "Extra virgin olive oil - 1 tablespoon",
+   "buy": "4 1/2 tablespoons",
+   "grams_source": 13.5,
+   "notes": null
+  },
+  {
+   "raw": "Fennel bulb, raw - 1 each",
+   "buy": "4 1/2 medium bulbs, quartered",
+   "grams_source": 234,
+   "notes": "1 medium fennel bulb = 234 g (USDA each-weight)."
+  },
+  {
+   "raw": "Garlic - 1 clove",
+   "buy": "5 cloves, thinly sliced",
+   "grams_source": 3,
+   "notes": null
+  },
+  {
+   "raw": "Red onion - 0.5 medium (2 1/2\" diameter)",
+   "buy": "2 1/4 cups thinly sliced (about 2 medium)",
+   "grams_source": 55,
+   "notes": null
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "Pork roast, shoulder, fresh, visible fat eaten - 28 ounce",
+   "term": "pork shoulder roast",
+   "canon_item": "Pork Shoulder",
+   "bid": "pork-shoulder",
+   "decision": "mapped",
+   "grams_source": 793.8,
+   "evidence": "RENAME to the existing vocabulary row. 'Roast' is a cut descriptor of the same whole-muscle primal, not a form flip (not ground, not cured, not smoked); pork-shoulder is priced 7 of 7 stores."
+  },
+  {
+   "raw": "Mustard - 1 teaspoon",
+   "term": "mustard",
+   "canon_item": "Yellow Mustard",
+   "bid": "mustard",
+   "decision": "mapped",
+   "grams_source": 5,
+   "evidence": "RENAME to Yellow Mustard [mustard]. The line is a wet condiment stirred into a braise with the vinegar and paste, so it is prepared mustard, not dry powder; mustard is priced 7 of 7."
+  },
+  {
+   "raw": "Extra virgin olive oil - 1 tablespoon",
+   "term": "extra virgin olive oil",
+   "canon_item": "Olive Oil",
+   "bid": "olive-oil",
+   "decision": "mapped",
+   "grams_source": 13.5,
+   "evidence": "RENAME to Olive Oil [olive-oil]. Extra virgin is a grade of the same oil at the same price class, not a form flip; this batch's own meatball recipe already carries Olive Oil [olive-oil] as a settled line."
+  },
+  {
+   "raw": "Fennel bulb, raw - 1 each",
+   "term": "fennel bulb",
+   "canon_item": "Fennel Bulb",
+   "bid": "fennel",
+   "decision": "mapped",
+   "grams_source": 234,
+   "evidence": "REUSE, not a proposal: `fennel` is a live board id (1 of 7 stores, 3.99 at Baker's). Only the vocabulary row is missing, which is a naming question, not a registrar one. Food-macros-db already carries a 'fennel bulb' row."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 622,
+   "protein_g": 49.8,
+   "fat_g": 42.5,
+   "total_carbs_g": 7.7,
+   "servings": null
+  },
+  "our_totals": {
+   "calories": 1753,
+   "protein_g": 148.2,
+   "fat_g": 114,
+   "carbs_g": 28.8
+  },
+  "servings_derived": 3,
+  "our_per_serving": {
+   "calories": 584,
+   "protein_g": 49.4,
+   "fat_g": 38,
+   "carbs_g": 9.6
+  },
+  "protein_delta_pct": -0.8,
+  "calorie_delta_pct": -6.1,
+  "verdict": "pass - protein matches within 1% at 3 servings, which is also how the servings count was recovered"
+ }
+}

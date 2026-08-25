@@ -1,0 +1,43 @@
+{
+    "slug":  "turkey-parmesan-meatball-bake",
+    "title":  "Easy Keto Chicken Parmesan Low Carb Meatballs",
+    "source_url":  "https://www.sugarfreemom.com/recipes/easy-low-carb-keto-chicken-parmesan-meatballs-recipe/",
+    "protein":  "",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-25T11:55:02",
+    "updated":  "2026-08-25T12:03:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-25T11:55:02",
+                        "by":  "seed",
+                        "detail":  "seeded from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "pre-selected for the T-shakedown"
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "extraction copied from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-25T12:03:29",
+                        "by":  "mapper",
+                        "detail":  "Protein lands at 35.9 vs the published 35, so the main-protein portion is right. Note the calorie route: baked (the recipe\u0027s default) the dish computes to 410 cal per serving, only 10 above this run\u0027s 400 floor; the fry route, which adds the optional ground almonds and 2 tbsp olive oil, computes to 539. Both are inside 400-650 and both are inside 35 g carbs, but the baked figure has almost no head"
+                    }
+                ]
+}

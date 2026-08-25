@@ -1,0 +1,139 @@
+﻿{
+    "slug":  "italian-sausage-stuffed-peppers-bake",
+    "title":  "Cheese Stuffed Italian Sausage and Peppers (Lazy Keto, Low Carb)",
+    "source_url":  "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/",
+    "servings":  5,
+    "built_at":  "2026-08-25T11:55:35",
+    "line_count":  6,
+    "resolved_count":  2,
+    "residual_count":  4,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "onion",
+                           "bell pepper",
+                           "Italian sausage links",
+                           "cheese stick"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "1 Onions",
+                     "term":  "onion",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170000 Onions, raw [SR Legacy] per 100 g: 40.0 cal, 1.1 P, 9.34 C, 0.1 F, 1.7 fiber | fdc:169844 DENNY\u0027S, onion rings [SR Legacy] per 100 g: 385.0 cal, 5.29 P, 41.0 C, 22.2 F, 2.4 fiber | fdc:170002 Onions, dehydrated flakes [SR Legacy] per 100 g: 349.0 cal, 8.95 P, 83.3 C, 0.46 F, 9.2 fiber; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "8 ounces Green Bell Pepper green, red, yellow or orange cut into slices",
+                     "term":  "bell pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:2079108 BELL PEPPERS [Branded] per 100 g: 18.0 cal, 1.18 P, 4.71 C, 0.0 F, 1.2 fiber | fdc:2590026 BELL PEPPER \u0026 ONION SAUSAGE, BELL PEPPER \u0026 ONION [Branded] per 100 g: 304.0 cal, 16.1 P, 0.0 C, 26.8 F, 0.0 fiber | fdc:2020513 BELL PEPPER ZESTY RELISH, BELL PEPPER ZESTY [Branded] per 100 g: 132.0 cal, 0.0 P, 31.6 C, 0.0 F, 0.0 fiber; board MAPPED: bell-peppers, 5 of 7 stores, cheapest 0.77 at Fareway",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "5 Italian Sausage links, about 1.5-2 pounds",
+                     "term":  "Italian sausage links",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172952 Sausage, Italian, sweet, links [SR Legacy] per 100 g: 149.0 cal, 16.1 P, 2.1 C, 8.42 F, 0.0 fiber | fdc:174584 Sausage, smoked link sausage, pork [SR Legacy] per 100 g: 309.0 cal, 12.0 P, 0.94 C, 28.2 F, 0.0 fiber | fdc:174585 Sausage, smoked link sausage, pork and beef [SR Legacy] per 100 g: 320.0 cal, 12.0 P, 2.42 C, 28.7 F, 0.0 fiber | fdc:172934 Pork sausage, link/patty, unprepared [SR Legacy] per 100 g: 288.0 cal, 15.4 P, 0.93 C, 24.8 F, 0.0 fiber; board MAPPED: italian-sausage, 6 of 7 stores, cheapest 2.4842 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "5 Cheese Stick",
+                     "term":  "cheese stick",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:168076 DENNY\u0027S, mozzarella cheese sticks [SR Legacy] per 100 g: 324.0 cal, 13.6 P, 27.2 C, 17.9 F, 1.6 fiber | fdc:174599 Sausage, summer, pork and beef, sticks, with cheddar cheese [SR Legacy] per 100 g: 426.0 cal, 19.4 P, 1.82 C, 37.9 F, 0.2 fiber | fdc:169011 APPLEBEE\u0027S, mozzarella sticks [SR Legacy] per 100 g: 316.0 cal, 14.9 P, 22.9 C, 18.4 F, 2.1 fiber | fdc:174602 Bacon and beef sticks [SR Legacy] per 100 g: 517.0 cal, 29.1 P, 0.8 C, 44.2 F, 0.0 fiber; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1 cup marinara sauce",
+                     "term":  "marinara sauce",
+                     "canon_item":  "Marinara Sauce",
+                     "bid":  "marinara-sauce",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: pasta-sauce, 7 of 7 stores, cheapest 0.0591 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  250
+                 },
+                 {
+                     "raw":  "1 cup mozzarella cheese",
+                     "term":  "mozzarella cheese",
+                     "canon_item":  "Mozzarella Cheese",
+                     "bid":  "mozzarella-cheese",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: shredded-cheese, 7 of 7 stores, cheapest 0.1521 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 2 of 6 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "none published",
+                                          "cal":  null,
+                                          "carbs":  null,
+                                          "protein_g":  null,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  2,
+                           "lines_total":  6,
+                           "uncovered_lines":  [
+                                                   "onion",
+                                                   "bell pepper",
+                                                   "Italian sausage links",
+                                                   "cheese stick"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

@@ -1,0 +1,43 @@
+{
+    "slug":  "italian-sausage-stuffed-peppers-bake",
+    "title":  "Cheese Stuffed Italian Sausage and Peppers (Lazy Keto, Low Carb)",
+    "source_url":  "https://remakemyplate.com/lazy-keto-italian-stuffed-sausage-peppers/",
+    "protein":  "",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-25T11:55:02",
+    "updated":  "2026-08-25T12:03:28",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-25T11:55:02",
+                        "by":  "seed",
+                        "detail":  "seeded from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "pre-selected for the T-shakedown"
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "extraction copied from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-25T12:03:28",
+                        "by":  "mapper",
+                        "detail":  "CALL THIS ONE OUT LOUDLY. The published block cannot be satisfied by any single sausage weight: its 140 g of total protein implies about 425 g of sausage, while its 230 g of total fat implies 700 to 900 g. It is self-contradictory, so protein alone cannot arbitrate here. I took the recipe\u0027s own printed weight instead, at the LOW end of its stated range - 5 links at 1.5 lb = 680 g, i.e. 136 g per l"
+                    }
+                ]
+}

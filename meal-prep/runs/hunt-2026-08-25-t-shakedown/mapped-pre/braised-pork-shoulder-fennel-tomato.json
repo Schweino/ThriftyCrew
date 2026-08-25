@@ -1,0 +1,199 @@
+﻿{
+    "slug":  "braised-pork-shoulder-fennel-tomato",
+    "title":  "Keto Braised Pork Shoulder",
+    "source_url":  "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+    "servings":  null,
+    "built_at":  "2026-08-25T11:55:35",
+    "line_count":  10,
+    "resolved_count":  6,
+    "residual_count":  4,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "pork shoulder roast",
+                           "mustard",
+                           "extra virgin olive oil",
+                           "fennel bulb"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "Pork roast, shoulder, fresh, visible fat eaten - 28 ounce",
+                     "term":  "pork shoulder roast",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Pork Shoulder [pork-shoulder] DIFFERENT FORM: roast | Pork Loin [pork-loin] DIFFERENT FORM: shoulder/roast/loin | Ground Pork [ground-pork] DIFFERENT FORM: shoulder/roast/ground; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:168259 Pork, fresh, shoulder, blade, boston (roasts), separable lean and fat, cooked, roasted [SR Legacy] per 100 g: 269.0 cal, 23.1 P, 0.0 C, 18.9 F, 0.0 fiber | fdc:167852 Pork, fresh, shoulder, blade, boston (roasts), separable lean only, cooked, roasted [SR Legacy] per 100 g: 232.0 cal, 24.2 P, 0.0 C, 14.3 F, 0.0 fiber | fdc:167879 Pork, cured, shoulder, arm picnic, separable lean and fat, roasted [SR Legacy] per 100 g: 280.0 cal, 20.4 P, 0.0 C, 21.4 F, 0.0 fiber | fdc:167880 Pork, cured, shoulder, arm picnic, separable lean only, roasted [SR Legacy] per 100 g: 170.0 cal, 24.9 P, 0.0 C, 7.04 F, 0.0 fiber; board MAPPED: pork-shoulder, 7 of 7 stores, cheapest 1.94 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Chicken broth, bouillon or consomme, homemade - 2 cup",
+                     "term":  "chicken broth",
+                     "canon_item":  "Chicken Broth",
+                     "bid":  "chicken-broth",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0373 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  480
+                 },
+                 {
+                     "raw":  "Tomato paste - 1.5 tablespoon",
+                     "term":  "tomato paste",
+                     "canon_item":  "Tomato Paste",
+                     "bid":  "tomato-paste",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: tomato-paste, 7 of 7 stores, cheapest 0.1017 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  24
+                 },
+                 {
+                     "raw":  "Apple cider vinegar - 1 tablespoon",
+                     "term":  "apple cider vinegar",
+                     "canon_item":  "Apple Cider Vinegar",
+                     "bid":  "apple-cider-vinegar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: apple-cider-vinegar, 6 of 7 stores, cheapest 0.0521 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  15
+                 },
+                 {
+                     "raw":  "Thyme, dried - 1 teaspoon",
+                     "term":  "dried thyme",
+                     "canon_item":  "Dried Thyme",
+                     "bid":  "dried-thyme",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: dried-thyme, 5 of 7 stores, cheapest 0.8776 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  1
+                 },
+                 {
+                     "raw":  "Mustard - 1 teaspoon",
+                     "term":  "mustard",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Yellow Mustard [mustard] same form | Honey Dijon Mustard [honey-dijon-mustard] same form | Dijon Mustard [dijon-mustard] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172337 Oil, mustard [SR Legacy] per 100 g: 884.0 cal, 0.0 P, 0.0 C, 100.0 F, 0.0 fiber | fdc:169891 Cabbage, mustard, salted [SR Legacy] per 100 g: 28.0 cal, 1.1 P, 5.63 C, 0.1 F, 3.1 fiber | fdc:169256 Mustard greens, raw [SR Legacy] per 100 g: 27.0 cal, 2.86 P, 4.67 C, 0.42 F, 3.2 fiber | fdc:326698 Mustard, prepared, yellow [Foundation] per 100 g: 61.0 cal, 4.25 P, 5.3 C, 3.38 F, 4.3 fiber; board MAPPED: mustard, 7 of 7 stores, cheapest 0.0495 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Extra virgin olive oil - 1 tablespoon",
+                     "term":  "extra virgin olive oil",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:167737 Oil, corn, peanut, and olive [SR Legacy] per 100 g: 884.0 cal, 0.0 P, 0.0 C, 100.0 F, 0.0 fiber; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Fennel bulb, raw - 1 each",
+                     "term":  "fennel bulb",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; board MAPPED: fennel, 1 of 7 stores, cheapest 3.99 at Baker\u0027s",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Garlic - 1 clove",
+                     "term":  "garlic",
+                     "canon_item":  "Garlic",
+                     "bid":  "garlic",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  3
+                 },
+                 {
+                     "raw":  "Red onion - 0.5 medium (2 1/2\" diameter)",
+                     "term":  "red onion",
+                     "canon_item":  "Red Onion",
+                     "bid":  "red-onion",
+                     "board":  null,
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: red-onion, 5 of 7 stores, cheapest 1.095 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  55
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 6 of 10 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "none published",
+                                          "cal":  null,
+                                          "carbs":  null,
+                                          "protein_g":  null,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  6,
+                           "lines_total":  10,
+                           "uncovered_lines":  [
+                                                   "pork shoulder roast",
+                                                   "mustard",
+                                                   "extra virgin olive oil",
+                                                   "fennel bulb"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

@@ -1,0 +1,43 @@
+{
+    "slug":  "braised-pork-shoulder-fennel-tomato",
+    "title":  "Keto Braised Pork Shoulder",
+    "source_url":  "https://www.carbmanager.com/recipe-detail/ug:e7fabfd2af844317a0ca32dd5fedccd9/keto-braised-pork-shoulder",
+    "protein":  "",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-25T11:55:02",
+    "updated":  "2026-08-25T12:03:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-25T11:55:02",
+                        "by":  "seed",
+                        "detail":  "seeded from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "pre-selected for the T-shakedown"
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-25T11:55:11",
+                        "by":  "seed",
+                        "detail":  "extraction copied from the lf1scan corpus"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-25T12:03:26",
+                        "by":  "mapper",
+                        "detail":  "SERVINGS ARE NOT PUBLISHED and this is the one thing to check behind me. The page gives macros per \u0027bowl\u0027 with no yield, so the pre-resolve table shows portion factor None and the orchestrator has no scale factor. I recovered it from the source\u0027s own numbers: our computed totals divided by the published per-serving figures give 2.98 by protein, 2.82 by calories, 2.68 by fat, so the source yield is"
+                    }
+                ]
+}
