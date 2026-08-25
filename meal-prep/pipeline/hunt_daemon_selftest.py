@@ -848,6 +848,34 @@ def run():
       *_f1_shelf_coverage_line())
 
     # =================================================================================================
+    H("M2 - the map dossier carries the estate (2026-08-25)")
+    # =================================================================================================
+    # NEUTER PROOFS, ALL FIVE RUN AND REVERTED 2026-08-25. The counts are what the suite actually
+    # printed, not what section 4.3 predicted - each neuter took its own case AND the twins that
+    # depend on the same section being rendered at all:
+    #   - drop section 1 (the food-DB rows)        -> 3 red: the seam case, the announced-unreadable
+    #     twin (nothing left to announce) and the cap case (the block no longer reaches 4,000);
+    #   - drop section 2 (the whole precheck)      -> 3 red: the tuning case and the same two;
+    #   - drop section 3 (the yield)               -> 2 red: the servings case and the twin;
+    #   - read the LIVE DB instead of self.food_db_path -> 2 red: the seam case with the scratch
+    #     numbers absent, which is the lf1 round-2 defect reproduced exactly, and the twin;
+    #   - raise MAP_EXTRAS_CAP above the block     -> 1 red: the cap case alone.
+    T("MUST FIRE  a fooddb_known food's OWN numbers ride in the prompt, read through the --food-db "
+      "SEAM - lf1 round 2 read the LIVE DB four times while pointed at a scratch copy",
+      *_m2_food_db_rows_come_from_the_seam())
+    T("MUST FIRE  the precheck rides WHOLE: every tuning line, the uncovered lines and the missing "
+      "DB rows, verbatim - one tuning line was the entire explanation for a 591-vs-468 disagreement",
+      *_m2_the_precheck_rides_whole())
+    T("MUST FIRE  the extraction's servings, title and source_url arrive, and the raw ingredient "
+      "lines are NOT rendered a second time - the table already carries them",
+      *_m2_the_yield_arrives_and_the_lines_are_not_doubled())
+    T("CLEAN TWIN an unreadable food DB and a missing extraction are both ANNOUNCED, and the rest of "
+      "the prompt still builds - a quietly shorter dossier reads as a complete one",
+      *_m2_unreadable_is_announced())
+    T("MUST FIRE  the cap ANNOUNCES itself when it bites, naming how many lines are not shown",
+      *_m2_the_cap_announces_itself())
+
+    # =================================================================================================
     H("M3 - a recipe with nothing to price stops going to the price lane (2026-08-25)")
     # =================================================================================================
     # NEUTER PROOF, RUN AND REVERTED 2026-08-25: restoring the `and norm_state(res["state"]) ==
@@ -890,6 +918,173 @@ def run():
 # =====================================================================================================
 # the fixture bodies
 # =====================================================================================================
+
+
+# =====================================================================================================
+# M2 - the map dossier carries the estate.
+#
+# MEASURED (lf1 round 2, 21 tool calls on a batch where 2 of 3 recipes had ZERO residual lines): 3
+# extraction Reads, 1 Grep plus 4 full Reads of the LIVE food-macros-db.json while the drill was
+# pointed at a scratch copy, and 4 turns re-reading mapped-pre\<slug>.json for the macro_precheck
+# block. Twelve of twenty-one calls, all for material the daemon already had on disk.
+# =====================================================================================================
+
+M2_SCRATCH_DB = {"readme": "a scratch DB whose numbers exist nowhere else",
+                 "items": [
+                     {"item": "Chicken", "brand": "Scratch", "serving_grams": 111, "serving_qty": 4,
+                      "serving_unit": "oz", "calories": 1231, "protein_g": 251, "carbs_g": 1,
+                      "fat_g": 31},
+                     {"item": "Rice", "brand": "Scratch", "serving_grams": 112, "serving_qty": 1,
+                      "serving_unit": "cup", "calories": 1232, "protein_g": 252, "carbs_g": 2,
+                      "fat_g": 32},
+                     {"item": "Cheddar", "brand": "Scratch", "serving_grams": 113, "serving_qty": 1,
+                      "serving_unit": "oz", "calories": 1233, "protein_g": 253, "carbs_g": 3,
+                      "fat_g": 33}]}
+
+M2_RAW = "1 lb chicken, cut into 1-inch pieces"
+
+
+def _m2_table(tmp, slug="s1", known=("Chicken", "Rice", "Cheddar"), tuning=None, extraction=True):
+    """One mapped-pre table with THREE food-DB-known rows, a whole precheck, and its extraction."""
+    out = os.path.join(tmp, "mapped-pre")
+    os.makedirs(out, exist_ok=True)
+    rows = []
+    for i, item in enumerate(known):
+        rows.append({"raw": M2_RAW if i == 0 else ("%d cup %s" % (i, item)),
+                     "term": item.lower(), "canon_item": item, "bid": item.lower(),
+                     "board": "weekly", "resolution": "resolved", "gpu_known": True,
+                     "density_known": True, "fooddb_known": True, "evidence": "exact vocabulary row",
+                     "source": "vocab"})
+    rows.append({"raw": "1 tbsp gochujang", "term": "gochujang", "canon_item": None, "bid": None,
+                 "board": None, "resolution": "unresolved", "gpu_known": False,
+                 "density_known": False, "fooddb_known": False,
+                 "evidence": "no vocabulary row shares a core word", "source": None})
+    doc = {"slug": slug, "title": "Drill Dish", "source_url": "https://d/%s" % slug, "servings": 4,
+           "line_count": len(rows), "resolved_count": len(known), "residual_count": 1,
+           "hold_count": 0, "residual_terms": ["gochujang"], "holds": [], "rows": rows,
+           "macro_precheck": {"state": "computed", "reason": "",
+                              "source": {"from": "candidate-pool.band", "cal": 468, "carbs": 20,
+                                         "protein_g": 35, "fat_g": None},
+                              "lines_covered": 3, "lines_total": len(rows),
+                              "uncovered_lines": ["gochujang", "tteok", "saffron"],
+                              "computed_per_serving": {"cal": 591, "carbs": 41, "protein_g": 44,
+                                                       "fat_g": 22},
+                              "portion_factor": 1.75,
+                              "tuning": list(tuning if tuning is not None else
+                                             ["added Rice base 200g (src scale)",
+                                              "dropped garnish parsley (0.4 g)",
+                                              "held cheddar at label basis"]),
+                              "missing_db_items": ["gochujang", "tteok", "saffron"]}}
+    with open(os.path.join(out, "%s.json" % slug), "w", encoding="utf-8") as f:
+        json.dump(doc, f)
+    if extraction:
+        ex = os.path.join(tmp, "extracted")
+        os.makedirs(ex, exist_ok=True)
+        with open(os.path.join(ex, "%s.json" % slug), "w", encoding="utf-8") as f:
+            json.dump({"slug": slug, "title": "Skillet Chicken And Rice",
+                       "source_url": "https://example.test/skillet-chicken-and-rice",
+                       "servings": 6,
+                       "ingredients": [{"raw": M2_RAW, "item": "chicken", "qty": "1", "unit": "lb"}]},
+                      f)
+    return doc
+
+
+def _m2_prompt(tmp, db=M2_SCRATCH_DB, seam=True, **kw):
+    """The map prompt for one slug, built off a SCRATCH food DB whose numbers exist nowhere else."""
+    doc = _m2_table(tmp, **kw)
+    db_path = os.path.join(tmp, "food-db.json")
+    if db is not None:
+        with open(db_path, "w", encoding="utf-8") as f:
+            json.dump(db, f)
+    d = daemon(run_dir=tmp, food_db_path=db_path if seam else "")
+    return d.map_prompt(["s1"], {"s1": doc}), d
+
+
+def _m2_food_db_rows_come_from_the_seam():
+    tmp = tempfile.mkdtemp(prefix="daemon-m2a-")
+    try:
+        prompt, d = _m2_prompt(tmp)
+        # THE NUMBERS, NOT THE NAMES. A name proves the row was listed; only the scratch DB's own
+        # calories prove which FILE it was read out of, which is the whole claim.
+        want = ["Chicken: 4 oz = 111 g, 1231 cal, 251 P, 1 C, 31 F",
+                "Rice: 1 cup = 112 g, 1232 cal, 252 P, 2 C, 32 F",
+                "Cheddar: 1 oz = 113 g, 1233 cal, 253 P, 3 C, 33 F"]
+        missing = [w for w in want if w not in prompt]
+        return (not missing and d.food_db_path == os.path.join(tmp, "food-db.json"),
+                "missing=%s" % json.dumps(missing))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m2_the_precheck_rides_whole():
+    tmp = tempfile.mkdtemp(prefix="daemon-m2b-")
+    try:
+        prompt, _d = _m2_prompt(tmp)
+        want = ["tuning: added Rice base 200g (src scale)",
+                "tuning: dropped garnish parsley (0.4 g)",
+                "tuning: held cheddar at label basis",
+                "food-DB rows it wanted and did not have: gochujang, tteok, saffron",
+                "lines it could NOT cover: gochujang, tteok, saffron",
+                "portion factor 1.75",
+                "3 of 4 line(s) covered"]
+        missing = [w for w in want if w not in prompt]
+        return not missing, "missing=%s" % json.dumps(missing)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m2_the_yield_arrives_and_the_lines_are_not_doubled():
+    tmp = tempfile.mkdtemp(prefix="daemon-m2c-")
+    try:
+        prompt, _d = _m2_prompt(tmp)
+        yielded = ("6 servings" in prompt and "Skillet Chicken And Rice" in prompt
+                   and "https://example.test/skillet-chicken-and-rice" in prompt)
+        # ONE occurrence of the raw line, from the table's own SETTLED block. A second copy is a
+        # second thing to disagree with the first.
+        n = prompt.count(M2_RAW)
+        return (yielded and n == 1), "yield=%s raw_occurrences=%d" % (yielded, n)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m2_unreadable_is_announced():
+    tmp = tempfile.mkdtemp(prefix="daemon-m2d-")
+    try:
+        # No DB file written at all, and no extraction either.
+        prompt, _d = _m2_prompt(tmp, db=None, extraction=False)
+        announced = prompt.count("the table says a row exists and it could not be read")
+        yield_said = "could not be read" in prompt and "extracted\\s1.json" in prompt
+        # ...and the prompt is still a prompt: the residual, the contract and the precheck all stand.
+        intact = ("gochujang" in prompt and "YOUR JOB IS THREE THINGS" in prompt
+                  and "tuning: added Rice base 200g (src scale)" in prompt)
+        return ((announced == 3 and yield_said and intact),
+                "announced=%d yield_said=%s intact=%s" % (announced, yield_said, intact))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m2_the_cap_announces_itself():
+    tmp = tempfile.mkdtemp(prefix="daemon-m2e-")
+    try:
+        # 60 tuning lines is well past 4,000 characters, and a real precheck can carry dozens.
+        tuning = ["tuning line %02d: added something at source scale" % i for i in range(60)]
+        doc = _m2_table(tmp, tuning=tuning)
+        db_path = os.path.join(tmp, "food-db.json")
+        with open(db_path, "w", encoding="utf-8") as f:
+            json.dump(M2_SCRATCH_DB, f)
+        d = daemon(run_dir=tmp, food_db_path=db_path)
+        prompt = d.map_prompt(["s1"], {"s1": doc})
+        # THE ANNOUNCEMENT, AND PROOF THAT REAL CONTENT WAS DROPPED: the yield section is rendered
+        # LAST, so a capped block is a block whose yield line is gone. Capping quietly would leave
+        # the mapper believing it had seen the whole dossier.
+        return (("CAPPED at 4000 characters" in prompt and "more line(s) of this block are not shown"
+                 in prompt and "tuning line 00" in prompt
+                 and "THE SOURCE'S OWN YIELD" not in prompt),
+                "capped=%s yield_dropped=%s" % ("CAPPED at 4000 characters" in prompt,
+                                                 "THE SOURCE'S OWN YIELD" not in prompt))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
 
 
 # =====================================================================================================

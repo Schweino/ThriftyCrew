@@ -2165,6 +2165,140 @@ class Daemon(object):
         await self.pool_worker(hunt_lib.LANE_CAPS["map"], worker)
         self.ch["price_wake"].close()
 
+    # M2 (2026-08-25): the dossier cap, the same bound render_audit_dossier gives itself. Round 2 of
+    # the lf1 drill spent 12 of its 21 tool calls fetching things the daemon could have rendered.
+    MAP_EXTRAS_CAP = 4000
+
+    def food_db_index(self):
+        """The food DB, keyed by item name, read ONCE per run off the SEAM path.
+
+        THE SEAM, NOT THE LIVE FILE, and that is half the point of this method. lf1 round 2 read
+        meal-prep\food-macros-db.json four times while the drill was pointed at a scratch copy
+        through --food-db, so every number the mapper verified against came from the wrong file.
+
+        CACHED PER RUN, the commodity_rows pattern: these rows do not change under a hunt except by
+        the daemon's own hand, and re-reading 348 rows per dispatch is the waste this removes.
+
+        A read that COULD NOT RUN is recorded as such rather than collapsing to "no rows" - the
+        could-not-look-is-not-a-clean-bill rule, arriving here. The renderer announces it.
+        """
+        if getattr(self, "_food_db_index", None) is not None:
+            return self._food_db_index
+        self._food_db_why = ""
+        idx = {}
+        try:
+            with open(self.food_db_path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            rows = doc.get("items") if isinstance(doc, dict) else doc
+            for r in (rows if isinstance(rows, list) else []):
+                if isinstance(r, dict) and str(r.get("item") or "").strip():
+                    idx[str(r["item"]).strip().lower()] = r
+        except Exception as e:                                    # noqa: BLE001
+            self._food_db_why = str(e)[:120]
+        self._food_db_index = idx
+        return idx
+
+    def map_dossier_extras(self, slug, table):
+        """M2: the three things lf1 round 2 measurably went to disk for, rendered into the prompt.
+
+        1. THE FOOD-DB ROWS THIS BATCH ALREADY HAS - 1 Grep and 4 full Reads of the DB on round 2.
+        2. THE MACRO PRECHECK, WHOLE - 4 turns re-reading mapped-pre\<slug>.json, three of them lost
+           to environment friction. One tuning line ("added Rice base 200g (src scale)") was the
+           entire explanation for a 591-vs-468 calorie disagreement the mapper was otherwise going to
+           litigate by hand.
+        3. THE SOURCE'S OWN YIELD - 3 extraction Reads.
+
+        The raw ingredient lines are NOT re-rendered: the table above already carries `raw` per row,
+        and a second copy of the lines is a second thing to disagree with the first.
+
+        BOUNDED, AND THE CAP ANNOUNCES ITSELF. A quietly cut dossier has the mapper believe it saw
+        everything.
+        """
+        table = table or {}
+        rows = table.get("rows") or []
+        out = []
+
+        # ---- 1. the food-DB rows this batch already has -----------------------------------------
+        known = []
+        for r in rows:
+            if not r.get("fooddb_known"):
+                continue
+            item = str(r.get("canon_item") or r.get("term") or "").strip()
+            if item and item.lower() not in [k.lower() for k in known]:
+                known.append(item)
+        if known:
+            idx = self.food_db_index()
+            shown, missed = [], 0
+            for item in known:
+                row = idx.get(item.lower())
+                if not row:
+                    # ANNOUNCED-UNREADABLE, NEVER SILENCE. The table says a row exists; if this cannot
+                    # produce it, the mapper is told so rather than shown a shorter list.
+                    why = self._food_db_why
+                    shown.append("    %s: the table says a row exists and it could not be read%s "
+                                 "- check it yourself"
+                                 % (item, (" (%s)" % why) if why else ""))
+                    missed += 1
+                    continue
+                shown.append("    %s: %s %s = %s g, %s cal, %s P, %s C, %s F"
+                             % (item, row.get("serving_qty"), row.get("serving_unit"),
+                                row.get("serving_grams"), row.get("calories"), row.get("protein_g"),
+                                row.get("carbs_g"), row.get("fat_g")))
+            out.append("  THE FOOD-DB ROWS THIS BATCH ALREADY HAS - do not go and read them:")
+            out.extend(shown)
+            if missed:
+                out.append("    (%d of the %d rows above could not be read out of the DB at %s)"
+                           % (missed, len(known), self.food_db_path))
+
+        # ---- 2. the macro precheck, whole -------------------------------------------------------
+        mp = table.get("macro_precheck") or {}
+        if mp:
+            out.append("  THE MACRO PRECHECK, WHOLE - state %s%s, %s of %s line(s) covered, portion "
+                       "factor %s:"
+                       % (mp.get("state"),
+                          (" (%s)" % mp.get("reason")) if mp.get("reason") else "",
+                          mp.get("lines_covered"), mp.get("lines_total"), mp.get("portion_factor")))
+            for t in (mp.get("tuning") or []):
+                out.append("    tuning: %s" % t)
+            if mp.get("uncovered_lines"):
+                out.append("    lines it could NOT cover: %s"
+                           % ", ".join(str(x) for x in mp["uncovered_lines"]))
+            if mp.get("missing_db_items"):
+                out.append("    food-DB rows it wanted and did not have: %s"
+                           % ", ".join(str(x) for x in mp["missing_db_items"]))
+
+        # ---- 3. the source's own yield ----------------------------------------------------------
+        ex, why = self.read_extraction(slug)
+        if ex is None:
+            out.append("  THE SOURCE'S OWN YIELD: extracted\\%s.json could not be read (%s) - the "
+                       "servings figure this block exists to carry is NOT available, so treat the "
+                       "table's line count as all you have." % (slug, why))
+        else:
+            out.append("  THE SOURCE'S OWN YIELD: %s servings, titled %s (%s)"
+                       % (ex.get("servings"), ex.get("title") or "(untitled)",
+                          ex.get("source_url") or "no source_url"))
+
+        if not out:
+            return ""
+        text = "\n".join(out)
+        if len(text) > self.MAP_EXTRAS_CAP:
+            # CUT AT A LINE BOUNDARY. Half a rendered row is a row the mapper can read as whole.
+            cut = text[:self.MAP_EXTRAS_CAP].rsplit("\n", 1)[0]
+            dropped = text[len(cut):].count("\n")
+            text = (cut + "\n    ... CAPPED at %d characters: %d more line(s) of this block are not "
+                          "shown - read the DB and mapped-pre\\%s.json for those."
+                    % (self.MAP_EXTRAS_CAP, dropped, slug))
+        return text
+
+    def read_extraction(self, slug):
+        """(doc, why). A missing or unparseable extraction is ANNOUNCED, never silently absent."""
+        path = os.path.join(self.run_dir, "extracted", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                return json.load(f), ""
+        except Exception as e:                                    # noqa: BLE001
+            return None, str(e)[:120]
+
     def map_prompt(self, slugs, tables=None):
         """THE RESIDUAL CONTRACT (D7). The vocabulary lecture left this prompt in the same commit that
         shipped the pre-resolve table, because the table IS the lecture, answered. What is left is what
@@ -2233,6 +2367,11 @@ class Daemon(object):
                              % (mp.get("reason") or mp.get("state") or "no table",
                                 src.get("cal"), src.get("carbs"), src.get("protein_g"),
                                 src.get("from") or "unknown"))
+            # M2: the batch's own estate, rendered per slug directly after its block - the same move
+            # CHANGE W made for the writer and CHANGE A for the auditor.
+            extras = self.map_dossier_extras(slug, t)
+            if extras:
+                lines.append(extras)
             blocks.append("\n".join(lines))
 
         return (
