@@ -467,7 +467,15 @@ foreach ($r in $raw) {
     [void][double]::TryParse((([string]$r.was) -replace '[^0-9.]',''), [ref]$wasV)
     [void][double]::TryParse((([string]$b.row.ad_price) -replace '[^0-9.]',''), [ref]$curV)
     if ($wasV -gt 0 -and $curV -gt 0 -and $wasV -gt $curV) {
-      $rw = Get-RollbackWindow -Store "Sam's Club" -ItemId ([string]$r.id) -Price $curV -Today $script:CaptureDate -Root $root
+      # $script:CaptureDate IS NEVER ASSIGNED IN THIS FILE (fixed 2026-08-25). This line was copied from
+      # build-walmart-deals.ps1, which DOES set it (three times, from -Date or the capture filename). Here it
+      # read $null, so -Today bound to '' and Get-RollbackWindow fell through to its own
+      # "(Get-Date)" default - i.e. the day the BUILDER RAN, not the capture that showed the cut price.
+      # Harmless on a same-day build, which is why it survived; but rebuilding an older Sam's capture
+      # stamped first_seen = today and handed a weeks-old rollback a fresh 30 days, which is precisely the
+      # infinite-TTL failure rollback-ttl-lib exists to prevent. $Date is the variable this script actually
+      # sets and the one its rows carry as as_of, so it is both -Today and the honest -AsOf anchor.
+      $rw = Get-RollbackWindow -Store "Sam's Club" -ItemId ([string]$r.id) -Price $curV -Today $Date -AsOf $Date -Root $root
       if ($rw) {
         Add-Member -InputObject $b.row -NotePropertyName 'base_price'  -NotePropertyValue $wasV       -Force
         Add-Member -InputObject $b.row -NotePropertyName 'marked_down' -NotePropertyValue $true       -Force

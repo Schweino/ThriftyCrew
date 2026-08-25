@@ -1,4 +1,4 @@
-<#
+﻿<#
   ingredient-queue.ps1 - the durable handoff between the Recipe Hunter's mapping stage and its pricing stage.
 
   WHAT IT IS FOR. When a hunted recipe needs an ingredient the board has never priced, that ingredient lands
@@ -303,7 +303,16 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
       [pscustomobject]@{ term='achiote paste'; store='Aldi'; state='not-carried'; price=0; size=''; item=''; evidence='searched in-store mode' },
       [pscustomobject]@{ term='gochujang'; store='Hy-Vee'; state='blocked'; price=0; size=''; item=''; evidence='no browser in this session' })
     ($good | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    # NATIVE STDERR UNDER EAP=Stop (guarded 2026-08-25). This file runs at $ErrorActionPreference='Stop',
+    # and "& powershell ... 2>&1" is a NATIVE command: PS 5.1 wraps each stderr line in an ErrorRecord, which
+    # under Stop throws NativeCommandError and sets $? to $false even when the child returned 0. These five
+    # self-test fixtures deliberately capture a child's combined output to assert on it, so the redirect is
+    # correct and only the preference is wrong. Save/force/restore around the call is the shape
+    # test-native-stderr-eap.ps1 accepts, and it must sit within 8 lines of the call - a guard further up
+    # proves nothing about this line.
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $ErrorActionPreference = $prev
     $rc = $LASTEXITCODE
     $after = Read-Queue $btmp
     $sf = (Get-Item $after 'saffron').stores."Baker's"
@@ -329,7 +338,10 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
       [pscustomobject]@{ term='achiote paste'; store='Sams Club'; state='not-carried'; price=0; size=''; item=''; evidence='e' },
       [pscustomobject]@{ term='gochujang'; store='Hy-Vee'; state='blocked'; price=0; size=''; item=''; evidence='e' })
     ($mixed | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    # stderr redirect on a native child under EAP=Stop - see the note at the first fixture above.
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     $o2 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $ErrorActionPreference = $prev
     $rc2 = $LASTEXITCODE
     $after2 = Read-Queue $btmp
     $wrote = @(@($after2.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
@@ -347,7 +359,10 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
       [pscustomobject]@{ term='achiote paste'; store='Aldi'; state='carried'; price=0; size=''; item='paste'; evidence='e' },
       [pscustomobject]@{ term='gochujang'; store='Fareway'; state='error'; price=0; size=''; item=''; evidence='e' })
     ($nopr | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    # stderr redirect on a native child under EAP=Stop - see the note at the first fixture above.
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     $o3 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $ErrorActionPreference = $prev
     $rc3 = $LASTEXITCODE
     $after3 = Read-Queue $btmp
     $wrote3 = @(@($after3.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
@@ -362,7 +377,10 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
       [pscustomobject]@{ term='never queued'; store='Aldi'; state='not-carried'; price=0; size=''; item=''; evidence='e' },
       [pscustomobject]@{ term='gochujang'; store='Fareway'; state='not-carried'; price=0; size=''; item=''; evidence='e' })
     ($unq | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $bfile -Encoding UTF8
+    # stderr redirect on a native child under EAP=Stop - see the note at the first fixture above.
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     $o4 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -RecordBatch -File $bfile -QueueFile $btmp 2>&1
+    $ErrorActionPreference = $prev
     $rc4 = $LASTEXITCODE
     $after4 = Read-Queue $btmp
     $wrote4 = @(@($after4.items) | Where-Object { @($_.stores.PSObject.Properties | Where-Object { $null -ne $_.Value }).Count -gt 0 }).Count
@@ -415,7 +433,10 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     $qd = [pscustomobject]@{ items = @([pscustomobject]@{ term = 'fixture-saffron'; recipes = @('x'); added = (Get-Stamp); status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null }) }
     Write-Queue $qd $cq
     ([pscustomobject]@{ bids = [pscustomobject]@{} } | ConvertTo-Json -Depth 6) | Set-Content $cl -Encoding UTF8
+    # stderr redirect on a native child under EAP=Stop - see the note at the first fixture above.
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     $o = & powershell -NoProfile -File $PSCommandPath -Promote -Term 'fixture-saffron' -Bid 'fixture-saffron' -QueueFile $cq -CarriagePath $cl 2>&1
+    $ErrorActionPreference = $prev
     $prc = $LASTEXITCODE
     $got = Get-Content $cl -Raw | ConvertFrom-Json
     $liveAfter = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
