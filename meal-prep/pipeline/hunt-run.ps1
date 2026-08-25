@@ -59,6 +59,12 @@ param(
   [string]$Title = '', [string]$SourceUrl = '', [string]$Protein = '',
   [string[]]$Terms = @(), [string[]]$OptionalTerms = @(),
   [string]$LaneName = '', [string]$Label = '', [string[]]$Items = @(),
+  # T3 (2026-08-25). A start line the caller can BACKDATE, for the one shape that cannot emit its own
+  # start before its work: the local extraction ladder learns which rung settled the page only after
+  # the page is settled, so it wrote start and end back to back and -StageSummary ranked every local
+  # extraction at ~0 s. `detail` carried the real duration as prose that no reader parses. Defaults to
+  # Get-Stamp, so every other caller is byte-identical to what it was.
+  [string]$At = '',
   [string]$Conditions = '', [string]$Stop = '', [int]$WaveSize = 10,
   # THE BAND IS A RUN PARAMETER (Brad's ruling 2026-08-24, before the 6b proving run). The calorie
   # window, the carb ceiling and the protein floor all change run to run, so -Init REFUSES to mint a
@@ -821,6 +827,37 @@ if ($runSelfTest) {
         ($null -ne $s4 -and @($s4.unfinished).Count -eq 0) `
         ($(if ($s4) { 'unfinished=' + (@($s4.unfinished) -join ',') } else { 'no json' }))
     } finally { Remove-Item -Recurse -Force $lt4 -ErrorAction SilentlyContinue }
+    # ---- T3 (2026-08-25): -At LETS A CALLER BACKDATE ITS OWN START LINE, and the local extraction
+    # ladder is why. It learns which rung settled a page only AFTER the page is settled, so it wrote
+    # start and end back to back and -StageSummary ranked every local extraction at ~0 s while the
+    # real duration sat in `detail` as prose no reader parses. A fake zero is worse than a gap: it
+    # reads as a stage that cost nothing. Driven through the REAL -Lane entry point, because the
+    # defect being fixed is in the passthrough, not in New-LaneLine (which always took -At).
+    $lt5 = Join-Path ([IO.Path]::GetTempPath()) ("hr-at-" + [Guid]::NewGuid().ToString('N'))
+    try {
+      New-Item -ItemType Directory -Path $lt5 -Force | Out-Null
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Lane -RunDir $lt5 `
+        -LaneName 'extract' -Label 'local rung 1' -Items 'y' -By 'local' -Event 'start' `
+        -At '2026-08-24T10:00:00' | Out-Null
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Lane -RunDir $lt5 `
+        -LaneName 'extract' -Label 'local rung 1' -Items 'y' -By 'local' -Event 'end' `
+        -At '2026-08-24T10:00:42' -InputTokens 0 -OutputTokens 0 | Out-Null
+      $so5 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt5 -Json 2>&1
+      $s5 = $null
+      try { $s5 = (@($so5 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
+      $r5 = $null
+      if ($s5) { $r5 = @($s5.stages | Where-Object { $_.stage -eq 'local rung 1' })[0] }
+      T 'MUST FIRE  -At backdates the start line, so a stage that reports its own duration is ranked at 42s instead of the fake 0s it used to show' `
+        ($null -ne $r5 -and [long]$r5.total_sec -eq 42 -and [string]$r5.kind -eq 'local') `
+        ($(if ($r5) { 'total_sec=' + $r5.total_sec + ' kind=' + $r5.kind } else { ($so5 -join ' ') }))
+      # CLEAN TWIN: every OTHER caller passes no -At and must be stamped now, exactly as before.
+      & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Lane -RunDir $lt5 `
+        -LaneName 'map' -Label 'plain' -Items 'z' -By 'mechanical' -Event 'start' | Out-Null
+      $plain = @(Read-LaneLog (Join-Path $lt5 'lane-log.jsonl') | Where-Object { $_.label -eq 'plain' })[0]
+      T 'CLEAN TWIN a caller that passes no -At is stamped NOW, so every existing call site is byte-identical' `
+        ($null -ne $plain -and ([datetime]::Parse($plain.at) -gt (Get-Date).AddMinutes(-5))) `
+        ($(if ($plain) { [string]$plain.at } else { 'no plain line' }))
+    } finally { Remove-Item -Recurse -Force $lt5 -ErrorAction SilentlyContinue }
     # ---- F (2026-08-24): API ROUND TRIPS ARE NOT BILLED INVOCATIONS, and the reader must keep them
     # apart. The 6b run's own numbers are the case: one mapper session made 47 round trips and billed
     # ~500k tokens while `calls` read 1, because `calls` counts CLI invocations (a re-ask makes it 2)
@@ -1216,7 +1253,8 @@ if ($runLane) {
     Write-Output ("hunt-run: '{0}' is not a lane. One of: {1}" -f $LaneName, (@($script:LANES) -join ', ')); exit 1
   }
   if (-not (Test-Path $RunDir)) { Write-Output ("hunt-run: no such run dir '{0}'" -f $RunDir); exit 1 }
-  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail -At (Get-Stamp) `
+  $line = New-LaneLine -LaneName $ln -Label $Label -ItemList $Items -By $By -Detail $Detail `
+                       -At $(if ($At) { $At } else { (Get-Stamp) }) `
                        -In $InputTokens -Out $OutputTokens -Event $Event `
                        -CacheRead $CacheRead -CacheCreation $CacheCreation -Calls $Calls -ApiTurns $ApiTurns `
                        -AllIn $AllModelsIn -AllOut $AllModelsOut -Models $Models

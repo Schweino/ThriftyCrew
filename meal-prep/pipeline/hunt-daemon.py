@@ -453,9 +453,14 @@ class Daemon(object):
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: self._py(script, args, timeout))
 
+    @staticmethod
+    def _stamp_ago(seconds):
+        """hunt-run's own stamp format (yyyy-MM-ddTHH:mm:ss, local, no zone), N seconds back."""
+        return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(time.time() - max(0.0, seconds)))
+
     async def lane(self, lane_name, label, items, by, event, tokens_in=-1, tokens_out=-1,
                    detail="", cache_read=-1, cache_creation=-1, calls=-1,
-                   all_in=-1, all_out=-1, models="", api_turns=-1):
+                   all_in=-1, all_out=-1, models="", api_turns=-1, at=""):
         """A lane-log line. BOTH ENDS, always: the daemon owns a real clock, so start/end pairing is
         what finally makes stage duration measurable. Section 4.5's completeness rule covers local
         work too - a page settled by the local ladder is work done, not work skipped."""
@@ -473,6 +478,8 @@ class Daemon(object):
             args += ["-Models", models]
         if detail:
             args += ["-Detail", detail]
+        if at:
+            args += ["-At", at]
         rc, out, err = await self.ps(HUNT_RUN_PS, args, timeout=120)
         if rc == 0:
             self.lane_lines += 1
@@ -1037,8 +1044,17 @@ class Daemon(object):
                     if rec["settled"]:
                         # Section 4.5's lane-log completeness rule: a locally settled page is WORK
                         # DONE. -By local, tokens 0, which is the point - it cost the run nothing.
+                        #
+                        # T3 (2026-08-25): THE START LINE IS BACKDATED, and it has to be. The rung is
+                        # only known once the page has settled, so the label cannot exist before the
+                        # work - which is why both lines used to be written here, back to back, and
+                        # -StageSummary ranked every local extraction at ~0 s while the real duration
+                        # sat in `detail` as prose no reader parses. A fake zero is worse than a gap:
+                        # it reads as a stage that cost nothing. sweep_one reports its own seconds, so
+                        # the start line is stamped that far back and the pair now measures the work.
                         await self.lane("extract", "local rung %d" % rec["rung"], [rec["slug"]],
-                                        "local", "start")
+                                        "local", "start",
+                                        at=self._stamp_ago(rec.get("seconds") or 0))
                         await self.lane_free_end("extract", "local rung %d" % rec["rung"],
                                                  [rec["slug"]], "local",
                                                  "settled in %.1fs" % rec["seconds"])
@@ -2721,9 +2737,16 @@ class Daemon(object):
                 json.dump(list(terms), fh, ensure_ascii=False)
         except Exception as e:
             return store_name, None, "could not write the lookup term list (%s)" % e
-        rc, so, se = await self.py(PULL_BROWSER_STORES_PY,
-                                   ["--store", store_key, "--lookup-terms-file", tf,
-                                    "--lookup-out", out], timeout=LOOKUP_TIMEOUT)
+        # T3 (2026-08-25): TIMED, because this is the longest thing a run can do and it logged
+        # NOTHING. LOOKUP_TIMEOUT is 45 minutes; a store sweep that takes half of that fell into a
+        # lane-log gap, so the one block most likely to dominate a wide run's wall clock was the one
+        # block no summary could see. Per STORE, because that is the unit that varies - a seeded
+        # Sam's and a NEEDS-SEEDING Sam's differ by the entire timeout.
+        rc, so, se = await self.py_timed("price", "store-lookup:%s" % store_key, [],
+                                         PULL_BROWSER_STORES_PY,
+                                         ["--store", store_key, "--lookup-terms-file", tf,
+                                          "--lookup-out", out], timeout=LOOKUP_TIMEOUT,
+                                         by="pre-pass")
         why = ""
         doc = None
         if os.path.exists(out):

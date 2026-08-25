@@ -28,6 +28,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -1496,6 +1497,54 @@ def _pregather_lookup_is_python():
     return (len(calls) == 2 and stores == ["fareway", "samsclub"] and flags_ok and not on_ps
             and all(c["timeout"] >= 40 * 60 for c in calls),
             "py=%s ps=%s" % (json.dumps(stores), json.dumps(on_ps)))
+
+
+def _t3_store_lookup_is_timed():
+    """MUST FIRE (T3, 2026-08-25). LOOKUP_TIMEOUT is 45 minutes and this call logged NOTHING - the
+    single longest block a run can execute was the one block no summary could see, so it either fell
+    in a lane-log gap or hid under a concurrent lane. Timed PER STORE, because that is the unit that
+    varies: a seeded Sam's and a NEEDS-SEEDING Sam's differ by the entire timeout."""
+    d, tmp = _price_daemon(py=FakePy())
+    try:
+        pairs = {}
+        for c in d._ps.find("hunt-run.ps1", "-Lane"):
+            lab = FakePS.value_after(c["args"], "-Label") or ""
+            if lab.startswith("store-lookup:"):
+                pairs.setdefault(lab, []).append(FakePS.value_after(c["args"], "-Event"))
+        ok = (sorted(pairs) == ["store-lookup:fareway", "store-lookup:samsclub"]
+              and all(sorted(v) == ["end", "start"] for v in pairs.values()))
+        return ok, "pairs=%s" % json.dumps(pairs, sort_keys=True)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t3_backdated_start_reaches_hunt_run():
+    """MUST FIRE with its CLEAN TWIN in one case, because the twin is the whole safety story: -At is
+    opt-in, so every existing call site must still be stamped by hunt-run itself."""
+    d = daemon(run_dir="R")
+    arun(d.lane("extract", "local rung 1", ["s1"], "local", "start", at="2026-08-24T10:00:00"))
+    arun(d.lane("extract", "local rung 1", ["s1"], "local", "start"))
+    calls = d._ps.find("hunt-run.ps1", "-Lane")
+    backdated = FakePS.value_after(calls[0]["args"], "-At") if calls else None
+    plain_has_at = "-At" in calls[1]["args"] if len(calls) > 1 else True
+    return (backdated == "2026-08-24T10:00:00" and not plain_has_at,
+            "backdated=%r plain_carries_At=%s" % (backdated, plain_has_at))
+
+
+def _t3_stamp_ago_is_hunt_runs_own_format():
+    """MUST FIRE. A stamp in any other shape is not a backdate, it is a line hunt-run cannot pair -
+    and an unpaired start reads as a stage that never finished."""
+    s = HD.Daemon._stamp_ago(90)
+    shaped = re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$", s) is not None
+    try:
+        delta = time.time() - time.mktime(time.strptime(s, "%Y-%m-%dT%H:%M:%S"))
+    except ValueError:
+        return False, "unparseable stamp %r" % s
+    # and a NEGATIVE duration is never a backdate: sweep_one reporting nonsense must clamp to now.
+    zero = HD.Daemon._stamp_ago(-5)
+    fwd = time.mktime(time.strptime(zero, "%Y-%m-%dT%H:%M:%S")) - time.time()
+    return (shaped and 85 <= delta <= 95 and fwd <= 1,
+            "stamp=%r delta=%.1f clamp_fwd=%.1f" % (s, delta, fwd))
 
 
 def _pregather_never_records():
@@ -5931,4 +5980,25 @@ def _mechanical_lane_events():
     res.append(("MUST FIRE  a stage that THREW still closes its start/end pair, and the throw still "
                 "reaches the caller", threw and [x[2] for x in lines3] == ["start", "end"],
                 "threw=%s lines=%s" % (threw, json.dumps(lines3))))
+
+    # ---- T3 (2026-08-25): THE TWO STAGES THE TIMING CONVENTION STILL MISSED.
+    #
+    # NEUTER PROOFS, RUN AND REVERTED, with the counts the suite actually printed rather than the
+    # ones this comment first predicted (1 / 2 / 1):
+    #   * revert store_lookup to plain self.py            -> 4 red, not 1. The timed-pair case went,
+    #     and so did three existing store fixtures: the crude revert left py_timed's argument list on
+    #     a self.py call, so the lookup itself broke. That is a DIRTY neuter - it proves the case is
+    #     load-bearing but not that it is load-bearing ALONE, and it is recorded that way rather than
+    #     trimmed to look clean.
+    #   * drop the `at=` passthrough out of lane()        -> 1 red, the backdate case alone.
+    #   * drop the max(0.0, seconds) clamp in _stamp_ago  -> 1 red, the stamp case, on its negative
+    #     twin - a start line stamped in the FUTURE pairs to a negative duration.
+    res.append(("MUST FIRE  the 45-minute browser store lookup emits a timed pair per store - it is "
+                "the longest block a run can execute and it used to log nothing",
+                *_t3_store_lookup_is_timed()))
+    res.append(("MUST FIRE  a caller can BACKDATE its start line, and one that does not is stamped "
+                "by hunt-run exactly as before", *_t3_backdated_start_reaches_hunt_run()))
+    res.append(("MUST FIRE  the backdated stamp is hunt-run's own format and never lands in the "
+                "future - an unpairable start reads as a stage that never finished",
+                *_t3_stamp_ago_is_hunt_runs_own_format()))
     return res
