@@ -113,6 +113,14 @@ is too clean could cost accuracy on the stage whose entire purpose is accuracy.
 - `design/EVAL-latency-lf1-drill-2026-08-25.md`, `design/EVAL-map-lane-latency-m1-drill-2026-08-25.md`,
   `design/EVAL-registrar-batch-2026-08-25.md` - measured drills. Note that two prior rounds of
   optimisation cut this stage's token cost substantially and **did not move its wall clock**.
+
+  **CORRECTED 2026-08-25 (same day, while reviewing the external response this brief produced).**
+  "Did not move its wall clock" overstates. The M1-M4 round moved the like-for-like pre-qualified
+  batch from 368 s to 221 s - a 40% wall improvement. What has not moved is the ~8-minute figure
+  for RESIDUAL-HEAVY batches, which is the case that matters here. The 221 s figure also matters
+  in its own right: it is a near-zero-adjudication control, so it brackets how much of the current
+  dispatch is bulk work (~220 s) versus judgment (~250-290 s) - see
+  PLAN-map-judge-split-2026-08-25.md section 2.
 - `meal-prep/runs/hunt-2026-08-25-t-shakedown/` - the raw evidence: `lane-log.jsonl` for the timings,
   `mapped-pre/*.rulings.json` for what the agent actually returned, `state/` for where each recipe
   died.
