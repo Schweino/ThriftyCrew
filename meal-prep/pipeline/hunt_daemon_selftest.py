@@ -1499,6 +1499,73 @@ def _pregather_lookup_is_python():
             "py=%s ps=%s" % (json.dumps(stores), json.dumps(on_ps)))
 
 
+def _t6_preaudit_reads_the_seamed_spec_store():
+    """MUST FIRE (T6). lf1's wave-1 auditor reported "the certified spec is the stale 2026-08-16
+    lowcarb-100 build" - the battery graded live specs while the drill was pointed elsewhere, so
+    every number the auditor was handed came from a file the run never wrote."""
+    tmp = _wave_scratch()
+    try:
+        specs = os.path.join(tmp, "specs")
+        os.makedirs(specs, exist_ok=True)
+        d = daemon(run_dir=tmp, specs_dir=specs)
+        arun(d.preaudit(1))
+        calls = d._ps.find("wave-preaudit")
+        seamed = calls and FakePS.value_after(calls[0]["args"], "-SpecsDir") == specs
+        # CLEAN TWIN in the same case: an UNSEAMED daemon passes the flag at all.
+        d2 = daemon(run_dir=tmp)
+        arun(d2.preaudit(1))
+        c2 = d2._ps.find("wave-preaudit")
+        plain = c2 and "-SpecsDir" not in c2[0]["args"]
+        return bool(seamed and plain), "seamed=%s unseamed_clean=%s" % (seamed, plain)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t6_qa_battery_and_mtimes_follow_the_seam():
+    """MUST FIRE. Two more readers of the live store: the QA battery graded the live spec, and the
+    staleness mtimes compared a freshly built spec against the live file's clock - the changed-
+    nothing guard reasoning about the wrong file."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t6-")
+    try:
+        specs = os.path.join(tmp, "specs")
+        os.makedirs(specs, exist_ok=True)
+        d = daemon(run_dir=tmp, specs_dir=specs)
+        paths = list(d.mtimes(["a", "b", "c"], os.path.join(tmp, "audit.md")).keys())
+        spec_paths = [p for p in paths if p.endswith(".json") and "ingredients" not in p]
+        mt = bool(spec_paths) and all(p.startswith(specs) for p in spec_paths)
+        # THE BATTERY'S OWN COMMAND LINE, asserted through qa_battery_args - which exists precisely
+        # because this call shells directly and the seam was otherwise unreachable by any neuter.
+        bargs = d.qa_battery_args("a")
+        bat = FakePS.value_after(bargs, "--spec") == os.path.join(specs, "a.json")
+        live = daemon(run_dir=tmp)
+        live_paths = [p for p in live.mtimes(["a"], os.path.join(tmp, "audit.md"))
+                      if p.endswith("a.json")]
+        plain = (bool(live_paths) and all(HD.SPECS_DIR in p for p in live_paths)
+                 and FakePS.value_after(live.qa_battery_args("a"), "--spec")
+                 == os.path.join(HD.SPECS_DIR, "a.json"))
+        return (mt and bat and plain),  "mtimes=%s battery=%s unseamed_live=%s" % (mt, bat, plain)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t6_auditor_is_told_which_spec_store_is_this_runs():
+    """MUST FIRE with its CLEAN TWIN. The mechanical readers are seamed above; this is the half no
+    argument can reach - an auditor that opens the file itself has to be told which file is ours."""
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        specs = os.path.join(tmp, "specs")
+        d = daemon(run_dir=tmp, specs_dir=specs)
+        p = d.audit_prompt(1, ["a", "b", "c"], "drill-run-w1", "whole-wave", None)
+        seamed = ("THIS IS A DRILL ON A SCRATCH SPEC STORE at %s" % specs) in p and \
+                 "a disagreement between\ntwo files rather than a finding about this recipe" in p
+        plain = daemon(run_dir=tmp).audit_prompt(1, ["a"], "drill-run-w1", "whole-wave", None)
+        clean = "SCRATCH SPEC STORE" not in plain
+        return seamed and clean, "seamed=%s unseamed_clean=%s" % (seamed, clean)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _t2_narrative_is_written_and_stamped():
     """MUST FIRE (T2). say() printed to stdout and nowhere else, so the run's findings, parks and
     STUCK messages lived only in scrollback while the lane log and the artifacts sat on disk looking
@@ -6070,6 +6137,26 @@ def _mechanical_lane_events():
     #   * drop the `at=` passthrough out of lane()        -> 1 red, the backdate case alone.
     #   * drop the max(0.0, seconds) clamp in _stamp_ago  -> 1 red, the stamp case, on its negative
     #     twin - a start line stamped in the FUTURE pairs to a negative duration.
+    # ---- T6 NEUTER PROOFS, RUN AND REVERTED 2026-08-25, one per seamed reader, all on a full roster:
+    #   * preaudit back to the live store       -> 1 red;
+    #   * mtimes back to the live store         -> 1 red;
+    #   * drop the auditor's specs seam note    -> 1 red;
+    #   * qa_battery back to the live store     -> 0 RED THE FIRST TIME, and that is the finding of
+    #     this unit's own build. The fixture's NAME claimed the battery and its BODY only tested
+    #     mtimes, because qa_battery shells straight through subprocess.run and there was nothing for
+    #     a fixture to intercept. The command line was split into qa_battery_args to make the seam
+    #     reachable, the assertion added, and the neuter re-run: 1 red. A seam no neuter can reach is
+    #     a seam that will quietly come undone, and a fixture named for what it does not test is
+    #     worse than no fixture - it reports the coverage without providing it.
+    res.append(("MUST FIRE  T6: the preaudit battery reads the SEAMED spec store, and an unseamed "
+                "run passes no flag at all - lf1's auditor graded a file the run never wrote",
+                *_t6_preaudit_reads_the_seamed_spec_store()))
+    res.append(("MUST FIRE  T6: the QA battery and the staleness mtimes follow the seam too - three "
+                "readers of the live store, not one", *_t6_qa_battery_and_mtimes_follow_the_seam()))
+    res.append(("MUST FIRE  T6: the AUDITOR is told which spec store is this run's, and an unseamed "
+                "prompt carries no drill sentence",
+                *_t6_auditor_is_told_which_spec_store_is_this_runs()))
+
     # ---- T2 NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as the suite printed them:
     #   * drop the _tee call out of say()          -> 2 red (the narrative case and the survival case);
     #   * let _tee RAISE instead of swallowing     -> 1 red, the survival case - which is the whole

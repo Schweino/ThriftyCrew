@@ -410,6 +410,29 @@ class Daemon(object):
                 "lands in the live Omaha ledgers, which the cost engine and the publish gate read as\n"
                 "fact.\n" % " and ".join(flags))
 
+    def specs_seam_note(self):
+        r"""T6 (2026-08-25): the drill's SPEC STORE, said to the AUDITOR - which holds its own tools.
+
+        Measured on lf1: the wave-1 auditor reported that "the certified spec is the stale 2026-08-16
+        lowcarb-100 build". It had read meal-prep\db\recipes while the drill was pointed at a scratch
+        store through --specs, because the drill reused a slug that already exists live. It produced
+        a real NO-GO on a real disagreement, so no gate was fooled - but the disagreement was between
+        two DIFFERENT FILES, which is not a finding about the recipe, and a drill on a fresh slug
+        would never have surfaced it.
+
+        The mechanical half is seamed in the same commit (the preaudit battery, the QA battery and
+        the staleness mtimes). This is the half no argument can reach: an agent that decides to open
+        the file itself needs to be told which file is this run's.
+
+        THE NOTE EXISTS ONLY WHEN A SEAM IS SET, so an unseamed run's prompt is byte-identical.
+        """
+        if not self.specs_dir:
+            return ""
+        return ("\nTHIS IS A DRILL ON A SCRATCH SPEC STORE at %s. Every certified spec in this wave\n"
+                "is THERE, not in meal-prep\\db\\recipes. A slug that also exists live has an OLDER\n"
+                "file at the live path, and a disagreement with THAT file is a disagreement between\n"
+                "two files rather than a finding about this recipe.\n" % self.specs_dir)
+
     def food_db_seam_note(self):
         """M4 (2026-08-25): the drill's FOOD DB seam, said to the MAPPER.
 
@@ -3441,13 +3464,25 @@ class Daemon(object):
         return {"extractor": "recipe-hunter-extractor",
                 "mapper": "recipe-ingredient-mapper"}.get(owner, "recipe-writer")
 
+    def qa_battery_args(self, slug):
+        """The battery's command line, SPLIT OUT so its seam is assertable.
+
+        This call shells straight through subprocess.run rather than ps()/py(), so a fixture has
+        nothing to intercept and the T6 seam here was unpinned - measured 2026-08-25, when reverting
+        it to the live path produced ZERO red on a full roster. A seam no neuter can reach is a seam
+        that will quietly come undone.
+        """
+        return [sys.executable, os.path.join(HERE, "coverage_check.py"), "--battery",
+                # T6: the QA battery grades the spec this RUN built, not the live one that happens to
+                # share the slug. A drill reusing a live slug was grading a file it never wrote.
+                "--spec", os.path.join(self.specs_dir or SPECS_DIR, "%s.json" % slug),
+                "--source", os.path.join(self.run_dir, "extracted", "%s.json" % slug),
+                "--run-dir", self.run_dir]
+
     async def qa_battery(self, slug):
         import subprocess                                          # noqa: PLC0415
         loop = asyncio.get_event_loop()
-        args = [sys.executable, os.path.join(HERE, "coverage_check.py"), "--battery",
-                "--spec", os.path.join(SPECS_DIR, "%s.json" % slug),
-                "--source", os.path.join(self.run_dir, "extracted", "%s.json" % slug),
-                "--run-dir", self.run_dir]
+        args = self.qa_battery_args(slug)
         p = await loop.run_in_executor(None, lambda: subprocess.run(args, capture_output=True))
         if p.returncode == hunt_lib.EXIT_CANNOT_RUN:
             # Exit 2 is a BLOCKED stage, never a pass. It is a finding for the QA agent to see, not
@@ -3956,8 +3991,13 @@ class Daemon(object):
 
     async def preaudit(self, wk):
         rc, _o, _e = await self.cost_engine(
-            WAVE_PREAUDIT_PS, ["-RunDir", self.run_dir, "-Wave", wk], timeout=1800,
-            lane="audit", stage="wave-preaudit w%d" % wk, items=[])
+            WAVE_PREAUDIT_PS,
+            ["-RunDir", self.run_dir, "-Wave", wk]
+            # T6: the battery reads the spec store this run built. Without it the preaudit graded
+            # live specs for any slug the drill happened to reuse, and every downstream number the
+            # auditor is handed came from a file the run never wrote.
+            + (["-SpecsDir", self.specs_dir] if self.specs_dir else []),
+            timeout=1800, lane="audit", stage="wave-preaudit w%d" % wk, items=[])
         if rc == hunt_lib.EXIT_CANNOT_RUN:
             self.findings.append("wave %d: the preaudit battery could not run (exit 2) - a BLOCKED "
                                  "stage, never a pass" % wk)
@@ -3965,7 +4005,10 @@ class Daemon(object):
 
     def mtimes(self, slugs, audit_path):
         out = {}
-        paths = [os.path.join(SPECS_DIR, "%s.json" % s) for s in slugs]
+        # T6: the staleness reference is the spec store this run WROTE. Against the live store a
+        # drill's freshly built spec looks older than an audit it predates, which is the changed-
+        # nothing guard reasoning about the wrong file.
+        paths = [os.path.join(self.specs_dir or SPECS_DIR, "%s.json" % s) for s in slugs]
         paths.append(os.path.join(MP, "db", "ingredients.json"))
         for p in paths:
             try:
@@ -4139,7 +4182,7 @@ class Daemon(object):
             "Report to %s\\waves\\wave-%d.audit.md. FIRST line exactly GO or NO-GO. SECOND line\n"
             "exactly \"scope: %s\". Return the verdict, the blocking slugs, whether each blocker is\n"
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
-            "%s"
+            "%s%s"
             % (wk, self.run_id, self.run_dir, self.run_dir, wk, ", ".join(slugs), scope,
                ("\nReason: " + why) if why else "  (first audit of this wave)",
                self.run_dir, wk,
@@ -4147,7 +4190,8 @@ class Daemon(object):
                # audit has no repair behind it, so a block there would be describing nothing.
                (self.repair_delta_block(delta) if why else ""),
                self.render_audit_dossier(wk),
-               self.conditions, self.run_dir, wk, scope, self.GREP_HARNESS_NOTE))
+               self.conditions, self.run_dir, wk, scope, self.specs_seam_note(),
+               self.GREP_HARNESS_NOTE))
 
     def repair_prompt(self, wk, blockers, audit):
         return (

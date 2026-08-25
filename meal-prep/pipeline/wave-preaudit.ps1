@@ -46,6 +46,12 @@ param(
   [switch]$SkipLive,
   [switch]$SkipShared,
   [switch]$SelfTest,
+  # T6 (2026-08-25). The SPEC STORE, seamable on its own. -Root moves the whole meal-prep tree, which
+  # is far too blunt for a drill that wants scratch SPECS beside the live food DB and costed rows.
+  # Measured on lf1: the wave-1 auditor reported "the certified spec is the stale 2026-08-16
+  # lowcarb-100 build" because this script read db\recipes while the drill was pointed elsewhere
+  # through --specs. Empty means the live store, so every existing caller is unchanged.
+  [string]$SpecsDir = '',
   [string]$Root = ''
 )
 $ErrorActionPreference = 'Stop'
@@ -662,7 +668,7 @@ if ($Slugs -and @($Slugs).Count) {
 if (-not $OutFile) { $OutFile = Join-Path $RunDir ("waves\wave-{0}.preaudit.json" -f $Wave) }
 if (-not $ReferenceCard) { $ReferenceCard = Join-Path $mp 'db\built\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html' }
 
-$recipesDir = Join-Path $mp 'db\recipes'
+$recipesDir = if ($SpecsDir) { $SpecsDir } else { Join-Path $mp 'db\recipes' }
 $costedPath = Join-Path $mp 'db\costed.json'
 $foodDbPath = Join-Path $mp 'food-macros-db.json'
 
