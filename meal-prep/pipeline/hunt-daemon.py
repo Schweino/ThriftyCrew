@@ -2079,6 +2079,72 @@ class Daemon(object):
             self._food_db = None
         return written, findings
 
+    async def new_bid_proposals(self, slug, res):
+        r"""Every bid the three namespaces do NOT already wire - declared or not.
+
+        T8, MEASURED ON THE T-SHAKEDOWN (2026-08-25). map_prompt promises, in as many words: "The
+        orchestrator checks the three commodity namespaces itself and sends every genuinely new one
+        to the registrar, so you cannot skip that gate by omission." It did not. This road read
+        `res["new_commodity_proposals"]` and nothing else, so a mapper that ruled
+        `bid='ground-chicken'` while returning an EMPTY proposals array bought no registrar dispatch
+        at all. The assembler then refused the unapproved id and the recipe STUCK - safe, and
+        useless: the gate that exists to ADJUDICATE a new commodity had instead become a gate that
+        silently stalls the recipe, after a 7.8-minute map dispatch was already paid for.
+
+        THE SWEEP WAS ALREADY BUILT AND NOBODY CALLED IT. map-preresolve's `-NewBids` takes this
+        exact payload, loads all three namespaces, and returns the union of ruled-but-unwired bids
+        and declared proposals, each flagged `declared`. It even carries the same >=300-id
+        plausibility floor the assembler uses, so a half-read namespace file reports BLOCKED instead
+        of declaring every id in the estate brand new. This is the F1 shape exactly - a fixtured
+        capability with no daemon road to it - and the fix is to call it, not to write a second one.
+
+        DEGRADE, NEVER SILENTLY NARROW. If the sweep cannot run, fall back to what the mapper
+        declared and say so in a finding. That is the same set this road used before T8, so the
+        failure mode is today's behaviour rather than a new one, and the assembler stays the backstop
+        that refuses any id nothing approved.
+        """
+        declared = [p for p in (res.get("new_commodity_proposals") or []) if isinstance(p, dict)]
+        probe_dir = os.path.join(self.run_dir, "mapped-pre")
+        probe = os.path.join(probe_dir, "%s.newbids.json" % slug)
+        try:
+            os.makedirs(probe_dir, exist_ok=True)
+            with open(probe, "w", encoding="utf-8") as f:
+                json.dump({"slug": slug,
+                           "rulings": res.get("rulings") or [],
+                           "new_commodity_proposals": declared}, f, ensure_ascii=False)
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("map/%s: the new-bid sweep could not write its probe (%s) - falling "
+                                 "back to the %d proposal(s) the mapper declared"
+                                 % (slug, e, len(declared)))
+            return declared
+        rc, out, err = await self.ps(MAP_PRERESOLVE_PS,
+                                     ["-NewBids", "-RulingsFile", probe], timeout=300)
+        if rc != hunt_lib.EXIT_CLEAN:
+            self.findings.append(
+                "map/%s: the new-bid sweep could not run (exit %s: %s) - falling back to the %d "
+                "proposal(s) the mapper declared, and any id it missed will be REFUSED by the "
+                "assembler rather than minted" % (slug, rc, ((out or "") + (err or "")).strip()[:160],
+                                                  len(declared)))
+            return declared
+        try:
+            doc = json.loads((out or "").strip())
+            found = [p for p in (doc.get("proposals") or []) if isinstance(p, dict) and
+                     str(p.get("proposed_bid") or "").strip()]
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("map/%s: the new-bid sweep returned unreadable JSON (%s) - falling "
+                                 "back to the mapper's %d declared proposal(s)"
+                                 % (slug, e, len(declared)))
+            return declared
+        undeclared = [p for p in found if not p.get("declared")]
+        if undeclared:
+            # WORTH SEEING AT WIDTH. A model that keeps forgetting to declare is a prompt problem;
+            # the gate holding anyway is what makes it a log line instead of a stalled recipe.
+            self.findings.append(
+                "map/%s: %d new commodity id(s) reached the registrar that the mapper did NOT declare "
+                "(%s) - the by-omission sweep is what caught them"
+                % (slug, len(undeclared), ", ".join(str(p.get("proposed_bid")) for p in undeclared)))
+        return found
+
     async def assemble_mapped(self, slug, res, tables=None):
         r"""A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
         arrays. Returns (ok, why_not).
@@ -2090,7 +2156,7 @@ class Daemon(object):
         the dispatch payload, not the file), so the defect was invisible until something tried to READ
         the file - a whole stage later, with the prose already paid for.
         """
-        proposals = res.get("new_commodity_proposals") or []
+        proposals = await self.new_bid_proposals(slug, res)
         rulings = await self.registrar_rulings(slug, proposals, tables)
         db_written, db_findings = await self.write_food_db_rows(slug, res.get("food_db_rows"))
         for f in db_findings:
@@ -2177,6 +2243,58 @@ class Daemon(object):
                             "F1: the post-fill re-resolve could not run (%s) - the batch of %d rides "
                             "the pre-fill table" % (why2[:120], len(slugs)))
                 self.log_shelf_coverage(tables)
+                # ---- T7: THE COMPLETENESS GATE, AND IT IS A PICK-UP CHECK ON PURPOSE ---------------
+                #
+                # MEASURED on the T-shakedown (2026-08-25): 2 of 3 recipes died AFTER a 7.8-minute
+                # mapper dispatch, on facts a millisecond of arithmetic already knew - one extraction
+                # stated no servings at all, and one candidate carried no protein. D8 refuses to scale
+                # a recipe of unknown yield and refuses to build a skeleton with no protein, both
+                # correctly, but by then the whole batch had been paid for.
+                #
+                # THE DATA IS NOT CORRUPT, IT IS INCOMPLETE, and the difference is the whole design.
+                # local_extract is FORBIDDEN to guess ("servings AS STATED, or null. Do not infer it
+                # from pan size or volume"), so a null yield is an honest record of a page that never
+                # said. Nothing was broken upstream; what was missing is anyone asking BEFORE paying.
+                #
+                # WHY REJECT RATHER THAN STICK. A source page that never states its yield cannot
+                # become a costed 14-serving recipe by any later effort, so `rejected-unreadable` is
+                # the truthful verdict and it is a legal move from `extracted`. A recipe that is
+                # merely missing its PROTEIN is a different case - that is run bookkeeping, not a
+                # defect in the source - so it is STUCK and resumable, never rejected.
+                keep = []
+                for b in batch:
+                    s = b["slug"]
+                    ext, _why = self.read_extraction(s)
+                    if ext is None:
+                        keep.append(b)                # unreadable here is the mapper's own problem
+                        continue
+                    if not ext.get("servings"):
+                        await self.advance(s, "rejected-unreadable", "daemon",
+                                           "the source states no servings, so nothing can ever be "
+                                           "scaled to a 14-serving batch - refused before the mapper "
+                                           "was paid rather than after")
+                        self.findings.append(
+                            "map/%s: REFUSED AT PICK-UP - the source states no servings. A yield "
+                            "nobody stated cannot be guessed, and the cost of learning that after a "
+                            "map dispatch is the whole dispatch." % s)
+                        continue
+                    if not str(self.state_row(s).get("protein") or "").strip():
+                        self.stuck(s, "map",
+                                   "no protein is named for this candidate, and D8 refuses to build "
+                                   "a skeleton without one. This is run bookkeeping rather than a "
+                                   "defect in the source, so it is resumable: name the protein and "
+                                   "re-run.")
+                        continue
+                    keep.append(b)
+                if not keep:
+                    self.log("  map: every slug in this micro-batch failed the pick-up check - "
+                             "nothing was dispatched")
+                    continue
+                if len(keep) != len(batch):
+                    batch = keep
+                    slugs = [b["slug"] for b in batch]
+                    self.log("  map: dispatching %d of the batch after the pick-up check (%s)"
+                             % (len(slugs), ", ".join(slugs)))
                 r = await self.with_retry(
                     lambda: self.dispatch("recipe-ingredient-mapper", self.map_prompt(slugs, tables),
                                           "map", "map:%dx" % len(slugs), slugs,

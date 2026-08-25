@@ -960,6 +960,38 @@ def run():
       *_m3_optional_still_reaches_the_queue())
 
     # =================================================================================================
+    H("T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)")
+    # =================================================================================================
+    # NEUTER PROOFS, ALL RUN AND REVERTED 2026-08-25, counts as the suite printed them:
+    #   * drop the servings check                       -> 1 red;
+    #   * drop the protein check                        -> 1 red;
+    #   * REJECT on missing protein instead of sticking -> 1 red (the twin pins the distinction:
+    #     our bookkeeping gap must not throw away someone else's good page);
+    #   * revert the T8 call site to the declared list  -> 1 red, but ONLY after the call-site case
+    #     was added. It first came back 0 RED, because the T8 cases exercised new_bid_proposals()
+    #     directly and nothing asserted assemble_mapped actually calls it - and the defect was never
+    #     that the sweep was wrong, it was that this road had no sweep. Second time this build that a
+    #     fixture pinned a function while the bug lived at its call site.
+    #   * swallow the blocked-sweep finding             -> 1 red.
+    T("MUST FIRE  a source stating NO SERVINGS is refused AT PICK-UP, before a mapper dispatch is "
+      "paid for - it cost the T-shakedown a 7.8 min batch to learn this",
+      *_t7_no_servings_is_refused_before_the_mapper())
+    T("MUST FIRE  a candidate with no PROTEIN is STUCK and resumable, never rejected - that is our "
+      "bookkeeping missing, not a defect in the source page",
+      *_t7_no_protein_is_stuck_not_rejected())
+    T("CLEAN TWIN a COMPLETE candidate still dispatches, and the gate refuses nothing",
+      *_t7_a_complete_candidate_still_dispatches())
+    T("MUST FIRE  an UNDECLARED new bid still reaches the registrar - the mapper ruled "
+      "`ground-chicken` and declared nothing, and the gate that adjudicates had become a gate that "
+      "silently stalls", *_t8_an_undeclared_bid_still_reaches_the_registrar())
+    T("MUST FIRE  ...and the CALL SITE uses it: assemble_mapped dispatches the registrar for an id "
+      "the mapper never declared. Pinning only the function passes with the bug restored",
+      *_t8_the_call_site_actually_uses_the_sweep())
+    T("CLEAN TWIN a BLOCKED sweep falls back to the declared proposals and ANNOUNCES it - today's "
+      "behaviour, with the assembler still refusing any id nothing approved",
+      *_t8_a_blocked_sweep_degrades_and_says_so())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -1272,6 +1304,161 @@ def _m3_advanced_to(ps):
 def _m3_queue_terms(ps):
     return [FakePS.value_after(c["args"], "-Term")
             for c in ps.find("ingredient-queue.ps1") if "-Add" in c["args"]]
+
+
+# =====================================================================================================
+# T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)
+#
+# T7: 2 of 3 recipes died AFTER a 7.8-minute mapper dispatch, on facts arithmetic already knew - one
+# extraction stated no servings, one candidate carried no protein. The gate now runs at PICK-UP.
+# T8: the mapper ruled `bid='ground-chicken'` with an EMPTY new_commodity_proposals, no registrar was
+# ever dispatched, and the assembler refused the unapproved id - a gate that adjudicates turned into
+# a gate that silently stalls. map-preresolve's -NewBids answered this all along and nobody called it.
+# =====================================================================================================
+
+def _t7_pickup(tmp, servings=4, protein="chicken"):
+    """One map-lane run whose extraction and state completeness the case chooses."""
+    preresolved(tmp, ["s1"], residual={"s1": ["gochujang"]})
+    os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+    ext = {"slug": "s1", "title": "T", "source_url": "u", "ingredients": [], "instructions": []}
+    if servings is not None:
+        ext["servings"] = servings
+    with io.open(os.path.join(tmp, "extracted", "s1.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps(ext))
+    os.makedirs(os.path.join(tmp, "state"), exist_ok=True)
+    st = {"slug": "s1", "state": "extracted", "history": [], "reject_reason": ""}
+    if protein:
+        st["protein"] = protein
+    with io.open(os.path.join(tmp, "state", "s1.json"), "w", encoding="utf-8") as f:
+        f.write(json.dumps(st))
+    ps = _asm_ps(0)
+    fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [_mapper_result("s1")]}]})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+    d.ch["map"].push({"slug": "s1"})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    return d, ps, fd
+
+
+def _t7_no_servings_is_refused_before_the_mapper():
+    """MUST FIRE. A source that never stated its yield can never become a costed 14-serving recipe,
+    so it is rejected-unreadable BEFORE the dispatch - not discovered after one is paid for."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t7a-")
+    try:
+        d, ps, fd = _t7_pickup(tmp, servings=None)
+        dispatched = len(fd.prompts("recipe-ingredient-mapper"))
+        states = _m3_advanced_to(ps)
+        said = any("REFUSED AT PICK-UP" in f for f in d.findings)
+        return (dispatched == 0 and "rejected-unreadable" in states and said,
+                "dispatches=%d states=%s findings=%s"
+                % (dispatched, json.dumps(states), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t7_no_protein_is_stuck_not_rejected():
+    """MUST FIRE. Missing protein is RUN BOOKKEEPING, not a defect in the source, so the recipe is
+    STUCK and resumable - rejecting it would throw away a perfectly good page over our own omission."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t7b-")
+    try:
+        d, ps, fd = _t7_pickup(tmp, protein="")
+        dispatched = len(fd.prompts("recipe-ingredient-mapper"))
+        states = _m3_advanced_to(ps)
+        rejected = [s for s in states if str(s).startswith("rejected")]
+        return (dispatched == 0 and not rejected,
+                "dispatches=%d states=%s" % (dispatched, json.dumps(states)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t7_a_complete_candidate_still_dispatches():
+    """CLEAN TWIN, and the one that matters most: the gate must not start refusing good recipes."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t7c-")
+    try:
+        d, _ps, fd = _t7_pickup(tmp, servings=4, protein="chicken")
+        dispatched = len(fd.prompts("recipe-ingredient-mapper"))
+        refused = [f for f in d.findings if "PICK-UP" in f]
+        return (dispatched == 1 and not refused,
+                "dispatches=%d refused=%s" % (dispatched, json.dumps(refused)[:160]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+_T8_SWEEP = {"slug": "s1", "count": 1, "proposals": [
+    {"term": "ground chicken", "proposed_bid": "ground-chicken",
+     "evidence": "ruled but never declared", "declared": False}]}
+
+
+def _t8_ps(sweep=None, rc=0):
+    """FakePS that answers -NewBids the way map-preresolve does, and -Assemble as usual."""
+    def handler(args):
+        if "-NewBids" in args:
+            return rc, json.dumps(sweep if sweep is not None else _T8_SWEEP), ""
+        return 0, "", ""
+    return FakePS({"map-preresolve": handler})
+
+
+def _t8_an_undeclared_bid_still_reaches_the_registrar():
+    """MUST FIRE - the T-shakedown defect exactly. The mapper ruled a new id and declared NOTHING;
+    the registrar must still be asked, because the prompt promises it cannot be skipped by omission."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t8a-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
+        d = daemon(run_dir=tmp, ps=_t8_ps())
+        res = _mapper_result("s1")
+        res["new_commodity_proposals"] = []          # the mapper declared NOTHING
+        got = arun(d.new_bid_proposals("s1", res))
+        bids = [p.get("proposed_bid") for p in got]
+        said = any("did NOT declare" in f for f in d.findings)
+        return (bids == ["ground-chicken"] and said,
+                "proposals=%s findings=%s" % (json.dumps(bids), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t8_the_call_site_actually_uses_the_sweep():
+    """MUST FIRE, and it pins the CALL SITE rather than the function.
+
+    THE T8 DEFECT WAS NEVER THAT THE SWEEP WAS WRONG - it was that this road did not call one. A
+    fixture that only exercises new_bid_proposals() directly passes with the old
+    `res.get("new_commodity_proposals")` line restored, MEASURED 2026-08-25 when exactly that neuter
+    came back 0 red. So this drives assemble_mapped and asserts the REGISTRAR WAS DISPATCHED for an
+    id the mapper never declared."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t8c-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
+        fd = FakeDispatch({"commodity-registrar": [{"rulings": [
+            {"proposed_bid": "ground-chicken", "verdict": "approve", "bid": "ground-chicken",
+             "reason": "cooked pulled meat is its own purchase"}]}]})
+        d = daemon(run_dir=tmp, ps=_t8_ps(), dispatcher=fd)
+        res = _mapper_result("s1")
+        res["new_commodity_proposals"] = []          # declared NOTHING, exactly as on the shakedown
+        arun(d.assemble_mapped("s1", res, None))
+        prompts = fd.prompts("commodity-registrar")
+        return (len(prompts) == 1 and "ground-chicken" in prompts[0],
+                "registrar dispatches=%d" % len(prompts))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _t8_a_blocked_sweep_degrades_and_says_so():
+    """CLEAN TWIN. A sweep that cannot run must fall back to what the mapper declared and ANNOUNCE
+    it - that is today's behaviour, not a new failure mode, and the assembler is still the backstop
+    that refuses any id nothing approved. Silence here would re-open the hole invisibly."""
+    tmp = tempfile.mkdtemp(prefix="daemon-t8b-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
+        d = daemon(run_dir=tmp, ps=_t8_ps(sweep={}, rc=2))
+        res = _mapper_result("s1")
+        res["new_commodity_proposals"] = [{"proposed_bid": "declared-one", "term": "x",
+                                           "evidence": "e"}]
+        got = arun(d.new_bid_proposals("s1", res))
+        bids = [p.get("proposed_bid") for p in got]
+        said = any("could not run" in f and "falling back" in f for f in d.findings)
+        return (bids == ["declared-one"] and said,
+                "proposals=%s findings=%s" % (json.dumps(bids), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _m3_zero_absent_routes_to_write():
