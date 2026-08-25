@@ -151,7 +151,7 @@ def _tee(m):
     if not path:
         return
     try:
-        stamp = dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         with open(path, "a", encoding="utf-8", errors="replace", newline="\n") as fh:
             fh.write("%s %s\n" % (stamp, m))
     except Exception:                                             # noqa: BLE001
