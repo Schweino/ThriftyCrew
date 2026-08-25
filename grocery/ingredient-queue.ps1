@@ -53,6 +53,11 @@ param(
   [string]$Evidence = '',
   [string]$Status = '',
   [string]$QueueFile = '',
+  # A SCRATCH CARRIAGE LEDGER, for exactly the reason -QueueFile exists and added for the same
+  # measured reason (H2, 2026-08-25): a NO-PUBLISH drill with every other seam engaged still wrote
+  # the live grocery\carriage.json, because -Promote resolved that path itself. Empty means the live
+  # ledger, which is what a real run wants.
+  [string]$CarriagePath = '',
   [switch]$Json,
   [switch]$IngredientQueueSelfTest,
   [switch]$SelfTest
@@ -391,6 +396,38 @@ if ($SelfTest -or $IngredientQueueSelfTest) {
     foreach ($f in @($btmp, $bfile)) { if (Test-Path $f) { Remove-Item $f -Force -ErrorAction SilentlyContinue } }
   }
 
+  # MUST FIRE (H2, 2026-08-25): -Promote WRITES WHERE -CarriagePath SAYS, and nowhere else.
+  # Measured on the jc1 drill: a run with --ledger, --specs, --costed, --food-db and NO --publish
+  # still wrote the live grocery\carriage.json, because this verb resolved that path itself. The
+  # seam is proven by driving the real -Promote in a child process over a scratch queue and a
+  # scratch ledger, and asserting the LIVE ledger's bytes are untouched.
+  # NEUTER PROOF, RUN 2026-08-25: revert $ledgerFile to the hardcoded Join-Path and this case fails
+  # on the scratch ledger still holding zero bids (the row went to the live file instead).
+  $ctmp = Join-Path ([IO.Path]::GetTempPath()) ('iq-carriage-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $ctmp | Out-Null
+  try {
+    $cq = Join-Path $ctmp 'queue.json'
+    $cl = Join-Path $ctmp 'carriage.json'
+    $live = Join-Path $root 'carriage.json'
+    $liveBefore = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
+    $st = @{}; foreach ($s in $STORES) { $st[$s] = [pscustomobject]@{ state = 'not-carried'; evidence = 'fixture' } }
+    $st["Baker's"] = [pscustomobject]@{ state = 'carried'; price = 3.49; item = 'Fixture Saffron'; size = '1 g'; evidence = 'fixture' }
+    $qd = [pscustomobject]@{ items = @([pscustomobject]@{ term = 'fixture-saffron'; recipes = @('x'); added = (Get-Stamp); status = 'pending'; stores = [pscustomobject]$st; verdict = 'PENDING'; notes = $null }) }
+    Write-Queue $qd $cq
+    ([pscustomobject]@{ bids = [pscustomobject]@{} } | ConvertTo-Json -Depth 6) | Set-Content $cl -Encoding UTF8
+    $o = & powershell -NoProfile -File $PSCommandPath -Promote -Term 'fixture-saffron' -Bid 'fixture-saffron' -QueueFile $cq -CarriagePath $cl 2>&1
+    $prc = $LASTEXITCODE
+    $got = Get-Content $cl -Raw | ConvertFrom-Json
+    $liveAfter = $(if (Test-Path $live) { (Get-Item $live).Length } else { -1 })
+    if ($prc -ne 0 -or -not ($got.bids.PSObject.Properties.Name -contains 'fixture-saffron')) {
+      Write-Output ("  X MUST FIRE -Promote must write the SCRATCH ledger -CarriagePath names; rc=$prc " + ($o -join ' | ')); $bad++
+    } elseif ($liveAfter -ne $liveBefore) {
+      Write-Output '  X MUST FIRE -Promote wrote the LIVE carriage.json while -CarriagePath pointed elsewhere'; $bad++
+    } else {
+      Write-Output '  ok MUST FIRE -Promote writes the ledger -CarriagePath names and leaves the live one untouched - a no-publish drill must not write a live grocery ledger'
+    }
+  } finally { Remove-Item $ctmp -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($bad -eq 0) { Write-Output 'ingredient-queue SELF-TEST PASS (Rule B: one carried is enough; unchecked/blocked/errored is never not-carried; file round-trips; concurrent writers lose nothing; -RecordBatch is atomic)'; exit 0 }
   Write-Output ("ingredient-queue SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
@@ -559,7 +596,7 @@ if ($Promote) {
     Write-Output ("ingredient-queue: REFUSED to promote '{0}' - verdict is PENDING ({1} of 7 checked). An unfinished check is not a fact." -f $Term, $v.checked.Count)
     exit 1
   }
-  $ledgerFile = Join-Path $root 'carriage.json'
+  $ledgerFile = $(if ($CarriagePath) { $CarriagePath } else { Join-Path $root 'carriage.json' })
   if (-not (Test-Path $ledgerFile)) { Write-Output ("ingredient-queue: no ledger at " + $ledgerFile); exit 1 }
   # carriage.json is ANOTHER single-file ledger, so its read-modify-write takes the same lock, keyed
   # on ITS path. The pricer is a singleton, but nothing about this script knows that, and a rule that

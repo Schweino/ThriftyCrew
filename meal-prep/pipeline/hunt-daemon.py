@@ -235,7 +235,8 @@ class Daemon(object):
     def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
-                 costed_path="", pyrun=None, food_db_path=""):
+                 costed_path="", pyrun=None, food_db_path="", queue_path="",
+                 carriage_path="", considered_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         self.conditions = conditions
@@ -269,6 +270,18 @@ class Daemon(object):
         # ONE PEN, ONE LOCK. The map lane runs two workers and both may carry new rows for the same
         # single file, which is the ingredient-resolutions lesson (S4: 2,293 outcomes recorded as 65
         # under last-writer-wins) arriving at the food DB. Modelled on cost_lock above.
+        # H2 (2026-08-25): THE THREE LEDGERS A NO-PUBLISH DRILL WAS STILL WRITING. Measured on jc1:
+        # with --ledger, --specs, --costed and --food-db all engaged and publish dry, the run still
+        # wrote live grocery\ingredient-queue.json, grocery\carriage.json and
+        # meal-prep\db\considered-dishes.json. The queue rows were real evidence and were kept
+        # deliberately, but the SEAM GAP is the defect - the next drill may not be so lucky.
+        # Two of the three seams already existed on the scripts (-QueueFile, and -Store on
+        # considered-dishes.ps1, which decide_apply already threads); only carriage needed a new one
+        # (-CarriagePath on ingredient-queue.ps1's -Promote). Empty means the live ledger, which is
+        # what a real run wants.
+        self.queue_path = queue_path
+        self.carriage_path = carriage_path
+        self.considered_path = considered_path
         self.food_db_lock = asyncio.Lock()
         # F1 (2026-08-25): THE SAME ONE-PEN-ONE-LOCK RULE FOR THE FDC CACHE. fdc_lookup.cache_write is
         # a whole-file write and two map workers can fill overlapping term lists at the same moment;
@@ -332,6 +345,39 @@ class Daemon(object):
     def log(self, m):
         if not self.quiet:
             say(m)
+
+    def queue_seam_note(self):
+        """H2: the drill's queue seams, said to the PRICER - which holds this pen itself.
+
+        The daemon can thread -QueueFile onto its own calls, and does; it cannot thread anything onto
+        a call an agent makes. So on a seamed run the prompt names the flags, and the note exists at
+        all only when a seam is set - a real run's prompt is byte-identical to what it was.
+        """
+        if not (self.queue_path or self.carriage_path):
+            return ""
+        flags = []
+        if self.queue_path:
+            flags.append("-QueueFile '%s'" % self.queue_path)
+        if self.carriage_path:
+            flags.append("-CarriagePath '%s'" % self.carriage_path)
+        return ("\nTHIS IS A DRILL ON SCRATCH LEDGERS. Add %s to EVERY ingredient-queue.ps1 call you\n"
+                "make - -RecordBatch, -Verdict and -Promote alike. Without those flags your evidence\n"
+                "lands in the live Omaha ledgers, which the cost engine and the publish gate read as\n"
+                "fact.\n" % " and ".join(flags))
+
+    def queue_args(self, args):
+        """H2: the queue call, with the drill's seams appended when they are set.
+
+        ONE ROAD for the same reason ps_invoke is one road: three call sites appending their own
+        flags is three places for a drill seam to be forgotten, and the forgetting is silent - it
+        writes a live grocery ledger and nothing says so.
+        """
+        out = list(args)
+        if self.queue_path:
+            out += ["-QueueFile", self.queue_path]
+        if self.carriage_path:
+            out += ["-CarriagePath", self.carriage_path]
+        return out
 
     async def ps(self, script, args, timeout=600):
         """EVERY PowerShell call goes through hunt_lib.ps_invoke - never a second invocation style.
@@ -789,7 +835,8 @@ class Daemon(object):
             loop = asyncio.get_event_loop()
             applied, findings = await loop.run_in_executor(
                 None, lambda: decide_apply.apply_verdict(payload, self.run_dir, self.run_id,
-                                                         self.pool_path, "", False, True))
+                                                         self.pool_path, self.considered_path,
+                                                         False, True))
             self.findings.extend(findings)
             for slug, verdict, _how in applied:
                 if verdict != "accepted":
@@ -1311,8 +1358,8 @@ class Daemon(object):
             else:
                 for t in absent:
                     await self.ps(INGREDIENT_QUEUE_PS,
-                                  ["-Add", "-Term", t, "-Recipe", slug,
-                                   "-Why", "%s needs it" % slug], timeout=180)
+                                  self.queue_args(["-Add", "-Term", t, "-Recipe", slug,
+                                                   "-Why", "%s needs it" % slug]), timeout=180)
                     if t not in self.absent_terms and t not in self.priced_terms:
                         self.absent_terms.append(t)
                 await self.advance(slug, "pricing", "unhold", "hold cleared",
@@ -2059,8 +2106,9 @@ class Daemon(object):
                         # -Terms as DISTINCT elements, through ps_invoke's -Command road.
                         for t in absent:
                             await self.ps(INGREDIENT_QUEUE_PS,
-                                          ["-Add", "-Term", t, "-Recipe", b["slug"],
-                                           "-Why", "%s needs it" % b["slug"]], timeout=180)
+                                          self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
+                                                           "-Why", "%s needs it" % b["slug"]]),
+                                          timeout=180)
                             # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
                             # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
                             # `absent_terms` is consumed destructively - so without this, the second
@@ -2511,12 +2559,12 @@ class Daemon(object):
             "named with its row number - so you get one correction pass rather than a hole in your\n"
             "own evidence. Then -Verdict, then -Promote when a term settles; those stay per term.\n"
             "Do not write board cells and do not move any recipe state - the orchestrator derives\n"
-            "that from the queue.\n"
+            "that from the queue.\n%s"
             % (len(terms), ", ".join(terms),
                ", ".join(blocked) or "(the evidence names none)",
                price_evidence.NO_BROWSER_EVIDENCE,
                (" - today that is: " + ", ".join(walled)) if walled else "",
-               len(terms), 7 * len(terms)))
+               len(terms), 7 * len(terms), self.queue_seam_note()))
         if evidence:
             body += "\n" + price_evidence.render(evidence, path=path) + "\n"
         else:
@@ -3905,7 +3953,8 @@ class Daemon(object):
         afternoon on that ambiguity.
         """
         rc, out, err = await self.ps(INGREDIENT_QUEUE_PS,
-                                     ["-List", "-Status", "pending", "-Json"], timeout=300)
+                                     self.queue_args(["-List", "-Status", "pending", "-Json"]),
+                                     timeout=300)
         text = (out or "").strip()
         if rc != hunt_lib.EXIT_CLEAN:
             return [], "ingredient-queue exited %s: %s" % (rc, ((text + (err or "")).strip())[:200])
@@ -4386,6 +4435,20 @@ def main(argv=None):
                          "live one. Same seam as --ledger / --specs / --costed / --pool, and it "
                          "exists because CHANGE M made the daemon a WRITER of this file: a drill "
                          "row in the live DB would be read by every spec build in the estate.")
+    # H2 (2026-08-25). The jc1 drill had every seam above engaged, published nothing, and still wrote
+    # three LIVE grocery ledgers. These are those three.
+    ap.add_argument("--queue", default="",
+                    help="a scratch grocery\\ingredient-queue.json, for a drill. Empty means the live "
+                         "one. Threaded onto every ingredient-queue.ps1 call the daemon makes AND "
+                         "named to the pricer, which holds the -Record/-Verdict/-Promote pen itself.")
+    ap.add_argument("--carriage", default="",
+                    help="a scratch grocery\\carriage.json, for a drill. Empty means the live one. "
+                         "This is where a settled queue verdict is PROMOTED to, and it is read by the "
+                         "cost engine and the publish gate, so a drill row in it is a live fact.")
+    ap.add_argument("--considered", default="",
+                    help="a scratch meal-prep\\db\\considered-dishes.json, for a drill. Empty means "
+                         "the live one. It is the estate's dish-rulings memory, so a drill ruling in "
+                         "it changes what a later real run treats as prior art.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
@@ -4414,7 +4477,8 @@ def main(argv=None):
     d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions, band,
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
                specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None),
-               food_db_path=a.food_db)
+               food_db_path=a.food_db, queue_path=a.queue, carriage_path=a.carriage,
+               considered_path=a.considered)
 
     async def go():
         ok, err = await d.seed()

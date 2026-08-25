@@ -802,6 +802,26 @@ def run():
       *_fooddb_prompt_moved_the_pen())
 
     # =================================================================================================
+    H("H2 - a no-publish drill must not write a LIVE grocery ledger (2026-08-25)")
+    # =================================================================================================
+    T("MUST FIRE  every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath, "
+      "and the base arguments are untouched",
+      *_h2_queue_calls_carry_the_seams())
+    T("CLEAN TWIN with no seams set the call is byte-identical to what it always was - a seam that "
+      "leaks a flag into a real run is its own defect",
+      *_h2_live_run_passes_no_override())
+    T("MUST FIRE  end to end: a mapper's absent terms are enqueued through the SCRATCH queue, and "
+      "not one -Add reaches the live one",
+      *_h2_map_lane_queues_through_the_seam())
+    T("MUST FIRE  the decider's ruling goes to the SCRATCH dish ledger - decide_apply already had "
+      "the seam and the daemon was passing an empty string, so every drill wrote the real prior-art "
+      "memory",
+      *_h2_considered_seam_reaches_decide_apply())
+    T("MUST FIRE  the PRICER is TOLD the seams, because it holds the -Record/-Verdict/-Promote pen "
+      "itself and no daemon-side threading can reach those calls",
+      *_h2_pricer_is_told_the_seams())
+
+    # =================================================================================================
     H("F1 - the FDC shelf is FILLED with the run's own terms before the mapper is paid (2026-08-25)")
     # =================================================================================================
     T("MUST FIRE  exactly the unresolved / food-DB-missing terms reach cache_fill, deduped through "
@@ -4310,6 +4330,143 @@ def _fooddb_prompt_moved_the_pen():
              and "Add those rows as you always have" not in pr),
             "food_db_rows=%s old-sentence=%s" % ("food_db_rows" in pr,
                                                  "Add those rows as you always have" in pr))
+
+
+# =====================================================================================================
+# H2 - a no-publish drill must not write a LIVE grocery ledger (2026-08-25)
+#
+# Measured on jc1: --ledger, --specs, --costed and --food-db all engaged, publish dry, and the run
+# still wrote grocery\ingredient-queue.json, grocery\carriage.json and db\considered-dishes.json. The
+# queue rows were real evidence and were kept deliberately; the SEAM GAP is the defect.
+#
+# INVESTIGATED BEFORE BUILT, per plan 8.H2: ingredient-queue.ps1 already had -QueueFile and
+# considered-dishes.ps1 already had -Store (which decide_apply already threads through its
+# `store_path` argument, and the daemon was passing ""). Only carriage needed a NEW parameter,
+# -CarriagePath on -Promote, whose own MUST FIRE lives in ingredient-queue.ps1's selftest and drives
+# the real verb in a child process against a scratch ledger.
+#
+# NEUTER PROOFS, RUN 2026-08-25 and reverted:
+#   * make queue_args return its argument unchanged -> both queue cases go red (the live path).
+#   * pass "" for considered_path again -> the considered case goes red.
+#   * make queue_seam_note return "" always -> the pricer case goes red, which is the one that
+#     matters most: the pricer holds this pen itself and no daemon-side threading can reach it.
+
+def _h2_seam_daemon(tmp, **kw):
+    d = daemon(run_dir=tmp, ps=FakePS(), queue_path=os.path.join(tmp, "queue.json"),
+               carriage_path=os.path.join(tmp, "carriage.json"),
+               considered_path=os.path.join(tmp, "considered.json"), **kw)
+    return d
+
+
+def _h2_queue_calls_carry_the_seams():
+    """MUST FIRE: every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath,
+    and the live paths are never passed."""
+    tmp = tempfile.mkdtemp(prefix="daemon-h2q-")
+    try:
+        d = _h2_seam_daemon(tmp)
+        # the three shapes the daemon actually calls: -Add from the map lane, -Add from the unhold,
+        # and the -List the parked loop reads the queue with
+        args_add = d.queue_args(["-Add", "-Term", "saffron", "-Recipe", "s1"])
+        args_list = d.queue_args(["-List", "-Status", "pending", "-Json"])
+        both = (FakePS.value_after(args_add, "-QueueFile") == os.path.join(tmp, "queue.json")
+                and FakePS.value_after(args_add, "-CarriagePath") == os.path.join(tmp, "carriage.json")
+                and FakePS.value_after(args_list, "-QueueFile") == os.path.join(tmp, "queue.json"))
+        # and the base arguments are untouched - a seam that reorders a call is a seam that breaks it
+        kept = args_add[:5] == ["-Add", "-Term", "saffron", "-Recipe", "s1"]
+        return both and kept, "add=%s list=%s" % (json.dumps(args_add), json.dumps(args_list))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _h2_live_run_passes_no_override():
+    """CLEAN TWIN: with no seams set the calls are byte-identical to what they always were. A seam
+    that leaks a flag into a real run is its own defect."""
+    d = daemon(run_dir="R")
+    args = d.queue_args(["-Add", "-Term", "saffron", "-Recipe", "s1"])
+    return (args == ["-Add", "-Term", "saffron", "-Recipe", "s1"]
+            and d.queue_seam_note() == "", "args=%s note=%r" % (json.dumps(args), d.queue_seam_note()))
+
+
+def _h2_map_lane_queues_through_the_seam():
+    """MUST FIRE, end to end: a mapper returning absent terms enqueues them through the SCRATCH
+    queue - the costed_path pattern, asserted on the real call the lane makes."""
+    tmp = tempfile.mkdtemp(prefix="daemon-h2map-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["saffron", "harissa", "tteok"]})
+        ps = _asm_ps(0)
+        res = _mapper_result("s1")
+        res["state"] = "pricing"
+        res["absent_terms"] = ["saffron", "harissa", "tteok"]
+        fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=ps,
+                   queue_path=os.path.join(tmp, "queue.json"),
+                   carriage_path=os.path.join(tmp, "carriage.json"))
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        adds = [c for c in ps.find("ingredient-queue.ps1") if "-Add" in c["args"]]
+        seamed = [c for c in adds
+                  if FakePS.value_after(c["args"], "-QueueFile") == os.path.join(tmp, "queue.json")]
+        live = [c for c in adds if "-QueueFile" not in c["args"]]
+        return (len(adds) == 3 and len(seamed) == 3 and not live,
+                "adds=%d seamed=%d live=%d" % (len(adds), len(seamed), len(live)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _h2_considered_seam_reaches_decide_apply():
+    """MUST FIRE: the decider's ruling goes to the SCRATCH dish ledger. considered-dishes.ps1 already
+    had -Store and decide_apply already threaded it; the daemon was passing an empty string, so every
+    drill wrote the estate's real prior-art memory."""
+    tmp = tempfile.mkdtemp(prefix="daemon-h2cd-")
+    try:
+        seen = {}
+        import decide_apply                                        # noqa: PLC0415
+
+        real = decide_apply.apply_verdict
+
+        def spy(payload, run_dir, run_id, pool_path, store_path, dry_run=False, quiet=False):
+            seen["store_path"] = store_path
+            return [], []
+
+        pool_path = _decide_pool(tmp, ["a", "b", "c"])
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        fd = FakeDispatch({"recipe-dedup-selector": [
+            {"decisions": [_verdict("a"), _verdict("b"), _verdict("c")]}]})
+        d = daemon(run_dir=run_dir, dispatcher=fd, ps=FakePS(), pool_path=pool_path,
+                   queue_path=os.path.join(tmp, "queue.json"),
+                   carriage_path=os.path.join(tmp, "carriage.json"),
+                   considered_path=os.path.join(tmp, "considered.json"))
+        decide_apply.apply_verdict = spy
+        try:
+            # the POOL lane is what feeds the decide channel; decide alone never pops a candidate
+            arun(d.run(("pool", "decide")))
+        finally:
+            decide_apply.apply_verdict = real
+        return (seen.get("store_path") == os.path.join(tmp, "considered.json"),
+                "store_path=%r" % seen.get("store_path"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _h2_pricer_is_told_the_seams():
+    """MUST FIRE: the PRICER holds the -Record/-Verdict/-Promote pen itself, so no daemon-side
+    threading can reach those calls. On a seamed run its prompt names the flags; on a real run the
+    note is absent entirely."""
+    tmp = tempfile.mkdtemp(prefix="daemon-h2price-")
+    try:
+        d = _h2_seam_daemon(tmp)
+        p = d.price_prompt(["saffron", "harissa", "tteok"])
+        live = daemon(run_dir="R").price_prompt(["saffron", "harissa", "tteok"])
+        return (("-QueueFile '%s'" % os.path.join(tmp, "queue.json")) in p
+                and ("-CarriagePath '%s'" % os.path.join(tmp, "carriage.json")) in p
+                and "DRILL ON SCRATCH LEDGERS" in p
+                and "DRILL ON SCRATCH LEDGERS" not in live,
+                "seamed=%s live_clean=%s" % ("-QueueFile" in p,
+                                             "DRILL ON SCRATCH LEDGERS" not in live))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 # =====================================================================================================
