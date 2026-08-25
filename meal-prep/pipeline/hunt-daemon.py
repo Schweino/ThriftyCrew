@@ -382,7 +382,50 @@ class Daemon(object):
         return ("\nTHIS IS A DRILL ON A SCRATCH FOOD DB at %s. Verify against THAT file, not\n"
                 "meal-prep\\food-macros-db.json.\n" % self.food_db_path)
 
-    def queue_args(self, args):
+    # ---- THE HARNESS'S OWN GREP, SAID ONCE TO EVERY JUDGE THAT SWEEPS ------------------------------
+    #
+    # MEASURED 2026-08-25 (EVAL-registrar-batch-2026-08-25.md), reproduced with controls before a word
+    # of this was written. The 2-proposal registrar opened with the RIGHT move - one parallel request,
+    # one semantic sweep per food family, the identical shape that closed a batch of ONE in 3 turns -
+    # and its brace glob carried `out/recipe-board-everyday.json`. Both sweeps returned "No matches
+    # found" against files that demonstrably carry the matches. It then spent 2 turns proving the
+    # silence was false, 4 redoing the sweep file by file, and 1 more on the minified feed: 7 of 12
+    # turns, and at least 44,109 raw of a 123,401 session, none of it registrar work.
+    #
+    # THE MECHANISM IS RIPGREP'S, NOT A BUG TO ROUTE AROUND BLIND. A glob with no separator matches the
+    # BASENAME at any depth; a glob WITH one is anchored at the REPO ROOT rather than at the `path`
+    # argument; and one separator anywhere in a brace anchors EVERY alternative in it, which is what
+    # turned a four-file sweep into a false empty. Naming the real rule is why this says "use
+    # grocery/out/x.json or **/out/x.json" instead of the superstition "avoid slashes" - a rule that
+    # explains itself survives the next harness change, and a taboo does not.
+    #
+    # THE ONE THING THIS MUST NEVER DO IS DISCOURAGE THE SWEEP. In all three registrar transcripts read
+    # for that eval the sweep produced the DECISIVE evidence of the ruling: pork-shoulder's own
+    # `pulled` exclude, gouda existing in the estate only inside another cheese's exclude pattern, and
+    # reduced-fat-mozzarella, which the word-overlap dossier could not see. The dossier cannot carry
+    # that work - ranking by shared words is mechanical, but choosing which OTHER words a food hides
+    # under is judgment, the fork PLAN-latency 3.2 closed and this note keeps closed. So every sentence
+    # here distrusts the empty RESULT and none of them distrusts the sweep.
+    #
+    # THE PRICER AND THE DECIDER ARE DELIBERATELY LEFT OUT. Both carry Grep, and neither sweeps a
+    # namespace: the pricer adjudicates store rows gathered by the pre-pass, and the decider ruled 3
+    # candidates in 1 turn off a whole dossier. Prompt weight buys nothing where nobody greps.
+    GREP_HARNESS_NOTE = (
+        "\nYOUR `glob` AND THIS HARNESS, measured 2026-08-25 - this cost one registrar 7 of its 12\n"
+        "turns. A glob with NO separator matches the BASENAME AT ANY DEPTH, so `commodities.json` also\n"
+        "reads the `regression-inputs\\` and `engine-backup\\` copies - read the paths in your hits. A\n"
+        "glob CONTAINING a separator is anchored at the REPO ROOT, not at your `path` argument:\n"
+        "`out/smp-feed.json` matches NOTHING, while `grocery/out/smp-feed.json` and\n"
+        "`**/out/smp-feed.json` both work. And ONE separator anywhere in a brace anchors EVERY\n"
+        "alternative in it, so `{commodities.json,out/recipe-board-everyday.json}` returns \"No matches\n"
+        "found\" for both files - a FALSE EMPTY that reads exactly like proof the estate is clean. A\n"
+        "backslash in a glob never matches at all. An empty sweep is the thing to distrust, never a\n"
+        "reason to stop sweeping: re-run it per file before you believe it.\n"
+        "`grocery\\out\\smp-feed.json` IS ONE MINIFIED LINE, so a content-mode grep on it returns\n"
+        "\"[Omitted long matching line]\" and shows you nothing. Use `-o` with a context pattern such as\n"
+        "`.{60}(?:your|terms).{60}`.\n")
+
+    def queue_args(self, args):
         """H2: the queue call, with the drill's seams appended when they are set.
 
         ONE ROAD for the same reason ps_invoke is one road: three call sites appending their own
@@ -1771,7 +1814,8 @@ class Daemon(object):
             "cells, the declared-same-thing pairs, and label greps. You keep every tool you had and\n"
             "may re-derive anything you distrust - what is gone is the OBLIGATION to fetch it, never\n"
             "the right. Spend your turns on the variant-vs-duplicate JUDGMENT, which is the half of\n"
-            "this gate no file read can do.\n\n"
+            "this gate no file read can do.\n"
+            "%s\n"
             "%s\n"
             "Return `rulings`: one entry per proposal, each carrying `proposed_bid` EXACTLY as stated\n"
             "above (it is the key every ruling is joined on), `verdict`, `bid` and `reason`. A\n"
@@ -1781,7 +1825,7 @@ class Daemon(object):
             "evidence rather than the conclusion. A reject leaves the ingredient line UNSETTLED and\n"
             "the recipe STUCK carrying your sentence - which is the right outcome when the honest\n"
             "answer is no, and an expensive one when it is guesswork.\n"
-            % (len(work_items), slug, "\n".join(blocks)))
+            % (len(work_items), slug, self.GREP_HARNESS_NOTE, "\n".join(blocks)))
 
     # ---- CHANGE M: THE DAEMON WRITES THE FOOD DB --------------------------------------------------
     #
@@ -2380,7 +2424,7 @@ class Daemon(object):
                              "rendered WHOLE - its tuning lines, its uncovered lines and its missing "
                              "DB rows are all shown - so there is nothing to go and read in "
                              "mapped-pre\\<slug>.json. If the two disagree by more than the dish can "
-                             "explain, say so in `detail`.")
+                             "explain, say so in `detail`.")
             else:
                 lines.append("    MACRO CROSS-CHECK: NOT pre-computed (%s). Source published %s cal / "
                              "%s carbs / %s protein (%s). Do the check yourself over the lines you rule."
@@ -2433,7 +2477,7 @@ class Daemon(object):
             "ONE fetch and ONE fallback per food. If two reads have not produced a printed label you\n"
             "can transcribe, return NO row for that food and say why in `detail` - a missing row is a\n"
             "finding a person can act on, and a fifth fetch is a turn that re-reads this whole\n"
-            "session. Measured: 9 web calls on 2 foods, 2026-08-25.\n\n"
+            "session. Measured: 9 web calls on 2 foods, 2026-08-25.\n\n"
             "YOU DO NOT EDIT meal-prep\\food-macros-db.json ANY MORE EITHER. No file access to it.\n"
             "Return each new row in `food_db_rows` and the ORCHESTRATOR writes the DB: same shape as the\n"
             "DB's own entries, one row per food the table marks as having none.\n"
@@ -2497,10 +2541,11 @@ class Daemon(object):
             "array cannot be comma-joined by accident.\n\n"
             "Transcriptions, if you need a line's full context: %s\\extracted\\<slug>.json\n"
             "This run's conditions: %s\n"
-            "%s"
+            "%s%s"
             % (len(slugs), hunt_lib.MAP_BATCH, "\n\n".join(blocks), hunt_lib.TARGET_SERVINGS,
                self.run_dir, " | ".join(hunt_lib.MAPPED_RULING_DECISIONS),
-               self.run_dir, self.conditions, self.food_db_seam_note()))
+               self.run_dir, self.conditions, self.food_db_seam_note(),
+               self.GREP_HARNESS_NOTE))
 
     # ---------------------------------------------------------------------------------------------
     # PRICE - SINGLETON, self-looping queue drainer. ARCHITECTURE, not config (section 4.1a).
@@ -3511,10 +3556,12 @@ class Daemon(object):
             "steps. Verdict only: never edit, re-extract or price, and do not move any state - the\n"
             "orchestrator does that from your verdict, and it writes the verdict file itself now, so\n"
             "your entire deliverable is the payload.\n"
+            "%s"
             % (slug, self.qa_dossier(slug), self.specs_dir or SPECS_DIR, slug,
                self.run_dir, slug, self.run_dir, slug,
                ("\nThis is the RE-QA after one owner-routed repair cycle. A second FAIL is terminal.\n"
-                if attempt > 1 else "")))
+                if attempt > 1 else ""),
+               self.GREP_HARNESS_NOTE))
 
     def write_qa_verdict(self, slug, q):
         r"""THE PEN MOVES TO THE DAEMON (plan 5.2.3, decided from the grep and not from memory).
@@ -4018,6 +4065,7 @@ class Daemon(object):
             "Report to %s\\waves\\wave-%d.audit.md. FIRST line exactly GO or NO-GO. SECOND line\n"
             "exactly \"scope: %s\". Return the verdict, the blocking slugs, whether each blocker is\n"
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
+            "%s"
             % (wk, self.run_id, self.run_dir, self.run_dir, wk, ", ".join(slugs), scope,
                ("\nReason: " + why) if why else "  (first audit of this wave)",
                self.run_dir, wk,
@@ -4025,7 +4073,7 @@ class Daemon(object):
                # audit has no repair behind it, so a block there would be describing nothing.
                (self.repair_delta_block(delta) if why else ""),
                self.render_audit_dossier(wk),
-               self.conditions, self.run_dir, wk, scope))
+               self.conditions, self.run_dir, wk, scope, self.GREP_HARNESS_NOTE))
 
     def repair_prompt(self, wk, blockers, audit):
         return (

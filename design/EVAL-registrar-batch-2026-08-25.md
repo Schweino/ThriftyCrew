@@ -181,6 +181,42 @@ the likely mechanism is a path-separator mismatch (the glob is matched against `
 paths), but the mechanism is the harness's business - the measured behavior is what the estate's
 prompts have to live with.
 
+**CORRECTED 2026-08-25 (the G1 build, measured the same day with four more controls before the
+guidance sentence was written).** The paragraph above is wrong in its rule and its hypothesis, and
+the correction matters because the wrong version would have taught every judge a superstition. A
+slash-bearing glob does NOT "never match": it is ANCHORED AT THE REPO ROOT instead of at the `path`
+argument. Measured, pattern `pulled|bbq`, path `grocery`:
+
+| glob | result |
+|------|--------|
+| `commodities.json` | 39 hits across **4 files** - including `regression-inputs\` and two `engine-backup\` copies |
+| `out/recipe-board-everyday.json` | 0 |
+| `grocery/out/recipe-board-everyday.json` | **5** |
+| `**/out/recipe-board-everyday.json` | **5** |
+| `**/recipe-board-everyday.json` | **5** |
+| `out\recipe-board-everyday.json` | 0 |
+| `out/*.json` | 0 |
+| `{commodities.json,**/recipe-board-everyday.json}` | 5 - and **0 from commodities.json** |
+| `{grocery/commodities.json,grocery/out/recipe-board-everyday.json}` | **20 across both** |
+
+These are ripgrep's own glob semantics: a pattern with no separator matches the BASENAME at any
+depth, a pattern with one is anchored relative to the search root, and a backslash is the escape
+character rather than a separator. The brace "poisoning" is real but is a CONSEQUENCE, not a
+separate rule - one separator anywhere in the pattern makes the whole thing path-anchored, so the
+slash-free alternatives stop basename-matching and anchor at the root too, where they match
+nothing. The registrar's four-member glob failed for exactly that reason: all four became
+root-anchored, and none of the four files sits at the repo root.
+
+TWO THINGS THIS CHANGES BEYOND THE WORDING. First, the fix is a rule an agent can apply rather than
+a taboo to obey: `grocery/out/smp-feed.json` and `**/out/smp-feed.json` both work, so nothing needs
+avoiding. Second, and this one is an ACCURACY finding the original paragraph missed entirely: a
+bare basename glob silently reads STALE COPIES. `commodities.json` matched `regression-inputs\`
+and two `engine-backup\` copies alongside the live file, so a registrar sweeping `*.json` under
+`grocery` can quote a backup's row as the live estate - which is a wrong answer in the direction
+this gate exists to prevent. That is why the shipped guidance tells the reader to check the paths
+in their hits, and it is a finding for Brad in its own right: nothing today stops a sweep from
+citing an engine backup.
+
 **Defect 2: content-mode Grep on minified one-line JSON returns "[Omitted long matching line]".**
 `grocery\out\smp-feed.json` is single-line. m1b call 8 and jc1 call 7 both hit it and both paid
 one extra call for the `-o` context workaround. Two independent sessions, same wall, same
@@ -280,6 +316,23 @@ re-check; item 3 is a measurement decision, not a build.
    the harness fixes the glob behavior (it then misdescribes the tool but breaks nothing); and it
    must be worded so it never reads as "do not sweep" - a sentence that discourages the sweep
    would gut the evidence the verdicts run on, which is a gate weakening and off the table.
+
+   **BUILT 2026-08-25 (unit G1), on Brad's order after this review was delivered.** One shared
+   `Daemon.GREP_HARNESS_NOTE` constant, rendered into the four dispatch prompts whose agents sweep:
+   `registrar_batch_prompt`, `map_prompt`, `qa_prompt` and `audit_prompt`. The pricer and the
+   decider carry Grep and were DELIBERATELY LEFT OUT - neither sweeps a namespace, and the omission
+   is pinned by its own clean twin so a later edit cannot widen it by accident. The durable copy
+   went into `.claude\agents\commodity-registrar.md`, because that agent is consulted outside the
+   daemon too, and `-Sync` is clean. The note states the measured RULE (basename-at-any-depth,
+   root-anchored-when-a-separator-is-present, the brace consequence, the backslash, the minified
+   feed) rather than the taboo, per the section 4 correction, and its final clause aims the distrust
+   at the empty RESULT and never at the sweep. Six fixtures, daemon suite 207 -> 213, all three
+   neuter proofs RUN and reverted with the counts the suite actually printed (blanking the constant
+   is 5 red, not the 4 predicted). What is NOT built: items 2 and 3 below, both still proposals.
+   The prompt cost measured out at 1,075 characters / 163 words (order 270 tokens) per dispatch
+   rather than the 100-150 tokens estimated above, because the rule needs its worked examples to be
+   applicable. Against a session that burned 44,109 raw on the failure it prevents, that is the
+   trade, and it is stated rather than buried.
 2. **Hand the registrar the mapper's already-checked spellings per proposal.** The mapper's case
    already names what it checked ("under Gouda, Gouda Cheese and Cheese Gouda"); the dossier could
    render that as a checklist line so the registrar's sweep starts from the unchecked synonyms.

@@ -59,6 +59,23 @@ JUDGMENT, which is the half of this gate no file read can do. And read a batch's
 EACH OTHER as well as against the estate: two of them approving near-identical ids is the exact
 defect you exist to prevent.
 
+YOUR SWEEP'S TOOL LIES TO YOU IN ONE SPECIFIC WAY, and it is worth knowing before you trust an empty
+result (measured 2026-08-25, EVAL-registrar-batch). A Grep `glob` with NO separator matches the
+BASENAME at any depth, so `commodities.json` also reads the `regression-inputs\` and `engine-backup\`
+copies - read the paths in your hits before quoting one as the live estate. A glob CONTAINING a
+separator is anchored at the REPO ROOT, not at your `path` argument: `out/smp-feed.json` matches
+nothing, while `grocery/out/smp-feed.json` and `**/out/smp-feed.json` both work. And ONE separator
+anywhere in a brace anchors EVERY alternative in it, so
+`{commodities.json,out/recipe-board-everyday.json}` returns "No matches found" for both - a FALSE
+EMPTY that reads exactly like proof the food is unpriced, which is the one wrong answer this gate
+cannot afford. A backslash in a glob never matches at all. Separately, `grocery\out\smp-feed.json` is
+ONE MINIFIED LINE: content-mode grep returns "[Omitted long matching line]" and shows you nothing, so
+use `-o` with a context pattern such as `.{60}(?:your|terms).{60}`. NONE OF THIS IS A REASON TO SWEEP
+LESS. On the drill that measured it, the sweep is what found pork-shoulder's own `pulled` exclude and
+the fact that the estate's only `gouda` string sat inside another cheese's exclude list - the
+decisive evidence in both rulings. Distrust the empty RESULT, never the sweep: re-run it per file
+before you believe it.
+
 ## Procedure for a proposed id/name
 
 1. MECHANICAL SWEEP first: run the same normalizations the daily audit runs (lowercase, strip separators,

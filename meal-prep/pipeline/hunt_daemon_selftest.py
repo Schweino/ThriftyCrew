@@ -874,6 +874,29 @@ def run():
       *_m4_says_the_precheck_is_complete())
 
     # =================================================================================================
+    H("G1 - the harness's own Grep, said once to every judge that sweeps (2026-08-25)")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-25 - the counts the suite printed, not the ones predicted:
+    #   - blank GREP_HARNESS_NOTE                  -> 5 red, not 4: the four rendering cases AND the
+    #     safety case, which also needs the sentence present (the no-leak twin correctly stays green,
+    #     because it asserts an ABSENCE);
+    #   - drop the "never a reason to stop sweeping" clause -> 1 red, the safety case alone;
+    #   - render the note into price_prompt too    -> 1 red, the no-leak twin, which proves that twin
+    #     pins the deliberate omission rather than passing by luck.
+    T("MUST FIRE  the REGISTRAR's prompt names both harness behaviours - the root-anchored brace that "
+      "returns a false empty, and the minified feed's omitted line - which cost it 7 of 12 turns",
+      *_g1_registrar_prompt_carries_the_note())
+    T("MUST FIRE  the MAPPER's prompt carries the same note", *_g1_map_prompt_carries_the_note())
+    T("MUST FIRE  source-QA's prompt carries the same note", *_g1_qa_prompt_carries_the_note())
+    T("MUST FIRE  the AUDITOR's prompt carries the same note", *_g1_audit_prompt_carries_the_note())
+    T("MUST FIRE  the note distrusts the empty RESULT and never the sweep, and F2's authority "
+      "language stands untouched beside it - the sweep is where every decisive ruling came from",
+      *_g1_note_never_discourages_the_sweep())
+    T("CLEAN TWIN it does NOT leak into the pricer or the decider, neither of which sweeps a "
+      "namespace - prompt weight buys nothing where nobody greps",
+      *_g1_note_does_not_leak_into_prompts_that_do_not_sweep())
+
+    # =================================================================================================
     H("M2 - the map dossier carries the estate (2026-08-25)")
     # =================================================================================================
     # NEUTER PROOFS, ALL FIVE RUN AND REVERTED 2026-08-25. The counts are what the suite actually
@@ -3922,6 +3945,105 @@ def _registrar_collision_recheck():
                 ck("harissa") != ck("gochujang") and ck("pork-loin") != ck("pork-shoulder"),
                 "%r %r" % (ck("pork-loin"), ck("pork-shoulder"))))
     return out
+
+
+# =====================================================================================================
+# G1 - the harness's own Grep, said once to every judge that sweeps (2026-08-25)
+#
+# MEASURED (EVAL-registrar-batch-2026-08-25.md): the 2-proposal registrar spent 7 of its 12 turns
+# recovering from two harness Grep behaviours - a brace glob whose one slash-bearing member anchored
+# every alternative at the repo root and returned a FALSE EMPTY, and the minified smp-feed rendering
+# as "[Omitted long matching line]". At least 44,109 raw of a 123,401 session, none of it gate work.
+#
+# THE ASSERTIONS ARE ON THE SENTENCE, the M4 rule, because the sentence is the change. They are also
+# on the SAFETY half: the note must never read as a reason to sweep less, since the sweep produced the
+# decisive evidence in all three registrar transcripts.
+#
+# NEUTER PROOFS, RUN 2026-08-25 and reverted, with the counts the suite ACTUALLY printed rather than
+# the ones this comment first predicted:
+#   * blank GREP_HARNESS_NOTE to ""                     -> 5 red, not the 4 predicted: the four
+#     rendering cases AND the safety case, which also needs the sentence present to find it. The
+#     no-leak twin stays green, which is correct - it asserts an ABSENCE.
+#   * drop the "never a reason to stop sweeping" clause -> 1 red (the safety case alone), which is
+#     the case that exists so a future trim cannot quietly turn this into a sweep ban.
+#   * render the note into price_prompt as well         -> 1 red (the no-leak twin), proving that
+#     twin pins the deliberate omission rather than merely passing by luck.
+#
+# AND ONE TRAP WORTH THE NEXT BUILDER'S TIME. The first attempt at the second neuter wrote a real
+# newline into the string literal instead of the two characters `\` and `n`. The daemon then failed to
+# IMPORT, the suite never ran, and a harness that counted only "  X" lines reported it as 0 red - a
+# neuter that appears to prove the fixture is dead when it actually proves nothing at all. A neuter
+# must FAIL CASES, never fail to run: check the exit code and the case count before believing a zero.
+# =====================================================================================================
+
+_G1_WANT = ["matches the BASENAME AT ANY DEPTH",
+            "anchored at the REPO ROOT, not at your `path` argument",
+            "ONE separator anywhere in a brace anchors EVERY",
+            "a FALSE EMPTY",
+            "IS ONE MINIFIED LINE"]
+
+
+def _g1_missing(prompt):
+    return [w for w in _G1_WANT if w not in prompt]
+
+
+def _g1_registrar_prompt_carries_the_note():
+    d = _reg_daemon()
+    p = d.registrar_batch_prompt("some-dish", [("gouda-cheese", "Gouda cheese", "case", None)])
+    missing = _g1_missing(p)
+    return not missing, "missing=%s" % json.dumps(missing)
+
+
+def _g1_map_prompt_carries_the_note():
+    prompt, _d, _p = _m4_prompt()
+    missing = _g1_missing(prompt)
+    return not missing, "missing=%s" % json.dumps(missing)
+
+
+def _g1_qa_prompt_carries_the_note():
+    d, tmp = _qa_dossier_run()
+    try:
+        missing = _g1_missing(d.qa_prompt("s1", 1))
+        return not missing, "missing=%s" % json.dumps(missing)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _g1_audit_prompt_carries_the_note():
+    tmp = _wave_scratch()
+    try:
+        _preaudited(tmp)
+        d = daemon(run_dir=tmp)
+        missing = _g1_missing(d.audit_prompt(1, ["a", "b", "c"], "drill-run-w1", "whole-wave", None))
+        return not missing, "missing=%s" % json.dumps(missing)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _g1_note_never_discourages_the_sweep():
+    """MUST FIRE, and this is the case that matters most. A note about a broken tool is one careless
+    edit away from reading "do not sweep" - and the sweep is where every registrar ruling's decisive
+    evidence came from. The distrust is aimed at the empty RESULT, in as many words."""
+    d = _reg_daemon()
+    p = d.registrar_batch_prompt("dish", [("gouda-cheese", "Gouda cheese", "case", None)])
+    safety = ("never a\nreason to stop sweeping" in p and "re-run it per file before you believe it"
+              in p)
+    # and the authority language F2 pinned is UNTOUCHED beside it
+    authority = ("may re-derive anything you distrust" in p and "NOT exhaustive" in p
+                 and "OBLIGATION to fetch it, never" in p)
+    return safety and authority, "safety=%s authority=%s" % (safety, authority)
+
+
+def _g1_note_does_not_leak_into_prompts_that_do_not_sweep():
+    """CLEAN TWIN: the pricer and the decider carry Grep and neither sweeps a namespace - the pricer
+    adjudicates pre-gathered store rows, the decider ruled 3 candidates in 1 turn off a whole dossier.
+    Prompt weight buys nothing where nobody greps, and this pins that omission as deliberate."""
+    d = daemon(run_dir="R")
+    price = d.price_prompt(["saffron", "harissa", "tteok"])
+    decide = d.decide_prompt([{"slug": "x", "name": "X", "dossier": {"slug": "x", "name": "X"}}], "3")
+    leaked = [n for n, p in (("price", price), ("decide", decide))
+              if "YOUR `glob` AND THIS HARNESS" in p]
+    return not leaked, "the note leaked into: %s" % json.dumps(leaked)
 
 
 def _registrar_gets_evidence():
