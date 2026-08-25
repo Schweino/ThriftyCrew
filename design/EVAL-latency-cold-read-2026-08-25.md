@@ -135,9 +135,15 @@ minutes-per-recipe lever in the system and it is retrieval, not judgment.
 12 dispatches and 12 minutes of wall on 6b; 10 turns for ONE commodity on jc1 - after the daemon
 already hands it the near-miss evidence block. Its turns are its own greps and feed reads across
 the three namespaces, i.e. the auditor's old shape: an OBLIGATION to fetch what could be shown.
-It is also dispatched once per proposal, serially, inside assemble. The decider rules 8 candidates
+The decider rules 8 candidates
 in one turn from one dossier; the registrar rules 1 in ten turns. Same gate, same authority, the
 difference is only what arrives pre-gathered and whether proposals batch.
+
+**CORRECTED 2026-08-25, same day, while writing the F1-F7 plan against the code.** This finding
+originally added "dispatched once per proposal, serially, inside assemble." That is stale: pass-1
+concurrency with the sibling-collision re-check landed in commit c36879cd, and 6b's 12 serial
+registrar dispatches predate it. The live defects are turn economy and session count only, which
+is what PLAN-latency-F1-F7 section 4 addresses.
 
 **F3. The per-recipe tail is four sessions where the content could support one or two.**
 write, then source-qa, then (sometimes) qa-repair, then re-qa - each a fresh session over largely
