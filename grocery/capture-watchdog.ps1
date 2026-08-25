@@ -474,6 +474,17 @@ $freshByStore = @{}; $newestByStore = @{}
 # cold. Judge rotation freshness on rotation output only.
 $captureFiles = @(Get-ChildItem (Join-Path $OutDir 'regular\*-regular-*.json') -ErrorAction SilentlyContinue |
                   Where-Object { $_.Name -notlike 'hunter-*' })
+# SAM'S ROTATION OUTPUT IS NOT IN out\regular, AND THIS CHECK COULD NOT SEE IT (fixed 2026-08-25).
+# Every other store's daily rotation lands in out\regular\<store>-regular-<date>.json, but
+# build-sams-deals.ps1 writes out\sams\sams-deals-<date>.json - the name compare-deals globs to find
+# Sam's captures. It is rotation output either way: the same 7-terms-a-day worklist feeds it. Reading
+# only out\regular left this check looking at sams-regular-2026-08-01.json, an abandoned file nothing
+# has written since, so it reported Sam's as 24 days cold while the store was in fact being captured
+# every morning - 377 cells on the 2026-08-25 board, 17 of them dated that day. A freshness check that
+# reads the wrong directory does not report a stale store, it invents one, and it is the third alarm of
+# that shape found today. sams-rejects-*.json is deliberately outside this glob, as it is outside
+# compare-deals' - rejected rows must never be read back as captures.
+$captureFiles += @(Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json') -ErrorAction SilentlyContinue)
 foreach ($rf in $captureFiles) {
   try { $doc = Get-Content $rf.FullName -Raw -Encoding UTF8 | ConvertFrom-Json } catch { continue }
   $st = [string]$doc.store
