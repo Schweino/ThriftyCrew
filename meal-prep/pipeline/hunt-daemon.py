@@ -3032,6 +3032,7 @@ class Daemon(object):
                 if q is None:
                     self.stuck(slug, "qa", "initial QA rendered no verdict")
                     continue
+                self.write_qa_verdict(slug, q)
                 if not hunt_lib.is_pass(q.get("verdict")):
                     owner = self.owner_agent(q.get("owner"))
                     self.log("QA FAIL %s -> one repair cycle by %s" % (slug, owner))
@@ -3054,6 +3055,7 @@ class Daemon(object):
                         self.stuck(slug, "qa", "the repair cycle was spent but re-QA rendered no "
                                                "verdict")
                         continue
+                    self.write_qa_verdict(slug, q)
                     if not hunt_lib.is_pass(q.get("verdict")):
                         await self.advance(slug, "rejected-qa", "source-qa",
                                            "failed QA twice: %s" % (q.get("findings") or "")[:150])
@@ -3152,22 +3154,147 @@ class Daemon(object):
                                if x.strip()) or "  (source-QA named no finding)",
                "\n".join(shown)))
 
+    # ---- F3 (2026-08-25): QA RULES FROM A DOSSIER TOO -------------------------------------------
+    #
+    # THE STAGE IS NOT MERGED, AND THAT IS A DECISION, not an omission. The eval's F3 named the
+    # write -> qa -> repair -> re-qa tail as four sessions over the same material and asked whether to
+    # collapse it. A writer QAing its own work is worth nothing and source-qa's whole value is an
+    # INDEPENDENT reader, so what lands here is the smaller proven move: source-qa keeps its own
+    # session and gets its material INLINE, exactly as the auditor did in CHANGE A. Independence is
+    # about WHO RULES, not about who does the file I/O.
+    #
+    # THE LIVE-PAGE FETCH STAYS A RIGHT. It is the one thing a dossier cannot carry, and it is part of
+    # the fidelity check's value - so QA turns are expected to land around 2-3, not 1.
+    def qa_dossier(self, slug):
+        """The transcription, the BUILT SPEC's reader-facing view, and the battery's numbers."""
+        def read(*parts):
+            try:
+                with open(os.path.join(*parts), "r", encoding="utf-8-sig") as f:
+                    return json.load(f) or {}
+            except Exception as e:                                # noqa: BLE001
+                return {"_unreadable": str(e)[:160]}
+
+        ex = read(self.run_dir, "extracted", "%s.json" % slug)
+        spec = read(self.specs_dir or SPECS_DIR, "%s.json" % slug)
+        bat = read(self.run_dir, "qa", "%s.battery.json" % slug)
+        out = []
+        out.append("THE TRANSCRIPTION - the recipe of record, and your anchor:")
+        if ex.get("_unreadable"):
+            # ANNOUNCED, never rendered as an empty section: a QA reading "ingredients as written (0)"
+            # would take a dropped-everything recipe for a faithful one.
+            out.append("  COULD NOT BE READ (%s) - read %s\\extracted\\%s.json yourself before ruling."
+                       % (ex["_unreadable"], self.run_dir, slug))
+        else:
+            out.append("  title  : %s" % as_text(ex.get("title")))
+            out.append("  source : %s" % as_text(ex.get("source_url")))
+            ings = [i for i in (ex.get("ingredients") or []) if i]
+            out.append("  ingredients as written (%d):" % len(ings))
+            for i in ings:
+                out.append("    - %s" % as_text(i if isinstance(i, str) else
+                                                (i.get("raw") or i.get("text") or json.dumps(i)), 300))
+            steps = [i for i in (ex.get("instructions") or ex.get("steps") or []) if i]
+            out.append("  instructions as written (%d):" % len(steps))
+            for n, st in enumerate(steps, 1):
+                out.append("    %d. %s" % (n, as_text(st if isinstance(st, str)
+                                                      else (st.get("text") or json.dumps(st)), 900)))
+        out.append("")
+        out.append("THE BUILT RECIPE, as a reader will meet it - this is what we are about to sell:")
+        if spec.get("_unreadable"):
+            out.append("  COULD NOT BE READ (%s) - the spec is at %s\\%s.json."
+                       % (spec["_unreadable"], self.specs_dir or SPECS_DIR, slug))
+        else:
+            out.append("  name     : %s" % as_text(spec.get("name") or spec.get("title")))
+            out.append("  servings : %s" % as_text(spec.get("servings")))
+            mac = spec.get("macros_per_serving") or spec.get("stat") or {}
+            if isinstance(mac, dict) and mac:
+                out.append("  per serving: %s" % ", ".join(
+                    "%s %s" % (k, mac.get(k)) for k in sorted(mac) if mac.get(k) is not None))
+            lines = [i for i in (spec.get("ingredients") or []) if isinstance(i, dict)]
+            out.append("  the %d ingredient lines, with the buy strings the reader sees:" % len(lines))
+            for i in lines:
+                out.append("    - %s%s" % (as_text(i.get("item"), 90),
+                                           (" | buy: %s" % as_text(i.get("buy"), 160))
+                                           if i.get("buy") else ""))
+            steps = (spec.get("make_it") or (spec.get("prose") or {}).get("make_it")
+                     or (spec.get("head") or {}).get("steps") or [])
+            if isinstance(steps, str):
+                steps = [steps]
+            out.append("  the %d make-it step(s) as written:" % len(steps))
+            for n, st in enumerate(steps, 1):
+                out.append("    %d. %s" % (n, as_text(st if isinstance(st, str)
+                                                      else json.dumps(st), 900)))
+        out.append("")
+        out.append("THE BATTERY, already run - its findings are QUESTIONS for you, never verdicts:")
+        if bat.get("_unreadable"):
+            out.append("  COULD NOT BE READ (%s) - and a battery nobody could read is not a battery "
+                       "that passed. Read %s\\qa\\%s.battery.json or say plainly that you ruled "
+                       "without it." % (bat["_unreadable"], self.run_dir, slug))
+        else:
+            checks = bat.get("checks") or bat.get("slug_checks") or []
+            if isinstance(checks, dict):
+                checks = [c for v in checks.values() for c in (v if isinstance(v, list) else [v])]
+            for c in (checks if isinstance(checks, list) else []):
+                if not isinstance(c, dict):
+                    continue
+                nums = c.get("numbers")
+                out.append("  %-28s %-6s %s"
+                           % (as_text(c.get("check"), 28), as_text(c.get("verdict"), 6),
+                              (" ".join("%s=%s" % (k, nums[k]) for k in sorted(nums))
+                               if isinstance(nums, dict) and nums
+                               else as_text(c.get("detail"), 160))))
+            if not checks:
+                out.append("  (the battery report names no checks - say so in your verdict rather "
+                           "than treating it as a pass)")
+        return "\n".join(out)
+
     def qa_prompt(self, slug, attempt):
         return (
-            "Fidelity check on ONE built recipe: %s.\n"
-            "Built spec:      %s\\%s.json\n"
-            "Transcription:   %s\\extracted\\%s.json\n"
-            "Battery report:  %s\\qa\\%s.battery.json  (already run for you; its findings are\n"
-            "                 questions for you, not verdicts. Exit 2 there is a BLOCKED stage.)\n%s\n"
-            "Anchor on the transcription always; read the live page too when the domain is fetchable.\n"
+            "Fidelity check on ONE built recipe: %s. Is the recipe we are about to sell the recipe we\n"
+            "actually found?\n\n%s\n\n"
+            "EVERYTHING ABOVE IS ALREADY READ FOR YOU. The artifacts are still on disk if you want the\n"
+            "raw ones - spec %s\\%s.json, transcription %s\\extracted\\%s.json, battery\n"
+            "%s\\qa\\%s.battery.json (exit 2 there is a BLOCKED stage) - but a re-read costs a turn and\n"
+            "a turn re-reads your whole accumulated context with it.\n%s\n"
+            "Anchor on the transcription always; read the live page too when the domain is fetchable -\n"
+            "that read is YOURS and it is the one thing the block above cannot carry.\n"
             "A BLOCKED DOMAIN IS NEVER A FINDING AGAINST THE RECIPE - it makes the transcription the\n"
             "sole anchor and the verdict says so. Catch invented, dropped and drifted ingredients and\n"
-            "steps. Write your verdict JSON to %s\\qa\\%s.json. Verdict only: never edit, re-extract\n"
-            "or price, and do not move any state - the orchestrator does that from your verdict.\n"
-            % (slug, SPECS_DIR, slug, self.run_dir, slug, self.run_dir, slug,
+            "steps. Verdict only: never edit, re-extract or price, and do not move any state - the\n"
+            "orchestrator does that from your verdict, and it writes the verdict file itself now, so\n"
+            "your entire deliverable is the payload.\n"
+            % (slug, self.qa_dossier(slug), self.specs_dir or SPECS_DIR, slug,
+               self.run_dir, slug, self.run_dir, slug,
                ("\nThis is the RE-QA after one owner-routed repair cycle. A second FAIL is terminal.\n"
-                if attempt > 1 else ""),
-               self.run_dir, slug))
+                if attempt > 1 else "")))
+
+    def write_qa_verdict(self, slug, q):
+        r"""THE PEN MOVES TO THE DAEMON (plan 5.2.3, decided from the grep and not from memory).
+
+        source-qa used to Write qa\<slug>.json itself. Nothing reads it: not the daemon (which rules
+        off the payload), not wave-preaudit.ps1, not hunt-run.ps1, not any agent definition. The one
+        reference in the estate is qa_repair_prompt telling a repairing agent where the file is - and
+        that pointer keeps working, because the daemon writes the same file from the same fields.
+        The plan expected wave-preaudit and the auditor to read it; they do not, and it is CORRECTED
+        there in this commit.
+
+        A payload with NO verdict writes NOTHING: B5 - no verdict is never a pass, and a file on disk
+        saying nothing is worse than no file, because it looks like a ruling.
+        """
+        if not q or not str(q.get("verdict") or "").strip():
+            return None
+        path = os.path.join(self.run_dir, "qa", "%s.json" % slug)
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"slug": str(q.get("slug") or slug),
+                           "verdict": str(q.get("verdict") or ""),
+                           "owner": str(q.get("owner") or ""),
+                           "findings": str(q.get("findings") or "")}, f, indent=2)
+            return path
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("qa/%s: the verdict file could not be written (%s) - the ruling "
+                                 "still stands, it is the record that is missing" % (slug, e))
+            return None
 
     def qa_repair_prompt(self, slug, q):
         return (

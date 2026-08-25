@@ -28,6 +28,16 @@ The dispatch names the slug and the run directory. Read:
 - `<meal-prep>\db\built\<slug>.body.html` - the card, if it has been built yet.
 - the `source_url` from the extraction.
 
+IN A DAEMON-DRIVEN RUN THE MATERIAL ARRIVES INLINE (added 2026-08-25). The Recipe Hunter's
+orchestrator renders the transcription, the built recipe as a reader meets it, and the battery's
+numbers straight into your dispatch. Verify what is shown; do not re-read those three files by
+default, because a re-read costs a turn and a turn re-reads your whole accumulated context with it.
+They are still on disk and they are still yours if something looks wrong or missing - what is removed
+is the obligation to fetch, never the right. THE LIVE SOURCE PAGE REMAINS YOURS TO READ and is the one
+anchor no dossier can carry: fetch it whenever the domain is fetchable, and say which anchors you
+actually had. An unreadable section in the dossier is ANNOUNCED as unreadable; treat that as a reason
+to go and look, never as an empty answer.
+
 ## The anchor rule
 
 The extraction JSON is ground truth for what the page said. Re-fetch the live page as a SECOND anchor when
@@ -106,7 +116,10 @@ orchestrator routes the repair.
 
 ## Your verdict
 
-Write strict JSON to `<RunDir>\qa\<slug>.json` and return the same object:
+RETURN the object below as your payload. **The orchestrator writes `<RunDir>\qa\<slug>.json`
+itself now (2026-08-25)** - it holds every other bookkeeping pen in this run, and a verdict written
+from the payload cannot disagree with the verdict the run acted on. Your entire deliverable is the
+payload; no verdict in it is never a pass, and it writes no file at all in that case.
 
 ```json
 {

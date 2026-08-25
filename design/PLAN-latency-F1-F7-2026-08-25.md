@@ -287,6 +287,15 @@ buy enough that the large collapse is not worth its independence cost.
    agent-authored extras beyond the schema (grep consumers; wave-preaudit and the auditor read
    it). If consumers only read schema fields, move the pen; if not, leave the write with the
    agent and record why in a comment. Do not guess - grep and decide.
+
+   **CORRECTED 2026-08-25 (F3 build, from the grep this paragraph ordered).** "wave-preaudit and the
+   auditor read it" is wrong: NOTHING in the estate reads qa\<slug>.json. Not the daemon (qa_lane
+   rules off the payload and never opens the file), not wave-preaudit.ps1, not hunt-run.ps1, not
+   coverage_check.py, not any agent definition. The only reference anywhere is qa_repair_prompt
+   telling a repairing agent where the file is, and that pointer keeps working because the daemon
+   writes the same path from the same fields. So the pen MOVED, with a further gain this paragraph
+   did not name: a verdict file written from the payload cannot disagree with the verdict the run
+   acted on, which a separately-authored file always could.
 4. recipe-source-qa.md gains the same ADDED paragraph as the registrar (material arrives inline;
    verify, do not re-fetch by default; the live source page remains yours to read). -Sync,
    committed.

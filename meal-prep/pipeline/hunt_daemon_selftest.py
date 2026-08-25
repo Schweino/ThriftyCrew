@@ -737,6 +737,22 @@ def run():
     T("MUST FIRE  a QA failure owned by the WRITER is a field patch, and the one-repair rule is "
       "untouched - one repair, exactly one re-QA",
       *_qa_writer_repair_is_a_patch())
+
+    # =================================================================================================
+    H("F3 - QA rules from a dossier, and the daemon holds the verdict pen (2026-08-25)")
+    # =================================================================================================
+    T("MUST FIRE  the QA dispatch carries the transcription's lines, the BUILT recipe's buy strings "
+      "and the battery's numbers - and the anchor, blocked-domain and verdict-only language verbatim",
+      *_qa_dossier_carries_its_material())
+    T("CLEAN TWIN a missing battery report is ANNOUNCED as unreadable, never rendered as an empty "
+      "section a QA would read as nothing to say",
+      *_qa_dossier_missing_battery_is_announced())
+    T("MUST FIRE  the DAEMON writes qa\<slug>.json from the payload and it carries exactly the "
+      "schema's fields - the agent's Write is retired",
+      *_qa_daemon_holds_the_verdict_pen())
+    T("MUST FIRE  a payload with NO verdict writes NOTHING and the recipe is STUCK - a file saying "
+      "nothing is worse than no file, because it looks like a ruling",
+      *_qa_no_verdict_writes_nothing())
     T("CLEAN TWIN a QA failure owned by the MAPPER keeps its current owner and its current prompt - "
       "no field patch reaches a mapping defect",
       *_qa_mapper_repair_keeps_its_road())
@@ -4769,6 +4785,145 @@ def _patch_road_no_change_still_guards():
                  and any("not the prose" in f for f in d.findings)),
                 "audits=%d specs=%d findings=%s"
                 % (len(fd.prompts("recipe-batch-auditor")), len(specs), json.dumps(d.findings)[:300]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# F3 - QA rules from a dossier, and the daemon holds the verdict pen (2026-08-25)
+#
+# 6b: source-qa ran 6-8 turns and 104k-143k per recipe re-reading the transcription, the spec and the
+# battery report a dossier could carry. The stage is NOT merged with the writer's: independence is
+# about WHO RULES, not about who does the file I/O.
+#
+# THE PEN MOVED ON EVIDENCE, per plan 5.2.3's grep-then-decide. Nothing in the estate reads
+# qa\<slug>.json - not the daemon (it rules off the payload), not wave-preaudit.ps1, not hunt-run.ps1,
+# not any agent definition. The only reference is qa_repair_prompt pointing a repairing agent at it,
+# and the daemon writes the same file from the same fields. The plan predicted wave-preaudit and the
+# auditor read it; they do not, and it is CORRECTED there.
+#
+# NEUTER PROOFS, RUN 2026-08-25 and reverted:
+#   * qa_prompt back to the four file pointers (no self.qa_dossier call) -> the dossier case goes red
+#     on all three sections.
+#   * make the unreadable branches render an empty section instead of announcing -> the clean twin
+#     goes red.
+#   * drop the write_qa_verdict call out of qa_lane -> the pen case goes red (no file on disk).
+#   * write the file even when the verdict is empty -> the no-verdict case goes red.
+# =====================================================================================================
+
+def _qa_dossier_run(spec=None, battery=None, extraction=True):
+    """A run dir with the three artifacts a QA dossier renders, plus a scratch spec store."""
+    tmp = tempfile.mkdtemp(prefix="daemon-qadoss-")
+    specs = os.path.join(tmp, "specs")
+    os.makedirs(specs, exist_ok=True)
+    os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+    os.makedirs(os.path.join(tmp, "qa"), exist_ok=True)
+    if extraction:
+        with open(os.path.join(tmp, "extracted", "s1.json"), "w", encoding="utf-8") as f:
+            json.dump({"slug": "s1", "title": "Harissa Chicken Traybake",
+                       "source_url": "https://d/harissa",
+                       "ingredients": ["2 lb chicken thighs", "3 tbsp harissa paste",
+                                       "1 lemon, quartered"],
+                       "instructions": ["Heat the oven to 425F.", "Toss the chicken with harissa.",
+                                        "Roast 35 minutes."]}, f)
+    if spec is not False:
+        with open(os.path.join(specs, "s1.json"), "w", encoding="utf-8") as f:
+            json.dump(spec or {"name": "Harissa Chicken Traybake", "servings": 14,
+                               "macros_per_serving": {"calories": 524, "protein_g": 44},
+                               "ingredients": [{"item": "Chicken Thighs", "buy": "5 lb, bone-in"},
+                                               {"item": "Harissa", "buy": "a 10 oz jar"},
+                                               {"item": "Lemon", "buy": "3 lemons"}],
+                               "make_it": ["Heat the oven to 425F.", "Toss with harissa.",
+                                           "Roast 35 minutes."]}, f)
+    if battery is not False:
+        with open(os.path.join(tmp, "qa", "s1.battery.json"), "w", encoding="utf-8") as f:
+            json.dump(battery or {"checks": [
+                {"check": "ingredient-coverage", "verdict": "pass",
+                 "numbers": {"source_lines": 3, "spec_lines": 3, "invented": 0, "dropped": 0}},
+                {"check": "scaling-ratio", "verdict": "pass",
+                 "numbers": {"ratio": 3.5, "servings": 14}},
+                {"check": "prose-numbers", "verdict": "fail",
+                 "numbers": {"claimed": 520, "stat": 524}}]}, f)
+    d = daemon(run_dir=tmp, specs_dir=specs)
+    return d, tmp
+
+
+def _qa_dossier_carries_its_material():
+    d, tmp = _qa_dossier_run()
+    try:
+        p = d.qa_prompt("s1", 1)
+        trans = "2 lb chicken thighs" in p and "Roast 35 minutes." in p
+        built = "buy: 5 lb, bone-in" in p and "Harissa Chicken Traybake" in p
+        bat = "ingredient-coverage" in p and "invented=0" in p and "claimed=520" in p
+        verbatim = ("Anchor on the transcription always" in p
+                    and "A BLOCKED DOMAIN IS NEVER A FINDING AGAINST THE RECIPE" in p
+                    and "read the live page too when the domain is fetchable" in p
+                    and "Verdict only" in p)
+        return (trans and built and bat and verbatim,
+                "transcription=%s built=%s battery=%s verbatim=%s" % (trans, built, bat, verbatim))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_dossier_missing_battery_is_announced():
+    """CLEAN TWIN: a missing battery report is ANNOUNCED, never rendered as an empty section a QA
+    would read as nothing to say - the CHANGE A unreadable-dossier pattern."""
+    d, tmp = _qa_dossier_run(battery=False)
+    try:
+        p = d.qa_prompt("s1", 1)
+        return ("COULD NOT BE READ" in p and "not a battery that passed" in p
+                and "2 lb chicken thighs" in p,          # the readable sections still render
+                "the missing battery did not announce itself: %s" % p[-400:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_daemon_holds_the_verdict_pen():
+    """MUST FIRE: the DAEMON writes qa\\<slug>.json from the payload, and it matches the schema
+    fields. The agent's Write is retired."""
+    tmp = tempfile.mkdtemp(prefix="daemon-qapen-")
+    try:
+        skeletoned(tmp, ["s1"])
+        fd = FakeDispatch({"recipe-source-qa": [
+            {"slug": "s1", "verdict": "pass", "owner": "", "findings": "anchors: extraction only"}]})
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=FakePS())
+        d.qa_battery = lambda slug: _immediate(0)
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.run(("qa",)))
+        path = os.path.join(tmp, "qa", "s1.json")
+        doc = json.load(open(path, encoding="utf-8-sig")) if os.path.exists(path) else None
+        return (doc is not None and doc.get("verdict") == "pass" and doc.get("slug") == "s1"
+                and doc.get("findings") == "anchors: extraction only"
+                and sorted(doc) == ["findings", "owner", "slug", "verdict"],
+                "verdict file=%s" % json.dumps(doc))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_no_verdict_writes_nothing():
+    """MUST FIRE: B5 - no verdict is never a pass. A payload carrying none writes NO file (a file on
+    disk saying nothing is worse than no file, because it looks like a ruling) and the recipe is
+    STUCK."""
+    tmp = tempfile.mkdtemp(prefix="daemon-qanov-")
+    try:
+        skeletoned(tmp, ["s1"])
+        fd = FakeDispatch({"recipe-source-qa": [None, None, None]})   # transport failures: no verdict
+        d = daemon(run_dir=tmp, dispatcher=fd, ps=FakePS())
+        d.qa_battery = lambda slug: _immediate(0)
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.run(("qa",)))
+        wrote = os.path.exists(os.path.join(tmp, "qa", "s1.json"))
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        # ...and an empty verdict in a real payload writes nothing either
+        d2, tmp2 = _qa_dossier_run()
+        try:
+            none_path = d2.write_qa_verdict("s1", {"slug": "s1", "verdict": ""})
+        finally:
+            shutil.rmtree(tmp2, ignore_errors=True)
+        return (not wrote and len(stuck) == 1 and none_path is None,
+                "wrote=%s stuck=%d empty_verdict_path=%r" % (wrote, len(stuck), none_path))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
