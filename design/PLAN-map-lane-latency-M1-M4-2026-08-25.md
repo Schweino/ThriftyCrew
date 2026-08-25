@@ -130,6 +130,12 @@ head-noun cache keying - that fork stayed closed in PLAN-latency 3.2 and stays c
 The round-1 class - 6 direct FDC queries plus 5 turns of tool archaeology - disappears entirely. That
 is 11 of 22 turns on round 1's shape. Measure it in the drill (section 7), do not assert it here.
 
+**MEASURED 2026-08-25 (EVAL-map-lane-latency-m1-drill).** It disappeared entirely, exactly as
+written: the batch-B mapper transcript carries ZERO queries to api.nal.usda.gov, ZERO uses of
+DEMO_KEY and ZERO turns of fdc_lookup archaeology, and the batch came in at 13 turns against
+round 1's 22. Two food-DB rows written by the drill cite `fdc:2067385` and `fdc:171241`, a
+source that was unobtainable before this change.
+
 ## 4. M2 - the map dossier carries what the contract forces the mapper to fetch
 
 Same move CHANGE W made for the writer and CHANGE A made for the auditor, applied to the three things
@@ -185,6 +191,16 @@ Round 2's shape loses 3 extraction Reads, 1 Grep, 4 DB Reads and 4 precheck-hunt
 21 tool calls. The standing target from PLAN-latency 3.5 is **<=6 turns and <=300k raw per batch** and
 it does NOT move. If M1+M2 land the mapper at 8-12 turns rather than 6, that is a MEASUREMENT to
 bring to Brad with the transcript, not a target to adjust.
+
+**MEASURED 2026-08-25 (EVAL-map-lane-latency-m1-drill).** The like-for-like batch came in at **4
+turns / 115,898 raw**, against lf1 round 2's 22 / 643,565 on the same three slugs - the target
+MET for the first time. The transcript is 3 tool calls against 21, and every class this section
+names is absent: 0 extraction Reads, 0 DB Greps, 0 re-reads of mapped-pre, 0 environment-friction
+turns, and the one food-DB read went to the SCRATCH file. The residual-heavy batch came in at 13
+turns / 295,972 raw: raw inside target, turns twice over it, and the residue is label acquisition
+for foods FDC does not carry. Both numbers and their decomposition are in the EVAL, and the
+registrar's first N>1 measurement (12 turns / 123,401 on a batch of two) is a MISS reported there
+with its own numbers.
 
 ## 5. M3 - a recipe with nothing to price stops going to the price lane
 

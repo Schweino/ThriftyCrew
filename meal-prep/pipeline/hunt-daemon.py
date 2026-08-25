@@ -2219,7 +2219,7 @@ class Daemon(object):
         """M2: the three things lf1 round 2 measurably went to disk for, rendered into the prompt.
 
         1. THE FOOD-DB ROWS THIS BATCH ALREADY HAS - 1 Grep and 4 full Reads of the DB on round 2.
-        2. THE MACRO PRECHECK, WHOLE - 4 turns re-reading mapped-pre\<slug>.json, three of them lost
+        2. THE MACRO PRECHECK, WHOLE - 4 turns re-reading mapped-pre\\<slug>.json, three of them lost
            to environment friction. One tuning line ("added Rice base 200g (src scale)") was the
            entire explanation for a 591-vs-468 calorie disagreement the mapper was otherwise going to
            litigate by hand.
