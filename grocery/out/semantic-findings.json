@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-24 21:32",
-    "board":  "comparison-2026-08-24.json",
-    "sidecar_generated":  "2026-08-24 21:32:08",
+    "generated":  "2026-08-25 08:19",
+    "board":  "comparison-2026-08-25.json",
+    "sidecar_generated":  "2026-08-25 08:19:48",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,11 +10,11 @@
                    },
     "examined":  {
                      "board_pairs":  3074,
-                     "corpus":  37451,
-                     "rule_invisible":  6537
+                     "corpus":  37457,
+                     "rule_invisible":  6538
                  },
     "identity_count":  0,
-    "coverage_count":  54,
+    "coverage_count":  55,
     "identity":  [
 
                  ],
@@ -151,6 +151,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.6829,
+                         "score":  0.95879,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ribeye-steak",
                          "commodity":  "Ribeye Steak",
                          "store":  "Walmart",
@@ -177,16 +187,6 @@
                          "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
                          "cos":  0.7059,
                          "score":  0.957228,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "bar-soap",
-                         "commodity":  "Bar Soap",
-                         "store":  "Baker\u0027s",
-                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.6953,
-                         "score":  0.955202,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -547,6 +547,16 @@
                          "product":  "Las Palmas Medium Red Chile Sauce, 28 oz",
                          "cos":  0.6431,
                          "score":  0.903476,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Walmart",
+                         "product":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
+                         "cos":  0.5862,
+                         "score":  0.902819,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

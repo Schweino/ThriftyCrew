@@ -892,13 +892,6 @@
                                                         "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.1992
                                                     },
-                                           "Baker\u0027s":  {
-                                                                "url":  "https://www.bakersplus.com/p/private-selection-artichoke-hearts/0001111081808",
-                                                                "name":  "Private Selection Artichoke Hearts",
-                                                                "price":  3.19,
-                                                                "size":  "12 oz",
-                                                                "verified":  "2026-08-23"
-                                                            },
                                            "Family Fare":  {
                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/del_monte_quartered_artichoke_hearts_14_oz/p/1564405684713279030",
                                                                "name":  "Del Monte Quartered Artichoke Hearts 14 Oz",
@@ -934,7 +927,14 @@
                                                            "price":  "$2.22",
                                                            "size":  "13.75 oz",
                                                            "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Baker\u0027s":  {
+                                                                "url":  "https://www.bakersplus.com/p/napoleon-whole-artichoke-hearts/0004125300483",
+                                                                "name":  "Napoleon Whole Artichoke Hearts",
+                                                                "price":  "$2.29",
+                                                                "size":  "9.9 oz",
+                                                                "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                            }
                                        },
                   "artichokes":  {
                                      "commodity":  "Artichokes (fresh, whole)",
@@ -1291,13 +1291,6 @@
                                                      "size":  "240 ct",
                                                      "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                  },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/3600052547",
-                                                             "name":  "Huggies Natural Care Baby Wipes, Cucumber and Green Tea, 17 pk., 1088 Wipes",
-                                                             "price":  "$25.98",
-                                                             "size":  "1299 ct",
-                                                             "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                         },
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/comforts-fragrance-free-baby-wipes/0004126002093",
                                                           "name":  "Comforts Fragrance Free Baby Wipes",
@@ -1311,7 +1304,14 @@
                                                      "price":  "$18.98",
                                                      "size":  "560 ct",
                                                      "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/15216671397",
+                                                             "name":  "Pampers, Complete Clean Baby Wipes, Baby Fresh Scent, 15 pk., 1200 Wipes",
+                                                             "price":  "$24.48",
+                                                             "size":  "1224 ct",
+                                                             "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                         }
                                  },
                   "bacon":  {
                                 "commodity":  "Bacon",
@@ -1328,13 +1328,6 @@
                                                 "price":  "$5.94",
                                                 "size":  "1.5 lb",
                                                 "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                            },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73357-farmland-bacon-rtc-16-oz",
-                                                "name":  "Farmland Thick Cut Naturally Hickory Smoked Bacon",
-                                                "price":  "$4.99",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                             },
                                 "Aldi":  {
                                              "url":  "https://www.aldi.us/store/aldi/products/20047386-appleton-farms-lower-sodium-bacon-16-oz",
@@ -1756,12 +1749,6 @@
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.6345
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24721072-fareway-batteries-alkaline-aa-15-v-8-pack-8-each",
-                                                    "price":  4.99,
-                                                    "size":  "8 ct",
-                                                    "name":  "Fareway 8 Pack 1.5 V AA Alkaline Batteries"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2398471/simply-done-aa-batteries-4-pk",
                                                    "name":  "Simply Done AA Batteries 4 Pk",
@@ -1776,7 +1763,14 @@
                                                             "size":  "66 ct",
                                                             "name":  "Member\u0027s Mark AA Alkaline Batteries, 66-Pack",
                                                             "board_pu":  0.28
-                                                        }
+                                                        },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24775115-fareway-batteries-alkaline-aa-15v-24-pack-24-each",
+                                                    "name":  "Fareway 24 Pack 1.5V AA Alkaline Batteries",
+                                                    "price":  "$9.97",
+                                                    "size":  "24 ct",
+                                                    "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "bay-leaves":  {
                                      "commodity":  "Bay Leaves",
@@ -1835,12 +1829,6 @@
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                         "board_pu":  0.1106
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71519-sweet-baby-ray-s-barbecue-sauce-honey-28-oz",
-                                                    "price":  3.48,
-                                                    "size":  "28 oz",
-                                                    "name":  "Sweet Baby Ray\u0027s Honey Barbecue Sauce"
-                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/13599611407",
                                                             "price":  11.98,
@@ -1875,7 +1863,14 @@
                                                    "price":  "$1.99",
                                                    "size":  "18 oz",
                                                    "verified":  "2026-08-18 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71522-sweet-baby-ray-s-barbecue-sauce-honey-40-oz",
+                                                    "name":  "Sweet Baby Ray\u0027s Barbecue Sauce, Honey",
+                                                    "price":  "$3.99",
+                                                    "size":  "40 oz",
+                                                    "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "beef-broth":  {
                                      "commodity":  "Beef Broth",
@@ -5461,7 +5456,14 @@
                                                           "price":  "$3.99",
                                                           "size":  "12 oz",
                                                           "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2973805/naturesweet-cherubs-fresh-heavenly-salad-grape-tomatoes-10-oz",
+                                                         "name":  "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 10 oz",
+                                                         "price":  "$4.69",
+                                                         "size":  "10 oz",
+                                                         "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                     }
                                       },
                   "chicken-breast":  {
                                          "commodity":  "Boneless Skinless Chicken Breast",
@@ -5714,27 +5716,20 @@
                                                          "size":  "lb",
                                                          "name":  "Bone-In Chicken Thighs"
                                                      },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Chicken-Thighs-Family-Pack-4-75-6-0-lb-Tray/51259108",
-                                                         "name":  "Tyson All Natural, Fresh Chicken Thighs, Family Pack, 4.75 - 6.0 lb Tray",
-                                                         "price":  "$8.62",
-                                                         "size":  "4.87 lb",
-                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13605458056",
-                                                                 "name":  "Member\u0027s Mark Chicken Thighs, Case, priced per pound",
-                                                                 "price":  "$1.28",
-                                                                 "size":  "lb",
-                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                             },
                                          "Aldi":  {
                                                       "url":  "https://www.aldi.us/store/aldi/products/20363180-fresh-chicken-thighs-family-pack-per-lb",
                                                       "name":  "Fresh Chicken Thighs Family Pack Per LB",
                                                       "price":  "$1.55",
                                                       "size":  "lb",
                                                       "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13610718601",
+                                                                 "name":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
+                                                                 "price":  "$0.98",
+                                                                 "size":  "lb",
+                                                                 "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "chicken-wings":  {
                                         "commodity":  "chicken-wings",
@@ -8537,11 +8532,11 @@
                                                                  "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                                              },
                                              "Baker\u0027s":  {
-                                                                  "url":  "https://www.bakersplus.com/p/kroger-seaside-escape-scent-disinfecting-wipes/0001111013910",
-                                                                  "name":  "Kroger Seaside Escape Scent Disinfecting Wipes",
-                                                                  "price":  3.5,
+                                                                  "url":  "https://www.bakersplus.com/p/kroger-lemon-scent-disinfecting-wipes/0001111013912",
+                                                                  "name":  "Kroger Lemon Scent Disinfecting Wipes",
+                                                                  "price":  "$3.50",
                                                                   "size":  "75 ct",
-                                                                  "verified":  "2026-08-23"
+                                                                  "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
                                                               }
                                          },
                   "dog-food":  {
@@ -16878,13 +16873,6 @@
                                               "size":  "3 lb",
                                               "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                           },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13599313206",
-                                                         "name":  "Yellow Onions, 10 lbs.",
-                                                         "price":  "$7.37",
-                                                         "size":  "10 lb",
-                                                         "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_medium_yellow_onion/p/1564405684714568560",
                                                      "name":  "Our Family Medium Yellow Onion",
@@ -16898,7 +16886,14 @@
                                                  "price":  "$3.99",
                                                  "size":  "3 lb",
                                                  "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/13604862865",
+                                                         "name":  "Sweet Onions, 6 lbs.",
+                                                         "price":  "$4.96",
+                                                         "size":  "6 lb",
+                                                         "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "onion-soup-mix":  {
                                          "commodity":  "Onion Soup Mix (dry packets)",
@@ -17591,11 +17586,11 @@
                                                 "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
                                             },
                                 "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/22457/hy-vee-penne-rigate",
-                                               "name":  "Hy-Vee Penne Rigate",
-                                               "price":  "$0.99",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/55914/hy-vee-rotini-pasta",
+                                               "name":  "Hy-Vee Rotini Pasta",
+                                               "price":  "$1.19",
                                                "size":  "16 oz",
-                                               "verified":  "2026-08-24 DERIVED from the price row (same record the board priced)"
+                                               "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
                                            }
                             },
                   "pasta-sauce":  {
@@ -18946,7 +18941,14 @@
                                                             "price":  "$5.74",
                                                             "size":  "8.5 oz",
                                                             "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/40108/morton-bassett-poultry-seasoning",
+                                                           "name":  "Morton \u0026 Bassett Poultry Seasoning",
+                                                           "price":  "$9.99",
+                                                           "size":  "2.1 oz",
+                                                           "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                       }
                                         },
                   "powdered-sugar":  {
                                          "commodity":  "powdered-sugar",
@@ -25992,6 +25994,15 @@
                                                           "price":  "$2.29",
                                                           "size":  "2 oz"
                                                       }
-                                  }
+                                  },
+                  "bean-sprouts":  {
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/76068-la-choy-bean-sprouts-14-oz",
+                                                       "name":  "La Choy Bean Sprouts",
+                                                       "price":  "$1.99",
+                                                       "size":  "14 oz",
+                                                       "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
+                                                   }
+                                   }
               }
 }

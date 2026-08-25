@@ -1,0 +1,44 @@
+﻿{
+    "store":  "Aldi",
+    "date":  "2026-08-25",
+    "policy":  "ad-rollover + sale-expiry + quarterly rotation (90d)",
+    "ad_rollover":  false,
+    "ad_note":  "ad current until 2026-08-25; next_pull 2026-08-26",
+    "cursor_start":  7,
+    "cursor_next":  14,
+    "total_terms":  598,
+    "rotation_terms":  [
+                           "alfredo sauce",
+                           "all purpose cleaner",
+                           "unsweetened almond milk",
+                           "whole almonds",
+                           "aluminum foil",
+                           "anaheim peppers",
+                           "apple cider vinegar"
+                       ],
+    "sale_terms":  [
+
+                   ],
+    "terms":  [
+                  "alfredo sauce",
+                  "all purpose cleaner",
+                  "unsweetened almond milk",
+                  "whole almonds",
+                  "aluminum foil",
+                  "anaheim peppers",
+                  "apple cider vinegar"
+              ],
+    "commodities":  [
+                        "alfredo-sauce",
+                        "all-purpose-cleaner",
+                        "almond-milk",
+                        "almonds",
+                        "aluminum-foil",
+                        "anaheim-peppers",
+                        "apple-cider-vinegar"
+                    ],
+    "call_cap":  45,
+    "expiry_deferred":  0,
+    "expiry_oldest_owed":  "",
+    "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here."
+}

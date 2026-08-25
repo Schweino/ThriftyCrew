@@ -396,6 +396,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
+        "id":  "brandy",
+        "store":  "Family Fare",
+        "product":  "E \u0026 J Brandy Brandy 750 Ml",
+        "dept":  "beer_wine_spirits",
+        "aisle":  "beer_wine_spirits/spirits",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beer_wine_spirits\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
+    },
+    {
         "id":  "bread-crumbs",
         "store":  "Family Fare",
         "product":  "Our Family Bread Crumbs, Plain 15 Oz",
@@ -3258,6 +3267,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "white-wine",
+        "store":  "Family Fare",
+        "product":  "Vendange Pinot Grigio White Wine 500 Ml",
+        "dept":  "beer_wine_spirits",
+        "aisle":  "beer_wine_spirits/wines_champagnes",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027beer_wine_spirits\u0027; category \u0027snacks\u0027 allows only: pantry, beverages"
+    },
+    {
         "id":  "whole-chicken",
         "store":  "Family Fare",
         "product":  "Our Family Fresh Whole Chicken",
@@ -3454,5 +3472,14 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "BLIND",
         "reason":  "\u0027apple-cider\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "white-wine-vinegar",
+        "store":  "Family Fare",
+        "product":  "Holland House White Wine Vinegar 12 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "BLIND",
+        "reason":  "\u0027white-wine-vinegar\u0027 is in no estate category - refused rather than guessed"
     }
 ]

@@ -1,15 +1,15 @@
 {
-    "updated":  "2026-08-24T08:17:25",
-    "price_table":  "price-table-2026-08-24.json",
+    "updated":  "2026-08-25T08:17:29",
+    "price_table":  "price-table-2026-08-25.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
                    {
                        "file":  "ingredient-queue.json",
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
-                       "captured":  99,
+                       "captured":  153,
                        "reached":  16,
-                       "missing":  83,
+                       "missing":  137,
                        "missing_rows":  [
                                             {
                                                 "key":  "chili-garlic-sauce",
@@ -157,26 +157,10 @@
                                             },
                                             {
                                                 "key":  "green bell pepper",
-                                                "store":  "Walmart",
-                                                "price":  2.96,
-                                                "size":  "8 oz / 2 ct",
-                                                "item":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "green bell pepper",
                                                 "store":  "Fareway",
-                                                "price":  0.77,
-                                                "size":  "each",
+                                                "price":  1.17,
+                                                "size":  "1 each",
                                                 "item":  "Green Bell Pepper",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "green bell pepper",
-                                                "store":  "Family Fare",
-                                                "price":  1.29,
-                                                "size":  "1 ct",
-                                                "item":  "Fresh Green Peppers",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -185,6 +169,14 @@
                                                 "price":  0.79,
                                                 "size":  "lb",
                                                 "item":  "Green Bell Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "green bell pepper",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  4.97,
+                                                "size":  "6 ct",
+                                                "item":  "Green Bell Peppers, 6 ct.",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -297,6 +289,62 @@
                                                 "price":  2.49,
                                                 "size":  "0.88 oz",
                                                 "item":  "Patak\u0027s BBQ Tandoori Chicken Seasoning Rub 0.88 oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "guacamole",
+                                                "store":  "Fareway",
+                                                "price":  4.48,
+                                                "size":  "7.5 oz",
+                                                "item":  "Wholly Guacamole Classic Mild",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "guacamole",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  6.36,
+                                                "size":  "12 oz x 3 pk",
+                                                "item":  "Member\u0027s Mark Homestyle Chunky Guacamole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "guacamole",
+                                                "store":  "Baker\u0027s",
+                                                "price":  6.99,
+                                                "size":  "14 oz",
+                                                "item":  "Kroger Mild Guacamole",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "pico de gallo",
+                                                "store":  "Fareway",
+                                                "price":  4.88,
+                                                "size":  "14 oz",
+                                                "item":  "Crazy Fresh Pico De Gallo Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "pico de gallo",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  6.73,
+                                                "size":  "48 oz",
+                                                "item":  "Member\u0027s Mark Fresh Pico De Gallo Style Salsa",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "pico de gallo",
+                                                "store":  "Aldi",
+                                                "price":  3.29,
+                                                "size":  "10 oz",
+                                                "item":  "Park Street Deli Pico De Gallo",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "pico de gallo",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.89,
+                                                "size":  "14 oz",
+                                                "item":  "Private Selection Medium Pico De Gallo Salsa",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -673,6 +721,390 @@
                                                 "price":  4.99,
                                                 "size":  "1 lb",
                                                 "item":  "Perdue NAE Tray Pack Ground Chicken",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "mustard powder",
+                                                "store":  "Fareway",
+                                                "price":  3.49,
+                                                "size":  "1.55 oz",
+                                                "item":  "Tone\u0027s Mustard, Ground",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "mustard powder",
+                                                "store":  "Baker\u0027s",
+                                                "price":  8.99,
+                                                "size":  "4 oz",
+                                                "item":  "Colman\u0027s Mustard Powder",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground sage",
+                                                "store":  "Walmart",
+                                                "price":  5.28,
+                                                "size":  "0.6 oz",
+                                                "item":  "McCormick Kosher Ground Sage, 0.6 oz Bottle",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground sage",
+                                                "store":  "Fareway",
+                                                "price":  6.99,
+                                                "size":  "0.6 oz",
+                                                "item":  "McCormick Ground Sage",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "ground sage",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.29,
+                                                "size":  "0.75 oz",
+                                                "item":  "Kroger Ground Sage Shaker",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Fareway",
+                                                "price":  2.99,
+                                                "size":  "8 oz",
+                                                "item":  "Fareway Grated Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Family Fare",
+                                                "price":  3.69,
+                                                "size":  "8 oz",
+                                                "item":  "Our Family Grated Cheese, Parmesan 8 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Hy-Vee",
+                                                "price":  3.49,
+                                                "size":  "8 oz",
+                                                "item":  "Hy Vee Grated Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  7.42,
+                                                "size":  "24 oz",
+                                                "item":  "Member\u0027s Mark Grated Parmesan Cheese, 24 oz.",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Aldi",
+                                                "price":  2.79,
+                                                "size":  "8 oz",
+                                                "item":  "Reggano Grated Parmesan Cheese 8 OZ",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "grated Parmesan cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "8 oz",
+                                                "item":  "Kraft Grated Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chicken drumsticks",
+                                                "store":  "Fareway",
+                                                "price":  5.99,
+                                                "size":  "2.5 lb (1.13 kg) frozen bag",
+                                                "item":  "Tyson Chicken Drumsticks, 2.5 lb. (Frozen)",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chicken drumsticks",
+                                                "store":  "Family Fare",
+                                                "price":  2.49,
+                                                "size":  "lb",
+                                                "item":  "Chicken Drumsticks",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chicken drumsticks",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  4.89,
+                                                "size":  "priced per pound ($0.98/lb)",
+                                                "item":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "chicken drumsticks",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.49,
+                                                "size":  "1 lb",
+                                                "item":  "Heritage Farm Bone In Skin On Chicken Drumsticks",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "beef back ribs",
+                                                "store":  "Walmart",
+                                                "price":  18.23,
+                                                "size":  "3.0-5.0 lb ($4.34/lb)",
+                                                "item":  "Beef Back Ribs, Bone-In, USDA Select",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "malt vinegar",
+                                                "store":  "Walmart",
+                                                "price":  3.82,
+                                                "size":  "12 fl oz",
+                                                "item":  "Heinz Gourmet Malt Vinegar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "malt vinegar",
+                                                "store":  "Family Fare",
+                                                "price":  3.39,
+                                                "size":  "12 fl oz",
+                                                "item":  "Holland House Malt Vinegar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "malt vinegar",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.79,
+                                                "size":  "12.7 fl oz",
+                                                "item":  "London Pub Malt Vinegar",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried onion flakes",
+                                                "store":  "Fareway",
+                                                "price":  2.99,
+                                                "size":  "1.88 oz",
+                                                "item":  "Tone\u0027s Onion, Minced",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried onion flakes",
+                                                "store":  "Family Fare",
+                                                "price":  1.39,
+                                                "size":  "2.25 oz",
+                                                "item":  "Thats Smart! Minced Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried onion flakes",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  7.98,
+                                                "size":  "15 oz",
+                                                "item":  "Member\u0027s Mark Minced Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried onion flakes",
+                                                "store":  "Aldi",
+                                                "price":  0.99,
+                                                "size":  "2 oz",
+                                                "item":  "Stonemill Minced Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "dried onion flakes",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.25,
+                                                "size":  "2.01 oz",
+                                                "item":  "Smart Way Minced Onion",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "canned crushed pineapple",
+                                                "store":  "Walmart",
+                                                "price":  1.68,
+                                                "size":  "20 oz",
+                                                "item":  "Great Value Canned Crushed Pineapple",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "canned crushed pineapple",
+                                                "store":  "Fareway",
+                                                "price":  1.68,
+                                                "size":  "20 oz",
+                                                "item":  "Fareway Crushed Pineapple",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "canned crushed pineapple",
+                                                "store":  "Family Fare",
+                                                "price":  2.29,
+                                                "size":  "20 oz",
+                                                "item":  "Our Family Pineapple, Crushed",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "canned crushed pineapple",
+                                                "store":  "Aldi",
+                                                "price":  1.65,
+                                                "size":  "20 oz",
+                                                "item":  "Sweet Harvest Crushed Pineapple",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "canned crushed pineapple",
+                                                "store":  "Baker\u0027s",
+                                                "price":  1.99,
+                                                "size":  "20 oz",
+                                                "item":  "Kroger Canned Crushed Pineapple in Pineapple Juice",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "sourdough bread",
+                                                "store":  "Fareway",
+                                                "price":  4.99,
+                                                "size":  "16 oz",
+                                                "item":  "Bakery Fresh Sourdough Bread",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "sourdough bread",
+                                                "store":  "Family Fare",
+                                                "price":  5.49,
+                                                "size":  "1 lb",
+                                                "item":  "The Rustik Oven Sourdough Bread 1 Lb",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "sourdough bread",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  3.96,
+                                                "size":  "23 oz",
+                                                "item":  "Member\u0027s Mark Sliced Sourdough Bread, 23 oz.",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "sourdough bread",
+                                                "store":  "Aldi",
+                                                "price":  3.49,
+                                                "size":  "24 oz",
+                                                "item":  "Specially Selected Sourdough Square Loaf, 24 OZ",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "sourdough bread",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.79,
+                                                "size":  "20 oz",
+                                                "item":  "Artesano Sourdough Bread",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bone-in skin-on chicken breasts",
+                                                "store":  "Fareway",
+                                                "price":  2.99,
+                                                "size":  "$2.99/lb ($7.48 pkg)",
+                                                "item":  "Bone-In Chicken Breast",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "bone-in skin-on chicken breasts",
+                                                "store":  "Baker\u0027s",
+                                                "price":  2.29,
+                                                "size":  "1 lb",
+                                                "item":  "Heritage Farm(R) Bone In Skin On Split Chicken Breasts",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh mozzarella cheese",
+                                                "store":  "Fareway",
+                                                "price":  4.99,
+                                                "size":  "8 oz",
+                                                "item":  "BelGioioso Fresh Mozzarella Cheese, Ball",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh mozzarella cheese",
+                                                "store":  "Family Fare",
+                                                "price":  5.89,
+                                                "size":  "226 g",
+                                                "item":  "Bel Gioioso Fresh Mozzarella Cheese 226 G",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh mozzarella cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  7.44,
+                                                "size":  "8 oz x 3 pk",
+                                                "item":  "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "fresh mozzarella cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  3.99,
+                                                "size":  "8 oz",
+                                                "item":  "BelGioioso Fresh Mozzarella Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "whole grain mustard",
+                                                "store":  "Family Fare",
+                                                "price":  3.39,
+                                                "size":  "9.25 oz",
+                                                "item":  "Silver Spring Mustard, Whole Grain, Old Style 9.25 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "whole grain mustard",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "7 oz",
+                                                "item":  "Murray\u0027s Whole Grain Mustard",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cotija cheese",
+                                                "store":  "Family Fare",
+                                                "price":  5.99,
+                                                "size":  "10 oz",
+                                                "item":  "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "cotija cheese",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.49,
+                                                "size":  "10 oz",
+                                                "item":  "Cacique Cotija Part Skim Milk Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "part skim mozzarella slices",
+                                                "store":  "Fareway",
+                                                "price":  2.48,
+                                                "size":  "8 x 8 each",
+                                                "item":  "Fareway Low-Moisture Part-Skim Mozzarella Cheese Slices",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "prosciutto",
+                                                "store":  "Fareway",
+                                                "price":  5.99,
+                                                "size":  "2 oz",
+                                                "item":  "La Quercia Prosciutto Americano",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "prosciutto",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  13.44,
+                                                "size":  "7 oz, 2 pk",
+                                                "item":  "Rossetti Prosciutto Italiano",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "prosciutto",
+                                                "store":  "Baker\u0027s",
+                                                "price":  5.99,
+                                                "size":  "3 oz",
+                                                "item":  "Private Selection Old World Prosciutto Deli Sliced",
                                                 "commodity_known":  false
                                             }
                                         ]

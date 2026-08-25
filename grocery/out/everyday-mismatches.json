@@ -94,9 +94,9 @@
         "id":  "avocados",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
-        "board":  1.272,
+        "board":  1.344,
         "link":  1.046,
-        "ratio":  0.82,
+        "ratio":  0.78,
         "price":  5.23,
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
@@ -270,6 +270,19 @@
         "size":  "5 oz",
         "boardItem":  "Hy-Vee Chunk Light Tuna in Water Free-School Caught",
         "linkItem":  "Hy-Vee Chunk Light Tuna in Water Free-School Caught",
+        "board_src":  "main"
+    },
+    {
+        "id":  "carrots",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  0.87,
+        "link":  0.912,
+        "ratio":  1.05,
+        "price":  4.56,
+        "size":  "5 lb",
+        "boardItem":  "Organic Tender Sweet Carrots, 5 lbs.",
+        "linkItem":  "Organic Tender Sweet Carrots, 5 lbs.",
         "board_src":  "main"
     },
     {

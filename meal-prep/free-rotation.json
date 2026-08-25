@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-24",
-    "rotated_at":  "2026-08-24T08:17:05",
+    "week_of":  "2026-08-25",
+    "rotated_at":  "2026-08-25T08:17:08",
     "free":  [
                  {
                      "slug":  "buffalo-chicken-pasta-bake",
@@ -130,18 +130,18 @@
                      "per_serving":  1.65
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                     "protein":  "pork",
-                     "rank":  4,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.85
-                 },
-                 {
                      "slug":  "pork-egg-roll-in-a-bowl",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Pork Egg Roll in a Bowl",
-                     "per_serving":  1.89
+                     "per_serving":  1.81
+                 },
+                 {
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.85
                  }
              ]
 }

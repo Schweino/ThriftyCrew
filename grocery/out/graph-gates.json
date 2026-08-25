@@ -1,9 +1,9 @@
 {
-    "updated":  "2026-08-24T08:17:42",
+    "updated":  "2026-08-25T08:17:43",
     "python":  "C:\\Codex\\Python312\\python.exe",
     "mode":  "ADVISORY - graph checks the finished board and can never change a price or stop a publish. Promotion to blocking is per-gate, after a clean record of real days, and is Brad\u0027s call.",
     "gates_total":  7,
-    "gates_failing":  0,
+    "gates_failing":  1,
     "gates":  [
                   {
                       "gate":  "omaha_identity",
@@ -12,7 +12,7 @@
                   },
                   {
                       "gate":  "ad_window",
-                      "verdict":  "PASS",
+                      "verdict":  "FAIL",
                       "detail":  ""
                   },
                   {
@@ -38,7 +38,7 @@
                   {
                       "gate":  "provenance_complete",
                       "verdict":  "PASS",
-                      "detail":  ""
+                      "detail":  "{\"checked\": 5, \"overdue\": [{\"store\": \"Fareway\", \"window\": \"2026-08-17..2026-08-22\", \"today\": \"2026-08-25\", \"days_past_window\": 3, \"next_pull\": \"2026-08-23\", \"pull_method\": \"browser\", \"days_overdue\": 2"
                   }
               ]
 }
