@@ -3844,7 +3844,7 @@ def main(argv=None):
                          "exists so a drill can aim the run at a chosen corpus without editing the "
                          "live pool, which harvest.py is the sole writer of.")
     ap.add_argument("--food-db", dest="food_db", default="",
-                    help="a scratch meal-prep\food-macros-db.json, for a drill. Empty means the "
+                    help="a scratch meal-prep\\food-macros-db.json, for a drill. Empty means the "
                          "live one. Same seam as --ledger / --specs / --costed / --pool, and it "
                          "exists because CHANGE M made the daemon a WRITER of this file: a drill "
                          "row in the live DB would be read by every spec build in the estate.")

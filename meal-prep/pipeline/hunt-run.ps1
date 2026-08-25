@@ -776,6 +776,51 @@ if ($runSelfTest) {
       ($(if ($mapRow) { 'turns=' + $mapRow.turns + ' cr=' + $mapRow.cache_read + ' reasks=' + $mapRow.reasks } else { 'no map row' }))
     T 'MUST FIRE  a start/end pair is ONE invocation, never two' `
       ($null -ne $mapRow -and [long]$mapRow.calls -eq 1) ($(if ($mapRow) { [string]$mapRow.calls } else { 'no row' }))
+
+    # ---- SAME-SECOND PAIRS AND SHARED LABELS (added 2026-08-25, measured on the jc1 drill).
+    #
+    # Two defects that both LOSE PAIRS SILENTLY, in the instrument the wide proving run is measured
+    # with. (1) `at` has SECOND resolution, so a fast mechanical stage stamps its start and its end in
+    # the same timestamp - measured: `map-preresolve verify` on the drill's second slug stamped both
+    # at 05:51:53. The reader used to `Sort-Object at` first, and PS 5.1's sort gives no stable-order
+    # guarantee for equal keys, so that end could be ordered BEFORE its own start: the end is dropped
+    # and the start dangles forever. The drill reported "1 invocation(s) logged a start with no end"
+    # over a log whose starts and ends balance exactly. The log is APPEND-ONLY, so file order IS
+    # chronological and the sort could only destroy information. (2) The pairing key omitted `items`,
+    # so two invocations sharing a lane and a label shared one slot.
+    #
+    # NEUTER PROOF, run 2026-08-25: restore `| Sort-Object at` and the same-second case goes red; drop
+    # `items` from the pairing key and the shared-label case goes red. On the real drill log the fix
+    # also moved the map lane's mean_sec from 200 to 160 - a lost pair being counted again, which is
+    # the point: this recovers data, it does not merely silence a warning.
+    $lt4 = Join-Path ([IO.Path]::GetTempPath()) ("hr-lanesum2-" + [Guid]::NewGuid().ToString('N'))
+    try {
+      New-Item -ItemType Directory -Path $lt4 -Force | Out-Null
+      $lg4 = Join-Path $lt4 'lane-log.jsonl'
+      # a same-second pair, and TWO more invocations sharing lane+label with different items
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:00' -Event 'start')
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('a') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:00' -Event 'end' -In 0 -Out 0)
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('b') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:01' -Event 'start')
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('c') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:02' -Event 'start')
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('b') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:05' -Event 'end' -In 0 -Out 0)
+      Add-LaneLine -Path $lg4 -Line (New-LaneLine -LaneName 'map' -Label 'verify' -ItemList @('c') -By 'mechanical' -Detail '' -At '2026-08-24T10:00:09' -Event 'end' -In 0 -Out 0)
+      # ASSERTED THROUGH -StageSummary -Json, because that is the ONLY surface that exposes what the
+      # pairing produces. -LaneSummary's `calls` counts non-end lines and `measured` counts end lines;
+      # neither touches $durations, so a fixture asserting on them cannot fail when the pairing breaks
+      # - measured 2026-08-25, when exactly that fixture passed with both defects restored. A neuter
+      # proof that does not fail is not a proof, and the assertion had to move, not the standard.
+      $so4 = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -StageSummary -RunDir $lt4 -Json 2>&1
+      $s4 = $null
+      try { $s4 = (@($so4 | ForEach-Object { [string]$_ }) -join "`n") | ConvertFrom-Json } catch {}
+      $r4 = $null
+      if ($s4) { $r4 = @($s4.stages | Where-Object { $_.stage -eq 'verify' })[0] }
+      T 'MUST FIRE  three invocations sharing lane+label with different items are THREE pairs carrying their own durations (0 + 4 + 7 = 11s) - without `items` in the key the interleaved ones overwrite each other and one pair is lost' `
+        ($null -ne $r4 -and [long]$r4.n -eq 3 -and [long]$r4.total_sec -eq 11) `
+        ($(if ($r4) { 'n=' + $r4.n + ' total_sec=' + $r4.total_sec } else { ($so4 -join ' ').Substring(0, [Math]::Min(200, ($so4 -join ' ').Length)) }))
+      T 'MUST FIRE  ...and no start is left dangling - a same-second pair must still close' `
+        ($null -ne $s4 -and @($s4.unfinished).Count -eq 0) `
+        ($(if ($s4) { 'unfinished=' + (@($s4.unfinished) -join ',') } else { 'no json' }))
+    } finally { Remove-Item -Recurse -Force $lt4 -ErrorAction SilentlyContinue }
     # ---- F (2026-08-24): API ROUND TRIPS ARE NOT BILLED INVOCATIONS, and the reader must keep them
     # apart. The 6b run's own numbers are the case: one mapper session made 47 round trips and billed
     # ~500k tokens while `calls` read 1, because `calls` counts CLI invocations (a re-ask makes it 2)
@@ -971,10 +1016,29 @@ if ($runLaneSummary) {
   $durations = @{}
   $stageSecs = @{}
   $stageBy = @{}
-  foreach ($r in ($rows | Sort-Object at)) {
+  # TWO PAIRING DEFECTS, BOTH FIXED 2026-08-25, BOTH MEASURED ON THE jc1 DRILL. This is the
+  # instrument the wide proving run gets measured with, and it was quietly losing pairs.
+  #
+  # 1. `Sort-Object at` RE-SORTED AN ALREADY-ORDERED FILE, AND ITS SORT IS NOT STABLE. `at` has
+  #    SECOND resolution, so a fast mechanical stage starts and ends inside one timestamp - measured:
+  #    `map-preresolve verify` on the second slug stamped start and end both at 05:51:53. PS 5.1's
+  #    Sort-Object gives no stable-order guarantee for equal keys, so that end can be ordered BEFORE
+  #    its own start. The end is then dropped (no start recorded yet) and the start dangles forever,
+  #    which is exactly what the drill reported: "1 invocation(s) logged a start with no end" over a
+  #    log whose starts and ends balance perfectly. The lane log is APPEND-ONLY - hunt-run is its only
+  #    writer and every line is appended as it happens - so FILE ORDER IS ALREADY CHRONOLOGICAL and
+  #    the sort could only ever destroy information. It is removed rather than made stable.
+  #
+  # 2. THE KEY OMITTED `items`, so two invocations sharing a lane and a label shared one slot. The map
+  #    lane runs 2 workers and `map-preresolve verify` carries a fixed label with a different slug in
+  #    `items` each time; genuinely concurrent ones would overwrite each other's start and report the
+  #    survivor's duration for both. audit-lane-shape.ps1's Get-Invocations already keys on
+  #    lane+label+items for this same reason - the two readers of this file now agree.
+  foreach ($r in $rows) {
     $ev = if ($r.PSObject.Properties.Name -contains 'event') { [string]$r.event } else { '' }
     if (-not $ev) { continue }
-    $key = ([string]$r.lane) + '|' + ([string]$r.label)
+    $key = ([string]$r.lane) + '|' + ([string]$r.label) + '|' +
+           ((@($r.items) | ForEach-Object { [string]$_ }) -join ([char]1))
     if ($ev -eq 'start') { $starts[$key] = [datetime]$r.at; continue }
     if ($ev -eq 'end' -and $starts.ContainsKey($key)) {
       $sec = ([datetime]$r.at - $starts[$key]).TotalSeconds
@@ -984,9 +1048,13 @@ if ($runLaneSummary) {
         # G (2026-08-24): the SAME pairing, kept at STAGE granularity too. The lane roll-up answers
         # 'which lane is slow'; -StageSummary answers 'which stage in it', which is the question that
         # was actually being asked when the mechanical stages were emitting nothing at all.
-        if (-not $stageSecs.ContainsKey($key)) { $stageSecs[$key] = @() }
-        $stageSecs[$key] += $sec
-        $stageBy[$key] = $(if ($r.PSObject.Properties.Name -contains 'by') { [string]$r.by } else { '' })
+        # the STAGE roll-up is keyed lane|label WITHOUT items on purpose: it answers "which stage
+        # is slow", so every invocation of one stage belongs in the same bucket. Only the PAIRING
+        # key needs items to be unique.
+        $sk = ([string]$r.lane) + '|' + ([string]$r.label)
+        if (-not $stageSecs.ContainsKey($sk)) { $stageSecs[$sk] = @() }
+        $stageSecs[$sk] += $sec
+        $stageBy[$sk] = $(if ($r.PSObject.Properties.Name -contains 'by') { [string]$r.by } else { '' })
       }
       $starts.Remove($key)
     }
