@@ -145,6 +145,14 @@ concurrency with the sibling-collision re-check landed in commit c36879cd, and 6
 registrar dispatches predate it. The live defects are turn economy and session count only, which
 is what PLAN-latency-F1-F7 section 4 addresses.
 
+**BUILT 2026-08-25 (F2).** Both live defects are closed the way this finding described: ONE dispatch
+per slug-batch of proposals carrying one dossier and returning one schema'd verdict array, and the
+dossier now pre-gathers the rest of the registrar's own checklist - the live feed's price cell per id,
+the declared-same-thing pairs, and label greps - beside the near-miss block it already had. The
+collision re-check is unchanged and still re-adjudicates a colliding pair, now as a batch of one each
+with the sibling named. Turn and token numbers against this finding's 10-turns-per-proposal go in the
+H3 drill report; nothing here is claimed until that measurement exists.
+
 **F3. The per-recipe tail is four sessions where the content could support one or two.**
 write, then source-qa, then (sometimes) qa-repair, then re-qa - each a fresh session over largely
 the SAME material: the transcription, the skeleton, the prose. CHANGE W already renders that

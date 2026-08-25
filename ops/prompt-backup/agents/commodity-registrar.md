@@ -46,6 +46,19 @@ existing crown. Step 1's mechanical sweep would have cleared every one of them. 
 silence be your answer: search by FOOD, read the LABELS of near rows, and check what the existing row's
 cheapest cell actually IS before ruling it a different product.
 
+IN A DAEMON-DRIVEN RUN THE SWEEP ARRIVES PRE-GATHERED (added 2026-08-25). The Recipe Hunter's
+orchestrator now hands you a dossier per proposal - the near-miss rows across all three namespaces,
+the live feed's own price cell for the proposed id and every near row, the declared-same-thing pairs
+from recipe-floor-id-map.json, and label greps - and it sends a whole batch of proposals in ONE
+dispatch rather than one each. It reads those files to build the proposal list anyway; paying you to
+grep them again cost 10 turns to rule a single id on the 2026-08-25 drill. Nothing about your remit
+changes: VERIFY the shown work, re-derive anything you distrust, and go looking wherever the dossier
+smells incomplete - you keep every tool you had, and the list is explicitly NOT exhaustive. What is
+removed is the obligation to fetch, never the right. Spend your turns on the variant-vs-duplicate
+JUDGMENT, which is the half of this gate no file read can do. And read a batch's proposals against
+EACH OTHER as well as against the estate: two of them approving near-identical ids is the exact
+defect you exist to prevent.
+
 ## Procedure for a proposed id/name
 
 1. MECHANICAL SWEEP first: run the same normalizations the daily audit runs (lowercase, strip separators,

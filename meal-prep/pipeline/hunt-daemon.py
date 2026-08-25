@@ -1354,29 +1354,58 @@ class Daemon(object):
             row = next((r for r in rows if str(r.get("term") or "") == term), None)
             work.append((bid, term, str((prop or {}).get("evidence") or ""), row))
 
-        async def rule(bid, term, evidence, row, siblings=()):
+        if not work:
+            # No proposal, no gate to pay for. The dispatch is per BATCH now, so an empty batch would
+            # otherwise buy a session to rule on nothing.
+            return []
+
+        async def rule(items, siblings=None):
+            """ONE dispatch, one dossier, one schema'd verdict array. Returns {proposed_bid: ruling}.
+
+            F2 (2026-08-25). This was one dispatch PER PROPOSAL: measured on jc1, 10 turns and 81,929
+            raw tokens to rule ONE id, each paying its own ~7s startup and ~18k fixed input over a
+            cold cache. The decider's shape is the answer - 8 candidates, one dossier, one verdict
+            array - and it is the same move CHANGE A made one gate over.
+            """
+            expected = [w[0] for w in items]
             payload = await self.dispatch(
                 "commodity-registrar",
-                self.registrar_prompt(slug, term, bid, evidence, row, siblings=siblings),
-                "map", "registrar:%s" % bid, [slug],
-                schema=hunt_lib.REGISTRAR, validator=hunt_lib.validate_registrar,
+                self.registrar_batch_prompt(slug, items, siblings=siblings),
+                "map", "registrar:%dx" % len(items), [slug],
+                schema=hunt_lib.REGISTRAR_BATCH,
+                validator=lambda p: hunt_lib.validate_registrar_batch(p, expected=expected),
                 stage="registrar")
             if payload is None:
-                self.findings.append("map/%s: the commodity-registrar returned no verdict on the "
-                                     "proposed id '%s' - the line stays unsettled, which is the safe "
-                                     "direction" % (slug, bid))
-                return None
-            return {"proposed_bid": bid,
-                    "verdict": str(payload.get("verdict") or "").strip().lower(),
-                    "bid": str(payload.get("bid") or "").strip(),
-                    "reason": str(payload.get("reason") or "")}
+                # SILENCE IS NOT CONSENT, AND IT IS NOT PARTIAL EITHER. A batch that does not answer
+                # leaves EVERY id in it unruled; the assembler then refuses each one.
+                self.findings.append("map/%s: the commodity-registrar returned no verdict on %d "
+                                     "proposed id(s) (%s) - the line(s) stay unsettled, which is the "
+                                     "safe direction" % (slug, len(expected), ", ".join(expected)))
+                return {}
+            out = {}
+            for item in (payload.get("rulings") or []):
+                if not isinstance(item, dict):
+                    continue
+                pb = str(item.get("proposed_bid") or "").strip()
+                if pb not in expected or pb in out:
+                    continue
+                out[pb] = {"proposed_bid": pb,
+                           "verdict": str(item.get("verdict") or "").strip().lower(),
+                           "bid": str(item.get("bid") or "").strip(),
+                           "reason": str(item.get("reason") or "")}
+            for pb in expected:
+                if pb not in out:
+                    self.findings.append("map/%s: the commodity-registrar's batch verdict said "
+                                         "nothing about the proposed id '%s' - it stays unsettled, "
+                                         "which is the safe direction" % (slug, pb))
+            return out
 
-        # ---- PASS 1: concurrent. Each proposal is a ruling about a DIFFERENT id, so they do not need
-        # to see each other to rule against the ESTATE - the three namespaces they check are on disk
-        # and immutable under a hunt. Measured on 6b: 11 serial rulings took 10.4 min of a 64-min run,
-        # 0.6-1.9 min each, and they blocked the mappers queued behind them.
-        settled = await asyncio.gather(*[rule(*w) for w in work])
-        out = [r for r in settled if r is not None]
+        # ---- PASS 1: ONE DISPATCH FOR THE WHOLE BATCH. Each proposal is still ruled on its own
+        # merits against the ESTATE - the three namespaces are on disk and immutable under a hunt -
+        # but one session sees its siblings, which is the collision the re-check below exists for
+        # made visible IN-PROMPT rather than only after the fact.
+        ruled = await rule(work)
+        out = [ruled[w[0]] for w in work if w[0] in ruled]
 
         # ---- PASS 2: THE COLLISION RE-CHECK, which is what makes pass 1 safe to run concurrently.
         # The one thing a concurrent ruling CANNOT see is its siblings in the same batch. Two
@@ -1406,9 +1435,11 @@ class Daemon(object):
                     if not w:
                         continue
                     sib = [n for n in names if n != (g["bid"] or g["proposed_bid"])]
-                    redo = await rule(w[0], w[1], w[2], w[3], siblings=sib)
-                    if redo is not None:
-                        g.update(redo)
+                    # A BATCH OF ONE, and deliberately not a special case: the same dossier with one
+                    # entry, through the same road, so the re-check stays what it was.
+                    redo = await rule([w], siblings={w[0]: sib})
+                    if redo.get(w[0]) is not None:
+                        g.update(redo[w[0]])
         return out
 
     # -----------------------------------------------------------------------------------------------
@@ -1514,38 +1545,178 @@ class Daemon(object):
                         for r in near)
         return head + lines + self.NOT_EXHAUSTIVE
 
-    def registrar_prompt(self, slug, term, bid, evidence, row=None, siblings=()):
-        near = ""
+    # ---- F2: THE REST OF THE REGISTRAR'S OWN CHECKLIST, PRE-GATHERED --------------------------------
+    #
+    # commodity-registrar.md orders three more reads beyond the near-miss sweep: the declared-same-thing
+    # layer (recipe-floor-id-map.json), the LIVE FEED ("ALWAYS check the live feed too... the only place
+    # that says whether an id is actually PRICED"), and the LABELS of near rows ("the EXISTING ROW'S
+    # LABEL IS 'Yellow Mustard' - read labels, not just ids"). Every one of those is a file the daemon
+    # can read for free. What is removed is the OBLIGATION to fetch, never the RIGHT - the registrar
+    # keeps every tool it had and may re-derive anything it distrusts. This is CHANGE A's exact recipe
+    # applied one gate over.
+    #
+    # COULD-NOT-LOOK IS NEVER A CLEAN BILL, here as everywhere: an unreadable feed or floor map is
+    # ANNOUNCED as unreadable in the dossier, never rendered as "nothing there".
+
+    FEED_PATH = os.path.join(REPO, "grocery", "out", "smp-feed.json")
+    FLOOR_MAP_PATH = os.path.join(REPO, "grocery", "recipe-floor-id-map.json")
+
+    def feed_prices(self):
+        """id -> its live price cell, or None if the feed could not be read. Cached per run."""
+        if getattr(self, "_feed_prices", None) is not None:
+            return self._feed_prices[0]
+        try:
+            with open(self.FEED_PATH, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            ing = doc.get("ingredients")
+            got = dict((str(k), v) for k, v in (ing or {}).items() if isinstance(v, dict)) \
+                if isinstance(ing, dict) else None
+        except Exception:                                         # noqa: BLE001
+            got = None
+        self._feed_prices = (got,)
+        return got
+
+    def floor_map(self):
+        """The declared-same-thing pairs, or None if the file could not be read. Cached per run."""
+        if getattr(self, "_floor_map", None) is not None:
+            return self._floor_map[0]
+        try:
+            with open(self.FLOOR_MAP_PATH, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            m = doc.get("map")
+            got = dict((str(k), str(v)) for k, v in m.items()) if isinstance(m, dict) else None
+        except Exception:                                         # noqa: BLE001
+            got = None
+        self._floor_map = (got,)
+        return got
+
+    @staticmethod
+    def _stems(text):
+        out = set()
+        for w in re.split(r"[^a-z0-9]+", str(text or "").lower()):
+            if len(w) > 3:
+                out.add(w[:-1] if w.endswith("s") else w)
+        return out
+
+    def feed_block(self, term, bid, near):
+        feed = self.feed_prices()
+        if feed is None:
+            return ("\nTHE LIVE FEED: could NOT be read at %s. Nobody has answered the priced\n"
+                    "question for this proposal - check it yourself.\n" % self.FEED_PATH)
+        lines, seen = [], set()
+        for i in [bid] + [r["id"] for r in near]:
+            if not i or i in seen:
+                continue
+            seen.add(i)
+            cell = feed.get(i)
+            if cell is None:
+                lines.append("    %-34s not in the feed - no price cell exists for this id today" % i[:34])
+            else:
+                lines.append("    %-34s $%s / %s cheapest at %s (%s store(s))"
+                             % (i[:34], cell.get("cheapest"), cell.get("unit"),
+                                cell.get("store"), cell.get("n")))
+        return ("\nTHE LIVE FEED (grocery\\out\\smp-feed.json), ALREADY CHECKED FOR YOU - and note the\n"
+                "distinction your own definition draws: 'already exists' and 'already PRICED' are\n"
+                "different answers to the caller.\n" + "\n".join(lines) + "\n")
+
+    def floor_map_block(self, term, bid, near):
+        fm = self.floor_map()
+        if fm is None:
+            return ("\nTHE DECLARED-SAME-THING LAYER: could NOT be read at %s - check it yourself.\n"
+                    % self.FLOOR_MAP_PATH)
+        want = set([bid] + [r["id"] for r in near])
+        want.add(re.sub(r"[^a-z0-9]+", "-", str(term or "").lower()).strip("-"))
+        hits = ["    %s -> %s" % (k, v) for k, v in sorted(fm.items()) if k in want or v in want]
+        if not hits:
+            return ("\nTHE DECLARED-SAME-THING LAYER (grocery\\recipe-floor-id-map.json, %d verified\n"
+                    "pairs): no entry names this proposal or any row above.\n" % len(fm))
+        return ("\nTHE DECLARED-SAME-THING LAYER (grocery\\recipe-floor-id-map.json) - recipe spelling\n"
+                "to weekly id, each pair a ONE-TIME HUMAN VERIFICATION that they are the same food in\n"
+                "the same form:\n" + "\n".join(hits) + "\n")
+
+    def label_grep_block(self, term, near):
+        """Rows whose LABEL carries a stem of this term but whose id does not - the yellow-mustard
+        seam, where the existing row's id says `mustard` and only its label says Yellow Mustard."""
+        want = self._stems(term)
+        if not want:
+            return ""
+        shown = set(r["id"] for r in near)
+        hits = []
+        for r in self.commodity_rows():
+            if r["id"] in shown or not r["label"]:
+                continue
+            lab = r["label"].lower()
+            if any(w in lab for w in want):
+                hits.append("    %-34s %-30s [%s]" % (r["id"][:34], r["label"][:30], r["ns"]))
+            if len(hits) >= 8:
+                break
+        if not hits:
+            return ""
+        return ("\nLABEL MATCHES NOT ALREADY LISTED - greps over the LABELS rather than the ids,\n"
+                "because the yellow-mustard seam hides exactly there:\n" + "\n".join(hits) + "\n")
+
+    def registrar_dossier(self, term, bid, evidence, row=None, siblings=()):
+        """Everything the registrar's checklist orders, for ONE proposal, gathered."""
+        near = self.commodity_near_misses(term, bid)
+        parts = ["  ingredient line  : %s" % (term or "(the mapper did not name the term)"),
+                 "  proposed id      : %s" % bid,
+                 "  the mapper's case: %s" % (evidence or "(none given)")]
         if row:
-            near = "\nWhat the mechanical pre-resolve found for this line:\n    %s\n" % (
-                (row.get("evidence") or "")[:600])
+            parts.append("  the mechanical pre-resolve found: %s" % (row.get("evidence") or "")[:600])
         if siblings:
-            near += (
-                "\nRE-ADJUDICATION. Another proposal in this SAME batch normalises to the same\n"
-                "commodity as yours: %s. Neither of you could see the other the first time round, and\n"
-                "you were both approved, which would mint the same food twice under two ids - the\n"
-                "bread-crumbs / breadcrumbs failure, where one food carried two disagreeing prices\n"
-                "while every per-file guard read green. Rule again knowing this. If they are one food,\n"
-                "exactly one id may be born: `alias` yours onto the better name, or `approve` yours\n"
-                "and say plainly why the other is the alias. If they are genuinely different foods,\n"
-                "`approve` and say what distinguishes them.\n" % ", ".join(siblings))
+            parts.append(
+                "\n  RE-ADJUDICATION. Another proposal in this SAME batch normalises to the same\n"
+                "  commodity as this one: %s. You were both approved, which would mint the same food\n"
+                "  twice under two ids - the bread-crumbs / breadcrumbs failure, where one food\n"
+                "  carried two disagreeing prices while every per-file guard read green. Rule again\n"
+                "  knowing this. If they are one food, exactly one id may be born: `alias` this one\n"
+                "  onto the better name, or `approve` it and say plainly why the other is the alias.\n"
+                "  If they are genuinely different foods, `approve` and say what distinguishes them."
+                % ", ".join(siblings))
+        return ("\n".join(parts) + "\n"
+                + self.registrar_evidence_block(term, bid)
+                + self.feed_block(term, bid, near)
+                + self.floor_map_block(term, bid, near)
+                + self.label_grep_block(term, near))
+
+    def registrar_batch_prompt(self, slug, work_items, siblings=None):
+        """ONE dossier, every proposal in the batch, one schema'd verdict array back."""
+        siblings = siblings or {}
+        blocks = []
+        for n, (bid, term, evidence, row) in enumerate(work_items, 1):
+            blocks.append("---- PROPOSAL %d of %d ----------------------------------------------\n%s"
+                          % (n, len(work_items),
+                             self.registrar_dossier(term, bid, evidence, row,
+                                                    siblings=siblings.get(bid) or ())))
         return (
-            "Rule on ONE proposed new grocery commodity id, for the recipe `%s`.\n\n"
-            "  ingredient line : %s\n"
-            "  proposed id     : %s\n"
-            "  the mapper's case: %s\n%s%s\n"
-            "This is the gate before the id is born. Prove the food is not already priced under\n"
+            "Rule on %d proposed new grocery commodity id(s), for the recipe `%s`. This is the gate\n"
+            "before an id is born. For EACH proposal: prove the food is not already priced under\n"
             "another name across all three id namespaces and the live feed, rule variant-vs-duplicate\n"
             "on the evidence, and answer:\n"
             "  approve  a genuinely new id, and `bid` is the id to mint\n"
             "  alias    it is already priced under another id, and `bid` is THAT EXISTING id\n"
             "  reject   it should not be minted and no existing id fits either\n\n"
+            "THESE PROPOSALS ARE SIBLINGS IN ONE BATCH, and that is why they arrive together. Two of\n"
+            "them approving near-identical ids is the exact defect you exist to prevent, and ruling\n"
+            "them one at a time is how it slips through: each ruling checks a clean estate, neither\n"
+            "sees the other, and one food is minted twice. Read them against each other as well as\n"
+            "against the estate. The orchestrator ALSO re-checks approvals for collisions mechanically\n"
+            "and sends any pair back to you - belt and braces, not a substitute for your reading.\n\n"
+            "THE SWEEP BELOW IS ALREADY RUN FOR YOU: the three namespaces, the live feed's price\n"
+            "cells, the declared-same-thing pairs, and label greps. You keep every tool you had and\n"
+            "may re-derive anything you distrust - what is gone is the OBLIGATION to fetch it, never\n"
+            "the right. Spend your turns on the variant-vs-duplicate JUDGMENT, which is the half of\n"
+            "this gate no file read can do.\n\n"
+            "%s\n"
+            "Return `rulings`: one entry per proposal, each carrying `proposed_bid` EXACTLY as stated\n"
+            "above (it is the key every ruling is joined on), `verdict`, `bid` and `reason`. A\n"
+            "proposal you cannot rule on is a `reject` carrying what would settle it - never an\n"
+            "omission, because an id nobody ruled on is refused and the recipe stops.\n\n"
             "`reason` is the sentence a person reads when this blocks a recipe, so make it the\n"
             "evidence rather than the conclusion. A reject leaves the ingredient line UNSETTLED and\n"
             "the recipe STUCK carrying your sentence - which is the right outcome when the honest\n"
             "answer is no, and an expensive one when it is guesswork.\n"
-            % (slug, term or "(the mapper did not name the term)", bid,
-               evidence or "(none given)", near, self.registrar_evidence_block(term, bid)))
+            % (len(work_items), slug, "\n".join(blocks)))
 
     # ---- CHANGE M: THE DAEMON WRITES THE FOOD DB --------------------------------------------------
     #

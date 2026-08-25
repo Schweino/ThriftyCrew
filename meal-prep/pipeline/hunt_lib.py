@@ -825,6 +825,28 @@ REGISTRAR = {"type": "object", "properties": {
                "description": "the evidence, in a sentence a person can act on"}},
     "required": ["verdict", "reason"]}
 
+# F2 (2026-08-25): THE REGISTRAR RULES A WHOLE BATCH FROM ONE DOSSIER. Measured on the jc1 drill, one
+# dispatch per proposal cost 10 turns and 81,929 raw tokens to rule a single id, each session paying
+# its own startup and fixed input over a cold cache. This is the decider's shape - one dossier in, one
+# verdict array out - and `proposed_bid` is what every ruling is joined on, which is why it is
+# required: a ruling nobody can attribute to a proposal is a ruling that cannot be applied.
+#
+# The single-item REGISTRAR above STAYS for now, per plan 4.2.3: it is retired only once the drill has
+# proven the batch road, and only if nothing else references it.
+REGISTRAR_BATCH = {"type": "object", "properties": {
+    "rulings": {"type": "array", "description":
+                "one entry per proposal in the dossier, in any order",
+                "items": {"type": "object", "properties": {
+                    "proposed_bid": {"type": "string", "description":
+                                     "the proposed id EXACTLY as the dossier states it"},
+                    "verdict": {"type": "string", "description": "approve | reject | alias"},
+                    "bid": {"type": "string", "description":
+                            "on approve, the id to mint; on alias, the EXISTING id it resolves to"},
+                    "reason": {"type": "string", "description":
+                               "the evidence, in a sentence a person can act on"}},
+                    "required": ["proposed_bid", "verdict", "reason"]}}},
+    "required": ["rulings"]}
+
 REGISTRAR_VERDICTS = ("approve", "reject", "alias")
 
 
@@ -859,6 +881,49 @@ def validate_registrar(payload):
         problems.append("an `alias` verdict must name the EXISTING id in `bid` - an alias with no "
                         "target is not an alias")
     return problems
+
+def validate_registrar_batch(payload, expected=()):
+    """The batch road's validator. Every problem NAMES ITS ITEM, because the dispatch re-ask has to
+    tell the model WHICH ruling was malformed - "verdict is not one of" over an eight-item array is a
+    re-ask nobody can act on.
+
+    IT IS A WHOLE-PAYLOAD CHECK, the CHANGE W rule arriving here: a batch carrying one bad ruling is
+    refused entire and re-asked, never applied in part. Half a batch of approvals is exactly the shape
+    where an id gets minted while its sibling's collision is still unruled.
+
+    `expected` is the proposal list the dossier actually asked about. An omission is a problem rather
+    than a silent drop: a proposal the registrar could not rule on is a `reject` carrying what would
+    settle it, and an id nobody ruled on is refused downstream and stops the recipe.
+    """
+    rulings = (payload or {}).get("rulings")
+    if not isinstance(rulings, list) or not rulings:
+        return ["`rulings` must be a non-empty array with one entry per proposal in the dossier"]
+    problems, seen = [], set()
+    for i, item in enumerate(rulings):
+        if not isinstance(item, dict):
+            problems.append("ruling %d is not an object" % i)
+            continue
+        pb = str(item.get("proposed_bid") or "").strip()
+        if not pb:
+            problems.append("ruling %d names no `proposed_bid` - that field is the key every ruling "
+                            "is joined on, so a ruling without it cannot be applied to anything" % i)
+        else:
+            if pb in seen:
+                problems.append("ruling %d rules on '%s' a second time - one verdict per proposal"
+                                % (i, pb))
+            seen.add(pb)
+        for p in validate_registrar(item):
+            problems.append("ruling %d (%s): %s" % (i, pb or "unnamed", p))
+    missing = [b for b in expected if b not in seen]
+    if missing:
+        problems.append("no ruling for: %s - every proposal in the dossier needs one, and a proposal "
+                        "you cannot rule on is a `reject` carrying what would settle it, never an "
+                        "omission" % ", ".join(missing))
+    stray = [b for b in sorted(seen) if expected and b not in expected]
+    if stray:
+        problems.append("ruling(s) for id(s) this dossier did not ask about: %s" % ", ".join(stray))
+    return problems
+
 
 DERIVE = {"type": "object", "properties": {
     "resolved": {"type": "array", "items": {"type": "object", "properties": {

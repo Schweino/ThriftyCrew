@@ -429,6 +429,18 @@ def run():
     T("MUST FIRE  an include-pattern match is surfaced too - that is how the board absorbs a food "
       "under another id, and it is the thing the gate exists to catch",
       *_registrar_evidence_shows_include())
+    T("MUST FIRE  F2: three proposals are ONE dispatch carrying all three, and three rulings come "
+      "back - the decider's shape, one dossier in and one verdict array out",
+      *_registrar_batch_is_one_dispatch())
+    T("MUST FIRE  F2: the dossier carries the LIVE FEED's own price cell, the declared-same-thing "
+      "rows and the label greps - the three reads the registrar's definition orders beyond the sweep",
+      *_registrar_dossier_carries_the_checklist())
+    T("CLEAN TWIN F2: an unreadable feed or floor map is ANNOUNCED as unreadable, never rendered as "
+      "'no price cell exists' - which a registrar would read as evidence FOR a new id",
+      *_registrar_unreadable_sources_are_announced())
+    T("MUST FIRE  F2: a malformed item names its INDEX in the problem, and the WHOLE payload is "
+      "refused - the good ruling beside it does not land either",
+      *_registrar_batch_refusal_names_the_item())
 
     # =================================================================================================
     H("A lane's death is ITS death (2026-08-24), and the card belongs to whoever owns it")
@@ -1896,8 +1908,10 @@ def _registrar_is_dispatched():
             {"term": "tteok", "proposed_bid": "korean-rice-cakes",
              "evidence": "rice-cakes is priced from Quaker snack cakes; this is a different food"}])
         fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}],
-                           "commodity-registrar": [{"verdict": "approve", "bid": "korean-rice-cakes",
-                                                    "reason": "no id in any namespace prices tteok"}]})
+                           "commodity-registrar": [{"rulings": [
+                               {"proposed_bid": "korean-rice-cakes", "verdict": "approve",
+                                "bid": "korean-rice-cakes",
+                                "reason": "no id in any namespace prices tteok"}]}]})
         preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
         d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
         d.ch["map"].push({"slug": "s1"})
@@ -1906,7 +1920,7 @@ def _registrar_is_dispatched():
         calls = [c for c in fd.calls if c["agent"] == "commodity-registrar"]
         if len(calls) != 1:
             return False, "registrar dispatches=%d" % len(calls)
-        schema_ok = calls[0]["schema"] is hunt_lib.REGISTRAR
+        schema_ok = calls[0]["schema"] is hunt_lib.REGISTRAR_BATCH
         asked = "korean-rice-cakes" in calls[0]["prompt"] and "tteok" in calls[0]["prompt"]
         asm = [c for c in ps.find("map-preresolve.ps1") if "-Assemble" in c["args"]]
         rf = FakePS.value_after(asm[0]["args"], "-RulingsFile") if asm else None
@@ -3366,18 +3380,23 @@ def _registrar_collision_recheck():
 
     # ---- MUST FIRE: two spellings of ONE food, both approved in pass 1, force a serial re-check.
     fd = FakeDispatch({"commodity-registrar": [
-        {"verdict": "approve", "bid": "bread-crumbs", "reason": "new"},
-        {"verdict": "approve", "bid": "breadcrumbs", "reason": "new"},
-        # pass 2, each told about the other:
-        {"verdict": "approve", "bid": "bread-crumbs", "reason": "the canonical spelling"},
-        {"verdict": "alias", "bid": "bread-crumbs", "reason": "same food, aliased"}]})
+        # pass 1 is ONE dispatch carrying BOTH rulings now (F2), and it approves both:
+        {"rulings": [{"proposed_bid": "bread-crumbs", "verdict": "approve", "bid": "bread-crumbs",
+                      "reason": "new"},
+                     {"proposed_bid": "breadcrumbs", "verdict": "approve", "bid": "breadcrumbs",
+                      "reason": "new"}]},
+        # pass 2, a batch of ONE each, each told about the other:
+        {"rulings": [{"proposed_bid": "bread-crumbs", "verdict": "approve", "bid": "bread-crumbs",
+                      "reason": "the canonical spelling"}]},
+        {"rulings": [{"proposed_bid": "breadcrumbs", "verdict": "alias", "bid": "bread-crumbs",
+                      "reason": "same food, aliased"}]}]})
     d = daemon(dispatcher=fd)
     d._commodity_rows = list(_REG_ROWS)
     res = arun(d.registrar_rulings("dish", props("bread-crumbs", "breadcrumbs")))
     n = len(fd.prompts("commodity-registrar"))
     out.append(("MUST FIRE  two proposals that normalise to the SAME commodity are re-adjudicated "
                 "serially - concurrency must not let one food be minted twice",
-                n == 4, "registrar dispatches=%d (expected 4: 2 concurrent + 2 re-checks)" % n))
+                n == 3, "registrar dispatches=%d (expected 3: ONE batch + 2 re-checks)" % n))
     out.append(("MUST FIRE  ...and the re-adjudication prompt NAMES the sibling, so the second "
                 "ruling is made knowing what the first could not see",
                 any("breadcrumbs" in p and "RE-ADJUDICATION" in p
@@ -3391,27 +3410,31 @@ def _registrar_collision_recheck():
 
     # ---- CLEAN TWIN: genuinely different foods are ruled once each and never re-litigated.
     fd2 = FakeDispatch({"commodity-registrar": [
-        {"verdict": "approve", "bid": "harissa", "reason": "new"},
-        {"verdict": "approve", "bid": "gochujang", "reason": "new"}]})
+        {"rulings": [{"proposed_bid": "harissa", "verdict": "approve", "bid": "harissa",
+                      "reason": "new"},
+                     {"proposed_bid": "gochujang", "verdict": "approve", "bid": "gochujang",
+                      "reason": "new"}]}]})
     d2 = daemon(dispatcher=fd2)
     d2._commodity_rows = list(_REG_ROWS)
     res2 = arun(d2.registrar_rulings("dish", props("harissa", "gochujang")))
     n2 = len(fd2.prompts("commodity-registrar"))
-    out.append(("CLEAN TWIN two genuinely different foods cost ONE ruling each - the re-check must "
-                "not tax the common case",
-                n2 == 2 and len(res2) == 2, "registrar dispatches=%d" % n2))
+    out.append(("CLEAN TWIN two genuinely different foods are ruled in ONE batch dispatch and "
+                "never re-litigated - the re-check must not tax the common case",
+                n2 == 1 and len(res2) == 2, "registrar dispatches=%d" % n2))
 
     # ---- CLEAN TWIN: an ALIAS mints nothing, so two aliases onto one target are not a clash.
     fd3 = FakeDispatch({"commodity-registrar": [
-        {"verdict": "alias", "bid": "block-cheese", "reason": "already priced"},
-        {"verdict": "alias", "bid": "block-cheese", "reason": "already priced"}]})
+        {"rulings": [{"proposed_bid": "shredded-cheese", "verdict": "alias", "bid": "block-cheese",
+                      "reason": "already priced"},
+                     {"proposed_bid": "grated-cheese", "verdict": "alias", "bid": "block-cheese",
+                      "reason": "already priced"}]}]})
     d3 = daemon(dispatcher=fd3)
     d3._commodity_rows = list(_REG_ROWS)
     arun(d3.registrar_rulings("dish", props("shredded-cheese", "grated-cheese")))
     n3 = len(fd3.prompts("commodity-registrar"))
     out.append(("CLEAN TWIN two ALIASES onto the same existing id are correct, not a collision - "
                 "only `approve` mints anything",
-                n3 == 2, "registrar dispatches=%d (expected 2, no re-check)" % n3))
+                n3 == 1, "registrar dispatches=%d (expected 1, no re-check)" % n3))
 
     # ---- the normaliser itself
     ck = hunt_lib.collision_key
@@ -3427,16 +3450,147 @@ def _registrar_collision_recheck():
 
 def _registrar_gets_evidence():
     d = _reg_daemon()
-    p = d.registrar_prompt("some-dish", "chicken drumsticks", "chicken-drumsticks", "the mapper's case")
+    p = d.registrar_batch_prompt("some-dish", [("chicken-drumsticks", "chicken drumsticks",
+                                                 "the mapper's case", None)])
     return ("chicken-thighs" in p and "ALREADY READ FOR YOU" in p,
             "near-miss row absent from the prompt: %s" % p[-400:])
 
 
 def _registrar_evidence_is_not_a_verdict():
     d = _reg_daemon()
-    p = d.registrar_prompt("some-dish", "chicken drumsticks", "chicken-drumsticks", "case")
+    p = d.registrar_batch_prompt("some-dish", [("chicken-drumsticks", "chicken drumsticks",
+                                                 "case", None)])
     return ("NOT exhaustive" in p and "approve" in p and "alias" in p,
             "the block reads as a verdict rather than as leads: %s" % p[-300:])
+
+
+# =====================================================================================================
+# F2 - the registrar rules a whole BATCH from one dossier (2026-08-25)
+#
+# Measured on jc1: 10 turns and 81,929 raw tokens to rule ONE proposal, with the near-miss block
+# already in the prompt - the turns were the registrar's own greps and feed reads, i.e. the auditor's
+# old shape, an OBLIGATION to fetch what could be shown. 6b: 12 dispatches, 12.0 minutes of wall.
+#
+# NEUTER PROOFS, RUN 2026-08-25 and reverted:
+#   * dispatch per proposal again (loop `rule([w])` over work) -> the one-dispatch case goes red at
+#     3 dispatches, and the collision twin at 4 where 3 belong.
+#   * drop feed_block / floor_map_block / label_grep_block out of registrar_dossier -> the dossier
+#     case goes red naming the missing block.
+#   * make validate_registrar_batch return [] -> the indexed-refusal case goes red (the bad ruling
+#     lands, which is the whole-payload rule broken).
+# =====================================================================================================
+
+_REG_FEED = {"chicken-thighs": {"unit": "lb", "cheapest": 1.29, "store": "Aldi", "n": 6},
+             "brown-rice": {"unit": "lb", "cheapest": 0.98, "store": "Walmart", "n": 5}}
+_REG_FLOOR = {"chicken-drumsticks": "chicken-thighs", "jasmine-rice": "brown-rice",
+              "yellow-mustard": "mustard"}
+
+
+def _reg_batch_daemon(feed=None, floor=None, dispatcher=None):
+    d = daemon(run_dir="R", dispatcher=dispatcher)
+    d._commodity_rows = list(_REG_ROWS)
+    # The caches are seeded so these fixtures never depend on the LIVE feed, which another session
+    # rewrites daily - the tuple wrapper is what lets a seeded None mean "could not be read".
+    d._feed_prices = (dict(_REG_FEED) if feed is None else feed,)
+    d._floor_map = (dict(_REG_FLOOR) if floor is None else floor,)
+    return d
+
+
+_REG_WORK = [("chicken-drumsticks", "chicken drumsticks", "a different cut", None),
+             ("brown-jasmine-rice", "brown jasmine rice", "a different grain", None),
+             ("goat-cheese", "goat cheese", "not block cheese", None)]
+
+
+def _registrar_batch_is_one_dispatch():
+    """MUST FIRE: three proposals, ONE dispatch, three rulings back - the decider's shape."""
+    fd = FakeDispatch({"commodity-registrar": [{"rulings": [
+        {"proposed_bid": "chicken-drumsticks", "verdict": "alias", "bid": "chicken-thighs",
+         "reason": "the include pattern already prices drumsticks"},
+        {"proposed_bid": "brown-jasmine-rice", "verdict": "approve", "bid": "brown-jasmine-rice",
+         "reason": "a different grain from brown-rice"},
+        {"proposed_bid": "goat-cheese", "verdict": "approve", "bid": "goat-cheese",
+         "reason": "block-cheese is a different food"}]}]})
+    d = _reg_batch_daemon(dispatcher=fd)
+    props = [{"proposed_bid": b, "term": t, "evidence": e} for b, t, e, _r in _REG_WORK]
+    res = arun(d.registrar_rulings("dish", props))
+    prompts = fd.prompts("commodity-registrar")
+    one = len(prompts) == 1
+    named = one and all(b in prompts[0] and t in prompts[0] for b, t, _e, _r in _REG_WORK)
+    ok = (one and named and len(res) == 3
+          and [r["proposed_bid"] for r in res] == [w[0] for w in _REG_WORK]
+          and [r["verdict"] for r in res] == ["alias", "approve", "approve"]
+          # the sibling framing is in the prompt, not only in the mechanical re-check
+          and "SIBLINGS IN ONE BATCH" in prompts[0])
+    return ok, "dispatches=%d rulings=%s" % (len(prompts), json.dumps(res)[:300])
+
+
+def _registrar_dossier_carries_the_checklist():
+    """MUST FIRE: the feed's own price cell, the declared-same-thing rows and the label greps arrive
+    in the dossier - the three reads commodity-registrar.md orders beyond the namespace sweep."""
+    d = _reg_batch_daemon()
+    # THE LABEL SEAM IS ITS OWN CASE, and it has to be a term whose only route to the row is the
+    # LABEL's own word form: `tomato paste` shares no token with id `canned-tomatoes` or label
+    # `Tomatoes` (tomato against tomatoes), so the near-miss sweep cannot see it and only a stem grep
+    # over labels can. That is the yellow-mustard seam, which cost a full seven-store pricing run.
+    d._commodity_rows = list(_REG_ROWS) + [
+        {"id": "canned-tomatoes", "label": "Tomatoes", "ns": "commodities", "include": ""}]
+    work = list(_REG_WORK) + [("tomato-paste", "tomato paste", "a concentrate, not the canned form",
+                               None)]
+    p = d.registrar_batch_prompt("dish", work)
+    feed = "$1.29 / lb cheapest at Aldi" in p and "not in the feed" in p
+    floor = "chicken-drumsticks -> chicken-thighs" in p
+    labels = "LABEL MATCHES" in p and "canned-tomatoes" in p.split("LABEL MATCHES")[-1]
+    authority = ("NOT exhaustive" in p and "may re-derive anything you distrust" in p
+                 and "OBLIGATION to fetch it, never" in p)
+    return (feed and floor and labels and authority,
+            "feed=%s floor=%s labels=%s authority=%s" % (feed, floor, labels, authority))
+
+
+def _registrar_unreadable_sources_are_announced():
+    """CLEAN TWIN: could-not-look is never a clean bill. An unreadable feed is ANNOUNCED, never
+    rendered as 'no price cell exists', which a registrar would read as evidence FOR a new id."""
+    d = _reg_batch_daemon()
+    d._feed_prices = (None,)
+    d._floor_map = (None,)
+    p = d.registrar_batch_prompt("dish", _REG_WORK)
+    return ("THE LIVE FEED: could NOT be read" in p
+            and "DECLARED-SAME-THING LAYER: could NOT be read" in p
+            and "not in the feed" not in p,
+            "an unreadable source rendered as an answer: %s" % p[-500:])
+
+
+def _registrar_batch_refusal_names_the_item():
+    """MUST FIRE: a malformed item is refused with its INDEX named, and the WHOLE payload is refused -
+    never applied in part. Half a batch of approvals is where an id gets minted while its sibling's
+    collision is still unruled."""
+    expected = [w[0] for w in _REG_WORK]
+    bad = {"rulings": [
+        {"proposed_bid": "chicken-drumsticks", "verdict": "alias", "bid": "chicken-thighs",
+         "reason": "ok"},
+        {"proposed_bid": "brown-jasmine-rice", "verdict": "mint-it", "reason": "invented verdict"},
+        {"proposed_bid": "goat-cheese", "verdict": "alias", "reason": "an alias with no target"}]}
+    problems = hunt_lib.validate_registrar_batch(bad, expected=expected)
+    indexed = (any(pr.startswith("ruling 1 (brown-jasmine-rice)") for pr in problems)
+               and any(pr.startswith("ruling 2 (goat-cheese)") for pr in problems))
+
+    # ...and at the daemon: a dispatcher that HONOURS the validator (as hunt_dispatch does after its
+    # one re-ask) returns nothing, so NO ruling from that payload is applied and every id stays
+    # unsettled.
+    class Validating(FakeDispatch):
+        def __call__(self, agent, prompt, schema=None, validator=None, **kw):
+            res = FakeDispatch.__call__(self, agent, prompt, schema=schema, validator=validator, **kw)
+            if validator and res.payload and validator(res.payload):
+                res.payload, res.failure = None, "schema"
+            return res
+
+    fd = Validating({"commodity-registrar": [bad]})
+    d = _reg_batch_daemon(dispatcher=fd)
+    props = [{"proposed_bid": b, "term": t, "evidence": e} for b, t, e, _r in _REG_WORK]
+    res = arun(d.registrar_rulings("dish", props))
+    said = any("returned no verdict on 3 proposed id(s)" in f for f in d.findings)
+    # the GOOD ruling in the same payload does not land either: whole payload or nothing
+    return (indexed and res == [] and said,
+            "indexed=%s applied=%s findings=%s" % (indexed, json.dumps(res), json.dumps(d.findings)[:240]))
 
 
 def _registrar_evidence_shows_include():
