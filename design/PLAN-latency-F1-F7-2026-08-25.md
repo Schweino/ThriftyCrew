@@ -249,6 +249,15 @@ commit.
 <=3 turns and <=120k raw per proposal BATCH (vs 9-10 turns and 62k-233k per single proposal).
 Wall: one session's startup instead of N.
 
+**MEASURED 2026-08-25 (lf1 drill, m1 drill, and EVAL-registrar-batch-2026-08-25.md).** At a batch
+of ONE: 3 turns / 40,098 - MET to the turn. At a batch of TWO: 12 turns / 123,401 - MISSED on both
+edges, and the decomposition attributes 7 of the 11 tool calls to reproduced harness Grep friction
+rather than to the batch road; the zero-friction counterfactual is 5-6 turns / ~60-75k (raw inside,
+turns still over). The target's turn edge equals the N=1 floor and carries no N term while the
+registrar's own sweep scales with food families - whether it gains an N term, moves to per-request
+counting, or stands is Brad's call (that eval, section 6). The target text above is deliberately
+unchanged.
+
 ## 5. F3 - QA rules from a dossier (the tail's judge contract)
 
 ### 5.1 The decision this plan takes, and the one it explicitly does NOT

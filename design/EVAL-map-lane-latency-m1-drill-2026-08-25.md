@@ -216,6 +216,18 @@ turns / <=120k target on both edges. The claim F2 was built on - that N proposal
 rather than N - is still true in DISPATCH count (one dispatch, two proposals), but the session itself
 grew four times as long. Thursday's wide run is where this matters; it is worth knowing before it.
 
+   **CORRECTED 2026-08-25 (registrar-batch review, EVAL-registrar-batch-2026-08-25.md).** The
+   decomposition now exists, and "grew four times as long" is the TURN metric only: on raw it is
+   3.08x, on API requests 2.5x (5 vs 2 - the lane log counts parallel same-request tool calls as
+   separate turns), on wall 1.77x. Measured off the transcript: 7 of the session's 11 tool calls
+   were recovery from two REPRODUCED harness Grep defects (a slash-bearing glob member silently
+   matching nothing and poisoning its whole brace alternation; the minified smp-feed rendering as
+   an omitted long line), not batch work - the two pure-recovery API requests alone cost 44,109
+   raw, 35.7% of the session. The batch road is ruled INNOCENT of the miss; even as measured it
+   cost 25% less per proposal than jc1's single road. The surviving finding is the target's own
+   arithmetic (its 3-turn edge equals the N=1 zero-friction floor and carries no N term), which is
+   that eval's section 6 and Brad's conversation.
+
 **3. M4's cap is not being obeyed, and on the other batch it bit too hard.** Batch B made 9 web calls
 against a stated cap of "ONE fetch and ONE fallback per food", so the sentence did not bind. Batch A
 shows the reverse and it is more expensive: the mapper made 2 WebSearches for `Pork Smoked Sausage`
