@@ -567,18 +567,27 @@ def run():
       *_skeleton_incomplete_is_stuck())
     T("MUST FIRE  a BLOCKED skeleton (exit 2) is STUCK and never reaches the writer",
       *_skeleton_blocked_is_stuck())
-    T("MUST FIRE  the write prompt says the intake ALREADY EXISTS and names only the writer-fillable "
-      "fields - the writer completes it in place, it no longer creates it",
-      *_write_prompt_is_in_place())
-    T("MUST FIRE  a locked-field drift buys ONE re-dispatch, quoting the drifted fields VERBATIM",
-      *_drift_buys_one_reask())
-    T("MUST FIRE  a SECOND drift is rejected-qa with the fields in the detail - one correction, "
-      "never a loop, never a silent daemon-side revert",
-      *_second_drift_is_rejected())
-    T("MUST FIRE  and against the REAL state machine that rejection LANDS - `priced -> rejected-qa` "
-      "was being faked until D8 added the edge, and only a real-machine fixture could see it",
-      *_second_drift_real_machine())
-    T("CLEAN TWIN a clean prose-only fill passes with no re-dispatch at all",
+    T("MUST FIRE  the write prompt hands the writer its CONTENT INLINE and asks for `fields` - no "
+      "file to read, no file to write, and the old in-place language gone",
+      *_write_prompt_is_a_dossier())
+    T("MUST FIRE  a `fields` payload patches EXACTLY those fields and every other byte of the intake "
+      "is identical to the skeleton it was issued from",
+      *_fields_patch_exactly())
+    T("CLEAN TWIN dotted keys nest one level, splitting on the FIRST dot only, and arrays survive as "
+      "arrays",
+      *_fields_nest_correctly())
+    T("MUST FIRE  a key outside the fillable set is refused by the DISPATCH validator with the key "
+      "named, and the intake is untouched",
+      *_fields_unknown_key_refused())
+    T("MUST FIRE  ...and the patcher refuses it too, so the belt holds if the brace is ever removed",
+      *_patcher_refuses_unknown_key())
+    T("MUST FIRE  a post-patch locked-field difference is a DAEMON BUG: the recipe is STUCK with the "
+      "detail, state None, and there is NO second writer dispatch - the redrift road is gone",
+      *_post_patch_drift_is_stuck())
+    T("MUST FIRE  the redrift road is DELETED from the daemon's source - no redrift_prompt, no "
+      "`drifted twice` branch, so nobody rebuilds the re-ask this change made impossible",
+      *_redrift_road_is_gone())
+    T("CLEAN TWIN a clean prose-only fill passes with exactly one dispatch and one verify",
       *_clean_fill_no_reask())
     T("MUST FIRE  a -Verify that could not RUN is STUCK, never a pass and never a drift",
       *_verify_blocked_is_stuck())
@@ -2086,8 +2095,10 @@ def _skeleton_runs_first():
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
         builds = [c for c in ps.find("build-intake-skeleton.ps1") if "-Verify" not in c["args"]]
         prompt = fd.prompts("recipe-writer")[0] if fd.prompts("recipe-writer") else ""
+        # the prompt assertion moved to _write_prompt_is_a_dossier with CHANGE W; what this case is
+        # about is the ORDER - the machine half exists before a word of prose is paid for.
         return (len(builds) == 1 and FakePS.value_after(builds[0]["args"], "-Slug") == "s1"
-                and "THE INTAKE ALREADY EXISTS" in prompt,
+                and "THE SKELETON'S LOCKED VIEW" in prompt,
                 "builds=%d slug=%s" % (len(builds), FakePS.value_after(builds[0]["args"], "-Slug")
                                        if builds else None))
     finally:
@@ -2165,131 +2176,195 @@ def _skeleton_blocked_is_stuck():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _write_prompt_is_in_place():
+def _ok_fields(**over):
+    """A three-field patch, 3+ elements per the estate's collection rule, with one array among them
+    so the array path is exercised in the ordinary case and not only in its own fixture."""
+    f = {"prose.intro_html": "<p>Brad on this dish.</p>",
+         "cuisine": "American",
+         "head.steps": ["Brown the beef.", "Add the rice.", "Simmer."]}
+    f.update(over)
+    return f
+
+
+def _write_result(slug="s1", fields=None, **over):
+    r = {"slug": slug, "status": "ok", "state": "written",
+         "fields": _ok_fields() if fields is None else fields}
+    r.update(over)
+    return r
+
+
+def _read_intake(tmp, slug="s1"):
+    with open(os.path.join(tmp, "intake", "%s.json" % slug), "r", encoding="utf-8-sig") as f:
+        return json.load(f)
+
+
+def _read_skeleton(tmp, slug="s1"):
+    with open(os.path.join(tmp, "intake", "%s.skeleton.json" % slug), "r", encoding="utf-8-sig") as f:
+        return (json.load(f) or {}).get("intake") or {}
+
+
+def _write_prompt_is_a_dossier():
+    """CHANGE W. v2's line was "Produce ONE intake JSON"; D8's was "COMPLETE its intake IN PLACE".
+    Both are gone: the writer has no file access at all, and its whole deliverable is the payload."""
     tmp = tempfile.mkdtemp(prefix="daemon-skel6-")
     try:
-        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()])
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        with open(os.path.join(tmp, "extracted", "s1.json"), "w", encoding="utf-8") as f:
+            json.dump({"title": "Beef And Rice", "source_url": "https://d/x",
+                       "ingredients": ["3 1/2 lb ground beef", "3 cups rice", "2 onions"],
+                       "instructions": ["Brown the beef.", "Add rice.", "Simmer 25 minutes."]}, f)
+        d, fd = _write_daemon(tmp, ["s1"], [_write_result()])
         prompt = fd.prompts("recipe-writer")[0]
-        # v2's line was "Produce ONE intake JSON at <RunDir>\intake\<slug>.json". It leaves in the
-        # same commit as the skeleton, or the writer and the skeleton race for the same file with two
-        # different ideas of who creates it.
-        return ("THE INTAKE ALREADY EXISTS" in prompt and "FILL ONLY THESE FIELDS" in prompt
-                and "Produce %s" % tmp not in prompt and "Compute NO number" in prompt
-                and "forbidden_prose_terms" in prompt,
-                prompt[:160])
+        return (("THE TRANSCRIPTION" in prompt and "THE SKELETON'S LOCKED VIEW" in prompt
+                 # the content is really inline, not pointed at
+                 and "Simmer 25 minutes." in prompt and "3 1/2 lb" in prompt
+                 and "prose.intro_html" in prompt and "head.step_names" in prompt
+                 # and the two superseded contracts are both gone
+                 and "COMPLETE its intake IN PLACE" not in prompt
+                 and "THE INTAKE ALREADY EXISTS" not in prompt
+                 and "Produce ONE intake JSON" not in prompt
+                 # the rails that did NOT move
+                 and "Compute NO number" in prompt and "no em dashes" in prompt
+                 and "14 servings" in prompt),
+                prompt[:200])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _drift_reply(drifted):
-    """A -Verify that reports drift once and then clean, the way a writer that fixed it would read."""
-    seq = {"n": 0}
+def _fields_patch_exactly():
+    tmp = tempfile.mkdtemp(prefix="daemon-fields1-")
+    try:
+        d, fd = _write_daemon(tmp, ["s1"], [_write_result()])
+        got, skel = _read_intake(tmp), _read_skeleton(tmp)
+        touched = {"prose": got.get("prose"), "cuisine": got.get("cuisine"),
+                   "head.steps": (got.get("head") or {}).get("steps")}
+        # EVERY OTHER BYTE IDENTICAL: compare whole dicts with the fillable paths removed, which is
+        # the only comparison that can catch a patcher that quietly re-serialises a number.
+        a, b = json.loads(json.dumps(got)), json.loads(json.dumps(skel))
+        for doc in (a, b):
+            doc.pop("prose", None)
+            doc.pop("cuisine", None)
+            (doc.get("head") or {}).pop("steps", None)
+        return ((touched["prose"] == {"intro_html": "<p>Brad on this dish.</p>"}
+                 and touched["cuisine"] == "American"
+                 and touched["head.steps"] == ["Brown the beef.", "Add the rice.", "Simmer."]
+                 and a == b and not d.outcomes),
+                "touched=%s rest-identical=%s" % (json.dumps(touched)[:200], a == b))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
-    def reply(args):
-        if "-Verify" not in args:
-            return 0, "", ""
-        seq["n"] += 1
-        if seq["n"] == 1:
-            return 1, ("build-intake-skeleton: %d LOCKED FIELD(S) DRIFTED in s1\n" % len(drifted)
-                       + "\n".join("    " + d for d in drifted)
-                       + "\nBUILD-INTAKE-SKELETON-COMPLETE"), ""
-        return 0, "every locked field is as issued", ""
-    return reply
+
+def _fields_nest_correctly():
+    """`prose.cost_closing_html` is a TWO level path, not three. A naive split on every dot would
+    invent a nesting build-v2-spec cannot read, and the value would vanish without an error."""
+    tmp = tempfile.mkdtemp(prefix="daemon-fields2-")
+    try:
+        fields = {"prose.cost_closing_html": "<p>What it costs.</p>",
+                  "head.step_names": ["Brown", "Add", "Simmer"],
+                  "writer_notes": ["one", "two", "three"],
+                  "forbidden_prose_terms": ["cheap", "gourmet", "healthy"]}
+        d, fd = _write_daemon(tmp, ["s1"], [_write_result(fields=fields)])
+        got = _read_intake(tmp)
+        return (((got.get("prose") or {}).get("cost_closing_html") == "<p>What it costs.</p>"
+                 and (got.get("head") or {}).get("step_names") == ["Brown", "Add", "Simmer"]
+                 and got.get("writer_notes") == ["one", "two", "three"]
+                 and got.get("forbidden_prose_terms") == ["cheap", "gourmet", "healthy"]
+                 # no invented nesting anywhere
+                 and "prose.cost_closing_html" not in got
+                 and "cost_closing_html" not in ((got.get("prose") or {}).get("cost", {}) or {})),
+                json.dumps({"prose": got.get("prose"), "head": got.get("head"),
+                            "writer_notes": got.get("writer_notes")})[:250])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _drift_buys_one_reask():
+def _fields_unknown_key_refused():
+    """DISPATCH-LEVEL, so the model gets the re-ask with the key named - the same road
+    validate_registrar takes. Never a silent drop: a writer that keeps believing it can set
+    macros_per_serving is exactly the defect the skeleton exists to end."""
+    bad = dict(_ok_fields())
+    bad["macros_per_serving"] = {"calories": 640}
+    problems = hunt_lib.validate_writer_fields({"slug": "s1", "fields": bad})
+    named = [p for p in problems if "macros_per_serving" in p]
+    # a rejection carries no fields at all, and that stays legal
+    none_ok = hunt_lib.validate_writer_fields({"slug": "s1", "status": "rejected"}) == []
+    # and the array fields are type-checked where it matters
+    shape = hunt_lib.validate_writer_fields(
+        {"slug": "s1", "fields": {"head.steps": "not an array"}})
+    return (len(named) == 1 and none_ok and len(shape) == 1 and "ARRAY" in shape[0],
+            "problems=%s none_ok=%s shape=%s" % (json.dumps(problems)[:250], none_ok,
+                                                 json.dumps(shape)[:150]))
+
+
+def _patcher_refuses_unknown_key():
+    tmp = tempfile.mkdtemp(prefix="daemon-fields3-")
+    try:
+        skeletoned(tmp, ["s1"])
+        before = _read_intake(tmp)
+        d = daemon(run_dir=tmp)
+        bad = dict(_ok_fields())
+        bad["macros_per_serving"] = {"calories": 640}
+        ok, why = d.apply_writer_fields("s1", bad)
+        after = _read_intake(tmp)
+        return ((not ok) and "macros_per_serving" in why and after == before,
+                "ok=%s why=%s untouched=%s" % (ok, why[:150], after == before))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _post_patch_drift_is_stuck():
+    r"""THE MEANING OF verify_skeleton INVERTS. It used to catch the WRITER editing a machine field,
+    and the answer was the one re-ask. The writer has no file access now - only apply_writer_fields
+    writes this file - so a locked-field difference can only be the PATCHER's doing. That is a daemon
+    bug: STUCK with the detail, never a re-ask, because there is nobody to ask.
+
+    THE DISPATCH COUNT IS THE PROOF THE REDRIFT ROAD IS GONE. Two writer results are queued; if the
+    old road survived anywhere, the second would be consumed.
+    """
     tmp = tempfile.mkdtemp(prefix="daemon-drift1-")
     try:
         drifted = ["ingredients[1].grams: issued '630', returned '900'",
                    "macros_per_serving.calories: issued '500', returned '640'",
                    "head.totalTime: issued 'PT40M', returned 'PT25M'"]
-        ps = FakePS({"build-intake-skeleton.ps1": _drift_reply(drifted)})
-        d, fd = _write_daemon(tmp, ["s1"], [_ok_write(), _ok_write()], ps=ps)
-        prompts = fd.prompts("recipe-writer")
-        to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
-        quoted = len(prompts) == 2 and all(d0 in prompts[1] for d0 in drifted)
-        return (quoted and to == ["spec-built", "written"] and not d.outcomes
-                and "This is the one correction" in prompts[1],
-                "dispatches=%d quoted=%s advances=%s" % (len(prompts), quoted, to))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _second_drift_is_rejected():
-    tmp = tempfile.mkdtemp(prefix="daemon-drift2-")
-    try:
-        drifted = ["ingredients[0].buy: issued '3 1/2 lb', returned '4 lb'",
-                   "name: issued 's1', returned 's1 Deluxe'",
-                   "macros_per_serving.fat_g: issued '20', returned '18'"]
         body = ("build-intake-skeleton: 3 LOCKED FIELD(S) DRIFTED in s1\n"
-                + "\n".join("    " + d for d in drifted) + "\nBUILD-INTAKE-SKELETON-COMPLETE")
+                + "\n".join("    " + x for x in drifted) + "\nBUILD-INTAKE-SKELETON-COMPLETE")
         ps = FakePS({"build-intake-skeleton.ps1":
                      lambda a: ((1, body, "") if "-Verify" in a else (0, "", ""))})
-        d, fd = _write_daemon(tmp, ["s1"], [_ok_write(), _ok_write()], ps=ps)
+        d, fd = _write_daemon(tmp, ["s1"], [_write_result(), _write_result()], ps=ps)
         to = [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run.ps1", "-Advance")]
-        return (len(fd.prompts("recipe-writer")) == 2 and to == ["rejected-qa"]
-                and d.outcomes and d.outcomes[0]["state"] == "rejected-qa"
-                and "drifted twice" in d.outcomes[0]["detail"]
-                and "ingredients[0].buy" in d.outcomes[0]["detail"],
+        out = d.outcomes[0] if d.outcomes else {}
+        return ((len(fd.prompts("recipe-writer")) == 1
+                 and out.get("status") == "stuck" and out.get("state") is None
+                 and "daemon bug" in (out.get("detail") or "")
+                 and "macros_per_serving.calories" in (out.get("detail") or "")
+                 # a daemon bug belongs in the run's findings, not only in one recipe's outcome
+                 and any("daemon bug" in f for f in d.findings)
+                 # and NOTHING advanced: no spec build, no rejected-qa
+                 and to == []),
                 "dispatches=%d advances=%s outcome=%s"
-                % (len(fd.prompts("recipe-writer")), to, json.dumps(d.outcomes)))
+                % (len(fd.prompts("recipe-writer")), to, json.dumps(d.outcomes)[:300]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _second_drift_real_machine():
-    """The double-drift retirement, against the REAL hunt-run.ps1 on a scratch run dir.
-
-    THE INJECTED TWIN ABOVE PASSED WHILE THIS ROUTE WAS ILLEGAL. `priced` allowed only `spec-built`
-    and `rejected-macros`, so `priced -> rejected-qa` was REFUSED and the recipe stayed at `priced`
-    on disk while the daemon counted it rejected - the same shape as phase 3's band-route trap, found
-    the same way and by the same kind of fixture. D8 added the edge; this is what keeps it honest.
-    """
-    tmp = tempfile.mkdtemp(prefix="daemon-drift-real-")
-    try:
-        run_dir = os.path.join(tmp, "run")
-        os.makedirs(run_dir, exist_ok=True)
-        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
-                                                     "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
-        if rc != 0:
-            return False, "could not init: %s" % o.strip()[:150]
-        for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
-            args = ["-Advance", "-RunDir", run_dir, "-Slug", "drift-drill", "-To", st,
-                    "-By", "drill", "-Detail", "drill"]
-            if i == 0:
-                args += ["-Title", "Drift Drill", "-SourceUrl", "https://d/x", "-Protein", "beef"]
-            rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
-            if rc != 0:
-                return False, "staging refused at %s: %s" % (st, o.strip()[:150])
-        skeletoned(run_dir, ["drift-drill"])
-        drifted = ["ingredients[0].grams: issued '1568', returned '1900'",
-                   "macros_per_serving.calories: issued '500', returned '640'",
-                   "name: issued 'drift-drill', returned 'Drift Drill Deluxe'"]
-        body = ("build-intake-skeleton: 3 LOCKED FIELD(S) DRIFTED in drift-drill\n"
-                + "\n".join("    " + d for d in drifted) + "\nBUILD-INTAKE-SKELETON-COMPLETE")
-        real_ps = hunt_lib.ps_invoke
-
-        def ps(script, args, timeout=180):
-            # the REAL hunt-run.ps1 for every state move; only the skeleton surface is scripted, so the
-            # fixture can force a second drift without inventing a writer that makes one
-            if "build-intake-skeleton" in os.path.basename(script):
-                return (1, body, "") if "-Verify" in args else (0, "", "")
-            return real_ps(script, args, timeout)
-
-        fd = FakeDispatch({"recipe-writer": [{"slug": "drift-drill", "status": "ok",
-                                              "state": "written"},
-                                             {"slug": "drift-drill", "status": "ok",
-                                              "state": "written"}]})
-        d = HD.Daemon(run_dir, "drift-drill-run", dispatcher=fd, ps=ps, quiet=True)
-        d.ch["write"].push({"slug": "drift-drill"})
-        d.ch["write"].close()
-        arun(d.run(("write",)))
-        final = d.state_of("drift-drill")
-        return (final == "rejected-qa" and len(fd.prompts("recipe-writer")) == 2 and not d.findings,
-                "on-disk state=%s dispatches=%d findings=%s"
-                % (final, len(fd.prompts("recipe-writer")), json.dumps(d.findings)))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+def _redrift_road_is_gone():
+    """Source scan, the _one_marshalling_road idiom. The re-ask class is dead by CONSTRUCTION, and
+    the thing that would quietly resurrect it is somebody adding the prompt back because the name
+    still reads sensibly. NEUTER PROOF, run 2026-08-25: restoring redrift_prompt turns this red."""
+    with open(os.path.join(HERE, "hunt-daemon.py"), "r", encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    # CODE ONLY. The comments explaining the deletion naturally quote the thing they deleted, and a
+    # scan that cannot tell a tombstone from a resurrection would force those comments out - which
+    # would leave the next reader with no record of why the road is missing.
+    src = "\n".join(l for l in lines if not l.lstrip().startswith("#"))
+    bad = []
+    if "def redrift_prompt" in src:
+        bad.append("redrift_prompt is back")
+    if "drifted twice" in src:
+        bad.append("the `drifted twice` rejected-qa branch is back")
+    if ":redrift" in src:
+        bad.append("a redrift dispatch label is back")
+    return not bad, "; ".join(bad)
 
 
 def _status_names_stuck():
@@ -2366,7 +2441,7 @@ def _clean_fill_no_reask():
     tmp = tempfile.mkdtemp(prefix="daemon-drift3-")
     try:
         ps = FakePS()
-        d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
+        d, fd = _write_daemon(tmp, ["s1"], [_write_result()], ps=ps)
         verifies = [c for c in ps.find("build-intake-skeleton.ps1") if "-Verify" in c["args"]]
         return (len(fd.prompts("recipe-writer")) == 1 and len(verifies) == 1 and not d.outcomes,
                 "dispatches=%d verifies=%d" % (len(fd.prompts("recipe-writer")), len(verifies)))

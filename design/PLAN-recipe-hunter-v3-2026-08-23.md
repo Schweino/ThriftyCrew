@@ -588,6 +588,31 @@ Two consequences worth naming so they get built:
   a macro) rejects the intake and re-dispatches with the drift named. That is the D8 fixture's
   enforcement mechanism.
 
+  **CORRECTED 2026-08-25 (CHANGE W, from design\PLAN-hunter-judge-contract-2026-08-25.md section 4).
+  The re-dispatch half of that sentence is now dead code and the paragraph would rebuild it.** The
+  writer no longer touches the intake at all. It returns a `fields` object keyed by the dotted
+  writer-fillable names and `Daemon.apply_writer_fields` patches the file; the content the writer
+  used to Read (the transcription, and the skeleton's locked view) is rendered INLINE into the
+  dispatch by `Daemon.writer_dossier`. Measured motive, on 6b: one recipe cost 23 turns and 1,169,531
+  raw tokens, and the turns were file I/O on the intake.
+
+  The diff STAYS and its MEANING INVERTS, which is the part worth reading twice. It used to catch the
+  writer editing a machine field, and the answer was the one re-ask. Post-patch, only
+  apply_writer_fields writes that file, so a locked-field difference can only be the PATCHER's doing:
+  it is an orchestrator defect, the recipe is STUCK carrying that sentence, and it is never re-asked,
+  because there is nobody to ask. The redrift road is DELETED - `redrift_prompt`, the r2 re-dispatch,
+  and the `drifted twice -> rejected-qa` branch - and a source-scan fixture keeps it deleted, because
+  the thing that would quietly resurrect it is somebody adding a prompt back whose name still reads
+  sensibly. The one-correction discipline is untouched where it still applies (QA).
+
+  Two consequences to state rather than discover later. `validate_writer_fields` runs at DISPATCH, so
+  a key outside the fillable set is refused with the key quoted back to the model, never coerced or
+  silently dropped - the same road `validate_registrar` takes, for the same never-auto-coerce reason
+  §4.1a gives. And `_second_drift_real_machine`, the real-state-machine fixture proving
+  `priced -> rejected-qa` LANDS on a double drift, is retired with the route it proved: the new
+  failure is a STUCK, which performs no advance, so there is no state-machine edge left to keep
+  honest. `_band_gate_real_machine` remains the write lane's real-machine coverage.
+
 ### S7 QA -> battery first, judgment residue second
 
 Extend the mechanical battery (all pure code, run by the orchestrator before the agent):

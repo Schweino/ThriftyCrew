@@ -868,10 +868,61 @@ DERIVE = {"type": "object", "properties": {
     "required": ["resolved"]}
 
 # The delta: no cal_per_serving / carbs_per_serving / protein_per_serving / cost_per_serving.
+#
+# CHANGE W (2026-08-25): THE WRITER RETURNS ITS FIELDS AND THE DAEMON PATCHES THE INTAKE. It used to
+# Read three files and Edit the intake field by field: 23 turns and 1,169,531 raw tokens for one
+# recipe on 6b, plus a whole re-ask class (redrift) policing what construction can simply prevent.
+# A writer that never opens the intake cannot drift a locked field.
+#
+# THE KEYS ARE THE DOTTED NAMES, AS LITERAL JSON KEYS ("prose.intro_html"), so the payload stays flat
+# and apply_writer_fields owns the nesting. And the value types are DELIBERATELY LOOSE - the 6a
+# lesson pinned above MAPPED's report fields, arriving here: an over-constrained type cost a whole
+# session's re-ask when the model was right and the schema was wrong. head.steps and head.step_names
+# are the two that must be arrays, and they say so in their descriptions rather than in a `type` this
+# validator would refuse a good answer over.
+WRITER_FIELDS = ("prose.intro_html", "prose.shop_smart", "prose.make_it", "prose.portion_html",
+                 "prose.cost_closing_html", "prose.upsell_html", "cuisine", "head.description",
+                 "head.keywords", "head.steps", "head.step_names", "writer_notes",
+                 "forbidden_prose_terms")
+
 WRITE = {"type": "object", "properties": {
     "slug": {"type": "string"}, "status": {"type": "string"}, "state": {"type": "string"},
-    "detail": {"type": "string"}},
+    "detail": {"type": "string"},
+    "fields": {"type": "object", "description":
+               "your entire deliverable. The dotted names are literal keys: " +
+               ", ".join(WRITER_FIELDS) + ". head.steps, head.step_names, writer_notes and "
+               "forbidden_prose_terms are ARRAYS of strings; the rest are strings. The ORCHESTRATOR "
+               "patches the intake - you have no file to open and none to write."}},
     "required": ["slug", "status", "state"]}
+
+
+def validate_writer_fields(payload):
+    """Any key outside WRITER_FIELDS is an orchestrator-contract violation by the model, and it is
+    refused at DISPATCH - the same road validate_registrar takes - so the re-ask quotes the offending
+    key back rather than the daemon silently dropping it or, worse, patching it.
+
+    A KEY OUTSIDE THE SET IS NEVER COERCED AWAY. Dropping it would let a writer keep believing it can
+    set `macros_per_serving` and let the run keep passing, which is exactly the shape of defect the
+    skeleton exists to end. It is also why this refuses the WHOLE payload rather than the key: a
+    partial patch is a file half in one contract and half in another.
+    """
+    problems = []
+    fields = (payload or {}).get("fields")
+    if fields is None:
+        return problems                      # a rejection carries no fields, and that is legal
+    if not isinstance(fields, dict):
+        return ["`fields` must be an object keyed by the dotted field names, got %s"
+                % type(fields).__name__]
+    for k in sorted(fields.keys()):
+        if k not in WRITER_FIELDS:
+            problems.append("`fields` carries %r, which is not writer-fillable. The writable set is "
+                            "exactly: %s. Every other field is the skeleton's and is LOCKED."
+                            % (k, ", ".join(WRITER_FIELDS)))
+    for k in ("head.steps", "head.step_names", "writer_notes", "forbidden_prose_terms"):
+        if k in fields and not isinstance(fields[k], list):
+            problems.append("`fields[%r]` must be an ARRAY of strings, got %s"
+                            % (k, type(fields[k]).__name__))
+    return problems
 
 QA = {"type": "object", "properties": {
     "slug": {"type": "string"}, "verdict": {"type": "string"},

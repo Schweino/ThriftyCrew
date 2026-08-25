@@ -2376,6 +2376,7 @@ class Daemon(object):
                 r = await self.with_retry(
                     lambda: self.dispatch("recipe-writer", self.write_prompt(slug),
                                           "write", slug, [slug], schema=hunt_lib.WRITE,
+                                          validator=hunt_lib.validate_writer_fields,
                                           stage="writer"),
                     slug, "write")
                 if r is None:
@@ -2386,31 +2387,30 @@ class Daemon(object):
                     await self.advance(slug, "rejected-qa", "writer", (r.get("detail") or "")[:200])
                     continue
 
-                # THE LOCKED-FIELD DIFF, and the adapter's one-correction discipline. On a named drift
-                # the writer is re-dispatched ONCE with the drifted fields quoted VERBATIM - never a
-                # silent daemon-side revert, because the writer has to see what it did. A second drift
-                # is rejected-qa with the fields in the detail. One correction, never a loop, never a
-                # coercion.
+                # CHANGE W: THE DAEMON PATCHES THE INTAKE from the payload. A writer that never opens
+                # the file cannot drift a locked field.
+                okp, whyp = self.apply_writer_fields(slug, r.get("fields"))
+                if not okp:
+                    self.stuck(slug, "write", whyp[:250])
+                    continue
+
+                # THE LOCKED-FIELD DIFF STAYS, AND ITS MEANING INVERTS. It used to catch the writer
+                # editing a machine field, and the answer was the one re-ask. Post-patch, the writer
+                # could not have touched a locked field - only apply_writer_fields writes this file -
+                # so a difference here is an ORCHESTRATOR DEFECT. That is a STUCK carrying the detail,
+                # never a re-ask, because there is nobody to ask. The redrift road is DELETED: the
+                # prompt, the re-dispatch and the "drifted twice" rejected-qa branch are gone, and the
+                # dispatch count is the fixture that proves it.
                 clean, drift, vdetail = await self.verify_skeleton(slug)
                 if not clean and not drift:
                     self.stuck(slug, "write", vdetail[:250])
                     continue
                 if not clean:
-                    self.log("write: %s drifted %d locked field(s) - one re-ask" % (slug, len(drift)))
-                    r2 = await self.with_retry(
-                        lambda: self.dispatch("recipe-writer", self.redrift_prompt(slug, drift),
-                                              "write", "%s:redrift" % slug, [slug],
-                                              schema=hunt_lib.WRITE, stage="writer"),
-                        slug, "write")
-                    if r2 is None:
-                        self.stuck(slug, "write", "no response to the locked-field re-ask")
-                        continue
-                    clean, drift2, vdetail = await self.verify_skeleton(slug)
-                    if not clean:
-                        detail = "locked fields drifted twice: %s" % "; ".join(drift2 or drift)
-                        self.finish(slug, "rejected", "rejected-qa", detail)
-                        await self.advance(slug, "rejected-qa", "writer", detail[:200])
-                        continue
+                    detail = ("the patcher touched a locked field - daemon bug, not a writer defect. "
+                              "%s" % "; ".join(drift))
+                    self.findings.append("%s: %s" % (slug, detail))
+                    self.stuck(slug, "write", detail[:250])
+                    continue
                 # THE COST PASS IS SERIALIZED. Spec assembly stayed parallel; this does not.
                 rc_spec, sp_out, sp_err = await self.cost_engine(
                     BUILD_V2_SPEC_PS, self.spec_args(slug),
@@ -2488,45 +2488,162 @@ class Daemon(object):
                        "upsell_html), cuisine, head.description, head.keywords, head.steps, "
                        "head.step_names, writer_notes, forbidden_prose_terms")
 
-    def write_prompt(self, slug):
-        """PROSE ONLY, IN PLACE. D8 changed the old 'Produce ONE intake JSON' line in the same commit
-        that shipped the skeleton: the writer and the skeleton must not race for the same file with two
-        different ideas of who creates it."""
-        return (
-            "Write recipe %s in Brad's voice and COMPLETE its intake IN PLACE.\n"
-            "Inputs: %s\\extracted\\%s.json (the transcription - the recipe of record)\n"
-            "        %s\\mapped\\%s.json (commodity ids, food-DB rows)\n\n"
-            "THE INTAKE ALREADY EXISTS at %s\\intake\\%s.json. build-intake-skeleton.ps1 wrote it: the\n"
-            "name, slug, protein, source_url, visibility, every ingredient line with its grams and buy\n"
-            "string, macros_per_serving, and head.prepTime/cookTime/totalTime are all in it already,\n"
-            "derived from the decision files above. Do not create it and do not re-derive it.\n\n"
-            "FILL ONLY THESE FIELDS, in place: %s.\n"
-            "Every other field is LOCKED. A snapshot of the file as issued sits beside it at\n"
-            "intake\\%s.skeleton.json, and the orchestrator diffs your result against it: any change to a\n"
-            "locked field is refused and comes back to you with the field named. That is not a\n"
-            "formality - the reason you receive the numbers instead of computing them is that the\n"
-            "prose-number defect class dies by construction rather than at QA.\n\n"
-            "Voice rails: no em dashes, Brad's tone, the existing framework, 14 servings.\n"
-            "Compute NO number. Every macro and every cost comes from the engine, and the orchestrator\n"
-            "runs the spec build and reads the band off the built spec itself. Do not run hunt-run.ps1\n"
-            "and do not move any state.\n\n"
-            "This run's conditions: %s\n"
-            % (slug, self.run_dir, slug, self.run_dir, slug, self.run_dir, slug,
-               self.WRITER_FILLABLE, slug, self.conditions))
+    # ---- CHANGE W: THE WRITER RETURNS FIELDS, THE DAEMON PATCHES THE INTAKE ----------------------
+    #
+    # The old contract said "COMPLETE its intake IN PLACE": the writer Read extracted\<slug>.json,
+    # mapped\<slug>.json and intake\<slug>.json, then Edited the intake field by field. Measured on
+    # 6b: 23 turns, 1,169,531 raw tokens for ONE recipe, and a whole re-ask class (redrift) existing
+    # only to police what construction can prevent. A writer that never opens the intake cannot drift
+    # a locked field.
+    #
+    # WHAT THIS DELETES, AND WHY THAT IS SAFE. The redrift road is gone: redrift_prompt, the r2
+    # re-dispatch, and the "drifted twice" rejected-qa branch. verify_skeleton STAYS and its meaning
+    # INVERTS - post-patch, a locked-field difference can no longer be the writer's doing, so it is
+    # an ORCHESTRATOR DEFECT and the recipe goes STUCK carrying that sentence. It is never re-asked,
+    # because there is nobody to ask. The one-correction discipline is untouched where it still
+    # applies (QA); here the defect class is dead rather than managed.
+    def apply_writer_fields(self, slug, fields):
+        """Patch the intake with exactly the writer-fillable fields. Returns (ok, why_not).
 
-    def redrift_prompt(self, slug, drift):
-        """THE ONE RE-ASK, quoting the drifted fields VERBATIM. Never a silent daemon-side revert: the
-        writer has to see what it did, or the same edit comes back on the next recipe. One correction,
-        never a loop - a second drift is rejected-qa."""
+        REFUSES the whole patch if any key is outside the fillable set. That refusal normally never
+        reaches here - validate_writer_fields runs at DISPATCH so the model gets the re-ask with the
+        key named - and this is the belt behind that brace, because the patcher is the thing actually
+        holding the pen.
+        """
+        fields = fields or {}
+        if not isinstance(fields, dict):
+            return False, "the writer returned `fields` as %s, not an object" % type(fields).__name__
+        bad = [k for k in sorted(fields) if k not in hunt_lib.WRITER_FIELDS]
+        if bad:
+            return False, ("the writer returned field(s) outside the fillable set and NOTHING was "
+                           "patched: %s" % ", ".join(bad))
+        path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception as e:                                    # noqa: BLE001
+            return False, "the intake could not be read for patching (%s)" % e
+        if not isinstance(doc, dict):
+            return False, "the intake is not an object, so there is nothing to patch"
+        for key in fields:
+            # SPLIT ON THE FIRST DOT ONLY. `prose.cost_closing_html` is a two-level path, not three,
+            # and a naive split on every dot would invent a nesting the spec builder cannot read.
+            head, sep, tail = key.partition(".")
+            if not sep:
+                doc[key] = fields[key]
+                continue
+            sub = doc.get(head)
+            if not isinstance(sub, dict):
+                sub = {}
+                doc[head] = sub
+            sub[tail] = fields[key]
+        try:
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(doc, f, ensure_ascii=False, indent=1)
+            os.replace(tmp, path)
+        except Exception as e:                                    # noqa: BLE001
+            return False, "the patched intake could not be written (%s)" % e
+        return True, ""
+
+    def writer_dossier(self, slug):
+        """Everything the writer used to spend turns READING, rendered inline.
+
+        The bound is worth stating because section 9 names it as a way this backfires: the
+        transcription plus the locked view is ~10-20k chars for a normal recipe against 23 turns at
+        ~51k of context each. If it ever runs long the drill reports it rather than shipping blind.
+        """
+        def read(*parts):
+            try:
+                with open(os.path.join(self.run_dir, *parts), "r", encoding="utf-8-sig") as f:
+                    return json.load(f) or {}
+            except Exception:                                     # noqa: BLE001
+                return {}
+
+        ex = read("extracted", "%s.json" % slug)
+        sk = read("intake", "%s.skeleton.json" % slug) or {}
+        # the snapshot is {slug, findings, intake:{...}}; the intake itself is the bare document. Read
+        # whichever arrived rather than assuming, so a dossier is never silently empty.
+        if isinstance(sk.get("intake"), dict):
+            sk = sk["intake"]
+        if not sk:
+            sk = read("intake", "%s.json" % slug)
+        out = []
+        out.append("THE TRANSCRIPTION - the recipe of record, exactly as the source page states it:")
+        out.append("  title  : %s" % as_text(ex.get("title") or sk.get("name")))
+        out.append("  source : %s" % as_text(ex.get("source_url") or sk.get("source_url")))
+        ings = [i for i in (ex.get("ingredients") or []) if i]
+        out.append("  ingredients as written (%d):" % len(ings))
+        for i in ings:
+            out.append("    - %s" % as_text(i if isinstance(i, str) else
+                                            (i.get("raw") or i.get("text") or json.dumps(i)), 300))
+        steps = [i for i in (ex.get("instructions") or ex.get("steps") or []) if i]
+        out.append("  instructions as written (%d):" % len(steps))
+        for n, st in enumerate(steps, 1):
+            out.append("    %d. %s" % (n, as_text(st if isinstance(st, str)
+                                                  else (st.get("text") or json.dumps(st)), 900)))
+        out.append("")
+        out.append("THE SKELETON'S LOCKED VIEW - these are the engine's own figures. They are already")
+        out.append("in the intake, they are not yours to set, and they are the ONLY numbers that may")
+        out.append("appear in your prose:")
+        out.append("  name      : %s" % as_text(sk.get("name")))
+        out.append("  protein   : %s" % as_text(sk.get("protein")))
+        out.append("  servings  : 14")
+        mac = sk.get("macros_per_serving") or {}
+        out.append("  per serving: %s" % ", ".join(
+            "%s %s" % (k, mac.get(k)) for k in ("calories", "protein_g", "carbs_g", "fat_g")
+            if mac.get(k) is not None))
+        head = sk.get("head") or {}
+        out.append("  times     : prep %s, cook %s, total %s"
+                   % (head.get("prepTime") or "-", head.get("cookTime") or "-",
+                      head.get("totalTime") or "-"))
+        lines = [i for i in (sk.get("ingredients") or []) if isinstance(i, dict)]
+        out.append("  the %d LOCKED ingredient lines, as the reader will see them:" % len(lines))
+        for i in lines:
+            out.append("    - %s%s" % (as_text(i.get("item"), 90),
+                                       (" | buy: %s" % as_text(i.get("buy"), 160))
+                                       if i.get("buy") else ""))
+        return "\n".join(out)
+
+
+    def write_prompt(self, slug):
+        """PROSE ONLY, AND NOT A FILE IN SIGHT (CHANGE W). The content the writer used to Read is
+        rendered inline; its entire deliverable is the `fields` object in its payload."""
         return (
-            "%s\\intake\\%s.json came back with LOCKED fields changed. These are machine fields; the\n"
-            "skeleton issued them and nothing downstream re-derives them, so a change here publishes a\n"
-            "wrong number.\n\n"
+            "Write recipe %s in Brad's voice. Your entire deliverable is the `fields` object in your\n"
+            "payload. You have NO files to read and NO files to write: everything you would have\n"
+            "opened is below, and the ORCHESTRATOR patches the intake with what you return.\n\n"
             "%s\n\n"
-            "Put each of those back to the ISSUED value exactly as quoted, leave your prose as it is,\n"
-            "and change nothing else. You may still edit only: %s.\n"
-            "This is the one correction. A second drift retires the recipe at rejected-qa.\n"
-            % (self.run_dir, slug, "\n".join("  - %s" % d for d in drift), self.WRITER_FILLABLE))
+            "FILL EXACTLY THESE FIELDS, as literal dotted keys inside `fields`:\n"
+            "  prose.intro_html        - the opening, Brad talking about this dish\n"
+            "  prose.shop_smart        - how to buy for it well\n"
+            "  prose.make_it           - the method in Brad's voice, faithful to the transcription\n"
+            "  prose.portion_html      - how it portions across the 14 containers\n"
+            "  prose.cost_closing_html - the closing on what it costs to eat this way\n"
+            "  prose.upsell_html       - the close\n"
+            "  cuisine                 - one short label\n"
+            "  head.description        - the SEO description\n"
+            "  head.keywords           - the SEO keywords\n"
+            "  head.steps              - ARRAY of strings, the schema steps\n"
+            "  head.step_names         - ARRAY of strings, one short name per step, same length\n"
+            "  writer_notes            - ARRAY of strings, anything a later reader needs\n"
+            "  forbidden_prose_terms   - ARRAY of strings\n"
+            "Any other key refuses the WHOLE payload and comes back to you with the key named. Every\n"
+            "field not in that list belongs to the skeleton and is LOCKED - and you cannot reach it\n"
+            "anyway, which is the point: the prose-number defect class is dead by construction now\n"
+            "rather than caught at QA.\n\n"
+            "Voice rails, unchanged: no em dashes, Brad's tone, the existing framework, 14 servings.\n"
+            "Compute NO number. Every macro and every cost comes from the engine, and the only figures\n"
+            "that may appear in your prose are the ones shown in the locked view above. The\n"
+            "orchestrator runs the spec build and reads the band off the built spec itself. Do not run\n"
+            "hunt-run.ps1 and do not move any state.\n\n"
+            "This run's conditions: %s\n"
+            % (slug, self.writer_dossier(slug), self.conditions))
+
+    # redrift_prompt DELETED 2026-08-25 (CHANGE W). It re-asked the writer to put back locked fields
+    # it had edited. The writer has no file access now, so that payload class cannot exist: a
+    # post-patch locked-field difference is the PATCHER's doing, which is a daemon bug and a STUCK,
+    # not a question to ask a model. See write_lane below.
 
     # ---------------------------------------------------------------------------------------------
     # QA - cap 2, one owner-routed repair cycle (section S7)
