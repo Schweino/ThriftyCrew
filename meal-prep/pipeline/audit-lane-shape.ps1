@@ -52,6 +52,24 @@ $repo = Split-Path -Parent $mp                        # ...\income
 # script making up a rule the design never made.
 # ---------------------------------------------------------------------------------------------------
 $script:LANE_BATCH = @{ 'price' = 10; 'map' = 5 }
+
+# WHOSE INVOCATIONS THE BATCH SIZE IS ABOUT (added 2026-08-25).
+#
+# A LANE NAME IS NOT A STAGE. Both shape-judged lanes now file several kinds of line under one lane:
+# `map` carries the MAPPER's micro-batches, the REGISTRAR's per-term gates and the MECHANICAL
+# pre-resolve pass; `price` carries the PRICER's batches and the mechanical pre-pass. The plan numbers
+# are about one stage each - S4's micro-batch of 5 is five recipes to ONE MAPPER, and 2.4's batch of
+# 10 is ten terms to ONE PRICER - so shaping the whole lane measures a mixed population.
+#
+# Measured on hunt-2026-08-24-v3-phase6b: the map lane read as 22 invocations for 12 items and fired
+# BOTH map-lane-not-batched and map-lane-duplicate-items over 9 slugs, every one of which was a slug
+# that took a pre-resolve, a mapper and a registrar. Not one of those was real. It is the same defect
+# class the 2026-08-24 pairing fix addressed, one level up: counting things that are not the thing.
+#
+# A registrar gate is not a mapper batch that failed to batch, and refusing to say so would leave the
+# two real findings this script exists for buried under nine false ones - which is how a gate gets
+# turned off.
+$script:LANE_JUDGE = @{ 'price' = 'pricer'; 'map' = 'mapper' }
 # Kept in step with hunt-run.ps1's write-side vocabulary ON PURPOSE, and drift is a FINDING rather than a
 # silent skip: a lane hunt-run will happily record but this script does not know is a lane whose shape
 # nobody is judging, which is how the founding bug hid in the first place.
@@ -115,6 +133,21 @@ function Get-InvocationCount {
   $sel = @($Lines)
   if ($Lane) { $sel = @($sel | Where-Object { [string]$_.lane -eq $Lane }) }
   return @(Get-Invocations $sel).Count
+}
+
+# Narrow a lane's invocations to the STAGE the batch size is about.
+#
+# A LINE WITH NO `by` AT ALL IS AN OLD LINE and is kept, because the field arrived after some of the
+# logs this script still reads. If NOTHING in the lane carries a `by`, the whole lane is a historical
+# log and every line stands - filtering there would judge a real run as having made no invocations,
+# which is the vacuity failure this file already refuses elsewhere.
+function Select-JudgeInvocations {
+  param($Invocations, [string]$Stage)
+  $inv = @($Invocations)
+  if (-not $Stage -or -not $inv.Count) { return $inv }
+  $withBy = @($inv | Where-Object { [string]$_.by })
+  if (-not $withBy.Count) { return $inv }
+  return @($inv | Where-Object { (-not [string]$_.by) -or ([string]$_.by -eq $Stage) })
 }
 
 # The headline: how many invocations did this lane take, against how many the batch size needed?
@@ -357,6 +390,46 @@ if ($runSelfTest) {
   T 'CLEAN TWIN a lane with no lines at all counts zero, so the map-lane-unlogged catch still fires' `
     ((Get-InvocationCount $mixed 'map') -eq 0) ('got ' + (Get-InvocationCount $mixed 'map'))
 
+  # ---- FIXTURE 3d. A LANE NAME IS NOT A STAGE (added 2026-08-25).
+  # The map lane files mapper batches, registrar gates and the mechanical pre-resolve under one lane
+  # name. Judging the whole lane against S4's micro-batch of 5 measures a mixed population, and on 6b
+  # it fired map-lane-duplicate-items over 9 slugs, every one of which had simply taken a pre-resolve,
+  # a mapper and a registrar. NEUTER PROOF, run 2026-08-25: make Select-JudgeInvocations return its
+  # input unchanged and the two MUST FIRE cases below go red, reporting 5 invocations and 3 repeats.
+  function ByInv([string]$Lane, [string]$Label, $Items, [string]$By) {
+    return [pscustomobject]@{ lane = $Lane; label = $Label; items = @($Items); count = @($Items).Count
+                              by = $By; event = 'end'; in = 0; out = 0 }
+  }
+  $mapMixed = @((ByInv 'map' 'map-preresolve' @('r1', 'r2', 'r3') 'mechanical'),
+                (ByInv 'map' 'map:3x' @('r1', 'r2', 'r3') 'mapper'),
+                (ByInv 'map' 'registrar:goat-cheese' @('r1') 'registrar'),
+                (ByInv 'map' 'registrar:harissa' @('r2') 'registrar'),
+                (ByInv 'map' 'map-preresolve verify' @('r3') 'mechanical'))
+  $judged = @(Select-JudgeInvocations $mapMixed 'mapper')
+  T 'MUST FIRE  only the MAPPER''s own batches are judged against S4''s micro-batch of 5 - a registrar
+        gate is not a mapper batch that failed to batch' `
+    ($judged.Count -eq 1) ("judged " + $judged.Count + " of " + $mapMixed.Count)
+  T 'MUST FIRE  and the mixed lane no longer reports every slug as a duplicate - on 6b that fired
+        over 9 slugs and not one of them was real' `
+    ((@((Get-BatchShape $judged 5).repeated)).Count -eq 0) `
+    (@((Get-BatchShape $mapMixed 5).repeated) -join ', ')
+  T '   and the raw mixed lane, unfiltered, is exactly the false finding this replaces' `
+    ((@((Get-BatchShape $mapMixed 5).repeated)).Count -eq 3) `
+    (@((Get-BatchShape $mapMixed 5).repeated) -join ', ')
+  T 'CLEAN TWIN the price lane narrows to the PRICER, so the mechanical pre-pass is not a price batch' `
+    ((@(Select-JudgeInvocations @((ByInv 'price' 'pre-pass batch 1' @('a', 'b') 'pre-pass'),
+                                  (ByInv 'price' 'queue batch 1' @('a', 'b', 'c') 'pricer'),
+                                  (ByInv 'price' 'pre-pass batch 2' @('c') 'pre-pass')) 'pricer')).Count -eq 1) `
+    'kept a pre-pass as a pricer invocation'
+  T 'CLEAN TWIN an OLD log where NO line carries `by` keeps every line - filtering a historical log
+        would report a real run as having made no invocations at all' `
+    ((@(Select-JudgeInvocations @((Inv 'b1' @('a')), (Inv 'b2' @('b')), (Inv 'b3' @('c'))) 'pricer')).Count -eq 3) `
+    'filtered a historical log into silence'
+  T 'CLEAN TWIN a MIXED-era log keeps its unattributed lines alongside the judged stage' `
+    ((@(Select-JudgeInvocations @((Inv 'old' @('a')), (ByInv 'price' 'b' @('b') 'pricer'),
+                                  (ByInv 'price' 'c' @('c') 'pre-pass')) 'pricer')).Count -eq 2) `
+    'dropped an unattributed line that predates the field'
+
   # ---- FIXTURE 4. THE PER-RECIPE FINGERPRINT, independent of any threshold. Every invocation confined to
   # a single recipe while several recipes were waiting is the defect itself, not a symptom of it.
   $owners = @{ 'mascarpone' = @('chicken-florentine'); 'kewpie mayo' = @('loco-moco')
@@ -477,6 +550,7 @@ foreach ($l in $seenLanes) {
 foreach ($l in @($script:LANE_BATCH.Keys | Sort-Object)) {
   $size = [int]$script:LANE_BATCH[$l]
   $inv = @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq $l }))
+  $inv = @(Select-JudgeInvocations $inv ([string]$script:LANE_JUDGE[$l]))
   $shape = Get-BatchShape $inv $size
   $sig = if ($l -eq 'price') { Get-PerRecipeSignature $inv $owners } else { $null }
   $lanes += [pscustomobject]@{ lane = $l; shape = $shape; signature = $sig }
@@ -502,7 +576,8 @@ foreach ($l in @($script:LANE_BATCH.Keys | Sort-Object)) {
 }
 
 # THE NON-COMPLIANCE CATCH. An orchestrator that never calls -Lane must not pass by leaving no evidence.
-$priceInv = @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq 'price' }))
+$priceInv = @(Select-JudgeInvocations `
+    @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq 'price' })) 'pricer')
 if ($everPriced.Count -and -not $priceInv.Count) {
   $findings += [pscustomobject]@{ code = 'price-lane-unlogged'; lane = 'price'
     detail = ("{0} recipe(s) went through the pricing state and the lane log records ZERO pricer invocations. The run's lane shape cannot be audited at all, and could-not-look is never a clean bill. Record each invocation with hunt-run.ps1 -Lane -LaneName price -Items '<terms>'." -f $everPriced.Count) }
@@ -520,7 +595,9 @@ elseif ($priceInv.Count) {
   }
 }
 $mapped = @($entries | Where-Object { @($_.history | ForEach-Object { [string]$_.state }) -contains 'mapped' })
-if ($mapped.Count -and -not (Get-InvocationCount $log 'map')) {
+$mapInv = @(Select-JudgeInvocations `
+    @(Get-Invocations @($log | Where-Object { [string]$_.lane -eq 'map' })) 'mapper')
+if ($mapped.Count -and -not $mapInv.Count) {
   $warnings += [pscustomobject]@{ code = 'map-lane-unlogged'; lane = 'map'
     detail = ("{0} recipe(s) were mapped and the lane log records no mapper invocation, so the S4 micro-batch shape cannot be judged." -f $mapped.Count) }
 }
@@ -538,8 +615,9 @@ Write-Output ("audit-lane-shape: {0}   {1} lane invocation(s) over {2} recipe(s)
 Write-Output ''
 foreach ($x in $lanes) {
   $s = $x.shape
-  Write-Output ("  {0,-6} {1,3} invocation(s)   {2,3} distinct item(s)   floor ceil({2}/{3}) = {4}   mean {5}/invocation" -f
-                $x.lane, $s.invocations, $s.distinct, $s.batch_size, $s.floor, $s.mean_per_invocation)
+  Write-Output ("  {0,-6} {1,3} {6} invocation(s)   {2,3} distinct item(s)   floor ceil({2}/{3}) = {4}   mean {5}/invocation" -f
+                $x.lane, $s.invocations, $s.distinct, $s.batch_size, $s.floor, $s.mean_per_invocation,
+                [string]$script:LANE_JUDGE[[string]$x.lane])
 }
 foreach ($l in @($seenLanes | Where-Object { -not $script:LANE_BATCH.ContainsKey($_) })) {
   Write-Output ("  {0,-6} {1,3} invocation(s)   (no batch size declared in the plan - counted, not judged)" -f

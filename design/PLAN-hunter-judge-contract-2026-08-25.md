@@ -326,13 +326,26 @@ ONE invocation, because PS 5.1 delivers an empty array through an if-expression 
 exactly the run it exists to fail. Guarded in `Get-Invocations` itself, with a MUST FIRE case. It
 was the new zero-lane CLEAN TWIN that surfaced it.
 
-**One observation, NOT fixed, because it is outside this section's scope.** 6b still reports
-`map-lane-not-batched` (22 invocations for 12 items) and `map-lane-duplicate-items` (9 slugs). The
-map lane now carries three kinds of line under one lane name - `mapper` dispatches, `registrar`
-gates and `mechanical` pre-resolve passes - so `Get-BatchShape` is measuring a mixed population and
-the duplicate-items finding fires by construction on any slug that took a pre-resolve, a mapper and
-a registrar. That is the same class of defect the 2026-08-24 pairing fix addressed, one level up,
-and it is a proposal for Brad rather than a build-time convenience.
+**A third defect, found while fixing the first two, and FIXED 2026-08-25 on Brad's instruction.** A
+LANE NAME IS NOT A STAGE. The map lane files three kinds of line under one name - `mapper` batches,
+`registrar` gates, `mechanical` pre-resolve passes - and the price lane files two (`pricer`,
+`pre-pass`), while the plan numbers behind `LANE_BATCH` are about ONE stage each: S4's micro-batch of
+5 is five recipes to one MAPPER, and 2.4's batch of 10 is ten terms to one PRICER. Shaping the whole
+lane measured a mixed population. On 6b that fired `map-lane-duplicate-items` over 9 slugs, every one
+of which had simply taken a pre-resolve, a mapper and a registrar; not one was real. Same class as
+the 2026-08-24 pairing fix, one level up: counting things that are not the thing.
+
+`Select-JudgeInvocations` narrows each shape-judged lane to its own judgment stage via a new
+`LANE_JUDGE` table, and the printed line now names whose invocations it judged. A line carrying no
+`by` is kept, and a lane where NOTHING carries a `by` is treated as a historical log and judged
+whole - filtering there would report a real run as having made no invocations, which is the vacuity
+failure this script already refuses elsewhere.
+
+Measured on 6b, before and after: map read as 22 invocations with 9 duplicate slugs and now reads as
+5 mapper invocations with none; price read as 10 invocations with 12 duplicate terms and now reads as
+5 pricer invocations with ONE - `golden beets`, which really did go to the pricer twice and is the
+kind of finding this script exists for. Whole-run findings 4 to 3. Leaving nine false findings
+standing is how a gate gets turned off.
 
 ## 8. Build order, gates, and the drill
 
