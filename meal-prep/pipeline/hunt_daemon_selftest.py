@@ -25,6 +25,7 @@ from __future__ import annotations
 import asyncio
 import datetime as dt
 import importlib.util
+import io
 import json
 import os
 import shutil
@@ -847,6 +848,31 @@ def run():
       *_f1_shelf_coverage_line())
 
     # =================================================================================================
+    H("M3 - a recipe with nothing to price stops going to the price lane (2026-08-25)")
+    # =================================================================================================
+    # NEUTER PROOF, RUN AND REVERTED 2026-08-25: restoring the `and norm_state(res["state"]) ==
+    # "priced"` clause turned THREE cases red, not the two section 5.3 predicted - the two named
+    # there plus the optional case, which routes through the same branch. The first one reproduced
+    # the lf1 round-2 park exactly, in its own got line: advanced=["mapped", "pricing"] adds=[] -
+    # a recipe sent to the price lane with an EMPTY term list and nothing that could ever wake it.
+    # Both twins stayed green, which is the point of them.
+    T("MUST FIRE  a mapper result with ZERO absent terms lands on the WRITE channel at `priced` even "
+      "though the mapper called its own state `mapped` - the terms decide the route, and no -Add "
+      "reaches the queue",
+      *_m3_zero_absent_routes_to_write())
+    T("MUST FIRE  ...and the disagreement is LOGGED, naming the slug and the state it claimed",
+      *_m3_the_disagreement_is_logged())
+    T("CLEAN TWIN three absent terms still route to `pricing`, still enqueue all three and still "
+      "wake the price lane - byte for byte as before M3",
+      *_m3_absent_terms_still_price())
+    T("CLEAN TWIN a table with unbid HOLDS still holds at `mapped` and never reaches either branch - "
+      "the hold returns first and M3 does not touch it",
+      *_m3_the_unbid_hold_returns_first())
+    T("MUST FIRE  zero absent WITH an optional_absent term advances to `priced` AND the optional "
+      "term still reaches the queue - optional never blocked and does not start blocking here",
+      *_m3_optional_still_reaches_the_queue())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -864,6 +890,134 @@ def run():
 # =====================================================================================================
 # the fixture bodies
 # =====================================================================================================
+
+
+# =====================================================================================================
+# M3 - the terms decide the route, not the mapper's own state field.
+#
+# THE MEASURED DEFECT (lf1 round 2, EVAL-latency-lf1-drill finding 3): both fully-resolved recipes
+# advanced mapped -> pricing carrying an EMPTY absent_terms list, enqueued nothing, and sat. Nothing
+# could ever wake them, and the state file said `pricing`, which reads like a recipe legitimately
+# waiting on a price. Only a second daemon start and its hunt-run -Derive moved them on.
+#
+# THE SIBLING SITE, NAMED AND DELIBERATELY LEFT: the unhold road carries the identical condition
+# (`if not absent and rec.get("mapper_state") == "priced"`). It sits inside the unbid HOLD road,
+# which PLAN-map-lane-latency section 2 lists among the things M3 does not touch, so it is reported
+# to Brad rather than changed here.
+# =====================================================================================================
+
+def _m3_map(tmp, absent=None, optional=None, state="mapped", holds=None):
+    """One map-lane run over one slug, with the mapper's own state and term lists chosen. Returns
+    (daemon, FakePS) so a case can assert the route AND the queue calls off the same run."""
+    preresolved(tmp, ["s1"], holds=holds, residual={"s1": ["gochujang", "tteok", "saffron"]})
+    ps = _asm_ps(0)
+    res = _mapper_result("s1")
+    res["state"] = state
+    res["absent_terms"] = list(absent or [])
+    res["optional_absent"] = list(optional or [])
+    fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps, queue_path=os.path.join(tmp, "queue.json"),
+               carriage_path=os.path.join(tmp, "carriage.json"))
+    # NOT QUIET: the disagreement line is one of the things M3 ships, and the suite's daemon() helper
+    # silences log() by default.
+    d.quiet = False
+    d.ch["map"].push({"slug": "s1"})
+    d.ch["map"].close()
+    # THE LOG IS THE ARTIFACT for the disagreement case, so it is CAPTURED rather than watched go by:
+    # Daemon.log prints through say(), and a line nobody can read is a line that is not really there.
+    import contextlib                                             # noqa: PLC0415
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        arun(d.run(("map",)))
+    d.m3_log = buf.getvalue().splitlines()
+    return d, ps
+
+
+def _m3_advanced_to(ps):
+    """Every state hunt-run.ps1 -Advance was asked for, in order. The route is a claim about what the
+    daemon DID, so it is read off the real call rather than off an internal flag."""
+    return [FakePS.value_after(c["args"], "-To")
+            for c in ps.find("hunt-run.ps1") if "-Advance" in c["args"]]
+
+
+def _m3_queue_terms(ps):
+    return [FakePS.value_after(c["args"], "-Term")
+            for c in ps.find("ingredient-queue.ps1") if "-Add" in c["args"]]
+
+
+def _m3_zero_absent_routes_to_write():
+    tmp = tempfile.mkdtemp(prefix="daemon-m3a-")
+    try:
+        d, ps = _m3_map(tmp, absent=[], state="mapped")
+        states = _m3_advanced_to(ps)
+        adds = _m3_queue_terms(ps)
+        ok = ("priced" in states and "pricing" not in states and not adds
+              and "s1" not in d.pricing_slugs)
+        return ok, "advanced=%s adds=%s pricing_slugs=%s" % (
+            json.dumps(states), json.dumps(adds), json.dumps(sorted(d.pricing_slugs)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m3_the_disagreement_is_logged():
+    tmp = tempfile.mkdtemp(prefix="daemon-m3b-")
+    try:
+        d, _ps = _m3_map(tmp, absent=[], state="mapped")
+        line = next((m for m in d.m3_log if "ZERO absent terms" in m), "")
+        return ("s1" in line and "mapped" in line), "line=%r" % line
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m3_absent_terms_still_price():
+    tmp = tempfile.mkdtemp(prefix="daemon-m3c-")
+    try:
+        d, ps = _m3_map(tmp, absent=["saffron", "harissa", "tteok"], state="pricing")
+        adds = _m3_queue_terms(ps)
+        states = _m3_advanced_to(ps)
+        return ((adds == ["saffron", "harissa", "tteok"] and "pricing" in states
+                 and "priced" not in states and "s1" in d.pricing_slugs),
+                "advanced=%s adds=%s" % (json.dumps(states), json.dumps(adds)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m3_the_unbid_hold_returns_first():
+    tmp = tempfile.mkdtemp(prefix="daemon-m3d-")
+    try:
+        holds = {"s1": [{"term": "sumac", "why": "Sumac has no bid wired"},
+                        {"term": "labneh", "why": "Labneh has no bid wired"},
+                        {"term": "zaatar", "why": "Zaatar has no bid wired"}]}
+        d, ps = _m3_map(tmp, absent=[], state="mapped", holds=holds)
+        states = _m3_advanced_to(ps)
+        adds = _m3_queue_terms(ps)
+        return ((states == ["mapped"] and not adds
+                 and [h for h in d.held if h[0] == "s1"]),
+                "advanced=%s adds=%s held=%s" % (json.dumps(states), json.dumps(adds),
+                                                 json.dumps([h[0] for h in d.held])))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m3_optional_still_reaches_the_queue():
+    tmp = tempfile.mkdtemp(prefix="daemon-m3e-")
+    try:
+        d, ps = _m3_map(tmp, absent=[], optional=["fresh dill", "chives", "mint"], state="mapped")
+        adds = _m3_queue_terms(ps)
+        seamed = [c for c in ps.find("ingredient-queue.ps1")
+                  if "-Add" in c["args"]
+                  and FakePS.value_after(c["args"], "-QueueFile") == os.path.join(tmp, "queue.json")]
+        states = _m3_advanced_to(ps)
+        # THE PRICE LANE IS NOT WOKEN AND THE TERM IS NOT TRACKED AS ABSENT: optional reaching the
+        # queue is the estate learning of it, not the recipe waiting on it.
+        return ((adds == ["fresh dill", "chives", "mint"] and len(seamed) == 3
+                 and "priced" in states and "pricing" not in states
+                 and "s1" not in d.pricing_slugs and not d.absent_terms),
+                "advanced=%s adds=%s absent_terms=%s" % (json.dumps(states), json.dumps(adds),
+                                                         json.dumps(d.absent_terms)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
 
 # =====================================================================================================
 # D10 - the price-evidence pre-pass.

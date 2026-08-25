@@ -215,9 +215,27 @@ invisible: the state file says `pricing`, which reads like a recipe legitimately
 3. `optional_absent` terms, when `absent` is empty, are still enqueued through the existing
    `ingredient-queue -Add` call so the estate learns of them, and the recipe still advances. Optional
    never blocked and must not start blocking here.
+
+   **CORRECTED 2026-08-25 (M3 build, read off hunt-daemon.py's map_lane at d754e610).** There was no
+   existing `-Add` call for optional terms to be enqueued through. Today `optional_absent` is passed
+   to `advance(... optional_terms=optional)`, which records it in the STATE FILE through hunt-run's
+   `-OptionalTerms`, and nothing anywhere calls `ingredient-queue -Add` for an optional term - not in
+   the pricing branch, not in the unhold road. So the fixture this section pins ("the optional term
+   still reaches the queue") is NEW behaviour, and it was built as specced: the priced branch now
+   enqueues each optional term with `-Why "<slug> lists it as optional"`. It does NOT wake the price
+   lane and does NOT enter `self.absent_terms`, so optional still blocks nothing. The PRICING branch
+   is untouched, because 5.3's clean twin pins it byte for byte.
+
 4. Log the disagreement rather than swallowing it: when `absent` is empty and the mapper's state is
    NOT "priced", `self.log` one line naming the slug and the state it claimed. A contract the model
    keeps missing is worth seeing at width.
+
+4b. **THE SIBLING SITE, NAMED AND DELIBERATELY LEFT.** The unhold road carries the identical
+   condition at hunt-daemon.py:1355: `if not absent and rec.get("mapper_state") == "priced"`, with
+   the same park-forever consequence for a recipe whose bid gets wired and whose mapper called its
+   state anything but "priced". It was NOT changed, because it sits inside the unbid HOLD road and
+   section 2 of this plan lists that road among the things M3 does not touch. It is a finding for
+   Brad and it is recorded in the M3 fixture section's own header.
 
 ### 5.3 Fixtures
 

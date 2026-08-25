@@ -2097,7 +2097,38 @@ class Daemon(object):
                         self.stuck(b["slug"], "map", why_asm)
                         self.log("  map: %s STUCK - %s" % (b["slug"], why_asm[:200]))
                         continue
-                    if not absent and hunt_lib.norm_state(res.get("state")) == "priced":
+                    # M3 (2026-08-25): THE TERMS DECIDE THE ROUTE, NOT THE MAPPER'S OWN STATE FIELD.
+                    # This read `not absent and norm_state(res["state"]) == "priced"`, so a recipe
+                    # whose absent_terms was EMPTY still routed to pricing unless the mapper also
+                    # named its own state "priced". Measured on lf1 round 2: both fully-resolved
+                    # recipes advanced mapped -> pricing carrying an EMPTY term list, enqueued
+                    # nothing, and sat. The price lane had nothing to answer for them and no wake
+                    # could ever clear them; the drill only reached the write lane because a SECOND
+                    # daemon start ran hunt-run -Derive. On an attended drill that is a restart. On
+                    # an unattended run it is a park with no exit, and it is INVISIBLE - the state
+                    # file says `pricing`, which reads like a recipe legitimately waiting on a price.
+                    #
+                    # Zero absent terms means the board answered every line and there is nothing for
+                    # the price lane to do. The unbid hold returns ABOVE this and is untouched, so
+                    # nothing unbid can reach the writer through here: the only recipes this moves
+                    # are ones the pre-resolve and the mapper BOTH settled.
+                    if not absent:
+                        # LOG THE DISAGREEMENT RATHER THAN SWALLOWING IT. A contract the model keeps
+                        # missing is worth seeing at width, and this is now the only place it shows.
+                        claimed = hunt_lib.norm_state(res.get("state"))
+                        if claimed != "priced":
+                            self.log("map: %s has ZERO absent terms but the mapper called its state "
+                                     "%s - routing on the terms, not on the claim"
+                                     % (b["slug"], claimed or "(none)"))
+                        # OPTIONAL NEVER BLOCKED AND MUST NOT START BLOCKING HERE. The estate still
+                        # learns of an optional term the board cannot answer - it reaches the queue -
+                        # but it wakes no pricer and holds up no recipe.
+                        for t in optional:
+                            await self.ps(INGREDIENT_QUEUE_PS,
+                                          self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
+                                                           "-Why", "%s lists it as optional"
+                                                                   % b["slug"]]),
+                                          timeout=180)
                         await self.advance(b["slug"], "priced", "mapper",
                                            "every term answered from the board")
                         self.ch["write"].push(self.record(b["slug"], {"state": "priced"}))
