@@ -857,12 +857,21 @@ def run():
     #     case AND the unseamed twin, which is the pair working: a seam that leaks a sentence into a
     #     real run is its own defect;
     #   - drop the precheck-is-whole clause      -> 1 red.
+    #   - T5 (2026-08-25): neutralise the reads-not-searches clauses (a WebSearch "is a read", the
+    #     allowance "also spent", the row-you-never-looked-for line inverted) -> 1 red, the T5 case
+    #     alone. Run and reverted. NOTE FOR THE NEXT NEUTER: rebuilding a prompt sentence by hand in
+    #     the neuter script wrote a REAL newline into the literal and the daemon failed to import -
+    #     the suite then reports 0 red, which looks like a dead fixture and proves nothing. Neuter by
+    #     substring surgery on the file's own bytes, and check the case count before believing a zero.
     T("MUST FIRE  the prompt BANS the direct FDC query and names DEMO_KEY as the throttling lie - "
       "lf1 round 1 made 6 of them for foods the shelf had already covered",
       *_m4_bans_the_direct_fdc_query())
     T("MUST FIRE  the prompt caps the hunt at ONE fetch and ONE fallback per food, and says a "
       "missing row is a finding - lf1 round 2 spent 9 web calls on 2 foods",
       *_m4_caps_the_hunt())
+    T("MUST FIRE  the cap counts LABEL READS and says a WebSearch is not one - on m1 batch A two "
+      "searches burned the whole allowance, no label was read, and the write lane refused the recipe",
+      *_t5_cap_counts_reads_not_searches())
     T("MUST FIRE  a SEAMED run names the scratch food DB in the prompt, the way queue_seam_note "
       "names the scratch queue",
       *_m4_seam_note_names_the_scratch_db())
@@ -999,6 +1008,22 @@ def _m4_caps_the_hunt():
     want = ["ONE fetch and ONE fallback per food",
             "return NO row for that food and say why in `detail`",
             "a fifth fetch is a turn that re-reads this whole"]
+    missing = [w for w in want if w not in prompt]
+    return not missing, "missing=%s" % json.dumps(missing)
+
+
+def _t5_cap_counts_reads_not_searches():
+    """MUST FIRE (T5, 2026-08-25). The cap missed in BOTH directions on the m1 drill: 9 web calls on
+    2 foods on batch B, and on batch A two WebSearches burned the whole allowance without a single
+    label read - the mapper returned no row, gave no reason, and the write lane refused the recipe.
+    The eval offered "the cap counts READS and a search is not a read" as a hypothesis; this is that
+    hypothesis written into the sentence so the model cannot hold the other reading."""
+    prompt, _d, _p = _m4_prompt()
+    want = ["THE CAP COUNTS LABEL READS",
+            "A WebSearch is NOT a read",
+            "never spends the allowance",
+            "leave both\nyour reads unspent",
+            "A row you did not\neven look for is not a cap working"]
     missing = [w for w in want if w not in prompt]
     return not missing, "missing=%s" % json.dumps(missing)
 
