@@ -31,6 +31,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -759,6 +760,31 @@ def run():
     T("MUST FIRE  map_prompt tells the mapper it has no file access to the DB, names the Atwater and "
       "conflict rules, and prefers the FDC shelf",
       *_fooddb_prompt_moved_the_pen())
+
+    # =================================================================================================
+    H("F1 - the FDC shelf is FILLED with the run's own terms before the mapper is paid (2026-08-25)")
+    # =================================================================================================
+    T("MUST FIRE  exactly the unresolved / food-DB-missing terms reach cache_fill, deduped through "
+      "fdc_lookup's own key function - a settled line with a DB row is never asked about",
+      *_f1_fill_list_is_the_unresolved_terms())
+    T("MUST FIRE  the order is preresolve, FILL, preresolve, dispatch - and the DISPATCHED table is "
+      "the second pass's, because only the re-run carries the warm shelf",
+      *_f1_order_is_preresolve_fill_preresolve_dispatch())
+    T("CLEAN TWIN a fill that added nothing and failed nothing skips the second mechanical pass - "
+      "that batch is already as warm as it can get",
+      *_f1_nothing_added_skips_the_rerun())
+    T("MUST FIRE  a fill that THROWS degrades and never blocks: one finding naming the count, and "
+      "the mapper is dispatched exactly as it was before F1 existed",
+      *_f1_a_failed_fill_degrades_and_still_dispatches())
+    T("MUST FIRE  two map workers filling overlapping term lists leave the UNION in the cache - "
+      "cache_write is a whole-file write and this is the ingredient-resolutions lesson a third time",
+      *_f1_concurrent_fills_keep_every_term())
+    T("MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op fdc_lock the same two fills "
+      "lose terms, so the case above is proving the lock and not the scheduler",
+      *_f1_fdc_lock_is_load_bearing())
+    T("MUST FIRE  the shelf-coverage line reports X of Y and names the terms FDC LACKS - which are "
+      "the mapper's licensed web reads, not findings",
+      *_f1_shelf_coverage_line())
 
     # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
@@ -4030,6 +4056,263 @@ def _fooddb_prompt_moved_the_pen():
              and "Add those rows as you always have" not in pr),
             "food_db_rows=%s old-sentence=%s" % ("food_db_rows" in pr,
                                                  "Add those rows as you always have" in pr))
+
+
+# =====================================================================================================
+# F1 - THE FDC SHELF IS FILLED WITH THE RUN'S OWN TERMS BEFORE THE MAPPER IS PAID (2026-08-25)
+#
+# Measured on the jc1 drill: 4 of 19 residual lines carried an FDC candidate and the mapper spent
+# ~12 minutes at 61 s/turn fetching the other 15 labels itself, then cited `fdc:<id>` for the rows it
+# returned. Nothing in the daemon had ever called fdc_lookup.cache_fill. These fixtures are about the
+# daemon's own behaviour around that call - what it passes, when it re-resolves, and that a fill
+# which cannot run never costs the batch its dispatch.
+#
+# NEUTER PROOFS, ALL RUN 2026-08-25 against this suite, each reverted immediately after:
+#   * replace the map lane's `fill = await self.fill_fdc_shelf(...)` with `fill = None`
+#     -> the order case, the clean twin and the degrade case all go red (3 reds).
+#   * never re-run preresolve after the fill (`if False:`)
+#     -> the order case goes red on both the call count AND the shelf missing from the prompt.
+#   * empty Daemon.FDC_SHELF_MARKER -> the coverage case goes red.
+#   * drop the settled-and-known filter out of fdc_fill_terms -> the fill-list case goes red (it asks
+#     FDC about a line that has a food-DB row), and two more with it.
+# The lock's neuter is not a comment at all: it is _f1_fdc_lock_is_load_bearing, which RUNS the
+# no-op-lock case on every suite run and fails if the loss ever stops happening.
+# =====================================================================================================
+
+F1_SHELF_LINE = ("USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. "
+                 "Parsley, fresh [SR Legacy] per 100 g: 36 cal, 2.97 P, 6.33 C")
+
+
+def _f1_tables(residual=("ras el hanout", "gochujang", "parsley leaves")):
+    """A pre-resolve table shaped like map-preresolve's own output: one SETTLED line that already has
+    a food-DB row (which the fill must skip), the residual lines (which it must ask about), one
+    SETTLED line with no DB row (which still needs a label, so it must be asked about too), and a
+    case-variant duplicate of a residual term (which must dedupe away)."""
+    rows = [{"raw": "1 lb chicken", "term": "chicken", "resolution": "resolved",
+             "fooddb_known": True, "evidence": "exact vocabulary row"},
+            {"raw": "2 tbsp labneh", "term": "labneh", "resolution": "resolved",
+             "fooddb_known": False, "evidence": "no food-macros-db row - a label needs transcribing"}]
+    for t in residual:
+        rows.append({"raw": "1 tsp %s" % t, "term": t, "resolution": "unresolved",
+                     "fooddb_known": False, "evidence": "no vocabulary row shares a core word"})
+    rows.append({"raw": "more parsley", "term": residual[-1].upper(), "resolution": "unresolved",
+                 "fooddb_known": False, "evidence": "no vocabulary row shares a core word"})
+    return {"s1": {"slug": "s1", "rows": rows}}
+
+
+def _f1_fill_list_is_the_unresolved_terms():
+    """MUST FIRE: exactly the unresolved / food-DB-missing terms reach cache_fill, deduped through
+    fdc_lookup's own key function, with the settled-and-known line excluded."""
+    d = daemon()
+    seen = {}
+
+    def stub(terms, page_size=3, pause=0.0, **kw):
+        seen["terms"] = list(terms)
+        seen["page_size"] = page_size
+        seen["pause"] = pause
+        return {"added": len(terms), "skipped": 0, "failed": 0, "size": len(terms)}
+
+    real = HD.fdc_lookup.cache_fill
+    HD.fdc_lookup.cache_fill = stub
+    try:
+        arun(d.fill_fdc_shelf(["s1"], _f1_tables()))
+    finally:
+        HD.fdc_lookup.cache_fill = real
+    got = seen.get("terms") or []
+    ok = (got == ["labneh", "ras el hanout", "gochujang", "parsley leaves"]
+          # the case variant deduped away, and the settled+known line never asked about
+          and "chicken" not in got and seen.get("page_size") == 3 and seen.get("pause") == 0.5)
+    return ok, "terms=%s page_size=%s pause=%s" % (json.dumps(got), seen.get("page_size"),
+                                                   seen.get("pause"))
+
+
+def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=("s1", "s2", "s3")):
+    """The map lane driven end to end with the fill stubbed. Returns (d, fd, ps, order)."""
+    preresolved(tmp, list(slugs),
+                residual=dict((s, ["parsley leaves", "ras el hanout", "gochujang"]) for s in slugs))
+    order, passes = [], {"n": 0}
+
+    def warm_the_tables():
+        for s in slugs:
+            p = os.path.join(tmp, "mapped-pre", "%s.json" % s)
+            with open(p, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+            for r in doc["rows"]:
+                if r.get("resolution") == "unresolved":
+                    r["evidence"] = r["evidence"] + " | " + F1_SHELF_LINE
+            with open(p, "w", encoding="utf-8") as f:
+                json.dump(doc, f)
+
+    def reply(args):
+        if "-Slugs" in args:
+            passes["n"] += 1
+            order.append("preresolve")
+            if passes["n"] == 2 and warm:
+                warm_the_tables()
+        return 0, "", ""
+
+    def stub(terms, page_size=3, pause=0.0, **kw):
+        order.append("fill")
+        if raises:
+            raise RuntimeError("api.data.gov refused the connection")
+        return dict(stat or {"added": len(terms), "skipped": 0, "failed": 0, "size": len(terms)})
+
+    ps = FakePS(replies={"map-preresolve": reply})
+    fd = FakeDispatch({"recipe-ingredient-mapper": [
+        {"results": [{"slug": s, "status": "ok", "state": "priced"} for s in slugs]}]})
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
+    real = HD.fdc_lookup.cache_fill
+    HD.fdc_lookup.cache_fill = stub
+    try:
+        for s in slugs:
+            d.ch["map"].push({"slug": s})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+    finally:
+        HD.fdc_lookup.cache_fill = real
+    if fd.prompts("recipe-ingredient-mapper"):
+        order.append("dispatch")
+    return d, fd, ps, order
+
+
+def _f1_order_is_preresolve_fill_preresolve_dispatch():
+    tmp = tempfile.mkdtemp(prefix="daemon-f1ord-")
+    try:
+        d, fd, ps, order = _f1_map_run(tmp)
+        prompt = (fd.prompts("recipe-ingredient-mapper") or [""])[0]
+        pre = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
+        ok = (order == ["preresolve", "fill", "preresolve", "dispatch"] and len(pre) == 2
+              # THE DISPATCHED TABLES ARE THE SECOND PASS'S: only the re-run carries the shelf, and
+              # a prompt built off the first table would name none of it.
+              and "Parsley, fresh [SR Legacy]" in prompt)
+        return ok, "order=%s preresolve_calls=%d shelf_in_prompt=%s" % (
+            json.dumps(order), len(pre), "Parsley, fresh [SR Legacy]" in prompt)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _f1_nothing_added_skips_the_rerun():
+    """CLEAN TWIN: a batch whose terms were all already cached is as warm as it can get, so the
+    second mechanical pass is not paid for."""
+    tmp = tempfile.mkdtemp(prefix="daemon-f1warm-")
+    try:
+        d, fd, ps, order = _f1_map_run(tmp, stat={"added": 0, "skipped": 3, "failed": 0, "size": 3})
+        pre = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
+        ok = (order == ["preresolve", "fill", "dispatch"] and len(pre) == 1)
+        return ok, "order=%s preresolve_calls=%d" % (json.dumps(order), len(pre))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _f1_a_failed_fill_degrades_and_still_dispatches():
+    """MUST FIRE: DEGRADE, NEVER BLOCK. The fill can only add evidence, so a fill that throws is one
+    finding naming the count and a mapper dispatched exactly as it was before F1 existed."""
+    tmp = tempfile.mkdtemp(prefix="daemon-f1boom-")
+    try:
+        d, fd, ps, order = _f1_map_run(tmp, raises=True)
+        named = [f for f in d.findings if f.startswith("F1: the FDC fill could not run")]
+        pre = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
+        ok = (len(fd.prompts("recipe-ingredient-mapper")) == 1 and len(named) == 1
+              and "3 term(s)" in named[0] and "refused the connection" in named[0]
+              # nothing landed, so no second pass is paid for either
+              and len(pre) == 1 and not [o for o in d.outcomes if o.get("status") == "stuck"])
+        return ok, "dispatches=%d findings=%s" % (len(fd.prompts("recipe-ingredient-mapper")),
+                                                  json.dumps(named)[:300])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _f1_cache_fill_with_gate(path, gate):
+    """A cache_fill that READS, waits at a barrier, then WRITES - the read-modify-write shape, with
+    the interleaving made deterministic instead of left to the thread scheduler.
+
+    Under the lock the second worker cannot reach the barrier, so the first times out (a broken
+    barrier), both writes serialize, and the union survives. With the lock neutered both workers meet
+    at the barrier holding the SAME stale read and the second write erases the first.
+    """
+    def fill(terms, page_size=3, pause=0.0, **kw):
+        doc = HD.fdc_lookup.cache_read(path)
+        doc.setdefault("terms", {})
+        try:
+            gate.wait(timeout=0.6)
+        except Exception:                                         # noqa: BLE001  (BrokenBarrierError)
+            pass
+        added = 0
+        for t in terms:
+            k = HD.fdc_lookup._cache_key(t)                       # noqa: SLF001
+            if k and k not in doc["terms"]:
+                doc["terms"][k] = {"asked": True, "candidates": []}
+                added += 1
+        HD.fdc_lookup.cache_write(doc, path)
+        return {"added": added, "skipped": len(terms) - added, "failed": 0,
+                "size": len(doc["terms"])}
+    return fill
+
+
+def _f1_two_fills(no_lock=False):
+    tmp = tempfile.mkdtemp(prefix="daemon-f1lock-")
+    path = os.path.join(tmp, "fdc-cache.json")
+    HD.fdc_lookup.cache_write({"terms": {}}, path)
+    d = daemon(run_dir=tmp)
+    if no_lock:
+        class NoLock(object):
+            async def __aenter__(self):
+                return self
+
+            async def __aexit__(self, *a):
+                return False
+        d.fdc_lock = NoLock()
+    gate = threading.Barrier(2)
+    real = HD.fdc_lookup.cache_fill
+    HD.fdc_lookup.cache_fill = _f1_cache_fill_with_gate(path, gate)
+    try:
+        # OVERLAPPING lists, 3+ terms each, exactly as two map workers over neighbouring recipes look
+        one = _f1_tables(("ras el hanout", "gochujang", "shared term"))
+        two = _f1_tables(("harissa", "doubanjiang", "shared term"))
+
+        async def both():
+            return await asyncio.gather(d.fill_fdc_shelf(["s1"], one),
+                                        d.fill_fdc_shelf(["s2"], two))
+
+        arun(both())
+        keys = sorted((HD.fdc_lookup.cache_read(path).get("terms") or {}).keys())
+        return keys
+    finally:
+        HD.fdc_lookup.cache_fill = real
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _f1_concurrent_fills_keep_every_term():
+    keys = _f1_two_fills()
+    want = sorted(["labneh", "ras el hanout", "gochujang", "shared term",
+                   "harissa", "doubanjiang"])
+    return keys == want, "cache(%d)=%s" % (len(keys), json.dumps(keys))
+
+
+def _f1_fdc_lock_is_load_bearing():
+    """The neuter, run as its own case so the proof is REPRODUCED on every suite run rather than
+    recorded in a comment nobody re-runs. Note WHY it can be reproduced at all: the fill runs in the
+    executor, which is what puts a real await between the cache's read and its write. With the I/O
+    on the event loop nothing could interleave and this case would pass while proving nothing - the
+    CHANGE M correction, met a second time."""
+    keys = _f1_two_fills(no_lock=True)
+    return len(keys) < 6, ("a no-op fdc_lock kept ALL %d terms, so the concurrency case above has "
+                           "stopped proving the lock does anything" % len(keys))
+
+
+def _f1_shelf_coverage_line():
+    """MUST FIRE: the coverage line names X of Y and the terms FDC lacks. It exists so the drill and
+    Thursday can correlate mapper turns against shelf coverage without transcript archaeology."""
+    d = daemon()
+    tables = _f1_tables(("ras el hanout", "gochujang", "parsley leaves"))
+    rows = tables["s1"]["rows"]
+    for r in rows:
+        if r.get("term") in ("parsley leaves", "labneh"):
+            r["evidence"] = r["evidence"] + " | " + F1_SHELF_LINE
+    line = d.log_shelf_coverage(tables)
+    ok = (line is not None and "2 of 4" in line and "ras el hanout" in line
+          and "gochujang" in line and "parsley leaves" not in line.split("FDC lacks:")[-1])
+    return ok, "line=%r" % line
 
 
 # =====================================================================================================

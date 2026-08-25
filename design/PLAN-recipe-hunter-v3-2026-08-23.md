@@ -486,6 +486,21 @@ mistake one artifact for the other. And the daemon gained a `--food-db` scratch 
 --ledger / --specs / --costed / --pool: before this change a drill could not put a row into the live
 food DB even by accident, and now it can.
 
+**APPENDED 2026-08-25 (F1, from design\PLAN-latency-F1-F7-2026-08-25.md section 3, measured on the
+jc1 drill).** The mechanical pre-resolve is now TWO passes with a mechanical FDC fill between them:
+preresolve -> `Daemon.fill_fdc_shelf` -> preresolve -> dispatch. The shelf this section relies on was
+attached correctly and was almost always EMPTY: on jc1, 4 of 19 residual lines carried an FDC
+candidate and the mapper spent 12.3 minutes (77% of the drill's wall) at 61 s/turn fetching the other
+15 labels itself, then cited `fdc:<id>` for the rows it returned. Nothing in the estate had ever
+called `fdc_lookup.cache_fill` for a run's terms; the 150 cached terms were leftovers from a manual
+pass. The fill asks FDC about THIS BATCH'S OWN EXACT TERMS (cache_get's keying ruling), runs in the
+executor under `Daemon.fdc_lock`, and DEGRADES NEVER BLOCKS - a missing key or a transport failure is
+one finding naming the count and the mapper is dispatched exactly as before. Fuzzy or head-noun cache
+keying was refused with the reason written down: head-noun matching is an identity assertion, and
+`garlic cloves` reaching `Ground Cloves` is a wrong-food shelf served with mechanical confidence.
+The second pass exists because map-preresolve owns the RENDERING of a shelf into a row's evidence;
+splicing candidates into the built table in Python would be a second renderer of the same thing.
+
 Registrar path unchanged. Local 27B's role in mapping: **none in the initial build** (a
 vocab-candidate ordering signal is DEFERRED alongside S2's and S5's; and it could only ever rank,
 never resolve - "Dry White Wine" auto-matching "White Wine Vinegar" is the founding reason).

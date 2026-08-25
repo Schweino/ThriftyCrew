@@ -69,6 +69,18 @@ ALREADY in the dossier: map-preresolve.ps1 lines ~500-514 attach FDC candidate r
 term from meal-prep\db\fdc-cache.json (filled by meal-prep\pipeline\fdc_lookup.py). So candidates
 arrive; the residual agent work is choosing/transcribing and the file edits.
 
+**CORRECTED 2026-08-25 (F1 build session, measured on C:\tmp\jc1 and fixed in the same commit).**
+"So candidates arrive" was FALSE IN PRACTICE, and it is the single largest wall item this plan's own
+drill then measured. On jc1, 4 of 19 residual lines carried an FDC candidate and 15 did not; the
+mapper spent 12.3 minutes at 61 s/turn acquiring those labels itself and then cited `fdc:<id>` for
+the rows it returned, which is proof the data was reachable by the offline tool the whole time. The
+root cause was NOT this paragraph's subject: map-preresolve's attach works. It is that nothing in the
+daemon ever called `fdc_lookup.cache_fill` for a run's terms - the function existed, was fixtured,
+took a term list, and had no caller. The 150 terms in the cache were leftovers from an earlier manual
+pass, which is why the shelf looked alive in a spot check and was cold for every new recipe. FIXED by
+`Daemon.fill_fdc_shelf` between two preresolve passes (PLAN-latency-F1-F7 section 3), with a
+shelf-coverage log line so the gap can never again be invisible to a drill.
+
 ### 3.2 The change
 
 1. Extend hunt_lib.MAPPED (hunt_lib.py line ~736): inside each `results` item, ADD:

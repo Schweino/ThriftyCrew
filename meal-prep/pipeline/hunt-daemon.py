@@ -270,6 +270,12 @@ class Daemon(object):
         # single file, which is the ingredient-resolutions lesson (S4: 2,293 outcomes recorded as 65
         # under last-writer-wins) arriving at the food DB. Modelled on cost_lock above.
         self.food_db_lock = asyncio.Lock()
+        # F1 (2026-08-25): THE SAME ONE-PEN-ONE-LOCK RULE FOR THE FDC CACHE. fdc_lookup.cache_write is
+        # a whole-file write and two map workers can fill overlapping term lists at the same moment;
+        # this is the ingredient-resolutions lesson arriving at a third file. See fill_fdc_shelf for
+        # why the fill runs in the executor - without a real await between read and write the lock
+        # would be decorative and its neuter proof unproducible.
+        self.fdc_lock = asyncio.Lock()
         self.pool_path = pool_path or harvest.POOL
         self.quiet = quiet
         # A TEST SEAM, and the ONLY thing it may ever carry is a path: extra arguments appended to
@@ -1085,6 +1091,136 @@ class Daemon(object):
                 return False, {}, "no pre-resolve table for %s (%s)" % (slug, e)
         return True, tables, detail[-400:]
 
+    # ---------------------------------------------------------------------------------------------
+    # F1 (2026-08-25): THE FDC SHELF IS FILLED WITH THE RUN'S OWN TERMS BEFORE THE MAPPER IS PAID.
+    #
+    # THE MEASURED DEFECT. map-preresolve attaches FDC candidates per unresolved term from
+    # meal-prep\db\fdc-cache.json, and PLAN-hunter-judge-contract 3.1 assumed "candidates arrive".
+    # On the jc1 drill they did not: 4 of 19 residual lines carried a candidate and 15 did not, and
+    # the mapper spent ~12 minutes at 61 s/turn acquiring labels it then cited as `fdc:<id>` - proof
+    # the data was reachable by the offline tool the whole time. The root cause was not the shelf
+    # code. It was that NOTHING CALLED fdc_lookup.cache_fill for a run's terms; the cached terms were
+    # leftovers from a manual pass.
+    #
+    # WHY EXACT TERMS AND NOT HEAD NOUNS. cache_get's docstring is a ruling: the cache is "KEYED BY
+    # THE RECIPE'S OWN TERM, not by a canonical food name, and that is the point". Filling per run
+    # with the recipe's own phrasing makes exact-key hits and respects it. Fuzzy or head-noun keying
+    # was REFUSED in plan 3.2: stripping `garlic cloves` toward its head noun reaches `cloves`, and
+    # the near-miss table already shows `garlic cloves` sitting beside `Ground Cloves` - a wrong-food
+    # shelf served with mechanical confidence. Local code may rank; it may never assert identity.
+    # ---------------------------------------------------------------------------------------------
+
+    # The exact string map-preresolve.ps1 prepends when it attaches the shelf (its FDC attach, the
+    # `$evidence.Add("USDA FDC rows that MENTION this term...` line). Matching on the marker is how
+    # coverage is read back out of the table without a second renderer.
+    FDC_SHELF_MARKER = "USDA FDC rows that MENTION this term"
+
+    def fdc_fill_terms(self, tables):
+        """The fill list, taken from the pre-resolve TABLES and never from the extraction.
+
+        Every row that is not fully settled: `resolution != 'resolved'` OR no food-DB row. A settled
+        line with a food-DB row needs no label and no shelf. Deduped case-insensitively through
+        fdc_lookup's own key function, so the dedup here and the cache's keying cannot drift apart.
+        """
+        terms, seen = [], set()
+        for slug in sorted(tables or {}):
+            for r in ((tables.get(slug) or {}).get("rows") or []):
+                if not isinstance(r, dict):
+                    continue
+                if r.get("resolution") == "resolved" and r.get("fooddb_known") is not False:
+                    continue
+                term = str(r.get("term") or r.get("raw") or "").strip()
+                key = fdc_lookup._cache_key(term)                  # noqa: SLF001
+                if not key or key in seen:
+                    continue
+                seen.add(key)
+                terms.append(term)
+        return terms
+
+    async def fill_fdc_shelf(self, slugs, tables):
+        """Ask FDC about this batch's own terms and store the candidates. Returns cache_fill's stat
+        dict {added, skipped, failed}, or None when there was nothing to fill or the fill could not run.
+
+        IN THE EXECUTOR, UNDER A LOCK, AND BOTH HALVES ARE THE SPEC. cache_fill is synchronous
+        network code; run on the event loop it would stall every other lane for its whole wall. The
+        executor is also what puts a real await between the cache's read and its write, which is what
+        makes fdc_lock LOAD-BEARING rather than decorative - the CHANGE M correction, a second time:
+        with the I/O synchronous nothing can interleave, so a neuter proof cannot be produced and the
+        fixture would be proving the scheduler.
+
+        DEGRADE, NEVER BLOCK. This stage can only ADD evidence. A missing key, a transport failure or
+        a whole fill that throws logs ONE finding naming the count and the map dispatch proceeds
+        exactly as it did before this method existed. Exit 2 semantics do not apply here.
+
+        NOT PARALLELISED, DELIBERATELY. api.data.gov rate limits, and a throttled key reads as "FDC
+        has nothing" - which fdc_lookup's own header calls the worst possible lie for a nutrition
+        lookup to tell. page_size 3 with a 0.5s pause over a micro-batch's residual is ~30-60s.
+        """
+        terms = self.fdc_fill_terms(tables)
+        if not terms:
+            return None
+        label = "fdc-fill"
+        await self.lane("map", label, list(slugs), "mechanical", "start")
+        t0 = time.time()
+        st = None
+        try:
+            loop = asyncio.get_event_loop()
+            async with self.fdc_lock:
+                st = await loop.run_in_executor(
+                    None, lambda: fdc_lookup.cache_fill(terms, page_size=3, pause=0.5))
+        except Exception as e:                                    # noqa: BLE001
+            self.findings.append("F1: the FDC fill could not run (%s) - the mapper will acquire "
+                                 "labels itself for %d term(s)" % (str(e)[:160], len(terms)))
+            st = None
+        finally:
+            await self.lane_free_end("map", label, list(slugs), "mechanical",
+                                     "%.1fs, %d term(s)" % (time.time() - t0, len(terms)))
+        if st and st.get("failed"):
+            # A failed lookup is NOT stored by fdc_lookup (its own rule, fixtured there), so this is
+            # a retry next run and not a frozen "FDC has nothing". It is still worth a finding: a
+            # whole batch failing is what a missing or throttled key looks like from here.
+            self.findings.append("F1: the FDC fill could not run for %d of %d term(s) - the mapper "
+                                 "will acquire those labels itself"
+                                 % (st["failed"], len(terms)))
+        return st
+
+    def shelf_coverage(self, tables):
+        """(shelved, needing, lacking_terms) read back off the tables through the attach's marker.
+
+        The population is the rows map-preresolve marks as having NO food-macros-db row, because
+        those are the only rows the attach can serve - a settled line with a DB row never gets a
+        shelf and counting it as a gap would report a defect that does not exist.
+
+        A TERM FDC GENUINELY LACKS IS NOT A FINDING. It is the mapper's licensed open-web read, which
+        is the correct residue. This exists so the drill and Thursday can correlate mapper turns
+        against shelf coverage without transcript archaeology.
+        """
+        shelved, lacking, seen = 0, [], set()
+        for slug in sorted(tables or {}):
+            for r in ((tables.get(slug) or {}).get("rows") or []):
+                if not isinstance(r, dict) or r.get("fooddb_known") is not False:
+                    continue
+                term = str(r.get("term") or r.get("raw") or "").strip()
+                key = fdc_lookup._cache_key(term)                  # noqa: SLF001
+                if not key or key in seen:
+                    continue
+                seen.add(key)
+                if self.FDC_SHELF_MARKER in str(r.get("evidence") or ""):
+                    shelved += 1
+                else:
+                    lacking.append(term)
+        return shelved, shelved + len(lacking), lacking
+
+    def log_shelf_coverage(self, tables):
+        shelved, needing, lacking = self.shelf_coverage(tables)
+        if not needing:
+            return None
+        line = ("map shelf: %d of %d term(s) with no food-DB row carry FDC candidates%s"
+                % (shelved, needing,
+                   ("; FDC lacks: %s" % ", ".join(lacking[:12])) if lacking else ""))
+        self.log(line)
+        return line
+
     HOLD_FILE_DOC = ("The mapper's routing for a recipe the daemon HELD at `mapped`. Written by the "
                      "daemon, read by the next seed's unhold. Without it a repaired recipe could only "
                      "be re-mapped, which is paying an agent twice for one judgment.")
@@ -1623,6 +1759,25 @@ class Daemon(object):
                     self.findings.append("map: a micro-batch of %d was blocked by map-preresolve (%s)"
                                          % (len(slugs), why[:160]))
                     continue
+                # F1: FILL THE SHELF, THEN RE-RUN THE MECHANICAL PASS SO THE TABLE CARRIES IT.
+                # The re-run is how the warm cache reaches the dossier: map-preresolve owns the
+                # rendering of a shelf into a row's `evidence` (its FDC attach), and splicing
+                # candidates into the already-built table here would be a second renderer of the same
+                # thing - the forked-taxonomy defect this estate has scars from. It is mechanical,
+                # ~5s, idempotent, and stamps its own lane pair through the road it already uses.
+                fill = await self.fill_fdc_shelf(slugs, tables)
+                if fill and (fill.get("added") or fill.get("failed")):
+                    ok2, tables2, why2 = await self.preresolve(slugs)
+                    if ok2:
+                        tables = tables2
+                    else:
+                        # DEGRADE, NEVER BLOCK. The first pass already returned a clean table and the
+                        # batch is not blocked by a warm-up step failing; the mapper rides the colder
+                        # table exactly as it did before F1 existed.
+                        self.findings.append(
+                            "F1: the post-fill re-resolve could not run (%s) - the batch of %d rides "
+                            "the pre-fill table" % (why2[:120], len(slugs)))
+                self.log_shelf_coverage(tables)
                 r = await self.with_retry(
                     lambda: self.dispatch("recipe-ingredient-mapper", self.map_prompt(slugs, tables),
                                           "map", "map:%dx" % len(slugs), slugs,
@@ -1820,7 +1975,11 @@ class Daemon(object):
             "having no food-macros-db row, because that transcription has to be label-accurate and\n"
             "nothing here can supply it - and even that read has a shelf in front of it. Where the table\n"
             "shows FDC CANDIDATES for a term, PREFER one of them and cite it as `fdc:<id>`; go to the\n"
-            "open web ONLY when the shelf has no match for that food, and cite the URL you read.\n\n"
+            "open web ONLY when the shelf has no match for that food, and cite the URL you read.\n"
+            "Most terms now arrive with the shelf already FILLED FOR THIS RUN - the orchestrator asks\n"
+            "FDC about this batch's own terms before you are dispatched. So a term with no shelf\n"
+            "candidates means FDC WAS ASKED and lacks it: go straight to the open web for that one\n"
+            "without re-checking FDC yourself.\n\n"
             "YOU DO NOT EDIT meal-prep\\food-macros-db.json ANY MORE EITHER. No file access to it.\n"
             "Return each new row in `food_db_rows` and the ORCHESTRATOR writes the DB: same shape as the\n"
             "DB's own entries, one row per food the table marks as having none.\n"

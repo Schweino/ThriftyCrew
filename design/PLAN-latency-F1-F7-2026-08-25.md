@@ -132,6 +132,16 @@ still missing badly, that is a MEASUREMENT to bring to Brad, not a license to gu
    that). Terms FDC genuinely lacks are NOT findings - they are the mapper's legitimate web reads.
    The line exists so the drill and Thursday can correlate mapper turns against shelf coverage
    without transcript archaeology.
+
+   **CORRECTED 2026-08-25 (F1 build, measured against map-preresolve.ps1's attach at lines 495-514).**
+   "X of Y unresolved term(s)" names the wrong population. The attach only ever runs inside the
+   `if (-not $foodDbKnown)` branch, so a row that is unresolved but HAS a food-macros-db row can
+   never carry a shelf marker and counting it as a gap would report a defect that does not exist -
+   and the reverse case is real too: a SETTLED line with no DB row still needs a label and does get a
+   shelf. The line as built reads "map shelf: X of Y term(s) with no food-DB row carry FDC
+   candidates; FDC lacks: ...", computed over exactly the rows the attach can serve, deduped through
+   fdc_lookup._cache_key. The FILL list is the wider set section 3.3.1 specifies (unresolved OR no DB
+   row) and is unchanged - the two populations are deliberately different and the code says so.
 4. map_prompt: no contract change. It already says prefer the shelf and cite `fdc:<id>` (CHANGE M
    wrote that language). One addition, in the licensed-read paragraph: "Most terms now arrive with
    the shelf already filled for this run; a term with no shelf candidates means FDC was ASKED and
