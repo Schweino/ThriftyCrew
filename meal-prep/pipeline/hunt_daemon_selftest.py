@@ -848,6 +848,32 @@ def run():
       *_f1_shelf_coverage_line())
 
     # =================================================================================================
+    H("M4 - four prompt patches, no schema change (2026-08-25)")
+    # =================================================================================================
+    # NEUTER PROOFS, ALL FOUR RUN AND REVERTED 2026-08-25, with the counts the suite printed:
+    #   - remove the FDC ban sentence            -> 1 red (its own case);
+    #   - remove the ONE-fetch cap sentence      -> 1 red;
+    #   - INVERT food_db_seam_note's guard so the seam and the live path swap -> 2 red, the seamed
+    #     case AND the unseamed twin, which is the pair working: a seam that leaks a sentence into a
+    #     real run is its own defect;
+    #   - drop the precheck-is-whole clause      -> 1 red.
+    T("MUST FIRE  the prompt BANS the direct FDC query and names DEMO_KEY as the throttling lie - "
+      "lf1 round 1 made 6 of them for foods the shelf had already covered",
+      *_m4_bans_the_direct_fdc_query())
+    T("MUST FIRE  the prompt caps the hunt at ONE fetch and ONE fallback per food, and says a "
+      "missing row is a finding - lf1 round 2 spent 9 web calls on 2 foods",
+      *_m4_caps_the_hunt())
+    T("MUST FIRE  a SEAMED run names the scratch food DB in the prompt, the way queue_seam_note "
+      "names the scratch queue",
+      *_m4_seam_note_names_the_scratch_db())
+    T("CLEAN TWIN an UNSEAMED daemon renders no drill sentence at all - food_db_seam_note is empty "
+      "and the prompt is what it always was",
+      *_m4_unseamed_prompt_carries_no_drill_sentence())
+    T("MUST FIRE  the prompt says the precheck is rendered WHOLE, so there is nothing to go and "
+      "read in mapped-pre\\<slug>.json - that read cost lf1 round 2 four turns",
+      *_m4_says_the_precheck_is_complete())
+
+    # =================================================================================================
     H("M2 - the map dossier carries the estate (2026-08-25)")
     # =================================================================================================
     # NEUTER PROOFS, ALL FIVE RUN AND REVERTED 2026-08-25. The counts are what the suite actually
@@ -918,6 +944,65 @@ def run():
 # =====================================================================================================
 # the fixture bodies
 # =====================================================================================================
+
+
+# =====================================================================================================
+# M4 - the four prompt patches. Assertions are on the SENTENCE, because the sentence is the change.
+# =====================================================================================================
+
+def _m4_prompt(seam=True):
+    tmp = tempfile.mkdtemp(prefix="daemon-m4-")
+    doc = _m2_table(tmp)
+    db_path = os.path.join(tmp, "food-db.json")
+    with open(db_path, "w", encoding="utf-8") as f:
+        json.dump(M2_SCRATCH_DB, f)
+    d = daemon(run_dir=tmp, food_db_path=db_path if seam else "")
+    try:
+        return d.map_prompt(["s1"], {"s1": doc}), d, db_path
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _m4_bans_the_direct_fdc_query():
+    prompt, _d, _p = _m4_prompt()
+    want = ["Do NOT query", "api.nal.usda.gov yourself and NEVER with DEMO_KEY",
+            "the worst lie a nutrition lookup can"]
+    missing = [w for w in want if w not in prompt]
+    return not missing, "missing=%s" % json.dumps(missing)
+
+
+def _m4_caps_the_hunt():
+    prompt, _d, _p = _m4_prompt()
+    want = ["ONE fetch and ONE fallback per food",
+            "return NO row for that food and say why in `detail`",
+            "a fifth fetch is a turn that re-reads this whole"]
+    missing = [w for w in want if w not in prompt]
+    return not missing, "missing=%s" % json.dumps(missing)
+
+
+def _m4_seam_note_names_the_scratch_db():
+    prompt, d, db_path = _m4_prompt(seam=True)
+    note = d.food_db_seam_note()
+    return (("THIS IS A DRILL ON A SCRATCH FOOD DB at %s" % db_path) in prompt
+            and "Verify against THAT file" in prompt and note.strip() != "", "note=%r" % note[:90])
+
+
+def _m4_unseamed_prompt_carries_no_drill_sentence():
+    prompt, d, _p = _m4_prompt(seam=False)
+    # A SEAM THAT LEAKS A SENTENCE INTO A REAL RUN IS ITS OWN DEFECT - the queue_seam_note twin,
+    # a second time.
+    return (d.food_db_seam_note() == "" and "SCRATCH FOOD DB" not in prompt
+            and "THIS IS A DRILL" not in prompt,
+            "note=%r live=%s" % (d.food_db_seam_note(), d.food_db_path))
+
+
+def _m4_says_the_precheck_is_complete():
+    prompt, _d, _p = _m4_prompt()
+    want = ["VERIFY it, do not re-derive it. The precheck block below is rendered WHOLE",
+            "so there is nothing to go and read in mapped-pre\\<slug>.json"]
+    missing = [w for w in want if w not in prompt]
+    return not missing, "missing=%s" % json.dumps(missing)
+
 
 
 # =====================================================================================================

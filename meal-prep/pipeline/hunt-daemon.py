@@ -365,7 +365,24 @@ class Daemon(object):
                 "lands in the live Omaha ledgers, which the cost engine and the publish gate read as\n"
                 "fact.\n" % " and ".join(flags))
 
-    def queue_args(self, args):
+    def food_db_seam_note(self):
+        """M4 (2026-08-25): the drill's FOOD DB seam, said to the MAPPER.
+
+        Modelled exactly on queue_seam_note, and for the same measured reason: on lf1 round 2 the
+        mapper verified against meal-prep\food-macros-db.json four times while the drill was pointed
+        at a scratch copy through --food-db, so every conflict it weighed was against the wrong file.
+
+        THE NOTE EXISTS ONLY WHEN A SEAM IS SET. food_db_path defaults to the live file, so an
+        unseamed run's prompt stays byte-identical to what it was.
+        """
+        live = os.path.join(MP, "food-macros-db.json")
+        if os.path.normcase(os.path.abspath(self.food_db_path)) == os.path.normcase(
+                os.path.abspath(live)):
+            return ""
+        return ("\nTHIS IS A DRILL ON A SCRATCH FOOD DB at %s. Verify against THAT file, not\n"
+                "meal-prep\\food-macros-db.json.\n" % self.food_db_path)
+
+    def queue_args(self, args):
         """H2: the queue call, with the drill's seams appended when they are set.
 
         ONE ROAD for the same reason ps_invoke is one road: three call sites appending their own
@@ -2359,8 +2376,11 @@ class Daemon(object):
                              % (src.get("cal"), src.get("carbs"), src.get("protein_g"), src.get("from")))
                 if mp.get("missing_db_items"):
                     lines.append("      food-DB rows missing: %s" % ", ".join(mp["missing_db_items"]))
-                lines.append("      VERIFY it, do not re-derive it. If the two disagree by more than the"
-                             " dish can explain, say so in `detail`.")
+                lines.append("      VERIFY it, do not re-derive it. The precheck block below is "
+                             "rendered WHOLE - its tuning lines, its uncovered lines and its missing "
+                             "DB rows are all shown - so there is nothing to go and read in "
+                             "mapped-pre\\<slug>.json. If the two disagree by more than the dish can "
+                             "explain, say so in `detail`.")
             else:
                 lines.append("    MACRO CROSS-CHECK: NOT pre-computed (%s). Source published %s cal / "
                              "%s carbs / %s protein (%s). Do the check yourself over the lines you rule."
@@ -2404,7 +2424,16 @@ class Daemon(object):
             "Most terms now arrive with the shelf already FILLED FOR THIS RUN - the orchestrator asks\n"
             "FDC about this batch's own terms before you are dispatched. So a term with no shelf\n"
             "candidates means FDC WAS ASKED and lacks it: go straight to the open web for that one\n"
-            "without re-checking FDC yourself.\n\n"
+            "without re-checking FDC yourself.\n"
+            "THE SHELF IS fdc_lookup's OWN OUTPUT, already fetched for this run. Do NOT query\n"
+            "api.nal.usda.gov yourself and NEVER with DEMO_KEY - a demo key silently throttles and\n"
+            "reads as 'FDC has no data for this food', which is the worst lie a nutrition lookup can\n"
+            "tell. If the shelf has no candidate for a food, FDC was asked and lacks it: go to the\n"
+            "open web.\n"
+            "ONE fetch and ONE fallback per food. If two reads have not produced a printed label you\n"
+            "can transcribe, return NO row for that food and say why in `detail` - a missing row is a\n"
+            "finding a person can act on, and a fifth fetch is a turn that re-reads this whole\n"
+            "session. Measured: 9 web calls on 2 foods, 2026-08-25.\n\n"
             "YOU DO NOT EDIT meal-prep\\food-macros-db.json ANY MORE EITHER. No file access to it.\n"
             "Return each new row in `food_db_rows` and the ORCHESTRATOR writes the DB: same shape as the\n"
             "DB's own entries, one row per food the table marks as having none.\n"
@@ -2468,9 +2497,10 @@ class Daemon(object):
             "array cannot be comma-joined by accident.\n\n"
             "Transcriptions, if you need a line's full context: %s\\extracted\\<slug>.json\n"
             "This run's conditions: %s\n"
+            "%s"
             % (len(slugs), hunt_lib.MAP_BATCH, "\n\n".join(blocks), hunt_lib.TARGET_SERVINGS,
                self.run_dir, " | ".join(hunt_lib.MAPPED_RULING_DECISIONS),
-               self.run_dir, self.conditions))
+               self.run_dir, self.conditions, self.food_db_seam_note()))
 
     # ---------------------------------------------------------------------------------------------
     # PRICE - SINGLETON, self-looping queue drainer. ARCHITECTURE, not config (section 4.1a).
