@@ -51,6 +51,7 @@ MP = os.path.dirname(HERE)
 REPO = os.path.dirname(MP)
 sys.path.insert(0, HERE)
 
+import fdc_lookup                                                # noqa: E402
 import harvest                                                   # noqa: E402
 import hunt_dispatch                                             # noqa: E402
 import hunt_lib                                                  # noqa: E402
@@ -234,7 +235,7 @@ class Daemon(object):
     def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
-                 costed_path="", pyrun=None):
+                 costed_path="", pyrun=None, food_db_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         self.conditions = conditions
@@ -259,6 +260,16 @@ class Daemon(object):
         # producing a spec whose cost block is zeros and letting a reader assume it was priced.
         self.specs_dir = specs_dir
         self.costed_path = costed_path
+        # A SCRATCH FOOD DB, for exactly the reason the three above exist, and added with CHANGE M
+        # (2026-08-25) because that change makes the daemon a WRITER of this file. Before it, a drill
+        # could not put a row into food-macros-db.json even by accident; now it can, and the live DB
+        # is read by every spec build and every macro recompute in the estate. Empty means the live
+        # one, which is what a real run wants.
+        self.food_db_path = food_db_path or os.path.join(MP, "food-macros-db.json")
+        # ONE PEN, ONE LOCK. The map lane runs two workers and both may carry new rows for the same
+        # single file, which is the ingredient-resolutions lesson (S4: 2,293 outcomes recorded as 65
+        # under last-writer-wins) arriving at the food DB. Modelled on cost_lock above.
+        self.food_db_lock = asyncio.Lock()
         self.pool_path = pool_path or harvest.POOL
         self.quiet = quiet
         # A TEST SEAM, and the ONLY thing it may ever carry is a path: extra arguments appended to
@@ -1400,6 +1411,139 @@ class Daemon(object):
             % (slug, term or "(the mapper did not name the term)", bid,
                evidence or "(none given)", near, self.registrar_evidence_block(term, bid)))
 
+    # ---- CHANGE M: THE DAEMON WRITES THE FOOD DB --------------------------------------------------
+    #
+    # WHY THE PEN MOVED. map_prompt already forbids re-reads ("the table above is the estate, already
+    # read for you"), and the mapper's one licensed read is a nutrition LABEL for a food with no
+    # food-macros-db row. It then said "add those rows as you always have", so the mapper EDITED
+    # meal-prep\food-macros-db.json itself. Measured on 6b: a 3-recipe map batch took 22 turns and
+    # 1.08M raw tokens, and the turns were label acquisition plus Edit-and-verify round trips on that
+    # one file. The mapper returns `food_db_rows` now and has no file access to the DB at all.
+    #
+    # AND WHAT THE MOVE BUYS BEYOND TURNS - this is the part that is accuracy, not cost. A row that
+    # arrives in a payload can be CHECKED before it lands. `db_entries_added` was a names-only
+    # self-report: it said what the mapper CLAIMED to have written, which is precisely the thing a
+    # gate cannot be built on. Every row now passes the Atwater derivation and the conflict rule
+    # before the file changes, and the mapped artifact records what the DAEMON WROTE.
+    #
+    # THE CONFLICT RULE IS THE MEAL-MACRO SKILL'S, arriving here unchanged: "When a label conflicts
+    # with the DB, STOP and surface it. Do NOT silently overwrite." An existing row always stands.
+    async def write_food_db_rows(self, slug, rows):
+        r"""Returns (written_names, findings). Never raises on a bad row - a bad row is a FINDING.
+
+        Order per row: shape, then source, then Atwater, then conflict. Nothing is written until
+        every check on that row has passed, and one bad row never costs a good one its write.
+        """
+        written, findings = [], []
+        rows = [r for r in (rows or []) if isinstance(r, dict)]
+        if not rows:
+            return written, findings
+        # THE WHOLE READ-MODIFY-WRITE IS INSIDE THE LOCK, not just the write. Two map workers can
+        # carry rows for this one file at the same time (the MAP cap is 2), and a read outside the
+        # lock is exactly the last-writer-wins shape that cost ingredient-resolutions 97% of its
+        # outcomes in the source-domains measurement S4 records.
+        # THE DISK I/O RUNS IN THE EXECUTOR, exactly like ps() and py() do, and it is not a detail.
+        # A synchronous read-modify-write of a growing JSON file on the event loop stalls every other
+        # lane for its duration. It also has a second consequence that the fixtures depend on: it puts
+        # a real await between the read and the write, which is what makes the lock LOAD-BEARING
+        # rather than decorative. Measured 2026-08-25 - with the I/O synchronous, removing the lock
+        # changed nothing, because nothing could ever interleave; the neuter proof the estate's rule
+        # demands could not be produced, which is a fixture proving the scheduler, not the mutex.
+        loop = asyncio.get_event_loop()
+
+        def _read():
+            with open(self.food_db_path, "r", encoding="utf-8-sig") as f:
+                return json.load(f)
+
+        def _write(payload):
+            tmp = self.food_db_path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(payload, f, ensure_ascii=False, indent=1)
+            os.replace(tmp, self.food_db_path)
+
+        async with self.food_db_lock:
+            try:
+                doc = await loop.run_in_executor(None, _read)
+            except Exception as e:                                # noqa: BLE001
+                return written, ["%s: the food DB could not be read, so %d new row(s) were NOT "
+                                 "written (%s)" % (slug, len(rows), e)]
+            # THE FILE IS {readme, items:[...]} - A LIST OF ROWS, not a dict keyed by item name.
+            # Measured 2026-08-25 on the live file. PLAN-hunter-judge-contract said "the DB is a DICT
+            # keyed by item name - preserve that shape" and is CORRECTED in the same commit.
+            # Preserving the REAL shape matters: recipe-macros.ps1 and the meal-macro skill both read
+            # `items` as an array, and a dict written here would be a silently unreadable DB.
+            if not isinstance(doc, dict) or not isinstance(doc.get("items"), list):
+                return written, ["%s: the food DB is not the expected {readme, items:[...]} shape, "
+                                 "so %d new row(s) were NOT written" % (slug, len(rows))]
+            items = doc["items"]
+            by_name = {}
+            for r in items:
+                if isinstance(r, dict) and r.get("item"):
+                    by_name[str(r["item"]).strip().lower()] = r
+            added = []
+            for row in rows:
+                name = str(row.get("item") or "").strip()
+                if not name:
+                    findings.append("%s: a food_db_rows entry carries no `item` name and was not "
+                                    "written" % slug)
+                    continue
+                missing = [k for k in ("serving_grams", "calories", "protein_g", "carbs_g", "fat_g")
+                           if not isinstance(row.get(k), (int, float))]
+                if missing:
+                    findings.append("%s: the food-DB row for %r is missing %s and was NOT written"
+                                    % (slug, name, ", ".join(missing)))
+                    continue
+                # SECTION 9's NAMED BACKFIRE, GATED. The Atwater check catches fabricated
+                # ARITHMETIC; it cannot catch a wrong-but-self-consistent label. The defence against
+                # that one is provenance, so a row citing neither an FDC id nor a URL is a finding
+                # and does not land.
+                src = str(row.get("source") or "").strip()
+                if not (src.lower().startswith("fdc:") or "://" in src):
+                    findings.append("%s: the food-DB row for %r cites no source (expected "
+                                    "'fdc:<id>' or a URL) and was NOT written. Atwater proves the "
+                                    "four numbers agree with each other, never that they are this "
+                                    "food's numbers" % (slug, name))
+                    continue
+                chk = fdc_lookup.atwater_check(row)
+                if not chk.get("ok"):
+                    findings.append("%s: the food-DB row for %r FAILED the Atwater check (%s) and "
+                                    "was NOT written"
+                                    % (slug, name, chk.get("why") or "no reason given"))
+                    continue
+                prior = by_name.get(name.lower())
+                if prior is not None:
+                    diff = [k for k in ("serving_grams", "serving_qty", "serving_unit", "calories",
+                                        "protein_g", "carbs_g", "fat_g")
+                            if k in row and row.get(k) != prior.get(k)]
+                    if diff:
+                        # NEVER OVERWRITE ON A CONFLICT. Both rows are quoted so a person can rule;
+                        # the recipe proceeds on the row that is already there.
+                        findings.append(
+                            "%s: the food DB already carries %r and the mapper's row DIFFERS on %s. "
+                            "Nothing was written and the existing row stands. existing=%s new=%s"
+                            % (slug, name, ", ".join(diff),
+                               json.dumps(dict((k, prior.get(k)) for k in diff), ensure_ascii=False),
+                               json.dumps(dict((k, row.get(k)) for k in diff), ensure_ascii=False)))
+                    continue                      # an identical row is skipped silently, per plan 3.2
+                clean = dict((k, v) for k, v in row.items() if v not in (None, ""))
+                clean["item"] = name
+                clean["added_by"] = "recipe-hunter map lane (%s)" % self.run_id
+                added.append(clean)
+                by_name[name.lower()] = clean
+                written.append(name)
+            if not added:
+                return written, findings
+            try:
+                items.extend(added)
+                await loop.run_in_executor(None, _write, doc)
+            except Exception as e:                                # noqa: BLE001
+                out = ["%s: the food DB could not be written, so the row for %r did NOT land (%s)"
+                       % (slug, n, e) for n in written]
+                return [], findings + out
+            # the daemon's own cached index is now stale, and unverified_foods reads it
+            self._food_db = None
+        return written, findings
+
     async def assemble_mapped(self, slug, res, tables=None):
         r"""A1 / pins P2-P6. Build `<RunDir>\mapped\<slug>.json` from the table plus the mapper's two
         arrays. Returns (ok, why_not).
@@ -1413,12 +1557,19 @@ class Daemon(object):
         """
         proposals = res.get("new_commodity_proposals") or []
         rulings = await self.registrar_rulings(slug, proposals, tables)
+        db_written, db_findings = await self.write_food_db_rows(slug, res.get("food_db_rows"))
+        for f in db_findings:
+            self.findings.append(f)
         payload = {
             "slug": slug,
             "lines": res.get("lines") or [],
             "rulings": res.get("rulings") or [],
             "absent_terms": [t for t in (res.get("absent_terms") or []) if t],
-            "db_entries_added": res.get("db_entries_added") or [],
+            # WHAT THE DAEMON WROTE, not what the mapper claimed to have written. The key is
+            # renamed along with the meaning, so a reader of an old artifact and a reader of a new
+            # one cannot mistake the two.
+            "db_entries_written": db_written,
+            "db_row_findings": db_findings,
             "rejected": res.get("rejected") or [],
             "ruled_substitutions": res.get("ruled_substitutions") or [],
             "new_commodity_proposals": proposals,
@@ -1667,7 +1818,22 @@ class Daemon(object):
             "is answered above, and a re-read costs a turn that re-reads the whole accumulated context\n"
             "with it. The ONE read still worth a turn is a nutrition LABEL for a food the table marks as\n"
             "having no food-macros-db row, because that transcription has to be label-accurate and\n"
-            "nothing here can supply it. Add those rows as you always have.\n\n"
+            "nothing here can supply it - and even that read has a shelf in front of it. Where the table\n"
+            "shows FDC CANDIDATES for a term, PREFER one of them and cite it as `fdc:<id>`; go to the\n"
+            "open web ONLY when the shelf has no match for that food, and cite the URL you read.\n\n"
+            "YOU DO NOT EDIT meal-prep\\food-macros-db.json ANY MORE EITHER. No file access to it.\n"
+            "Return each new row in `food_db_rows` and the ORCHESTRATOR writes the DB: same shape as the\n"
+            "DB's own entries, one row per food the table marks as having none.\n"
+            "  required : item, serving_grams, calories, protein_g, carbs_g, fat_g\n"
+            "  also give: brand, serving_qty, serving_unit, fiber_g, notes, and `source` - which is\n"
+            "             `fdc:<id>` off the shelf, or the URL of the label you read. A row citing\n"
+            "             NEITHER is refused, because arithmetic can prove four numbers agree with each\n"
+            "             other and only provenance can say they are THIS food's numbers.\n"
+            "The orchestrator Atwater-checks every row (4/4/9 against the stated calories) and REFUSES a\n"
+            "conflict: if the DB already carries that item with different macros, nothing is written, both\n"
+            "rows are quoted in the run's findings and the existing row stands. So give the label AS\n"
+            "PRINTED, never a reconstruction - a row you reasoned your way to will either fail the check\n"
+            "or, worse, pass it while describing a different food.\n\n"
             "YOU DO NOT WRITE %s\\mapped\\<slug>.json ANY MORE, and this is the change to read twice.\n"
             "The ORCHESTRATOR assembles that file from the table plus your two arrays. On 2026-08-24 a\n"
             "live batch wrote it in the pre-resolve TABLE'S shape and the skeleton builder exited 1 over\n"
@@ -2126,7 +2292,7 @@ class Daemon(object):
             return self._food_db
         idx = {}
         try:
-            with open(os.path.join(MP, "food-macros-db.json"), "r", encoding="utf-8-sig") as f:
+            with open(self.food_db_path, "r", encoding="utf-8-sig") as f:
                 doc = json.load(f)
             rows = doc.get("foods") or doc.get("items") or doc
             if isinstance(rows, dict):
@@ -3291,6 +3457,11 @@ def main(argv=None):
                          "db/candidate-pool.json. Same seam as --ledger / --specs / --costed: it "
                          "exists so a drill can aim the run at a chosen corpus without editing the "
                          "live pool, which harvest.py is the sole writer of.")
+    ap.add_argument("--food-db", dest="food_db", default="",
+                    help="a scratch meal-prep\food-macros-db.json, for a drill. Empty means the "
+                         "live one. Same seam as --ledger / --specs / --costed / --pool, and it "
+                         "exists because CHANGE M made the daemon a WRITER of this file: a drill "
+                         "row in the live DB would be read by every spec build in the estate.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
@@ -3318,7 +3489,8 @@ def main(argv=None):
 
     d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions, band,
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
-               specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None))
+               specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None),
+               food_db_path=a.food_db)
 
     async def go():
         ok, err = await d.seed()

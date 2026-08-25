@@ -686,6 +686,38 @@ def run():
         T(name, ok, got)
 
     # =================================================================================================
+    H("CHANGE M - the mapper returns food-DB rows and the DAEMON writes them (2026-08-25)")
+    # =================================================================================================
+    T("MUST FIRE  a payload carrying food_db_rows makes the DAEMON write them, and the file keeps "
+      "its {readme, items:[...]} shape - items is a LIST, not a dict keyed by name",
+      *_fooddb_writes())
+    T("MUST FIRE  a row failing the Atwater check is NOT written and the finding names it - a "
+      "fabricated label is the worse-than-no-gate case",
+      *_fooddb_atwater_refuses())
+    T("MUST FIRE  an item that already exists with DIFFERENT macros is not written, BOTH rows are "
+      "quoted in the finding, and the existing row stands untouched",
+      *_fooddb_conflict_never_overwrites())
+    T("CLEAN TWIN an identical existing row is skipped silently - no write, no finding, no noise",
+      *_fooddb_identical_is_silent())
+    T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
+      "agree with each other, never that they are this food's numbers",
+      *_fooddb_needs_a_source())
+    T("MUST FIRE  two concurrent map workers each carrying three rows leave SIX rows in the file",
+      *_fooddb_concurrent_writers())
+    T("MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op lock the same two writers lose "
+      "rows, so the case above is proving the lock and not the scheduler",
+      *_fooddb_lock_is_load_bearing())
+    T("MUST FIRE  the mapped artifact records what the DAEMON WROTE (db_entries_written), the old "
+      "self-report key is gone, and a refused row is a finding on the artifact AND on the run",
+      *_fooddb_assemble_records_what_was_written())
+    T("MUST FIRE  MAPPED retired db_entries_added and carries food_db_rows with the label fields "
+      "required",
+      *_fooddb_schema_retired_the_self_report())
+    T("MUST FIRE  map_prompt tells the mapper it has no file access to the DB, names the Atwater and "
+      "conflict rules, and prefers the FDC shelf",
+      *_fooddb_prompt_moved_the_pen())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -3637,6 +3669,258 @@ def _lane_lines(ps):
             return a[a.index(flag) + 1] if flag in a else ""
         out.append((g("-LaneName"), g("-Label"), g("-Event")))
     return out
+
+
+# =====================================================================================================
+# CHANGE M - THE DAEMON WRITES THE FOOD DB (2026-08-25)
+#
+# The mapper used to Edit meal-prep\food-macros-db.json itself and report back a names-only
+# `db_entries_added` array. A self-report is the one thing a gate cannot be built on, so the pen moved
+# and two gates moved onto the road with it: the Atwater derivation, and the meal-macro skill's
+# standing conflict rule ("never overwrite the DB on a conflict without asking").
+# =====================================================================================================
+
+def _food_db_run(rows_by_slug, existing=None, readme="fixture DB"):
+    """A scratch food DB plus a daemon aimed at it through the --food-db seam. Returns (daemon, path).
+
+    THE SEAM IS THE POINT of doing it this way: before CHANGE M a drill could not put a row into the
+    live DB even by accident, and now it can. Every fixture here writes a temp file and none of them
+    can reach meal-prep\food-macros-db.json.
+    """
+    tmp = tempfile.mkdtemp(prefix="daemon-fooddb-")
+    path = os.path.join(tmp, "food-macros-db.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"readme": readme, "items": list(existing or [])}, f)
+    d = daemon(run_dir=tmp, food_db_path=path)
+    return d, path, tmp
+
+
+def _db_items(path):
+    with open(path, "r", encoding="utf-8-sig") as f:
+        return json.load(f)
+
+
+# A row whose 4/4/9 actually reconciles, so the Atwater gate is not what any of these turn on unless
+# the case says so. 25*4 + 3*4 + 5*9 = 157 against a stated 155: inside tolerance.
+def _good_row(name, source="fdc:171077", **kw):
+    row = {"item": name, "brand": "Fixture Farms", "serving_grams": 100, "serving_qty": 4,
+           "serving_unit": "oz", "calories": 155, "protein_g": 25, "carbs_g": 3, "fat_g": 5,
+           "notes": "raw", "source": source}
+    row.update(kw)
+    return row
+
+
+def _fooddb_writes():
+    d, path, tmp = _food_db_run(None)
+    try:
+        # 3+ elements, per the estate's collection rule
+        rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        names = [r.get("item") for r in doc["items"]]
+        ok = (sorted(written) == ["Fixture Beef", "Fixture Chicken", "Fixture Pork"]
+              and not findings
+              and sorted(names) == ["Fixture Beef", "Fixture Chicken", "Fixture Pork"]
+              # THE SHAPE IS PRESERVED: {readme, items:[...]}, a LIST of rows. The plan said this file
+              # was a dict keyed by item name; it is not, and a dict written here would be a DB that
+              # recipe-macros.ps1 and the meal-macro skill silently cannot read.
+              and isinstance(doc.get("items"), list) and doc.get("readme") == "fixture DB")
+        return ok, ("written=%s findings=%s items=%s readme=%r"
+                    % (written, findings, json.dumps(names), doc.get("readme")))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_atwater_refuses():
+    d, path, tmp = _food_db_run(None)
+    try:
+        # 25 P / 3 C / 5 F computes 157 kcal. Stating 900 is not a rounding difference; it is four
+        # numbers that do not describe one food, which is what a fabricated label looks like.
+        bad = _good_row("Fixture Fabrication", calories=900)
+        rows = [_good_row("Fixture Chicken"), bad, _good_row("Fixture Pork")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        names = [r.get("item") for r in _db_items(path)["items"]]
+        named = [f for f in findings if "Fixture Fabrication" in f and "Atwater" in f]
+        ok = ("Fixture Fabrication" not in names and "Fixture Fabrication" not in written
+              and len(named) == 1
+              # and one bad row never costs a good one its write
+              and sorted(names) == ["Fixture Chicken", "Fixture Pork"])
+        return ok, "items=%s findings=%s" % (json.dumps(names), json.dumps(findings))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_conflict_never_overwrites():
+    prior = _good_row("Fixture Chicken", protein_g=25, calories=155)
+    prior["brand"] = "The Row That Was Already There"
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        # same item, DIFFERENT macros, and its own arithmetic is fine (30*4 + 3*4 + 5*9 = 177)
+        clash = _good_row("Fixture Chicken", protein_g=30, calories=177)
+        rows = [clash, _good_row("Fixture Pork"), _good_row("Fixture Beef")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        chicken = [r for r in doc["items"] if r.get("item") == "Fixture Chicken"]
+        named = [f for f in findings if "Fixture Chicken" in f and "DIFFERS" in f]
+        ok = (len(chicken) == 1
+              and chicken[0].get("brand") == "The Row That Was Already There"
+              and chicken[0].get("protein_g") == 25
+              and "Fixture Chicken" not in written
+              and len(named) == 1
+              # BOTH rows are quoted, or a person cannot rule on the conflict from the finding alone
+              and "25" in named[0] and "30" in named[0]
+              # the other two rows still land: a conflict holds ONE row, not the batch
+              and sorted(written) == ["Fixture Beef", "Fixture Pork"])
+        return ok, "written=%s finding=%s" % (written, json.dumps(named)[:400])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_identical_is_silent():
+    prior = _good_row("Fixture Chicken")
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        names = [r.get("item") for r in _db_items(path)["items"]]
+        ok = (not findings and "Fixture Chicken" not in written
+              and names.count("Fixture Chicken") == 1
+              and sorted(written) == ["Fixture Beef", "Fixture Pork"])
+        return ok, "written=%s findings=%s items=%s" % (written, json.dumps(findings), json.dumps(names))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_needs_a_source():
+    d, path, tmp = _food_db_run(None)
+    try:
+        rows = [_good_row("Fixture Chicken"),
+                _good_row("Fixture Hearsay", source=""),
+                _good_row("Fixture Pork")]
+        written, findings = arun(d.write_food_db_rows("s1", rows))
+        names = [r.get("item") for r in _db_items(path)["items"]]
+        named = [f for f in findings if "Fixture Hearsay" in f and "source" in f]
+        ok = ("Fixture Hearsay" not in names and len(named) == 1
+              and sorted(names) == ["Fixture Chicken", "Fixture Pork"])
+        return ok, "items=%s findings=%s" % (json.dumps(names), json.dumps(findings))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_concurrent_writers():
+    r"""TWO MAP WORKERS LANDING TOGETHER. The MAP cap is 2, so two batches can each carry new rows for
+    this one file at the same moment.
+
+    NEUTER PROOF, RUN 2026-08-25 and REQUIRED before this case counts. Replacing `self.food_db_lock`
+    with a no-op context manager makes this fail at 3 rows of 6 - the classic read-modify-write loss,
+    each writer serialising the doc it read before the other's rows existed. The proof is in the
+    result line, not in a promise: with the lock the file holds all six.
+    """
+    d, path, tmp = _food_db_run(None)
+    try:
+        slow = {"n": 0}
+        real_open = io_open = open
+
+        async def three(slug, tag):
+            return await d.write_food_db_rows(
+                slug, [_good_row("%s A" % tag), _good_row("%s B" % tag), _good_row("%s C" % tag)])
+
+        async def both():
+            return await asyncio.gather(three("s1", "Worker One"), three("s2", "Worker Two"))
+
+        res = arun(both())
+        names = sorted(r.get("item") for r in _db_items(path)["items"])
+        want = sorted(["Worker One A", "Worker One B", "Worker One C",
+                       "Worker Two A", "Worker Two B", "Worker Two C"])
+        written = sorted([n for w, _ in res for n in w])
+        ok = names == want and written == want
+        return ok, "items(%d)=%s" % (len(names), json.dumps(names))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_lock_is_load_bearing():
+    """The neuter, run as its own case so the proof is REPRODUCED on every suite run rather than
+    recorded in a comment nobody re-runs. A no-op lock must LOSE rows; if it stops losing them the
+    concurrency fixture above has stopped proving anything and this case says so."""
+    class NoLock(object):
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *a):
+            return False
+
+    d, path, tmp = _food_db_run(None)
+    try:
+        d.food_db_lock = NoLock()
+
+        async def three(slug, tag):
+            # a real await between the read and the write, which is what a lock exists to survive
+            await asyncio.sleep(0)
+            return await d.write_food_db_rows(
+                slug, [_good_row("%s A" % tag), _good_row("%s B" % tag), _good_row("%s C" % tag)])
+
+        async def both():
+            return await asyncio.gather(three("s1", "Worker One"), three("s2", "Worker Two"))
+
+        arun(both())
+        names = [r.get("item") for r in _db_items(path)["items"]]
+        # 6 rows survive only if the two never interleaved. Under a no-op lock this is 3.
+        return len(names) < 6, ("a no-op lock kept ALL %d rows, so the concurrency fixture is no "
+                                "longer proving the lock does anything" % len(names))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_assemble_records_what_was_written():
+    """The mapped artifact says what the DAEMON WROTE. `db_entries_added` reported what the mapper
+    CLAIMED, which is the whole reason the pen moved."""
+    d, path, tmp = _food_db_run(None)
+    try:
+        d.registrar_rulings = lambda slug, proposals, tables=None: _immediate([])
+        res = {"slug": "s1", "status": "ok", "state": "mapped", "lines": [], "rulings": [],
+               "food_db_rows": [_good_row("Fixture Chicken"), _good_row("Fixture Pork"),
+                                _good_row("Fixture Beef", calories=900)]}
+        arun(d.assemble_mapped("s1", res))
+        with open(os.path.join(tmp, "mapped-pre", "s1.rulings.json"), "r", encoding="utf-8") as f:
+            doc = json.load(f)
+        ok = (sorted(doc.get("db_entries_written") or []) == ["Fixture Chicken", "Fixture Pork"]
+              and "db_entries_added" not in doc
+              and len(doc.get("db_row_findings") or []) == 1
+              and any("Fixture Beef" in f for f in doc["db_row_findings"])
+              # and the run's own findings carry it too, or a hold has nothing to say
+              and any("Fixture Beef" in f for f in d.findings))
+        return ok, json.dumps({k: doc.get(k) for k in ("db_entries_written", "db_row_findings")})[:400]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _immediate(v):
+    async def go():
+        return v
+    return go()
+
+
+def _fooddb_schema_retired_the_self_report():
+    """`db_entries_added` is gone from MAPPED and `food_db_rows` is in it. A schema that still
+    accepted the old field would let a mapper keep self-reporting into a daemon that ignores it."""
+    props = hunt_lib.MAPPED["properties"]["results"]["items"]["properties"]
+    rows = props.get("food_db_rows") or {}
+    req = ((rows.get("items") or {}).get("required")) or []
+    return ("db_entries_added" not in props and rows.get("type") == "array"
+            and sorted(req) == sorted(["item", "serving_grams", "calories", "protein_g",
+                                       "carbs_g", "fat_g"])), \
+           "db_entries_added=%s required=%s" % ("db_entries_added" in props, json.dumps(req))
+
+
+def _fooddb_prompt_moved_the_pen():
+    d = daemon()
+    pr = d.map_prompt(["s1"], {"s1": {"rows": [], "scale_factor": 1.0}})
+    return (("food_db_rows" in pr and "no file access" in pr.lower()
+             and "Atwater" in pr and "fdc:" in pr
+             and "Add those rows as you always have" not in pr),
+            "food_db_rows=%s old-sentence=%s" % ("food_db_rows" in pr,
+                                                 "Add those rows as you always have" in pr))
 
 
 def _mechanical_lane_events():

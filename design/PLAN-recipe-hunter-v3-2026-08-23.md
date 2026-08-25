@@ -451,6 +451,41 @@ same named-system-mutex pattern from day one (or routes them through the daemon'
 the rest of the bookkeeping), with a concurrent-writers fixture; it does not wait to measure the
 loss a second time. The audit rule generalises: before any lane's cap is raised above 1, enumerate
 every single-file ledger its stage writes and give each one a mutex or a single pen.
+**CORRECTED 2026-08-25 (CHANGE M, built from design\PLAN-hunter-judge-contract-2026-08-25.md
+sections 3.1-3.4, measured against that file's section 1 baseline).** This section said the mapper
+does "label transcription for new food-DB rows" and left the WRITE with the agent. It no longer has
+it. The mapper returns `food_db_rows` in its payload and the DAEMON is the sole writer of
+meal-prep\food-macros-db.json.
+
+Why the pen moved: on hunt-2026-08-24-v3-phase6b a 3-recipe map batch took 22 turns and 1,084,231 raw
+tokens, and the turns were label acquisition plus Edit-and-verify round trips on that one file. But
+the cost is only half of it. The old contract reported back `db_entries_added`, a names-only array of
+what the mapper CLAIMED to have written, and a self-report is precisely the thing a gate cannot be
+built on. A row that arrives in a payload can be checked before it lands, so three gates now sit on
+the road, in this order, per row:
+
+- **Provenance.** A row citing neither `fdc:<id>` nor a URL in `source` is refused. Arithmetic can
+  prove four numbers agree with each other; only provenance can say they are this food's numbers.
+- **Atwater.** `fdc_lookup.atwater_check` - 4/4/9 (fibre at 2) against the stated calories. A failing
+  row is NOT written, becomes a finding naming it, and the recipe holds at `mapped`.
+- **Conflict.** The meal-macro skill's standing rule arriving here unchanged: if the item already
+  exists with different macros, nothing is written, BOTH rows are quoted in the finding, and the
+  existing row stands. The recipe proceeds on the existing row. An identical row is skipped silently.
+
+Writes are serialized under `Daemon.food_db_lock`, because the map lane runs two workers and this is
+the second single-file ledger the paragraph above already warned about. **The disk I/O runs in the
+executor**, which is what makes that lock load-bearing rather than decorative: with the read and the
+write synchronous, nothing could interleave, and removing the lock changed nothing - a concurrency
+fixture that cannot fail without its mutex is proving the scheduler, not the mutex. With the I/O in
+the executor, removing the lock loses exactly 3 of 6 rows, which is the ingredient-resolutions
+failure shape reproduced at fixture scale.
+
+Two smaller corrections that belong with it. The mapped artifact's `db_entries_added` is renamed
+`db_entries_written` (plus `db_row_findings`), because the key changed meaning and a reader must not
+mistake one artifact for the other. And the daemon gained a `--food-db` scratch seam alongside
+--ledger / --specs / --costed / --pool: before this change a drill could not put a row into the live
+food DB even by accident, and now it can.
+
 Registrar path unchanged. Local 27B's role in mapping: **none in the initial build** (a
 vocab-candidate ordering signal is DEFERRED alongside S2's and S5's; and it could only ever rank,
 never resolve - "Dry White Wine" auto-matching "White Wine Vinegar" is the founding reason).

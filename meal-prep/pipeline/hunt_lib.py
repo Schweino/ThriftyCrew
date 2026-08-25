@@ -770,7 +770,25 @@ MAPPED = {"type": "object", "properties": {
         "new_commodity_proposals": {"type": "array", "items": {"type": "object", "properties": {
             "term": {"type": "string"}, "proposed_bid": {"type": "string"},
             "evidence": {"type": "string"}}, "required": ["proposed_bid"]}},
-        "db_entries_added": {"type": "array", "items": {"type": "string"}},
+        # THE MAPPER RETURNS ITS FOOD-DB ROWS; THE DAEMON WRITES THE DB (CHANGE M, 2026-08-25).
+        # This replaces `db_entries_added`, a names-only array reporting what the mapper CLAIMED to
+        # have written with the Edit tool. The 22 turns of a 3-recipe map batch were label
+        # acquisition plus Edit/verify round-trips on food-macros-db.json; the daemon now holds that
+        # pen too, exactly as 6a moved mapped\<slug>.json, and it Atwater-checks and conflict-checks
+        # every row on the way in - neither of which a self-report could ever be.
+        "food_db_rows": {"type": "array", "description":
+            "Label-accurate food-macros-db rows for foods the table marks as having NO row. The "
+            "ORCHESTRATOR writes the DB; you never edit it. Same shape as the DB's own entries.",
+            "items": {"type": "object", "properties": {
+                "item": {"type": "string"}, "brand": {"type": "string"},
+                "serving_grams": {"type": "number"}, "serving_qty": {"type": "number"},
+                "serving_unit": {"type": "string"}, "calories": {"type": "number"},
+                "protein_g": {"type": "number"}, "carbs_g": {"type": "number"},
+                "fat_g": {"type": "number"}, "fiber_g": {"type": "number"},
+                "notes": {"type": "string"},
+                "source": {"type": "string", "description":
+                    "where the label came from: 'fdc:<fdcId>' when chosen off the shelf, else the URL"}},
+                "required": ["item", "serving_grams", "calories", "protein_g", "carbs_g", "fat_g"]}},
         "rejected": {"type": "array", "items": {"type": "string"}},
         "ruled_substitutions": {"type": "array", "items": {"type": "string"}},
         # NO `type` ON THESE THREE, AND IT IS DELIBERATE (phase-6a gate drill, 2026-08-24).

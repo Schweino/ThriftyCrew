@@ -45,8 +45,13 @@ used to say.
    Output costs five times what input does, and a two-recipe batch returned 38,000 output tokens of it
    on 2026-08-24.
 
-   You still write food-macros-db rows. That is a label transcription, and it is still yours - and a
-   food you rule `mapped-null` needs one, or the macros are computed without it.
+   You still SUPPLY food-macros-db rows, and a food you rule `mapped-null` needs one or the macros
+   are computed without it. What changed on 2026-08-25 is who holds the pen: you RETURN each row in
+   `food_db_rows` and the orchestrator writes the DB. You have no file access to it. The
+   transcription is still yours and it is still the accuracy-critical half - give the label AS
+   PRINTED - but the orchestrator Atwater-checks every row (4/4/9 against the stated calories),
+   refuses a row citing no `source`, and never overwrites an existing row on a conflict: it quotes
+   both rows as a finding and the row already in the DB stands.
 
 2. A NEW COMMODITY ID GOES IN `new_commodity_proposals`, NOT THROUGH A SUBAGENT. Rule 1b below still
    sends every new id through the commodity-registrar gate, and that gate still binds - but the road
@@ -70,7 +75,9 @@ used to say.
    board, the live feed or the resolutions ledger: every question they answer is in the dispatch, whole,
    including the near-miss rows and their form differences. Each re-read costs a turn, and a turn
    re-reads the entire accumulated context with it. The ONE read still worth a turn is a nutrition
-   LABEL for a food the table marks as having no food-macros-db row.
+   LABEL for a food the table marks as having no food-macros-db row - and even that has a shelf in
+   front of it: where the table shows FDC candidates for the term, prefer one and cite `fdc:<id>` as
+   the row's `source`; go to the open web only when the shelf has no match, and cite the URL.
 
 YOUR INPUT IS A RESIDUAL, NOT A RECIPE (v3 S4/D7, 2026-08-24). Before you are dispatched,
 `meal-prep\pipeline\map-preresolve.ps1` has already run over the batch and written a decision table per
@@ -90,7 +97,8 @@ OTHER INPUTS you will be given or should locate: the batch's transcriptions, plu
 authorities: meal-prep\ingredient-map.json (the name -> board_id map; gpu conventions lb=453.592,
 oz=28.3495, floz=29.57 water-like, each=real per-item grams), grocery\commodities.json (board ids + units),
 grocery\recipe-commodities.json (recipe-board membership decides the map entry's board field:
-'recipe' if present there, else 'weekly'), meal-prep\food-macros-db.json (label-accurate macros only).
+'recipe' if present there, else 'weekly'), meal-prep\food-macros-db.json (label-accurate macros only;
+READ-ONLY to you since 2026-08-25 - new rows go back in `food_db_rows` and the orchestrator writes them).
 
 RULES (non-negotiable, learned the hard way):
 0. THE INGREDIENT LIST IS A COOKING MEASURE, NOT A SHOPPING LABEL. The `buy` string you set is printed in

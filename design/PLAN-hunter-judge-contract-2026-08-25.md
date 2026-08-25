@@ -106,6 +106,17 @@ arrive; the residual agent work is choosing/transcribing and the file edits.
      Model it on the existing cost-engine mutex (section 4.5 of PLAN v3; the selftest has
      `_cost_mutex` as the pattern). Read with encoding utf-8-sig, write compact like the daemon's
      other JSON writes in assemble_mapped. The DB is a DICT keyed by item name - preserve that shape.
+
+     **CORRECTED 2026-08-25 (build session, measured on the live meal-prep\food-macros-db.json).**
+     The DB is NOT a dict keyed by item name. It is `{"readme": "<string>", "items": [ ...row
+     objects... ]}` - `items` is a LIST, and each row carries its own `item` field. Writing the shape
+     this paragraph describes would have produced a DB that recipe-macros.ps1 and the meal-macro
+     skill both read as empty, silently. `write_food_db_rows` refuses to write at all unless the file
+     parses as `{readme, items:[...]}`, appends to that list, and a fixture asserts the shape
+     survives the write. Two additions the paragraph did not call for, both built: `fiber_g` is in
+     the row schema (atwater_check credits fibre at 2 kcal/g and without the field a legitimate
+     high-fibre row fails the gate), and a row citing no `source` is refused outright per section 9's
+     named backfire rather than merely noted.
 3. map_prompt edits: replace "Add those rows as you always have" with: return them in
    `food_db_rows`; you no longer have (or need) file access to the DB; prefer an FDC shelf candidate
    when one matches (cite `fdc:<id>` in `source`); fetch an open-web label ONLY when the shelf has
@@ -285,7 +296,8 @@ proof is reverting the production change and watching the extended fixture fail.
 audit-lane-shape.ps1's counted-not-judged lanes to count INVOCATIONS (start/end pairs), not raw
 lines - it currently reports extract 18 where 9 invocations exist.
 
-**CORRECTED 2026-08-25 (build session, measured on `meal-prepuns\hunt-2026-08-24-v3-phase6b`).**
+**CORRECTED 2026-08-25 (build session, measured on `meal-prep
+uns\hunt-2026-08-24-v3-phase6b`).**
 Three claims in the paragraphs above were wrong or short, and the fix is wider than they describe.
 
 1. *"the fixture is exercising a different code path than ps_timed/py-road mechanical stages take"* -

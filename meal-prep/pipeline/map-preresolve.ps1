@@ -1375,7 +1375,10 @@ function New-MappedDecisionFile {
     pricing_terms_needed = @((As-Array $Payload.absent_terms) | ForEach-Object { [string]$_ })
     ruled_substitutions  = @((As-Array $Payload.ruled_substitutions))
     rejected             = @((As-Array $Payload.rejected))
-    db_entries_added     = @((As-Array $Payload.db_entries_added))
+    # CHANGE M (2026-08-25): the DAEMON writes food-macros-db.json now, so this records what it
+    # WROTE rather than what the mapper claimed to have written. Renamed with the meaning.
+    db_entries_written   = @((As-Array $Payload.db_entries_written))
+    db_row_findings      = @((As-Array $Payload.db_row_findings))
     new_commodity_proposals = @((As-Array $Payload.new_commodity_proposals))
     registrar_rulings    = @((As-Array $Payload.registrar_rulings))
     # NAMED, NEVER SILENT. Every line joined by the fallback rather than by an exact raw copy is
