@@ -1,4 +1,4 @@
-# wave-preaudit.ps1 - the MECHANICAL half of a wave audit, done by code so the auditor can spend its
+﻿# wave-preaudit.ps1 - the MECHANICAL half of a wave audit, done by code so the auditor can spend its
 # context on judgment.
 #
 # WHY THIS EXISTS (2026-08-23, PLAN-recipe-hunter-v3 S8 / F3 / D1). The wave-2 NO-GO report - the real
@@ -705,7 +705,15 @@ $sharedSpec = @(
   @{ name = 'audit-store-integrity';     script = (Join-Path $here 'audit-store-integrity.ps1');     args = @();                            marker = 'store-integrity' },
   @{ name = 'audit-vocab-integrity';     script = (Join-Path $here 'audit-vocab-integrity.ps1');     args = @('-Slugs', $slugArg);          marker = 'audit-vocab-integrity' },
   @{ name = 'audit-unbid-ingredients';   script = (Join-Path $here 'audit-unbid-ingredients.ps1');   args = @('-Slugs', $slugArg);          marker = 'audit-unbid-ingredients' },
-  @{ name = 'audit-cost-plausibility';   script = (Join-Path $here 'audit-cost-plausibility.ps1');   args = @('-Slugs', $slugArg);          marker = 'audit-cost-plausibility' }
+  @{ name = 'audit-cost-plausibility';   script = (Join-Path $here 'audit-cost-plausibility.ps1');   args = @('-Slugs', $slugArg);          marker = 'audit-cost-plausibility' },
+  # THE FOURTH QUESTION, and the one that was missing on 2026-08-16 (wired in 2026-08-25). The three
+  # gates above all ask whether a price COULD be found, and all three passed on
+  # slow-cooker-boneless-beef-short-ribs while it sat one audit away from publishing at $0.30 a serving
+  # against a real $6.30 - seven pounds of short ribs, the entire protein, priced correctly by the
+  # engine and simply absent from the spec's cost block. Nobody asked whether the spec's cost block
+  # still agreed with the engine row it was rendered from. It had no production caller at all until
+  # now, which is why audit-guard-contract reported it DEAD: a guard nobody runs is not a guard.
+  @{ name = 'audit-cost-line-coverage';  script = (Join-Path $here 'audit-cost-line-coverage.ps1');  args = @('-Slugs', $slugArg);          marker = 'audit-cost-line-coverage' }
 )
 
 $sharedChecks = New-Object System.Collections.Generic.List[object]

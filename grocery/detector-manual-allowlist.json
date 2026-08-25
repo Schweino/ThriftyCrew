@@ -1,4 +1,4 @@
-{
+﻿{
     "readme":  "Detectors with NO production caller that are meant to have none. audit-guard-contract.ps1 fails on any detector nothing in production calls, because a guard nobody runs is not a guard - audit-unit-basis-outlier.ps1 sat dead from 2026-07-31 to 2026-08-08 while the board published butter priced from a bottle of pancake syrup, and audit-script-census stayed green the whole time because the one executable naming it was its own test. Reachability now distinguishes a PRODUCTION caller from a TEST caller, and this file is the written statement of which detectors are unwired on purpose. Keyed by NAME alone, unlike the drift allowlists: what is blessed here is a permanent property of the script (it is a manual diagnostic), not a transient state a content hash should re-arm on. Adding a line is a decision someone defends in a diff. If the honest answer is \u0027this should run\u0027, wire it into the chain instead - that is what audit-count-gpu.ps1 and audit-prompt-backup.ps1 got on 2026-08-08.",
     "schema":  1,
     "manual":  [
@@ -36,7 +36,49 @@
                        "name":  "test-capture-builders.ps1",
                        "recorded":  "2026-08-23",
                        "recorded_by":  "claude",
-                       "reason":  "A FIXTURE TEST, not a detector - same class as test-rollback-ttl.ps1 above, and blessed for the same reason. It builds a sandbox of fake captures and fake builders, extracts capture-run.ps1's builder block by marker and runs it against them. It reads no live data and detects nothing about the estate, so a production caller would assert the same ten things about the same fakes every morning. It IS run: test-auditors calls it. What it protects - that the 2026-08-23 three-pass restructure (serial existence checks, a fan-out over the first-stage builders, serial verdict handling) still keeps a missing capture outstanding, names a failed builder, skips stage 2 after a failed stage 1, and judges stage 2 on evidence rather than exit code - is enforced in production by capture-run.ps1 itself on every capture. Declared here on the day it was added, rather than left to show up as audit-guard-contract's seventh DEAD line."
+                       "reason":  "A FIXTURE TEST, not a detector - same class as test-rollback-ttl.ps1 above, and blessed for the same reason. It builds a sandbox of fake captures and fake builders, extracts capture-run.ps1\u0027s builder block by marker and runs it against them. It reads no live data and detects nothing about the estate, so a production caller would assert the same ten things about the same fakes every morning. It IS run: test-auditors calls it. What it protects - that the 2026-08-23 three-pass restructure (serial existence checks, a fan-out over the first-stage builders, serial verdict handling) still keeps a missing capture outstanding, names a failed builder, skips stage 2 after a failed stage 1, and judges stage 2 on evidence rather than exit code - is enforced in production by capture-run.ps1 itself on every capture. Declared here on the day it was added, rather than left to show up as audit-guard-contract\u0027s seventh DEAD line."
+                   },
+                   {
+                       "name":  "test-ad-match.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST, not a detector - same class as test-rollback-ttl.ps1 and test-capture-builders.ps1 above, blessed for the same reason. It drives ad-match-lib against frozen synthetic ad lines to prove a sale cell cannot take the window of whichever same-price ad line happens to come first. It reads no live data, so a production caller would assert the same things about the same fixtures every morning. It IS run: test-auditors calls it, which is the correct home for a unit test. What it protects is enforced in production by ad-match-lib itself, which the builders call."
+                   },
+                   {
+                       "name":  "test-commit-size-gate.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST of the commit-size gate\u0027s predicate, run against synthetic diffs rather than the repo. capture-run.ps1 describes the gate in prose but does not invoke this file - only the LIVE gate - which is why reachability sees no production caller. It IS run: test-auditors calls it. Note the census matches on the full \u0027test-commit-size-gate.ps1\u0027 including the extension, so a prose mention of the bare name does not and should not count as a caller."
+                   },
+                   {
+                       "name":  "test-hyvee-tag-check.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST covering two frozen Hy-Vee rules: a price below the store shelf tag is refused, a real promotion is not, and no script is pinned to the retired Omaha #01 store. Fixtures only - it reads no live capture. It IS run: test-auditors calls it. The live half is enforced in production by the Hy-Vee puller and the shelf-tag guard."
+                   },
+                   {
+                       "name":  "test-price-split.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST of price-split-lib: the everyday/ad separation Brad called non-negotiable, proved against synthetic rows in both directions. It reads no live board. It IS run: test-auditors calls it. Production enforcement lives in price-split-lib and compare-deals, which every build calls."
+                   },
+                   {
+                       "name":  "test-commodity-rules.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "A FIXTURE TEST of individual commodity include/exclude rules, frozen against REAL product names. Written 2026-08-24 after the Recipe Hunter\u0027s 6b run found chicken-thighs excluding \\b(drumsticks?)\\b while its own label read \u0027Chicken Thighs / Drumsticks\u0027, so the board answered \u0027chicken drumsticks\u0027 with seven stores of THIGHS. It shipped with NO caller at all - the census listed it as an ORPHAN and guard-contract as DEAD. Wired into test-auditors on 2026-08-25, which is the correct home for a fixture suite; recorded here because a test-only caller is still not a production one, exactly like the entries above."
+                   },
+                   {
+                       "name":  "verify-debt.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "NOT A GROCERY DETECTOR AT ALL - it lives in .claude\\skills\\lesson\\ and belongs to the lesson skill. It is a manual one-shot that WRITES a sample debt scenario into the live Google Sheets debt calculator and reads the computed outputs back to verify the sheet\u0027s formulas. It must NEVER be wired into an automated chain: it mutates a production spreadsheet Brad\u0027s readers use. It looks DEAD to audit-guard-contract because the only thing that invokes it is the skill\u0027s Markdown, and the reachability scan reads .ps1/.js/.yml and not .md - so every skill-owned helper will always appear dead. Recorded rather than excluded, so the decision is visible in a diff."
+                   },
+                   {
+                       "name":  "verify-savings.ps1",
+                       "recorded":  "2026-08-25",
+                       "recorded_by":  "claude",
+                       "reason":  "The savings-goal twin of verify-debt.ps1 above, in .claude\\skills\\lesson\\, and blessed for exactly the same reasons: a manual one-shot that writes sample goals into the live Google Sheets savings tracker and reads the results back, unreachable to a scan that cannot read the skill Markdown that calls it, and dangerous to automate because it writes to a production sheet."
                    }
                ]
 }

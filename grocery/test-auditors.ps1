@@ -1207,7 +1207,13 @@ $r = PSChild (Join-Path $root 'test-commit-size-gate.ps1')
 $csgRc = $LASTEXITCODE
 $rTxt = ($r | Out-String)
 if ($csgRc -eq 3) { Bad ('test-commit-size-gate is BLIND - it could not find the gate in capture-run.ps1, so nothing about it was proven: ' + (($rTxt -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' ')) }
-elseif ($csgRc -eq 0 -and $rTxt -match 'SELFTEST: 7/7 pass') {
+# NOT A FROZEN COUNT (2026-08-25). This asserted 'SELFTEST: 7/7 pass'. Three cases were added to
+# test-commit-size-gate.ps1 and this line was never updated, so the child printed 'SELFTEST: 10/10 pass'
+# and COMMIT-SIZE-GATE-COMPLETE cases=10 failed=0 - completely green - while this harness reported it as
+# a FAILING watcher. A test that breaks when its subject gets BETTER trains the reader to ignore it, and
+# it is the same false-alarm shape as the rollback ledger count fixed the same day. Assert what the
+# contract actually is - it finished, and nothing failed - so growing the fixture set can never fail it.
+elseif ($csgRc -eq 0 -and $rTxt -match 'COMMIT-SIZE-GATE-COMPLETE cases=\d+ failed=0') {
   Ok 'commit-size gate fixture passes (400 files refused, 40 MB refused, a SMALL never-tracked directory refused, a normal day and an already-tracked directory untouched, -ForceBigCommit honoured)'
 } else { Bad ('test-commit-size-gate failed (rc=' + $csgRc + '): ' + (($rTxt -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 
@@ -4459,6 +4465,19 @@ else { Bad ('price-table fixtures FAILED (rc=' + $r.rc + ') - the everyday/ad se
 $r = RunPS 'test-hyvee-tag-check.ps1' @()
 if ($r.rc -eq 0 -and $r.text -match 'HYVEE-TAG-CHECK PASSED') { Ok 'Hy-Vee: a price below the store shelf tag is still refused, a real promotion still is not, and no script is pinned to the retired store' }
 else { Bad ('Hy-Vee tag/identity fixtures FAILED (rc=' + $r.rc + ') - either a price the till will not honour can publish again, or a caller is still pulling the retired Omaha #01: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+# ---------------------------------------------------------------- commodity rules (wired 2026-08-25)
+# THE SAME ORPHAN STORY AS test-matcher-parity BELOW, and caught the same way. test-commodity-rules.ps1
+# was written on 2026-08-24 - the day the Recipe Hunter's 6b run found that chicken-thighs carried
+# exclude \b(drumsticks?)\b while its own label read 'Chicken Thighs / Drumsticks', so the board answered
+# 'chicken drumsticks' with seven stores of THIGHS - and it shipped with NO caller at all: the script
+# census listed it as an ORPHAN and guard-contract as DEAD. It asks the one question test-match-lib
+# cannot: not 'do the two matcher implementations agree' but 'does this rule do what its own label says'.
+# A frozen regression fixture nobody runs protects nothing, so it is called from here - the same home,
+# and for the same reason, as every other fixture suite in this file.
+$r = RunPS 'test-commodity-rules.ps1' @()
+if ($r.rc -eq 0 -and $r.text -match 'test-commodity-rules: PASS') { Ok 'commodity rules: every frozen case still resolves the way its label says - the drumsticks-under-thighs class stays closed' }
+else { Bad ('commodity-rule fixtures FAILED (rc=' + $r.rc + ') - a commodity include/exclude rule no longer does what its label claims, which is how the board served THIGHS for drumsticks: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL' } | Select-Object -First 3) -join ' | ')) }
+
 # ---------------------------------------------------------------- matcher parity (wired 2026-08-21)
 # WHICH COMMODITY OWNS A PRODUCT NAME is decided by Match-Category in compare-deals, and re-implemented in
 # at least three auditors - one of them, audit-household-in-food, a HARD guard. test-matcher-parity.ps1 was

@@ -1,4 +1,4 @@
-# wave-publish.ps1 - the ONLY sanctioned path from a green wave audit to live recipe posts.
+﻿# wave-publish.ps1 - the ONLY sanctioned path from a green wave audit to live recipe posts.
 #
 # WHY THIS EXISTS (2026-08-15). The Recipe Hunter v2 publishes automatically: Brad approved removing the
 # human gate, which means the gates that remain are the only thing between a hunted recipe and the site.
@@ -465,6 +465,12 @@ $gates = @(
   # build-v2-spec had. Every "could it be priced" gate passed. Only the number was absurd, and nothing
   # was looking at the number.
   @{ label = 'audit-cost-plausibility';   path = (Join-Path $here 'audit-cost-plausibility.ps1');   args = @('-Slugs', ($slugs -join ',')); marker = ''; text = 'ok - every recipe prices every line' },
+  # And the line-level twin of it (wired in 2026-08-25). Plausibility asks whether the published NUMBER
+  # is sane; this asks whether every materially priced engine line actually reached the spec's cost
+  # block, which is the way the 2026-08-16 short-ribs recipe stayed plausible while missing its whole
+  # protein. Verified by its own completion marker rather than a text line, because a detector that
+  # dies mid-run is silent and 'no findings' must never read the same as 'never ran'.
+  @{ label = 'audit-cost-line-coverage';  path = (Join-Path $here 'audit-cost-line-coverage.ps1');  args = @('-Slugs', ($slugs -join ',')); marker = 'audit-cost-line-coverage'; text = '' },
   @{ label = 'test-guards';               path = (Join-Path $here 'test-guards.ps1');               args = @();         marker = '';                    text = 'ALL GUARD PREDICATE TESTS PASS' }
 )
 foreach ($g in $gates) {
