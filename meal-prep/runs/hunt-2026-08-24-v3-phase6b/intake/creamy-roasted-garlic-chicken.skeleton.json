@@ -1,0 +1,101 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-24T19:26:16",
+    "slug":  "creamy-roasted-garlic-chicken",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Hot Sauce\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "merged a second \u0027Butter\u0027 line into the first - 245 g total",
+                  "merged a second \u0027All-Purpose Flour\u0027 line into the first - 109 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 140 g total",
+                  "merged a second \u0027Black Pepper\u0027 line into the first - 28 g total"
+              ],
+    "intake":  {
+                   "name":  "Creamy Roasted Garlic Chicken",
+                   "slug":  "creamy-roasted-garlic-chicken",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  3174,
+                                           "buy":  "7 lb, sliced horizontally into cutlets"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  245,
+                                           "buy":  "7 tbsp; 10 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  140,
+                                           "buy":  "to taste"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  28,
+                                           "buy":  "to taste"
+                                       },
+                                       {
+                                           "item":  "All-Purpose Flour",
+                                           "grams":  109,
+                                           "buy":  "3 1/2 tbsp, for dusting the cutlets; 10 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  158,
+                                           "buy":  "3 1/2 heads (about 50 cloves)"
+                                       },
+                                       {
+                                           "item":  "Milk",
+                                           "grams":  1715,
+                                           "buy":  "7 cups"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  196,
+                                           "buy":  "1 3/4 cups grated"
+                                       },
+                                       {
+                                           "item":  "Hot Sauce",
+                                           "grams":  18,
+                                           "buy":  "3 1/2 tsp (optional)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  563,
+                                              "protein_g":  63.9,
+                                              "carbs_g":  14.7,
+                                              "fat_g":  27.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT15M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

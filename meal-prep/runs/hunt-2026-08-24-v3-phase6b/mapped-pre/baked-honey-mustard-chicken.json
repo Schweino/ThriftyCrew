@@ -1,0 +1,199 @@
+﻿{
+    "slug":  "baked-honey-mustard-chicken",
+    "title":  "Baked Honey Mustard Chicken",
+    "source_url":  "https://keviniscooking.com/baked-honey-mustard-chicken/",
+    "servings":  4,
+    "built_at":  "2026-08-24T19:12:13",
+    "line_count":  10,
+    "resolved_count":  6,
+    "residual_count":  4,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "chicken breasts",
+                           "fresh mozzarella cheese",
+                           "grain mustard",
+                           "parsley"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "4 chicken breasts (2 lbs boneless and skinless)",
+                     "term":  "chicken breasts",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/boneless/skinless | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1 medium red onion (sliced thin)",
+                     "term":  "red onion",
+                     "canon_item":  "Red Onion",
+                     "bid":  "red-onion",
+                     "board":  null,
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: red-onion, 5 of 7 stores, cheapest 1.095 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  110
+                 },
+                 {
+                     "raw":  "1 tbsp olive oil",
+                     "term":  "olive oil",
+                     "canon_item":  "Olive Oil",
+                     "bid":  "olive-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  13.5
+                 },
+                 {
+                     "raw":  "1/2 tsp salt",
+                     "term":  "salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  3
+                 },
+                 {
+                     "raw":  "1/2 tsp black pepper",
+                     "term":  "black pepper",
+                     "canon_item":  "Black Pepper",
+                     "bid":  "black-pepper",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  1.2
+                 },
+                 {
+                     "raw":  "1/2 tsp garlic powder",
+                     "term":  "garlic powder",
+                     "canon_item":  "Garlic Powder",
+                     "bid":  "garlic-powder",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  1.6
+                 },
+                 {
+                     "raw":  "8 oz fresh mozzarella cheese (sliced)",
+                     "term":  "fresh mozzarella cheese",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Mozzarella Cheese [mozzarella-cheese] DIFFERENT FORM: fresh | Swiss Cheese [swiss-cheese] DIFFERENT FORM: fresh | Ricotta Cheese [ricotta] DIFFERENT FORM: fresh; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: shredded-cheese, 7 of 7 stores, cheapest 0.1521 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1/4 cup honey",
+                     "term":  "honey",
+                     "canon_item":  "Honey",
+                     "bid":  "honey",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  84.8
+                 },
+                 {
+                     "raw":  "4 tbsp grain mustard",
+                     "term":  "grain mustard",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Yellow Mustard [mustard] same form | Honey Dijon Mustard [honey-dijon-mustard] same form | Dijon Mustard [dijon-mustard] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: mustard, 7 of 7 stores, cheapest 0.0495 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1/4 cup chopped parsley",
+                     "term":  "parsley",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Fresh Parsley [fresh-parsley] DIFFERENT FORM: fresh | Dried Parsley [dried-parsley] DIFFERENT FORM: dried; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. Parsley, fresh [SR Legacy] per 100 g: 36.0 cal, 2.97 P, 6.33 C | Parsley, freeze-dried [SR Legacy] per 100 g: 271.0 cal, 31.3 P, 42.4 C | Spices, parsley, dried [SR Legacy] per 100 g: 292.0 cal, 26.6 P, 50.6 C; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 6 of 10 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  547.0,
+                                          "carbs":  23.0,
+                                          "protein_g":  62.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  6,
+                           "lines_total":  10,
+                           "uncovered_lines":  [
+                                                   "chicken breasts",
+                                                   "fresh mozzarella cheese",
+                                                   "grain mustard",
+                                                   "parsley"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

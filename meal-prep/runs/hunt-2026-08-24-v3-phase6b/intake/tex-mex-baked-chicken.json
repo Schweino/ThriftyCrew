@@ -1,0 +1,101 @@
+﻿{
+    "name":  "Tex Mex Baked Chicken",
+    "slug":  "tex-mex-baked-chicken",
+    "protein":  "chicken",
+    "cuisine":  "",
+    "source_url":  "https://keviniscooking.com/mexican-baked-chicken/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Canned Black Beans",
+                            "grams":  1785,
+                            "buy":  "seven 15 oz cans, drained (about 7 cups)"
+                        },
+                        {
+                            "item":  "Yellow Onion",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium, diced"
+                        },
+                        {
+                            "item":  "Green Bell Peppers",
+                            "grams":  416,
+                            "buy":  "3 1/2 medium, diced"
+                        },
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  3174,
+                            "buy":  "7 lb"
+                        },
+                        {
+                            "item":  "Garlic Powder",
+                            "grams":  6,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Ground Cumin",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Chili Powder",
+                            "grams":  5,
+                            "buy":  "1 3/4 tsp chili powder"
+                        },
+                        {
+                            "item":  "Salt",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Black Pepper",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Enchilada Sauce",
+                            "grams":  1260,
+                            "buy":  "5 1/4 cups"
+                        },
+                        {
+                            "item":  "Cheddar Cheese",
+                            "grams":  595,
+                            "buy":  "5 1/4 cups shredded"
+                        },
+                        {
+                            "item":  "Cotija Cheese",
+                            "grams":  196,
+                            "buy":  "1 3/4 cups crumbled"
+                        },
+                        {
+                            "item":  "Fresh Cilantro",
+                            "grams":  35,
+                            "buy":  "1/2 cup chopped, for garnish"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  470,
+                               "protein_g":  62.2,
+                               "carbs_g":  30.9,
+                               "fat_g":  9.8
+                           },
+    "writer_notes":  [
+
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "prose":  {
+
+              },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT40M",
+                 "steps":  [
+
+                           ]
+             }
+}

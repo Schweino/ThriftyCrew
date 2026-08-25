@@ -1,0 +1,31 @@
+{
+    "slug":  "sausage-and-rice-one-pot",
+    "title":  "Sausage and Rice - One Pot!",
+    "source_url":  "https://thecozycook.com/sausage-and-rice/",
+    "protein":  "sausage",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T15:32:05",
+    "updated":  "2026-08-24T15:32:06",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy-cheesy sausage-and-rice bake (cream of chicken soup, sour cream, cheddar, peppers, rice) is the same dinner the catalog already carries in turkey as the cheesy turkey sausage vegetable rice casserole and as the cheesy smoked sausage rice skillet; pork-vs-turkey is the cross-protein twin this stage catches.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T15:32:05",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/sausage-and-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T15:32:06",
+                        "by":  "decider",
+                        "detail":  "Creamy-cheesy sausage-and-rice bake (cream of chicken soup, sour cream, cheddar, peppers, rice) is the same dinner the catalog already carries in turkey as the cheesy turkey sausage vegetable rice casserole and as the cheesy smoked sausage rice skillet; pork-vs-turkey is the cross-protein twin this stage catches."
+                    }
+                ]
+}

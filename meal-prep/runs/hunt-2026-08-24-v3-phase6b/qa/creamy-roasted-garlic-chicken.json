@@ -1,0 +1,12 @@
+﻿{
+  "slug": "creamy-roasted-garlic-chicken",
+  "verdict": "pass",
+  "anchors": ["extraction", "live-page"],
+  "findings": [
+    { "check": "ingredient-coverage", "severity": "note", "detail": "Battery INVENTED 'Hot Sauce' / DROPPED 'Tabasco' is a brand-to-generic substitution: source '1 tsp Tabasco ((optional))' -> spec 'Hot Sauce (Frank's RedHot) 3 1/2 tsp (optional)', exact 3.5x, still optional. Same food, same role; defensible.", "owner": "mapper" },
+    { "check": "ingredient-coverage", "severity": "note", "detail": "All four CONSOLIDATED lines verified as sums: butter 2+3=5 tbsp x3.5 = 17.5 tbsp = spec '7 tbsp; 10 1/2 tbsp' (245 g); flour 1+3=4 tbsp x3.5 = 14 tbsp = spec '3 1/2; 10 1/2 tbsp' (109 g); salt and black pepper are no-qty 'to taste' in both source sections and one to-taste spec line each.", "owner": "mapper" },
+    { "check": "prose-numbers", "severity": "note", "detail": "Battery flagged 'intro says 15g carbs, stat says 15' - the values are equal (stat.carbs = 15, prose literal '15 grams of carbs'); the fail is a unit-suffix parse artifact, not a disagreement.", "owner": "writer" },
+    { "check": "method", "severity": "note", "detail": "Source step 2 names Italian seasoning (absent from its own ingredient list) and step 7 an optional parsley garnish; both deliberately dropped, documented in writer_notes and forbidden_prose_terms. Method otherwise mirrors the source: dry-pan roasted garlic, floured seared cutlets, butter-flour-milk-parmesan sauce, sauce over chicken.", "owner": "writer" }
+  ],
+  "notes": "Re-QA after repair. Both anchors held: transcription plus live fetch of keviniscooking.com, which matched the extraction line for line (14 lines, 4 servings, Tabasco optional). Uniform 3.5x scaling on every rated line, servings 4->14, title and credit correct. Battery's two FAILs both resolve as non-findings: Tabasco->generic hot sauce is a defensible brand substitution at exact ratio, and the prose-numbers flag compares equal values. Writer_notes already flag the 140 g salt / 28 g pepper fallback weights for the auditor; that is macro/cost territory, not fidelity."
+}

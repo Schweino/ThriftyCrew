@@ -4,19 +4,6 @@
                             ],
     "findings":  [
                      {
-                         "id":  "soda",
-                         "commodity":  "Soda (12-pack)",
-                         "unit":  "floz",
-                         "store":  "Fareway",
-                         "per_unit":  0.1395,
-                         "median":  0.0312,
-                         "mult":  4.47,
-                         "size":  "20 fl oz",
-                         "item":  "Coca-Cola Soda Bottle",
-                         "peers_packed":  "3 of 6",
-                         "size_shape_mismatch":  true
-                     },
-                     {
                          "id":  "protein-bars",
                          "commodity":  "Protein Bars",
                          "unit":  "each",
@@ -108,6 +95,19 @@
                          "size_shape_mismatch":  false
                      },
                      {
+                         "id":  "soda",
+                         "commodity":  "Soda (12-pack)",
+                         "unit":  "floz",
+                         "store":  "Fareway",
+                         "per_unit":  0.1395,
+                         "median":  0.0312,
+                         "mult":  4.47,
+                         "size":  "20 fl oz",
+                         "item":  "Coca-Cola Soda Bottle",
+                         "peers_packed":  "2 of 6",
+                         "size_shape_mismatch":  false
+                     },
+                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -135,7 +135,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-23T14:02:15",
+    "generated":  "2026-08-24T08:13:23",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -223,6 +223,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "apple-juice",
+                              "commodity":  "Apple Juice",
+                              "unit":  "floz",
+                              "store":  "Hy-Vee",
+                              "per_unit":  0.0467,
+                              "size":  "64 oz",
+                              "item":  "Hy Vee 100 Apple Juice No Sugar Added",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "balsamic-vinegar",
                               "commodity":  "Balsamic Vinegar",
                               "unit":  "floz",
@@ -230,18 +242,6 @@
                               "per_unit":  0.3914,
                               "size":  "12.75 oz",
                               "item":  "Alessi Balsamic Vinegar 12.75 Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "banana-peppers",
-                              "commodity":  "Banana Peppers / Pepperoncini",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.165,
-                              "size":  "12 oz",
-                              "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -431,7 +431,7 @@
                               "commodity":  "Coffee Creamer",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.1041,
+                              "per_unit":  0.1244,
                               "size":  "32 oz",
                               "item":  "Coffee Mate French Vanilla Flavored Coffee Creamer",
                               "kind":  "weight",
@@ -803,7 +803,7 @@
                               "commodity":  "Olive Oil",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.4112,
+                              "per_unit":  0.4406,
                               "size":  "17 oz",
                               "item":  "Hy Vee Extra Virgin Olive Oil",
                               "kind":  "weight",
@@ -1171,5 +1171,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-23.json"
+    "compare_file":  "comparison-2026-08-24.json"
 }

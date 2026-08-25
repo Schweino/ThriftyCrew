@@ -1067,60 +1067,68 @@
                                       "batch3",
                                       "low-carb-steak-fajita-skillet",
                                       "italian-sausage-stuffed-peppers-bake",
-                                      "pulled-pork-stuffed-peppers"
+                                      "pulled-pork-stuffed-peppers",
+                                      "tex-mex-baked-chicken"
                                   ],
                       "added":  "2026-08-15T20:58:49",
                       "why":  "the vessel of the dish, 7 peppers; commodity id exists but no priced board cell (CAPTURE) - 8 capture candidates across 6 stores need the pricer rule",
                       "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
-                                                     "state":  "carried",
-                                                     "price":  2.96,
-                                                     "size":  "8 oz / 2 ct",
-                                                     "item":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
-                                                     "evidence":  "price-ingredient tier 1 on today\u0027s captures: Walmart \u0027Marketside Organic Green Bell Pepper, 8 oz, 2 Count\u0027 \\.96 - fresh whole green bell peppers (organic packaged, the only green-bell row Walmart returned in today\u0027s capture). Carriage is clear; a cheaper conventional loose row may exist but was not in the capture.",
-                                                     "checked":  "2026-08-16T06:36:33"
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 -Name \u0027green bell pepper\u0027 lists 12 candidates across 6 stores and Walmart is not among them. A capture miss is a publish-sweep gap, not a shelf audit - stays PENDING.",
+                                                     "checked":  "2026-08-24T19:25:46"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
-                                                     "price":  0.77,
-                                                     "size":  "each",
+                                                     "price":  1.17,
+                                                     "size":  "1 each",
                                                      "item":  "Green Bell Pepper",
-                                                     "evidence":  "price-ingredient tier 1 on today\u0027s captures (comparison-2026-08-15): Fareway \u0027Green Bell Pepper\u0027 \\.77 each, plain fresh produce row, exact ingredient. No adjudication ambiguity.",
-                                                     "checked":  "2026-08-16T06:36:32"
+                                                     "evidence":  "driver rung 1 MATCHES=24; adjudicated: \u0027Green Bell Pepper\u0027 $1.17 each is the ingredient (disk capture corroborates a $0.77/each row same week). Ruled out jalapeno, serrano, mini peppers, diced frozen peppers, celery, cabbage - Instacart suggestion drift.",
+                                                     "checked":  "2026-08-24T19:25:46"
                                                  },
                                      "Family Fare":  {
-                                                         "state":  "carried",
-                                                         "price":  1.29,
-                                                         "size":  "1 ct",
-                                                         "item":  "Fresh Green Peppers",
-                                                         "evidence":  "Freshop store_id 6401 Omaha. rung 1 \u0027green bell pepper\u0027: 1 hit and it was Our Family diced tomatoes with green bell pepper - NOT the ingredient. rung \u0027bell pepper\u0027: 6 hits, none a fresh green one (yellow bell, organic red, Mezzetta roasted red, Spanish rice, McCormick seasoning, diced tomatoes). rung \u0027green pepper\u0027: 21 hits, MATCHES - \u0027Fresh Green Peppers\u0027 1 ct 1.29 in fresh_fruits_vegetables/peppers is the whole fresh green bell pepper. Fresh Divide cut/diced trays 5.99/lb skipped as prepared.",
-                                                         "checked":  "2026-08-15T21:01:57"
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server-tier FULL LADDER EMPTY: rung 1 \u0027green bell pepper\u0027=1 candidate, rung 3 spacing variant \u0027greenbellpepper\u0027=0; no candidates on any rung. The one rung-1 row in today\u0027s capture is Our Family Diced Tomatoes with Onion, Celery \u0026 Green Bell Pepper - a canned tomato product, not the produce item. Term is not on audit-search-terms.ps1\u0027s bad-term list (verified this session), so the silence is about the shelf.",
+                                                         "checked":  "2026-08-24T19:25:46"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "carried",
                                                     "price":  0.79,
                                                     "size":  "lb",
                                                     "item":  "Green Bell Pepper",
-                                                    "evidence":  "price-ingredient tier 1 on today\u0027s captures: Hy-Vee \u0027Green Bell Pepper\u0027 \\.79/lb fresh produce row, exact ingredient. Already on disk, so no browser lookup was needed.",
-                                                    "checked":  "2026-08-16T06:36:33"
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027green bell pepper\u0027 (week 2026-08-24 captures) returns Hy-Vee \u0027Green Bell Pepper\u0027 $0.79/lb. That is the produce item itself, on Hy-Vee\u0027s own shelf listing.",
+                                                    "checked":  "2026-08-24T19:25:46"
                                                 },
-                                     "Sam\u0027s Club":  null,
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  4.97,
+                                                             "size":  "6 ct",
+                                                             "item":  "Green Bell Peppers, 6 ct.",
+                                                             "evidence":  "driver rung 1 MATCHES=17; adjudicated: \u0027Green Bell Peppers, 6 ct.\u0027 $4.97 ($0.83/ea) is exactly the ingredient in club pack size. Ruled out Multi Bell Sweet Peppers and Sweet Mini Peppers - different peppers.",
+                                                             "checked":  "2026-08-24T19:25:46"
+                                                         },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  2.69,
                                                   "size":  "3 ct",
                                                   "item":  "Green Bell Pepper 3 CT",
-                                                  "evidence":  "price-ingredient tier 1 on today\u0027s captures: Aldi \u0027Green Bell Pepper 3 CT\u0027 \\.69 (first-party Omaha in-store capture), a 3-pack of the fresh pepper - the exact ingredient.",
-                                                  "checked":  "2026-08-16T06:36:33"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027green bell pepper\u0027 returns Aldi \u0027Green Bell Pepper 3 CT\u0027 $2.69 ($0.90/ea) in today\u0027s captures. The produce item, adjudicated in.",
+                                                  "checked":  "2026-08-24T19:25:46"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  0.99,
                                                           "size":  "1 ct",
                                                           "item":  "Fresh Large Green Bell Pepper",
-                                                          "evidence":  "price-ingredient tier 1 on comparison-2026-08-15 (today\u0027s captures): commodity exists but has no priced board cell; 8 candidates across 6 stores. Baker\u0027s row \u0027Fresh Large Green Bell Pepper\u0027 \\.99 each is the whole fresh pepper a cook would buy. Ruled out the Baker\u0027s \u0027Green Giant SteamCrisp Mexicorn ... with Red \u0026 Green Bell Peppers\u0027 11 oz can - a corn dish, not the pepper.",
-                                                          "checked":  "2026-08-16T06:36:32"
+                                                          "evidence":  "full-ladder MATCHES=3; adjudicated: Fresh Large Green Bell Pepper $0.99 each rel 133 is the produce item. Ruled out Green Giant Mexicorn (canned corn WITH bell peppers).",
+                                                          "checked":  "2026-08-24T19:25:46"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -2894,6 +2902,766 @@
                                                           "item":  "Kraft Grated Parmesan Cheese",
                                                           "evidence":  "pre-pass rung 1 \u0027grated Parmesan cheese\u0027, 25 hits, no no-results banner; Kraft Grated Parmesan Cheese 8 oz $5.99 rel 133 is the shaker of grated parm itself, plus Kroger 16 oz $5.99 and Cello 10 oz $8.99; flavored variants (basil/oregano, red pepper) ruled out as not plain parmesan",
                                                           "checked":  "2026-08-24T11:24:14"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "golden beets",
+                      "recipes":  [
+                                      "turmeric-braised-chicken-with-golden-beets-and-leeks"
+                                  ],
+                      "added":  "2026-08-24T12:20:52",
+                      "why":  "turmeric-braised-chicken-with-golden-beets-and-leeks needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-24T19:14:31"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Driver rung 1 only: \u0027golden beets\u0027 returned 72 hits but the evidence file captured only 8, and none of those 8 is a golden beet (Fareway Sliced/Whole/Diced Beets 15oz canned red .44, Love Beets pickled/marinated, plus clear suggestion tiles - Grimmway Carrot Chips and Asparagus - showing a fuzzy result set). I cannot see the other 64 rows and have no browser this session to re-query or walk the ladder, so adjudication is incomplete. Not an empty shelf - an unfinished look. PENDING for an attended run.",
+                                                     "checked":  "2026-08-24T19:14:31"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Full ladder walked headless via probe-ingredient.ps1 (Freshop store_id 6401 Omaha). rung1 \u0027golden beets\u0027=0; rung3 \u0027goldenbeets\u0027=0; pre-pass rung \u0027golden\u0027=25 tiles all Golden Delicious apples/Twinkies/Coors Banquet/Golden Oreo - wrong rung. Correct head-noun rung \u0027beets\u0027=13 genuine beet products: Baby RED Beets .49, Our Family Diced/Whole/Sliced Beets 15oz .19, Del Monte Sliced 14.5oz, Aunt Nellie\u0027s + Paisley Farm pickled, Mrs Gerrys Beets And Onions - all red or unspecified, none golden/yellow. Synonyms too: \u0027gold beets\u0027=0 and \u0027goldbeets\u0027=0 (fell back to \u0027beets\u0027); \u0027yellow beets\u0027=0, \u0027yellowbeets\u0027=0, \u0027yellow\u0027=25 all bananas/corn/peppers/onions. Populated beets category with no golden variety.",
+                                                         "checked":  "2026-08-24T19:14:31"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T19:14:31"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Driver rung 1 only: \u0027golden beets\u0027=12 hits, none a beet in any form - Force Factor Total Beets soft-chew supplement, Om lion\u0027s mane capsules, Giorgio mushrooms, Premier Protein shakes, VitaCup mushroom coffee. That is fuzzy keyword noise, not a no-results banner, and rung 1 alone cannot support not-carried. No browser this session to walk the ladder (\u0027beets\u0027 head noun never tried at this club). PENDING for an attended run.",
+                                                             "checked":  "2026-08-24T19:14:31"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-24T19:14:31"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "Full ladder walked headless via probe-ingredient.ps1. rung1 \u0027golden beets\u0027=0; rung3 \u0027goldenbeets\u0027=0; pre-pass rung \u0027golden\u0027=25 tiles, all cereal/beer/pizza-crust (Golden Grahams, Golden Road beer) - wrong rung for a 2-word term. I walked the correct head-noun rung \u0027beets\u0027=25 genuine beet products: Beets Bunch 1 lb, Organic RED Beets .49/lb, Del Monte Sliced, Kroger Whole/Sliced/Shoestring, Aunt Nellie\u0027s pickled - every one red or unspecified, none golden/yellow. Synonym rungs also walked: \u0027gold beets\u0027=1 -\u003e \u0027goldbeets\u0027=8 all Haribo Goldbears gummy candy; \u0027yellow beets\u0027=13 all Yellow Tail wine. Beets category is well populated here, so the absence of the golden variety within it is meaningful, not a search-box artifact. No beet commodity appears in audit-search-terms.ps1.",
+                                                          "checked":  "2026-08-24T19:14:31"
+                                                      }
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chicken drumsticks",
+                      "recipes":  [
+                                      "turmeric-braised-chicken-with-golden-beets-and-leeks",
+                                      "hawaiian-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:20:52",
+                      "why":  "turmeric-braised-chicken-with-golden-beets-and-leeks needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027chicken drumsticks\u0027 returns only \u0027Tyson All Natural, Fresh Chicken Thighs, Family Pack, 4.75-6.0 lb Tray\u0027 $1.77/lb for Walmart - thighs, not drumsticks.",
+                                                     "checked":  "2026-08-24T12:24:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  5.99,
+                                                     "size":  "2.5 lb (1.13 kg) frozen bag",
+                                                     "item":  "Tyson Chicken Drumsticks, 2.5 lb. (Frozen)",
+                                                     "evidence":  "Driver rung 1 \u0027chicken drumsticks\u0027=31 hits. Tyson Chicken Drumsticks 2.5 lb frozen $5.99 (about $2.40/lb) is the ingredient in a package a cook would buy. Remaining captured rows are Drumstick ice-cream cones, chicken bouillon/broth and wing portions - all excluded by adjudication.",
+                                                     "checked":  "2026-08-24T12:24:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.49,
+                                                         "size":  "lb",
+                                                         "item":  "Chicken Drumsticks",
+                                                         "evidence":  "Server tier rung 1 \u0027chicken drumsticks\u0027=6 hits (Freshop store_id 6401 Omaha, pickup = the store\u0027s own shelf price). Plain \u0027Chicken Drumsticks\u0027 $2.49/lb is the raw cut; also Fresh Chicken Drumsticks Ep $2.29/lb and Gold N Plump family pack $1.99/lb. Seasoned drumsticks $3.99/lb and the Hartz chicken-flavor dog toy excluded.",
+                                                         "checked":  "2026-08-24T12:24:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027chicken drumsticks\u0027 maps to commodity chicken-thighs and the only Hy-Vee capture row is \u0027Hy Vee 100 Natural Chicken Thighs Value Pack\u0027 $1.77/lb - thighs, not drumsticks, so it is not this ingredient, and a capture miss is never not-carried.",
+                                                    "checked":  "2026-08-24T12:24:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  4.89,
+                                                             "size":  "priced per pound ($0.98/lb)",
+                                                             "item":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
+                                                             "evidence":  "Driver rung 1 \u0027chicken drumsticks\u0027=20 hits from the seeded Omaha member session. Member\u0027s Mark Chicken Drumsticks, priced per pound: linePrice $4.89, unitPrice $0.98/lb - the base raw cut, no organic/prepared qualifier. The Case listing ($39.30, same $0.98/lb) confirms it; thigh, breast and dumpling rows excluded.",
+                                                             "checked":  "2026-08-24T12:24:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027chicken drumsticks\u0027 returns only \u0027Fresh Chicken Thighs Family Pack Per LB\u0027 $1.55/lb for Aldi - thighs, not drumsticks.",
+                                                  "checked":  "2026-08-24T12:24:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.49,
+                                                          "size":  "1 lb",
+                                                          "item":  "Heritage Farm Bone In Skin On Chicken Drumsticks",
+                                                          "evidence":  "Server tier rung 1 \u0027chicken drumsticks\u0027=24 hits (kroger-public-api, locationId 61500319). Heritage Farm Bone In Skin On Chicken Drumsticks $1.49/lb is the raw bone-in cut. Corroborated on the same grid by Kroger Fresh Uncooked Chicken Drumsticks 4.5 lb $5.00 and Tyson All Natural Fresh Chicken Drumsticks $2.99/lb; Home Chef cold fried drumsticks excluded as deli-prepared.",
+                                                          "checked":  "2026-08-24T12:24:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "beef back ribs",
+                      "recipes":  [
+                                      "beef-back-ribs"
+                                  ],
+                      "added":  "2026-08-24T12:35:18",
+                      "why":  "beef-back-ribs needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  18.23,
+                                                     "size":  "3.0-5.0 lb ($4.34/lb)",
+                                                     "item":  "Beef Back Ribs, Bone-In, USDA Select",
+                                                     "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\captures\\v2-manual-2026-08-11\\walmart\\projected-capture.csv line 5066 (capture term \u0027pork baby back ribs\u0027): \u0027Beef Back Ribs, Bone-In, USDA Select\u0027 $18.23 / $4.34 per lb, item 51259077, walmart.com/ip/Beef-Center-Cut-Back-Ribs-Bone-In-3-0-5-0-lb/51259077. This is the beef back rib rack itself.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 \u0027beef back ribs\u0027 returned 3 priced Apollo nodes: USDA Choice Whole Bone-In Beef SHORT Ribs $9.99/lb, and two Baby Back PORK Ribs $4.99/lb. The search surfaced the rib case and no beef back rib rack was in it; short ribs are a different cut and not what this recipe buys. Ladder past rung 1 not walkable without a browser this session.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass rung 1 \u0027beef back ribs\u0027=0; I walked rung 2 myself via probe-ingredient.ps1 \u0027beef ribs\u0027 (Freshop store_id 6401 Omaha): 4 rows - Fresh Beef Rib Steak Value Pack, Prime Rib Beef Patties, a Tail Wagger dog rib bone, and sliced steak with rib meat. None is a beef back rib rack.",
+                                                         "checked":  "2026-08-24T12:42:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:42:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 \u0027beef back ribs\u0027 returned 20 priced rows, all beef but all case/bulk primals and processed beef (brisket, fajita beef, ground beef chub, top butt, sirloin tip, cheek meat, chuck roll, special trim). No back ribs. Ladder past rung 1 not walkable without a browser this session.",
+                                                             "checked":  "2026-08-24T12:42:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-24T12:42:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "pre-pass rung 1 \u0027beef back ribs\u0027=0; I walked rung 2 myself via probe-ingredient.ps1 \u0027beef ribs\u0027 (kroger-public-api, locationId 61500319): 16 rows, all boneless/bone-in SHORT ribs ($9.99-$11.99/lb), flanken short ribs, ribeye steak and a short-rib ravioli - no beef BACK rib rack. Board data confirms Baker\u0027s rib item is Kroger Natural Pork Baby Back Ribs (pork, not beef).",
+                                                          "checked":  "2026-08-24T12:42:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "malt vinegar",
+                      "recipes":  [
+                                      "hawaiian-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:37:44",
+                      "why":  "hawaiian-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  3.82,
+                                                     "size":  "12 fl oz",
+                                                     "item":  "Heinz Gourmet Malt Vinegar",
+                                                     "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\captures\\v2-manual-2026-08-11\\walmart\\projected-capture.csv line 4505 (capture term \u0027rice vinegar\u0027): \u0027Heinz Gourmet Malt Vinegar, 12 fl oz Bottle\u0027 $3.82 / 31.8 cents per fl oz, item 10294540. Same capture also holds a 3-pack of London Pub Malt Vinegar 12.7 fl oz at $9.36.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "not-carried",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 \u0027malt vinegar\u0027 returned 20 priced Apollo nodes - the whole vinegar shelf (balsamic, apple cider, rice, white, vinaigrettes) and not one malt vinegar. The category rendered; the item was absent.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.39,
+                                                         "size":  "12 fl oz",
+                                                         "item":  "Holland House Malt Vinegar",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027malt vinegar\u0027 (Freshop store_id 6401 Omaha), 2 rows, both bottled malt vinegar: Holland House 12 fl oz $3.39 and London Pub 12.7 fl oz $3.99.",
+                                                         "checked":  "2026-08-24T12:42:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:42:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 \u0027malt vinegar\u0027 returned 18 priced rows - distilled white vinegar, apple cider vinegar, olive/canola/coconut oils and ghee. No malt vinegar in the oil-and-vinegar aisle it surfaced.",
+                                                             "checked":  "2026-08-24T12:42:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-24T12:42:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.79,
+                                                          "size":  "12.7 fl oz",
+                                                          "item":  "London Pub Malt Vinegar",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027malt vinegar\u0027 (kroger-public-api, locationId 61500319), 2 rows: London Pub Malt Vinegar 12.7 fl oz $3.79 - the bottled vinegar itself. The other row, Boulder Canyon malt vinegar kettle chips, is ruled out as a flavoured snack.",
+                                                          "checked":  "2026-08-24T12:42:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "dried onion flakes",
+                      "recipes":  [
+                                      "hawaiian-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:37:44",
+                      "why":  "hawaiian-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "1.88 oz",
+                                                     "item":  "Tone\u0027s Onion, Minced",
+                                                     "evidence":  "driver rung 1 \u0027dried onion flakes\u0027 returned 6 priced Apollo nodes, all dehydrated spice-aisle onion: Tone\u0027s Onion Minced 1.88 oz $2.99, Tone\u0027s Onion Chopped 1.1 oz $2.99, McCormick Minced Onions 2 oz $3.99 and 3.5 oz $4.99, Badia Minced Onion 17 oz $7.99. Cheapest qualifying row taken.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.39,
+                                                         "size":  "2.25 oz",
+                                                         "item":  "Thats Smart! Minced Onion",
+                                                         "evidence":  "pre-pass laddered to bare \u0027onion\u0027 and returned fresh produce only. I ran probe-ingredient.ps1 \u0027minced onion\u0027 myself (Freshop store_id 6401 Omaha): Thats Smart! Minced Onion 2.25 oz $1.39 and Our Family Onion, Minced 3.5 oz $3.29 - both dehydrated spice-aisle minced onion.",
+                                                         "checked":  "2026-08-24T12:42:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:42:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.98,
+                                                             "size":  "15 oz",
+                                                             "item":  "Member\u0027s Mark Minced Onion",
+                                                             "evidence":  "driver rung 1 \u0027dried onion flakes\u0027 returned 22 rows, mostly seasoning blends (Montreal Steak, Mrs. Dash, Hidden Valley) which are ruled out as blends. Member\u0027s Mark Minced Onion 15 oz $7.98 ($0.53/oz) is straight dehydrated minced onion - the club-size dried onion flake.",
+                                                             "checked":  "2026-08-24T12:42:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  0.99,
+                                                  "size":  "2 oz",
+                                                  "item":  "Stonemill Minced Onion",
+                                                  "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\captures\\aldi-capture-2026-08-05.csv line 2157: \u0027stonemill minced onion 2 oz\u0027 $0.99, aldi.us/store/aldi/products/19696914-stonemill-minced-onion-2-oz. Stonemill is Aldi\u0027s spice private label; dehydrated minced onion is the dried onion flake product.",
+                                                  "checked":  "2026-08-24T12:42:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.25,
+                                                          "size":  "2.01 oz",
+                                                          "item":  "Smart Way Minced Onion",
+                                                          "evidence":  "pre-pass laddered to bare \u0027onion\u0027 and drowned in fresh produce - a term artifact, not a shelf. I ran probe-ingredient.ps1 \u0027minced onion\u0027 myself (kroger-public-api, locationId 61500319): 8 rows of spice-aisle dehydrated minced onion - Smart Way Minced Onion 2.01 oz $1.25, Kroger Minced Onion Shaker 6.25 oz $5.49, Kroger Minced Onion 17.2 oz $7.49. Dehydrated minced onion is the same product as dried onion flakes.",
+                                                          "checked":  "2026-08-24T12:42:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "canned crushed pineapple",
+                      "recipes":  [
+                                      "hawaiian-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:37:44",
+                      "why":  "hawaiian-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.68,
+                                                     "size":  "20 oz",
+                                                     "item":  "Great Value Canned Crushed Pineapple",
+                                                     "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\captures\\walmart-capture-2026-08-06.csv line 21981: \u0027Great Value Canned Crushed Pineapple, 20 oz\u0027 $1.68 / 8.4 cents per oz, item 15021180. Same capture line 21974 has Dole Crushed Pineapple in 100% Juice 20 oz $2.22.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.68,
+                                                     "size":  "20 oz",
+                                                     "item":  "Fareway Crushed Pineapple",
+                                                     "evidence":  "driver rung 1 \u0027canned crushed pineapple\u0027 returned 6 priced Apollo nodes, all canned crushed pineapple: Fareway Crushed Pineapple 20 oz $1.68, Fareway Crushed in Natural Juice 8 oz $0.88, Fareway in Heavy Syrup 20 oz $1.68, Dole Crushed 20 oz $2.67.",
+                                                     "checked":  "2026-08-24T12:42:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.29,
+                                                         "size":  "20 oz",
+                                                         "item":  "Our Family Pineapple, Crushed",
+                                                         "evidence":  "pre-pass rung 1 \u0027canned crushed pineapple\u0027=0 was a search artifact. I walked rung 2 myself via probe-ingredient.ps1 \u0027crushed pineapple\u0027 (Freshop store_id 6401 Omaha): 6 rows - Our Family Pineapple Crushed 20 oz $2.29, Dole Pineapple Crushed 20 oz $2.89 and 8 oz $1.99. Cottage cheese with crushed pineapple ruled out.",
+                                                         "checked":  "2026-08-24T12:42:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:42:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 \u0027canned crushed pineapple\u0027 returned 15 rows that all drifted to canned VEGETABLES (peas, corn, artichoke hearts, mushrooms, green beans) with no pineapple of any kind - the word canned dominated the query. That is a term artifact, not a shelf reading, and I have no browser this session to walk rung 2. Unchecked, not absent.",
+                                                             "checked":  "2026-08-24T12:42:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.65,
+                                                  "size":  "20 oz",
+                                                  "item":  "Sweet Harvest Crushed Pineapple",
+                                                  "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\captures\\aldi-capture-2026-08-15.csv line 560: \u0027Sweet Harvest Crushed Pineapple\u0027 $1.65, 20 oz. Sweet Harvest is Aldi\u0027s canned fruit private label.",
+                                                  "checked":  "2026-08-24T12:42:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.99,
+                                                          "size":  "20 oz",
+                                                          "item":  "Kroger Canned Crushed Pineapple in Pineapple Juice",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027canned crushed pineapple\u0027 and \u0027crushed pineapple\u0027 (kroger-public-api, locationId 61500319): Kroger Canned Crushed Pineapple in Pineapple Juice 20 oz $1.99, same in heavy syrup $1.99, Dole 20 oz $2.49 and 8 oz $1.59. Juice-packed 20 oz taken as the form a cook buys.",
+                                                          "checked":  "2026-08-24T12:42:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "sourdough bread",
+                      "recipes":  [
+                                      "french-onion-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:38:19",
+                      "why":  "french-onion-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-24T12:45:43"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.99,
+                                                     "size":  "16 oz",
+                                                     "item":  "Bakery Fresh Sourdough Bread",
+                                                     "evidence":  "driver lookup rung 1 \u0027sourdough bread\u0027 = 6 priced Apollo nodes at Fareway (retailerLocation 531573, 17070 Audrey St); adjudicated: Bakery Fresh Sourdough Bread 16 oz $4.99 is the store-bakery plain sourdough loaf. No ladder needed - rung 1 returned genuine hits.",
+                                                     "checked":  "2026-08-24T12:45:43"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.49,
+                                                         "size":  "1 lb",
+                                                         "item":  "The Rustik Oven Sourdough Bread 1 Lb",
+                                                         "evidence":  "pre-pass probe rung 1 \u0027sourdough bread\u0027 = 11 MATCHES at Family Fare; adjudicated: The Rustik Oven Sourdough Bread 1 lb $5.49 is a plain sourdough loaf (rejected Schar gluten-free deli-style and Izzio everything/potato flavored variants as non-base).",
+                                                         "checked":  "2026-08-24T12:45:43"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:45:43"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  3.96,
+                                                             "size":  "23 oz",
+                                                             "item":  "Member\u0027s Mark Sliced Sourdough Bread, 23 oz.",
+                                                             "evidence":  "driver lookup rung 1 \u0027sourdough bread\u0027 = 18 MATCHES at Sam\u0027s Club; adjudicated: Member\u0027s Mark Sliced Sourdough Bread 23 oz $3.96 ($0.17/oz) is the base member-label sourdough loaf (rejected the 12-ct frozen case, the Wildgrain box, and the pretzel-bite/keto rows as not this ingredient).",
+                                                             "checked":  "2026-08-24T12:45:43"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.49,
+                                                  "size":  "24 oz",
+                                                  "item":  "Specially Selected Sourdough Square Loaf, 24 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027sourdough\u0027 returned 13 candidate rows across 3 stores incl. Aldi Specially Selected Sourdough Square Loaf 24 oz $3.49 and Sliced Sourdough Round 24 oz $3.49 (out\\regular\\aldi-regular capture, product slug 19685443-specially-selected-sourdough-square-24-oz). Adjudicated: plain sourdough loaf, base private label; flavored Everything/Jalapeno Cheddar rows rejected.",
+                                                  "checked":  "2026-08-24T12:45:43"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.79,
+                                                          "size":  "20 oz",
+                                                          "item":  "Artesano Sourdough Bread",
+                                                          "evidence":  "pre-pass probe rung 1 \u0027sourdough bread\u0027 = 25 MATCHES at Baker\u0027s; adjudicated: Artesano Sourdough Bread 20 oz $4.79 is a plain sourdough loaf a cook would buy (rejected Schar/Rudi\u0027s gluten-free specialty loaves as non-base). Full-ladder server-tier result.",
+                                                          "checked":  "2026-08-24T12:45:43"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "bone-in skin-on chicken breasts",
+                      "recipes":  [
+                                      "french-onion-chicken"
+                                  ],
+                      "added":  "2026-08-24T12:38:20",
+                      "why":  "french-onion-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-24T12:45:43"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "$2.99/lb ($7.48 pkg)",
+                                                     "item":  "Bone-In Chicken Breast",
+                                                     "evidence":  "driver lookup rung 1 = 3 priced Apollo nodes at Fareway; adjudicated: \u0027Bone-In Chicken Breast\u0027 $2.99/lb is the split bone-in breast at the meat case, the standard cut which is sold skin-on. Label states bone-in but does not spell out skin-on - noted honestly; the other two rows (Boneless Skinless, Boneless Trimmed) are the wrong cut.",
+                                                     "checked":  "2026-08-24T12:45:43"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server-tier FULL ladder empty at Family Fare: \u0027bone-in skin-on chicken breasts\u0027=0 -\u003e \u0027bone in skin on chicken breasts\u0027=0 -\u003e \u0027boneinskinonchickenbreasts\u0027=0, no candidates on any rung, no bot wall or transport error. Cross-check on disk: price-ingredient.ps1 -Name \u0027chicken breast\u0027 shows Family Fare\u0027s only chicken-breast row today is \u0027Boneless Skinless Chicken Breasts\u0027 $2.99/lb - the wrong cut. No bone-in skin-on breast at this store.",
+                                                         "checked":  "2026-08-24T12:45:43"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-24T12:45:43"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver lookup was RUNG 1 ONLY and returned 14 rows, none of which is this ingredient (Member\u0027s Mark bone-in THIGHS, boneless-skinless breasts/thighs, organic and case packs). A rung-1 miss at a driver store does not support not-carried and I have no browser this session to walk the ladder (\u0027split chicken breast\u0027, \u0027chicken breast bone in\u0027), so this store stays unchecked.",
+                                                             "checked":  "2026-08-24T12:45:43"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-24T12:45:43"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.29,
+                                                          "size":  "1 lb",
+                                                          "item":  "Heritage Farm(R) Bone In Skin On Split Chicken Breasts",
+                                                          "evidence":  "pre-pass probe rung 1 = 12 MATCHES at Baker\u0027s; adjudicated: Heritage Farm Bone In Skin On Split Chicken Breasts $2.29/lb names the exact cut - bone-in AND skin-on. Every other row (Kroger/Tyson/Heritage Farm boneless skinless, diced, thin sliced) is the wrong cut and was rejected.",
+                                                          "checked":  "2026-08-24T12:45:43"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh mozzarella cheese",
+                      "recipes":  [
+                                      "baked-honey-mustard-chicken"
+                                  ],
+                      "added":  "2026-08-24T19:21:38",
+                      "why":  "baked-honey-mustard-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 returns only Great Value Mild Cheddar Finely Shredded for Walmart - not fresh mozzarella.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.99,
+                                                     "size":  "8 oz",
+                                                     "item":  "BelGioioso Fresh Mozzarella Cheese, Ball",
+                                                     "evidence":  "driver rung 1 MATCHES=6; adjudicated: BelGioioso Fresh Mozzarella Ball 8 oz $4.99 is the ingredient. Ruled out Fareway Low-Moisture Part-Skim $2.48 and Tillamook shreds/snacks - not fresh mozzarella.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.89,
+                                                         "size":  "226 g",
+                                                         "item":  "Bel Gioioso Fresh Mozzarella Cheese 226 G",
+                                                         "evidence":  "pre-pass full-ladder MATCHES=3, all three are Bel Gioioso FRESH mozzarella (ball, sliced, pearls). Ruled in: 226 g = 8 oz ball.",
+                                                         "checked":  "2026-08-24T19:25:46"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 -Name \u0027fresh mozzarella cheese\u0027 maps to commodity shredded-cheese and returns Hy-Vee Pepper Jack Cheese - shredded/low-moisture, NOT fresh mozzarella. Capture miss is not not-carried; stays PENDING for an attended run.",
+                                                    "checked":  "2026-08-24T19:25:46"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.44,
+                                                             "size":  "8 oz x 3 pk",
+                                                             "item":  "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+                                                             "evidence":  "driver rung 1 MATCHES=25; adjudicated: BelGioioso Fresh Mozzarella Pearls 3-pk $7.44 ($0.31/oz) is the ingredient; BelGioioso Pre-Sliced Fresh Mozzarella 32 oz $8.28 is a second. Ruled out all Member\u0027s Mark part-skim shred and string cheese.",
+                                                             "checked":  "2026-08-24T19:25:46"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 returns only Happy Farms Shredded Mild Cheddar for Aldi via the shredded-cheese mapping - not fresh mozzarella.",
+                                                  "checked":  "2026-08-24T19:25:46"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.99,
+                                                          "size":  "8 oz",
+                                                          "item":  "BelGioioso Fresh Mozzarella Cheese",
+                                                          "evidence":  "pre-pass ladder rung 1 \u0027fresh mozzarella cheese\u0027=12 MATCHES; adjudicated: BelGioioso Fresh Mozzarella 8 oz rel 132 is the ball-in-water fresh mozzarella a cook buys, not low-moisture shred. Private Selection 8 oz $4.49 confirms a second SKU.",
+                                                          "checked":  "2026-08-24T19:25:46"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "whole grain mustard",
+                      "recipes":  [
+                                      "baked-honey-mustard-chicken"
+                                  ],
+                      "added":  "2026-08-24T19:21:38",
+                      "why":  "baked-honey-mustard-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. Disk row for Walmart is Great Value Yellow Mustard 20 oz - not whole grain.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver RUNG 1 ONLY, MATCHES=12: Grey Poupon Dijon, French\u0027s Chardonnay Dijon, Fareway spicy brown/sweet hot/horseradish, Woeber\u0027s sweet \u0026 spicy - none is whole-grain/old-style mustard. Rung 1 alone cannot support not-carried and I have no browser to walk rungs 2-4 (\u0027whole grain\u0027 / \u0027stone ground mustard\u0027 / brand). Honest state is blocked, not not-carried.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.39,
+                                                         "size":  "9.25 oz",
+                                                         "item":  "Silver Spring Mustard, Whole Grain, Old Style 9.25 Oz",
+                                                         "evidence":  "full-ladder MATCHES=2; adjudicated: Silver Spring Whole Grain Old Style Mustard 9.25 oz is the jarred whole-grain mustard. Ruled out the Star Kist tuna salad pouch.",
+                                                         "checked":  "2026-08-24T19:25:46"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 maps \u0027whole grain mustard\u0027 to the broad commodity mustard (/\\bmustard\\b/) and returns That\u0027s Smart! YELLOW Mustard for Hy-Vee - a different condiment, not whole-grain. No disk carriage; stays PENDING.",
+                                                    "checked":  "2026-08-24T19:25:46"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver RUNG 1 ONLY, MATCHES=17 and the pile is mayonnaise plus French\u0027s classic YELLOW mustard - the term clearly under-targeted. No whole-grain row. Rung 1 alone cannot support not-carried and no browser here to ladder; blocked.",
+                                                             "checked":  "2026-08-24T19:25:46"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Disk row for Aldi under the mustard commodity is Burman\u0027s Traditional Yellow Mustard - not whole grain.",
+                                                  "checked":  "2026-08-24T19:25:46"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.99,
+                                                          "size":  "7 oz",
+                                                          "item":  "Murray\u0027s Whole Grain Mustard",
+                                                          "evidence":  "full-ladder MATCHES=2; adjudicated: Murray\u0027s Whole Grain Mustard 7 oz rel 133 IS the jarred condiment. Ruled out StarKist Whole Grain Dijon Mustard Tuna Salad Pouch - a tuna pouch flavoured with it, not mustard.",
+                                                          "checked":  "2026-08-24T19:25:46"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "cotija cheese",
+                      "recipes":  [
+                                      "tex-mex-baked-chicken"
+                                  ],
+                      "added":  "2026-08-24T19:22:24",
+                      "why":  "tex-mex-baked-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027cotija cheese\u0027 = ABSENT across all captures, which is a capture miss and never not-carried.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver RUNG 1 ONLY, MATCHES=72 and not one row is cotija - crumbled feta, Mexican-style shredded blends, grated parmesan, queso dip, tortillas. That pile is Instacart relevance drift off \u0027cheese\u0027, so rung 1 did not really test the term; no browser here to walk rungs 2-4 (\u0027cotija\u0027, \u0027queso cotija\u0027, brand Cacique). Blocked, not not-carried.",
+                                                     "checked":  "2026-08-24T19:25:46"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.99,
+                                                         "size":  "10 oz",
+                                                         "item":  "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz",
+                                                         "evidence":  "full-ladder MATCHES=2, both cotija; adjudicated in: El Mexicano Cotija grating cheese 10 oz $5.99 (and Granulado Cotija 16 oz $8.89).",
+                                                         "checked":  "2026-08-24T19:25:46"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 -Name \u0027cotija cheese\u0027 returns ABSENT - no commodity claims the term and nothing in any capture matches. ABSENT is explicitly not a verdict of zero; stays PENDING.",
+                                                    "checked":  "2026-08-24T19:25:46"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver RUNG 1 ONLY, MATCHES=17 with no cotija row (panela, feta, mozzarella, parmesan, Dubliner) - the same generic-cheese drift. Rung 1 alone cannot support not-carried and no browser to ladder; blocked.",
+                                                             "checked":  "2026-08-24T19:25:46"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027cotija cheese\u0027 = ABSENT across all captures, which is a capture miss and never not-carried.",
+                                                  "checked":  "2026-08-24T19:25:46"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  5.49,
+                                                          "size":  "10 oz",
+                                                          "item":  "Cacique Cotija Part Skim Milk Cheese",
+                                                          "evidence":  "full-ladder MATCHES=3, all three genuinely cotija; adjudicated in: Cacique Cotija 10 oz $5.49, plus Queso Campesino Cotija 12 oz $8.49 and Kroger Mercado Queso Cotija Grated 8 oz $3.79.",
+                                                          "checked":  "2026-08-24T19:25:46"
                                                       }
                                  },
                       "verdict":  "CARRIED",

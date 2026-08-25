@@ -1,0 +1,258 @@
+{
+    "name":  "Creamy Roasted Garlic Chicken",
+    "slug":  "creamy-roasted-garlic-chicken",
+    "cuisine":  "Italian-American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+    "source_site":  "keviniscooking.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Completed slug: creamy-roasted-garlic-chicken. All 10 bought lines are used by a step and no step calls for anything unbought. Chicken (steps 3, 4, 7), butter (searing step 4 plus the roux in sauce step 6), olive oil (step 4), salt (season the cutlets step 3 plus season the sauce step 6), black pepper (steps 3 and 6), all-purpose flour (dusting the cutlets step 3 plus the roux step 6), garlic (roasted in step 2, mashed into the sauce step 6), milk (step 6), parmesan (step 6), hot sauce (optional finish, step 6). Walked the costed list against the steps in both directions.",
+                         "SOURCE STEPS name two ingredients the build does NOT buy: Italian seasoning (source step 2) and a parsley garnish (source step 7). Neither is on the shopper\u0027s list, so I dropped both from the prose rather than write a step that uses something nobody purchased. Both are in forbidden_prose_terms.",
+                         "NO heavy cream in this recipe: the creamy sauce is milk (1715 g, 7 cups) thickened with a butter-and-flour roux and finished with parmesan. The prose leans on the milk-not-cream contrast as the budget angle, but no cream, half-and-half, or cream cheese is bought or named as an ingredient. I did NOT put \u0027heavy cream\u0027 in forbidden_prose_terms because I deliberately reference it to say it is absent.",
+                         "NO shop_smart bullet makes a checkable per-package arithmetic claim (no cheaper-per-ounce, no lasts-N-batches, no nothing-left). Every bullet is qualitative shopping logic grounded in the recipe\u0027s own buy amounts, so none needs a cost_lines trace. Parmesan is named as the grated tub or bag (the mapper resolved parmesan to a grated cell, so the build buys the tub); the 2026-08-15 block-vs-tub trap is avoided by design. Re-walk the bullets against cost_lines once the recipe costs.",
+                         "DATA SANITY / SMELLS TO CHECK (none blocking, all transcribed as issued, none fixed silently): SALT 140 g \u0027to taste\u0027 across 14 servings is about 10 g per serving (roughly 2 tsp each), implausibly high for a real plate. The mapper\u0027s join_fallbacks confirms salt could not be grounded (no-qty house-staple fallback), so the 140 g is a fallback, not a measured weight; macro impact is sodium only (0 cal), so it does not move the band. Flagging the 140 g for the repair pass. BLACK PEPPER 28 g \u0027to taste\u0027 is about 2 g per serving, the same to-taste fallback with the same 0-cal note; flagging the 28 g.",
+                         "MACROS land 563 cal / 63.9 g protein / 14.7 g carb / 27.1 g fat per serving, cleanly inside this run\u0027s band (400-650 cal AND 35 g carb or less; 14.7 g is well under). Protein reads high; the mapper\u0027s cross-check (PASS, protein +12.1% vs source) names the cause: the estate\u0027s Milk row is Fairlife fat-free ultra-filtered at 13 g protein per cup versus ordinary milk\u0027s ~8 g. That is a known basis, not a portion error, so I left the locked macro alone.",
+                         "GARLIC 158 g = 3 1/2 heads / about 50 cloves is a lot of garlic, but it is whole-clove roasted (which turns it sweet and mellow) and the dish is literally named for it, so the quantity is in-character, not a defect. Source 1 head / 15 cloves scaled 3.5x lands here. No title ingredient is missing from the build; chicken is expected to lead the cost and no single line looks poised to dominate a 14-serving batch absurdly. Herb/cut/sauce profile is consistent with a creamy roasted-garlic parmesan chicken."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "Italian seasoning",
+                                  "parsley",
+                                  "cream cheese",
+                                  "half-and-half",
+                                  "white wine",
+                                  "chicken thighs",
+                                  "pasta",
+                                  "rice"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  563,
+                 "protein":  64,
+                 "carbs":  15,
+                 "fat":  27,
+                 "cost_ps":  "1.76"
+             },
+    "intro_html":  "Creamy garlic chicken sounds like something you order out and pay restaurant money for, but look down the list and there is not a drop of heavy cream in it. The sauce gets its body from milk, a spoon of flour, and a fistful of garlic that turns sweet and mellow when you roast it in a dry pan. You sear seasoned cutlets, build a simple white sauce right behind them, and stir in parmesan until it clings to every piece. Built at 14 servings it runs about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a serving, with about 15 grams of carbs, for roughly \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a serving (at everyday cost). That is a rich, garlicky dinner that eats like a splurge and shops like a Tuesday.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb, sliced horizontally into cutlets (3174 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp; 10 1/2 tbsp (245 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tbsp (47 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (140 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (28 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3 1/2 tbsp, for dusting the cutlets; 10 1/2 tbsp (109 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 1/2 heads (about 50 cloves) (158 g)",
+                                "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 7 cups (1715 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 3/4 cups grated (196 g)",
+                                "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 3 1/2 tsp (optional) (18 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb, sliced horizontally into cutlets: ~$15.61. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Butter, 7 tbsp; 10 1/2 tbsp: ~$1.61. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "All-Purpose Flour, 3 1/2 tbsp, for dusting the cutlets; 10 1/2 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 1/2 heads (about 50 cloves): ~$2.15. \u003cstrong\u003eBuy 4 heads: $2.32.\u003c/strong\u003e",
+                       "Milk, 7 cups: ~$1.28. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 3/4 cups grated: ~$2.37. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Hot Sauce, 3 1/2 tsp (optional): ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$1.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.70 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.15 across 14 servings, roughly $2.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.82. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a creamy roasted garlic chicken that tastes like it cost three times that. The chicken and the milk-based sauce carry it, and the roasted garlic does the expensive-tasting work for pennies.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eThe big pack of breasts is the whole game.\u003c/strong\u003e Seven pounds of boneless skinless breast is where nearly all the money and all the protein sit. Reach for the family value pack instead of the little trays so you are buying chicken and not shrink wrap, and slice the thick breasts flat into cutlets yourself. When breast hits a sale price, grab extra and freeze it in batch-size bags.",
+                       "\u003cstrong\u003eMilk is the trick here, not cream.\u003c/strong\u003e This creamy sauce is built on plain milk thickened with butter and flour, so you skip the pricey little carton of heavy cream entirely. You need about seven cups, so a half gallon covers it with room to spare and leaves you milk for the rest of the week.",
+                       "\u003cstrong\u003eBuy your garlic by the head, not the jar.\u003c/strong\u003e This dish leans on roasted garlic, about three and a half heads of it, and roasting whole cloves in a dry pan is what turns them sweet instead of sharp. Loose fresh heads are cheap and roast up far better than the pre-minced jar, which would just scorch.",
+                       "\u003cstrong\u003eGrab the grated parmesan.\u003c/strong\u003e It melts straight into the sauce, so whichever grated tub or bag is cheapest is the right one. There is no reason to chase an expensive wedge when it is going to disappear into a white sauce anyway.",
+                       "\u003cstrong\u003eButter, flour, oil, salt, and pepper carry the rest.\u003c/strong\u003e A little butter and oil to sear and to start the sauce, flour to dust the chicken and to thicken the pan, and salt and pepper to taste. These are backbone staples you most likely already own, so they barely move the cart. A few dashes of hot sauce at the end is optional if you want a little heat."
+                   ],
+    "make_it":  [
+                    "Weigh your empty skillet and write the number down. You will use it at the end to split this into 14 even servings by weight instead of eyeballing every container.",
+                    "Break the garlic heads into individual cloves, skins still on, and add them to a dry skillet over medium heat. Cook about 15 minutes, stirring to turn and brown them, until the cloves are soft inside even if the skins darken. Let them cool, then peel or squeeze the cloves out and mash them smooth with the side of your knife. Set aside.",
+                    "Slice each chicken breast flat into cutlets. Season both sides with salt and black pepper, then dust each side lightly with flour and set the cutlets aside.",
+                    "In a large skillet over medium-high heat, melt part of the butter with the olive oil. Working in batches so the pan is not crowded, sear the cutlets a few minutes a side until golden and cooked through (165F in the thickest part). Move the chicken to a plate and cover it with foil to keep warm.",
+                    "Lower the heat to medium and add the rest of the butter to the same pan, scraping up all the browned bits stuck to the bottom.",
+                    "Whisk the flour into the butter and cook a couple of minutes. Slowly whisk in the milk until the sauce is smooth, then stir in the mashed roasted garlic and the parmesan and cook, whisking, until the sauce thickens. Season with salt and pepper to taste, and stir in the hot sauce now if you want a little heat.",
+                    "Return the chicken and any collected juices to the pan and spoon the sauce over every cutlet to coat.",
+                    "Weigh the full pan and subtract the empty weight from Step 1 to get the cooked total. Divide by 14 and give each container one cutlet and an even share of the roasted garlic sauce, aiming for that weight."
+                ],
+    "portion_html":  "Set the full pan on your scale and subtract the empty weight you wrote down in Step 1 to get the cooked total. Divide that number by 14. Each container gets one chicken cutlet and an even ladle of the roasted garlic parmesan sauce, landing near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://keviniscooking.com/creamy-roasted-garlic-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ekeviniscooking.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A rich, high-protein chicken dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  24.7,
+    "cost_batch_true":  28.15,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.01,
+    "cost_pantry_add":  12.67,
+    "cost_first_run":  40.82,
+    "scaler":  {
+                   "cost":  "28.15",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3174,
+                                   "buy":  "7 lb, sliced horizontally into cutlets",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  245,
+                                   "buy":  "7 tbsp; 10 1/2 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  140,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  28,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "canon":  "All-Purpose Flour",
+                                   "grams":  109,
+                                   "buy":  "3 1/2 tbsp, for dusting the cutlets; 10 1/2 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  158,
+                                   "buy":  "3 1/2 heads (about 50 cloves)",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  1715,
+                                   "buy":  "7 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  196,
+                                   "buy":  "1 3/4 cups grated",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Sauce",
+                                   "canon":  "Hot Sauce",
+                                   "grams":  18,
+                                   "buy":  "3 1/2 tsp (optional)",
+                                   "bid":  "hot-sauce",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Creamy roasted garlic chicken for meal prep: seared chicken cutlets under a milk-based roasted garlic and parmesan sauce, built for 14 servings. About {{cal}} calories and {{protein}} grams of protein per serving, with about 15 grams of carbs, for around ${{cost_ps}} each (at everyday cost).",
+                 "keywords":  "creamy roasted garlic chicken, garlic parmesan chicken, high protein meal prep, budget chicken dinner, creamy chicken meal prep, roasted garlic sauce, cheap high protein dinner",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  1.76,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 7 lb, sliced horizontally into cutlets (3174 g)",
+                                          "Butter, 7 tbsp; 10 1/2 tbsp (245 g)",
+                                          "Olive Oil, 3 1/2 tbsp (47 g)",
+                                          "Salt, to taste (140 g)",
+                                          "Black Pepper, to taste (28 g)",
+                                          "All-Purpose Flour, 3 1/2 tbsp, for dusting the cutlets; 10 1/2 tbsp (109 g)",
+                                          "Garlic, 3 1/2 heads (about 50 cloves) (158 g)",
+                                          "Milk, 7 cups (1715 g)",
+                                          "Parmesan Cheese, 1 3/4 cups grated (196 g)",
+                                          "Hot Sauce, 3 1/2 tsp (optional) (18 g)"
+                                      ],
+                 "steps":  [
+                               "Break the garlic into cloves, skins on, and roast them in a dry skillet over medium heat about 15 minutes until soft, then cool, peel, and mash smooth.",
+                               "Slice the chicken breasts into cutlets, season both sides with salt and black pepper, and dust with flour.",
+                               "Sear the cutlets in butter and olive oil until golden and cooked through, then set them aside and keep warm.",
+                               "In the same pan, cook the flour in butter, whisk in the milk until smooth, then stir in the roasted garlic and parmesan and season, adding hot sauce if you like heat.",
+                               "Spoon the sauce over the chicken, then weigh, divide, and portion into 14 containers."
+                           ],
+                 "step_names":  [
+                                    "Roast the garlic",
+                                    "Prep the cutlets",
+                                    "Sear the chicken",
+                                    "Build the sauce",
+                                    "Sauce and portion"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  3174
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  109
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  1715
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Hot Sauce",
+                                  "grams":  18
+                              }
+                          ]
+}

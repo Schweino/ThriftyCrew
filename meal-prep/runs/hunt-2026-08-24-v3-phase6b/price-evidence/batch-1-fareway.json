@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-24T12:21:29",
+ "generated": "2026-08-24T19:12:02",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,89 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1333295-love-beets-organic-mild-vinegar-beets-6-5-oz"
     },
     {
-     "item": "Organic Girl Baby Spinach",
-     "price": 5.44,
-     "size": "10 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/122143-organicgirl-baby-spinach-10-oz"
-    },
-    {
-     "item": "Dole Celery Hearts",
-     "price": 2.99,
+     "item": "Grimmway Farms Carrot Chips 1 lb",
+     "price": 1.99,
      "size": "16 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3078796-dole-organic-celery-16-0-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "chicken drumsticks",
-   "state": "MATCHES",
-   "term_used": "chicken drumsticks",
-   "attempts": [
-    {
-     "term": "chicken drumsticks",
-     "state": "OK",
-     "hits": 31
-    }
-   ],
-   "hits": [
-    {
-     "item": "Tyson Chicken Drumsticks, 2.5 lb. (Frozen)",
-     "price": 5.99,
-     "size": "1.13 kg",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3129619-tyson-chicken-drumsticks-2-5-lb-frozen-2-5-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/150721-grimmway-farms-carrot-chips-16-oz"
     },
     {
-     "item": "Perdue High Protein Chicken Bites",
-     "price": 10.59,
-     "size": "20 oz",
+     "item": "Asparagus",
+     "price": 4.99,
+     "size": "$4.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/110027539-perdue-powered-high"
-    },
-    {
-     "item": "Drumstick Vanilla Frozen Dairy Dessert Cones",
-     "price": 5.48,
-     "size": "4 x 4 each",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/94967605-drumstick-vanilla-frozen-dairy-dessert-cones-18-4-fl-oz"
-    },
-    {
-     "item": "Knorr Granulated Bouillon Chicken Flavor",
-     "price": 3.29,
-     "size": "7.9 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35576-knorr-chicken-flavor-bouillon-granulated-7-9-oz"
-    },
-    {
-     "item": "Tyson Frozen Chicken Wing Portions",
-     "price": 7.99,
-     "size": "1.13 kg",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3247014-tyson-frozen-chicken-wing-portions-2-5-lbr"
-    },
-    {
-     "item": "Fareway Chicken Broth",
-     "price": 0.98,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23966597-fareway-chicken-broth-reduced-sodium-145-oz"
-    },
-    {
-     "item": "Better Than Bouillon Roasted Chicken Base, Premium",
-     "price": 5.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69743-better-than-bouillon-premium-roasted-chicken-base-8-oz"
-    },
-    {
-     "item": "Drumstick Vanilla Fudge And Vanilla Caramel Mini Sundae Cones",
-     "price": 8.98,
-     "size": "12 ct",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2772392-nestle-vanilla-fudge-swirl-and-vanilla-caramel-swirl-sundae-cones-12-ct"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16856881-asparagus-1-lb"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

@@ -1,0 +1,162 @@
+{
+ "slug": "creamy-roasted-garlic-chicken",
+ "lines": [
+  {
+   "raw": "2 lbs chicken breasts",
+   "buy": "7 lb, sliced horizontally into cutlets",
+   "grams_source": 907,
+   "notes": "Weight is stated on the line; the method slices each breast into 2 cutlets."
+  },
+  {
+   "raw": "2 tbsp butter",
+   "buy": "7 tbsp",
+   "notes": "Settled line (28 g source)."
+  },
+  {
+   "raw": "1 tbsp olive oil",
+   "buy": "3 1/2 tbsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "salt",
+   "buy": "to taste",
+   "notes": "Settled line, no quantity on the source page; table carries 20 g source as the house to-taste default."
+  },
+  {
+   "raw": "black pepper",
+   "buy": "to taste",
+   "notes": "Settled line, no quantity on the source page."
+  },
+  {
+   "raw": "1 tbsp all purpose flour ((plus more if needed))",
+   "buy": "3 1/2 tbsp, for dusting the cutlets",
+   "grams_source": 7.8,
+   "notes": "1 tbsp flour = 7.8 g."
+  },
+  {
+   "raw": "1 head of garlic ((about 15 cloves))",
+   "buy": "3 1/2 heads (about 50 cloves)",
+   "grams_source": 45,
+   "notes": "15 cloves at the house 3 g clove. A head is the cooking unit here - the whole head is browned and mashed."
+  },
+  {
+   "raw": "3 tbsp butter",
+   "buy": "10 1/2 tbsp",
+   "notes": "Settled line (42 g source)."
+  },
+  {
+   "raw": "3 tbsp all purpose flour",
+   "buy": "10 1/2 tbsp",
+   "grams_source": 23.4,
+   "notes": "Roux flour, 7.8 g per tbsp."
+  },
+  {
+   "raw": "2 cups milk",
+   "buy": "7 cups",
+   "notes": "Settled line (490 g source)."
+  },
+  {
+   "raw": "1/2 cup grated Parmesan cheese",
+   "buy": "1 3/4 cups grated",
+   "grams_source": 56,
+   "notes": "The estate's Parmesan Cheese row is itself a 1/4 cup = 28 g grated label, so 1/2 cup = 56 g."
+  },
+  {
+   "raw": "salt",
+   "buy": "to taste",
+   "notes": "Second seasoning line, for the sauce."
+  },
+  {
+   "raw": "black pepper",
+   "buy": "to taste",
+   "notes": "Second seasoning line, for the sauce."
+  },
+  {
+   "raw": "1 tsp Tabasco ((optional))",
+   "buy": "3 1/2 tsp (optional)",
+   "grams_source": 5,
+   "notes": "Optional on the source page."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 lbs chicken breasts",
+   "term": "chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 907,
+   "evidence": "Plain boneless breasts sliced into cutlets by the method; chicken-breast is priced 7 of 7. 2 lbs = 907 g, stated on the line, so no each-weight guess."
+  },
+  {
+   "raw": "1 tbsp all purpose flour ((plus more if needed))",
+   "term": "all purpose flour",
+   "canon_item": "All-Purpose Flour",
+   "bid": "flour",
+   "decision": "mapped",
+   "grams_source": 7.8,
+   "evidence": "Exact same food and form as the All-Purpose Flour vocabulary row; wheat flour, not the almond-flour row. Existing food DB row (110 cal / 30 g)."
+  },
+  {
+   "raw": "1 head of garlic ((about 15 cloves))",
+   "term": "head of garlic",
+   "canon_item": "Garlic",
+   "bid": "garlic",
+   "decision": "mapped",
+   "grams_source": 45,
+   "evidence": "A head is a purchase and cooking unit of the same fresh garlic, not a form flip like powder; the line even states 15 cloves, and the Garlic row is 3 g per clove."
+  },
+  {
+   "raw": "3 tbsp all purpose flour",
+   "term": "all purpose flour",
+   "canon_item": "All-Purpose Flour",
+   "bid": "flour",
+   "decision": "mapped",
+   "grams_source": 23.4,
+   "evidence": "Same ruling as the dusting line; this is the roux flour."
+  },
+  {
+   "raw": "1/2 cup grated Parmesan cheese",
+   "term": "grated Parmesan cheese",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 56,
+   "evidence": "Grating is a preparation of the same cheese, and the existing Parmesan Cheese food row is itself a grated 1/4 cup (28 g) label, so the gram weight is the estate's own. Not a variety or price-class flip."
+  },
+  {
+   "raw": "1 tsp Tabasco ((optional))",
+   "term": "Tabasco",
+   "canon_item": "Hot Sauce",
+   "bid": "hot-sauce",
+   "decision": "mapped-optional",
+   "grams_source": 5,
+   "evidence": "Tabasco is a vinegar-and-cayenne hot sauce, the same product concept the hot-sauce commodity prices at 7 of 7; the extraction marks the line optional. Existing Hot Sauce food row (0 cal / 5 g)."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 580,
+   "protein_g": 57,
+   "carbs_g": 13
+  },
+  "our_computed_per_serving": {
+   "calories": 563.1,
+   "protein_g": 63.9,
+   "carbs_g": 14.7
+  },
+  "delta_pct": {
+   "calories": -2.9,
+   "protein": 12.1,
+   "carbs": 13.1
+  },
+  "servings_source": 4,
+  "verdict": "PASS, with one named cause. Protein is +12.1%, inside the 15% band, and almost all of the excess is the settled Milk line: the estate's Milk row is Fairlife FAT FREE ultra-filtered at 13 g protein per cup, while the source used ordinary milk at about 8 g. Swap that basis and the recipe lands at 61.3 g protein, +7.5%. No portion is wrong."
+ }
+}

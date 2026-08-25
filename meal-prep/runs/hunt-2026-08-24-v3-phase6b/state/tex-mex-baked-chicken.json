@@ -1,0 +1,62 @@
+{
+    "slug":  "tex-mex-baked-chicken",
+    "title":  "Tex Mex Baked Chicken",
+    "source_url":  "https://keviniscooking.com/mexican-baked-chicken/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-24T18:57:49",
+    "updated":  "2026-08-24T19:26:15",
+    "terms":  [
+                  {
+                      "term":  "green bell pepper",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cotija cheese",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T18:57:49",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/mexican-baked-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T18:57:49",
+                        "by":  "decider",
+                        "detail":  "Chicken breasts baked with black beans, enchilada sauce and cheddar/cotija (no tortillas); distinct enchilada-bean bake from the all-beef Tex-Mex neighbours, verified low-carb high-protein band 548/16/64."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T19:12:10",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T19:21:41",
+                        "by":  "mapper",
+                        "detail":  "8 residual lines ruled, 0 rejected, 1 mapped-null (cotija), 1 new commodity proposed (green-bell-pepper). Also repaired a settled-line gap: the table computed no weight for \u00271 1/2 cups cheddar cheese\u0027, so it is weighed here at 170 g source - without it the recipe would have costed and counted macros with no cheese at all."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T19:22:25",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T19:26:15",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

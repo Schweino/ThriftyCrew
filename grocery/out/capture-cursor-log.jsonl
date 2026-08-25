@@ -14,3 +14,7 @@
 {"at":"2026-08-23T08:00:13","store":"Baker\u0027s","from":0,"to":7,"day":"2026-08-23","caller":"pull-regular-bakers-api.ps1","pid":6940}
 {"at":"2026-08-23T08:30:12","store":"Sam\u0027s Club","from":7,"to":14,"day":"2026-08-23","caller":"build-sams-deals.ps1","pid":37656}
 {"at":"2026-08-23T08:30:38","store":"Fareway","from":21,"to":28,"day":"2026-08-23","caller":"build-fareway-regular.ps1","pid":22296}
+{"at":"2026-08-24T08:00:20","store":"Baker\u0027s","from":7,"to":14,"day":"2026-08-24","caller":"pull-regular-bakers-api.ps1","pid":39360}
+{"at":"2026-08-24T08:06:17","store":"Hy-Vee (products)","from":36,"to":67,"day":"2026-08-24","caller":"pull-regular-hyvee.ps1","pid":41844}
+{"at":"2026-08-24T08:10:30","store":"Sam\u0027s Club","from":14,"to":21,"day":"2026-08-24","caller":"build-sams-deals.ps1","pid":24708}
+{"at":"2026-08-24T08:10:34","store":"Fareway","from":28,"to":35,"day":"2026-08-24","caller":"build-fareway-regular.ps1","pid":22816}

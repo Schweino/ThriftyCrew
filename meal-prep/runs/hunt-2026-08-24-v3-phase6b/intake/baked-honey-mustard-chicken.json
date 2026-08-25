@@ -1,0 +1,127 @@
+﻿{
+    "name":  "Baked Honey Mustard Chicken",
+    "slug":  "baked-honey-mustard-chicken",
+    "protein":  "chicken",
+    "cuisine":  "American",
+    "source_url":  "https://keviniscooking.com/baked-honey-mustard-chicken/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "grams":  3174,
+                            "buy":  "7 lb (about 14), boneless and skinless"
+                        },
+                        {
+                            "item":  "Red Onion",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium, sliced thin"
+                        },
+                        {
+                            "item":  "Olive Oil",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp"
+                        },
+                        {
+                            "item":  "Salt",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Black Pepper",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Garlic Powder",
+                            "grams":  6,
+                            "buy":  "1 3/4 tsp"
+                        },
+                        {
+                            "item":  "Fresh Mozzarella Cheese",
+                            "grams":  794,
+                            "buy":  "1 3/4 lb, sliced"
+                        },
+                        {
+                            "item":  "Honey",
+                            "grams":  297,
+                            "buy":  "3/4 cup plus 2 tbsp"
+                        },
+                        {
+                            "item":  "Whole Grain Mustard",
+                            "grams":  210,
+                            "buy":  "3/4 cup plus 2 tbsp"
+                        },
+                        {
+                            "item":  "Fresh Parsley",
+                            "grams":  52,
+                            "buy":  "scant 1 cup chopped"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  525,
+                               "protein_g":  61.2,
+                               "carbs_g":  21.4,
+                               "fat_g":  19.6
+                           },
+    "writer_notes":  [
+                         "Completed slug: baked-honey-mustard-chicken. All 10 bought lines are used by a step, and no step calls for anything unbought. Chicken breast (baked), red onion (tossed in the olive oil, roasted under the chicken, then spooned on top at serving), olive oil (tossing the onions), salt/black pepper/garlic powder (seasoning the tops), fresh mozzarella (sliced over each breast), honey and whole grain mustard (the glaze, half brushed on before baking and half reserved as a finishing drizzle), fresh parsley (garnish). Every one of the ten appears in make_it.",
+                         "SOURCE AMBIGUITY (resolved, not a data bug): the source recipe lays raw sliced red onion under the chicken in step 2, then in step 7 says to top each breast with 'sauteed onion slices' with no separate saute step anywhere. I resolved it faithfully by roasting the onions under the chicken (tossed in the recipe's olive oil) and spooning those softened onions over the top at the end. That keeps both the olive-oil line and the onion line honestly used and matches the source's serving picture. The source's closing line also suggests serving over rice, pasta, or potatoes; none of those is bought, so none appears in a step, and all three are in forbidden_prose_terms.",
+                         "No shop_smart bullet makes a checkable per-package arithmetic claim (no cheaper-per-ounce, no lasts-N-batches, no nothing-left), so none needs a cost_lines trace. Every bullet is qualitative shopping logic. I deliberately did NOT claim the whole grain mustard jar or the honey bottle beats any alternative per unit, and I did NOT claim any package lasts across batches, because the cost pass is the orchestrator's and I have no cost_lines in hand to prove such a claim (the 2026-08-15 block-vs-tub trap avoided by construction). Fresh Mozzarella Cheese and Whole Grain Mustard are both mapped-null pricing terms still being priced, so I make no price assertion about either.",
+                         "DATA SANITY (all plausible, none blocking): macros land 525 cal / 61.2 g protein / 21.4 g carb / 19.6 g fat per serving, inside this run's band (400-650 cal AND <=35 g carb). Mapper macro cross-check PASSED (protein -1.3%, cal -4.1%, carb -7.4% vs the source's own per-serving figures). Chicken is 3174 g = 7 lb across 14 servings = 227 g (8 oz) raw per serving, exactly the source's 2 lb for 4 scaled by 3.5. Fresh mozzarella 794 g = source 227 g x 3.5, about 57 g (2 oz) per serving, a reasonable slice. Honey 297 g (source 84.8 g x 3.5) is the biggest sugar/carb driver at about 21 g honey per serving, but half is a finishing drizzle and the per-serving carb still sits comfortably in band. Whole grain mustard 210 g = 4 tbsp x 3.5 = 14 tbsp at 15 g/tbsp. Parsley 52 g = 15 g x 3.5. No title ingredient missing from the build; no single line looks like it should dominate a 14-serving batch."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "rice",
+                                  "pasta",
+                                  "potatoes",
+                                  "breadcrumbs",
+                                  "flour",
+                                  "dijon",
+                                  "brown sugar",
+                                  "shrimp"
+                              ],
+    "prose":  {
+                  "intro_html":  "Honey mustard chicken sounds like a diner order, but the whole recipe is one bowl, one whisk, and one baking dish. You stir honey together with whole grain mustard, brush half of it over chicken breasts laid on a bed of sliced red onion, top each breast with fresh mozzarella, and bake. The other half of that glaze gets held back and drizzled on at the very end, so every bite tastes saucy instead of like plain baked chicken. Each serving carries <strong>{{protein}} grams of protein</strong> and {{cal}} calories with under 25 grams of carbs, for about <strong>${{cost_ps}}</strong> a serving (at everyday cost). That is a sweet and tangy dinner for less than the drive-thru charges.",
+                  "shop_smart":  [
+                                     "<strong>Buy the big value pack of breasts.</strong> Seven pounds sounds like a lot until you remember it is fourteen dinners. The family pack runs cheaper per pound than the tidy little tray of two, and when chicken breast drops to a sale price, grab extra and freeze it flat in batch-size bags.",
+                                     "<strong>Mix the glaze yourself from a jar and a bottle.</strong> A jar of whole grain mustard and a bottle of honey is all the glaze is, and doing it yourself means you control the balance. Skip the pre-mixed honey mustard in the squeeze bottle; it is thinner and sweeter and will not brush on in a proper coat.",
+                                     "<strong>Fresh mozzarella is the splurge, so shop it carefully.</strong> This wants the soft fresh mozzarella packed in water, not the shredded low-moisture bag, and they live in different corners of the store. Buy whichever ball or log is cheapest and slice it yourself rather than paying up for pre-sliced.",
+                                     "<strong>Grab loose red onions.</strong> You need a few, so weigh out what the recipe calls for from the loose bin instead of grabbing a mesh sack you will not finish. They soften and sweeten as they roast under the chicken, so do not fuss over perfect slices.",
+                                     "<strong>Reach for honey without overthinking it.</strong> Honey keeps practically forever in the pantry, so it never goes to waste no matter which bottle you buy. Get whichever one is cheapest by the shelf tag and you will work through it in dressings, oatmeal, and the next batch of this."
+                                 ],
+                  "make_it":  [
+                                  "Weigh your empty baking dish and write the number down. That is how you portion 14 even servings at the end instead of eyeballing it.",
+                                  "Preheat the oven to 400F. In a small bowl, whisk the honey and whole grain mustard into a smooth glaze. Spoon half of it into a second bowl and set that aside; it is your finishing drizzle and does not touch raw chicken.",
+                                  "Toss the sliced red onion with the olive oil and spread it in an even layer across the bottom of a large baking dish.",
+                                  "Pat the chicken breasts dry and lay them on top of the onions in a single layer. Sprinkle the tops with the salt, black pepper, and garlic powder.",
+                                  "Brush the chicken all over with the first bowl of glaze, the half you did not set aside.",
+                                  "Lay slices of fresh mozzarella over each breast, two or three slices apiece depending on size.",
+                                  "Bake uncovered at 400F for about 30 minutes, until the thickest part of the chicken reaches 165F and the cheese is soft and melted.",
+                                  "Rest the chicken 5 minutes. Spoon the roasted onions from the dish over the tops, scatter the chopped parsley, and drizzle on the reserved glaze. Then portion into your 14 containers."
+                              ],
+                  "portion_html":  "Line up 14 containers. This batch bakes 14 breasts across 14 servings, so one glazed breast per container is your portion, with a spoonful of the roasted onions and a drizzle of the reserved glaze on top. To keep it honest, weigh the finished dish, subtract the empty dish weight from Step 1, and divide by 14, then even things out if one breast came out heavier than the rest. Each serving lands near <strong>{{cal}} calories</strong> and {{protein}} grams of protein.",
+                  "cost_closing_html":  "About <strong>${{cost_ps}} a serving</strong> (at everyday cost). Chicken breast, a bottle of honey, a jar of mustard, and a little cheese is a cheap way to put a sweet and tangy dinner on the table all week. The fresh mozzarella is the splurge here, and it is exactly what makes each breast feel like more than baked chicken.",
+                  "upsell_html":  "A sweet and tangy chicken dinner for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month."
+              },
+    "head":  {
+                 "description":  "Baked honey mustard chicken with fresh mozzarella and roasted red onion, built for meal prep. Fourteen servings at {{cal}} calories, {{protein}} grams of protein, and under 25 grams of carbs for about ${{cost_ps}} each (at everyday cost).",
+                 "keywords":  "honey mustard chicken, high protein meal prep, baked chicken meal prep, honey mustard chicken breast, budget chicken dinner, fresh mozzarella chicken, cheap high protein dinner",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT40M",
+                 "steps":  [
+                               "Whisk the honey and whole grain mustard into a glaze and reserve half for the end.",
+                               "Toss the sliced red onion with the olive oil and spread it in a large baking dish.",
+                               "Lay the chicken breasts on the onions, season the tops with salt, black pepper, and garlic powder, then brush with half the glaze.",
+                               "Top each breast with slices of fresh mozzarella and bake at 400F for about 30 minutes until the chicken reaches 165F.",
+                               "Rest 5 minutes, spoon the roasted onions over the top, scatter the parsley, drizzle on the reserved glaze, and portion into 14 containers."
+                           ],
+                 "step_names":  [
+                                    "Mix the glaze",
+                                    "Bed the onions",
+                                    "Season and glaze",
+                                    "Top and bake",
+                                    "Finish and portion"
+                                ]
+             }
+}

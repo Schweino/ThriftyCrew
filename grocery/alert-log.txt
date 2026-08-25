@@ -1094,3 +1094,35 @@
 [2026-08-23T13:25:53] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-23' [type: grocery walmart full capture aging]
 [2026-08-23T13:29:33] QUEUE ABSORBED into open item 2026-08-22-5a178d (day 1 of this condition, count now 8) - no new id minted
 [2026-08-23T13:29:33] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 1 clamped' [type: recipe price inversion clamped]
+[2026-08-24T08:12:16] QUEUE ABSORBED into open item 2026-08-22-5a178d (day 2 of this condition, count now 9) - no new id minted
+[2026-08-24T08:12:16] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 1 clamped' [type: recipe price inversion clamped]
+[2026-08-24T08:17:27] QUEUE ABSORBED into open item 2026-08-22-6827cf (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:17:27] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-24T08:17:28] QUEUE ABSORBED into open item 2026-08-22-2c3e88 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:17:28] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: store-registry drift - 21 issue(s)' [type: grocery store registry drift issue s]
+[2026-08-24T08:19:48] QUEUE ABSORBED into open item 2026-08-22-14416d (day 2 of this condition, count now 4) - no new id minted
+[2026-08-24T08:19:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 10 store(s) dropped from a commodity they carry - 2026-08-24' [type: grocery store s dropped from a commodity they carry]
+[2026-08-24T08:19:48] QUEUE ABSORBED into open item 2026-08-22-51a5b6 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-24T08:19:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: semantic sweep found 54 product(s) no rule can see - 2026-08-24' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-24T08:19:48] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 7 board cell(s) sit in the wrong store department - 2026-08-24' [type: grocery board cell s sit in the wrong store department]
+[2026-08-24T08:19:56] QUEUE ABSORBED into open item 2026-08-22-d004bf (day 2 of this condition, count now 2) - no new id minted
+[2026-08-24T08:19:56] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 4 on-sale item(s) have no everyday fallback - 2026-08-24' [type: grocery on sale item s have no everyday fallback]
+[2026-08-24T08:19:58] QUEUE BODY UPGRADED on 2026-08-22-f25be9 (302 -> 999 chars) - a later occurrence carried fuller evidence
+[2026-08-24T08:19:58] QUEUE ABSORBED into open item 2026-08-22-f25be9 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-24T08:19:58] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Database constraint refused a write' [type: database constraint refused a write]
+[2026-08-24T08:19:58] QUEUE ABSORBED into open item 2026-08-22-ad9fdd (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:19:58] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'A write broke cross-store integrity' [type: a write broke cross store integrity]
+[2026-08-24T08:19:59] QUEUE ABSORBED into open item 2026-08-22-c41c27 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:19:59] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe batch stalled with stages unfinished' [type: recipe batch stalled with stages unfinished]
+[2026-08-24T08:19:59] QUEUE ABSORBED into open item 2026-08-22-83012e (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:19:59] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-24T08:21:08] QUEUE ABSORBED into open item 2026-08-22-8360b4 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T08:21:08] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: 4 NEW price flag(s) - 2026-08-24' [type: grocery new price flag s]
+[2026-08-24T08:21:22] QUEUE ABSORBED into open item 2026-08-22-ca099c (day 2 of this condition, count now 4) - no new id minted
+[2026-08-24T08:21:22] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery: Walmart full capture aging - 2026-08-24' [type: grocery walmart full capture aging]
+[2026-08-24T08:27:44] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Tools: a live page has drifted from its local source' [type: tools a live page has drifted from its local source]
+[2026-08-24T09:30:30] QUEUE ABSORBED into open item 2026-08-22-fe7b43 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-24T09:30:30] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Grocery capture watchdog: 8 issue(s) 2026-08-24' [type: grocery capture watchdog issue s]
+[2026-08-24T18:31:56] QUEUE ABSORBED into open item 2026-08-22-5a178d (day 2 of this condition, count now 10) - no new id minted
+[2026-08-24T18:31:56] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Recipe price inversion: 1 clamped' [type: recipe price inversion clamped]
+[2026-08-24T18:51:44] MUTED (muted since 2026-08-14, no expiry) - queued but NOT emailed: 'Daily pipeline ran but did not commit (2026-08-24) - commit step or task changed around 08-19' [type: daily pipeline ran but did not commit commit step or task changed around]

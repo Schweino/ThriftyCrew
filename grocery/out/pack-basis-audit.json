@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-23 14:02",
-    "compare_file":  "comparison-2026-08-23.json",
-    "finding_count":  3,
+    "generated":  "2026-08-24 08:17",
+    "compare_file":  "comparison-2026-08-24.json",
+    "finding_count":  2,
     "confirmed_count":  0,
     "findings":  [
                      {
@@ -16,22 +16,6 @@
                          "size":  "10 pk 1.4 oz",
                          "ad":  "$3.59",
                          "item":  "ARTICHOKES HRTS 8-10 CT 6/14 OZ/CASE-KROGER (EACH)",
-                         "fingerprint":  "undecidable",
-                         "each_derived":  null,
-                         "peer_single_unit":  null
-                     },
-                     {
-                         "id":  "canned-peaches",
-                         "commodity":  "Canned Peaches",
-                         "store":  "Sam\u0027s Club",
-                         "unit":  "oz",
-                         "published":  0.0616,
-                         "as_pack_total":  1.4784,
-                         "peer_cheapest":  0.0959,
-                         "count":  24,
-                         "size":  "24 ct 4 oz",
-                         "ad":  "$5.91",
-                         "item":  "Summer Is Inside Organic Diced Peaches in Fruit Juice, 4 oz., 24 pk.",
                          "fingerprint":  "undecidable",
                          "each_derived":  null,
                          "peer_single_unit":  null

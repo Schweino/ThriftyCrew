@@ -349,6 +349,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:25f0837f43339ff9cce1",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hot\\\\s+honey|habanero\\\\s+honey\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Pace® Hot Honey Habanero' for hot honey.",
+    "status": "proposed",
+    "target_id": "hot-honey"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T06:57:51",
     "id": "lp:277900b01ac449ba9d00",
     "kind": "add_known_wrong",
@@ -408,6 +420,18 @@
     "target_id": "commodity:staple:all-purpose-cleaner"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:2c32a05694b0a1fe1fd6",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"^red\\\\s+pepper$\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Red Pepper'. Anchored to the full string to avoid matching 'Roasted Red Peppers' or 'Red Bell Pepper Sauce'. Note: 'Red Pepper' is ambiguous (could be chili flakes), but in a grocery context next to 'Roasted Red Peppers', it often指",
+    "status": "proposed",
+    "target_id": "red-bell-pepper"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:2eef5f60353339406ab6",
@@ -418,6 +442,18 @@
     "rationale": "the inverted 'Peas Sweet' feed order",
     "status": "applied",
     "target_id": "commodity:staple:canned-peas"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:2fec5989ff2298ed6721",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cut\\\\s+green\\\\s+beans\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans'. Anchors on 'Cut Green Beans' which is the standard form for frozen green beans.",
+    "status": "proposed",
+    "target_id": "frozen-cut-green-beans"
   },
   {
     "confidence": 0.9,
@@ -529,6 +565,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:38759a83f8e3ba423283",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hickory\\\\s+liquid\\\\s+smoke\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on the specific flavor/type 'Hickory Liquid Smoke'.",
+    "status": "proposed",
+    "target_id": "liquid-smoke"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T23:45:32",
     "id": "lp:38c8b7f3c781a77355af",
     "kind": "add_alias",
@@ -610,6 +658,18 @@
     "rationale": "the 'Moisturizer, <skin type>, Ultra Healing' comma order; SPF/tanning excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:lotion"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:41c8f5a0f04aabf6a2f2",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"roasted\\\\s+peppers|roasted\\\\s+red\\\\s+peppers\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Dunbars Roasted Peppers' for roasted red peppers.",
+    "status": "proposed",
+    "target_id": "roasted-red-peppers"
   },
   {
     "confidence": 0.9,
@@ -730,6 +790,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:corn-muffin-mix"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:4e99c4e806c10d00cf2e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cut\\\\s+green\\\\s+beans|steam\\\\s+cut\\\\s+green\\\\s+beans\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans' for frozen cut green beans.",
+    "status": "proposed",
+    "target_id": "frozen-cut-green-beans"
   },
   {
     "confidence": 0.9,
@@ -865,6 +937,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:5a43941a25d5cb1fd300",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"spicy\\\\s+italian\\\\s+sausage\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on 'Spicy Italian Sausage' to distinguish from mild or sweet varieties.",
+    "status": "proposed",
+    "target_id": "hot-italian-sausage"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:5bd443ef49d54c64fd59",
     "kind": "add_alias",
@@ -937,6 +1021,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:60fc3c71c54d04cb6fe9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"spicy\\\\s+italian\\\\s+sausage|cafe\\\\s+spicy\\\\s+italian\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage' for hot Italian sausage.",
+    "status": "proposed",
+    "target_id": "hot-italian-sausage"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T17:00:43",
     "id": "lp:611cefe1370e9c9bb7bd",
     "kind": "add_alias",
@@ -958,6 +1054,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:maple-syrup"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:64c19418e15f80db993b",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"jasmine|thjasmine\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Great Value Gv Thjasmine' for jasmine rice (dry).",
+    "status": "proposed",
+    "target_id": "jasmine-rice-dry"
   },
   {
     "confidence": 0.9,
@@ -1162,6 +1270,18 @@
     "rationale": "allows a form/scent phrase between 'Bathroom' and 'Cleaner'",
     "status": "applied",
     "target_id": "commodity:staple:shower-cleaner"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:7d4c9691846ab0cd1016",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"buffalo\\\\s+sauce|zesty\\\\s+buffalo\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Chick-fil-A Zesty Buffalo Sauce' specifically for buffalo wing sauce.",
+    "status": "proposed",
+    "target_id": "buffalo-wing-sauce"
   },
   {
     "confidence": 0.9,
@@ -1438,6 +1558,18 @@
     "rationale": "tolerates the singular 'Vegetable'; the canned excludes remain the guard",
     "status": "applied",
     "target_id": "commodity:staple:frozen-vegetables"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:96b38aeb310022de8f50",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"spinach\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Simply Nature Organic Spinach' for frozen chopped spinach.",
+    "status": "proposed",
+    "target_id": "frozen-chopped-spinach"
   },
   {
     "confidence": 0.9,
@@ -1740,6 +1872,18 @@
     "target_id": "commodity:staple:onion-soup-mix"
   },
   {
+    "confidence": 0.95,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:b94ce818e72eca8b947c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"caesar\\\\s+salad|chick\\\\s+caesar\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Tay Farm Chick Caesar' and other Caesar salad kit variants without matching unrelated items.",
+    "status": "proposed",
+    "target_id": "caesar-salad-kit"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:badd990f547fdc1b1081",
@@ -1848,6 +1992,18 @@
     "target_id": "commodity:staple:sweet-corn"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:c5a0e98911b2e1a0b373",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"baby\\\\s+broccoli\\\\s+florets\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Birds Eye Baby Broccoli Florets'. Anchors on 'Baby Broccoli Florets' to distinguish from regular broccoli florets if they are priced separately, though often interchangeable. High confidence due to specific product name.",
+    "status": "proposed",
+    "target_id": "frozen-broccoli-florets"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:c6586cd69c1a526158e6",
@@ -1920,6 +2076,18 @@
     "target_id": "commodity:staple:sparkling-water"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:cbbd6b5ff067974bc9b5",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"thjasmine|jasmine\\\\s+rice\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Great Value Gv Thjasmine' (likely a typo for Jasmine) and standard jasmine rice listings. The regex handles the specific typo found in the data.",
+    "status": "proposed",
+    "target_id": "jasmine-rice-dry"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:cca996c511034269c847",
@@ -1978,6 +2146,30 @@
     "rationale": "names the fresh-herb brands specifically so dried/ground thyme cannot match",
     "status": "applied",
     "target_id": "commodity:staple:fresh-thyme"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:d3d41447422f8eae352f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"hot\\\\s+honey\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on the core product name 'Hot Honey'.",
+    "status": "proposed",
+    "target_id": "hot-honey"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:d40c463be57c4b456b0f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"roasted\\\\s+peppers\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Dunbars Roasted Peppers'. Anchors on 'Roasted Peppers'.",
+    "status": "proposed",
+    "target_id": "roasted-red-peppers"
   },
   {
     "confidence": 0.9,
@@ -2185,6 +2377,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:ec266f9d4b343086748e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"red\\\\s+pepper|red\\\\s+bell\\\\s+pepper\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Red Pepper' for red bell pepper.",
+    "status": "proposed",
+    "target_id": "red-bell-pepper"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:ec8b6ad45be3fff637c6",
     "kind": "add_alias",
@@ -2232,6 +2436,18 @@
     "target_id": "apple-cider"
   },
   {
+    "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:f301cd43eafbf9dc2ae6",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"liquid\\\\s+smoke|hickory\\\\s+liquid\\\\s+smoke\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade' for liquid smoke.",
+    "status": "proposed",
+    "target_id": "liquid-smoke"
+  },
+  {
     "confidence": 0.7,
     "created_at": "2026-08-21T01:00:34",
     "id": "lp:f4815b86b55fade1a748",
@@ -2254,6 +2470,18 @@
     "rationale": "Matches 'Burman's Medium Wing Sauce' by anchoring on the specific flavor variant name.",
     "status": "proposed",
     "target_id": "buffalo-wing-sauce"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-24T21:32:21",
+    "id": "lp:f6b7c1fe62147e339717",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"broccoli\\\\s+florets|baby\\\\s+broccoli\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Birds Eye Baby Broccoli Florets' for frozen broccoli florets.",
+    "status": "proposed",
+    "target_id": "frozen-broccoli-florets"
   },
   {
     "confidence": 0.9,
@@ -2362,5 +2590,17 @@
     "rationale": "the 'No Beans Chili' and 'Chili Without Beans' orders the existing pattern misses",
     "status": "applied",
     "target_id": "commodity:staple:canned-chili"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-23T21:31:53",
+    "id": "lp:ff96cdbe378d25ad36d7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"shredded\\\\s+mozzarella|mozzarella\\\\s+shredded\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches multiple listings: 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', 'Sargento Mozzarella Shredded Cheese', etc. Anchors on the combination of 'Shredded' and 'Mozzarella'.",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
   }
 ]

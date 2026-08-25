@@ -1,7 +1,7 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-24T12:21:19",
+ "generated": "2026-08-24T19:11:58",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -34,6 +34,14 @@
      "url": "https://www.samsclub.com/p/-/731TC4PY73ON"
     },
     {
+     "item": "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
+     "price": 12.98,
+     "size": "",
+     "unit_price": "$1.08/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15T8I1MC50OK"
+    },
+    {
      "item": "Premier Protein 30g Coffeehouse Variety Pack, 11.5 fl. oz., 12 pk.",
      "price": 24.98,
      "size": "",
@@ -50,14 +58,6 @@
      "url": "https://www.samsclub.com/p/-/10Q2YRGCPUOS"
     },
     {
-     "item": "Premier Protein High Protein Shake, Coffeehouse Mocha, 11 fl. oz., 15 pk.",
-     "price": 26.64,
-     "size": "",
-     "unit_price": "$0.16/foz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/117LPXNIE1A0"
-    },
-    {
      "item": "Vital Proteins Collagen Peptides Powder, Limited Edition Ice Pop, 26.3 oz.",
      "price": 29.98,
      "size": "",
@@ -66,99 +66,20 @@
      "url": "https://www.samsclub.com/p/-/4E5YVILXAQ6H"
     },
     {
-     "item": "RAW Grass Fed Whey Isolate Protein, Milk & Cookies, 1.56 lbs.",
-     "price": 29.98,
-     "size": "",
-     "unit_price": "$1.20/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3RO562IUXWDE"
-    },
-    {
-     "item": "Premier Protein 30g High Protein Shake, Pumpkin Spice 11 fl. oz., 15 pk.",
+     "item": "Premier Protein High Protein Shake, Coffeehouse Mocha, 11 fl. oz., 15 pk.",
      "price": 26.64,
      "size": "",
      "unit_price": "$0.16/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4KMLRXGH2PUC"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "chicken drumsticks",
-   "state": "MATCHES",
-   "term_used": "chicken drumsticks",
-   "attempts": [
-    {
-     "term": "chicken drumsticks",
-     "state": "MATCHES",
-     "hits": 20
-    }
-   ],
-   "hits": [
-    {
-     "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
-     "price": 27.08,
-     "size": "",
-     "unit_price": "$6.77/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
+     "url": "https://www.samsclub.com/p/-/117LPXNIE1A0"
     },
     {
-     "item": "Buena Mesa Authentically Seasoned Fajita Chicken, priced per pound",
-     "price": 19.04,
+     "item": "VitaCup Mushroom Focus Coffee, 16 oz.",
+     "price": 19.98,
      "size": "",
-     "unit_price": "$4.76/lb",
+     "unit_price": "$1.25/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3XL0EDZI1JJ5"
-    },
-    {
-     "item": "Member's Mark Chicken Drumsticks, priced per pound",
-     "price": 4.89,
-     "size": "",
-     "unit_price": "$0.98/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/70H7BHXK0D6R"
-    },
-    {
-     "item": "Member's Mark Chicken Drumsticks, Case, priced per pound",
-     "price": 39.3,
-     "size": "",
-     "unit_price": "$0.98/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1ZN6GCLO35JL"
-    },
-    {
-     "item": "SUMM! Chicken Dumplings with Chili Crisp Oil, 2PK (16.23 oz)",
-     "price": 8.64,
-     "size": "",
-     "unit_price": "",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3NM9YEPXSSBS"
-    },
-    {
-     "item": "Nature Raised Farms Fully Cooked Lightly Breaded Chicken Breast Strips, Frozen, 2.5 lbs.",
-     "price": 15.97,
-     "size": "",
-     "unit_price": "$6.39/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0Y3T1FF0O3IH"
-    },
-    {
-     "item": "Member's Mark Chicken Thighs, Case, priced per pound",
-     "price": 60.85,
-     "size": "",
-     "unit_price": "$1.28/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/68S6A0SC80AT"
-    },
-    {
-     "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
-     "price": 108.67,
-     "size": "",
-     "unit_price": "$2.48/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+     "url": "https://www.samsclub.com/p/-/2QZ1QSSOZSG3"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

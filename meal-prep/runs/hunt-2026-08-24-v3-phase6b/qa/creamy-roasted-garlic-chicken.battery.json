@@ -1,0 +1,215 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "creamy-roasted-garlic-chicken",
+  "generated": "2026-08-24T19:29:46",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-24-v3-phase6b\\extracted\\creamy-roasted-garlic-chicken.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 10,
+        "source_ingredients": 14,
+        "matched": 9,
+        "invented": [
+          "Hot Sauce"
+        ],
+        "dropped": [
+          "Tabasco"
+        ],
+        "consolidated": [
+          "butter",
+          "all purpose flour",
+          "salt",
+          "black pepper"
+        ]
+      },
+      "detail": "INVENTED: 'Hot Sauce' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'Tabasco' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states 'butter' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'all purpose flour' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'black pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Hot Sauce' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Tabasco' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'butter' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'all purpose flour' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'black pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 6,
+        "unrated": 2,
+        "exempt": 2,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "2 lb",
+            "spec": "7 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Butter",
+            "source": "2 tbsp",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "All-Purpose Flour",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Milk",
+            "source": "2 cup",
+            "spec": "7 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Garlic",
+            "why": "the two measures are not the same kind (count:head vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Hot Sauce",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Salt",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 6 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 4,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 15g carbs, the stat says 15; head.description says 15g carbs, the stat says 15",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 15g carbs, the stat says 15"
+        },
+        {
+          "severity": "fail",
+          "detail": "head.description says 15g carbs, the stat says 15"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Creamy Roasted Garlic Chicken",
+        "spec_source_url": "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+        "transcription_source_url": "https://keviniscooking.com/creamy-roasted-garlic-chicken/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

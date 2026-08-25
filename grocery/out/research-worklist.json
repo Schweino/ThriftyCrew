@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-23 13:18",
+    "generated":  "2026-08-24 08:17",
     "items":  [
                   {
                       "commodity":  "bacon-bits",
@@ -9,6 +9,16 @@
                   {
                       "commodity":  "miracle-whip",
                       "store":  "Baker\u0027s",
+                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
+                  },
+                  {
+                      "commodity":  "red-wine",
+                      "store":  "Hy-Vee",
+                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
+                  },
+                  {
+                      "commodity":  "white-wine",
+                      "store":  "Hy-Vee",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   }
               ]

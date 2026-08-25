@@ -1,0 +1,147 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Beef Stroganoff Soup",
+  "source_url": "https://www.spendwithpennies.com/beef-stroganoff-soup/",
+  "servings": 4,
+  "time_total": "75 minutes",
+  "time_active": "20 minutes",
+  "ingredients": [
+    {
+      "raw": "1 onion (diced)",
+      "item": "onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons olive oil (divided)",
+      "item": "olive oil",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 pound stewing beef (trimmed)",
+      "item": "stewing beef",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "trimmed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "salt and black pepper (to taste)",
+      "item": "salt and black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 clove garlic (minced)",
+      "item": "garlic",
+      "qty": "1",
+      "unit": "clove",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces mushrooms (brown or white, sliced)",
+      "item": "mushrooms",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": "(brown or white, sliced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 cups reduced sodium beef broth",
+      "item": "reduced sodium beef broth",
+      "qty": "6",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup red wine",
+      "item": "red wine",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons cornstarch",
+      "item": "cornstarch",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup sour cream",
+      "item": "sour cream",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tablespoons chopped fresh parsley",
+      "item": "fresh parsley",
+      "qty": "3",
+      "unit": "tablespoons",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ cups egg noodles (measured dry, cooked according to package directions)",
+      "item": "egg noodles",
+      "qty": "1 ½ cups",
+      "unit": null,
+      "prep": "measured dry, cooked according to package directions",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat 2 tablespoons olive oil over medium-high heat. Season the stewing beef with salt and pepper and cook until browned. Set aside.",
+    "Add 1 tablespoon olive oil and cook onion until tender, about 5 minutes. Add garlic and mushrooms. Cook 3-4 minutes or until tender.",
+    "Stir in wine, broth, Worcestershire sauce, and beef and bring to a boil, cover and reduce to a simmer. Allow to simmer 45 minutes or until beef is tender.",
+    "Combine cornstarch with 3 tablespoons cold water. Whisk into boiling soup until slightly thickened. Remove from heat and stir in sour cream and parsley.",
+    "Place egg noodles in the bottom of a bowl. Top with soup and serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

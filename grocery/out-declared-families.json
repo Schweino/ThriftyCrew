@@ -1,0 +1,11 @@
+{
+  "readme": "DECLARED NEW FAMILIES under grocery/out. Read by capture-run.ps1's commit gate, which refuses any commit containing a top-level directory under grocery/out that HEAD has never tracked (the browser-profiles mechanism, 2026-08-22). That refusal is correct for a surprise and wrong for a feature: on 2026-08-24 check-ad-cycles.ps1 began writing out/cadence, the gate refused, and BOTH scheduled runs failed the same way every day after - because the only stated way through was -ForceBigCommit, an interactive switch an unattended 07:00 task can never pass. This file is that missing durable path. It can only ever ADMIT a brand-new directory into a commit; it can never exclude, ignore or untrack anything, so it cannot cause the silent-drop failure that PLAN-storage-hygiene section 3.1's prune-list allowlist would have. Declaring a family is a deliberate act with a named writer and a reason: if you cannot name the script that writes it, it is not a family, it is the incident. Undeclared new directories still refuse, exactly as before, and the size caps apply to a declared family like any other.",
+  "families": [
+    {
+      "dir": "cadence",
+      "since": "2026-08-24",
+      "writer": "grocery/check-ad-cycles.ps1",
+      "why": "One ASCII ISO-8601 stamp per advisory auditor (semantic, aisle-test, matcher-parity, precedence-ladders, store-registry, commodity-dupes, search-terms, guard-contract, cloud-readiness, test-auditors) recording when it last ran. The cadence gate reads these to decide whether a weekly/3-day auditor is due. Persistent state, not scratch: lose it and every auditor is due forever, which is the failure test-cadence.ps1 case 2 exists to catch. Same family as grocery/ghost-drift-weekly-stamp.txt, which is tracked. ~35 bytes per file, one file per auditor, no growth over time."
+    }
+  ]
+}

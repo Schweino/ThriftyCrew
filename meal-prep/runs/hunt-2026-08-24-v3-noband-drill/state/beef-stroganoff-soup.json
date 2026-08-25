@@ -1,0 +1,43 @@
+{
+    "slug":  "beef-stroganoff-soup",
+    "title":  "Beef Stroganoff Soup",
+    "source_url":  "https://www.spendwithpennies.com/beef-stroganoff-soup/",
+    "protein":  "beef",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-24T15:32:06",
+    "updated":  "2026-08-24T15:37:14",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T15:32:06",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/beef-stroganoff-soup/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T15:32:06",
+                        "by":  "decider",
+                        "detail":  "A brothy stroganoff soup (6 cups broth, stewing-beef chunks, spoon dish) is a genuinely different dinner and format from the catalog\u0027s Ground Beef Stroganoff Pasta plate; verified band 454cal/26c/35p fits well and adds a soup format to the beef-cream region."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T15:32:25",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T15:37:14",
+                        "by":  "mapper",
+                        "detail":  "{\"counts\": {\"residual_lines_ruled\": 6, \"rejected\": 0, \"new_commodity_proposals\": 1, \"vocabulary_rows_proposed\": 2, \"food_db_rows_added\": 1}, \"rejections\": \"None. Every residual line resolved on its merits; no mapping was stretched, so no line needed a null.\", \"food_db_row_added\": \"Stewing Beef, per 100 g: 128 cal / 22 P / 0.2 C / 4 F. USDA SR \u0027Beef, chuck for stew, separable lean and fat, all grad"
+                    }
+                ]
+}

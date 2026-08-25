@@ -1,20 +1,20 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-08-23",
-                  "pid":  19148,
-                  "started":  "2026-08-23T08:00:02",
-                  "updated":  "2026-08-23T08:29:09",
+                  "date":  "2026-08-24",
+                  "pid":  31020,
+                  "started":  "2026-08-24T08:00:01",
+                  "updated":  "2026-08-24T08:28:24",
                   "stage":  "complete",
                   "exit_code":  1,
-                  "log":  "--- run-log: capture-run-daily | 2026-08-23T08:00:02 | pid 19148 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-08-23.log"
+                  "log":  "--- run-log: capture-run-daily | 2026-08-24T08:00:01 | pid 31020 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-08-24.log"
               },
     "ad":  {
-               "date":  "2026-08-23",
-               "pid":  37752,
-               "started":  "2026-08-23T07:00:02",
-               "updated":  "2026-08-23T07:01:15",
+               "date":  "2026-08-24",
+               "pid":  26672,
+               "started":  "2026-08-24T07:00:01",
+               "updated":  "2026-08-24T07:00:59",
                "stage":  "complete",
                "exit_code":  1,
-               "log":  "--- run-log: capture-run-ad | 2026-08-23T07:00:02 | pid 37752 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-08-23.log"
+               "log":  "--- run-log: capture-run-ad | 2026-08-24T07:00:01 | pid 26672 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-08-24.log"
            }
 }

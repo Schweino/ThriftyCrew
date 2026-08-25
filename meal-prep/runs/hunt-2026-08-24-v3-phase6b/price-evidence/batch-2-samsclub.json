@@ -1,322 +1,322 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-24T12:38:27",
+ "generated": "2026-08-24T19:22:59",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "beef back ribs",
+   "term": "fresh mozzarella cheese",
    "state": "MATCHES",
-   "term_used": "beef back ribs",
+   "term_used": "fresh mozzarella cheese",
    "attempts": [
     {
-     "term": "beef back ribs",
+     "term": "fresh mozzarella cheese",
      "state": "MATCHES",
-     "hits": 20
+     "hits": 25
     }
    ],
    "hits": [
     {
-     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
-     "price": 31.47,
+     "item": "Frigo Cheese Heads Yellow Cheddar & Turkey Sticks, 18.9 oz, 24 count",
+     "price": 10.47,
      "size": "",
-     "unit_price": "$15.73/lb",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+     "url": "https://www.samsclub.com/p/-/2VWODA2RI7O5"
     },
     {
-     "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
-     "price": 28.64,
+     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+     "price": 7.44,
      "size": "",
-     "unit_price": "$7.16/lb",
+     "unit_price": "$0.31/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
     },
     {
-     "item": "90%/10% Ground Beef Chub, Case, priced per pound",
-     "price": 442.71,
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
      "size": "",
-     "unit_price": "$5.22/lb",
+     "unit_price": "$2.43/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/740SBJFV7YFB"
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
     },
     {
-     "item": "USDA Choice Angus Beef Top Butt Boneless Center Cut, Case, priced per pound",
-     "price": 662.71,
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
      "size": "",
-     "unit_price": "$9.74/lb",
+     "unit_price": "$0.18/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/65M2XLQ1VI4L"
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
     },
     {
-     "item": "Sirloin Tip, Case  priced per pound",
-     "price": 414.73,
+     "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
      "size": "",
-     "unit_price": "$6.47/lb",
+     "unit_price": "$2.43/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5OCWZYGPSEHZ"
+     "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
     },
     {
-     "item": "USDA Choice Beef Cheek Meat, Case, priced per pound",
-     "price": 146.82,
+     "item": "Member's Mark Light String Cheese 36 ct.",
+     "price": 7.27,
      "size": "",
-     "unit_price": "$4.94/lb",
+     "unit_price": "$0.20/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/54HKBE6SI6VN"
+     "url": "https://www.samsclub.com/p/-/7IM6BJPRZN7R"
     },
     {
-     "item": "Whole Beef Chuck Roll, Case, priced per pound",
-     "price": 505.77,
+     "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+     "price": 9.47,
      "size": "",
-     "unit_price": "$6.64/lb",
+     "unit_price": "$0.20/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2MLNNSAI1WGQ"
+     "url": "https://www.samsclub.com/p/-/1UADNMJ2D50Y"
     },
     {
-     "item": "Member's Mark USDA Choice Angus Whole Beef Special Trim, Cryovac, priced per pound",
-     "price": 104.23,
+     "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+     "price": 8.28,
      "size": "",
-     "unit_price": "$6.47/lb",
+     "unit_price": "$0.26/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7L32XW8Q5R0M"
+     "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
   },
   {
-   "term": "malt vinegar",
+   "term": "whole grain mustard",
    "state": "MATCHES",
-   "term_used": "malt vinegar",
+   "term_used": "whole grain mustard",
    "attempts": [
     {
-     "term": "malt vinegar",
+     "term": "whole grain mustard",
      "state": "MATCHES",
-     "hits": 18
+     "hits": 17
     }
    ],
    "hits": [
     {
-     "item": "Carrington Farms Liquid Coconut Cooking Oil, 40 oz.",
-     "price": 16.98,
-     "size": "",
-     "unit_price": "$0.42/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/27E3J39AUTUU"
-    },
-    {
-     "item": "Carrington Farms Ghee, Clarified Butter, 54 oz.",
-     "price": 20.98,
-     "size": "",
-     "unit_price": "$0.39/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5QHK0EQ5HQQD"
-    },
-    {
-     "item": "Bragg Organic Apple Cider Vinegar, 32 oz., 2 pk.",
-     "price": 9.98,
-     "size": "",
-     "unit_price": "$0.16/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4JT9BNL5H1TH"
-    },
-    {
-     "item": "Member's Mark Clear Frying Oil 35 lbs.",
-     "price": 39.98,
-     "size": "",
-     "unit_price": "$0.07/foz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6ITEQVDEI609"
-    },
-    {
-     "item": "Member's Mark Distilled White Vinegar, 1 gal., 2 pk.",
-     "price": 5.98,
-     "size": "",
-     "unit_price": "$0.02/foz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/60JHSKP6738J"
-    },
-    {
-     "item": "Filippo Berio Extra Virgin Olive Oil, 67.6 oz.",
-     "price": 18.98,
-     "size": "",
-     "unit_price": "$0.28/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/481WJWUZPNHA"
-    },
-    {
-     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar, 128 fl. oz.",
-     "price": 16.98,
+     "item": "Duke's Real Mayonnaise, 64 fl. oz.",
+     "price": 8.48,
      "size": "",
      "unit_price": "$0.13/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2E5K6II8HHV7"
+     "url": "https://www.samsclub.com/p/-/7KZ0ECF2JHUS"
     },
     {
-     "item": "Member's Mark Canola Oil, 192 fl. oz.",
-     "price": 13.88,
+     "item": "McCormick Mayonesa Mayonnaise with Lime Juice, 28 fl. oz., 2 pk.",
+     "price": 11.68,
      "size": "",
-     "unit_price": "$0.07/foz",
+     "unit_price": "$0.21/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3IOIUS59BY8W"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "dried onion flakes",
-   "state": "MATCHES",
-   "term_used": "dried onion flakes",
-   "attempts": [
-    {
-     "term": "dried onion flakes",
-     "state": "MATCHES",
-     "hits": 22
-    }
-   ],
-   "hits": [
-    {
-     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
-     "price": 4.98,
-     "size": "",
-     "unit_price": "$0.17/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+     "url": "https://www.samsclub.com/p/-/7FNF33KHHSED"
     },
     {
-     "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
-     "price": 6.98,
+     "item": "French's Mustard Single-Serve Packets, 5.5 g., 500 ct.",
+     "price": 13.24,
      "size": "",
-     "unit_price": "$0.70/oz",
+     "unit_price": "$0.03/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+     "url": "https://www.samsclub.com/p/-/55J5IBTFQW1T"
     },
     {
-     "item": "Member's Mark Minced Onion, 15 oz.",
-     "price": 7.98,
+     "item": "Hellmann's Real Mayonnaise, 64 fl. oz.",
+     "price": 9.48,
      "size": "",
-     "unit_price": "$0.53/oz",
+     "unit_price": "$0.15/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0XPU85B6UZOD"
+     "url": "https://www.samsclub.com/p/-/1WVQFO3USD8Q"
     },
     {
-     "item": "Mrs. Dash Original Seasoning, 10 oz.",
-     "price": 6.98,
+     "item": "Best Foods Real Mayonnaise, 64 fl. oz.",
+     "price": 9.48,
      "size": "",
-     "unit_price": "$0.70/oz",
+     "unit_price": "$0.15/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+     "url": "https://www.samsclub.com/p/-/5AYZNWGGFIVM"
     },
     {
-     "item": "Dan-O's Original Seasoning, 8.9 oz.",
-     "price": 6.98,
-     "size": "",
-     "unit_price": "$0.78/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
-    },
-    {
-     "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+     "item": "Yellowbird Blue Agave Sriracha, 19.6 oz.",
      "price": 8.98,
      "size": "",
-     "unit_price": "$0.56/oz",
+     "unit_price": "$0.46/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+     "url": "https://www.samsclub.com/p/-/5AVA01F864WZ"
     },
     {
-     "item": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
-     "price": 5.98,
+     "item": "French's 100% Natural Classic Yellow Mustard, 30 oz., 2 pk.",
+     "price": 5.48,
      "size": "",
-     "unit_price": "$0.66/oz",
+     "unit_price": "$0.09/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4KBPWOZW3WU1"
+     "url": "https://www.samsclub.com/p/-/67I7U5OZ8MLK"
     },
     {
-     "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
-     "price": 6.98,
-     "size": "",
-     "unit_price": "$1.16/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "canned crushed pineapple",
-   "state": "MATCHES",
-   "term_used": "canned crushed pineapple",
-   "attempts": [
-    {
-     "term": "canned crushed pineapple",
-     "state": "MATCHES",
-     "hits": 15
-    }
-   ],
-   "hits": [
-    {
-     "item": "Del Monte Sweet Peas, 105 oz.",
-     "price": 7.12,
-     "size": "",
-     "unit_price": "$0.07/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3WTTXI3YJUV4"
-    },
-    {
-     "item": "Del Monte Whole Kernel Corn, 106 oz.",
-     "price": 5.76,
+     "item": "French's 100% Natural Classic Yellow Mustard, 105 oz.",
+     "price": 5.38,
      "size": "",
      "unit_price": "$0.05/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2CLHKQS2F6MO"
+     "url": "https://www.samsclub.com/p/-/10SK1OVVNA7O"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "green bell pepper",
+   "state": "MATCHES",
+   "term_used": "green bell pepper",
+   "attempts": [
+    {
+     "term": "green bell pepper",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
     },
     {
-     "item": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
-     "price": 7.86,
+     "item": "Green Bell Peppers, 6 ct.",
+     "price": 4.97,
      "size": "",
-     "unit_price": "$0.23/oz",
+     "unit_price": "$0.83/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0V8BGXDOBK9P"
+     "url": "https://www.samsclub.com/p/-/206QFTWNWXV2"
     },
     {
-     "item": "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
-     "price": 8.42,
+     "item": "Multi Bell Sweet Peppers, 6 ct.",
+     "price": 5.97,
      "size": "",
-     "unit_price": "$1.05/ea",
+     "unit_price": "$0.99/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2IS6C9JATZ5E"
+     "url": "https://www.samsclub.com/p/-/4NC1O4LLPTI8"
     },
     {
-     "item": "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
-     "price": 12.98,
+     "item": "Russet Potatoes, 10 lbs.",
+     "price": 4.96,
      "size": "",
-     "unit_price": "$1.08/ea",
+     "unit_price": "$0.50/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/15T8I1MC50OK"
+     "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
     },
     {
-     "item": "Le Sueur Very Young Small Sweet Peas, 15 oz., 8 ct.",
-     "price": 12.98,
+     "item": "Organic Yellow Onions, 5 lbs.",
+     "price": 5.22,
      "size": "",
-     "unit_price": "$1.62/ea",
+     "unit_price": "$1.04/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4OUEK2V3VO10"
+     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
     },
     {
-     "item": "Terra Verde Marinated Quartered Artichoke Hearts, 34 oz.",
-     "price": 5.51,
+     "item": "Tomatoes on the Vine, 3 lbs.",
+     "price": 4.97,
      "size": "",
-     "unit_price": "$0.16/oz",
+     "unit_price": "$1.66/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2PBJW1G43NUS"
+     "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
     },
     {
-     "item": "Allens Italian Style Green Beans, 28 oz., 6 pk.",
-     "price": 12.78,
+     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+     "price": 4.92,
      "size": "",
-     "unit_price": "$2.13/ea",
+     "unit_price": "$2.46/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/52T1MCWNTSW5"
+     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+    },
+    {
+     "item": "Sweet Mini Peppers, 1.5 lbs.",
+     "price": 5.15,
+     "size": "",
+     "unit_price": "$3.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JE9I2ZU0VCN"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "cotija cheese",
+   "state": "MATCHES",
+   "term_used": "cotija cheese",
+   "attempts": [
+    {
+     "term": "cotija cheese",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Frigo Cheese Heads Yellow Cheddar & Turkey Sticks, 18.9 oz, 24 count",
+     "price": 10.47,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2VWODA2RI7O5"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+     "price": 7.44,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+    },
+    {
+     "item": "El Viajero Panela Basket Cheese 3 lbs.",
+     "price": 11.67,
+     "size": "",
+     "unit_price": "$3.89/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0RQKQXZG40PD"
+    },
+    {
+     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.30/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+    },
+    {
+     "item": "Member's Mark Grated Parmesan Cheese, 24 oz.",
+     "price": 7.42,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XOCVA61RIFC"
+    },
+    {
+     "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+     "price": 12.87,
+     "size": "",
+     "unit_price": "$7.35/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3OV28O1VC6S4"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

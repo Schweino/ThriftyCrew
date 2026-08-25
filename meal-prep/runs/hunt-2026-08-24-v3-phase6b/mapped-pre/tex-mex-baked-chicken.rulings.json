@@ -1,0 +1,194 @@
+{
+ "slug": "tex-mex-baked-chicken",
+ "lines": [
+  {
+   "raw": "30 oz black beans ((2 15-oz cans), drained)",
+   "buy": "seven 15 oz cans, drained (about 7 cups)",
+   "grams_source": 510,
+   "notes": "COST BASIS WARNING: 510 g is the DRAINED weight that goes in the dish (about 255 g per 15 oz can), which is the right basis for macros against the 1/2 cup = 130 g drained label. The purchase is 30 oz gross per source batch, so a per-gram cost off this number under-prices the cans by roughly 40%."
+  },
+  {
+   "raw": "1 medium yellow onion ( diced)",
+   "buy": "3 1/2 medium, diced",
+   "grams_source": 110,
+   "notes": "House medium onion, same 110 g the table used for the red onion in the sister recipe."
+  },
+  {
+   "raw": "1 green bell pepper (diced)",
+   "buy": "3 1/2 medium, diced",
+   "grams_source": 119,
+   "notes": "119 g is the existing Green Bell Peppers food row's own medium-pepper each-weight."
+  },
+  {
+   "raw": "2 lbs chicken breasts ((See Note 1))",
+   "buy": "7 lb",
+   "grams_source": 907,
+   "notes": "Weight stated on the line."
+  },
+  {
+   "raw": "1/2 tsp garlic powder",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp ground cumin",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp chili seasoning",
+   "buy": "1 3/4 tsp chili powder",
+   "grams_source": 1.35,
+   "notes": "USDA chili powder 2.7 g per tsp."
+  },
+  {
+   "raw": "1/2 tsp kosher salt",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp black pepper",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 1/2 cups red enchilada sauce",
+   "buy": "5 1/4 cups",
+   "grams_source": 360,
+   "notes": "240 g per cup, matching the Enchilada Sauce row's 1/4 cup = 60 g label."
+  },
+  {
+   "raw": "1 1/2 cups cheddar cheese (or Oaxaca cheese)",
+   "buy": "5 1/4 cups shredded",
+   "grams_source": 170,
+   "notes": "Settled identity but the table computed NO weight, so I weighed it: 1/4 cup shredded = 28 g on the Cheddar Cheese, Shredded row, so 1 1/2 cups = 170 g."
+  },
+  {
+   "raw": "1/2 cup crumbled cotija cheese (or queso fresco)",
+   "buy": "1 3/4 cups crumbled",
+   "grams_source": 56,
+   "notes": "1 oz = 28 g is about 1/4 cup crumbled on the Cacique label."
+  },
+  {
+   "raw": "cilantro (for garnish)",
+   "buy": "1/2 cup chopped, for garnish",
+   "grams_source": 10,
+   "notes": "No quantity on the source page; 10 g source is a garnish handful and is macro-immaterial."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "30 oz black beans ((2 15-oz cans), drained)",
+   "term": "black beans",
+   "canon_item": "Canned Black Beans",
+   "bid": "canned-black-beans",
+   "decision": "mapped",
+   "grams_source": 510,
+   "evidence": "The line names its own form - 2 15-oz cans, drained - so this is canned, not dry, and plain rather than the Seasoned Black Beans row. Grams are the drained yield (255 g per can), matching the food row's drained 1/2 cup = 130 g basis."
+  },
+  {
+   "raw": "1 medium yellow onion ( diced)",
+   "term": "medium yellow onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "Same form, same variety as the Yellow Onion vocabulary row; onions is priced 7 of 7. Not red-onion, which is its own variety price."
+  },
+  {
+   "raw": "1 green bell pepper (diced)",
+   "term": "green bell pepper",
+   "canon_item": "Green Bell Peppers",
+   "bid": "green-bell-pepper",
+   "decision": "mapped",
+   "grams_source": 119,
+   "evidence": "Green is a separate price class from red by standing precedent and the estate already carries red and yellow as their own ids; no commodity claims green, so the id is proposed rather than bridged. canon_item uses the plural spelling deliberately - it is the exact existing food-macros-db row (24 cal / 119 g)."
+  },
+  {
+   "raw": "2 lbs chicken breasts ((See Note 1))",
+   "term": "chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 907,
+   "evidence": "Plain breasts, weight stated on the line; chicken-breast priced 7 of 7. Note 1 is a thickness note, not a cut change."
+  },
+  {
+   "raw": "1/2 tsp chili seasoning",
+   "term": "chili seasoning",
+   "canon_item": "Chili Powder",
+   "bid": "chili-powder",
+   "decision": "mapped",
+   "grams_source": 1.35,
+   "evidence": "The source's own step 1 calls this line chili powder, and 1/2 tsp is a spice-jar measure, not a seasoning packet. Same spice-aisle product and price class; existing Chili Powder food row."
+  },
+  {
+   "raw": "1 1/2 cups red enchilada sauce",
+   "term": "red enchilada sauce",
+   "canon_item": "Enchilada Sauce",
+   "bid": "enchilada-sauce",
+   "decision": "mapped",
+   "grams_source": 360,
+   "evidence": "Red is the default the enchilada-sauce commodity prices (5 of 7 stores) and the Enchilada Sauce food row is Old El Paso red; 'red' is a qualifier here, not a form flip."
+  },
+  {
+   "raw": "1/2 cup crumbled cotija cheese (or queso fresco)",
+   "term": "cotija cheese",
+   "canon_item": "Cotija Cheese",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 56,
+   "evidence": "Board ABSENT: no commodity and no capture match. Will not bridge onto parmesan or a generic cheese id - different food, different price class - so null with the term enqueued. New label row added."
+  },
+  {
+   "raw": "cilantro (for garnish)",
+   "term": "cilantro",
+   "canon_item": "Fresh Cilantro",
+   "bid": "cilantro",
+   "decision": "mapped-optional",
+   "grams_source": 10,
+   "evidence": "A chopped garnish is fresh cilantro, not dried coriander leaf; the cilantro commodity is priced 6 of 7 and the Fresh Cilantro food row exists. The extraction marks the line optional."
+  }
+ ],
+ "absent_terms": [
+  "green bell pepper",
+  "cotija cheese"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "green bell pepper",
+   "proposed_bid": "green-bell-pepper",
+   "evidence": "Standing precedent explicitly rejects pricing green peppers off red-bell-pepper (variety price class), and the estate already splits this food by colour: red-bell-pepper and yellow-bell-pepper are separate ids and separate food-DB rows (31 vs 27 cal per 100 g), with a Green Bell Peppers macro row already on the books at 24 cal / 119 g. The pre-resolve's own namespace sweep returned 'no commodity claims it' while today's captures carry matching products, so this is an unpriced sibling of two existing ids rather than a duplicate of any of them. If a green-pepper id already exists under another spelling, alias to it - the food is the ordinary fresh green bell pepper, sold by the each."
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "green-bell-pepper",
+   "verdict": "alias",
+   "bid": "green-bell-pepper",
+   "reason": "The id already exists and is already priced - the mapper's sweep missed the recipe-board namespace: recipe-board-everyday.json carries a 'green-bell-pepper' row (Green Bell Pepper, unit=each, fresh green bells at Sam's/Walmart/Aldi/Baker's, e.g. 'Fresh Green Bell Pepper' $0.86), the live feed smp-feed.json prices green-bell-pepper at $0.77/each (Fareway, n=5 stores), and recipe-floor-id-map.json already declares the recipe-spelling alias green-bell-pepper -> bell-peppers (the weekly staples id whose include patterns cover 'green\\s+bell' and which shows the identical $0.77 Fareway crown, n=5 - the same rows). Nothing to mint and no edit needed: resolve the tex-mex-baked-chicken line to the existing green-bell-pepper id (per-each), which the existing floor-map entry already routes to the bell-peppers weekly commodity."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 548,
+   "protein_g": 64,
+   "carbs_g": 16
+  },
+  "our_computed_per_serving": {
+   "calories": 637.0,
+   "protein_g": 71.2,
+   "carbs_g": 32.3
+  },
+  "delta_pct": {
+   "calories": 16.2,
+   "protein": 11.3,
+   "carbs": 102
+  },
+  "servings_source": 4,
+  "verdict": "PASS ON PROTEIN (+11.3%, inside the band, so the 907 g chicken and the cheese portions are right) but FLAG THE CARBS LOUDLY. The source's published 16 g carb per serving is arithmetically impossible with two 15-oz cans of black beans: 510 g drained carries 86 g of carbohydrate on its own, which is 21.6 g per serving before anything else on the line list. Our 32.3 g is the honest number and the source's is wrong, most likely a net-carb or one-can calculation. Two consequences the orchestrator should see: at 32.3 g this recipe still clears the run's 35 g ceiling, but only by 2.7 g, and at 637 cal it clears the 650 ceiling by 13 - both would flip if the beans were costed at gross can weight instead of drained, or if the cheese were rounded up."
+ }
+}

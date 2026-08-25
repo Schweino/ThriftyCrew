@@ -1,0 +1,158 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Creamy Roasted Garlic Chicken",
+  "source_url": "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 lbs chicken breasts",
+      "item": "chicken breasts",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "salt",
+      "item": "salt",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "black pepper",
+      "item": "black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp all purpose flour ((plus more if needed))",
+      "item": "all purpose flour",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": "(plus more if needed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 head of garlic ((about 15 cloves))",
+      "item": "head of garlic",
+      "qty": "1",
+      "unit": null,
+      "prep": "(about 15 cloves)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tbsp butter",
+      "item": "butter",
+      "qty": "3",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tbsp all purpose flour",
+      "item": "all purpose flour",
+      "qty": "3",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups milk",
+      "item": "milk",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup grated Parmesan cheese",
+      "item": "grated Parmesan cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "salt",
+      "item": "salt",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "black pepper",
+      "item": "black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp Tabasco ((optional))",
+      "item": "Tabasco",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": "optional",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat an entire head of garlic, broken up into individual cloves with skin still on, in a hot skillet. Cook the cloves over medium heat for 15 minutes, stirring to turn and brown most of the time. The skins may turn black, but the garlic inside will be softened. Peel or squeeze after cooled and mash with the side of a kitchen knife until smooth. Set aside.",
+    "If chicken is large, slice each breast horizontal for 2 cutlets per breast. Season both sides with kosher salt, black pepper and Italian seasoning. Dust each side with flour. Set aside.",
+    "In a large skillet over medium high heat add 2 tablespoons of the butter and the oil. Sauté chicken for several minutes on each side until golden brown and crispy (internal temp should be 165°F). Do in batches if needed.",
+    "Remove from pan and place on a plate or baking dish - keep warm, covered with aluminum foil.",
+    "In the same large skillet I sautéed the chicken in (or if just making the sauce, a new skillet) add butter to melt and scrape up any browned bits from pan.",
+    "Add flour and cook for a couple minutes. Whisk in milk for a basic white sauce. Whisking until smooth add the roasted garlic, parmesan cheese and cook for several minutes until sauce is thickened. Season to taste with kosher salt and pepper. I also added some Tabasco for a little hit of heat (optional). (See Note 1)",
+    "Spoon sauce over sautéed chicken and serve. Garnish with chopped parsley if desired."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

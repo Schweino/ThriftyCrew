@@ -1,0 +1,122 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Honey Mustard Chicken",
+  "source_url": "https://keviniscooking.com/baked-honey-mustard-chicken/",
+  "servings": 4,
+  "time_total": "40 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 chicken breasts (2 lbs boneless and skinless)",
+      "item": "chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": "(2 lbs boneless and skinless)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 medium red onion (sliced thin)",
+      "item": "red onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "medium, sliced thin",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp salt",
+      "item": "salt",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp black pepper",
+      "item": "black pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp garlic powder",
+      "item": "garlic powder",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz fresh mozzarella cheese (sliced)",
+      "item": "fresh mozzarella cheese",
+      "qty": "8",
+      "unit": "oz",
+      "prep": "sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup honey",
+      "item": "honey",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tbsp grain mustard",
+      "item": "grain mustard",
+      "qty": "4",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup chopped parsley",
+      "item": "parsley",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400°F. In a small bowl mix together the honey and grain mustard. Reserve half in separate bowl. Set both aside.",
+    "Place thinly sliced red onion in a rectangle 9x12\" casserole dish that has been sprayed with cooking spray or olive oil. Add the chicken breasts on top of the onions.",
+    "Sprinkle the chicken with kosher salt, black pepper and garlic powder.",
+    "Baste chicken with half of the honey mustard glaze.",
+    "Add 2-3 slices of fresh Mozzarella cheese on top of each chicken breast.",
+    "Bake for 30 minutes, depending on the thickness of your chicken breasts. (See Note 1)",
+    "Allow to rest 5 minutes before slicing or serving. When serving, top each chicken breast with sautéed onion slices and fresh chopped parsley. Drizzle remaining honey mustard glaze on top of each chicken breast. Serve on its own, over steamed rice, pasta of choice, or roasted potatoes."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

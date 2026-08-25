@@ -1,0 +1,62 @@
+{
+    "slug":  "baked-honey-mustard-chicken",
+    "title":  "Baked Honey Mustard Chicken",
+    "source_url":  "https://keviniscooking.com/baked-honey-mustard-chicken/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-24T18:57:46",
+    "updated":  "2026-08-24T19:26:15",
+    "terms":  [
+                  {
+                      "term":  "fresh mozzarella cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "whole grain mustard",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T18:57:46",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/baked-honey-mustard-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T18:57:46",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breasts with red onion and melted mozzarella in a honey + grain-mustard sauce; honey-mustard family absent from catalog (live honey chicken is hot-honey/chipotle/sesame), low saturation (2), band verified 547/23/62."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T19:11:49",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T19:21:36",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled, 0 rejected, 2 mapped-null (fresh mozzarella, whole grain mustard). DEFECT WORTH A LOOK, not fixed by me: the board matched the term \u0027fresh mozzarella cheese\u0027 to the shredded-cheese commodity. That is a keyword over-claim across a real form and price-class split, and it would have published a shredded-bag price for a water-packed ball. Flagging for the match-soundness gate; "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T19:21:39",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T19:26:15",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

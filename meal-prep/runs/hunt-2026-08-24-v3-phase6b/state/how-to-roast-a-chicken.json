@@ -1,0 +1,31 @@
+{
+    "slug":  "how-to-roast-a-chicken",
+    "title":  "How to Roast a Chicken",
+    "source_url":  "https://keviniscooking.com/how-to-roast-a-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T18:57:48",
+    "updated":  "2026-08-24T18:57:48",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Whole chicken roasted with lemon, garlic and fresh herbs; same dinner as ina-garten-s-roast-chicken accepted earlier this run (whole-bird herb-and-lemon roast).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T18:57:48",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/how-to-roast-a-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T18:57:48",
+                        "by":  "decider",
+                        "detail":  "Whole chicken roasted with lemon, garlic and fresh herbs; same dinner as ina-garten-s-roast-chicken accepted earlier this run (whole-bird herb-and-lemon roast)."
+                    }
+                ]
+}

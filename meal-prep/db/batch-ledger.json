@@ -515,5 +515,33 @@
                          "detail":  "FIXED-AND-CLEAN: live pages, paid bodies (admin API), JSON-LD, recipes-db/costed/feed/planner set identity, free-rotation 20/20, FEEDCOV re-run rc=0, 375px DOM check, zero dashes in wave copy; 10 collateral slugs correctly refused (unstamped, absent from every reader surface, 404 live); dc73fc59 worker build skipped - this stamp commit retriggers the feed deploy"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-24-v3-phase6b-w2",
+      "opened":  "2026-08-24T19:34:01",
+      "last_activity":  "2026-08-24T19:34:02",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "creamy-roasted-garlic-chicken"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-24T19:34:01",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-24T19:34:02",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-24T19:34:02",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

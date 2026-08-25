@@ -1,0 +1,226 @@
+﻿{
+    "slug":  "creamy-roasted-garlic-chicken",
+    "title":  "Creamy Roasted Garlic Chicken",
+    "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-24",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 lbs chicken breasts",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  3174,
+                            "buy":  "7 lb, sliced horizontally into cutlets",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weight is stated on the line; the method slices each breast into 2 cutlets. Plain boneless breasts sliced into cutlets by the method; chicken-breast is priced 7 of 7. 2 lbs = 907 g, stated on the line, so no each-weight guess.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line (28 g source).",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second seasoning line, for the sauce.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second seasoning line, for the sauce.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp all purpose flour ((plus more if needed))",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  27,
+                            "buy":  "3 1/2 tbsp, for dusting the cutlets",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tbsp flour = 7.8 g. Exact same food and form as the All-Purpose Flour vocabulary row; wheat flour, not the almond-flour row. Existing food DB row (110 cal / 30 g).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 head of garlic ((about 15 cloves))",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  null,
+                            "grams":  158,
+                            "buy":  "3 1/2 heads (about 50 cloves)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "15 cloves at the house 3 g clove. A head is the cooking unit here - the whole head is browned and mashed. A head is a purchase and cooking unit of the same fresh garlic, not a form flip like powder; the line even states 15 cloves, and the Garlic row is 3 g per clove.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 tbsp butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  147,
+                            "buy":  "10 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line (42 g source).",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 tbsp all purpose flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  82,
+                            "buy":  "10 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Roux flour, 7.8 g per tbsp. Same ruling as the dusting line; this is the roux flour.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 cups milk",
+                            "item":  "Milk",
+                            "bid":  "milk",
+                            "board":  "weekly",
+                            "grams":  1715,
+                            "buy":  "7 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line (490 g source).",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup grated Parmesan cheese",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  null,
+                            "grams":  196,
+                            "buy":  "1 3/4 cups grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The estate\u0027s Parmesan Cheese row is itself a 1/4 cup = 28 g grated label, so 1/2 cup = 56 g. Grating is a preparation of the same cheese, and the existing Parmesan Cheese food row is itself a grated 1/4 cup (28 g) label, so the gram weight is the estate\u0027s own. Not a variety or price-class flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second seasoning line, for the sauce.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second seasoning line, for the sauce.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp Tabasco ((optional))",
+                            "item":  "Hot Sauce",
+                            "bid":  "hot-sauce",
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "3 1/2 tsp (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Optional on the source page. Tabasco is a vinegar-and-cayenne hot sauce, the same product concept the hot-sauce commodity prices at 7 of 7; the extraction marks the line optional. Existing Hot Sauce food row (0 cal / 5 g).",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_added":  [
+
+                         ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u0027salt\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027black pepper\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027salt\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027black pepper\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  580,
+                                                                   "protein_g":  57,
+                                                                   "carbs_g":  13
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  563.1,
+                                                               "protein_g":  63.9,
+                                                               "carbs_g":  14.7
+                                                           },
+                              "delta_pct":  {
+                                                "calories":  -2.9,
+                                                "protein":  12.1,
+                                                "carbs":  13.1
+                                            },
+                              "servings_source":  4,
+                              "verdict":  "PASS, with one named cause. Protein is +12.1%, inside the 15% band, and almost all of the excess is the settled Milk line: the estate\u0027s Milk row is Fairlife FAT FREE ultra-filtered at 13 g protein per cup, while the source used ordinary milk at about 8 g. Swap that basis and the recipe lands at 61.3 g protein, +7.5%. No portion is wrong."
+                          }
+}

@@ -938,7 +938,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -2583,6 +2583,15 @@
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
     },
     {
+        "id":  "ready-to-serve-long-grain-wild-rice-pouch",
+        "store":  "Family Fare",
+        "product":  "Uncle Bens Ready Rice Rice, Long Grain \u0026 Wild",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
         "id":  "red-onion",
         "store":  "Family Fare",
         "product":  "Organic Red Onions",
@@ -2603,7 +2612,7 @@
     {
         "id":  "red-wine",
         "store":  "Family Fare",
-        "product":  "Vendange Cabernet Sauvignon Red Wine 500 Ml",
+        "product":  "Mogen David Concord, Red Wine, 750ml",
         "dept":  "beer_wine_spirits",
         "aisle":  "beer_wine_spirits/wines_champagnes",
         "verdict":  "BLOCK",

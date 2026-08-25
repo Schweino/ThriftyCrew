@@ -1,0 +1,31 @@
+{
+    "slug":  "taco-stack",
+    "title":  "Taco Stack",
+    "source_url":  "https://www.recipetineats.com/taco-stack-with-pork-carnitas-or-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-24T18:57:42",
+    "updated":  "2026-08-24T18:57:42",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Baked layered tortilla-meat-cheese Mexican casserole; cross-protein twin of live turkey-taco-casserole (chicken/pork vs turkey), same bake/tortilla/taco-tomato dinner in a Tex-Mex region already saturated.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T18:57:42",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/taco-stack-with-pork-carnitas-or-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-24T18:57:42",
+                        "by":  "decider",
+                        "detail":  "Baked layered tortilla-meat-cheese Mexican casserole; cross-protein twin of live turkey-taco-casserole (chicken/pork vs turkey), same bake/tortilla/taco-tomato dinner in a Tex-Mex region already saturated."
+                    }
+                ]
+}

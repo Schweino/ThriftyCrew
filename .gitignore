@@ -413,3 +413,12 @@ meal-prep/db/harvest-neighbours.json
 meal-prep/db/fdc-api-key.txt
 *-api-key.txt
 *.apikey
+
+# TRANSIENT BY DESIGN: the run-log lock sidecar. When another process holds grocery/ad-cycle-log.txt,
+# check-ad-cycles.ps1 diverts that run's trail to ad-cycle-log.LOCKED-<day>.txt rather than going mute,
+# and the next run that CAN write the primary folds it back in and deletes it. So a sidecar is a file
+# that is supposed to disappear - committing one would freeze a half-run's trail into history beside the
+# merged copy. NOT ignored because it is unimportant: it is the whole record of a run. On 2026-08-22 an
+# abandoned `tail -F` held the primary for 67 hours, three sidecars accumulated, and 3,560 lines of run
+# history sat outside the log. capture-watchdog check 6b now PAGES when a prior-day sidecar survives.
+/grocery/ad-cycle-log.LOCKED-*.txt

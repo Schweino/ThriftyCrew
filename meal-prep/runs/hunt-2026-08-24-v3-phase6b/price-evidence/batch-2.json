@@ -2,12 +2,12 @@
  "schema": "price-evidence/1",
  "run": "hunt-2026-08-24-v3-phase6b",
  "batch": 2,
- "generated": "2026-08-24T12:38:32",
+ "generated": "2026-08-24T19:23:10",
  "batch_terms": [
-  "beef back ribs",
-  "malt vinegar",
-  "dried onion flakes",
-  "canned crushed pineapple"
+  "fresh mozzarella cheese",
+  "whole grain mustard",
+  "green bell pepper",
+  "cotija cheese"
  ],
  "roster": [
   "Baker's",
@@ -21,254 +21,113 @@
  "findings": [],
  "terms": [
   {
-   "term": "beef back ribs",
+   "term": "fresh mozzarella cheese",
    "unit": "",
    "stores": [
     {
      "store": "Baker's",
-     "state": "EMPTY",
-     "term_used": "beefbackribs",
+     "state": "MATCHES",
+     "term_used": "fresh mozzarella cheese",
      "attempts": [
       {
-       "term": "beef back ribs",
+       "term": "fresh mozzarella cheese",
        "state": "OK",
-       "hits": 0
-      },
-      {
-       "term": "beefbackribs",
-       "state": "OK",
-       "hits": 0
+       "hits": 12
       }
      ],
-     "hits": [],
-     "reason": "no candidates on any of 2 ladder rung(s)",
+     "hits": [
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0003114200088"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 4.49,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004375"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004374"
+      },
+      {
+       "item": "BelGioioso® Sliced Fresh Mozzarella Cheese",
+       "price": 8.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003114200069"
+      },
+      {
+       "item": "Private Selection® Cherry Size Fresh Mozzarella Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001111004378"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Prosciutto & Basil Roll",
+       "price": 9.99,
+       "size": "8 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0003114200553"
+      },
+      {
+       "item": "Kroger® Fresh Mozzarella Sliced Cheese",
+       "price": null,
+       "size": "16 slices / 16 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111004821"
+      },
+      {
+       "item": "BelGioioso® Fresh Mozzarella Pearls Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0003114200480"
+      }
+     ],
+     "reason": "",
      "tier": "server"
     },
     {
      "store": "Family Fare",
-     "state": "EMPTY",
-     "term_used": "beefbackribs",
-     "attempts": [
-      {
-       "term": "beef back ribs",
-       "state": "OK",
-       "hits": 0
-      },
-      {
-       "term": "beefbackribs",
-       "state": "OK",
-       "hits": 0
-      }
-     ],
-     "hits": [],
-     "reason": "no candidates on any of 2 ladder rung(s)",
-     "tier": "server"
-    },
-    {
-     "store": "Hy-Vee",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
-     "tier": "pricer-tab"
-    },
-    {
-     "store": "Aldi",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    },
-    {
-     "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "beef back ribs",
+     "term_used": "fresh mozzarella cheese",
      "attempts": [
       {
-       "term": "beef back ribs",
+       "term": "fresh mozzarella cheese",
        "state": "OK",
        "hits": 3
       }
      ],
      "hits": [
       {
-       "item": "USDA Choice Whole Bone-In Beef Short Ribs",
-       "price": 99.9,
-       "size": "$9.99 / lb",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388391-usda-choice-bonein-beef-short-ribs-1-each"
+       "item": "Bel Gioioso Fresh Mozzarella Cheese 226 G",
+       "price": 5.89,
+       "size": "226 g",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_fresh_mozzarella_cheese_226_g/p/22599"
       },
       {
-       "item": "Baby Back Pork Ribs",
-       "price": 14.97,
-       "size": "$4.99 / lb",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387478-baby-back-pork-ribs"
+       "item": "Bel Gioioso Cheese, Sliced, Fresh Mozzarella 8 Oz",
+       "price": 5.89,
+       "size": "8 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/bel_gioioso_cheese_sliced_fresh_mozzarella_8_oz/p/5659"
       },
       {
-       "item": "Hand-Cut Extra Meaty Baby Back Pork Ribs",
-       "price": 14.97,
-       "size": "$4.99 / lb",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387836-hand-cut-extra-meaty-baby-back-pork-ribs-1-each"
-      }
-     ],
-     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
-     "tier": "driver"
-    },
-    {
-     "store": "Sam's Club",
-     "state": "MATCHES",
-     "term_used": "beef back ribs",
-     "attempts": [
-      {
-       "term": "beef back ribs",
-       "state": "MATCHES",
-       "hits": 20
-      }
-     ],
-     "hits": [
-      {
-       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
-       "price": 31.47,
-       "size": "",
-       "unit_price": "$15.73/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
-      },
-      {
-       "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
-       "price": 28.64,
-       "size": "",
-       "unit_price": "$7.16/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
-      },
-      {
-       "item": "90%/10% Ground Beef Chub, Case, priced per pound",
-       "price": 442.71,
-       "size": "",
-       "unit_price": "$5.22/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/740SBJFV7YFB"
-      },
-      {
-       "item": "USDA Choice Angus Beef Top Butt Boneless Center Cut, Case, priced per pound",
-       "price": 662.71,
-       "size": "",
-       "unit_price": "$9.74/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/65M2XLQ1VI4L"
-      },
-      {
-       "item": "Sirloin Tip, Case  priced per pound",
-       "price": 414.73,
-       "size": "",
-       "unit_price": "$6.47/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/5OCWZYGPSEHZ"
-      },
-      {
-       "item": "USDA Choice Beef Cheek Meat, Case, priced per pound",
-       "price": 146.82,
-       "size": "",
-       "unit_price": "$4.94/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/54HKBE6SI6VN"
-      },
-      {
-       "item": "Whole Beef Chuck Roll, Case, priced per pound",
-       "price": 505.77,
-       "size": "",
-       "unit_price": "$6.64/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2MLNNSAI1WGQ"
-      },
-      {
-       "item": "Member's Mark USDA Choice Angus Whole Beef Special Trim, Cryovac, priced per pound",
-       "price": 104.23,
-       "size": "",
-       "unit_price": "$6.47/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/7L32XW8Q5R0M"
-      }
-     ],
-     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
-     "tier": "driver"
-    },
-    {
-     "store": "Walmart",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    }
-   ]
-  },
-  {
-   "term": "malt vinegar",
-   "unit": "",
-   "stores": [
-    {
-     "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "malt vinegar",
-     "attempts": [
-      {
-       "term": "malt vinegar",
-       "state": "OK",
-       "hits": 2
-      }
-     ],
-     "hits": [
-      {
-       "item": "London Pub® Malt Vinegar",
-       "price": 3.79,
-       "size": "12.7 fl oz",
-       "relevance": 134,
-       "url": "https://www.bakersplus.com/p/0007067000289"
-      },
-      {
-       "item": "Boulder Canyon Avocado Oil Malt Vinegar & Sea Salt Kettle Cooked Potato Chips",
-       "price": 4.29,
-       "size": "5.25 oz",
-       "relevance": 121,
-       "url": "https://www.bakersplus.com/p/0070816312192"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "malt vinegar",
-     "attempts": [
-      {
-       "term": "malt vinegar",
-       "state": "OK",
-       "hits": 2
-      }
-     ],
-     "hits": [
-      {
-       "item": "Holland House Malt Vinegar 12 Fl Oz",
-       "price": 3.39,
-       "size": "12 fl oz",
-       "relevance": 131,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/holland_house_malt_vinegar_12_fl_oz/p/40496"
-      },
-      {
-       "item": "London Pub Traditional British Flavor Malt Vinegar 12.7 Fl Oz",
-       "price": 3.99,
-       "size": "12.7 fl oz",
-       "relevance": 125,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/london_pub_traditional_british_flavor_malt_vinegar_12_7_fl_oz/p/2378137"
+       "item": "Bel Gioioso Cheese, Fresh Mozzarella, Pearls 8 Oz",
+       "price": 5.89,
+       "size": "8 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_cheese_fresh_mozzarella_pearls_8_oz/p/222027"
       }
      ],
      "reason": "",
@@ -295,395 +154,56 @@
     {
      "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "malt vinegar",
+     "term_used": "fresh mozzarella cheese",
      "attempts": [
       {
-       "term": "malt vinegar",
-       "state": "OK",
-       "hits": 20
-      }
-     ],
-     "hits": [
-      {
-       "item": "Bertolli Balsamic Glaze Vinegar",
-       "price": 4.48,
-       "size": "6.76 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/149551-bertolli-balsamic-glaze-6-76-oz"
-      },
-      {
-       "item": "Bragg Apple Cider Vinegar, Organic",
-       "price": 6.99,
-       "size": "32 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218713-bragg-apple-cider-vinegar-organic-32-fl-oz"
-      },
-      {
-       "item": "Heinz All Natural Apple Cider Vinegar",
-       "price": 3.99,
-       "size": "32 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71065-heinz-all-natural-apple-cider-vinegar-32-oz"
-      },
-      {
-       "item": "Bertolli Balsamic Vinegar of Modena",
-       "price": 4.48,
-       "size": "16.9 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27987867-bertolli-balsamic-vinegar-of-modena-16-9-fl-oz"
-      },
-      {
-       "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar",
-       "price": 4.69,
-       "size": "16 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218717-bragg-organic-raw-unfiltered-apple-cider-vinegar-16-oz"
-      },
-      {
-       "item": "Alessi Balsamic Reduction, Premium, Traditional",
-       "price": 5.39,
-       "size": "8.5 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/100665-alessi-balsamic-reduction-premium-8-5-oz"
-      },
-      {
-       "item": "Marukan Seasoned Gourmet Rice Vinegar",
-       "price": 3.69,
-       "size": "12 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16884141-marukan-seasoned-gourmet-rice-vinegar-12-0-fl-oz"
-      },
-      {
-       "item": "Ken's Steak House Simply Vinaigrette Balsamic",
-       "price": 2.99,
-       "size": "16 fl oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17069414-ken-s-steak-house-dressing-balsamic-16-oz"
-      }
-     ],
-     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
-     "tier": "driver"
-    },
-    {
-     "store": "Sam's Club",
-     "state": "MATCHES",
-     "term_used": "malt vinegar",
-     "attempts": [
-      {
-       "term": "malt vinegar",
-       "state": "MATCHES",
-       "hits": 18
-      }
-     ],
-     "hits": [
-      {
-       "item": "Carrington Farms Liquid Coconut Cooking Oil, 40 oz.",
-       "price": 16.98,
-       "size": "",
-       "unit_price": "$0.42/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/27E3J39AUTUU"
-      },
-      {
-       "item": "Carrington Farms Ghee, Clarified Butter, 54 oz.",
-       "price": 20.98,
-       "size": "",
-       "unit_price": "$0.39/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/5QHK0EQ5HQQD"
-      },
-      {
-       "item": "Bragg Organic Apple Cider Vinegar, 32 oz., 2 pk.",
-       "price": 9.98,
-       "size": "",
-       "unit_price": "$0.16/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4JT9BNL5H1TH"
-      },
-      {
-       "item": "Member's Mark Clear Frying Oil 35 lbs.",
-       "price": 39.98,
-       "size": "",
-       "unit_price": "$0.07/foz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6ITEQVDEI609"
-      },
-      {
-       "item": "Member's Mark Distilled White Vinegar, 1 gal., 2 pk.",
-       "price": 5.98,
-       "size": "",
-       "unit_price": "$0.02/foz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/60JHSKP6738J"
-      },
-      {
-       "item": "Filippo Berio Extra Virgin Olive Oil, 67.6 oz.",
-       "price": 18.98,
-       "size": "",
-       "unit_price": "$0.28/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/481WJWUZPNHA"
-      },
-      {
-       "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar, 128 fl. oz.",
-       "price": 16.98,
-       "size": "",
-       "unit_price": "$0.13/foz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2E5K6II8HHV7"
-      },
-      {
-       "item": "Member's Mark Canola Oil, 192 fl. oz.",
-       "price": 13.88,
-       "size": "",
-       "unit_price": "$0.07/foz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3IOIUS59BY8W"
-      }
-     ],
-     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
-     "tier": "driver"
-    },
-    {
-     "store": "Walmart",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    }
-   ]
-  },
-  {
-   "term": "dried onion flakes",
-   "unit": "",
-   "stores": [
-    {
-     "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "onion",
-     "attempts": [
-      {
-       "term": "dried onion flakes",
-       "state": "OK",
-       "hits": 0
-      },
-      {
-       "term": "onion",
-       "state": "OK",
-       "hits": 25
-      }
-     ],
-     "hits": [
-      {
-       "item": "Green Onions",
-       "price": null,
-       "size": "1 ct",
-       "relevance": 137,
-       "url": "https://www.bakersplus.com/p/0000000004659"
-      },
-      {
-       "item": "Green Onions",
-       "price": 1.19,
-       "size": "1 each",
-       "relevance": 137,
-       "url": "https://www.bakersplus.com/p/0000000004068"
-      },
-      {
-       "item": "Jumbo White Onions",
-       "price": 1.29,
-       "size": "1 lb",
-       "relevance": 136,
-       "url": "https://www.bakersplus.com/p/0000000004663"
-      },
-      {
-       "item": "Jumbo Sweet Onions",
-       "price": 1.29,
-       "size": "1 lb",
-       "relevance": 136,
-       "url": "https://www.bakersplus.com/p/0000000004166"
-      },
-      {
-       "item": "Jumbo Red Onions",
-       "price": 1.69,
-       "size": "1 lb",
-       "relevance": 136,
-       "url": "https://www.bakersplus.com/p/0000000004082"
-      },
-      {
-       "item": "Jumbo Yellow Onions",
-       "price": 1.29,
-       "size": "1 lb",
-       "relevance": 135,
-       "url": "https://www.bakersplus.com/p/0000000004093"
-      },
-      {
-       "item": "Organic Green Onions",
-       "price": 1.79,
-       "size": "1 each",
-       "relevance": 135,
-       "url": "https://www.bakersplus.com/p/0000000094068"
-      },
-      {
-       "item": "Peeled Jumbo Red Onions",
-       "price": null,
-       "size": "1 ct",
-       "relevance": 134,
-       "url": "https://www.bakersplus.com/p/0000000004669"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "onion",
-     "attempts": [
-      {
-       "term": "dried onion flakes",
-       "state": "OK",
-       "hits": 0
-      },
-      {
-       "term": "onion",
-       "state": "OK",
-       "hits": 25
-      }
-     ],
-     "hits": [
-      {
-       "item": "White Onions",
-       "price": 1.49,
-       "size": "lb",
-       "relevance": 137,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/white_onions/p/12537"
-      },
-      {
-       "item": "Fresh White Onions",
-       "price": 1.39,
-       "size": "lb",
-       "relevance": 136,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/fresh_white_onions/p/1564405684713020770"
-      },
-      {
-       "item": "Organic Red Onions",
-       "price": 1.99,
-       "size": "lb",
-       "relevance": 136,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/organic_red_onions/p/2313279"
-      },
-      {
-       "item": "Shallots Onions",
-       "price": 5.99,
-       "size": "lb",
-       "relevance": 136,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/shallots_onions/p/12536"
-      },
-      {
-       "item": "Fresh Yellow Onions",
-       "price": 1.39,
-       "size": "lb",
-       "relevance": 135,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/fresh_yellow_onions/p/1564405684713020772"
-      },
-      {
-       "item": "Fresh Vidalia Onion",
-       "price": 1.69,
-       "size": "lb",
-       "relevance": 135,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/fresh_vidalia_onion/p/1564405684714568540"
-      },
-      {
-       "item": "Our Family Onion Red",
-       "price": 3.49,
-       "size": "32 oz",
-       "relevance": 135,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_red/p/2341162"
-      },
-      {
-       "item": "Sweet Red Italian Onions",
-       "price": 1.79,
-       "size": "lb",
-       "relevance": 134,
-       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/sweet_red_italian_onions/p/606958"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Hy-Vee",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
-     "tier": "pricer-tab"
-    },
-    {
-     "store": "Aldi",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    },
-    {
-     "store": "Fareway",
-     "state": "MATCHES",
-     "term_used": "dried onion flakes",
-     "attempts": [
-      {
-       "term": "dried onion flakes",
+       "term": "fresh mozzarella cheese",
        "state": "OK",
        "hits": 6
       }
      ],
      "hits": [
       {
-       "item": "Badia Spices Minced Onion",
-       "price": 7.99,
-       "size": "17 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21522194-badia-spices-onion-minced-17-oz"
-      },
-      {
-       "item": "Badia Spices Chopped Onion",
-       "price": 3.99,
-       "size": "5.5 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458675-badia-spices-onion-chopped-5-5-oz"
-      },
-      {
-       "item": "Tone's Onion, Chopped",
-       "price": 2.99,
-       "size": "1.1 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16983161-tone-s-chopped-onion-1-1-oz"
-      },
-      {
-       "item": "Tone's Onion, Minced",
-       "price": 2.99,
-       "size": "1.88 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2650230-tone-s-minced-onion-1-88-oz"
-      },
-      {
-       "item": "McCormick Minced Onions",
-       "price": 3.99,
-       "size": "2 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72849-mccormick-minced-onions-2-oz"
-      },
-      {
-       "item": "McCormick Minced Onions",
+       "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
        "price": 4.99,
-       "size": "3.5 oz",
+       "size": "8 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72860-mccormick-minced-onions-3-5-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Sliced",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Pearls",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
+      },
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+      },
+      {
+       "item": "Tillamook Whole Milk Mozzarella Farmstyle Shreds",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/34336458-whole-milk-mozzarella-cheese-shreds-8-oz"
+      },
+      {
+       "item": "Tillamook Whole Milk Mozzarella Cheese Snacks 10 Count",
+       "price": 3.99,
+       "size": "10 x 0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38311478-tilla-whl-mlk-mozz-snack-bar"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -692,78 +212,78 @@
     {
      "store": "Sam's Club",
      "state": "MATCHES",
-     "term_used": "dried onion flakes",
+     "term_used": "fresh mozzarella cheese",
      "attempts": [
       {
-       "term": "dried onion flakes",
+       "term": "fresh mozzarella cheese",
        "state": "MATCHES",
-       "hits": 22
+       "hits": 25
       }
      ],
      "hits": [
       {
-       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
-       "price": 4.98,
+       "item": "Frigo Cheese Heads Yellow Cheddar & Turkey Sticks, 18.9 oz, 24 count",
+       "price": 10.47,
        "size": "",
-       "unit_price": "$0.17/oz",
+       "unit_price": "",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+       "url": "https://www.samsclub.com/p/-/2VWODA2RI7O5"
       },
       {
-       "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
-       "price": 6.98,
+       "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+       "price": 7.44,
        "size": "",
-       "unit_price": "$0.70/oz",
+       "unit_price": "$0.31/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+       "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
       },
       {
-       "item": "Member's Mark Minced Onion, 15 oz.",
-       "price": 7.98,
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
        "size": "",
-       "unit_price": "$0.53/oz",
+       "unit_price": "$2.43/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/0XPU85B6UZOD"
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
       },
       {
-       "item": "Mrs. Dash Original Seasoning, 10 oz.",
-       "price": 6.98,
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
        "size": "",
-       "unit_price": "$0.70/oz",
+       "unit_price": "$0.18/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
       },
       {
-       "item": "Dan-O's Original Seasoning, 8.9 oz.",
-       "price": 6.98,
+       "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
        "size": "",
-       "unit_price": "$0.78/oz",
+       "unit_price": "$2.43/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+       "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
       },
       {
-       "item": "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
-       "price": 8.98,
+       "item": "Member's Mark Light String Cheese 36 ct.",
+       "price": 7.27,
        "size": "",
-       "unit_price": "$0.56/oz",
+       "unit_price": "$0.20/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4F1CFKBSTLFC"
+       "url": "https://www.samsclub.com/p/-/7IM6BJPRZN7R"
       },
       {
-       "item": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
-       "price": 5.98,
+       "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+       "price": 9.47,
        "size": "",
-       "unit_price": "$0.66/oz",
+       "unit_price": "$0.20/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4KBPWOZW3WU1"
+       "url": "https://www.samsclub.com/p/-/1UADNMJ2D50Y"
       },
       {
-       "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
-       "price": 6.98,
+       "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+       "price": 8.28,
        "size": "",
-       "unit_price": "$1.16/ea",
+       "unit_price": "$0.26/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+       "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
@@ -781,55 +301,286 @@
    ]
   },
   {
-   "term": "canned crushed pineapple",
+   "term": "whole grain mustard",
    "unit": "",
    "stores": [
     {
      "store": "Baker's",
      "state": "MATCHES",
-     "term_used": "canned crushed pineapple",
+     "term_used": "whole grain mustard",
      "attempts": [
       {
-       "term": "canned crushed pineapple",
+       "term": "whole grain mustard",
        "state": "OK",
-       "hits": 5
+       "hits": 2
       }
      ],
      "hits": [
       {
-       "item": "Kroger® Canned Crushed Pineapple in Heavy Syrup",
-       "price": 1.99,
-       "size": "20 oz",
-       "relevance": 128,
-       "url": "https://www.bakersplus.com/p/0001111083132"
+       "item": "Murray's Whole Grain Mustard",
+       "price": 5.99,
+       "size": "7 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0081794401258"
       },
       {
-       "item": "Kroger® Canned Crushed Pineapple in Heavy Syrup",
-       "price": 1.99,
-       "size": "20 oz",
-       "relevance": 128,
-       "url": "https://www.bakersplus.com/p/0001111012155"
+       "item": "StarKist® Tuna Creations® Whole Grain Dijon Mustard Tuna Salad Pouch",
+       "price": 1.25,
+       "size": "3 oz",
+       "relevance": 83,
+       "url": "https://www.bakersplus.com/p/0008000052148"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "whole grain mustard",
+     "attempts": [
+      {
+       "term": "whole grain mustard",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Star Kist Whole Grain Dijon Mustard Tuna Salad 3 Oz",
+       "price": 1.69,
+       "size": "3 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/meat/seafood_fish/tuna/star_kist_whole_grain_dijon_mustard_tuna_salad_3_oz/p/1564405684714535019"
       },
       {
-       "item": "Kroger® Canned Crushed Pineapple in Pineapple Juice",
-       "price": 1.99,
-       "size": "20 oz",
-       "relevance": 127,
-       "url": "https://www.bakersplus.com/p/0001111083129"
+       "item": "Silver Spring Mustard, Whole Grain, Old Style 9.25 Oz",
+       "price": 3.39,
+       "size": "9.25 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/silver_spring_mustard_whole_grain_old_style_9_25_oz/p/2030859"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "whole grain mustard",
+     "attempts": [
+      {
+       "term": "whole grain mustard",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "Grey Poupon Dijon Mustard",
+       "price": 4.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41145-grey-poupon-dijon-mustard-10-oz"
       },
       {
-       "item": "Dole® Canned Crushed Pineapple Fruit In 100% Pineapple Juice",
-       "price": 1.59,
+       "item": "French's® Chardonnay Dijon Mustard Squeeze Bottle",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16409311-french-s-chardonnay-dijon-mustard-squeeze-bottle-12-oz"
+      },
+      {
+       "item": "Grey Poupon Dijon Mustard",
+       "price": 4.49,
        "size": "8 oz",
-       "relevance": 125,
-       "url": "https://www.bakersplus.com/p/0003890000619"
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25285-grey-poupon-dijon-mustard-8-oz"
       },
       {
-       "item": "Dole® Canned Crushed Pineapple Fruit In 100% Pineapple Juice",
-       "price": 2.49,
-       "size": "20 oz",
-       "relevance": 125,
-       "url": "https://www.bakersplus.com/p/0003890000613"
+       "item": "Fareway Spicy Brown Mustard",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22998964-fareway-mustard-spicy-brown-12-oz"
+      },
+      {
+       "item": "French's® Spicy Brown Mustard",
+       "price": 1.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16409600-french-s-spicy-brown-mustard-12-oz"
+      },
+      {
+       "item": "Fareway Sweet Hot Mustard",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22999792-fareway-mustard-sweet-hot-12-oz"
+      },
+      {
+       "item": "Fareway Horseradish Mustard",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22999160-fareway-mustard-horseradish-12-oz"
+      },
+      {
+       "item": "Woeber's Mustard, Sweet & Spicy",
+       "price": 2.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/149523-woeber-s-mustard-sweet-spicy-16-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "whole grain mustard",
+     "attempts": [
+      {
+       "term": "whole grain mustard",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Duke's Real Mayonnaise, 64 fl. oz.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.13/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KZ0ECF2JHUS"
+      },
+      {
+       "item": "McCormick Mayonesa Mayonnaise with Lime Juice, 28 fl. oz., 2 pk.",
+       "price": 11.68,
+       "size": "",
+       "unit_price": "$0.21/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7FNF33KHHSED"
+      },
+      {
+       "item": "French's Mustard Single-Serve Packets, 5.5 g., 500 ct.",
+       "price": 13.24,
+       "size": "",
+       "unit_price": "$0.03/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/55J5IBTFQW1T"
+      },
+      {
+       "item": "Hellmann's Real Mayonnaise, 64 fl. oz.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$0.15/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1WVQFO3USD8Q"
+      },
+      {
+       "item": "Best Foods Real Mayonnaise, 64 fl. oz.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$0.15/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AYZNWGGFIVM"
+      },
+      {
+       "item": "Yellowbird Blue Agave Sriracha, 19.6 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.46/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AVA01F864WZ"
+      },
+      {
+       "item": "French's 100% Natural Classic Yellow Mustard, 30 oz., 2 pk.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/67I7U5OZ8MLK"
+      },
+      {
+       "item": "French's 100% Natural Classic Yellow Mustard, 105 oz.",
+       "price": 5.38,
+       "size": "",
+       "unit_price": "$0.05/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/10SK1OVVNA7O"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "green bell pepper",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "green bell pepper",
+     "attempts": [
+      {
+       "term": "green bell pepper",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh Large Green Bell Pepper",
+       "price": 0.99,
+       "size": "1 ct",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0000000004065"
+      },
+      {
+       "item": "Organic Fresh Green Bell Pepper",
+       "price": 1.69,
+       "size": "1 ct",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0000000094065"
+      },
+      {
+       "item": "Green Giant® SteamCrisp® Mexicorn® Whole Kernel Corn with Red & Green Bell Peppers",
+       "price": 2.29,
+       "size": "11 oz",
+       "relevance": 120,
+       "url": "https://www.bakersplus.com/p/0081015393012"
       }
      ],
      "reason": "",
@@ -838,15 +589,15 @@
     {
      "store": "Family Fare",
      "state": "EMPTY",
-     "term_used": "cannedcrushedpineapple",
+     "term_used": "greenbellpepper",
      "attempts": [
       {
-       "term": "canned crushed pineapple",
+       "term": "green bell pepper",
        "state": "OK",
-       "hits": 0
+       "hits": 1
       },
       {
-       "term": "cannedcrushedpineapple",
+       "term": "greenbellpepper",
        "state": "OK",
        "hits": 0
       }
@@ -876,56 +627,70 @@
     {
      "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "canned crushed pineapple",
+     "term_used": "green bell pepper",
      "attempts": [
       {
-       "term": "canned crushed pineapple",
+       "term": "green bell pepper",
        "state": "OK",
-       "hits": 6
+       "hits": 24
       }
      ],
      "hits": [
       {
-       "item": "Fareway Crushed Pineapple",
-       "price": 1.68,
-       "size": "20 oz",
+       "item": "Green Bell Pepper",
+       "price": 1.17,
+       "size": "1 each",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23976254-fareway-pineapple-crushed-20-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each"
       },
       {
-       "item": "Dole Pineapple, Crushed",
-       "price": 2.67,
-       "size": "20 oz",
+       "item": "Fareway Diced Green Peppers",
+       "price": 1.98,
+       "size": "10 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3405695-dole-crushed-pineapple-in-100-pineapple-juice-20-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278117-fareway-green-peppers-diced-10-oz"
       },
       {
-       "item": "Fareway Crushed Pineapple in Natural Juice",
-       "price": 0.88,
-       "size": "8 oz",
+       "item": "Jalapeno Pepper",
+       "price": 0.3,
+       "size": "$2.99 / lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25857776-fareway-pineapple-in-natural-juice-crushed-8-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/232739-jalapeno-pepper-1-lb"
       },
       {
-       "item": "Fareway Crushed Pineapple in Heavy Syrup",
-       "price": 1.68,
-       "size": "20 oz",
+       "item": "Yellow Onions",
+       "price": 3.77,
+       "size": "3 lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720244-fareway-pineapple-in-heavy-syrup-crushed-20-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16519988-onions-yellow-1-ea"
       },
       {
-       "item": "Dole Pineapple, Crushed",
-       "price": 1.64,
-       "size": "8 oz",
+       "item": "Green Serrano Pepper",
+       "price": 0.21,
+       "size": "$4.99 / lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69914-dole-crushed-pineapple-in-100-pineapple-juice-8-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
       },
       {
-       "item": "Dole Pineapple, Crushed",
-       "price": 1.64,
-       "size": "8.25 oz",
+       "item": "Celery",
+       "price": 1.99,
+       "size": "1 each",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/80632-dole-crushed-pineapple-in-heavy-syrup-8-25-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2717598-celery-each"
+      },
+      {
+       "item": "Green Cabbage",
+       "price": 2.48,
+       "size": "$0.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304904-green-cabbage-1-lb"
+      },
+      {
+       "item": "Mini Peppers",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16703600-mini-peppers-1-lb"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -934,78 +699,330 @@
     {
      "store": "Sam's Club",
      "state": "MATCHES",
-     "term_used": "canned crushed pineapple",
+     "term_used": "green bell pepper",
      "attempts": [
       {
-       "term": "canned crushed pineapple",
+       "term": "green bell pepper",
        "state": "MATCHES",
-       "hits": 15
+       "hits": 17
       }
      ],
      "hits": [
       {
-       "item": "Del Monte Sweet Peas, 105 oz.",
-       "price": 7.12,
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
        "size": "",
-       "unit_price": "$0.07/oz",
+       "unit_price": "$4.65/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3WTTXI3YJUV4"
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
       },
       {
-       "item": "Del Monte Whole Kernel Corn, 106 oz.",
-       "price": 5.76,
+       "item": "Green Bell Peppers, 6 ct.",
+       "price": 4.97,
        "size": "",
-       "unit_price": "$0.05/oz",
+       "unit_price": "$0.83/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2CLHKQS2F6MO"
+       "url": "https://www.samsclub.com/p/-/206QFTWNWXV2"
       },
       {
-       "item": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
-       "price": 7.86,
+       "item": "Multi Bell Sweet Peppers, 6 ct.",
+       "price": 5.97,
        "size": "",
-       "unit_price": "$0.23/oz",
+       "unit_price": "$0.99/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/0V8BGXDOBK9P"
+       "url": "https://www.samsclub.com/p/-/4NC1O4LLPTI8"
       },
       {
-       "item": "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
-       "price": 8.42,
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 4.96,
        "size": "",
-       "unit_price": "$1.05/ea",
+       "unit_price": "$0.50/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2IS6C9JATZ5E"
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
       },
       {
-       "item": "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
-       "price": 12.98,
+       "item": "Organic Yellow Onions, 5 lbs.",
+       "price": 5.22,
        "size": "",
-       "unit_price": "$1.08/ea",
+       "unit_price": "$1.04/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/15T8I1MC50OK"
+       "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
       },
       {
-       "item": "Le Sueur Very Young Small Sweet Peas, 15 oz., 8 ct.",
-       "price": 12.98,
+       "item": "Tomatoes on the Vine, 3 lbs.",
+       "price": 4.97,
        "size": "",
-       "unit_price": "$1.62/ea",
+       "unit_price": "$1.66/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4OUEK2V3VO10"
+       "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
       },
       {
-       "item": "Terra Verde Marinated Quartered Artichoke Hearts, 34 oz.",
-       "price": 5.51,
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
        "size": "",
-       "unit_price": "$0.16/oz",
+       "unit_price": "$2.46/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2PBJW1G43NUS"
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
       },
       {
-       "item": "Allens Italian Style Green Beans, 28 oz., 6 pk.",
-       "price": 12.78,
+       "item": "Sweet Mini Peppers, 1.5 lbs.",
+       "price": 5.15,
        "size": "",
-       "unit_price": "$2.13/ea",
+       "unit_price": "$3.43/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/52T1MCWNTSW5"
+       "url": "https://www.samsclub.com/p/-/4JE9I2ZU0VCN"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "cotija cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Cacique® Cotija Part Skim Milk Cheese",
+       "price": 5.49,
+       "size": "10 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0007456200110"
+      },
+      {
+       "item": "Queso Campesino® Cotija Whole Milk Cheese",
+       "price": 8.49,
+       "size": "12 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0064440413716"
+      },
+      {
+       "item": "Kroger® Mercado Mexican Style Queso Cotija Grated Cheese",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111012735"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz",
+       "price": 5.99,
+       "size": "10 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/el_mexicano_grating_cheese_part_skim_cotija_queso_10_oz/p/3081598"
+      },
+      {
+       "item": "El Mexicano Cheese, Aged Part Skim Milk Cheese, Granulado, Cotija 16 Oz",
+       "price": 8.89,
+       "size": "16 oz",
+       "relevance": 82,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/el_mexicano_cheese_aged_part_skim_milk_cheese_granulado_cotija_16_oz/p/6091880"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "Crystal Farms Cheese, Feta, Crumbled",
+       "price": 2.98,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1658850-crystal-farms-feta-cheese-113-0-g"
+      },
+      {
+       "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24495714-fareway-cheese-mexican-style-blend-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Grated Parmesan Cheese",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24501059-fareway-cheese-parmesan-grated-8-oz"
+      },
+      {
+       "item": "Kraft Mexican Style Four Cheese Finely Shredded Cheese",
+       "price": 3.18,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74508760-kraft-mexican-style-four-cheese-8-00-oz"
+      },
+      {
+       "item": "Fareway Colby Jack Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24450064-fareway-cheese-colby-jack-shredded-8-oz"
+      },
+      {
+       "item": "El Terrifico Tamale Co. White Cheese Dip, Mexican Restaurant Style, Mild",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3141309-el-terrifico-tamale-white-cheese-dip-mexican-restaurant-style-mild-16-oz"
+      },
+      {
+       "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+       "price": 1.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+      },
+      {
+       "item": "Fareway Taco Blend Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712408-fareway-cheese-taco-blend-fancy-shredded-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Frigo Cheese Heads Yellow Cheddar & Turkey Sticks, 18.9 oz, 24 count",
+       "price": 10.47,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2VWODA2RI7O5"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+       "price": 7.44,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+      },
+      {
+       "item": "El Viajero Panela Basket Cheese 3 lbs.",
+       "price": 11.67,
+       "size": "",
+       "unit_price": "$3.89/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0RQKQXZG40PD"
+      },
+      {
+       "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.30/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      },
+      {
+       "item": "Member's Mark Grated Parmesan Cheese, 24 oz.",
+       "price": 7.42,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XOCVA61RIFC"
+      },
+      {
+       "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+       "price": 12.87,
+       "size": "",
+       "unit_price": "$7.35/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3OV28O1VC6S4"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",

@@ -1,0 +1,125 @@
+{
+ "slug": "baked-honey-mustard-chicken",
+ "lines": [
+  {
+   "raw": "4 chicken breasts (2 lbs boneless and skinless)",
+   "buy": "7 lb (about 14), boneless and skinless",
+   "grams_source": 907,
+   "notes": "The line states its own weight, so no each-weight assumption is involved."
+  },
+  {
+   "raw": "1 medium red onion (sliced thin)",
+   "buy": "3 1/2 medium, sliced thin",
+   "notes": "Settled line, weight carried from the table (110 g source)."
+  },
+  {
+   "raw": "1 tbsp olive oil",
+   "buy": "3 1/2 tbsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp black pepper",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tsp garlic powder",
+   "buy": "1 3/4 tsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "8 oz fresh mozzarella cheese (sliced)",
+   "buy": "1 3/4 lb, sliced",
+   "grams_source": 227,
+   "notes": "8 oz = 227 g. High-moisture fresh mozzarella, not shredded low-moisture."
+  },
+  {
+   "raw": "1/4 cup honey",
+   "buy": "3/4 cup plus 2 tbsp",
+   "notes": "Settled line (84.8 g source). Half is reserved as a finishing drizzle."
+  },
+  {
+   "raw": "4 tbsp grain mustard",
+   "buy": "3/4 cup plus 2 tbsp",
+   "grams_source": 60,
+   "notes": "Prepared mustard at 15 g per tbsp."
+  },
+  {
+   "raw": "1/4 cup chopped parsley",
+   "buy": "scant 1 cup chopped",
+   "grams_source": 15,
+   "notes": "USDA fresh parsley: 1 cup chopped = 60 g, so 1/4 cup = 15 g."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "4 chicken breasts (2 lbs boneless and skinless)",
+   "term": "chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 907,
+   "evidence": "The line names its own form in the prep text - 2 lbs boneless and skinless - which is exactly what the chicken-breast commodity prices at 7 of 7 stores. Food DB row already exists (130 cal / 112 g raw)."
+  },
+  {
+   "raw": "8 oz fresh mozzarella cheese (sliced)",
+   "term": "fresh mozzarella cheese",
+   "canon_item": "Fresh Mozzarella Cheese",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 227,
+   "evidence": "Fresh high-moisture mozzarella packed in water is a different product and price class from both the shredded-cheese id the board matched and the low-moisture Mozzarella Cheese row (250 vs 304 cal per 100 g); refusing the bridge and enqueuing the term. New label row added."
+  },
+  {
+   "raw": "4 tbsp grain mustard",
+   "term": "grain mustard",
+   "canon_item": "Whole Grain Mustard",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 60,
+   "evidence": "Coarse whole-seed prepared mustard: not the yellow mustard the mustard id prices and not smooth Dijon. Same condiment family, specialty jar price class, so no bridge; term enqueued. New label row added."
+  },
+  {
+   "raw": "1/4 cup chopped parsley",
+   "term": "parsley",
+   "canon_item": "Fresh Parsley",
+   "bid": "fresh-parsley",
+   "decision": "mapped",
+   "grams_source": 15,
+   "evidence": "1/4 cup CHOPPED can only be fresh (a quarter cup of dried parsley is not a garnish). fresh-parsley is an existing live commodity id, so this is a reuse and not a proposal; the Fresh Parsley food row already exists."
+  }
+ ],
+ "absent_terms": [
+  "fresh mozzarella cheese",
+  "whole grain mustard"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 547,
+   "protein_g": 62,
+   "carbs_g": 23
+  },
+  "our_computed_per_serving": {
+   "calories": 525,
+   "protein_g": 61.2,
+   "carbs_g": 21.3
+  },
+  "delta_pct": {
+   "calories": -4.1,
+   "protein": -1.3,
+   "carbs": -7.4
+  },
+  "servings_source": 4,
+  "verdict": "PASS. Protein is within 1.3% of the source's own figure, which confirms the 907 g chicken basis and the 227 g fresh mozzarella. No portion needs re-examining."
+ }
+}

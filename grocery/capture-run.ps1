@@ -656,6 +656,46 @@ try {
     }
   }
 
+  # AN UNATTENDED RUN NEEDS A WAY THROUGH, OR THE GUARD BECOMES THE OUTAGE (2026-08-25).
+  # The check above is right about the mechanism and was wrong about the remedy. On 2026-08-24
+  # check-ad-cycles.ps1 started writing out\cadence - a real feature, ten 35-byte stamps - and this
+  # gate refused. Correct on the first morning. But the ONLY exits it names are .gitignore (wrong: the
+  # stamps belong in git, they are the auditor schedule) and -ForceBigCommit, an interactive switch
+  # that no Task Scheduler action carries. So 07:00 and 08:00 both refused, reset the index, and exited
+  # 1 - and would have done so again every morning until a human noticed. They did it for a day and a
+  # half: the board was rebuilt each morning and public\board.json never shipped, so readers held a
+  # board 146 of 607 cells out of date while every capture in the run reported rc=0.
+  #
+  # A GUARD THAT CANNOT BE SATISFIED WITHOUT A HUMAN IS A GUARD THAT STOPS THE PIPELINE, NOT ONE THAT
+  # PROTECTS IT. Give it a durable declaration instead. out-declared-families.json names each new family
+  # with its writer and its reason; a declared directory is admitted and SAID OUT LOUD in the log, an
+  # undeclared one refuses exactly as before.
+  #
+  # WHY THIS IS NOT THE ALLOWLIST THE HEADER ABOVE REJECTS. That one replaced the sweep with an
+  # enumeration of what to track, so anything missing from it silently stopped being committed - 269
+  # things, per the 2026-08-23 measurement. This list is the opposite polarity: it can only ADMIT a
+  # directory that is already staged. It has no power to exclude, untrack or ignore anything, so the
+  # cloud-clone-quietly-missing-it failure it warns of cannot arise from it. Read failures admit
+  # nothing - a manifest that cannot be parsed must not become a skeleton key.
+  $declared = @{}
+  $declFile = Join-Path $repo 'grocery\out-declared-families.json'
+  if (Test-Path -LiteralPath $declFile) {
+    try {
+      foreach ($fam in @((Get-Content -LiteralPath $declFile -Raw -Encoding UTF8 | ConvertFrom-Json).families)) {
+        if ($fam.dir) { $declared[[string]$fam.dir] = $fam }
+      }
+    } catch {
+      Write-Warning ('commit gate: out-declared-families.json is unreadable (' + $_.Exception.Message + ') - declaring nothing; a manifest that cannot be parsed must not admit a directory.')
+    }
+  }
+  if ($newDirs.Count) {
+    $admitted = @($newDirs | Where-Object { $declared.ContainsKey($_) })
+    foreach ($d in $admitted) {
+      Write-Output ("commit: NEW directory under grocery\out ADMITTED by declaration: " + $d + "  (writer: " + $declared[$d].writer + ", declared " + $declared[$d].since + ")")
+    }
+    $newDirs = @($newDirs | Where-Object { -not $declared.ContainsKey($_) })
+  }
+
   $NEW_FILE_CAP = 300
   $NEW_MB_CAP   = 25
   $sizeGateRefused = $false
@@ -673,7 +713,13 @@ try {
       Write-Warning ("commit REFUSED: a directory under grocery\out has never been tracked before: " + ($newDirs -join ', '))
       Write-Output  ('commit: REFUSED - NEW directory under grocery\out: ' + ($newDirs -join ', '))
       Write-Output  '  browser-profiles arrived exactly this way on 2026-08-22 and became half the pack.'
-      Write-Output  '  If it does not belong in git, add it to .gitignore. If it does, -ForceBigCommit.'
+      Write-Output  '  Three ways through, and only one of them survives to tomorrow:'
+      Write-Output  '    - it does NOT belong in git      -> add it to .gitignore'
+      Write-Output  '    - it DOES belong, permanently    -> declare it in grocery\out-declared-families.json'
+      Write-Output  '                                        (name the writer and why; the 07:00 task can pass that, it cannot pass a switch)'
+      Write-Output  '    - just this once, by hand        -> re-run with -ForceBigCommit'
+      Write-Output  '  Do NOT leave it at -ForceBigCommit for a family that will be written again tomorrow: out\cadence'
+      Write-Output  '  was left undeclared on 2026-08-24 and both scheduled runs refused every morning after it.'
     }
     Write-Output  'commit: REFUSED - that is not a day of prices. Top directories by new-file count:'
     $byDir = @{}

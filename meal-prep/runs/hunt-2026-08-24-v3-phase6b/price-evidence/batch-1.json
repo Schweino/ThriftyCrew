@@ -2,10 +2,9 @@
  "schema": "price-evidence/1",
  "run": "hunt-2026-08-24-v3-phase6b",
  "batch": 1,
- "generated": "2026-08-24T12:21:29",
+ "generated": "2026-08-24T19:12:02",
  "batch_terms": [
-  "golden beets",
-  "chicken drumsticks"
+  "golden beets"
  ],
  "roster": [
   "Baker's",
@@ -52,20 +51,6 @@
        "url": "https://www.bakersplus.com/p/0088491211762"
       },
       {
-       "item": "Artesano® Golden Wheat Bread",
-       "price": 4.79,
-       "size": "20 oz",
-       "relevance": 133,
-       "url": "https://www.bakersplus.com/p/0007016295869"
-      },
-      {
-       "item": "Mezzetta Golden Greek Pepperoncini",
-       "price": 4.69,
-       "size": "16 fl oz",
-       "relevance": 132,
-       "url": "https://www.bakersplus.com/p/0007321400105"
-      },
-      {
        "item": "Golden Road Mango Cart Craft Beer",
        "price": 17.99,
        "size": "12 can / 12 fl. oz",
@@ -80,11 +65,18 @@
        "url": "https://www.bakersplus.com/p/0004240040758"
       },
       {
-       "item": "General Mills Golden Grahams™ Cereal",
+       "item": "General Mills Golden GrahamsT Cereal",
        "price": 4.99,
        "size": "11.7 oz",
        "relevance": 131,
        "url": "https://www.bakersplus.com/p/0001600012025"
+      },
+      {
+       "item": "Golden Homer Ultra Crispy Pizza Crust",
+       "price": 6.49,
+       "size": "14.25 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0002340208710"
       },
       {
        "item": "Golden Home Ultra Thin Pizza Crusts",
@@ -94,11 +86,18 @@
        "url": "https://www.bakersplus.com/p/0002340208715"
       },
       {
-       "item": "Golden Home® Ultra Crispy Pizza Crust",
-       "price": 6.49,
-       "size": "14.25 oz",
-       "relevance": 131,
-       "url": "https://www.bakersplus.com/p/0002340208710"
+       "item": "Krogerr Whole Kernel Sweet Golden Corn",
+       "price": 1,
+       "size": "15.25 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111011383"
+      },
+      {
+       "item": "OREO Fresh Stacks Golden Sandwich Cookies",
+       "price": 2.99,
+       "size": "8.05 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0004400008205"
       }
      ],
      "reason": "",
@@ -259,18 +258,18 @@
        "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1333295-love-beets-organic-mild-vinegar-beets-6-5-oz"
       },
       {
-       "item": "Organic Girl Baby Spinach",
-       "price": 5.44,
-       "size": "10 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/122143-organicgirl-baby-spinach-10-oz"
-      },
-      {
-       "item": "Dole Celery Hearts",
-       "price": 2.99,
+       "item": "Grimmway Farms Carrot Chips 1 lb",
+       "price": 1.99,
        "size": "16 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3078796-dole-organic-celery-16-0-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/150721-grimmway-farms-carrot-chips-16-oz"
+      },
+      {
+       "item": "Asparagus",
+       "price": 4.99,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16856881-asparagus-1-lb"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -305,6 +304,14 @@
        "url": "https://www.samsclub.com/p/-/731TC4PY73ON"
       },
       {
+       "item": "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
+       "price": 12.98,
+       "size": "",
+       "unit_price": "$1.08/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15T8I1MC50OK"
+      },
+      {
        "item": "Premier Protein 30g Coffeehouse Variety Pack, 11.5 fl. oz., 12 pk.",
        "price": 24.98,
        "size": "",
@@ -321,14 +328,6 @@
        "url": "https://www.samsclub.com/p/-/10Q2YRGCPUOS"
       },
       {
-       "item": "Premier Protein High Protein Shake, Coffeehouse Mocha, 11 fl. oz., 15 pk.",
-       "price": 26.64,
-       "size": "",
-       "unit_price": "$0.16/foz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/117LPXNIE1A0"
-      },
-      {
        "item": "Vital Proteins Collagen Peptides Powder, Limited Edition Ice Pop, 26.3 oz.",
        "price": 29.98,
        "size": "",
@@ -337,335 +336,20 @@
        "url": "https://www.samsclub.com/p/-/4E5YVILXAQ6H"
       },
       {
-       "item": "RAW Grass Fed Whey Isolate Protein, Milk & Cookies, 1.56 lbs.",
-       "price": 29.98,
-       "size": "",
-       "unit_price": "$1.20/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3RO562IUXWDE"
-      },
-      {
-       "item": "Premier Protein 30g High Protein Shake, Pumpkin Spice 11 fl. oz., 15 pk.",
+       "item": "Premier Protein High Protein Shake, Coffeehouse Mocha, 11 fl. oz., 15 pk.",
        "price": 26.64,
        "size": "",
        "unit_price": "$0.16/foz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4KMLRXGH2PUC"
-      }
-     ],
-     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
-     "tier": "driver"
-    },
-    {
-     "store": "Walmart",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    }
-   ]
-  },
-  {
-   "term": "chicken drumsticks",
-   "unit": "",
-   "stores": [
-    {
-     "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "chicken drumsticks",
-     "attempts": [
-      {
-       "term": "chicken drumsticks",
-       "state": "OK",
-       "hits": 24
-      }
-     ],
-     "hits": [
-      {
-       "item": "Home Chef Cold Fried Chicken Drumsticks",
-       "price": 5,
-       "size": "5 pc",
-       "relevance": 130,
-       "url": "https://www.bakersplus.com/p/0004517310554"
+       "url": "https://www.samsclub.com/p/-/117LPXNIE1A0"
       },
       {
-       "item": "Kroger® Fresh Uncooked Chicken Drumsticks",
-       "price": 5,
-       "size": "4.5 lb",
-       "relevance": 130,
-       "url": "https://www.bakersplus.com/p/0001111063825"
-      },
-      {
-       "item": "Tyson® All Natural Fresh Chicken Drumsticks",
-       "price": 2.99,
-       "size": "1 lb",
-       "relevance": 129,
-       "url": "https://www.bakersplus.com/p/0026080800000"
-      },
-      {
-       "item": "Heritage Farm® Bone In Skin On Chicken Drumsticks",
-       "price": 1.49,
-       "size": "1 lb",
-       "relevance": 128,
-       "url": "https://www.bakersplus.com/p/0028334800000"
-      },
-      {
-       "item": "Smart NAE Chicken Party Wing",
-       "price": 4.99,
-       "size": "1 lb",
-       "relevance": 43,
-       "url": "https://www.bakersplus.com/p/0028187400000"
-      },
-      {
-       "item": "Smart NAE Boneless Chicken Thigh",
-       "price": 5.99,
-       "size": "1 lb",
-       "relevance": 42,
-       "url": "https://www.bakersplus.com/p/0023178550000"
-      },
-      {
-       "item": "Tyson® All Natural Fresh Chicken Thighs",
-       "price": 2.99,
-       "size": "1 lb",
-       "relevance": 40,
-       "url": "https://www.bakersplus.com/p/0026064500000"
-      },
-      {
-       "item": "Smart NAE Chicken Party Wing Family Pack",
-       "price": 4.99,
-       "size": "1 lb",
-       "relevance": 40,
-       "url": "https://www.bakersplus.com/p/0022144500000"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "chicken drumsticks",
-     "attempts": [
-      {
-       "term": "chicken drumsticks",
-       "state": "OK",
-       "hits": 6
-      }
-     ],
-     "hits": [
-      {
-       "item": "Chicken Drumsticks",
-       "price": 2.49,
-       "size": "lb",
-       "relevance": 136,
-       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_drumsticks/p/1564405684714642704"
-      },
-      {
-       "item": "Mba Chicken Drumsticks",
-       "price": 3.29,
-       "size": "lb",
-       "relevance": 134,
-       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/mba_chicken_drumsticks/p/1564405684714638149"
-      },
-      {
-       "item": "Fresh Chicken Drumsticks Ep",
-       "price": 2.29,
-       "size": "lb",
-       "relevance": 133,
-       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/fresh_chicken_drumsticks_ep/p/1564405684714642647"
-      },
-      {
-       "item": "Seasoned Chicken Drumsticks",
-       "price": 3.99,
-       "size": "lb",
-       "relevance": 133,
-       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/prepared_chicken/seasoned_chicken_drumsticks/p/1564405684713031759"
-      },
-      {
-       "item": "Chicken Drumsticks, Family Pack Gold N Plump",
-       "price": 1.99,
-       "size": "lb",
-       "relevance": 129,
-       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_drumsticks_family_pack_gold_n_plump/p/1564405684714631527"
-      },
-      {
-       "item": "Hartz Drumstick Toy Chicken Flavor Extra Small",
-       "price": 6.89,
-       "size": "1 ct",
-       "relevance": 38,
-       "url": "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/toys_chews/hartz_drumstick_toy_chicken_flavor_extra_small/p/1564405684711693523"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Hy-Vee",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
-     "tier": "pricer-tab"
-    },
-    {
-     "store": "Aldi",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    },
-    {
-     "store": "Fareway",
-     "state": "MATCHES",
-     "term_used": "chicken drumsticks",
-     "attempts": [
-      {
-       "term": "chicken drumsticks",
-       "state": "OK",
-       "hits": 31
-      }
-     ],
-     "hits": [
-      {
-       "item": "Tyson Chicken Drumsticks, 2.5 lb. (Frozen)",
-       "price": 5.99,
-       "size": "1.13 kg",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3129619-tyson-chicken-drumsticks-2-5-lb-frozen-2-5-lb"
-      },
-      {
-       "item": "Perdue High Protein Chicken Bites",
-       "price": 10.59,
-       "size": "20 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/110027539-perdue-powered-high"
-      },
-      {
-       "item": "Drumstick Vanilla Frozen Dairy Dessert Cones",
-       "price": 5.48,
-       "size": "4 x 4 each",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/94967605-drumstick-vanilla-frozen-dairy-dessert-cones-18-4-fl-oz"
-      },
-      {
-       "item": "Knorr Granulated Bouillon Chicken Flavor",
-       "price": 3.29,
-       "size": "7.9 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35576-knorr-chicken-flavor-bouillon-granulated-7-9-oz"
-      },
-      {
-       "item": "Tyson Frozen Chicken Wing Portions",
-       "price": 7.99,
-       "size": "1.13 kg",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3247014-tyson-frozen-chicken-wing-portions-2-5-lbr"
-      },
-      {
-       "item": "Fareway Chicken Broth",
-       "price": 0.98,
-       "size": "14.5 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/23966597-fareway-chicken-broth-reduced-sodium-145-oz"
-      },
-      {
-       "item": "Better Than Bouillon Roasted Chicken Base, Premium",
-       "price": 5.99,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69743-better-than-bouillon-premium-roasted-chicken-base-8-oz"
-      },
-      {
-       "item": "Drumstick Vanilla Fudge And Vanilla Caramel Mini Sundae Cones",
-       "price": 8.98,
-       "size": "12 ct",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2772392-nestle-vanilla-fudge-swirl-and-vanilla-caramel-swirl-sundae-cones-12-ct"
-      }
-     ],
-     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
-     "tier": "driver"
-    },
-    {
-     "store": "Sam's Club",
-     "state": "MATCHES",
-     "term_used": "chicken drumsticks",
-     "attempts": [
-      {
-       "term": "chicken drumsticks",
-       "state": "MATCHES",
-       "hits": 20
-      }
-     ],
-     "hits": [
-      {
-       "item": "Farmer Focus Organic Thin Sliced Boneless Skinless Chicken Breast, priced per pound",
-       "price": 27.08,
+       "item": "VitaCup Mushroom Focus Coffee, 16 oz.",
+       "price": 19.98,
        "size": "",
-       "unit_price": "$6.77/lb",
+       "unit_price": "$1.25/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/1LQAM2NDZAC9"
-      },
-      {
-       "item": "Buena Mesa Authentically Seasoned Fajita Chicken, priced per pound",
-       "price": 19.04,
-       "size": "",
-       "unit_price": "$4.76/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3XL0EDZI1JJ5"
-      },
-      {
-       "item": "Member's Mark Chicken Drumsticks, priced per pound",
-       "price": 4.89,
-       "size": "",
-       "unit_price": "$0.98/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/70H7BHXK0D6R"
-      },
-      {
-       "item": "Member's Mark Chicken Drumsticks, Case, priced per pound",
-       "price": 39.3,
-       "size": "",
-       "unit_price": "$0.98/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/1ZN6GCLO35JL"
-      },
-      {
-       "item": "SUMM! Chicken Dumplings with Chili Crisp Oil, 2PK (16.23 oz)",
-       "price": 8.64,
-       "size": "",
-       "unit_price": "",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3NM9YEPXSSBS"
-      },
-      {
-       "item": "Nature Raised Farms Fully Cooked Lightly Breaded Chicken Breast Strips, Frozen, 2.5 lbs.",
-       "price": 15.97,
-       "size": "",
-       "unit_price": "$6.39/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/0Y3T1FF0O3IH"
-      },
-      {
-       "item": "Member's Mark Chicken Thighs, Case, priced per pound",
-       "price": 60.85,
-       "size": "",
-       "unit_price": "$1.28/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/68S6A0SC80AT"
-      },
-      {
-       "item": "Member's Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
-       "price": 108.67,
-       "size": "",
-       "unit_price": "$2.48/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/5AAWMYQVP0K2"
+       "url": "https://www.samsclub.com/p/-/2QZ1QSSOZSG3"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",

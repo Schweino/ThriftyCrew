@@ -1,32 +1,32 @@
 ﻿{
-    "generated":  "2026-08-23T01:26:17",
-    "started":  "2026-08-23T01:24:05",
-    "deadline":  "2026-08-23T02:04:05",
+    "generated":  "2026-08-24T21:32:44",
+    "started":  "2026-08-24T21:30:01",
+    "deadline":  "2026-08-25T00:00:01",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  132,
+    "elapsed_sec":  163,
     "card_free":  true,
-    "free_vram_mib":  14830,
+    "free_vram_mib":  14627,
     "llama_started":  true,
     "stages":  [
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 0 question(s) of 20507 (20507 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 1.9s",
-                       "sec":  2
+                       "detail":  "contested: 0 question(s) of 20507 (20507 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.4s",
+                       "sec":  3
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[01:24:07] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
-                       "sec":  0
+                       "detail":  "[21:30:05] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  1
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  93
+                       "sec":  123
                    },
                    {
                        "stage":  "serve",
@@ -44,7 +44,7 @@
                        "stage":  "stage1",
                        "state":  "OK",
                        "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
-                       "sec":  24
+                       "sec":  21
                    },
                    {
                        "stage":  "stop",

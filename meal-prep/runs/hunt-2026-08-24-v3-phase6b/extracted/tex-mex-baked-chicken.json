@@ -1,0 +1,149 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Tex Mex Baked Chicken",
+  "source_url": "https://keviniscooking.com/mexican-baked-chicken/",
+  "servings": 4,
+  "time_total": "40 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "30 oz black beans ((2 15-oz cans), drained)",
+      "item": "black beans",
+      "qty": "30 oz",
+      "unit": null,
+      "prep": "(2 15-oz cans), drained",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 medium yellow onion ( diced)",
+      "item": "medium yellow onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 green bell pepper (diced)",
+      "item": "green bell pepper",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lbs chicken breasts ((See Note 1))",
+      "item": "chicken breasts",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": "(See Note 1)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp garlic powder",
+      "item": "garlic powder",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp ground cumin",
+      "item": "ground cumin",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp chili seasoning",
+      "item": "chili seasoning",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp kosher salt",
+      "item": "kosher salt",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp black pepper",
+      "item": "black pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 cups red enchilada sauce",
+      "item": "red enchilada sauce",
+      "qty": "1 1/2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 cups cheddar cheese (or Oaxaca cheese)",
+      "item": "cheddar cheese",
+      "qty": "1 1/2",
+      "unit": "cups",
+      "prep": "(or Oaxaca cheese)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup crumbled cotija cheese (or queso fresco)",
+      "item": "cotija cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "crumbled (or queso fresco)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "cilantro (for garnish)",
+      "item": "cilantro",
+      "qty": null,
+      "unit": null,
+      "prep": "for garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400°F. In a small bowl mix together the garlic, cumin, chili powder, kosher salt and pepper.",
+    "Place the black beans, onion and bell pepper in a rectangle 9x13\" casserole dish that has been sprayed with cooking spray or vegetable oil.",
+    "Layer the chicken breasts on top of the black beans/vegetables and top with seasoning mixture.",
+    "Drizzle half of the red enchilada sauce on top of the chicken.",
+    "Bake covered with foil for 25 minutes, depending on the thickness of your chicken breasts. (See Note 1) Be sure chicken internal temp reads at least 160°F as it will continue to cook.",
+    "Remove from oven and top each chicken breast with the remaining red enchilada sauce and cheddar cheese. Put it back in the oven, uncovered for 5 minutes. We want a finished 165°F internal temp, check. Remove from oven and allow to rest 5 minutes before slicing or serving.",
+    "Sprinkle the cotija cheese crumbles over all and chopped cilantro (optional) for garnish."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

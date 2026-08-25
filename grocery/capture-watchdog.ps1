@@ -310,6 +310,61 @@ foreach ($f in ($flags | Where-Object { ((Get-Date) - $_.LastWriteTime).TotalDay
 }
 
 
+# ---- 6b. IS ANYTHING STILL HOLDING THE RUN LOG MUTE? (2026-08-25) ------------------------------------
+# check-ad-cycles.ps1 already survives a locked ad-cycle-log.txt: it diverts the run's trail to a dated
+# LOCKED-<day> sidecar, and the next run that CAN write the primary folds the sidecar back in and deletes
+# it. Both halves worked. What nothing checked was the case where the lock never lifts.
+#
+# On 2026-08-22 at 08:53 an abandoned Claude session left `tail -n 0 -F grocery/ad-cycle-log.txt` running.
+# It held the file for 67 HOURS. Every run from 08-22 on diverted to a sidecar, and the recovery fold
+# correctly refused to delete anything it could not first append - so the sidecars simply accumulated:
+# three of them, 3,560 lines, the entire trail of three days of runs, sitting outside the log that is
+# supposed to hold them and outside git. The recovery design was right. It was just waiting for a run
+# that could write, and no such run was ever going to come while that process lived.
+#
+# A PRIOR-DAY SIDECAR IS ITSELF THE ALARM. Its existence means today's fold could not append, which means
+# the primary is still held. That is a one-line check and it would have fired on the morning of 08-23.
+# Name the holder if we can - "something has it" sends the reader hunting; a PID and a command line ends
+# the question. Get-CimInstance is best-effort and must never take the watchdog down with it.
+$sidecars = @(Get-ChildItem (Join-Path $PSScriptRoot 'ad-cycle-log.LOCKED-*.txt') -EA SilentlyContinue |
+              Where-Object { $_.BaseName -match 'LOCKED-(\d{4}-\d{2}-\d{2})$' -and $Matches[1] -lt $todayS })
+if ($sidecars.Count) {
+  $scLines = 0
+  foreach ($sc in $sidecars) { try { $scLines += @(Get-Content $sc.FullName -EA SilentlyContinue).Count } catch { } }
+  $oldestSc = ($sidecars | Sort-Object Name | Select-Object -First 1)
+  $holder = ''
+  try {
+    $primary = Join-Path $PSScriptRoot 'ad-cycle-log.txt'
+    try { $fsT = [System.IO.File]::Open($primary, 'Append', 'Write', 'None'); $fsT.Close() }
+    catch {
+      # NEVER ACCUSE OURSELVES. Command-line matching is a heuristic, and the watchdog's own launch chain
+      # mentions this log whenever a human runs it by hand from a shell one-liner - the first draft of
+      # this check named the parent PowerShell that started it, which is a false lead wearing a PID.
+      # Walk our own ancestry out of the candidate set first, then prefer the documented culprits
+      # (tail/bash) over any shell, so the reader gets the process actually sitting on the handle.
+      $mine = @{}; $walk = $PID
+      for ($h = 0; $h -lt 12 -and $walk; $h++) {
+        $mine[[int]$walk] = $true
+        $pp = Get-CimInstance Win32_Process -Filter ("ProcessId=" + [int]$walk) -EA SilentlyContinue
+        if (-not $pp) { break }
+        $walk = $pp.ParentProcessId
+      }
+      $cands = @(Get-CimInstance Win32_Process -EA SilentlyContinue |
+                 Where-Object { -not $mine.ContainsKey([int]$_.ProcessId) -and [string]$_.CommandLine -like '*ad-cycle-log*' })
+      $pick = @($cands | Where-Object { $_.Name -in @('tail.exe','bash.exe') } | Select-Object -First 1)
+      if (-not $pick.Count) { $pick = @($cands | Select-Object -First 1) }
+      if ($pick.Count) { $holder = "  HOLDER: pid $($pick[0].ProcessId) ($($pick[0].Name)) since $($pick[0].CreationDate) :: " + ([string]$pick[0].CommandLine).Trim() }
+      else { $holder = '  HOLDER: the primary log is locked but no other process command line names it - check open handles (Sysinternals handle.exe / Resource Monitor).' }
+    }
+  } catch { }
+  # SINGLE-QUOTED, DELIBERATELY. In a double-quoted PowerShell string the backtick before "tail" is an
+  # escape and 'tail -F' silently became a TAB character in the alert - the check fired correctly and the
+  # sentence telling the reader what to look for had eaten its own subject. Caught by running it.
+  $mute = 'RUN LOG HELD MUTE: {0} prior-day LOCKED sidecar(s) survive, oldest {1}, holding {2} line(s) of run history that never reached ad-cycle-log.txt. The recovery fold only deletes a sidecar it could append first, so a surviving one means the primary is STILL locked by another process - kill it and the next run folds them back automatically. An abandoned "tail -F" from a dead session did this for 67 hours from 2026-08-22.{3}'
+  [void]$findings.Add(($mute -f $sidecars.Count, $oldestSc.Name, $scLines, $holder))
+}
+
+
 # ---- 7. did each STORE actually contribute a fresh row, or just the pipeline? -------------------------
 # THE HOLE THIS CLOSES. Checks 1-6 are all pipeline-level: the tasks fired, a board exists, it published.
 # Every one of them passes while an individual store captures NOTHING, because carry-forward keeps that

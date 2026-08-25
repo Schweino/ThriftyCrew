@@ -1,0 +1,85 @@
+{
+    "slug":  "creamy-roasted-garlic-chicken",
+    "title":  "Creamy Roasted Garlic Chicken",
+    "source_url":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-audit",
+    "wave":  2,
+    "created":  "2026-08-24T18:57:43",
+    "updated":  "2026-08-24T19:48:27",
+    "terms":  [
+
+              ],
+    "reject_reason":  "NO-GO on two recipe-local, writer-owned prose defects in meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json; no shared data implicated. B1: shop_smart milk bullet says \u0027a half gallon covers it wi",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-24T18:57:43",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/creamy-roasted-garlic-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-24T18:57:44",
+                        "by":  "decider",
+                        "detail":  "Chicken breasts under a roasted-whole-head-of-garlic and parmesan bechamel; no live creamy-garlic-chicken match (40-clove garlic is a braise, parmesan-garlic sheet-pan has potatoes), verified low-carb band 580/13/57."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-24T19:12:00",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-24T19:21:39",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled, 0 rejected, 0 mapped-null, 0 new DB rows needed (chicken breast, flour, garlic, parmesan and hot sauce all already had label rows under their canon names - the table\u0027s \u0027no food-macros-db row\u0027 flags were term-string misses, not real gaps). Called out, not acted on: the settled Milk row is nonfat ultra-filtered and this is a cream-sauce recipe, so the published card will read"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-24T19:21:40",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-24T19:26:15",
+                        "by":  "derive",
+                        "detail":  "all 0 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-24T19:29:46",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-24T19:29:46",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-24T19:34:00",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-24T19:34:01",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-24T19:48:27",
+                        "by":  "auditor",
+                        "detail":  "NO-GO on two recipe-local, writer-owned prose defects in meal-prep\\db\\recipes\\creamy-roasted-garlic-chicken.json; no shared data implicated. B1: shop_smart milk bullet says \u0027a half gallon covers it wi"
+                    }
+                ]
+}

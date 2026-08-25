@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-23T18:20:28",
-    "count":  72,
+    "updated":  "2026-08-24T18:57:50",
+    "count":  104,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -1084,6 +1084,491 @@
                        "run":  "hunt-2026-08-23-v3-phase1-mini",
                        "by":  "decider",
                        "at":  "2026-08-23T18:20:28"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "turmeric-braised-chicken-with-golden-beets-and-leeks",
+                       "name":  "Turmeric Braised Chicken with Golden Beets and Leeks",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "accepted",
+                       "reason":  "Novel turmeric-ginger-lemon white-wine chicken braise with golden beets and leeks; widens catalog beyond existing braised-chicken dishes, verified band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:54"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+                       "name":  "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Balsamic-goat-cheese-cranberry harvest chicken skillet, distinct plate from the roasted sheet-pan brussels harvest chicken; borderline but different veg and sauce.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:55"
+                   },
+                   {
+                       "key":  "turkey|bake|plain",
+                       "slug":  "roast-turkey-recipe",
+                       "name":  "Roast Turkey Recipe",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Whole-bird holiday roast turkey (10-15 lb, 15 servings), not a weeknight batch-prep dinner format the catalog wants.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:55"
+                   },
+                   {
+                       "key":  "pork|braised|plain",
+                       "slug":  "slow-cooker-pork-loin-roast-or-pork-shoulder",
+                       "name":  "Slow Cooker Pork Loin Roast OR Pork Shoulder",
+                       "protein":  "pork",
+                       "method":  "braised",
+                       "verdict":  "accepted",
+                       "reason":  "Honey-butter-cider-vinegar glazed slow-cooker pork roast, distinct sweet-tangy profile from existing gravy/blackberry/mustard pork roasts.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:56"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "carne-en-su-jugo",
+                       "name":  "Carne en su Jugo",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same Jalisco carne en su jugo (bacon, steak, tomatillo-serrano-cilantro, pinto beans) already live as carne-en-su-jugo-bowls.",
+                       "dupe_of":  [
+                                       "carne-en-su-jugo-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:57"
+                   },
+                   {
+                       "key":  "beef|bake|plain",
+                       "slug":  "beef-back-ribs",
+                       "name":  "Beef Back Ribs",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Dry-rub BBQ oven-baked beef back ribs; distinct from all live beef bowls/stews, adds a BBQ-rib format.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:09:58"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "chicken-burrito",
+                       "name":  "Chicken Burrito",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Plain salsa-and-cheese chicken burrito; no distinct flavor beyond the 8+ chicken-burrito variants already live.",
+                       "dupe_of":  [
+                                       "chicken-bean-burrito",
+                                       "bbq-chicken-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:10:00"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "authentic-birria",
+                       "name":  "Authentic Birria",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Classic beef birria chile braise duplicates live beef-birria-rice-bowls/beef-birria-burrito; birria region already carried twice.",
+                       "dupe_of":  [
+                                       "beef-birria-rice-bowls",
+                                       "beef-birria-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:10:01"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "beef-and-guinness-stew",
+                       "name":  "Beef and Guinness Stew",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Identical Irish beef-and-Guinness stew already live as irish-beef-and-guinness-stew.",
+                       "dupe_of":  [
+                                       "irish-beef-and-guinness-stew"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:10:02"
+                   },
+                   {
+                       "key":  "chicken|braised|curry",
+                       "slug":  "chicken-dal-curry",
+                       "name":  "Chicken Dal Curry",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Yellow split peas not carried in Omaha (per prior burmese-chicken-dal-curry ruling); also a very crowded chicken-curry region.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:10:02"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "ina-garten-s-roast-chicken",
+                       "name":  "Ina Garten\u0027s Roast Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Whole-bird herb-and-lemon roast chicken with carrots/fennel/onion; no live roast-chicken match, distinct staple format, band verified 641cal/8c/54p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:12"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "french-onion-chicken",
+                       "name":  "French Onion Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked bone-in chicken breasts over sourdough with caramelized onion and thyme; distinct baked format from the existing slow-cooker french-onion chicken bowls (differs on method + starch), band verified 583/35/61.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:13"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "stuffed-chicken-breast",
+                       "name":  "Stuffed Chicken Breast",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken breast stuffed with spinach, sun-dried tomato, cream cheese and mozzarella (Tuscan cream profile); no live near-match, distinct from chicken parmesan, band verified 559cal/10c/61p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:14"
+                   },
+                   {
+                       "key":  "chicken|bake|cheese",
+                       "slug":  "cheese-stuffed-chicken-parmesan",
+                       "name":  "Cheese-Stuffed Chicken Parmesan",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Breaded cheese-stuffed baked chicken parmesan with marinara/mozzarella; live catalog holds only a chicken-parm PASTA, no cutlet version, so distinct; band verified 567cal/24c/50p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:15"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "jamaican-jerk-chicken",
+                       "name":  "Jamaican Jerk Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Marinated jerk chicken, same flavor identity as live one-pot-jerk-chicken-and-rice; jerk/Jamaican chicken region already saturated (jerk rice, jerk burrito, brown stew chicken all live).",
+                       "dupe_of":  [
+                                       "one-pot-jerk-chicken-and-rice"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:16"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "pork-roast-recipe",
+                       "name":  "Pork Roast Recipe",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Center-cut boneless pork loin roast with apples/onion; same pork-loin-roast dinner as live dutch-oven-pork-loin-roast-gravy and the slow-cooker pork loin roast accepted same run.",
+                       "dupe_of":  [
+                                       "dutch-oven-pork-loin-roast-gravy",
+                                       "slow-cooker-pork-loin-roast-or-pork-shoulder"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:17"
+                   },
+                   {
+                       "key":  "pork|braised|spice",
+                       "slug":  "slow-cooker-asian-pulled-pork-tacos",
+                       "name":  "Slow Cooker Asian Pulled Pork Tacos",
+                       "protein":  "pork",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Hoisin sweet-soy braised shredded pork over rice; 4-of-4 structural match to live slow-cooker teriyaki/korean shredded pork bowls, Asian slow-cooker pork already well covered.",
+                       "dupe_of":  [
+                                       "slow-cooker-teriyaki-pork-bowls",
+                                       "slow-cooker-korean-shredded-pork-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:18"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "mushroom-pork-chops",
+                       "name":  "Mushroom Pork Chops",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Breaded pork steaks in cream-of-mushroom sauce; near-identical to live creamy-mushroom-pork-chops-over-mashed-potatoes (same protein/method/cream-mushroom sauce, bge 0.90).",
+                       "dupe_of":  [
+                                       "creamy-mushroom-pork-chops-over-mashed-potatoes"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:19"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "how-to-cook-the-perfect-steak",
+                       "name":  "How to Cook the Perfect Steak",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Ribeye-cooking technique page (2 servings, herb butter); not a batch-scalable composed dinner and ribeye cost is implausible for the thrifty catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:20"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "easy-chicken-cordon-bleu",
+                       "name":  "Easy Chicken Cordon Bleu",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Rolled ham-and-swiss chicken cordon bleu with dijon cream; same dinner identity as live chicken-cordon-bleu-casserole (turkey cordon bleu casserole also live), flavor already saturated.",
+                       "dupe_of":  [
+                                       "chicken-cordon-bleu-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:21"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "hawaiian-chicken",
+                       "name":  "Hawaiian Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken drumsticks in a pineapple-ketchup-soy-brown-sugar Hawaiian glaze served with coconut rice; distinct pineapple/Polynesian sauce family with no dupe in catalog or backlog, verified low-carb band and a cuisine that widens the American-skewed catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T12:13:38"
+                   },
+                   {
+                       "key":  "sausage|casserole|plain",
+                       "slug":  "sausage-and-rice-one-pot",
+                       "name":  "Sausage and Rice - One Pot!",
+                       "protein":  "sausage",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Creamy cheesy sausage-and-rice bake duplicates the existing cheesy turkey sausage vegetable rice casserole (same dish in turkey) and cheesy smoked sausage rice skillet; nothing distinguishes the plate.",
+                       "dupe_of":  [
+                                       "cheesy-turkey-sausage-vegetable-rice-casserole",
+                                       "cheesy-smoked-sausage-rice-skillet"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-noband-drill",
+                       "by":  "decider",
+                       "at":  "2026-08-24T15:32:06"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "beef-stroganoff-soup",
+                       "name":  "Beef Stroganoff Soup",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Brothy stewing-beef stroganoff soup distinct in format from existing stroganoff pastas; verified band fits, strong 35g protein.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-noband-drill",
+                       "by":  "decider",
+                       "at":  "2026-08-24T15:32:07"
+                   },
+                   {
+                       "key":  "any|any|plain",
+                       "slug":  "apple-dijon-kale-salad-meal-prep",
+                       "name":  "Apple Dijon Kale Salad Meal Prep",
+                       "protein":  "any",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Proteinless cold kale salad, not a batchable dinner entree; page has no recipe/nutrition block.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-noband-drill",
+                       "by":  "decider",
+                       "at":  "2026-08-24T15:32:07"
+                   },
+                   {
+                       "key":  "pork|any|plain",
+                       "slug":  "all-purpose-pork-brine",
+                       "name":  "All-Purpose Pork Brine",
+                       "protein":  "pork",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "A pork brining formula (salt, brown sugar, spices, citrus, cider vinegar) rather than a finished dinner; not batch-scalable as a meal, no assembled plate to serve.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:41"
+                   },
+                   {
+                       "key":  "chicken|bake|spice",
+                       "slug":  "taco-stack",
+                       "name":  "Taco Stack",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Layered baked tortilla + shredded meat + cheese + corn + tomato casserole; same dinner as live turkey-taco-casserole with only the protein swapped (3 of 4 axes: bake, tortilla starch, taco-tomato sauce all match). Tex-Mex chicken already crowded.",
+                       "dupe_of":  [
+                                       "turkey-taco-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:42"
+                   },
+                   {
+                       "key":  "chicken|bake|spice",
+                       "slug":  "blackened-chicken-fiesta-salad",
+                       "name":  "Blackened Chicken Fiesta Salad",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Blackened chicken over a fresh fiesta salad with diced avocado and cherry tomato; a cold composed salad that browns/wilts and doesn\u0027t batch-store well, and Tex-Mex chicken is already over-represented in the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:43"
+                   },
+                   {
+                       "key":  "chicken|bake|cream",
+                       "slug":  "creamy-roasted-garlic-chicken",
+                       "name":  "Creamy Roasted Garlic Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Seared chicken breasts in a roasted-garlic + parmesan milk/butter cream sauce (no starch); distinct from live chicken-40-cloves (braise) and parmesan-garlic sheet-pan (potatoes, roasted not creamy). Band verified 580cal/13c/57p; saturation-5 creamy-chicken lane but no direct dupe.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:44"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "rotisserie-flavoured-chicken-and-potato-bake-amp-a-giveaway",
+                       "name":  "Rotisserie Flavoured Chicken and Potato Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "One-pan chicken thighs over sliced-potato milk-and-parmesan gratin; reads as the same chicken-and-potato oven bake as live loaded-chicken-and-potato-casserole across all four structural axes (chicken, bake, potato, cream), differing only in the gratin vs bacon/cheddar loaded topping.",
+                       "dupe_of":  [
+                                       "loaded-chicken-and-potato-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:46"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "baked-honey-mustard-chicken",
+                       "name":  "Baked Honey Mustard Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken breasts topped with mozzarella in a honey + grain-mustard glaze; distinct honey-mustard sauce family with no live match (existing honey chicken is hot-honey, chipotle or sesame), saturation 2, band verified 547cal/23c/62p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:47"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "how-to-roast-a-chicken",
+                       "name":  "How to Roast a Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Basic whole roast chicken with lemon, garlic and a bundle of fresh herbs; identical dinner identity to ina-garten-s-roast-chicken accepted earlier this same run (whole-bird herb-lemon roast), so the slot is already taken.",
+                       "dupe_of":  [
+                                       "ina-garten-s-roast-chicken"
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:48"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "tex-mex-baked-chicken",
+                       "name":  "Tex Mex Baked Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken breasts with black beans, red enchilada sauce and cheddar/cotija (no tortilla, no rice); a chicken enchilada-bean bake distinct from the live all-beef Tex-Mex dishes (carne guisada, beef burrito, beef rice skillet). Band verified 548cal/16c/64p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-24-v3-phase6b",
+                       "by":  "decider",
+                       "at":  "2026-08-24T18:57:50"
                    }
                ]
 }

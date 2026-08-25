@@ -1,173 +1,173 @@
-{
- "_doc": "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
- "_rule": "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
- "updated": "2026-08-24T16:45:33",
- "count": 15,
- "domains": [
-  {
-   "domain": "budgetbytes.com",
-   "ok": 59,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:24"
-  },
-  {
-   "domain": "spendwithpennies.com",
-   "ok": 55,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:24"
-  },
-  {
-   "domain": "isabeleats.com",
-   "ok": 60,
-   "fail": 1,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "unreliable",
-   "note": "fetch-recipe: The request was aborted: The connection was closed unexpectedly.",
-   "updated": "2026-08-24T15:00:25"
-  },
-  {
-   "domain": "wellplated.com",
-   "ok": 48,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:25"
-  },
-  {
-   "domain": "thecozycook.com",
-   "ok": 24,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:25"
-  },
-  {
-   "domain": "recipetineats.com",
-   "ok": 46,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:29"
-  },
-  {
-   "domain": "skinnytaste.com",
-   "ok": 62,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T15:00:37"
-  },
-  {
-   "domain": "japan.recipetineats.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "unknown",
-   "note": "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
-   "updated": "2026-08-24T16:44:07"
-  },
-  {
-   "domain": "recipetinmeals.org.au",
-   "ok": 1,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": false,
-   "forced_block": false,
-   "status": "unknown",
-   "note": "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
-   "updated": "2026-08-24T16:44:11"
-  },
-  {
-   "domain": "keviniscooking.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T16:44:25"
-  },
-  {
-   "domain": "thereciperebel.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T16:44:38"
-  },
-  {
-   "domain": "orgasmicchef.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": false,
-   "forced_block": false,
-   "status": "unknown",
-   "note": "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
-   "updated": "2026-08-24T16:44:54"
-  },
-  {
-   "domain": "nospoonnecessary.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": true,
-   "forced_block": false,
-   "status": "reliable",
-   "note": "",
-   "updated": "2026-08-24T16:45:08"
-  },
-  {
-   "domain": "hapanom.com",
-   "ok": 4,
-   "fail": 0,
-   "last_404": null,
-   "has_jsonld": false,
-   "forced_block": false,
-   "status": "unknown",
-   "note": "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
-   "updated": "2026-08-24T16:45:22"
-  },
-  {
-   "domain": "simplyrecipes.com",
-   "ok": 0,
-   "fail": 4,
-   "last_404": null,
-   "has_jsonld": false,
-   "forced_block": false,
-   "status": "blocked",
-   "note": "fetch-recipe: The remote server returned an error: (403) Forbidden.",
-   "updated": "2026-08-24T16:45:33"
-  }
- ]
+﻿{
+    "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
+    "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
+    "updated":  "2026-08-24T18:03:22",
+    "count":  15,
+    "domains":  [
+                    {
+                        "domain":  "budgetbytes.com",
+                        "ok":  59,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T15:00:24"
+                    },
+                    {
+                        "domain":  "spendwithpennies.com",
+                        "ok":  55,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T15:00:24"
+                    },
+                    {
+                        "domain":  "isabeleats.com",
+                        "ok":  60,
+                        "fail":  1,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "unreliable",
+                        "note":  "fetch-recipe: The request was aborted: The connection was closed unexpectedly.",
+                        "updated":  "2026-08-24T15:00:25"
+                    },
+                    {
+                        "domain":  "wellplated.com",
+                        "ok":  48,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T15:00:25"
+                    },
+                    {
+                        "domain":  "thecozycook.com",
+                        "ok":  24,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T15:00:25"
+                    },
+                    {
+                        "domain":  "recipetineats.com",
+                        "ok":  60,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T18:01:22"
+                    },
+                    {
+                        "domain":  "skinnytaste.com",
+                        "ok":  62,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T15:00:37"
+                    },
+                    {
+                        "domain":  "japan.recipetineats.com",
+                        "ok":  4,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "unknown",
+                        "note":  "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
+                        "updated":  "2026-08-24T16:44:07"
+                    },
+                    {
+                        "domain":  "recipetinmeals.org.au",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "unknown",
+                        "note":  "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
+                        "updated":  "2026-08-24T16:44:11"
+                    },
+                    {
+                        "domain":  "keviniscooking.com",
+                        "ok":  60,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T18:03:17"
+                    },
+                    {
+                        "domain":  "thereciperebel.com",
+                        "ok":  60,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T18:03:11"
+                    },
+                    {
+                        "domain":  "orgasmicchef.com",
+                        "ok":  4,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "unknown",
+                        "note":  "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
+                        "updated":  "2026-08-24T16:44:54"
+                    },
+                    {
+                        "domain":  "nospoonnecessary.com",
+                        "ok":  60,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-24T18:03:22"
+                    },
+                    {
+                        "domain":  "hapanom.com",
+                        "ok":  4,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "unknown",
+                        "note":  "demoted 2026-08-24: promoted by the ACT of being probed, not by having worked. The probe judged it unusable (no machine-readable Recipe block).",
+                        "updated":  "2026-08-24T16:45:22"
+                    },
+                    {
+                        "domain":  "simplyrecipes.com",
+                        "ok":  0,
+                        "fail":  4,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "blocked",
+                        "note":  "fetch-recipe: The remote server returned an error: (403) Forbidden.",
+                        "updated":  "2026-08-24T16:45:33"
+                    }
+                ]
 }

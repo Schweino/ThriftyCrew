@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-23 13:12",
-    "board":  "comparison-2026-08-23.json",
-    "sidecar_generated":  "2026-08-23 13:12:10",
+    "generated":  "2026-08-24 21:32",
+    "board":  "comparison-2026-08-24.json",
+    "sidecar_generated":  "2026-08-24 21:32:08",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3073,
-                     "corpus":  37444,
-                     "rule_invisible":  6547
+                     "board_pairs":  3074,
+                     "corpus":  37451,
+                     "rule_invisible":  6537
                  },
     "identity_count":  0,
-    "coverage_count":  55,
+    "coverage_count":  54,
     "identity":  [
 
                  ],
@@ -65,8 +65,8 @@
                          "commodity":  "Baby Back Ribs",
                          "store":  "Walmart",
                          "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
-                         "cos":  0.7249,
-                         "score":  0.976005,
+                         "cos":  0.7185,
+                         "score":  0.975572,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -135,8 +135,18 @@
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Walmart",
                          "product":  "93% Lean / 7% Fat Lean Ground Beef Patties, 4 Count, 1 lb Tray, Fresh, All Natural*",
-                         "cos":  0.7625,
-                         "score":  0.96316,
+                         "cos":  0.7613,
+                         "score":  0.965099,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
+                         "cos":  0.7576,
+                         "score":  0.961451,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -165,8 +175,8 @@
                          "commodity":  "Baby Back Ribs",
                          "store":  "Walmart",
                          "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
-                         "cos":  0.7119,
-                         "score":  0.956812,
+                         "cos":  0.7059,
+                         "score":  0.957228,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -181,12 +191,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "USDA 73% Lean 27% Fat Ground Beef, Per LB",
-                         "cos":  0.753,
-                         "score":  0.95222,
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+                         "cos":  0.7495,
+                         "score":  0.953225,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -201,12 +211,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
-                         "cos":  0.7337,
-                         "score":  0.948211,
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
+                         "cos":  0.7219,
+                         "score":  0.947862,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -231,12 +241,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.746,
-                         "score":  0.941829,
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "73% Lean 27% Fat Ground Beef, 3 LB",
+                         "cos":  0.7362,
+                         "score":  0.94368,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -311,12 +321,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "vegetable-soup",
-                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
-                         "store":  "Walmart",
-                         "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
-                         "cos":  0.698,
-                         "score":  0.933822,
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Aldi",
+                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
+                         "cos":  0.6563,
+                         "score":  0.932323,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -325,8 +335,18 @@
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
                          "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7786,
-                         "score":  0.933402,
+                         "cos":  0.7599,
+                         "score":  0.931774,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "white-wine",
+                         "commodity":  "White Wine",
+                         "store":  "Family Fare",
+                         "product":  "Vendange Chardonnay White Wine 1.5 L",
+                         "cos":  0.5637,
+                         "score":  0.931691,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -371,22 +391,32 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "queso",
-                         "commodity":  "Queso / Cheese Dip",
-                         "store":  "Baker\u0027s",
-                         "product":  "Ricos Products Co. Gourmet Nacho Cheddar Cheese Sauce",
-                         "cos":  0.755,
-                         "score":  0.924664,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "string-cheese",
                          "commodity":  "String Cheese",
                          "store":  "Walmart",
                          "product":  "Frigo Cheese Heads Light String Mozzarella Cheese, 20 oz, 24 Count",
                          "cos":  0.7402,
                          "score":  0.924552,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-beef-93-7",
+                         "commodity":  "93/7 Lean Ground Beef",
+                         "store":  "Walmart",
+                         "product":  "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray",
+                         "cos":  0.76,
+                         "score":  0.924208,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Baker\u0027s",
+                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+                         "cos":  0.7207,
+                         "score":  0.924141,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -411,32 +441,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "white-wine",
-                         "commodity":  "White Wine",
-                         "store":  "Family Fare",
-                         "product":  "Vendange Chardonnay White Wine 1.5 L",
-                         "cos":  0.5602,
-                         "score":  0.921828,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Simply Nature Organic Grass Fed 93/07 Ground Beef",
-                         "cos":  0.6571,
-                         "score":  0.916552,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
                          "cos":  0.6617,
                          "score":  0.915625,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Walmart",
+                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
+                         "cos":  0.7621,
+                         "score":  0.913394,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -471,16 +491,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "graham-crackers",
-                         "commodity":  "Graham Crackers",
-                         "store":  "Family Fare",
-                         "product":  "Honey Maid Cinnamon Grahams 14.4 Oz",
-                         "cos":  0.6053,
-                         "score":  0.911812,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "coconut-oil",
                          "commodity":  "Coconut Oil",
                          "store":  "Walmart",
@@ -511,32 +521,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
-                         "cos":  0.7795,
-                         "score":  0.909728,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "All Natural* 73% Lean/27% Fat Ground Beef, 1 lb Tray",
-                         "cos":  0.7591,
-                         "score":  0.909261,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "vegetable-soup",
                          "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
                          "store":  "Baker\u0027s",
                          "product":  "Campbell\u0027s Chunky Beef Soup with Country Vegetables 18.8 Oz Can",
-                         "cos":  0.7303,
-                         "score":  0.904312,
+                         "cos":  0.7279,
+                         "score":  0.908327,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

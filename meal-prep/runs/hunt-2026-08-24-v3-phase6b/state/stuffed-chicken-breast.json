@@ -3,10 +3,10 @@
     "title":  "Stuffed Chicken Breast",
     "source_url":  "https://thecozycook.com/stuffed-chicken-breast/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  1,
     "created":  "2026-08-24T12:13:13",
-    "updated":  "2026-08-24T12:49:26",
+    "updated":  "2026-08-24T18:32:18",
     "terms":  [
 
               ],
@@ -73,6 +73,12 @@
                         "state":  "waved",
                         "at":  "2026-08-24T12:49:26",
                         "by":  "wave-close",
+                        "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-24T18:32:18",
+                        "by":  "wave-publish",
                         "detail":  "wave 1"
                     }
                 ]

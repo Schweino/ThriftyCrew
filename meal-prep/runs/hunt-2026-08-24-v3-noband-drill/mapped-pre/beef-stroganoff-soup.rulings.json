@@ -1,0 +1,174 @@
+{
+ "slug": "beef-stroganoff-soup",
+ "lines": [
+  {
+   "raw": "1 onion (diced)",
+   "buy": "3 1/4 cups diced (about 3 1/2 medium onions)",
+   "grams_source": 150,
+   "notes": "House each-weight 150 g for a medium-large retail yellow onion, trimmed; 3 1/4 cups at 160 g/cup diced agrees with 525 g at 14 servings."
+  },
+  {
+   "raw": "3 tablespoons olive oil (divided)",
+   "buy": "10 1/2 tbsp (2/3 cup), divided: 7 tbsp to brown the beef, 3 1/2 tbsp for the onions",
+   "notes": "Settled line; split follows the source method."
+  },
+  {
+   "raw": "1 pound stewing beef (trimmed)",
+   "buy": "3 1/2 lb, trimmed and cut into 1 inch cubes",
+   "grams_source": 453.592,
+   "notes": "1 lb at source basis using lb=453.592. Main protein line; carries the recipe's protein cross-check."
+  },
+  {
+   "raw": "salt and black pepper (to taste)",
+   "buy": "about 1 tbsp salt and 1 1/2 tsp black pepper, to taste",
+   "grams_source": 6,
+   "notes": "Grams are the salt only (1 tsp source basis); the pepper rides pantry-static at about 1 g and adds 3 cal to the whole pot."
+  },
+  {
+   "raw": "1 clove garlic (minced)",
+   "buy": "3 to 4 cloves, minced",
+   "notes": "Settled line; 3 g per clove x 3.5 = 10.5 g."
+  },
+  {
+   "raw": "8 ounces mushrooms (brown or white, sliced)",
+   "buy": "1 3/4 lb (28 oz), sliced",
+   "grams_source": 226.796,
+   "notes": "8 oz at oz=28.3495."
+  },
+  {
+   "raw": "6 cups reduced sodium beef broth",
+   "buy": "21 cups reduced sodium beef broth",
+   "grams_source": 1440,
+   "notes": "1 cup = 240 g, matching the Beef Broth label serving in food-macros-db."
+  },
+  {
+   "raw": "½ cup red wine",
+   "buy": "1 3/4 cups dry red wine",
+   "grams_source": 118.3,
+   "notes": "1/2 cup at 236.6 g/cup water-like; alcohol simmers off over the 45 minute braise."
+  },
+  {
+   "raw": "1 tablespoon Worcestershire sauce",
+   "buy": "3 1/2 tbsp",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "3 tablespoons cornstarch",
+   "buy": "2/3 cup, whisked smooth with 2/3 cup cold water",
+   "notes": "Settled line; the slurry water scales with it and is not purchased."
+  },
+  {
+   "raw": "½ cup sour cream",
+   "buy": "1 3/4 cups light sour cream, stirred in off the heat",
+   "notes": "Settled line; off-heat addition prevents curdling."
+  },
+  {
+   "raw": "3 tablespoons chopped fresh parsley",
+   "buy": "2/3 cup chopped (about 1 bunch)",
+   "grams_source": 11.4,
+   "notes": "FLAG: the pre-resolve table's settled 48 g is about 4x too high. The estate's own Fresh Parsley row states USDA 1 tbsp chopped = 3.8 g, so 3 tbsp = 11.4 g; 48 g would print as 2.8 cups of parsley at batch scale. Macro impact is only 3 cal/serving, but the printed measure would be wrong."
+  },
+  {
+   "raw": "1 ½ cups egg noodles (measured dry, cooked according to package directions)",
+   "buy": "5 1/4 cups dry egg noodles (about 7 oz), cooked per the package and spooned into the bowls",
+   "notes": "Settled line at 57 g source basis; noodles go in the bowl, not the pot, so they do not absorb broth in storage."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 onion (diced)",
+   "term": "onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 150,
+   "evidence": "Bare 'onion' in a savory braise is the default yellow onion, same form as the vocabulary row; board onions 7/7 stores. Not red-onion (variety pricing precedent)."
+  },
+  {
+   "raw": "1 pound stewing beef (trimmed)",
+   "term": "stewing beef",
+   "canon_item": "Stewing Beef",
+   "bid": "stew-beef",
+   "decision": "mapped",
+   "grams_source": 453.592,
+   "evidence": "Cubed chuck sold as stew meat; the only near rows are ground beef, and a grind is a different price class and a different gram weight, so no alias. New id proposed to the registrar; board found no commodity and no capture match."
+  },
+  {
+   "raw": "salt and black pepper (to taste)",
+   "term": "salt and black pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped-optional",
+   "grams_source": 6,
+   "evidence": "Optional to-taste seasoning line; costed as salt (board 7/7) with black pepper pantry-static, since one line cannot carry two ids."
+  },
+  {
+   "raw": "8 ounces mushrooms (brown or white, sliced)",
+   "term": "mushrooms",
+   "canon_item": "White Mushrooms",
+   "bid": "mushrooms",
+   "decision": "mapped",
+   "grams_source": 226.796,
+   "evidence": "Source says brown or white, so the cheaper white/cremini tray is correct; board mushrooms 7/7. Not portobello-mushrooms, which is a separate commodity and price class."
+  },
+  {
+   "raw": "6 cups reduced sodium beef broth",
+   "term": "reduced sodium beef broth",
+   "canon_item": "Beef Broth",
+   "bid": "beef-broth",
+   "decision": "mapped",
+   "grams_source": 1440,
+   "evidence": "Reduced sodium is a sodium level within the same carton product, not a form flip: identical gram weight, same shelf and price class. Distinct from the Beef Base row, which is the concentrated paste."
+  },
+  {
+   "raw": "½ cup red wine",
+   "term": "red wine",
+   "canon_item": "Red Wine",
+   "bid": "red-wine",
+   "decision": "mapped",
+   "grams_source": 118.3,
+   "evidence": "red-wine is an existing board id priced at 4 of 7 stores, so this is a REUSE, not a new commodity; only the vocabulary row is missing. Never white-wine and never red-wine-vinegar (form flip)."
+  }
+ ],
+ "absent_terms": [
+  "stewing beef"
+ ],
+ "db_entries_added": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "stewing beef",
+   "proposed_bid": "stew-beef",
+   "evidence": "Retail pre-cut beef stew meat (cubed chuck), sold as its own tray SKU. Pre-resolve board check returned ABSENT for both commodity and capture match, and the closed vocabulary's nearest rows are 80/20 and 93/7 ground beef, which are a grind at a different price class. REGISTRAR PLEASE CHECK ONE THING I CANNOT: food-macros-db carries a Beef Chuck Roast row, so a chuck-roast style id may exist under a spelling my term search would not hit ('chuck roast', 'beef chuck', 'beef for stew', 'stew meat'). If one exists, alias only if it prices the same SKU; pre-cut stew cubes normally price above a whole chuck roast, which is a real price class split, not a spelling variant."
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "stew-beef",
+   "verdict": "alias",
+   "bid": "chuck-roast",
+   "reason": "The food is already priced: commodities.json carries weekly id chuck-roast (label 'Chuck Roast', unit lb, include 'chuck roast'/'chuck pot roast'/'beef chuck\\b'), it is live in smp-feed.json, and the recipe board carries it as beef-chuck-roast with six whole-roast rows ($6.64-$10.99/lb, cheapest Sam's $7.47) which recipe-floor-id-map already routes via 'beef-chuck-roast' -> 'chuck-roast'. Stewing beef is cubed chuck - same food, same lb unit; the pre-cut tray is the same food at a convenience premium, so minting stew-beef would put one food under two ids at deliberately disagreeing prices (the panko failure mode), and its include patterns ('stew meat', 'beef for stew ... chuck') would collide with chuck-roast's 'beef chuck\\b' in the daily dupe audit - note canned beef-stew already excludes 'stew meat' precisely to route it to the meat id. FOLLOW-UP EDITS: (1) add alias pair 'stew-beef' -> 'chuck-roast' (and/or the recipe spelling 'stewing-beef') to recipe-floor-id-map.json via the sanctioned editor; (2) SEPARATE NAME RULING - ingredients.json has no 'stewing beef' row (nearest vocab rows are the two ground beefs, a different form), so add the vocabulary NAME 'stewing beef' resolving to the Beef Chuck Roast food-macros row; the name row must not mint an id. If Brad later wants the tray SKU tracked as its own price class, that is a new deliberate-variant proposal (stew-meat + allowlist pair vs chuck-roast) requiring its own ~150-pattern exclude list, not this recipe's blocker."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 454,
+   "carbs_g": 26,
+   "protein_g": 35
+  },
+  "recomputed_per_serving": {
+   "calories": 425,
+   "carbs_g": 25.3,
+   "protein_g": 33.2,
+   "fat_g": 18.5
+  },
+  "delta_pct": {
+   "calories": -6.4,
+   "carbs": -2.7,
+   "protein": -5.0
+  },
+  "verdict": "PASS. Protein is -5.0%, far inside the 15% bar, and carbs land within 0.7 g of the published figure - that near-exact carb match is independent confirmation of the noodle, cornstarch and onion weights. Servings 4, so the orchestrator's factor to 14 is 3.5.",
+  "run_conditions": "425 cal/serving sits inside the 400-650 band but only 25 cal above the floor, so the parsley and broth gram figures should not be inflated to compensate; 25.3 g carbs is comfortably under the 35 g cap; no seafood."
+ }
+}

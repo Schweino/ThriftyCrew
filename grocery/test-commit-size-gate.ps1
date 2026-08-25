@@ -111,6 +111,47 @@ try {
   T 'CLEAN TWIN a new file in an already-tracked directory is ordinary daily work' `
     (-not $rOld.refused) ("refused=$($rOld.refused)")
 
+  # ---- THE DURABLE WAY THROUGH (2026-08-25) ------------------------------------------------------
+  # out\cadence was a real feature that this gate refused correctly on its first morning and then went
+  # on refusing, because the only exits it named were .gitignore (wrong - the stamps belong in git) and
+  # -ForceBigCommit (impossible - Task Scheduler passes no switches). Both scheduled runs failed every
+  # morning and the board stopped shipping. out-declared-families.json is the exit an unattended run
+  # can take; these two cases prove it admits ONLY what is declared, and admits nothing when it breaks.
+  $rDecl = New-Case {
+    param($c)
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out/cadence') -Force | Out-Null
+    1..10 | ForEach-Object { '2026-08-24T08:19:48.7480420-05:00' | Set-Content (Join-Path $c ('grocery/out/cadence/cadence-a' + $_ + '.txt')) }
+    New-Item -ItemType Directory (Join-Path $c 'grocery') -Force | Out-Null
+    '{ "families": [ { "dir": "cadence", "since": "2026-08-24", "writer": "grocery/check-ad-cycles.ps1", "why": "auditor stamps" } ] }' |
+      Set-Content (Join-Path $c 'grocery/out-declared-families.json') -Encoding UTF8
+  }
+  T 'CLEAN TWIN a DECLARED new directory is admitted (this is the 08-24 cadence outage)' `
+    ((-not $rDecl.refused) -and $rDecl.staged -gt 0) ("refused=$($rDecl.refused) staged=$($rDecl.staged)")
+
+  # A manifest that cannot be parsed must not become a skeleton key. Truncated JSON is the realistic
+  # shape - a half-written file from an interrupted edit - and the safe reading of it is "declares
+  # nothing", never "declares everything".
+  $rBad = New-Case {
+    param($c)
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out/cadence') -Force | Out-Null
+    1..10 | ForEach-Object { 'stamp' | Set-Content (Join-Path $c ('grocery/out/cadence/cadence-a' + $_ + '.txt')) }
+    '{ "families": [ { "dir": "caden' | Set-Content (Join-Path $c 'grocery/out-declared-families.json') -Encoding UTF8
+  }
+  T 'MUST FIRE  an UNPARSEABLE manifest declares nothing and the new directory still refuses' `
+    ($rBad.refused -and $rBad.staged -eq 0) ("refused=$($rBad.refused) staged=$($rBad.staged)")
+
+  # And the undeclared directory in the SAME repo as a valid manifest still refuses - the list admits
+  # by name, not by existing.
+  $rOther = New-Case {
+    param($c)
+    New-Item -ItemType Directory (Join-Path $c 'grocery/out/browser-profiles/sams') -Force | Out-Null
+    1..8 | ForEach-Object { 'cookie' | Set-Content (Join-Path $c ('grocery/out/browser-profiles/sams/c' + $_ + '.txt')) }
+    '{ "families": [ { "dir": "cadence", "since": "2026-08-24", "writer": "x", "why": "y" } ] }' |
+      Set-Content (Join-Path $c 'grocery/out-declared-families.json') -Encoding UTF8
+  }
+  T 'MUST FIRE  a valid manifest does not admit a directory it does not name' `
+    ($rOther.refused -and $rOther.staged -eq 0) ("refused=$($rOther.refused) staged=$($rOther.staged)")
+
   Write-Output ''
   Write-Output ("SELFTEST: {0}/{1} pass" -f ($n-$bad), $n)
   Write-Output ("COMMIT-SIZE-GATE-COMPLETE cases={0} failed={1}" -f $n, $bad)
