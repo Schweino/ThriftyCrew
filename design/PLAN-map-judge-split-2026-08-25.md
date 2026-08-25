@@ -86,6 +86,50 @@ U0's cost of being wrong: a single-dispatch probe is not a perfect twin of the b
 schema re-ask pressure, hand-built evidence packs). It can mislead by tens of seconds, not by the
 minutes the decision needs.
 
+### 3.1 U0 RAN 2026-08-25. The result, and it is not the one anybody hoped for.
+
+Dispatched the real `recipe-ingredient-mapper` on its ratified pin against a hand-built
+judgment-only prompt (17,228 chars vs the monolith's 28,586), carrying the full recipe for all three
+slugs, the 11 residual lines, their gathered evidence, and no obligation to emit buy strings, gram
+weights or anything already settled.
+
+| | monolithic (T-shakedown) | U0 judgment-only | change |
+|---|---|---|---|
+| wall | **469 s** | **317 s** | **-32%** |
+| raw tokens | 349,292 | 64,343 | **-82%** |
+| tool calls | 13 | 18 | +5 |
+| prompt | 28,586 ch | 17,228 ch | -40% |
+
+**Against the external proposal's success bar of 90-120 s: FALSIFIED.** Against this plan's own
+falsification line (>= 4 min): 317 s crosses it. Two findings follow, and the second is the
+important one.
+
+**1. Wall clock here is not driven by token volume, and now we know.** Tokens fell 82% while wall
+fell 32%. That asymmetry retroactively explains why two prior rounds of token optimisation moved
+cost and not minutes: what costs the wall is reasoning time plus SERIAL tool round trips, neither of
+which shrinks when you hand the judge less to write. Any future proposal reasoned from token counts
+should be read against this line.
+
+**2. THE SHELF SERVED A WRONG ROW ON A MAIN PROTEIN, AND ONLY THE JUDGE'S DISTRUST CAUGHT IT.** The
+FDC shelf offered `fdc:172952 Sausage, Italian, sweet, links` at 149 cal/100 g for the line "5
+Italian Sausage links, about 1.5-2 pounds" - a raw purchase weight, and the main protein of that
+dish. The judge rejected it, went and found `fdc:171631 Sausage, Italian, pork, mild, raw` at 290
+cal, and stated the consequence: taking the shelf row understates that recipe by roughly 33% (~656
+cal/serving becoming ~440). It made 18 tool calls, MORE than the monolith's 13, precisely because it
+distrusted gathered evidence and was right to.
+
+That is a measured counterexample to the external proposal's classification of Job 3 ("web retrieval
++ transcription - does NOT need expensive judgment; the tool calls are cheap and transcription is
+extraction, not identity judgment"). On this batch, choosing WHICH gathered row is the food was
+exactly identity judgment, on the number that decides whether a recipe is honest. A pre-pass that
+gathers and a judge that trusts the gather would have shipped the error.
+
+**What U0 therefore rules.** The split is worth roughly 150 s of a 469 s dispatch - real, and not
+enough. 6-7 min end to end does not follow from it. And the largest remaining piece of the redesign
+(moving label work off the judge) is the piece U0 just produced evidence against. Sections 4, 5 and
+8 stand as written but their premise is now weaker than when they were drafted, and R2 in particular
+should be read as "(a) or nothing", not as an open choice.
+
 ## 4. The units, if U0 says build
 
 - **U1 - the label-evidence pre-pass (daemon, python road).** For each residual term with no
