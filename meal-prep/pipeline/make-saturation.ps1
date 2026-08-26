@@ -51,6 +51,16 @@ function Get-Family { param([string]$Text)
   foreach ($k in $script:FAMILIES.Keys) { foreach ($n in $script:FAMILIES[$k]) { if ($t -like ('*'+$n+'*')) { return $k } } }
   return 'plain' }
 
+# THE ONE PLACE A DIGEST ROW BECOMES A FAMILY. The derivation loop below calls this and so does the
+# garnish fixture, deliberately: PLAN-recipe-hunter-v3 S2a part (d) will move the six item-DEFINED
+# families (cream, tomato, soy, curry, wine, bbq) onto the row's canonical items at D12 rung 4, and
+# cheese, herb and spice STAY name-only for a measured reason - their ingredient needles fire on
+# garnishes. Shredded cheese on top of a beef skillet does not make it a cheese dish, and parsley at
+# the end does not make it herb. With the derivation behind one function, that rung is an edit here
+# and the clean twin in --selftest goes red the moment items start deciding `cheese`.
+function Get-RowFamily { param($Row)
+  return Get-Family ([string]$Row.name) }
+
 if ($runSelfTest) {
   $bad=0
   function T([string]$n,[bool]$ok,[string]$got){ if($ok){Write-Output ("  ok    "+$n)}else{Write-Output ("  X     "+$n+"   got: "+$got); $script:bad++} }
@@ -58,6 +68,23 @@ if ($runSelfTest) {
   T 'family vocabulary matches considered-dishes (soy)' ((Get-Family 'Beef Egg Roll in a Bowl') -eq 'soy') (Get-Family 'Beef Egg Roll in a Bowl')
   T 'an unmatched name is plain, not an error' ((Get-Family 'Roast Beef') -eq 'plain') (Get-Family 'Roast Beef')
   T 'MUST FIRE  the digest exists to derive from' (Test-Path $DigestFile) $DigestFile
+
+  # ---- THE GARNISH CLEAN TWIN (D12's named fixture) ----------------------------------------------
+  # A dinner with shredded cheese on top is not a cheese dish, and the sourcer map must never file it
+  # as one: `cheese` reads as a crowded region, the sourcer stops hunting a shelf that was never full,
+  # and nobody finds out because saturation is guidance nobody audits. Both rows go through
+  # Get-RowFamily - the same entry point the derivation uses and the same one D12 rung 4 will edit -
+  # so this fixture is a live guard on that rung, not a note about it.
+  $garnished = [pscustomobject]@{ slug='beef-and-rice-skillet'; name='Beef and Rice Skillet'
+                                  items=@('93-7-ground-beef','rice','onions','cheddar-cheese-shredded') }
+  T 'MUST FIRE  a dinner with shredded cheese in its ITEMS is not filed as a cheese dish' (
+      (Get-RowFamily $garnished) -ne 'cheese') (Get-RowFamily $garnished)
+  T 'CLEAN TWIN and it lands where its NAME puts it, which is plain' (
+      (Get-RowFamily $garnished) -eq 'plain') (Get-RowFamily $garnished)
+  $realCheese = [pscustomobject]@{ slug='chicken-broccoli-gratin'; name='Cheesy Chicken Broccoli Gratin'
+                                   items=@('chicken-breast','frozen-broccoli-florets','shredded-cheese') }
+  T 'CLEAN TWIN the cheese family is not dead - a dish that IS about cheese still files there, so the twin above is not passing vacuously' (
+      (Get-RowFamily $realCheese) -eq 'cheese') (Get-RowFamily $realCheese)
   # the crowding threshold must actually flag the region that cost the last run
   $counts = @{ 'chicken|cream' = 14; 'lamb|curry' = 1 }
   T 'MUST FIRE  a region at/over the threshold is crowded' ($counts['chicken|cream'] -ge $CrowdedAt) ([string]$counts['chicken|cream'])
@@ -94,7 +121,7 @@ $digest = Get-Content $DigestFile -Raw -Encoding utf8 | ConvertFrom-Json
 $regions = @{}
 foreach ($p in $digest.by_protein.PSObject.Properties) {
   foreach ($r in $p.Value) {
-    $fam = Get-Family ([string]$r.name)
+    $fam = Get-RowFamily $r
     $key = ('{0}|{1}' -f $p.Name, $fam)
     if (-not $regions.ContainsKey($key)) { $regions[$key] = [pscustomobject]@{ protein=$p.Name; family=$fam; count=0; examples=@() } }
     $regions[$key].count++

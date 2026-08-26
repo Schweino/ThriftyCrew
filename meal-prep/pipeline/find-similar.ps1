@@ -55,13 +55,70 @@ function Get-Tokens {
   return @($t -split '\s+' | Where-Object { $_ -and $_.Length -gt 2 -and ($script:STOP -notcontains $_) } | Select-Object -Unique)
 }
 
+# SPLIT AND MATCH (D12 rung 1, S2a part a). The query side of the item channel is no longer a list of
+# canonical ids - a candidate has none, because the mapper does not run until after the decider rules -
+# it is the content WORDS of the candidate's verbatim ingredient lines (harvest.py's ingredient_words).
+# The board's ids are kebab-case English, so an id matches when the query knows any of its words:
+# `heavy-cream` against a line that said "1 cup heavy cream", `93-7-ground-turkey` against "1 lb ground
+# turkey". The fold below is what makes onion/onions and tomato/tomatoes the same evidence, and it runs
+# on BOTH sides so the two can never disagree about what a word is.
+#
+# AN ID MATCHES WHEN THE QUERY KNOWS ALL OF ITS WORDS, AND THAT RULE WAS MEASURED, NOT PICKED.
+# The looser rule - any one shared word - was tried first against the live 562-recipe digest, on the
+# composition twin the fixture below uses (Creamy Tuscan Chicken Skillet, reached from its own
+# ingredient list under a disjoint name). Under any-word it ranked FIFTH behind four dishes that
+# shared only the word `chicken` or `tomatoes`, because a row with ten items collects more accidental
+# hits than a row with five; under all-words it ranks FIRST with all five items named, and the four
+# runners-up are genuinely creamy-chicken dinners. Recall is the constitution here, but a shortlist
+# capped at five that ranks the true twin off the end has LOST the evidence, not gained it.
+# Numeric id words are dropped before the test - `93-7-ground-turkey` is ground turkey on any page
+# that ever wrote it down, and no publisher prints the board's fat ratio.
+function Get-ItemWords {
+  param($Values)
+  $out = @{}
+  foreach ($v in @($Values)) {
+    if (-not $v) { continue }
+    foreach ($w in ([string]$v).ToLower() -split '[^a-z0-9]+') {
+      if ($w.Length -lt 3 -or $w -match '^[0-9]+$') { continue }
+      # singular/plural fold, both sides, same rule: onions -> onion, tomatoes -> tomatoe.
+      if ($w.Length -gt 3 -and $w.EndsWith('s')) { $w = $w.Substring(0, $w.Length - 1) }
+      $out[$w] = $true
+    }
+  }
+  return $out
+}
+
+# One process answers thousands of queries against the same few hundred digest rows, so the word set of
+# `heavy-cream` would otherwise be rebuilt thousands of times. Memoised per id; the ids are stable for
+# the life of the process. MEASURED 2026-08-26, live 562-recipe digest x 2,444 candidates, one batch
+# process: 7m21 without these caches, 2m48 with, byte-identical output - against 3m36 for the same
+# batch on the pre-D12 script with the channel unplugged. The evidence got richer and the lane got
+# faster; without the caches the same evidence would have cost twice the wall clock.
+$script:IDWORDS = @{}
+$script:NAMETOK = @{}
+$script:ROWITEMS = @{}
+
 function Get-Score {
-  param($NameTokens, $CandTokens, $Items, $CandItems)
+  param($NameTokens, $CandTokens, $Items, $CandItems, $QWords = $null)
   $shared = @($NameTokens | Where-Object { $CandTokens -contains $_ })
   $score = 10 * @($shared).Count
   $sharedItems = @()
   if (@($Items).Count -gt 0 -and @($CandItems).Count -gt 0) {
-    $sharedItems = @($Items | Where-Object { $CandItems -contains $_ })
+    # $QWords is the query's words, computed ONCE per query by Get-Matches. A caller that does not
+    # have them - every fixture below, and the single-query road - gets the same answer the long way.
+    if ($null -eq $QWords) { $QWords = Get-ItemWords $Items }
+    $qWords = $QWords
+    foreach ($id in @($CandItems)) {
+      $idWords = $script:IDWORDS[$id]
+      if ($null -eq $idWords) { $idWords = Get-ItemWords @($id); $script:IDWORDS[$id] = $idWords }
+      if ($idWords.Count -eq 0) { continue }
+      $hit = $true
+      foreach ($w in $idWords.Keys) { if (-not $qWords.ContainsKey($w)) { $hit = $false; break } }
+      if ($hit) { $sharedItems += ,([string]$id) }
+    }
+    # ONE POINT PER SHARED ITEM, unchanged: the item channel is a tiebreak under the name channel's
+    # 10-per-word, never a rival to it. What changed is which items count as shared, not what they
+    # are worth - and an exact-id caller still scores exactly what it always did.
     $score += @($sharedItems).Count
   }
   return @{ score = $score; words = @($shared); items = @($sharedItems) }
@@ -72,18 +129,28 @@ function Get-Matches {
   # Protein narrows the ordering but never hides a match: a cross-protein twin (the same dish in beef
   # and in turkey) is the exact collision the decider is asked to catch, so all proteins are scored.
   $nameTok = Get-Tokens $QName
-  $rows = @()
+  # A LIST, not `$rows += `. With the item channel plugged in, a query matches far more rows than the
+  # name channel alone ever did - a chicken dinner shares a word with most chicken recipes - and `+=`
+  # copies the whole array per row. At 562 digest rows x 2,444 candidates in one batch process that is
+  # the difference between seconds and a lane nobody waits for.
+  $rows = New-Object System.Collections.Generic.List[object]
+  $qw = if (@($QItems).Count -gt 0) { Get-ItemWords $QItems } else { $null }
   foreach ($p in $Digest.by_protein.PSObject.Properties) {
     foreach ($r in $p.Value) {
-      $ct = Get-Tokens ([string]$r.name)
-      $ci = @(@($r.items) | ForEach-Object { ([string]$_).ToLower() })
-      $s = Get-Score $nameTok $ct $QItems $ci
+      $ct = $script:NAMETOK[[string]$r.name]
+      if ($null -eq $ct) { $ct = Get-Tokens ([string]$r.name); $script:NAMETOK[[string]$r.name] = $ct }
+      $ci = $script:ROWITEMS[[string]$r.slug]
+      if ($null -eq $ci) {
+        $ci = @(@($r.items) | ForEach-Object { ([string]$_).ToLower() })
+        $script:ROWITEMS[[string]$r.slug] = $ci
+      }
+      $s = Get-Score $nameTok $ct $QItems $ci $qw
       if ($s.score -le 0) { continue }
-      $rows += [pscustomobject]@{
+      $rows.Add([pscustomobject]@{
         slug = [string]$r.slug; name = [string]$r.name; protein = $p.Name; score = $s.score
         shared_words = @($s.words); shared_items = @($s.items)
         same_protein = ($QProtein -and $p.Name -eq $QProtein.ToLower())
-      }
+      })
     }
   }
   return @($rows | Sort-Object @{Expression='score';Descending=$true}, @{Expression='same_protein';Descending=$true} | Select-Object -First $TopN)
@@ -115,6 +182,29 @@ if ($runSelfTest) {
       (Get-Score (Get-Tokens 'Low Carb Korean Beef Bulgogi') (Get-Tokens 'Beef Bulgogi Rice Bowls') @() @()).score -ge 20
     ) ([string](Get-Score (Get-Tokens 'Low Carb Korean Beef Bulgogi') (Get-Tokens 'Beef Bulgogi Rice Bowls') @() @()).score)
   T 'MUST FIRE  the digest exists where the sourcer prompts will point' (Test-Path $DigestFile) $DigestFile
+
+  # ---- the ingredient channel, plugged in (D12 rung 1) --------------------------------------------
+  T 'an item id and an ingredient word meet in the same namespace - `heavy cream` finds heavy-cream' (
+      (Get-Score @() @() @('heavy','cream','chicken','breast') @('heavy-cream')).items -contains 'heavy-cream'
+    ) ([string](Get-Score @() @() @('heavy','cream') @('heavy-cream')).items)
+  T 'MUST FIRE  the singular/plural fold runs on BOTH sides - one onion matches onions' (
+      (Get-Score @() @() @('onion') @('onions')).score -eq 1
+    ) ([string](Get-Score @() @() @('onion') @('onions')).score)
+  T 'CLEAN TWIN and an unrelated word still shares nothing' (
+      (Get-Score @() @() @('onion') @('russet-potatoes')).score -eq 0
+    ) ([string](Get-Score @() @() @('onion') @('russet-potatoes')).score)
+  T 'MUST FIRE  a PARTIAL word hit is not a shared item - `chicken` alone does not make chicken-broth evidence' (
+      (Get-Score @() @() @('chicken','breast') @('chicken-broth')).score -eq 0
+    ) ([string](Get-Score @() @() @('chicken','breast') @('chicken-broth')).items)
+  T 'CLEAN TWIN and the same query DOES claim chicken-breast, which it knows every word of' (
+      (Get-Score @() @() @('chicken','breast') @('chicken-breast')).items -contains 'chicken-breast'
+    ) ([string](Get-Score @() @() @('chicken','breast') @('chicken-breast')).items)
+  T 'MUST FIRE  a modifier-heavy board id is still reachable from plain prose words' (
+      (Get-Score @() @() @('ground','turkey') @('93-7-ground-turkey')).items -contains '93-7-ground-turkey'
+    ) ([string](Get-Score @() @() @('ground','turkey') @('93-7-ground-turkey')).items)
+  T 'CLEAN TWIN empty query items score nothing - which is what score_pool sent for every candidate ever scored' (
+      (Get-Score @() @() @() @('heavy-cream','chicken-breast')).score -eq 0
+    ) ([string](Get-Score @() @() @() @('heavy-cream','chicken-breast')).score)
 
   # BATCH MODE returns the SAME rows as the single query, or the batch is a second implementation
   # wearing the first one's name. Asserted against the live digest, on the collision that founded this
@@ -160,6 +250,28 @@ if ($runSelfTest) {
         (@($many | ForEach-Object { $_.slug + ':' + $_.score }) -join '|')
       ) ((@($many | ForEach-Object { $_.slug }) -join ','))
     T 'CLEAN TWIN the shortlist is non-empty on a name the catalog really carries' (@($one).Count -gt 0) ([string]@($one).Count)
+
+    # ---- THE COMPOSITION DUPLICATE (D12 rung 1's named gate), against the LIVE digest -------------
+    # Same dinner, disjoint name. `creamy-tuscan-chicken-skillet` is butter + chicken-breast +
+    # heavy-cream + spinach + sun-dried-tomatoes; the query below is that ingredient list in prose,
+    # under a name that shares not one significant word with it ("skillet" is a stop word). On names
+    # alone this pair is invisible - which is precisely how "Marry Me Chicken" and "Creamy Sun-Dried
+    # Tomato Chicken" reached the decider as two dishes.
+    $twinWords = @('boneless','skinless','chicken','breast','heavy','cream','sun','dried','tomatoes',
+                   'fresh','spinach','butter')     # what harvest.py's ingredient_words emits
+    $twinHits = @(Get-Matches $dg 'Date Night Skillet' '' $twinWords 5)
+    $twinRow = @($twinHits | Where-Object { $_.slug -eq 'creamy-tuscan-chicken-skillet' })
+    T 'MUST FIRE  a composition duplicate with a disjoint NAME surfaces on ingredients alone' (
+        @($twinRow).Count -eq 1 -and @($twinRow[0].shared_words).Count -eq 0
+      ) (@($twinHits | ForEach-Object { $_.slug }) -join ',')
+    T 'MUST FIRE  and it arrives with its evidence NAMED, never a bare integer' (
+        @($twinRow).Count -eq 1 -and @($twinRow[0].shared_items) -contains 'heavy-cream' -and
+        @($twinRow[0].shared_items) -contains 'sun-dried-tomatoes'
+      ) (@($twinRow | ForEach-Object { @($_.shared_items) -join '+' }) -join ',')
+    $blindTwin = @(Get-Matches $dg 'Date Night Skillet' '' @() 5)
+    T 'MUST FIRE  with the channel unplugged - items empty, as score_pool sent for every candidate - the same pair is INVISIBLE' (
+        @($blindTwin | Where-Object { $_.slug -eq 'creamy-tuscan-chicken-skillet' }).Count -eq 0
+      ) (@($blindTwin | ForEach-Object { $_.slug }) -join ',')
   }
 
   if ($bad -gt 0) { Write-Output ("find-similar SELF-TEST FAIL ({0})" -f $bad); exit 2 }

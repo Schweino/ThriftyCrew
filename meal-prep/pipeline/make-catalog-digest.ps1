@@ -16,15 +16,31 @@
   MAIN-INGREDIENT heuristic: an item_id is "main" if its grams are >= -MinGrams (default 60) OR it is the
   single largest line. This keeps proteins/starches/vegetables that define a dish and drops trace
   aromatics/spices that every dish shares (so the dedup key is meaningful, not swamped by salt+pepper).
+
+  THE CALIBRATION TRAVELS WITH THE DIGEST (D12 rung 2, PLAN-recipe-hunter-v3 S2a part b). The live
+  catalog's own internal pairwise similarity distribution is a property OF this digest - it is what
+  says which similarity scores two PUBLISHED, ruled-distinct recipes actually sit at, and therefore
+  the only honest floor under any dupe threshold. So it is rebuilt HERE, in the same act, rather than
+  by a step someone has to remember: a distribution describing last week's catalog is worse than none,
+  which is why its reader fingerprints it against the digest and refuses when the two disagree.
+  It needs torch, so it runs under sidecar\.venv. If that interpreter is not there the digest still
+  writes and this SAYS the calibration is now stale - could-not-look is never a clean bill, and the
+  fingerprint downstream is what enforces it.
 #>
 param(
   [string]$DbPath = '',
   [string]$OutPath = '',
-  [int]$MinGrams = 60
+  [int]$MinGrams = 60,
+  [switch]$NoCalibrate,
+  # The sidecar venv is gitignored, so a git WORKTREE has none - and a worktree is exactly where this
+  # change was built and proved. Naming the interpreter is how the happy path gets exercised somewhere
+  # other than the main tree; nothing scheduled ever passes it.
+  [string]$VenvPython = ''
 )
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
+$repo = Split-Path -Parent $mp
 if (-not $DbPath)  { $DbPath  = Join-Path $mp 'recipes-db.json' }
 if (-not $OutPath) { $OutPath = Join-Path $here 'catalog-digest.json' }
 
@@ -56,3 +72,22 @@ $json = $digest | ConvertTo-Json -Depth 6 -Compress
 $sizeK = [math]::Round((Get-Item $OutPath).Length / 1KB, 1)
 $counts = ($outProt.Keys | ForEach-Object { "$_=$(@($outProt[$_]).Count)" }) -join ' '
 Write-Output ("catalog-digest.json: {0} recipes, {1} KB ({2}) -> {3}" -f $digest.recipe_count, $sizeK, $counts, $OutPath)
+
+# ---- the calibration, in the same act (D12 rung 2) --------------------------------------------------
+if (-not $NoCalibrate) {
+  $venv = if ($VenvPython) { $VenvPython } else { Join-Path $repo 'sidecar\.venv\Scripts\python.exe' }
+  $embed = Join-Path $here 'harvest_embed.py'
+  if (-not (Test-Path $venv) -or -not (Test-Path $embed)) {
+    # The parentheses matter: -f binds tighter than nothing here, and applied to a two-string
+    # concatenation it formats only the SECOND half, which prints a literal {0} at the reader.
+    Write-Output ((("  CALIBRATION NOT REFRESHED - {0} is not there. catalog-similarity.json now " +
+      "describes an older digest, and every reader of it will report BLIND until this is re-run.")) -f $venv)
+  } else {
+    # -Digest is not passed: harvest_embed reads the same default path this script just wrote.
+    & $venv $embed --calibrate | ForEach-Object { "  $_" }
+    if ($LASTEXITCODE -ne 0) {
+      Write-Output ((("  CALIBRATION NOT REFRESHED - harvest_embed --calibrate exited {0}. The " +
+        "distribution beside this digest is stale and its reader will say so.")) -f $LASTEXITCODE)
+    }
+  }
+}
