@@ -103,9 +103,22 @@ try {
         $name = $name.TrimStart('.')
         if ([string]::IsNullOrWhiteSpace($name)) { $name = 'drop' }
 
+        # ALWAYS decode as UTF-8 - never $req.ContentEncoding.
+        #
+        # The form posts enctype="text/plain" with no charset parameter, so HttpListener has nothing to go
+        # on and $req.ContentEncoding falls back to the machine's ANSI codepage (Windows-1252 here). The
+        # browser sent UTF-8 regardless - the capture page is a UTF-8 document - so that fallback decodes
+        # every multi-byte character one byte at a time and bakes a mojibake layer into the file we write.
+        # 2026-08-26: a Walmart capture arrived with every "34.0 <cent>/oz" written as A-circumflex + cent,
+        # 278 times over. And it is not cheaply undone downstream: the five bytes cp1252 leaves undefined
+        # (0x81 0x8D 0x8F 0x90 0x9D) come back as raw C1 characters, so a plain 1252 round-trip cannot even
+        # re-encode them without a per-character fallback. Decode it right the first time.
+        #
+        # StreamReader's own BOM sniffing stays on: a UTF-8 BOM, if one ever led the body, is consumed
+        # rather than landing in the file as a stray U+FEFF.
         $body = ''
         if ($req.HasEntityBody) {
-            $sr = New-Object System.IO.StreamReader($req.InputStream, $req.ContentEncoding)
+            $sr = New-Object System.IO.StreamReader($req.InputStream, [System.Text.Encoding]::UTF8)
             $body = $sr.ReadToEnd()
             $sr.Close()
         }
