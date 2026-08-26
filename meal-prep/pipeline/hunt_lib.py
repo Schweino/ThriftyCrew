@@ -294,7 +294,7 @@ def ps_spawn_detached(script):
     return True, ""
 
 
-def py_invoke(script, args, timeout=600):
+def py_invoke(script, args, timeout=600, exe=""):
     """Call a PYTHON surface. Returns (rc, stdout, stderr).
 
     ONE ROAD PER LANGUAGE, and this is the Python one. ps_invoke exists because `-File` cannot carry
@@ -304,8 +304,20 @@ def py_invoke(script, args, timeout=600):
     could-not-run for a script that is perfectly fine. argv carries strings straight through, so
     there is no marshalling problem here and none is invented: a list argument would be a defect in
     the CALLER, which is why every element is stringified rather than joined.
+
+    `exe` NAMES A DIFFERENT INTERPRETER, and it exists because this estate has THREE and they are
+    not interchangeable (2026-08-25, PLAN-ingredient-memory D3). meal-prep\\pipeline runs under
+    C:\\Codex\\Python312; anything importing numpy or torch runs under sidecar\\.venv and nothing
+    else; the graph's interpreter has no numpy at all. `resolution_embed.py` is a meal-prep surface
+    that needs the SIDECAR one, so the choice belongs at the call site - but it stays on this ONE
+    road, because the alternative is a second subprocess style growing in the daemon, which is
+    exactly what ps_invoke exists to prevent on the other side of the fence. A named exe that does
+    not exist is a could-not-run naming the path, never a fallback to whatever is on PATH: falling
+    back would run the wrong environment and report its ImportError as this script's failure.
     """
-    cmd = [sys.executable, script] + [str(a) for a in args]
+    if exe and not os.path.exists(exe):
+        return EXIT_CANNOT_RUN, "", "no interpreter at %s" % exe
+    cmd = [exe or sys.executable, script] + [str(a) for a in args]
     try:
         p = subprocess.run(cmd, capture_output=True, timeout=timeout)
     except subprocess.TimeoutExpired:

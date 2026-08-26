@@ -79,6 +79,21 @@ used to say.
    front of it: where the table shows FDC candidates for the term, prefer one and cite `fdc:<id>` as
    the row's `source`; go to the open web only when the shelf has no match, and cite the URL.
 
+4. SOME RESIDUAL LINES CARRY A **PRIOR RULINGS** SHELF, AND IT IS EVIDENCE, NEVER AN ANSWER
+   (2026-08-25). The orchestrator retrieves the nearest PAST identity rulings this estate has made
+   and inlines up to five per residual term. They resolve nothing, they change no line's `status`,
+   and you may disagree with any of them in writing. **Every one of them was ruled for a DIFFERENT
+   phrase**, which is why each line carries that phrase, the id it was ruled to, the decision word
+   and the date: the ranking is cosine over WORDING, not over food identity, and the estate has
+   measured that the worst cross-food neighbours score the highest ("Great Value Swiss Sliced" ->
+   "Great Value Sliced Olives" at 0.817). Rejections and `mapped-null` rulings appear on the shelf
+   too and are often the most transferable, because "this shape of phrase was ruled out" is a
+   statement about the phrase while "this belongs" is a statement about one specific commodity.
+   A shelf that reads `PRIOR RULINGS: BLIND` means the lookup could not run - that is absent
+   evidence, not absence of precedent, and it is never a reason to treat a term as unprecedented.
+   You never need to go and read `db\ingredient-resolutions.json` for this: rule 3 still holds, and
+   the exact-key hits from that ledger are already SETTLED lines in your table.
+
 YOUR INPUT IS A RESIDUAL, NOT A RECIPE (v3 S4/D7, 2026-08-24). Before you are dispatched,
 `meal-prep\pipeline\map-preresolve.ps1` has already run over the batch and written a decision table per
 slug at `<RunDir>\mapped-pre\<slug>.json`. It resolved every line it could from the prior-rulings ledger

@@ -131,9 +131,13 @@ class FakePy(object):
         self.calls = []
         self.replies = replies or {}
 
-    def __call__(self, script, args, timeout=600):
+    def __call__(self, script, args, timeout=600, exe=""):
         name = os.path.basename(script)
-        self.calls.append({"script": name, "args": list(args), "timeout": timeout})
+        # `exe` IS RECORDED, not swallowed. The estate has three interpreters and they are not
+        # interchangeable - a surface importing torch run under C:\Codex\Python312 reports its own
+        # ImportError as a script failure - so which one a call site chose is a fact a fixture must
+        # be able to assert on.
+        self.calls.append({"script": name, "args": list(args), "timeout": timeout, "exe": exe})
         for key, val in self.replies.items():
             if key in name:
                 return val(args) if callable(val) else val
@@ -1038,6 +1042,36 @@ def run():
       "with the writer instead of after it)", *_learn_seams_are_never_live())
 
     # =================================================================================================
+    H("D3 - attend: the nearest PAST rulings, as a shelf and never as an answer")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as this suite printed them:
+    #   * render the BLIND state as an empty channel        -> 2 red;
+    #   * drop the `exe=SIDECAR_PY` from the call site      -> 1 red;
+    #   * ask about SETTLED lines as well as residual ones  -> 1 red;
+    #   * drop the map_prompt sentence                      -> 1 red;
+    #   * render neighbours without their own term/date     -> 2 red.
+    T("MUST FIRE  the neighbours reach the DOSSIER, each carrying the phrase it was ruled for, its "
+      "id, its decision and its date - and a term with none says so",
+      *_prior_renders_the_shelf())
+    T("MUST FIRE  the retrieval runs under the SIDECAR interpreter, on a 120 s budget - bge-m3 lives "
+      "in sidecar\\.venv and C:\\Codex\\Python312 has no torch",
+      *_prior_uses_the_sidecar_interpreter())
+    T("MUST FIRE  a retrieval that could not run renders BLIND and says absent evidence is not "
+      "absence of precedent - an empty list pretending it looked is the one thing this may not do",
+      *_prior_blind_is_announced())
+    T("CLEAN TWIN an EMPTY corpus is not BLIND: the retriever ran, and the shelf says so per term",
+      *_prior_empty_is_not_blind())
+    T("MUST FIRE  a REJECTED and a MAPPED-NULL neighbour render with their decision words - the "
+      "estate's transfer asymmetry is for the judge to weigh, not a filter to apply here",
+      *_prior_every_decision_stays_visible())
+    T("MUST FIRE  only RESIDUAL terms are asked about - a settled line is not a question",
+      *_prior_only_residual_terms_are_asked())
+    T("MUST FIRE  map_prompt NAMES the new field. A prompt that said `unchanged contract` without "
+      "naming one field broke a clean batch on 2026-08-24", *_prior_the_prompt_names_the_field())
+    T("CLEAN TWIN a BLIND shelf costs the batch a channel and nothing else - the dossier still "
+      "carries its settled lines and the recipe still maps", *_prior_never_blocks_the_lane())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -1715,6 +1749,176 @@ def _learn_seams_are_never_live():
             and os.path.abspath(d.events_path) != os.path.abspath(live_ev)
             and os.path.abspath(d.resolutions_path) != os.path.abspath(live_led),
             "events=%s ledger=%s" % (d.events_path, d.resolutions_path))
+
+
+# =====================================================================================================
+# D3 - ATTEND. The three states, and the framing that keeps a shelf from reading as an answer.
+# =====================================================================================================
+
+_PRIOR_NEIGHBOURS = {
+    "state": "ok", "corpus": 3, "terms": [
+        {"key": "thin sliced beef for sandwiches", "term": "thin sliced beef for sandwiches",
+         "neighbours": [
+             {"term": "Shaved Beef Steak", "key": "shaved beef steak", "bid": "shaved-beef-steak",
+              "decision": "mapped", "evidence": "the thin-sliced sandwich steak, not a roast",
+              "cos": 0.82, "at": "2026-08-15T10:00:00", "slug": "philly"},
+             {"term": "Duck Fat", "key": "duck fat", "bid": "", "decision": "rejected",
+              "evidence": "no Omaha store carries it", "cos": 0.31,
+              "at": "2026-08-14T10:00:00", "slug": "confit"},
+             {"term": "Mustard Powder", "key": "mustard powder", "bid": "",
+              "decision": "mapped-null", "evidence": "dry ground seed, not the condiment",
+              "cos": 0.20, "at": "2026-08-13T10:00:00", "slug": "rub"}]},
+        {"key": "harissa paste", "term": "harissa paste", "neighbours": []}]}
+
+
+def _prior_daemon(tmp, reply=None, rc=0, write=True):
+    """A daemon whose python road answers resolution_embed with a scripted neighbours file."""
+    def handler(args):
+        if "--query" in args and write:
+            out = args[args.index("--out") + 1]
+            with io.open(out, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(reply if reply is not None else _PRIOR_NEIGHBOURS, f)
+        return rc, "", ("the venv is not here" if rc else "")
+    py = FakePy({"resolution_embed": handler})
+    d = daemon(run_dir=tmp, ps=FakePS(), pyrun=py)
+    return d, py
+
+
+def _prior_table(tmp, terms):
+    preresolved(tmp, ["s1"], residual={"s1": list(terms)})
+    with io.open(os.path.join(tmp, "mapped-pre", "s1.json"), encoding="utf-8-sig") as f:
+        return {"s1": json.load(f)}
+
+
+def _prior_renders_the_shelf():
+    """MUST FIRE. The neighbours reach the DOSSIER, each carrying the phrase it was ruled for."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-a-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        ok = ("PRIOR RULINGS NEAR THESE TERMS - a shelf, not an answer" in text
+              and "'Shaved Beef Steak' -> shaved-beef-steak (mapped, 2026-08-15, cos 0.82)" in text
+              and "the thin-sliced sandwich steak, not a roast" in text
+              and "no prior rulings near this term (we looked)" in text)
+        return ok, text[-500:]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_uses_the_sidecar_interpreter():
+    """MUST FIRE. bge-m3 lives in sidecar\\.venv and nowhere else; C:\\Codex\\Python312 has no torch,
+    and a surface run under the wrong interpreter reports its own ImportError as a failure."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-b-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        calls = py.find("resolution_embed")
+        return (len(calls) == 1 and calls[0].get("exe") == HD.SIDECAR_PY
+                and calls[0]["timeout"] == 120,
+                "calls=%d exe=%s" % (len(calls), (calls[0].get("exe") if calls else None)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_blind_is_announced():
+    """MUST FIRE. A retrieval that could not run renders BLIND. An empty list pretending it looked is
+    how a judge concludes there is no precedent when nobody checked."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-c-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, rc=2, write=False)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        said = any("BLIND" in f for f in d.findings)
+        return ("PRIOR RULINGS: BLIND" in text and "Absent evidence, not absence of precedent" in text
+                and "NEAR THESE TERMS" not in text and said,
+                "findings=%s tail=%s" % (json.dumps(d.findings)[:160], text[-220:]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_empty_is_not_blind():
+    """CLEAN TWIN. Day one: the log is empty, the retriever RAN, and the shelf says so per term.
+    `empty` and `blind` are different weeks and must never print the same line."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-d-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, reply={"state": "empty", "corpus": 0, "terms": [
+            {"key": "thin sliced beef for sandwiches", "term": "thin sliced beef for sandwiches",
+             "neighbours": []}]})
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        return ("no prior rulings near this term (we looked)" in text
+                and "BLIND" not in text and not d.findings,
+                "findings=%s tail=%s" % (json.dumps(d.findings)[:160], text[-220:]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_every_decision_stays_visible():
+    """MUST FIRE. A `rejected` and a `mapped-null` neighbour render with their decision words. The
+    estate measured that rejections transfer and confirmations do not - that is for the judge to
+    weigh, and encoding it as a filter here would be this file ruling on an identity."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-e-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        return ("(rejected, 2026-08-14" in text and "(mapped-null, 2026-08-13" in text
+                and "-> no id (rejected" in text, text[-400:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_only_residual_terms_are_asked():
+    """MUST FIRE. Settled lines are not questions. Asking about them would spend the retrieval on
+    the very terms the exact-key cache already answered, and crowd the shelf with them."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-f-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
+        d, py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        qin = py.find("resolution_embed")[0]["args"]
+        with io.open(qin[qin.index("--query") + 1], encoding="utf-8-sig") as f:
+            asked = [t["term"] for t in json.load(f)["terms"]]
+        return (sorted(asked) == ["harissa paste", "thin sliced beef for sandwiches"],
+                json.dumps(asked))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_the_prompt_names_the_field():
+    """MUST FIRE. hunt-daemon's own scar: a prompt that said "unchanged contract" without naming one
+    new field broke a clean batch. A shelf the judge was never told about is an unexplained block."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-g-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        p = d.map_prompt(["s1"], tables)
+        return ("PRIOR RULINGS shelf" in p and "they resolve nothing and you may disagree" in p
+                and "absent evidence and not absence of precedent" in p, p[:0])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_never_blocks_the_lane():
+    """CLEAN TWIN. A blind retrieval costs the batch a channel and nothing else: the dossier is still
+    built, the settled lines are still there, and the recipe still maps."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-h-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, rc=2, write=False)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        p = d.map_prompt(["s1"], tables)
+        return ("SETTLED lines - identity is DONE" in p and "1 lb chicken" in p
+                and "PRIOR RULINGS: BLIND" in p, p[-300:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _m3_zero_absent_routes_to_write():
