@@ -2449,14 +2449,56 @@ class Daemon(object):
                                            "every term answered from the board")
                         self.ch["write"].push(self.record(b["slug"], {"state": "priced"}))
                     else:
-                        # THE DAEMON HOLDS THE PEN, so B8 becomes impossible rather than warned
-                        # against: the terms arrive as a JSON array and go to the queue and to
-                        # -Terms as DISTINCT elements, through ps_invoke's -Command road.
-                        for t in absent:
-                            await self.ps(INGREDIENT_QUEUE_PS,
-                                          self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
-                                                           "-Why", "%s needs it" % b["slug"]]),
-                                          timeout=180)
+                        # ---- Q1 (2026-08-26): THE ADVANCE COMES FIRST, AND THAT REVERSAL IS THE FIX.
+                        # This loop used to enqueue `absent` - the MAPPER'S CLAIM - and then advance.
+                        # But -Advance -To pricing is itself a WRITER of the term list: it unions in
+                        # Get-CarriageBlockingTerms, ingredients the mapper mapped fine that no Omaha
+                        # store carries. Nobody ever enqueued those. -Derive then scored them PENDING
+                        # (an unchecked term is never not-carried, correctly), so the recipe parked on
+                        # every pass, forever, with a state file reading `pricing` -> `parked` like a
+                        # recipe legitimately waiting on a price. Measured on hunt-2026-08-26-ten:
+                        # 5 of 7 parked recipes, 8 terms, none of them ever on the queue.
+                        #
+                        # So the queue is now driven by WHAT WAS WRITTEN, never by what was claimed.
+                        # The state file is the record; the record is what gets enqueued; a term
+                        # cannot be recorded as blocking without being enqueued because the recording
+                        # is what the enqueue reads. B8 stays impossible for the same reason it was
+                        # before - the terms ride to -Terms as DISTINCT array elements through
+                        # ps_invoke's -Command road - and now the derived half rides the same road.
+                        if not await self.advance(b["slug"], "pricing", "mapper", "",
+                                                  terms=absent, optional_terms=optional):
+                            self.stuck(b["slug"], "map",
+                                       "hunt-run refused the advance to pricing; nothing was enqueued")
+                            self.log("  map: %s STUCK - hunt-run refused the advance to pricing"
+                                     % b["slug"])
+                            continue
+                        blocking, why_bt = self.blocking_terms(b["slug"])
+                        if why_bt:
+                            self.stuck(b["slug"], "map", why_bt)
+                            self.log("  map: %s STUCK - %s" % (b["slug"], why_bt))
+                            continue
+                        # THE CARRIAGE HALF IS NAMED, not inferred from a count. A term the daemon
+                        # never claimed is the interesting one, and at width it is the only way to see
+                        # the gate working.
+                        extra = [t for t in blocking if t not in absent]
+                        if extra:
+                            self.log("map: %s - hunt-run's carriage union added %d blocking term(s) "
+                                     "the mapper did not report: %s"
+                                     % (b["slug"], len(extra), ", ".join(extra)))
+                        refused = []
+                        for t in blocking:
+                            rc_q, out_q, err_q = await self.ps(
+                                INGREDIENT_QUEUE_PS,
+                                self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
+                                                 "-Why", "%s needs it" % b["slug"]]),
+                                timeout=180)
+                            # AN -Add THAT FAILED USED TO BE SWALLOWED WHOLE. ingredient-queue exits 1
+                            # when it cannot take the write lock in 15s, saying "NOTHING was written",
+                            # and the map lane discarded that and advanced anyway - a second, rarer
+                            # road to the same permanent park.
+                            if rc_q != hunt_lib.EXIT_CLEAN:
+                                refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
+                                continue
                             # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
                             # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
                             # `absent_terms` is consumed destructively - so without this, the second
@@ -2467,10 +2509,20 @@ class Daemon(object):
                             # one item, which is how a recipe learns its own term was answered.
                             if t not in self.absent_terms and t not in self.priced_terms:
                                 self.absent_terms.append(t)
-                        await self.advance(b["slug"], "pricing", "mapper", "",
-                                           terms=absent, optional_terms=optional)
+                        if refused:
+                            # LOUD, AND THE RECIPE IS NOT COUNTED AS PRICING. The state file already
+                            # says `pricing` - the advance landed - so this recipe would park on the
+                            # next -Derive exactly as before. The difference is that it now parks with
+                            # a STUCK outcome and the offending terms NAMED, which is a state a person
+                            # can act on, instead of a silence nobody could see.
+                            self.stuck(b["slug"], "map",
+                                       "the queue refused %d blocking term(s): %s"
+                                       % (len(refused), "; ".join(refused)))
+                            self.log("  map: %s STUCK - the queue refused %d blocking term(s): %s"
+                                     % (b["slug"], len(refused), "; ".join(refused)))
+                            continue
                         self.pricing_slugs.add(b["slug"])
-                        self.record(b["slug"], {"state": "pricing", "absent": absent})
+                        self.record(b["slug"], {"state": "pricing", "absent": blocking})
                         woke = True
                 # ONE WAKE PER MICRO-BATCH, after every term in it is on the queue. Waking the pricer
                 # inside the per-slug loop let it start on recipe one's terms while recipe two's were
@@ -4645,6 +4697,48 @@ class Daemon(object):
 
     def state_of(self, slug):
         return self.state_row(slug).get("state")
+
+    def blocking_terms(self, slug):
+        """Q1. Every NON-OPTIONAL term hunt-run ACTUALLY WROTE to the recipe's state file. Returns
+        (terms, why_not) - a non-empty `why_not` is a STUCK, never an empty list.
+
+        THIS IS THE AUTHORITY FOR WHAT GETS ENQUEUED, and that is the whole point. The map lane used
+        to enqueue the mapper's `absent_terms` and then advance; -Advance -To pricing is itself a
+        writer of this list (the carriage union), so the two lists were allowed to differ and did.
+        Reading the record back means the set that blocks and the set that is enqueued are the same
+        set by construction rather than by agreement.
+
+        FAIL-CLOSED, LOUDLY. An unreadable state file, a missing `terms` array or a term row that is
+        not an object all return a reason and NO terms. The tempting fallback - "use the mapper's
+        list, it is probably the same" - is exactly the assumption this function exists to delete: a
+        silent empty here is indistinguishable from a recipe that legitimately needs nothing, and the
+        recipe would sail to the writer unpriced.
+
+        A SINGLE-ELEMENT ARRAY THAT COLLAPSED TO A SCALAR IS STILL READ. hunt-run guards against
+        writing one (its own suite pins it), but this reader is downstream of a PowerShell writer and
+        the one-element collapse is the estate's most-paid-for JSON trap.
+        """
+        row = self.state_row(slug)
+        if not row:
+            return [], "%s's state file could not be read back after the advance" % slug
+        rows = row.get("terms")
+        if rows is None:
+            return [], "%s's state file carries no `terms` array after the advance" % slug
+        if isinstance(rows, dict):
+            rows = [rows]
+        if not isinstance(rows, list):
+            return [], "%s's `terms` is %s, not an array" % (slug, type(rows).__name__)
+        out = []
+        for t in rows:
+            if not isinstance(t, dict):
+                return [], ("%s has a term row that is not an object (%r) - the state file cannot be "
+                            "trusted to say what blocks" % (slug, t))
+            if t.get("optional"):
+                continue
+            name = as_text(t.get("term")).strip()
+            if name and name not in out:
+                out.append(name)
+        return out, ""
 
     async def status_json(self):
         rc, out, err = await self.ps(HUNT_RUN_PS, ["-Status", "-RunDir", self.run_dir, "-Json"],
