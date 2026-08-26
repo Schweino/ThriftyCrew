@@ -1,0 +1,71 @@
+{
+    "slug":  "peach-chicken",
+    "title":  "Peach Chicken",
+    "source_url":  "https://thecozycook.com/peach-chicken/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:26:14",
+    "updated":  "2026-08-26T05:14:45",
+    "terms":  [
+                  {
+                      "term":  "burrata cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Dried Thyme, Dried Basil and Onion Powder",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Worcestershire Sauce",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "mustard powder",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Dried Thyme, Dried Basil and Onion Powder",
+                      "Worcestershire Sauce"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:26:14",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/peach-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:26:15",
+                        "by":  "decider",
+                        "detail":  "Skillet chicken with a peach/balsamic/white-wine pan sauce, burrata and honey-glazed almonds; a distinctive summery plate that widens the catalog with no live match, saturation 1, band verified 643/32/41 (premium burrata/almonds but plausible)."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:26:58",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:07:25",
+                        "by":  "mapper",
+                        "detail":  "8 residual lines ruled (6 mapped, 2 mapped-null), 0 rejected. One new id proposed (burrata) and listed in absent_terms. chicken-breast, salt, peaches, almonds and bouillon are all existing ids - reuses, not proposals. Dry white wine had no computed weight upstream; I weighed it at 118 g source basis. Least confident items: (a) the Burrata DB row - two independent renderings of the BelGioioso label"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:08:06",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "waiting on: Dried Thyme, Dried Basil and Onion Powder, Worcestershire Sauce"
+                    }
+                ]
+}

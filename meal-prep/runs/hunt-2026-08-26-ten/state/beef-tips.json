@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-tips",
+    "title":  "Beef Tips",
+    "source_url":  "https://www.spendwithpennies.com/beef-tips-gravy/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:54",
+    "updated":  "2026-08-26T04:12:54",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cubed chuck beef tips simmered in beef-broth/French-onion gravy is the same dinner as live beef-tips-and-gravy-mashed-potatoes; beef + tips + gravy + braise all match, stovetop-vs-slowcooker is the only difference.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:54",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/beef-tips-gravy/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:54",
+                        "by":  "decider",
+                        "detail":  "Cubed chuck beef tips simmered in beef-broth/French-onion gravy is the same dinner as live beef-tips-and-gravy-mashed-potatoes; beef + tips + gravy + braise all match, stovetop-vs-slowcooker is the only difference."
+                    }
+                ]
+}

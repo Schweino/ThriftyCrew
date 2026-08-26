@@ -1,0 +1,167 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Smoked Chicken Thighs",
+  "source_url": "https://www.wellplated.com/smoked-chicken-thighs/",
+  "servings": 4,
+  "time_total": "120 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 1/2 pounds bone-in skin-on chicken thighs ( about 6)",
+      "item": "bone-in skin-on chicken thighs",
+      "qty": "2 1/2",
+      "unit": "pounds",
+      "prep": "( about 6)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Charcoal (pellets, or whatever fuels your smoker, we use hardwood lump charcoal)",
+      "item": "Charcoal",
+      "qty": null,
+      "unit": null,
+      "prep": "(pellets, or whatever fuels your smoker, we use hardwood lump charcoal)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Wood chips or chunks (such as pecan, apple, or oak)",
+      "item": "Wood chips or chunks",
+      "qty": null,
+      "unit": null,
+      "prep": "such as pecan, apple, or oak",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup Homemade Barbecue Sauce (or your favorite store-bought BBQ sauce)",
+      "item": "Homemade Barbecue Sauce",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": "or your favorite store-bought BBQ sauce",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons unsalted butter",
+      "item": "unsalted butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons brown sugar",
+      "item": "brown sugar",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon smoked paprika",
+      "item": "smoked paprika",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon onion powder",
+      "item": "onion powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon chili powder",
+      "item": "chili powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground cumin",
+      "item": "ground cumin",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground cloves or cardamom",
+      "item": "ground cloves or cardamom",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon cayenne pepper",
+      "item": "cayenne pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Remove the chicken thighs from the refrigerator, place on a parchment-lined baking sheet, and pat dry.",
+    "In a small bowl, combine the rub ingredients: brown sugar, salt, smoked paprika, garlic powder, onion powder chili powder, cumin, black pepper, cloves, and cayenne.",
+    "Rub all over the chicken, working some of the rub underneath the skin. Let sit for 30 minutes at room temperature while you prepare the smoker.",
+    "Heat your smoker to 225°F. Prior to lighting, add the wood, mixing it with the charcoal. It’s OK if your smoker gets a bit hotter than 225°F; just note that the chicken will cook more quickly. Do not cook it any lower than 225°F or the skin will be rubbery.",
+    "Add the chicken thighs skin-side up and smoke until they reach 165°F on an instant-read thermometer inserted at the thickest part, 45 minutes to 1 hour 15 minutes depending upon the size of your thighs, your smoker set up, and how much your smoker temperature is fluctuating. Smoke to temperature, not to time on the clock.",
+    "While the chicken is smoking, heat together the barbecue sauce and butter, stirring until the butter melts completely. Once the chicken reaches around 150°F (about 40 minutes in), baste the chicken all over with the sauce, then continue smoking until the chicken reaches 165°F.",
+    "Remove the chicken from the smoker. Tent with foil and let rest 10 minutes. If you'd like to crisp the skin, place the chicken under the oven broiler for a few minutes just before serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 15,
+    "verified": 15,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

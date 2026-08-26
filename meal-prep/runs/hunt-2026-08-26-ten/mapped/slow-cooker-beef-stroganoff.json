@@ -1,0 +1,314 @@
+﻿{
+    "slug":  "slow-cooker-beef-stroganoff",
+    "title":  "Slow Cooker Beef Stroganoff",
+    "source_url":  "https://thecozycook.com/slow-cooker-beef-stroganoff/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "beef",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 ½ pounds stew meat (cut into 1-inch cubes)",
+                            "item":  "Beef Stew Meat",
+                            "bid":  "beef-stew-meat",
+                            "board":  null,
+                            "grams":  1984,
+                            "buy":  "4 3/8 lb beef stew meat, cut into 1-inch cubes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2.5 lb x 453.592. The main protein: no commodity claims it but today\u0027s captures carry matching products, so a null here would pantry-price 2.5 lb of beef. Proposed as a new id through the registrar; boneless chuck cubed for stew is its own fresh-case cut and price class, not ground beef and not a roast.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garlic salt",
+                            "item":  "Garlic Salt",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  6,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Label basis: 1/4 tsp = 0.9 g, so 1 tsp = 3.6 g. The board\u0027s \u0027garlic\u0027 match is fresh bulb garlic - a different food, price class and gram weight, exactly the 2026-08-26 garlic-powder precedent. Garlic salt is a pantry blend at 1 tsp; pantry-static pricing is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "7 tbsp all-purpose flour",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Label basis: 1/4 cup = 30 g. Exact same-form vocabulary row All-Purpose Flour [flour]; board carries flour 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3-6 tablespoons olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  106,
+                            "buy":  "1/2 cup (about 8 tbsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolver took the 4 1/2 tbsp midpoint of the source\u0027s range.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 tablespoons cold butter (divided)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  null,
+                            "grams":  74,
+                            "buy":  "5 1/4 tbsp cold butter, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "14 g per tbsp. \u0027Cold\u0027 is a temperature instruction, not a form: same product as Butter [butter], which the board carries 7 of 7 and the DB already has a row for.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ cup white wine (see notes)",
+                            "item":  "Dry White Wine",
+                            "bid":  "white-wine",
+                            "board":  null,
+                            "grams":  206,
+                            "buy":  "7/8 cup dry white wine",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Wine at 0.99 g/mL. Same-form row Dry White Wine [white-wine], board 4 of 7. Deliberately NOT white-wine-vinegar - that is the wrong dinner and the standing form-flip rejection.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "16 oz. button Mushrooms (sliced)",
+                            "item":  "White Mushrooms",
+                            "bid":  "mushrooms",
+                            "board":  null,
+                            "grams":  794,
+                            "buy":  "1 3/4 lb white button mushrooms, sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Button mushroom is the retail name for the white mushroom; same product, same price class, board 7 of 7. Portobello is a different, dearer product.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 small yellow onion (diced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  122,
+                            "buy":  "1 medium yellow onion, diced (about 4 1/2 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Small onion = 70 g; 1.75x lands at one medium onion. Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 cloves garlic (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "7 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 cups beef broth",
+                            "item":  "Beef Broth",
+                            "bid":  "beef-broth",
+                            "board":  "recipe",
+                            "grams":  1680,
+                            "buy":  "7 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: beef-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp better than bouillon (or 1 beef bouillon cube)",
+                            "item":  "Beef Bouillon Base",
+                            "bid":  "bouillon",
+                            "board":  null,
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp beef base (or 2 beef bouillon cubes)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tsp of the paste = 6 g. The line itself names a bouillon cube as the equal alternative, so the concentrated-bouillon concept is what the recipe buys; board carries bouillon 6 of 7. Flagging that I could not verify the board id\u0027s flavour is beef rather than chicken.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons red wine vinegar",
+                            "item":  "Red Wine Vinegar",
+                            "bid":  "red-wine-vinegar",
+                            "board":  "recipe",
+                            "grams":  52,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: red-wine-vinegar, 6 of 7 stores, cheapest 0.1192 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons Worcestershire sauce",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  "worcestershire",
+                            "board":  "recipe",
+                            "grams":  60,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: worcestershire, 6 of 7 stores, cheapest 0.1 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons Dijon mustard",
+                            "item":  "Dijon Mustard",
+                            "bid":  "dijon-mustard",
+                            "board":  "recipe",
+                            "grams":  52,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dijon-mustard, 6 of 7 stores, cheapest 0.1242 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  56,
+                            "buy":  "7 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup cold water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water for the cornstarch slurry: nothing is bought and it contributes no macros. Kept on the line list so the method still reads."
+                        },
+                        {
+                            "source_raw":  "1 ½ cups sour cream (not reduced fat)",
+                            "item":  "Light Sour Cream",
+                            "bid":  "sour-cream",
+                            "board":  "recipe",
+                            "grams":  604,
+                            "buy":  "2 5/8 cups full-fat sour cream",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027sour cream\u0027 -\u003e sour-cream (by adjudication on 2026-08-16T08:21:02); board MAPPED: light-sour-cream, 6 of 7 stores, cheapest 0.1094 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "10.5 oz. condensed cream of mushroom soup (optional)",
+                            "item":  "Cream of Mushroom Soup",
+                            "bid":  "cream-of-mushroom-soup",
+                            "board":  null,
+                            "grams":  521,
+                            "buy":  "18 oz condensed cream of mushroom soup (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "10.5 oz x 28.3495. Same-form vocabulary row Cream of Mushroom Soup [cream-of-mushroom-soup]; condensed IS the canned form of that product. The board match shown (\u0027mushrooms\u0027) is a fuzzy miss and I ignored it. Line is marked optional by the source.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 pound wide homestyle egg noodles",
+                            "item":  "Egg Noodles",
+                            "bid":  "egg-noodles",
+                            "board":  null,
+                            "grams":  794,
+                            "buy":  "1 3/4 lb wide egg noodles",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Cooked separately as the bed; see the macro cross-check. Same-form vocabulary row Egg Noodles [egg-noodles]; \u0027wide homestyle\u0027 is a cut of the same dry product. The board match shown (\u0027eggs\u0027) is a fuzzy miss and would price the wrong food.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "beef stew meat",
+                                 "wide egg noodles"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Beef Stew Meat",
+                               "Garlic Salt",
+                               "Beef Bouillon Base"
+                           ],
+    "db_row_findings":  [
+                            "slow-cooker-beef-stroganoff: the food DB already carries \u0027All-Purpose Flour\u0027 and the mapper\u0027s row DIFFERS on protein_g. Nothing was written and the existing row stands. existing={\"protein_g\": 3} new={\"protein_g\": 4}",
+                            "slow-cooker-beef-stroganoff: the food-DB row for \u0027Dry White Wine\u0027 FAILED the Atwater check (Atwater 11 vs stated 82 - a 87% gap, so these four numbers do not describe one food) and was NOT written",
+                            "slow-cooker-beef-stroganoff: the food DB already carries \u0027White Mushrooms\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 70, \"serving_qty\": 1, \"serving_unit\": \"cup sliced\", \"calories\": 15, \"protein_g\": 2.2, \"carbs_g\": 2.3, \"fat_g\": 0.2} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 27, \"protein_g\": 3.1, \"carbs_g\": 3.1, \"fat_g\": 0.0}",
+                            "slow-cooker-beef-stroganoff: the food DB already carries \u0027Egg Noodles\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 56, \"serving_qty\": 2, \"serving_unit\": \"oz dry\", \"calories\": 210, \"protein_g\": 8, \"carbs_g\": 40, \"fat_g\": 3} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 384, \"protein_g\": 14.2, \"carbs_g\": 71.3, \"fat_g\": 4.44}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "stew meat",
+                                        "proposed_bid":  "beef-stew-meat",
+                                        "evidence":  "No commodity in any namespace claims it per the pre-resolve table, yet today\u0027s captures carry matching products, so it is stocked and priceable. The food is boneless beef chuck cut into 1-inch cubes, sold in the fresh beef case per lb: not ground-beef (different cut, different price), not a whole chuck roast (sold uncut, cheaper per lb), not a steak id. If the estate already prices this under a spelling like \u0027stew-beef\u0027 or \u0027beef-chuck-stew\u0027, alias it there rather than minting.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "beef-stew-meat",
+                                  "verdict":  "approve",
+                                  "bid":  "beef-stew-meat",
+                                  "reason":  "No namespace prices raw cubed beef under any spelling: the only \u0027stew meat\u0027 string in the estate is commodities.json line 40087, where the canned \u0027beef-stew\u0027 commodity (label \u0027Canned Beef Stew\u0027, $0.1538/oz shelf-stable at Sam\u0027s Club) EXPLICITLY EXCLUDES \u0027stew\\s+meat\u0027 - the estate already ruled the raw cut out of that id, so aliasing there would price a canned Dinty Moore meal as fresh beef. The nearest real-beef row, beef-chuck-roast ($6.64/lb; board product names are all whole roasts - \u0027Whole Beef Chuck Roll\u0027, \u0027Boneless Chuck Roast\u0027), is the same animal cut but a different purchase: sold uncut and cheaper per lb than pre-cubed stew meat, so SAME FOOD, DIFFERENT FORM - a new id, not an alias. No \u0027stew-beef\u0027/\u0027beef-chuck-stew\u0027 spelling exists anywhere, recipe-commodities has zero stew hits, and the live feed has no price cell for beef-stew-meat (all its \u0027stew\u0027 cells are canned goods, soup mixes, and recipe names). Mint in the RECIPE namespace (recipe-board-everyday baseline + recipe-commodities.json, alongside beef-chuck-roast). REQUIRED follow-ups or the daily audit pages Brad: (1) commodity-dupe-allowlist.json pair beef-stew-meat|beef-stew, reason \u0027raw cubed beef vs canned prepared stew - beef-stew\u0027s own exclude list already separates them; prefix rule will re-flag otherwise\u0027; (2) pair beef-stew-meat|beef-chuck-roast (and chuck-roast), reason \u0027same cut, whole-roast vs pre-cubed purchase at different $/lb\u0027. Prescribe include [\u0027beef\\s+stew\\s+meat\u0027, \u0027stew\\s+meat\u0027] with excludes at neighboring-commodity rigor, minimally: canned, dinty moore, soup, seasoning, mix, frozen (unless the fresh case is empty), pork, chicken, turkey, lamb, veal, kabob only if priced differently, dog/cat food, broth, gravy - build from beef-stew\u0027s ~40-pattern exclude block as the template. Separately, per the two-namespace rule: this ruling mints the ID only; the ingredient NAME \u0027stew meat\u0027 has no vocabulary row and needs its own row minted through the name gate, and its macros need a label transcription - both FDC hits offered are chicken and must not be used."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  500.0,
+                                                                   "carbs_g":  27.0,
+                                                                   "protein_g":  40.0
+                                                               },
+                              "ours_per_serving_with_noodles":  {
+                                                                    "calories":  664,
+                                                                    "carbs_g":  56.4,
+                                                                    "protein_g":  44.5
+                                                                },
+                              "ours_per_serving_without_noodles":  {
+                                                                       "calories":  446,
+                                                                       "carbs_g":  16.0,
+                                                                       "protein_g":  36.5
+                                                                   },
+                              "protein_gap_pct":  11.3,
+                              "verdict":  "pass on protein, LOUD FLAG on carbs",
+                              "detail":  "Protein is the sharp instrument and it agrees: 44.5 g against the source\u0027s 40 g with the noodles counted, +11%, inside the band, so the 2.5 lb of stew meat is the right portion. Calories and carbs do NOT agree and the reason is structural: the 1 lb of dry egg noodles alone carries 1742 cal and 323 g carbs, and the source\u0027s published 500 cal / 27 g carbs can only have been computed WITHOUT the noodle bed (drop the noodles and we land at 446 cal / 16 g carbs / 36.5 g protein, which brackets the source). This decides whether the recipe meets this run\u0027s conditions: counting the noodles it is 664 cal and 56 g carbs per serving, breaching both the 650 cal ceiling and the 35 g carb cap; not counting them it passes comfortably. I am not the gate for that, but nothing downstream should read the pass without reading this paragraph. Optional cream-of-mushroom soup is included in the with-noodles figures (+29 cal, +2.5 g carbs per serving)."
+                          }
+}

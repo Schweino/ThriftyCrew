@@ -1,0 +1,86 @@
+﻿{
+    "name":  "Apple Spice Pork Chops",
+    "slug":  "apple-spice-pork-chops",
+    "protein":  "pork",
+    "cuisine":  "",
+    "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Pork Chops",
+                            "grams":  2380,
+                            "buy":  "14 pork chops, about 6 oz each (5 1/4 lb total)"
+                        },
+                        {
+                            "item":  "Vegetable Oil",
+                            "grams":  98,
+                            "buy":  "7 tbsp"
+                        },
+                        {
+                            "item":  "Salt and Pepper",
+                            "grams":  4,
+                            "buy":  "1/2 tsp salt and 1/2 tsp black pepper, to taste"
+                        },
+                        {
+                            "item":  "Yellow Onion",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium yellow onions, sliced (about 13 oz)"
+                        },
+                        {
+                            "item":  "Apples",
+                            "grams":  1260,
+                            "buy":  "7 Fuji apples, cored and sliced (about 2 3/4 lb)"
+                        },
+                        {
+                            "item":  "Butter",
+                            "grams":  98,
+                            "buy":  "7 tbsp (just under 1 stick)"
+                        },
+                        {
+                            "item":  "Brown Sugar",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp, packed"
+                        },
+                        {
+                            "item":  "Ground Cinnamon",
+                            "grams":  2,
+                            "buy":  "scant 1 tsp ground cinnamon"
+                        },
+                        {
+                            "item":  "Ground Nutmeg",
+                            "grams":  1,
+                            "buy":  "scant 1/2 tsp ground nutmeg"
+                        },
+                        {
+                            "item":  "Chicken Broth",
+                            "grams":  840,
+                            "buy":  "3 1/2 cups"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  452,
+                               "protein_g":  35.7,
+                               "carbs_g":  19.9,
+                               "fat_g":  25
+                           },
+    "writer_notes":  [
+
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "prose":  {
+
+              },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT45M",
+                 "steps":  [
+
+                           ]
+             }
+}

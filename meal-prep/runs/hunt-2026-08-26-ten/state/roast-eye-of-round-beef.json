@@ -1,0 +1,62 @@
+{
+    "slug":  "roast-eye-of-round-beef",
+    "title":  "Roast Eye of Round Beef",
+    "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
+    "protein":  "any",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:10:58",
+    "updated":  "2026-08-26T04:54:43",
+    "terms":  [
+                  {
+                      "term":  "eye of round roast",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cremini mushrooms",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:10:58",
+                        "by":  "harvest",
+                        "detail":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:10:58",
+                        "by":  "decider",
+                        "detail":  "Composed roast-beef dinner with red-wine/cremini mushroom gravy and vegetables; verified low-carb band, sliceable/reheatable batch prep, distinct from the catalog\u0027s braised pot-roast bowls."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:11:33",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:43:58",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected, 0 not-purchased. 5 food-macros-db rows returned (Eye of Round Roast, Fresh Rosemary, Cremini Mushrooms, Dry Red Wine, Beef Broth); Fresh Thyme, Salt, Black Pepper, Butter, Cornstarch and the aromatics already have rows. 2 new ids proposed (eye-of-round-roast, cremini-mushrooms). REUSES, not proposals: fresh-rosemary, fresh-thyme, red-wine and beef-broth are all"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:45:16",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

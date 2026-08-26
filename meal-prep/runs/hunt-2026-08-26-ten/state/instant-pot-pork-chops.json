@@ -1,0 +1,31 @@
+{
+    "slug":  "instant-pot-pork-chops",
+    "title":  "Instant Pot Pork Chops",
+    "source_url":  "https://www.spendwithpennies.com/instant-pot-pork-chops/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:51",
+    "updated":  "2026-08-26T04:12:51",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy cream-of-mushroom pork chops with onion/mushroom gravy duplicate live creamy-mushroom-pork-chops-over-mashed-potatoes; same protein + mushroom-cream sauce + chops, method-only difference (pressure vs skillet) in a saturation-6 region.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:51",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/instant-pot-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:51",
+                        "by":  "decider",
+                        "detail":  "Creamy cream-of-mushroom pork chops with onion/mushroom gravy duplicate live creamy-mushroom-pork-chops-over-mashed-potatoes; same protein + mushroom-cream sauce + chops, method-only difference (pressure vs skillet) in a saturation-6 region."
+                    }
+                ]
+}

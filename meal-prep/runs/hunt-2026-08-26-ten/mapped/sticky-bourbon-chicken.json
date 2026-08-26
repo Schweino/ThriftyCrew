@@ -1,0 +1,216 @@
+﻿{
+    "slug":  "sticky-bourbon-chicken",
+    "title":  "Sticky Bourbon Chicken",
+    "source_url":  "https://www.spendwithpennies.com/sticky-bourbon-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 pounds boneless skinless chicken thighs",
+                            "item":  "Boneless Skinless Chicken Thigh",
+                            "bid":  "boneless-skinless-chicken-thigh",
+                            "board":  null,
+                            "grams":  3174,
+                            "buy":  "7 lb boneless skinless, cut into 1 inch pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "All-meat weight, no bone. REFUSED the board\u0027s chicken-thighs bridge: bone-in skin-on thighs are roughly half the price per lb and about 70% edible, so both price and gram weight differ. Used the vocabulary\u0027s own row for this exact food.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup less sodium soy sauce",
+                            "item":  "Soy Sauce",
+                            "bid":  "soy-sauce",
+                            "board":  null,
+                            "grams":  224,
+                            "buy":  "7/8 cup (1 cup less 2 tablespoons) reduced sodium soy sauce",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup soy sauce = 255 g. Reduced sodium is a label variant of the same bottle at the same shelf price; vocabulary row Soy Sauce [soy-sauce] is same form, board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ cup bourbon",
+                            "item":  "Bourbon",
+                            "bid":  "bourbon",
+                            "board":  null,
+                            "grams":  200,
+                            "buy":  "7/8 cup",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1/4 cup at 0.94 g/ml. No commodity claims it but captures carry matching products, and the estate already prices cooking alcohol (white-wine is a live id), so a null would pantry-price a spirits purchase. Proposed to the registrar.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ cup apple juice",
+                            "item":  "Apple Juice",
+                            "bid":  "apple-juice",
+                            "board":  null,
+                            "grams":  217,
+                            "buy":  "7/8 cup",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup dark brown sugar",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  null,
+                            "grams":  192,
+                            "buy":  "7/8 cup, packed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Packed measure. Dark vs light brown sugar is the same bagged product at the same price; refused the board\u0027s plain \u0027sugar\u0027 match, which is a different food and gram weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon minced garlic",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  null,
+                            "grams":  32,
+                            "buy":  "3 1/2 tablespoons, minced (about 10 cloves)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tbsp minced = 3 cloves. Minced is a knife instruction, not a form: fresh garlic minced by the cook, same as the \u0027cold butter\u0027 -\u003e butter precedent. Reuses the live garlic id and the existing DB row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon grated fresh ginger",
+                            "item":  "Ginger",
+                            "bid":  "fresh-ginger",
+                            "board":  null,
+                            "grams":  21,
+                            "buy":  "3 1/2 tablespoons grated (a 3 inch piece)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Grated fresh root. Vocabulary row Ginger [fresh-ginger] is exactly this food; deliberately NOT ground-ginger, which is a different price class and gram weight. Board 6 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon rice wine vinegar",
+                            "item":  "Rice Vinegar",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "3 1/2 tablespoons rice vinegar",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Unseasoned rice vinegar. The board\u0027s \u0027rice\u0027 match is the grain, not a vinegar - an outright wrong food. No rice-vinegar id exists and 1 tbsp does not justify minting one; pantry-static pricing is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon red pepper flakes",
+                            "item":  "Red Pepper Flakes",
+                            "bid":  "red-pepper-flakes",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water thinning the sauce; nothing is bought."
+                        },
+                        {
+                            "source_raw":  "1 tablespoon cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  28,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon cold water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Cornstarch slurry water - the exact \u0027cold water\u0027 -\u003e not-purchased precedent of 2026-08-26."
+                        },
+                        {
+                            "source_raw":  "2 green onions (thinly sliced, green tops only)",
+                            "item":  "Green Onions",
+                            "bid":  "green-onions",
+                            "board":  "recipe",
+                            "grams":  105,
+                            "buy":  "7, thinly sliced, green tops only",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "bourbon"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "bourbon",
+                                        "proposed_bid":  "bourbon",
+                                        "evidence":  "No commodity claims it but captures carry matching products, and the estate already prices cooking alcohol (white-wine is a live id), so a null would pantry-price a spirits purchase. Proposed to the registrar.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "bourbon",
+                                  "verdict":  "approve",
+                                  "bid":  "bourbon",
+                                  "reason":  "Swept all three namespaces plus the feed and alias map for bourbon/whiskey/whisky/liquor/spirit: every hit is an EXCLUDE pattern (dozens of per-commodity excludes in commodities.json and the GLOBAL exclude list in recipe-commodities.json lines 59-63) - no id anywhere prices any spirit, the recipe board carries none, and smp-feed.json has no price cell for it or any whiskey. Not a duplicate and no variant candidate exists; white-wine (live at Baker\u0027s, $0.1571/floz) is a different food, not this purchase. Namespace ruling: mint in commodities.json (weekly staples) exactly as white-wine is - it must NOT go in recipe-commodities.json, whose global excludes (\u0027bourbon\u0027,\u0027whiskey\u0027,\u0027wine\u0027) would self-exclude the row, and white-wine\u0027s placement shows commodities.json is where cooking alcohol lives. Prescription: id \u0027bourbon\u0027, unit floz, include patterns like \\bbourbon\\b requiring whiskey context; the exclude list needs the ~150-pattern rigor and MUST cover the bourbon-FLAVORED estate the existing excludes were built against - bourbon BBQ/sauce/marinade/glaze, bourbon chicken meal kits/bowls, bourbon cashews/walnuts/honey (the FDC hits are exactly these wrong foods - transcribe a real bottle label instead), \u0027Madagascar bourbon\u0027 vanilla extract, bourbon-barrel-aged foods, and cream liqueurs. No allowlist entry needed since no near id exists; run audit-commodity-dupes.ps1 after minting to confirm zero suspects. Edits via add-commodity-rule.ps1 by the caller/Brad."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source band 450 cal / 20 carbs / 45 g protein per serving over 4. My build: 227 g raw boneless skinless thigh (327 cal, 43 g P), brown sugar 13.75 g (52 cal, 13.5 C), olive oil 6.75 g (60 cal), bourbon 14 g (33 cal), soy 16 g (9 cal), apple juice 15.5 g (7 cal), cornstarch 2 g (8 cal), aromatics ~5 cal = about 500 cal, 43.5 g protein, ~21 g carbs. Protein is 3% off and carbs 1 g off - the closest agreement in the batch. Calories run 11% high, consistent with the sauce reducing and some being left in the pan. No line looks wrong."
+}

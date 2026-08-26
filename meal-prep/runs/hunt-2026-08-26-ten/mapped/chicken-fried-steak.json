@@ -1,0 +1,327 @@
+﻿{
+    "slug":  "chicken-fried-steak",
+    "title":  "Chicken Fried Steak",
+    "source_url":  "https://thecozycook.com/chicken-fried-steak-recipe/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "beef",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 cube steaks (each about 1/3 pound)",
+                            "item":  "Cube Steak",
+                            "bid":  "cube-steak",
+                            "board":  null,
+                            "grams":  2114,
+                            "buy":  "14 steaks, about 1/3 lb each (4 2/3 lb total)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Tenderized round steak sold on its own tray by the pound; board reports ABSENT (no commodity, no capture), so a new id is proposed. 4 x 1/3 lb = 604 g raw.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ½ cups vegetable oil",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  1144,
+                            "buy":  "5 1/4 cups, for frying",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Shallow-frying medium - bought in full but only a few tablespoons are absorbed; see the macro cross-check.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups buttermilk (see notes for substitutions)",
+                            "item":  "Buttermilk",
+                            "bid":  "buttermilk",
+                            "board":  null,
+                            "grams":  1715,
+                            "buy":  "7 cups, for soaking",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Soaking liquid: purchased in full, but most is drained away, so computed calories on this line overstate what is eaten. buttermilk is a live board id priced 5/7 - a reuse the vocabulary simply has no name row for. Full 490 g is stated because the whole quart is bought even though the soak is drained.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 large eggs",
+                            "item":  "Eggs",
+                            "bid":  "eggs",
+                            "board":  null,
+                            "grams":  350,
+                            "buy":  "7 large eggs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "\"Large\" is the grade the `eggs` id already prices; 50 g per shelled large egg.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 teaspoons salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  63,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cups flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  438,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Plain dredging flour is the vocabulary\u0027s All-Purpose Flour; 1 cup scooped and levelled is 125 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/3 cup corn starch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  null,
+                            "grams":  150,
+                            "buy":  "1 1/6 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Two-word spelling of the existing Cornstarch row and the `cornstarch` id priced 7/7 - a reuse, not a new food. 1 cup is 128 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ½ teaspoons seasoned salt",
+                            "item":  "Seasoned Salt",
+                            "bid":  "seasoned-salt",
+                            "board":  null,
+                            "grams":  32,
+                            "buy":  "1 3/4 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "A Lawry\u0027s-style seasoning blend at spice-aisle prices, not the salt canister; mapping it to `salt` would publish a wrong price. The estate already prices celery-salt as its own id, so the precedent is for splitting.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon cayenne pepper",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cayenne-pepper, 6 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 Tablespoons butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  147,
+                            "buy":  "10 1/2 tbsp (1 stick plus 2 1/2 tbsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 Tablespoons flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  null,
+                            "grams":  80,
+                            "buy":  "2/3 cup",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Same food as the dredge line, here as the gravy roux; 1 tbsp is 7.8 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 Tablespoons pan drippings",
+                            "item":  "Pan Drippings",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "The fat left in the skillet after frying the steaks - it is already bought as the vegetable oil line, so it carries no id and no weight of its own rather than double-counting."
+                        },
+                        {
+                            "source_raw":  "3 cloves garlic, minced",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "10 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  420,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0373 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 sprig fresh thyme",
+                            "item":  "Fresh Thyme",
+                            "bid":  "fresh-thyme",
+                            "board":  null,
+                            "grams":  4,
+                            "buy":  "4 sprigs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "fresh-thyme is a live board id (4/7); no bridge to dried-thyme, which is a different price and weight. One sprig is about 1 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¾ teaspoon seasoned salt",
+                            "item":  "Seasoned Salt",
+                            "bid":  "seasoned-salt",
+                            "board":  null,
+                            "grams":  16,
+                            "buy":  "2 2/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second occurrence of the same blend, in the gravy.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon cayenne pepper",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cayenne-pepper, 6 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 ½ cup milk",
+                            "item":  "Milk",
+                            "bid":  "milk",
+                            "board":  "weekly",
+                            "grams":  1286,
+                            "buy":  "5 1/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: milk, 7 of 7 stores, cheapest 2.816 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¾ cup half and half",
+                            "item":  "Half and Half",
+                            "bid":  "half-and-half",
+                            "board":  "recipe",
+                            "grams":  630,
+                            "buy":  "2 2/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed here because the table computed no weight: 3/4 cup is 180 g.",
+                            "grams_from":  "line"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "cube steak",
+                                 "seasoned salt"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Buttermilk"
+                           ],
+    "db_row_findings":  [
+                            "chicken-fried-steak: the food DB already carries \u0027Eggs\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 50, \"serving_qty\": 1, \"serving_unit\": \"large egg\", \"calories\": 70, \"protein_g\": 6, \"carbs_g\": 0, \"fat_g\": 5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 148, \"protein_g\": 12.4, \"carbs_g\": 0.96, \"fat_g\": 9.96}",
+                            "chicken-fried-steak: the food DB already carries \u0027All-Purpose Flour\u0027 and the mapper\u0027s row DIFFERS on calories. Nothing was written and the existing row stands. existing={\"calories\": 110} new={\"calories\": 100}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "cube steaks",
+                                        "proposed_bid":  "cube-steak",
+                                        "evidence":  "Mechanically tenderized round steak, sold on a tray by the pound in the fresh beef case. Board reports ABSENT: no commodity, no capture match. Checked by food across the namespaces: the beef ids in play are ground (ground-beef-8020) and roasts; cube steak is neither, it is a thin tenderized steak at its own price per lb, and no word-order variant (cubed steak / minute steak / tenderized round steak) is carried. This is the recipe\u0027s main protein, so a null here would leave the dish uncostable.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "seasoned salt",
+                                        "proposed_bid":  "seasoned-salt",
+                                        "evidence":  "A blended seasoning (salt, paprika, turmeric, garlic, onion) sold as an 8 oz spice-aisle bottle at several dollars, against a 26 oz salt canister at well under one. Mapping it to `salt` would be a price-class stretch of an order of magnitude. The estate already treats blended and flavoured salts as their own ids (celery-salt), and no existing id (salt, garlic-powder, paprika) covers the blend under another spelling.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "cube-steak",
+                                  "verdict":  "approve",
+                                  "bid":  "cube-steak",
+                                  "reason":  "Swept the live feed for cube/cubed/minute/tenderized/round steak: the only \u0027cube\u0027 hits are Cubed Ham and Kleenex Cube boxes, and no commodity in any of the three namespaces carries an include pattern for this cut - the near rows (ribeye-steak $10.99/lb, sirloin-steak $5.49/lb, shaved-beef-steak $4.37/lb, ground-beef-8020) are same-food-different-form purchases: mechanically tenderized round is its own price class, so a new id is legitimate. Mint cube-steak in the recipe namespace (recipe-board baseline + recipe-commodities); include should cover \u0027cube steak\u0027, \u0027cubed steak\u0027, \u0027minute steak\u0027, \u0027tenderized (round|beef) steak\u0027 contiguously; excludes need ~150-pattern rigor - at minimum fence out \u0027steak sauce\u0027, \u0027steak seasoning\u0027, \u0027shaved\u0027, \u0027sirloin\u0027, \u0027ribeye\u0027, bouillon \u0027beef cubes\u0027, \u0027stew meat\u0027, pet food, and frozen breaded \u0027country fried steak\u0027 entrees; add allowlist pairs cube-steak/sirloin-steak and cube-steak/shaved-beef-steak (different cut, same food word). Separately: \u0027cube steaks\u0027 also needs a NEW vocabulary row (no existing name resolves) and a food-macros label transcription - none of the offered FDC rows (broth cubes) is this food."
+                              },
+                              {
+                                  "proposed_bid":  "seasoned-salt",
+                                  "verdict":  "approve",
+                                  "bid":  "seasoned-salt",
+                                  "reason":  "The estate\u0027s only two \u0027seasoned salt\u0027 strings are EXCLUDE patterns inside garlic-herb-seasoning and sea-salt (commodities.json lines 71081 and 73807) - the neighbors deliberately refuse this product and no id claims it, so it is unpriced under every spelling; the feed prices salt at $0.0304/oz vs celery-salt at $0.415/oz, confirming blended salts are their own ~10x price class the estate already recognizes (celery-salt precedent), making this a deliberate variant, not a duplicate of salt/sea-salt/kosher-salt. Mint seasoned-salt in the recipe namespace (recipe-board baseline + recipe-commodities); include \u0027seasoned salt\u0027 and \u0027season(-| )all\u0027 (Lawry\u0027s/Morton Season-All are the shelf names but the ID stays generic); exclude plain/sea/kosher/celery/garlic salt, \u0027salt pork\u0027, \u0027seasoned black beans\u0027, snack items, bath salts, at neighbor-grade rigor; add allowlist pairs seasoned-salt/salt, seasoned-salt/sea-salt, seasoned-salt/kosher-salt, seasoned-salt/celery-salt so the daily audit never re-flags them. Separately: the vocabulary needs a new \u0027Seasoned Salt\u0027 name row - do NOT resolve it to the existing Salt row, whose board mapping is the order-of-magnitude price stretch the mapper flagged."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source publishes 687 cal / 18 carbs / 42 protein over 4 servings. Recomputed at source scale: about 1,368 cal and 50 g protein per serving. TWO gaps, both explainable and both worth a person\u0027s eye. (1) Calories: 701 of those 1,368 are the 1 1/2 cups of frying oil counted in full. Shallow-fry oil is a cooking medium - maybe 3 to 4 tbsp is actually absorbed - so the honest eaten figure is around 660 to 700 cal, right on the source\u0027s 687 and inside this run\u0027s 400-650 band only marginally. As the table stands the recipe will compute at roughly double the cap and will be retired on paper. I did not override the settled vegetable-oil weight, because the full 327 g is what the shopper buys; the fix is a cooking-loss basis, not a smaller purchase. (2) Protein 50 g against 42, +20%: the buttermilk soak, the egg wash and most of the dredge flour are drained or shaken off, so the coating is counted whole when only part of it fries onto the steak. Cube steak alone gives about 33 g per serving, which sits sensibly under the published 42 once the adhering coating and gravy milk are added. No portion looks wrong; the basis does."
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "carnitas-mexican-slow-cooker-pulled-pork",
+    "title":  "Carnitas (Mexican Slow Cooker Pulled Pork)",
+    "source_url":  "https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:50",
+    "updated":  "2026-08-26T04:12:50",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same Mexican slow-cooker carnitas (orange/cumin/oregano/chipotle-jalapeno pulled pork shoulder) already live as slow-cooker-pork-carnitas-bowl; dropping the burrito-bowl rice/beans is a re-plating, not a distinct dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:50",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:50",
+                        "by":  "decider",
+                        "detail":  "Same Mexican slow-cooker carnitas (orange/cumin/oregano/chipotle-jalapeno pulled pork shoulder) already live as slow-cooker-pork-carnitas-bowl; dropping the burrito-bowl rice/beans is a re-plating, not a distinct dinner."
+                    }
+                ]
+}

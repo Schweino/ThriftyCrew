@@ -1,0 +1,149 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Spaghetti Squash Boats with Chicken",
+  "source_url": "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+  "servings": 4,
+  "time_total": "75 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 medium spaghetti squash (about 2 pounds each)",
+      "item": "spaghetti squash",
+      "qty": "2",
+      "unit": null,
+      "prep": "medium (about 2 pounds each)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 strips thick-sliced center-cut bacon (roughly chopped)",
+      "item": "thick-sliced center-cut bacon",
+      "qty": "4",
+      "unit": "strips",
+      "prep": "roughly chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+      "item": "boneless skinless chicken breasts",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "cut into bite-sized pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups baby spinach (torn into pieces)",
+      "item": "baby spinach",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "torn into pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup nonfat plain Greek yogurt",
+      "item": "nonfat plain Greek yogurt",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup part-skim mozzarella cheese (divided)",
+      "item": "part-skim mozzarella cheese",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons chopped fresh basil (plus additional for serving)",
+      "item": "basil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "chopped fresh (plus additional for serving)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Place a rack in the center of your oven and preheat the oven to 400 degrees F. Roast the spaghetti squash according to this recipe for Roasted Spaghetti Squash. Remove from the oven and set aside to cool. Reduce the oven temperature to 350 degrees F.",
+    "Meanwhile, heat a large saucepan over medium and add the bacon. Cook until the bacon is crisp and the fat has rendered; about 8 minutes. With a slotted spoon, remove the bacon to a paper towel-lined plate and pat dry.",
+    "Discard all but 1 tablespoon bacon fat from the pan and increase the heat to medium-high. Add the chicken pieces to the pan and season with garlic powder, 1/4 teaspoon salt, and 1/4 teaspoon pepper. Sauté until the chicken is cooked through, about 5 minutes.",
+    "Remove from the heat, then add the spinach. Stir the chicken and spinach together until the spinach wilts, then stir in the Greek yogurt, half of the mozzarella cheese, and basil.",
+    "Once the squash is cool enough to handle, use a fork to shred and fluff the inside flesh so it's no longer attached to the walls and makes a \"nest.\"",
+    "Divide the chicken filling evenly among the boats, using a fork to lightly mix it with the spaghetti squash. Arrange the stuffed squash on a baking sheet and sprinkle with the reserved bacon and remaining mozzarella cheese.",
+    "Bake until the cheesy is bubbly, about 10 minutes. Let cool for a few minutes, then serve hot, sprinkled with additional fresh basil."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

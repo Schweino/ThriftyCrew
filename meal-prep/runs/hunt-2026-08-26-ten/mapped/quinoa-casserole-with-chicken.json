@@ -1,0 +1,193 @@
+﻿{
+    "slug":  "quinoa-casserole-with-chicken",
+    "title":  "Quinoa Casserole with Chicken",
+    "source_url":  "https://www.nospoonnecessary.com/mexican-chicken-quinoa-casserole/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 ¼ Cups Uncooked Quinoa",
+                            "item":  "Quinoa",
+                            "bid":  "quinoa-uncooked",
+                            "board":  null,
+                            "grams":  497,
+                            "buy":  "2 7/8 cups uncooked quinoa, rinsed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup uncooked quinoa = 170 g (label basis 1/4 cup = 43 g); grams are the DRY weight, which is what is purchased and costed. quinoa-uncooked is a LIVE board id (2 of 7 stores, cheapest 0.1372 at Sam\u0027s Club), so this is a REUSE and not a new id. The missing piece is a vocabulary ROW for the name, which is a naming question, not a registrar one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 Cups Cooked Chicken – skin discarded if applicable; chicken shredded or chopped",
+                            "item":  "Rotisserie Chicken",
+                            "bid":  "rotisserie-chicken",
+                            "board":  null,
+                            "grams":  980,
+                            "buy":  "7 cups shredded cooked chicken, about 2 lb pulled meat (2 rotisserie chickens, skin discarded)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup chopped/shredded cooked chicken = 140 g; grams are pulled meat, not bird weight. The pre-resolver flagged rotisserie-chicken as DIFFERENT FORM \u0027cooked\u0027, but rotisserie chicken is SOLD cooked and this line calls for cooked shredded meat with skin discarded: same form, same price class. Mapping to raw chicken-breast or thigh would be the real form flip (raw price, and a 30% cook loss on the gram weight).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 1/3 Cup Salsa Verde",
+                            "item":  "Salsa Verde",
+                            "bid":  "salsa-verde",
+                            "board":  "recipe",
+                            "grams":  747,
+                            "buy":  "3 cups plus 2 tablespoons salsa verde",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; buy string derived from the table\u0027s 320 g source basis at 240 g/cup.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ small Yellow Onion – finely diced",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  82,
+                            "buy":  "1/2 cup finely diced yellow onion (1 small onion)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 82 g target at 160 g/cup chopped is one whole small onion.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 (4.5 ounce) Can Chopped Green Chiles – drained",
+                            "item":  "Diced Green Chiles",
+                            "bid":  "canned-green-chilies",
+                            "board":  null,
+                            "grams":  252,
+                            "buy":  "1 cup drained chopped green chiles (one 7 oz can plus one 4 oz can)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "4.5 oz can = 127.6 g net, about 108 g drained; the package nouns are named only because whole cans are used. The \u0027DIFFERENT FORM: canned\u0027 flag is spurious here - the recipe line IS a can (\u00271 (4.5 ounce) Can\u0027). Chopped and diced green chiles are the same product; board carries it 6 of 7 stores.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¾ Cup Roasted Corn Kernels – canned or frozen (drained if using canned)",
+                            "item":  "Frozen Corn Kernels",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  245,
+                            "buy":  "1 3/4 cups roasted corn kernels, thawed if frozen or drained if canned",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Frozen basis 140 g/cup. Fire-roasted frozen corn is the intended product; plain corn is the acceptable substitute the source itself allows. Board ABSENT for this phrase, but a corn commodity very likely exists under another spelling (frozen-corn, canned-corn, sweet-corn) and I cannot verify the four namespaces from the table, so I refuse to propose a new id. Null gives safe pantry-static pricing while the term is hunted.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¾ Cup Black Beans – drained and rinsed",
+                            "item":  "Canned Black Beans",
+                            "bid":  "canned-black-beans",
+                            "board":  null,
+                            "grams":  301,
+                            "buy":  "1 3/4 cups black beans, drained and rinsed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drained canned basis 172 g/cup. \u0027Drained and rinsed\u0027 is canned usage, not dry beans, so the canned row is the same form and not a flip; board carries canned-black-beans 7 of 7 stores. Seasoned Black Beans is a different seasoned product.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp EACH: Garlic Powder, Cumin, and Chili Powder",
+                            "item":  "Garlic Powder, Cumin, and Chili Powder",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  19,
+                            "buy":  "2 1/4 teaspoons each garlic powder, ground cumin, and chili powder",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Composite pantry-spice line: 1 tsp garlic powder 3.1 g + 1 tsp ground cumin 2.1 g + 1 tsp chili powder 2.6 g. Three separate pantry spices on one unsplittable line, so no single bid can carry it; the board\u0027s \u0027garlic\u0027 match is fresh bulb garlic, a different food, price class and gram weight from garlic powder. Null is pantry-static and safe at 8 g total.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ½ Cups Colby Jack, Monterey Jack OR Pepper Jack Cheese – freshly shredded, divided",
+                            "item":  "Monterey Jack Cheese",
+                            "bid":  "monterey-jack-cheese",
+                            "board":  null,
+                            "grams":  397,
+                            "buy":  "3 1/2 cups freshly shredded Monterey Jack, Colby Jack or Pepper Jack cheese (14 oz), divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Shredded cheese 113 g per cup (4 oz). Divided: about 2 1/3 cups into the mix, the rest over the top. Monterey Jack is the middle option the source names and a same-form vocabulary row; I chose the named variety over the board\u0027s generic shredded-cheese because blend pricing is a different price class (the red-onion-is-not-onions precedent).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ¼ Cup Mozzarella Cheese – freshly shredded, divided",
+                            "item":  "Mozzarella Cheese",
+                            "bid":  "mozzarella-cheese",
+                            "board":  "recipe",
+                            "grams":  329,
+                            "buy":  "2 7/8 cups freshly shredded mozzarella (about 11 1/2 oz), divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled identity, but the table computed NO weight for it, so I weighed it: 1.25 cups at 113 g/cup. Divided: about 1 1/6 cups into the mix, the rest over the top.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "Optional Garnishes: Pico de Gallo Sliced Scallions, Chopped Cilantro, Sliced Avocados or Guacamole, Sour Cream",
+                            "item":  "Optional Garnishes",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "A garnish bundle of five distinct foods with no quantity given for any of them; costing or weighing it would mean inventing every number. Excluded from the shopping list and from macros at 0 g."
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "rotisserie chicken",
+                                 "roasted corn kernels",
+                                 "monterey jack cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Quinoa",
+                               "Frozen Corn Kernels"
+                           ],
+    "db_row_findings":  [
+                            "quinoa-casserole-with-chicken: the food DB already carries \u0027Diced Green Chiles\u0027 and the mapper\u0027s row DIFFERS on calories, carbs_g. Nothing was written and the existing row stands. existing={\"calories\": 10, \"carbs_g\": 2} new={\"calories\": 5, \"carbs_g\": 1}",
+                            "quinoa-casserole-with-chicken: the food DB already carries \u0027Canned Black Beans\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g. Nothing was written and the existing row stands. existing={\"calories\": 120, \"protein_g\": 8, \"carbs_g\": 22} new={\"calories\": 110, \"protein_g\": 7, \"carbs_g\": 20}",
+                            "quinoa-casserole-with-chicken: the food DB already carries \u0027Monterey Jack Cheese\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 373, \"protein_g\": 24.5, \"carbs_g\": 0.7, \"fat_g\": 30.3} new={\"serving_grams\": 28, \"serving_qty\": 0.25, \"serving_unit\": \"cup shredded\", \"calories\": 100, \"protein_g\": 7, \"carbs_g\": 1, \"fat_g\": 8}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  489,
+                                                                   "carbs_g":  35,
+                                                                   "protein_g":  41
+                                                               },
+                              "computed_per_serving_at_source_scale":  {
+                                                                           "calories":  476,
+                                                                           "protein_g":  35.3,
+                                                                           "carbs_g":  39.6
+                                                                       },
+                              "servings":  6,
+                              "calorie_delta_pct":  -2.7,
+                              "protein_delta_pct":  -13.9,
+                              "verdict":  "PASS, but only just on protein, and the portions are corroborated rather than suspect.",
+                              "detail":  "Line totals at source basis: quinoa 213 g = 784 cal / 30.0 P; chicken 420 g = 643 cal / 94.1 P; salsa verde 320 g = 107 cal; onion 35 g = 14 cal; green chiles 108 g = 18 cal; corn 105 g = 119 cal / 3.8 P; black beans 129 g = 109 cal / 6.9 P; spices 8 g = about 24 cal; jack cheese 170 g = 607 cal / 42.5 P; mozzarella 141 g = 429 cal / 33.3 P. The main-protein each-weight is the thing rule 6 exists to catch, so I checked it directly: 3 cups cooked chicken at the standard 140 g per cup is 420 g, calories land within 2.7% of the source\u0027s own figure, and the whole 13.9% protein gap is explained by the rotisserie label basis (a brined, seasoned bird reads about 22.4 g protein per 100 g against roughly 27-28 for plain roasted meat). At a plain-roast basis protein computes to 38.5 g per serving, about 6% under the source. No portion needs re-examining.",
+                              "carb_flag":  "TOTAL carbs compute to 39.6 g per serving against the source\u0027s published 35 and this run\u0027s condition of 35 g or less. Fiber is about 22.6 g per recipe (quinoa 14.9, beans 5.0, corn 2.7), so on a NET carb basis it lands at about 35.8. Whoever runs the condition gate needs to know which basis the 35 g ceiling is measured on, because this recipe sits on the wrong side of it on total carbs and on the line on net."
+                          }
+}

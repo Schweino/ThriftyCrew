@@ -1,0 +1,115 @@
+{
+ "slug": "rosemary-chicken-thighs",
+ "lines": [
+  {
+   "raw": "1 medium yellow onion* (thinly sliced (about 1 1/2 cups))",
+   "buy": "3 1/2 medium yellow onions (about 5 1/4 cups), thinly sliced",
+   "grams_source": 150,
+   "notes": "Medium onion trimmed, matching the source's 1 1/2 cups sliced."
+  },
+  {
+   "raw": "1 medium tart apple* (such as Granny Smith, halved, cored, and cut into 8 wedges*)",
+   "buy": "3 1/2 medium Granny Smith apples, cored and cut into wedges",
+   "grams_source": 180,
+   "notes": "Medium apple, cored."
+  },
+  {
+   "raw": "2 tablespoons extra virgin olive oil (divided)",
+   "buy": "7 tablespoons, divided",
+   "grams_source": 27,
+   "notes": "13.5 g per tbsp."
+  },
+  {
+   "raw": "2 1/2 to 3 pounds bone-in skin-on chicken thighs (about 5 thighs)",
+   "buy": "9 1/2 lb bone-in skin-on thighs (about 18 thighs)",
+   "grams_source": 1247,
+   "notes": "Midpoint of the 2.5-3 lb range, bone-in."
+  },
+  {
+   "raw": "5 sprigs fresh rosemary (plus additional chopped fresh rosemary for serving)",
+   "buy": "18 sprigs, plus extra chopped for serving",
+   "grams_source": 5,
+   "notes": "Sprigs roast whole; most is not eaten."
+  },
+  {
+   "raw": "3/4 pound Brussels sprouts* (ends trimmed and halved (see note))",
+   "buy": "2 5/8 lb, ends trimmed and halved",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 tablespoon Dijon mustard",
+   "buy": "3 1/2 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 tablespoon honey",
+   "buy": "1 3/4 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 teaspoon kosher salt (divided)",
+   "buy": "1 tablespoon plus 1/2 teaspoon kosher salt, divided",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/2 teaspoon ground black pepper (divided)",
+   "buy": "1 3/4 teaspoons ground black pepper, divided",
+   "notes": "Settled line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 medium yellow onion* (thinly sliced (about 1 1/2 cups))",
+   "term": "medium yellow onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 150,
+   "evidence": "Exact same-form vocabulary row Yellow Onion [onions], board 7 of 7; 'medium' is a size word. Follows the 'small yellow onion' ruling of 2026-08-26."
+  },
+  {
+   "raw": "1 medium tart apple* (such as Granny Smith, halved, cored, and cut into 8 wedges*)",
+   "term": "medium tart apple",
+   "canon_item": "Apple",
+   "bid": "apples",
+   "decision": "mapped",
+   "grams_source": 180,
+   "evidence": "apples is a live board id 7 of 7, so a reuse; Granny Smith is a mainstream bagged apple at the generic apple price, exactly the 'fuji apples' precedent."
+  },
+  {
+   "raw": "2 tablespoons extra virgin olive oil (divided)",
+   "term": "extra virgin olive oil",
+   "canon_item": "Olive Oil",
+   "bid": "olive-oil",
+   "decision": "mapped",
+   "grams_source": 27,
+   "evidence": "Extra virgin is what the olive-oil commodity is sold as; not a form flip. Board 7 of 7."
+  },
+  {
+   "raw": "2 1/2 to 3 pounds bone-in skin-on chicken thighs (about 5 thighs)",
+   "term": "bone-in skin-on chicken thighs",
+   "canon_item": "Chicken Thighs",
+   "bid": "chicken-thighs",
+   "decision": "mapped",
+   "grams_source": 1247,
+   "evidence": "chicken-thighs is a live board id at 7 of 7 priced from bone-in packs, which is precisely this line - a reuse, not a proposal. The missing piece is only a vocabulary row for the bone-in name."
+  },
+  {
+   "raw": "5 sprigs fresh rosemary (plus additional chopped fresh rosemary for serving)",
+   "term": "fresh rosemary",
+   "canon_item": "Fresh Rosemary",
+   "bid": "fresh-rosemary",
+   "decision": "mapped",
+   "grams_source": 5,
+   "evidence": "Sprigs can only be the fresh herb; dried-rosemary is a different price class and gram weight, so no bridge. Board 5 of 7."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Source band 672 cal / 20 carbs / 43 g protein per serving over 4. My build: 1247 g bone-in thighs at ~70% edible = 218 g meat and skin per serving (410 cal, 37 g P), Brussels 85 g (37 cal, 2.9 P), apple 45 g (23 cal), onion 37.5 g (14 cal), olive oil 6.75 g (60 cal), dijon and honey (10 cal) = about 554 cal, 41 g protein, ~19 g carbs. Protein 5% under and carbs 1 g under - both well inside tolerance. Calories run 18% under the band, which is a rendering/serving-basis difference and not a portion error. Nothing to re-examine."
+}

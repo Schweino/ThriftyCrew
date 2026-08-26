@@ -1,0 +1,641 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T04:47:57",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "eye of round roast",
+   "state": "MATCHES",
+   "term_used": "eye of round roast",
+   "attempts": [
+    {
+     "term": "eye of round roast",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13586071223"
+    },
+    {
+     "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+     "price": 17.93,
+     "size": "",
+     "unit_price": "$0.75/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13843866537"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Eye of Round Roast, priced per pound",
+     "price": 30.01,
+     "size": "",
+     "unit_price": "$6.24/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/57G871BKBGYV"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Eye of Round Steak, priced per pound",
+     "price": 23.25,
+     "size": "",
+     "unit_price": "$6.74/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6GKK636WAH40"
+    },
+    {
+     "item": "USDA Choice Angus Whole Eye of Round, Case, priced per pound",
+     "price": 426.33,
+     "size": "",
+     "unit_price": "$5.44/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1G2433TGVWET"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Whole Beef Eye of Round, Cryovac, priced per pound",
+     "price": 44.07,
+     "size": "",
+     "unit_price": "$5.86/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1YWFUNASODWD"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+     "price": 29.83,
+     "size": "",
+     "unit_price": "$6.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0T4L19GGXIR2"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Whole Beef Ribeye, Cryovac, priced per pound",
+     "price": 232.07,
+     "size": "",
+     "unit_price": "$13.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/74ANT4EYHTUO"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "cremini mushrooms",
+   "state": "MATCHES",
+   "term_used": "cremini mushrooms",
+   "attempts": [
+    {
+     "term": "cremini mushrooms",
+     "state": "MATCHES",
+     "hits": 32
+    }
+   ],
+   "hits": [
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15367317581"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13599513403"
+    },
+    {
+     "item": "Nutrops by Gruns Adult Organic Functional Nootropic Mushroom Gummies, 25 ct.",
+     "price": 25.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6CJ2J8GY4E2P"
+    },
+    {
+     "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
+     "price": 9.48,
+     "size": "",
+     "unit_price": "$1.58/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
+    },
+    {
+     "item": "Member’s Mark Organic Mushroom Complex Capsules, 240 ct.",
+     "price": 19.97,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3ML4S5ALV9MR"
+    },
+    {
+     "item": "Om Mushrooms Master Blend, Organic Mushroom Supplements, 195 CT",
+     "price": 31.98,
+     "size": "",
+     "unit_price": "$0.16/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6PWKP31BMKDE"
+    },
+    {
+     "item": "PowerA Advantage Wired Controller for Nintendo Switch 2 - Mushroom Kingdom",
+     "price": 24.99,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/51FLG7HG39K9"
+    },
+    {
+     "item": "Whole White Mushrooms 24 oz.",
+     "price": 3.97,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/64FJYQZ7Y1ZD"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "turkey sausage",
+   "state": "MATCHES",
+   "term_used": "turkey sausage",
+   "attempts": [
+    {
+     "term": "turkey sausage",
+     "state": "MATCHES",
+     "hits": 26
+    }
+   ],
+   "hits": [
+    {
+     "item": "Old Wisconsin Turkey Snack Sticks 32 oz.",
+     "price": 14.47,
+     "size": "",
+     "unit_price": "$0.45/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13867574198"
+    },
+    {
+     "item": "Frigo Cheese Heads Snack Sticks Mild Cheddar Cheese & Turkey Sausage, 24 Count, 18.9 oz.",
+     "price": 10.47,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/19711265530"
+    },
+    {
+     "item": "Jimmy Dean Fully Cooked Turkey Sausage Patties 24 ct.",
+     "price": 9.86,
+     "size": "",
+     "unit_price": "$5.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/337SSEF0D6JD"
+    },
+    {
+     "item": "Hillshire Farm Turkey Polska Kielbasa Smoked Sausage, 14 oz., 3 pk.",
+     "price": 7.57,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1NQP7N1KXPUM"
+    },
+    {
+     "item": "Old Wisconsin Natural Cut Turkey Smoked Sausage & Colby Jack Cheese Bites, 1.5 oz., 6 ct.",
+     "price": 8.67,
+     "size": "",
+     "unit_price": "$1.45/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2E6W81QP7J6V"
+    },
+    {
+     "item": "Old Wisconsin Beef Sticks 1 oz., 32 ct.",
+     "price": 15.56,
+     "size": "",
+     "unit_price": "$0.49/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13564266120"
+    },
+    {
+     "item": "Godshall's Uncured Turkey Bacon 40 oz.",
+     "price": 13.86,
+     "size": "",
+     "unit_price": "$5.54/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4N4N3I5THSXS"
+    },
+    {
+     "item": "Old Trapper Peppered Beef Jerky, 18 oz.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$1.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13856401760"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "asiago cheese",
+   "state": "MATCHES",
+   "term_used": "asiago cheese",
+   "attempts": [
+    {
+     "term": "asiago cheese",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.30/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13874852267"
+    },
+    {
+     "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+     "price": 12.87,
+     "size": "",
+     "unit_price": "$7.35/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13878908387"
+    },
+    {
+     "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+     "price": 9.86,
+     "size": "",
+     "unit_price": "$5.63/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+    },
+    {
+     "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
+     "price": 10.14,
+     "size": "",
+     "unit_price": "$4.06/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13598620787"
+    },
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13571669511"
+    },
+    {
+     "item": "Cello Domestic Romano Cheese Wheel approx. 18 lbs.",
+     "price": 174.26,
+     "size": "",
+     "unit_price": "$9.68/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2TU6KN96JHZ9"
+    },
+    {
+     "item": "Alpenhaus French Gruyere Semi-Hard Cheese Wedge, 1 lb.",
+     "price": 11.87,
+     "size": "",
+     "unit_price": "$0.74/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6TE7K3A52JXC"
+    },
+    {
+     "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "green bell pepper",
+   "state": "MATCHES",
+   "term_used": "green bell pepper",
+   "attempts": [
+    {
+     "term": "green bell pepper",
+     "state": "MATCHES",
+     "hits": 19
+    }
+   ],
+   "hits": [
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15367317581"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13599513403"
+    },
+    {
+     "item": "Green Bell Peppers, 6 ct.",
+     "price": 4.97,
+     "size": "",
+     "unit_price": "$0.83/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/206QFTWNWXV2"
+    },
+    {
+     "item": "Multi Bell Sweet Peppers, 6 ct.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.99/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4NC1O4LLPTI8"
+    },
+    {
+     "item": "Russet Potatoes, 10 lbs.",
+     "price": 4.96,
+     "size": "",
+     "unit_price": "$0.50/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+    },
+    {
+     "item": "Organic Yellow Onions, 5 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$1.04/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+    },
+    {
+     "item": "Tomatoes on the Vine, 3 lbs.",
+     "price": 4.97,
+     "size": "",
+     "unit_price": "$1.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+    },
+    {
+     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+     "price": 4.92,
+     "size": "",
+     "unit_price": "$2.46/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "red onion",
+   "state": "MATCHES",
+   "term_used": "red onion",
+   "attempts": [
+    {
+     "term": "red onion",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13599513403"
+    },
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15367317581"
+    },
+    {
+     "item": "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+     "price": 6.42,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/25CSPSJ2282X"
+    },
+    {
+     "item": "Sweet Onions, 5 lbs.",
+     "price": 4.96,
+     "size": "",
+     "unit_price": "$0.99/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/61EDSZBFT3MZ"
+    },
+    {
+     "item": "Organic Yellow Onions, 5 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$1.04/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+    },
+    {
+     "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
+     "price": 5.47,
+     "size": "",
+     "unit_price": "$2.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+    },
+    {
+     "item": "Tomatoes on the Vine, 3 lbs.",
+     "price": 4.97,
+     "size": "",
+     "unit_price": "$1.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "cube steak",
+   "state": "MATCHES",
+   "term_used": "cube steak",
+   "attempts": [
+    {
+     "term": "cube steak",
+     "state": "MATCHES",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13586071223"
+    },
+    {
+     "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+     "price": 17.93,
+     "size": "",
+     "unit_price": "$0.75/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13843866537"
+    },
+    {
+     "item": "Member's Mark Love at First Bite Box, Frozen, 3.71 lbs.",
+     "price": 46.17,
+     "size": "",
+     "unit_price": "$12.44/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0S6CORIX3MQK"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless NY Strip Steak, priced per pound",
+     "price": 53.09,
+     "size": "",
+     "unit_price": "$13.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/17B5DE7X8ETW"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks, priced per pound",
+     "price": 35.89,
+     "size": "",
+     "unit_price": "$9.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/61EZCPH9RV60"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Inside Skirt Steak, priced per pound",
+     "price": 38.45,
+     "size": "",
+     "unit_price": "$14.24/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2DJW59GG2GYO"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Steak, priced per pound",
+     "price": 20.16,
+     "size": "",
+     "unit_price": "$6.38/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5BSZU85M9MXG"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Eye of Round Steak, priced per pound",
+     "price": 23.25,
+     "size": "",
+     "unit_price": "$6.74/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6GKK636WAH40"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "seasoned salt",
+   "state": "MATCHES",
+   "term_used": "seasoned salt",
+   "attempts": [
+    {
+     "term": "seasoned salt",
+     "state": "MATCHES",
+     "hits": 29
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Sea Salt, 36 oz.",
+     "price": 3.98,
+     "size": "",
+     "unit_price": "$0.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13576072865"
+    },
+    {
+     "item": "Member's Mark Himalayan Pink Salt, 38 oz.",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13609868850"
+    },
+    {
+     "item": "Lawry's Seasoned Salt, 40 oz.",
+     "price": 7.48,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+    },
+    {
+     "item": "Member's Mark Salt-Free Curry Powder, 18 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.50/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2CLM8FI6VFJ1"
+    },
+    {
+     "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 10.5 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.47/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5AZ9M02O6XSN"
+    },
+    {
+     "item": "Member's Mark Mediterranean Sea Salt Grinder, 14.9 oz.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$0.37/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13614254911"
+    },
+    {
+     "item": "Ac'cent Flavor Seasoning Enhancer 32 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.28/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/36GYF4RIA9CJ"
+    },
+    {
+     "item": "Badia Complete Seasoning, 28 oz.",
+     "price": 6.38,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

@@ -1,0 +1,170 @@
+﻿{
+    "slug":  "dill-pickle-chicken-wings",
+    "title":  "Dill Pickle Chicken Wings",
+    "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+    "servings":  4,
+    "built_at":  "2026-08-26T04:22:35",
+    "line_count":  8,
+    "resolved_count":  4,
+    "residual_count":  4,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "chicken wings",
+                           "dill pickle juice/brine",
+                           "white pepper",
+                           "cooking spray"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "4 lbs chicken wings (See Note 1)",
+                     "term":  "chicken wings",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171111 Chicken, wing, frozen, glazed, barbecue flavored [SR Legacy] per 100 g: 211.0 cal, 19.7 P, 3.34 C, 12.7 F, 0.6 fiber | fdc:172830 Chicken, broiler, rotisserie, BBQ, wing, meat and skin [SR Legacy] per 100 g: 257.0 cal, 23.4 P, 0.6 C, 18.0 F, 0.0 fiber | fdc:171516 Chicken, broiler, rotisserie, BBQ, wing, meat only [SR Legacy] per 100 g: 186.0 cal, 28.3 P, 0.54 C, 7.79 F, 0.0 fiber; board MAPPED: chicken-wings, 7 of 7 stores, cheapest 1.997 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "4 cups dill pickle juice/brine (from empty pickle jar)",
+                     "term":  "dill pickle juice/brine",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; board MAPPED: pickles, 7 of 7 stores, cheapest 0.05 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "5 tsp baking powder (NOT BAKING SODA and make sure it\u0027s aluminum free baking powder)",
+                     "term":  "baking powder",
+                     "canon_item":  "Baking Powder",
+                     "bid":  "baking-powder",
+                     "board":  null,
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: baking-powder, 7 of 7 stores, cheapest 0.1768 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  26.5,
+                     "grams_basis_fallback":  "default tsp"
+                 },
+                 {
+                     "raw":  "2 tsp dried dill",
+                     "term":  "dried dill",
+                     "canon_item":  "Dried Dill",
+                     "bid":  "dried-dill",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: dried-dill, 5 of 7 stores, cheapest 1.505 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  2
+                 },
+                 {
+                     "raw":  "1 tsp garlic powder",
+                     "term":  "garlic powder",
+                     "canon_item":  "Garlic Powder",
+                     "bid":  "garlic-powder",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  3.1
+                 },
+                 {
+                     "raw":  "3/4 tsp salt",
+                     "term":  "salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  4.5
+                 },
+                 {
+                     "raw":  "1/8 tsp white pepper (optional)",
+                     "term":  "white pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170933 Spices, pepper, white [SR Legacy] per 100 g: 296.0 cal, 10.4 P, 68.6 C, 2.12 F, 26.2 fiber | fdc:169394 Pepper, banana, raw [SR Legacy] per 100 g: 27.0 cal, 1.66 P, 5.35 C, 0.45 F, 3.4 fiber | fdc:169396 Peppers, ancho, dried [SR Legacy] per 100 g: 281.0 cal, 11.9 P, 51.4 C, 8.2 F, 21.6 fiber | fdc:168578 Peppers, hungarian, raw [SR Legacy] per 100 g: 29.0 cal, 0.8 P, 6.7 C, 0.41 F, 1.0 fiber; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "source":  null,
+                     "optional":  true,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "PAM/Oil spray",
+                     "term":  "cooking spray",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171430 Oil, PAM cooking spray, original [SR Legacy] per 100 g: 792.0 cal, 0.26 P, 20.7 C, 78.7 F, 0.0 fiber | fdc:174147 Beverages, OCEAN SPRAY, Cran Cherry [SR Legacy] per 100 g: 46.0 cal, 0.19 P, 12.8 C, 0.0 F, 0.6 fiber | fdc:174132 Beverages, OCEAN SPRAY, Cran Grape [SR Legacy] per 100 g: 54.0 cal, 0.21 P, 13.2 C, 0.0 F, 0.6 fiber; board MAPPED: cooking-spray, 7 of 7 stores, cheapest 0.3113 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 4 of 8 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  620.0,
+                                          "carbs":  20.0,
+                                          "protein_g":  45.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  4,
+                           "lines_total":  8,
+                           "uncovered_lines":  [
+                                                   "chicken wings",
+                                                   "dill pickle juice/brine",
+                                                   "white pepper",
+                                                   "cooking spray"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

@@ -23,6 +23,7 @@ B11 (the repair-claim mtime check) and the cost-engine mutex, plus the five phas
 from __future__ import annotations
 
 import asyncio
+import atexit
 import datetime as dt
 import importlib.util
 import io
@@ -213,6 +214,46 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
     return tmp
 
 
+# EVERY SCRATCH DIR THIS SUITE MAKES IS TRACKED AND SWEPT ON EXIT, and nothing below calls
+# tempfile.mkdtemp directly any more.
+#
+# TWO DEFECTS, ONE ROOT, both measured 2026-08-26. daemon()'s run_dir defaulted to the bare string
+# "R", so a fixture that took it and reached a lane which WRITES into the run dir - qa_lane's
+# write_qa_verdict is the one that does it - created R\qa\ relative to the CURRENT WORKING
+# DIRECTORY. Run the documented way, from this source directory, that is an untracked
+# meal-prep\pipeline\R\ carrying three verdict files, and it is NOT covered by the root
+# .gitignore (which only ignores /* at the repo top), so the daily bot's ~07:00 sweep of anything
+# staged in the main tree can pick it up. Run from a repo root it lands as R\ there instead, which
+# the root rule does ignore - the hazard depends on the cwd, which is exactly why a bare relative
+# default is the wrong thing to hand a fixture.
+#
+# The same measurement found the other half: seven fixtures allocated a temp dir and never removed
+# it, so every run left 16-17 directories in %TEMP% forever. Over ~380 runs that had become 6,577
+# directories holding 23,038 files. 40.6 MB - the COUNT is the cost, not the bytes.
+#
+# BOTH ARE THE SAME DEFECT: an allocation whose cleanup is a thing a fixture has to REMEMBER. So it
+# is not remembered any more. scratch_dir() is the only way to get a directory in this file, it
+# registers what it hands out, and sweep_scratch() takes every one on exit however the process ends.
+# A fixture that ALSO cleans up locally in a `finally` - most do, and should, so a long run does not
+# hold a hundred dirs open at once - is simply a no-op for the sweep. There is no path left where
+# forgetting leaks.
+_SCRATCH_DIRS = []
+
+
+def scratch_dir(prefix="daemon-run-"):
+    p = tempfile.mkdtemp(prefix=prefix)
+    _SCRATCH_DIRS.append(p)
+    return p
+
+
+def sweep_scratch():
+    while _SCRATCH_DIRS:
+        shutil.rmtree(_SCRATCH_DIRS.pop(), ignore_errors=True)
+
+
+atexit.register(sweep_scratch)
+
+
 # THE MEMORY SEAMS, DEFAULTED FOR THE WHOLE SUITE (PLAN-ingredient-memory D1).
 #
 # assemble_mapped now writes ingredient-events.jsonl and, through -Record, the resolutions ledger -
@@ -221,15 +262,15 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
 # believe. So the suite's OWN scratch paths are the default here rather than something each fixture
 # has to remember, which is the H2 lesson (three live ledgers a no-publish drill was still writing)
 # applied before the first drill instead of after it. `_learn_seams_are_never_live` asserts it.
-LEARN_SCRATCH = tempfile.mkdtemp(prefix="daemon-learn-seam-")
+LEARN_SCRATCH = scratch_dir(prefix="daemon-learn-seam-")
 SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
 
 
-def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
+def daemon(run_dir=None, run_id="drill-run", dispatcher=None, ps=None, **kw):
     kw.setdefault("events_path", SCRATCH_EVENTS)
     kw.setdefault("resolutions_path", SCRATCH_RESOLUTIONS)
-    return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
+    return HD.Daemon(run_dir or scratch_dir(), run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
 
 
@@ -261,7 +302,7 @@ def run():
     # =================================================================================================
     H("B5 - a null is STUCK, never a verdict")
     # =================================================================================================
-    _b5tmp = tempfile.mkdtemp(prefix="daemon-b5-")
+    _b5tmp = scratch_dir(prefix="daemon-b5-")
     skeletoned(_b5tmp, ["s1"])
     for lane_name, agent, seed_ch, schema in (
             ("write", "recipe-writer", "write", hunt_lib.WRITE),
@@ -287,7 +328,7 @@ def run():
     # =================================================================================================
     H("B6 - retry budgets are keyed PER SLUG, and the breaker watches run-wide")
     # =================================================================================================
-    _b6tmp = tempfile.mkdtemp(prefix="daemon-b6-")
+    _b6tmp = scratch_dir(prefix="daemon-b6-")
     skeletoned(_b6tmp, ["s1"])
     d = daemon(run_dir=_b6tmp,
                dispatcher=FakeDispatch({"recipe-writer": [None, None, None, {"slug": "s1",
@@ -301,7 +342,7 @@ def run():
       d.retry_counts.get("write:s1") == hunt_lib.MAX_STAGE_RETRIES + 1
       and d.outcomes and d.outcomes[0]["status"] == "stuck",
       "counts=%s outcomes=%s" % (json.dumps(d.retry_counts), json.dumps(d.outcomes)))
-    _brtmp = tempfile.mkdtemp(prefix="daemon-breaker-")
+    _brtmp = scratch_dir(prefix="daemon-breaker-")
     skeletoned(_brtmp, ["s%d" % i for i in range(4)])
     d = daemon(run_dir=_brtmp, dispatcher=FakeDispatch({"recipe-writer": [None] * 30}))
     for i in range(4):
@@ -323,11 +364,17 @@ def run():
         fd = FakeDispatch({"recipe-source-qa": [{"slug": "s1", "verdict": verdict, "owner": "writer"},
                                                 {"slug": "s1", "verdict": "PASS"}],
                            "recipe-writer": [{}]})
-        d = daemon(dispatcher=fd)
-        d.ch["qa"].push({"slug": "s1"})
-        d.ch["qa"].close()
-        arun(d.run(("qa",)))
-        repaired = bool(fd.prompts("recipe-writer"))
+        # THE QA LANE WRITES qa\<slug>.json, so this case needs a run dir of its own and takes it
+        # away again - the same shape every other writing fixture in this suite uses.
+        _b7tmp = scratch_dir(prefix="daemon-b7-")
+        try:
+            d = daemon(run_dir=_b7tmp, dispatcher=fd)
+            d.ch["qa"].push({"slug": "s1"})
+            d.ch["qa"].close()
+            arun(d.run(("qa",)))
+            repaired = bool(fd.prompts("recipe-writer"))
+        finally:
+            shutil.rmtree(_b7tmp, ignore_errors=True)
         T("%s verdict %-18s -> %s" % ("MUST FIRE " if expect_pass else "CLEAN TWIN", repr(verdict),
                                       "passes with no repair cycle" if expect_pass
                                       else "buys its one repair cycle"),
@@ -340,8 +387,10 @@ def run():
     fd = FakeDispatch({"recipe-ingredient-mapper": [
         {"results": [{"slug": "s1", "status": "ok", "state": "pricing", "absent_terms": terms,
                       "optional_absent": ["cilantro"]}]}]})
-    ps = FakePS()
-    _b8tmp = tempfile.mkdtemp(prefix="daemon-b8map-")
+    # _asm_ps, NOT a bare FakePS: since Q1 the lane enqueues what hunt-run RECORDED, so an injected
+    # hunt-run that writes no state file leaves nothing to enqueue and this case reads empty.
+    ps = _asm_ps()
+    _b8tmp = scratch_dir(prefix="daemon-b8map-")
     d = daemon(run_dir=preresolved(_b8tmp, ["s1"]), dispatcher=fd, ps=ps)
     d.ch["map"].push({"slug": "s1"})
     d.ch["map"].close()
@@ -812,12 +861,43 @@ def run():
     T("MUST FIRE  H1: same serving basis and macros a ROUNDING apart is the identical-row case - "
       "silent skip, no finding, the existing row stands (jc1 filed 2 of 5 conflicts on this noise)",
       *_fooddb_rounding_is_not_a_conflict())
-    T("CLEAN TWIN H1: ...and ANY serving-basis difference is a full conflict however close the "
-      "macros look - a different basis is a different claim about the food (the Pork Chops save)",
+    T("CLEAN TWIN H1/H2: the Pork Chops save survives normalisation - 155 cal per 112 g is 138 per "
+      "100 g against a stated 155, so the two rows still disagree once put on one basis",
       *_fooddb_a_different_basis_is_always_a_conflict())
+    T("MUST FIRE  H2: a per-100 g row and the DB's HOUSEHOLD row for the same food are not in "
+      "conflict - Dried Basil 233/100 g IS 2 cal per 1 g tsp, and 10 of 13 findings on run "
+      "hunt-2026-08-26-ten were this false alarm burying the real ones",
+      *_fooddb_agreeing_bases_are_not_a_conflict())
+    T("MUST FIRE  H2: ...and a REAL disagreement across two bases is still a conflict - Beef Broth "
+      "at 0.83 g protein per 100 g against 1.97 is more than double, and normalising is what proves "
+      "it rather than forgiving it",
+      *_fooddb_normalising_still_catches_a_real_disagreement())
+    T("CLEAN TWIN H2: two bases can only be compared when BOTH carry a weight - a row with no usable "
+      "serving_grams stays a conflict, because nobody could check is not the same as they agree",
+      *_fooddb_unweighable_basis_is_still_a_conflict())
     T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
       "agree with each other, never that they are this food's numbers",
       *_fooddb_needs_a_source())
+    T("MUST FIRE  H3: a row landing beside a name that differs only by plural or punctuation is "
+      "NAMED - the exact-name check is why this DB holds Apple/Apples, Lemon/Lemons, Green Bell "
+      "Pepper(s) and Fresh Thyme twice",
+      *_fooddb_near_name_twin_is_named_but_still_written())
+    T("MUST FIRE  H3: ...and the key is the PRECISE one, not the head-noun scoring - it keeps digits "
+      "so 93/7 and 90/10 Ground Beef stay apart, and keeps noise words so Hot Sauce and Alfredo "
+      "Sauce do too",
+      *_fooddb_near_name_key_is_precise_not_recall())
+    T("CLEAN TWIN H3: both halves of a collision can be NEW in one payload - an index built only "
+      "from what was already on disk would miss it",
+      *_fooddb_near_name_catches_two_new_rows_in_one_payload())
+    T("CLEAN TWIN H3: a real new variant says NOTHING - a check that questioned every ground-beef "
+      "ratio would be trained out of existence inside a week",
+      *_fooddb_near_name_is_silent_on_a_real_variant())
+    T("LOCKSTEP  the LIVE food DB still holds exactly the four known name collisions - a fifth is a "
+      "real find and this is where it surfaces",
+      *_fooddb_near_name_matches_the_live_db())
+    T("the key's 'ss' guard is DORMANT and says so - no live name ends in ss, its neuter fires "
+      "nothing, and inventing a fixture to hide that would prove only the fixture",
+      *_fooddb_near_name_ss_guard_is_dormant())
     T("MUST FIRE  two concurrent map workers each carrying three rows leave SIX rows in the file",
       *_fooddb_concurrent_writers())
     T("MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op lock the same two writers lose "
@@ -832,6 +912,25 @@ def run():
     T("MUST FIRE  map_prompt tells the mapper it has no file access to the DB, names the Atwater and "
       "conflict rules, and prefers the FDC shelf",
       *_fooddb_prompt_moved_the_pen())
+
+    # =================================================================================================
+    H("THE SHORTFALL DETECTOR - rows the table ASKED FOR that never came back (2026-08-26)")
+    # =================================================================================================
+    T("MUST FIRE  the foods the pre-resolve table asked for and the mapper never mentioned are NAMED "
+      "at map time - on hunt-2026-08-26-ten the mapper returned zero rows for 12 of 22 recipes and "
+      "each was discovered a whole lane later as a STUCK nobody had predicted",
+      *_shortfall_names_what_never_came_back())
+    T("CLEAN TWIN a batch where every asked-for row came back says nothing at all",
+      *_shortfall_is_silent_when_every_row_arrived())
+    T("MUST FIRE  a row that came back and was REFUSED is not counted as absent - it was ruled on, "
+      "and its own finding already says why",
+      *_shortfall_a_refused_row_is_not_a_shortfall())
+    T("CLEAN TWIN a term ruled not-purchased needs no nutrition label - charcoal is on a real "
+      "ingredient line and demanding a row for it is a finding nobody can ever clear",
+      *_shortfall_a_food_nobody_buys_needs_no_row())
+    T("MUST FIRE  end to end: an EMPTY food_db_rows against a table asking for two lands on the "
+      "mapped artifact AND the run findings, which is the exact payload that shipped nothing",
+      *_shortfall_reaches_the_run_findings())
 
     # =================================================================================================
     H("H2 - a no-publish drill must not write a LIVE grocery ledger (2026-08-25)")
@@ -990,6 +1089,90 @@ def run():
       *_m3_optional_still_reaches_the_queue())
 
     # =================================================================================================
+    H("Q1 - a term recorded as BLOCKING is a term on the QUEUE (2026-08-26)")
+    # =================================================================================================
+    # These five run the REAL hunt-run.ps1 and the REAL ingredient-queue.ps1 against a scratch run dir
+    # and a scratch -QueueFile. Every M3 case above injects hunt-run, which is exactly why none of them
+    # could see this defect: an injected hunt-run cannot union a carriage term, so the claim and the
+    # record can never disagree inside a FakePS fixture. Pinning blocking_terms() or
+    # Get-CarriageBlockingTerms alone would have reproduced the call-site trap PLAN-map-judge-split
+    # section 4 names, so the pin is on the LANE.
+    T("MUST FIRE  after the map lane routes a recipe to `pricing`, EVERY non-optional term on its "
+      "state file exists in the ingredient queue - the postcondition, over the real scripts",
+      *_q1_every_blocking_term_is_on_the_queue())
+    T("MUST FIRE  a term the CARRIAGE UNION added and the mapper never claimed is enqueued too - the "
+      "8 stranded terms on hunt-2026-08-26-ten were every one of them this shape",
+      *_q1_the_carriage_half_is_enqueued_too())
+    T("MUST FIRE  NET 1: a line the mapper ruled `optional-note` is RECORDED on the recipe as "
+      "optional and never reaches the queue - it cannot block, and it must not vanish either",
+      *_q1_net1_the_mappers_own_ruling())
+    T("MUST FIRE  NET 2: a tap line the mapper MISLABELLED as a real purchase is still stopped, by "
+      "the stoplist - the two nets are tested apart because together they hide each other",
+      *_q1_net2_the_stoplist())
+    T("MUST FIRE  a derived item holding three spices is SPLIT - no comma survives onto the state "
+      "file and all three parts are on the queue",
+      *_q1_a_composite_line_is_split_and_each_part_queued())
+    T("CLEAN TWIN a recipe with nothing derived, nothing composite and nothing un-buyable queues "
+      "EXACTLY the mapper's claim - the fix does not turn the queue into a dumping ground",
+      *_q1_clean_twin_nothing_extra_is_queued())
+
+    # =================================================================================================
+    H("Q2 - the carriage gate runs on EVERY road to `priced`, including the zero-absent one (2026-08-26)")
+    # =================================================================================================
+    # NEUTER PROOFS, ALL RUN AND REVERTED 2026-08-26, counts exactly as the suite printed them. The
+    # FULL case count was read on every one, never just the red count: a case that VANISHES and a case
+    # that PASSES are indistinguishable in a tally of failures, and this suite has been bitten by that.
+    # The total held at 255 on all three, and the restore was verified byte-identical by md5.
+    #   * N1 - map lane's direct `advance(slug, "priced")` on the zero-absent road restored, AND
+    #     `mapped` -> `priced` put back in $script:NEXT   -> 4 red / 255 total: the two M3 route cases
+    #     (which now pin the route, not just the destination), the zero-absent case below, and the
+    #     edge case below.
+    #   * N2 - ONLY the state-machine edge put back, daemon left routed through `pricing`
+    #                                                    -> 1 red / 255 total: the EDGE case alone.
+    #     Every lane case stayed green, which is precisely why the edge is pinned separately - the
+    #     daemon doing the right thing by habit is not the same as the door being shut.
+    #   * N3 - the UNHOLD road's direct advance restored, plus the edge
+    #                                                    -> 2 red / 255 total: the edge case and the
+    #     unhold case. The map-lane cases stayed green, so the two roads are pinned independently and
+    #     neither is riding on the other's fix.
+    T("MUST FIRE  a mapper result with ZERO absent terms over an artifact whose real-bid ingredient "
+      "the carriage union does NOT report CARRIED is REFUSED `priced` - it lands at `pricing` with "
+      "the derived term blocking, on the queue, and no writer paid",
+      *_q2_zero_absent_is_still_carriage_checked())
+    T("CLEAN TWIN a recipe whose every line the union agrees is CARRIED still reaches `priced` in the "
+      "same pass, enqueues nothing and still reaches the writer - M3's purpose, kept whole",
+      *_q2_clean_twin_every_line_carried_still_reaches_priced())
+    T("MUST FIRE  and the BYPASS ITSELF is gone: the real hunt-run.ps1 refuses `mapped` -> `priced` "
+      "outright and leaves the state file where it was, so no future caller can route around the "
+      "union the way these two did",
+      *_q2_the_state_machine_refuses_the_bypass())
+    T("MUST FIRE  THE SECOND ROAD: the UNHOLD advances on a ruling that reported nothing absent, and "
+      "it is carriage-checked too - a recipe held for an unbid line and later repaired lands at "
+      "`pricing` with its derived term queued, not on a paid page",
+      *_q2_unhold_is_carriage_checked())
+
+    # =================================================================================================
+    H("Q3 - a rejection the state machine REFUSED is not a rejection (2026-08-26)")
+    # =================================================================================================
+    # Over the REAL hunt-run.ps1, for the reason the section header above this one gives twice already:
+    # `_rejects_explicitly` injects hunt-run through FakePS, every -Advance comes back rc=0, and so an
+    # ILLEGAL transition and a legal one are the same event inside that fixture. It was green through
+    # the whole life of this defect.
+    T("MUST FIRE  a mapper rejection carrying NO terminal state is STUCK, never a rejection under a "
+      "state the daemon picked for it - and the state file is untouched",
+      *_q3_no_state_is_stuck_not_rejected())
+    T("MUST FIRE  THE LIVE SHAPE: `rejected-not-carried` from `extracted` is refused by the real "
+      "state machine, so NO rejection is recorded - the record and the disk agree it is stuck",
+      *_q3_an_illegal_rejection_is_never_recorded())
+    T("CLEAN TWIN a rejection that IS legal from `extracted` (`rejected-macros`) is still recorded "
+      "and still LANDS on disk - the mapper can reject, it just cannot invent a route",
+      *_q3_clean_twin_a_legal_rejection_still_lands())
+    T("MUST FIRE  THE PROMPT HALF: hunt_lib.MAPPER_REJECTION_STATES - which is what TELLS the mapper "
+      "which verdicts `extracted` can take, and is the one line of Python restating hunt-run's table - "
+      "is exactly the set the real hunt-run.ps1 accepts, asked of it rather than copied from it",
+      *_q3_the_constant_is_asked_of_hunt_run_not_copied_from_it())
+
+    # =================================================================================================
     H("T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)")
     # =================================================================================================
     # NEUTER PROOFS, ALL RUN AND REVERTED 2026-08-25, counts as the suite printed them:
@@ -1107,7 +1290,7 @@ def run():
 # =====================================================================================================
 
 def _m4_prompt(seam=True):
-    tmp = tempfile.mkdtemp(prefix="daemon-m4-")
+    tmp = scratch_dir(prefix="daemon-m4-")
     doc = _m2_table(tmp)
     db_path = os.path.join(tmp, "food-db.json")
     with open(db_path, "w", encoding="utf-8") as f:
@@ -1258,7 +1441,7 @@ def _m2_prompt(tmp, db=M2_SCRATCH_DB, seam=True, **kw):
 
 
 def _m2_food_db_rows_come_from_the_seam():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2a-")
+    tmp = scratch_dir(prefix="daemon-m2a-")
     try:
         prompt, d = _m2_prompt(tmp)
         # THE NUMBERS, NOT THE NAMES. A name proves the row was listed; only the scratch DB's own
@@ -1274,7 +1457,7 @@ def _m2_food_db_rows_come_from_the_seam():
 
 
 def _m2_the_precheck_rides_whole():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2b-")
+    tmp = scratch_dir(prefix="daemon-m2b-")
     try:
         prompt, _d = _m2_prompt(tmp)
         want = ["tuning: added Rice base 200g (src scale)",
@@ -1291,7 +1474,7 @@ def _m2_the_precheck_rides_whole():
 
 
 def _m2_the_yield_arrives_and_the_lines_are_not_doubled():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2c-")
+    tmp = scratch_dir(prefix="daemon-m2c-")
     try:
         prompt, _d = _m2_prompt(tmp)
         yielded = ("6 servings" in prompt and "Skillet Chicken And Rice" in prompt
@@ -1305,7 +1488,7 @@ def _m2_the_yield_arrives_and_the_lines_are_not_doubled():
 
 
 def _m2_unreadable_is_announced():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2d-")
+    tmp = scratch_dir(prefix="daemon-m2d-")
     try:
         # No DB file written at all, and no extraction either.
         prompt, _d = _m2_prompt(tmp, db=None, extraction=False)
@@ -1321,7 +1504,7 @@ def _m2_unreadable_is_announced():
 
 
 def _m2_the_cap_announces_itself():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2e-")
+    tmp = scratch_dir(prefix="daemon-m2e-")
     try:
         # 60 tuning lines is well past 4,000 characters, and a real precheck can carry dozens.
         tuning = ["tuning line %02d: added something at source scale" % i for i in range(60)]
@@ -1356,6 +1539,12 @@ def _m2_the_cap_announces_itself():
 # (`if not absent and rec.get("mapper_state") == "priced"`). It sits inside the unbid HOLD road,
 # which PLAN-map-lane-latency section 2 lists among the things M3 does not touch, so it is reported
 # to Brad rather than changed here.
+#
+# CLOSED 2026-08-26 BY Q2, on Brad's ruling, and both roads went the same way: neither of them is
+# reachable any more, because `mapped` -> `priced` is no longer a transition the state machine will
+# make. Reporting it rather than changing it was right - and it is worth noticing that the report sat
+# for a day carrying a defect nobody could see from inside the M3 fixtures, because every one of them
+# injects hunt-run. See the Q2 section for both pins.
 # =====================================================================================================
 
 def _m3_map(tmp, absent=None, optional=None, state="mapped", holds=None):
@@ -1434,7 +1623,7 @@ def _t7_pickup(tmp, servings=4, protein="chicken"):
 def _t7_no_servings_is_refused_before_the_mapper():
     """MUST FIRE. A source that never stated its yield can never become a costed 14-serving recipe,
     so it is rejected-unreadable BEFORE the dispatch - not discovered after one is paid for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7a-")
+    tmp = scratch_dir(prefix="daemon-t7a-")
     try:
         d, ps, fd = _t7_pickup(tmp, servings=None)
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1450,7 +1639,7 @@ def _t7_no_servings_is_refused_before_the_mapper():
 def _t7_no_protein_is_stuck_not_rejected():
     """MUST FIRE. Missing protein is RUN BOOKKEEPING, not a defect in the source, so the recipe is
     STUCK and resumable - rejecting it would throw away a perfectly good page over our own omission."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7b-")
+    tmp = scratch_dir(prefix="daemon-t7b-")
     try:
         d, ps, fd = _t7_pickup(tmp, protein="")
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1464,7 +1653,7 @@ def _t7_no_protein_is_stuck_not_rejected():
 
 def _t7_a_complete_candidate_still_dispatches():
     """CLEAN TWIN, and the one that matters most: the gate must not start refusing good recipes."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7c-")
+    tmp = scratch_dir(prefix="daemon-t7c-")
     try:
         d, _ps, fd = _t7_pickup(tmp, servings=4, protein="chicken")
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1492,7 +1681,7 @@ def _t8_ps(sweep=None, rc=0):
 def _t8_an_undeclared_bid_still_reaches_the_registrar():
     """MUST FIRE - the T-shakedown defect exactly. The mapper ruled a new id and declared NOTHING;
     the registrar must still be asked, because the prompt promises it cannot be skipped by omission."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8a-")
+    tmp = scratch_dir(prefix="daemon-t8a-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         d = daemon(run_dir=tmp, ps=_t8_ps())
@@ -1515,7 +1704,7 @@ def _t8_the_call_site_actually_uses_the_sweep():
     `res.get("new_commodity_proposals")` line restored, MEASURED 2026-08-25 when exactly that neuter
     came back 0 red. So this drives assemble_mapped and asserts the REGISTRAR WAS DISPATCHED for an
     id the mapper never declared."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8c-")
+    tmp = scratch_dir(prefix="daemon-t8c-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         fd = FakeDispatch({"commodity-registrar": [{"rulings": [
@@ -1536,7 +1725,7 @@ def _t8_a_blocked_sweep_degrades_and_says_so():
     """CLEAN TWIN. A sweep that cannot run must fall back to what the mapper declared and ANNOUNCE
     it - that is today's behaviour, not a new failure mode, and the assembler is still the backstop
     that refuses any id nothing approved. Silence here would re-open the hole invisibly."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8b-")
+    tmp = scratch_dir(prefix="daemon-t8b-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         d = daemon(run_dir=tmp, ps=_t8_ps(sweep={}, rc=2))
@@ -1563,7 +1752,7 @@ import learn_apply as _LA                                        # noqa: E402
 
 def _learn_scratch(prefix):
     """A run dir plus its OWN event log and ledger, so no two cases can read each other's writes."""
-    tmp = tempfile.mkdtemp(prefix=prefix)
+    tmp = scratch_dir(prefix=prefix)
     return tmp, os.path.join(tmp, "events.jsonl"), os.path.join(tmp, "ledger.json")
 
 
@@ -1753,7 +1942,7 @@ def _learn_seams_are_never_live():
     Checked on the DAEMON the fixtures actually build, not on the constants, because the defect
     would be a fixture that forgot to thread them.
     """
-    d = daemon(run_dir="R")
+    d = daemon()
     live_ev = os.path.join(HD.MP, "db", "ingredient-events.jsonl")
     live_led = os.path.join(HD.MP, "db", "ingredient-resolutions.json")
     return (bool(d.events_path) and bool(d.resolutions_path)
@@ -1803,7 +1992,7 @@ def _prior_table(tmp, terms):
 
 def _prior_renders_the_shelf():
     """MUST FIRE. The neighbours reach the DOSSIER, each carrying the phrase it was ruled for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-a-")
+    tmp = scratch_dir(prefix="daemon-prior-a-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
         d, _py = _prior_daemon(tmp)
@@ -1821,7 +2010,7 @@ def _prior_renders_the_shelf():
 def _prior_uses_the_sidecar_interpreter():
     """MUST FIRE. bge-m3 lives in sidecar\\.venv and nowhere else; C:\\Codex\\Python312 has no torch,
     and a surface run under the wrong interpreter reports its own ImportError as a failure."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-b-")
+    tmp = scratch_dir(prefix="daemon-prior-b-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, py = _prior_daemon(tmp)
@@ -1837,7 +2026,7 @@ def _prior_uses_the_sidecar_interpreter():
 def _prior_blind_is_announced():
     """MUST FIRE. A retrieval that could not run renders BLIND. An empty list pretending it looked is
     how a judge concludes there is no precedent when nobody checked."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-c-")
+    tmp = scratch_dir(prefix="daemon-prior-c-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, rc=2, write=False)
@@ -1854,7 +2043,7 @@ def _prior_blind_is_announced():
 def _prior_empty_is_not_blind():
     """CLEAN TWIN. Day one: the log is empty, the retriever RAN, and the shelf says so per term.
     `empty` and `blind` are different weeks and must never print the same line."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-d-")
+    tmp = scratch_dir(prefix="daemon-prior-d-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, reply={"state": "empty", "corpus": 0, "terms": [
@@ -1873,7 +2062,7 @@ def _prior_every_decision_stays_visible():
     """MUST FIRE. A `rejected` and a `mapped-null` neighbour render with their decision words. The
     estate measured that rejections transfer and confirmations do not - that is for the judge to
     weigh, and encoding it as a filter here would be this file ruling on an identity."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-e-")
+    tmp = scratch_dir(prefix="daemon-prior-e-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp)
@@ -1888,7 +2077,7 @@ def _prior_every_decision_stays_visible():
 def _prior_only_residual_terms_are_asked():
     """MUST FIRE. Settled lines are not questions. Asking about them would spend the retrieval on
     the very terms the exact-key cache already answered, and crowd the shelf with them."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-f-")
+    tmp = scratch_dir(prefix="daemon-prior-f-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
         d, py = _prior_daemon(tmp)
@@ -1905,7 +2094,7 @@ def _prior_only_residual_terms_are_asked():
 def _prior_the_prompt_names_the_field():
     """MUST FIRE. hunt-daemon's own scar: a prompt that said "unchanged contract" without naming one
     new field broke a clean batch. A shelf the judge was never told about is an unexplained block."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-g-")
+    tmp = scratch_dir(prefix="daemon-prior-g-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp)
@@ -1920,7 +2109,7 @@ def _prior_the_prompt_names_the_field():
 def _prior_never_blocks_the_lane():
     """CLEAN TWIN. A blind retrieval costs the batch a channel and nothing else: the dossier is still
     built, the settled lines are still there, and the recipe still maps."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-h-")
+    tmp = scratch_dir(prefix="daemon-prior-h-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, rc=2, write=False)
@@ -1933,12 +2122,17 @@ def _prior_never_blocks_the_lane():
 
 
 def _m3_zero_absent_routes_to_write():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3a-")
+    tmp = scratch_dir(prefix="daemon-m3a-")
     try:
         d, ps = _m3_map(tmp, absent=[], state="mapped")
         states = _m3_advanced_to(ps)
         adds = _m3_queue_terms(ps)
-        ok = ("priced" in states and "pricing" not in states and not adds
+        # AMENDED BY Q2 (2026-08-26). This read `"pricing" not in states`, which pinned the bypass
+        # itself: routing `mapped` -> `priced` directly is precisely how a recipe reached a paid page
+        # without the carriage union ever reading it. The DESTINATION is unchanged and is still M3's
+        # whole claim - zero absent terms means the write lane, in this pass, with nothing queued and
+        # no pricer woken. What is now also pinned is the ROUTE it takes to get there.
+        ok = (states == ["mapped", "pricing", "priced"] and not adds
               and "s1" not in d.pricing_slugs)
         return ok, "advanced=%s adds=%s pricing_slugs=%s" % (
             json.dumps(states), json.dumps(adds), json.dumps(sorted(d.pricing_slugs)))
@@ -1947,7 +2141,7 @@ def _m3_zero_absent_routes_to_write():
 
 
 def _m3_the_disagreement_is_logged():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3b-")
+    tmp = scratch_dir(prefix="daemon-m3b-")
     try:
         d, _ps = _m3_map(tmp, absent=[], state="mapped")
         line = next((m for m in d.m3_log if "ZERO absent terms" in m), "")
@@ -1957,7 +2151,7 @@ def _m3_the_disagreement_is_logged():
 
 
 def _m3_absent_terms_still_price():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3c-")
+    tmp = scratch_dir(prefix="daemon-m3c-")
     try:
         d, ps = _m3_map(tmp, absent=["saffron", "harissa", "tteok"], state="pricing")
         adds = _m3_queue_terms(ps)
@@ -1970,7 +2164,7 @@ def _m3_absent_terms_still_price():
 
 
 def _m3_the_unbid_hold_returns_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3d-")
+    tmp = scratch_dir(prefix="daemon-m3d-")
     try:
         holds = {"s1": [{"term": "sumac", "why": "Sumac has no bid wired"},
                         {"term": "labneh", "why": "Labneh has no bid wired"},
@@ -1987,7 +2181,7 @@ def _m3_the_unbid_hold_returns_first():
 
 
 def _m3_optional_still_reaches_the_queue():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3e-")
+    tmp = scratch_dir(prefix="daemon-m3e-")
     try:
         d, ps = _m3_map(tmp, absent=[], optional=["fresh dill", "chives", "mint"], state="mapped")
         adds = _m3_queue_terms(ps)
@@ -1997,11 +2191,581 @@ def _m3_optional_still_reaches_the_queue():
         states = _m3_advanced_to(ps)
         # THE PRICE LANE IS NOT WOKEN AND THE TERM IS NOT TRACKED AS ABSENT: optional reaching the
         # queue is the estate learning of it, not the recipe waiting on it.
+        # `states` amended by Q2 (2026-08-26) for the reason given in _m3_zero_absent_routes_to_write:
+        # the recipe still ENDS at `priced`, it now transits `pricing` so the carriage union reads it.
+        # The optional half of the claim is untouched and is what this case is really about.
         return ((adds == ["fresh dill", "chives", "mint"] and len(seamed) == 3
-                 and "priced" in states and "pricing" not in states
+                 and states == ["mapped", "pricing", "priced"]
                  and "s1" not in d.pricing_slugs and not d.absent_terms),
                 "advanced=%s adds=%s absent_terms=%s" % (json.dumps(states), json.dumps(adds),
                                                          json.dumps(d.absent_terms)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# Q1 (2026-08-26) - A TERM RECORDED AS BLOCKING IS A TERM ON THE QUEUE. THE POSTCONDITION, AT THE CALL
+# SITE, OVER THE REAL SCRIPTS.
+#
+# THE DEFECT, measured on run hunt-2026-08-26-ten at 05:15. 5 of its 7 parked recipes were permanently
+# stranded: their state files carried BLOCKING term rows (optional=false) that were never added to
+# grocery\ingredient-queue.json, so -Derive scored them PENDING on every pass (an unchecked term is
+# never not-carried, which is correct) and they could never leave `parked`. Eight terms across five
+# recipes, none of them ever asked of anybody.
+#
+# AND THE CAUSE WAS NOT WHERE IT LOOKED. The map lane's -Add loop was honest: every term it advanced
+# with, it enqueued. But `hunt-run.ps1 -Advance -To pricing` is ITSELF A WRITER of the term list - it
+# unions in Get-CarriageBlockingTerms, ingredients the mapper mapped cleanly that no Omaha store
+# carries - and nothing enqueued THOSE. Two writers of the blocking list, one writer of the queue, and
+# no reconciliation between them. So the claim and the record were free to differ, and did.
+#
+# WHY THIS FIXTURE RUNS THE REAL SCRIPTS, and it is the whole reason it exists. Every M3 case below
+# injects hunt-run.ps1 through FakePS. An injected hunt-run cannot union anything, so not one of them
+# could ever have seen this - `_m3_absent_terms_still_price` asserts adds == the mapper's list and was
+# GREEN through all five stranded recipes. That is the call-site trap PLAN-map-judge-split section 4
+# names ("twice this build a neuter came back 0 red because a fixture pinned a function while the bug
+# lived at its call site"), and pinning Get-CarriageBlockingTerms or blocking_terms alone would repeat
+# it exactly. So the map lane runs for real here, against the real hunt-run.ps1 and the real
+# ingredient-queue.ps1, and the assertion is made over the two artifacts a person would read: the
+# recipe's state file and the queue.
+#
+# FIVE INGREDIENT ROWS, NOT ONE, and each is a way this can be wrong:
+#   * Gochujang     - claimed by the mapper AND derived. The overlap case: enqueued exactly once.
+#   * Doubanjiang   - derived ONLY (bid=null, mapped-null). THE REGRESSION: on disk as blocking,
+#                     never on the queue. This is the row that was red before the fix.
+#   * Water         - decision=optional-note. Must be RECORDED and must NOT block.
+#   * the spice line- one source line holding three spices. Must split, and each part must be queued.
+#   * Chicken       - a plain mapped row, present so the recipe is not made entirely of edge cases.
+# =====================================================================================================
+
+class MapLaneRealPS(object):
+    r"""Real ps_invoke for the two scripts this postcondition is ABOUT - hunt-run.ps1, which writes the
+    term list, and ingredient-queue.ps1, which is that list's other half - and an injected clean exit
+    for everything else the map lane shells (map-preresolve, whose own behaviour is fixtured in its own
+    suite and whose -Assemble would otherwise overwrite the mapped artifact this case hand-builds).
+
+    -QueueFile IS PINNED HERE, not on the daemon. Same reasoning as QueueScopedPS: the estate's
+    standing rule is that no drill touches the live worklist, the daemon has no queue-file seam and
+    must not grow one, so the seam lives at the injection point the daemon already has. Note the
+    daemon is therefore constructed WITHOUT queue_path - queue_args would append a SECOND -QueueFile
+    and PowerShell refuses a duplicated parameter.
+    """
+
+    def __init__(self, queue_file):
+        self.queue_file = queue_file
+        self.calls = []
+
+    def __call__(self, script, args, timeout=600):
+        name = os.path.basename(script)
+        a = list(args)
+        if "ingredient-queue" in name:
+            a += ["-QueueFile", self.queue_file]
+        self.calls.append({"script": name, "args": a})
+        if "hunt-run" in name and "-Derive" in a:
+            # NOT SKIPPED TO MAKE THE FIXTURE PASS - skipped because -Derive reads the LIVE ingredient
+            # queue by its own internal path, which no -QueueFile of ours reaches. Its behaviour is
+            # fixtured in hunt-run.ps1's own suite. Same call QueueScopedPS makes, same reason.
+            return 0, "", ""
+        if "hunt-run" in name or "ingredient-queue" in name:
+            return hunt_lib.ps_invoke(script, a, timeout)
+        return 0, "", ""
+
+    def find(self, script_part, flag=None):
+        return [c for c in self.calls
+                if script_part in c["script"] and (flag is None or flag in c["args"])]
+
+
+Q1_SLUG = "q1-dish"
+
+Q1_INGREDIENTS = [
+    {"source_raw": "1 lb chicken", "item": "Chicken", "bid": "chicken", "grams": 454,
+     "buy": "1 lb", "optional": False, "decision": "mapped", "notes": ""},
+    {"source_raw": "2 tbsp gochujang", "item": "Gochujang", "bid": "gochujang", "grams": 34,
+     "buy": "1 tub", "optional": False, "decision": "mapped", "notes": ""},
+    {"source_raw": "1 tbsp doubanjiang", "item": "Doubanjiang", "bid": None, "grams": 17,
+     "buy": "", "optional": False, "decision": "mapped-null",
+     "notes": "the Sichuan fermented broad-bean paste; no board id and no capture"},
+    # ONE ROW PER NET, AND EACH IS CAUGHT BY ITS OWN NET ALONE. The first attempt used a single
+    # optional-note row named 'Water' and the N1 neuter came back 0 RED: 'water' is also on the
+    # stoplist, so net 2 rescued it and the case could not tell the two nets apart. A fixture that
+    # stays green when you delete the thing it is named after is not testing that thing.
+    #   'Water'                    - decision=mapped-null, NOT optional. The mapper mislabelled a tap
+    #                                line as a real purchase, which is the only case net 2 exists for.
+    #                                Net 1 does not see it. Only the stoplist can catch it.
+    #   'Reserved Braising Liquid' - decision=optional-note, and deliberately NOT on the stoplist,
+    #                                because no list of names could hold every byproduct a recipe
+    #                                invents. Only the mapper's own ruling can catch it.
+    {"source_raw": "2 cups water", "item": "Water", "bid": None, "grams": 0, "buy": "",
+     "optional": False, "decision": "mapped-null",
+     "notes": "the mapper called a tap line a purchase - only the stoplist catches this"},
+    {"source_raw": "1/2 cup reserved braising liquid", "item": "Reserved Braising Liquid",
+     "bid": None, "grams": 0, "buy": "", "optional": True, "decision": "optional-note",
+     "notes": "what the pot leaves behind - nothing the shopper buys, and no stoplist knows it"},
+    {"source_raw": "1 tsp each garlic powder, cumin, and chili powder",
+     "item": "Garlic Powder, Cumin, and Chili Powder", "bid": None, "grams": 6, "buy": "",
+     "optional": False, "decision": "mapped-null",
+     "notes": "one source line holding three separate spices"},
+]
+
+Q1_SPICES = ["Garlic Powder", "Cumin", "Chili Powder"]
+
+
+def _q1_stage(tmp, ingredients=None):
+    """Stage ONE recipe at `extracted` in a scratch run dir, with the mapped artifact already on disk,
+    and return (run_dir, queue_file) - or (None, why) if the staging itself failed.
+
+    The state file is built by the REAL hunt-run.ps1, through -Init and the real transition chain,
+    because a hand-written state file is a state file this fixture invented and the whole point here is
+    that the real writer is under test.
+    """
+    run_dir = os.path.join(tmp, "run")
+    os.makedirs(run_dir, exist_ok=True)
+    qf = os.path.join(tmp, "scratch-queue.json")
+    rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+        "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
+        "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
+    if rc != 0:
+        return None, "could not init a scratch run dir: %s" % o.strip()[:200]
+    for i, st in enumerate(("sourced", "selected", "extracted")):
+        args = ["-Advance", "-RunDir", run_dir, "-Slug", Q1_SLUG, "-To", st, "-By", "drill",
+                "-Detail", "drill"]
+        if i == 0:
+            args += ["-Title", "Q1 Dish", "-SourceUrl", "https://d/q1", "-Protein", "chicken"]
+        r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+        if r != 0:
+            return None, "could not stage %s: %s" % (st, (oo + ee).strip()[:200])
+
+    preresolved(run_dir, [Q1_SLUG], residual={Q1_SLUG: ["gochujang"]})
+    os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
+    with io.open(os.path.join(run_dir, "extracted", "%s.json" % Q1_SLUG), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"slug": Q1_SLUG, "title": "Q1 Dish", "source_url": "https://d/q1",
+                            "servings": 4, "ingredients": [], "instructions": []}))
+    # THE MAPPED ARTIFACT IS THE INPUT TO THE CARRIAGE UNION, so it is written here rather than left
+    # to map-preresolve -Assemble (which this fixture injects, so it writes nothing).
+    os.makedirs(os.path.join(run_dir, "mapped"), exist_ok=True)
+    with io.open(os.path.join(run_dir, "mapped", "%s.json" % Q1_SLUG), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"slug": Q1_SLUG, "title": "Q1 Dish", "source_url": "https://d/q1",
+                            "source_servings": 4, "target_servings": 14, "protein": "chicken",
+                            "ingredients": list(Q1_INGREDIENTS if ingredients is None else ingredients),
+                            "pricing_terms_needed": ["gochujang"], "rejected": [],
+                            "new_commodity_proposals": [], "registrar_rulings": []}))
+    return (run_dir, qf), ""
+
+
+def _q1_run(tmp, ingredients=None, absent=("gochujang",)):
+    """One map-lane run over the staged recipe, with hunt-run.ps1 and ingredient-queue.ps1 REAL.
+    Returns (state_rows, queued_terms, why) - `why` non-empty means the drill could not be set up."""
+    staged, why = _q1_stage(tmp, ingredients=ingredients)
+    if why:
+        return [], [], why
+    run_dir, qf = staged
+
+    res = _mapper_result(Q1_SLUG)
+    res["state"] = "mapped"
+    res["absent_terms"] = list(absent)
+    res["optional_absent"] = []
+    ps = MapLaneRealPS(qf)
+    d = daemon(run_dir=run_dir, dispatcher=FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]}),
+               ps=ps)
+    d.ch["map"].push({"slug": Q1_SLUG})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+
+    rows = []
+    try:
+        with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG), encoding="utf-8-sig") as f:
+            doc = json.load(f)
+        raw = doc.get("terms") or []
+        if isinstance(raw, dict):
+            raw = [raw]
+        rows = [{"term": str(t.get("term") or ""), "optional": bool(t.get("optional")),
+                 "state": str(doc.get("state") or "")} for t in raw]
+    except Exception as e:                                        # noqa: BLE001
+        return [], [], "the state file could not be read back: %s" % e
+    # THE QUEUE FILE IS READ DIRECTLY. ingredient-queue.ps1 is its only writer and this is the artifact
+    # it writes - going back through -List -Json here would test the reader, and what is under test is
+    # whether the term is IN there at all.
+    queued = []
+    try:
+        if os.path.exists(qf):
+            with io.open(qf, encoding="utf-8-sig") as f:
+                queued = [str(i.get("term") or "") for i in (json.load(f).get("items") or [])]
+    except Exception as e:                                        # noqa: BLE001
+        return rows, [], "the scratch queue could not be read: %s" % e
+    return rows, queued, ""
+
+
+def _q1_every_blocking_term_is_on_the_queue():
+    """THE POSTCONDITION ITSELF. After the map lane routes a recipe to `pricing`, every non-optional
+    term on its state file exists in the queue. No exceptions, no allowance for the carriage half."""
+    tmp = scratch_dir(prefix="daemon-q1a-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        if not rows:
+            return False, "the recipe reached `pricing` with NO term rows at all"
+        blocking = [r["term"] for r in rows if not r["optional"]]
+        missing = [t for t in blocking if t not in queued]
+        at = rows[0]["state"]
+        return (at == "pricing" and blocking and not missing,
+                "state=%s blocking=%s queued=%s MISSING=%s"
+                % (at, json.dumps(blocking), json.dumps(queued), json.dumps(missing)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_the_carriage_half_is_enqueued_too():
+    """The named regression. 'Doubanjiang' is derived by the carriage union and claimed by NOBODY -
+    the mapper never reports it. Before 2026-08-26 it landed on the state file as blocking and was
+    never enqueued, which is chicken-fried-steak's 'Pan Drippings' and stroganoff's 'Garlic Salt'."""
+    tmp = scratch_dir(prefix="daemon-q1b-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        row = next((r for r in rows if r["term"] == "Doubanjiang"), None)
+        return (row is not None and not row["optional"] and "Doubanjiang" in queued,
+                "row=%s queued=%s" % (json.dumps(row), json.dumps(queued)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_recorded_not_blocking(term):
+    """Shared shape for the two nets: the term is ON the recipe, marked optional, and NOT on the queue.
+    Recorded because dropping it silently trades one invisible failure for another; not queued because
+    there is no store answer that could ever settle it."""
+    tmp = scratch_dir(prefix="daemon-q1c-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        row = next((r for r in rows if r["term"] == term), None)
+        return (row is not None and row["optional"] and term not in queued,
+                "row=%s queued=%s" % (json.dumps(row), json.dumps(queued)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_net1_the_mappers_own_ruling():
+    """Defect 1, NET 1 - the ruling that was already on the row and was being discarded. 'Reserved
+    Braising Liquid' is on no stoplist and never could be; the only thing that knows it is a byproduct
+    is the mapper's own decision=optional-note, which is exactly what the carriage union used to throw
+    away before stamping optional=false over it."""
+    return _q1_recorded_not_blocking("Reserved Braising Liquid")
+
+
+def _q1_net2_the_stoplist():
+    """Defect 1, NET 2 - the backstop. Here the mapper got it WRONG and called a tap line a real
+    purchase (decision=mapped-null, optional=false), so net 1 lets it through and only
+    grocery\\non-purchasable-terms.json can stop it blocking."""
+    return _q1_recorded_not_blocking("Water")
+
+
+def _q1_a_composite_line_is_split_and_each_part_queued():
+    """Defect 2 (B8 class, reached from the derived side). One source line holding three spices can
+    never key a queue entry. It is SPLIT here rather than refused - Brad's ruling 2026-08-26 - and the
+    proof is that no comma survives onto the state file and all three spices are on the queue."""
+    tmp = scratch_dir(prefix="daemon-q1d-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        commas = [r["term"] for r in rows if "," in r["term"]]
+        blocking = [r["term"] for r in rows if not r["optional"]]
+        got = [s for s in Q1_SPICES if s in blocking and s in queued]
+        return (not commas and len(got) == 3,
+                "commas=%s spices_blocking_and_queued=%s blocking=%s"
+                % (json.dumps(commas), json.dumps(got), json.dumps(blocking)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_clean_twin_nothing_extra_is_queued():
+    """CLEAN TWIN. A mapped artifact with no derived blockers, no composite and no un-buyable line must
+    queue EXACTLY the mapper's claim - the fix must not turn the queue into a dumping ground for every
+    ingredient in the recipe, which is the obvious over-correction."""
+    tmp = scratch_dir(prefix="daemon-q1e-")
+    try:
+        clean = [dict(Q1_INGREDIENTS[1])]              # Gochujang alone: claimed AND derived
+        # THE CLAIM IS SPELLED AS THE ARTIFACT SPELLS IT, so the overlap collapses to one row. The
+        # main case above deliberately does NOT do this - it claims 'gochujang' against an item named
+        # 'Gochujang', which is how the two writers really spell things (the mapper lowercases, the
+        # artifact keeps the label's case) and which is worth seeing in a `got` line.
+        rows, queued, why = _q1_run(tmp, ingredients=clean, absent=("Gochujang",))
+        if why:
+            return False, why
+        blocking = sorted(r["term"] for r in rows if not r["optional"])
+        return (sorted(queued) == ["Gochujang"] and blocking == ["Gochujang"],
+                "blocking=%s queued=%s" % (json.dumps(blocking), json.dumps(sorted(queued))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# Q2 (2026-08-26) - THE CARRIAGE GATE RUNS ON EVERY ROAD TO `priced`, INCLUDING THE ZERO-ABSENT ONE.
+#
+# THE DEFECT. hunt-run.ps1 derives the carriage union (Get-CarriageBlockingTerms) on ONE road only -
+# the way into `pricing`. M3 (2026-08-25) routed a recipe whose mapper reported ZERO absent terms
+# straight to `priced`, and `mapped` -> `priced` was a legal transition, so that recipe was never
+# carriage-checked at all. The unhold road carried the identical condition; the M3 note named it and
+# deliberately left it, and Brad ruled it in scope on 2026-08-26.
+#
+# AND THAT IS THE UNION'S FOUNDING CASE, NOT AN EDGE OF IT. hunt-run.ps1's own note above the function
+# says so in as many words: doubanjiang, rice-cakes and ground-sumac all mapped to REAL commodity ids,
+# so the mapper reported nothing absent, so nothing was ever priced, and the recipe sailed to a paid
+# page. The 2026-08-22 union closed that hole for recipes that transit `pricing`. M3 reopened it three
+# days later for the recipes that no longer did - the exact shape, on the exact ingredients.
+#
+# WHY THESE RUN THE REAL SCRIPTS, and it is the same reason the Q1 section gives. Every M3 case injects
+# hunt-run through FakePS, and an injected hunt-run derives no carriage whatsoever. _asm_ps can
+# SIMULATE a derived term through its `derived=` argument, but that simulation is the fixture's own, so
+# a case built on it would pass whether or not hunt-run ever ran the union - it pins the helper, not
+# the gate. Only the real script can fail this the way production failed.
+#
+# THE INGREDIENT THAT DOES THE WORK is Doubanjiang carrying bid='doubanjiang' - a REAL commodity id the
+# mapper resolved cleanly, whose row in grocery\carriage.json reads UNKNOWN (hunted as "chili bean
+# sauce" and never found). A NULL bid would prove nothing here and would be a different case: the whole
+# point is that the mapper did its job correctly and the recipe is STILL unbuyable.
+#
+# THESE CASES CAN GO RED WITHOUT A CODE CHANGE, deliberately. If somebody ever finds doubanjiang in an
+# Omaha store and writes it a CARRIED row, the premise is gone and the fixture says so loudly rather
+# than passing on an assumption that has quietly expired. Repoint it at whatever the ledger's remaining
+# UNKNOWN is; do not delete the case.
+# =====================================================================================================
+
+Q2_INGREDIENTS = [
+    {"source_raw": "1 lb chicken breast", "item": "Chicken Breast", "bid": "chicken-breast",
+     "grams": 454, "buy": "1 lb", "optional": False, "decision": "mapped", "notes": ""},
+    # THE ROW UNDER TEST: mapped, non-optional, off the stoplist, and carrying a real board id whose
+    # carriage verdict is UNKNOWN. The mapper reports it absent NOWHERE - it resolved perfectly.
+    {"source_raw": "1 tbsp doubanjiang", "item": "Doubanjiang", "bid": "doubanjiang", "grams": 17,
+     "buy": "1 tub", "optional": False, "decision": "mapped",
+     "notes": "a real commodity id, resolved cleanly; no Omaha store is known to stock it"},
+]
+
+
+def _q2_run(tmp, ingredients, absent=()):
+    """One map-lane run over the staged recipe with hunt-run.ps1 and ingredient-queue.ps1 REAL, and the
+    recipe's FINAL STATE read back off disk. Returns (state, blocking, queued, wrote, why).
+
+    `state` is read on its own rather than off a term row, because the question here is what happens to
+    a recipe that ends up with NO term rows at all - which is the passing shape, and one `_q1_run`
+    cannot report."""
+    staged, why = _q1_stage(tmp, ingredients=ingredients)
+    if why:
+        return "", [], [], 0, why
+    run_dir, qf = staged
+    res = _mapper_result(Q1_SLUG)
+    # THE MAPPER CLAIMS `priced` AND CLAIMS NOTHING ABSENT, which is the strongest form of the claim
+    # this gate exists to distrust - and before Q2 it was enough on its own to reach a paid page.
+    res["state"] = "priced"
+    res["absent_terms"] = list(absent)
+    res["optional_absent"] = []
+    d = daemon(run_dir=run_dir,
+               dispatcher=FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]}),
+               ps=MapLaneRealPS(qf))
+    d.ch["map"].push({"slug": Q1_SLUG})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    try:
+        with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG), encoding="utf-8-sig") as f:
+            doc = json.load(f)
+    except Exception as e:                                        # noqa: BLE001
+        return "", [], [], 0, "the state file could not be read back: %s" % e
+    raw = doc.get("terms") or []
+    if isinstance(raw, dict):
+        raw = [raw]
+    blocking = sorted(str(t.get("term") or "") for t in raw if not t.get("optional"))
+    wrote = len(d.ch["write"]._items)
+    queued = []
+    try:
+        if os.path.exists(qf):
+            with io.open(qf, encoding="utf-8-sig") as f:
+                queued = sorted(str(i.get("term") or "") for i in (json.load(f).get("items") or []))
+    except Exception as e:                                        # noqa: BLE001
+        return str(doc.get("state") or ""), blocking, [], wrote, "scratch queue unreadable: %s" % e
+    return str(doc.get("state") or ""), blocking, queued, wrote, ""
+
+
+def _q2_zero_absent_is_still_carriage_checked():
+    """THE CASE. absent_terms=[] over a mapped artifact holding a real-bid ingredient the carriage union
+    does NOT report CARRIED. The recipe must NOT reach `priced` and must NOT reach the writer: it
+    belongs at `pricing`, with the derived term recorded as blocking AND on the queue."""
+    tmp = scratch_dir(prefix="daemon-q2a-")
+    try:
+        state, blocking, queued, wrote, why = _q2_run(tmp, Q2_INGREDIENTS, absent=())
+        if why:
+            return False, why
+        return ((state == "pricing" and blocking == ["Doubanjiang"]
+                 and queued == ["Doubanjiang"] and wrote == 0),
+                "state=%s blocking=%s queued=%s wrote=%d"
+                % (state, json.dumps(blocking), json.dumps(queued), wrote))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q2_clean_twin_every_line_carried_still_reaches_priced():
+    """CLEAN TWIN, and it is what stops the fix becoming "nothing is ever priced again" - the obvious
+    over-correction. A recipe whose every line the union agrees is CARRIED still lands at `priced` in
+    the SAME pass, still enqueues nothing, still wakes no pricer and still reaches the writer. That is
+    M3's whole purpose, and Q2 keeps it whole."""
+    tmp = scratch_dir(prefix="daemon-q2b-")
+    try:
+        carried = [dict(Q2_INGREDIENTS[0])]           # Chicken Breast alone: CARRIED in the ledger
+        state, blocking, queued, wrote, why = _q2_run(tmp, carried, absent=())
+        if why:
+            return False, why
+        return (state == "priced" and not blocking and not queued and wrote == 1,
+                "state=%s blocking=%s queued=%s wrote=%d"
+                % (state, json.dumps(blocking), json.dumps(queued), wrote))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q2_the_state_machine_refuses_the_bypass():
+    """THE EDGE ITSELF, asked of the real hunt-run.ps1 with no daemon in the way. Both call sites were
+    repaired the same day, but a third caller written next year would have found the same door open and
+    nothing would have said no - so the door is gone. This is the case that says it stays gone."""
+    tmp = scratch_dir(prefix="daemon-q2c-")
+    try:
+        staged, why = _q1_stage(tmp)
+        if why:
+            return False, why
+        run_dir, _qf = staged
+        rc0, o0, _e0 = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+            "-Advance", "-RunDir", run_dir, "-Slug", Q1_SLUG, "-To", "mapped", "-By", "drill"])
+        if rc0 != 0:
+            return False, "could not stage `mapped`: %s" % o0.strip()[:200]
+        rc, o, e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+            "-Advance", "-RunDir", run_dir, "-Slug", Q1_SLUG, "-To", "priced", "-By", "drill"])
+        said = ((o or "") + (e or "")).strip()
+        # AND THE STATE ON DISK IS UNCHANGED, not merely a non-zero exit. A refusal that still wrote the
+        # state file would be the worst of both, and the exit code is the half people actually read.
+        try:
+            with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG),
+                         encoding="utf-8-sig") as f:
+                still = str((json.load(f) or {}).get("state") or "")
+        except Exception as ex:                                   # noqa: BLE001
+            return False, "state file unreadable after the refusal: %s" % ex
+        return (rc != 0 and "REFUSED" in said and still == "mapped",
+                "rc=%s state=%s said=%r" % (rc, still, said[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# Q3 - A REJECTION THE STATE MACHINE REFUSED IS NOT A REJECTION (2026-08-26).
+#
+# THE DEFECT. The map lane's rejection branch read `res.get("state") or "rejected-not-carried"`, and it
+# runs while the recipe is still `extracted` - the success path advances to `mapped` several lines
+# later. hunt-run.ps1's table allows `rejected-not-carried` from `mapped`, `pricing` and `parked` only,
+# because it is the PRICE lane's derived verdict about Omaha carriage. So a mapper rejection carrying
+# no state of its own wrote the rejection into the run record, had its advance REFUSED, and left the
+# recipe sitting at `extracted` - reading as stuck to everybody watching, with a verdict already
+# recorded against it. The 2026-08-16 hunt-run fixture-4b incident, a third time.
+#
+# WHY `_rejects_explicitly` COULD NOT SEE IT, and this is the whole reason these three exist. That case
+# injects hunt-run.ps1 through FakePS, which answers rc=0 to every -Advance ever made of it. Under an
+# injected state machine EVERY transition is legal, so a fixture there can pin what the daemon SAYS and
+# can never pin what the disk CARRIES. These run the real hunt-run.ps1 over a scratch run dir, exactly
+# as the Q1 and Q2 sections do, and both halves - the run record AND the state file - are read back.
+#
+# THE EMPTY STRING IS THE REALISTIC SHAPE, not an omitted field. MAPPED requires `state`, and
+# validate_schema counts a missing key and an explicit null as missing - so a payload with no `state`
+# at all never reaches this branch, it fails validation upstream. An EMPTY string satisfies `required`
+# and then falls through `or` into the default, which is how a live payload gets here.
+#
+# NEUTER PROOFS, run and reverted 2026-08-26, full case count and EXIT CODE read on every one (a
+# vanished case and a passing case are indistinguishable in a red-only tally). The restore was verified
+# byte-identical by md5 both times:
+#   * N1 - ONLY the `or "rejected-not-carried"` default restored, `settle` left in place
+#                                                    -> 1 red / 272 total, exit 2: Q3a alone. The
+#     recipe is still STUCK rather than falsely rejected - `settle` sees to that - but it is stuck
+#     over a REFUSED TRANSITION the daemon invented, instead of over the empty field the mapper
+#     actually sent, and the sentence a person reads names the wrong thing. Q3b cannot move here: it
+#     states `rejected-not-carried` explicitly, so no default is consulted. That is why the two
+#     halves are pinned by two cases and not by one.
+#   * N2 - the ENTIRE original branch restored (the default AND finish-then-unconditional-advance)
+#                                                    -> 2 red / 272 total, exit 2: Q3a and Q3b, both
+#     reporting the filed defect verbatim - `{"status": "rejected", "state": "rejected-not-carried"}`
+#     in the run record while the state file on disk still read `extracted`.
+#   Q3c stayed green on both, which is the point of keeping a legal rejection in the section at all.
+# =====================================================================================================
+
+
+def _q3_run(tmp, state):
+    """One map-lane run over the Q1 staged recipe (at `extracted`, real hunt-run.ps1) where the mapper
+    REJECTS, carrying `state` verbatim. Returns (on-disk state, outcomes, why)."""
+    staged, why = _q1_stage(tmp)
+    if why:
+        return "", [], why
+    run_dir, qf = staged
+    res = {"slug": Q1_SLUG, "status": "rejected", "state": state,
+           "detail": "the mapper's own sentence about why this recipe cannot be carried"}
+    d = daemon(run_dir=run_dir,
+               dispatcher=FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]}),
+               ps=MapLaneRealPS(qf))
+    d.ch["map"].push({"slug": Q1_SLUG})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    try:
+        with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG),
+                     encoding="utf-8-sig") as f:
+            on_disk = str((json.load(f) or {}).get("state") or "")
+    except Exception as e:                                        # noqa: BLE001
+        return "", d.outcomes, "the state file could not be read back: %s" % e
+    return on_disk, list(d.outcomes), ""
+
+
+def _q3_no_state_is_stuck_not_rejected():
+    """A rejection naming no terminal state is a payload nobody can act on. It must be STUCK, with the
+    mapper's own sentence attached - never a rejection under a state the daemon picked for it."""
+    tmp = scratch_dir(prefix="daemon-q3a-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "stuck"
+                and on_disk == "extracted"
+                and "named no terminal state" in (one.get("detail") or ""),
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q3_an_illegal_rejection_is_never_recorded():
+    """THE LIVE SHAPE. `rejected-not-carried` from `extracted` is refused by the real state machine, so
+    no rejection may be recorded: the run record and the state file agree that this recipe is stuck,
+    and the refusal is quoted where a person will read it."""
+    tmp = scratch_dir(prefix="daemon-q3b-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "rejected-not-carried")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "stuck"
+                and on_disk == "extracted"
+                and "refused extracted -> rejected-not-carried" in (one.get("detail") or ""),
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q3_clean_twin_a_legal_rejection_still_lands():
+    """CLEAN TWIN, and it is what stops the fix becoming "the mapper can no longer reject anything".
+    `rejected-macros` IS legal from `extracted` - it was added on 2026-08-16 for this very stage - so
+    that rejection is recorded AND lands on disk, in one advance."""
+    tmp = scratch_dir(prefix="daemon-q3c-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "rejected-macros")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "rejected"
+                and one.get("state") == "rejected-macros" and on_disk == "rejected-macros",
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -2018,6 +2782,102 @@ def _m3_optional_still_reaches_the_queue():
 
 PRICE_TERMS = ["guacamole", "pico de gallo", "korean-rice-cakes"]
 
+
+
+# THE PROMPT HALF OF Q3, AND WHY IT NEEDS A CASE OF ITS OWN (2026-08-26).
+#
+# settle() closed the defect: it offers the transition to hunt-run.ps1 and records nothing the state
+# file refused, holding NO copy of $script:NEXT to drift. That is the whole correctness story, and the
+# three cases above pin it.
+#
+# WHAT IT DOES NOT DO IS TELL THE MAPPER ANYTHING. A live mapper reaching for the words it actually
+# means - "not carried" - now produces a correct STUCK instead of a faked rejection, which is right and
+# is still a recipe a person has to clear by hand, every time. So hunt_lib.MAPPER_REJECTION_STATES
+# names the legal set INSIDE THE SCHEMA DESCRIPTION the mapper reads, and this case exists because that
+# tuple is the one place in Python that now restates something hunt-run.ps1 owns.
+#
+# IT IS ASKED, NOT READ. The candidate universe comes off hunt-run.ps1's own $script:REJECTED_STATES
+# line, and the verdict on each candidate comes from hunt-run.ps1 REFUSING OR ACCEPTING IT for real. A
+# fixture that parsed $script:NEXT and compared two Python lists would be a third copy of the table,
+# which is the thing being guarded against.
+#
+# ONE SLUG STRETCHES ACROSS THE REFUSALS, and that is not a shortcut - it USES the property the edge
+# case above pins: a refused advance leaves the state file exactly where it was, so the same recipe can
+# be offered every illegal state in turn. Only an ACCEPTED one spends it, so this costs one staging per
+# LEGAL state (three) rather than one per candidate.
+#
+# NEUTER PROOFS, RUN AND REVERTED 2026-08-26, both restored byte-identical by md5, and the FULL case
+# count read on each rather than the red count alone. The guard is bidirectional and the two directions
+# fire differently, which is the point of running both:
+#   * `rejected-not-carried` added to $script:NEXT['extracted'] in hunt-run.ps1
+#         -> 2 red / 273, exit 2: this case, AND the live-shape case above (which then records the
+#         rejection, because the state machine now allows it). The table moving is caught twice.
+#   * `rejected-not-carried` added to MAPPER_REJECTION_STATES instead, table untouched
+#         -> 1 red / 273, exit 2: THIS CASE ALONE. Nothing else can see it, because nothing else reads
+#         the tuple - which is exactly the hole this case exists to cover. A prompt that tells the
+#         mapper a lie breaks no assertion anywhere else in this suite.
+# Measured cost: 5.8s, one -Init plus three stagings and six probes against the real hunt-run.ps1.
+def _q3_the_constant_is_asked_of_hunt_run_not_copied_from_it():
+    """hunt_lib.MAPPER_REJECTION_STATES must be EXACTLY the rejection states the real hunt-run.ps1
+    accepts from `extracted`. Nothing routes on it, so drift costs a worse prompt rather than a wrong
+    verdict - and a worse prompt is what turns every mapper rejection into a stuck somebody clears by
+    hand."""
+    import re as _re
+    tmp = scratch_dir(prefix="daemon-q3d-")
+    try:
+        src = io.open(HUNT_RUN_PS, encoding="utf-8-sig").read()
+        m = _re.search(r"\$script:REJECTED_STATES\s*=\s*@\(([^)]*)\)", src)
+        if not m:
+            return False, "could not find $script:REJECTED_STATES in hunt-run.ps1 - the candidate " \
+                          "universe must come from hunt-run, so this case fails rather than guesses"
+        candidates = _re.findall(r"'([^']+)'", m.group(1))
+        if not candidates:
+            return False, "$script:REJECTED_STATES parsed to an EMPTY list, which would make this " \
+                          "case pass by finding nothing"
+
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+            "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
+            "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35",
+            "-ProteinMin", "0"])
+        if rc != 0:
+            return False, "could not init a scratch run dir: %s" % o.strip()[:200]
+
+        def fresh(n):
+            """A slug parked at `extracted`, built by the REAL transition chain."""
+            slug = "q3d-%d" % n
+            for k, st in enumerate(("sourced", "selected", "extracted")):
+                a = ["-Advance", "-RunDir", run_dir, "-Slug", slug, "-To", st, "-By", "drill",
+                     "-Detail", "drill"]
+                if k == 0:
+                    a += ["-Title", "Q3D %d" % n, "-SourceUrl", "https://d/q3d", "-Protein",
+                          "chicken"]
+                r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, a)
+                if r != 0:
+                    return None, "could not stage %s for %s: %s" % (st, slug, (oo + ee).strip()[:160])
+            return slug, ""
+
+        accepted, spent = [], 0
+        slug, why = fresh(spent)
+        if why:
+            return False, why
+        for st in candidates:
+            r, _oo, _ee = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+                "-Advance", "-RunDir", run_dir, "-Slug", slug, "-To", st, "-By", "drill"])
+            if r == 0:
+                accepted.append(st)
+                spent += 1
+                slug, why = fresh(spent)      # that recipe is no longer at `extracted`
+                if why:
+                    return False, why
+        want = sorted(hunt_lib.MAPPER_REJECTION_STATES)
+        return (sorted(accepted) == want,
+                "hunt-run accepts %s from `extracted`; MAPPER_REJECTION_STATES says %s (candidates "
+                "probed: %s)" % (json.dumps(sorted(accepted)), json.dumps(want),
+                                 json.dumps(candidates)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 def _probe_ok(args):
     return 0, json.dumps(price_evidence.PROBE_JSON_SAMPLE), ""
@@ -2061,7 +2921,7 @@ def _lookup_writer(states):
 
 def _price_daemon(terms=None, probe=None, py=None, run_dir=None):
     """The price lane, driven end to end with every shell and every dispatch injected."""
-    tmp = run_dir or tempfile.mkdtemp(prefix="daemon-price-")
+    tmp = run_dir or scratch_dir(prefix="daemon-price-")
     ps = FakePS({"probe-ingredient": probe or _probe_ok})
     d = daemon(run_dir=tmp, ps=ps, pyrun=py or FakePy(),
                dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"note": "free text"}]}))
@@ -2183,7 +3043,7 @@ def _t6_qa_battery_and_mtimes_follow_the_seam():
     """MUST FIRE. Two more readers of the live store: the QA battery graded the live spec, and the
     staleness mtimes compared a freshly built spec against the live file's clock - the changed-
     nothing guard reasoning about the wrong file."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t6-")
+    tmp = scratch_dir(prefix="daemon-t6-")
     try:
         specs = os.path.join(tmp, "specs")
         os.makedirs(specs, exist_ok=True)
@@ -2228,7 +3088,7 @@ def _t2_narrative_is_written_and_stamped():
     """MUST FIRE (T2). say() printed to stdout and nowhere else, so the run's findings, parks and
     STUCK messages lived only in scrollback while the lane log and the artifacts sat on disk looking
     complete."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t2-")
+    tmp = scratch_dir(prefix="daemon-t2-")
     try:
         path = os.path.join(tmp, "daemon.log")
         HD.set_log_file(path)
@@ -2268,7 +3128,7 @@ def _t2_a_log_line_can_never_end_a_run():
     finally:
         HD.set_log_file(None)
     # and the U+FFFD line that actually killed 6a still survives, now through the tee as well
-    tmp = tempfile.mkdtemp(prefix="daemon-t2b-")
+    tmp = scratch_dir(prefix="daemon-t2b-")
     try:
         path = os.path.join(tmp, "daemon.log")
         HD.set_log_file(path)
@@ -2291,7 +3151,7 @@ def _t2_a_quiet_daemon_writes_no_narrative():
     """CLEAN TWIN: every fixture in this suite builds a quiet daemon, and none of them may start
     writing a log into a temp dir as a side effect of being constructed."""
     HD.set_log_file(None)
-    tmp = tempfile.mkdtemp(prefix="daemon-t2c-")
+    tmp = scratch_dir(prefix="daemon-t2c-")
     try:
         daemon(run_dir=tmp)
         return (HD._LOG_PATH[0] is None
@@ -2323,7 +3183,7 @@ def _t3_store_lookup_is_timed():
 def _t3_backdated_start_reaches_hunt_run():
     """MUST FIRE with its CLEAN TWIN in one case, because the twin is the whole safety story: -At is
     opt-in, so every existing call site must still be stamped by hunt-run itself."""
-    d = daemon(run_dir="R")
+    d = daemon()
     arun(d.lane("extract", "local rung 1", ["s1"], "local", "start", at="2026-08-24T10:00:00"))
     arun(d.lane("extract", "local rung 1", ["s1"], "local", "start"))
     calls = d._ps.find("hunt-run.ps1", "-Lane")
@@ -2367,7 +3227,7 @@ def _pregather_no_schema():
 def _pregather_inline_and_numbered():
     """12 terms is two batches at PRICE_BATCH=10, which is what proves n is the LANE's counter."""
     terms = ["guacamole", "pico de gallo", "korean-rice-cakes"] + ["t%d" % i for i in range(9)]
-    tmp = tempfile.mkdtemp(prefix="daemon-price-n-")
+    tmp = scratch_dir(prefix="daemon-price-n-")
     ps = FakePS({"probe-ingredient": _probe_ok})
     d = daemon(run_dir=tmp, ps=ps, pyrun=FakePy(),
                dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"a": 1}, {"a": 2}]}))
@@ -2386,10 +3246,16 @@ def _pregather_inline_and_numbered():
 
 
 def _rejects_explicitly():
+    """THE STATE HERE IS `rejected-macros`, AND THE SWAP IS THE POINT (Q3, 2026-08-26). It was
+    `rejected-not-carried`, which is ILLEGAL from `extracted` - and this fixture stayed green through
+    every day of that defect, because its hunt-run.ps1 is injected and an injected state machine
+    answers rc=0 to anything. What this case pins is the SHAPE - an explicit rejection is recorded as
+    a rejection and not as a stuck - so it now uses a state that is actually reachable from where the
+    recipe stands. Whether the transition is legal is pinned in the Q3 section, over the real script."""
     fd = FakeDispatch({"recipe-ingredient-mapper": [
-        {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-not-carried",
-                      "detail": "nobody carries it"}]}]})
-    tmp = tempfile.mkdtemp(prefix="daemon-mapreject-")
+        {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-macros",
+                      "detail": "no label-accurate reading lands inside the run's macro window"}]}]})
+    tmp = scratch_dir(prefix="daemon-mapreject-")
     try:
         d = daemon(run_dir=preresolved(tmp, ["s1"]), dispatcher=fd)
         d.ch["map"].push({"slug": "s1"})
@@ -2401,7 +3267,7 @@ def _rejects_explicitly():
 
 
 def _ps_array_roundtrip(terms):
-    tmp = tempfile.mkdtemp(prefix="daemon-b8-")
+    tmp = scratch_dir(prefix="daemon-b8-")
     try:
         p = os.path.join(tmp, "t.ps1")
         with open(p, "w", encoding="utf-8") as f:
@@ -2431,7 +3297,7 @@ def _wave_daemon(audit_seq, run_dir, ps=None, repair_touches=None):
 
 def _wave_scratch():
     """A scratch run dir with a wave manifest and an audit file, so the wave lane's real reads work."""
-    tmp = tempfile.mkdtemp(prefix="daemon-wave-")
+    tmp = scratch_dir(prefix="daemon-wave-")
     os.makedirs(os.path.join(tmp, "waves"), exist_ok=True)
     with open(os.path.join(tmp, "waves", "wave-1.json"), "w", encoding="utf-8") as f:
         json.dump({"wave": 1, "run": "drill-run", "batch": "drill-run-w1",
@@ -2531,41 +3397,48 @@ def _wave_mid_run():
     fd = FakeDispatch({"recipe-source-qa": [{"slug": "s1", "verdict": "PASS"},
                                             {"slug": "s2", "verdict": "PASS"},
                                             {"slug": "s3", "verdict": "PASS"}]})
-    d = daemon(dispatcher=fd, wave_size=2)
-    seen = []
+    # THREE PASSING VERDICTS ARE THREE FILES the qa lane writes into the run dir, so this fixture
+    # owns one and takes it away again. It used to take daemon()'s bare "R" default and leave
+    # R\qa\s1.json, s2.json and s3.json in whatever directory the suite was started from.
+    tmp = scratch_dir(prefix="daemon-wavemid-")
+    try:
+        d = daemon(run_dir=tmp, dispatcher=fd, wave_size=2)
+        seen = []
 
-    async def fake_wave(k, drain=False):
-        seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
-    d.run_wave = fake_wave
+        async def fake_wave(k, drain=False):
+            seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
+        d.run_wave = fake_wave
 
-    async def drill():
-        task = asyncio.ensure_future(d.qa_lane())
-        d.ch["qa"].push({"slug": "s1"})
-        d.ch["qa"].push({"slug": "s2"})
-        for _ in range(600):
-            if seen:
-                break
-            await asyncio.sleep(0.01)
-        mid = list(seen)                       # what had closed while the lane was still open
-        d.ch["qa"].push({"slug": "s3"})
-        d.ch["qa"].close()
-        await task
-        d.schedule_wave(True)                  # the drain, as run() performs it
-        if d._wave_chain is not None:
-            await d._wave_chain
-        return mid, list(seen)
+        async def drill():
+            task = asyncio.ensure_future(d.qa_lane())
+            d.ch["qa"].push({"slug": "s1"})
+            d.ch["qa"].push({"slug": "s2"})
+            for _ in range(600):
+                if seen:
+                    break
+                await asyncio.sleep(0.01)
+            mid = list(seen)                   # what had closed while the lane was still open
+            d.ch["qa"].push({"slug": "s3"})
+            d.ch["qa"].close()
+            await task
+            d.schedule_wave(True)              # the drain, as run() performs it
+            if d._wave_chain is not None:
+                await d._wave_chain
+            return mid, list(seen)
 
-    mid, all_waves = arun(drill())
-    ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
-          and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
-    return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
+        mid, all_waves = arun(drill())
+        ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
+              and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
+        return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _cost_mutex():
     """Two write-lane completions landing together. The cost engine is a real subprocess-free stub
     that APPENDS to costed.json under the lock; without serialization the two interleave and the file
     stops parsing, which is the failure v2 actually watched happen mid-audit."""
-    tmp = tempfile.mkdtemp(prefix="daemon-cost-")
+    tmp = scratch_dir(prefix="daemon-cost-")
     try:
         costed = os.path.join(tmp, "costed.json")
         with open(costed, "w", encoding="utf-8") as f:
@@ -2641,7 +3514,7 @@ def _verdict(slug, verdict="accepted"):
 
 
 def _decide_threads_accepted():
-    tmp = tempfile.mkdtemp(prefix="daemon-decide-")
+    tmp = scratch_dir(prefix="daemon-decide-")
     try:
         slugs = ["cand-%02d" % i for i in range(1, 13)]
         d, fd, _p = _decide_daemon(tmp, slugs,
@@ -2672,7 +3545,7 @@ def _decide_threads_accepted():
 
 
 def _taken_before_dispatch():
-    tmp = tempfile.mkdtemp(prefix="daemon-taken-")
+    tmp = scratch_dir(prefix="daemon-taken-")
     try:
         d, fd, pool_path = _decide_daemon(tmp, ["cand-a", "cand-b"],
                                           [{"decisions": [_verdict("cand-a"), _verdict("cand-b")]}])
@@ -2706,7 +3579,7 @@ def _taken_before_dispatch():
 
 
 def _taken_refusal_drops():
-    tmp = tempfile.mkdtemp(prefix="daemon-taken2-")
+    tmp = scratch_dir(prefix="daemon-taken2-")
     try:
         d, fd, pool_path = _decide_daemon(tmp, ["cand-a", "cand-b"],
                                           [{"decisions": [_verdict("cand-b")]}])
@@ -2920,7 +3793,7 @@ def _cap_arithmetic():
 
 
 def _inflight_scratch():
-    tmp = tempfile.mkdtemp(prefix="daemon-inflight-")
+    tmp = scratch_dir(prefix="daemon-inflight-")
     other = os.path.join(tmp, "runs", "hunt-other", "state")
     os.makedirs(other, exist_ok=True)
     with open(os.path.join(other, "jalapeno-popper-chicken-casserole.json"), "w",
@@ -2950,7 +3823,7 @@ def _inflight_side():
 
 
 def _inflight_blind():
-    tmp = tempfile.mkdtemp(prefix="daemon-blind-")
+    tmp = scratch_dir(prefix="daemon-blind-")
     try:
         empty = os.path.join(tmp, "not-find-similar.ps1")
         with open(empty, "w", encoding="utf-8") as f:
@@ -3075,7 +3948,7 @@ def _never_touches_the_server():
              and any(b in v.lower() for b in banned)]
     if named:
         return False, "a script constant points at the server: %s" % ", ".join(named)
-    tmp = tempfile.mkdtemp(prefix="daemon-gpu-")
+    tmp = scratch_dir(prefix="daemon-gpu-")
     try:
         lad, _inner = _retry_ladder([None])
         ps = FakePS()
@@ -3100,7 +3973,7 @@ def _never_touches_the_server():
 
 
 def _pending_narrow_pass():
-    tmp = tempfile.mkdtemp(prefix="daemon-narrow-")
+    tmp = scratch_dir(prefix="daemon-narrow-")
     try:
         lad, inner = _retry_ladder([[{"raw": "x", "coverage": 0.4, "reasons": ["r"]}]],
                                    ctx=4096)     # the 4-slot default: rung 2 does not fit
@@ -3115,7 +3988,7 @@ def _pending_narrow_pass():
 
 
 def _blocked_is_not_escalated():
-    tmp = tempfile.mkdtemp(prefix="daemon-blocked-")
+    tmp = scratch_dir(prefix="daemon-blocked-")
     try:
         lad, _inner = _retry_ladder([None])
         fd = FakeDispatch({"recipe-hunter-extractor": [{"state": "ok", "ingredients": [],
@@ -3164,7 +4037,7 @@ def _rung3_daemon(tmp, returned):
 
 
 def _rung3_verifies_stripped_text():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3-")
+    tmp = scratch_dir(prefix="daemon-rung3-")
     try:
         d, _esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One", "servings": 4,
@@ -3182,7 +4055,7 @@ def _rung3_verifies_stripped_text():
 
 
 def _rung3_cleans_up():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3b-")
+    tmp = scratch_dir(prefix="daemon-rung3b-")
     try:
         d, esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One",
@@ -3197,7 +4070,7 @@ def _rung3_cleans_up():
 
 
 def _rung3_records_not_gates():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3c-")
+    tmp = scratch_dir(prefix="daemon-rung3c-")
     try:
         d, esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One",
@@ -3232,7 +4105,7 @@ def judgment_lanes(ps):
 def _lane_daemon():
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    tmp = tempfile.mkdtemp(prefix="daemon-lane-")
+    tmp = scratch_dir(prefix="daemon-lane-")
     skeletoned(tmp, ["s1"])
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (500, 20, 40)
@@ -3266,7 +4139,7 @@ def _lane_tokens():
 
 
 def _lane_local():
-    tmp = tempfile.mkdtemp(prefix="daemon-lanelocal-")
+    tmp = scratch_dir(prefix="daemon-lanelocal-")
     try:
         lad, _inner = _retry_ladder([None])
         ps = FakePS()
@@ -3302,7 +4175,11 @@ def _lane_local():
 def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None, **kw):
     preresolved(tmp, slugs, holds=holds, residual=residual)
     fd = FakeDispatch({"recipe-ingredient-mapper": [mapper_result]})
-    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps or FakePS(), **kw)
+    # _asm_ps(), NOT a bare FakePS: since Q2 (2026-08-26) EVERY road out of the map lane reads the
+    # term list back off the state file, so an injected hunt-run that writes nothing sends every
+    # recipe STUCK and each case here quietly stops testing its own subject. _asm_ps() with no
+    # arguments answers identically to FakePS() on every call - it only also writes the state file.
+    d = daemon(run_dir=tmp, dispatcher=fd, ps=ps or _asm_ps(), **kw)
     for slug in slugs:
         d.ch["map"].push({"slug": slug})
     d.ch["map"].close()
@@ -3311,7 +4188,7 @@ def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None, *
 
 
 def _preresolve_runs_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre1-")
+    tmp = scratch_dir(prefix="daemon-pre1-")
     try:
         ps = FakePS()
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
@@ -3336,7 +4213,7 @@ def _preresolve_runs_first():
 
 
 def _preresolve_two_blocks():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre2-")
+    tmp = scratch_dir(prefix="daemon-pre2-")
     try:
         ps = FakePS({"map-preresolve.ps1": lambda a: (2, "map-preresolve: BLOCKED - no extraction", "")})
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
@@ -3350,9 +4227,11 @@ def _preresolve_two_blocks():
 
 
 def _preresolve_zero_still_dispatches():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre0-")
+    tmp = scratch_dir(prefix="daemon-pre0-")
     try:
-        ps = FakePS({"map-preresolve.ps1": lambda a: (0, "map-preresolve: 3 slug(s), 0 residual", "")})
+        # pre_out carries the "0 residual" line this case is about; the hunt-run half writes the state
+        # file every road out of the lane now reads back (Q2).
+        ps = _asm_ps(pre_out="map-preresolve: 3 slug(s), 0 residual")
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
                             {"results": [{"slug": s, "status": "ok", "state": "priced"}
                                          for s in ("s1", "s2", "s3")]}, ps=ps)
@@ -3364,7 +4243,7 @@ def _preresolve_zero_still_dispatches():
 
 
 def _map_prompt_is_residual():
-    tmp = tempfile.mkdtemp(prefix="daemon-preP-")
+    tmp = scratch_dir(prefix="daemon-preP-")
     try:
         d, fd = _map_daemon(tmp, ["s1"], {"results": [{"slug": "s1", "status": "ok", "state": "priced"}]},
                             residual={"s1": ["ras el hanout", "dry white wine", "gochujang"]})
@@ -3381,14 +4260,95 @@ def _map_prompt_is_residual():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _asm_ps(rc=0, out=""):
-    """A FakePS whose map-preresolve -Assemble call answers with a chosen exit code. The pre-resolve
-    road must keep answering 0, or the batch is blocked before the mapper is ever dispatched."""
+def _hunt_run_writer(derived=None, skipped=None):
+    r"""An injected hunt-run.ps1 -Advance that actually WRITES the recipe's state file, returned as a
+    reply callable so any fixture can drop it into a FakePS.
+
+    WHY EVERY MAP-LANE FIXTURE NEEDS ONE. Since Q1 (2026-08-26) the lane advances FIRST and then
+    enqueues whatever hunt-run RECORDED, and since Q2 (2026-08-26) the ZERO-ABSENT road does the same -
+    it reads the term list back before it will let a recipe reach `priced`. An injected hunt-run that
+    writes nothing leaves that read-back with no file, which is a STUCK, so a fixture on a bare FakePS
+    stops testing its own subject and starts testing the absence of a state file. Q2 turned two such
+    fixtures red on its first run (D7's zero-residual twin and F1's failed-fill case), which is how
+    this factory came to be shared rather than left inside _asm_ps.
+
+    The write mirrors the real -Advance union - -Terms plus `derived` as blocking rows, -OptionalTerms
+    plus `skipped` as optional ones, first spelling wins.
+
+    IT DOES NOT TEST THE UNION and must not be read as if it did: `derived` is this helper's own
+    simulation of it. The union itself is pinned against the REAL hunt-run.ps1 in the Q1 and Q2
+    sections, which is the whole reason those sections exist.
+    """
+    def hunt_run(args):
+        if "-Advance" not in args:
+            return 0, "", ""
+        slug = FakePS.value_after(args, "-Slug")
+        run_dir = FakePS.value_after(args, "-RunDir")
+        to = FakePS.value_after(args, "-To")
+        # NEVER CREATE THE RUN DIR ITSELF, and this guard OUTLIVES the defect that prompted it.
+        # daemon() used to default run_dir to the bare string "R", so a fixture taking that default
+        # would have this helper mkdir a stray `R\state` INSIDE meal-prep\pipeline - an untracked
+        # test artifact in the source tree. That default is gone (daemon() now hands out a tracked
+        # temp dir), but the guard is NOT redundant: it is what keeps this helper honest for any
+        # caller that passes a run dir of its own that does not exist yet, and a fixture writing
+        # state into a directory nobody created is a bug wherever the path came from. Only a run dir
+        # that already exists is written to.
+        if not slug or not run_dir or not os.path.isdir(run_dir):
+            return 0, "", ""
+        sd = os.path.join(run_dir, "state")
+        os.makedirs(sd, exist_ok=True)
+        sp = os.path.join(sd, "%s.json" % slug)
+        try:
+            with io.open(sp, encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            doc = {"slug": slug, "history": [], "terms": []}
+        doc["state"] = to
+        if to == "pricing":
+            rows, seen = [], set()
+            for t in list(FakePS.value_after(args, "-Terms") or []) + list(derived or []):
+                if t and t not in seen:
+                    seen.add(t)
+                    rows.append({"term": t, "optional": False})
+            for t in list(FakePS.value_after(args, "-OptionalTerms") or []) + list(skipped or []):
+                if t and t not in seen:
+                    seen.add(t)
+                    rows.append({"term": t, "optional": True})
+            doc["terms"] = rows
+        with io.open(sp, "w", encoding="utf-8") as f:
+            f.write(json.dumps(doc))
+        return 0, "", ""
+
+    return hunt_run
+
+
+def _asm_ps(rc=0, out="", derived=None, skipped=None, pre_out=""):
+    r"""A FakePS whose map-preresolve -Assemble call answers with a chosen exit code. The pre-resolve
+    road must keep answering 0, or the batch is blocked before the mapper is ever dispatched.
+
+    AND, SINCE Q1 (2026-08-26), its hunt-run.ps1 -Advance actually WRITES the recipe's state file.
+    That is not decoration: the map lane no longer enqueues the mapper's CLAIM, it advances first and
+    then enqueues whatever hunt-run RECORDED, so an injected hunt-run that writes nothing leaves the
+    lane reading an absent state file and every M3 case goes STUCK. The write here mirrors the real
+    -Advance union - -Terms plus `derived` as blocking rows, -OptionalTerms plus `skipped` as optional
+    ones, first spelling wins - so these cases keep testing the ROUTE for zero tokens.
+
+    THEY DO NOT TEST THE UNION, and must not be read as if they did: `derived` is this helper's
+    simulation of it. The union itself, and the postcondition over it, are pinned in the Q1 section
+    against the REAL hunt-run.ps1 - which is the whole reason that section exists.
+
+    THE WRITE ITSELF NOW LIVES IN _hunt_run_writer, because Q2 (2026-08-26) made the ZERO-ABSENT road
+    read the record back too and fixtures outside this helper suddenly needed the same thing.
+    """
     def reply(args):
         if "-Assemble" in args:
             return rc, out, ""
-        return 0, "", ""
-    return FakePS(replies={"map-preresolve": reply})
+        # `pre_out` is the PRE-RESOLVE pass's stdout - the "N slug(s), M residual" line some D7 cases
+        # read. Default "" keeps every existing caller byte-identical.
+        return 0, pre_out, ""
+
+    return FakePS(replies={"map-preresolve": reply,
+                           "hunt-run": _hunt_run_writer(derived, skipped)})
 
 
 def _mapper_result(slug, proposals=None):
@@ -3415,7 +4375,7 @@ def _assemble_is_the_daemons():
     ingredient" over a recipe it had just settled cleanly. With the pen here, that shape is not
     reachable.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-asm1-")
+    tmp = scratch_dir(prefix="daemon-asm1-")
     try:
         ps = _asm_ps(0)
         d, fd = _map_daemon(tmp, ["s1"], {"results": [_mapper_result("s1")]}, ps=ps,
@@ -3442,7 +4402,7 @@ def _assemble_is_the_daemons():
 def _assemble_failure_is_stuck():
     """A1. Nothing partly-settled advances. The old failure was an exit 1 a whole stage later, after
     the prose had been paid for; this is a STUCK at the map lane with the lines named."""
-    tmp = tempfile.mkdtemp(prefix="daemon-asm2-")
+    tmp = scratch_dir(prefix="daemon-asm2-")
     try:
         findings = ("map-preresolve -Assemble: 1 finding(s) - NOTHING was written\n"
                     "    FINDING  'tteok' has no gram weight from the engine or from a ruling\n")
@@ -3467,7 +4427,7 @@ def _registrar_is_dispatched():
     """A4 / pin P6. A3 strips `Agent` from the mapper, which severs the road its own definition orders
     new ids down. The daemon rebuilds it - and as a STAMPED dispatch, not the invisible 21-turn
     subagent that cost $1.64 in no ledger on the phase-5 run."""
-    tmp = tempfile.mkdtemp(prefix="daemon-reg1-")
+    tmp = scratch_dir(prefix="daemon-reg1-")
     try:
         ps = _asm_ps(0)
         res = _mapper_result("s1", proposals=[
@@ -3502,7 +4462,7 @@ def _registrar_is_dispatched():
 
 
 def _no_proposal_no_registrar():
-    tmp = tempfile.mkdtemp(prefix="daemon-reg2-")
+    tmp = scratch_dir(prefix="daemon-reg2-")
     try:
         fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [_mapper_result("s1")]}]})
         preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
@@ -3520,7 +4480,7 @@ def _registrar_null_is_not_approval():
     """SILENCE IS NOT CONSENT about whether a commodity is born. A duplicate id lets the same food
     carry two disagreeing prices while every per-file guard reads green - bread-crumbs vs breadcrumbs
     sat 2.9x apart across two boards until somebody spotted it by eye."""
-    tmp = tempfile.mkdtemp(prefix="daemon-reg3-")
+    tmp = scratch_dir(prefix="daemon-reg3-")
     try:
         ps = _asm_ps(0)
         res = _mapper_result("s1", proposals=[{"term": "tteok", "proposed_bid": "korean-rice-cakes",
@@ -3549,7 +4509,7 @@ def _map_prompt_inlines_and_bans_reads():
     220 characters - which cut the near-miss list off the end, the single most useful sentence in the
     table. A prompt that hides what it already knows sends the model back to the estate to re-derive
     it, and every one of those reads is a turn that re-reads the accumulated context with it."""
-    tmp = tempfile.mkdtemp(prefix="daemon-preQ-")
+    tmp = scratch_dir(prefix="daemon-preQ-")
     try:
         long_ev = ("prior ruling: none; nearest vocabulary rows: White Wine Vinegar "
                    "[white-wine-vinegar] DIFFERENT FORM: vinegar | Rice Vinegar [rice-vinegar] "
@@ -3584,7 +4544,7 @@ def _map_prompt_inlines_and_bans_reads():
 
 
 def _unbid_holds():
-    tmp = tempfile.mkdtemp(prefix="daemon-hold-")
+    tmp = scratch_dir(prefix="daemon-hold-")
     try:
         ps = FakePS()
         holds = {"s1": [{"term": "sumac", "canon_item": "Sumac", "bid": "",
@@ -3603,9 +4563,9 @@ def _unbid_holds():
 
 
 def _no_hold_routes_normally():
-    tmp = tempfile.mkdtemp(prefix="daemon-nohold-")
+    tmp = scratch_dir(prefix="daemon-nohold-")
     try:
-        ps = FakePS()
+        ps = _asm_ps()          # Q1: the -Add is driven off the state file hunt-run writes
         d, _fd = _map_daemon(tmp, ["s1"],
                              {"results": [{"slug": "s1", "status": "ok", "state": "pricing",
                                            "absent_terms": ["sumac"]}]}, ps=ps)
@@ -3617,19 +4577,26 @@ def _no_hold_routes_normally():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _unhold_between_seeds():
-    """THE UNHOLD, end to end, against the REAL hunt-run.ps1 and the REAL map-preresolve.ps1.
+def _unhold_drill(mapped_ingredients=None, queue_file=None):
+    """THE UNHOLD, end to end, against the REAL hunt-run.ps1 and the REAL map-preresolve.ps1. Returns
+    (info, why); a non-empty `why` means the drill could not be set up and nothing was measured.
 
     The seed table alone would strand a repaired recipe forever: it seeds `mapped`-with-holds to the
     HELD list, which is right while the hold stands and a trap the moment the missing bid is wired -
     on the next resume the recipe lands back on the held list with nobody re-checking anything. So the
     seed RE-RUNS map-preresolve over the `mapped` recipes, and a cleared hold advances on the ruling
-    already on disk. The whole claim is in the last assertion: ZERO dispatches on the second seed.
+    already on disk.
 
     The scratch vocabulary is the thing being edited between the seeds, which is what "the bid is
     wired" means mechanically - a row in db\\ingredients.json gaining a bid.
+
+    SHARED BY TWO CASES SINCE Q2 (2026-08-26). `mapped_ingredients` is what the carriage union reads,
+    so the D7 case passes none (nothing to derive, the recipe prices out) and the Q2 case passes a row
+    the union refuses. `queue_file` is the scratch worklist seam: the D7 case needs none because a
+    recipe with nothing blocking makes no -Add at all, and the Q2 case MUST have one, because its
+    recipe does - and no drill touches the live queue.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-unhold-")
+    tmp = scratch_dir(prefix="daemon-unhold-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
@@ -3653,17 +4620,23 @@ def _unhold_between_seeds():
                                         "unit": None, "optional": False},
                                        {"raw": "1 tsp Sumac", "item": "Sumac", "qty": "1",
                                         "unit": "teaspoon", "optional": False}]}, f)
-        # the mapper's decision file: the ruling the unhold advances ON, and never re-buys
+        # the mapper's decision file: the ruling the unhold advances ON, and never re-buys. It is ALSO
+        # what hunt-run's carriage union reads on the way into `pricing`, which is why Q2 can steer
+        # this whole drill through one argument.
         with open(os.path.join(run_dir, "mapped", "unhold-drill.json"), "w", encoding="utf-8") as f:
-            json.dump({"slug": "unhold-drill", "ingredients": []}, f)
+            json.dump({"slug": "unhold-drill",
+                       "ingredients": list(mapped_ingredients or [])}, f)
 
         seam = ["-NoBoard", "-NoPrecheck", "-VocabFile", os.path.join(tmp, "vocab.json"),
                 "-ResolutionsFile", os.path.join(tmp, "resolutions.json")]
+        kw = {"preresolve_args": seam}
+        if queue_file:
+            kw["queue_path"] = queue_file
 
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-Init", "-RunDir", run_dir, "-Conditions",
                                                      "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
-            return False, "could not init: %s" % o.strip()[:150]
+            return None, "could not init: %s" % o.strip()[:150]
         for i, st in enumerate(["sourced", "selected", "extracted"]):
             args = ["-Advance", "-RunDir", run_dir, "-Slug", "unhold-drill", "-To", st,
                     "-By", "drill", "-Detail", "drill"]
@@ -3671,28 +4644,28 @@ def _unhold_between_seeds():
                 args += ["-Title", "Unhold Drill", "-SourceUrl", "https://d/u", "-Protein", "beef"]
             rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
             if rc != 0:
-                return False, "staging refused at %s: %s" % (st, o.strip()[:150])
+                return None, "staging refused at %s: %s" % (st, o.strip()[:150])
 
         # ---- the map lane, once. The mapper rules; the DAEMON holds on the unbid line.
         fd = FakeDispatch({"recipe-ingredient-mapper": [
             {"results": [{"slug": "unhold-drill", "status": "ok", "state": "priced",
                           "absent_terms": []}]}]})
-        d0 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd, quiet=True, preresolve_args=seam)
+        d0 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd, quiet=True, **kw)
         d0.ch["map"].push({"slug": "unhold-drill"})
         d0.ch["map"].close()
         arun(d0.run(("map",)))
         if d0.state_of("unhold-drill") != "mapped" or len(d0.held) != 1:
-            return False, "first pass: state=%s held=%s" % (d0.state_of("unhold-drill"),
-                                                            json.dumps(d0.held))
+            return None, "first pass: state=%s held=%s" % (d0.state_of("unhold-drill"),
+                                                           json.dumps(d0.held))
 
         # ---- SEED 1: the bid is still missing, so the hold still stands and nothing is dispatched.
         fd1 = FakeDispatch({})
-        d1 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd1, quiet=True, preresolve_args=seam)
+        d1 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd1, quiet=True, **kw)
         ok1, err1 = arun(d1.seed())
         if not ok1:
-            return False, "seed 1 failed: %s" % err1
+            return None, "seed 1 failed: %s" % err1
         if len(d1.held) != 1 or d1.state_of("unhold-drill") != "mapped" or fd1.calls:
-            return False, "seed 1: held=%s state=%s dispatches=%d" % (
+            return None, "seed 1: held=%s state=%s dispatches=%d" % (
                 json.dumps(d1.held), d1.state_of("unhold-drill"), len(fd1.calls))
 
         # ---- THE BID IS WIRED. One row in the vocabulary gains a bid; nothing else changes.
@@ -3700,15 +4673,65 @@ def _unhold_between_seeds():
 
         # ---- SEED 2: the hold clears, the recipe advances on the ruling already on disk, ZERO agents.
         fd2 = FakeDispatch({})
-        d2 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd2, quiet=True, preresolve_args=seam)
+        d2 = HD.Daemon(run_dir, "unhold-run", dispatcher=fd2, quiet=True, **kw)
         ok2, err2 = arun(d2.seed())
         if not ok2:
-            return False, "seed 2 failed: %s" % err2
-        return (not d2.held and d2.state_of("unhold-drill") == "priced" and not fd2.calls
-                and d2.ch["write"]._items.__len__() == 1,
-                "seed 2: held=%s state=%s dispatches=%d write_q=%d"
-                % (json.dumps(d2.held), d2.state_of("unhold-drill"), len(fd2.calls),
-                   d2.ch["write"]._items.__len__()))
+            return None, "seed 2 failed: %s" % err2
+
+        raw = (d2.state_row("unhold-drill") or {}).get("terms") or []
+        if isinstance(raw, dict):
+            raw = [raw]
+        queued = []
+        if queue_file and os.path.exists(queue_file):
+            try:
+                with io.open(queue_file, encoding="utf-8-sig") as f:
+                    queued = sorted(str(i.get("term") or "")
+                                    for i in (json.load(f).get("items") or []))
+            except Exception as e:                                # noqa: BLE001
+                return None, "the scratch queue could not be read: %s" % e
+        return ({"state": d2.state_of("unhold-drill"),
+                 "held": list(d2.held),
+                 "dispatches": len(fd2.calls),
+                 "write_q": len(d2.ch["write"]._items),
+                 "blocking": sorted(str(t.get("term") or "") for t in raw if not t.get("optional")),
+                 "queued": queued}, "")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _unhold_between_seeds():
+    """D7's claim, unchanged: a repaired recipe with nothing blocking clears its hold and prices out on
+    the ruling already on disk. The whole claim is in the last assertion - ZERO dispatches on the
+    second seed."""
+    info, why = _unhold_drill()
+    if why:
+        return False, why
+    return (not info["held"] and info["state"] == "priced" and not info["dispatches"]
+            and info["write_q"] == 1,
+            "seed 2: held=%s state=%s dispatches=%d write_q=%d"
+            % (json.dumps(info["held"]), info["state"], info["dispatches"], info["write_q"]))
+
+
+def _q2_unhold_is_carriage_checked():
+    """Q2, THE SECOND ROAD. The unhold advances on a mapper ruling that reported NOTHING absent, and
+    before today it went straight to `priced` on that ruling alone - so a recipe held for an unbid line
+    and later repaired reached a paid page without the carriage union ever reading it. Same hole as the
+    map lane's, on a narrower road, and the M3 note named it and left it for Brad.
+
+    The recipe is identical to the D7 twin above in every respect except the one under test: its mapped
+    artifact carries a real-bid ingredient the union refuses."""
+    tmp = scratch_dir(prefix="daemon-q2unh-")
+    try:
+        qf = os.path.join(tmp, "scratch-queue.json")
+        info, why = _unhold_drill(mapped_ingredients=Q2_INGREDIENTS, queue_file=qf)
+        if why:
+            return False, why
+        return ((info["state"] == "pricing" and info["blocking"] == ["Doubanjiang"]
+                 and info["queued"] == ["Doubanjiang"] and info["write_q"] == 0
+                 and not info["dispatches"]),
+                "state=%s blocking=%s queued=%s write_q=%d dispatches=%d"
+                % (info["state"], json.dumps(info["blocking"]), json.dumps(info["queued"]),
+                   info["write_q"], info["dispatches"]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -3735,7 +4758,7 @@ def _ok_write(slug="s1"):
 
 
 def _skeleton_runs_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel1-")
+    tmp = scratch_dir(prefix="daemon-skel1-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
@@ -3755,7 +4778,7 @@ def _prewrite_band_retires():
     """The whole point of moving the gate: v2 checked the band on the WRITE result, after the most
     expensive per-recipe stage had already run. Here the skeleton says 700 cal and no prose is paid
     for at all - the assertion that matters is `dispatches == 0`."""
-    tmp = tempfile.mkdtemp(prefix="daemon-skel2-")
+    tmp = scratch_dir(prefix="daemon-skel2-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=700)
@@ -3770,7 +4793,7 @@ def _prewrite_band_retires():
 
 
 def _prewrite_band_passes():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel3-")
+    tmp = scratch_dir(prefix="daemon-skel3-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=500)
@@ -3783,7 +4806,7 @@ def _prewrite_band_passes():
 
 
 def _skeleton_incomplete_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel4-")
+    tmp = scratch_dir(prefix="daemon-skel4-")
     try:
         # The real script prints its summary, then TWO path lines, then the findings - so a blind
         # `detail[-400:]` handed the operator half a file path where the reason should be. Measured on
@@ -3809,7 +4832,7 @@ def _skeleton_incomplete_is_stuck():
 
 
 def _skeleton_blocked_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel5-")
+    tmp = scratch_dir(prefix="daemon-skel5-")
     try:
         ps = FakePS({"build-intake-skeleton.ps1":
                      lambda a: (2, "build-intake-skeleton: BLOCKED - required input missing", "")})
@@ -3852,7 +4875,7 @@ def _read_skeleton(tmp, slug="s1"):
 def _write_prompt_is_a_dossier():
     """CHANGE W. v2's line was "Produce ONE intake JSON"; D8's was "COMPLETE its intake IN PLACE".
     Both are gone: the writer has no file access at all, and its whole deliverable is the payload."""
-    tmp = tempfile.mkdtemp(prefix="daemon-skel6-")
+    tmp = scratch_dir(prefix="daemon-skel6-")
     try:
         os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
         with open(os.path.join(tmp, "extracted", "s1.json"), "w", encoding="utf-8") as f:
@@ -3878,7 +4901,7 @@ def _write_prompt_is_a_dossier():
 
 
 def _fields_patch_exactly():
-    tmp = tempfile.mkdtemp(prefix="daemon-fields1-")
+    tmp = scratch_dir(prefix="daemon-fields1-")
     try:
         d, fd = _write_daemon(tmp, ["s1"], [_write_result()])
         got, skel = _read_intake(tmp), _read_skeleton(tmp)
@@ -3903,7 +4926,7 @@ def _fields_patch_exactly():
 def _fields_nest_correctly():
     """`prose.cost_closing_html` is a TWO level path, not three. A naive split on every dot would
     invent a nesting build-v2-spec cannot read, and the value would vanish without an error."""
-    tmp = tempfile.mkdtemp(prefix="daemon-fields2-")
+    tmp = scratch_dir(prefix="daemon-fields2-")
     try:
         fields = {"prose.cost_closing_html": "<p>What it costs.</p>",
                   "head.step_names": ["Brown", "Add", "Simmer"],
@@ -3943,7 +4966,7 @@ def _fields_unknown_key_refused():
 
 
 def _patcher_refuses_unknown_key():
-    tmp = tempfile.mkdtemp(prefix="daemon-fields3-")
+    tmp = scratch_dir(prefix="daemon-fields3-")
     try:
         skeletoned(tmp, ["s1"])
         before = _read_intake(tmp)
@@ -3967,7 +4990,7 @@ def _post_patch_drift_is_stuck():
     THE DISPATCH COUNT IS THE PROOF THE REDRIFT ROAD IS GONE. Two writer results are queued; if the
     old road survived anywhere, the second would be consumed.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-drift1-")
+    tmp = scratch_dir(prefix="daemon-drift1-")
     try:
         drifted = ["ingredients[1].grams: issued '630', returned '900'",
                    "macros_per_serving.calories: issued '500', returned '640'",
@@ -4014,7 +5037,7 @@ def _redrift_road_is_gone():
 
 
 def _status_names_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-statusstuck-")
+    tmp = scratch_dir(prefix="daemon-statusstuck-")
     try:
         ps = FakePS({"build-v2-spec.ps1": lambda a: (1, "", "UNKNOWN INGREDIENT NAME: Marsala Wine")})
         d, _fd = _write_daemon(tmp, ["s1", "s2", "s3"],
@@ -4035,7 +5058,7 @@ def _spec_build_refusal_is_stuck():
     The band read then found no spec, and hunt_lib.in_band answers "not reported -> ok" BY DESIGN
     (v2 parity: a band nobody reported is not a rejection), so a refused build read as a pass.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-specrc-")
+    tmp = scratch_dir(prefix="daemon-specrc-")
     try:
         refusal = ("UNKNOWN INGREDIENT NAME: Marsala Wine are not in the ingredient vocabulary "
                    "(db\\ingredients.json). THE PRICE IS PROBABLY NOT MISSING - THE NAME IS WRONG.\n"
@@ -4053,7 +5076,7 @@ def _spec_build_refusal_is_stuck():
 
 
 def _unreadable_spec_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-specnone-")
+    tmp = scratch_dir(prefix="daemon-specnone-")
     try:
         ps = FakePS()
         skeletoned(tmp, ["s1"])
@@ -4072,7 +5095,7 @@ def _unreadable_spec_is_stuck():
 
 
 def _spec_build_clean():
-    tmp = tempfile.mkdtemp(prefix="daemon-specok-")
+    tmp = scratch_dir(prefix="daemon-specok-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
@@ -4084,7 +5107,7 @@ def _spec_build_clean():
 
 
 def _clean_fill_no_reask():
-    tmp = tempfile.mkdtemp(prefix="daemon-drift3-")
+    tmp = scratch_dir(prefix="daemon-drift3-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_write_result()], ps=ps)
@@ -4098,7 +5121,7 @@ def _clean_fill_no_reask():
 def _verify_blocked_is_stuck():
     """A diff with nothing to diff against is not a pass and it is not a drift either. Re-asking the
     writer here would be asking it to fix fields nobody can name."""
-    tmp = tempfile.mkdtemp(prefix="daemon-drift4-")
+    tmp = scratch_dir(prefix="daemon-drift4-")
     try:
         ps = FakePS({"build-intake-skeleton.ps1":
                      lambda a: ((2, "BLOCKED - no skeleton snapshot", "") if "-Verify" in a
@@ -4129,7 +5152,7 @@ def _band(cal, carbs, prot=40):
     passes and these fixtures exercise the postcondition over the BUILT SPEC, which D8 keeps."""
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    tmp = tempfile.mkdtemp(prefix="daemon-band-")
+    tmp = scratch_dir(prefix="daemon-band-")
     skeletoned(tmp, ["s1"], cal=500, carbs=20)
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (cal, carbs, prot)
@@ -4162,7 +5185,7 @@ def _band_gate_real_machine():
     """The band rejection, against the REAL hunt-run.ps1 on a scratch run dir. This is the fixture
     the FakePS blind spot demands: it proves every advance in the route is LEGAL, so the on-disk
     state is the rejection rather than a refused transition nobody saw."""
-    tmp = tempfile.mkdtemp(prefix="daemon-bandreal-")
+    tmp = scratch_dir(prefix="daemon-bandreal-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4170,7 +5193,9 @@ def _band_gate_real_machine():
                                                      "drill", "-Stop", "1", "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
         if rc != 0:
             return False, "could not init: %s" % o.strip()[:150]
-        for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "priced"]):
+        # `pricing` is in the chain because Q2 (2026-08-26) removed `mapped` -> `priced` from the state
+        # machine; this is STAGING, so it takes the legal road to the state the case is actually about.
+        for i, st in enumerate(["sourced", "selected", "extracted", "mapped", "pricing", "priced"]):
             args = ["-Advance", "-RunDir", run_dir, "-Slug", "band-drill", "-To", st,
                     "-By", "drill", "-Detail", "drill"]
             if i == 0:
@@ -4250,7 +5275,7 @@ def _band_gate_clean():
 
 
 def _wip_gates_pops():
-    tmp = tempfile.mkdtemp(prefix="daemon-wip-")
+    tmp = scratch_dir(prefix="daemon-wip-")
     try:
         slugs = ["c%02d" % i for i in range(40)]
         d, fd, _p = _decide_daemon(tmp, slugs, [])
@@ -4350,7 +5375,7 @@ def _b5_reseed_from_queue():
     is not ours).
     """
     out = []
-    tmp = tempfile.mkdtemp(prefix="daemon-b5-reseed-")
+    tmp = scratch_dir(prefix="daemon-b5-reseed-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4458,7 +5483,7 @@ def _b3_prompt(terms=("korean-rice-cakes", "gochujang", "doubanjiang")):
     probe = price_evidence.probe_failed(["Baker's", "Family Fare"], terms,
                                         "transport ERROR (400) Bad Request - likely Freshop throttling")
     doc = price_evidence.build("drill-run", 1, terms, probe_by_term=probe, roster=roster)
-    d = daemon(run_dir="R")
+    d = daemon()
     return d.price_prompt(terms, doc, path="R\\price-evidence\\batch-1.json"), doc, terms
 
 
@@ -4540,7 +5565,7 @@ def _c1_daemon(model_usage, tokens_in=1234, tokens_out=56, cache_read=900, cache
         res.model_usage = model_usage
         return res
 
-    tmp = tempfile.mkdtemp(prefix="daemon-c1-")
+    tmp = scratch_dir(prefix="daemon-c1-")
     preresolved(tmp, ["s1"])
     d = HD.Daemon(tmp, "c1-drill", dispatcher=dispatcher, ps=ps, quiet=True)
     d.ch["map"].push({"slug": "s1"})
@@ -4628,7 +5653,7 @@ def _lane_c1_delegation_finding():
 def _resume_seed_table():
     """The section 4.5 seed table, against a REAL scratch run dir driven by hunt-run.ps1 itself."""
     out = []
-    tmp = tempfile.mkdtemp(prefix="daemon-resume-")
+    tmp = scratch_dir(prefix="daemon-resume-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4650,14 +5675,17 @@ def _resume_seed_table():
                     return oo + ee
             return ""
 
+        # `pricing` sits between `mapped` and `priced` because Q2 (2026-08-26) removed the direct edge
+        # from the state machine. These are STAGING chains - the seed table is what the case is about,
+        # so they take the legal road to each state rather than asserting anything about the road.
         plan = {"r-selected": ["sourced", "selected"],
                 "r-extracted": ["sourced", "selected", "extracted"],
                 "r-mapped": ["sourced", "selected", "extracted", "mapped"],
-                "r-priced": ["sourced", "selected", "extracted", "mapped", "priced"],
-                "r-written": ["sourced", "selected", "extracted", "mapped", "priced", "spec-built",
-                              "written"],
-                "r-qapassed": ["sourced", "selected", "extracted", "mapped", "priced", "spec-built",
-                               "written", "qa-passed"]}
+                "r-priced": ["sourced", "selected", "extracted", "mapped", "pricing", "priced"],
+                "r-written": ["sourced", "selected", "extracted", "mapped", "pricing", "priced",
+                              "spec-built", "written"],
+                "r-qapassed": ["sourced", "selected", "extracted", "mapped", "pricing", "priced",
+                               "spec-built", "written", "qa-passed"]}
         for slug, states in plan.items():
             err = advance(slug, states)
             if err:
@@ -4736,7 +5764,7 @@ def _band_pool(tmp, spec):
 
 
 def _popped(spec, band=None):
-    tmp = tempfile.mkdtemp(prefix="daemon-popband-")
+    tmp = scratch_dir(prefix="daemon-popband-")
     try:
         p = _band_pool(tmp, spec)
         d = daemon(run_dir=os.path.join(tmp, "run"), pool_path=p,
@@ -4775,7 +5803,7 @@ def _band_absent_is_unbounded():
     by two gates for a whole run - a real failure mode. The ABSENCE of a constraint has none: it cannot
     wrongly reject anything. So an unstated band now runs with no limits, and what the refusal bought
     (a reader knowing what the gates enforced) is kept by run.json and by the logged effective band."""
-    tmp = tempfile.mkdtemp(prefix="daemon-bandstate-")
+    tmp = scratch_dir(prefix="daemon-bandstate-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"run": "r", "conditions": "c"}, f)
@@ -4788,7 +5816,7 @@ def _band_absent_is_unbounded():
 
 
 def _band_partial_is_honoured():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandpart-")
+    tmp = scratch_dir(prefix="daemon-bandpart-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"band": {"calMin": None, "calMax": None, "carbMax": None, "proteinMin": 45}}, f)
@@ -4803,7 +5831,7 @@ def _band_partial_is_honoured():
 
 
 def _band_read_from_run_json():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandread-")
+    tmp = scratch_dir(prefix="daemon-bandread-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"band": {"calMin": 500, "calMax": 650, "carbMax": 40, "proteinMin": 50}}, f)
@@ -4817,7 +5845,7 @@ def _band_read_from_run_json():
 
 
 def _band_inverted_refused():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandinv-")
+    tmp = scratch_dir(prefix="daemon-bandinv-")
     try:
         band, why = HD.resolve_band(tmp, 700.0, 500.0, 40.0, 0.0)
         return band is None and "above its ceiling" in why, "band=%s why=%s" % (json.dumps(band), why[:120])
@@ -4826,7 +5854,7 @@ def _band_inverted_refused():
 
 
 def _band_zero_floor_is_no_floor():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandzero-")
+    tmp = scratch_dir(prefix="daemon-bandzero-")
     try:
         band, _w = HD.resolve_band(tmp, 500.0, 650.0, 40.0, 0.0)
         # ...and the predicate agrees: a 12 g dish is in band when the floor was stated as 0
@@ -4856,7 +5884,7 @@ _REG_ROWS = [
 
 
 def _reg_daemon():
-    d = daemon(run_dir="R")
+    d = daemon()
     d._commodity_rows = list(_REG_ROWS)
     return d
 
@@ -5101,7 +6129,7 @@ def _g1_note_does_not_leak_into_prompts_that_do_not_sweep():
     """CLEAN TWIN: the pricer and the decider carry Grep and neither sweeps a namespace - the pricer
     adjudicates pre-gathered store rows, the decider ruled 3 candidates in 1 turn off a whole dossier.
     Prompt weight buys nothing where nobody greps, and this pins that omission as deliberate."""
-    d = daemon(run_dir="R")
+    d = daemon()
     price = d.price_prompt(["saffron", "harissa", "tteok"])
     decide = d.decide_prompt([{"slug": "x", "name": "X", "dossier": {"slug": "x", "name": "X"}}], "3")
     leaked = [n for n, p in (("price", price), ("decide", decide))
@@ -5148,7 +6176,7 @@ _REG_FLOOR = {"chicken-drumsticks": "chicken-thighs", "jasmine-rice": "brown-ric
 
 
 def _reg_batch_daemon(feed=None, floor=None, dispatcher=None):
-    d = daemon(run_dir="R", dispatcher=dispatcher)
+    d = daemon(dispatcher=dispatcher)
     d._commodity_rows = list(_REG_ROWS)
     # The caches are seeded so these fixtures never depend on the LIVE feed, which another session
     # rewrites daily - the tuple wrapper is what lets a seeded None mean "could not be read".
@@ -5261,7 +6289,7 @@ def _registrar_evidence_shows_include():
     rows = [r for r in _REG_ROWS if r["id"] != "chicken-thighs"]
     rows.append({"id": "chicken-thighs", "label": "Poultry Dark Meat", "ns": "commodities",
                  "include": "['chicken\s+(thigh|drumstick|leg)']"})
-    d = daemon(run_dir="R")
+    d = daemon()
     d._commodity_rows = rows
     near = d.commodity_near_misses("drumstick", "drumsticks")
     return (any(r["id"] == "chicken-thighs" for r in near),
@@ -5292,7 +6320,7 @@ def _extract_run(n_pages):
     against the unfixed code and proved nothing. What distinguishes batching is WHEN the pushes happen
     relative to the settles - all at the end, or one after each settle.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-batch-")
+    tmp = scratch_dir(prefix="daemon-batch-")
     try:
         lad, _inner = _retry_ladder([None] * max(n_pages, 1))
         ps = FakePS()
@@ -5349,7 +6377,7 @@ def _extract_releases_a_lone_recipe():
     and demands the recipe reach the map lane WITHOUT the channel ever closing. That is the difference
     between "flushed because the run ended" and "flushed because nothing else was queued".
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-lone-")
+    tmp = scratch_dir(prefix="daemon-lone-")
     try:
         lad, _inner = _retry_ladder([None, None])
         ps = FakePS()
@@ -5404,7 +6432,7 @@ def _extract_strands_nothing():
 
 def _extract_respects_map_batch():
     # The daemon logs each flush with its count; no flush may carry more than MAP_BATCH.
-    tmp = tempfile.mkdtemp(prefix="daemon-batchcap-")
+    tmp = scratch_dir(prefix="daemon-batchcap-")
     try:
         n = hunt_lib.MAP_BATCH + 3
         lad, _inner = _retry_ladder([None] * n)
@@ -5444,7 +6472,7 @@ def _extract_drain_flush_releases_held():
     pages are still queued (so no size() flush), and the lane then exits early because the breaker
     tripped. Without the drain flush that recipe is stranded in `pending` and never mapped.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-drain-")
+    tmp = scratch_dir(prefix="daemon-drain-")
     try:
         lad, _inner = _retry_ladder([None, None, None])
         ps = FakePS()
@@ -5493,7 +6521,7 @@ def _extract_drain_flush_releases_held():
 # =====================================================================================================
 
 def _band_pair_run(cal, carbs, prot, source_band, band=None):
-    tmp = tempfile.mkdtemp(prefix="daemon-pair-")
+    tmp = scratch_dir(prefix="daemon-pair-")
     try:
         fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
         ps = FakePS()
@@ -5572,7 +6600,7 @@ def _any_limit_restores_verification():
 # =====================================================================================================
 
 def _bandgate_run(protein, food_rows):
-    tmp = tempfile.mkdtemp(prefix="daemon-nv-")
+    tmp = scratch_dir(prefix="daemon-nv-")
     try:
         fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
         ps = FakePS()
@@ -5643,7 +6671,7 @@ def _food_db_run(rows_by_slug, existing=None, readme="fixture DB"):
     live DB even by accident, and now it can. Every fixture here writes a temp file and none of them
     can reach meal-prep\food-macros-db.json.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-fooddb-")
+    tmp = scratch_dir(prefix="daemon-fooddb-")
     path = os.path.join(tmp, "food-macros-db.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump({"readme": readme, "items": list(existing or [])}, f)
@@ -5671,7 +6699,7 @@ def _fooddb_writes():
     try:
         # 3+ elements, per the estate's collection rule
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         names = [r.get("item") for r in doc["items"]]
         ok = (sorted(written) == ["Fixture Beef", "Fixture Chicken", "Fixture Pork"]
@@ -5694,7 +6722,7 @@ def _fooddb_atwater_refuses():
         # numbers that do not describe one food, which is what a fabricated label looks like.
         bad = _good_row("Fixture Fabrication", calories=900)
         rows = [_good_row("Fixture Chicken"), bad, _good_row("Fixture Pork")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Fabrication" in f and "Atwater" in f]
         ok = ("Fixture Fabrication" not in names and "Fixture Fabrication" not in written
@@ -5714,7 +6742,7 @@ def _fooddb_conflict_never_overwrites():
         # same item, DIFFERENT macros, and its own arithmetic is fine (30*4 + 3*4 + 5*9 = 177)
         clash = _good_row("Fixture Chicken", protein_g=30, calories=177)
         rows = [clash, _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chicken = [r for r in doc["items"] if r.get("item") == "Fixture Chicken"]
         named = [f for f in findings if "Fixture Chicken" in f and "DIFFERS" in f]
@@ -5737,7 +6765,7 @@ def _fooddb_identical_is_silent():
     d, path, tmp = _food_db_run(None, existing=[prior])
     try:
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         ok = (not findings and "Fixture Chicken" not in written
               and names.count("Fixture Chicken") == 1
@@ -5782,7 +6810,7 @@ def _fooddb_rounding_is_not_a_conflict():
                 _good_row("Fixture Parsley", calories=36, protein_g=3.0, carbs_g=6.3, fat_g=0.8,
                           fiber_g=3.3),                                    # hundredths, every field
                 _good_row("Fixture Chicken", calories=158)]                # 3 cal apart
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         spinach = [r for r in doc["items"] if r.get("item") == "Fixture Spinach"]
         ok = (not findings and not written and len(doc["items"]) == 3
@@ -5804,7 +6832,7 @@ def _fooddb_a_different_basis_is_always_a_conflict():
     try:
         clash = _good_row("Fixture Pork Chops", serving_grams=112, calories=155, protein_g=25.2)
         rows = [clash, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chops = [r for r in doc["items"] if r.get("item") == "Fixture Pork Chops"]
         named = [f for f in findings if "Fixture Pork Chops" in f and "DIFFERS" in f]
@@ -5819,13 +6847,328 @@ def _fooddb_a_different_basis_is_always_a_conflict():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _fooddb_near_name_twin_is_named_but_still_written():
+    """H3 (2026-08-26). THE FOUR LIVE COLLISIONS, and every one is a food the DB already had:
+    'Apple'/'Apples', 'Lemon'/'Lemons', 'Green Bell Pepper'/'Green Bell Peppers' and 'Fresh Thyme'
+    TWICE. They landed because every check above the write asked only "is there a row called EXACTLY
+    that". The lookup is a name-keyed dict here and in Get-MacroRecompute, so a duplicate does not
+    announce itself - one row shadows the other and a recipe can be costed off whichever won.
+
+    IT IS A FINDING AND THE ROW STILL LANDS. Refusing would park the recipe over a NAMING question,
+    which is the failure class this whole commit removes.
+    """
+    prior = _good_row("Apple", serving_grams=100, calories=52, protein_g=0.3, carbs_g=14, fat_g=0.2)
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        twin = _good_row("Apples", serving_grams=100, calories=63, protein_g=0.2, carbs_g=15.2,
+                         fat_g=0.18)
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [twin, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
+        names = sorted(r.get("item") for r in _db_items(path)["items"])
+        named = [f for f in findings if "'Apple'" in f and "'Apples'" in f]
+        ok = (len(named) == 1
+              # the row LANDED - a naming question must never park a recipe
+              and "Apples" in names and "Apple" in names and "Apples" in written
+              # ...and the finding says the lookup is name-keyed, or nobody knows why it matters
+              and "shadows" in named[0])
+        return ok, "written=%s finding=%s" % (json.dumps(written), json.dumps(named)[:300])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_key_is_precise_not_recall():
+    """THE KEY IS THE DESIGN, and this is the case that chooses it. Measured over the live 369-row DB
+    the day this was written: this key finds 4 collisions and all 4 are real duplicates; the
+    head-noun scoring finds 103 pairs of which 21 are the single word "sauce". A write-time check
+    that fires on every new sauce row forever is a check nobody reads, so recall belongs on the
+    mapper's shelf and precision belongs here."""
+    k = daemon(run_dir=".")._loose_name_key
+    same = [("Apple", "Apples"), ("Lemon", "Lemons"),
+            ("Green Bell Pepper", "Green Bell Peppers"),
+            ("Fresh Thyme", "fresh  thyme"), ("Bok Choy", "bok-choy")]
+    apart = [("93/7 Ground Beef", "90/10 Ground Beef"),   # digits KEPT - head-noun strips both to "beef"
+             ("Hot Sauce", "Alfredo Sauce"),              # "hot" is a NOISE word to the head-noun road
+             ("Honey", "Hot Honey"), ("Paprika", "Smoked Paprika"),
+             ("Monterey Jack Cheese", "Pepper Jack Cheese")]
+    bad = [(a, b) for a, b in same if k(a) != k(b)] + [(a, b) for a, b in apart if k(a) == k(b)]
+    return not bad, "misjudged: %s" % json.dumps(bad)
+
+
+def _fooddb_near_name_ss_guard_is_dormant():
+    """THE ONE PART OF THE KEY THAT IS NOT LOAD-BEARING, said out loud rather than dressed up.
+
+    The 'ss' guard is inherited from coverage_check's _words so the two normalisations read the same,
+    and it exists so a future 'Watercress' does not become 'watercres'. MEASURED 2026-08-26 across
+    the food DB and the vocabulary together: NOT ONE name ends in 'ss', and the collision set is
+    identical with the guard on or off. Its neuter therefore fires nothing, and a fixture invented to
+    make it look load-bearing would be a fixture that proves the fixture.
+
+    So this asserts the true thing - that the guard is DORMANT - and it starts meaning something the
+    day someone adds a food whose name ends in 'ss'.
+    """
+    k = daemon(run_dir=".")._loose_name_key
+    names = []
+    for rel in (("food-macros-db.json",), ("db", "ingredients.json")):
+        p = os.path.join(os.path.dirname(HERE), *rel)
+        if not os.path.exists(p):
+            return False, "cannot read %s" % p
+        with io.open(p, encoding="utf-8-sig") as fh:
+            doc = json.load(fh)
+        rows = doc.get("items") if isinstance(doc, dict) else doc
+        names += [r["item"] for r in rows if isinstance(r, dict) and r.get("item")]
+    ends_ss = [n for n in set(names) if re.sub(r"[^a-z0-9]+", "", n.lower()).endswith("ss")]
+    # and the guard genuinely separates the pair it exists for, whether or not one is in use yet
+    works = k("Watercress") != k("Watercres")
+    return (not ends_ss) and works, ("names ending in ss: %s (a non-empty list here means the guard "
+                                     "has woken up and wants a real fixture)" % json.dumps(ends_ss))
+
+
+def _fooddb_near_name_catches_two_new_rows_in_one_payload():
+    """CLEAN TWIN: the two colliding rows can BOTH be new. 'Fresh Thyme' is in the live DB twice and
+    neither copy carries added_by, so they arrived before the pen moved - but nothing stops one
+    payload carrying both halves, and an index built only from what was ALREADY on disk would miss
+    it."""
+    d, path, tmp = _food_db_run(None)
+    try:
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [_good_row("Fresh Thyme"), _good_row("Fresh Thymes"),
+                   _good_row("Fixture Beef")]))
+        named = [f for f in findings if "Fresh Thyme" in f]
+        ok = len(named) == 1 and sorted(written) == ["Fixture Beef", "Fresh Thyme", "Fresh Thymes"]
+        return ok, "written=%s finding=%s" % (json.dumps(written), json.dumps(named)[:260])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_is_silent_on_a_real_variant():
+    """CLEAN TWIN and the reason the key keeps its digits. A new ground-beef ratio is a REAL new food
+    the estate buys separately, and a check that questioned every one of them would be trained out of
+    existence inside a week."""
+    prior = _good_row("93/7 Ground Beef")
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [_good_row("90/10 Ground Beef"), _good_row("80/20 Ground Beef"),
+                   _good_row("Fixture Lamb")]))
+        ok = (not findings and len(written) == 3)
+        return ok, "written=%s findings=%s" % (json.dumps(written), json.dumps(findings)[:260])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_matches_the_live_db():
+    """LOCKSTEP with the real file. The key's whole claim is a measurement - 4 collisions, all real -
+    and a measurement nobody re-runs is a comment. This re-runs it: if the live DB grows a fifth
+    collision, or the key starts pairing foods that are genuinely distinct, this says so."""
+    live = os.path.join(os.path.dirname(HERE), "food-macros-db.json")
+    if not os.path.exists(live):
+        return False, "no live food DB at %s" % live
+    with io.open(live, encoding="utf-8-sig") as fh:
+        rows = json.load(fh).get("items") or []
+    k = daemon(run_dir=".")._loose_name_key
+    groups = {}
+    for r in rows:
+        if isinstance(r, dict) and r.get("item"):
+            groups.setdefault(k(r["item"]), []).append(r["item"])
+    hits = sorted(v for v in groups.values() if len(v) > 1)
+    want = sorted([["Apple", "Apples"], ["Fresh Thyme", "Fresh Thyme"],
+                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
+                  key=lambda v: sorted(v))
+    got = sorted(hits, key=lambda v: sorted(v))
+    ok = [sorted(v) for v in got] == [sorted(v) for v in want]
+    return ok, ("the live DB's collision set is %s (expected the four known duplicates; a NEW one "
+                "here is a real find, not a broken fixture)" % json.dumps(hits))
+
+
+def _fooddb_agreeing_bases_are_not_a_conflict():
+    """H2 (2026-08-26). THE DEFECT, MEASURED: on run hunt-2026-08-26-ten, 10 of the 13 conflict
+    findings were the mapper's per-100 g FDC row against a household row this DB already held, and
+    every one of them was the SAME FOOD. These are the live numbers off that run - Dried Basil at
+    2 cal per 1 g tsp against 233 cal per 100 g, which is 2.33 against 2.
+
+    Reporting that as DIFFERS is a false statement about the data, and at width the noise buries the
+    real conflicts - the same sentence H1 wrote about rounding, one layer up.
+    """
+    prior = {"item": "Dried Basil", "brand": "Great Value", "serving_grams": 1, "serving_qty": 1,
+             "serving_unit": "tsp", "calories": 2, "protein_g": 0.2, "carbs_g": 0.5, "fat_g": 0.04,
+             "source": "fdc:170925"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        per100 = {"item": "Dried Basil", "serving_grams": 100, "serving_qty": 100,
+                  "serving_unit": "g", "calories": 233, "protein_g": 23.0, "carbs_g": 47.8,
+                  "fat_g": 4.07, "fiber_g": 37.7, "source": "fdc:170925"}
+        rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
+        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        basil = [r for r in doc["items"] if r.get("item") == "Dried Basil"]
+        ok = (# NOT a finding - the two agree
+              not [f for f in findings if "Dried Basil" in f]
+              # the HOUSEHOLD row is the one that stands, per Brad's standing rule
+              and len(basil) == 1 and basil[0].get("serving_unit") == "tsp"
+              and basil[0].get("calories") == 2
+              # ...and it was LOOKED AT, which is the difference between agreement and silence
+              and len([n for n in notes if "Dried Basil" in n]) == 1
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, "findings=%s notes=%s kept=%s" % (
+            json.dumps([f for f in findings if "Dried Basil" in f]),
+            json.dumps(notes)[:220], json.dumps(basil))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_normalising_still_catches_a_real_disagreement():
+    """MUST FIRE, and it is the whole reason H2 normalises instead of forgiving. Beef Broth from the
+    SAME run: the DB holds 2 g protein per 240 g cup and the mapper returned 1.97 per 100 g. Those
+    are 0.83 and 1.97 on one basis - more than double - so it is a real disagreement and it stays a
+    conflict. A rule that merely widened the tolerance for a basis difference would have lost this.
+    """
+    prior = {"item": "Beef Broth", "serving_grams": 240, "serving_qty": 1, "serving_unit": "cup",
+             "calories": 10, "protein_g": 2, "carbs_g": 0, "fat_g": 0, "source": "fdc:174312"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        per100 = {"item": "Beef Broth", "serving_grams": 100, "serving_qty": 100,
+                  "serving_unit": "g", "calories": 13, "protein_g": 1.97, "carbs_g": 1.2,
+                  "fat_g": 0.09, "source": "fdc:174312"}
+        rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
+        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        broth = [r for r in _db_items(path)["items"] if r.get("item") == "Beef Broth"]
+        named = [f for f in findings if "Beef Broth" in f and "DIFFERS" in f]
+        ok = (len(named) == 1
+              # the finding now says WHY on one basis, or a person cannot tell it from the noise
+              and "still disagree" in named[0] and "protein_g" in named[0]
+              and not [n for n in notes if "Beef Broth" in n]
+              and len(broth) == 1 and broth[0].get("serving_unit") == "cup"
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, "finding=%s" % json.dumps(named)[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_unweighable_basis_is_still_a_conflict():
+    """CLEAN TWIN: two bases can only be compared when both carry a weight. A row with no usable
+    serving_grams cannot be put on the other's basis at all, and an unanswerable question is a
+    conflict a person rules on - never a pass on the grounds that nobody could check."""
+    prior = {"item": "Mystery Spice", "serving_grams": 2, "serving_qty": 1, "serving_unit": "tsp",
+             "calories": 6, "protein_g": 0.2, "carbs_g": 1.0, "fat_g": 0.1, "source": "fdc:1"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        noweight = {"item": "Mystery Spice", "serving_grams": 0, "serving_qty": 1,
+                    "serving_unit": "pinch", "calories": 6, "protein_g": 0.2, "carbs_g": 1.0,
+                    "fat_g": 0.1, "source": "fdc:1"}
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [noweight, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
+        named = [f for f in findings if "Mystery Spice" in f]
+        ok = (len(named) == 1 and not [n for n in notes if "Mystery Spice" in n]
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, json.dumps(named)[:300]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# THE SHORTFALL DETECTOR (2026-08-26). The pre-resolve table names the foods with no food-DB row; the
+# mapper is asked for one row each; NOTHING compared the two. On run hunt-2026-08-26-ten the mapper
+# returned ZERO rows for twelve of twenty-two recipes and not one recipe got a row for every food that
+# needed one, and the run published nothing.
+# =====================================================================================================
+
+def _shortfall_daemon(rows):
+    d, path, tmp = _food_db_run(None)
+    tables = {"s1": {"rows": rows}}
+    return d, tables, tmp
+
+
+def _shortfall_names_what_never_came_back():
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "chicken thighs", "canon_item": "Chicken Thighs", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False},
+        {"term": "yellow onion", "canon_item": "Yellow Onion", "fooddb_known": False},
+        {"term": "brussels sprouts", "canon_item": "Brussels Sprouts", "fooddb_known": True}])
+    try:
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables, [], [])
+        ok = (f is not None and "'Chicken Thighs'" in f and "'Fresh Rosemary'" in f
+              and "'Yellow Onion'" in f and "Brussels Sprouts" not in f
+              and "named 3 food(s)" in f and "nothing at all for 3" in f)
+        return ok, str(f)[:400]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_is_silent_when_every_row_arrived():
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "chicken thighs", "canon_item": "Chicken Thighs", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables,
+                                ["Chicken Thighs", "Fresh Rosemary"], [])
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_a_refused_row_is_not_a_shortfall():
+    """A row that CAME BACK and was refused was ruled on, and its own finding already says why.
+    Counting it twice would make the honest gates look like the silent ones."""
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "dry red wine", "canon_item": "Dry Red Wine", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        refused = ["s1: the food-DB row for 'Dry Red Wine' FAILED the Atwater check (x) and was "
+                   "NOT written"]
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables, ["Fresh Rosemary"], refused)
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_a_food_nobody_buys_needs_no_row():
+    """CLEAN TWIN: charcoal and wood chips are on real ingredient lines and are not food. A term the
+    mapper ruled not-purchased is accounted for, and demanding a nutrition label for it would be a
+    finding that can never be cleared."""
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "charcoal", "canon_item": "Charcoal", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        res = {"rulings": [{"term": "charcoal", "canon_item": "Charcoal",
+                            "decision": "not-purchased"}]}
+        f = d.food_db_shortfall("s1", res, tables, ["Fresh Rosemary"], [])
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_reaches_the_run_findings():
+    """END TO END, and this is the case that would have caught the live run: a mapper that returns
+    an EMPTY food_db_rows against a table asking for two. Before this existed the payload was
+    accepted in silence and the recipe went STUCK a whole lane later."""
+    d, path, tmp = _food_db_run(None)
+    try:
+        d.registrar_rulings = lambda slug, proposals, tables=None: _immediate([])
+        tables = {"s1": {"rows": [
+            {"term": "spaghetti squash", "canon_item": "Spaghetti Squash", "fooddb_known": False},
+            {"term": "fresh basil", "canon_item": "Fresh Basil", "fooddb_known": False}]}}
+        res = {"slug": "s1", "status": "ok", "state": "mapped", "lines": [], "rulings": [],
+               "detail": "New DB rows returned: Spaghetti Squash, Fresh Basil",
+               "food_db_rows": []}
+        arun(d.assemble_mapped("s1", res, tables))
+        with open(os.path.join(tmp, "mapped-pre", "s1.rulings.json"), "r", encoding="utf-8") as fh:
+            doc = json.load(fh)
+        named = [f for f in (doc.get("db_row_findings") or []) if "ABSENT" in f]
+        ok = (len(named) == 1 and "'Spaghetti Squash'" in named[0]
+              and "'Fresh Basil'" in named[0]
+              and any("ABSENT" in f for f in d.findings))
+        return ok, json.dumps(doc.get("db_row_findings"))[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _fooddb_needs_a_source():
     d, path, tmp = _food_db_run(None)
     try:
         rows = [_good_row("Fixture Chicken"),
                 _good_row("Fixture Hearsay", source=""),
                 _good_row("Fixture Pork")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Hearsay" in f and "source" in f]
         ok = ("Fixture Hearsay" not in names and len(named) == 1
@@ -5860,7 +7203,7 @@ def _fooddb_concurrent_writers():
         names = sorted(r.get("item") for r in _db_items(path)["items"])
         want = sorted(["Worker One A", "Worker One B", "Worker One C",
                        "Worker Two A", "Worker Two B", "Worker Two C"])
-        written = sorted([n for w, _ in res for n in w])
+        written = sorted([n for w, _f, _n in res for n in w])
         ok = names == want and written == want
         return ok, "items(%d)=%s" % (len(names), json.dumps(names))
     finally:
@@ -5980,7 +7323,7 @@ def _h2_seam_daemon(tmp, **kw):
 def _h2_queue_calls_carry_the_seams():
     """MUST FIRE: every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath,
     and the live paths are never passed."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2q-")
+    tmp = scratch_dir(prefix="daemon-h2q-")
     try:
         d = _h2_seam_daemon(tmp)
         # the three shapes the daemon actually calls: -Add from the map lane, -Add from the unhold,
@@ -6000,7 +7343,7 @@ def _h2_queue_calls_carry_the_seams():
 def _h2_live_run_passes_no_override():
     """CLEAN TWIN: with no seams set the calls are byte-identical to what they always were. A seam
     that leaks a flag into a real run is its own defect."""
-    d = daemon(run_dir="R")
+    d = daemon()
     args = d.queue_args(["-Add", "-Term", "saffron", "-Recipe", "s1"])
     return (args == ["-Add", "-Term", "saffron", "-Recipe", "s1"]
             and d.queue_seam_note() == "", "args=%s note=%r" % (json.dumps(args), d.queue_seam_note()))
@@ -6009,7 +7352,7 @@ def _h2_live_run_passes_no_override():
 def _h2_map_lane_queues_through_the_seam():
     """MUST FIRE, end to end: a mapper returning absent terms enqueues them through the SCRATCH
     queue - the costed_path pattern, asserted on the real call the lane makes."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2map-")
+    tmp = scratch_dir(prefix="daemon-h2map-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["saffron", "harissa", "tteok"]})
         ps = _asm_ps(0)
@@ -6037,7 +7380,7 @@ def _h2_considered_seam_reaches_decide_apply():
     """MUST FIRE: the decider's ruling goes to the SCRATCH dish ledger. considered-dishes.ps1 already
     had -Store and decide_apply already threaded it; the daemon was passing an empty string, so every
     drill wrote the estate's real prior-art memory."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2cd-")
+    tmp = scratch_dir(prefix="daemon-h2cd-")
     try:
         seen = {}
         import decide_apply                                        # noqa: PLC0415
@@ -6073,11 +7416,11 @@ def _h2_pricer_is_told_the_seams():
     """MUST FIRE: the PRICER holds the -Record/-Verdict/-Promote pen itself, so no daemon-side
     threading can reach those calls. On a seamed run its prompt names the flags; on a real run the
     note is absent entirely."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2price-")
+    tmp = scratch_dir(prefix="daemon-h2price-")
     try:
         d = _h2_seam_daemon(tmp)
         p = d.price_prompt(["saffron", "harissa", "tteok"])
-        live = daemon(run_dir="R").price_prompt(["saffron", "harissa", "tteok"])
+        live = daemon().price_prompt(["saffron", "harissa", "tteok"])
         return (("-QueueFile '%s'" % os.path.join(tmp, "queue.json")) in p
                 and ("-CarriagePath '%s'" % os.path.join(tmp, "carriage.json")) in p
                 and "DRILL ON SCRATCH LEDGERS" in p
@@ -6192,7 +7535,9 @@ def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=("s1", "s2", "s3"
             raise RuntimeError("api.data.gov refused the connection")
         return dict(stat or {"added": len(terms), "skipped": 0, "failed": 0, "size": len(terms)})
 
-    ps = FakePS(replies={"map-preresolve": reply})
+    # the hunt-run half writes the state file the lane reads back on every road out (Q2, 2026-08-26).
+    # Without it this case measures a STUCK batch instead of the fill's own degrade behaviour.
+    ps = FakePS(replies={"map-preresolve": reply, "hunt-run": _hunt_run_writer()})
     fd = FakeDispatch({"recipe-ingredient-mapper": [
         {"results": [{"slug": s, "status": "ok", "state": "priced"} for s in slugs]}]})
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
@@ -6211,7 +7556,7 @@ def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=("s1", "s2", "s3"
 
 
 def _f1_order_is_preresolve_fill_preresolve_dispatch():
-    tmp = tempfile.mkdtemp(prefix="daemon-f1ord-")
+    tmp = scratch_dir(prefix="daemon-f1ord-")
     try:
         d, fd, ps, order = _f1_map_run(tmp)
         prompt = (fd.prompts("recipe-ingredient-mapper") or [""])[0]
@@ -6229,7 +7574,7 @@ def _f1_order_is_preresolve_fill_preresolve_dispatch():
 def _f1_nothing_added_skips_the_rerun():
     """CLEAN TWIN: a batch whose terms were all already cached is as warm as it can get, so the
     second mechanical pass is not paid for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-f1warm-")
+    tmp = scratch_dir(prefix="daemon-f1warm-")
     try:
         d, fd, ps, order = _f1_map_run(tmp, stat={"added": 0, "skipped": 3, "failed": 0, "size": 3})
         pre = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
@@ -6242,7 +7587,7 @@ def _f1_nothing_added_skips_the_rerun():
 def _f1_a_failed_fill_degrades_and_still_dispatches():
     """MUST FIRE: DEGRADE, NEVER BLOCK. The fill can only add evidence, so a fill that throws is one
     finding naming the count and a mapper dispatched exactly as it was before F1 existed."""
-    tmp = tempfile.mkdtemp(prefix="daemon-f1boom-")
+    tmp = scratch_dir(prefix="daemon-f1boom-")
     try:
         d, fd, ps, order = _f1_map_run(tmp, raises=True)
         named = [f for f in d.findings if f.startswith("F1: the FDC fill could not run")]
@@ -6285,7 +7630,7 @@ def _f1_cache_fill_with_gate(path, gate):
 
 
 def _f1_two_fills(no_lock=False):
-    tmp = tempfile.mkdtemp(prefix="daemon-f1lock-")
+    tmp = scratch_dir(prefix="daemon-f1lock-")
     path = os.path.join(tmp, "fdc-cache.json")
     HD.fdc_lookup.cache_write({"terms": {}}, path)
     d = daemon(run_dir=tmp)
@@ -6658,7 +8003,7 @@ def _patch_road_no_change_still_guards():
 
 def _qa_dossier_run(spec=None, battery=None, extraction=True):
     """A run dir with the three artifacts a QA dossier renders, plus a scratch spec store."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qadoss-")
+    tmp = scratch_dir(prefix="daemon-qadoss-")
     specs = os.path.join(tmp, "specs")
     os.makedirs(specs, exist_ok=True)
     os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
@@ -6726,7 +8071,7 @@ def _qa_dossier_missing_battery_is_announced():
 def _qa_daemon_holds_the_verdict_pen():
     """MUST FIRE: the DAEMON writes qa\\<slug>.json from the payload, and it matches the schema
     fields. The agent's Write is retired."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qapen-")
+    tmp = scratch_dir(prefix="daemon-qapen-")
     try:
         skeletoned(tmp, ["s1"])
         fd = FakeDispatch({"recipe-source-qa": [
@@ -6750,7 +8095,7 @@ def _qa_no_verdict_writes_nothing():
     """MUST FIRE: B5 - no verdict is never a pass. A payload carrying none writes NO file (a file on
     disk saying nothing is worse than no file, because it looks like a ruling) and the recipe is
     STUCK."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qanov-")
+    tmp = scratch_dir(prefix="daemon-qanov-")
     try:
         skeletoned(tmp, ["s1"])
         fd = FakeDispatch({"recipe-source-qa": [None, None, None]})   # transport failures: no verdict
@@ -6774,7 +8119,7 @@ def _qa_no_verdict_writes_nothing():
 
 
 def _qa_writer_repair_is_a_patch():
-    tmp = tempfile.mkdtemp(prefix="daemon-qapatch-")
+    tmp = scratch_dir(prefix="daemon-qapatch-")
     try:
         skeletoned(tmp, ["s1"])
         script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "writer",
@@ -6807,7 +8152,7 @@ def _qa_writer_repair_is_a_patch():
 def _qa_mapper_repair_keeps_its_road():
     """CLEAN TWIN. A QA finding owned by the mapper needs re-mapping, which no field patch reaches.
     Its owner routing and its prompt are both unchanged."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qamapper-")
+    tmp = scratch_dir(prefix="daemon-qamapper-")
     try:
         skeletoned(tmp, ["s1"])
         script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "mapper",

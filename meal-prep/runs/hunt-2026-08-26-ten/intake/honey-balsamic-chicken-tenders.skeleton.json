@@ -1,0 +1,83 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T04:52:02",
+    "slug":  "honey-balsamic-chicken-tenders",
+    "findings":  [
+                     "no food-macros-db row for \u0027Salt and Pepper\u0027 - the macros are computed WITHOUT it"
+                 ],
+    "notes":  [
+                  "\u0027Salt and Pepper\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "merged a second \u0027Balsamic Vinegar\u0027 line into the first - 335 g total"
+              ],
+    "intake":  {
+                   "name":  "Honey Balsamic Chicken Tenders",
+                   "slug":  "honey-balsamic-chicken-tenders",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  2380,
+                                           "buy":  "5 1/4 lb, sliced lengthwise into tenders"
+                                       },
+                                       {
+                                           "item":  "Balsamic Vinegar",
+                                           "grams":  335,
+                                           "buy":  "7/8 cup (1 cup less 2 tablespoons), for the marinade; 7 tablespoons, for the pan sauce"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  10,
+                                           "buy":  "3 1/2 cloves (about 1 tablespoon), minced"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  94,
+                                           "buy":  "7 tablespoons, divided"
+                                       },
+                                       {
+                                           "item":  "Salt and Pepper",
+                                           "grams":  7,
+                                           "buy":  "about 1 1/2 teaspoons each salt and pepper, to taste"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  49,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Honey",
+                                           "grams":  220,
+                                           "buy":  "2/3 cup (10 1/2 tablespoons)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  348,
+                                              "protein_g":  38.1,
+                                              "carbs_g":  17,
+                                              "fat_g":  14.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-barbacoa-beef",
+    "title":  "Slow Cooker Barbacoa Beef",
+    "source_url":  "https://www.spendwithpennies.com/barbacoa/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:52",
+    "updated":  "2026-08-26T04:12:52",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Identical chuck-roast chipotle-adobo/lime/ACV/cumin slow-cooker barbacoa already live as slow-cooker-barbacoa-bowl (bge 0.92); estate already rejected the twin slug slow-cooker-beef-barbacoa for the same reason, saturation 12.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:52",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/barbacoa/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:52",
+                        "by":  "decider",
+                        "detail":  "Identical chuck-roast chipotle-adobo/lime/ACV/cumin slow-cooker barbacoa already live as slow-cooker-barbacoa-bowl (bge 0.92); estate already rejected the twin slug slow-cooker-beef-barbacoa for the same reason, saturation 12."
+                    }
+                ]
+}

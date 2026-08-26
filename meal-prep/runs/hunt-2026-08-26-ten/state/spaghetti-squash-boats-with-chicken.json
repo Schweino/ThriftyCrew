@@ -1,0 +1,68 @@
+{
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "title":  "Spaghetti Squash Boats with Chicken",
+    "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:21",
+    "updated":  "2026-08-26T04:58:44",
+    "terms":  [
+                  {
+                      "term":  "mozzarella cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh basil",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:21",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:20:21",
+                        "by":  "decider",
+                        "detail":  "Stuffed spaghetti-squash boats with chicken, bacon, spinach, yogurt and mozzarella - a distinct vegetable-forward baked format with no live or backlog match; band verified 538/37/42, saturation 2."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:20:47",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:53:04",
+                        "by":  "mapper",
+                        "detail":  "8 residual lines ruled, 0 rejected. New DB rows returned: Spaghetti Squash, Hickory Smoked Bacon, Spinach, Greek Yogurt, Mozzarella Cheese, Fresh Basil (the chicken breast row is shared with honey-balsamic-chicken-tenders). Bacon and both chicken cuts were the only foods I spent open-web label reads on."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:53:08",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "waiting on: mozzarella cheese"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:58:44",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

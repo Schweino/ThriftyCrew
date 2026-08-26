@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-and-broccoli-pasta-bake",
+    "title":  "Chicken and Broccoli Pasta Bake",
+    "source_url":  "https://thecozycook.com/chicken-and-broccoli-pasta-bake/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:28",
+    "updated":  "2026-08-26T04:22:28",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy cheddar/parmesan chicken + broccoli + pasta oven bake is the same dinner as in-flight chicken-broccoli-ziti (chicken, bake, pasta, cheese, broccoli — four axes); fusilli vs ziti is not a distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:28",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/chicken-and-broccoli-pasta-bake/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:22:28",
+                        "by":  "decider",
+                        "detail":  "Creamy cheddar/parmesan chicken + broccoli + pasta oven bake is the same dinner as in-flight chicken-broccoli-ziti (chicken, bake, pasta, cheese, broccoli — four axes); fusilli vs ziti is not a distinguishing plate."
+                    }
+                ]
+}

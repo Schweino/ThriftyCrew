@@ -1,0 +1,486 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T04:48:19",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "eye of round roast",
+   "state": "MATCHES",
+   "term_used": "eye of round roast",
+   "attempts": [
+    {
+     "term": "eye of round roast",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Hormel Top Round Roast Beef",
+     "price": 14.99,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388901-top-round-roast-beef"
+    },
+    {
+     "item": "USDA Choice Boneless Chuck Roast",
+     "price": 23.64,
+     "size": "$7.88 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386797-usda-choice-boneless-chuck-roast-1-each"
+    },
+    {
+     "item": "USDA Choice Sirloin Tip Roast",
+     "price": 23.97,
+     "size": "$7.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314266-usda-choice-sirloin-tip-roast-1-each"
+    },
+    {
+     "item": "USDA Choice Boneless Beef Rump Roast",
+     "price": 23.97,
+     "size": "$7.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388659-usda-choice-boneless-beef-rump-roast-1-each"
+    },
+    {
+     "item": "USDA Choice Boneless Ribeye Roast",
+     "price": 109.95,
+     "size": "$21.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89321656-usda-choice-boneless-ribeye-roast"
+    },
+    {
+     "item": "USDA Prime Boneless Ribeye Roast",
+     "price": 164.95,
+     "size": "$32.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89324190-usda-prime-boneless-ribeye-roast"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "cremini mushrooms",
+   "state": "MATCHES",
+   "term_used": "cremini mushrooms",
+   "attempts": [
+    {
+     "term": "cremini mushrooms",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Highline Whole Mini Bella Mushrooms",
+     "price": 2.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19168615-rakhara-baby-bella-crimini-mushroom-8-oz"
+    },
+    {
+     "item": "Highline Sliced Baby Bella Mushrooms",
+     "price": 2.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16636543-highline-sliced-baby-portobella-mushrooms-8-oz"
+    },
+    {
+     "item": "Highline Sliced White Mushrooms",
+     "price": 2.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18545165-produce-conventional-sliced-mushrooms-8-oz"
+    },
+    {
+     "item": "Highline Shiitake Mushrooms",
+     "price": 4.99,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20994878-highline-mushrooms-organic-sizzling-stir-fry-mushroom-medley-each"
+    },
+    {
+     "item": "Highline Whole White Mushrooms",
+     "price": 2.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18737949-produce-mushroom-broiler-8-oz"
+    },
+    {
+     "item": "Highline Mini Bella Caps",
+     "price": 4.99,
+     "size": "6 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20562453-highline-mushrooms-mini-bella-caps-mushrooms-6-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "turkey sausage",
+   "state": "MATCHES",
+   "term_used": "turkey sausage",
+   "attempts": [
+    {
+     "term": "turkey sausage",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Johnsonville Turkey Breakfast Links",
+     "price": 5.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/372325-johnsonville-sausage-fully-cooked-turkey-breakfast-sausage-12-count-45-grm"
+    },
+    {
+     "item": "Fareway Turkey Breakfast Sausage",
+     "price": 5.49,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24269938-fareway-breakfast-sausage-turkey-16-oz"
+    },
+    {
+     "item": "Johnsonville Fully Cooked Turkey Breakfast Sausage Patties",
+     "price": 5.99,
+     "size": "8 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18263434-johnsonville-turkey-sausage-patties-8-ea"
+    },
+    {
+     "item": "Old Wisconsin Smoked Sausage Honey Brown Sugar Turkey Bites",
+     "price": 4.98,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3246500-old-wisconsin-turkey-sausage-honey-brown-sugar-snack-bites-6-oz"
+    },
+    {
+     "item": "Old Wisconsin Sausage Sticks, Turkey, Honey Brown Sugar",
+     "price": 19.99,
+     "size": "28 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2800363-old-wisconsin-honey-brown-sugar-turkey-old-wisconsin-honey-brown-sugar-turkey-sausage-snack-sticks-28-oz"
+    },
+    {
+     "item": "Old Wisconsin Sausage Sticks, Turkey",
+     "price": 19.99,
+     "size": "28 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2800716-old-wisconsin-turkey-sausage-28-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "asiago cheese",
+   "state": "MATCHES",
+   "term_used": "asiago cheese",
+   "attempts": [
+    {
+     "term": "asiago cheese",
+     "state": "OK",
+     "hits": 1
+    }
+   ],
+   "hits": [
+    {
+     "item": "BelGioioso Asiago Wedge",
+     "price": 4.49,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1354318-belgioioso-asiago-cheese-wedge-5-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "green bell pepper",
+   "state": "MATCHES",
+   "term_used": "green bell pepper",
+   "attempts": [
+    {
+     "term": "green bell pepper",
+     "state": "OK",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Green Bell Pepper",
+     "price": 1.17,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each"
+    },
+    {
+     "item": "Fareway Diced Green Peppers",
+     "price": 1.98,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278117-fareway-green-peppers-diced-10-oz"
+    },
+    {
+     "item": "Green, Red & Yellow Peppers",
+     "price": 4.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89326993-green-red-yellow-peppers"
+    },
+    {
+     "item": "Red Bell Pepper",
+     "price": 1.5,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+    },
+    {
+     "item": "Sweet Onion",
+     "price": 0.96,
+     "size": "$1.28 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16516452-sweet-onion-1-lb"
+    },
+    {
+     "item": "Green Onions (Scallions)",
+     "price": 0.99,
+     "size": "1 bunch",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+    },
+    {
+     "item": "Cilantro",
+     "price": 1.49,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+    },
+    {
+     "item": "Orange Bell Pepper",
+     "price": 1.5,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2750749-orange-bell-pepper-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "red onion",
+   "state": "MATCHES",
+   "term_used": "red onion",
+   "attempts": [
+    {
+     "term": "red onion",
+     "state": "OK",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Red Onion",
+     "price": 1.11,
+     "size": "$1.48 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+    },
+    {
+     "item": "Crazy Fresh Red Onion Diced",
+     "price": 2.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19269233-crazy-fresh-diced-red-onion-each"
+    },
+    {
+     "item": "Mezzetta Pickled Red Onions",
+     "price": 5.97,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27276229-mezzetta-pickled-red-onions-16-fl-oz"
+    },
+    {
+     "item": "Litehouse Herb, Freeze Dried Red Onion",
+     "price": 4.99,
+     "size": "0.6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151495-litehouse-freeze-dried-red-onion-0-35-oz"
+    },
+    {
+     "item": "NatureSweet Cherubs Tomatoes",
+     "price": 3.49,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz"
+    },
+    {
+     "item": "Radishes Fresh, Bag",
+     "price": 1.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43373-for-you-radishes-fresh-bag-16-oz"
+    },
+    {
+     "item": "Red Bell Pepper",
+     "price": 1.5,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+    },
+    {
+     "item": "English Seedless Cucumber",
+     "price": 1.5,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614423-english-seedless-cucumber-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "cube steak",
+   "state": "MATCHES",
+   "term_used": "cube steak",
+   "attempts": [
+    {
+     "term": "cube steak",
+     "state": "OK",
+     "hits": 52
+    }
+   ],
+   "hits": [
+    {
+     "item": "USDA Choice Cube Steak",
+     "price": 4.5,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387249-usda-choice-cube-steak"
+    },
+    {
+     "item": "McCormick® GRILL MATES Montreal Steak Seasoning",
+     "price": 2.49,
+     "size": "3.4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87680-mccormick-grill-mates-montreal-steak-seasoning-3-4-oz"
+    },
+    {
+     "item": "USDA Choice Boneless Chuck Eye Steak",
+     "price": 11.24,
+     "size": "$14.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388338-usda-choice-boneless-chuck-eye-steak"
+    },
+    {
+     "item": "Fareway Meat Market Organic Steak Seasoning",
+     "price": 6.99,
+     "size": "9.77 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/111118160-fareway-meat-market-organic-steak-seasoning-9-77-oz"
+    },
+    {
+     "item": "USDA Choice Bacon Wrapped London Broils",
+     "price": 4.5,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386209-usda-choice-bacon-wrapped-london-broil-8-oz"
+    },
+    {
+     "item": "A.1. Original Steak Sauce",
+     "price": 5.48,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16656995-a1-original-steak-sauce-10-oz"
+    },
+    {
+     "item": "McCormick Spicy Montreal Steak Seasoning",
+     "price": 2.49,
+     "size": "3.12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87682-mccormick-grill-mates-spicy-montreal-steak-seasoning-3-12-oz"
+    },
+    {
+     "item": "USDA Choice Top Of Iowa Sirloin Steak",
+     "price": 16.24,
+     "size": "$12.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386604-usda-choice-top-of-iowa-sirloin-steak"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "seasoned salt",
+   "state": "MATCHES",
+   "term_used": "seasoned salt",
+   "attempts": [
+    {
+     "term": "seasoned salt",
+     "state": "OK",
+     "hits": 51
+    }
+   ],
+   "hits": [
+    {
+     "item": "LAWRY'S Economy Size Seasoned Salt",
+     "price": 4.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87708-lawry-s-economy-size-seasoned-salt-16-oz"
+    },
+    {
+     "item": "LAWRY'S Seasoned Salt",
+     "price": 3.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87703-lawry-s-seasoned-salt-8-oz"
+    },
+    {
+     "item": "Morton Seasoned Salt",
+     "price": 3.18,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41422-morton-season-all-seasoned-salt-blend-of-salt-and-savory-spices-for-bbq-grilling-and-potatoes-8-oz-canister-8-oz"
+    },
+    {
+     "item": "Lawry's® 25% Less Sodium Seasoned Salt",
+     "price": 3.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41215-lawry-s-25-less-sodium-seasoned-salt-8-oz"
+    },
+    {
+     "item": "Badia Spices All Purpose Seasoned Salt",
+     "price": 3.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3303248-badia-spices-all-purpose-seasoned-salt-16-0-oz"
+    },
+    {
+     "item": "Morton Iodized Salt",
+     "price": 1.88,
+     "size": "26 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028-morton-iodized-salt-26-ounce-26-oz"
+    },
+    {
+     "item": "Kinder's The Blend Salt, Pepper & Garlic Seasoning",
+     "price": 7.98,
+     "size": "14.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/33778175-kinder-s-the-blend-seasoning-6-ct"
+    },
+    {
+     "item": "Tony Chachere's Creole Seasoning, Original",
+     "price": 2.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41470-tony-chachere-s-creole-seasoning-original-8-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

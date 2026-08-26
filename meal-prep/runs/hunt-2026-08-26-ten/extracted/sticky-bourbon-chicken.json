@@ -1,0 +1,157 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Sticky Bourbon Chicken",
+  "source_url": "https://www.spendwithpennies.com/sticky-bourbon-chicken/",
+  "servings": 4,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 pounds boneless skinless chicken thighs",
+      "item": "boneless skinless chicken thighs",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup less sodium soy sauce",
+      "item": "less sodium soy sauce",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup bourbon",
+      "item": "bourbon",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup apple juice",
+      "item": "apple juice",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup dark brown sugar",
+      "item": "dark brown sugar",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon minced garlic",
+      "item": "minced garlic",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon grated fresh ginger",
+      "item": "fresh ginger",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "grated",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon rice wine vinegar",
+      "item": "rice wine vinegar",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon red pepper flakes",
+      "item": "red pepper flakes",
+      "qty": "½",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup water",
+      "item": "water",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon cornstarch",
+      "item": "cornstarch",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon cold water",
+      "item": "water",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "cold",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 green onions (thinly sliced, green tops only)",
+      "item": "green onions",
+      "qty": "2",
+      "unit": null,
+      "prep": "thinly sliced, green tops only",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Trim off any extra fat on the chicken thighs and cut into 1-inch chunks.",
+    "In a medium-sized mixing bowl whisk together soy sauce, bourbon, apple juice, dark brown sugar, grated garlic, grated ginger, rice wine vinegar, red pepper flakes, and water.",
+    "Heat olive oil over medium-high heat and cook in batches until browned and mostly cooked through.",
+    "Pour the sauce mixture into the skillet with the chicken and simmer for 15 minutes. This will help cook off the alcohol in the bourbon and fully cook the chicken throughout.",
+    "In a small bowl whisk together the cornstarch and the cold water. Add to mixture and cook until the sauce has thickened and coats the chicken fully.",
+    "Stir in green onion tops and serve over rice."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-cordon-bleu",
+    "title":  "Chicken Cordon Bleu",
+    "source_url":  "https://www.wellplated.com/baked-chicken-cordon-bleu/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:26:16",
+    "updated":  "2026-08-26T04:26:16",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ham-and-gruyere breaded baked chicken cordon bleu; same dinner identity as live chicken-cordon-bleu-casserole (turkey cordon bleu casserole also live, and near-identical easy-chicken-cordon-bleu already rejected as its dupe), bge 0.95.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:26:16",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/baked-chicken-cordon-bleu/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:26:16",
+                        "by":  "decider",
+                        "detail":  "Ham-and-gruyere breaded baked chicken cordon bleu; same dinner identity as live chicken-cordon-bleu-casserole (turkey cordon bleu casserole also live, and near-identical easy-chicken-cordon-bleu already rejected as its dupe), bge 0.95."
+                    }
+                ]
+}

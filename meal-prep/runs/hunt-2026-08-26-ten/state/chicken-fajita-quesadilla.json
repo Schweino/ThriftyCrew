@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fajita-quesadilla",
+    "title":  "Chicken Fajita Quesadilla",
+    "source_url":  "https://www.isabeleats.com/chicken-fajita-quesadilla/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:31",
+    "updated":  "2026-08-26T04:22:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken fajita filling (chili/cumin chicken + peppers/onion) folded in tortillas with cheese is the same fajita-chicken identity as live creamy-chicken-fajita-burrito; quesadilla vs burrito is a format nuance and Tex-Mex chicken is already crowded (fajita burrito + fajita rice bowl live).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:31",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/chicken-fajita-quesadilla/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:22:31",
+                        "by":  "decider",
+                        "detail":  "Chicken fajita filling (chili/cumin chicken + peppers/onion) folded in tortillas with cheese is the same fajita-chicken identity as live creamy-chicken-fajita-burrito; quesadilla vs burrito is a format nuance and Tex-Mex chicken is already crowded (fajita burrito + fajita rice bowl live)."
+                    }
+                ]
+}

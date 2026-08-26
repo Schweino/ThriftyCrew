@@ -1,0 +1,83 @@
+{
+ "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish",
+ "lines": [
+  {
+   "raw": "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+   "buy": "about 12 1/2 lb whole chicken (3 birds, roughly 4 lb each)",
+   "grams_source": 1650,
+   "notes": "Range midpoint of 1.5 - 1.8 kg, as purchased with bone and skin."
+  },
+  {
+   "raw": "2 tsp salt ((plus more to taste))",
+   "buy": "2 tbsp plus 1 tsp salt, plus more to taste"
+  },
+  {
+   "raw": "Black pepper",
+   "buy": "2 tbsp black pepper, to taste"
+  },
+  {
+   "raw": "2 tbsp olive oil",
+   "buy": "7 tbsp olive oil"
+  },
+  {
+   "raw": "1/2 stick cinnamon",
+   "buy": "1 3/4 tsp ground cinnamon (or 1 3/4 cinnamon sticks)"
+  },
+  {
+   "raw": "1/4 cup loosely packed fresh sage leaves",
+   "buy": "7/8 cup loosely packed fresh sage leaves",
+   "grams_source": 6
+  },
+  {
+   "raw": "2 lemons (, zest only (avoid grating the pith which is bitter))",
+   "buy": "7 lemons, zest only (avoid the bitter pith)",
+   "grams_source": 116,
+   "notes": "Whole lemons are bought even though only the zest goes in, so the purchased weight is stated."
+  },
+  {
+   "raw": "10 cloves of garlic (, whole, skin on)",
+   "buy": "35 cloves garlic, whole and unpeeled"
+  },
+  {
+   "raw": "2 1/4 cups milk ((I used low fat))",
+   "buy": "7 7/8 cups low fat milk"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+   "term": "whole chicken",
+   "canon_item": "Whole Chicken",
+   "bid": "whole-chicken",
+   "decision": "mapped",
+   "grams_source": 1650,
+   "evidence": "whole-chicken is a live board id at 7 of 7 stores, so a REUSE and not a proposal. Rotisserie chicken is sold cooked at a different price class, so that bridge is refused."
+  },
+  {
+   "raw": "1/4 cup loosely packed fresh sage leaves",
+   "term": "fresh sage leaves",
+   "canon_item": "Fresh Sage",
+   "bid": "fresh-sage",
+   "decision": "mapped",
+   "grams_source": 6,
+   "evidence": "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure."
+  },
+  {
+   "raw": "2 lemons (, zest only (avoid grating the pith which is bitter))",
+   "term": "lemons",
+   "canon_item": "Lemons",
+   "bid": "lemons",
+   "decision": "mapped",
+   "grams_source": 116,
+   "evidence": "lemons is a live board id (5 of 7), a reuse the vocabulary has no name row for; 2 medium lemons at 58 g, stated as purchased because zest-only still buys the whole fruit."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": ""
+}

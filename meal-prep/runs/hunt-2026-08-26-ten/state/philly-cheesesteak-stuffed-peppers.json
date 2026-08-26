@@ -1,0 +1,31 @@
+{
+    "slug":  "philly-cheesesteak-stuffed-peppers",
+    "title":  "Philly Cheesesteak Stuffed Peppers",
+    "source_url":  "https://thecozycook.com/philly-cheesesteak-stuffed-peppers/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:24",
+    "updated":  "2026-08-26T04:15:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Identical dish (same slug, all four name words shared) already accepted and QA-passed in open run hunt-2026-08-15-lowcarb-100 as an in-flight recipe; shipping it would double the jalapeno-popper collision class.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:24",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/philly-cheesesteak-stuffed-peppers/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:15:25",
+                        "by":  "decider",
+                        "detail":  "Identical dish (same slug, all four name words shared) already accepted and QA-passed in open run hunt-2026-08-15-lowcarb-100 as an in-flight recipe; shipping it would double the jalapeno-popper collision class."
+                    }
+                ]
+}

@@ -1,0 +1,208 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T05:15:21",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "grape tomatoes",
+   "state": "MATCHES",
+   "term_used": "grape tomatoes",
+   "attempts": [
+    {
+     "term": "grape tomatoes",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Red Grape Tomato",
+     "price": 2.49,
+     "size": "1 pint container",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16502137-red-grape-tomato-1-pt"
+    },
+    {
+     "item": "NatureSweet Cherubs Tomatoes",
+     "price": 3.49,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz"
+    },
+    {
+     "item": "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes",
+     "price": 7.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2720020-naturesweet-cherubs-salad-tomatoes-24-oz"
+    },
+    {
+     "item": "NatureSweet Golden Cherubs",
+     "price": 3.49,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21826459-naturesweet-tomatoes-comets-10-oz"
+    },
+    {
+     "item": "On The Vine Blended Cherry Tomatoes",
+     "price": 4.99,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74490192-cheery-tomatoes-on-the-vine-mucci-farms"
+    },
+    {
+     "item": "NatureSweet Glorys Cherry Tomatoes",
+     "price": 3.49,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22143008-naturesweet-tomatoes-fresh-ingredient-10-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "baby potatoes",
+   "state": "MATCHES",
+   "term_used": "baby potatoes",
+   "attempts": [
+    {
+     "term": "baby potatoes",
+     "state": "OK",
+     "hits": 47
+    }
+   ],
+   "hits": [
+    {
+     "item": "Summertime Farms Baby Gold Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+    },
+    {
+     "item": "The Little Potato Co. Little Duos",
+     "price": 5.99,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
+    },
+    {
+     "item": "Summertime Farms Baby Red Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+    },
+    {
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 4.99,
+     "size": "1.5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
+    },
+    {
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 5.99,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
+    },
+    {
+     "item": "The Little Potato Co. Little Reds",
+     "price": 4.99,
+     "size": "1.5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152459-the-little-potato-company-potatoes-fresh-creamer-blushing-belle-1-5-lb"
+    },
+    {
+     "item": "Russet Potato",
+     "price": 0.74,
+     "size": "$1.49 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb"
+    },
+    {
+     "item": "The Little Potato Co. A Little Homestyle Ranch",
+     "price": 4.99,
+     "size": "1 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/114641332-the-little-potato-company-homestyle-ranch-microwave-ready-baby-potatoes-1-lb"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "fresh mozzarella",
+   "state": "MATCHES",
+   "term_used": "fresh mozzarella",
+   "attempts": [
+    {
+     "term": "fresh mozzarella",
+     "state": "OK",
+     "hits": 33
+    }
+   ],
+   "hits": [
+    {
+     "item": "BelGioioso Fresh Mozzarella Sliced",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Pearls",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+    },
+    {
+     "item": "Tillamook Whole Milk Mozzarella Cheese Snacks 10 Count",
+     "price": 3.99,
+     "size": "10 x 0.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38311478-tilla-whl-mlk-mozz-snack-bar"
+    },
+    {
+     "item": "Crystal Farms Shredded Mozzarella Cheese",
+     "price": 2.67,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/301336-crystal-farms-shredded-mozzarella-cheese-8-0-oz"
+    },
+    {
+     "item": "Tillamook Whole Milk Mozzarella Farmstyle Shreds",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/34336458-whole-milk-mozzarella-cheese-shreds-8-oz"
+    },
+    {
+     "item": "Italia Low-Moisture Part Skim Mozzarella String Cheese Family Pack",
+     "price": 9.99,
+     "size": "20 x 1 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19041190-italia-brand-cheese-string-cheese-1-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

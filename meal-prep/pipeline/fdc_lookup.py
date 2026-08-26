@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import urllib.parse
 import urllib.request
 
@@ -55,6 +56,66 @@ DEFAULT_TYPES = ("SR Legacy", "Foundation", "Branded")
 
 # See atwater_check: below this, a ratio says nothing.
 ABS_TOLERANCE_KCAL = 20.0
+
+# ETHANOL IS 7 kcal/g AND IT IS NONE OF PROTEIN, CARB OR FAT, so 4/4/9 cannot see it. Measured on
+# the live DB 2026-08-26: Red Wine states 85 cal against 0.1 P / 2.6 C / 0 F, which computes 11 - an
+# 87% gap on a row that is exactly right. Dry White Wine (82 vs 11) and Marsala (152 vs 48) are the
+# same arithmetic, and the run they blocked published nothing. This is the SAME SHAPE as the fibre
+# term already above: a real energy carrier the general factors omit, credited as a fourth term.
+KCAL_PER_G_ALCOHOL = 7.0
+
+# WHAT THE FOURTH TERM IS NOT: an exemption. Crediting the residual to ethanol with no further test
+# would pass ANY four numbers for anything named "wine", which is the gate turned off for a whole
+# class of foods. So the residual has to land where that class's ethanol actually lands. The bands
+# are grams of ethanol per 100 g of the food AS SOLD - ABV is by VOLUME, so a 12.5% ABV wine carries
+# 0.125 * 0.789 / 0.99 = ~10 g per 100 g, not 12.5. Bands are deliberately wider than the real
+# spread; they exist to refuse a fabrication, not to grade a vintage.
+#   Checked against the estate's own rows the day this was written:
+#     Red Wine        residual 74.0 -> 10.6 g/100 g   (12.5% ABV table wine is ~10)
+#     Dry White Wine  residual 71.0 -> 10.1 g/100 g   (11.5% ABV is ~9.2)
+#     Marsala Wine    residual 104.4 -> 14.9 g/100 g  (18% ABV fortified is ~14.2)
+#     USDA 80-proof spirits  231 -> 33.0 g/100 g      (40% ABV is ~33)
+#     USDA regular beer       27 -> 3.9 g/100 g       (4.5% ABV is ~3.6)
+#     USDA vanilla extract   236.6 -> 33.8 g/100 g    (35% ABV is ~30)
+ALCOHOL_BANDS = (
+    # (class name, (min g/100 g, max g/100 g))
+    ("spirit",          (22.0, 52.0)),
+    ("extract",         (22.0, 95.0)),
+    ("fortified wine",  (8.0,  24.0)),
+    ("wine",            (2.0,  18.0)),
+    ("beer",            (0.5,  12.0)),
+)
+
+# A NAME IS THE ONLY SIGNAL A ROW CARRIES, so the matcher is explicit on both sides. The exclusions
+# are not tidiness: the live DB holds Red Wine Vinegar, White Wine Vinegar and Rice Vinegar, all of
+# which say "wine" and none of which carry drinkable ethanol - a vinegar handed the wine band would
+# be a row this check waved through on a word.
+_ALCOHOL_NOT = re.compile(
+    r"(?i)\b(vinegar|root beer|ginger beer|birch beer|non[- ]?alcoholic|alcohol[- ]?free|"
+    r"de[- ]?alcoholi[sz]ed|0\.0%|near beer)\b")
+_ALCOHOL_CLASS = (
+    ("spirit", re.compile(
+        r"(?i)\b(vodka|gin|rum|whisk(?:e)?y|bourbon|tequila|brandy|cognac|scotch|"
+        r"grappa|schnapps|absinthe|mezcal|liqueur|triple sec|kirsch)\b")),
+    ("extract", re.compile(r"(?i)\bextract\b")),
+    ("fortified wine", re.compile(
+        r"(?i)\b(marsala|sherry|port wine|madeira|vermouth|fortified wine|dessert wine)\b")),
+    ("wine", re.compile(r"(?i)\b(wine|sake|saké|mirin|shaoxing|prosecco|champagne|riesling|"
+                        r"chardonnay|merlot|cabernet|pinot|sangria)\b")),
+    ("beer", re.compile(r"(?i)\b(beer|ale|lager|stout|porter|pilsner|hard cider|hard seltzer)\b")),
+)
+
+
+def alcohol_class(name):
+    """The class an item name declares, or None. Name-only by design - a food-DB row carries no ABV
+    field, and inventing one from the macros would be the circularity this check exists to break."""
+    n = str(name or "")
+    if not n.strip() or _ALCOHOL_NOT.search(n):
+        return None
+    for cls, rx in _ALCOHOL_CLASS:
+        if rx.search(n):
+            return cls
+    return None
 
 
 def api_key():
@@ -218,10 +279,62 @@ def atwater_check(macros, tolerance=0.15):
         return {"ok": False, "computed": round(computed, 1), "drift": None,
                 "why": "stated 0 kcal but the macros compute %0.0f - one of them is wrong" % computed}
     drift = diff / float(cal)
-    return {"ok": drift <= tolerance, "computed": round(computed, 1), "drift": round(drift, 3),
-            "why": "" if drift <= tolerance else
-                   "Atwater %0.0f vs stated %0.0f - a %.0f%% gap, so these four numbers do not "
+    if drift <= tolerance:
+        return {"ok": True, "computed": round(computed, 1), "drift": round(drift, 3), "why": ""}
+    # THE FOURTH TERM, AND IT IS TRIED ONLY AFTER THE ORDINARY CHECK HAS ALREADY FAILED. A row whose
+    # 4/4/9 reconciles never reaches here, so nothing that passes today changes answer.
+    alc = _alcohol_reconciles(macros, computed, cal)
+    if alc is not None:
+        return alc
+    return {"ok": False, "computed": round(computed, 1), "drift": round(drift, 3),
+            "why": "Atwater %0.0f vs stated %0.0f - a %.0f%% gap, so these four numbers do not "
                    "describe one food" % (computed, cal, drift * 100)}
+
+
+def _alcohol_reconciles(macros, computed, cal):
+    """The ethanol term. Returns a verdict dict when the row is alcohol-bearing, else None so the
+    caller falls through to the ordinary refusal.
+
+    A VERDICT, NOT A PASS. Three separate things have to hold, and any one of them failing REFUSES
+    the row with a reason that names the number - because "we could not check it" and "we checked it
+    and it is wrong" are different sentences and a person rules on them differently.
+    """
+    cls = alcohol_class(macros.get("item"))
+    if cls is None:
+        return None
+    band = dict(ALCOHOL_BANDS).get(cls)
+    residual = float(cal) - float(computed)
+    # ETHANOL ONLY ADDS CALORIES. An Atwater figure ABOVE the stated energy cannot be explained by an
+    # energy carrier the sum left out, so this direction is a real disagreement in an alcoholic food
+    # exactly as it is in any other, and it is refused with its own sentence rather than the generic
+    # one - the generic one would send a person looking for the wrong error.
+    if residual <= 0:
+        return {"ok": False, "computed": round(computed, 1), "drift": None,
+                "why": "Atwater %0.0f OVERSHOOTS the stated %0.0f on a %s row. Alcohol can only ADD "
+                       "calories, so ethanol cannot explain this gap and the four numbers still do "
+                       "not describe one food" % (computed, cal, cls)}
+    grams = macros.get("serving_grams")
+    if not isinstance(grams, (int, float)) or grams <= 0:
+        return {"ok": False, "computed": round(computed, 1), "drift": None,
+                "why": "this %s row leaves %0.0f kcal unaccounted, which is the shape of alcohol, but "
+                       "it carries no usable serving_grams so the implied ethanol cannot be put on a "
+                       "per-100 g basis and nothing can rule on it" % (cls, residual)}
+    per100 = (residual / KCAL_PER_G_ALCOHOL) * (100.0 / float(grams))
+    lo, hi = band
+    if lo <= per100 <= hi:
+        return {"ok": True, "computed": round(computed, 1), "drift": None,
+                "alcohol_class": cls, "alcohol_g_per_100g": round(per100, 1),
+                "why": "",
+                "note": "the %0.0f kcal 4/4/9 leaves unaccounted implies %.1f g ethanol per 100 g, "
+                        "which is inside the %s band %.1f-%.1f - the row reconciles once alcohol is "
+                        "credited at %g kcal/g"
+                        % (residual, per100, cls, lo, hi, KCAL_PER_G_ALCOHOL)}
+    return {"ok": False, "computed": round(computed, 1), "drift": None,
+            "alcohol_class": cls, "alcohol_g_per_100g": round(per100, 1),
+            "why": "this %s row leaves %0.0f kcal unaccounted, which would be %.1f g ethanol per "
+                   "100 g - OUTSIDE the %.1f-%.1f g band a %s actually carries, so alcohol does not "
+                   "explain the gap and these four numbers do not describe one food"
+                   % (cls, residual, per100, lo, hi, cls)}
 
 
 CACHE_FILE = os.path.join(MP, "db", "fdc-cache.json")
@@ -420,6 +533,65 @@ def selftest():
     c2 = atwater_check({"calories": 36.0, "protein_g": 2.97, "carbs_g": None, "fat_g": 0.79})
     T("MUST FIRE  a row missing a macro is not silently Atwater-passed",
       not c2["ok"], json.dumps(c2))
+
+    # ---- ETHANOL, THE FOURTH TERM (2026-08-26) ---------------------------------------------------
+    # WHAT THIS COST BEFORE IT EXISTED: on run hunt-2026-08-26-ten the Dry White Wine and Dry Red
+    # Wine rows were refused at 87% gaps and the recipes carrying them went STUCK at the write lane.
+    # Both rows were exactly right. Every fixture below uses REAL numbers off the live food DB or
+    # USDA SR, so a band that drifts away from the foods it describes fails here.
+    wine = atwater_check({"item": "Dry Red Wine", "serving_grams": 100, "calories": 85,
+                          "protein_g": 0.1, "carbs_g": 2.6, "fat_g": 0})
+    T("MUST FIRE  a wine row RECONCILES once ethanol is credited at 7 kcal/g - 4/4/9 computes 11 "
+      "against a stated 85 and the row is correct",
+      wine["ok"] and 9.0 <= wine.get("alcohol_g_per_100g", 0) <= 12.0, json.dumps(wine))
+    for name, grams, cal, pro, carb, fat, lo, hi in (
+            ("Dry White Wine",  100, 82,  0.1,  2.6,   0,    9.0, 11.5),   # live DB row
+            ("Marsala Wine",    100, 152, 0.2,  11.7,  0,    13.0, 17.0),  # live DB row, fortified
+            ("Bourbon",         100, 231, 0,    0,     0,    30.0, 36.0),  # USDA 80-proof spirits
+            ("Regular Beer",    100, 43,  0.46, 3.55,  0,    3.0, 5.0),    # USDA beer, regular
+            ("Vanilla Extract", 100, 288, 0.06, 12.65, 0.06, 30.0, 37.0)): # USDA vanilla extract
+        r = atwater_check({"item": name, "serving_grams": grams, "calories": cal,
+                           "protein_g": pro, "carbs_g": carb, "fat_g": fat})
+        T("MUST FIRE  %s reconciles on the ethanol term and lands in its own class band" % name,
+          r["ok"] and lo <= r.get("alcohol_g_per_100g", 0) <= hi, json.dumps(r))
+    # THE BAND IS THE GATE, AND THIS IS THE FIXTURE THAT PROVES IT IS STILL ONE. A row named "wine"
+    # does not get a pass; it gets an ETHANOL BUDGET, and a fabrication overruns it. 600 kcal of wine
+    # implies 84 g of ethanol in 100 g of liquid, which is stronger than any drinkable thing.
+    fake = atwater_check({"item": "Dry Red Wine", "serving_grams": 100, "calories": 600,
+                          "protein_g": 0.1, "carbs_g": 2.6, "fat_g": 0})
+    T("MUST FIRE  a FABRICATED wine row is still REFUSED - naming a food 'wine' buys an ethanol "
+      "budget, never an exemption",
+      not fake["ok"] and "OUTSIDE" in fake["why"], json.dumps(fake))
+    over = atwater_check({"item": "Chardonnay", "serving_grams": 100, "calories": 5,
+                          "protein_g": 0.1, "carbs_g": 20.0, "fat_g": 0})
+    T("MUST FIRE  an Atwater figure ABOVE the stated calories is refused on an alcoholic row too - "
+      "ethanol only ADDS calories, so it cannot explain that direction",
+      not over["ok"] and "OVERSHOOT" in over["why"], json.dumps(over))
+    nog = atwater_check({"item": "Dry Red Wine", "calories": 85, "protein_g": 0.1,
+                         "carbs_g": 2.6, "fat_g": 0})
+    T("MUST FIRE  an alcoholic row with no serving_grams is REFUSED, not waved through - the implied "
+      "ethanol cannot be put on a per-100 g basis and nothing can rule on it",
+      not nog["ok"] and "serving_grams" in nog["why"], json.dumps(nog))
+    # MUST FIRE: the live DB carries Red Wine Vinegar, White Wine Vinegar and Rice Vinegar. A matcher
+    # that reads the word "wine" would hand all three an ethanol budget they have no claim to.
+    T("MUST FIRE  vinegar is NOT alcohol-bearing however much its name says wine",
+      alcohol_class("Red Wine Vinegar") is None and alcohol_class("White Wine Vinegar") is None,
+      "red=%s white=%s" % (alcohol_class("Red Wine Vinegar"), alcohol_class("White Wine Vinegar")))
+    T("MUST FIRE  root beer and a non-alcoholic wine get no ethanol budget either",
+      alcohol_class("Root Beer") is None and alcohol_class("Non-Alcoholic Wine") is None,
+      "rootbeer=%s na=%s" % (alcohol_class("Root Beer"), alcohol_class("Non-Alcoholic Wine")))
+    # CLEAN TWIN: the whole ethanol road is only reachable AFTER the ordinary check has failed, so
+    # nothing that passes today can change answer because a name matched.
+    T("CLEAN TWIN a NON-alcoholic row is untouched by any of this - it never reaches the alcohol road",
+      atwater_check({"item": "Chicken Breast", "serving_grams": 100, "calories": 165,
+                     "protein_g": 31.0, "carbs_g": 0, "fat_g": 3.6})["ok"], "chicken breast")
+    T("MUST FIRE  ...and a non-alcoholic row whose numbers genuinely disagree is refused exactly as "
+      "before, with no ethanol sentence in its reason",
+      (lambda r: not r["ok"] and "ethanol" not in r["why"])(
+          atwater_check({"item": "Ground Cinnamon", "serving_grams": 100, "calories": 20,
+                         "protein_g": 40.0, "carbs_g": 0, "fat_g": 0})),
+      json.dumps(atwater_check({"item": "Ground Cinnamon", "serving_grams": 100, "calories": 20,
+                                "protein_g": 40.0, "carbs_g": 0, "fat_g": 0})))
     # ---- THE CACHE -------------------------------------------------------------------------------
     import tempfile                                               # noqa: PLC0415
     tmp = os.path.join(tempfile.mkdtemp(prefix="fdccache-"), "c.json")

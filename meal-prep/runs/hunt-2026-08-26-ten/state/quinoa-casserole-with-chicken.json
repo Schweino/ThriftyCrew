@@ -1,0 +1,80 @@
+{
+    "slug":  "quinoa-casserole-with-chicken",
+    "title":  "Quinoa Casserole with Chicken",
+    "source_url":  "https://www.nospoonnecessary.com/mexican-chicken-quinoa-casserole/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:59",
+    "updated":  "2026-08-26T04:27:23",
+    "terms":  [
+                  {
+                      "term":  "rotisserie chicken",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "roasted corn kernels",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "monterey jack cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Frozen Corn Kernels",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Garlic Powder, Cumin, and Chili Powder",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Optional Garnishes",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Frozen Corn Kernels",
+                      "Garlic Powder, Cumin, and Chili Powder",
+                      "Optional Garnishes"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:59",
+                        "by":  "harvest",
+                        "detail":  "https://www.nospoonnecessary.com/mexican-chicken-quinoa-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:12:59",
+                        "by":  "decider",
+                        "detail":  "Mexican chicken-quinoa casserole (salsa verde, green chiles, black beans, corn, jack cheese) widens the catalog\u0027s casserole spread beyond its American poppyseed/cordon-bleu/pot-pie set, uses a novel quinoa base, no live or in-flight Mexican-casserole collision, verified 489cal/35carb."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:15:06",
+                        "by":  "extractor",
+                        "detail":  "rung 3 (Claude), verification recorded"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:21:57",
+                        "by":  "mapper",
+                        "detail":  "COUNTS: 8 residual lines ruled (5 mapped, 2 mapped-null, 1 not-purchased, 0 rejected), 3 settled lines carried through untouched, 11 buy strings written, 5 food-db rows returned, 2 foods deliberately returned WITHOUT a row, 0 new commodity proposals.\n\nLOUDEST ITEM - NO MACRO ROW FOR THE MAIN PROTEIN. I could not transcribe a printed label for Rotisserie Chicken and I am returning no row for it, pe"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:22:01",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:27:23",
+                        "by":  "derive",
+                        "detail":  "waiting on: Frozen Corn Kernels, Garlic Powder, Cumin, and Chili Powder, Optional Garnishes"
+                    }
+                ]
+}

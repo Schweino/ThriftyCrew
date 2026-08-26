@@ -1,0 +1,31 @@
+{
+    "slug":  "4-ingredient-chicken-rice-casserole",
+    "title":  "4 Ingredient Chicken \u0026 Rice Casserole",
+    "source_url":  "https://www.spendwithpennies.com/chicken-rice-casserole/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:28",
+    "updated":  "2026-08-26T04:15:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy chicken-and-rice cream-soup bake; same dinner as live poppy-seed-chicken-and-rice-casserole (word-overlap 30, chicken+rice+cream-soup casserole), the poppy-seed/Ritz garnish being the only differentiator there.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:28",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/chicken-rice-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:15:29",
+                        "by":  "decider",
+                        "detail":  "Creamy chicken-and-rice cream-soup bake; same dinner as live poppy-seed-chicken-and-rice-casserole (word-overlap 30, chicken+rice+cream-soup casserole), the poppy-seed/Ritz garnish being the only differentiator there."
+                    }
+                ]
+}

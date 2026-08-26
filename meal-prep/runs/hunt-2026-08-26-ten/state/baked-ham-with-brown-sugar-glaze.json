@@ -1,0 +1,58 @@
+{
+    "slug":  "baked-ham-with-brown-sugar-glaze",
+    "title":  "Baked Ham with Brown Sugar Glaze",
+    "source_url":  "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/",
+    "protein":  "pork",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:31",
+    "updated":  "2026-08-26T04:42:15",
+    "terms":  [
+                  {
+                      "term":  "spiral ham",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "spiral ham"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:31",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:15:31",
+                        "by":  "decider",
+                        "detail":  "Whole brown-sugar/pineapple/Dijon glazed spiral ham is a centerpiece format the catalog lacks (live ham dishes are fried rice and soup, not a baked ham); verified band, thrifty per-serving at 12 servings, no dupe."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:16:00",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:35:28",
+                        "by":  "mapper",
+                        "detail":  "1 residual line ruled: 1 mapped (through a new-id proposal). 1 rejection of a proposed bridge (deli-ham), recorded in the ruling. 1 food-db row returned. The extraction carries TWO identical raw lines \u00272 tablespoons Dijon mustard\u0027; I copied both verbatim rather than merging them, but flagging that the join key is not unique for this slug."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:36:34",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:42:15",
+                        "by":  "derive",
+                        "detail":  "waiting on: spiral ham"
+                    }
+                ]
+}

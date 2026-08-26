@@ -1,0 +1,263 @@
+﻿[
+    {
+        "term":  "eye of round roast",
+        "evidence":  "server probe, FULL ladder: \u0027eye of round roast\u0027=0 hits -\u003e \u0027eyeofroundroast\u0027=0 hits. search-verdict EMPTY, no candidates on any rung.",
+        "store":  "Baker\u0027s",
+        "state":  "not-carried"
+    },
+    {
+        "term":  "eye of round roast",
+        "evidence":  "server probe, FULL ladder: \u0027eye of round roast\u0027=1 hit -\u003e \u0027eyeofroundroast\u0027=0. search-verdict EMPTY; the lone rung-1 hit did not survive as a candidate and no eye-of-round roast appeared.",
+        "store":  "Family Fare",
+        "state":  "not-carried"
+    },
+    {
+        "term":  "eye of round roast",
+        "evidence":  "blocked - no browser in this session",
+        "store":  "Hy-Vee",
+        "state":  "blocked"
+    },
+    {
+        "term":  "eye of round roast",
+        "evidence":  "blocked - no browser in this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027eye of round\u0027 returns only Aldi \u0027Black Angus USDA Choice Beef Eye OF Round STEAK Per LB\u0027 \\.99/lb, which is a steak and not the roast. A capture miss is not not-carried.",
+        "store":  "Aldi",
+        "state":  "blocked"
+    },
+    {
+        "term":  "eye of round roast",
+        "evidence":  "driver rung 1 \u0027eye of round roast\u0027: all 6 priced Apollo rows visible and adjudicated - Hormel Top Round deli Roast Beef \\.99, Choice Boneless Chuck Roast \\.88/lb, Choice Sirloin Tip Roast \\.99/lb, Choice Boneless Rump Roast \\.99/lb, Choice Boneless Ribeye Roast \\.99/lb, Prime Boneless Ribeye Roast \\.99/lb. A full roast case listing with no eye of round roast in it; the term has no strippable qualifier and is 4 words, so no further rung applies.",
+        "store":  "Fareway",
+        "state":  "not-carried"
+    },
+    {
+        "store":  "Sam\u0027s Club",
+        "item":  "Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast",
+        "evidence":  "driver rung 1 \u0027eye of round roast\u0027, 23 hits: Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast, priced per pound, \\.01 (\\.24/lb). Exactly the cut, whole-muscle roast, in a form a cook buys for this recipe. Whole Eye of Round Cryovac \\.07 (\\.86/lb) also present as corroboration.",
+        "price":  30.01,
+        "term":  "eye of round roast",
+        "state":  "carried",
+        "size":  "priced per pound (\\$6.24/lb)"
+    },
+    {
+        "term":  "eye of round roast",
+        "evidence":  "blocked - no browser in this session",
+        "store":  "Walmart",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Baker\u0027s",
+        "item":  "Kroger Whole Baby Bella Mushrooms",
+        "evidence":  "server probe, ladder rung 3 \u0027mushrooms\u0027 (rungs 1-2 = 0 hits), 25 hits: Kroger Whole Baby Bella Mushrooms 8 oz \\.89. Baby bella IS cremini - same mushroom, common US retail name - and it is loose fresh whole mushrooms, the form this recipe buys.",
+        "price":  2.89,
+        "term":  "cremini mushrooms",
+        "state":  "carried",
+        "size":  "8 oz"
+    },
+    {
+        "term":  "cremini mushrooms",
+        "evidence":  "server probe laddered to \u0027mushrooms\u0027 with 25 hits, but only the top 8 are captured in the evidence file and all 8 are white/canned/button (Our Family white, sliced, pieces and stems). No cremini or baby bella in the visible slice, but 17 rows are unseen and I have no browser this session to read them, so absence is unproven. NOT not-carried.",
+        "store":  "Family Fare",
+        "state":  "blocked"
+    },
+    {
+        "term":  "cremini mushrooms",
+        "evidence":  "blocked - no browser in this session; checked disk - price-ingredient.ps1 -Name \u0027cremini mushrooms\u0027 maps to commodity \u0027mushrooms\u0027 and the Hy-Vee row is Highline Whole WHITE Mushrooms, not cremini. Capture miss, not not-carried.",
+        "store":  "Hy-Vee",
+        "state":  "blocked"
+    },
+    {
+        "term":  "cremini mushrooms",
+        "evidence":  "blocked - no browser in this session; checked disk - price-ingredient.ps1 -Name \u0027cremini mushrooms\u0027 returns Aldi Monterey White Mushrooms Sliced 8 OZ only, not cremini. Capture miss, not not-carried.",
+        "store":  "Aldi",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Fareway",
+        "item":  "Highline Whole Mini Bella Mushrooms",
+        "evidence":  "driver rung 1 \u0027cremini mushrooms\u0027, 6 rows: Highline Whole Mini Bella Mushrooms 8 oz \\.49, product URL slug \u0027rakhara-baby-bella-crimini-mushroom-8-oz\u0027 - the catalog itself names it crimini. Sliced Baby Bella 8 oz \\.49 also present.",
+        "price":  2.49,
+        "term":  "cremini mushrooms",
+        "state":  "carried",
+        "size":  "8 oz"
+    },
+    {
+        "term":  "cremini mushrooms",
+        "evidence":  "driver rung 1 returned 32 hits but only 8 are captured in the evidence file, and those 8 are mushroom SUPPLEMENTS, a pasta bowl, a salad kit, a Nintendo controller and Whole White Mushrooms 24 oz - none is cremini. 24 rows unseen and no browser this session, so absence is unproven. NOT not-carried.",
+        "store":  "Sam\u0027s Club",
+        "state":  "blocked"
+    },
+    {
+        "term":  "cremini mushrooms",
+        "evidence":  "blocked - no browser in this session",
+        "store":  "Walmart",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Baker\u0027s",
+        "item":  "Kroger Fully Cooked Turkey Sausage Patties",
+        "evidence":  "server probe rung 1 \u0027turkey sausage\u0027, 25 hits: Kroger Fully Cooked Turkey Sausage Patties 20 oz \\.49, top-relevance row. Plain turkey breakfast sausage, the ingredient itself.",
+        "price":  8.49,
+        "term":  "turkey sausage",
+        "state":  "carried",
+        "size":  "20 oz"
+    },
+    {
+        "store":  "Family Fare",
+        "item":  "Johnsonville Turkey Sausage, Smoked",
+        "evidence":  "server probe rung 1 \u0027turkey sausage\u0027, 11 hits: Johnsonville Turkey Sausage, Smoked 13.5 Oz \\.99. A rope of smoked turkey sausage, not a sandwich or a bowl.",
+        "price":  4.99,
+        "term":  "turkey sausage",
+        "state":  "carried",
+        "size":  "13.5 oz"
+    },
+    {
+        "store":  "Hy-Vee",
+        "item":  "Johnsonville Smoked Turkey Sausage, 6 Count",
+        "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027turkey sausage\u0027 returns Hy-Vee \u0027Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz\u0027 \\.96, captured 2026-08-21. That is the ingredient, not a frozen meal (the store\u0027s other row, a Healthy Choice lasagna bowl, was rejected).",
+        "price":  4.96,
+        "term":  "turkey sausage",
+        "state":  "carried",
+        "size":  "13.5 oz"
+    },
+    {
+        "term":  "turkey sausage",
+        "evidence":  "blocked - no browser in this session; checked disk - the only Aldi row is \u0027Simms Turkey Sausage Snack Sticks 8 OZ\u0027 \\.89, a shelf-stable snack stick and not sausage a cook would buy for this recipe. Capture miss, not not-carried.",
+        "store":  "Aldi",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Fareway",
+        "item":  "Fareway Turkey Breakfast Sausage",
+        "evidence":  "driver rung 1 \u0027turkey sausage\u0027, 6 rows: Fareway Turkey Breakfast Sausage 16 oz \\.49, the store\u0027s own bulk turkey breakfast sausage. Johnsonville Turkey Breakfast Links 12 ct \\.99 corroborates.",
+        "price":  5.49,
+        "term":  "turkey sausage",
+        "state":  "carried",
+        "size":  "16 oz"
+    },
+    {
+        "store":  "Sam\u0027s Club",
+        "item":  "Jimmy Dean Fully Cooked Turkey Sausage Patties",
+        "evidence":  "driver rung 1 \u0027turkey sausage\u0027, 26 hits: Jimmy Dean Fully Cooked Turkey Sausage Patties 24 ct \\.86 (\\.48/lb). Turkey sausage patties, not snack sticks or cheese bites (those rows were rejected).",
+        "price":  9.86,
+        "term":  "turkey sausage",
+        "state":  "carried",
+        "size":  "24 ct (\\$5.48/lb)"
+    },
+    {
+        "term":  "turkey sausage",
+        "evidence":  "blocked - no browser in this session",
+        "store":  "Walmart",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Baker\u0027s",
+        "item":  "Shredded Asiago Cheese",
+        "evidence":  "server probe rung 1 \u0027asiago cheese\u0027, 7 hits: Shredded Asiago Cheese 5 oz \\.49 and Cello Asiago Cheese Wedge 1 lb \\.49. Real asiago in both shredded and wedge form; the Brazi Bites bread and the mac-and-cheese rows were rejected as dishes flavoured with it.",
+        "price":  5.49,
+        "term":  "asiago cheese",
+        "state":  "carried",
+        "size":  "5 oz"
+    },
+    {
+        "store":  "Family Fare",
+        "item":  "Culinary Tours Cheese, Asiago",
+        "evidence":  "server probe rung 1 \u0027asiago cheese\u0027, 3 hits: Culinary Tours Cheese, Asiago 8 Oz \\.49 and BelGioioso Shredded Cheese, Asiago 5 Oz \\.49. Both are asiago itself.",
+        "price":  5.49,
+        "term":  "asiago cheese",
+        "state":  "carried",
+        "size":  "8 oz"
+    },
+    {
+        "term":  "asiago cheese",
+        "evidence":  "blocked - no browser in this session; checked disk - price-ingredient.ps1 -Name \u0027asiago\u0027 returns only Hy-Vee \u0027Briannas Home Style Asiago Caesar Dressing 12 fl oz\u0027, a salad dressing and not the cheese. Capture miss, not not-carried.",
+        "store":  "Hy-Vee",
+        "state":  "blocked"
+    },
+    {
+        "term":  "asiago cheese",
+        "evidence":  "blocked - no browser in this session; checked disk - Aldi rows are \u0027Asiago Cheese Ciabatta Rolls\u0027 \\.69 and \u0027Brianna S Dressing Asiago Caesar\u0027, bread and dressing, not the cheese. Capture miss, not not-carried.",
+        "store":  "Aldi",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Fareway",
+        "item":  "BelGioioso Asiago Wedge",
+        "evidence":  "driver rung 1 \u0027asiago cheese\u0027, 1 row and it is the ingredient: BelGioioso Asiago Wedge 5 oz \\.49. A single row would not support a NEGATIVE, but it is sufficient for a positive that the store lists a priced asiago wedge.",
+        "price":  4.49,
+        "term":  "asiago cheese",
+        "state":  "carried",
+        "size":  "5 oz"
+    },
+    {
+        "term":  "asiago cheese",
+        "evidence":  "driver rung 1 returned 23 hits but only 8 are captured in the evidence file: feta, Dubliner, BelGioioso Shaved Cheese BLEND, Colby Jack, cheddar, Romano wheel, Gruyere, mozzarella - none is asiago (the shaved blend is a blend, not adjudicable as asiago). 15 rows unseen and no browser this session, so absence is unproven. NOT not-carried.",
+        "store":  "Sam\u0027s Club",
+        "state":  "blocked"
+    },
+    {
+        "term":  "asiago cheese",
+        "evidence":  "blocked - no browser in this session",
+        "store":  "Walmart",
+        "state":  "blocked"
+    },
+    {
+        "store":  "Baker\u0027s",
+        "item":  "Fresh Large Green Bell Pepper",
+        "evidence":  "server probe rung 1 \u0027green bell pepper\u0027, 3 hits: Fresh Large Green Bell Pepper 1 ct \\.89 - the whole fresh pepper, unit is each. The Green Giant Mexicorn row was rejected.",
+        "price":  0.89,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "1 ct"
+    },
+    {
+        "term":  "green bell pepper",
+        "evidence":  "server probe, FULL ladder: \u0027green bell pepper\u0027=1 hit -\u003e \u0027greenbellpepper\u0027=0. search-verdict EMPTY. The store\u0027s only capture row containing the phrase is Our Family Diced Petite Tomatoes with onion, celery and green bell pepper - a canned tomato product, not the pepper. Recorded per the server-lane contract; worth a re-look in an attended run since this is a produce staple.",
+        "store":  "Family Fare",
+        "state":  "not-carried"
+    },
+    {
+        "store":  "Hy-Vee",
+        "item":  "Green Bell Pepper",
+        "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027green bell pepper\u0027 returns Hy-Vee \u0027Green Bell Pepper\u0027 \\.79/lb, captured 2026-08-21. The plain fresh pepper.",
+        "price":  0.79,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "lb"
+    },
+    {
+        "store":  "Aldi",
+        "item":  "Green Bell Pepper 3 CT",
+        "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027green bell pepper\u0027 returns Aldi \u0027Green Bell Pepper 3 CT\u0027 \\.69, captured 2026-08-25. Fresh whole peppers, 3-count bag.",
+        "price":  2.69,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "3 ct"
+    },
+    {
+        "store":  "Fareway",
+        "item":  "Green Bell Pepper",
+        "evidence":  "driver rung 1 \u0027green bell pepper\u0027, 20 rows: \u0027Green Bell Pepper\u0027 1 each \\.17, the plain fresh pepper. Red/orange bell, onions and cilantro in the same pile are suggestion tiles and were rejected.",
+        "price":  1.17,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "1 each"
+    },
+    {
+        "store":  "Sam\u0027s Club",
+        "item":  "Green Bell Peppers, 6 ct.",
+        "evidence":  "driver rung 1 \u0027green bell pepper\u0027, 19 hits: Green Bell Peppers, 6 ct. \\.97 (\\.83/ea). Fresh whole green bells; the multi-colour sweet pepper pack was rejected as a different item.",
+        "price":  4.97,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "6 ct (\\$0.83/ea)"
+    },
+    {
+        "store":  "Walmart",
+        "item":  "Marketside Organic Green Bell Pepper, 8 oz, 2 Count",
+        "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027green bell pepper\u0027 returns Walmart \u0027Marketside Organic Green Bell Pepper, 8 oz, 2 Count\u0027 \\.96, captured 2026-08-25 (and again 2026-08-16). Organic, but it is a whole fresh green bell pepper, which is the ingredient.",
+        "price":  2.96,
+        "term":  "green bell pepper",
+        "state":  "carried",
+        "size":  "8 oz / 2 ct"
+    }
+]

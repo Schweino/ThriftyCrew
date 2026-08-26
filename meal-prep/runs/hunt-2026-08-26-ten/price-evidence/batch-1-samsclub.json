@@ -1,0 +1,246 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T04:22:29",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "rotisserie chicken",
+   "state": "MATCHES",
+   "term_used": "rotisserie chicken",
+   "attempts": [
+    {
+     "term": "rotisserie chicken",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+     "price": 6.44,
+     "size": "",
+     "unit_price": "$0.64/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/16343160365"
+    },
+    {
+     "item": "Soules Kitchen Chicken Breast Fajitas Strips, 32 oz., 2 pk.",
+     "price": 9.96,
+     "size": "",
+     "unit_price": "$4.98/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13589509720"
+    },
+    {
+     "item": "Member's Mark Seasoned Rotisserie Chicken",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1BVSEIPL4UL2"
+    },
+    {
+     "item": "Member's Mark Rotisserie Chicken Bites, 2 lbs.",
+     "price": 11.48,
+     "size": "",
+     "unit_price": "$5.74/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2GTC9SQ266N4"
+    },
+    {
+     "item": "Member's Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
+     "price": 9.57,
+     "size": "",
+     "unit_price": "$6.96/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6ZLFIIYVJSHV"
+    },
+    {
+     "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+     "price": 17.93,
+     "size": "",
+     "unit_price": "$0.75/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13843866537"
+    },
+    {
+     "item": "Member's Mark Rotisserie Chicken Enchiladas, priced per pound",
+     "price": 15.12,
+     "size": "",
+     "unit_price": "$3.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3RPD20STXXPK"
+    },
+    {
+     "item": "Rossetti Prosciutto Italiano, 7 oz., 2 pk.",
+     "price": 13.44,
+     "size": "",
+     "unit_price": "$0.96/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13871009552"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "roasted corn kernels",
+   "state": "MATCHES",
+   "term_used": "roasted corn kernels",
+   "attempts": [
+    {
+     "term": "roasted corn kernels",
+     "state": "MATCHES",
+     "hits": 16
+    }
+   ],
+   "hits": [
+    {
+     "item": "Corn Nuts Ranch Crunchy Corn Kernels 1.7 oz., 18 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.33/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4KUM84A3OF28"
+    },
+    {
+     "item": "Go Raw Organic Dry Roasted Pumpkin Seeds with Sea Salt, 20 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/14ZEE273GS5K"
+    },
+    {
+     "item": "Corn Nuts Chile Picante con Limon Crunchy Corn Kernels, 1.7 oz., 18 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.33/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6UHAOFIEEZPI"
+    },
+    {
+     "item": "Corn Nuts Crunchy Corn Snacks, Variety Pack, 1.7 oz., 24 pk.",
+     "price": 10.98,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5396Q5KTFW08"
+    },
+    {
+     "item": "Planters Salted Dry Roasted Peanuts Canister, 52 oz.",
+     "price": 8.58,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/573HWWVWL90H"
+    },
+    {
+     "item": "Del Monte Mexican Style Street Corn, 14.75 oz., 6 pk.",
+     "price": 10.78,
+     "size": "",
+     "unit_price": "$1.80/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6XQL19VX7A3O"
+    },
+    {
+     "item": "Premium Gold Organic Golden Flaxseed, 4 lbs.",
+     "price": 15.98,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/132JP340LC1T"
+    },
+    {
+     "item": "Members Mark Organic Chia Seeds, 48 oz.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/55KBLYXQR8DH"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "monterey jack cheese",
+   "state": "MATCHES",
+   "term_used": "monterey jack cheese",
+   "attempts": [
+    {
+     "term": "monterey jack cheese",
+     "state": "MATCHES",
+     "hits": 25
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13571669511"
+    },
+    {
+     "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
+     "price": 10.14,
+     "size": "",
+     "unit_price": "$4.06/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13598620787"
+    },
+    {
+     "item": "Member's Mark Colby and Monterey Jack Shredded Cheese 16 oz., 2 pk.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6WSZE44AG1FN"
+    },
+    {
+     "item": "Member's Mark Colby and Monterey Jack Cheese Chunk 2 lbs.",
+     "price": 5.42,
+     "size": "",
+     "unit_price": "$2.71/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/45XSL96F8EFD"
+    },
+    {
+     "item": "Member's Mark Colby and Monterey Jack Cheese Sticks, 36 ct.",
+     "price": 7.87,
+     "size": "",
+     "unit_price": "$0.22/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6UYJVG9YVPZO"
+    },
+    {
+     "item": "Tillamook Sharp Cheddar Cheese, 2.5 lbs.",
+     "price": 11.47,
+     "size": "",
+     "unit_price": "$4.59/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13585574608"
+    },
+    {
+     "item": "Member's Mark Fancy Shredded Colby and Monterey Jack Cheese 5 lbs.",
+     "price": 12.22,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2JOOO9D4WVS8"
+    },
+    {
+     "item": "Member's Mark Smoked Sausage Made with Bacon, Jalapeno & Monterey Jack Cheese, 4 oz., 12 ct.",
+     "price": 12.96,
+     "size": "",
+     "unit_price": "$1.08/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/732A56Y7U2AS"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

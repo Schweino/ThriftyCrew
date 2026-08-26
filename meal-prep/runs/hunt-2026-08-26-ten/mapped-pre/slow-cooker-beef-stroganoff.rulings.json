@@ -1,0 +1,270 @@
+{
+ "slug": "slow-cooker-beef-stroganoff",
+ "lines": [
+  {
+   "raw": "2 ½ pounds stew meat (cut into 1-inch cubes)",
+   "buy": "4 3/8 lb beef stew meat, cut into 1-inch cubes",
+   "grams_source": 1134,
+   "notes": "2.5 lb x 453.592."
+  },
+  {
+   "raw": "1 teaspoon garlic salt",
+   "buy": "1 3/4 tsp",
+   "grams_source": 3.6,
+   "notes": "Label basis: 1/4 tsp = 0.9 g, so 1 tsp = 3.6 g."
+  },
+  {
+   "raw": "¼ cup flour",
+   "buy": "7 tbsp all-purpose flour",
+   "grams_source": 30,
+   "notes": "Label basis: 1/4 cup = 30 g."
+  },
+  {
+   "raw": "3 tablespoons cold butter (divided)",
+   "buy": "5 1/4 tbsp cold butter, divided",
+   "grams_source": 42,
+   "notes": "14 g per tbsp."
+  },
+  {
+   "raw": "½ cup white wine (see notes)",
+   "buy": "7/8 cup dry white wine",
+   "grams_source": 118,
+   "notes": "Wine at 0.99 g/mL."
+  },
+  {
+   "raw": "16 oz. button Mushrooms (sliced)",
+   "buy": "1 3/4 lb white button mushrooms, sliced",
+   "grams_source": 453.6,
+   "notes": ""
+  },
+  {
+   "raw": "1 small yellow onion (diced)",
+   "buy": "1 medium yellow onion, diced (about 4 1/2 oz)",
+   "grams_source": 70,
+   "notes": "Small onion = 70 g; 1.75x lands at one medium onion."
+  },
+  {
+   "raw": "1 tsp better than bouillon (or 1 beef bouillon cube)",
+   "buy": "1 3/4 tsp beef base (or 2 beef bouillon cubes)",
+   "grams_source": 6,
+   "notes": "1 tsp of the paste = 6 g."
+  },
+  {
+   "raw": "¼ cup cold water",
+   "buy": "7 tbsp cold water",
+   "grams_source": 59,
+   "notes": "Not purchased; carried so the cornstarch slurry step still reads correctly."
+  },
+  {
+   "raw": "10.5 oz. condensed cream of mushroom soup (optional)",
+   "buy": "18 oz condensed cream of mushroom soup (optional)",
+   "grams_source": 297.7,
+   "notes": "10.5 oz x 28.3495."
+  },
+  {
+   "raw": "1 pound wide homestyle egg noodles",
+   "buy": "1 3/4 lb wide egg noodles",
+   "grams_source": 453.6,
+   "notes": "Cooked separately as the bed; see the macro cross-check."
+  },
+  {
+   "raw": "½ teaspoon black pepper",
+   "buy": "scant 1 tsp",
+   "notes": ""
+  },
+  {
+   "raw": "3-6 tablespoons olive oil",
+   "buy": "1/2 cup (about 8 tbsp)",
+   "notes": "Pre-resolver took the 4 1/2 tbsp midpoint of the source's range."
+  },
+  {
+   "raw": "4 cloves garlic (minced)",
+   "buy": "7 cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "4 cups beef broth",
+   "buy": "7 cups",
+   "notes": ""
+  },
+  {
+   "raw": "2 tablespoons red wine vinegar",
+   "buy": "3 1/2 tbsp",
+   "notes": ""
+  },
+  {
+   "raw": "2 tablespoons Worcestershire sauce",
+   "buy": "3 1/2 tbsp",
+   "notes": ""
+  },
+  {
+   "raw": "2 tablespoons Dijon mustard",
+   "buy": "3 1/2 tbsp",
+   "notes": ""
+  },
+  {
+   "raw": "¼ cup cornstarch",
+   "buy": "7 tbsp",
+   "notes": ""
+  },
+  {
+   "raw": "1 ½ cups sour cream (not reduced fat)",
+   "buy": "2 5/8 cups full-fat sour cream",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 ½ pounds stew meat (cut into 1-inch cubes)",
+   "term": "stew meat",
+   "canon_item": "Beef Stew Meat",
+   "bid": "beef-stew-meat",
+   "decision": "mapped",
+   "grams_source": 1134,
+   "evidence": "The main protein: no commodity claims it but today's captures carry matching products, so a null here would pantry-price 2.5 lb of beef. Proposed as a new id through the registrar; boneless chuck cubed for stew is its own fresh-case cut and price class, not ground beef and not a roast."
+  },
+  {
+   "raw": "1 teaspoon garlic salt",
+   "term": "garlic salt",
+   "canon_item": "Garlic Salt",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 3.6,
+   "evidence": "The board's 'garlic' match is fresh bulb garlic - a different food, price class and gram weight, exactly the 2026-08-26 garlic-powder precedent. Garlic salt is a pantry blend at 1 tsp; pantry-static pricing is safe."
+  },
+  {
+   "raw": "¼ cup flour",
+   "term": "flour",
+   "canon_item": "All-Purpose Flour",
+   "bid": "flour",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Exact same-form vocabulary row All-Purpose Flour [flour]; board carries flour 7 of 7."
+  },
+  {
+   "raw": "3 tablespoons cold butter (divided)",
+   "term": "cold butter",
+   "canon_item": "Butter",
+   "bid": "butter",
+   "decision": "mapped",
+   "grams_source": 42,
+   "evidence": "'Cold' is a temperature instruction, not a form: same product as Butter [butter], which the board carries 7 of 7 and the DB already has a row for."
+  },
+  {
+   "raw": "½ cup white wine (see notes)",
+   "term": "white wine",
+   "canon_item": "Dry White Wine",
+   "bid": "white-wine",
+   "decision": "mapped",
+   "grams_source": 118,
+   "evidence": "Same-form row Dry White Wine [white-wine], board 4 of 7. Deliberately NOT white-wine-vinegar - that is the wrong dinner and the standing form-flip rejection."
+  },
+  {
+   "raw": "16 oz. button Mushrooms (sliced)",
+   "term": "button Mushrooms",
+   "canon_item": "White Mushrooms",
+   "bid": "mushrooms",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "Button mushroom is the retail name for the white mushroom; same product, same price class, board 7 of 7. Portobello is a different, dearer product."
+  },
+  {
+   "raw": "1 small yellow onion (diced)",
+   "term": "small yellow onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 70,
+   "evidence": "Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g."
+  },
+  {
+   "raw": "1 tsp better than bouillon (or 1 beef bouillon cube)",
+   "term": "better than bouillon",
+   "canon_item": "Beef Bouillon Base",
+   "bid": "bouillon",
+   "decision": "mapped",
+   "grams_source": 6,
+   "evidence": "The line itself names a bouillon cube as the equal alternative, so the concentrated-bouillon concept is what the recipe buys; board carries bouillon 6 of 7. Flagging that I could not verify the board id's flavour is beef rather than chicken."
+  },
+  {
+   "raw": "¼ cup cold water",
+   "term": "cold water",
+   "canon_item": "Water",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 59,
+   "evidence": "Tap water for the cornstarch slurry: nothing is bought and it contributes no macros. Kept on the line list so the method still reads."
+  },
+  {
+   "raw": "10.5 oz. condensed cream of mushroom soup (optional)",
+   "term": "condensed cream of mushroom soup",
+   "canon_item": "Cream of Mushroom Soup",
+   "bid": "cream-of-mushroom-soup",
+   "decision": "mapped-optional",
+   "grams_source": 297.7,
+   "evidence": "Same-form vocabulary row Cream of Mushroom Soup [cream-of-mushroom-soup]; condensed IS the canned form of that product. The board match shown ('mushrooms') is a fuzzy miss and I ignored it. Line is marked optional by the source."
+  },
+  {
+   "raw": "1 pound wide homestyle egg noodles",
+   "term": "wide homestyle egg noodles",
+   "canon_item": "Egg Noodles",
+   "bid": "egg-noodles",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "Same-form vocabulary row Egg Noodles [egg-noodles]; 'wide homestyle' is a cut of the same dry product. The board match shown ('eggs') is a fuzzy miss and would price the wrong food."
+  }
+ ],
+ "absent_terms": [
+  "beef stew meat",
+  "wide egg noodles"
+ ],
+ "db_entries_written": [
+  "Beef Stew Meat",
+  "Garlic Salt",
+  "Beef Bouillon Base"
+ ],
+ "db_row_findings": [
+  "slow-cooker-beef-stroganoff: the food DB already carries 'All-Purpose Flour' and the mapper's row DIFFERS on protein_g. Nothing was written and the existing row stands. existing={\"protein_g\": 3} new={\"protein_g\": 4}",
+  "slow-cooker-beef-stroganoff: the food-DB row for 'Dry White Wine' FAILED the Atwater check (Atwater 11 vs stated 82 - a 87% gap, so these four numbers do not describe one food) and was NOT written",
+  "slow-cooker-beef-stroganoff: the food DB already carries 'White Mushrooms' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 70, \"serving_qty\": 1, \"serving_unit\": \"cup sliced\", \"calories\": 15, \"protein_g\": 2.2, \"carbs_g\": 2.3, \"fat_g\": 0.2} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 27, \"protein_g\": 3.1, \"carbs_g\": 3.1, \"fat_g\": 0.0}",
+  "slow-cooker-beef-stroganoff: the food DB already carries 'Egg Noodles' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 56, \"serving_qty\": 2, \"serving_unit\": \"oz dry\", \"calories\": 210, \"protein_g\": 8, \"carbs_g\": 40, \"fat_g\": 3} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 384, \"protein_g\": 14.2, \"carbs_g\": 71.3, \"fat_g\": 4.44}"
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "stew meat",
+   "proposed_bid": "beef-stew-meat",
+   "evidence": "No commodity in any namespace claims it per the pre-resolve table, yet today's captures carry matching products, so it is stocked and priceable. The food is boneless beef chuck cut into 1-inch cubes, sold in the fresh beef case per lb: not ground-beef (different cut, different price), not a whole chuck roast (sold uncut, cheaper per lb), not a steak id. If the estate already prices this under a spelling like 'stew-beef' or 'beef-chuck-stew', alias it there rather than minting.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "beef-stew-meat",
+   "verdict": "approve",
+   "bid": "beef-stew-meat",
+   "reason": "No namespace prices raw cubed beef under any spelling: the only 'stew meat' string in the estate is commodities.json line 40087, where the canned 'beef-stew' commodity (label 'Canned Beef Stew', $0.1538/oz shelf-stable at Sam's Club) EXPLICITLY EXCLUDES 'stew\\s+meat' - the estate already ruled the raw cut out of that id, so aliasing there would price a canned Dinty Moore meal as fresh beef. The nearest real-beef row, beef-chuck-roast ($6.64/lb; board product names are all whole roasts - 'Whole Beef Chuck Roll', 'Boneless Chuck Roast'), is the same animal cut but a different purchase: sold uncut and cheaper per lb than pre-cubed stew meat, so SAME FOOD, DIFFERENT FORM - a new id, not an alias. No 'stew-beef'/'beef-chuck-stew' spelling exists anywhere, recipe-commodities has zero stew hits, and the live feed has no price cell for beef-stew-meat (all its 'stew' cells are canned goods, soup mixes, and recipe names). Mint in the RECIPE namespace (recipe-board-everyday baseline + recipe-commodities.json, alongside beef-chuck-roast). REQUIRED follow-ups or the daily audit pages Brad: (1) commodity-dupe-allowlist.json pair beef-stew-meat|beef-stew, reason 'raw cubed beef vs canned prepared stew - beef-stew's own exclude list already separates them; prefix rule will re-flag otherwise'; (2) pair beef-stew-meat|beef-chuck-roast (and chuck-roast), reason 'same cut, whole-roast vs pre-cubed purchase at different $/lb'. Prescribe include ['beef\\s+stew\\s+meat', 'stew\\s+meat'] with excludes at neighboring-commodity rigor, minimally: canned, dinty moore, soup, seasoning, mix, frozen (unless the fresh case is empty), pork, chicken, turkey, lamb, veal, kabob only if priced differently, dog/cat food, broth, gravy - build from beef-stew's ~40-pattern exclude block as the template. Separately, per the two-namespace rule: this ruling mints the ID only; the ingredient NAME 'stew meat' has no vocabulary row and needs its own row minted through the name gate, and its macros need a label transcription - both FDC hits offered are chicken and must not be used."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 500.0,
+   "carbs_g": 27.0,
+   "protein_g": 40.0
+  },
+  "ours_per_serving_with_noodles": {
+   "calories": 664,
+   "carbs_g": 56.4,
+   "protein_g": 44.5
+  },
+  "ours_per_serving_without_noodles": {
+   "calories": 446,
+   "carbs_g": 16.0,
+   "protein_g": 36.5
+  },
+  "protein_gap_pct": 11.3,
+  "verdict": "pass on protein, LOUD FLAG on carbs",
+  "detail": "Protein is the sharp instrument and it agrees: 44.5 g against the source's 40 g with the noodles counted, +11%, inside the band, so the 2.5 lb of stew meat is the right portion. Calories and carbs do NOT agree and the reason is structural: the 1 lb of dry egg noodles alone carries 1742 cal and 323 g carbs, and the source's published 500 cal / 27 g carbs can only have been computed WITHOUT the noodle bed (drop the noodles and we land at 446 cal / 16 g carbs / 36.5 g protein, which brackets the source). This decides whether the recipe meets this run's conditions: counting the noodles it is 664 cal and 56 g carbs per serving, breaching both the 650 cal ceiling and the 35 g carb cap; not counting them it passes comfortably. I am not the gate for that, but nothing downstream should read the pass without reading this paragraph. Optional cream-of-mushroom soup is included in the with-noodles figures (+29 cal, +2.5 g carbs per serving)."
+ }
+}

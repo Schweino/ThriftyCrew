@@ -1,0 +1,81 @@
+﻿{
+    "name":  "Enchiladas Suizas",
+    "slug":  "enchiladas-suizas",
+    "protein":  "chicken",
+    "cuisine":  "",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "visibility":  "paid",
+    "ingredients":  [
+                        {
+                            "item":  "Salsa Verde",
+                            "grams":  1680,
+                            "buy":  "7 cups salsa verde"
+                        },
+                        {
+                            "item":  "Fresh Cilantro",
+                            "grams":  14,
+                            "buy":  "scant 1 cup packed fresh cilantro, chopped (optional)"
+                        },
+                        {
+                            "item":  "Vegetable Oil",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons vegetable oil, plus more for frying the tortillas"
+                        },
+                        {
+                            "item":  "Mexican Crema",
+                            "grams":  630,
+                            "buy":  "2 2/3 cups Mexican crema, plus more for drizzling"
+                        },
+                        {
+                            "item":  "Cooked Shredded Chicken",
+                            "grams":  1225,
+                            "buy":  "8 3/4 cups cooked shredded chicken (about 2 3/4 lb)"
+                        },
+                        {
+                            "item":  "Salt",
+                            "grams":  70,
+                            "buy":  "about 5 tablespoons kosher salt, to taste, divided"
+                        },
+                        {
+                            "item":  "Corn Tortillas",
+                            "grams":  1050,
+                            "buy":  "42 corn tortillas (6 inch)"
+                        },
+                        {
+                            "item":  "Chihuahua Cheese",
+                            "grams":  1176,
+                            "buy":  "10 1/2 cups shredded Chihuahua cheese (about 2 1/2 lb)"
+                        },
+                        {
+                            "item":  "Yellow Onion",
+                            "grams":  175,
+                            "buy":  "1 1/2 medium onions, thinly sliced, for topping"
+                        }
+                    ],
+    "macros_per_serving":  {
+                               "calories":  225,
+                               "protein_g":  3.1,
+                               "carbs_g":  40.7,
+                               "fat_g":  5
+                           },
+    "writer_notes":  [
+
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "prose":  {
+
+              },
+    "head":  {
+                 "description":  "",
+                 "keywords":  "",
+                 "image":  "",
+                 "prepTime":  "PT8M",
+                 "cookTime":  "PT17M",
+                 "totalTime":  "PT25M",
+                 "steps":  [
+
+                           ]
+             }
+}

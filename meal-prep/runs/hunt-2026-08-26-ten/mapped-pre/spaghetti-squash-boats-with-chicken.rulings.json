@@ -1,0 +1,162 @@
+{
+ "slug": "spaghetti-squash-boats-with-chicken",
+ "lines": [
+  {
+   "raw": "2 medium spaghetti squash (about 2 pounds each)",
+   "buy": "7 medium (about 14 lb total), halved lengthwise and seeded",
+   "grams_source": 1814,
+   "notes": "Whole squash weight, rind and seeds included."
+  },
+  {
+   "raw": "2 teaspoons extra-virgin olive oil",
+   "buy": "2 tablespoons plus 1 teaspoon",
+   "grams_source": 9,
+   "notes": "4.5 g per tsp."
+  },
+  {
+   "raw": "4 strips thick-sliced center-cut bacon (roughly chopped)",
+   "buy": "14 thick-cut strips, roughly chopped",
+   "grams_source": 100,
+   "notes": "25 g per thick-cut strip, raw."
+  },
+  {
+   "raw": "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+   "buy": "3 1/2 lb, cut into bite-sized pieces",
+   "grams_source": 454,
+   "notes": "Raw weight."
+  },
+  {
+   "raw": "2 cups baby spinach (torn into pieces)",
+   "buy": "7 cups, torn into pieces",
+   "grams_source": 60,
+   "notes": "30 g per cup of leaves."
+  },
+  {
+   "raw": "1/2 cup nonfat plain Greek yogurt",
+   "buy": "1 3/4 cups plain nonfat Greek yogurt",
+   "grams_source": 122,
+   "notes": "245 g per cup."
+  },
+  {
+   "raw": "1 cup part-skim mozzarella cheese (divided)",
+   "buy": "3 1/2 cups shredded part-skim mozzarella, divided",
+   "grams_source": 112,
+   "notes": "1 cup shredded = 112 g."
+  },
+  {
+   "raw": "2 tablespoons chopped fresh basil (plus additional for serving)",
+   "buy": "7 tablespoons chopped fresh basil, plus more for serving",
+   "grams_source": 5,
+   "notes": "Chopped leaves."
+  },
+  {
+   "raw": "1/2 teaspoon kosher salt",
+   "buy": "1 3/4 teaspoons kosher salt",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "3/4 teaspoon ground black pepper",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/4 teaspoon kosher salt",
+   "buy": "3/4 teaspoon kosher salt",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "3/4 teaspoon ground black pepper",
+   "notes": "Settled line, second addition."
+  },
+  {
+   "raw": "1/2 teaspoon garlic powder",
+   "buy": "1 3/4 teaspoons garlic powder",
+   "notes": "Settled line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 medium spaghetti squash (about 2 pounds each)",
+   "term": "spaghetti squash",
+   "canon_item": "Spaghetti Squash",
+   "bid": "spaghetti-squash",
+   "decision": "mapped",
+   "grams_source": 1814,
+   "evidence": "spaghetti-squash is a live board id at 4 of 7 stores, so this is a reuse and not a new id; only a vocabulary row for the name is missing."
+  },
+  {
+   "raw": "2 teaspoons extra-virgin olive oil",
+   "term": "extra-virgin olive oil",
+   "canon_item": "Olive Oil",
+   "bid": "olive-oil",
+   "decision": "mapped",
+   "grams_source": 9,
+   "evidence": "Extra virgin is the grade the olive-oil commodity is sold at, not a different food. Board 7 of 7."
+  },
+  {
+   "raw": "4 strips thick-sliced center-cut bacon (roughly chopped)",
+   "term": "thick-sliced center-cut bacon",
+   "canon_item": "Hickory Smoked Bacon",
+   "bid": "bacon",
+   "decision": "mapped",
+   "grams_source": 100,
+   "evidence": "Thick-sliced and center-cut are cut descriptors on the same smoked pork bacon the id prices; deliberately NOT turkey-bacon, which is a different meat. Board 7 of 7."
+  },
+  {
+   "raw": "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+   "term": "boneless skinless chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 454,
+   "evidence": "Word-for-word the vocabulary row's own name; the form flag is a plural/singular artefact. Board 7 of 7."
+  },
+  {
+   "raw": "2 cups baby spinach (torn into pieces)",
+   "term": "baby spinach",
+   "canon_item": "Spinach",
+   "bid": "spinach",
+   "decision": "mapped",
+   "grams_source": 60,
+   "evidence": "Baby is a leaf size on the same fresh bagged spinach, not a form flip like fresh vs frozen. Board 7 of 7."
+  },
+  {
+   "raw": "1/2 cup nonfat plain Greek yogurt",
+   "term": "nonfat plain Greek yogurt",
+   "canon_item": "Greek Yogurt",
+   "bid": "greek-yogurt",
+   "decision": "mapped",
+   "grams_source": 122,
+   "evidence": "Same-form vocabulary row Greek Yogurt [greek-yogurt]; nonfat and plain are label variants within the same tub price class."
+  },
+  {
+   "raw": "1 cup part-skim mozzarella cheese (divided)",
+   "term": "part-skim mozzarella cheese",
+   "canon_item": "Mozzarella Cheese",
+   "bid": "mozzarella-cheese",
+   "decision": "mapped",
+   "grams_source": 112,
+   "evidence": "REFUSED the board's shredded-cheese bridge - that id prices bagged cheddar/blend, a different cheese. Vocabulary row Mozzarella Cheese [mozzarella-cheese] is same form; term reported absent for pricing."
+  },
+  {
+   "raw": "2 tablespoons chopped fresh basil (plus additional for serving)",
+   "term": "basil",
+   "canon_item": "Fresh Basil",
+   "bid": "fresh-basil",
+   "decision": "mapped",
+   "grams_source": 5,
+   "evidence": "Chopped fresh leaves, so the vocabulary's Fresh Basil row and not dried-basil (different price class and gram weight). No commodity claims it, so the term is reported."
+  }
+ ],
+ "absent_terms": [
+  "mozzarella cheese"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Source band 538 cal / 37 carbs / 42 g protein per serving over 4. My build: 1814 g whole squash at ~60% edible strands = 272 g per serving (74 cal, 1.8 P, 17.6 C), chicken 113.5 g (136 cal, 25.5 P), bacon 25 g raw (114 cal, 3 P), mozzarella 28 g (85 cal, 6.6 P), yogurt 30.5 g (18 cal, 3.1 P), spinach 15 g (3 cal), olive oil 2.25 g (20 cal) = about 450 cal, 40 g protein, ~22 g carbs. Protein 5% under - fine. Carbs land 15 g under the published 37, which reads as the source costing the whole 4 lb of squash as edible; either way the recipe clears the 35 g carb ceiling comfortably, and it does so on MY figure, so the ceiling call does not depend on the band being right."
+}

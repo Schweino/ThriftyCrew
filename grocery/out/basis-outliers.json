@@ -135,9 +135,21 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-25T08:13:36",
+    "generated":  "2026-08-26T08:13:49",
     "ratio":  4,
     "kind_mismatch":  [
+                          {
+                              "id":  "all-purpose-cleaner",
+                              "commodity":  "All-Purpose Cleaner",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.0841,
+                              "size":  "32 oz",
+                              "item":  "Power Force Lemon Scented All Purpose Cleaner",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
                           {
                               "id":  "all-purpose-cleaner",
                               "commodity":  "All-Purpose Cleaner",
@@ -235,6 +247,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "baby-formula",
+                              "commodity":  "Baby Formula",
+                              "unit":  "oz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.9158,
+                              "size":  "6 pk 2 fl oz",
+                              "item":  "Enfamil NeuroPro Triple Prebiotic Immune Blend Baby Formula",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "balsamic-vinegar",
                               "commodity":  "Balsamic Vinegar",
                               "unit":  "floz",
@@ -289,7 +313,7 @@
                               "store":  "Aldi",
                               "per_unit":  0.0483,
                               "size":  "121 oz",
-                              "item":  "Tandil 75 Percent Bleach 121 OZ",
+                              "item":  "Tandil 7.5 Percent Bleach",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -706,6 +730,18 @@
                               "id":  "hot-sauce",
                               "commodity":  "Hot Sauce",
                               "unit":  "floz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.1085,
+                              "size":  "34 oz",
+                              "item":  "Valentina Mexican Hot Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "hot-sauce",
+                              "commodity":  "Hot Sauce",
+                              "unit":  "floz",
                               "store":  "Sam\u0027s Club",
                               "per_unit":  0.12,
                               "size":  "129 oz",
@@ -946,6 +982,18 @@
                               "id":  "shower-cleaner",
                               "commodity":  "Shower / Bathroom Cleaner",
                               "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.0841,
+                              "size":  "32 oz",
+                              "item":  "Power Force Bathroom Cleaner",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "shower-cleaner",
+                              "commodity":  "Shower / Bathroom Cleaner",
+                              "unit":  "floz",
                               "store":  "Sam\u0027s Club",
                               "per_unit":  0.1,
                               "size":  "99.4 oz",
@@ -975,18 +1023,6 @@
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
                               "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "sports-drinks",
-                              "commodity":  "Sports Drinks",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.0374,
-                              "size":  "8 pack",
-                              "item":  "Gatorade 8-Pack 20 fl oz or Pringles Multipack 12 ct",
-                              "kind":  "count",
                               "row_kind":  "volume",
                               "holds_crown":  false
                           },
@@ -1171,5 +1207,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-25.json"
+    "compare_file":  "comparison-2026-08-26.json"
 }

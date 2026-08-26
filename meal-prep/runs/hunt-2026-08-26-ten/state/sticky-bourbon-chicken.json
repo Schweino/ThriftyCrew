@@ -1,0 +1,68 @@
+{
+    "slug":  "sticky-bourbon-chicken",
+    "title":  "Sticky Bourbon Chicken",
+    "source_url":  "https://www.spendwithpennies.com/sticky-bourbon-chicken/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:07",
+    "updated":  "2026-08-26T04:54:43",
+    "terms":  [
+                  {
+                      "term":  "bourbon",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Rice Vinegar",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "bourbon",
+                      "Rice Vinegar",
+                      "Water"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:07",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/sticky-bourbon-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:18:07",
+                        "by":  "decider",
+                        "detail":  "Sticky bourbon chicken thighs (bourbon, apple juice, soy, brown sugar, ginger) over rice — an iconic distinct dish with no live match, separate from the slow-cooker honey-sesame bowls, band verified 450/20/45."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:19:17",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:52:02",
+                        "by":  "mapper",
+                        "detail":  "9 residual lines ruled, 0 rejected. New DB rows returned: Boneless Skinless Chicken Thigh, Soy Sauce, Bourbon, Brown Sugar, Ginger, Water. NO ROW RETURNED FOR RICE VINEGAR: the FDC shelf offered only red wine vinegar (a different food) and I spent my label reads on the two chicken cuts and the bacon, which move the macros; plain unseasoned rice vinegar contributes ~0 cal at 1 tbsp, so the omission"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:53:00",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "waiting on: bourbon, Rice Vinegar, Water"
+                    }
+                ]
+}

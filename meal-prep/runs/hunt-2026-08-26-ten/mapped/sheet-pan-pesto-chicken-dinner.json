@@ -1,0 +1,184 @@
+﻿{
+    "slug":  "sheet-pan-pesto-chicken-dinner",
+    "title":  "Sheet Pan Pesto Chicken Dinner",
+    "source_url":  "https://www.budgetbytes.com/sheet-pan-pesto-chicken-dinner/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 lb. baby potatoes ($2.00)",
+                            "item":  "Baby Potatoes",
+                            "bid":  "baby-potatoes",
+                            "board":  null,
+                            "grams":  1589,
+                            "buy":  "3 1/2 lb baby potatoes, halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Small creamer potatoes are their own bagged SKU priced well above bulk russets, and no commodity claims them though today\u0027s captures carry them; sweet-potatoes is a different food.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 Tbsp olive oil, divided ($0.48)",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  142,
+                            "buy":  "2/3 cup olive oil, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp oregano ($0.05)",
+                            "item":  "Dried Oregano",
+                            "bid":  "dried-oregano",
+                            "board":  null,
+                            "grams":  2,
+                            "buy":  "1 3/4 tsp dried oregano",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "An unqualified oregano measured in teaspoons for a dry rub is the dried jar, matching the 2026-08-26 \u0027ground oregano\u0027 ruling; board 7 of 7. Fresh would be a different price and gram weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 pinches salt and pepper ($0.05)",
+                            "item":  "Salt and Pepper",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  5,
+                            "buy":  "1 tsp salt plus 1/2 tsp black pepper, to taste",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Two distinct pantry foods on one unsplittable line, so no single bid can carry it - the 2026-08-26 precedent. Pantry-static pricing at 3 pinches is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 pint grape tomatoes ($1.99)",
+                            "item":  "Cherry Tomatoes",
+                            "bid":  "cherry-tomatoes",
+                            "board":  null,
+                            "grams":  1043,
+                            "buy":  "3 1/2 pints grape tomatoes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board\u0027s `grapes` match is fruit.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 boneless, skinless chicken breasts (about 1.3 lbs. total) ($3.89)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  2065,
+                            "buy":  "4 1/2 lb boneless skinless chicken breasts (about 7)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Exact vocabulary row Boneless Skinless Chicken Breast [chicken-breast], board 7 of 7; the source states 1.3 lb total, so no each-weight assumption is needed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 cup pesto ($0.73)",
+                            "item":  "Basil Pesto",
+                            "bid":  "pesto",
+                            "board":  null,
+                            "grams":  224,
+                            "buy":  "7/8 cup basil pesto",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Same-form vocabulary row Basil Pesto [pesto] and a live board id at 5 of 7 - a reuse. 1/4 cup jarred pesto is 64 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 oz. fresh mozzarella ($1.05)",
+                            "item":  "Fresh Mozzarella",
+                            "bid":  "fresh-mozzarella",
+                            "board":  null,
+                            "grams":  396,
+                            "buy":  "14 oz fresh mozzarella, sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Water-packed fresh ball is a different SKU and price class from low-moisture shredded, and reduced-fat or fat-free mozzarella are different products; no commodity claims it, captures do.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 lb. spring mix ($1.00)",
+                            "item":  "Spring Mix",
+                            "bid":  "spring-mix",
+                            "board":  null,
+                            "grams":  396,
+                            "buy":  "14 oz spring mix",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "spring-mix is a live board id at 7 of 7 - a reuse, only a vocabulary name row is missing. The FDC shelf returned spring wheat and scallions, a keyword miss.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 cup Caesar dressing ($0.75)",
+                            "item":  "Caesar Dressing",
+                            "bid":  "caesar-dressing",
+                            "board":  null,
+                            "grams":  210,
+                            "buy":  "7/8 cup Caesar dressing",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "caesar-dressing is a live board id (6 of 7) - a reuse; ranch is a different dressing, so no bridge to ranch-dressing.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "baby potatoes",
+                                 "fresh mozzarella",
+                                 "grape tomatoes"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "baby potatoes",
+                                        "proposed_bid":  "baby-potatoes",
+                                        "evidence":  "Small creamer potatoes are their own bagged SKU priced well above bulk russets, and no commodity claims them though today\u0027s captures carry them; sweet-potatoes is a different food.",
+                                        "declared":  false
+                                    },
+                                    {
+                                        "term":  "fresh mozzarella",
+                                        "proposed_bid":  "fresh-mozzarella",
+                                        "evidence":  "Water-packed fresh ball is a different SKU and price class from low-moisture shredded, and reduced-fat or fat-free mozzarella are different products; no commodity claims it, captures do.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "baby-potatoes",
+                                  "verdict":  "approve",
+                                  "bid":  "baby-potatoes",
+                                  "reason":  "No id claims baby/creamer potatoes: yukon-gold-potatoes explicitly EXCLUDES \u0027baby\u0027, \u0027petite\u0027, \u0027creamer potato\u0027, \u0027fingerling\u0027 (commodities.json:57791-57798), so the estate already ruled they are not yellow potatoes, and russet/red/canned/instant/sweet ids cover other forms; live feed has no cell for the food under any spelling. Different purchase from bulk russets (bagged creamer SKU, own price class). Mint in weekly staples (commodities.json + capture worklist), unit lb; REQUIRED follow-ups: allowlist pairs baby-potatoes\u003c-\u003e{russet-potatoes,red-potatoes,yukon-gold-potatoes} with reason \u0027different form: bagged baby/creamer vs bulk\u0027, and a neighbor-rigor exclude list (sweet, canned, instant, mashed, salad, frozen, medley, chips, fries, honey-gold brand) or the audit re-flags it and V4-style wrong crowns follow."
+                              },
+                              {
+                                  "proposed_bid":  "fresh-mozzarella",
+                                  "verdict":  "approve",
+                                  "bid":  "fresh-mozzarella",
+                                  "reason":  "The dossier\u0027s sweep missed the priced ids mozzarella-cheese ($0.1521/oz Sam\u0027s Club, live today) and reduced-fat-mozzarella ($0.18/oz) — but every board row under both is SHREDDED low-moisture part-skim (crown: Member\u0027s Mark Part-Skim Shredded 5 lb), a different form and price class from water-packed fresh ball; string-cheese claims \u0027mozzarella sticks\u0027 and daiya shreds are plant-based, so no existing id prices the fresh ball. Same food, different form = different purchase. Mint in weekly staples, unit oz; REQUIRED follow-ups: allowlist pairs fresh-mozzarella\u003c-\u003e{mozzarella-cheese,reduced-fat-mozzarella} with reason \u0027different form: water-packed fresh ball vs low-moisture shredded\u0027, include anchored on fresh\\s+mozzarella|mozzarella\\s+(?:ball|log|pearls|ciliegine|bocconcini), excludes for shredded, low-moisture, part-skim, string, sticks, smoked, daiya. Separately, the ingredient NAME \u0027fresh mozzarella\u0027 needs its own vocabulary row (nearest rows are Reduced Fat / Fat Free Mozzarella, different products) — a name ruling, not settled by this id."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  ""
+}

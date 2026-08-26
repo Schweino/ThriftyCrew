@@ -1,0 +1,500 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T05:09:23",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "Mexican crema",
+   "state": "MATCHES",
+   "term_used": "Mexican crema",
+   "attempts": [
+    {
+     "term": "Mexican crema",
+     "state": "OK",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "AE Dairy Sour Cream Dip, Mexican Style",
+     "price": 1.25,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17617168-anderson-erickson-dip-sour-cream-mexican-style-8-oz"
+    },
+    {
+     "item": "Daisy Sour Cream, Pure & Natural",
+     "price": 2.88,
+     "size": "14 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2591153-daisy-sour-cream-14-oz"
+    },
+    {
+     "item": "Daisy Sour Cream, Pure & Natural",
+     "price": 1.68,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89722-daisy-sour-cream-8-oz"
+    },
+    {
+     "item": "Fareway Sour Cream",
+     "price": 2.68,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24279950-fareway-sour-cream-16-oz"
+    },
+    {
+     "item": "Daisy Sour Cream",
+     "price": 2.68,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2692623-daisy-sour-cream-16-oz"
+    },
+    {
+     "item": "Guerrero Tostadas Caseras Amarillas",
+     "price": 2.99,
+     "size": "22 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/203419-guerrero-tostadas-22-ct"
+    },
+    {
+     "item": "Daisy Light Sour Cream",
+     "price": 2.88,
+     "size": "14 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18492279-daisy-light-sour-cream-14-oz"
+    },
+    {
+     "item": "Daisy Light Sour Cream",
+     "price": 1.68,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89719-daisy-light-sour-cream-8-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "Chihuahua cheese",
+   "state": "MATCHES",
+   "term_used": "Chihuahua cheese",
+   "attempts": [
+    {
+     "term": "Chihuahua cheese",
+     "state": "OK",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Monterey Jack Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30532635-fareway-monterey-jack-shredded-cheese-8-oz"
+    },
+    {
+     "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
+     "price": 7.48,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28263148-fareway-mexican-style-blend-monterey-jack-cheddar-queso-quesadilla-and-asadero-cheese-fancy-shredded-32-oz"
+    },
+    {
+     "item": "Fareway Taco Blend Fancy Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712408-fareway-cheese-taco-blend-fancy-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Cheese, Gouda, Slices",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20679616-fareway-cheese-gouda-slices-12-oz"
+    },
+    {
+     "item": "Tillamook Mexican 4 Cheese Farmstyle Shreds, 8 oz",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2697833-tillamook-farmstyle-thick-cut-mexican-4-cheese-blend-shredded-cheese-8-oz"
+    },
+    {
+     "item": "Sargento Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691924-sargento-sliced-provolone-natural-cheese-with-natural-smoke-flavor-8-oz"
+    },
+    {
+     "item": "Tillamook Farmstyle Provolone Cheese Slices, 7oz, 8ct",
+     "price": 3.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16742439-tillamook-farmstyle-thick-cut-smoked-provolone-cheese-slices-7-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "boneless pork chops",
+   "state": "MATCHES",
+   "term_used": "boneless pork chops",
+   "attempts": [
+    {
+     "term": "boneless pork chops",
+     "state": "OK",
+     "hits": 5
+    }
+   ],
+   "hits": [
+    {
+     "item": "Boneless Pork Chop",
+     "price": 2.5,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop"
+    },
+    {
+     "item": "Boneless Pork Ribeye Chops",
+     "price": 1.67,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387017-boneless-pork-ribeye-chops-5-oz"
+    },
+    {
+     "item": "Iowa Pork Chops",
+     "price": 3.49,
+     "size": "$3.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386428-iowa-pork-chops-1-each"
+    },
+    {
+     "item": "Center Cut Pork Chops",
+     "price": 2.49,
+     "size": "$3.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388353-center-cut-pork-chops-1-each"
+    },
+    {
+     "item": "Bone-In Smoked Pork Chops",
+     "price": 4.37,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388729-bonein-smoked-pork-chops-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "chicken tenderloins",
+   "state": "MATCHES",
+   "term_used": "chicken tenderloins",
+   "attempts": [
+    {
+     "term": "chicken tenderloins",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tyson Boneless Skinless Chicken Breast Tenderloins, 2.5 lb. (Frozen)",
+     "price": 12.99,
+     "size": "1.13 kg",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1523112-tyson-chicken-breast-tenderloins-2-5-lb"
+    },
+    {
+     "item": "Tyson Fully Cooked Southern Style Chicken Breast Tenderloins, Frozen",
+     "price": 7.76,
+     "size": "25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/129892-tyson-fully-cooked-southern-style-chicken-breast-tenderloins-frozen-25-onz"
+    },
+    {
+     "item": "Boneless Trimmed Chicken Breast",
+     "price": 5.68,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388188-boneless-trimmed-chicken-breast"
+    },
+    {
+     "item": "Perdue Chicken Breast Tenders",
+     "price": 6.99,
+     "size": "29 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/76971-perdue-breaded-chicken-breast-tenders-1-81-lb"
+    },
+    {
+     "item": "Perdue Gluten Free Organic Chicken Tenders",
+     "price": 10.59,
+     "size": "22 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/171979-perdue-s-breaded-chicken-breast-tenders-gluten-free-1-38-lb"
+    },
+    {
+     "item": "Boneless Skinless Chicken Breast",
+     "price": 7.8,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "cornmeal",
+   "state": "MATCHES",
+   "term_used": "cornmeal",
+   "attempts": [
+    {
+     "term": "cornmeal",
+     "state": "OK",
+     "hits": 2
+    }
+   ],
+   "hits": [
+    {
+     "item": "Quaker Corn Meal, Yellow",
+     "price": 2.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69219-quaker-yellow-cornmeal-24-oz"
+    },
+    {
+     "item": "Early Morning Harvest Organic Corn Meal",
+     "price": 3.99,
+     "size": "1.75 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19061466-early-morning-harvest-organic-corn-meal-1-75-lb"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "mustard powder",
+   "state": "MATCHES",
+   "term_used": "mustard powder",
+   "attempts": [
+    {
+     "term": "mustard powder",
+     "state": "OK",
+     "hits": 45
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tone's Mustard, Ground",
+     "price": 3.49,
+     "size": "1.55 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21443924-tone-s-ground-mustard-1-55-oz"
+    },
+    {
+     "item": "McCormick Ground Mustard",
+     "price": 4.99,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97841-mccormick-ground-mustard-1-75-oz"
+    },
+    {
+     "item": "Simply Organic Mustard, Ground",
+     "price": 6.99,
+     "size": "2.65 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43336220-simply-organic-ground-mustard-seed-2-65-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "Badia Spices Onion Powder",
+     "price": 1.68,
+     "size": "2.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/143917-badia-spices-onion-powder-2-75-oz"
+    },
+    {
+     "item": "French's® Chardonnay Dijon Mustard Squeeze Bottle",
+     "price": 3.49,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16409311-french-s-chardonnay-dijon-mustard-squeeze-bottle-12-oz"
+    },
+    {
+     "item": "Woeber's Horseradish Sauce",
+     "price": 2.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz"
+    },
+    {
+     "item": "Ken's Steak House Lite Gluten Free Honey Mustard Dressing",
+     "price": 2.99,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71325-ken-s-steak-house-dressing-lite-honey-mustard-16-fl-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "ground cloves",
+   "state": "MATCHES",
+   "term_used": "ground cloves",
+   "attempts": [
+    {
+     "term": "ground cloves",
+     "state": "OK",
+     "hits": 56
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Ground Allspice",
+     "price": 3.99,
+     "size": "0.9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72757-mccormick-ground-allspice-0-9-oz"
+    },
+    {
+     "item": "Badia Spices Nutmeg, Ground",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258047-badia-spices-nutmeg-ground-2-oz"
+    },
+    {
+     "item": "Badia Spices Ground Allspice",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257996-badia-spices-allspice-ground-2-oz"
+    },
+    {
+     "item": "McCormick Ground Nutmeg",
+     "price": 4.99,
+     "size": "1.1 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41609-mccormick-ground-nutmeg-1-1-oz"
+    },
+    {
+     "item": "Badia Spices Bay Leaves",
+     "price": 1.68,
+     "size": "0.17 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz"
+    },
+    {
+     "item": "Badia Spices Coriander, Ground",
+     "price": 1.68,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+    },
+    {
+     "item": "McCormick Bay Leaves",
+     "price": 4.99,
+     "size": "0.12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41222-mccormick-bay-leaves-0-12-oz"
+    },
+    {
+     "item": "Badia Spices Ground Black Pepper",
+     "price": 7.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136-badia-spices-black-pepper-ground-16-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "burrata cheese",
+   "state": "MATCHES",
+   "term_used": "burrata cheese",
+   "attempts": [
+    {
+     "term": "burrata cheese",
+     "state": "OK",
+     "hits": 50
+    }
+   ],
+   "hits": [
+    {
+     "item": "BelGioioso Fresh Mozzarella Pearls",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Sliced",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
+    },
+    {
+     "item": "Barilla Rustic Basil Pesto Sauce - Made with Fragrant Basil & Freshly Grated Cheeses",
+     "price": 3.49,
+     "size": "6.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16830429-barilla-rustic-basil-pesto-sauce-and-spread-6-oz"
+    },
+    {
+     "item": "Crystal Farms Cheese, Ricotta, Whole Milk",
+     "price": 3.48,
+     "size": "15 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/509993-crystal-farms-ricotta-cheese-whole-milk-15-oz"
+    },
+    {
+     "item": "Athenos Garlic & Herb Feta Crumbles",
+     "price": 3.49,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676173-athenos-garlic-herb-crumbled-feta-cheese-4-oz"
+    },
+    {
+     "item": "Ile de France Brie Soft Ripened Cheese",
+     "price": 8.99,
+     "size": "4.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17248090-ile-de-france-brie-original-french-recipe-4-5-oz"
+    },
+    {
+     "item": "La Bonne Vie Goat Cheese, Original",
+     "price": 5.99,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2789904-la-bonne-vie-goat-cheese-original-4-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

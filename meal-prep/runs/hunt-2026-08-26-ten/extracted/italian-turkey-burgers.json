@@ -1,0 +1,185 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Italian Turkey Burgers",
+  "source_url": "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+  "servings": 6,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 pound 99% lean ground turkey",
+      "item": "ground turkey",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "99% lean",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 pound turkey sausage (sweet or spicy with casings removed (I used spicy))",
+      "item": "turkey sausage",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "sweet or spicy with casings removed (I used spicy)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup panko bread crumbs",
+      "item": "panko bread crumbs",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons ground basil",
+      "item": "ground basil",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons ground oregano",
+      "item": "ground oregano",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon fennel seeds",
+      "item": "fennel seeds",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon kosher salt",
+      "item": "kosher salt",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon crushed red pepper flakes",
+      "item": "crushed red pepper flakes",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces Asiago cheese",
+      "item": "Asiago cheese",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces Mozzarella cheese",
+      "item": "Mozzarella cheese",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 whole wheat hamburger buns (for serving)",
+      "item": "whole wheat hamburger buns",
+      "qty": "6",
+      "unit": null,
+      "prep": "for serving",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 large red onion (halved and thinly sliced)",
+      "item": "large red onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "halved and thinly sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 green bell pepper (thinly sliced)",
+      "item": "green bell pepper",
+      "qty": "1",
+      "unit": null,
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 red bell pepper (thinly sliced)",
+      "item": "red bell pepper",
+      "qty": "1",
+      "unit": null,
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons extra virgin olive oil",
+      "item": "extra virgin olive oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat a grill to medium-high. While the grill heats, make the burgers by placing the ground turkey, turkey sausage, bread crumbs, basil, oregano, fennel, garlic powder, salt, black pepper, and red pepper flakes in a large mixing bowl.",
+    "Gently mix with your fingers. Make sure the ingredients are fairly evenly incorporated, but do not compact the meat.",
+    "Shape into 6 patties, then grill on medium high until the bottoms are browned (about 5 minutes).",
+    "Flip and continue grilling until cooked through; about 5 additional minutes. When the burgers are almost ready, top with mozzarella and Asiago cheeses.",
+    "Meanwhile, place the veggie slices in a medium bowl. Drizzle with olive oil, then sprinkle with salt and pepper. Toss to coat.",
+    "Place in a grill basket and grill until softened and lightly charred, about 8 minutes, turning the veggies often so that they do not burn. Toast the buns as desired.",
+    "Serve burgers on the buns, topped with grilled veggies. Enjoy immediately."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

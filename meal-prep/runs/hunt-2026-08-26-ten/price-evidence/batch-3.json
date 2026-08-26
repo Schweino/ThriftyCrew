@@ -1,0 +1,2331 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-ten",
+ "batch": 3,
+ "generated": "2026-08-26T04:48:20",
+ "batch_terms": [
+  "eye of round roast",
+  "cremini mushrooms",
+  "turkey sausage",
+  "asiago cheese",
+  "green bell pepper",
+  "red onion",
+  "cube steak",
+  "seasoned salt"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "eye of round roast",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "eyeofroundroast",
+     "attempts": [
+      {
+       "term": "eye of round roast",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "eyeofroundroast",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "eyeofroundroast",
+     "attempts": [
+      {
+       "term": "eye of round roast",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "eyeofroundroast",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "eye of round roast",
+     "attempts": [
+      {
+       "term": "eye of round roast",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Hormel Top Round Roast Beef",
+       "price": 14.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388901-top-round-roast-beef"
+      },
+      {
+       "item": "USDA Choice Boneless Chuck Roast",
+       "price": 23.64,
+       "size": "$7.88 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386797-usda-choice-boneless-chuck-roast-1-each"
+      },
+      {
+       "item": "USDA Choice Sirloin Tip Roast",
+       "price": 23.97,
+       "size": "$7.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314266-usda-choice-sirloin-tip-roast-1-each"
+      },
+      {
+       "item": "USDA Choice Boneless Beef Rump Roast",
+       "price": 23.97,
+       "size": "$7.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388659-usda-choice-boneless-beef-rump-roast-1-each"
+      },
+      {
+       "item": "USDA Choice Boneless Ribeye Roast",
+       "price": 109.95,
+       "size": "$21.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89321656-usda-choice-boneless-ribeye-roast"
+      },
+      {
+       "item": "USDA Prime Boneless Ribeye Roast",
+       "price": 164.95,
+       "size": "$32.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89324190-usda-prime-boneless-ribeye-roast"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "eye of round roast",
+     "attempts": [
+      {
+       "term": "eye of round roast",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+       "price": 31.47,
+       "size": "",
+       "unit_price": "$15.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13586071223"
+      },
+      {
+       "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+       "price": 17.93,
+       "size": "",
+       "unit_price": "$0.75/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13843866537"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Eye of Round Roast, priced per pound",
+       "price": 30.01,
+       "size": "",
+       "unit_price": "$6.24/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/57G871BKBGYV"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Eye of Round Steak, priced per pound",
+       "price": 23.25,
+       "size": "",
+       "unit_price": "$6.74/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GKK636WAH40"
+      },
+      {
+       "item": "USDA Choice Angus Whole Eye of Round, Case, priced per pound",
+       "price": 426.33,
+       "size": "",
+       "unit_price": "$5.44/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1G2433TGVWET"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Whole Beef Eye of Round, Cryovac, priced per pound",
+       "price": 44.07,
+       "size": "",
+       "unit_price": "$5.86/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1YWFUNASODWD"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound",
+       "price": 29.83,
+       "size": "",
+       "unit_price": "$6.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0T4L19GGXIR2"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Whole Beef Ribeye, Cryovac, priced per pound",
+       "price": 232.07,
+       "size": "",
+       "unit_price": "$13.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/74ANT4EYHTUO"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "cremini mushrooms",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "mushrooms",
+     "attempts": [
+      {
+       "term": "cremini mushrooms",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "creminimushrooms",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "mushrooms",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Maitake Mushrooms",
+       "price": 4.49,
+       "size": "3.5 oz",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0007047565620"
+      },
+      {
+       "item": "Kroger® Canned Mushrooms",
+       "price": 2.79,
+       "size": "8 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111012712"
+      },
+      {
+       "item": "Kroger® Sliced Mushrooms",
+       "price": 2.99,
+       "size": "6 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111012714"
+      },
+      {
+       "item": "Kroger® Whole White Mushrooms",
+       "price": 2.39,
+       "size": "8 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111091011"
+      },
+      {
+       "item": "Kroger® Sliced Whole Mushrooms",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111012711"
+      },
+      {
+       "item": "Kroger® Mushrooms Pieces & Stems",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111012710"
+      },
+      {
+       "item": "Kroger® Sliced White Mushrooms",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111091487"
+      },
+      {
+       "item": "Kroger® Whole Baby Bella Mushrooms",
+       "price": 2.89,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111091013"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "mushrooms",
+     "attempts": [
+      {
+       "term": "cremini mushrooms",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "creminimushrooms",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "mushrooms",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Mushrooms, White 12 Oz",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_12_oz/p/1564405684713576573"
+      },
+      {
+       "item": "Pampa Mushrooms, Pieces & Stems 7 Oz",
+       "price": null,
+       "size": "7 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/pampa_mushrooms_pieces_stems_7_oz/p/1564405684713407515"
+      },
+      {
+       "item": "Our Family Mushrooms, Sliced 6.5 Oz",
+       "price": 1.89,
+       "size": "6.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_mushrooms_sliced_6_5_oz/p/7081236"
+      },
+      {
+       "item": "Our Family Mushrooms, Pieces & Stems 4 Oz",
+       "price": 1.79,
+       "size": "4 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_mushrooms_pieces_stems_4_oz/p/6786970"
+      },
+      {
+       "item": "Our Family Mushrooms, Whole Button 6.5 Oz",
+       "price": 1.89,
+       "size": "6.5 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_mushrooms_whole_button_6_5_oz/p/7081238"
+      },
+      {
+       "item": "Our Family Mushrooms, White, Sliced 8 Oz",
+       "price": 2.79,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_sliced_8_oz/p/1564405684713576547"
+      },
+      {
+       "item": "Our Family Mushrooms, White, Whole 8 Oz",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_whole_8_oz/p/1564405684713576546"
+      },
+      {
+       "item": "Our Family Mushrooms, Pieces & Stems 13.4 Oz",
+       "price": 2.99,
+       "size": "13.4 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_mushrooms_pieces_stems_13_4_oz/p/6786972"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cremini mushrooms",
+     "attempts": [
+      {
+       "term": "cremini mushrooms",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Highline Whole Mini Bella Mushrooms",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19168615-rakhara-baby-bella-crimini-mushroom-8-oz"
+      },
+      {
+       "item": "Highline Sliced Baby Bella Mushrooms",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16636543-highline-sliced-baby-portobella-mushrooms-8-oz"
+      },
+      {
+       "item": "Highline Sliced White Mushrooms",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18545165-produce-conventional-sliced-mushrooms-8-oz"
+      },
+      {
+       "item": "Highline Shiitake Mushrooms",
+       "price": 4.99,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20994878-highline-mushrooms-organic-sizzling-stir-fry-mushroom-medley-each"
+      },
+      {
+       "item": "Highline Whole White Mushrooms",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18737949-produce-mushroom-broiler-8-oz"
+      },
+      {
+       "item": "Highline Mini Bella Caps",
+       "price": 4.99,
+       "size": "6 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20562453-highline-mushrooms-mini-bella-caps-mushrooms-6-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cremini mushrooms",
+     "attempts": [
+      {
+       "term": "cremini mushrooms",
+       "state": "MATCHES",
+       "hits": 32
+      }
+     ],
+     "hits": [
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15367317581"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13599513403"
+      },
+      {
+       "item": "Nutrops by Gruns Adult Organic Functional Nootropic Mushroom Gummies, 25 ct.",
+       "price": 25.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6CJ2J8GY4E2P"
+      },
+      {
+       "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$1.58/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
+      },
+      {
+       "item": "Member’s Mark Organic Mushroom Complex Capsules, 240 ct.",
+       "price": 19.97,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ML4S5ALV9MR"
+      },
+      {
+       "item": "Om Mushrooms Master Blend, Organic Mushroom Supplements, 195 CT",
+       "price": 31.98,
+       "size": "",
+       "unit_price": "$0.16/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6PWKP31BMKDE"
+      },
+      {
+       "item": "PowerA Advantage Wired Controller for Nintendo Switch 2 - Mushroom Kingdom",
+       "price": 24.99,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/51FLG7HG39K9"
+      },
+      {
+       "item": "Whole White Mushrooms 24 oz.",
+       "price": 3.97,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/64FJYQZ7Y1ZD"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "turkey sausage",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "turkey sausage",
+     "attempts": [
+      {
+       "term": "turkey sausage",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Fully Cooked Turkey Sausage Patties",
+       "price": 8.49,
+       "size": "20 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111016326"
+      },
+      {
+       "item": "Jimmy Dean® Fully Cooked Breakfast Turkey Sausage Crumbles",
+       "price": 4.99,
+       "size": "9.6 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0007790019631"
+      },
+      {
+       "item": "Jimmy Dean® Fully Cooked Breakfast Turkey Sausage Links",
+       "price": 4.99,
+       "size": "9.6 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0007790019257"
+      },
+      {
+       "item": "Jimmy Dean® Fully Cooked Breakfast Turkey Sausage Patties",
+       "price": 4.99,
+       "size": "9.6 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0007790019416"
+      },
+      {
+       "item": "Jimmy Dean® All Natural Fully Cooked Turkey Sausage Patties",
+       "price": 9.99,
+       "size": "21.6 oz",
+       "relevance": 125,
+       "url": "https://www.bakersplus.com/p/0007790000354"
+      },
+      {
+       "item": "Butterball Fully Cooked Natural Hardwood Smoked Turkey Sausage",
+       "price": 3,
+       "size": "13 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0002265530646"
+      },
+      {
+       "item": "Jimmy Dean® Heat 'N Serve Turkey Sausage Frozen Breakfast Links",
+       "price": 7.49,
+       "size": "23.4 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0007790036518"
+      },
+      {
+       "item": "Jimmy Dean® Heat 'N Serve Turkey Sausage Frozen Breakfast Patties",
+       "price": 7.49,
+       "size": "23.9 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0007790036517"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "turkey sausage",
+     "attempts": [
+      {
+       "term": "turkey sausage",
+       "state": "OK",
+       "hits": 11
+      }
+     ],
+     "hits": [
+      {
+       "item": "Johnsonville Turkey Sausage, Smoked 13.5 Oz",
+       "price": 4.99,
+       "size": "13.5 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/johnsonville_turkey_sausage_smoked_13_5_oz/p/597752"
+      },
+      {
+       "item": "Banquet Brown 'N Serve Turkey Sausage Links 10 Ea",
+       "price": 2.29,
+       "size": "10 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/meat/sausage/breakfast/banquet_brown_n_serve_turkey_sausage_links_10_ea/p/22563"
+      },
+      {
+       "item": "Jimmy Dean Delights Breakfast Bowl, Turkey Sausage, Frozen, Bowl 7 Oz",
+       "price": 3.69,
+       "size": "7 oz",
+       "relevance": 123,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_delights_breakfast_bowl_turkey_sausage_frozen_bowl_7_oz/p/529116"
+      },
+      {
+       "item": "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct",
+       "price": 10.99,
+       "size": "4 ct",
+       "relevance": 114,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_delights_croissant_breakfast_sandwiches_with_turkey_sausage_egg_white_and_cheese_frozen_4_ct/p/45710"
+      },
+      {
+       "item": "Jimmy Dean Delights English Muffin Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct",
+       "price": 10.99,
+       "size": "20 oz",
+       "relevance": 112,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/breakfast/jimmy_dean_delights_english_muffin_breakfast_sandwiches_with_turkey_sausage_egg_white_and_cheese_frozen_4_ct/p/45708"
+      },
+      {
+       "item": "Jimmy Dean Delights Egg’wich Breakfast Sandwiches With Bacon, Spinach, Caramelized Onions, And Parmesan Egg Frittatas With Turkey Sausage And Cheese, Breadless, Frozen 4 Ct",
+       "price": 10.99,
+       "size": "4 ct",
+       "relevance": 100,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/jimmy_dean_delights_egg_wich_breakfast_sandwiches_with_bacon_spinach_caramelized_onions_and_parmesan_egg_frittatas_with_turkey_sausage_and_cheese_breadless_frozen_4_ct/p/1564405684703633650"
+      },
+      {
+       "item": "Hillshire Farm Turkey Smoked Sausage 13 Oz",
+       "price": 5.99,
+       "size": "13 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/hillshire_farm_turkey_smoked_sausage_13_oz/p/91833"
+      },
+      {
+       "item": "Eckrich Skinless Turkey Smoked Sausage 12 Oz",
+       "price": 3.99,
+       "size": "12 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/eckrich_skinless_turkey_smoked_sausage_12_oz/p/20954"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "turkey sausage",
+     "attempts": [
+      {
+       "term": "turkey sausage",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Johnsonville Turkey Breakfast Links",
+       "price": 5.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/372325-johnsonville-sausage-fully-cooked-turkey-breakfast-sausage-12-count-45-grm"
+      },
+      {
+       "item": "Fareway Turkey Breakfast Sausage",
+       "price": 5.49,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24269938-fareway-breakfast-sausage-turkey-16-oz"
+      },
+      {
+       "item": "Johnsonville Fully Cooked Turkey Breakfast Sausage Patties",
+       "price": 5.99,
+       "size": "8 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18263434-johnsonville-turkey-sausage-patties-8-ea"
+      },
+      {
+       "item": "Old Wisconsin Smoked Sausage Honey Brown Sugar Turkey Bites",
+       "price": 4.98,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3246500-old-wisconsin-turkey-sausage-honey-brown-sugar-snack-bites-6-oz"
+      },
+      {
+       "item": "Old Wisconsin Sausage Sticks, Turkey, Honey Brown Sugar",
+       "price": 19.99,
+       "size": "28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2800363-old-wisconsin-honey-brown-sugar-turkey-old-wisconsin-honey-brown-sugar-turkey-sausage-snack-sticks-28-oz"
+      },
+      {
+       "item": "Old Wisconsin Sausage Sticks, Turkey",
+       "price": 19.99,
+       "size": "28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2800716-old-wisconsin-turkey-sausage-28-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "turkey sausage",
+     "attempts": [
+      {
+       "term": "turkey sausage",
+       "state": "MATCHES",
+       "hits": 26
+      }
+     ],
+     "hits": [
+      {
+       "item": "Old Wisconsin Turkey Snack Sticks 32 oz.",
+       "price": 14.47,
+       "size": "",
+       "unit_price": "$0.45/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13867574198"
+      },
+      {
+       "item": "Frigo Cheese Heads Snack Sticks Mild Cheddar Cheese & Turkey Sausage, 24 Count, 18.9 oz.",
+       "price": 10.47,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/19711265530"
+      },
+      {
+       "item": "Jimmy Dean Fully Cooked Turkey Sausage Patties 24 ct.",
+       "price": 9.86,
+       "size": "",
+       "unit_price": "$5.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/337SSEF0D6JD"
+      },
+      {
+       "item": "Hillshire Farm Turkey Polska Kielbasa Smoked Sausage, 14 oz., 3 pk.",
+       "price": 7.57,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1NQP7N1KXPUM"
+      },
+      {
+       "item": "Old Wisconsin Natural Cut Turkey Smoked Sausage & Colby Jack Cheese Bites, 1.5 oz., 6 ct.",
+       "price": 8.67,
+       "size": "",
+       "unit_price": "$1.45/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2E6W81QP7J6V"
+      },
+      {
+       "item": "Old Wisconsin Beef Sticks 1 oz., 32 ct.",
+       "price": 15.56,
+       "size": "",
+       "unit_price": "$0.49/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13564266120"
+      },
+      {
+       "item": "Godshall's Uncured Turkey Bacon 40 oz.",
+       "price": 13.86,
+       "size": "",
+       "unit_price": "$5.54/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4N4N3I5THSXS"
+      },
+      {
+       "item": "Old Trapper Peppered Beef Jerky, 18 oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$1.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13856401760"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "asiago cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Shredded Asiago Cheese",
+       "price": 5.49,
+       "size": "5 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111063673"
+      },
+      {
+       "item": "Cello Asiago Cheese Wedge",
+       "price": 10.49,
+       "size": "1 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0028962700000"
+      },
+      {
+       "item": "Brazi Bites® Gluten Free Frozen Garlic Asiago Cheese Bread",
+       "price": 6.99,
+       "size": "18 ct / 11.5 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0085355200303"
+      },
+      {
+       "item": "Private Selection® Asiago Wedge Cheese",
+       "price": 5.99,
+       "size": "8 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111063680"
+      },
+      {
+       "item": "Sartori® Rosemary and Olive Oil Asiago Wedge Cheese",
+       "price": 20.99,
+       "size": "1 lb",
+       "relevance": 87,
+       "url": "https://www.bakersplus.com/p/0028647980000"
+      },
+      {
+       "item": "Private Selection® Italian Style Parmesan Asiago and Cheddar Macaroni and Cheese",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 80,
+       "url": "https://www.bakersplus.com/p/0001111010682"
+      },
+      {
+       "item": "Private Selection® Chef's Blend Sharp Cheddar Gouda Asiago Thick Cut Shredded Cheese",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": 79,
+       "url": "https://www.bakersplus.com/p/0001111008389"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Culinary Tours Cheese, Asiago 8 Oz",
+       "price": 5.49,
+       "size": "8 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/culinary_tours_cheese_asiago_8_oz/p/1564405684711368502"
+      },
+      {
+       "item": "Bel Gioioso Shredded Cheese, Asiago 5 Oz",
+       "price": 6.49,
+       "size": "5 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_shredded_cheese_asiago_5_oz/p/22617"
+      },
+      {
+       "item": "Bel Gioioso Fresh Asiago With Calabrian Chili Peppers Cheese 8 Oz",
+       "price": 6.49,
+       "size": "8 oz",
+       "relevance": 84,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_fresh_asiago_with_calabrian_chili_peppers_cheese_8_oz/p/4792682"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "BelGioioso Asiago Wedge",
+       "price": 4.49,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1354318-belgioioso-asiago-cheese-wedge-5-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.30/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13874852267"
+      },
+      {
+       "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+       "price": 12.87,
+       "size": "",
+       "unit_price": "$7.35/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13878908387"
+      },
+      {
+       "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+       "price": 9.86,
+       "size": "",
+       "unit_price": "$5.63/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+      },
+      {
+       "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
+       "price": 10.14,
+       "size": "",
+       "unit_price": "$4.06/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13598620787"
+      },
+      {
+       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$4.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13571669511"
+      },
+      {
+       "item": "Cello Domestic Romano Cheese Wheel approx. 18 lbs.",
+       "price": 174.26,
+       "size": "",
+       "unit_price": "$9.68/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2TU6KN96JHZ9"
+      },
+      {
+       "item": "Alpenhaus French Gruyere Semi-Hard Cheese Wedge, 1 lb.",
+       "price": 11.87,
+       "size": "",
+       "unit_price": "$0.74/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6TE7K3A52JXC"
+      },
+      {
+       "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "green bell pepper",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "green bell pepper",
+     "attempts": [
+      {
+       "term": "green bell pepper",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh Large Green Bell Pepper",
+       "price": 0.89,
+       "size": "1 ct",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0000000004065"
+      },
+      {
+       "item": "Organic Fresh Green Bell Pepper",
+       "price": 1.69,
+       "size": "1 ct",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0000000094065"
+      },
+      {
+       "item": "Green Giant® SteamCrisp® Mexicorn® Whole Kernel Corn with Red & Green Bell Peppers",
+       "price": 2.29,
+       "size": "11 oz",
+       "relevance": 120,
+       "url": "https://www.bakersplus.com/p/0081015393012"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "greenbellpepper",
+     "attempts": [
+      {
+       "term": "green bell pepper",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "greenbellpepper",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "green bell pepper",
+     "attempts": [
+      {
+       "term": "green bell pepper",
+       "state": "OK",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Green Bell Pepper",
+       "price": 1.17,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each"
+      },
+      {
+       "item": "Fareway Diced Green Peppers",
+       "price": 1.98,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278117-fareway-green-peppers-diced-10-oz"
+      },
+      {
+       "item": "Green, Red & Yellow Peppers",
+       "price": 4.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89326993-green-red-yellow-peppers"
+      },
+      {
+       "item": "Red Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+      },
+      {
+       "item": "Sweet Onion",
+       "price": 0.96,
+       "size": "$1.28 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16516452-sweet-onion-1-lb"
+      },
+      {
+       "item": "Green Onions (Scallions)",
+       "price": 0.99,
+       "size": "1 bunch",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+      },
+      {
+       "item": "Cilantro",
+       "price": 1.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+      },
+      {
+       "item": "Orange Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2750749-orange-bell-pepper-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "green bell pepper",
+     "attempts": [
+      {
+       "term": "green bell pepper",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15367317581"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13599513403"
+      },
+      {
+       "item": "Green Bell Peppers, 6 ct.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$0.83/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/206QFTWNWXV2"
+      },
+      {
+       "item": "Multi Bell Sweet Peppers, 6 ct.",
+       "price": 5.97,
+       "size": "",
+       "unit_price": "$0.99/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4NC1O4LLPTI8"
+      },
+      {
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 4.96,
+       "size": "",
+       "unit_price": "$0.50/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+      },
+      {
+       "item": "Organic Yellow Onions, 5 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$1.04/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+      },
+      {
+       "item": "Tomatoes on the Vine, 3 lbs.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+      },
+      {
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "red onion",
+   "unit": "lb",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Jumbo Red Onions",
+       "price": 1.69,
+       "size": "1 lb",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000004082"
+      },
+      {
+       "item": "Peeled Jumbo Red Onions",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000004669"
+      },
+      {
+       "item": "Organic Jumbo Red Onions",
+       "price": 1.99,
+       "size": "1 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000094082"
+      },
+      {
+       "item": "Kroger® Red Onion 3 lb Bag",
+       "price": 3.99,
+       "size": "3 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111062959"
+      },
+      {
+       "item": "Mezzetta™ Pickled Red Onions",
+       "price": 6.79,
+       "size": "16 fl oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0007321400868"
+      },
+      {
+       "item": "Diced Red Onions Fresh Cut In Store Daily",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0063912388001"
+      },
+      {
+       "item": "Simple Truth Organic® Red Onion 2 lb Bag",
+       "price": 3.89,
+       "size": "2 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111060161"
+      },
+      {
+       "item": "Cleveland Kitchen Pickled Red Onions 16 fl oz",
+       "price": 5.99,
+       "size": "16 fl oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0085977400784"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Organic Red Onions",
+       "price": 1.99,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/organic_red_onions/p/2313279"
+      },
+      {
+       "item": "Mt. Olive Pickled Red Onions 12 Fl Oz",
+       "price": 3.19,
+       "size": "12 fl oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_pickled_red_onions_12_fl_oz/p/1764405684714921934"
+      },
+      {
+       "item": "Fresh Red Onions, Sliced Fresh Divide",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_red_onions_sliced_fresh_divide/p/1564405684713033936"
+      },
+      {
+       "item": "Litehouse Herb, Freeze  Dried Red Onion 0.6 Oz",
+       "price": 5.99,
+       "size": "200 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/litehouse_herb_freeze_dried_red_onion_0_6_oz/p/3745"
+      },
+      {
+       "item": "Our Family Onion Red",
+       "price": 3.49,
+       "size": "32 oz",
+       "relevance": 95,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_red/p/2341162"
+      },
+      {
+       "item": "Sweet Red Italian Onions",
+       "price": 1.79,
+       "size": "lb",
+       "relevance": 94,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/sweet_red_italian_onions/p/606958"
+      },
+      {
+       "item": "Red Robin Crispy Onion Rings 14 Oz",
+       "price": 6.89,
+       "size": "14 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/appetizers_snacks_side_dishes/red_robin_crispy_onion_rings_14_oz/p/2139196"
+      },
+      {
+       "item": "Fresh Fajita Mix: Onions, Red, Yellow, & Green Peppers Fresh Divide",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_fajita_mix_onions_red_yellow_green_peppers_fresh_divide/p/1564405684713033958"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Onion",
+       "price": 1.11,
+       "size": "$1.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+      },
+      {
+       "item": "Crazy Fresh Red Onion Diced",
+       "price": 2.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19269233-crazy-fresh-diced-red-onion-each"
+      },
+      {
+       "item": "Mezzetta Pickled Red Onions",
+       "price": 5.97,
+       "size": "16 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27276229-mezzetta-pickled-red-onions-16-fl-oz"
+      },
+      {
+       "item": "Litehouse Herb, Freeze Dried Red Onion",
+       "price": 4.99,
+       "size": "0.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151495-litehouse-freeze-dried-red-onion-0-35-oz"
+      },
+      {
+       "item": "NatureSweet Cherubs Tomatoes",
+       "price": 3.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz"
+      },
+      {
+       "item": "Radishes Fresh, Bag",
+       "price": 1.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43373-for-you-radishes-fresh-bag-16-oz"
+      },
+      {
+       "item": "Red Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+      },
+      {
+       "item": "English Seedless Cucumber",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614423-english-seedless-cucumber-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13599513403"
+      },
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15367317581"
+      },
+      {
+       "item": "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+       "price": 6.42,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/25CSPSJ2282X"
+      },
+      {
+       "item": "Sweet Onions, 5 lbs.",
+       "price": 4.96,
+       "size": "",
+       "unit_price": "$0.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61EDSZBFT3MZ"
+      },
+      {
+       "item": "Organic Yellow Onions, 5 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$1.04/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+      },
+      {
+       "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
+       "price": 5.47,
+       "size": "",
+       "unit_price": "$2.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+      },
+      {
+       "item": "Tomatoes on the Vine, 3 lbs.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "cube steak",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "cube steak",
+     "attempts": [
+      {
+       "term": "cube steak",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Cubed Beef Steaks",
+       "price": 9.99,
+       "size": "1 lb",
+       "relevance": 96,
+       "url": "https://www.bakersplus.com/p/0024157750000"
+      },
+      {
+       "item": "Cubed Beef Steak Family Pack",
+       "price": 8.99,
+       "size": "1 lb",
+       "relevance": 93,
+       "url": "https://www.bakersplus.com/p/0025574500000"
+      },
+      {
+       "item": "Pork Cubed Steak (About 2 Steaks per Pack)",
+       "price": 3.79,
+       "size": "1 lb",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0024381200000"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "steak",
+     "attempts": [
+      {
+       "term": "cube steak",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "cubesteak",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "steak",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh Angus Strip Steak",
+       "price": 10.99,
+       "size": "1 ea",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_angus_strip_steak/p/1564405684713031225"
+      },
+      {
+       "item": "Fresh Beef T Bone Steak",
+       "price": 18.49,
+       "size": "lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_t_bone_steak/p/1564405684713030761"
+      },
+      {
+       "item": "Fresh Beef Ribeye Steak",
+       "price": 23.49,
+       "size": "lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_ribeye_steak/p/1564405684713030742"
+      },
+      {
+       "item": "Fresh Beef Sirloin Tip Steak",
+       "price": 11.49,
+       "size": "lb",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_sirloin_tip_steak/p/1564405684713030734"
+      },
+      {
+       "item": "Fresh Beef Eye Of Round Steak",
+       "price": 11.49,
+       "size": "lb",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_eye_of_round_steak/p/1564405684713030836"
+      },
+      {
+       "item": "Fresh Beef Ranch Steak, Boneless",
+       "price": 11.49,
+       "size": "lb",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_ranch_steak_boneless/p/1564405684713030695"
+      },
+      {
+       "item": "Fresh Beef T Bone Steak, Thin Cut",
+       "price": 18.99,
+       "size": "lb",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_t_bone_steak_thin_cut/p/1564405684713030763"
+      },
+      {
+       "item": "Fresh Beef Rib Steak Value Pack",
+       "price": 19.99,
+       "size": "lb",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_beef_rib_steak_value_pack/p/1564405684713030744"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cube steak",
+     "attempts": [
+      {
+       "term": "cube steak",
+       "state": "OK",
+       "hits": 52
+      }
+     ],
+     "hits": [
+      {
+       "item": "USDA Choice Cube Steak",
+       "price": 4.5,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387249-usda-choice-cube-steak"
+      },
+      {
+       "item": "McCormick® GRILL MATES Montreal Steak Seasoning",
+       "price": 2.49,
+       "size": "3.4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87680-mccormick-grill-mates-montreal-steak-seasoning-3-4-oz"
+      },
+      {
+       "item": "USDA Choice Boneless Chuck Eye Steak",
+       "price": 11.24,
+       "size": "$14.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388338-usda-choice-boneless-chuck-eye-steak"
+      },
+      {
+       "item": "Fareway Meat Market Organic Steak Seasoning",
+       "price": 6.99,
+       "size": "9.77 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/111118160-fareway-meat-market-organic-steak-seasoning-9-77-oz"
+      },
+      {
+       "item": "USDA Choice Bacon Wrapped London Broils",
+       "price": 4.5,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386209-usda-choice-bacon-wrapped-london-broil-8-oz"
+      },
+      {
+       "item": "A.1. Original Steak Sauce",
+       "price": 5.48,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16656995-a1-original-steak-sauce-10-oz"
+      },
+      {
+       "item": "McCormick Spicy Montreal Steak Seasoning",
+       "price": 2.49,
+       "size": "3.12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87682-mccormick-grill-mates-spicy-montreal-steak-seasoning-3-12-oz"
+      },
+      {
+       "item": "USDA Choice Top Of Iowa Sirloin Steak",
+       "price": 16.24,
+       "size": "$12.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386604-usda-choice-top-of-iowa-sirloin-steak"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cube steak",
+     "attempts": [
+      {
+       "term": "cube steak",
+       "state": "MATCHES",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+       "price": 31.47,
+       "size": "",
+       "unit_price": "$15.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13586071223"
+      },
+      {
+       "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+       "price": 17.93,
+       "size": "",
+       "unit_price": "$0.75/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13843866537"
+      },
+      {
+       "item": "Member's Mark Love at First Bite Box, Frozen, 3.71 lbs.",
+       "price": 46.17,
+       "size": "",
+       "unit_price": "$12.44/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0S6CORIX3MQK"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless NY Strip Steak, priced per pound",
+       "price": 53.09,
+       "size": "",
+       "unit_price": "$13.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/17B5DE7X8ETW"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks, priced per pound",
+       "price": 35.89,
+       "size": "",
+       "unit_price": "$9.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61EZCPH9RV60"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Inside Skirt Steak, priced per pound",
+       "price": 38.45,
+       "size": "",
+       "unit_price": "$14.24/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DJW59GG2GYO"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Steak, priced per pound",
+       "price": 20.16,
+       "size": "",
+       "unit_price": "$6.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5BSZU85M9MXG"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Eye of Round Steak, priced per pound",
+       "price": 23.25,
+       "size": "",
+       "unit_price": "$6.74/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GKK636WAH40"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "seasoned salt",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "seasoned salt",
+     "attempts": [
+      {
+       "term": "seasoned salt",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "Lawry's Seasoned Salt",
+       "price": 3.49,
+       "size": "4 oz",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0002150000057"
+      },
+      {
+       "item": "Lawry's Seasoned Salt",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0002150000052"
+      },
+      {
+       "item": "Smart Way™ Seasoned Salt",
+       "price": 1.25,
+       "size": "4.2 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111011737"
+      },
+      {
+       "item": "Kroger® Seasoned Salt Shaker",
+       "price": 4.49,
+       "size": "14 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111000324"
+      },
+      {
+       "item": "Lawry's Economy Size Seasoned Salt",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0002150000300"
+      },
+      {
+       "item": "SEASONED SALT - SMART WAY - 4.20 OZ",
+       "price": 1.25,
+       "size": "4.20",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111011229"
+      },
+      {
+       "item": "Fire & Smoke Society® Seasoned Salt",
+       "price": 5.99,
+       "size": "7.1 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0085006366169"
+      },
+      {
+       "item": "Wonderful Pistachios In-Shell Seasoned Salt Flavored Nuts",
+       "price": 9.99,
+       "size": "14 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001411370105"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "seasoned salt",
+     "attempts": [
+      {
+       "term": "seasoned salt",
+       "state": "OK",
+       "hits": 24
+      }
+     ],
+     "hits": [
+      {
+       "item": "Morton Seasoned Salt 8 Oz",
+       "price": 3.69,
+       "size": "8 oz",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/morton_seasoned_salt_8_oz/p/7163"
+      },
+      {
+       "item": "Lawry's Seasoned Salt 8 Oz",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/lawry_s_seasoned_salt_8_oz/p/17818"
+      },
+      {
+       "item": "Spice Supreme Seasoned Salt 1.25 Oz",
+       "price": null,
+       "size": "1.25 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_seasoned_salt_1_25_oz/p/2400910"
+      },
+      {
+       "item": "Lawry's The Original Seasoned Salt 4 Oz",
+       "price": 4.79,
+       "size": "4 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/lawry_s_the_original_seasoned_salt_4_oz/p/2473405"
+      },
+      {
+       "item": "Lawry's 25% Less Sodium Seasoned Salt 8 Oz",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/lawry_s_25_less_sodium_seasoned_salt_8_oz/p/524017"
+      },
+      {
+       "item": "Lawry's Economy Size Seasoned Salt 16 Oz",
+       "price": 6.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/lawry_s_economy_size_seasoned_salt_16_oz/p/17820"
+      },
+      {
+       "item": "Wonderful Seasoned Salt Pistachios 14 Oz",
+       "price": 9.99,
+       "size": "14 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/nuts/wonderful_seasoned_salt_pistachios_14_oz/p/1564405684715372449"
+      },
+      {
+       "item": "Mc Cormick Garlic Seasoned Salt Grinder 1.58 Oz",
+       "price": 3.99,
+       "size": "1.58 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_garlic_seasoned_salt_grinder_1_58_oz/p/2371499"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "seasoned salt",
+     "attempts": [
+      {
+       "term": "seasoned salt",
+       "state": "OK",
+       "hits": 51
+      }
+     ],
+     "hits": [
+      {
+       "item": "LAWRY'S Economy Size Seasoned Salt",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87708-lawry-s-economy-size-seasoned-salt-16-oz"
+      },
+      {
+       "item": "LAWRY'S Seasoned Salt",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87703-lawry-s-seasoned-salt-8-oz"
+      },
+      {
+       "item": "Morton Seasoned Salt",
+       "price": 3.18,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41422-morton-season-all-seasoned-salt-blend-of-salt-and-savory-spices-for-bbq-grilling-and-potatoes-8-oz-canister-8-oz"
+      },
+      {
+       "item": "Lawry's® 25% Less Sodium Seasoned Salt",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41215-lawry-s-25-less-sodium-seasoned-salt-8-oz"
+      },
+      {
+       "item": "Badia Spices All Purpose Seasoned Salt",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3303248-badia-spices-all-purpose-seasoned-salt-16-0-oz"
+      },
+      {
+       "item": "Morton Iodized Salt",
+       "price": 1.88,
+       "size": "26 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028-morton-iodized-salt-26-ounce-26-oz"
+      },
+      {
+       "item": "Kinder's The Blend Salt, Pepper & Garlic Seasoning",
+       "price": 7.98,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/33778175-kinder-s-the-blend-seasoning-6-ct"
+      },
+      {
+       "item": "Tony Chachere's Creole Seasoning, Original",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41470-tony-chachere-s-creole-seasoning-original-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "seasoned salt",
+     "attempts": [
+      {
+       "term": "seasoned salt",
+       "state": "MATCHES",
+       "hits": 29
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Sea Salt, 36 oz.",
+       "price": 3.98,
+       "size": "",
+       "unit_price": "$0.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13576072865"
+      },
+      {
+       "item": "Member's Mark Himalayan Pink Salt, 38 oz.",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13609868850"
+      },
+      {
+       "item": "Lawry's Seasoned Salt, 40 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+      },
+      {
+       "item": "Member's Mark Salt-Free Curry Powder, 18 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.50/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CLM8FI6VFJ1"
+      },
+      {
+       "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 10.5 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.47/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AZ9M02O6XSN"
+      },
+      {
+       "item": "Member's Mark Mediterranean Sea Salt Grinder, 14.9 oz.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.37/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13614254911"
+      },
+      {
+       "item": "Ac'cent Flavor Seasoning Enhancer 32 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.28/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/36GYF4RIA9CJ"
+      },
+      {
+       "item": "Badia Complete Seasoning, 28 oz.",
+       "price": 6.38,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

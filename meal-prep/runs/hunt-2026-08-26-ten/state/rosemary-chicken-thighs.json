@@ -1,0 +1,49 @@
+{
+    "slug":  "rosemary-chicken-thighs",
+    "title":  "Rosemary Chicken Thighs",
+    "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:08",
+    "updated":  "2026-08-26T04:53:03",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:08",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:18:09",
+                        "by":  "decider",
+                        "detail":  "Bone-in rosemary chicken thighs roasted with Brussels sprouts, apple and Dijon-honey — a distinct autumn herb-roast plate (different veg, fruit and sauce than the accepted balsamic sweet-potato/kale/cranberry harvest chicken), saturation 0, band verified 672/20/43."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:19:31",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:53:00",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled, 0 rejected. New DB rows returned: Yellow Onion, Apple, Chicken Thighs (bone-in, meat and skin basis), Fresh Rosemary. Naming note, not a registrar question: \u0027Chicken Thighs\u0027 has no vocabulary row even though the bid is live at 7 of 7 - the same shape as the brown-lentils case."
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:53:03",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board"
+                    }
+                ]
+}

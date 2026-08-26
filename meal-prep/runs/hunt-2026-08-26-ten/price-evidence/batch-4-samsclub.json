@@ -1,0 +1,246 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T04:55:12",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "parmesan cheese",
+   "state": "MATCHES",
+   "term_used": "parmesan cheese",
+   "attempts": [
+    {
+     "term": "parmesan cheese",
+     "state": "MATCHES",
+     "hits": 27
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+     "price": 6.44,
+     "size": "",
+     "unit_price": "$0.64/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/16343160365"
+    },
+    {
+     "item": "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+     "price": 6.54,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3620022163"
+    },
+    {
+     "item": "Member's Mark Grated Parmesan Cheese, 24 oz.",
+     "price": 7.42,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XOCVA61RIFC"
+    },
+    {
+     "item": "Member's Mark Shredded Parmesan Cheese, 24 oz.",
+     "price": 10.74,
+     "size": "",
+     "unit_price": "$0.45/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/35CJCISKI68K"
+    },
+    {
+     "item": "Kraft Parmesan Cheese Grated 4.5 lb.",
+     "price": 25.88,
+     "size": "",
+     "unit_price": "$5.75/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3T9R2XRIKCMH"
+    },
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13571669511"
+    },
+    {
+     "item": "Member's Mark Parmesan Cheese Wedge, priced per pound",
+     "price": 16.45,
+     "size": "",
+     "unit_price": "$6.58/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/78RG19NPUFZD"
+    },
+    {
+     "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+     "price": 9.86,
+     "size": "",
+     "unit_price": "$5.63/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "bourbon",
+   "state": "MATCHES",
+   "term_used": "bourbon",
+   "attempts": [
+    {
+     "term": "bourbon",
+     "state": "MATCHES",
+     "hits": 31
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Kentucky Straight Bourbon Whiskey, 750 ml",
+     "price": 16.94,
+     "size": "",
+     "unit_price": "$0.67/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4PNSSUZA82L2"
+    },
+    {
+     "item": "Woodford Reserve Kentucky Straight Bourbon Whiskey (750 ml)",
+     "price": 26.97,
+     "size": "",
+     "unit_price": "$1.06/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5V1QES5BXF4W"
+    },
+    {
+     "item": "Jim Beam Bourbon Whiskey 1.75 L",
+     "price": 22.97,
+     "size": "",
+     "unit_price": "$0.39/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/53G70NHP4D9X"
+    },
+    {
+     "item": "Angel's Envy Kentucky Straight Bourbon Whiskey, 750 ml",
+     "price": 33.97,
+     "size": "",
+     "unit_price": "$1.34/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/61HLS5N1HPMP"
+    },
+    {
+     "item": "Russell's Reserve 10-Year-Old Bourbon Whiskey, 750 ml",
+     "price": 30.97,
+     "size": "",
+     "unit_price": "$1.22/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/42OATCLGEXMA"
+    },
+    {
+     "item": "Maker's Mark Bourbon Whisky, 1.75 L",
+     "price": 39.17,
+     "size": "",
+     "unit_price": "$0.66/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FYM5ASUQI84"
+    },
+    {
+     "item": "Basil Hayden's Kentucky Straight Bourbon Whiskey 750 ml",
+     "price": 28.97,
+     "size": "",
+     "unit_price": "$1.14/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7C8B9ILS69MW"
+    },
+    {
+     "item": "Maker's Mark 46 Kentucky Straight Bourbon Whisky 750 ml",
+     "price": 29.27,
+     "size": "",
+     "unit_price": "$1.15/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6IVJE048JRHL"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "mozzarella cheese",
+   "state": "MATCHES",
+   "term_used": "mozzarella cheese",
+   "attempts": [
+    {
+     "term": "mozzarella cheese",
+     "state": "MATCHES",
+     "hits": 33
+    }
+   ],
+   "hits": [
+    {
+     "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+     "price": 9.47,
+     "size": "",
+     "unit_price": "$0.20/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13879914072"
+    },
+    {
+     "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+     "price": 12.87,
+     "size": "",
+     "unit_price": "$7.35/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13878908387"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+    },
+    {
+     "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+     "price": 12.42,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+    },
+    {
+     "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
+     "price": 9.64,
+     "size": "",
+     "unit_price": "$0.40/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/17272174871"
+    },
+    {
+     "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+     "price": 8.28,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
+    },
+    {
+     "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

@@ -1,0 +1,176 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Stuffed Pork Chops",
+  "source_url": "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+  "servings": 4,
+  "time_total": "50 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+      "item": "boneless pork chops",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": "1 1/4 inch thick, loin chops",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp Ranch Seasoning Mix",
+      "item": "Ranch Seasoning Mix",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp paprika",
+      "item": "paprika",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp salt",
+      "item": "salt",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp black pepper",
+      "item": "black pepper",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp butter",
+      "item": "butter",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup small white onion (diced)",
+      "item": "small white onion",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup celery stalk (diced)",
+      "item": "celery stalk",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup cranberries",
+      "item": "cranberries",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup carrot (shredded)",
+      "item": "carrot",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "shredded",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 tsp salt",
+      "item": "salt",
+      "qty": "1/2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup bread cubes",
+      "item": "bread cubes",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2/3 cup chicken broth",
+      "item": "chicken broth",
+      "qty": "2/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp Ranch Seasoning Mix",
+      "item": "Ranch Seasoning Mix",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400˚F.",
+    "In a small bowl whisk together the olive oil, Ranch Seasoning and paprika. Set aside.",
+    "Carefully cut a pocket into the side of each pork chop (leaving fat side intact). Set aside.",
+    "In a skillet over medium heat add the butter and oil. Saute the onion, celery, cranberries and carrot until vegetables are soft, 4-5 minutes. Season with salt. Remove from heat and allow to cool (See Note 1).",
+    "Transfer to a bowl and toss with bread cubes, chicken broth and Ranch Seasoning. If mixture is too loose, add a few more bread cubes or use less chicken chicken stock. It should hold together.",
+    "Salt and pepper both sides of each pork chop. Divide stuffing equally between each pork chop. Carefully spoon stuffing inside each pork chop pocket, being sure not to poke through meat. Place stuffed chops on a lined cookie sheet or in a prepared baking dish (sprayed with cooking spray). Brush the tops of each pork chop with Ranch Paprika paste.",
+    "Bake uncovered for 28-35 minutes or until pork chops have reached internal temperature of 145˚F. Be sure to test in thickest part of pork meat. Remove from heat and allow to rest 3 minutes before serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

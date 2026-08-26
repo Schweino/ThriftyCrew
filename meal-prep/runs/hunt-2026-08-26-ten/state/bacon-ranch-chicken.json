@@ -1,0 +1,31 @@
+{
+    "slug":  "bacon-ranch-chicken",
+    "title":  "Bacon Ranch Chicken",
+    "source_url":  "https://thecozycook.com/bacon-ranch-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:34",
+    "updated":  "2026-08-26T04:22:35",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Baked chicken breasts smothered in creamy ranch sauce with bacon and cheddar is the same bacon-ranch-chicken bake identity as in-flight chicken-bacon-ranch-cauliflower-bake (chicken, bake, ranch-cream, bacon+cheddar — four axes); presence/absence of cauliflower is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:34",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/bacon-ranch-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:22:35",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breasts smothered in creamy ranch sauce with bacon and cheddar is the same bacon-ranch-chicken bake identity as in-flight chicken-bacon-ranch-cauliflower-bake (chicken, bake, ranch-cream, bacon+cheddar — four axes); presence/absence of cauliflower is not a distinct plate."
+                    }
+                ]
+}

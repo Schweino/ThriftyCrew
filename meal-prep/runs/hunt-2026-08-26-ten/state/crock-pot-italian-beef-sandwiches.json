@@ -1,0 +1,31 @@
+{
+    "slug":  "crock-pot-italian-beef-sandwiches",
+    "title":  "Crock Pot Italian Beef Sandwiches",
+    "source_url":  "https://www.spendwithpennies.com/crock-pot-italian-beef-sandwiches/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:55",
+    "updated":  "2026-08-26T04:12:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Slow-cooker chuck roast with pepperoncini + Italian dressing/seasoning is the same Italian beef prep as live slow-cooker-italian-beef-bowl; serving it on a hoagie instead of over rice is a format swap, not a distinct dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:55",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/crock-pot-italian-beef-sandwiches/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:55",
+                        "by":  "decider",
+                        "detail":  "Slow-cooker chuck roast with pepperoncini + Italian dressing/seasoning is the same Italian beef prep as live slow-cooker-italian-beef-bowl; serving it on a hoagie instead of over rice is a format swap, not a distinct dinner."
+                    }
+                ]
+}

@@ -1,0 +1,118 @@
+{
+ "slug": "dill-pickle-chicken-wings",
+ "lines": [
+  {
+   "raw": "4 lbs chicken wings (See Note 1)",
+   "buy": "14 lb chicken wings, split into drumettes and flats",
+   "grams_source": 1814.4,
+   "notes": "As-purchased bone-in weight; see the macro cross-check on the yield question."
+  },
+  {
+   "raw": "4 cups dill pickle juice/brine (from empty pickle jar)",
+   "buy": "14 cups dill pickle brine (about four 32 oz jars' worth), for the marinade",
+   "grams_source": 946,
+   "notes": "Marinade, drained off and discarded before baking."
+  },
+  {
+   "raw": "1/8 tsp white pepper (optional)",
+   "buy": "scant 1/2 tsp white pepper (optional)",
+   "grams_source": 0.3,
+   "notes": ""
+  },
+  {
+   "raw": "PAM/Oil spray",
+   "buy": "cooking spray, enough to coat 3 or 4 baking racks",
+   "grams_source": 3,
+   "notes": "Pan coating; no printed quantity in the source."
+  },
+  {
+   "raw": "5 tsp baking powder (NOT BAKING SODA and make sure it's aluminum free baking powder)",
+   "buy": "5 tbsp plus 2 1/2 tsp aluminum-free baking powder",
+   "notes": ""
+  },
+  {
+   "raw": "2 tsp dried dill",
+   "buy": "2 tbsp plus 1 tsp",
+   "notes": ""
+  },
+  {
+   "raw": "1 tsp garlic powder",
+   "buy": "1 tbsp plus 1/2 tsp",
+   "notes": ""
+  },
+  {
+   "raw": "3/4 tsp salt",
+   "buy": "generous 2 1/2 tsp",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "4 lbs chicken wings (See Note 1)",
+   "term": "chicken wings",
+   "canon_item": "Chicken Wings",
+   "bid": "chicken-wings",
+   "decision": "mapped",
+   "grams_source": 1814.4,
+   "evidence": "chicken-wings is a LIVE board id at 7 of 7 stores, so this is a REUSE and not a new id; the missing piece is only a vocabulary ROW for the name, which is a naming question. Raw wings, not the cooked or BBQ-glazed FDC rows the shelf offered."
+  },
+  {
+   "raw": "4 cups dill pickle juice/brine (from empty pickle jar)",
+   "term": "dill pickle juice/brine",
+   "canon_item": "Dill Pickle Juice",
+   "bid": "pickles",
+   "decision": "mapped",
+   "grams_source": 946,
+   "evidence": "The source itself says the brine comes 'from empty pickle jar', so what is actually purchased is jars of dill pickles; board carries pickles 7 of 7 and 946 g of jar contents is a fair cost basis. This is not the rejected juice-drink case - it is the same jar, priced as the jar."
+  },
+  {
+   "raw": "1/8 tsp white pepper (optional)",
+   "term": "white pepper",
+   "canon_item": "White Pepper",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 0.3,
+   "evidence": "No commodity claims it (captures only), and black-pepper is a different spice at a different price, so I will not bridge it. Optional line at 1/8 tsp: pantry-static pricing is safe and the term is reported as optional_absent."
+  },
+  {
+   "raw": "PAM/Oil spray",
+   "term": "cooking spray",
+   "canon_item": "Cooking Spray",
+   "bid": "cooking-spray",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "cooking-spray is a live board id at 7 of 7, so a REUSE, not a proposal; the source names PAM, which is exactly that product. 3 g is a light coating for the racks."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Chicken Wings",
+  "White Pepper",
+  "Cooking Spray"
+ ],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 620.0,
+   "carbs_g": 20.0,
+   "protein_g": 45.0
+  },
+  "ours_per_serving_label_basis_on_gross_weight": {
+   "calories": 864,
+   "carbs_g": 2.5,
+   "protein_g": 81
+  },
+  "ours_per_serving_edible_yield_adjusted": {
+   "calories": 545,
+   "carbs_g": 2.5,
+   "protein_g": 52
+  },
+  "protein_gap_pct": 80,
+  "verdict": "FAIL as computed - flagged, not silently fixed",
+  "detail": "This is the loudest thing in the batch. 4 lb of wings for 4 servings is a pound of wings per person, and applying the Perdue label (210 cal, 20 g protein per 112 g raw) to the full as-purchased 1814 g gives 864 cal and 81 g protein per serving: 80% over the source's published 45 g protein and well past this run's 650 cal ceiling. The cause is a basis mismatch, not a portion error: the gram weight is bone-in as purchased (right for cost), while every wing macro figure is a meat-and-skin basis. Applying the standard whole-wing edible yield of about 64% gives 545 cal and 52 g protein per serving, which brackets the source's 620/45 from either side. I did NOT shave the grams to make the macros land, because the cost side needs the purchased weight - someone downstream has to decide the yield basis for bone-in poultry, and this recipe's band eligibility turns entirely on it. Separately, the source's published 20 g carbs cannot be reproduced from these 8 lines (ours is 2.5 g); the source most likely counted a dipping sauce that is not in the ingredient list."
+ }
+}

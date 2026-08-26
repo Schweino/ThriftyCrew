@@ -1,0 +1,194 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T04:55:20",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "parmesan cheese",
+   "state": "MATCHES",
+   "term_used": "parmesan cheese",
+   "attempts": [
+    {
+     "term": "parmesan cheese",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Parmesan Fancy Shredded Cheese",
+     "price": 2.48,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713413-fareway-cheese-parmesan-fancy-shredded-6-oz"
+    },
+    {
+     "item": "Fareway Grated Parmesan Cheese",
+     "price": 2.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24501059-fareway-cheese-parmesan-grated-8-oz"
+    },
+    {
+     "item": "BelGioioso Freshly Shredded Parmesan Cheese",
+     "price": 4.49,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72161-belgioioso-cheese-freshly-shredded-parmesan-cheese-cup-5-oz"
+    },
+    {
+     "item": "BelGioioso Parmesan Wedge",
+     "price": 4.49,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/247155-belgioioso-parmesan-cheese-wedge-5-oz"
+    },
+    {
+     "item": "Kraft Grated Parmesan Cheese Shaker Bottle",
+     "price": 4.44,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/64564288-kraft-grated-parm-pp-499"
+    },
+    {
+     "item": "Crystal Farms Cheese, Parmesan, Finely Shredded",
+     "price": 2.67,
+     "size": "5.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27152419-crystal-farms-cf-shredded-parmesan-cheese-5-5-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "bourbon",
+   "state": "MATCHES",
+   "term_used": "bourbon",
+   "attempts": [
+    {
+     "term": "bourbon",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Bulleit Bourbon Whiskey",
+     "price": 32.99,
+     "size": "750 ml",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2678191-bulleit-bourbon-whiskey-750-ml"
+    },
+    {
+     "item": "Evan Williams Black Bourbon",
+     "price": 29.99,
+     "size": "1.75 L",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45643-evan-williams-straight-bourbon-black-label-1-75-l"
+    },
+    {
+     "item": "Four Roses Distillery Four Roses Bourbon Whiskey, 80 Proof",
+     "price": 19.99,
+     "size": "750 ml",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2678201-four-roses-yellow-label-bourbon-750-ml"
+    },
+    {
+     "item": "Rebel Kentucky Straight Bourbon Whiskey 100 Proof 100 Proof Straight Bourbon",
+     "price": 23.99,
+     "size": "750 ml",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984899-rebel-kentucky-straight-bourbon-whiskey-100-proof-100-proof-straight-bourbon-750-ml"
+    },
+    {
+     "item": "Elijah Craig 94PR Kentucky Straight Bourbon Whiskey",
+     "price": 29.99,
+     "size": "750 ml",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/57365-elijah-craig-94pr-kentucky-straight-bourbon-whiskey-750-ml"
+    },
+    {
+     "item": "Jim Beam Bourbon Whiskey",
+     "price": 17.99,
+     "size": "750 ml",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45619-jim-beam-bourbon-whiskey-kentucky-straight-750-ml"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "mozzarella cheese",
+   "state": "MATCHES",
+   "term_used": "mozzarella cheese",
+   "attempts": [
+    {
+     "term": "mozzarella cheese",
+     "state": "OK",
+     "hits": 28
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Mozzarella Shredded Cheese",
+     "price": 7.48,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712164-fareway-cheese-mozzarella-shredded-32-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Fancy Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24474018-fareway-cheese-mozzarella-fancy-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Shredded Mozzarella Cheese",
+     "price": 3.98,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712269-fareway-cheese-mozzarella-shredded-16-oz"
+    },
+    {
+     "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
+    },
+    {
+     "item": "Crystal Farms String Cheese, Light, Mozzarella, Low-Moisture, Part-Skim",
+     "price": 3.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/346945-crystal-farms-light-string-cheese-12-ct"
+    },
+    {
+     "item": "Italia Garden Smoked String Cheese",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19040648-italia-brand-cheese-string-cheese-smoked-natural-wisconsin-8-0-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

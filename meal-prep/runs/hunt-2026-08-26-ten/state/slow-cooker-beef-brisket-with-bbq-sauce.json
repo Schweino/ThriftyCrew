@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-beef-brisket-with-bbq-sauce",
+    "title":  "Slow Cooker Beef Brisket with BBQ Sauce",
+    "source_url":  "https://www.recipetineats.com/slow-cooker-beef-brisket-with-bbq-sauce/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:11:00",
+    "updated":  "2026-08-26T04:11:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same dinner as live slow-cooker-bbq-shredded-beef-bowls: slow-cooked saucy BBQ shredded beef (protein+sauce-family+method all match); brisket cut does not distinguish the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:11:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/slow-cooker-beef-brisket-with-bbq-sauce/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:11:00",
+                        "by":  "decider",
+                        "detail":  "Same dinner as live slow-cooker-bbq-shredded-beef-bowls: slow-cooked saucy BBQ shredded beef (protein+sauce-family+method all match); brisket cut does not distinguish the plate."
+                    }
+                ]
+}

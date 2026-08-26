@@ -1,0 +1,196 @@
+﻿{
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "title":  "Spaghetti Squash Boats with Chicken",
+    "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 medium spaghetti squash (about 2 pounds each)",
+                            "item":  "Spaghetti Squash",
+                            "bid":  "spaghetti-squash",
+                            "board":  null,
+                            "grams":  6349,
+                            "buy":  "7 medium (about 14 lb total), halved lengthwise and seeded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Whole squash weight, rind and seeds included. spaghetti-squash is a live board id at 4 of 7 stores, so this is a reuse and not a new id; only a vocabulary row for the name is missing.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons extra-virgin olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  null,
+                            "grams":  32,
+                            "buy":  "2 tablespoons plus 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "4.5 g per tsp. Extra virgin is the grade the olive-oil commodity is sold at, not a different food. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 teaspoons kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "3/4 teaspoon ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line, second addition.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 strips thick-sliced center-cut bacon (roughly chopped)",
+                            "item":  "Hickory Smoked Bacon",
+                            "bid":  "bacon",
+                            "board":  null,
+                            "grams":  350,
+                            "buy":  "14 thick-cut strips, roughly chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "25 g per thick-cut strip, raw. Thick-sliced and center-cut are cut descriptors on the same smoked pork bacon the id prices; deliberately NOT turkey-bacon, which is a different meat. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  1589,
+                            "buy":  "3 1/2 lb, cut into bite-sized pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Raw weight. Word-for-word the vocabulary row\u0027s own name; the form flag is a plural/singular artefact. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "3/4 teaspoon kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "3/4 teaspoon ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line, second addition.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "1 3/4 teaspoons garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups baby spinach (torn into pieces)",
+                            "item":  "Spinach",
+                            "bid":  "spinach",
+                            "board":  null,
+                            "grams":  210,
+                            "buy":  "7 cups, torn into pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "30 g per cup of leaves. Baby is a leaf size on the same fresh bagged spinach, not a form flip like fresh vs frozen. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup nonfat plain Greek yogurt",
+                            "item":  "Greek Yogurt",
+                            "bid":  "greek-yogurt",
+                            "board":  null,
+                            "grams":  427,
+                            "buy":  "1 3/4 cups plain nonfat Greek yogurt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "245 g per cup. Same-form vocabulary row Greek Yogurt [greek-yogurt]; nonfat and plain are label variants within the same tub price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup part-skim mozzarella cheese (divided)",
+                            "item":  "Mozzarella Cheese",
+                            "bid":  "mozzarella-cheese",
+                            "board":  null,
+                            "grams":  392,
+                            "buy":  "3 1/2 cups shredded part-skim mozzarella, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup shredded = 112 g. REFUSED the board\u0027s shredded-cheese bridge - that id prices bagged cheddar/blend, a different cheese. Vocabulary row Mozzarella Cheese [mozzarella-cheese] is same form; term reported absent for pricing.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons chopped fresh basil (plus additional for serving)",
+                            "item":  "Fresh Basil",
+                            "bid":  "fresh-basil",
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "7 tablespoons chopped fresh basil, plus more for serving",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Chopped leaves. Chopped fresh leaves, so the vocabulary\u0027s Fresh Basil row and not dried-basil (different price class and gram weight). No commodity claims it, so the term is reported.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "mozzarella cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source band 538 cal / 37 carbs / 42 g protein per serving over 4. My build: 1814 g whole squash at ~60% edible strands = 272 g per serving (74 cal, 1.8 P, 17.6 C), chicken 113.5 g (136 cal, 25.5 P), bacon 25 g raw (114 cal, 3 P), mozzarella 28 g (85 cal, 6.6 P), yogurt 30.5 g (18 cal, 3.1 P), spinach 15 g (3 cal), olive oil 2.25 g (20 cal) = about 450 cal, 40 g protein, ~22 g carbs. Protein 5% under - fine. Carbs land 15 g under the published 37, which reads as the source costing the whole 4 lb of squash as edible; either way the recipe clears the 35 g carb ceiling comfortably, and it does so on MY figure, so the ceiling call does not depend on the band being right."
+}

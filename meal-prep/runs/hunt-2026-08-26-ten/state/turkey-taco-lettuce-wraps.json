@@ -1,0 +1,31 @@
+{
+    "slug":  "turkey-taco-lettuce-wraps",
+    "title":  "Turkey Taco Lettuce Wraps",
+    "source_url":  "https://thecozycook.com/turkey-taco-lettuce-wraps/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:32",
+    "updated":  "2026-08-26T04:22:32",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Seasoned ground-turkey taco meat with black beans, cheese and sour cream is the same turkey-taco filling as live turkey-taco-rice-skillet/casserole (region saturation 9); lettuce-wrap is a cold vehicle, not a distinct dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:32",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/turkey-taco-lettuce-wraps/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:22:32",
+                        "by":  "decider",
+                        "detail":  "Seasoned ground-turkey taco meat with black beans, cheese and sour cream is the same turkey-taco filling as live turkey-taco-rice-skillet/casserole (region saturation 9); lettuce-wrap is a cold vehicle, not a distinct dinner."
+                    }
+                ]
+}

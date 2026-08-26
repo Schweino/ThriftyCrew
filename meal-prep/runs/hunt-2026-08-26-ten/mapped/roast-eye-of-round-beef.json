@@ -1,0 +1,294 @@
+﻿{
+    "slug":  "roast-eye-of-round-beef",
+    "title":  "Roast Eye of Round Beef",
+    "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "any",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3 to 3 ½ pounds Boneless Eye of Round Roast",
+                            "item":  "Eye of Round Roast",
+                            "bid":  "eye-of-round-roast",
+                            "board":  null,
+                            "grams":  2580,
+                            "buy":  "5 3/4 lb, tied and patted dry (two roasts if needed)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Midpoint of the source\u0027s 3 to 3 1/2 lb range. Whole-muscle beef round roast; board carries no commodity and no capture, so a new id is proposed. 1474 g (range midpoint) yields 43 g protein per serving against the source\u0027s published 40 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Kosher Salt \u0026 Freshly Cracked Black Pepper (- to taste)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "3 1/2 tsp kosher salt and 1 3/4 tsp cracked black pepper",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Costed as salt; the pepper on the same line is pantry-static. One line carrying two pantry seasonings; costed as salt (priced 7/7) with the black pepper noted as pantry-static rather than split into a phantom line.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "8 TBS Unsalted Butter (– softened)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  null,
+                            "grams":  198,
+                            "buy":  "14 tbsp (1 3/4 sticks), softened",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Unsalted is the same product concept, same 4-stick pack and same price class as the `butter` id, and the gram weight per tablespoon is identical - not a form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "5 cloves Garlic (– softened)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  26,
+                            "buy":  "9 cloves, minced into the butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp Finely Chopped Fresh Rosemary ((substitute: ½ tsp Dried))",
+                            "item":  "Fresh Rosemary",
+                            "bid":  "fresh-rosemary",
+                            "board":  null,
+                            "grams":  3,
+                            "buy":  "1 3/4 tsp finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "fresh-rosemary is already a live board id (5/7 stores), so this is a reuse needing only a vocabulary row; dried rosemary is a different price and a different gram weight per teaspoon.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tsp Chopped Fresh Thyme ((substitute: 1 tsp Dried))",
+                            "item":  "Fresh Thyme",
+                            "bid":  "fresh-thyme",
+                            "board":  null,
+                            "grams":  3,
+                            "buy":  "3 1/2 tsp chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "fresh-thyme is a live board id (4/7); refusing the bridge to dried-thyme because 2 tsp fresh is 1.6 g of herb against about 2 g of dried leaf at a different price.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 Yellow Onion ( – peeled \u0026 quartered through root)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  192,
+                            "buy":  "2 medium onions, peeled and quartered through the root",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 large Carrots (– peeled \u0026 cut into 2-inch chunks)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  214,
+                            "buy":  "3 medium carrots (about 7 1/2 oz), peeled and cut into 2-inch chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: carrots, 7 of 7 stores, cheapest 0.87 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 head Garlic (– loose skin removed \u0026 halved through root)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "2 heads, loose skin removed and halved through the root",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Bay Leaves",
+                            "item":  "Bay Leaves",
+                            "bid":  "bay-leaves",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "4 leaves",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: bay-leaves, 6 of 7 stores, cheapest 1.4369 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 sprigs Fresh Thyme",
+                            "item":  "Fresh Thyme",
+                            "bid":  "fresh-thyme",
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "7 sprigs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Same food as the chopped line; a thyme sprig weighs about 1 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 sprigs Fresh Rosemary",
+                            "item":  "Fresh Rosemary",
+                            "bid":  "fresh-rosemary",
+                            "board":  null,
+                            "grams":  10,
+                            "buy":  "5 sprigs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "A rosemary sprig weighs about 2 g; same live board id as the chopped line.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "12 ounces Cremini Mushrooms (– stemmed \u0026 halved)",
+                            "item":  "Cremini Mushrooms",
+                            "bid":  "mushrooms",
+                            "board":  null,
+                            "grams":  595,
+                            "buy":  "1 lb 5 oz, stemmed and halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Baby bella is its own 8 oz tray at a premium over the white-button `mushrooms` id (whose vocabulary label is White Mushrooms), and portobello is the mature large cap sold by the 2-count - variety pricing, same class of call as red onion vs onions.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 TBS Olive Oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Cup Dry Red Wine",
+                            "item":  "Dry Red Wine",
+                            "bid":  "red-wine",
+                            "board":  null,
+                            "grams":  411,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "red-wine is a live board id (4/7 stores) - a reuse, not a proposal; the vocabulary only lacks the name row. Red wine vinegar is a different food and is refused.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 ½ Cups No Sodium Beef Stock ((substitute: no-sodium beef broth))",
+                            "item":  "Beef Broth",
+                            "bid":  "beef-broth",
+                            "board":  null,
+                            "grams":  1050,
+                            "buy":  "4 1/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The source itself offers no-sodium beef broth as the substitute; beef-broth is the same carton class and is priced 7/7. Sodium level is not a price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 TBS Worcestershire Sauce",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  "worcestershire",
+                            "board":  "recipe",
+                            "grams":  30,
+                            "buy":  "1 3/4 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: worcestershire, 6 of 7 stores, cheapest 0.1 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 TBS Cornstarch (- mixed with 2 TBS Water)",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "1 3/4 tbsp, mixed with 3 1/2 tbsp cold water",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "OPTIONAL Heavy Cream (– to taste)",
+                            "item":  "Heavy Cream",
+                            "bid":  "heavy-cream",
+                            "board":  "weekly",
+                            "grams":  52,
+                            "buy":  "optional: 2 to 3 tbsp, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Optional finish; weighed at 2 tbsp so it can be costed.",
+                            "grams_from":  "line"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "eye of round roast",
+                                 "cremini mushrooms"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Eye of Round Roast",
+                               "Fresh Rosemary",
+                               "Cremini Mushrooms"
+                           ],
+    "db_row_findings":  [
+                            "roast-eye-of-round-beef: the food-DB row for \u0027Dry Red Wine\u0027 FAILED the Atwater check (Atwater 11 vs stated 85 - a 87% gap, so these four numbers do not describe one food) and was NOT written",
+                            "roast-eye-of-round-beef: the food DB already carries \u0027Beef Broth\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 240, \"serving_qty\": 1, \"serving_unit\": \"cup\", \"calories\": 10, \"protein_g\": 2, \"carbs_g\": 0, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 13, \"protein_g\": 1.97, \"carbs_g\": 1.2, \"fat_g\": 0.09}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Boneless Eye of Round Roast",
+                                        "proposed_bid":  "eye-of-round-roast",
+                                        "evidence":  "Board reports ABSENT: no commodity and no capture match. Not already priced under another spelling - the meat ids in play are ground-beef-8020 and cube/steak cuts; an eye of round is a whole-muscle roasting joint sold by the piece at roast prices, not a ground or steak SKU. No word-order variant (round roast / eye round) appears on the everyday board or the feed.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "Cremini Mushrooms",
+                                        "proposed_bid":  "cremini-mushrooms",
+                                        "evidence":  "Priced separately from `mushrooms` (vocabulary label: White Mushrooms) and from `portobello-mushrooms` (large caps sold 2-count). Baby bella/cremini is its own 8 oz tray SKU at a premium to white button - the same variety-pricing call the estate already makes for red onion vs onions. If the registrar judges the premium immaterial, aliasing to `mushrooms` is the acceptable fallback.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "eye-of-round-roast",
+                                  "verdict":  "approve",
+                                  "bid":  "eye-of-round-roast",
+                                  "reason":  "No round-primal beef id exists anywhere in the estate: re-swept all three namespaces and the live feed for round/rump/london/eye and found only ground-beef variants, ribeye-steak, chuck-roast/beef-chuck-roast, beef-short-ribs and \u0027birds eye\u0027 frozen-vegetable brand hits - no eye-of-round, bottom/top round, rump roast or london broil under any spelling, and no feed price cell. Chuck-roast ($6.64/lb, Sam\u0027s) is the nearest live row but is a different purchase, not a variant: chuck is a marbled shoulder braising cut, eye of round a lean whole-muscle roasting joint from the round primal, sold as distinct SKUs at distinct price bands. FOLLOW-UP EDITS: mint in the recipe namespace (recipe-board-everyday baseline + recipe-commodities.json, since beef roasts go on sale) via the sanctioned editors; include patterns \u0027eye\\s+of\\s+round\u0027 / \u0027eye\\s+round\\s+roast\u0027 survive contiguously in real product names; excludes MUST cover \u0027steak\u0027 (eye-of-round STEAK is a thin-cut different purchase), \u0027ground\u0027, \u0027deli\u0027, \u0027sliced\u0027, \u0027roast beef\u0027 lunchmeat, \u0027jerky\u0027, \u0027pet|dog\u0027, \u0027seasoning\u0027, \u0027gravy\u0027, \u0027broth\u0027 - build to the ~150-pattern rigor of a neighboring meat row, not the V4 2-5. Add allowlist pair eye-of-round-roast \u003c-\u003e chuck-roast (reason: different beef primal, different cut) so the shared \u0027roast\u0027 token never pages the daily audit. VOCABULARY: \u0027Boneless Eye of Round Roast\u0027 also needs a new ingredients.json row (no core-word match found) - a separate act; this ruling mints only the id. Macros: fdc:170229 is the COOKED/roasted SR row - use the raw separable-lean-and-fat counterpart or transcribe a label; do not attach cooked macros to a purchase id."
+                              },
+                              {
+                                  "proposed_bid":  "cremini-mushrooms",
+                                  "verdict":  "alias",
+                                  "bid":  "mushrooms",
+                                  "reason":  "The food is already priced by design: the weekly `mushrooms` row is labeled \u0027Mushrooms (white / baby bella)\u0027 and its include list explicitly claims \u0027cremini\u0027 and \u0027baby\\s*bella\u0027 (verified at commodities.json:9467-9474), live at $0.1612/oz across 7 stores - so every cremini tray on shelf is ALREADY captured by this id, and minting cremini-mushrooms would put the same tray under two ids, the exact bread-crumbs defect. The mapper\u0027s red-onion analogy fails on the estate\u0027s own record: red onion was split BEFORE the base row claimed it, whereas here the pooling of white+cremini is a deliberate, labeled decision, and the recipe-side white-mushrooms row excludes cremini precisely because the weekly pooled row carries it (white-mushrooms -\u003e mushrooms is already a verified floor-map pair). The current crown happens to be a white 8oz tray (Aldi Monterey white sliced, $1.29), so a cremini premium is real but is absorbed by the pool by design; if Brad wants the premium priced separately, that is a REPARTITION of `mushrooms` (remove cremini/baby-bella from its includes, relabel, then mint) - a Brad-level edit, not something this gate may do as a side effect of a new id. FOLLOW-UP EDITS: add recipe-floor-id-map.json pair cremini-mushrooms -\u003e mushrooms (units match, oz/oz); resolve the ingredient name to the existing vocabulary neighbors rather than minting a new row only if Brad rules the variety immaterial for macros - white and cremini macros differ trivially, so reuse is defensible there too."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source publishes 486 cal / 10 carbs / 40 protein per serving over 8 servings. Recomputed from the rows above at source scale: about 436 cal and 47 g protein per serving (roast 1474 g raw at 23.5 P/100 g contributes 43 g of that protein; butter 101 cal and olive oil 30 cal carry most of the fat). Protein is +17% against the source and calories -10%. Taking the low end of the stated 3 to 3 1/2 lb range (1361 g) lands protein at exactly 40 g, so the whole gap is the range midpoint I chose plus the source likely costing a fattier grade. Within tolerance, no line re-examined. Carbs recompute to about 8 g against the published 10 - comfortably inside the 35 g cap."
+}

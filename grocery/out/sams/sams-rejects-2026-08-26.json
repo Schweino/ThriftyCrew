@@ -1,0 +1,26 @@
+﻿[
+    {
+        "name":  "Wright® Brand Thick Sliced Applewood Smoked Bacon, 4 lbs.",
+        "lp":  "$20.47",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Ranch Style Beans, Canned Beans, 15 oz.",
+        "lp":  "$8.18",
+        "up":  "$0.07/oz",
+        "reason":  "NAME CONFLICT: name states 15 oz but none reproduces Sam\u0027s 0.07/oz (lp/up derives 116.857)"
+    },
+    {
+        "name":  "Rising Star Baking Supply Cocoa Powder, 20 oz.",
+        "lp":  "$11.78",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Dexas 3-Piece Silicone Baking Mats, Choose Color",
+        "lp":  "$14.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    }
+]

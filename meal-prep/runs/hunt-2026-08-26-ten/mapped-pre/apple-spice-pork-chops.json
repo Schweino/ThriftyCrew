@@ -1,0 +1,201 @@
+﻿{
+    "slug":  "apple-spice-pork-chops",
+    "title":  "Apple Spice Pork Chops",
+    "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+    "servings":  4,
+    "built_at":  "2026-08-26T04:22:35",
+    "line_count":  10,
+    "resolved_count":  5,
+    "residual_count":  5,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "salt and pepper",
+                           "med onion",
+                           "fuji apples",
+                           "cinnamon",
+                           "nutmeg"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "4 pork chops ($6.44)",
+                     "term":  "pork chops",
+                     "canon_item":  "Pork Chops",
+                     "bid":  "pork-chops",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: pork-chops, 7 of 7 stores, cheapest 2.52 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  680
+                 },
+                 {
+                     "raw":  "2 Tbsp vegetable oil ($0.08)",
+                     "term":  "vegetable oil",
+                     "canon_item":  "Vegetable Oil",
+                     "bid":  "vegetable-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: vegetable-oil, 7 of 7 stores, cheapest 0.0666 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  28
+                 },
+                 {
+                     "raw":  "Pinch salt and pepper ($0.05)",
+                     "term":  "salt and pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170109 Peppers, sweet, green, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170515 Peppers, sweet, red, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170428 Peppers, sweet, green, cooked, boiled, drained, without salt [SR Legacy] per 100 g: 28.0 cal, 0.92 P, 6.7 C, 0.2 F, 1.2 fiber; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1 med onion ($0.38)",
+                     "term":  "med onion",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170000 Onions, raw [SR Legacy] per 100 g: 40.0 cal, 1.1 P, 9.34 C, 0.1 F, 1.7 fiber | fdc:169844 DENNY\u0027S, onion rings [SR Legacy] per 100 g: 385.0 cal, 5.29 P, 41.0 C, 22.2 F, 2.4 fiber | fdc:170002 Onions, dehydrated flakes [SR Legacy] per 100 g: 349.0 cal, 8.95 P, 83.3 C, 0.46 F, 9.2 fiber | fdc:790577 Onions, red, raw [Foundation] per 100 g: 44.0 cal, 0.94 P, 9.93 C, 0.1 F, 2.2 fiber; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 fuji apples ($1.99)",
+                     "term":  "fuji apples",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:167793 Apples, raw, fuji, with skin (Includes foods for USDA\u0027s Food Distribution Program) [SR Legacy] per 100 g: 63.0 cal, 0.2 P, 15.2 C, 0.18 F, 2.1 fiber | fdc:174988 Croissants, apple [SR Legacy] per 100 g: 254.0 cal, 7.4 P, 37.1 C, 8.7 F, 2.5 fiber | fdc:175032 Strudel, apple [SR Legacy] per 100 g: 274.0 cal, 3.3 P, 41.1 C, 11.2 F, 2.2 fiber; board MAPPED: apples, 7 of 7 stores, cheapest 0.9967 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 Tbsp butter ($0.26)",
+                     "term":  "butter",
+                     "canon_item":  "Butter",
+                     "bid":  "butter",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  28
+                 },
+                 {
+                     "raw":  "1 Tbsp brown sugar ($0.03)",
+                     "term":  "brown sugar",
+                     "canon_item":  "Brown Sugar",
+                     "bid":  "brown-sugar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: brown-sugar, 6 of 7 stores, cheapest 0.925 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  13.5
+                 },
+                 {
+                     "raw":  "1/4 tsp cinnamon ($0.02)",
+                     "term":  "cinnamon",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Ground Cinnamon [ground-cinnamon] DIFFERENT FORM: ground; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171849 Bread, cinnamon [SR Legacy] per 100 g: 253.0 cal, 7.05 P, 44.4 C, 5.29 F, 3.5 fiber | fdc:174997 Muffins, English, raisin-cinnamon (includes apple-cinnamon) [SR Legacy] per 100 g: 240.0 cal, 7.91 P, 48.1 C, 1.8 F, 2.6 fiber | fdc:172664 Bagels, cinnamon-raisin [SR Legacy] per 100 g: 274.0 cal, 9.8 P, 55.2 C, 1.7 F, 2.3 fiber; board MAPPED: ground-cinnamon, 7 of 7 stores, cheapest 0.3629 at Walmart",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1/8 tsp nutmeg ($0.02)",
+                     "term":  "nutmeg",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Ground Nutmeg [ground-nutmeg] DIFFERENT FORM: ground; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172335 Oil, nutmeg butter [SR Legacy] per 100 g: 884.0 cal, 0.0 P, 0.0 C, 100.0 F, 0.0 fiber | fdc:171326 Spices, nutmeg, ground [SR Legacy] per 100 g: 525.0 cal, 5.84 P, 49.3 C, 36.3 F, 20.8 fiber; board MAPPED: ground-nutmeg, 5 of 7 stores, cheapest 0.84 at Fareway",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1 cup chicken broth ($0.13)",
+                     "term":  "chicken broth",
+                     "canon_item":  "Chicken Broth",
+                     "bid":  "chicken-broth",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0373 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  240
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 5 of 10 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  498.6,
+                                          "carbs":  24.3,
+                                          "protein_g":  40.73,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  5,
+                           "lines_total":  10,
+                           "uncovered_lines":  [
+                                                   "salt and pepper",
+                                                   "med onion",
+                                                   "fuji apples",
+                                                   "cinnamon",
+                                                   "nutmeg"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

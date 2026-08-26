@@ -1,0 +1,134 @@
+{
+ "slug": "apple-spice-pork-chops",
+ "lines": [
+  {
+   "raw": "4 pork chops ($6.44)",
+   "buy": "14 pork chops, about 6 oz each (5 1/4 lb total)",
+   "notes": "Settled line; 680 g source = 170 g per chop, a 6 oz chop."
+  },
+  {
+   "raw": "2 Tbsp vegetable oil ($0.08)",
+   "buy": "7 tbsp",
+   "notes": ""
+  },
+  {
+   "raw": "2 Tbsp butter ($0.26)",
+   "buy": "7 tbsp (just under 1 stick)",
+   "notes": ""
+  },
+  {
+   "raw": "1 Tbsp brown sugar ($0.03)",
+   "buy": "3 1/2 tbsp, packed",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup chicken broth ($0.13)",
+   "buy": "3 1/2 cups",
+   "notes": ""
+  },
+  {
+   "raw": "Pinch salt and pepper ($0.05)",
+   "buy": "1/2 tsp salt and 1/2 tsp black pepper, to taste",
+   "grams_source": 1,
+   "notes": "A pinch of each; weighed as 1 g total at source scale."
+  },
+  {
+   "raw": "1 med onion ($0.38)",
+   "buy": "3 1/2 medium yellow onions, sliced (about 13 oz)",
+   "grams_source": 110,
+   "notes": "Medium onion = 110 g, the same each-weight the DB carries for a medium red onion."
+  },
+  {
+   "raw": "2 fuji apples ($1.99)",
+   "buy": "7 Fuji apples, cored and sliced (about 2 3/4 lb)",
+   "grams_source": 360,
+   "notes": "180 g per medium Fuji, 2 apples = 360 g."
+  },
+  {
+   "raw": "1/4 tsp cinnamon ($0.02)",
+   "buy": "scant 1 tsp ground cinnamon",
+   "grams_source": 0.65,
+   "notes": "1 tsp ground cinnamon = 2.6 g."
+  },
+  {
+   "raw": "1/8 tsp nutmeg ($0.02)",
+   "buy": "scant 1/2 tsp ground nutmeg",
+   "grams_source": 0.28,
+   "notes": "1 tsp ground nutmeg = 2.2 g."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "Pinch salt and pepper ($0.05)",
+   "term": "salt and pepper",
+   "canon_item": "Salt and Pepper",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 1,
+   "evidence": "Two distinct pantry foods on one unsplittable line, so no single bid can carry it; follows the 'garlic powder, cumin, and chili powder' precedent of 2026-08-26. Pantry-static pricing at a pinch is safe."
+  },
+  {
+   "raw": "1 med onion ($0.38)",
+   "term": "med onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "Vocabulary row Yellow Onion [onions] is same form and the board carries onions 7 of 7; an unqualified 'onion' in a savoury braise is the yellow cooking onion, not the red variety."
+  },
+  {
+   "raw": "2 fuji apples ($1.99)",
+   "term": "fuji apples",
+   "canon_item": "Apples",
+   "bid": "apples",
+   "decision": "mapped",
+   "grams_source": 360,
+   "evidence": "apples is a LIVE board id (7 of 7 stores) so this is a REUSE, not a new id; Fuji is a mainstream bagged eating apple sold at the generic apple price, unlike the red-onion variety-pricing case. The missing piece is a vocabulary ROW named Apples, a naming question."
+  },
+  {
+   "raw": "1/4 tsp cinnamon ($0.02)",
+   "term": "cinnamon",
+   "canon_item": "Ground Cinnamon",
+   "bid": "ground-cinnamon",
+   "decision": "mapped",
+   "grams_source": 0.65,
+   "evidence": "The DIFFERENT FORM 'ground' flag is spurious: a 1/4 tsp measure of cinnamon IS ground cinnamon, not a stick. Board carries ground-cinnamon 7 of 7."
+  },
+  {
+   "raw": "1/8 tsp nutmeg ($0.02)",
+   "term": "nutmeg",
+   "canon_item": "Ground Nutmeg",
+   "bid": "ground-nutmeg",
+   "decision": "mapped",
+   "grams_source": 0.28,
+   "evidence": "Same spurious form flag: 1/8 tsp is a ground-spice measure, not a whole nutmeg. Board carries ground-nutmeg 5 of 7."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Apples"
+ ],
+ "db_row_findings": [
+  "apple-spice-pork-chops: the food DB already carries 'Yellow Onion' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 80, \"serving_qty\": 0.5, \"serving_unit\": \"cup chopped\", \"calories\": 32, \"protein_g\": 0.9, \"carbs_g\": 7.4, \"fat_g\": 0.1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 38, \"protein_g\": 0.83, \"carbs_g\": 8.61, \"fat_g\": 0.05}",
+  "apple-spice-pork-chops: the food DB already carries 'Ground Nutmeg' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 2.2, \"serving_qty\": 1, \"serving_unit\": \"tsp\", \"calories\": 12, \"protein_g\": 0, \"carbs_g\": 1, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 525, \"protein_g\": 5.84, \"carbs_g\": 49.3, \"fat_g\": 36.3}"
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 498.6,
+   "carbs_g": 24.3,
+   "protein_g": 40.73
+  },
+  "ours_per_serving": {
+   "calories": 452,
+   "carbs_g": 19.6,
+   "protein_g": 35.5
+  },
+  "protein_gap_pct": -12.8,
+  "verdict": "pass, with a caution",
+  "detail": "Totals at source scale over all 10 lines: 1808 cal, 142 g protein, 78 g carbs, 4 servings. Protein is 12.8% under the source, inside the 15% band but at its edge, and the whole gap sits on the pork-chop each-weight (170 g / 6 oz raw per chop, from the pre-resolver's 680 g). If those chops were 8 oz, protein lands at 46 g and calories at ~530, which would match the source almost exactly. I left the pre-resolved 680 g alone as instructed but flag it as the one number here worth a second look. Per serving 452 cal / 19.6 g carbs sits inside this run's 400-650 cal and 35 g carb conditions."
+ }
+}

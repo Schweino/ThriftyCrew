@@ -1,0 +1,192 @@
+{
+ "slug": "kfc-oven-baked-fried-chicken-tenders",
+ "lines": [
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 tsp salt"
+  },
+  {
+   "raw": "1 tbsp celery salt ((Note 1))",
+   "buy": "3 1/2 tbsp celery salt"
+  },
+  {
+   "raw": "1/2 tbsp coarsely ground black pepper",
+   "buy": "1 3/4 tbsp coarsely ground black pepper",
+   "grams_source": 3.5
+  },
+  {
+   "raw": "1 tbsp mustard powder",
+   "buy": "3 1/2 tbsp mustard powder",
+   "grams_source": 6.6
+  },
+  {
+   "raw": "2 tsp garlic powder",
+   "buy": "2 tbsp plus 1 tsp garlic powder"
+  },
+  {
+   "raw": "1/2 tsp dried thyme",
+   "buy": "1 3/4 tsp dried thyme"
+  },
+  {
+   "raw": "1/2 tsp dried basil",
+   "buy": "1 3/4 tsp dried basil"
+  },
+  {
+   "raw": "1/2 tsp dried oregano",
+   "buy": "1 3/4 tsp dried oregano"
+  },
+  {
+   "raw": "2 tbsp paprika ((not smoked, use sweet or plain))",
+   "buy": "7 tbsp paprika (sweet or plain, not smoked)"
+  },
+  {
+   "raw": "1 tsp ground ginger",
+   "buy": "1 tbsp plus 1/2 tsp ground ginger"
+  },
+  {
+   "raw": "1 tsp cayenne pepper or ground pure chili ((optional - for KFC \"Zinger\" flavour!))",
+   "buy": "1 tbsp plus 1/2 tsp cayenne pepper (optional)",
+   "grams_source": 1.8
+  },
+  {
+   "raw": "1.2 - 1.4 lb / 600 - 700 g chicken tenderloin ((10 - 12 pieces) (Note 2))",
+   "buy": "5 lb chicken tenderloins (about 35 to 42 pieces)",
+   "grams_source": 650,
+   "notes": "Range midpoint of 600 - 700 g, raw."
+  },
+  {
+   "raw": "1 cup buttermilk OR 1/3 cup plain yoghurt + 2/3 cup milk ((Note 3))",
+   "buy": "3 1/2 cups buttermilk",
+   "grams_source": 245
+  },
+  {
+   "raw": "1 cup flour",
+   "buy": "3 1/2 cups all-purpose flour"
+  },
+  {
+   "raw": "1/4 cup cornmeal ((Note 4))",
+   "buy": "7/8 cup cornmeal",
+   "grams_source": 34.5
+  },
+  {
+   "raw": "1 cup panko breadcrumbs",
+   "buy": "3 1/2 cups panko breadcrumbs",
+   "grams_source": 60,
+   "notes": "Weighed here because the table computed no weight: 1 cup panko is 60 g on the DB's own 0.5 cup = 30 g row."
+  },
+  {
+   "raw": "2 tbsp butter ((unsalted))",
+   "buy": "7 tbsp unsalted butter"
+  },
+  {
+   "raw": "1 tbsp vegetable or canola oil",
+   "buy": "3 1/2 tbsp vegetable or canola oil",
+   "grams_source": 13.6
+  },
+  {
+   "raw": "Oil spray",
+   "buy": "oil spray, for the racks and trays",
+   "grams_source": 3
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1/2 tbsp coarsely ground black pepper",
+   "term": "coarsely ground black pepper",
+   "canon_item": "Black Pepper",
+   "bid": "black-pepper",
+   "decision": "mapped",
+   "grams_source": 3.5,
+   "evidence": "Coarse vs fine is a grind within one pepper SKU, not a form flip, exactly as 'ground oregano' was ruled to dried-oregano; board carries black-pepper 7 of 7."
+  },
+  {
+   "raw": "1 tbsp mustard powder",
+   "term": "mustard powder",
+   "canon_item": "Mustard Powder",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 6.6,
+   "evidence": "Dry ground seed, not the prepared condiment: different price class and different gram weight per spoon, so the `mustard` bridge is refused. Pantry-static pricing at 1 tbsp is safe."
+  },
+  {
+   "raw": "1 tsp cayenne pepper or ground pure chili ((optional - for KFC \"Zinger\" flavour!))",
+   "term": "cayenne pepper or ground pure chili",
+   "canon_item": "Cayenne Pepper",
+   "bid": "cayenne-pepper",
+   "decision": "mapped-optional",
+   "grams_source": 1.8,
+   "evidence": "The source marks the line optional. cayenne-pepper is a live board id (6 of 7) and the DB already holds the Cayenne Pepper row."
+  },
+  {
+   "raw": "1.2 - 1.4 lb / 600 - 700 g chicken tenderloin ((10 - 12 pieces) (Note 2))",
+   "term": "chicken tenderloin",
+   "canon_item": "Chicken Tenderloins",
+   "bid": "chicken-tenderloins",
+   "decision": "mapped",
+   "grams_source": 650,
+   "evidence": "The main protein: no commodity claims it but today's captures carry matching products, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no chicken-breast bridge."
+  },
+  {
+   "raw": "1 cup buttermilk OR 1/3 cup plain yoghurt + 2/3 cup milk ((Note 3))",
+   "term": "buttermilk",
+   "canon_item": "Buttermilk",
+   "bid": "buttermilk",
+   "decision": "mapped",
+   "grams_source": 245,
+   "evidence": "Exact prior ruling from 2026-08-26 and a live board id at 5 of 7 stores - a reuse. The line states 1 cup, so 245 g."
+  },
+  {
+   "raw": "1/4 cup cornmeal ((Note 4))",
+   "term": "cornmeal",
+   "canon_item": "Cornmeal",
+   "bid": "cornmeal",
+   "decision": "mapped",
+   "grams_source": 34.5,
+   "evidence": "No commodity claims it and today's captures carry it; a distinct food from cornstarch and from corn flour, so neither existing id can carry it."
+  },
+  {
+   "raw": "1 tbsp vegetable or canola oil",
+   "term": "vegetable or canola oil",
+   "canon_item": "Vegetable Oil",
+   "bid": "vegetable-oil",
+   "decision": "mapped",
+   "grams_source": 13.6,
+   "evidence": "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class."
+  },
+  {
+   "raw": "Oil spray",
+   "term": "Oil spray",
+   "canon_item": "Cooking Spray",
+   "bid": "cooking-spray",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "cooking-spray is a live board id at 7 of 7, so a reuse; 3 g is a light coating, following the 2026-08-26 cooking-spray ruling."
+  }
+ ],
+ "absent_terms": [
+  "chicken tenderloins",
+  "cornmeal",
+  "mustard powder"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "chicken tenderloin",
+   "proposed_bid": "chicken-tenderloins",
+   "evidence": "The main protein: no commodity claims it but today's captures carry matching products, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no chicken-breast bridge.",
+   "declared": false
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "chicken-tenderloins",
+   "verdict": "approve",
+   "bid": "chicken-tenderloins",
+   "reason": "No id prices this cut: chicken-breast, whole-chicken and cooked-shredded-chicken each EXCLUDE 'tender' in commodities.json (lines 20, 5206, 66494), so tenderloins are deliberately walled out of every existing chicken id rather than carried by one; the live feed's only 'tenderloin' cell is pork-tenderloin, and chicken-nuggets is a breaded frozen cooked form, i.e. a different purchase. Approve chicken-tenderloins as recipe-only (recipe-board baseline + recipe-commodities.json). Follow-ups: (1) include must be tight — e.g. chicken\\s+tender(?:loin)?s?\\b — with a full ~150-pattern exclude list copied from chicken-breast's rigor, and it MUST exclude breaded|battered|crispy|frozen|fully\\s+cooked|nugget|popcorn|dipping|strips so breaded 'chicken tenders' SKUs cannot crown a raw-tray id; (2) add commodity-dupe-allowlist.json pairs chicken-tenderloins~chicken-breast (different cut, distinct tray SKU priced above breast) and chicken-tenderloins~pork-tenderloin (different animal, shared word only) so the daily audit never re-flags them; (3) separately, meal-prep vocabulary has no 'chicken tenderloin' row (nearest is Pork Tenderloin) — a new NAME row is needed via the sanctioned editor, and this ruling does not mint it."
+  }
+ ],
+ "macro_cross_check": ""
+}

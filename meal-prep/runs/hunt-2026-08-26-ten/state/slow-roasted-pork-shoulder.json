@@ -1,0 +1,62 @@
+{
+    "slug":  "slow-roasted-pork-shoulder",
+    "title":  "Slow Roasted Pork Shoulder",
+    "source_url":  "https://keviniscooking.com/moroccan-slow-roasted-pork/",
+    "protein":  "pork",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:30",
+    "updated":  "2026-08-26T04:42:15",
+    "terms":  [
+                  {
+                      "term":  "Moroccan seven spice blend",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "dried apricots",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Moroccan seven spice blend"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:30",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/moroccan-slow-roasted-pork/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:15:30",
+                        "by":  "decider",
+                        "detail":  "Moroccan seven-spice slow-roasted pork shoulder with apricots, sweet potato and mint widens the catalog\u0027s thin North-African representation; verified band, saturation 0, distinct from the in-flight fennel-tomato braised shoulder and live Ecuadorian hornado."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:15:50",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:34:49",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled: 3 mapped, 1 mapped-null. No rejections. 2 food-db rows returned. NO ROW for Moroccan Seven Spice Blend: it is a house blend with no single retail label I could verify, and reconstructing one from component spices would be exactly the invented row the rules forbid; its omission costs roughly 12 cal per serving. Chicken stock needed no row - it maps to the existing Chicken Br"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:35:27",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:42:15",
+                        "by":  "derive",
+                        "detail":  "waiting on: Moroccan seven spice blend"
+                    }
+                ]
+}

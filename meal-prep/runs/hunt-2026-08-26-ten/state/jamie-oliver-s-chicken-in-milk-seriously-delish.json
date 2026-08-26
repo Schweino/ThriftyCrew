@@ -1,0 +1,49 @@
+{
+    "slug":  "jamie-oliver-s-chicken-in-milk-seriously-delish",
+    "title":  "Jamie Oliver\u0027s Chicken in Milk {Seriously Delish}",
+    "source_url":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:23",
+    "updated":  "2026-08-26T05:07:07",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:23",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:20:23",
+                        "by":  "decider",
+                        "detail":  "Milk-braised whole chicken with lemon, sage and cinnamon - a distinctive Italian classic with a curdled-milk sauce, unlike the herb-lemon roast chickens; no live match, band verified 466/6/61, widens the American-skewed catalog."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:20:59",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:07:04",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T05:07:07",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board"
+                    }
+                ]
+}

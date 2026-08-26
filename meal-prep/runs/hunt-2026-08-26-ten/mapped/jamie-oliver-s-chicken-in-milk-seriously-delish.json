@@ -1,0 +1,148 @@
+﻿{
+    "slug":  "jamie-oliver-s-chicken-in-milk-seriously-delish",
+    "title":  "Jamie Oliver\u0027s Chicken in Milk {Seriously Delish}",
+    "source_url":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+                            "item":  "Whole Chicken",
+                            "bid":  "whole-chicken",
+                            "board":  null,
+                            "grams":  5775,
+                            "buy":  "about 12 1/2 lb whole chicken (3 birds, roughly 4 lb each)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Range midpoint of 1.5 - 1.8 kg, as purchased with bone and skin. whole-chicken is a live board id at 7 of 7 stores, so a REUSE and not a proposal. Rotisserie chicken is sold cooked at a different price class, so that bridge is refused.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tsp salt ((plus more to taste))",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  42,
+                            "buy":  "2 tbsp plus 1 tsp salt, plus more to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "2 tbsp black pepper, to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tbsp olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 stick cinnamon",
+                            "item":  "Ground Cinnamon",
+                            "bid":  "ground-cinnamon",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 tsp ground cinnamon (or 1 3/4 cinnamon sticks)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027cinnamon\u0027 -\u003e ground-cinnamon (by mapper on 2026-08-26T04:33:59); nearest vocabulary rows: Ground Cinnamon [ground-cinnamon] DIFFERENT FORM: ground",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 cup loosely packed fresh sage leaves",
+                            "item":  "Fresh Sage",
+                            "bid":  "fresh-sage",
+                            "board":  null,
+                            "grams":  21,
+                            "buy":  "7/8 cup loosely packed fresh sage leaves",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 lemons (, zest only (avoid grating the pith which is bitter))",
+                            "item":  "Lemons",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  406,
+                            "buy":  "7 lemons, zest only (avoid the bitter pith)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Whole lemons are bought even though only the zest goes in, so the purchased weight is stated. lemons is a live board id (5 of 7), a reuse the vocabulary has no name row for; 2 medium lemons at 58 g, stated as purchased because zest-only still buys the whole fruit.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "10 cloves of garlic (, whole, skin on)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  105,
+                            "buy":  "35 cloves garlic, whole and unpeeled",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 1/4 cups milk ((I used low fat))",
+                            "item":  "Milk",
+                            "bid":  "milk",
+                            "board":  "weekly",
+                            "grams":  1929,
+                            "buy":  "7 7/8 cups low fat milk",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: milk, 7 of 7 stores, cheapest 2.816 at Walmart",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u0027Black pepper\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  ""
+}

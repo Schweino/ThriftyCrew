@@ -1,0 +1,31 @@
+{
+    "slug":  "peruvian-chicken",
+    "title":  "Peruvian Chicken",
+    "source_url":  "https://www.wellplated.com/peruvian-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:24",
+    "updated":  "2026-08-26T04:20:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Roasted Peruvian bone-in chicken with aji-verde green sauce is the same dinner identity as live peruvian-sheet-pan-chicken-green-sauce across all four axes (chicken, bake/roast, Peruvian marinade, green sauce, no starch).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/peruvian-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:20:25",
+                        "by":  "decider",
+                        "detail":  "Roasted Peruvian bone-in chicken with aji-verde green sauce is the same dinner identity as live peruvian-sheet-pan-chicken-green-sauce across all four axes (chicken, bake/roast, Peruvian marinade, green sauce, no starch)."
+                    }
+                ]
+}

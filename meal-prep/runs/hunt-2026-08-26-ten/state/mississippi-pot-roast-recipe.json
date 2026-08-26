@@ -1,0 +1,31 @@
+{
+    "slug":  "mississippi-pot-roast-recipe",
+    "title":  "Mississippi Pot Roast Recipe",
+    "source_url":  "https://www.budgetbytes.com/mississippi-pot-roast/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:56",
+    "updated":  "2026-08-26T04:12:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ranch-packet + brown-gravy + pepperoncini + butter chuck roast is the exact Mississippi pot roast already live as mississippi-pot-roast-bowls (bge 0.94); dropping the bowl base is a re-plating.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:56",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/mississippi-pot-roast/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:12:57",
+                        "by":  "decider",
+                        "detail":  "Ranch-packet + brown-gravy + pepperoncini + butter chuck roast is the exact Mississippi pot roast already live as mississippi-pot-roast-bowls (bge 0.94); dropping the bowl base is a re-plating."
+                    }
+                ]
+}

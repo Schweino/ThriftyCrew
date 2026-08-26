@@ -1,0 +1,31 @@
+{
+    "slug":  "baked-macaroni-cheese-with-chicken-amp-broccoli",
+    "title":  "Baked Macaroni Cheese with Chicken \u0026amp; BROCCOLI",
+    "source_url":  "https://www.recipetineats.com/baked-macaroni-cheese-with-chicken-broccoli-one-pot/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:32",
+    "updated":  "2026-08-26T04:15:33",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + broccoli + pasta + cheese baked one-pot is the same dinner as the in-flight chicken-broccoli-ziti accepted in hunt-2026-08-23-v3-phase1-mini; shipping both doubles the chicken-broccoli-pasta-bake slot.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:32",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/baked-macaroni-cheese-with-chicken-broccoli-one-pot/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:15:33",
+                        "by":  "decider",
+                        "detail":  "Chicken + broccoli + pasta + cheese baked one-pot is the same dinner as the in-flight chicken-broccoli-ziti accepted in hunt-2026-08-23-v3-phase1-mini; shipping both doubles the chicken-broccoli-pasta-bake slot."
+                    }
+                ]
+}

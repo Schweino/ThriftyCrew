@@ -1,0 +1,9 @@
+﻿{
+    "date":  "2026-08-26",
+    "note":  "These stores could NOT be driven automatically. Open ONE CHROME TAB PER STORE and work each store worklist in out\\worklists\\capture-\u003cstore\u003e-\u003cdate\u003e.json. Advance the cursor with Save-CaptureCursor only AFTER the capture lands. (Aldi is here by design: its pull agent walks product slugs, not search terms - see pull-browser-stores.py ALDI_NOTE.)",
+    "stores":  [
+                   "Aldi",
+                   "Walmart"
+               ],
+    "kind":  "daily"
+}

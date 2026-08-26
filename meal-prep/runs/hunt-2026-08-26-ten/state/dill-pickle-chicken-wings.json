@@ -1,0 +1,49 @@
+{
+    "slug":  "dill-pickle-chicken-wings",
+    "title":  "Dill Pickle Chicken Wings",
+    "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:09",
+    "updated":  "2026-08-26T04:36:37",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:09",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:18:10",
+                        "by":  "decider",
+                        "detail":  "Dill-pickle-brined baked chicken wings with dried dill — a novel flavor with no catalog wing dish, distinct from the batch\u0027s garlic-parmesan wings (different flavor family and method), band verified 620/20/45."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:20:33",
+                        "by":  "extractor",
+                        "detail":  "rung 3 (Claude), verification recorded"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:36:34",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled: 3 mapped, 1 mapped-null. No rejections. 3 food-db rows returned. NO ROW for Dill Pickle Juice: both label reads were spent (nutrifox returned no data, recipal printed 1 cup / 227 g at 50 cal against 0 g fat, 0 g protein and 3 g carbs, which cannot be true arithmetic and would fail the 4/4/9 check), so I return no row rather than a number I do not believe. The brine is a dis"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:36:37",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board"
+                    }
+                ]
+}

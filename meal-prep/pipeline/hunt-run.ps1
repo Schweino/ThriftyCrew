@@ -116,7 +116,22 @@ $script:NEXT = @{
   # refused to force it, correctly, and the recipes sat at `extracted` looking stuck to everyone
   # watching. A verdict a state machine cannot express is a verdict that gets faked or lost.
   'extracted'  = @('mapped', 'rejected-unreadable', 'rejected-dupe', 'rejected-macros')
-  'mapped'     = @('pricing', 'priced', 'rejected-not-carried', 'rejected-macros')
+  # Q2 (2026-08-26): `mapped` -> `priced` IS GONE, and its removal is the gate rather than a tidy-up.
+  # The carriage union (Get-CarriageBlockingTerms, below) runs on ONE road only - the way into
+  # `pricing`. While `mapped` -> `priced` existed, any caller could route around the union entirely by
+  # naming the destination it wanted, and two of them did: the map lane's zero-absent branch and the
+  # unhold road both advanced straight to `priced` whenever the MAPPER reported no absent terms. That
+  # is the union's founding case exactly - doubanjiang, rice-cakes and ground-sumac all mapped to real
+  # commodity ids, so the mapper reported nothing absent, so nothing was priced and the recipe sailed
+  # to a paid page. The 2026-08-22 union closed that hole for recipes that transit `pricing`; this
+  # closes it for the ones that never did.
+  #
+  # A GATE WITH A DOOR BESIDE IT IS NOT A GATE, which is why this is fixed HERE and not only at the
+  # two call sites. Both were repaired the same day, but a third caller written next year would have
+  # found the same door open and nothing would have said no. Now the state machine says no: a recipe
+  # reaches `priced` through `pricing` (or through `parked`, which is itself only reachable from
+  # `pricing`), and there is no longer any route to a paid page that the union has not read.
+  'mapped'     = @('pricing', 'rejected-not-carried', 'rejected-macros')
   'pricing'    = @('priced', 'parked', 'rejected-not-carried')
   'parked'     = @('pricing', 'priced', 'parked', 'rejected-not-carried')
   # `priced` -> `rejected-macros` added 2026-08-24 (v3 D8). The band gate MOVED to before the
@@ -309,6 +324,78 @@ function Read-Entries {
 # The live verdict map. ONE call to the queue, and we read the `verdict` it recomputes on every -Record
 # through its own single implementation of Rule B. Re-deriving that rule here would be the second copy.
 # ---------------------------------------------------------------------------------------------------
+# NON-PURCHASABLE TERMS. Two nets, in this order, and the FIRST one is the real fix.
+#
+# Net 1 is the mapper's OWN ruling, which was already on the row and was being thrown away. Every
+# mapped line carries `decision` (map-preresolve's enum: mapped | mapped-null | mapped-optional |
+# not-purchased | optional-note) and `optional`. `optional-note` means, in map-preresolve.ps1's own
+# words, "water, a garnish, a sub-recipe - nothing the shopper buys". Until 2026-08-26 the loop below
+# read NEITHER field: it walked every ingredient, blocked on carriage alone, and the -Advance union
+# then stamped optional=$false over the mapper's optional=$true. So a line the mapper had explicitly
+# ruled un-buyable came back as a BLOCKING term. Measured on run hunt-2026-08-26-ten: 'Pan Drippings'
+# carried decision='optional-note' and optional=$true and the note "already bought as the vegetable
+# oil line", and it parked chicken-fried-steak forever.
+#
+# Net 2 is grocery\non-purchasable-terms.json, for the case where the mapper mislabels one of these as
+# a real purchase. It is a second net and never the first: a list of names cannot know that THIS
+# recipe's "drippings" is a byproduct, and the ruling on the row can.
+#
+# NOTHING IS SILENTLY DROPPED. A term caught by either net is still written to the state file by the
+# -Advance union, marked optional - so it reads on the recipe, it just stops the recipe waiting for a
+# price nobody can ever quote.
+# ---------------------------------------------------------------------------------------------------
+$script:NOT_PURCHASED_DECISIONS = @('optional-note', 'not-purchased', 'mapped-optional')
+
+function Get-NormTerm {
+  param([string]$Term)
+  return ([regex]::Replace(([string]$Term).Trim(), '\s+', ' ')).ToLowerInvariant()
+}
+
+function Get-NonPurchasableSet {
+  param([string]$RepoRoot)
+  $set = @{}
+  $p = Join-Path $RepoRoot 'grocery\non-purchasable-terms.json'
+  if (-not (Test-Path $p)) { return $set }
+  try { $doc = Get-Content $p -Raw | ConvertFrom-Json } catch { return $set }
+  foreach ($t in @($doc.terms)) {
+    $k = Get-NormTerm $t
+    if ($k) { $set[$k] = $true }
+  }
+  return $set
+}
+
+# ---------------------------------------------------------------------------------------------------
+# THE COMPOSITE SPLIT, and note it is a SPLIT here while -Terms one screen down is a REFUSAL. That
+# asymmetry is deliberate and it is about WHOSE BUG IT IS. A comma inside a caller-supplied -Terms
+# element is the CALLER binding -Terms 'a,b' wrong, and rewriting a caller's argument hides the
+# caller's bug - so that stays refused. A comma inside a DERIVED item is the recipe page's own
+# ingredient line ("Garlic Powder, Cumin, and Chili Powder" - one source line holding three spices),
+# which no caller can fix and which the queue can never key. Refusing it would only park the recipe a
+# different way. Brad's ruling, 2026-08-26.
+#
+# SPLIT ON COMMAS ONLY, AND ONLY WHEN THE LINE HAS NO BID. Both guards protect the same thing: a real
+# commodity whose NAME contains a conjunction. 'Half and Half' is an item in this estate with
+# bid='half-and-half'; splitting on ' and ' would shred it into two foods that do not exist. A comma
+# and no bid is the narrow shape that is always an unresolved multi-ingredient line. The leading
+# 'and '/'or ' of a final Oxford-comma part is stripped, because "and Chili Powder" is not a food.
+# ---------------------------------------------------------------------------------------------------
+function Split-CompositeItem {
+  param([string]$Item, [string]$Bid)
+  $s = [string]$Item
+  if ($Bid) { return @($s) }
+  if (-not $s.Contains(',')) { return @($s) }
+  $parts = @()
+  foreach ($p in ($s -split ',')) {
+    $q = ([string]$p).Trim()
+    $q = [regex]::Replace($q, '^(and|or)\s+', '', 'IgnoreCase')
+    $q = $q.Trim()
+    if ($q) { $parts += $q }
+  }
+  if (-not $parts.Count) { return @($s) }
+  return @($parts)
+}
+
+# ---------------------------------------------------------------------------------------------------
 # CARRIAGE-DERIVED BLOCKING TERMS. The mapper reports "absent terms" - ingredients it could not map to a
 # commodity id - and until 2026-08-22 that list WAS the pricing worklist. It is not sufficient, because
 # an ingredient can map perfectly and still be a food no Omaha store stocks: doubanjiang, rice-cakes and
@@ -319,30 +406,55 @@ function Read-Entries {
 # mapper reported. The mapper can now only ADD to the worklist, never shrink it - the difference between
 # a gate and a request. FAIL-CLOSED: an unreadable mapped file yields no derived terms and says so, and
 # an ingredient whose carriage is UNKNOWN parks the recipe rather than pricing it.
+#
+# WHAT THIS RETURNS AND WHY IT IS TWO LISTS (2026-08-26). `terms` are the blocking ones. `skipped` are
+# the rows the two nets above took out, WITH the reason - they still reach the state file as optional
+# rows, and a caller that cannot see why a term stopped blocking cannot review this gate. Returning one
+# list and logging the rest was the old shape, and it is how a discarded mapper ruling stayed invisible.
 # ---------------------------------------------------------------------------------------------------
 function Get-CarriageBlockingTerms {
   param([string]$RunDir, [string]$Slug, [string]$RepoRoot)
-  $out = @()
+  $out = @(); $skipped = @()
   $mf = Join-Path $RunDir ("mapped\{0}.json" -f $Slug)
-  if (-not (Test-Path $mf)) { return @{ terms = @(); read = $false; why = "no mapped\$Slug.json" } }
-  try { $doc = Get-Content $mf -Raw | ConvertFrom-Json } catch { return @{ terms = @(); read = $false; why = "mapped\$Slug.json unparseable" } }
+  if (-not (Test-Path $mf)) { return @{ terms = @(); skipped = @(); read = $false; why = "no mapped\$Slug.json" } }
+  try { $doc = Get-Content $mf -Raw | ConvertFrom-Json } catch { return @{ terms = @(); skipped = @(); read = $false; why = "mapped\$Slug.json unparseable" } }
   $carrLib = Join-Path $RepoRoot 'lib\carriage-lib.ps1'
-  if (-not (Test-Path $carrLib)) { return @{ terms = @(); read = $false; why = 'carriage-lib.ps1 missing' } }
+  if (-not (Test-Path $carrLib)) { return @{ terms = @(); skipped = @(); read = $false; why = 'carriage-lib.ps1 missing' } }
   . $carrLib
   $feedFile = Join-Path $RepoRoot 'grocery\out\smp-feed.json'
   $fc = @{}
   if (Test-Path $feedFile) { try { $fc = Get-FeedCarriedSet ((Get-Content $feedFile -Raw | ConvertFrom-Json).ingredients) } catch { $fc = @{} } }
   $led = Import-CarriageLedger (Join-Path $RepoRoot 'grocery\carriage.json')
+  $stop = Get-NonPurchasableSet -RepoRoot $RepoRoot
   foreach ($ing in @($doc.ingredients)) {
     $bid  = if ($ing.PSObject.Properties.Name -contains 'bid') { [string]$ing.bid } else { $null }
     $item = [string]$ing.item
     if (-not $item) { continue }
-    $c = Get-Carriage -Bid $bid -Item $item -FeedCarried $fc -Ledger $led
-    if ($c.verdict -ne 'CARRIED') { $out += $item }
+    # NET 1 - the ruling that was already on the row. Read BEFORE carriage, because a line nobody buys
+    # has no carriage question to answer.
+    $dec = if ($ing.PSObject.Properties.Name -contains 'decision') { [string]$ing.decision } else { '' }
+    if ($script:NOT_PURCHASED_DECISIONS -contains $dec) {
+      $skipped += [pscustomobject]@{ term = $item; why = ("the mapper ruled it '{0}' - nothing the shopper buys" -f $dec) }
+      continue
+    }
+    if ($ing.PSObject.Properties.Name -contains 'optional' -and [bool]$ing.optional) {
+      $skipped += [pscustomobject]@{ term = $item; why = 'the mapper marked the line optional' }
+      continue
+    }
+    # THE SPLIT RUNS BEFORE THE CARRIAGE CHECK, so each real spice gets its own carriage answer rather
+    # than one verdict for a string that is not a food.
+    foreach ($part in @(Split-CompositeItem -Item $item -Bid $bid)) {
+      # NET 2 - the stoplist, per PART.
+      if ($stop.ContainsKey((Get-NormTerm $part))) {
+        $skipped += [pscustomobject]@{ term = $part; why = 'listed in grocery\non-purchasable-terms.json' }
+        continue
+      }
+      $c = Get-Carriage -Bid $bid -Item $part -FeedCarried $fc -Ledger $led
+      if ($c.verdict -ne 'CARRIED') { $out += $part }
+    }
   }
-  return @{ terms = @($out | Sort-Object -Unique); read = $true; why = '' }
+  return @{ terms = @($out | Sort-Object -Unique); skipped = @($skipped); read = $true; why = '' }
 }
-
 function Get-TermVerdictMap {
   param([string]$QueuePath)
   $map = @{}
@@ -1494,17 +1606,26 @@ if ($runAdvance) {
   # THE CARRIAGE UNION. On the way into `pricing`, hunt-run derives the blocking list from the mapped
   # bids itself and unions it with the mapper's. A carriage-blocked ingredient is NEVER optional: a
   # garnish the store does not sell is still an ingredient nobody can buy.
-  $derivedTerms = @()
+  #
+  # EXCEPT a line nobody buys at all, which is not the same thing and used to be treated as if it were.
+  # `$cb.skipped` is what the two non-purchasable nets took out (see Get-CarriageBlockingTerms); those
+  # terms are still WRITTEN BELOW, as optional rows, so the recipe records them and stops waiting on
+  # them. Silently omitting them would trade one invisible failure for another.
+  $derivedTerms = @(); $skippedTerms = @()
   if ($To -eq 'pricing') {
     $cb = Get-CarriageBlockingTerms -RunDir $RunDir -Slug $Slug -RepoRoot $repo
     $derivedTerms = @($cb.terms)
+    $skippedTerms = @($cb.skipped)
     if (-not $cb.read) {
       Write-Output ("hunt-run: WARNING carriage not derived for {0} ({1}); relying on the mapper's -Terms alone" -f $Slug, $cb.why)
     } elseif ($derivedTerms.Count) {
       Write-Output ("hunt-run: carriage adds {0} blocking ingredient(s) the mapper did not report: {1}" -f $derivedTerms.Count, ($derivedTerms -join ', '))
     }
+    foreach ($s in $skippedTerms) {
+      Write-Output ("hunt-run: '{0}' does not block {1} - {2}" -f [string]$s.term, $Slug, [string]$s.why)
+    }
   }
-  if (@($Terms).Count -or @($OptionalTerms).Count -or $derivedTerms.Count) {
+  if (@($Terms).Count -or @($OptionalTerms).Count -or $derivedTerms.Count -or $skippedTerms.Count) {
     $rows = @(); $seen = @{}
     foreach ($t in @($Terms) + @($derivedTerms) | Where-Object { $_ }) {
       $k = [string]$t; if ($seen.ContainsKey($k)) { continue }; $seen[$k] = $true
@@ -1514,6 +1635,15 @@ if ($runAdvance) {
       $k = [string]$t
       # a carriage-blocked term outranks an "optional" label from the mapper
       if ($seen.ContainsKey($k)) { continue }
+      $seen[$k] = $true
+      $rows += [pscustomobject]@{ term = $k; optional = $true }
+    }
+    # THE NON-PURCHASABLE ROWS LAND LAST, so a term that is genuinely blocking on one line can never be
+    # demoted by a second line that happened to be ruled un-buyable. $seen already holds every blocking
+    # term by this point, and blocking wins.
+    foreach ($s in $skippedTerms) {
+      $k = [string]$s.term
+      if (-not $k -or $seen.ContainsKey($k)) { continue }
       $seen[$k] = $true
       $rows += [pscustomobject]@{ term = $k; optional = $true }
     }

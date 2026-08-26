@@ -1,0 +1,160 @@
+﻿{
+    "slug":  "baked-ham-with-brown-sugar-glaze",
+    "title":  "Baked Ham with Brown Sugar Glaze",
+    "source_url":  "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/",
+    "source_servings":  12,
+    "target_servings":  14,
+    "scale_factor":  1.1667,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 spiral ham (approx 7-9 pounds)",
+                            "item":  "Spiral Ham",
+                            "bid":  "spiral-ham",
+                            "board":  null,
+                            "grams":  4234,
+                            "buy":  "one 9 lb bone-in spiral-sliced ham",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Midpoint of the source\u0027s 7-9 lb range, 8 lb, at source scale; the whole ham genuinely is the amount used, so a package noun is honest here. REFUSED the board\u0027s deli-ham bridge: deli ham is sliced lunch meat at several dollars a pound and diced-ham is a convenience pack, while this is a 7-9 lb bone-in whole ham at a fraction of that per pound - a different product concept AND a different price class. Proposed as a new id.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons Dijon mustard",
+                            "item":  "Dijon Mustard",
+                            "bid":  "dijon-mustard",
+                            "board":  "recipe",
+                            "grams":  35,
+                            "buy":  "2 1/3 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second Dijon line, in the glaze.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup pineapple juice (or orange juice)",
+                            "item":  "Pineapple Juice",
+                            "bid":  "pineapple-juice",
+                            "board":  "recipe",
+                            "grams":  72,
+                            "buy":  "scant 1/3 cup (5 tbsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed by me - the pre-resolver computed no weight. 1 cup juice = 250 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "½ cup pineapple juice (or orange juice)",
+                            "item":  "Pineapple Juice",
+                            "bid":  "pineapple-juice",
+                            "board":  "recipe",
+                            "grams":  145,
+                            "buy":  "generous 1/2 cup (9 tbsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed by me - the pre-resolver computed no weight.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "½ cup brown sugar",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  "recipe",
+                            "grams":  124,
+                            "buy":  "generous 1/2 cup, packed (about 9 1/2 tbsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: brown-sugar, 6 of 7 stores, cheapest 0.925 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons Dijon mustard",
+                            "item":  "Dijon Mustard",
+                            "bid":  "dijon-mustard",
+                            "board":  "recipe",
+                            "grams":  35,
+                            "buy":  "2 1/3 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second Dijon line, in the glaze.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon ground ginger",
+                            "item":  "Ground Ginger",
+                            "bid":  "ground-ginger",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "scant 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-ginger, 6 of 7 stores, cheapest 0.7971 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "2 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "spiral ham"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Spiral Ham"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "spiral ham",
+                                        "proposed_bid":  "spiral-ham",
+                                        "evidence":  "The board answers this phrase with deli-ham (7 of 7), which is sliced sandwich meat sold by the half pound - a different product and a much higher price per pound than a whole bone-in spiral-sliced ham sold at 7-9 lb. The vocabulary\u0027s other ham row, diced-ham, is a diced convenience pack, also a different price class. Searched by food and not by string: neither a lunch-meat id nor a diced id can carry a whole holiday ham. If the estate already prices whole hams under a spelling such as \u0027ham\u0027 or \u0027bone-in-ham\u0027, alias there instead.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "spiral-ham",
+                                  "verdict":  "approve",
+                                  "bid":  "spiral-ham",
+                                  "reason":  "No namespace prices a whole ham: recipe-board-everyday.json has zero \u0027ham\u0027 rows (re-verified with Select-String after an empty grep), recipe-commodities.json\u0027s only \u0027ham\u0027 strings are excludes in brown-sugar/honey, and commodities.json\u0027s deli-ham explicitly EXCLUDES \u0027spiral\u0027, \u0027\\bwhole\\b\u0027, \u0027bone-?in\u0027 and \u0027glaze\u0027 - the estate already ruled spiral hams out of that id, so aliasing there would price a product its rules refuse. diced-ham is a diced pack at $0.31/oz, a different form and price class. The live feed has no spiral/bone-in product anywhere and deli-ham\u0027s crown is a Smithfield Portion Ham at $0.1238/oz, not a spiral ham. Mint spiral-ham in the recipe-only namespace (recipe-board baseline + recipe-commodities.json, since holiday hams go on sale), unit oz with variable-weight-capable capture. Prescribed include: \u0027spiral(?:[\\s-]?(?:cut|sliced))?\\s+ham\u0027, \u0027(?:bone[\\s-]?in|half|whole)\\s+ham\u0027 with a full-rigor exclude list modeled on deli-ham\u0027s (~150 patterns: lunch meat/sliced/deli, diced/cubed, ham salad, glaze packets sold alone, graham, hamburger, hock, steak, pet/beverage/household noise). Follow-up edits for the caller: add the row via add-commodity-rule.ps1, and add commodity-dupe-allowlist.json pairs spiral-ham|deli-ham (\u0027whole bone-in spiral ham vs sliced deli sandwich meat - same food, different purchase; deli-ham excludes spiral by rule\u0027) and spiral-ham|diced-ham (\u0027whole ham vs diced convenience pack\u0027) so audit-commodity-dupes.ps1 never re-flags the trio. Vocabulary answer, kept separate from the id ruling: \u0027spiral ham\u0027 needs a new ingredients.json name row (nearest row diced-ham is a different form; no macros row exists - transcribe a label; fdc:168340/168341 spiral-slice ham entries are plausible macro sources)."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  690.0,
+                                                                   "carbs_g":  11.0,
+                                                                   "protein_g":  57.0
+                                                               },
+                              "ours_per_serving":  {
+                                                       "calories":  437,
+                                                       "carbs_g":  14.9,
+                                                       "protein_g":  56.8
+                                                   },
+                              "protein_gap_pct":  -0.4,
+                              "verdict":  "pass",
+                              "detail":  "Totals at source scale over all 8 lines: 5246 cal, 681 g protein, 179 g carbs, 12 servings. Protein matches the source to within half a percent, which confirms the 8 lb midpoint I took for the \u00277-9 pounds\u0027 range is the right portion. Calories run 37% under the source\u0027s 690, entirely on the ham row basis: ours is the unheated lean-and-fat spiral-slice figure (129 cal/100 g) while the source\u0027s number implies a fattier or glazed-and-heated basis. Worth noting for whoever reads the cost side: the 3629 g is the ham\u0027s gross bone-in weight, while the FDC row is a boneless slice basis, so if anything our macros overstate the edible meat, not understate it. 437 cal / 15 g carbs is inside this run\u0027s conditions."
+                          }
+}
