@@ -173,8 +173,13 @@ $serverArgs += @('--log-file', $logFile)
 # Integrity block looks like -- that prints the PREVIOUS run's log: slot timings,
 # a clean startup banner, a model that loaded fine. On 2026-08-25 that stale tail
 # sent the diagnosis chasing a CUDA/driver fault for a day while the real cause
-# (Smart App Control had flipped from evaluation to enforcing at 15:47 and was
-# refusing to load unsigned ggml.dll) sat unread in the CodeIntegrity event log.
+# (Smart App Control) sat unread in the CodeIntegrity event log. SAC has been
+# ENFORCING on this box since 2026-06-23, so it was not a new setting that broke
+# this. What changed on 2026-08-25 was not the policy either -- its version was
+# byte-identical across the 08-13, 08-22 and 08-25 refreshes -- but Microsoft's
+# cloud reputation verdict for these unsigned files, re-read after the 15:47
+# refresh flushed the cached one. NOTHING LOCAL CHANGED, which is exactly why
+# looking for a local change (driver, CUDA, build, model) found nothing.
 # A log line this attempt did not write is not evidence about this attempt.
 $logPreLen   = if (Test-Path $logFile) { (Get-Item $logFile).Length } else { -1 }
 $startedAt   = Get-Date
