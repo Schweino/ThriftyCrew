@@ -1,0 +1,34 @@
+{
+  "readme": "Terms that are NOT groceries and must never block a recipe on the price lane. Read by hunt-run.ps1's Get-CarriageBlockingTerms and by hunt-daemon.py's map lane. Matching is on the term's NORMALISED form (lowercased, trimmed, inner runs of whitespace collapsed) - see Get-NonPurchasableSet / _norm_term, which are the only two readers. A term matched here is STILL RECORDED on the recipe's state file, marked optional, so nothing is silently dropped: the recipe simply stops waiting for a price nobody can ever quote.",
+  "why": "Run hunt-2026-08-26-ten stranded 5 of 7 parked recipes on terms like 'Water' and 'Pan Drippings'. The mapper had already ruled every one of them optional-note ('nothing the shopper buys'), and Get-CarriageBlockingTerms discarded that ruling and stamped optional=false over it. Honouring the mapper's own ruling is the primary fix; this list is the SECOND NET, for the case where the mapper mislabels one of these as a real purchase. A term needs to be on this list only if a shopper would never put it in a cart.",
+  "rules": [
+    "Add a term only when NO shopper would ever buy it as a grocery line: it comes out of a tap, it is a byproduct of cooking the dish, or it is a section header the extraction misread as an ingredient.",
+    "NEVER add a real grocery here to make a recipe pass. Salt, oil and flour are cheap, not free - they are purchases and they belong on the board.",
+    "This list stops a term BLOCKING. It does not delete it from the recipe and it does not touch the food DB."
+  ],
+  "terms": [
+    "water",
+    "cold water",
+    "warm water",
+    "hot water",
+    "ice water",
+    "boiling water",
+    "ice",
+    "ice cubes",
+    "pan drippings",
+    "drippings",
+    "reserved pan drippings",
+    "salt and pepper to taste",
+    "salt to taste",
+    "pepper to taste",
+    "optional garnishes",
+    "optional garnish",
+    "optional toppings",
+    "garnish",
+    "garnishes",
+    "for serving",
+    "for garnish",
+    "toppings",
+    "serving suggestions"
+  ]
+}

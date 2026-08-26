@@ -1518,23 +1518,70 @@ class Daemon(object):
             optional = [t for t in (rec.get("optional_absent") or []) if t]
             self.log("unhold: %s - the bid is wired, advancing on the mapper ruling already on disk "
                      "(zero dispatches)" % slug)
-            if not absent and rec.get("mapper_state") == "priced":
-                await self.advance(slug, "priced", "unhold",
-                                   "hold cleared: every term answered from the board")
-                self.ch["write"].push(self.record(slug, {"state": "priced"}))
-            else:
-                for t in absent:
-                    await self.ps(INGREDIENT_QUEUE_PS,
-                                  self.queue_args(["-Add", "-Term", t, "-Recipe", slug,
-                                                   "-Why", "%s needs it" % slug]), timeout=180)
-                    if t not in self.absent_terms and t not in self.priced_terms:
-                        self.absent_terms.append(t)
-                await self.advance(slug, "pricing", "unhold", "hold cleared",
-                                   terms=absent, optional_terms=optional)
-                self.pricing_slugs.add(slug)
-                self.record(slug, {"state": "pricing", "absent": absent})
-                self.ch["price_wake"].push("unhold of %s" % slug)
+            # Q2 (2026-08-26): THE UNHOLD ROAD TRANSITS `pricing` TOO. This is the sibling site the M3
+            # note named and deliberately left - it carried the identical condition (zero absent terms
+            # plus the mapper's own "priced" claim) and advanced `mapped` -> `priced` on that pair
+            # alone, so a held recipe whose missing bid was later wired reached a paid page without the
+            # carriage union ever reading it. The same hole as the map lane's, on a narrower road: only
+            # a recipe held for an unbid line and then unheld travels it. M3 left it because the unbid
+            # hold was out of its scope and reported it instead; Brad ruled both roads in scope on
+            # 2026-08-26. The state machine now refuses `mapped` -> `priced` outright, so this road
+            # could not keep its shortcut even if it wanted one.
+            #
+            # AND IT GAINS Q1'S POSTCONDITION ON THE WAY, which it never had. This road still enqueued
+            # the CLAIM and then advanced - the pre-Q1 order the map lane was fixed out of - so the
+            # carriage half of its term list was written to the state file and never put on the queue.
+            # That is the stranded-park shape exactly, and it is why the enqueue below reads the record
+            # back rather than trusting `absent`.
+            if not await self.advance(slug, "pricing", "unhold", "hold cleared",
+                                      terms=absent, optional_terms=optional):
+                self.stuck(slug, "unhold",
+                           "hunt-run refused the advance to pricing; nothing was enqueued")
+                self.log("  unhold: %s STUCK - hunt-run refused the advance to pricing" % slug)
+                continue
+            # THE STATE HAS MOVED OFF `mapped`, so the recipe counts as advanced from here on. Counting
+            # it only at the far end would report a recipe that reached `pricing` and then stuck as one
+            # the unhold never touched, which is the opposite of what a reader needs to know.
             advanced += 1
+            blocking, why_bt = self.blocking_terms(slug)
+            if why_bt:
+                self.stuck(slug, "unhold", why_bt)
+                self.log("  unhold: %s STUCK - %s" % (slug, why_bt))
+                continue
+            extra = [t for t in blocking if t not in absent]
+            if extra:
+                self.log("unhold: %s - hunt-run's carriage union added %d blocking term(s) the mapper "
+                         "did not report: %s" % (slug, len(extra), ", ".join(extra)))
+            if not blocking:
+                # Nothing blocks: the board answered every line AND the carriage union found nothing
+                # this town does not stock. Out to the writer, no pricer wake, exactly as before -
+                # what changed is that the union got to read the recipe first.
+                await self.advance(slug, "priced", "unhold",
+                                   "hold cleared: every term answered from the board and the "
+                                   "carriage union found nothing uncarried")
+                self.ch["write"].push(self.record(slug, {"state": "priced"}))
+                continue
+            refused = []
+            for t in blocking:
+                rc_q, out_q, err_q = await self.ps(
+                    INGREDIENT_QUEUE_PS,
+                    self.queue_args(["-Add", "-Term", t, "-Recipe", slug,
+                                     "-Why", "%s needs it" % slug]), timeout=180)
+                if rc_q != hunt_lib.EXIT_CLEAN:
+                    refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
+                    continue
+                if t not in self.absent_terms and t not in self.priced_terms:
+                    self.absent_terms.append(t)
+            if refused:
+                self.stuck(slug, "unhold",
+                           "the queue refused %d blocking term(s): %s"
+                           % (len(refused), "; ".join(refused)))
+                self.log("  unhold: %s STUCK - the queue refused %d blocking term(s): %s"
+                         % (slug, len(refused), "; ".join(refused)))
+                continue
+            self.pricing_slugs.add(slug)
+            self.record(slug, {"state": "pricing", "absent": blocking})
+            self.ch["price_wake"].push("unhold of %s" % slug)
         return advanced
 
     async def registrar_rulings(self, slug, proposals, tables=None):
@@ -1969,16 +2016,88 @@ class Daemon(object):
         tol = self.FOOD_DB_CAL_TOLERANCE if field == "calories" else self.FOOD_DB_MACRO_TOLERANCE
         return abs(float(new) - float(old)) <= tol
 
+    MACRO_FIELDS = ("calories", "protein_g", "carbs_g", "fat_g")
+
+    @staticmethod
+    def _loose_name_key(name):
+        r"""Two food names that differ only in punctuation, spacing or a trailing plural.
+
+        DELIBERATELY BLUNT AND DELIBERATELY NOT THE HEAD-NOUN SCORING. It keeps the DIGITS, which is
+        what separates '90/10 Ground Beef' from '93/7 Ground Beef' - the head-noun road strips both
+        to the single word "beef" and calls them the same food. It keeps every modifier too, so
+        'Hot Sauce' and 'Alfredo Sauce' stay apart where the head-noun road pairs them (because
+        "hot" is a noise word and vanishes, leaving no modifier to disagree with).
+
+        THE 'ss' GUARD IS DORMANT AND IS KEPT ANYWAY, which is worth saying rather than implying.
+        It is inherited from coverage_check's _words so the two normalisations read the same, and it
+        exists so a future 'Watercress' does not become 'watercres'. Measured 2026-08-26 across the
+        food DB and the vocabulary together: not one name ends in 'ss' and the collision set is
+        identical with it on or off, so its neuter fires nothing. The suite asserts that dormancy
+        directly instead of dressing it up in a fixture that would only prove itself.
+        The length floor keeps three-letter foods intact.
+        """
+        s = re.sub(r"[^a-z0-9]+", "", str(name or "").lower())
+        if len(s) > 3 and s.endswith("s") and not s.endswith("ss"):
+            s = s[:-1]
+        return s
+
+    @staticmethod
+    def _basis_text(r):
+        """How a row states its serving, in the row's own words."""
+        qty, unit, g = r.get("serving_qty"), r.get("serving_unit"), r.get("serving_grams")
+        if qty is not None and unit:
+            return "%s %s = %s g" % (qty, unit, g)
+        return "%s g" % g
+
+    def _same_food_other_basis(self, new, old):
+        """(agree, why) - do two rows on DIFFERENT serving bases state the SAME food?
+
+        Returns agree=False with an empty reason when the question cannot be asked, which is the
+        honest answer for a row that carries no usable weight: an unanswerable question is a conflict
+        a person rules on, never a pass.
+
+        THE COMPARISON RUNS ON THE EXISTING ROW'S OWN BASIS, not on a neutral per-100 g one, and that
+        is deliberate. The tolerances below are the estate's own (5 kcal, 0.5 g) and they were set
+        against a SERVING - forgiving 5 kcal per 100 g of dried basil would forgive 0.05 kcal per
+        tsp, which is a tolerance that has stopped meaning anything. Scaling the incoming row down
+        onto the household serving keeps the numbers the size the tolerance was written for.
+        """
+        gn, go = new.get("serving_grams"), old.get("serving_grams")
+        if not isinstance(gn, (int, float)) or not isinstance(go, (int, float)) or gn <= 0 or go <= 0:
+            return False, ""
+        f = float(go) / float(gn)
+        apart = []
+        for k in self.MACRO_FIELDS:
+            a, b = new.get(k), old.get(k)
+            if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+                # A macro missing on either side is a difference nobody can measure - the same rule
+                # _rounding_apart states, arriving here.
+                return False, ""
+            scaled = float(a) * f
+            tol = self.FOOD_DB_CAL_TOLERANCE if k == "calories" else self.FOOD_DB_MACRO_TOLERANCE
+            if abs(scaled - float(b)) > tol:
+                apart.append("%s %.4g vs %.4g" % (k, scaled, float(b)))
+        onto = "the mapper's row scaled onto the DB's %s" % self._basis_text(old)
+        if apart:
+            return False, "On one basis (%s) they still disagree: %s." % (onto, "; ".join(apart))
+        return True, "%s reproduces the DB's own numbers within %g kcal and %g g" % (
+            onto, self.FOOD_DB_CAL_TOLERANCE, self.FOOD_DB_MACRO_TOLERANCE)
+
     async def write_food_db_rows(self, slug, rows):
-        r"""Returns (written_names, findings). Never raises on a bad row - a bad row is a FINDING.
+        r"""Returns (written_names, findings, notes). Never raises on a bad row - a bad row is a FINDING.
 
         Order per row: shape, then source, then Atwater, then conflict. Nothing is written until
         every check on that row has passed, and one bad row never costs a good one its write.
+
+        NOTES ARE NOT FINDINGS. A row that agrees with the DB on a different serving basis is not a
+        problem anybody has to act on, so it does not go in the run's findings list - but it is worth
+        recording on the mapped artifact, because it is the difference between "we looked and they
+        agree" and "nobody looked".
         """
-        written, findings = [], []
+        written, findings, notes = [], [], []
         rows = [r for r in (rows or []) if isinstance(r, dict)]
         if not rows:
-            return written, findings
+            return written, findings, notes
         # THE WHOLE READ-MODIFY-WRITE IS INSIDE THE LOCK, not just the write. Two map workers can
         # carry rows for this one file at the same time (the MAP cap is 2), and a read outside the
         # lock is exactly the last-writer-wins shape that cost ingredient-resolutions 97% of its
@@ -2007,7 +2126,7 @@ class Daemon(object):
                 doc = await loop.run_in_executor(None, _read)
             except Exception as e:                                # noqa: BLE001
                 return written, ["%s: the food DB could not be read, so %d new row(s) were NOT "
-                                 "written (%s)" % (slug, len(rows), e)]
+                                 "written (%s)" % (slug, len(rows), e)], notes
             # THE FILE IS {readme, items:[...]} - A LIST OF ROWS, not a dict keyed by item name.
             # Measured 2026-08-25 on the live file. PLAN-hunter-judge-contract said "the DB is a DICT
             # keyed by item name - preserve that shape" and is CORRECTED in the same commit.
@@ -2015,12 +2134,14 @@ class Daemon(object):
             # `items` as an array, and a dict written here would be a silently unreadable DB.
             if not isinstance(doc, dict) or not isinstance(doc.get("items"), list):
                 return written, ["%s: the food DB is not the expected {readme, items:[...]} shape, "
-                                 "so %d new row(s) were NOT written" % (slug, len(rows))]
+                                 "so %d new row(s) were NOT written" % (slug, len(rows))], notes
             items = doc["items"]
             by_name = {}
+            by_loose = {}
             for r in items:
                 if isinstance(r, dict) and r.get("item"):
                     by_name[str(r["item"]).strip().lower()] = r
+                    by_loose.setdefault(self._loose_name_key(r["item"]), str(r["item"]))
             added = []
             for row in rows:
                 name = str(row.get("item") or "").strip()
@@ -2071,35 +2192,170 @@ class Daemon(object):
                         # The identical-row case, reached through rounding: silent skip, no finding,
                         # and the existing row stands exactly as it does for a byte-identical row.
                         macro = []
+                    # H2 (2026-08-26): A DIFFERENT BASIS IS NOT A DIFFERENT CLAIM.
+                    # The line above this - "the basis is judged first and ABSOLUTELY" - was written
+                    # from the Pork Chops save and it over-reached. Measured on run
+                    # hunt-2026-08-26-ten: 10 of the 13 conflict findings were the mapper returning a
+                    # per-100 g FDC row against a household row this DB already held, and every one of
+                    # them was the SAME FOOD. Dried Basil 2 cal per 1 g tsp against 233 cal per 100 g
+                    # is 2.33 against 2. Reporting that as a DIFFERS conflict is not a save, it is a
+                    # false statement about the data, and at width it buries the real ones - which is
+                    # the same sentence H1 wrote about rounding, one layer up.
+                    # WHAT SURVIVES: the refusal. Nothing is overwritten either way, and per Brad's
+                    # standing rule the HOUSEHOLD row is the one to keep, so agreement is silence and
+                    # the existing row stands untouched. Only DISAGREEMENT is reported.
+                    # AND IT IS STILL A GATE. Beef Broth in the same run states 2 g protein per 240 g
+                    # cup against the mapper's 1.97 per 100 g - 0.83 against 1.97 once put on one
+                    # basis, more than twice - and that stays a conflict, which is the fixture.
+                    agree, why_basis = self._same_food_other_basis(row, prior)
+                    if basis and agree:
+                        basis, macro = [], []
+                        notes.append(
+                            "%s: %r arrived on a different serving basis (%s) than the row the DB "
+                            "holds, and the two AGREE once put on one basis - %s. Nothing was written "
+                            "and the household row stands, which is the rule."
+                            % (slug, name, self._basis_text(row), why_basis))
                     diff = basis + macro
                     if diff:
                         # NEVER OVERWRITE ON A CONFLICT. Both rows are quoted so a person can rule;
                         # the recipe proceeds on the row that is already there.
                         findings.append(
                             "%s: the food DB already carries %r and the mapper's row DIFFERS on %s. "
-                            "Nothing was written and the existing row stands. existing=%s new=%s"
+                            "Nothing was written and the existing row stands.%s existing=%s new=%s"
                             % (slug, name, ", ".join(diff),
+                               (" " + why_basis) if why_basis else "",
                                json.dumps(dict((k, prior.get(k)) for k in diff), ensure_ascii=False),
                                json.dumps(dict((k, row.get(k)) for k in diff), ensure_ascii=False)))
                     continue                      # an identical row is skipped silently, per plan 3.2
+                # H3 (2026-08-26): THE EXACT-NAME CHECK IS WHY THIS DB HAS DUPLICATES.
+                # Everything above this line asks "is there a row called exactly that", so 'Apples'
+                # landed while 'Apple' was already there, 'Lemons' beside 'Lemon', 'Green Bell
+                # Peppers' beside 'Green Bell Pepper', and 'Fresh Thyme' TWICE - four collisions in
+                # 369 rows, every one of them a food the DB already had. The lookup is a name-keyed
+                # dict in both the conflict rule here and Get-MacroRecompute, so a duplicate does not
+                # announce itself: one row silently shadows the other and a recipe can be costed off
+                # whichever won.
+                #
+                # A FINDING, NEVER A REFUSAL, and that is the whole design. Refusing would put the
+                # recipe STUCK over a NAMING question, which is the exact failure class the rest of
+                # this commit exists to remove - and the row landing is what keeps the recipe moving.
+                # The collision is named where it is CAUSED, with the mapper still in the loop and
+                # the source page still in hand, instead of being found by an audit months later.
+                #
+                # AND IT IS THE PRECISE KEY, NOT THE HEAD-NOUN ONE. Measured over the live DB the day
+                # this was written: this key finds 4 collisions and all 4 are real duplicates, while
+                # the head-noun scoring finds 103 pairs of which 21 are the word "sauce" - it would
+                # fire on every new sauce row forever. Recall belongs on the mapper's shelf, where a
+                # near name is EVIDENCE it can rule against; precision belongs here, where a finding
+                # that cries wolf is a finding nobody reads. So '90/10 Ground Beef' beside '93/7'
+                # says nothing, and it should not.
+                twin = by_loose.get(self._loose_name_key(name))
+                if twin and twin.strip().lower() != name.lower():
+                    findings.append(
+                        "%s: the food DB already carries %r and this row is landing as %r - the same "
+                        "name modulo punctuation and plural, so these are almost certainly ONE food "
+                        "with two rows. The row was WRITTEN (a naming question must not park a "
+                        "recipe) and the lookup is name-keyed, so until they are merged one of them "
+                        "silently shadows the other." % (slug, twin, name))
                 clean = dict((k, v) for k, v in row.items() if v not in (None, ""))
                 clean["item"] = name
                 clean["added_by"] = "recipe-hunter map lane (%s)" % self.run_id
                 added.append(clean)
                 by_name[name.lower()] = clean
+                by_loose.setdefault(self._loose_name_key(name), name)
                 written.append(name)
             if not added:
-                return written, findings
+                return written, findings, notes
             try:
                 items.extend(added)
                 await loop.run_in_executor(None, _write, doc)
             except Exception as e:                                # noqa: BLE001
                 out = ["%s: the food DB could not be written, so the row for %r did NOT land (%s)"
                        % (slug, n, e) for n in written]
-                return [], findings + out
+                return [], findings + out, notes
             # the daemon's own cached index is now stale, and unverified_foods reads it
             self._food_db = None
-        return written, findings
+        return written, findings, notes
+
+    def food_db_shortfall(self, slug, res, tables, written, findings):
+        r"""The finding for rows the pre-resolve table ASKED FOR and the mapper never returned, or
+        None when every food that needed a row got one ruled on.
+
+        WHY THIS EXISTS, MEASURED ON RUN hunt-2026-08-26-ten. The table named between 1 and 9 foods
+        with no food-DB row on every one of the run's 22 recipes. The mapper returned ZERO rows for
+        TWELVE of them - including recipes whose own `detail` said in words that rows were returned
+        ("New DB rows returned: Yellow Onion, Apple, Chicken Thighs, Fresh Rosemary" against an empty
+        payload) - and NOT ONE recipe in the run returned a row for every food that needed one. The
+        recipes then went STUCK a whole lane later at the write gate, over a missing row nobody had
+        said was missing. `food_db_rows` is optional in the MAPPED schema and write_food_db_rows
+        returns silently on an empty list, so between the table asking and the skeleton refusing there
+        was no place the shortfall could be seen. This is that place.
+
+        NOT A GATE, ON PURPOSE. A missing row is already refused downstream by the skeleton builder,
+        and refusing here as well would turn one honest block into two. What this buys is that the
+        block is NAMED where it is caused, in the lane that could still act on it, instead of being
+        discovered by a stage that only knows the row is absent.
+
+        A ROW THAT WAS RETURNED AND REFUSED IS NOT A SHORTFALL - it was ruled on, and its own finding
+        already says why. Only silence counts.
+        """
+        table = (tables or {}).get(slug) or {}
+        # THE TABLE ASKS IN THE RECIPE'S WORDS AND THE DB ANSWERS IN THE ESTATE'S. A residual row's
+        # `term` is the page's own phrase - "med onion", "bone-in skin-on chicken thighs" - and its
+        # canon_item is null precisely because the table could not settle it. The name that has to be
+        # checked against the food DB is the one the MAPPER ruled, so the ruling is joined first and
+        # the raw term is only the fallback. Comparing "med onion" against a written "Yellow Onion"
+        # would report a shortfall on every residual line in the run.
+        ruled = {}
+        for r in (res.get("rulings") or []):
+            if not isinstance(r, dict):
+                continue
+            for k in ("raw", "term"):
+                if r.get(k):
+                    ruled[str(r[k]).strip().lower()] = r
+        # NOT EVERY DECISION NEEDS A LABEL. not-purchased is charcoal and wood chips; rejected is a
+        # line the mapper threw out. Everything else - mapped, mapped-null, mapped-optional - IS
+        # counted in the macros by the skeleton builder, so every one of them needs a row.
+        no_label = ("not-purchased", "rejected")
+        db = dict((str(k).strip().lower(), v) for k, v in (self.food_db() or {}).items())
+        need = []
+        for r in (table.get("rows") or []):
+            if not isinstance(r, dict) or r.get("fooddb_known"):
+                continue
+            rule = ruled.get(str(r.get("raw") or "").strip().lower()) \
+                or ruled.get(str(r.get("term") or "").strip().lower()) or {}
+            if str(rule.get("decision") or "").strip().lower() in no_label:
+                continue
+            name = rule.get("canon_item") or r.get("canon_item") or r.get("term")
+            if not name:
+                continue
+            name = str(name)
+            # The row may have been unknown to the TABLE and known to the DB all along - the table
+            # asks by the page's phrase and the mapper's ruling is what maps it onto a name the DB
+            # already carries. That is a lookup the table could not do, not a missing row.
+            if name.strip().lower() in db:
+                continue
+            if name not in need:
+                need.append(name)
+        if not need:
+            return None
+        # Every name the mapper ACCOUNTED FOR: written, or refused by name in a finding - a refused
+        # row was ruled on and its own finding already says why.
+        seen = set(str(n).strip().lower() for n in (written or []))
+        for f in (findings or []):
+            for n in need:
+                if ("'%s'" % n) in f or ('"%s"' % n) in f:
+                    seen.add(n.strip().lower())
+        missing = [n for n in need if n.strip().lower() not in seen]
+        if not missing:
+            return None
+        return ("map/%s: the pre-resolve table named %d food(s) with no food-DB row and the mapper "
+                "returned nothing at all for %d of them (%s). Those rows are not refused, they are "
+                "ABSENT - the write lane will refuse this recipe for a missing row that nobody said "
+                "was missing. A row the mapper could not acquire is a finding it is asked to state in "
+                "`detail`; silence is not."
+                % (slug, len(need), len(missing), ", ".join(repr(m) for m in missing[:8])
+                   + (" and %d more" % (len(missing) - 8) if len(missing) > 8 else "")))
 
     async def new_bid_proposals(self, slug, res):
         r"""Every bid the three namespaces do NOT already wire - declared or not.
@@ -2180,7 +2436,11 @@ class Daemon(object):
         """
         proposals = await self.new_bid_proposals(slug, res)
         rulings = await self.registrar_rulings(slug, proposals, tables)
-        db_written, db_findings = await self.write_food_db_rows(slug, res.get("food_db_rows"))
+        db_written, db_findings, db_notes = await self.write_food_db_rows(
+            slug, res.get("food_db_rows"))
+        shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
+        if shortfall:
+            db_findings = db_findings + [shortfall]
         for f in db_findings:
             self.findings.append(f)
         payload = {
@@ -2193,6 +2453,10 @@ class Daemon(object):
             # one cannot mistake the two.
             "db_entries_written": db_written,
             "db_row_findings": db_findings,
+            # Rows that were LOOKED AT and agreed with the DB on a different serving basis. Not
+            # findings - nobody has to act on them - but the difference between "we compared them"
+            # and "nobody compared them" is worth keeping on the artifact.
+            "db_row_notes": db_notes,
             "rejected": res.get("rejected") or [],
             "ruled_substitutions": res.get("ruled_substitutions") or [],
             "new_commodity_proposals": proposals,
@@ -2428,10 +2692,34 @@ class Daemon(object):
                     # the price lane to do. The unbid hold returns ABOVE this and is untouched, so
                     # nothing unbid can reach the writer through here: the only recipes this moves
                     # are ones the pre-resolve and the mapper BOTH settled.
+                    #
+                    # AMENDED BY Q2 (2026-08-26), and the sentence above is the one it amends: "zero
+                    # absent terms means the board answered every line" was the MAPPER'S account of
+                    # the recipe, and it is not sufficient. An ingredient can map perfectly to a real
+                    # commodity id and still be a food no Omaha store stocks, in which case the mapper
+                    # truthfully reports nothing absent and the recipe is still unbuyable. What is
+                    # still true is the second half - the unbid hold returns above this, so nothing
+                    # unbid reaches the writer through here.
+                    #
+                    # Q2 (2026-08-26): EVERY RECIPE TRANSITS `pricing`, AND THE CARRIAGE UNION IS WHY.
+                    # M3's zero-absent branch advanced `mapped` -> `priced` directly, so a recipe the
+                    # mapper reported no absent terms for was never carriage-checked at all - and that is
+                    # the union's FOUNDING CASE, not an edge of it. doubanjiang, rice-cakes and
+                    # ground-sumac all mapped to real commodity ids; the mapper therefore reported nothing
+                    # absent; nothing was ever priced; the recipe sailed to a paid page. The 2026-08-22
+                    # union closed that hole on the road into `pricing`, and M3 (2026-08-25) reopened it
+                    # for every recipe that skipped that road.
+                    #
+                    # M3'S INTENT IS KEPT WHOLE - the terms still decide the route, and a recipe with
+                    # nothing blocking still reaches the write lane in this same pass, with no pricer wake
+                    # and no park. What changes is WHOSE term list decides. The mapper's claim no longer
+                    # opens the gate; hunt-run's own RECORD does - the union of that claim and the carriage
+                    # derivation - and it is read back off the state file rather than trusted. `mapped` ->
+                    # `priced` is refused by the state machine as of today, so this is the only road left.
+                    claimed = hunt_lib.norm_state(res.get("state"))
                     if not absent:
                         # LOG THE DISAGREEMENT RATHER THAN SWALLOWING IT. A contract the model keeps
                         # missing is worth seeing at width, and this is now the only place it shows.
-                        claimed = hunt_lib.norm_state(res.get("state"))
                         if claimed != "priced":
                             self.log("map: %s has ZERO absent terms but the mapper called its state "
                                      "%s - routing on the terms, not on the claim"
@@ -2439,39 +2727,107 @@ class Daemon(object):
                         # OPTIONAL NEVER BLOCKED AND MUST NOT START BLOCKING HERE. The estate still
                         # learns of an optional term the board cannot answer - it reaches the queue -
                         # but it wakes no pricer and holds up no recipe.
+                        #
+                        # IT STAYS ON THIS ROAD ONLY, deliberately. The absent road records its optional
+                        # terms through -OptionalTerms and enqueues exactly its BLOCKING ones; B8 pins
+                        # that -Add list at three terms and a fourth would break it. The asymmetry
+                        # predates Q2 and is not Q2's to settle.
                         for t in optional:
                             await self.ps(INGREDIENT_QUEUE_PS,
                                           self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
                                                            "-Why", "%s lists it as optional"
                                                                    % b["slug"]]),
                                           timeout=180)
+                    # ---- Q1 (2026-08-26): THE ADVANCE COMES FIRST, AND THAT REVERSAL IS THE FIX.
+                    # This loop used to enqueue `absent` - the MAPPER'S CLAIM - and then advance.
+                    # But -Advance -To pricing is itself a WRITER of the term list: it unions in
+                    # Get-CarriageBlockingTerms, ingredients the mapper mapped fine that no Omaha
+                    # store carries. Nobody ever enqueued those. -Derive then scored them PENDING
+                    # (an unchecked term is never not-carried, correctly), so the recipe parked on
+                    # every pass, forever, with a state file reading `pricing` -> `parked` like a
+                    # recipe legitimately waiting on a price. Measured on hunt-2026-08-26-ten:
+                    # 5 of 7 parked recipes, 8 terms, none of them ever on the queue.
+                    #
+                    # So the queue is now driven by WHAT WAS WRITTEN, never by what was claimed.
+                    # The state file is the record; the record is what gets enqueued; a term
+                    # cannot be recorded as blocking without being enqueued because the recording
+                    # is what the enqueue reads. B8 stays impossible for the same reason it was
+                    # before - the terms ride to -Terms as DISTINCT array elements through
+                    # ps_invoke's -Command road - and now the derived half rides the same road.
+                    if not await self.advance(b["slug"], "pricing", "mapper", "",
+                                              terms=absent, optional_terms=optional):
+                        self.stuck(b["slug"], "map",
+                                   "hunt-run refused the advance to pricing; nothing was enqueued")
+                        self.log("  map: %s STUCK - hunt-run refused the advance to pricing"
+                                 % b["slug"])
+                        continue
+                    blocking, why_bt = self.blocking_terms(b["slug"])
+                    if why_bt:
+                        self.stuck(b["slug"], "map", why_bt)
+                        self.log("  map: %s STUCK - %s" % (b["slug"], why_bt))
+                        continue
+                    # THE CARRIAGE HALF IS NAMED, not inferred from a count. A term the daemon
+                    # never claimed is the interesting one, and at width it is the only way to see
+                    # the gate working.
+                    extra = [t for t in blocking if t not in absent]
+                    if extra:
+                        self.log("map: %s - hunt-run's carriage union added %d blocking term(s) "
+                                 "the mapper did not report: %s"
+                                 % (b["slug"], len(extra), ", ".join(extra)))
+                    # THE ZERO-BLOCKING EXIT, and it is what keeps M3 alive. hunt-run wrote the term list
+                    # and the read-back says nothing on it blocks: the board answered every line AND the
+                    # carriage union found nothing this town does not stock. There is no pricing question
+                    # left to ask, so the recipe leaves for the writer now rather than waiting on a lane
+                    # with nothing to do - which is the park-with-no-exit M3 was written to end.
+                    #
+                    # `pricing` -> `priced` IS A LEGAL TRANSITION and always has been; it is the same edge
+                    # -Derive uses when every term comes back CARRIED. The recipe is not counted into
+                    # pricing_slugs and no wake is pushed, so the price lane never learns of it.
+                    if not blocking:
                         await self.advance(b["slug"], "priced", "mapper",
-                                           "every term answered from the board")
+                                           "every term answered from the board and the carriage "
+                                           "union found nothing uncarried")
                         self.ch["write"].push(self.record(b["slug"], {"state": "priced"}))
-                    else:
-                        # THE DAEMON HOLDS THE PEN, so B8 becomes impossible rather than warned
-                        # against: the terms arrive as a JSON array and go to the queue and to
-                        # -Terms as DISTINCT elements, through ps_invoke's -Command road.
-                        for t in absent:
-                            await self.ps(INGREDIENT_QUEUE_PS,
-                                          self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
-                                                           "-Why", "%s needs it" % b["slug"]]),
-                                          timeout=180)
-                            # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
-                            # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
-                            # `absent_terms` is consumed destructively - so without this, the second
-                            # recipe wanting the same term re-queues it behind a pricer that has
-                            # already ruled on it. audit-lane-shape's price-lane-duplicate-items
-                            # finding exists to catch precisely that discarded dedup. The -Add above
-                            # still runs per recipe on purpose: the queue attaches BOTH slugs to the
-                            # one item, which is how a recipe learns its own term was answered.
-                            if t not in self.absent_terms and t not in self.priced_terms:
-                                self.absent_terms.append(t)
-                        await self.advance(b["slug"], "pricing", "mapper", "",
-                                           terms=absent, optional_terms=optional)
-                        self.pricing_slugs.add(b["slug"])
-                        self.record(b["slug"], {"state": "pricing", "absent": absent})
-                        woke = True
+                        continue
+                    refused = []
+                    for t in blocking:
+                        rc_q, out_q, err_q = await self.ps(
+                            INGREDIENT_QUEUE_PS,
+                            self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
+                                             "-Why", "%s needs it" % b["slug"]]),
+                            timeout=180)
+                        # AN -Add THAT FAILED USED TO BE SWALLOWED WHOLE. ingredient-queue exits 1
+                        # when it cannot take the write lock in 15s, saying "NOTHING was written",
+                        # and the map lane discarded that and advanced anyway - a second, rarer
+                        # road to the same permanent park.
+                        if rc_q != hunt_lib.EXIT_CLEAN:
+                            refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
+                            continue
+                        # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
+                        # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
+                        # `absent_terms` is consumed destructively - so without this, the second
+                        # recipe wanting the same term re-queues it behind a pricer that has
+                        # already ruled on it. audit-lane-shape's price-lane-duplicate-items
+                        # finding exists to catch precisely that discarded dedup. The -Add above
+                        # still runs per recipe on purpose: the queue attaches BOTH slugs to the
+                        # one item, which is how a recipe learns its own term was answered.
+                        if t not in self.absent_terms and t not in self.priced_terms:
+                            self.absent_terms.append(t)
+                    if refused:
+                        # LOUD, AND THE RECIPE IS NOT COUNTED AS PRICING. The state file already
+                        # says `pricing` - the advance landed - so this recipe would park on the
+                        # next -Derive exactly as before. The difference is that it now parks with
+                        # a STUCK outcome and the offending terms NAMED, which is a state a person
+                        # can act on, instead of a silence nobody could see.
+                        self.stuck(b["slug"], "map",
+                                   "the queue refused %d blocking term(s): %s"
+                                   % (len(refused), "; ".join(refused)))
+                        self.log("  map: %s STUCK - the queue refused %d blocking term(s): %s"
+                                 % (b["slug"], len(refused), "; ".join(refused)))
+                        continue
+                    self.pricing_slugs.add(b["slug"])
+                    self.record(b["slug"], {"state": "pricing", "absent": blocking})
+                    woke = True
                 # ONE WAKE PER MICRO-BATCH, after every term in it is on the queue. Waking the pricer
                 # inside the per-slug loop let it start on recipe one's terms while recipe two's were
                 # still being enqueued, which turns a lane that batches ACROSS recipes into a
@@ -4645,6 +5001,48 @@ class Daemon(object):
 
     def state_of(self, slug):
         return self.state_row(slug).get("state")
+
+    def blocking_terms(self, slug):
+        """Q1. Every NON-OPTIONAL term hunt-run ACTUALLY WROTE to the recipe's state file. Returns
+        (terms, why_not) - a non-empty `why_not` is a STUCK, never an empty list.
+
+        THIS IS THE AUTHORITY FOR WHAT GETS ENQUEUED, and that is the whole point. The map lane used
+        to enqueue the mapper's `absent_terms` and then advance; -Advance -To pricing is itself a
+        writer of this list (the carriage union), so the two lists were allowed to differ and did.
+        Reading the record back means the set that blocks and the set that is enqueued are the same
+        set by construction rather than by agreement.
+
+        FAIL-CLOSED, LOUDLY. An unreadable state file, a missing `terms` array or a term row that is
+        not an object all return a reason and NO terms. The tempting fallback - "use the mapper's
+        list, it is probably the same" - is exactly the assumption this function exists to delete: a
+        silent empty here is indistinguishable from a recipe that legitimately needs nothing, and the
+        recipe would sail to the writer unpriced.
+
+        A SINGLE-ELEMENT ARRAY THAT COLLAPSED TO A SCALAR IS STILL READ. hunt-run guards against
+        writing one (its own suite pins it), but this reader is downstream of a PowerShell writer and
+        the one-element collapse is the estate's most-paid-for JSON trap.
+        """
+        row = self.state_row(slug)
+        if not row:
+            return [], "%s's state file could not be read back after the advance" % slug
+        rows = row.get("terms")
+        if rows is None:
+            return [], "%s's state file carries no `terms` array after the advance" % slug
+        if isinstance(rows, dict):
+            rows = [rows]
+        if not isinstance(rows, list):
+            return [], "%s's `terms` is %s, not an array" % (slug, type(rows).__name__)
+        out = []
+        for t in rows:
+            if not isinstance(t, dict):
+                return [], ("%s has a term row that is not an object (%r) - the state file cannot be "
+                            "trusted to say what blocks" % (slug, t))
+            if t.get("optional"):
+                continue
+            name = as_text(t.get("term")).strip()
+            if name and name not in out:
+                out.append(name)
+        return out, ""
 
     async def status_json(self):
         rc, out, err = await self.ps(HUNT_RUN_PS, ["-Status", "-RunDir", self.run_dir, "-Json"],

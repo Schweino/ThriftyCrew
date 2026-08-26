@@ -1,4 +1,4 @@
-﻿# map-preresolve.ps1 - THE MECHANICAL HALF OF THE MAP STAGE (PLAN-recipe-hunter-v3 S4 / D7, 2026-08-24).
+# map-preresolve.ps1 - THE MECHANICAL HALF OF THE MAP STAGE (PLAN-recipe-hunter-v3 S4 / D7, 2026-08-24).
 # ---------------------------------------------------------------------------------------------------
 # Runs per micro-batch BEFORE the mapper agent is dispatched, and answers - from data already on disk,
 # in one pass - every ingredient question that does not need judgment. What it cannot answer it
@@ -334,6 +334,100 @@ function Invoke-Child {
   return [pscustomobject]@{ rc = $rc; text = $text }
 }
 
+function Get-CompositePython {
+  # The Windows Store python.exe on PATH is a stub that exits 49 without running anything, so the
+  # interpreter is always an absolute resolved path - the same list rebid-ingredient.ps1 uses.
+  foreach ($c in @('C:\Codex\Python312\python.exe',
+                   "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe",
+                   'C:\Program Files\Python312\python.exe')) {
+    if (Test-Path $c) { return $c }
+  }
+  return $null
+}
+
+function Get-CompositeSplits {
+  <#
+    ONE coverage_check --split-terms call for every distinct term in the batch, and it belongs in this
+    block for the same reason the vocabulary and board calls do: it is a composed surface, asked once.
+
+    WHAT IT ANSWERS. Which of these terms name MORE THAN ONE FOOD. "Salt and Pepper" is two foods on
+    one line and the food DB can never carry a row for it - that is not a lookup that failed, it is a
+    question with no answer, and on run hunt-2026-08-26-ten it took two recipes STUCK at the write
+    lane and parked four more one lane earlier waiting on a commodity id no single id can be.
+
+    THE RULE IS NOT IMPLEMENTED HERE. coverage_check.py owns the head-noun scoring this turns on and
+    has since 2026-08-23; a PowerShell reimplementation of it would be the forked-taxonomy defect
+    this file's own header warns about, one function further down.
+
+    NOT A GATE. A split that cannot be asked for - no interpreter, a child that fails - leaves every
+    term whole, which is exactly today's behaviour. The batch says so and carries on.
+  #>
+  param($Terms, $ResolvedWhole, $Names)
+  $out = @{}
+  $py = Get-CompositePython
+  if (-not $py) { return @{ splits = $out; why = 'no python interpreter at C:\Codex\Python312' } }
+  $script = Join-Path $here 'coverage_check.py'
+  if (-not (Test-Path $script)) { return @{ splits = $out; why = 'no coverage_check.py beside this script' } }
+  $req = @{ terms = @($Terms); resolved = @($ResolvedWhole); names = @($Names) } | ConvertTo-Json -Depth 4 -Compress
+  try {
+    $txt = $req | & $py $script --split-terms 2>&1
+    $text = (@($txt | ForEach-Object { [string]$_ }) -join "`n").Trim()
+    $line = @($text -split "`n" | Where-Object { $_.Trim().StartsWith('{') } | Select-Object -Last 1)[0]
+    if (-not $line) { return @{ splits = $out; why = ("the splitter printed no JSON: {0}" -f $text.Substring(0, [Math]::Min(160, $text.Length))) } }
+    $doc = $line | ConvertFrom-Json
+    if (-not $doc.ok) { return @{ splits = $out; why = [string]$doc.why } }
+    if ($doc.parts) {
+      foreach ($prop in $doc.parts.PSObject.Properties) { $out[[string]$prop.Name] = @($prop.Value | ForEach-Object { [string]$_ }) }
+    }
+    return @{ splits = $out; why = '' }
+  } catch {
+    return @{ splits = $out; why = ("the splitter would not run: {0}" -f $_.Exception.Message) }
+  }
+}
+
+function Split-ExtractionComposites {
+  <#
+    Rewrite one extraction's ingredient list so a line naming two foods becomes two lines.
+
+    THE RAW LINE IS THE JOIN KEY EVERYWHERE DOWNSTREAM - the grams snapshot is keyed by it, and so are
+    both of the mapper payload's arrays - so the parts CANNOT share one. Each part carries the source's
+    own line with the part named after it, which keeps the key unique, keeps the provenance readable,
+    and makes the grams snapshot MISS on purpose: nobody can apportion "Pinch salt and pepper" between
+    two foods without a ruling, and a shared gram figure copied onto both parts would put the whole
+    line's weight into the batch twice. A part with no grams is a residual line the mapper weighs,
+    which is the road that already exists for every line the engine cannot ground.
+
+    `item_split_from` records the original term so a person reading the table sees what happened.
+  #>
+  param($Extraction, $Splits)
+  if (-not $Splits -or $Splits.Count -eq 0) { return @{ changed = 0; notes = @() } }
+  $outIngs = New-Object System.Collections.Generic.List[object]
+  $notes = New-Object System.Collections.Generic.List[string]
+  $changed = 0
+  foreach ($ing in (As-Array $Extraction.ingredients)) {
+    $t = [string]$ing.item; if (-not $t) { $t = [string]$ing.raw }
+    if (-not ($t -and $Splits.ContainsKey($t))) { $outIngs.Add($ing) | Out-Null; continue }
+    $parts = @($Splits[$t])
+    foreach ($part in $parts) {
+      $clone = [pscustomobject]@{}
+      foreach ($prop in $ing.PSObject.Properties) {
+        $clone | Add-Member -NotePropertyName $prop.Name -NotePropertyValue $prop.Value -Force
+      }
+      $clone | Add-Member -NotePropertyName 'item' -NotePropertyValue $part -Force
+      $clone | Add-Member -NotePropertyName 'raw' -NotePropertyValue (("{0} [split: {1}]" -f [string]$ing.raw, $part)) -Force
+      $clone | Add-Member -NotePropertyName 'item_split_from' -NotePropertyValue $t -Force
+      $clone | Add-Member -NotePropertyName 'raw_split_from' -NotePropertyValue ([string]$ing.raw) -Force
+      $outIngs.Add($clone) | Out-Null
+    }
+    $changed++
+    $notes.Add(("'{0}' names {1} foods on one line and was split into {2} - a composite can never have one food-DB row or one commodity id" -f $t, $parts.Count, ($parts -join ' + '))) | Out-Null
+  }
+  if ($changed -gt 0) {
+    $Extraction | Add-Member -NotePropertyName 'ingredients' -NotePropertyValue ($outIngs.ToArray()) -Force
+  }
+  return @{ changed = $changed; notes = @($notes.ToArray()) }
+}
+
 function Get-VocabClassification {
   <# ONE ingredient-vocab -Missing call for every distinct term in the batch. Returns a hashtable
      term -> {class, resolves_to, candidates}. Its -Missing road is the bulk classifier and it is the
@@ -539,6 +633,10 @@ function New-PreResolveTable {
       evidence      = ($evidence -join '; ')
       source        = $(if ($src) { $src } else { $null })
       optional      = [bool]$ing.optional
+      # Set when this row came out of a COMPOSITE line ("Salt and Pepper" -> Salt, Pepper). It is the
+      # only place a reader of the table can see that one source line became two, and the mapper is
+      # told the same thing in the residual block so it rules on the part, never on the pair.
+      item_split_from = $(if ($ing.PSObject.Properties.Name -contains 'item_split_from') { [string]$ing.item_split_from } else { $null })
       # SOURCE-BASIS GRAMS (ADDED 2026-08-24, A-package / pin P3). Null here and filled in by the live
       # path from parse-compute's own per-line snapshot, because the arithmetic runs once per BATCH and
       # this function is pure over four lookups. Null means "the engine could not weigh this line",
@@ -2405,6 +2503,51 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
     ([string]$rowKnown.evidence -notmatch 'USDA FDC') ([string]$rowKnown.evidence)
   $script:FdcCache = $null
 
+  # ---- COMPOSITE TERM SPLITTING, END TO END (2026-08-26) -----------------------------------------
+  # THE RULE ITSELF IS coverage_check.py's AND ITS FIXTURES LIVE THERE. What is proved here is the
+  # WIRING: that this file asks, that it can read the answer back, and that the rewrite it does to an
+  # extraction is one the rest of this file can carry. Run hunt-2026-08-26-ten lost twelve recipes at
+  # the write lane and parked four more, and 'Salt and Pepper' was the named blocker on two of them.
+  $splitProbe = Get-CompositeSplits @('Salt and Pepper', 'Sweet and Sour Sauce', 'Yellow Onion') `
+                                    @('Yellow Onion') `
+                                    @('Salt', 'Black Pepper', 'Yellow Onion', 'Sour Sauce')
+  T 'MUST FIRE  the composite splitter can actually be ASKED from here - a rule nothing calls is a rule the batch does not have' `
+    ([string]$splitProbe.why -eq '') ([string]$splitProbe.why)
+  T "MUST FIRE  'Salt and Pepper' comes back as TWO foods across the process boundary" `
+    ($splitProbe.splits.ContainsKey('Salt and Pepper') -and
+     (@($splitProbe.splits['Salt and Pepper']) -join '|') -eq 'Salt|Pepper') `
+    ((@($splitProbe.splits.Keys) -join ',') + ' => ' + (@($splitProbe.splits['Salt and Pepper']) -join '|'))
+  T 'CLEAN TWIN a one-food term and a fixed compound both come back UNSPLIT, so the batch is not rewritten for nothing' `
+    ((-not $splitProbe.splits.ContainsKey('Yellow Onion')) -and
+     (-not $splitProbe.splits.ContainsKey('Sweet and Sour Sauce'))) `
+    (@($splitProbe.splits.Keys) -join ',')
+
+  $exSplit = [pscustomobject]@{ slug='fx'; title='Fixture'; servings=4; ingredients=@(
+      [pscustomobject]@{ raw='Pinch salt and pepper ($0.05)'; item='Salt and Pepper'; optional=$false },
+      [pscustomobject]@{ raw='1 medium yellow onion'; item='Yellow Onion'; optional=$false }) }
+  $spRes = Split-ExtractionComposites $exSplit @{ 'Salt and Pepper' = @('Salt','Pepper') }
+  $spIngs = @($exSplit.ingredients)
+  T 'MUST FIRE  one composite line becomes TWO ingredient lines and the untouched line is left alone' `
+    ($spRes.changed -eq 1 -and $spIngs.Count -eq 3 -and
+     (@($spIngs | ForEach-Object { [string]$_.item }) -join '|') -eq 'Salt|Pepper|Yellow Onion') `
+    ((@($spIngs | ForEach-Object { [string]$_.item }) -join '|') + " changed=" + $spRes.changed)
+  # THE RAW LINE IS THE JOIN KEY - the grams snapshot, the mapper's `lines` and its `rulings` are all
+  # keyed by it. Two parts sharing one raw would pull the SAME ruling and the SAME gram figure, which
+  # is the whole line's weight counted twice and one part ruled as the other.
+  T 'MUST FIRE  the split parts get DISTINCT raw lines - a shared join key would put one line''s grams into the batch twice' `
+    ((@($spIngs | ForEach-Object { [string]$_.raw }) | Select-Object -Unique).Count -eq 3) `
+    ((@($spIngs | ForEach-Object { [string]$_.raw }) -join ' || '))
+  T 'MUST FIRE  ...and each part still names the line it came from, so nobody reading the table has to guess' `
+    ((@($spIngs | Where-Object { [string]$_.item_split_from -eq 'Salt and Pepper' }).Count -eq 2) -and
+     ([string]$spIngs[0].raw_split_from -eq 'Pinch salt and pepper ($0.05)')) `
+    ([string]$spIngs[0].raw_split_from)
+  # AND THE TABLE CARRIES IT. New-PreResolveTable builds what the mapper is actually shown.
+  $tblSplit = New-PreResolveTable 'fx' $exSplit $vocab @{} @{} @{} $dens $each $foodDb
+  $rowSalt = @($tblSplit.rows | Where-Object { [string]$_.term -eq 'Salt' })[0]
+  T 'MUST FIRE  the built table carries one row per PART, each stamped with the composite it came from' `
+    (@($tblSplit.rows).Count -eq 3 -and [string]$rowSalt.item_split_from -eq 'Salt and Pepper') `
+    ((@($tblSplit.rows | ForEach-Object { [string]$_.term }) -join '|') + ' split_from=' + [string]$rowSalt.item_split_from)
+
   if ($bad -gt 0) { Write-Output ("map-preresolve SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'map-preresolve SELF-TEST PASS'
   Write-GuardComplete -Name 'map-preresolve' -Summary 'selftest pass'
@@ -2597,6 +2740,45 @@ try {
   foreach ($i in (As-Array $fRoot.items)) { if ($i.item) { $foodDb[[string]$i.item] = $i } }
 } catch {
   Write-Output ("map-preresolve: BLOCKED - a lookup would not load: {0}" -f $_.Exception.Message); exit 2
+}
+
+# 3a. SPLIT THE COMPOSITE TERMS FIRST, BEFORE ANY LOOKUP IS COMPOSED OVER THEM. A line naming two
+# foods has to become two lines HERE or it becomes one unanswerable question everywhere after:
+# ingredient-vocab is asked to classify a food that does not exist, the board is asked to price it,
+# and the food DB is asked for a row it can never carry. Run hunt-2026-08-26-ten lost twelve recipes
+# to the last of those and four more to the second.
+$preTerms = New-Object System.Collections.Generic.List[string]
+foreach ($slug in $slugList) {
+  foreach ($ing in (As-Array $extractions[$slug].ingredients)) {
+    $t = [string]$ing.item; if (-not $t) { $t = [string]$ing.raw }
+    if ($t -and -not $preTerms.Contains($t)) { $preTerms.Add($t) | Out-Null }
+  }
+}
+# A term the estate ALREADY resolves as a whole is a food it carries, however its name reads, so the
+# splitter is never asked about it. This is what keeps "Half and Half" one food.
+$knownNames = New-Object System.Collections.Generic.List[string]
+$resolvedWhole = New-Object System.Collections.Generic.List[string]
+foreach ($v in (As-Array $vocab)) {
+  if ($v.item) { $knownNames.Add([string]$v.item) | Out-Null }
+  if ($v.PSObject.Properties.Name -contains 'aliases') {
+    foreach ($al in (As-Array $v.aliases)) { if ($al) { $knownNames.Add([string]$al) | Out-Null } }
+  }
+}
+foreach ($k in $foodDb.Keys) { $knownNames.Add([string]$k) | Out-Null }
+foreach ($n in $knownNames) { $resolvedWhole.Add($n) | Out-Null }
+$splitRes = Get-CompositeSplits $preTerms.ToArray() $resolvedWhole.ToArray() $knownNames.ToArray()
+if ($splitRes.why) {
+  # NOT A GATE: every term stays whole and the batch says so, which is the behaviour that shipped
+  # before this step existed. Silence here would be a term-formation rule nobody can tell ran.
+  Write-Output ("map-preresolve: WARNING - composite terms were NOT split ({0}); a line naming two foods will reach the mapper whole." -f $splitRes.why)
+}
+$splitNotes = New-Object System.Collections.Generic.List[string]
+if ($splitRes.splits.Count -gt 0) {
+  foreach ($slug in $slugList) {
+    $r = Split-ExtractionComposites $extractions[$slug] $splitRes.splits
+    foreach ($n in @($r.notes)) { $splitNotes.Add(("{0}: {1}" -f $slug, $n)) | Out-Null }
+    if ($r.changed -gt 0) { Write-Output ("map-preresolve: {0} - split {1} composite ingredient line(s)" -f $slug, $r.changed) }
+  }
 }
 
 # 3. ONE VOCAB CALL AND ONE BOARD CALL FOR THE WHOLE BATCH.
