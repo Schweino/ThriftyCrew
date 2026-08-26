@@ -1,0 +1,167 @@
+{
+ "slug": "easy-beef-enchiladas",
+ "lines": [
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "1 3/4 tablespoons",
+   "notes": null
+  },
+  {
+   "raw": "1 medium onion, (diced)",
+   "buy": "1 3/4 medium onions, diced (about 1 1/4 cups)",
+   "grams_source": 110,
+   "notes": "Medium onion at 110 g."
+  },
+  {
+   "raw": "1 jalapeño pepper (stem and seeds removed, minced)",
+   "buy": "2 jalapeno peppers, stemmed, seeded and minced",
+   "grams_source": 14,
+   "notes": "1.75 peppers at batch scale, rounded to 2."
+  },
+  {
+   "raw": "1 pound lean ground beef",
+   "buy": "1 3/4 lb",
+   "grams_source": 453.6,
+   "notes": "Lean 93/7 grind, as the line states."
+  },
+  {
+   "raw": "2 cloves garlic, (minced)",
+   "buy": "4 cloves, minced",
+   "notes": "3.5 cloves scaled, rounded to 4."
+  },
+  {
+   "raw": "1 teaspoon kosher salt (plus more to taste)",
+   "buy": "1 3/4 teaspoons, plus more to taste",
+   "notes": null
+  },
+  {
+   "raw": "1 3/4 cups easy enchilada sauce, (divided)",
+   "buy": "3 cups, divided",
+   "grams_source": 420,
+   "notes": "1.75 cups x 240 g."
+  },
+  {
+   "raw": "8 large flour tortillas",
+   "buy": "14 large flour tortillas",
+   "grams_source": 568,
+   "notes": "71 g per 10-inch tortilla."
+  },
+  {
+   "raw": "2 cups shredded Mexican-blend cheese, (divided)",
+   "buy": "3 1/2 cups shredded, divided",
+   "grams_source": 226,
+   "notes": "2 cups shredded = one 8 oz bag."
+  },
+  {
+   "raw": "optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce",
+   "buy": "optional toppings: diced onion, chopped cilantro, sour cream, shredded lettuce, to taste",
+   "notes": "No stated quantity; not costed and not counted in macros."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 medium onion, (diced)",
+   "term": "medium onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "Exact precedent 'medium yellow onion' -> onions at cos 0.91; 'medium' is a size word, not a form. Board 7 of 7."
+  },
+  {
+   "raw": "1 jalapeño pepper (stem and seeds removed, minced)",
+   "term": "jalapeño pepper",
+   "canon_item": "Jalapeno Pepper",
+   "bid": "jalapenos",
+   "decision": "mapped",
+   "grams_source": 14,
+   "evidence": "`jalapenos` is a live board id at 6 of 7 that prices exactly this food, so a reuse; only the vocabulary name row is missing. The nearest vocabulary rows are bell and black pepper, both different foods and refused."
+  },
+  {
+   "raw": "1 pound lean ground beef",
+   "term": "lean ground beef",
+   "canon_item": "93/7 Ground Beef",
+   "bid": "93-7-ground-beef",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "'Lean' is a real form word - a different price and a different gram-for-gram macro - so I will not bridge it to 80/20; 93/7 Ground Beef is the vocabulary's own lean row, so this is a reuse of an existing bid."
+  },
+  {
+   "raw": "1 3/4 cups easy enchilada sauce, (divided)",
+   "term": "easy enchilada sauce",
+   "canon_item": "Enchilada Sauce",
+   "bid": "enchilada-sauce",
+   "decision": "mapped",
+   "grams_source": 420,
+   "evidence": "'Easy' is the source's own name for its homemade version, not a product difference; same-form vocabulary row Enchilada Sauce, board 5 of 7."
+  },
+  {
+   "raw": "8 large flour tortillas",
+   "term": "large flour tortillas",
+   "canon_item": "Flour Tortillas",
+   "bid": "flour-tortillas",
+   "decision": "mapped",
+   "grams_source": 568,
+   "evidence": "Refused the corn-tortillas bridge: corn and flour tortillas are different products at different per-unit prices and gram weights. New id proposed with an alias instruction against the generic `tortillas` board id. 8 x 71 g."
+  },
+  {
+   "raw": "2 cups shredded Mexican-blend cheese, (divided)",
+   "term": "shredded Mexican-blend cheese",
+   "canon_item": "Mexican Blend Cheese",
+   "bid": "mexican-blend-cheese",
+   "decision": "mapped",
+   "grams_source": 226,
+   "evidence": "Refused the cheddar-cheese-shredded bridge, following the estate's three 2026-08-26 refusals of shredded-cheese bridges: a cheddar/jack blend is a different bag from shredded cheddar. Board absent, so proposed. 2 cups = one 8 oz bag."
+  },
+  {
+   "raw": "optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce",
+   "term": "diced onions, chopped cilantro, sour cream, shredded lettuce",
+   "canon_item": "Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 0,
+   "evidence": "Four distinct foods on one unsplittable line with no quantity, so no single bid can carry it - the 'salt and pepper' precedent of 2026-08-26. Garnish to taste, pantry-static and safe."
+  }
+ ],
+ "absent_terms": [
+  "93/7 lean ground beef",
+  "shredded Mexican blend cheese",
+  "large flour tortillas"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "map/easy-beef-enchiladas: the pre-resolve table named 4 food(s) with no food-DB row and the mapper returned nothing at all for 4 of them ('Jalapeno Pepper', 'Flour Tortillas', 'Mexican Blend Cheese', 'Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce'). Those rows are not refused, they are ABSENT - the write lane will refuse this recipe for a missing row that nobody said was missing. A row the mapper could not acquire is a finding it is asked to state in `detail`; silence is not."
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "large flour tortillas",
+   "proposed_bid": "flour-tortillas",
+   "evidence": "Refused the corn-tortillas bridge: corn and flour tortillas are different products at different per-unit prices and gram weights. New id proposed with an alias instruction against the generic `tortillas` board id. 8 x 71 g.",
+   "declared": false
+  },
+  {
+   "term": "shredded Mexican-blend cheese",
+   "proposed_bid": "mexican-blend-cheese",
+   "evidence": "Refused the cheddar-cheese-shredded bridge, following the estate's three 2026-08-26 refusals of shredded-cheese bridges: a cheddar/jack blend is a different bag from shredded cheddar. Board absent, so proposed. 2 cups = one 8 oz bag.",
+   "declared": false
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "flour-tortillas",
+   "verdict": "alias",
+   "bid": "tortillas",
+   "reason": "The existing weekly id `tortillas` IS the flour-tortilla commodity - its commodities.json label is literally 'Tortillas (flour)' (line 9898), it is live-priced at $0.106/each across 7 stores (Walmart cheapest), and the estate already splits the other forms out under their own ids (corn-tortillas at $0.0561/each, high-fiber-tortillas excluded by pattern). 'Large' is not a variant here: the row's large/burrito/XL excludes fire only in combination with carb-balance/high-fiber terms, so plain large flour tortillas are in scope. Same food, same form, already priced - minting flour-tortillas would be exactly the bread-crumbs/breadcrumbs defect. Follow-up: add `flour-tortillas -> tortillas` to recipe-floor-id-map.json (units match: each). Separately, if the vocabulary needs a Flour Tortillas name row, that is a name ruling, not an id - fdc:175037 is the plausible macros row but transcribe a label before trusting it."
+  },
+  {
+   "proposed_bid": "mexican-blend-cheese",
+   "verdict": "alias",
+   "bid": "shredded-cheese",
+   "reason": "The mapper was right to refuse the cheddar-cheese-shredded bridge (a cheddar/jack blend is not a bag of shredded cheddar), but the estate's pricing id for this purchase class is the GENERIC `shredded-cheese` ('Shredded / Block Cheese', $0.1521/oz at Sam's Club, 7 stores): its include net already captures blend bags via 'shredded\\s+\\w+(?:\\s+\\w+)?\\s+cheese' and '(cheddar|mozzarella|colby|monterey|jack)\\s+cheese' - a 'Shredded Mexican Blend Cheese' label matches today and would be claimed by this row, so a new id would price the SAME shelf products twice. The declared-same-thing layer already collapses cheddar-cheese-shredded AND mozzarella-cheese into shredded-cheese (both alias_of in the live feed at the identical crown), which is the human-ratified convention that shredded-bag varieties share one price id. Follow-up: add `mexican-blend-cheese -> shredded-cheese` to recipe-floor-id-map.json (units match: oz, 8 oz bag). The vocabulary/macros question is separate: fdc:171288 'Cheese, Mexican blend' is a credible macros row for the NAME, but that mints no id."
+  }
+ ],
+ "macro_cross_check": "Computed over all 10 lines at source scale (8 servings): 3545 cal / 200.1 g protein / 314 g carbs = 443 cal, 25.0 g protein, 39.3 g carbs per serving. Source published 624 / 44 / 44. PROTEIN GAP -43%, far outside the 15% bar, so I re-examined the portions as rule 6 requires - and the gap is NOT ours. No each-weight assumption is in play: the main protein is written out as '1 pound lean ground beef' for 8 servings, which is 57 g raw per serving, and the instructions confirm 1 tortilla and 2 cups of cheese total per 8 enchiladas. 57 g of raw 93/7 beef (12.2 P) plus 28 g of cheese (6.6 P) plus one tortilla (5.7 P) is 24.5 g of protein, and there is no fourth protein on the page. The published 44 g cannot be reached from this ingredient list at any serving count (at 4 servings it would be 50 P but also 886 cal). I believe the SOURCE'S published block is wrong, not our grams, and I am flagging it rather than inflating a portion to chase it."
+}

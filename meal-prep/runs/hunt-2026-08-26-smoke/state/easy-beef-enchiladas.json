@@ -1,0 +1,43 @@
+{
+    "slug":  "easy-beef-enchiladas",
+    "title":  "Easy Beef Enchiladas",
+    "source_url":  "https://www.isabeleats.com/beef-enchiladas/",
+    "protein":  "beef",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-26T10:01:11",
+    "updated":  "2026-08-26T10:11:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T10:01:11",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/beef-enchiladas/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T10:01:12",
+                        "by":  "decider",
+                        "detail":  "Classic baked ground-beef enchiladas; no enchilada dupe in live catalog (nearest neighbours are Korean beef bowls), scalable bake, band verified."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T10:02:04",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T10:11:25",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled, 0 rejected, 4 food-db rows returned for this recipe (plus Yellow Onion, shared with salisbury). Two new ids proposed (flour-tortillas, mexican-blend-cheese); onions, jalapenos, enchilada-sauce and 93-7-ground-beef are reuses. THE BATCH-LEVEL FINDING, and it is the loud one: ALL THREE recipes in this micro-batch exceed this run\u0027s stated condition of \u002735 g carbohydrate or les"
+                    }
+                ]
+}

@@ -1,0 +1,124 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Easy Beef Enchiladas",
+  "source_url": "https://www.isabeleats.com/beef-enchiladas/",
+  "servings": 8,
+  "time_total": "42 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tablespoon olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 medium onion, (diced)",
+      "item": "medium onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 jalapeño pepper (stem and seeds removed, minced)",
+      "item": "jalapeño pepper",
+      "qty": "1",
+      "unit": null,
+      "prep": "stem and seeds removed, minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 pound lean ground beef",
+      "item": "lean ground beef",
+      "qty": "1",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cloves garlic, (minced)",
+      "item": "garlic",
+      "qty": "2",
+      "unit": "cloves",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon kosher salt (plus more to taste)",
+      "item": "kosher salt",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": "plus more to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 3/4 cups easy enchilada sauce, (divided)",
+      "item": "easy enchilada sauce",
+      "qty": "1 3/4",
+      "unit": "cups",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 large flour tortillas",
+      "item": "large flour tortillas",
+      "qty": "8",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded Mexican-blend cheese, (divided)",
+      "item": "shredded Mexican-blend cheese",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce",
+      "item": "diced onions, chopped cilantro, sour cream, shredded lettuce",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": "toppings"
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 350ºF.",
+    "Heat olive oil in a large skillet over medium-high heat. Add the onions and jalapeño. Saute for 5 minutes, stirring occasionally, until softened and translucent.",
+    "Add the ground beef, garlic, and salt. Use a wooden spoon to break up the meat into smaller chunks. Cook, stirring occasionally, for 6 to 8 minutes, until beef is browned.",
+    "Add 1/4 cup enchilada sauce, stir to combine, and remove from heat. Taste and season with more salt if necessary.",
+    "Microwave the tortillas on a plate for 1 minute, flipping them halfway through until all of them are warm and pliable.",
+    "Pour 1/4 cup of the enchilada sauce into a 9x13 baking dish, and spread it out to fully coat the bottom.",
+    "Assemble the enchiladas by filling each tortilla evenly with the beef mixture and 3/4 cup of shredded cheese. Roll the tortillas tightly to close and place in a large baking dish seam side down.",
+    "Pour the remaining 1 1/4 cups enchilada sauce over the tortillas, top with the remaining 1 1/4 cups shredded cheese, and bake for 20 minutes, until the cheese is melted and bubbly.",
+    "Serve immediately and garnish with desired toppings."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

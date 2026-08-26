@@ -14052,6 +14052,868 @@
      "portions": []
     }
    ]
+  },
+  "birria broth": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171606,
+     "description": "Fish broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.6,
+      "carbs_g": 0.4,
+      "calories": 16.0,
+      "fiber_g": 0.0,
+      "protein_g": 2.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171110,
+     "description": "Chicken, canned, no broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 8.1,
+      "carbs_g": 0.9,
+      "calories": 185.0,
+      "protein_g": 25.3,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171180,
+     "description": "Soup, SWANSON, vegetable broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.07,
+      "carbs_g": 1.02,
+      "calories": 6.0,
+      "protein_g": 0.23,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171099,
+     "description": "Chicken, canned, meat only, with broth",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 21.8,
+      "fiber_g": 0.0,
+      "fat_g": 7.95,
+      "carbs_g": 0.0,
+      "calories": 165.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "shredded birria": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 173431,
+     "description": "Cheese, parmesan, shredded",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 415.0,
+      "protein_g": 37.9,
+      "fiber_g": 0.0,
+      "fat_g": 27.3,
+      "carbs_g": 3.41
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170900,
+     "description": "Cheese, mozzarella, low moisture, part-skim, shredded",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 19.7,
+      "carbs_g": 8.06,
+      "calories": 304.0,
+      "protein_g": 23.6,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168586,
+     "description": "Nuts, coconut meat, dried (desiccated), sweetened, shredded",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 2.88,
+      "fiber_g": 4.5,
+      "fat_g": 35.5,
+      "carbs_g": 47.7,
+      "calories": 501.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 173894,
+     "description": "Cereals ready-to-eat, POST, Honey Nut Shredded Wheat",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 10.7,
+      "fat_g": 2.9,
+      "carbs_g": 83.6,
+      "protein_g": 8.5,
+      "calories": 373.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "ramen noodles": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171177,
+     "description": "Soup, ramen noodle, any flavor, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 17.6,
+      "carbs_g": 60.3,
+      "calories": 440.0,
+      "fiber_g": 2.9,
+      "protein_g": 10.2
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171614,
+     "description": "Soup, ramen noodle, beef flavor, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 17.7,
+      "carbs_g": 60.3,
+      "calories": 441.0,
+      "fiber_g": 3.0,
+      "protein_g": 10.1
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171615,
+     "description": "Soup, ramen noodle, chicken flavor, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.2,
+      "fiber_g": 2.9,
+      "fat_g": 17.5,
+      "carbs_g": 60.2,
+      "calories": 439.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171822,
+     "description": "Soup, ramen noodle, dry, any flavor, reduced fat, reduced sodium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.9,
+      "fiber_g": 2.7,
+      "fat_g": 2.5,
+      "carbs_g": 71.0,
+      "calories": 350.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "sliced radishes": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 169276,
+     "description": "Radishes, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 3.4,
+      "calories": 16.0,
+      "protein_g": 0.68,
+      "fiber_g": 1.6,
+      "fat_g": 0.1
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168453,
+     "description": "Radishes, oriental, dried",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 7.9,
+      "fat_g": 0.72,
+      "carbs_g": 63.4,
+      "calories": 271.0,
+      "fiber_g": 23.9
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168451,
+     "description": "Radishes, oriental, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 4.1,
+      "calories": 18.0,
+      "protein_g": 0.6,
+      "fiber_g": 1.6,
+      "fat_g": 0.1
+     },
+     "portions": []
+    }
+   ]
+  },
+  "medium onion": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 168886,
+     "description": "Rye flour, medium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.9,
+      "fiber_g": 11.8,
+      "fat_g": 1.52,
+      "carbs_g": 75.4,
+      "calories": 349.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170000,
+     "description": "Onions, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.1,
+      "carbs_g": 9.34,
+      "calories": 40.0,
+      "protein_g": 1.1,
+      "fiber_g": 1.7
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174525,
+     "description": "Sauce, homemade, white, medium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.2,
+      "protein_g": 3.84,
+      "fat_g": 10.6,
+      "carbs_g": 9.17,
+      "calories": 147.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169844,
+     "description": "DENNY'S, onion rings",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 22.2,
+      "carbs_g": 41.0,
+      "calories": 385.0,
+      "protein_g": 5.29,
+      "fiber_g": 2.4
+     },
+     "portions": []
+    }
+   ]
+  },
+  "jalapeño pepper": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 169394,
+     "description": "Pepper, banana, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 3.4,
+      "protein_g": 1.66,
+      "fat_g": 0.45,
+      "carbs_g": 5.35,
+      "calories": 27.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169396,
+     "description": "Peppers, ancho, dried",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 281.0,
+      "carbs_g": 51.4,
+      "protein_g": 11.9,
+      "fiber_g": 21.6,
+      "fat_g": 8.2
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168578,
+     "description": "Peppers, hungarian, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 6.7,
+      "fiber_g": 1.0,
+      "protein_g": 0.8,
+      "fat_g": 0.41,
+      "calories": 29.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168576,
+     "description": "Peppers, jalapeno, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 2.8,
+      "protein_g": 0.91,
+      "fat_g": 0.37,
+      "carbs_g": 6.5,
+      "calories": 29.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "lean ground beef": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 168652,
+     "description": "Beef, ground, 70% lean meat / 30% fat, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 332.0,
+      "protein_g": 14.4,
+      "fiber_g": 0.0,
+      "fat_g": 30.0,
+      "carbs_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174037,
+     "description": "Beef, ground, 75% lean meat / 25% fat, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 25.0,
+      "carbs_g": 0.0,
+      "protein_g": 15.8,
+      "fiber_g": 0.0,
+      "calories": 293.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 174036,
+     "description": "Beef, ground, 80% lean meat / 20% fat, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 0.0,
+      "protein_g": 17.2,
+      "fat_g": 20.0,
+      "carbs_g": 0.0,
+      "calories": 254.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "easy enchilada sauce": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 174074,
+     "description": "Sauce, enchilada, red, mild, ready to serve",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 0.62,
+      "fiber_g": 0.5,
+      "fat_g": 0.91,
+      "carbs_g": 4.87,
+      "calories": 30.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169854,
+     "description": "ON THE BORDER, cheese enchilada",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 11.7,
+      "fiber_g": 1.8,
+      "fat_g": 17.7,
+      "carbs_g": 16.2,
+      "calories": 271.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169855,
+     "description": "Restaurant, Mexican, cheese enchilada",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 18.5,
+      "carbs_g": 15.4,
+      "calories": 273.0,
+      "protein_g": 11.2,
+      "fiber_g": 1.9
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171584,
+     "description": "Sauce, cheese sauce mix, dry",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 18.3,
+      "carbs_g": 60.5,
+      "calories": 438.0,
+      "protein_g": 7.68,
+      "fiber_g": 1.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "large flour tortillas": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 175037,
+     "description": "Tortillas, ready-to-bake or -fry, flour, refrigerated",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 7.99,
+      "carbs_g": 49.4,
+      "calories": 306.0,
+      "protein_g": 8.2,
+      "fiber_g": 3.5
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169724,
+     "description": "Wheat flour, white, tortilla mix, enriched",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 9.66,
+      "fat_g": 10.6,
+      "carbs_g": 67.1,
+      "calories": 405.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 167535,
+     "description": "Tortillas, ready-to-bake or -fry, flour, shelf stable",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 7.58,
+      "carbs_g": 49.3,
+      "calories": 297.0,
+      "protein_g": 8.01,
+      "fiber_g": 2.4
+     },
+     "portions": []
+    }
+   ]
+  },
+  "shredded mexican-blend cheese": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 171288,
+     "description": "Cheese, Mexican blend",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 23.5,
+      "fiber_g": 0.0,
+      "fat_g": 32.1,
+      "carbs_g": 0.13,
+      "calories": 384.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172216,
+     "description": "Cheese, Mexican, blend, reduced fat",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "carbs_g": 3.41,
+      "protein_g": 24.7,
+      "fiber_g": 0.0,
+      "fat_g": 19.4,
+      "calories": 282.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172201,
+     "description": "Cheese, mexican, queso anejo",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "calories": 373.0,
+      "fiber_g": 0.0,
+      "protein_g": 21.4,
+      "fat_g": 30.0,
+      "carbs_g": 4.63
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 173437,
+     "description": "Cheese, mexican, queso asadero",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 25.0,
+      "carbs_g": 4.13,
+      "calories": 356.0,
+      "protein_g": 22.6,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "diced onions, chopped cilantro, sour cream, shredded lettuce": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 167963,
+     "description": "Snacks, potato chips, sour-cream-and-onion-flavor",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 8.1,
+      "fiber_g": 5.2,
+      "fat_g": 33.9,
+      "carbs_g": 51.5,
+      "calories": 531.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 170410,
+     "description": "Onions, frozen, chopped, unprepared",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 1.8,
+      "carbs_g": 6.82,
+      "fat_g": 0.1,
+      "calories": 29.0,
+      "protein_g": 0.79
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171257,
+     "description": "Cream, sour, cultured",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 2.44,
+      "fat_g": 19.4,
+      "carbs_g": 4.63,
+      "calories": 198.0,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 173443,
+     "description": "Sour cream, light",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 10.6,
+      "carbs_g": 7.1,
+      "protein_g": 3.5,
+      "fiber_g": 0.0,
+      "calories": 136.0
+     },
+     "portions": []
+    }
+   ]
+  },
+  "ground beef": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 168608,
+     "description": "Beef, grass-fed, ground, raw",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 12.7,
+      "carbs_g": 0.0,
+      "fiber_g": 0.0,
+      "protein_g": 19.4,
+      "calories": 198.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 169447,
+     "description": "Beef, ground, patties, frozen, cooked, broiled",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 21.8,
+      "protein_g": 23.0,
+      "calories": 295.0,
+      "fiber_g": 0.0,
+      "carbs_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 172161,
+     "description": "Beef, ground, unspecified fat content, cooked",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 14.5,
+      "carbs_g": 0.62,
+      "fiber_g": 0.0,
+      "protein_g": 25.1,
+      "calories": 240.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 167657,
+     "description": "ON THE BORDER, soft taco with ground beef, cheese and lettuce",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 11.0,
+      "carbs_g": 19.3,
+      "calories": 229.0,
+      "protein_g": 13.2,
+      "fiber_g": 1.8
+     },
+     "portions": []
+    }
+   ]
+  },
+  "reduced sodium beef broth": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 172889,
+     "description": "Soup, beef broth, less/reduced sodium, ready to serve",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 0.07,
+      "carbs_g": 0.2,
+      "calories": 6.0,
+      "protein_g": 1.14,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168118,
+     "description": "Beef, bologna, reduced sodium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 28.4,
+      "carbs_g": 2.0,
+      "calories": 310.0,
+      "protein_g": 11.7,
+      "fiber_g": 0.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 171179,
+     "description": "Soup, SWANSON, beef broth, lower sodium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 1.2,
+      "fat_g": 0.08,
+      "carbs_g": 0.21,
+      "calories": 6.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 173883,
+     "description": "Sausage, pork, turkey, and beef, reduced sodium",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 26.8,
+      "carbs_g": 0.11,
+      "calories": 284.0,
+      "protein_g": 10.7,
+      "fiber_g": 0.1
+     },
+     "portions": []
+    }
+   ]
+  },
+  "large rolls": {
+   "asked": true,
+   "candidates": [
+    {
+     "fdc_id": 172795,
+     "description": "Rolls, french",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fiber_g": 3.2,
+      "fat_g": 4.3,
+      "carbs_g": 50.2,
+      "calories": 277.0,
+      "protein_g": 8.6
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 168126,
+     "description": "Rolls, pumpernickel",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "fat_g": 2.8,
+      "fiber_g": 5.4,
+      "protein_g": 10.8,
+      "carbs_g": 51.9,
+      "calories": 276.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 167971,
+     "description": "Candies, TOOTSIE ROLL, chocolate-flavor roll",
+     "data_type": "SR Legacy",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 1.59,
+      "fiber_g": 0.1,
+      "fat_g": 3.31,
+      "carbs_g": 87.7,
+      "calories": 387.0
+     },
+     "portions": []
+    },
+    {
+     "fdc_id": 747997,
+     "description": "Eggs, Grade A, Large, egg white",
+     "data_type": "Foundation",
+     "brand": null,
+     "basis": "per 100 g",
+     "macros": {
+      "protein_g": 10.7,
+      "fat_g": 0.0,
+      "calories": 55.0,
+      "carbs_g": 2.36
+     },
+     "portions": []
+    }
+   ]
   }
  }
 }

@@ -1,0 +1,122 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T10:13:21",
+    "slug":  "salisbury-steak-burgers",
+    "findings":  [
+                     "no food-macros-db row for \u0027Kaiser Rolls\u0027 - the macros are computed WITHOUT it"
+                 ],
+    "notes":  [
+                  "excluded \u0027Water\u0027 (optional-note) - not something the shopper buys"
+              ],
+    "intake":  {
+                   "name":  "Salisbury Steak Burgers",
+                   "slug":  "salisbury-steak-burgers",
+                   "protein":  "beef",
+                   "cuisine":  "",
+                   "source_url":  "https://www.spendwithpennies.com/salisbury-steak-burgers/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "80/20 Ground Beef",
+                                           "grams":  1587,
+                                           "buy":  "3 1/2 lb, shaped into 14 patties"
+                                       },
+                                       {
+                                           "item":  "Panko Breadcrumbs",
+                                           "grams":  70,
+                                           "buy":  "1 cup plus 2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Eggs",
+                                           "grams":  117,
+                                           "buy":  "2 large eggs, beaten"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  1,
+                                           "buy":  "1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "All-Purpose Flour",
+                                           "grams":  19,
+                                           "buy":  "2 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Beef Broth",
+                                           "grams":  840,
+                                           "buy":  "3 1/2 cups"
+                                       },
+                                       {
+                                           "item":  "Brown Gravy Mix",
+                                           "grams":  66,
+                                           "buy":  "2 1/3 oz dry brown gravy mix (about 2 1/3 one-ounce packets)"
+                                       },
+                                       {
+                                           "item":  "Ketchup",
+                                           "grams":  79,
+                                           "buy":  "1/4 cup plus 2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Dijon Mustard",
+                                           "grams":  12,
+                                           "buy":  "2 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  65,
+                                           "buy":  "1/4 cup plus 2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  257,
+                                           "buy":  "2 1/2 medium onions, thinly sliced (about 2 1/2 cups)"
+                                       },
+                                       {
+                                           "item":  "White Mushrooms",
+                                           "grams":  163,
+                                           "buy":  "2 1/3 cups thinly sliced mushrooms"
+                                       },
+                                       {
+                                           "item":  "Cornstarch",
+                                           "grams":  37,
+                                           "buy":  "1/4 cup plus 2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Kaiser Rolls",
+                                           "grams":  994,
+                                           "buy":  "14 large sandwich rolls or Kaiser buns"
+                                       },
+                                       {
+                                           "item":  "Swiss Cheese",
+                                           "grams":  392,
+                                           "buy":  "14 slices"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  512,
+                                              "protein_g":  30.6,
+                                              "carbs_g":  14.3,
+                                              "fat_g":  36.5
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT25M",
+                                "totalTime":  "PT40M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

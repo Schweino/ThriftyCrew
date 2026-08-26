@@ -1,0 +1,241 @@
+﻿{
+    "slug":  "salisbury-steak-burgers",
+    "title":  "Salisbury Steak Burgers",
+    "source_url":  "https://www.spendwithpennies.com/salisbury-steak-burgers/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "beef",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 ½ pounds ground beef",
+                            "item":  "80/20 Ground Beef",
+                            "bid":  "ground-beef-8020",
+                            "board":  null,
+                            "grams":  1587,
+                            "buy":  "3 1/2 lb, shaped into 14 patties",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "80/20 grind, the default for patties. Unqualified ground beef in a patty recipe is the standard 80/20 grind, and ground-beef-8020 is the estate\u0027s existing id for it (the 2026-08-16 dupe record names it as the incumbent), so this is a reuse. 1.5 lb x 453.592 = 680 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ cup Panko bread crumbs",
+                            "item":  "Panko Breadcrumbs",
+                            "bid":  "bread-crumbs",
+                            "board":  "weekly",
+                            "grams":  70,
+                            "buy":  "1 cup plus 2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed from the DB row 0.5 cup = 30 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 egg",
+                            "item":  "Eggs",
+                            "bid":  "eggs",
+                            "board":  null,
+                            "grams":  117,
+                            "buy":  "2 large eggs, beaten",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2.3 eggs at batch scale, rounded down to 2; binder only. Prior ruling \u0027large eggs\u0027 -\u003e eggs (2026-08-26) binds; board carries eggs 7 of 7. 50 g per shelled large egg.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "0.58 tsp scaled, rounded to 1/2 tsp.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon all-purpose flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  "recipe",
+                            "grams":  19,
+                            "buy":  "2 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: flour, 7 of 7 stores, cheapest 0.3392 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 ½ cups reduced sodium beef broth",
+                            "item":  "Beef Broth",
+                            "bid":  "beef-broth",
+                            "board":  null,
+                            "grams":  840,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1.5 cups x 240 g. Reduced sodium is a label variant of the same carton at the same shelf price, the same call as \u0027less sodium soy sauce\u0027 -\u003e soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 ounce package brown gravy mix (dry)",
+                            "item":  "Brown Gravy Mix",
+                            "bid":  "brown-gravy-mix",
+                            "board":  null,
+                            "grams":  66,
+                            "buy":  "2 1/3 oz dry brown gravy mix (about 2 1/3 one-ounce packets)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: brown-gravy-mix, 7 of 7 stores, cheapest 0.2562 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons ketchup",
+                            "item":  "Ketchup",
+                            "bid":  "ketchup",
+                            "board":  "recipe",
+                            "grams":  79,
+                            "buy":  "1/4 cup plus 2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ketchup, 7 of 7 stores, cheapest 0.0506 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon Dijon mustard",
+                            "item":  "Dijon Mustard",
+                            "bid":  "dijon-mustard",
+                            "board":  "recipe",
+                            "grams":  12,
+                            "buy":  "2 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dijon-mustard, 6 of 7 stores, cheapest 0.1242 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  65,
+                            "buy":  "1/4 cup plus 2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 onion (thinly sliced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  257,
+                            "buy":  "2 1/2 medium onions, thinly sliced (about 2 1/2 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Medium onion at 110 g, the weight the estate\u0027s Red Onion row already uses. An unqualified onion in a savoury gravy is the yellow cooking onion, per the \u0027med onion\u0027 -\u003e onions precedent; red is refused on variety pricing. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup mushrooms (thinly sliced)",
+                            "item":  "White Mushrooms",
+                            "bid":  "mushrooms",
+                            "board":  null,
+                            "grams":  163,
+                            "buy":  "2 1/3 cups thinly sliced mushrooms",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup sliced white mushrooms = 70 g. Same-form vocabulary row White Mushrooms [mushrooms], board 7 of 7; portobello is a different price class and is refused.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  37,
+                            "buy":  "1/4 cup plus 2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 tablespoons water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water for the cornstarch slurry: no commodity, no cost, no macros. 4 tbsp x 14.79 g."
+                        },
+                        {
+                            "source_raw":  "6 large rolls (or Kaiser buns)",
+                            "item":  "Kaiser Rolls",
+                            "bid":  "hamburger-buns",
+                            "board":  null,
+                            "grams":  994,
+                            "buy":  "14 large sandwich rolls or Kaiser buns",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "71 g per large roll. Board absent and the vocabulary lookup is blind here (the phrase \u0027large rolls\u0027 shares no core word with a \u0027Hamburger Buns\u0027 style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "6 slices Swiss cheese (or cheddar cheese)",
+                            "item":  "Swiss Cheese",
+                            "bid":  "swiss-cheese",
+                            "board":  "recipe",
+                            "grams":  392,
+                            "buy":  "14 slices",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: swiss-cheese, 6 of 7 stores, cheapest 0.209 at Walmart",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "kaiser rolls"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "map/salisbury-steak-burgers: the pre-resolve table named 1 food(s) with no food-DB row and the mapper returned nothing at all for 1 of them (\u0027Kaiser Rolls\u0027). Those rows are not refused, they are ABSENT - the write lane will refuse this recipe for a missing row that nobody said was missing. A row the mapper could not acquire is a finding it is asked to state in `detail`; silence is not."
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "large rolls",
+                                        "proposed_bid":  "kaiser-rolls",
+                                        "evidence":  "Board absent and the vocabulary lookup is blind here (the phrase \u0027large rolls\u0027 shares no core word with a \u0027Hamburger Buns\u0027 style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "kaiser-rolls",
+                                  "verdict":  "alias",
+                                  "bid":  "hamburger-buns",
+                                  "reason":  "The dossier\u0027s word-overlap sweep missed the decisive row because \u0027buns\u0027 shares no token with \u0027kaiser-rolls\u0027: commodities.json carries hamburger-buns (\u0027Hamburger Buns\u0027, unit=each, includes hamburger/sandwich buns) and the live feed prices it today at $0.1658/each cheapest at Fareway across 6 stores — this food is already PRICED, not merely existing. The recipe is salisbury-steak-BURGERS and the line is \u00276 x 71 g large roll\u0027, i.e. the burger-bun purchase; a kaiser roll is a style of sandwich/burger roll, same food and same form as the hamburger-buns purchase, and no recipe need for the kaiser variant\u0027s macros or price is stated — a style name is not a variant. The string \u0027kaiser\u0027 appears nowhere in any of the three id namespaces or the feed, and dinner-rolls (the dossier\u0027s near row) is the wrong purchase: its includes are dinner/hawaiian/brown-and-serve rolls, the small-roll form, not a 71 g burger roll. Follow-ups for the caller: (1) add the alias pair kaiser-rolls -\u003e hamburger-buns (or the recipe spelling \u0027large rolls\u0027 -\u003e hamburger-buns) to recipe-floor-id-map.json — units match, each -\u003e each; (2) do NOT extend hamburger-buns\u0027 include patterns to \u0027kaiser\u0027 without Brad, since bakery kaiser 6-packs may price differently and the current crown is a plain white 12-pack; (3) separately from this id ruling, resolve the ingredient NAME: the vocabulary\u0027s \u0027Hamburger Buns\u0027-style row is the candidate — if the recipe genuinely needs a 71 g roll density row, that is a vocabulary decision via ingredient-vocab.ps1, and it must not mint an id as a side effect."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Computed over all 16 lines at source scale (6 servings): 4267 cal / 220.7 g protein / 301 g carbs total = 711 cal, 36.8 g protein, 50.2 g carbs per serving. Source published 542 / 40 / 43. PROTEIN AGREES at -8.1%, inside the 15% bar, so the portions are right (680 g beef = 113 g raw per patty, a normal 4 oz patty). Calories run +31% because 80/20 raw beef carries fat that renders out and is discarded with the pan, and because the bun is weighed at a full 71 g. CARBS ARE THE FINDING: 50 g per serving computed, 43 g on the source\u0027s own label, against this run\u0027s stated cap of 35 g or less. 214 g of the 301 g of carbs is the bun; a burger on a roll cannot meet a 35 g carb condition."
+}

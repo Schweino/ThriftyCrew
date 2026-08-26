@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-26T05:09:08",
-    "count":  131,
+    "updated":  "2026-08-26T10:11:24",
+    "count":  137,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -1182,6 +1182,60 @@
                             "evidence":  "caesar-dressing is a live board id (6 of 7) - a reuse; ranch is a different dressing, so no bridge to ranch-dressing. [slug sheet-pan-pesto-chicken-dinner, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T05:09:08"
+                        },
+                        {
+                            "key":  "ground beef",
+                            "term":  "ground beef",
+                            "item_id":  "ground-beef-8020",
+                            "bid_exists":  true,
+                            "evidence":  "Unqualified ground beef in a patty recipe is the standard 80/20 grind, and ground-beef-8020 is the estate\u0027s existing id for it (the 2026-08-16 dupe record names it as the incumbent), so this is a reuse. 1.5 lb x 453.592 = 680 g. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:22"
+                        },
+                        {
+                            "key":  "egg",
+                            "term":  "egg",
+                            "item_id":  "eggs",
+                            "bid_exists":  true,
+                            "evidence":  "Prior ruling \u0027large eggs\u0027 -\u003e eggs (2026-08-26) binds; board carries eggs 7 of 7. 50 g per shelled large egg. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:23"
+                        },
+                        {
+                            "key":  "reduced sodium beef broth",
+                            "term":  "reduced sodium beef broth",
+                            "item_id":  "beef-broth",
+                            "bid_exists":  true,
+                            "evidence":  "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as \u0027less sodium soy sauce\u0027 -\u003e soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:23"
+                        },
+                        {
+                            "key":  "onion",
+                            "term":  "onion",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "An unqualified onion in a savoury gravy is the yellow cooking onion, per the \u0027med onion\u0027 -\u003e onions precedent; red is refused on variety pricing. Board 7 of 7. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:23"
+                        },
+                        {
+                            "key":  "mushrooms",
+                            "term":  "mushrooms",
+                            "item_id":  "mushrooms",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row White Mushrooms [mushrooms], board 7 of 7; portobello is a different price class and is refused. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:23"
+                        },
+                        {
+                            "key":  "large rolls",
+                            "term":  "large rolls",
+                            "item_id":  "hamburger-buns",
+                            "bid_exists":  false,
+                            "evidence":  "Board absent and the vocabulary lookup is blind here (the phrase \u0027large rolls\u0027 shares no core word with a \u0027Hamburger Buns\u0027 style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T10:11:24"
                         }
                     ]
 }

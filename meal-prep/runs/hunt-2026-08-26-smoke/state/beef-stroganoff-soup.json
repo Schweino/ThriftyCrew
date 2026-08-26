@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-stroganoff-soup",
+    "title":  "Beef Stroganoff Soup",
+    "source_url":  "https://www.spendwithpennies.com/beef-stroganoff-soup/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T10:01:08",
+    "updated":  "2026-08-26T10:01:09",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Exact same dish already accepted in-flight as beef-stroganoff-soup in run hunt-2026-08-24-v3-noband-drill (name, protein, cream sauce, noodle all identical) — the in-flight collision class.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T10:01:08",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/beef-stroganoff-soup/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T10:01:09",
+                        "by":  "decider",
+                        "detail":  "Exact same dish already accepted in-flight as beef-stroganoff-soup in run hunt-2026-08-24-v3-noband-drill (name, protein, cream sauce, noodle all identical) — the in-flight collision class."
+                    }
+                ]
+}

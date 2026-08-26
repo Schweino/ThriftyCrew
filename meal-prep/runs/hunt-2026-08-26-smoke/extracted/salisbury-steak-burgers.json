@@ -1,0 +1,175 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Salisbury Steak Burgers",
+  "source_url": "https://www.spendwithpennies.com/salisbury-steak-burgers/",
+  "servings": 6,
+  "time_total": "40 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 ½ pounds ground beef",
+      "item": "ground beef",
+      "qty": "1 ½",
+      "unit": "pounds",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup Panko bread crumbs",
+      "item": "Panko bread crumbs",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 egg",
+      "item": "egg",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon black pepper",
+      "item": "black pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon all-purpose flour",
+      "item": "all-purpose flour",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ cups reduced sodium beef broth",
+      "item": "reduced sodium beef broth",
+      "qty": "1 ½",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ounce package brown gravy mix (dry)",
+      "item": "brown gravy mix",
+      "qty": "1",
+      "unit": "ounce",
+      "prep": "package (dry)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons ketchup",
+      "item": "ketchup",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Dijon mustard",
+      "item": "Dijon mustard",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 onion (thinly sliced)",
+      "item": "onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup mushrooms (thinly sliced)",
+      "item": "mushrooms",
+      "qty": "1",
+      "unit": "cup",
+      "prep": "thinly sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons cornstarch",
+      "item": "cornstarch",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons water",
+      "item": "water",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 large rolls (or Kaiser buns)",
+      "item": "large rolls",
+      "qty": "6",
+      "unit": null,
+      "prep": "or Kaiser buns",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 slices Swiss cheese (or cheddar cheese)",
+      "item": "Swiss cheese",
+      "qty": "6",
+      "unit": "slices",
+      "prep": "or cheddar cheese",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Combine beef, bread crumbs, egg, pepper and flour in a large bowl. Shape into 6 patties.",
+    "In a small bowl, combine, broth, gravy mix, ketchup and dijon, set aside.",
+    "Cook onions in butter over medium low heat for about 5 minutes or until slightly softened. Add mushrooms and cook an additional 3 minutes. Remove from pan and set aside.",
+    "Brown beef patties on both sides. Pour gravy mixture, mushrooms & onions over top and simmer covered for about 15-20 minutes or until patties are cooked through. Stack the patties in one side of the pan.",
+    "Combine cornstarch and water in a small bowl. Bring the gravy up to a low boil and whisk in the cornstarch mixture a little at a time until gravy thickens (you may not need all of it).",
+    "To assemble burgers, place 1 slice of cheese, 1 patty and a spoonful of mushroom gravy on each roll. Top with your favorite toppings."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

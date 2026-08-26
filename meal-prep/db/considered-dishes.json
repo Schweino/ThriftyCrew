@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-26T04:26:17",
-    "count":  175,
+    "updated":  "2026-08-26T10:01:16",
+    "count":  181,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -1421,21 +1421,6 @@
                        "at":  "2026-08-24T15:32:06"
                    },
                    {
-                       "key":  "beef|stew|plain",
-                       "slug":  "beef-stroganoff-soup",
-                       "name":  "Beef Stroganoff Soup",
-                       "protein":  "beef",
-                       "method":  "stew",
-                       "verdict":  "accepted",
-                       "reason":  "Brothy stewing-beef stroganoff soup distinct in format from existing stroganoff pastas; verified band fits, strong 35g protein.",
-                       "dupe_of":  [
-
-                                   ],
-                       "run":  "hunt-2026-08-24-v3-noband-drill",
-                       "by":  "decider",
-                       "at":  "2026-08-24T15:32:07"
-                   },
-                   {
                        "key":  "any|any|plain",
                        "slug":  "apple-dijon-kale-salad-meal-prep",
                        "name":  "Apple Dijon Kale Salad Meal Prep",
@@ -2635,6 +2620,111 @@
                        "run":  "hunt-2026-08-26-ten",
                        "by":  "decider",
                        "at":  "2026-08-26T04:26:17"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "salisbury-steak-burgers",
+                       "name":  "Salisbury Steak Burgers",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Ground-beef patties in brown gravy with onion/mushroom on Kaiser buns; not a dupe of salisbury-steak-potato-bowls (different format), verified band 542cal/43c.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:07"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "beef-stroganoff-soup",
+                       "name":  "Beef Stroganoff Soup",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Duplicate of the same-named beef stroganoff soup already in-flight (hunt-2026-08-24-v3-noband-drill); stewing beef, mushroom, sour cream, egg noodles — identical dinner.",
+                       "dupe_of":  [
+                                       "beef-stroganoff-soup"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:09"
+                   },
+                   {
+                       "key":  "beef|any|plain",
+                       "slug":  "birria-ramen",
+                       "name":  "Birria Ramen",
+                       "protein":  "beef",
+                       "method":  "any",
+                       "verdict":  "accepted",
+                       "reason":  "Birria broth and shredded birria over ramen noodles; distinct from catalog birria rice bowls/burritos (noodle starch, fusion), verified band 719cal/36c.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:10"
+                   },
+                   {
+                       "key":  "beef|bake|tomato",
+                       "slug":  "easy-beef-enchiladas",
+                       "name":  "Easy Beef Enchiladas",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Ground beef, enchilada sauce, flour tortillas, Mexican cheese, baked; no live enchilada duplicate found across 562 recipes, verified band 624cal/44c.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:12"
+                   },
+                   {
+                       "key":  "any|bake|plain",
+                       "slug":  "how-to-roast-pumpkin-seeds",
+                       "name":  "How to Roast Pumpkin Seeds",
+                       "protein":  "any",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Snack of oil-and-salt roasted pumpkin seeds, no protein and no dinner format; not a meal-prep dinner the catalog wants.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:13"
+                   },
+                   {
+                       "key":  "pork|braised|soy",
+                       "slug":  "teriyaki-pork-sandwiches",
+                       "name":  "Teriyaki Pork Sandwiches",
+                       "protein":  "pork",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Braised teriyaki pulled pork with pineapple/onion; same dinner as slow-cooker-teriyaki-pork-bowls served on buns instead of over rice (protein+sauce+method match).",
+                       "dupe_of":  [
+                                       "slow-cooker-teriyaki-pork-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:15"
+                   },
+                   {
+                       "key":  "turkey|bake|plain",
+                       "slug":  "smoked-turkey",
+                       "name":  "Smoked Turkey",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Whole 12-14 lb smoked turkey with aromatics; holiday whole-bird format, not a scalable weeknight batch dinner (consistent with roast-turkey-recipe rejection).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke",
+                       "by":  "decider",
+                       "at":  "2026-08-26T10:01:16"
                    }
                ]
 }

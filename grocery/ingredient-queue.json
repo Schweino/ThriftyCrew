@@ -5623,6 +5623,75 @@
                                  },
                       "verdict":  "CARRIED",
                       "notes":  null
+                  },
+                  {
+                      "term":  "kaiser rolls",
+                      "recipes":  [
+                                      "salisbury-steak-burgers"
+                                  ],
+                      "added":  "2026-08-26T10:11:24",
+                      "why":  "salisbury-steak-burgers needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-26T10:13:03"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.99,
+                                                     "size":  "6 ct",
+                                                     "item":  "Bakery Fresh Kaiser Rolls",
+                                                     "evidence":  "driver lookup rung 1 \u0027kaiser rolls\u0027 = 46 priced Apollo nodes; row 1 Bakery Fresh Kaiser Rolls 6 ct $3.99 is the ingredient; remaining rows are hamburger/brat/hoagie/cinnamon rolls and were ruled out",
+                                                     "checked":  "2026-08-26T10:13:03"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.59,
+                                                         "size":  "9 oz (4 ct)",
+                                                         "item":  "Fresh \u0026 Finest 4 Ct Kaiser Rolls",
+                                                         "evidence":  "pre-pass probe full ladder (\u0027kaiser rolls\u0027=1 -\u003e \u0027kaiserrolls\u0027=0 -\u003e \u0027kaiser\u0027=1); sole survivor is Fresh \u0026 Finest 4 Ct Kaiser Rolls, a store-bakery kaiser roll 4-pack - is the ingredient",
+                                                         "checked":  "2026-08-26T10:13:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-26T10:13:03"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver lookup rung 1 \u0027kaiser rolls\u0027 = 20 rows, no no-results banner; every row is a different bread product (Ball Park crustini/brat buns, Lakeland hamburger buns, Artesano Hawaiian buns, King\u0027s Hawaiian pretzel bites, Thomas\u0027 English muffins, sliced loaves) - warehouse club packs, none is a kaiser roll. Ladder rungs 2-4 do not apply usefully: stripping to \u0027kaiser\u0027 or head noun \u0027rolls\u0027 only widens into the same bun/sweet-roll pool, and widening must not manufacture presence",
+                                                             "checked":  "2026-08-26T10:13:03"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-26T10:13:03"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.99,
+                                                          "size":  "6 ct / 12 oz",
+                                                          "item":  "Bakery Fresh Goodness Kaiser Rolls",
+                                                          "evidence":  "pre-pass probe rung 1 \u0027kaiser rolls\u0027 = 2 hits; top row rel 132 is the plain kaiser roll 6-pack at $4.99, exactly the ingredient a cook buys",
+                                                          "checked":  "2026-08-26T10:13:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
                   }
               ]
 }

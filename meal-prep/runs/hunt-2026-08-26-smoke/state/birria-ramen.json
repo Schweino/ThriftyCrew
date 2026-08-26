@@ -1,0 +1,43 @@
+{
+    "slug":  "birria-ramen",
+    "title":  "Birria Ramen",
+    "source_url":  "https://www.isabeleats.com/birria-ramen/",
+    "protein":  "any",
+    "state":  "rejected-unreadable",
+    "wave":  null,
+    "created":  "2026-08-26T10:01:10",
+    "updated":  "2026-08-26T10:11:25",
+    "terms":  [
+
+              ],
+    "reject_reason":  "REJECTED, and not on identity grounds - every residual term here (radishes, sesame seeds, ramen, egg) was individually rulable. The recipe itself is a leftovers assembly: 2 of its 11 lines name the pr",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T10:01:10",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/birria-ramen/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T10:01:10",
+                        "by":  "decider",
+                        "detail":  "Birria broth + shredded birria over ramen noodles is a distinct Mexican-Japanese fusion; neighbours are all birria rice bowls/burritos (different starch), widens cuisine spread, band verified."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T10:01:50",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "rejected-unreadable",
+                        "at":  "2026-08-26T10:11:25",
+                        "by":  "mapper",
+                        "detail":  "REJECTED, and not on identity grounds - every residual term here (radishes, sesame seeds, ramen, egg) was individually rulable. The recipe itself is a leftovers assembly: 2 of its 11 lines name the pr"
+                    }
+                ]
+}

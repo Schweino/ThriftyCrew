@@ -1,0 +1,129 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Birria Ramen",
+  "source_url": "https://www.isabeleats.com/birria-ramen/",
+  "servings": 4,
+  "time_total": "20 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 cups birria broth, (from my birria recipe)",
+      "item": "birria broth",
+      "qty": "4",
+      "unit": "cups",
+      "prep": "(from my birria recipe)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded birria, (from my birria recipe)",
+      "item": "shredded birria",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "(from my birria recipe)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ounces ramen noodles",
+      "item": "ramen noodles",
+      "qty": "8",
+      "unit": "ounces",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Water, (as needed)",
+      "item": "Water",
+      "qty": null,
+      "unit": null,
+      "prep": "as needed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons kosher salt",
+      "item": "kosher salt",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Sliced radishes",
+      "item": "Sliced radishes",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Sesame seeds",
+      "item": "Sesame seeds",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Chopped cilantro",
+      "item": "cilantro",
+      "qty": null,
+      "unit": null,
+      "prep": "Chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Diced red onion",
+      "item": "red onion",
+      "qty": null,
+      "unit": null,
+      "prep": "Diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Lime juice",
+      "item": "Lime juice",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Soft-boiled egg ((optional))",
+      "item": "egg",
+      "qty": null,
+      "unit": null,
+      "prep": "Soft-boiled (optional)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Add enough water to cover the ramen noodles in a large pot. Bring the water to a boil and add salt. Cook the noodles according to the package instructions.",
+    "While the ramen is cooking, reheat the birria broth and shredded birria in medium pots or saucepans until hot, about 5-8 minutes.",
+    "Strain the ramen noodles and place them into 4 bowls.",
+    "Assemble the birria ramen by pouring 1 cup of birria broth and ½ cup of shredded birria into each of the bowls.",
+    "Top with sliced radishes, sesame seeds, cilantro, red onion, lime juice, and a soft-boiled egg. Serve immediately."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 11,
+    "verified": 11,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

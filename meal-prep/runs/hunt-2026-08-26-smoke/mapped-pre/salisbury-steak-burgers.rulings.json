@@ -1,0 +1,185 @@
+{
+ "slug": "salisbury-steak-burgers",
+ "lines": [
+  {
+   "raw": "1 ½ pounds ground beef",
+   "buy": "3 1/2 lb, shaped into 14 patties",
+   "grams_source": 680,
+   "notes": "80/20 grind, the default for patties."
+  },
+  {
+   "raw": "½ cup Panko bread crumbs",
+   "buy": "1 cup plus 2 tablespoons",
+   "grams_source": 30,
+   "notes": "Weighed from the DB row 0.5 cup = 30 g."
+  },
+  {
+   "raw": "1 egg",
+   "buy": "2 large eggs, beaten",
+   "grams_source": 50,
+   "notes": "2.3 eggs at batch scale, rounded down to 2; binder only."
+  },
+  {
+   "raw": "¼ teaspoon black pepper",
+   "buy": "1/2 teaspoon",
+   "notes": "0.58 tsp scaled, rounded to 1/2 tsp."
+  },
+  {
+   "raw": "1 tablespoon all-purpose flour",
+   "buy": "2 1/2 tablespoons",
+   "notes": null
+  },
+  {
+   "raw": "1 ½ cups reduced sodium beef broth",
+   "buy": "3 1/2 cups",
+   "grams_source": 360,
+   "notes": "1.5 cups x 240 g."
+  },
+  {
+   "raw": "1 ounce package brown gravy mix (dry)",
+   "buy": "2 1/3 oz dry brown gravy mix (about 2 1/3 one-ounce packets)",
+   "notes": null
+  },
+  {
+   "raw": "2 tablespoons ketchup",
+   "buy": "1/4 cup plus 2 teaspoons",
+   "notes": null
+  },
+  {
+   "raw": "1 teaspoon Dijon mustard",
+   "buy": "2 1/2 teaspoons",
+   "notes": null
+  },
+  {
+   "raw": "2 tablespoons butter",
+   "buy": "1/4 cup plus 2 teaspoons",
+   "notes": null
+  },
+  {
+   "raw": "1 onion (thinly sliced)",
+   "buy": "2 1/2 medium onions, thinly sliced (about 2 1/2 cups)",
+   "grams_source": 110,
+   "notes": "Medium onion at 110 g, the weight the estate's Red Onion row already uses."
+  },
+  {
+   "raw": "1 cup mushrooms (thinly sliced)",
+   "buy": "2 1/3 cups thinly sliced mushrooms",
+   "grams_source": 70,
+   "notes": "1 cup sliced white mushrooms = 70 g."
+  },
+  {
+   "raw": "2 tablespoons cornstarch",
+   "buy": "1/4 cup plus 2 teaspoons",
+   "notes": null
+  },
+  {
+   "raw": "4 tablespoons water",
+   "buy": "1/2 cup plus 1 1/2 tablespoons",
+   "grams_source": 59,
+   "notes": "Slurry water, not a purchased line."
+  },
+  {
+   "raw": "6 large rolls (or Kaiser buns)",
+   "buy": "14 large sandwich rolls or Kaiser buns",
+   "grams_source": 426,
+   "notes": "71 g per large roll."
+  },
+  {
+   "raw": "6 slices Swiss cheese (or cheddar cheese)",
+   "buy": "14 slices",
+   "notes": null
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 ½ pounds ground beef",
+   "term": "ground beef",
+   "canon_item": "80/20 Ground Beef",
+   "bid": "ground-beef-8020",
+   "decision": "mapped",
+   "grams_source": 680,
+   "evidence": "Unqualified ground beef in a patty recipe is the standard 80/20 grind, and ground-beef-8020 is the estate's existing id for it (the 2026-08-16 dupe record names it as the incumbent), so this is a reuse. 1.5 lb x 453.592 = 680 g."
+  },
+  {
+   "raw": "1 egg",
+   "term": "egg",
+   "canon_item": "Eggs",
+   "bid": "eggs",
+   "decision": "mapped",
+   "grams_source": 50,
+   "evidence": "Prior ruling 'large eggs' -> eggs (2026-08-26) binds; board carries eggs 7 of 7. 50 g per shelled large egg."
+  },
+  {
+   "raw": "1 ½ cups reduced sodium beef broth",
+   "term": "reduced sodium beef broth",
+   "canon_item": "Beef Broth",
+   "bid": "beef-broth",
+   "decision": "mapped",
+   "grams_source": 360,
+   "evidence": "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as 'less sodium soy sauce' -> soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change."
+  },
+  {
+   "raw": "1 onion (thinly sliced)",
+   "term": "onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "An unqualified onion in a savoury gravy is the yellow cooking onion, per the 'med onion' -> onions precedent; red is refused on variety pricing. Board 7 of 7."
+  },
+  {
+   "raw": "1 cup mushrooms (thinly sliced)",
+   "term": "mushrooms",
+   "canon_item": "White Mushrooms",
+   "bid": "mushrooms",
+   "decision": "mapped",
+   "grams_source": 70,
+   "evidence": "Same-form vocabulary row White Mushrooms [mushrooms], board 7 of 7; portobello is a different price class and is refused."
+  },
+  {
+   "raw": "4 tablespoons water",
+   "term": "water",
+   "canon_item": "Water",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 59,
+   "evidence": "Tap water for the cornstarch slurry: no commodity, no cost, no macros. 4 tbsp x 14.79 g."
+  },
+  {
+   "raw": "6 large rolls (or Kaiser buns)",
+   "term": "large rolls",
+   "canon_item": "Kaiser Rolls",
+   "bid": "kaiser-rolls",
+   "decision": "mapped",
+   "grams_source": 426,
+   "evidence": "Board absent and the vocabulary lookup is blind here (the phrase 'large rolls' shares no core word with a 'Hamburger Buns' style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll."
+  }
+ ],
+ "absent_terms": [
+  "kaiser rolls"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "map/salisbury-steak-burgers: the pre-resolve table named 1 food(s) with no food-DB row and the mapper returned nothing at all for 1 of them ('Kaiser Rolls'). Those rows are not refused, they are ABSENT - the write lane will refuse this recipe for a missing row that nobody said was missing. A row the mapper could not acquire is a finding it is asked to state in `detail`; silence is not."
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "large rolls",
+   "proposed_bid": "kaiser-rolls",
+   "evidence": "Board absent and the vocabulary lookup is blind here (the phrase 'large rolls' shares no core word with a 'Hamburger Buns' style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll.",
+   "declared": false
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "kaiser-rolls",
+   "verdict": "alias",
+   "bid": "hamburger-buns",
+   "reason": "The dossier's word-overlap sweep missed the decisive row because 'buns' shares no token with 'kaiser-rolls': commodities.json carries hamburger-buns ('Hamburger Buns', unit=each, includes hamburger/sandwich buns) and the live feed prices it today at $0.1658/each cheapest at Fareway across 6 stores — this food is already PRICED, not merely existing. The recipe is salisbury-steak-BURGERS and the line is '6 x 71 g large roll', i.e. the burger-bun purchase; a kaiser roll is a style of sandwich/burger roll, same food and same form as the hamburger-buns purchase, and no recipe need for the kaiser variant's macros or price is stated — a style name is not a variant. The string 'kaiser' appears nowhere in any of the three id namespaces or the feed, and dinner-rolls (the dossier's near row) is the wrong purchase: its includes are dinner/hawaiian/brown-and-serve rolls, the small-roll form, not a 71 g burger roll. Follow-ups for the caller: (1) add the alias pair kaiser-rolls -> hamburger-buns (or the recipe spelling 'large rolls' -> hamburger-buns) to recipe-floor-id-map.json — units match, each -> each; (2) do NOT extend hamburger-buns' include patterns to 'kaiser' without Brad, since bakery kaiser 6-packs may price differently and the current crown is a plain white 12-pack; (3) separately from this id ruling, resolve the ingredient NAME: the vocabulary's 'Hamburger Buns'-style row is the candidate — if the recipe genuinely needs a 71 g roll density row, that is a vocabulary decision via ingredient-vocab.ps1, and it must not mint an id as a side effect."
+  }
+ ],
+ "macro_cross_check": "Computed over all 16 lines at source scale (6 servings): 4267 cal / 220.7 g protein / 301 g carbs total = 711 cal, 36.8 g protein, 50.2 g carbs per serving. Source published 542 / 40 / 43. PROTEIN AGREES at -8.1%, inside the 15% bar, so the portions are right (680 g beef = 113 g raw per patty, a normal 4 oz patty). Calories run +31% because 80/20 raw beef carries fat that renders out and is discarded with the pan, and because the bun is weighed at a full 71 g. CARBS ARE THE FINDING: 50 g per serving computed, 43 g on the source's own label, against this run's stated cap of 35 g or less. 214 g of the 301 g of carbs is the bun; a burger on a roll cannot meet a 35 g carb condition."
+}

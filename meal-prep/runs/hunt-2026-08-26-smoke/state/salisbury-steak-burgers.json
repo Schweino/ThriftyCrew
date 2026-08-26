@@ -1,0 +1,62 @@
+{
+    "slug":  "salisbury-steak-burgers",
+    "title":  "Salisbury Steak Burgers",
+    "source_url":  "https://www.spendwithpennies.com/salisbury-steak-burgers/",
+    "protein":  "beef",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T10:01:06",
+    "updated":  "2026-08-26T10:13:21",
+    "terms":  [
+                  {
+                      "term":  "kaiser rolls",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T10:01:06",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/salisbury-steak-burgers/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T10:01:07",
+                        "by":  "decider",
+                        "detail":  "Salisbury steak burgers on buns with mushroom-onion gravy; distinct plate from live salisbury-steak-potato-bowls (bun-served handheld vs bowl), band verified and in range."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T10:01:37",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T10:10:35",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled, 0 rejected, 8 food-db rows returned. All 7 settled. One new id proposed (kaiser-rolls) and one term returned for pricing. ground-beef-8020, eggs, beef-broth, onions and mushrooms are all reuses of live ids, not proposals. The Kaiser Rolls macro row is the one soft number in this recipe: this run\u0027s FDC shelf carries no kaiser or hamburger-bun row, so I took fdc:172795 (Rolls"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T10:11:24",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T10:13:21",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

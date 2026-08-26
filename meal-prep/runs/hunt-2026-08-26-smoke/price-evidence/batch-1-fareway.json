@@ -1,0 +1,80 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T10:12:39",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "kaiser rolls",
+   "state": "MATCHES",
+   "term_used": "kaiser rolls",
+   "attempts": [
+    {
+     "term": "kaiser rolls",
+     "state": "OK",
+     "hits": 46
+    }
+   ],
+   "hits": [
+    {
+     "item": "Bakery Fresh Kaiser Rolls",
+     "price": 3.99,
+     "size": "6 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386723-bakery-fresh-kaiser-rolls-6-ct"
+    },
+    {
+     "item": "Bakery Fresh Italian Hamburger Buns",
+     "price": 4.49,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314980-italian-hamburger-buns"
+    },
+    {
+     "item": "Village Hearth Buns, Hamburger, Classic, White",
+     "price": 2.99,
+     "size": "8 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/318862-village-hearth-hamburger-buns-classic-white-sliced-8-ea"
+    },
+    {
+     "item": "Fareway Premium Brat Buns",
+     "price": 1.99,
+     "size": "6 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24337471-fareway-brat-buns-6-each"
+    },
+    {
+     "item": "Pepperidge Farm Soft White with Sesame Seeds Hoagie Rolls",
+     "price": 3.88,
+     "size": "14.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/232531-pepperidge-farm-bakery-classics-soft-white-with-sesame-seeds-hoagie-rolls-14-5-oz"
+    },
+    {
+     "item": "Fareway with Icing Cinnamon Rolls",
+     "price": 2.99,
+     "size": "12.4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389187-fareway-cinnamon-rolls-124-oz"
+    },
+    {
+     "item": "St Pierre Brioche Burger Buns",
+     "price": 4.99,
+     "size": "4 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2735020-st-pierre-brioche-burger-buns-pre-sliced-4-ct"
+    },
+    {
+     "item": "Fareway Premium Hamburger Buns",
+     "price": 1.99,
+     "size": "12 x 12 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24222138-fareway-hamburger-buns-white-12-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

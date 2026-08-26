@@ -1,0 +1,269 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-smoke",
+ "batch": 1,
+ "generated": "2026-08-26T10:12:39",
+ "batch_terms": [
+  "kaiser rolls"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "kaiser rolls",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "kaiser rolls",
+     "attempts": [
+      {
+       "term": "kaiser rolls",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bakery Fresh Goodness Kaiser Rolls",
+       "price": 4.99,
+       "size": "6 ct / 12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0004157305604"
+      },
+      {
+       "item": "Bakery Fresh Goodness Wheat Kaiser Rolls",
+       "price": 4.99,
+       "size": "6 ct / 12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0004157305653"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "kaiser",
+     "attempts": [
+      {
+       "term": "kaiser rolls",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "kaiserrolls",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "kaiser",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh & Finest 4 Ct Kaiser Rolls",
+       "price": 4.59,
+       "size": "9 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/bakery/buns_sandwich_rolls/fresh_finest_4_ct_kaiser_rolls/p/1564405684713023127"
+      }
+     ],
+     "reason": "only one candidate survived the full ladder - weigh it, do not assume",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "kaiser rolls",
+     "attempts": [
+      {
+       "term": "kaiser rolls",
+       "state": "OK",
+       "hits": 46
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bakery Fresh Kaiser Rolls",
+       "price": 3.99,
+       "size": "6 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386723-bakery-fresh-kaiser-rolls-6-ct"
+      },
+      {
+       "item": "Bakery Fresh Italian Hamburger Buns",
+       "price": 4.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314980-italian-hamburger-buns"
+      },
+      {
+       "item": "Village Hearth Buns, Hamburger, Classic, White",
+       "price": 2.99,
+       "size": "8 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/318862-village-hearth-hamburger-buns-classic-white-sliced-8-ea"
+      },
+      {
+       "item": "Fareway Premium Brat Buns",
+       "price": 1.99,
+       "size": "6 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24337471-fareway-brat-buns-6-each"
+      },
+      {
+       "item": "Pepperidge Farm Soft White with Sesame Seeds Hoagie Rolls",
+       "price": 3.88,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/232531-pepperidge-farm-bakery-classics-soft-white-with-sesame-seeds-hoagie-rolls-14-5-oz"
+      },
+      {
+       "item": "Fareway with Icing Cinnamon Rolls",
+       "price": 2.99,
+       "size": "12.4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389187-fareway-cinnamon-rolls-124-oz"
+      },
+      {
+       "item": "St Pierre Brioche Burger Buns",
+       "price": 4.99,
+       "size": "4 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2735020-st-pierre-brioche-burger-buns-pre-sliced-4-ct"
+      },
+      {
+       "item": "Fareway Premium Hamburger Buns",
+       "price": 1.99,
+       "size": "12 x 12 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24222138-fareway-hamburger-buns-white-12-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "kaiser rolls",
+     "attempts": [
+      {
+       "term": "kaiser rolls",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Ball Park Tailgaters Crustini Buns 32 oz., 12 ct.",
+       "price": 4.78,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/67LUWACZ5IPT"
+      },
+      {
+       "item": "King's Hawaiian Original Sweet Soft Pretzel Bites, 20.8 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.43/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15LH3OP78Y1W"
+      },
+      {
+       "item": "Lakeland Hamburger Buns 24oz",
+       "price": 3.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6207RNYR9GAW"
+      },
+      {
+       "item": "Artesano Hawaiian Bakery Buns, 16 ct.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1900O28YC7JR"
+      },
+      {
+       "item": "Ball Park Tailgaters Brat Buns 32 oz., 12 ct.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2S23B0MZL4U1"
+      },
+      {
+       "item": "Thomas' Light Multi-Grain English Muffins 24 oz., 12 ct.",
+       "price": 5.88,
+       "size": "",
+       "unit_price": "$0.24/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3H33P3N060GL"
+      },
+      {
+       "item": "Sara Lee 100% Whole Wheat Bread 20 oz., 2 pk.",
+       "price": 5.84,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4ZJZKJTRSNEH"
+      },
+      {
+       "item": "Brownberry Superior Keto Bread 20 oz., 2 pk.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5RKFNN0M8BMW"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

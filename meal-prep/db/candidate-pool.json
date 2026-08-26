@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-26T04:26:18",
+ "updated": "2026-08-26T10:01:16",
  "count": 2982,
  "candidates": [
   {
@@ -25556,8 +25556,8 @@
    "servings": 10,
    "status": "available",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:15:40",
+   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Oven-baked pork ribs in a scratch chipotle BBQ sauce; distinct from live country-style ribs-over-rice and Brazilian ribs bowls (chipotle-tomato sauce, baked, no starch), band verified.",
+   "ruled_at": "2026-08-26T10:01:15",
    "ingredients_verbatim": [
     "1 1/2 tbsp sweet paprika",
     "1 tbsp salt",
@@ -34145,76 +34145,10 @@
     "reason": ""
    },
    "servings": 8,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:15:47",
-   "ingredients_verbatim": [
-    "1 tablespoon olive oil",
-    "1 medium onion, (diced)",
-    "1 jalapeño pepper (stem and seeds removed, minced)",
-    "1 pound lean ground beef",
-    "2 cloves garlic, (minced)",
-    "1 teaspoon kosher salt (plus more to taste)",
-    "1 3/4 cups easy enchilada sauce, (divided)",
-    "8 large flour tortillas",
-    "2 cups shredded Mexican-blend cheese, (divided)",
-    "optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce"
-   ],
-   "neighbours": [
-    {
-     "slug": "korean-beef-japchae-noodle-bowls",
-     "name": "Korean Beef Japchae Noodle Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kerala-beef-ularthiyathu-rice-bowls",
-     "name": "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0
+   "ruled_reason": "Classic baked ground-beef enchiladas; no enchilada dupe in live catalog (nearest neighbours are Korean beef bowls), scalable bake, band verified.",
+   "ruled_at": "2026-08-26T10:01:13"
   },
   {
    "slug": "stuffed-pork-chops",
@@ -37326,8 +37260,8 @@
    "servings": 4,
    "status": "available",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:15:51",
+   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Spanish-style chicken thigh stew with smoked paprika, olives, sweet potato and raisins over rice; widens cuisine spread, distinct from other regional chicken stews, prior doro-wat ruling is a different dish.",
+   "ruled_at": "2026-08-26T10:01:16",
    "ingredients_verbatim": [
     "2 tablespoons extra-virgin olive oil (plus additional as needed)",
     "1 teaspoon kosher salt",
@@ -56307,7 +56241,6 @@
    "url": "https://www.spendwithpennies.com/beef-stroganoff-soup/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:09:14",
-   "last_verified": "2026-08-23T17:43:47",
    "signature": {
     "protein": "beef",
     "method": "any",
@@ -56322,122 +56255,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 onion (diced)",
-    "3 tablespoons olive oil (divided)",
-    "1 pound stewing beef (trimmed)",
-    "salt and black pepper (to taste)",
-    "1 clove garlic (minced)",
-    "8 ounces mushrooms (brown or white, sliced)",
-    "6 cups reduced sodium beef broth",
-    "½ cup red wine",
-    "1 tablespoon Worcestershire sauce",
-    "3 tablespoons cornstarch",
-    "½ cup sour cream",
-    "3 tablespoons chopped fresh parsley",
-    "1 ½ cups egg noodles (measured dry, cooked according to package directions)"
-   ],
-   "neighbours": [
-    {
-     "slug": "carbonada-chilean-beef-corn-soup",
-     "name": "Carbonada (Chilean Beef, Corn and Squash Soup)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kharcho-georgian-beef-walnut-soup",
-     "name": "Kharcho (Georgian Beef and Walnut Rice Soup)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "soto-betawi-indonesian-beef-coconut-soup",
-     "name": "Soto Betawi (Indonesian Beef and Coconut Soup)",
-     "score": 20,
-     "shared": [
-      "beef",
-      "soup"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ground-beef-stroganoff-pasta",
-     "name": "Ground Beef Stroganoff Pasta",
-     "score": 20,
-     "shared": [
-      "beef",
-      "stroganoff"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-beef-stroganoff",
-     "name": "Slow Cooker Beef Stroganoff",
-     "score": 0.9109,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "ground-beef-stroganoff",
-     "name": "Ground Beef Stroganoff",
-     "score": 0.8988,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "ground-beef-stroganoff-pasta",
-     "name": "Ground Beef Stroganoff Pasta",
-     "score": 0.8752,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-stew-recipe",
-     "name": "Beef Stew Recipe",
-     "score": 0.8542,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "crockpot-beef-stew",
-     "name": "Crockpot Beef Stew",
-     "score": 0.8241,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Exact same dish already accepted in-flight as beef-stroganoff-soup in run hunt-2026-08-24-v3-noband-drill (name, protein, cream sauce, noodle all identical) — the in-flight collision class.",
+   "ruled_at": "2026-08-26T10:01:09"
   },
   {
    "slug": "mozzarella-sticks",
@@ -158204,83 +158025,10 @@
     "reason": ""
    },
    "servings": 6,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:17:49",
-   "ingredients_verbatim": [
-    "1 ½ pounds ground beef",
-    "½ cup Panko bread crumbs",
-    "1 egg",
-    "¼ teaspoon black pepper",
-    "1 tablespoon all-purpose flour",
-    "1 ½ cups reduced sodium beef broth",
-    "1 ounce package brown gravy mix (dry)",
-    "2 tablespoons ketchup",
-    "1 teaspoon Dijon mustard",
-    "2 tablespoons butter",
-    "1 onion (thinly sliced)",
-    "1 cup mushrooms (thinly sliced)",
-    "2 tablespoons cornstarch",
-    "4 tablespoons water",
-    "6 large rolls (or Kaiser buns)",
-    "6 slices Swiss cheese (or cheddar cheese)"
-   ],
-   "neighbours": [
-    {
-     "slug": "salisbury-steak-potato-bowls",
-     "name": "Salisbury Steak and Potato Bowls",
-     "score": 20,
-     "shared": [
-      "salisbury",
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-steak-and-onions-rice",
-     "name": "Slow Cooker Steak and Onions over Rice",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-swiss-steak-rice",
-     "name": "Slow Cooker Swiss Steak with Rice",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "steak-fajita-rice-bowls",
-     "name": "Steak Fajita Rice Bowls",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "honey-garlic-steak-bites-potatoes",
-     "name": "Honey Garlic Steak Bites and Potatoes",
-     "score": 10,
-     "shared": [
-      "steak"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0
+   "ruled_reason": "Salisbury steak burgers on buns with mushroom-onion gravy; distinct plate from live salisbury-steak-potato-bowls (bun-served handheld vs bowl), band verified and in range.",
+   "ruled_at": "2026-08-26T10:01:08"
   },
   {
    "slug": "bionicos-mexican-fruit-bowls",
@@ -158599,57 +158347,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:17:50",
-   "ingredients_verbatim": [
-    "4 cups birria broth, (from my birria recipe)",
-    "2 cups shredded birria, (from my birria recipe)",
-    "8 ounces ramen noodles",
-    "Water, (as needed)",
-    "2 teaspoons kosher salt",
-    "Sliced radishes",
-    "Sesame seeds",
-    "Chopped cilantro",
-    "Diced red onion",
-    "Lime juice",
-    "Soft-boiled egg ((optional))"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-pork-birria-bowls",
-     "name": "Slow Cooker Pork Birria Bowls",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-birria-rice-bowls",
-     "name": "Beef Birria Rice Bowls",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "beef-birria-burrito",
-     "name": "Beef Birria Burrito",
-     "score": 10,
-     "shared": [
-      "birria"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0
+   "ruled_reason": "Birria broth + shredded birria over ramen noodles is a distinct Mexican-Japanese fusion; neighbours are all birria rice bowls/burritos (different starch), widens cuisine spread, band verified.",
+   "ruled_at": "2026-08-26T10:01:11"
   },
   {
    "slug": "50-pumpkin-recipes",
@@ -173416,69 +173117,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:18:07",
-   "ingredients_verbatim": [
-    "4 cups white uncooked pumpkin seeds",
-    "4 Tablespoons Olive Oil (equal to 1/4 cup)",
-    "2 Tablespoons Kosher Salt"
-   ],
-   "neighbours": [
-    {
-     "slug": "dutch-oven-pork-loin-roast-gravy",
-     "name": "Dutch Oven Pork Loin Roast with Potatoes and Gravy",
-     "score": 10,
-     "shared": [
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-pot-roast-potatoes-carrots",
-     "name": "Classic Slow Cooker Pot Roast with Potatoes and Carrots",
-     "score": 10,
-     "shared": [
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-pumpkin-chili",
-     "name": "Turkey Pumpkin Chili",
-     "score": 10,
-     "shared": [
-      "pumpkin"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "senfbraten-german-mustard-pork-roast",
-     "name": "Senfbraten (German Mustard-Gravy Pork Roast)",
-     "score": 10,
-     "shared": [
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "mississippi-pot-roast-bowls",
-     "name": "Mississippi Pot Roast Bowls",
-     "score": 10,
-     "shared": [
-      "roast"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0
+   "ruled_reason": "A roasted pumpkin-seed snack/how-to (seeds, oil, salt only), not a batch-prep dinner in any protein — wrong format for the run.",
+   "ruled_at": "2026-08-26T10:01:14"
   },
   {
    "slug": "taco-lasagna",
@@ -197093,74 +196735,10 @@
     "reason": ""
    },
    "servings": 8,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:18:33",
-   "ingredients_verbatim": [
-    "3 lbs pork butt roast, boston butt ($7.96)",
-    "1 sweet onion (medium, $0.53)",
-    "1 cup teriyaki sauce ($1.99)",
-    "15 oz can pineapple slices ($1.27)",
-    "1 inch fresh ginger (optional, $0.13)",
-    "3 Tbsp all-purpose flour ($0.02)",
-    "8 sandwich buns (or pack hamburger, $1.50)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-teriyaki-pork-bowls",
-     "name": "Slow Cooker Teriyaki Pork Bowls",
-     "score": 20,
-     "shared": [
-      "teriyaki",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-cuban-mojo-pork-bowls",
-     "name": "Slow Cooker Cuban Mojo Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-dr-pepper-pulled-pork-bowls",
-     "name": "Slow Cooker Dr Pepper Pulled Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-brown-sugar-sesame-pork-bowls",
-     "name": "Slow Cooker Brown Sugar Sesame Pork Bowls",
-     "score": 10,
-     "shared": [
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 3
+   "ruled_reason": "Slow-braised teriyaki pulled pork, same protein + teriyaki/soy sauce + braised method as live slow-cooker-teriyaki-pork-bowls; only the vessel (bun vs rice bowl) differs, which is the same dinner.",
+   "ruled_at": "2026-08-26T10:01:15"
   },
   {
    "slug": "tomato-spinach-pasta",
@@ -215929,91 +215507,10 @@
     "reason": ""
    },
    "servings": 8,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:18:53",
-   "ingredients_verbatim": [
-    "1 12- to 14- pound turkey* (THAWED)",
-    "1 batch Dry Brine",
-    "3 medium carrots",
-    "1 red apple",
-    "1 yellow onion",
-    "1 lemon",
-    "1 head garlic",
-    "8 sprigs fresh thyme",
-    "4 tablespoons ½ stick unsalted butter (melted)",
-    "Freshly ground black pepper",
-    "1 ½ cups apple juice, white wine, or chicken broth"
-   ],
-   "neighbours": [
-    {
-     "slug": "turkey-manicotti-ricotta",
-     "name": "Turkey Manicotti with Ricotta",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-mac-and-cheese-bake",
-     "name": "Turkey Mac and Cheese Bake",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-meatball-italian-wedding-soup",
-     "name": "Turkey Meatball Italian Wedding Soup",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-maqluba-upside-down-rice-bake",
-     "name": "Turkey Maqluba (Upside-Down Rice Bake)",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "turkey-keema-curry-with-peas",
-     "name": "Turkey Keema Curry with Peas",
-     "score": 10,
-     "shared": [
-      "turkey"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "turkey|bake|plain",
-     "slug": "roast-turkey-recipe",
-     "name": "Roast Turkey Recipe",
-     "protein": "turkey",
-     "method": "bake",
-     "verdict": "rejected-not-fit",
-     "reason": "Whole-bird holiday roast turkey (10-15 lb, 15 servings), not a weeknight batch-prep dinner format the catalog wants.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-24-v3-phase6b",
-     "by": "decider",
-     "at": "2026-08-24T12:09:55"
-    }
-   ],
-   "saturation_pressure": 0
+   "ruled_reason": "Whole 12-14 lb dry-brined smoked bird, a holiday-roast format, not a weeknight batch-prep dinner — matches prior roast-turkey rejection rationale.",
+   "ruled_at": "2026-08-26T10:01:16"
   },
   {
    "slug": "cortadillo-mexican-pink-cake",
@@ -220107,8 +219604,8 @@
    "servings": 4,
    "status": "available",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:18:58",
+   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Chicken soy/hoisin stir-fry with noodles and vegetables; no direct dupe (neighbours are beef/turkey stir-fries and specific regional noodle dishes), verified band, though region is saturated.",
+   "ruled_at": "2026-08-26T10:01:15",
    "ingredients_verbatim": [
     "1 1/4 pounds boneless skinless chicken breasts or thighs (thinly sliced then cut into bite-sized pieces)",
     "4 tablespoons low sodium soy sauce (plus additional to taste, divided)",

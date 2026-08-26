@@ -1,0 +1,31 @@
+{
+    "slug":  "teriyaki-pork-sandwiches",
+    "title":  "Teriyaki Pork Sandwiches",
+    "source_url":  "https://www.budgetbytes.com/teriyaki-pork-sandwiches/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T10:01:14",
+    "updated":  "2026-08-26T10:01:14",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Slow-braised teriyaki pulled pork, same protein + teriyaki/soy sauce + braised method as live slow-cooker-teriyaki-pork-bowls; only the vessel (bun vs rice bowl) differs, which is the same dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T10:01:14",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/teriyaki-pork-sandwiches/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T10:01:14",
+                        "by":  "decider",
+                        "detail":  "Slow-braised teriyaki pulled pork, same protein + teriyaki/soy sauce + braised method as live slow-cooker-teriyaki-pork-bowls; only the vessel (bun vs rice bowl) differs, which is the same dinner."
+                    }
+                ]
+}
