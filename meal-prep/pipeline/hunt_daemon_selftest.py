@@ -1141,6 +1141,23 @@ def run():
       *_q2_unhold_is_carriage_checked())
 
     # =================================================================================================
+    H("Q3 - a rejection the state machine REFUSED is not a rejection (2026-08-26)")
+    # =================================================================================================
+    # Over the REAL hunt-run.ps1, for the reason the section header above this one gives twice already:
+    # `_rejects_explicitly` injects hunt-run through FakePS, every -Advance comes back rc=0, and so an
+    # ILLEGAL transition and a legal one are the same event inside that fixture. It was green through
+    # the whole life of this defect.
+    T("MUST FIRE  a mapper rejection carrying NO terminal state is STUCK, never a rejection under a "
+      "state the daemon picked for it - and the state file is untouched",
+      *_q3_no_state_is_stuck_not_rejected())
+    T("MUST FIRE  THE LIVE SHAPE: `rejected-not-carried` from `extracted` is refused by the real "
+      "state machine, so NO rejection is recorded - the record and the disk agree it is stuck",
+      *_q3_an_illegal_rejection_is_never_recorded())
+    T("CLEAN TWIN a rejection that IS legal from `extracted` (`rejected-macros`) is still recorded "
+      "and still LANDS on disk - the mapper can reject, it just cannot invent a route",
+      *_q3_clean_twin_a_legal_rejection_still_lands())
+
+    # =================================================================================================
     H("T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)")
     # =================================================================================================
     # NEUTER PROOFS, ALL RUN AND REVERTED 2026-08-25, counts as the suite printed them:
@@ -2623,6 +2640,122 @@ def _q2_the_state_machine_refuses_the_bypass():
 
 
 # =====================================================================================================
+# Q3 - A REJECTION THE STATE MACHINE REFUSED IS NOT A REJECTION (2026-08-26).
+#
+# THE DEFECT. The map lane's rejection branch read `res.get("state") or "rejected-not-carried"`, and it
+# runs while the recipe is still `extracted` - the success path advances to `mapped` several lines
+# later. hunt-run.ps1's table allows `rejected-not-carried` from `mapped`, `pricing` and `parked` only,
+# because it is the PRICE lane's derived verdict about Omaha carriage. So a mapper rejection carrying
+# no state of its own wrote the rejection into the run record, had its advance REFUSED, and left the
+# recipe sitting at `extracted` - reading as stuck to everybody watching, with a verdict already
+# recorded against it. The 2026-08-16 hunt-run fixture-4b incident, a third time.
+#
+# WHY `_rejects_explicitly` COULD NOT SEE IT, and this is the whole reason these three exist. That case
+# injects hunt-run.ps1 through FakePS, which answers rc=0 to every -Advance ever made of it. Under an
+# injected state machine EVERY transition is legal, so a fixture there can pin what the daemon SAYS and
+# can never pin what the disk CARRIES. These run the real hunt-run.ps1 over a scratch run dir, exactly
+# as the Q1 and Q2 sections do, and both halves - the run record AND the state file - are read back.
+#
+# THE EMPTY STRING IS THE REALISTIC SHAPE, not an omitted field. MAPPED requires `state`, and
+# validate_schema counts a missing key and an explicit null as missing - so a payload with no `state`
+# at all never reaches this branch, it fails validation upstream. An EMPTY string satisfies `required`
+# and then falls through `or` into the default, which is how a live payload gets here.
+#
+# NEUTER PROOFS, run and reverted 2026-08-26, full case count and EXIT CODE read on every one (a
+# vanished case and a passing case are indistinguishable in a red-only tally). The restore was verified
+# byte-identical by md5 both times:
+#   * N1 - ONLY the `or "rejected-not-carried"` default restored, `settle` left in place
+#                                                    -> 1 red / 272 total, exit 2: Q3a alone. The
+#     recipe is still STUCK rather than falsely rejected - `settle` sees to that - but it is stuck
+#     over a REFUSED TRANSITION the daemon invented, instead of over the empty field the mapper
+#     actually sent, and the sentence a person reads names the wrong thing. Q3b cannot move here: it
+#     states `rejected-not-carried` explicitly, so no default is consulted. That is why the two
+#     halves are pinned by two cases and not by one.
+#   * N2 - the ENTIRE original branch restored (the default AND finish-then-unconditional-advance)
+#                                                    -> 2 red / 272 total, exit 2: Q3a and Q3b, both
+#     reporting the filed defect verbatim - `{"status": "rejected", "state": "rejected-not-carried"}`
+#     in the run record while the state file on disk still read `extracted`.
+#   Q3c stayed green on both, which is the point of keeping a legal rejection in the section at all.
+# =====================================================================================================
+
+
+def _q3_run(tmp, state):
+    """One map-lane run over the Q1 staged recipe (at `extracted`, real hunt-run.ps1) where the mapper
+    REJECTS, carrying `state` verbatim. Returns (on-disk state, outcomes, why)."""
+    staged, why = _q1_stage(tmp)
+    if why:
+        return "", [], why
+    run_dir, qf = staged
+    res = {"slug": Q1_SLUG, "status": "rejected", "state": state,
+           "detail": "the mapper's own sentence about why this recipe cannot be carried"}
+    d = daemon(run_dir=run_dir,
+               dispatcher=FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]}),
+               ps=MapLaneRealPS(qf))
+    d.ch["map"].push({"slug": Q1_SLUG})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+    try:
+        with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG),
+                     encoding="utf-8-sig") as f:
+            on_disk = str((json.load(f) or {}).get("state") or "")
+    except Exception as e:                                        # noqa: BLE001
+        return "", d.outcomes, "the state file could not be read back: %s" % e
+    return on_disk, list(d.outcomes), ""
+
+
+def _q3_no_state_is_stuck_not_rejected():
+    """A rejection naming no terminal state is a payload nobody can act on. It must be STUCK, with the
+    mapper's own sentence attached - never a rejection under a state the daemon picked for it."""
+    tmp = scratch_dir(prefix="daemon-q3a-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "stuck"
+                and on_disk == "extracted"
+                and "named no terminal state" in (one.get("detail") or ""),
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q3_an_illegal_rejection_is_never_recorded():
+    """THE LIVE SHAPE. `rejected-not-carried` from `extracted` is refused by the real state machine, so
+    no rejection may be recorded: the run record and the state file agree that this recipe is stuck,
+    and the refusal is quoted where a person will read it."""
+    tmp = scratch_dir(prefix="daemon-q3b-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "rejected-not-carried")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "stuck"
+                and on_disk == "extracted"
+                and "refused extracted -> rejected-not-carried" in (one.get("detail") or ""),
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q3_clean_twin_a_legal_rejection_still_lands():
+    """CLEAN TWIN, and it is what stops the fix becoming "the mapper can no longer reject anything".
+    `rejected-macros` IS legal from `extracted` - it was added on 2026-08-16 for this very stage - so
+    that rejection is recorded AND lands on disk, in one advance."""
+    tmp = scratch_dir(prefix="daemon-q3c-")
+    try:
+        on_disk, outcomes, why = _q3_run(tmp, "rejected-macros")
+        if why:
+            return False, why
+        one = outcomes[0] if outcomes else {}
+        return (len(outcomes) == 1 and one.get("status") == "rejected"
+                and one.get("state") == "rejected-macros" and on_disk == "rejected-macros",
+                "state=%s outcomes=%s" % (on_disk, json.dumps(outcomes)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
 # D10 - the price-evidence pre-pass.
 #
 # The injected probe reply is price_evidence.PROBE_JSON_SAMPLE, which is a literal frozen from
@@ -3002,9 +3135,15 @@ def _pregather_inline_and_numbered():
 
 
 def _rejects_explicitly():
+    """THE STATE HERE IS `rejected-macros`, AND THE SWAP IS THE POINT (Q3, 2026-08-26). It was
+    `rejected-not-carried`, which is ILLEGAL from `extracted` - and this fixture stayed green through
+    every day of that defect, because its hunt-run.ps1 is injected and an injected state machine
+    answers rc=0 to anything. What this case pins is the SHAPE - an explicit rejection is recorded as
+    a rejection and not as a stuck - so it now uses a state that is actually reachable from where the
+    recipe stands. Whether the transition is legal is pinned in the Q3 section, over the real script."""
     fd = FakeDispatch({"recipe-ingredient-mapper": [
-        {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-not-carried",
-                      "detail": "nobody carries it"}]}]})
+        {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-macros",
+                      "detail": "no label-accurate reading lands inside the run's macro window"}]}]})
     tmp = scratch_dir(prefix="daemon-mapreject-")
     try:
         d = daemon(run_dir=preresolved(tmp, ["s1"]), dispatcher=fd)

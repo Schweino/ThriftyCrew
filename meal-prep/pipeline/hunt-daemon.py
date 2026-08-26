@@ -719,6 +719,53 @@ class Daemon(object):
         somebody had (B5: 14 recipes were reported rejected in 2026-08-15 by exactly that confusion)."""
         self.finish(slug, "stuck", None, "%s: %s" % (stage, detail))
 
+    # ---- Q3 (2026-08-26): THE OUTCOME AND THE STATE FILE MOVE TOGETHER, OR NEITHER DOES -----------
+    #
+    # THE DEFECT THIS DELETES. Every terminal outcome in this daemon was written by a PAIR of calls -
+    # `finish` (the run record) and `-Advance` (the state file on disk) - and NOT ONE of the eight
+    # call sites checked whether the second one was accepted. `advance` returns a bool and appends a
+    # finding on refusal; every caller threw it away. So a refused transition left the run reporting a
+    # verdict that the state file does not carry, which reads on disk as a recipe STILL IN FLIGHT and
+    # is invisible to everyone watching - the same shape as the first build's priced -> rejected-qa
+    # advance, which _band_gate_real_machine exists to catch.
+    #
+    # THE ONE THAT WAS LIVE, found in the map lane on 2026-08-26. A mapper rejection defaulted its
+    # state to `rejected-not-carried` while the recipe was still `extracted`, and hunt-run.ps1's table
+    # allows that state only from `mapped`, `pricing` and `parked`. The rejection was written, the
+    # advance was refused, and the recipe sat at `extracted` looking stuck with a rejection already
+    # recorded against it - the worst of both halves. ORDERING WAS NOT THE CAUSE and swapping it is
+    # not the fix. Three of the eight sites called finish first and four called advance first, and
+    # every one of those seven wrote the outcome unconditionally either way; the eighth (the map
+    # lane's no-servings pick-up refusal) advanced and recorded NO outcome at all, which is the same
+    # pair broken at the other end. What was missing everywhere was the ANSWER.
+    #
+    # THE STATE MACHINE STAYS THE ONLY AUTHORITY ON WHAT IS LEGAL. This helper duplicates NO part of
+    # hunt-run.ps1's `$script:NEXT` - it asks, and it believes the answer. A legality table copied
+    # into Python is a second table, and two tables are two tables that drift.
+    async def settle(self, slug, state, by, detail, stage, status="rejected", outcome_detail=None):
+        """Advance FIRST; record the outcome only if the state file actually moved. Returns bool.
+
+        A missing state or a refused transition is a STUCK - a recipe a person can act on, with the
+        refusal quoted - and never an outcome. Same rule as `stuck`'s own note: nothing is recorded
+        as if somebody had ruled when the record cannot be made to say it.
+        """
+        said = as_text(detail)
+        if not state:
+            why = ("%s returned a %s verdict but named no terminal state, so nothing here can say "
+                   "which one it is: %s" % (by, status, said[:200] or "no detail given"))
+            self.stuck(slug, stage, why)
+            self.log("  %s: %s STUCK - a %s verdict naming no state" % (stage, slug, status))
+            return False
+        was = self.state_of(slug) or "?"
+        if not await self.advance(slug, state, by, said[:200]):
+            why = ("the state machine refused %s -> %s, so this %s is NOT on disk and the recipe is "
+                   "still at %s: %s" % (was, state, status, was, said[:200] or "no detail given"))
+            self.stuck(slug, stage, why)
+            self.log("  %s: %s STUCK - %s -> %s was refused" % (stage, slug, was, state))
+            return False
+        self.finish(slug, status, state, said if outcome_detail is None else outcome_detail)
+        return True
+
     def wip(self):
         return len(self.accepted_slugs) - len(self.outcomes)
 
@@ -1210,10 +1257,9 @@ class Daemon(object):
                                         "and this page is resumable")
             return
         if hunt_lib.norm_state(payload.get("state")) not in ("ok", "settled"):
-            self.finish(slug, "rejected", "rejected-unreadable",
-                        payload.get("reason") or "the extractor could not read the page")
-            await self.advance(slug, "rejected-unreadable", "extractor",
-                               (payload.get("reason") or "unreadable")[:200])
+            await self.settle(slug, "rejected-unreadable", "extractor",
+                              payload.get("reason") or "the extractor could not read the page",
+                              "extract")
             return
 
         # THE VERIFICATION BLOCK IS THE DAEMON'S TO COMPUTE, never the agent's to assert - and it is
@@ -2586,10 +2632,16 @@ class Daemon(object):
                         keep.append(b)                # unreadable here is the mapper's own problem
                         continue
                     if not ext.get("servings"):
-                        await self.advance(s, "rejected-unreadable", "daemon",
-                                           "the source states no servings, so nothing can ever be "
-                                           "scaled to a 14-serving batch - refused before the mapper "
-                                           "was paid rather than after")
+                        # Q3: AND THE OUTCOME IS RECORDED, which it was not. This site advanced the
+                        # state file and wrote a finding but never called finish, so the slug stayed
+                        # in flight for the whole run: `wip()` counts accepted minus OUTCOMES, and a
+                        # recipe that is rejected on disk and in flight in the record holds a WIP
+                        # slot that nothing can ever free. The same pair, the same rule, the other
+                        # half missing.
+                        await self.settle(s, "rejected-unreadable", "daemon",
+                                          "the source states no servings, so nothing can ever be "
+                                          "scaled to a 14-serving batch - refused before the mapper "
+                                          "was paid rather than after", "map")
                         self.findings.append(
                             "map/%s: REFUSED AT PICK-UP - the source states no servings. A yield "
                             "nobody stated cannot be guessed, and the cost of learning that after a "
@@ -2643,11 +2695,36 @@ class Daemon(object):
                             self.ch["map"].push(b)
                         continue
                     if hunt_lib.is_rejected(res.get("status")):
-                        state = res.get("state") or "rejected-not-carried"
-                        self.finish(b["slug"], "rejected", state,
-                                    as_text(res.get("detail")) or "mapper rejected")
-                        await self.advance(b["slug"], state, "mapper",
-                                           as_text(res.get("detail"), 200))
+                        # Q3 (2026-08-26): THERE IS NO DEFAULT TERMINAL STATE HERE ANY MORE, and the
+                        # one that was here was BOTH illegal and untrue. It read
+                        # `res.get("state") or "rejected-not-carried"`, and `rejected-not-carried`
+                        # is the PRICE lane's own derived verdict - "no Omaha store carries a
+                        # blocking ingredient", written by Get-DerivedPricingState after a recipe has
+                        # been mapped and priced. hunt-run.ps1 allows it from `mapped`, `pricing` and
+                        # `parked` for exactly that reason. This branch runs while the recipe is
+                        # still `extracted` (the success path advances to `mapped` a few lines
+                        # below), so the transition was refused, the rejection was already written,
+                        # and the recipe read as stuck with a verdict recorded against it.
+                        #
+                        # THE TABLE IS NOT THE THING THAT IS WRONG. Widening `extracted` to accept
+                        # `rejected-not-carried` would let the run record say no store carries an
+                        # ingredient of a recipe nothing has mapped yet - a carriage claim standing
+                        # on work nobody did, which is the same objection the 2026-08-24 note above
+                        # `priced` raises against walking a recipe forward to reach a rejection. And
+                        # advancing to `mapped` first to make the state reachable is that objection
+                        # exactly: no mapped artifact was assembled, so the advance would be a claim
+                        # about a file that does not exist.
+                        #
+                        # NOR IS A SAFER DEFAULT THE FIX. The three states legal from `extracted` -
+                        # unreadable, dupe, macros - are FINDINGS ABOUT THE RECIPE, and picking one
+                        # on the mapper's behalf would file a false one; the 2026-08-16 note above
+                        # `extracted` refused to do precisely that ("both would have been false").
+                        # MAPPED's schema already REQUIRES `state` and names `rejected-macros` on it.
+                        # A rejection that arrives without one is a payload we cannot read, and the
+                        # honest outcome is a STUCK carrying the mapper's own sentence - which is
+                        # what `settle` does with an empty state.
+                        await self.settle(b["slug"], as_text(res.get("state")).strip(), "mapper",
+                                          as_text(res.get("detail")) or "mapper rejected", "map")
                         continue
                     absent = [t for t in (res.get("absent_terms") or []) if t]
                     optional = [t for t in (res.get("optional_absent") or []) if t]
@@ -3754,10 +3831,8 @@ class Daemon(object):
             self.stuck(slug, "macro-gate", why[:400])
             return
         self.log("macro gate (%s): %s at %s - retiring" % (where, slug, verdict["reason"]))
-        await self.advance(slug, "rejected-macros", "macro-gate",
-                           "macro gate (%s): %s" % (where, verdict["reason"]))
-        self.finish(slug, "rejected", "rejected-macros",
-                    "macro gate (%s): %s" % (where, verdict["reason"]))
+        await self.settle(slug, "rejected-macros", "macro-gate",
+                          "macro gate (%s): %s" % (where, verdict["reason"]), "macro-gate")
 
     async def write_lane(self):
         async def worker(_i):
@@ -3810,8 +3885,8 @@ class Daemon(object):
                     self.stuck(slug, "write", "no response after retries - never actually written")
                     continue
                 if hunt_lib.is_rejected(r.get("status")):
-                    self.finish(slug, "rejected", "rejected-qa", r.get("detail") or "writer rejected")
-                    await self.advance(slug, "rejected-qa", "writer", (r.get("detail") or "")[:200])
+                    await self.settle(slug, "rejected-qa", "writer",
+                                      r.get("detail") or "writer rejected", "write")
                     continue
 
                 # CHANGE W: THE DAEMON PATCHES THE INTAKE from the payload. A writer that never opens
@@ -4127,12 +4202,17 @@ class Daemon(object):
                         continue
                     self.write_qa_verdict(slug, q)
                     if not hunt_lib.is_pass(q.get("verdict")):
-                        await self.advance(slug, "rejected-qa", "source-qa",
-                                           "failed QA twice: %s" % (q.get("findings") or "")[:150])
-                        self.finish(slug, "rejected", "rejected-qa", "failed source-QA twice")
+                        await self.settle(slug, "rejected-qa", "source-qa",
+                                          "failed QA twice: %s" % (q.get("findings") or "")[:150],
+                                          "qa", outcome_detail="failed source-QA twice")
                         continue
-                await self.advance(slug, "qa-passed", "source-qa", "")
-                self.finish(slug, "qa-passed", "qa-passed", "")
+                # A PASS IS A TERMINAL OUTCOME TOO, and it is the one with money behind it: only
+                # `qa-passed` opens a wave, and a wave publishes. A refused advance here would leave
+                # the recipe queued for a wave it can never legally enter (`waved` is reachable from
+                # `qa-passed` alone), so it takes the same road as every rejection.
+                if not await self.settle(slug, "qa-passed", "source-qa", "", "qa",
+                                         status="qa-passed"):
+                    continue
                 self.qa_passed.append(slug)
                 # the ported maybeCloseWave(false): a full pool closes a wave NOW, mid-run
                 self.schedule_wave(False)
@@ -4674,9 +4754,10 @@ class Daemon(object):
                     " (the auditor named no slugs, so the whole wave is blocked)" if not blockers
                     else ""))
         for s in plan["toReject"]:
-            await self.advance(s, "rejected-audit", "auditor",
-                               ((audit or {}).get("summary") or "blocked by the wave audit")[:200])
-            self.finish(s, "rejected", "rejected-audit", "blocked by the wave audit, repair spent")
+            await self.settle(s, "rejected-audit", "auditor",
+                              ((audit or {}).get("summary") or "blocked by the wave audit")[:200],
+                              "audit",
+                              outcome_detail="blocked by the wave audit, repair spent")
         for s in plan["toRepair"]:
             await self.advance(s, "qa-passed", "auditor",
                                "trimmed out of wave %d for repair" % wk)
