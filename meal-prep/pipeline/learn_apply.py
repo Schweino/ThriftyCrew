@@ -519,14 +519,50 @@ def apply_learn(run_dir, slug, res, tables, payload, store="", events="", log=No
             summary["surprises"] += 1
         return how
 
-    # ---- pre-flight. The validator guards the PEN, not the dispatch (plan 3.5) ---------------------
-    problems = hunt_lib.validate_map({"results": [res or {}]})
-    if problems:
-        findings.append("%s: the map result does not conform to the MAP contract, so nothing is "
-                        "cached from it: %s" % (slug, "; ".join(problems[:4])))
-
     table = (tables or {}).get(slug) or {}
     rulings = list((payload or {}).get("rulings") or [])
+
+    # ---- pre-flight. The validator guards the PEN, not the dispatch (plan 3.5) ---------------------
+    #
+    # PER RULING, because plan 3.2 says every other refusal in this pen is per ruling with its own
+    # held_reason and this one was not. MEASURED, hunt-2026-08-26-smoke3: the meatballs recipe lists
+    # "1 teaspoon cumin" twice, `validate_map` refused the whole payload for it, and all 13 events -
+    # ten of them clean rulings with live bids - were held with "the map result did not validate".
+    # The ledger learned NOTHING from a recipe that mapped fine. A problem now holds the rulings it
+    # NAMES and no others; a problem that names none of them (a payload nothing can walk) still
+    # condemns the lot, because there is no ruling left to judge one at a time.
+    problems, notes = hunt_lib.map_problems({"results": [res or {}]})
+    res_rulings = list((res or {}).get("rulings") or [])
+    # THE INDICES ARE THE JOIN, so they are checked before they are trusted. At the daemon call site
+    # `payload["rulings"] IS res["rulings"]` (hunt-daemon.py builds the payload from it), but a
+    # caller that hands over two different lists would silently hold the wrong rulings - the exact
+    # class of defect the validator's own rule 3 exists to catch. When they do not correspond, the
+    # blast radius falls back to the whole payload and the finding says so.
+    joined = len(res_rulings) == len(rulings) and all(
+        a is b or a == b for a, b in zip(res_rulings, rulings))
+    held_by_index = {}
+    payload_wide = []
+    for p in problems:
+        if p["rulings"] and joined:
+            for j in p["rulings"]:
+                held_by_index.setdefault(j, p["message"])
+        else:
+            payload_wide.append(p["message"])
+    if problems and not joined:
+        findings.append("%s: the map result's rulings and the payload's rulings are not the same "
+                        "list (%d vs %d), so no problem can be pinned to a ruling and every one of "
+                        "them is held" % (slug, len(res_rulings), len(rulings)))
+    if payload_wide:
+        findings.append("%s: the map result does not conform to the MAP contract in a way that "
+                        "names no single ruling, so nothing is cached from it: %s"
+                        % (slug, "; ".join(payload_wide[:4])))
+    if held_by_index:
+        findings.append("%s: the map result does not conform to the MAP contract on %d of %d "
+                        "ruling(s), which are held while the rest still learn: %s"
+                        % (slug, len(held_by_index), len(rulings),
+                           "; ".join(p["message"] for p in problems[:4])))
+    for nt in notes:
+        findings.append("%s: %s" % (slug, nt["message"]))
     reg = [r for r in ((payload or {}).get("registrar_rulings") or []) if isinstance(r, dict)]
     reg_by_bid = {}
     for g in reg:
@@ -545,7 +581,7 @@ def apply_learn(run_dir, slug, res, tables, payload, store="", events="", log=No
                         "BLIND for this slug" % (slug, why_ledger))
 
     # ---- 1. one event per residual ruling, and a projection for the clean ones --------------------
-    for ru in rulings:
+    for j, ru in enumerate(rulings):
         if not isinstance(ru, dict):
             findings.append("%s: a ruling is not an object and left no event" % slug)
             continue
@@ -583,8 +619,12 @@ def apply_learn(run_dir, slug, res, tables, payload, store="", events="", log=No
                     held = "the registrar aliased '%s' to an id no namespace carries" % bid
             else:
                 held = "bid unknown to every namespace"
-        if problems:
+        # THE VALIDATOR'S VERDICT ON THIS RULING, and on no other. A ruling the validator never
+        # named is not made unsafe by a sibling that was.
+        if payload_wide:
             held = held or "the map result did not validate"
+        elif j in held_by_index:
+            held = held or "the map result did not validate: %s" % held_by_index[j]
 
         prior = ledger.get(key) or {}
         prior_bid = str(prior.get("item_id") or "").strip()
@@ -878,6 +918,73 @@ TORT_2608 = ("Refused the corn-tortillas bridge: corn and flour tortillas are di
 # A REFUSED SIBLING WHOSE ID ENDS IN THE BID, the direction the enchiladas text does not cover.
 SIBLING_2608 = "Refused boneless-chicken-thighs: this line is the bone-in cut, sold by a different id."
 
+# THE BLAST-RADIUS CASE, FROZEN VERBATIM. Run hunt-2026-08-26-smoke3, slug
+# sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut, straight off
+# mapped-pre\<slug>.rulings.json. The recipe lists "1 teaspoon cumin" TWICE - once in the meatball
+# mix, once in the dry blend for the vegetables - and the mapper ruled both lines, identically, with
+# different evidence sentences. `validate_map` refused the whole payload for it and the pen held all
+# thirteen events with "the map result did not validate":
+#   map: sheet-pan-meatballs-... learned 13 event(s) (0 projected, 12 held, 0 surprise)
+# Every other recipe that day projected most of its rulings (5 of 8, 9 of 12, 6 of 8, 5 of 5). The
+# ten rulings below with live bids have nothing to do with the duplicate, and this is the corpus the
+# drill re-runs to prove they now learn. The `¼` is the source line's own fraction character.
+SMOKE3_MEATBALLS = [
+    {"raw": "3 cups cauliflower florets", "term": "cauliflower florets",
+     "canon_item": "Cauliflower", "decision": "mapped", "bid": "cauliflower",
+     "evidence": "Florets are a knife cut of the same whole head, not a form flip to a bagged or "
+                 "frozen product, so the live cauliflower id (5 of 7) is a reuse."},
+    {"raw": "3 cups cubed butternut squash", "term": "cubed butternut squash",
+     "canon_item": "Butternut Squash", "decision": "mapped", "bid": "butternut-squash",
+     "evidence": "butternut-squash is a live board id at 5 of 7, so a reuse and not a proposal; "
+                 "cubed is a cut, not a form."},
+    {"raw": "1 teaspoon cumin", "term": "cumin", "canon_item": "Ground Cumin",
+     "decision": "mapped", "bid": "ground-cumin",
+     "evidence": "Rename of the intake to the vocabulary's name: the line sits in a dry blend with "
+                 "garlic powder, onion powder and ground coriander and is stirred onto vegetables, "
+                 "which is ground cumin, not whole seed. Board 7 of 7."},
+    {"raw": "1 teaspoon cumin", "term": "cumin", "canon_item": "Ground Cumin",
+     "decision": "mapped", "bid": "ground-cumin",
+     "evidence": "Second cumin line, in the meatball mix, same rename and same 2.1 g per teaspoon."},
+    {"raw": "1 large egg (lightly beaten)", "term": "large egg", "canon_item": "Eggs",
+     "decision": "mapped", "bid": "eggs",
+     "evidence": "eggs is a live board id at 7 of 7, so a reuse; the vocabulary lookup missed only "
+                 "on the singular/qualifier wording."},
+    {"raw": "4 tablespoons chopped dill (plus more for garnish)", "term": "dill",
+     "canon_item": "Fresh Dill", "decision": "mapped", "bid": "fresh-dill",
+     "evidence": "Fresh, not the dried-dill vocabulary row: 4 tbsp chopped into a meatball mix is "
+                 "the fresh herb, and dried is a different price class."},
+    {"raw": "4 tablespoons chopped parsley", "term": "parsley", "canon_item": "Fresh Parsley",
+     "decision": "mapped", "bid": "fresh-parsley",
+     "evidence": "Chopped, 4 tbsp, into a raw mix is the fresh herb, so the Fresh Parsley "
+                 "[fresh-parsley] vocabulary row is the same form and an existing id, a reuse."},
+    {"raw": "1 teaspoon lemon zest", "term": "lemon zest", "canon_item": "Lemon Zest",
+     "decision": "mapped", "bid": "lemons",
+     "evidence": "Zest is the peel of the fruit you buy, so the live lemons id (5 of 7) prices it. "
+                 "1 tsp zest = 2 g."},
+    {"raw": "¼ cup breadcrumbs (plain or gluten-free)", "term": "breadcrumbs",
+     "canon_item": "Bread Crumbs", "decision": "mapped", "bid": "bread-crumbs",
+     "evidence": "bread-crumbs is a live generic id at 7 of 7 and the same product concept and "
+                 "price class; grams supplied for plain crumbs (1 cup = 108 g), not panko."},
+    {"raw": "1 pound lean ground bison (beef or lamb)", "term": "lean ground bison",
+     "canon_item": "Lean Ground Bison", "decision": "mapped", "bid": "ground-bison",
+     "evidence": "Board reports ABSENT (no commodity, no capture) and no vocabulary row shares a "
+                 "core word, so a new id goes to the registrar."},
+    {"raw": "Tzatziki (optional for serving)", "term": "Tzatziki", "canon_item": "Tzatziki",
+     "decision": "not-purchased", "bid": None,
+     "evidence": "Optional condiment offered at serving with no quantity anywhere in the source, "
+                 "so it cannot be costed or weighed."},
+    {"raw": "Harissa (optional for serving)", "term": "Harissa", "canon_item": "Harissa Paste",
+     "decision": "not-purchased", "bid": None,
+     "evidence": "Same as tzatziki: optional at serving with no quantity."},
+]
+
+# The slug's own registrar ruling, from the same file - `ground-bison` is the one bid of the ten that
+# no namespace carries, and it projects only because the registrar approved it in this batch. Reason
+# abridged; the verdict and the ids are verbatim.
+SMOKE3_REGISTRAR = [{"proposed_bid": "ground-bison", "verdict": "approve", "bid": "ground-bison",
+                     "reason": "Bison is unpriced anywhere in the estate and the estate already "
+                               "knows it is not beef."}]
+
 
 def _ruling(raw, term, bid, decision="mapped", evidence="e", canon=None):
     return {"raw": raw, "term": term, "canon_item": canon if canon is not None else term.title(),
@@ -886,6 +993,12 @@ def _ruling(raw, term, bid, decision="mapped", evidence="e", canon=None):
 
 def _payload(rulings, registrar=None):
     return {"rulings": list(rulings), "registrar_rulings": list(registrar or [])}
+
+
+def _tail_events(path, n):
+    """The last `n` event objects off a scratch log, for a case that asserts over a whole slug."""
+    lines = [l for l in io.open(path, encoding="utf-8").read().split("\n") if l.strip()]
+    return [json.loads(l) for l in lines[-n:]]
 
 
 def _res(slug, rulings):
@@ -981,6 +1094,54 @@ def cmd_selftest(_a):
       any("join" in p for p in hunt_lib.validate_map(dupe)), str(hunt_lib.validate_map(dupe)))
     T("MUST FIRE  a payload with no results array is refused",
       hunt_lib.validate_map({"x": 1}) != [], "accepted it")
+
+    # ---- the duplicate rule, split by whether the two rulings AGREE (the smoke3 blast radius) ------
+    print("")
+    print("map_problems - the same three rules, attributed to the rulings they implicate")
+    # NEUTER PROOFS, RUN AND REVERTED BY md5 2026-08-26, counts as the suites printed them
+    # (this suite / hunt_daemon_selftest):
+    #   * refuse AGREEING duplicate raw lines again (the smoke3 bug)          -> 8 red / 1 red;
+    #   * let ANY problem hold every ruling again (the old blast radius)      -> 2 red / 1 red;
+    #   * collapse DISAGREEING duplicates too (the rule loses its teeth)      -> 5 red / 1 red.
+    dprob, dnote = hunt_lib.map_problems(dupe)
+    T("MUST FIRE  a DISAGREEING duplicate names BOTH rulings - nothing knows which one the "
+      "assembler's join kept, so neither may become memory",
+      len(dprob) == 1 and dprob[0]["rulings"] == [0, 1] and dnote == [],
+      json.dumps(dprob) + " notes=" + json.dumps(dnote))
+    smoke = {"results": [{"slug": "sheet-pan-meatballs", "status": "ok",
+                          "rulings": list(SMOKE3_MEATBALLS)}]}
+    sprob, snote = hunt_lib.map_problems(smoke)
+    T("MUST FIRE  the smoke3 meatballs payload - '1 teaspoon cumin' ruled twice, IDENTICALLY - is "
+      "no longer a problem at all: the same ruling written twice is collapsed, not refused",
+      sprob == [] and len(snote) == 1 and snote[0]["rulings"] == [2, 3],
+      "problems=%s notes=%s" % (json.dumps(sprob)[:300], json.dumps(snote)[:300]))
+    # A case that INDEXES into the answer it is judging dies with a traceback the day the answer is
+    # empty, and a traceback is not a red line - it is a suite that stopped counting. Read it safely.
+    snote_msg = snote[0]["message"] if snote else "(no note)"
+    T("  and the collapse note says which line and which identity, so a duplicate is never silent",
+      "1 teaspoon cumin" in snote_msg and "ground-cumin" in snote_msg, snote_msg)
+    T("CLEAN TWIN  validate_map's flat list agrees with map_problems on the same payload",
+      hunt_lib.validate_map(smoke) == [] and hunt_lib.validate_map(dupe)
+      == [p["message"] for p in dprob], str(hunt_lib.validate_map(smoke)))
+    # THE ATTRIBUTION IS THE WHOLE POINT: one bad ruling must not condemn its siblings.
+    mixed = {"results": [{"slug": "s", "rulings": [
+        _ruling("a", "gochujang", "gochujang"),
+        _ruling("b", "x", "y", decision="sure"),
+        _ruling("c", "sumac", "", canon="")]}]}
+    mprob, _mnote = hunt_lib.map_problems(mixed)
+    T("MUST FIRE  a bad decision and an empty identity implicate ruling 1 and ruling 2 ONLY - "
+      "ruling 0 is named by nothing",
+      sorted(sum((p["rulings"] for p in mprob), [])) == [1, 2] and len(mprob) == 2,
+      json.dumps(mprob)[:300])
+    T("MUST FIRE  a problem nothing can pin to a ruling carries an EMPTY ruling list - a shape "
+      "nobody can walk condemns the lot",
+      all(p["rulings"] == [] for p in hunt_lib.map_problems({"x": 1})[0])
+      and all(p["rulings"] == [] for p in hunt_lib.map_problems(
+          {"results": [{"slug": "s", "rulings": "nope"}]})[0]), "pinned something")
+    T("CLEAN TWIN  a raw line ruled three times, all agreeing, is three collapses and no problem",
+      hunt_lib.map_problems({"results": [{"slug": "s", "rulings": [
+          _ruling("one raw", "a", "a"), _ruling("one raw", "a", "a"),
+          _ruling("one raw", "a", "a")]}]})[0] == [], "refused it")
 
     # ---- the notes-vs-bid check, against the REAL 2.6 evidence --------------------------------------
     print("")
@@ -1300,6 +1461,87 @@ def cmd_selftest(_a):
         sv2, _fv2 = apply_reviews(vf, store=store, events=events, packet=pkt)
         T("MUST FIRE  a `leave` verdict writes only the event and changes no row",
           sv2["left"] == 1 and read_ledger(store)[1] == before13, json.dumps(sv2))
+
+        # 12b. THE BLAST RADIUS, at the call site - the smoke3 meatballs, verbatim ---------------
+        #
+        # A fixture over map_problems alone proves nothing here: the defect was never in the
+        # validator, it was in what the PEN did with the validator's answer (PLAN-map-judge-split 4,
+        # twice-measured). So this drives apply_learn over the real 12-ruling payload and counts what
+        # reached the ledger.
+        pay12 = _payload(SMOKE3_MEATBALLS, registrar=SMOKE3_REGISTRAR)
+        s12, f12 = apply_learn(run_dir, "drill-smoke3", _res("drill-smoke3", SMOKE3_MEATBALLS),
+                               {}, pay12, store=store, events=events)
+        led12b, _n12b, _w = read_ledger(store)
+        T("MUST FIRE  the smoke3 meatballs - '1 teaspoon cumin' ruled twice - learn their TEN good "
+          "rulings: the recipe that projected 0 of 13 now projects every ruling the duplicate does "
+          "not implicate",
+          s12["projected"] == 10 and s12["held"] == 2 and s12["events_written"] == 13,
+          "summary=%s" % json.dumps(s12))
+        T("MUST FIRE  and the ten identities are really in the ledger, keyed and attributed",
+          all(led12b.get(term_key(t), {}).get("item_id") == b for t, b in [
+              ("cauliflower florets", "cauliflower"), ("cubed butternut squash", "butternut-squash"),
+              ("cumin", "ground-cumin"), ("large egg", "eggs"), ("dill", "fresh-dill"),
+              ("parsley", "fresh-parsley"), ("lemon zest", "lemons"),
+              ("breadcrumbs", "bread-crumbs"), ("lean ground bison", "ground-bison")]),
+          json.dumps({k: led12b.get(k, {}).get("item_id") for k in
+                      ["cauliflower florets", "cumin", "lean ground bison"]}))
+        T("MUST FIRE  the only two held rulings are the two not-purchased condiments - not one "
+          "ruling is held for 'the map result did not validate'",
+          not [e for e in _tail_events(events, 13) if "did not validate" in e["held_reason"]]
+          and sorted(e["held_reason"] for e in _tail_events(events, 13) if e["held_reason"]
+                     and e["kind"] == "ruling") == ["decision not-purchased"] * 2,
+          json.dumps([e["held_reason"] for e in _tail_events(events, 13)]))
+        T("MUST FIRE  the duplicate is never SILENT - the collapse is a finding naming the line",
+          any("1 teaspoon cumin" in x and "collapsed" in x for x in f12), json.dumps(f12)[:300])
+        T("MUST FIRE  both cumin lines still leave an event, so the 44-class postcondition holds "
+          "over a payload with a duplicated raw line",
+          postcondition_finding("drill-smoke3", s12, pay12) == "",
+          postcondition_finding("drill-smoke3", s12, pay12))
+
+        # 12c. CLEAN TWIN - the same corpus with the duplicate line removed, unchanged behaviour
+        twin = [r for i, r in enumerate(SMOKE3_MEATBALLS) if i != 3]
+        payT = _payload(twin, registrar=SMOKE3_REGISTRAR)
+        sT, fT = apply_learn(run_dir, "drill-smoke3-twin", _res("drill-smoke3-twin", twin), {},
+                             payT, store=store, events=events)
+        T("CLEAN TWIN  the same corpus with the second cumin line REMOVED projects its nine and "
+          "holds its two, with no collapse note and no validator finding",
+          sT["projected"] == 9 and sT["held"] == 2 and sT["events_written"] == 12
+          and not [x for x in fT if "collapsed" in x or "did not validate" in x],
+          "summary=%s findings=%s" % (json.dumps(sT), json.dumps(fT)[:200]))
+
+        # 12d. MUST FIRE - two rulings on ONE raw line that DISAGREE are still refused, both of them
+        fight = [_ruling("1 teaspoon cumin", "cumin", live, evidence="the ground spice"),
+                 _ruling("1 teaspoon cumin", "cumin", live2, evidence="no, the whole seed"),
+                 _ruling("1 tbsp gochujang", "Gochujang Paste", live,
+                         evidence="the Korean fermented chili paste")]
+        before12d = read_ledger(store)[1]
+        s12d, f12d = apply_learn(run_dir, "drill-fight", _res("drill-fight", fight), {},
+                                 _payload(fight), store=store, events=events)
+        ev12d = _tail_events(events, 3)
+        T("MUST FIRE  two rulings on ONE raw line that DISAGREE are BOTH held with a stated reason "
+          "- nothing knows which one the assembler's join kept",
+          s12d["held"] == 2 and s12d["projected"] == 1
+          and all("did not validate" in e["held_reason"] and "DIFFERENTLY" in e["held_reason"]
+                  for e in ev12d[:2]),
+          "summary=%s held=%s" % (json.dumps(s12d),
+                                  json.dumps([e["held_reason"][:90] for e in ev12d])))
+        T("MUST FIRE  ...and the CLEAN third ruling in the same payload still reaches the ledger - "
+          "one conflicted line no longer voids a recipe's memory",
+          read_ledger(store)[1] == before12d + 1
+          and read_ledger(store)[0].get("gochujang paste", {}).get("item_id") == live,
+          "rows %d -> %d" % (before12d, read_ledger(store)[1]))
+        T("MUST FIRE  the conflict is a finding that names the rulings it holds",
+          any("2 of 3 ruling(s), which are held" in x for x in f12d), json.dumps(f12d)[:300])
+
+        # 12e. THE JOIN ITSELF. The indices only mean anything if the two lists correspond; when
+        # they do not, the fallback is the OLD blast radius, announced.
+        sJ, fJ = apply_learn(run_dir, "drill-join", _res("drill-join", fight), {},
+                             _payload(fight[:1]), store=store, events=events)
+        T("MUST FIRE  a payload whose rulings are NOT the result's rulings cannot pin a problem to "
+          "a ruling, so it holds everything and SAYS so",
+          sJ["projected"] == 0 and sJ["held"] == 1
+          and any("not the same list" in x for x in fJ), "summary=%s findings=%s"
+          % (json.dumps(sJ), json.dumps(fJ)[:200]))
 
         # 13. every line on disk is a sorted-keys 14-field object
         allev = [json.loads(l) for l in io.open(events, encoding="utf-8").read().split("\n")
