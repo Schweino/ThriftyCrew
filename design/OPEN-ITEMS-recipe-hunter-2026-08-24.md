@@ -262,6 +262,25 @@ until ACCEPTANCES reach the target - but it means the decider ruled on 21 dossie
 acceptances. At 2,519 tokens per candidate the waste is small (~25k), so this is recorded rather than
 proposed for change.
 
+**CORRECTED 2026-08-26.** The sentence "it does not stop popping until ACCEPTANCES reach the target"
+described the intent, not the code. The pool checks the target BEFORE each pop, but by then it has
+already pushed up to `2 * DECIDE_BATCH` dossiers into the decide channel - so it bounded POPS and
+never bounded ACCEPTANCES, and a `--target N` run could accept up to `N + 2*DECIDE_BATCH`. This item
+could not see that because its own run was UNDER target (9 acceptances against 12), which is the only
+shape in which the two readings agree.
+
+Measured on hunt-2026-08-26-ten: `--target 10` printed "pool: target of 10 reached" after batch 4 and
+then ruled batches 5 and 6 anyway; accepted-slugs.json closed with TWENTY slugs. The cost conclusion
+inverts with it - the waste is not ~25k decider tokens, because an acceptance is billed DOWNSTREAM
+(extraction, the Opus mapper, the Opus pricer, the writer, source-QA, the batch auditor), so ten extra
+acceptances is roughly double the run's whole spend.
+
+FIXED the same day in `hunt-daemon.py`'s decide lane - the only lane that writes the acceptance count
+and therefore the only one that can bound it. Acceptances past the target are rewritten to `deferred`
+before decide_apply sees the payload, and a batch taken while the target is already met is drained
+without being dispatched. Pinned at the call site in `hunt_daemon_selftest.py` (five neuters, counts
+recorded there). What this item got RIGHT stands: the extra POPS are cheap and are still allowed.
+
 ### 3.4 The JS half of the parity gate was NOT run this session
 `hunt_lib.py --parity` is green 63/63 and `--selftest` verifies the hunt-lib.js hash stamp, so the
 spliced copy is provably current. But `hunt-lib-parity.js` itself runs only inside a zero-agent Workflow

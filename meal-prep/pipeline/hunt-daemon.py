@@ -274,6 +274,55 @@ def inflight_neighbours(candidate_name, inflight, stop, cap=3, floor=20):
     return hits[:cap]
 
 
+# ---------------------------------------------------------------------------------------------------
+# THE TARGET CAP (2026-08-26). See decide_lane's header for the run that paid for it.
+#
+# PURE, and separated from the lane for the usual reason: the arithmetic is worth a fixture of its own.
+# But the arithmetic is not where the defect was - the defect was that nothing called anything - so the
+# suite pins the CALL SITE too. (Twice in the map-judge build a neuter came back 0 red because a
+# fixture pinned a function while the bug lived at its call site; PLAN-map-judge-split-2026-08-25 s4.)
+#
+# DEFERRED, NOT REJECTED, and the difference is the whole reason this verdict is the right one to
+# rewrite to. `deferred` means "the decider looked and did not decide": no run state, no
+# considered-dishes record, and harvest --mark-ruled puts the pool entry back to `available`. A
+# candidate held back by an arithmetic limit has had nothing said about it, and burying it under a
+# rejection would teach every future run a ruling no decider ever made. Its OWN reason is carried
+# through verbatim inside the deferral so the ruling that was overruled is still legible.
+#
+# The record block goes with it: DECIDE_RECORDS_RULING["deferred"] is False, so nothing would read it,
+# and a decision that says `deferred` while carrying a record that says `accepted` is a payload that
+# lies about itself.
+# ---------------------------------------------------------------------------------------------------
+
+def cap_accepts_to_target(payload, already_accepted, target):
+    """Rewrite every acceptance PAST the run's target into a deferral.
+
+    Returns (payload, deferred_slugs). The payload is rebuilt rather than mutated - the caller holds
+    the agent's own reply and a run report that reprinted a doctored verdict as the decider's would be
+    a second lie. A falsy target means no limit was asked for and nothing is touched."""
+    if not target:
+        return payload, []
+    decisions = (payload or {}).get("decisions") or []
+    room = target - already_accepted
+    out, deferred = [], []
+    for d in decisions:
+        if d.get("verdict") != "accepted":
+            out.append(d)
+            continue
+        if room > 0:
+            room -= 1
+            out.append(d)
+            continue
+        held = dict((k, v) for k, v in d.items() if k not in ("record", "dupe_of"))
+        held["verdict"] = "deferred"
+        held["reason"] = ("held back by this run's target of %d acceptance(s), which was already "
+                          "met - back on the shelf unruled, not rejected. The decider's own ruling "
+                          "was ACCEPT: %s" % (target, d.get("reason") or "(no reason given)"))
+        out.append(held)
+        deferred.append(d.get("slug"))
+    return dict(payload, decisions=out), deferred
+
+
 # =====================================================================================================
 # The daemon
 # =====================================================================================================
@@ -872,7 +921,12 @@ class Daemon(object):
             while True:
                 if self.halted():
                     return
-                if self.target and len(self.accepted_slugs) >= self.target:
+                # A SAVING, NOT THE BOUND (2026-08-26). This reads a count only the decide lane
+                # writes, and by the time it reads it the channel already holds up to
+                # 2*DECIDE_BATCH unruled dossiers - so it stops the POPS and cannot stop the
+                # ACCEPTANCES. The bound itself lives in decide_lane, whose header carries the run
+                # that proved it: `--target 10` closed with 20 slugs in accepted-slugs.json.
+                if self.target_met():
                     self.log("pool: target of %d reached - popping nothing further" % self.target)
                     return
                 # Checked BEFORE the WIP park as well as after. Nothing but this lane closes the
@@ -982,7 +1036,49 @@ class Daemon(object):
 
     # ---------------------------------------------------------------------------------------------
     # DECIDE - one worker, the single writer of shared state. Section S2.
+    #
+    # AND THE ONLY PLACE `--target N` CAN ACTUALLY BE ENFORCED (measured 2026-08-26, hunt-2026-08-26-ten).
+    #
+    # WHAT THE RUN DID. Launched at `--target 10`, it printed "pool: target of 10 reached - popping
+    # nothing further" after batch 4 and then ruled batches 5 and 6 anyway. accepted-slugs.json closed
+    # with TWENTY slugs against a target of ten.
+    #
+    # WHY THE POOL GATE COULD NEVER HAVE HELD IT. The pool checks the target BEFORE it pops, but by
+    # then it has already pushed up to `2 * DECIDE_BATCH` dossiers into the decide channel - that
+    # pre-fill is the channel's backpressure limit and it is the whole reason the decider never waits
+    # on the pool. So the count the pool reads is STALE BY EVERYTHING IN FLIGHT: at pop time nothing
+    # in the buffer has been ruled yet, and a producer cannot bound a number only its consumer
+    # writes. Worst case a `--target N` run decided N + 2*DECIDE_BATCH candidates.
+    #
+    # WHY THAT IS EXPENSIVE. An acceptance costs nothing upstream and everything DOWNSTREAM -
+    # extraction, the Opus mapper, the Opus pricer, the writer, source-QA and the batch auditor all
+    # run per accepted recipe. Ten extra acceptances is roughly double the run's intended spend.
+    #
+    # SO THE BOUND MOVED TO THE WRITER OF THE COUNTER. Two halves, and both are needed:
+    #   1. A batch taken while the target is already met is NOT DISPATCHED at all - no decider call,
+    #      no --mark-taken, and its candidates stay `available` for the next run.
+    #   2. A batch that CROSSES the target mid-verdict is capped: the acceptances past the target are
+    #      rewritten to `deferred` BEFORE decide_apply sees the payload, because decide_apply is what
+    #      advances the state machine, records the ruling and appends accepted-slugs.json. Capping
+    #      after it would be capping a number that has already been spent.
+    #
+    # WHY NOT SHRINK THE PRE-FILL OR TRIM THE POP INSTEAD. Both were weighed and neither BOUNDS
+    # anything: they read the same stale count the pool gate reads, so a full batch of acceptances
+    # can still cross the target from under either of them. Trimming the dispatch also shrinks the
+    # decider's own cross-candidate view, which is what makes it one decider rather than N; and a
+    # `wait_for_space` computed from `target - accepted` reaches zero, and `wait_for_space(0)` parks
+    # on a limit nothing can lower - B9, exactly the trap the pool lane's own comment names. This
+    # lane keeps DRAINING the channel in half 1 rather than breaking out of its loop for the same
+    # reason: the take is what wakes a pool parked on backpressure, and a consumer that stops taking
+    # while its producer is parked is B9 wearing a different hat.
     # ---------------------------------------------------------------------------------------------
+
+    def target_met(self):
+        """Has this run bought everything it was asked to buy? ONE reading of the target, shared with
+        the pool gate, so the two cannot come to disagree about what `--target N` counts. On a
+        --resume `accepted_slugs` is seeded with everything already in flight, which makes N a TOTAL
+        for the run rather than N more - the pool gate has always meant that and this keeps it."""
+        return bool(self.target) and len(self.accepted_slugs) >= self.target
 
     async def decide_lane(self):
         import decide_apply                                       # noqa: PLC0415
@@ -999,6 +1095,19 @@ class Daemon(object):
                 break
             if self.halted():
                 break
+            # HALF 1 OF THE TARGET BOUND. Drained, deliberately, and not dispatched: the take is
+            # what wakes a pool parked on the channel's backpressure, so breaking out of this loop
+            # here would strand the producer (B9). Nothing is marked taken and no decider is paid -
+            # these candidates stay `available` and are the next run's to rule on.
+            #
+            # AHEAD OF THE WIP PARK, not behind it: a lane that has decided to spend nothing has no
+            # reason to wait for room to spend it in, and parking here would hold the drained batch
+            # and stop feeding a pool parked on backpressure until some recipe downstream resolved.
+            if self.target_met():
+                self.log("decide: the target of %d acceptance(s) is met - %d buffered dossier(s) "
+                         "left unruled and available (%s)"
+                         % (self.target, len(items), ", ".join(c["slug"] for c in items)))
+                continue
             await self.wait_for_wip()
             if self.breaker.open:
                 break
@@ -1036,6 +1145,14 @@ class Daemon(object):
                     self.stuck(s, "decide", "no verdict was ever rendered on this candidate")
                 continue
 
+            # HALF 2 OF THE TARGET BOUND, and it is BEFORE apply_verdict on purpose. apply_verdict
+            # is what advances the state machine, writes the ledger and appends accepted-slugs.json;
+            # a cap applied after it would be capping money already spent.
+            payload, over = cap_accepts_to_target(payload, len(self.accepted_slugs), self.target)
+            if over:
+                self.log("decide: %d acceptance(s) past the target of %d deferred rather than "
+                         "accepted - back on the shelf, not rejected (%s)"
+                         % (len(over), self.target, ", ".join(over)))
             loop = asyncio.get_event_loop()
             applied, findings = await loop.run_in_executor(
                 None, lambda: decide_apply.apply_verdict(payload, self.run_dir, self.run_id,
@@ -5610,8 +5727,9 @@ def main(argv=None):
     ap.add_argument("--protein-min", dest="protein_min", type=float, default=None)
     ap.add_argument("--wave-size", dest="wave_size", type=int, default=hunt_lib.WAVE_SIZE)
     ap.add_argument("--target", type=int, default=0,
-                    help="stop popping the pool after N acceptances; 0 pops until the backlog runs "
-                         "dry or the WIP limit parks the lane")
+                    help="accept at most N candidates; the decide lane defers the rest rather than "
+                         "accepting them, and 0 runs until the backlog runs dry or the WIP limit "
+                         "parks the lane")
     ap.add_argument("--lanes", default="pool,decide,extract,map,price,write,qa")
     ap.add_argument("--ledger", default="",
                     help="a scratch batch ledger, for a drill. Empty means the live one.")
