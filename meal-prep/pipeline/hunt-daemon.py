@@ -2019,6 +2019,29 @@ class Daemon(object):
     MACRO_FIELDS = ("calories", "protein_g", "carbs_g", "fat_g")
 
     @staticmethod
+    def _loose_name_key(name):
+        r"""Two food names that differ only in punctuation, spacing or a trailing plural.
+
+        DELIBERATELY BLUNT AND DELIBERATELY NOT THE HEAD-NOUN SCORING. It keeps the DIGITS, which is
+        what separates '90/10 Ground Beef' from '93/7 Ground Beef' - the head-noun road strips both
+        to the single word "beef" and calls them the same food. It keeps every modifier too, so
+        'Hot Sauce' and 'Alfredo Sauce' stay apart where the head-noun road pairs them (because
+        "hot" is a noise word and vanishes, leaving no modifier to disagree with).
+
+        THE 'ss' GUARD IS DORMANT AND IS KEPT ANYWAY, which is worth saying rather than implying.
+        It is inherited from coverage_check's _words so the two normalisations read the same, and it
+        exists so a future 'Watercress' does not become 'watercres'. Measured 2026-08-26 across the
+        food DB and the vocabulary together: not one name ends in 'ss' and the collision set is
+        identical with it on or off, so its neuter fires nothing. The suite asserts that dormancy
+        directly instead of dressing it up in a fixture that would only prove itself.
+        The length floor keeps three-letter foods intact.
+        """
+        s = re.sub(r"[^a-z0-9]+", "", str(name or "").lower())
+        if len(s) > 3 and s.endswith("s") and not s.endswith("ss"):
+            s = s[:-1]
+        return s
+
+    @staticmethod
     def _basis_text(r):
         """How a row states its serving, in the row's own words."""
         qty, unit, g = r.get("serving_qty"), r.get("serving_unit"), r.get("serving_grams")
@@ -2114,9 +2137,11 @@ class Daemon(object):
                                  "so %d new row(s) were NOT written" % (slug, len(rows))], notes
             items = doc["items"]
             by_name = {}
+            by_loose = {}
             for r in items:
                 if isinstance(r, dict) and r.get("item"):
                     by_name[str(r["item"]).strip().lower()] = r
+                    by_loose.setdefault(self._loose_name_key(r["item"]), str(r["item"]))
             added = []
             for row in rows:
                 name = str(row.get("item") or "").strip()
@@ -2202,11 +2227,42 @@ class Daemon(object):
                                json.dumps(dict((k, prior.get(k)) for k in diff), ensure_ascii=False),
                                json.dumps(dict((k, row.get(k)) for k in diff), ensure_ascii=False)))
                     continue                      # an identical row is skipped silently, per plan 3.2
+                # H3 (2026-08-26): THE EXACT-NAME CHECK IS WHY THIS DB HAS DUPLICATES.
+                # Everything above this line asks "is there a row called exactly that", so 'Apples'
+                # landed while 'Apple' was already there, 'Lemons' beside 'Lemon', 'Green Bell
+                # Peppers' beside 'Green Bell Pepper', and 'Fresh Thyme' TWICE - four collisions in
+                # 369 rows, every one of them a food the DB already had. The lookup is a name-keyed
+                # dict in both the conflict rule here and Get-MacroRecompute, so a duplicate does not
+                # announce itself: one row silently shadows the other and a recipe can be costed off
+                # whichever won.
+                #
+                # A FINDING, NEVER A REFUSAL, and that is the whole design. Refusing would put the
+                # recipe STUCK over a NAMING question, which is the exact failure class the rest of
+                # this commit exists to remove - and the row landing is what keeps the recipe moving.
+                # The collision is named where it is CAUSED, with the mapper still in the loop and
+                # the source page still in hand, instead of being found by an audit months later.
+                #
+                # AND IT IS THE PRECISE KEY, NOT THE HEAD-NOUN ONE. Measured over the live DB the day
+                # this was written: this key finds 4 collisions and all 4 are real duplicates, while
+                # the head-noun scoring finds 103 pairs of which 21 are the word "sauce" - it would
+                # fire on every new sauce row forever. Recall belongs on the mapper's shelf, where a
+                # near name is EVIDENCE it can rule against; precision belongs here, where a finding
+                # that cries wolf is a finding nobody reads. So '90/10 Ground Beef' beside '93/7'
+                # says nothing, and it should not.
+                twin = by_loose.get(self._loose_name_key(name))
+                if twin and twin.strip().lower() != name.lower():
+                    findings.append(
+                        "%s: the food DB already carries %r and this row is landing as %r - the same "
+                        "name modulo punctuation and plural, so these are almost certainly ONE food "
+                        "with two rows. The row was WRITTEN (a naming question must not park a "
+                        "recipe) and the lookup is name-keyed, so until they are merged one of them "
+                        "silently shadows the other." % (slug, twin, name))
                 clean = dict((k, v) for k, v in row.items() if v not in (None, ""))
                 clean["item"] = name
                 clean["added_by"] = "recipe-hunter map lane (%s)" % self.run_id
                 added.append(clean)
                 by_name[name.lower()] = clean
+                by_loose.setdefault(self._loose_name_key(name), name)
                 written.append(name)
             if not added:
                 return written, findings, notes
