@@ -116,7 +116,22 @@ $script:NEXT = @{
   # refused to force it, correctly, and the recipes sat at `extracted` looking stuck to everyone
   # watching. A verdict a state machine cannot express is a verdict that gets faked or lost.
   'extracted'  = @('mapped', 'rejected-unreadable', 'rejected-dupe', 'rejected-macros')
-  'mapped'     = @('pricing', 'priced', 'rejected-not-carried', 'rejected-macros')
+  # Q2 (2026-08-26): `mapped` -> `priced` IS GONE, and its removal is the gate rather than a tidy-up.
+  # The carriage union (Get-CarriageBlockingTerms, below) runs on ONE road only - the way into
+  # `pricing`. While `mapped` -> `priced` existed, any caller could route around the union entirely by
+  # naming the destination it wanted, and two of them did: the map lane's zero-absent branch and the
+  # unhold road both advanced straight to `priced` whenever the MAPPER reported no absent terms. That
+  # is the union's founding case exactly - doubanjiang, rice-cakes and ground-sumac all mapped to real
+  # commodity ids, so the mapper reported nothing absent, so nothing was priced and the recipe sailed
+  # to a paid page. The 2026-08-22 union closed that hole for recipes that transit `pricing`; this
+  # closes it for the ones that never did.
+  #
+  # A GATE WITH A DOOR BESIDE IT IS NOT A GATE, which is why this is fixed HERE and not only at the
+  # two call sites. Both were repaired the same day, but a third caller written next year would have
+  # found the same door open and nothing would have said no. Now the state machine says no: a recipe
+  # reaches `priced` through `pricing` (or through `parked`, which is itself only reachable from
+  # `pricing`), and there is no longer any route to a paid page that the union has not read.
+  'mapped'     = @('pricing', 'rejected-not-carried', 'rejected-macros')
   'pricing'    = @('priced', 'parked', 'rejected-not-carried')
   'parked'     = @('pricing', 'priced', 'parked', 'rejected-not-carried')
   # `priced` -> `rejected-macros` added 2026-08-24 (v3 D8). The band gate MOVED to before the

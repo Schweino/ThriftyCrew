@@ -738,10 +738,20 @@ For EACH recipe:
    optional line as blocking.
 5. Advance:
      ${HR} -Advance -RunDir ${RUN} -Slug <s> -To mapped -By mapper
-   then, if every term answered from disk:
-     ${HR} -Advance -RunDir ${RUN} -Slug <s> -To priced -By mapper
-   or, if any blocking term was enqueued (NOTE THE QUOTING - this is not a style preference):
+   then ALWAYS through pricing, whether or not you found anything blocking (NOTE THE QUOTING below -
+   this is not a style preference). With blocking terms:
      ${HR} -Advance -RunDir ${RUN} -Slug <s> -To pricing -By mapper -Terms 'term one','term two' -OptionalTerms 'garnish one'
+   with none:
+     ${HR} -Advance -RunDir ${RUN} -Slug <s> -To pricing -By mapper
+
+   NEVER -To priced FROM mapped. As of 2026-08-26 (Q2) the state machine REFUSES that transition and
+   the advance will exit 1. It used to be the shortcut for "every term answered from disk", and it was
+   a hole: -To pricing is where hunt-run runs the CARRIAGE UNION, deriving blocking ingredients from
+   the mapped bids themselves. An ingredient can map perfectly to a real commodity id and still be a
+   food no Omaha store stocks - doubanjiang, rice-cakes and ground-sumac all did - so "every term
+   answered from disk" is your account of the recipe, not a carriage verdict, and going straight to
+   priced on it is how an unbuyable recipe reaches a paid page. Advance to pricing and let the union
+   read it; if nothing blocks, hunt-run -Derive moves it to priced on its own.
 
    PASS EACH TERM AS ITS OWN QUOTED STRING, comma-SEPARATED, never as one comma-joined string.
    PowerShell binds -Terms 'a,b' to a [string[]] of ONE element, the literal "a,b" - not two terms. That

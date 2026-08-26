@@ -1518,23 +1518,70 @@ class Daemon(object):
             optional = [t for t in (rec.get("optional_absent") or []) if t]
             self.log("unhold: %s - the bid is wired, advancing on the mapper ruling already on disk "
                      "(zero dispatches)" % slug)
-            if not absent and rec.get("mapper_state") == "priced":
-                await self.advance(slug, "priced", "unhold",
-                                   "hold cleared: every term answered from the board")
-                self.ch["write"].push(self.record(slug, {"state": "priced"}))
-            else:
-                for t in absent:
-                    await self.ps(INGREDIENT_QUEUE_PS,
-                                  self.queue_args(["-Add", "-Term", t, "-Recipe", slug,
-                                                   "-Why", "%s needs it" % slug]), timeout=180)
-                    if t not in self.absent_terms and t not in self.priced_terms:
-                        self.absent_terms.append(t)
-                await self.advance(slug, "pricing", "unhold", "hold cleared",
-                                   terms=absent, optional_terms=optional)
-                self.pricing_slugs.add(slug)
-                self.record(slug, {"state": "pricing", "absent": absent})
-                self.ch["price_wake"].push("unhold of %s" % slug)
+            # Q2 (2026-08-26): THE UNHOLD ROAD TRANSITS `pricing` TOO. This is the sibling site the M3
+            # note named and deliberately left - it carried the identical condition (zero absent terms
+            # plus the mapper's own "priced" claim) and advanced `mapped` -> `priced` on that pair
+            # alone, so a held recipe whose missing bid was later wired reached a paid page without the
+            # carriage union ever reading it. The same hole as the map lane's, on a narrower road: only
+            # a recipe held for an unbid line and then unheld travels it. M3 left it because the unbid
+            # hold was out of its scope and reported it instead; Brad ruled both roads in scope on
+            # 2026-08-26. The state machine now refuses `mapped` -> `priced` outright, so this road
+            # could not keep its shortcut even if it wanted one.
+            #
+            # AND IT GAINS Q1'S POSTCONDITION ON THE WAY, which it never had. This road still enqueued
+            # the CLAIM and then advanced - the pre-Q1 order the map lane was fixed out of - so the
+            # carriage half of its term list was written to the state file and never put on the queue.
+            # That is the stranded-park shape exactly, and it is why the enqueue below reads the record
+            # back rather than trusting `absent`.
+            if not await self.advance(slug, "pricing", "unhold", "hold cleared",
+                                      terms=absent, optional_terms=optional):
+                self.stuck(slug, "unhold",
+                           "hunt-run refused the advance to pricing; nothing was enqueued")
+                self.log("  unhold: %s STUCK - hunt-run refused the advance to pricing" % slug)
+                continue
+            # THE STATE HAS MOVED OFF `mapped`, so the recipe counts as advanced from here on. Counting
+            # it only at the far end would report a recipe that reached `pricing` and then stuck as one
+            # the unhold never touched, which is the opposite of what a reader needs to know.
             advanced += 1
+            blocking, why_bt = self.blocking_terms(slug)
+            if why_bt:
+                self.stuck(slug, "unhold", why_bt)
+                self.log("  unhold: %s STUCK - %s" % (slug, why_bt))
+                continue
+            extra = [t for t in blocking if t not in absent]
+            if extra:
+                self.log("unhold: %s - hunt-run's carriage union added %d blocking term(s) the mapper "
+                         "did not report: %s" % (slug, len(extra), ", ".join(extra)))
+            if not blocking:
+                # Nothing blocks: the board answered every line AND the carriage union found nothing
+                # this town does not stock. Out to the writer, no pricer wake, exactly as before -
+                # what changed is that the union got to read the recipe first.
+                await self.advance(slug, "priced", "unhold",
+                                   "hold cleared: every term answered from the board and the "
+                                   "carriage union found nothing uncarried")
+                self.ch["write"].push(self.record(slug, {"state": "priced"}))
+                continue
+            refused = []
+            for t in blocking:
+                rc_q, out_q, err_q = await self.ps(
+                    INGREDIENT_QUEUE_PS,
+                    self.queue_args(["-Add", "-Term", t, "-Recipe", slug,
+                                     "-Why", "%s needs it" % slug]), timeout=180)
+                if rc_q != hunt_lib.EXIT_CLEAN:
+                    refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
+                    continue
+                if t not in self.absent_terms and t not in self.priced_terms:
+                    self.absent_terms.append(t)
+            if refused:
+                self.stuck(slug, "unhold",
+                           "the queue refused %d blocking term(s): %s"
+                           % (len(refused), "; ".join(refused)))
+                self.log("  unhold: %s STUCK - the queue refused %d blocking term(s): %s"
+                         % (slug, len(refused), "; ".join(refused)))
+                continue
+            self.pricing_slugs.add(slug)
+            self.record(slug, {"state": "pricing", "absent": blocking})
+            self.ch["price_wake"].push("unhold of %s" % slug)
         return advanced
 
     async def registrar_rulings(self, slug, proposals, tables=None):
@@ -2428,10 +2475,34 @@ class Daemon(object):
                     # the price lane to do. The unbid hold returns ABOVE this and is untouched, so
                     # nothing unbid can reach the writer through here: the only recipes this moves
                     # are ones the pre-resolve and the mapper BOTH settled.
+                    #
+                    # AMENDED BY Q2 (2026-08-26), and the sentence above is the one it amends: "zero
+                    # absent terms means the board answered every line" was the MAPPER'S account of
+                    # the recipe, and it is not sufficient. An ingredient can map perfectly to a real
+                    # commodity id and still be a food no Omaha store stocks, in which case the mapper
+                    # truthfully reports nothing absent and the recipe is still unbuyable. What is
+                    # still true is the second half - the unbid hold returns above this, so nothing
+                    # unbid reaches the writer through here.
+                    #
+                    # Q2 (2026-08-26): EVERY RECIPE TRANSITS `pricing`, AND THE CARRIAGE UNION IS WHY.
+                    # M3's zero-absent branch advanced `mapped` -> `priced` directly, so a recipe the
+                    # mapper reported no absent terms for was never carriage-checked at all - and that is
+                    # the union's FOUNDING CASE, not an edge of it. doubanjiang, rice-cakes and
+                    # ground-sumac all mapped to real commodity ids; the mapper therefore reported nothing
+                    # absent; nothing was ever priced; the recipe sailed to a paid page. The 2026-08-22
+                    # union closed that hole on the road into `pricing`, and M3 (2026-08-25) reopened it
+                    # for every recipe that skipped that road.
+                    #
+                    # M3'S INTENT IS KEPT WHOLE - the terms still decide the route, and a recipe with
+                    # nothing blocking still reaches the write lane in this same pass, with no pricer wake
+                    # and no park. What changes is WHOSE term list decides. The mapper's claim no longer
+                    # opens the gate; hunt-run's own RECORD does - the union of that claim and the carriage
+                    # derivation - and it is read back off the state file rather than trusted. `mapped` ->
+                    # `priced` is refused by the state machine as of today, so this is the only road left.
+                    claimed = hunt_lib.norm_state(res.get("state"))
                     if not absent:
                         # LOG THE DISAGREEMENT RATHER THAN SWALLOWING IT. A contract the model keeps
                         # missing is worth seeing at width, and this is now the only place it shows.
-                        claimed = hunt_lib.norm_state(res.get("state"))
                         if claimed != "priced":
                             self.log("map: %s has ZERO absent terms but the mapper called its state "
                                      "%s - routing on the terms, not on the claim"
@@ -2439,91 +2510,107 @@ class Daemon(object):
                         # OPTIONAL NEVER BLOCKED AND MUST NOT START BLOCKING HERE. The estate still
                         # learns of an optional term the board cannot answer - it reaches the queue -
                         # but it wakes no pricer and holds up no recipe.
+                        #
+                        # IT STAYS ON THIS ROAD ONLY, deliberately. The absent road records its optional
+                        # terms through -OptionalTerms and enqueues exactly its BLOCKING ones; B8 pins
+                        # that -Add list at three terms and a fourth would break it. The asymmetry
+                        # predates Q2 and is not Q2's to settle.
                         for t in optional:
                             await self.ps(INGREDIENT_QUEUE_PS,
                                           self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
                                                            "-Why", "%s lists it as optional"
                                                                    % b["slug"]]),
                                           timeout=180)
+                    # ---- Q1 (2026-08-26): THE ADVANCE COMES FIRST, AND THAT REVERSAL IS THE FIX.
+                    # This loop used to enqueue `absent` - the MAPPER'S CLAIM - and then advance.
+                    # But -Advance -To pricing is itself a WRITER of the term list: it unions in
+                    # Get-CarriageBlockingTerms, ingredients the mapper mapped fine that no Omaha
+                    # store carries. Nobody ever enqueued those. -Derive then scored them PENDING
+                    # (an unchecked term is never not-carried, correctly), so the recipe parked on
+                    # every pass, forever, with a state file reading `pricing` -> `parked` like a
+                    # recipe legitimately waiting on a price. Measured on hunt-2026-08-26-ten:
+                    # 5 of 7 parked recipes, 8 terms, none of them ever on the queue.
+                    #
+                    # So the queue is now driven by WHAT WAS WRITTEN, never by what was claimed.
+                    # The state file is the record; the record is what gets enqueued; a term
+                    # cannot be recorded as blocking without being enqueued because the recording
+                    # is what the enqueue reads. B8 stays impossible for the same reason it was
+                    # before - the terms ride to -Terms as DISTINCT array elements through
+                    # ps_invoke's -Command road - and now the derived half rides the same road.
+                    if not await self.advance(b["slug"], "pricing", "mapper", "",
+                                              terms=absent, optional_terms=optional):
+                        self.stuck(b["slug"], "map",
+                                   "hunt-run refused the advance to pricing; nothing was enqueued")
+                        self.log("  map: %s STUCK - hunt-run refused the advance to pricing"
+                                 % b["slug"])
+                        continue
+                    blocking, why_bt = self.blocking_terms(b["slug"])
+                    if why_bt:
+                        self.stuck(b["slug"], "map", why_bt)
+                        self.log("  map: %s STUCK - %s" % (b["slug"], why_bt))
+                        continue
+                    # THE CARRIAGE HALF IS NAMED, not inferred from a count. A term the daemon
+                    # never claimed is the interesting one, and at width it is the only way to see
+                    # the gate working.
+                    extra = [t for t in blocking if t not in absent]
+                    if extra:
+                        self.log("map: %s - hunt-run's carriage union added %d blocking term(s) "
+                                 "the mapper did not report: %s"
+                                 % (b["slug"], len(extra), ", ".join(extra)))
+                    # THE ZERO-BLOCKING EXIT, and it is what keeps M3 alive. hunt-run wrote the term list
+                    # and the read-back says nothing on it blocks: the board answered every line AND the
+                    # carriage union found nothing this town does not stock. There is no pricing question
+                    # left to ask, so the recipe leaves for the writer now rather than waiting on a lane
+                    # with nothing to do - which is the park-with-no-exit M3 was written to end.
+                    #
+                    # `pricing` -> `priced` IS A LEGAL TRANSITION and always has been; it is the same edge
+                    # -Derive uses when every term comes back CARRIED. The recipe is not counted into
+                    # pricing_slugs and no wake is pushed, so the price lane never learns of it.
+                    if not blocking:
                         await self.advance(b["slug"], "priced", "mapper",
-                                           "every term answered from the board")
+                                           "every term answered from the board and the carriage "
+                                           "union found nothing uncarried")
                         self.ch["write"].push(self.record(b["slug"], {"state": "priced"}))
-                    else:
-                        # ---- Q1 (2026-08-26): THE ADVANCE COMES FIRST, AND THAT REVERSAL IS THE FIX.
-                        # This loop used to enqueue `absent` - the MAPPER'S CLAIM - and then advance.
-                        # But -Advance -To pricing is itself a WRITER of the term list: it unions in
-                        # Get-CarriageBlockingTerms, ingredients the mapper mapped fine that no Omaha
-                        # store carries. Nobody ever enqueued those. -Derive then scored them PENDING
-                        # (an unchecked term is never not-carried, correctly), so the recipe parked on
-                        # every pass, forever, with a state file reading `pricing` -> `parked` like a
-                        # recipe legitimately waiting on a price. Measured on hunt-2026-08-26-ten:
-                        # 5 of 7 parked recipes, 8 terms, none of them ever on the queue.
-                        #
-                        # So the queue is now driven by WHAT WAS WRITTEN, never by what was claimed.
-                        # The state file is the record; the record is what gets enqueued; a term
-                        # cannot be recorded as blocking without being enqueued because the recording
-                        # is what the enqueue reads. B8 stays impossible for the same reason it was
-                        # before - the terms ride to -Terms as DISTINCT array elements through
-                        # ps_invoke's -Command road - and now the derived half rides the same road.
-                        if not await self.advance(b["slug"], "pricing", "mapper", "",
-                                                  terms=absent, optional_terms=optional):
-                            self.stuck(b["slug"], "map",
-                                       "hunt-run refused the advance to pricing; nothing was enqueued")
-                            self.log("  map: %s STUCK - hunt-run refused the advance to pricing"
-                                     % b["slug"])
+                        continue
+                    refused = []
+                    for t in blocking:
+                        rc_q, out_q, err_q = await self.ps(
+                            INGREDIENT_QUEUE_PS,
+                            self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
+                                             "-Why", "%s needs it" % b["slug"]]),
+                            timeout=180)
+                        # AN -Add THAT FAILED USED TO BE SWALLOWED WHOLE. ingredient-queue exits 1
+                        # when it cannot take the write lock in 15s, saying "NOTHING was written",
+                        # and the map lane discarded that and advanced anyway - a second, rarer
+                        # road to the same permanent park.
+                        if rc_q != hunt_lib.EXIT_CLEAN:
+                            refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
                             continue
-                        blocking, why_bt = self.blocking_terms(b["slug"])
-                        if why_bt:
-                            self.stuck(b["slug"], "map", why_bt)
-                            self.log("  map: %s STUCK - %s" % (b["slug"], why_bt))
-                            continue
-                        # THE CARRIAGE HALF IS NAMED, not inferred from a count. A term the daemon
-                        # never claimed is the interesting one, and at width it is the only way to see
-                        # the gate working.
-                        extra = [t for t in blocking if t not in absent]
-                        if extra:
-                            self.log("map: %s - hunt-run's carriage union added %d blocking term(s) "
-                                     "the mapper did not report: %s"
-                                     % (b["slug"], len(extra), ", ".join(extra)))
-                        refused = []
-                        for t in blocking:
-                            rc_q, out_q, err_q = await self.ps(
-                                INGREDIENT_QUEUE_PS,
-                                self.queue_args(["-Add", "-Term", t, "-Recipe", b["slug"],
-                                                 "-Why", "%s needs it" % b["slug"]]),
-                                timeout=180)
-                            # AN -Add THAT FAILED USED TO BE SWALLOWED WHOLE. ingredient-queue exits 1
-                            # when it cannot take the write lock in 15s, saying "NOTHING was written",
-                            # and the map lane discarded that and advanced anyway - a second, rarer
-                            # road to the same permanent park.
-                            if rc_q != hunt_lib.EXIT_CLEAN:
-                                refused.append("%s (%s)" % (t, ((out_q or "") + (err_q or "")).strip()[:120]))
-                                continue
-                            # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
-                            # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
-                            # `absent_terms` is consumed destructively - so without this, the second
-                            # recipe wanting the same term re-queues it behind a pricer that has
-                            # already ruled on it. audit-lane-shape's price-lane-duplicate-items
-                            # finding exists to catch precisely that discarded dedup. The -Add above
-                            # still runs per recipe on purpose: the queue attaches BOTH slugs to the
-                            # one item, which is how a recipe learns its own term was answered.
-                            if t not in self.absent_terms and t not in self.priced_terms:
-                                self.absent_terms.append(t)
-                        if refused:
-                            # LOUD, AND THE RECIPE IS NOT COUNTED AS PRICING. The state file already
-                            # says `pricing` - the advance landed - so this recipe would park on the
-                            # next -Derive exactly as before. The difference is that it now parks with
-                            # a STUCK outcome and the offending terms NAMED, which is a state a person
-                            # can act on, instead of a silence nobody could see.
-                            self.stuck(b["slug"], "map",
-                                       "the queue refused %d blocking term(s): %s"
-                                       % (len(refused), "; ".join(refused)))
-                            self.log("  map: %s STUCK - the queue refused %d blocking term(s): %s"
-                                     % (b["slug"], len(refused), "; ".join(refused)))
-                            continue
-                        self.pricing_slugs.add(b["slug"])
-                        self.record(b["slug"], {"state": "pricing", "absent": blocking})
-                        woke = True
+                        # A TERM THIS RUN HAS ALREADY SENT TO THE PRICER IS NOT SENT AGAIN.
+                        # ingredient-queue.ps1 is keyed by TERM and dedupes across recipes, and
+                        # `absent_terms` is consumed destructively - so without this, the second
+                        # recipe wanting the same term re-queues it behind a pricer that has
+                        # already ruled on it. audit-lane-shape's price-lane-duplicate-items
+                        # finding exists to catch precisely that discarded dedup. The -Add above
+                        # still runs per recipe on purpose: the queue attaches BOTH slugs to the
+                        # one item, which is how a recipe learns its own term was answered.
+                        if t not in self.absent_terms and t not in self.priced_terms:
+                            self.absent_terms.append(t)
+                    if refused:
+                        # LOUD, AND THE RECIPE IS NOT COUNTED AS PRICING. The state file already
+                        # says `pricing` - the advance landed - so this recipe would park on the
+                        # next -Derive exactly as before. The difference is that it now parks with
+                        # a STUCK outcome and the offending terms NAMED, which is a state a person
+                        # can act on, instead of a silence nobody could see.
+                        self.stuck(b["slug"], "map",
+                                   "the queue refused %d blocking term(s): %s"
+                                   % (len(refused), "; ".join(refused)))
+                        self.log("  map: %s STUCK - the queue refused %d blocking term(s): %s"
+                                 % (b["slug"], len(refused), "; ".join(refused)))
+                        continue
+                    self.pricing_slugs.add(b["slug"])
+                    self.record(b["slug"], {"state": "pricing", "absent": blocking})
+                    woke = True
                 # ONE WAKE PER MICRO-BATCH, after every term in it is on the queue. Waking the pricer
                 # inside the per-slug loop let it start on recipe one's terms while recipe two's were
                 # still being enqueued, which turns a lane that batches ACROSS recipes into a
