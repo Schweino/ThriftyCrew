@@ -1,0 +1,49 @@
+{
+    "slug":  "apple-spice-pork-chops",
+    "title":  "Apple Spice Pork Chops",
+    "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+    "protein":  "pork",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:49",
+    "updated":  "2026-08-26T04:34:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:49",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/apple-spice-pork-chops/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:12:49",
+                        "by":  "decider",
+                        "detail":  "Skillet pork chops in a sweet apple-cinnamon-nutmeg pan sauce; no apple pork chop exists in the live catalog (live pork-chop neighbours are all smothered/cajun/creamy-mushroom/country-style), verified band 499cal/24carb, cleanly costed."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:13:13",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:33:57",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled: 4 mapped, 1 mapped-null. No rejections. 3 food-db rows returned. NO ROW for \u0027Salt and Pepper\u0027: it is a composite of two foods already in the DB (Salt) or trivially zero at a pinch, and inventing a blended row would describe no real product; its macro contribution is 0."
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:34:00",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board"
+                    }
+                ]
+}

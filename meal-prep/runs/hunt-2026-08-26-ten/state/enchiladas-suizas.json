@@ -1,0 +1,62 @@
+{
+    "slug":  "enchiladas-suizas",
+    "title":  "Enchiladas Suizas",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:36",
+    "updated":  "2026-08-26T05:14:45",
+    "terms":  [
+                  {
+                      "term":  "Mexican crema",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Chihuahua cheese",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:36",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/enchiladas-suizas/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:22:36",
+                        "by":  "decider",
+                        "detail":  "Chicken enchiladas in salsa verde with Mexican crema and Chihuahua cheese, corn tortillas; no catalog/backlog/in-flight match at all (searched, 0), an authentic creamy-green Mexican dish distinct from Tex-Mex, verified band 519/29/41."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:23:04",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:04:44",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled (3 mapped, 1 mapped-optional), 0 rejected. Two new ids proposed (mexican-crema, chihuahua-cheese) - both are board-absent foods with real cost at batch scale, and both are listed in absent_terms for the pricer. cooked-shredded-chicken and onions are REUSES of live board ids (missing vocabulary name rows only, not registrar questions). Corn Tortillas had no computed weight up"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:06:01",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

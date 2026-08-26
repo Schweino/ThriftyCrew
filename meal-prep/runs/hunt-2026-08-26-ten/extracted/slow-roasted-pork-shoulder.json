@@ -1,0 +1,138 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Slow Roasted Pork Shoulder",
+  "source_url": "https://keviniscooking.com/moroccan-slow-roasted-pork/",
+  "servings": 8,
+  "time_total": "375 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "4 lb pork shoulder (bone in)",
+      "item": "pork shoulder",
+      "qty": "4",
+      "unit": "lb",
+      "prep": "bone in",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tbsp Moroccan Seven Spice Blend ((separated))",
+      "item": "Moroccan Seven Spice Blend",
+      "qty": "4",
+      "unit": "tbsp",
+      "prep": "(separated)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup chicken stock",
+      "item": "chicken stock",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 large carrots (, cut into French fry-like wedges)",
+      "item": "carrots",
+      "qty": "4",
+      "unit": null,
+      "prep": "large, cut into French fry-like wedges",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large sweet potatoes (, cut into French fry-like wedges)",
+      "item": "sweet potatoes",
+      "qty": "2",
+      "unit": null,
+      "prep": "large, cut into French fry-like wedges",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 red onion (, sliced thick)",
+      "item": "red onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "sliced thick",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup dried apricots",
+      "item": "dried apricots",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tbsp honey",
+      "item": "honey",
+      "qty": "1",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 large lemons (halved)",
+      "item": "large lemons",
+      "qty": "3",
+      "unit": null,
+      "prep": "halved",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup fresh mint ((optional))",
+      "item": "fresh mint",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "(optional)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 275°F. Allow pork shoulder to come to room temperature.",
+    "Rub salt and 3 tablespoons of Moroccan Seven Spice Blend all over pork shoulder, pressing to adhere. Allow to rest while oven heats up.",
+    "Peel and cut the carrots into thick, French fry-like wedges. Peel and cut sweet potatoes into large, French fry-like wedges. Peel and cut onion in half vertically. Trim edges and cut into thick half inch slices. Toss all in a bowl with oil, honey and remaining tablespoon of Moroccan Spice Blend.",
+    "In a large 13x9” baking dish place the pork shoulder in the center, fat side up and propped up if necessary with a few vegetables underneath. Arrange vegetables and fruit around pork. Pour chicken stock on and around pork and vegetables. Roast uncovered for 6 hours (basting occasionally), or until fall apart tender with internal temperature of 205°F.",
+    "Allow to rest at least 20 minutes, covered with aluminum foil. Remove bone from pork and pull apart or cut into pieces. Serve with roasted vegetables and fruit. Spoon pan juices and squeeze lemons over pork and vegetables and sprinkle chopped mint on top."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

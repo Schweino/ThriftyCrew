@@ -1,0 +1,254 @@
+﻿{
+    "slug":  "peach-chicken",
+    "title":  "Peach Chicken",
+    "source_url":  "https://thecozycook.com/peach-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 large boneless skinless chicken breast",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  1750,
+                            "buy":  "3 3/4 lb boneless skinless chicken breasts (about 7 large), each sliced in half lengthwise into cutlets",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "250 g per large raw breast. Word-for-word the vocabulary row\u0027s own name; \u0027large\u0027 is a size word and the board carries chicken-breast 7 of 7. 250 g per large raw breast reproduces the source\u0027s published 41 g protein per serving (ours 44).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons Italian seasoning",
+                            "item":  "Italian Seasoning",
+                            "bid":  "italian-seasoning",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "2 tablespoons plus 1 teaspoon Italian seasoning",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: italian-seasoning, 7 of 7 stores, cheapest 0.698 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Salt/Pepper",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  null,
+                            "grams":  14,
+                            "buy":  "kosher salt and black pepper, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "About 4 g of salt to season the cutlets at source scale. One line carrying two pantry seasonings; costed as salt (7 of 7) with the black pepper noted pantry-static, following the \u0027Kosher Salt \u0026 Freshly Cracked Black Pepper\u0027 -\u003e salt precedent rather than nulling a costable food.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1-2 tablespoons olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  71,
+                            "buy":  "5 tablespoons olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup dry white wine (see notes)",
+                            "item":  "Dry White Wine",
+                            "bid":  "white-wine",
+                            "board":  "weekly",
+                            "grams":  413,
+                            "buy":  "1 3/4 cups dry white wine",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "No weight computed upstream; 1/2 cup wine = 118 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "3 cloves garlic (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "10 cloves garlic, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tablespoons butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2-3 peaches (sliced)",
+                            "item":  "Peaches",
+                            "bid":  "peaches",
+                            "board":  null,
+                            "grams":  1225,
+                            "buy":  "9 medium peaches, sliced (about 2 3/4 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2.5 medium peaches at 140 g of flesh each. peaches is a live board id at 7 of 7 (cheapest 1.39 Aldi) - a reuse, only the vocabulary name row is missing. Fresh, not canned: the method slices raw fruit.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "8 oz. Burrata Cheese ((2 balls) See notes for subs.)",
+                            "item":  "Burrata Cheese",
+                            "bid":  "burrata",
+                            "board":  null,
+                            "grams":  794,
+                            "buy":  "28 oz burrata, torn (seven 4 oz balls)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "8 oz at 28.3495 g/oz. Board absent. Cream-filled fresh mozzarella sold in 8 oz two-ball tubs at roughly twice low-moisture mozzarella per oz, so the existing mozzarella-cheese id is a different price class and I will not bridge it; new id proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¾ cup Honey glazed almonds (or pecans)",
+                            "item":  "Honey Roasted Almonds",
+                            "bid":  "almonds",
+                            "board":  null,
+                            "grams":  368,
+                            "buy":  "2 2/3 cups honey glazed almonds",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup glazed whole almonds = 140 g. The food is almonds with a honey glaze - same nut aisle and price class, so the existing `almonds` id is a reuse (the board\u0027s `honey` match is a fuzzy miss). Macros differ from raw almonds, so the DB row is the honey-roasted label, not the raw one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¾ cup chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  630,
+                            "buy":  "2 2/3 cups chicken broth",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0373 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup balsamic vinegar",
+                            "item":  "Balsamic Vinegar",
+                            "bid":  "balsamic-vinegar",
+                            "board":  "recipe",
+                            "grams":  446,
+                            "buy":  "1 3/4 cups balsamic vinegar",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: balsamic-vinegar, 6 of 7 stores, cheapest 0.1704 at Fareway",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ chicken bouillon cube",
+                            "item":  "Chicken Bouillon",
+                            "bid":  "bouillon",
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "1 3/4 chicken bouillon cubes, crumbled",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Half of a 10 g cube. bouillon is a live board id at 6 of 7 (cheapest 0.1419 Sam\u0027s Club) - a reuse, not a proposal; only a vocabulary name row is missing.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons honey",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  147,
+                            "buy":  "7 tablespoons honey",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  28,
+                            "buy":  "3 1/2 tablespoons cornstarch",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon EACH: Worcestershire sauce, mustard powder",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon EACH: Worcestershire sauce and mustard powder",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Grams are the Worcestershire (1 tsp = 5 g); the mustard powder adds about 2 g and is pantry-static. Two pantry foods on one unsplittable line, so no single bid can carry it; dry mustard powder is ground seed, not the prepared condiment the `mustard` id prices - different price class and different gram weight. Pantry-static is safe at 1 tsp each.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon EACH: dried thyme, dried basil, onion powder",
+                            "item":  "Dried Thyme, Dried Basil and Onion Powder",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  8,
+                            "buy":  "1 3/4 teaspoons EACH: dried thyme, dried basil, onion powder",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Three dried spices totalling about 2.3 g at source scale. Three dried spices on one unsplittable line totalling about 2.3 g; the board\u0027s `onions` match is a fresh-for-dried form flip and is refused. Pantry-static pricing is safe at this quantity.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "burrata cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Burrata Cheese",
+                                        "proposed_bid":  "burrata",
+                                        "evidence":  "Board absent. Cream-filled fresh mozzarella sold in 8 oz two-ball tubs at roughly twice low-moisture mozzarella per oz, so the existing mozzarella-cheese id is a different price class and I will not bridge it; new id proposed.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "burrata",
+                                  "verdict":  "approve",
+                                  "bid":  "burrata",
+                                  "reason":  "No \u0027burrata\u0027 string exists in any of the three id namespaces or the live feed; the only mozzarella ids are mozzarella-cheese ($0.1521/oz) and reduced-fat-mozzarella ($0.18/oz), and every product name on their board rows is low-moisture part-skim SHREDDED (Member\u0027s Mark, Happy Farms, Great Value) - a different form and price class from a cream-filled fresh two-ball tub, so this is same-food-different-form, not a duplicate. Mint \u0027burrata\u0027 as recipe-only (recipe-board-everyday baseline + recipe-commodities.json), include pattern \u0027\\bburrata\\b\u0027 (the word survives contiguously in real product names), with real excludes to the ~150-pattern standard covering burrata ravioli/tortellini, burrata-topped pizzas/flatbreads, caprese salads/kits, burrata dips and snack pairings; add allowlist pair burrata\u003c-\u003emozzarella-cheese (and burrata\u003c-\u003ereduced-fat-mozzarella) to commodity-dupe-allowlist.json with reason \u0027fresh cream-filled vs low-moisture shredded - different form and price class\u0027. Separately, the ingredient NAME \u0027Burrata Cheese\u0027 has no vocabulary row (nearest: Ricotta/Provolone/Parmesan) and needs its own new row - do not resolve it to any existing name; a macros label must be transcribed since no food-macros-db row exists. Note to caller: \u0027approved\u0027 is not \u0027priced\u0027 - no feed cell exists yet, so the id needs a capture pass before the recipe can cost."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Ours (4-serving source basis, all 17 lines costed): 679 cal / 44.2 g protein / 33.5 g carbs per serving. Source published 643 cal / 41 P / 32 C. Protein +8% and calories +5.6% - both inside tolerance, so the 500 g of chicken (2 large breasts at 250 g) is the right portion. TWO THINGS TO WATCH: our 679 cal is ABOVE this run\u0027s 650 ceiling even though the source\u0027s own 643 sits just under it, and our 33.5 g carbs is only 1.5 g under the 35 g cap - the honey, balsamic, peaches and glazed almonds together carry 117 g of the 134 g of carbs, so any upward revision of the almonds or peaches pushes it over. Both are screening calls for the orchestrator, not mapping defects."
+}

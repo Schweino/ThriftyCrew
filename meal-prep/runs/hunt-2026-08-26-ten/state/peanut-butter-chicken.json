@@ -1,0 +1,31 @@
+{
+    "slug":  "peanut-butter-chicken",
+    "title":  "Peanut Butter Chicken",
+    "source_url":  "https://www.wellplated.com/peanut-chicken-with-veggies/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:06",
+    "updated":  "2026-08-26T04:18:06",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Thai-style peanut chicken with broccoli and peppers over rice — same peanut-chicken-and-rice dinner as live slow-cooker-thai-peanut-chicken-bowls; the peanut-chicken region is already saturated (thai peanut burrito, thai peanut bowls, Senegalese mafe all live).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:06",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/peanut-chicken-with-veggies/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:18:06",
+                        "by":  "decider",
+                        "detail":  "Thai-style peanut chicken with broccoli and peppers over rice — same peanut-chicken-and-rice dinner as live slow-cooker-thai-peanut-chicken-bowls; the peanut-chicken region is already saturated (thai peanut burrito, thai peanut bowls, Senegalese mafe all live)."
+                    }
+                ]
+}

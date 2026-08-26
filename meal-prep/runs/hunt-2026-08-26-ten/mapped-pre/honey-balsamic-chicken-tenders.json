@@ -1,0 +1,165 @@
+﻿{
+    "slug":  "honey-balsamic-chicken-tenders",
+    "title":  "Honey Balsamic Chicken Tenders",
+    "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
+    "servings":  "4",
+    "built_at":  "2026-08-26T04:37:09",
+    "line_count":  8,
+    "resolved_count":  6,
+    "residual_count":  2,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "chicken breasts",
+                           "salt and pepper"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "2 medium 1.5 lbs. chicken breasts ($2.99)",
+                     "term":  "chicken breasts",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/boneless/skinless | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171515 Chicken breast tenders, breaded, uncooked [SR Legacy] per 100 g: 263.0 cal, 14.7 P, 15.0 C, 15.8 F, 1.1 fiber | fdc:174608 Chicken breast, roll, oven-roasted [SR Legacy] per 100 g: 134.0 cal, 14.6 P, 1.79 C, 7.65 F, 0.0 fiber; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1/4 cup balsamic vinegar ($0.80)",
+                     "term":  "balsamic vinegar",
+                     "canon_item":  "Balsamic Vinegar",
+                     "bid":  "balsamic-vinegar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: balsamic-vinegar, 6 of 7 stores, cheapest 0.1704 at Fareway",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  63.8
+                 },
+                 {
+                     "raw":  "1 clove garlic ($0.08)",
+                     "term":  "garlic",
+                     "canon_item":  "Garlic",
+                     "bid":  "garlic",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  3
+                 },
+                 {
+                     "raw":  "2 Tbsp olive oil (divided, $0.24)",
+                     "term":  "olive oil",
+                     "canon_item":  "Olive Oil",
+                     "bid":  "olive-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  27
+                 },
+                 {
+                     "raw":  "salt and pepper (to taste , $0.05)",
+                     "term":  "salt and pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170109 Peppers, sweet, green, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170515 Peppers, sweet, red, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170428 Peppers, sweet, green, cooked, boiled, drained, without salt [SR Legacy] per 100 g: 28.0 cal, 0.92 P, 6.7 C, 0.2 F, 1.2 fiber; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  null,
+                     "optional":  true,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "1 Tbsp butter ($0.10)",
+                     "term":  "butter",
+                     "canon_item":  "Butter",
+                     "bid":  "butter",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  14
+                 },
+                 {
+                     "raw":  "2 Tbsp balsamic vinegar ($0.40)",
+                     "term":  "balsamic vinegar",
+                     "canon_item":  "Balsamic Vinegar",
+                     "bid":  "balsamic-vinegar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: balsamic-vinegar, 6 of 7 stores, cheapest 0.1704 at Fareway",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  32
+                 },
+                 {
+                     "raw":  "3 Tbsp honey ($0.33)",
+                     "term":  "honey",
+                     "canon_item":  "Honey",
+                     "bid":  "honey",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  63
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 6 of 8 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  452.48,
+                                          "carbs":  16.18,
+                                          "protein_g":  67.45,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  6,
+                           "lines_total":  8,
+                           "uncovered_lines":  [
+                                                   "chicken breasts",
+                                                   "salt and pepper"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

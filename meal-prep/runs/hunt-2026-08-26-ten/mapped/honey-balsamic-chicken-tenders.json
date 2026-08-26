@@ -1,0 +1,136 @@
+﻿{
+    "slug":  "honey-balsamic-chicken-tenders",
+    "title":  "Honey Balsamic Chicken Tenders",
+    "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 medium 1.5 lbs. chicken breasts ($2.99)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  2380,
+                            "buy":  "5 1/4 lb, sliced lengthwise into tenders",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1.5 lb = 680 g raw boneless skinless. The source slices these into tenders, i.e. plain boneless skinless breast; the vocabulary\u0027s own name carries the boneless/skinless words, so the form flag is a wording artefact. Board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 cup balsamic vinegar ($0.80)",
+                            "item":  "Balsamic Vinegar",
+                            "bid":  "balsamic-vinegar",
+                            "board":  "recipe",
+                            "grams":  223,
+                            "buy":  "7/8 cup (1 cup less 2 tablespoons), for the marinade",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 clove garlic ($0.08)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "3 1/2 cloves (about 1 tablespoon), minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line, 3 g per clove.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Tbsp olive oil (divided, $0.24)",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tablespoons, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "salt and pepper (to taste , $0.05)",
+                            "item":  "Salt and Pepper",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "about 1 1/2 teaspoons each salt and pepper, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "A seasoning pinch; pantry-static. Two pantry foods on one unsplittable line, so no single bid can carry it - the exact \u0027salt and pepper\u0027 -\u003e mapped-null precedent of 2026-08-26.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 Tbsp butter ($0.10)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Tbsp balsamic vinegar ($0.40)",
+                            "item":  "Balsamic Vinegar",
+                            "bid":  "balsamic-vinegar",
+                            "board":  "recipe",
+                            "grams":  112,
+                            "buy":  "7 tablespoons, for the pan sauce",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 Tbsp honey ($0.33)",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  220,
+                            "buy":  "2/3 cup (10 1/2 tablespoons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line.",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source band 452 cal / 16.18 carbs / 67.45 g protein per serving over 4. My build: 170 g raw breast per serving (204 cal, 38 g P), balsamic 24 g (21 cal), olive oil 6.75 g (59 cal), butter 3.5 g (25 cal), honey 15.75 g (48 cal) = about 358 cal, 39 g protein, 17 g carbs. Carbs match. PROTEIN IS 42% UNDER, but the published figure is arithmetically impossible: 1.5 lb of raw breast holds ~153 g protein total, so 4 servings cannot exceed ~38 g each. I trust the grams and read the band as wrong. TWO LOUD FLAGS: (1) at 358 cal per serving this recipe falls BELOW the run\u0027s 400 cal floor on its own ingredient list, and (2) if the band figure was what qualified it, the qualification was based on a bad number."
+}

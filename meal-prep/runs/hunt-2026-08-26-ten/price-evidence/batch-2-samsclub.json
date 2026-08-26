@@ -1,0 +1,404 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T04:37:17",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "beef stew meat",
+   "state": "MATCHES",
+   "term_used": "beef stew meat",
+   "attempts": [
+    {
+     "term": "beef stew meat",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Dinty Moore Beef Stew, 15 oz., 6 pk.",
+     "price": 13.84,
+     "size": "",
+     "unit_price": "$2.31/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13862221989"
+    },
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13586071223"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Stew Meat, priced per pound",
+     "price": 32.92,
+     "size": "",
+     "unit_price": "$7.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3V5FYSSY1FXX"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+     "price": 32.12,
+     "size": "",
+     "unit_price": "$7.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1MLJW43LIF1U"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Steak, priced per pound",
+     "price": 20.16,
+     "size": "",
+     "unit_price": "$6.38/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5BSZU85M9MXG"
+    },
+    {
+     "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+     "price": 17.93,
+     "size": "",
+     "unit_price": "$0.75/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13843866537"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Round Tip, priced per pound",
+     "price": 24.05,
+     "size": "",
+     "unit_price": "$7.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5EX4YTJGHG5W"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Flank Steak, priced per pound",
+     "price": 34.85,
+     "size": "",
+     "unit_price": "$13.94/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/58AZ337FZL1H"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "wide egg noodles",
+   "state": "MATCHES",
+   "term_used": "wide egg noodles",
+   "attempts": [
+    {
+     "term": "wide egg noodles",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7680800646"
+    },
+    {
+     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15256606257"
+    },
+    {
+     "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
+    },
+    {
+     "item": "Member's Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$0.91/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/623SPZIXWOJT"
+    },
+    {
+     "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$1.42/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
+    },
+    {
+     "item": "Annie's Shells and White Cheddar Mac and Cheese 6 oz.,12 pk.",
+     "price": 12.98,
+     "size": "",
+     "unit_price": "$1.08/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13577516430"
+    },
+    {
+     "item": "Barilla Elbow Pasta, 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$1.42/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/62GDX0FGUKF5"
+    },
+    {
+     "item": "Velveeta Shells & Cheese Original, 12 oz., 8 pk.",
+     "price": 12.98,
+     "size": "",
+     "unit_price": "$0.14/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2654GM0LU6AH"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "Moroccan seven spice blend",
+   "state": "MATCHES",
+   "term_used": "Moroccan seven spice blend",
+   "attempts": [
+    {
+     "term": "Moroccan seven spice blend",
+     "state": "MATCHES",
+     "hits": 8
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tone's Pickling Spice, 14 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.71/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/301P1X1G0812"
+    },
+    {
+     "item": "Lawry's Seasoned Salt, 40 oz.",
+     "price": 7.48,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+    },
+    {
+     "item": "Durkee Six Pepper Blend, 22 oz.",
+     "price": 11.34,
+     "size": "",
+     "unit_price": "$0.52/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U41EZL1WH6P"
+    },
+    {
+     "item": "Member's Mark Himalayan Pink Salt, 38 oz.",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4EAHNLWA0JJP"
+    },
+    {
+     "item": "Member's Mark Pumpkin Pie Spice Seasoning Blend, 5.6 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$1.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1Z0VOJK74W29"
+    },
+    {
+     "item": "Kinder’s Crispy Panko Blend Seasoned Coating Mix, Buttery Garlic & Herb Seasoned, 13 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.54/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3ANBYCFH95BP"
+    },
+    {
+     "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$1.16/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+    },
+    {
+     "item": "Member's Mark Parsley Flakes, 3.2 oz",
+     "price": 6.44,
+     "size": "",
+     "unit_price": "$2.01/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3F1K23CN8VC8"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "dried apricots",
+   "state": "MATCHES",
+   "term_used": "dried apricots",
+   "attempts": [
+    {
+     "term": "dried apricots",
+     "state": "MATCHES",
+     "hits": 15
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
+     "price": 9.78,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4114312907"
+    },
+    {
+     "item": "That's It Crunchable Variety Pack, 18 pk.",
+     "price": 11.48,
+     "size": "",
+     "unit_price": "$0.64/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15288010163"
+    },
+    {
+     "item": "Ocean Spray® Craisins®, 50% Less Sugar Dried Cranberries, Dried Fruit, 43 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4YAUO3IC6N4Y"
+    },
+    {
+     "item": "SnakYard Dried Mangoes, Unsweetened, 24 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.42/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/45HZL6OD6OZN"
+    },
+    {
+     "item": "Member's Mark Freeze Dried Fruit Variety Pack, 15 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$1.78/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7FU2WLF6APPC"
+    },
+    {
+     "item": "Member's Mark Freeze Dried Strawberry Slices, 3 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$1.99/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/112Z0QYW675N"
+    },
+    {
+     "item": "Member's Mark Dried Pitted Prunes, 40 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1TM7ESLO7EQ0"
+    },
+    {
+     "item": "Ocean Spray Craisins, Original Dried Cranberries, 48 oz.",
+     "price": 7.62,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5Y3JY0NUS2IP"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "spiral ham",
+   "state": "MATCHES",
+   "term_used": "spiral ham",
+   "attempts": [
+    {
+     "term": "spiral ham",
+     "state": "MATCHES",
+     "hits": 16
+    }
+   ],
+   "hits": [
+    {
+     "item": "Extra Lean Premium Ham, 1.25 lbs each., 2 pk.",
+     "price": 8.24,
+     "size": "",
+     "unit_price": "$3.30/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4POJC00HFA8K"
+    },
+    {
+     "item": "Member's Mark Uncured Boneless Quarter Sliced Ham, priced per pound",
+     "price": 15.18,
+     "size": "",
+     "unit_price": "$4.67/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5CGKBNSJPF74"
+    },
+    {
+     "item": "Smithfield Hardwood Smoked Bone In Ham Steak, priced per pound",
+     "price": 20.28,
+     "size": "",
+     "unit_price": "$3.38/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KIX0S0F5W5I"
+    },
+    {
+     "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+     "price": 24.73,
+     "size": "",
+     "unit_price": "$3.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
+    },
+    {
+     "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+     "price": 9.6,
+     "size": "",
+     "unit_price": "$2.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+    },
+    {
+     "item": "Pork Belly, Tray, priced per pound",
+     "price": 14.89,
+     "size": "",
+     "unit_price": "$4.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
+    },
+    {
+     "item": "Member’s Mark Bone-In Pork Shoulder Blade Steaks, Tray, priced per pound",
+     "price": 20.28,
+     "size": "",
+     "unit_price": "$3.87/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XRN59WFW66B"
+    },
+    {
+     "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+     "price": 20.58,
+     "size": "",
+     "unit_price": "$2.94/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

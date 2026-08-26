@@ -1,0 +1,75 @@
+{
+ "slug": "honey-balsamic-chicken-tenders",
+ "lines": [
+  {
+   "raw": "2 medium 1.5 lbs. chicken breasts ($2.99)",
+   "buy": "5 1/4 lb, sliced lengthwise into tenders",
+   "grams_source": 680,
+   "notes": "1.5 lb = 680 g raw boneless skinless."
+  },
+  {
+   "raw": "salt and pepper (to taste , $0.05)",
+   "buy": "about 1 1/2 teaspoons each salt and pepper, to taste",
+   "grams_source": 2,
+   "notes": "A seasoning pinch; pantry-static."
+  },
+  {
+   "raw": "1/4 cup balsamic vinegar ($0.80)",
+   "buy": "7/8 cup (1 cup less 2 tablespoons), for the marinade",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 clove garlic ($0.08)",
+   "buy": "3 1/2 cloves (about 1 tablespoon), minced",
+   "notes": "Settled line, 3 g per clove."
+  },
+  {
+   "raw": "2 Tbsp olive oil (divided, $0.24)",
+   "buy": "7 tablespoons, divided",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 Tbsp butter ($0.10)",
+   "buy": "3 1/2 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "2 Tbsp balsamic vinegar ($0.40)",
+   "buy": "7 tablespoons, for the pan sauce",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "3 Tbsp honey ($0.33)",
+   "buy": "2/3 cup (10 1/2 tablespoons)",
+   "notes": "Settled line."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 medium 1.5 lbs. chicken breasts ($2.99)",
+   "term": "chicken breasts",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 680,
+   "evidence": "The source slices these into tenders, i.e. plain boneless skinless breast; the vocabulary's own name carries the boneless/skinless words, so the form flag is a wording artefact. Board 7 of 7."
+  },
+  {
+   "raw": "salt and pepper (to taste , $0.05)",
+   "term": "salt and pepper",
+   "canon_item": "Salt and Pepper",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 2,
+   "evidence": "Two pantry foods on one unsplittable line, so no single bid can carry it - the exact 'salt and pepper' -> mapped-null precedent of 2026-08-26."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Source band 452 cal / 16.18 carbs / 67.45 g protein per serving over 4. My build: 170 g raw breast per serving (204 cal, 38 g P), balsamic 24 g (21 cal), olive oil 6.75 g (59 cal), butter 3.5 g (25 cal), honey 15.75 g (48 cal) = about 358 cal, 39 g protein, 17 g carbs. Carbs match. PROTEIN IS 42% UNDER, but the published figure is arithmetically impossible: 1.5 lb of raw breast holds ~153 g protein total, so 4 servings cannot exceed ~38 g each. I trust the grams and read the band as wrong. TWO LOUD FLAGS: (1) at 358 cal per serving this recipe falls BELOW the run's 400 cal floor on its own ingredient list, and (2) if the band figure was what qualified it, the qualification was based on a bad number."
+}

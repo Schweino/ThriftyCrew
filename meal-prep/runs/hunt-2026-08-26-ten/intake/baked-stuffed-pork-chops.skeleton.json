@@ -1,0 +1,116 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T05:14:45",
+    "slug":  "baked-stuffed-pork-chops",
+    "findings":  [
+                     "no food-macros-db row for \u0027Boneless Pork Chops\u0027 - the macros are computed WITHOUT it",
+                     "no food-macros-db row for \u0027Fresh Cranberries\u0027 - the macros are computed WITHOUT it",
+                     "no food-macros-db row for \u0027Bread\u0027 - the macros are computed WITHOUT it"
+                 ],
+    "notes":  [
+                  "merged a second \u0027Olive Oil\u0027 line into the first - 141 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 20 g total",
+                  "merged a second \u0027Ranch Seasoning Mix\u0027 line into the first - 73 g total"
+              ],
+    "intake":  {
+                   "name":  "Baked Stuffed Pork Chops",
+                   "slug":  "baked-stuffed-pork-chops",
+                   "protein":  "pork",
+                   "cuisine":  "",
+                   "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Pork Chops",
+                                           "grams":  3174,
+                                           "buy":  "7 lb boneless pork loin chops, 1 1/4 inches thick (about 14), with a pocket cut in each"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  141,
+                                           "buy":  "7 tablespoons olive oil, for the ranch paprika paste; 3 1/2 tablespoons olive oil, for the stuffing"
+                                       },
+                                       {
+                                           "item":  "Ranch Seasoning Mix",
+                                           "grams":  73,
+                                           "buy":  "7 tablespoons ranch seasoning mix, for the paste; 3 1/2 tablespoons ranch seasoning mix, for the stuffing"
+                                       },
+                                       {
+                                           "item":  "Paprika",
+                                           "grams":  8,
+                                           "buy":  "1 tablespoon plus 1/2 teaspoon paprika"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  20,
+                                           "buy":  "1 3/4 teaspoons salt, for the stuffing"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 teaspoons black pepper"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  49,
+                                           "buy":  "3 1/2 tablespoons butter"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  280,
+                                           "buy":  "1 3/4 cups diced white onion (about 2 small onions)"
+                                       },
+                                       {
+                                           "item":  "Celery",
+                                           "grams":  210,
+                                           "buy":  "1 3/4 cups diced celery (about 5 stalks)"
+                                       },
+                                       {
+                                           "item":  "Fresh Cranberries",
+                                           "grams":  175,
+                                           "buy":  "1 3/4 cups fresh cranberries"
+                                       },
+                                       {
+                                           "item":  "Carrots",
+                                           "grams":  94,
+                                           "buy":  "scant 1 cup shredded carrot (about 2 medium carrots)"
+                                       },
+                                       {
+                                           "item":  "Bread",
+                                           "grams":  140,
+                                           "buy":  "3 1/2 cups bread cubes (about 3 1/2 slices of white sandwich bread, cubed)"
+                                       },
+                                       {
+                                           "item":  "Chicken Broth",
+                                           "grams":  560,
+                                           "buy":  "2 1/3 cups chicken broth"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  148,
+                                              "protein_g":  0.7,
+                                              "carbs_g":  7,
+                                              "fat_g":  13
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT35M",
+                                "totalTime":  "PT50M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,933 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-ten",
+ "batch": 6,
+ "generated": "2026-08-26T05:15:21",
+ "batch_terms": [
+  "grape tomatoes",
+  "baby potatoes",
+  "fresh mozzarella"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "grape tomatoes",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "grape tomatoes",
+     "attempts": [
+      {
+       "term": "grape tomatoes",
+       "state": "OK",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Fresh Grape Tomatoes",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111091686"
+      },
+      {
+       "item": "Nature Sweet® Organics Grape Tomatoes",
+       "price": 6,
+       "size": "16 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0075166656085"
+      },
+      {
+       "item": "NatureSweet Twilights Fresh Dark & Rich Grape Tomatoes",
+       "price": null,
+       "size": "10 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0075166648005"
+      },
+      {
+       "item": "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 10 oz",
+       "price": 4.19,
+       "size": "10 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0075166677155"
+      },
+      {
+       "item": "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 16.5 oz",
+       "price": 5.49,
+       "size": "16.5 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0075166677365"
+      },
+      {
+       "item": "Private Selection® Petite Grape Snacking Tomatoes",
+       "price": 3.79,
+       "size": "10 oz",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0001111091191"
+      },
+      {
+       "item": "Simple Truth Organic® Fresh Grape Snacking Tomatoes",
+       "price": 3.99,
+       "size": "10 oz",
+       "relevance": 87,
+       "url": "https://www.bakersplus.com/p/0001111091068"
+      },
+      {
+       "item": "Cherry Tomatoes (Ciliegini)",
+       "price": 2.49,
+       "size": "14 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0085469300044"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "grape tomatoes",
+     "attempts": [
+      {
+       "term": "grape tomatoes",
+       "state": "OK",
+       "hits": 4
+      }
+     ],
+     "hits": [
+      {
+       "item": "Grape Tomatoes Our Family",
+       "price": 3.99,
+       "size": "1 pt",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/grape_tomatoes_our_family/p/1564405684712559777"
+      },
+      {
+       "item": "Fresh Grape Tomatoes, Organic",
+       "price": 4.49,
+       "size": "1 pt",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/fresh_grape_tomatoes_organic/p/208082"
+      },
+      {
+       "item": "Our Family Pint Grape Tomatoes",
+       "price": 3.99,
+       "size": "1 pt",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/our_family_pint_grape_tomatoes/p/1564405684712709324"
+      },
+      {
+       "item": "Sunset Flavor Rocks Grape Tomatoes On The Vine 12 Oz",
+       "price": 5.99,
+       "size": "12 oz",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/sunset_flavor_rocks_grape_tomatoes_on_the_vine_12_oz/p/1564405684704772179"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "grape tomatoes",
+     "attempts": [
+      {
+       "term": "grape tomatoes",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Grape Tomato",
+       "price": 2.49,
+       "size": "1 pint container",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16502137-red-grape-tomato-1-pt"
+      },
+      {
+       "item": "NatureSweet Cherubs Tomatoes",
+       "price": 3.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20337467-naturesweet-salad-tomatoes-heavenly-10-oz"
+      },
+      {
+       "item": "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes",
+       "price": 7.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2720020-naturesweet-cherubs-salad-tomatoes-24-oz"
+      },
+      {
+       "item": "NatureSweet Golden Cherubs",
+       "price": 3.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21826459-naturesweet-tomatoes-comets-10-oz"
+      },
+      {
+       "item": "On The Vine Blended Cherry Tomatoes",
+       "price": 4.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74490192-cheery-tomatoes-on-the-vine-mucci-farms"
+      },
+      {
+       "item": "NatureSweet Glorys Cherry Tomatoes",
+       "price": 3.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22143008-naturesweet-tomatoes-fresh-ingredient-10-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "grape tomatoes",
+     "attempts": [
+      {
+       "term": "grape tomatoes",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13599513403"
+      },
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15367317581"
+      },
+      {
+       "item": "Grape Tomatoes, 2 lbs.",
+       "price": 5.67,
+       "size": "",
+       "unit_price": "$2.83/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6J3G0XNKHHMP"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Tomatoes on the Vine, 3 lbs.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+      },
+      {
+       "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
+       "price": 5.47,
+       "size": "",
+       "unit_price": "$2.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+      },
+      {
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+      },
+      {
+       "item": "Organic Yellow Onions, 5 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$1.04/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "baby potatoes",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "baby potatoes",
+     "attempts": [
+      {
+       "term": "baby potatoes",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Birds Eye Garlic Herb Baby Potatoes, Frozen Sides",
+       "price": 6.99,
+       "size": "20.500 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001450000169"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Bananas Sweet Potatoes & Papaya Pouch",
+       "price": 1.89,
+       "size": "4 fl oz",
+       "relevance": 82,
+       "url": "https://www.bakersplus.com/p/0081957301325"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Sweet Potatoes Blueberries & Beets Baby Food Pouch",
+       "price": 1.89,
+       "size": "4 fl oz",
+       "relevance": 79,
+       "url": "https://www.bakersplus.com/p/0081957301757"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Sweet Potatoes Mangos & Carrots Organic Baby Food Pouch",
+       "price": 1.89,
+       "size": "4 fl oz",
+       "relevance": 78,
+       "url": "https://www.bakersplus.com/p/0081957301366"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Apples Sweet Potatoes & Granola Organic Baby Food Pouch",
+       "price": 1.89,
+       "size": "4 fl oz",
+       "relevance": 78,
+       "url": "https://www.bakersplus.com/p/0081957301390"
+      },
+      {
+       "item": "Beech-Nut Naturals Stage 1 Baby Food, Sweet Potato",
+       "price": 1.39,
+       "size": "4 oz",
+       "relevance": 38,
+       "url": "https://www.bakersplus.com/p/0005220017102"
+      },
+      {
+       "item": "Gerber Organic Apple Sweet Potato Pear Baby Food Jar",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 37,
+       "url": "https://www.bakersplus.com/p/0001500000033"
+      },
+      {
+       "item": "Beech-Nut Organics Stage 1 Organic Baby Food, Sweet Potato",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 36,
+       "url": "https://www.bakersplus.com/p/0005220007573"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "baby potatoes",
+     "attempts": [
+      {
+       "term": "baby potatoes",
+       "state": "OK",
+       "hits": 9
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Potatoes Red Baby Dutch",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_red_baby_dutch/p/1564405684714779215"
+      },
+      {
+       "item": "Our Family Potatoes Yellow Baby Dutch",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": 91,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_yellow_baby_dutch/p/1564405684714779191"
+      },
+      {
+       "item": "Idahoan Baby Reds Mashed Potatoes 4.1 Oz",
+       "price": 1.59,
+       "size": "4.1 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/potatoes/idahoan_baby_reds_mashed_potatoes_4_1_oz/p/118622"
+      },
+      {
+       "item": "Idahoan Baby Reds Mashed Potatoes Family Size 8.2 Oz",
+       "price": 2.99,
+       "size": "8.2 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/potatoes/idahoan_baby_reds_mashed_potatoes_family_size_8_2_oz/p/6935"
+      },
+      {
+       "item": "Idahoan Baby Reds Roasted Garlic & Parmesan Mashed Potatoes 4.1 Oz",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 84,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/potatoes/idahoan_baby_reds_roasted_garlic_parmesan_mashed_potatoes_4_1_oz/p/532306"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Bananas, Sweet Potatoes & Papaya Baby Food Pouch 4 Oz",
+       "price": 2.19,
+       "size": "4 oz",
+       "relevance": 78,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/toddler_meals/happy_baby_clearly_crafted_stage_2_bananas_sweet_potatoes_papaya_baby_food_pouch_4_oz/p/4895182"
+      },
+      {
+       "item": "Happy Baby Clearly Crafted Stage 2 Sweet Potatoes, Blueberries & Beets Baby Food Pouch 4 Oz",
+       "price": 2.19,
+       "size": "4 oz",
+       "relevance": 77,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/happy_baby_clearly_crafted_stage_2_sweet_potatoes_blueberries_beets_baby_food_pouch_4_oz/p/1564405684716615861"
+      },
+      {
+       "item": "Tippy Toes Baby Food, Apple Sweet Potato, 2 (6 Months & Up) 3.5 Oz",
+       "price": 1.59,
+       "size": "3.5 oz",
+       "relevance": 34,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/tippy_toes_baby_food_apple_sweet_potato_2_6_months_up_3_5_oz/p/1564405684706442926"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "baby potatoes",
+     "attempts": [
+      {
+       "term": "baby potatoes",
+       "state": "OK",
+       "hits": 47
+      }
+     ],
+     "hits": [
+      {
+       "item": "Summertime Farms Baby Gold Potatoes",
+       "price": 3.88,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+      },
+      {
+       "item": "The Little Potato Co. Little Duos",
+       "price": 5.99,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
+      },
+      {
+       "item": "Summertime Farms Baby Red Potatoes",
+       "price": 3.88,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+      },
+      {
+       "item": "The Little Potato Co. Little Yellows",
+       "price": 4.99,
+       "size": "1.5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
+      },
+      {
+       "item": "The Little Potato Co. Little Yellows",
+       "price": 5.99,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
+      },
+      {
+       "item": "The Little Potato Co. Little Reds",
+       "price": 4.99,
+       "size": "1.5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152459-the-little-potato-company-potatoes-fresh-creamer-blushing-belle-1-5-lb"
+      },
+      {
+       "item": "Russet Potato",
+       "price": 0.74,
+       "size": "$1.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb"
+      },
+      {
+       "item": "The Little Potato Co. A Little Homestyle Ranch",
+       "price": 4.99,
+       "size": "1 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/114641332-the-little-potato-company-homestyle-ranch-microwave-ready-baby-potatoes-1-lb"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "baby potatoes",
+     "attempts": [
+      {
+       "term": "baby potatoes",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15367317581"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13599513403"
+      },
+      {
+       "item": "Reser's Main St. Bistro Oven Roasted Potatoes 2 pk.",
+       "price": 7.88,
+       "size": "",
+       "unit_price": "$0.20/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3O0MQ21D8UVL"
+      },
+      {
+       "item": "Little Bellies Pick-Me Sticks Variety Pack, Strawberry & Sweet Potato, 0.56 oz., 10 ct.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QHW37S7FCJO"
+      },
+      {
+       "item": "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+       "price": 9.68,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3IE4ZA59MN9W"
+      },
+      {
+       "item": "Creamer Potatoes, 5 lbs.",
+       "price": 6.96,
+       "size": "",
+       "unit_price": "$1.39/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
+      },
+      {
+       "item": "Yellow Potatoes, 8 lbs.",
+       "price": 7.64,
+       "size": "",
+       "unit_price": "$0.95/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
+      },
+      {
+       "item": "Red Potatoes, 8 lbs.",
+       "price": 6.92,
+       "size": "",
+       "unit_price": "$0.86/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "fresh mozzarella",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "fresh mozzarella",
+     "attempts": [
+      {
+       "term": "fresh mozzarella",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0003114200088"
+      },
+      {
+       "item": "Kroger® Fresh Mozzarella Sliced Cheese",
+       "price": null,
+       "size": "16 slices / 16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004821"
+      },
+      {
+       "item": "BelGioioso® Fresh Mozzarella Pearls Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003114200480"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 4.49,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004375"
+      },
+      {
+       "item": "BelGioioso® Fresh Mozzarella Ciliegine",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003114200034"
+      },
+      {
+       "item": "BelGioioso® Sliced Fresh Mozzarella Cheese",
+       "price": 6.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003114200069"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004374"
+      },
+      {
+       "item": "Private Selection® Cherry Size Fresh Mozzarella Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001111004378"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "fresh mozzarella",
+     "attempts": [
+      {
+       "term": "fresh mozzarella",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bel Gioioso Fresh Mozzarella Cheese 226 G",
+       "price": 5.89,
+       "size": "226 g",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_fresh_mozzarella_cheese_226_g/p/22599"
+      },
+      {
+       "item": "Bel Gioioso Cheese, Fresh Mozzarella, Pearls 8 Oz",
+       "price": 5.89,
+       "size": "8 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_cheese_fresh_mozzarella_pearls_8_oz/p/222027"
+      },
+      {
+       "item": "Bel Gioioso Cheese, Sliced, Fresh Mozzarella 8 Oz",
+       "price": 5.89,
+       "size": "8 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/bel_gioioso_cheese_sliced_fresh_mozzarella_8_oz/p/5659"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "fresh mozzarella",
+     "attempts": [
+      {
+       "term": "fresh mozzarella",
+       "state": "OK",
+       "hits": 33
+      }
+     ],
+     "hits": [
+      {
+       "item": "BelGioioso Fresh Mozzarella Sliced",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Pearls",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
+      },
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+      },
+      {
+       "item": "Tillamook Whole Milk Mozzarella Cheese Snacks 10 Count",
+       "price": 3.99,
+       "size": "10 x 0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38311478-tilla-whl-mlk-mozz-snack-bar"
+      },
+      {
+       "item": "Crystal Farms Shredded Mozzarella Cheese",
+       "price": 2.67,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/301336-crystal-farms-shredded-mozzarella-cheese-8-0-oz"
+      },
+      {
+       "item": "Tillamook Whole Milk Mozzarella Farmstyle Shreds",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/34336458-whole-milk-mozzarella-cheese-shreds-8-oz"
+      },
+      {
+       "item": "Italia Low-Moisture Part Skim Mozzarella String Cheese Family Pack",
+       "price": 9.99,
+       "size": "20 x 1 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19041190-italia-brand-cheese-string-cheese-1-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "fresh mozzarella",
+     "attempts": [
+      {
+       "term": "fresh mozzarella",
+       "state": "MATCHES",
+       "hits": 29
+      }
+     ],
+     "hits": [
+      {
+       "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+       "price": 9.47,
+       "size": "",
+       "unit_price": "$0.20/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13879914072"
+      },
+      {
+       "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+       "price": 12.87,
+       "size": "",
+       "unit_price": "$7.35/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13878908387"
+      },
+      {
+       "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+       "price": 8.28,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
+      },
+      {
+       "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+      },
+      {
+       "item": "Formaggio Cheese Artisan Meat & Mozzarella Variety Wraps 22 oz.",
+       "price": 12.94,
+       "size": "",
+       "unit_price": "$0.59/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4GO1R6FUV9IT"
+      },
+      {
+       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$4.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13571669511"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

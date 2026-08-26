@@ -1,0 +1,73 @@
+{
+    "slug":  "sheet-pan-pesto-chicken-dinner",
+    "title":  "Sheet Pan Pesto Chicken Dinner",
+    "source_url":  "https://www.budgetbytes.com/sheet-pan-pesto-chicken-dinner/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:33",
+    "updated":  "2026-08-26T05:14:45",
+    "terms":  [
+                  {
+                      "term":  "baby potatoes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh mozzarella",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "grape tomatoes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt and Pepper",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "baby potatoes",
+                      "fresh mozzarella",
+                      "grape tomatoes",
+                      "Salt and Pepper"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:33",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/sheet-pan-pesto-chicken-dinner/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:22:33",
+                        "by":  "decider",
+                        "detail":  "Sheet-pan chicken breasts with baby potatoes, grape tomatoes, pesto and mozzarella; a distinct pesto sauce family with no live pesto-chicken match, verified band 599/28/42 and clean budgetbytes costing that widens toward Italian."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:22:52",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:08:10",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:09:09",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "waiting on: baby potatoes, fresh mozzarella, grape tomatoes, Salt and Pepper"
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-adobo",
+    "title":  "Chicken Adobo",
+    "source_url":  "https://www.budgetbytes.com/chicken-adobo/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:04:42",
+    "updated":  "2026-08-26T04:04:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Bone-in chicken braised in the classic soy-vinegar-garlic-bay adobo sauce is the same dinner as the live Slow Cooker Chicken Adobo Rice Bowls (identical protein and adobo/soy sauce family); the only difference is bone-in vs shredded and the omitted rice, and the catalog already carries two adobo chicken dishes.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:04:42",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/chicken-adobo/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:04:43",
+                        "by":  "decider",
+                        "detail":  "Bone-in chicken braised in the classic soy-vinegar-garlic-bay adobo sauce is the same dinner as the live Slow Cooker Chicken Adobo Rice Bowls (identical protein and adobo/soy sauce family); the only difference is bone-in vs shredded and the omitted rice, and the catalog already carries two adobo chicken dishes."
+                    }
+                ]
+}

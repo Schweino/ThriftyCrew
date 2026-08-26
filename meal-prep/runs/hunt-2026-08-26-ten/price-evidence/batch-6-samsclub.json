@@ -1,0 +1,246 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T05:15:10",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "grape tomatoes",
+   "state": "MATCHES",
+   "term_used": "grape tomatoes",
+   "attempts": [
+    {
+     "term": "grape tomatoes",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13599513403"
+    },
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15367317581"
+    },
+    {
+     "item": "Grape Tomatoes, 2 lbs.",
+     "price": 5.67,
+     "size": "",
+     "unit_price": "$2.83/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6J3G0XNKHHMP"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+    },
+    {
+     "item": "Tomatoes on the Vine, 3 lbs.",
+     "price": 4.97,
+     "size": "",
+     "unit_price": "$1.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+    },
+    {
+     "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
+     "price": 5.47,
+     "size": "",
+     "unit_price": "$2.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+    },
+    {
+     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+     "price": 4.92,
+     "size": "",
+     "unit_price": "$2.46/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+    },
+    {
+     "item": "Organic Yellow Onions, 5 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$1.04/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "baby potatoes",
+   "state": "MATCHES",
+   "term_used": "baby potatoes",
+   "attempts": [
+    {
+     "term": "baby potatoes",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
+     "size": "",
+     "unit_price": "$0.25/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/15367317581"
+    },
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13599513403"
+    },
+    {
+     "item": "Reser's Main St. Bistro Oven Roasted Potatoes 2 pk.",
+     "price": 7.88,
+     "size": "",
+     "unit_price": "$0.20/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3O0MQ21D8UVL"
+    },
+    {
+     "item": "Little Bellies Pick-Me Sticks Variety Pack, Strawberry & Sweet Potato, 0.56 oz., 10 ct.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4QHW37S7FCJO"
+    },
+    {
+     "item": "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+     "price": 9.68,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3IE4ZA59MN9W"
+    },
+    {
+     "item": "Creamer Potatoes, 5 lbs.",
+     "price": 6.96,
+     "size": "",
+     "unit_price": "$1.39/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
+    },
+    {
+     "item": "Yellow Potatoes, 8 lbs.",
+     "price": 7.64,
+     "size": "",
+     "unit_price": "$0.95/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
+    },
+    {
+     "item": "Red Potatoes, 8 lbs.",
+     "price": 6.92,
+     "size": "",
+     "unit_price": "$0.86/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "fresh mozzarella",
+   "state": "MATCHES",
+   "term_used": "fresh mozzarella",
+   "attempts": [
+    {
+     "term": "fresh mozzarella",
+     "state": "MATCHES",
+     "hits": 29
+    }
+   ],
+   "hits": [
+    {
+     "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+     "price": 9.47,
+     "size": "",
+     "unit_price": "$0.20/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13879914072"
+    },
+    {
+     "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+     "price": 12.87,
+     "size": "",
+     "unit_price": "$7.35/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13878908387"
+    },
+    {
+     "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+     "price": 8.28,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
+    },
+    {
+     "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+    },
+    {
+     "item": "Formaggio Cheese Artisan Meat & Mozzarella Variety Wraps 22 oz.",
+     "price": 12.94,
+     "size": "",
+     "unit_price": "$0.59/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4GO1R6FUV9IT"
+    },
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13571669511"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

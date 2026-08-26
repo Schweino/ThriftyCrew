@@ -1,0 +1,287 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T04:37:31",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "beef stew meat",
+   "state": "MATCHES",
+   "term_used": "beef stew meat",
+   "attempts": [
+    {
+     "term": "beef stew meat",
+     "state": "OK",
+     "hits": 1
+    }
+   ],
+   "hits": [
+    {
+     "item": "USDA Choice Premium Stew Meat",
+     "price": 8.99,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388685-premium-usda-choice-stew-meat-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "wide egg noodles",
+   "state": "MATCHES",
+   "term_used": "wide egg noodles",
+   "attempts": [
+    {
+     "term": "wide egg noodles",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Wide Egg Noodles",
+     "price": 2.79,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25446742-fareway-enriched-egg-noodle-product-wide-12-oz"
+    },
+    {
+     "item": "Fareway Extra Wide Egg Noodles",
+     "price": 2.79,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24905747-fareway-egg-noodles-extra-wide-12-oz"
+    },
+    {
+     "item": "Creamette Egg Noodles, Wide",
+     "price": 2.99,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16902851-creamette-wide-egg-noodles-12-0-oz"
+    },
+    {
+     "item": "AMISH KITCHENS Egg Noodles, Homestyle Extra Wide",
+     "price": 3.49,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/320008-amish-kitchens-egg-noodles-extra-wide-12-oz"
+    },
+    {
+     "item": "Creamette Egg Noodles, Extra Wide",
+     "price": 2.99,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16519592-creamette-extra-wide-egg-noodles-12-0-oz"
+    },
+    {
+     "item": "Neva's Noodles Egg Noodles, Wide",
+     "price": 2.99,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28495255-neva-s-noodles-old-fashion-homemade-egg-noodles-wide-10-00-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "Moroccan seven spice blend",
+   "state": "MATCHES",
+   "term_used": "Moroccan seven spice blend",
+   "attempts": [
+    {
+     "term": "Moroccan seven spice blend",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+     "price": 7.99,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+    },
+    {
+     "item": "Badia Spices Coriander, Ground",
+     "price": 1.68,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+    },
+    {
+     "item": "McCormick Smoked Paprika",
+     "price": 3.99,
+     "size": "0.9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/222010-mccormick-smoked-paprika-0-9-oz"
+    },
+    {
+     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
+     "price": 5.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "dried apricots",
+   "state": "MATCHES",
+   "term_used": "dried apricots",
+   "attempts": [
+    {
+     "term": "dried apricots",
+     "state": "OK",
+     "hits": 68
+    }
+   ],
+   "hits": [
+    {
+     "item": "Mariani Apricots",
+     "price": 3.99,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69367-mariani-apricots-mediterranean-6-oz"
+    },
+    {
+     "item": "Sun-Maid Mediterranean Pitted Dried Apricots",
+     "price": 8.99,
+     "size": "425 g",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/266077-sun-maid-apricots-mediterranean-15-oz"
+    },
+    {
+     "item": "Mariani Probiotic Apricots",
+     "price": 4.99,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19043393-mariani-probiotic-dried-apricots-6-0-oz"
+    },
+    {
+     "item": "Fareway Unpeeled in Heavy Syrup Apricots Halves",
+     "price": 1.99,
+     "size": "15.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24083028-fareway-apricots-halves-in-heavy-syrup-unpeeled-1525-oz"
+    },
+    {
+     "item": "Sunsweet Prunes, Pitted",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3120723-sunsweet-prunes-pitted-8-oz"
+    },
+    {
+     "item": "Sunsweet Pitted Dates",
+     "price": 4.49,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19015303-sunsweet-pitted-dates-8-oz"
+    },
+    {
+     "item": "Prune Plums",
+     "price": 0.31,
+     "size": "$2.49 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314168-plums-prune"
+    },
+    {
+     "item": "Sun-Maid California Sun-Dried Raisins",
+     "price": 3.49,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/75670-sun-maid-natural-california-raisins-10-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "spiral ham",
+   "state": "MATCHES",
+   "term_used": "spiral ham",
+   "attempts": [
+    {
+     "term": "spiral ham",
+     "state": "OK",
+     "hits": 51
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Boneless Half Ham",
+     "price": 34.95,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386969-fareway-boneless-half-ham-1-each"
+    },
+    {
+     "item": "Frick's Sliced Quarter Applewood Ham",
+     "price": 10.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17616704-fricks-smoked-ham-applewood-sliced-24-oz"
+    },
+    {
+     "item": "Fareway Boneless Quarter Ham",
+     "price": 17.48,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387408-fareway-boneless-quarter-ham-1-each"
+    },
+    {
+     "item": "Fareway Boneless Ham Steaks",
+     "price": 4.0,
+     "size": "$7.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387422-fareway-boneless-ham-steaks-1-each"
+    },
+    {
+     "item": "Farmland Diced Ham",
+     "price": 5.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/233565-farmland-ham-16-oz"
+    },
+    {
+     "item": "Hormel Diced Ham Classic",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410938-hormel-diced-boneless-ham-8-oz"
+    },
+    {
+     "item": "Frick's Ham, Diced",
+     "price": 5.99,
+     "size": "12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17399049-fricks-diced-ham-12-oz"
+    },
+    {
+     "item": "Smoked Ham Shanks",
+     "price": 5.98,
+     "size": "$3.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388298-smoked-ham-shanks"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

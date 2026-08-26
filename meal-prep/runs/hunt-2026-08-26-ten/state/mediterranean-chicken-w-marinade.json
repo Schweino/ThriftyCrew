@@ -1,0 +1,64 @@
+{
+    "slug":  "mediterranean-chicken-w-marinade",
+    "title":  "Mediterranean Chicken w/ Marinade",
+    "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:28",
+    "updated":  "2026-08-26T05:17:58",
+    "terms":  [
+                  {
+                      "term":  "grape tomatoes",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:28",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:20:29",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breasts with feta, kalamata olives, artichoke, grape tomato, lemon and oregano - a Greek/Mediterranean bake distinct from the slow-cooker Mediterranean bowls (differs on method + starch) and from the creamy spinach-artichoke bakes (feta/olive/lemon vs cream cheese); widens cuisine, band verified 673/18/49."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:21:59",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:08:05",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:08:09",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "waiting on: grape tomatoes"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T05:17:58",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

@@ -1,0 +1,157 @@
+﻿{
+    "slug":  "dill-pickle-chicken-wings",
+    "title":  "Dill Pickle Chicken Wings",
+    "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 lbs chicken wings (See Note 1)",
+                            "item":  "Chicken Wings",
+                            "bid":  "chicken-wings",
+                            "board":  null,
+                            "grams":  6350,
+                            "buy":  "14 lb chicken wings, split into drumettes and flats",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "As-purchased bone-in weight; see the macro cross-check on the yield question. chicken-wings is a LIVE board id at 7 of 7 stores, so this is a REUSE and not a new id; the missing piece is only a vocabulary ROW for the name, which is a naming question. Raw wings, not the cooked or BBQ-glazed FDC rows the shelf offered.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 cups dill pickle juice/brine (from empty pickle jar)",
+                            "item":  "Dill Pickle Juice",
+                            "bid":  "pickles",
+                            "board":  null,
+                            "grams":  3311,
+                            "buy":  "14 cups dill pickle brine (about four 32 oz jars\u0027 worth), for the marinade",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Marinade, drained off and discarded before baking. The source itself says the brine comes \u0027from empty pickle jar\u0027, so what is actually purchased is jars of dill pickles; board carries pickles 7 of 7 and 946 g of jar contents is a fair cost basis. This is not the rejected juice-drink case - it is the same jar, priced as the jar.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "5 tsp baking powder (NOT BAKING SODA and make sure it\u0027s aluminum free baking powder)",
+                            "item":  "Baking Powder",
+                            "bid":  "baking-powder",
+                            "board":  null,
+                            "grams":  93,
+                            "buy":  "5 tbsp plus 2 1/2 tsp aluminum-free baking powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: baking-powder, 7 of 7 stores, cheapest 0.1768 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tsp dried dill",
+                            "item":  "Dried Dill",
+                            "bid":  "dried-dill",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "2 tbsp plus 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-dill, 5 of 7 stores, cheapest 1.505 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "1 tbsp plus 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3/4 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  16,
+                            "buy":  "generous 2 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/8 tsp white pepper (optional)",
+                            "item":  "White Pepper",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  1,
+                            "buy":  "scant 1/2 tsp white pepper (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "No commodity claims it (captures only), and black-pepper is a different spice at a different price, so I will not bridge it. Optional line at 1/8 tsp: pantry-static pricing is safe and the term is reported as optional_absent.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "PAM/Oil spray",
+                            "item":  "Cooking Spray",
+                            "bid":  "cooking-spray",
+                            "board":  null,
+                            "grams":  10,
+                            "buy":  "cooking spray, enough to coat 3 or 4 baking racks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pan coating; no printed quantity in the source. cooking-spray is a live board id at 7 of 7, so a REUSE, not a proposal; the source names PAM, which is exactly that product. 3 g is a light coating for the racks.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Chicken Wings",
+                               "White Pepper",
+                               "Cooking Spray"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u00275 tsp baking powder (NOT BAKING SODA and make sure it\u0027s aluminum free baking powder)\u0027: the qty engine could not ground this weight (default tsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  620.0,
+                                                                   "carbs_g":  20.0,
+                                                                   "protein_g":  45.0
+                                                               },
+                              "ours_per_serving_label_basis_on_gross_weight":  {
+                                                                                   "calories":  864,
+                                                                                   "carbs_g":  2.5,
+                                                                                   "protein_g":  81
+                                                                               },
+                              "ours_per_serving_edible_yield_adjusted":  {
+                                                                             "calories":  545,
+                                                                             "carbs_g":  2.5,
+                                                                             "protein_g":  52
+                                                                         },
+                              "protein_gap_pct":  80,
+                              "verdict":  "FAIL as computed - flagged, not silently fixed",
+                              "detail":  "This is the loudest thing in the batch. 4 lb of wings for 4 servings is a pound of wings per person, and applying the Perdue label (210 cal, 20 g protein per 112 g raw) to the full as-purchased 1814 g gives 864 cal and 81 g protein per serving: 80% over the source\u0027s published 45 g protein and well past this run\u0027s 650 cal ceiling. The cause is a basis mismatch, not a portion error: the gram weight is bone-in as purchased (right for cost), while every wing macro figure is a meat-and-skin basis. Applying the standard whole-wing edible yield of about 64% gives 545 cal and 52 g protein per serving, which brackets the source\u0027s 620/45 from either side. I did NOT shave the grams to make the macros land, because the cost side needs the purchased weight - someone downstream has to decide the yield basis for bone-in poultry, and this recipe\u0027s band eligibility turns entirely on it. Separately, the source\u0027s published 20 g carbs cannot be reproduced from these 8 lines (ours is 2.5 g); the source most likely counted a dipping sauce that is not in the ingredient list."
+                          }
+}

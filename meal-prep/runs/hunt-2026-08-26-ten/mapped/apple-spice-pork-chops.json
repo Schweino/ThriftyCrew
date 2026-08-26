@@ -1,0 +1,175 @@
+﻿{
+    "slug":  "apple-spice-pork-chops",
+    "title":  "Apple Spice Pork Chops",
+    "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 pork chops ($6.44)",
+                            "item":  "Pork Chops",
+                            "bid":  "pork-chops",
+                            "board":  "weekly",
+                            "grams":  2380,
+                            "buy":  "14 pork chops, about 6 oz each (5 1/4 lb total)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 680 g source = 170 g per chop, a 6 oz chop.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Tbsp vegetable oil ($0.08)",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: vegetable-oil, 7 of 7 stores, cheapest 0.0666 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Pinch salt and pepper ($0.05)",
+                            "item":  "Salt and Pepper",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  4,
+                            "buy":  "1/2 tsp salt and 1/2 tsp black pepper, to taste",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "A pinch of each; weighed as 1 g total at source scale. Two distinct pantry foods on one unsplittable line, so no single bid can carry it; follows the \u0027garlic powder, cumin, and chili powder\u0027 precedent of 2026-08-26. Pantry-static pricing at a pinch is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 med onion ($0.38)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  385,
+                            "buy":  "3 1/2 medium yellow onions, sliced (about 13 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Medium onion = 110 g, the same each-weight the DB carries for a medium red onion. Vocabulary row Yellow Onion [onions] is same form and the board carries onions 7 of 7; an unqualified \u0027onion\u0027 in a savoury braise is the yellow cooking onion, not the red variety.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 fuji apples ($1.99)",
+                            "item":  "Apples",
+                            "bid":  "apples",
+                            "board":  null,
+                            "grams":  1260,
+                            "buy":  "7 Fuji apples, cored and sliced (about 2 3/4 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "180 g per medium Fuji, 2 apples = 360 g. apples is a LIVE board id (7 of 7 stores) so this is a REUSE, not a new id; Fuji is a mainstream bagged eating apple sold at the generic apple price, unlike the red-onion variety-pricing case. The missing piece is a vocabulary ROW named Apples, a naming question.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Tbsp butter ($0.26)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tbsp (just under 1 stick)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Tbsp brown sugar ($0.03)",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp, packed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: brown-sugar, 6 of 7 stores, cheapest 0.925 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 tsp cinnamon ($0.02)",
+                            "item":  "Ground Cinnamon",
+                            "bid":  "ground-cinnamon",
+                            "board":  null,
+                            "grams":  2,
+                            "buy":  "scant 1 tsp ground cinnamon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tsp ground cinnamon = 2.6 g. The DIFFERENT FORM \u0027ground\u0027 flag is spurious: a 1/4 tsp measure of cinnamon IS ground cinnamon, not a stick. Board carries ground-cinnamon 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/8 tsp nutmeg ($0.02)",
+                            "item":  "Ground Nutmeg",
+                            "bid":  "ground-nutmeg",
+                            "board":  null,
+                            "grams":  1,
+                            "buy":  "scant 1/2 tsp ground nutmeg",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tsp ground nutmeg = 2.2 g. Same spurious form flag: 1/8 tsp is a ground-spice measure, not a whole nutmeg. Board carries ground-nutmeg 5 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup chicken broth ($0.13)",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  840,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0373 at Aldi",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Apples"
+                           ],
+    "db_row_findings":  [
+                            "apple-spice-pork-chops: the food DB already carries \u0027Yellow Onion\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 80, \"serving_qty\": 0.5, \"serving_unit\": \"cup chopped\", \"calories\": 32, \"protein_g\": 0.9, \"carbs_g\": 7.4, \"fat_g\": 0.1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 38, \"protein_g\": 0.83, \"carbs_g\": 8.61, \"fat_g\": 0.05}",
+                            "apple-spice-pork-chops: the food DB already carries \u0027Ground Nutmeg\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. existing={\"serving_grams\": 2.2, \"serving_qty\": 1, \"serving_unit\": \"tsp\", \"calories\": 12, \"protein_g\": 0, \"carbs_g\": 1, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 525, \"protein_g\": 5.84, \"carbs_g\": 49.3, \"fat_g\": 36.3}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  498.6,
+                                                                   "carbs_g":  24.3,
+                                                                   "protein_g":  40.73
+                                                               },
+                              "ours_per_serving":  {
+                                                       "calories":  452,
+                                                       "carbs_g":  19.6,
+                                                       "protein_g":  35.5
+                                                   },
+                              "protein_gap_pct":  -12.8,
+                              "verdict":  "pass, with a caution",
+                              "detail":  "Totals at source scale over all 10 lines: 1808 cal, 142 g protein, 78 g carbs, 4 servings. Protein is 12.8% under the source, inside the 15% band but at its edge, and the whole gap sits on the pork-chop each-weight (170 g / 6 oz raw per chop, from the pre-resolver\u0027s 680 g). If those chops were 8 oz, protein lands at 46 g and calories at ~530, which would match the source almost exactly. I left the pre-resolved 680 g alone as instructed but flag it as the one number here worth a second look. Per serving 452 cal / 19.6 g carbs sits inside this run\u0027s 400-650 cal and 35 g carb conditions."
+                          }
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "honey-mustard-baked-chicken-with-potatoes-amp-bacon",
+    "title":  "Honey Mustard Baked Chicken with Potatoes \u0026amp; Bacon",
+    "source_url":  "https://www.recipetineats.com/honey-mustard-chicken-with-potatoes/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:20",
+    "updated":  "2026-08-26T04:20:20",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Honey+dijon baked chicken shares the honey-mustard sauce identity with in-flight baked-honey-mustard-chicken (chicken, bake, honey-mustard = 3 of 4 axes); the added potato/bacon/wine changes the plate but not the flavour family, which that accept already claimed as the distinct honey-mustard slot.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:20",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/honey-mustard-chicken-with-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:20:20",
+                        "by":  "decider",
+                        "detail":  "Honey+dijon baked chicken shares the honey-mustard sauce identity with in-flight baked-honey-mustard-chicken (chicken, bake, honey-mustard = 3 of 4 axes); the added potato/bacon/wine changes the plate but not the flavour family, which that accept already claimed as the distinct honey-mustard slot."
+                    }
+                ]
+}

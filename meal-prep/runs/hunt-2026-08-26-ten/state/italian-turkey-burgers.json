@@ -1,0 +1,70 @@
+{
+    "slug":  "italian-turkey-burgers",
+    "title":  "Italian Turkey Burgers",
+    "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+    "protein":  "turkey",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:11:02",
+    "updated":  "2026-08-26T04:54:43",
+    "terms":  [
+                  {
+                      "term":  "turkey sausage",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "asiago cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "green bell pepper",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "red onion",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:11:02",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/italian-turkey-burgers-recipe/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:11:02",
+                        "by":  "decider",
+                        "detail":  "Distinct burger format absent from the catalog: Italian-seasoned turkey+turkey-sausage patties with peppers/onions; verified band, no dupe, widens format spread despite a busy turkey region."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:11:54",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:45:16",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected, 0 not-purchased. 9 food-macros-db rows returned. 3 new ids proposed (turkey-sausage, asiago-cheese, green-bell-pepper); red-onion, dried-basil, dried-oregano, ground-fennel, red-pepper-flakes, hamburger-buns and olive-oil are all reuses of ids already in the vocabulary or on the board. NOT CONFIDENT, called out: the settled line \"1 pound 99% lean ground turkey\""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:46:14",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "all 4 blocking ingredient(s) carried"
+                    }
+                ]
+}

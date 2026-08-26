@@ -1,0 +1,115 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Jamie Oliver's Chicken in Milk {Seriously Delish}",
+  "source_url": "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+  "servings": 4,
+  "time_total": "105 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+      "item": "whole chicken",
+      "qty": "3 - 3.5 lb / 1.5 - 1.8 kg",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp salt ((plus more to taste))",
+      "item": "salt",
+      "qty": "2 tsp",
+      "unit": null,
+      "prep": "plus more to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "Black pepper",
+      "item": "Black pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 stick cinnamon",
+      "item": "cinnamon",
+      "qty": "1/2",
+      "unit": "stick",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup loosely packed fresh sage leaves",
+      "item": "fresh sage leaves",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "loosely packed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lemons (, zest only (avoid grating the pith which is bitter))",
+      "item": "lemons",
+      "qty": "2",
+      "unit": null,
+      "prep": "zest only (avoid grating the pith which is bitter)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10 cloves of garlic (, whole, skin on)",
+      "item": "garlic",
+      "qty": "10",
+      "unit": "cloves",
+      "prep": "whole, skin on",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 1/4 cups milk ((I used low fat))",
+      "item": "milk",
+      "qty": "2 1/4",
+      "unit": "cups",
+      "prep": "(I used low fat)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 190C/375F.",
+    "Wash the chicken under water and pat dry with paper towels.",
+    "Sprinkle over the salt and 5 grinds of black pepper and pat all over the chicken, concentrating on the top and sides.",
+    "Heat oil in a heavy based pot over high heat. (Note 1)",
+    "Brown the chicken all over as best you can. I find the easiest way to do this (and minimising skin tearing) is with tongs stuck in the rear of the chicken and a wooden spoon to lift and leverage the chicken. Tilt the chicken as required to brown as much of the skin as you can. (Note 2)",
+    "If you can manage it (or if you have a helper), pour the excess fat out of the pot with the chicken still in it. If you can't, remove the chicken onto a plate, then drain the fat.",
+    "Add the remaining ingredients into the pot (return the chicken to the pot if you removed it).",
+    "Bake covered for 40 minutes, then bake uncovered for 50 minutes (1.5 hrs in total).",
+    "Let stand for 5 minutes or so before removing the chicken from the pot onto a serving plate. Serve the sauce on the side. I prefer not to strain it because I want the bits of curd and garlic on my chicken, as well as bits of sage."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 9,
+    "verified": 9,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,210 @@
+﻿{
+    "slug":  "slow-roasted-pork-shoulder",
+    "title":  "Slow Roasted Pork Shoulder",
+    "source_url":  "https://keviniscooking.com/moroccan-slow-roasted-pork/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 lb pork shoulder (bone in)",
+                            "item":  "Pork Shoulder",
+                            "bid":  "pork-shoulder",
+                            "board":  null,
+                            "grams":  3175,
+                            "buy":  "7 lb bone-in pork shoulder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: pork-shoulder, 7 of 7 stores, cheapest 1.94 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 tbsp Moroccan Seven Spice Blend ((separated))",
+                            "item":  "Moroccan Seven Spice Blend",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  49,
+                            "buy":  "7 tbsp, divided",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Ground spice blend at 7 g per tbsp. Board ABSENT and no vocabulary row; the only near row (Mexican Cheese Blend) is not a food relation at all, it is a string collision. A multi-spice blend has no single commodity I can prove, so pantry-static pricing rather than a stretched match; term enqueued so the pricer can hunt a ras el hanout style blend.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tbsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "1 3/4 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup chicken stock",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  null,
+                            "grams":  420,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Stock and broth are the same purchased carton product at the same price class; board carries chicken-broth 7 of 7 and the DB already holds the Chicken Broth row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 large carrots (, cut into French fry-like wedges)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  427,
+                            "buy":  "7 large carrots, cut into thick wedges",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: carrots, 7 of 7 stores, cheapest 0.87 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 large sweet potatoes (, cut into French fry-like wedges)",
+                            "item":  "Sweet Potatoes",
+                            "bid":  "sweet-potatoes",
+                            "board":  "weekly",
+                            "grams":  455,
+                            "buy":  "1 lb sweet potatoes (about 3 1/2 large), cut into thick wedges",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: sweet-potatoes, 7 of 7 stores, cheapest 0.974 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 red onion (, sliced thick)",
+                            "item":  "Red Onion",
+                            "bid":  "red-onion",
+                            "board":  null,
+                            "grams":  192,
+                            "buy":  "1 3/4 red onions, sliced thick (about 7 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: red-onion, 5 of 7 stores, cheapest 1.095 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup dried apricots",
+                            "item":  "Dried Apricots",
+                            "bid":  "dried-apricots",
+                            "board":  null,
+                            "grams":  114,
+                            "buy":  "7/8 cup dried apricots (about 4 oz), halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup dried apricot halves = 130 g. REFUSED the board\u0027s \u0027apricots\u0027 bridge: fresh is not dried is a standing rejection, and dried fruit is a different price class (6-8 oz bags on the dried-fruit shelf) and a completely different gram weight per cup. Proposed as a new id; if the existing apricots id is in fact the dried product, alias it.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  24,
+                            "buy":  "1 3/4 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp honey",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  37,
+                            "buy":  "1 3/4 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 large lemons (halved)",
+                            "item":  "Lemons",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  578,
+                            "buy":  "5 large lemons, halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "110 g per large lemon. lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; \u0027large\u0027 is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignored.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 cup fresh mint ((optional))",
+                            "item":  "Fresh Mint",
+                            "bid":  "fresh-mint",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "scant 1/2 cup chopped fresh mint (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: fresh-mint, 5 of 7 stores, cheapest 3.56 at Walmart",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "Moroccan seven spice blend",
+                                 "dried apricots"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Dried Apricots",
+                               "Lemons"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "dried apricots",
+                                        "proposed_bid":  "dried-apricots",
+                                        "evidence":  "The board\u0027s only apricot id prices what the vocabulary treats as fresh produce (3 of 7 stores, cheapest 3.49 at Baker\u0027s). Dried apricots are a different product concept sold on the dried-fruit aisle in 6-8 oz bags, a different price class per pound and a different gram weight per cup, and fresh-to-dried is a standing form-flip rejection in this estate. If the existing \u0027apricots\u0027 id is in fact captured from dried-fruit bags, alias this term onto it instead of minting.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "dried-apricots",
+                                  "verdict":  "approve",
+                                  "bid":  "dried-apricots",
+                                  "reason":  "The existing \u0027apricots\u0027 row is provably FRESH produce, not dried-fruit bags: I read its rule block in commodities.json (line 55665) and it explicitly EXCLUDES \u0027\\bdried\\b\u0027 and \u0027turkish\u0027, and its live crown is Baker\u0027s PLU 4218 (url /p/apricots/0000000004218), the produce PLU for fresh apricots at $3.49/lb sold by the pound - so aliasing this term onto \u0027apricots\u0027 would price a recipe\u0027s dried fruit against fresh produce at roughly a quarter of the dried price class. No other id in any of the three namespaces or the feed carries dried apricots (dried-cranberries and prunes are the nearest dried-fruit rows and are different foods; \u0027dried-apricots\u0027 has no feed cell today, so this is \u0027does not exist\u0027, not merely \u0027unpriced\u0027). Same food, different form = different purchase, the estate\u0027s standing fresh-vs-dried split. FOLLOW-UPS the caller must make together, not later: (1) mint \u0027dried-apricots\u0027 as recipe-only (recipe-board-everyday baseline + recipe-commodities.json for sale overlay) unless Brad wants it as a weekly staple; include patterns \u0027dried\\s+apricots?\u0027 and \u0027apricots?,?\\s+dried\u0027 and \u0027turkish\\s+apricots?\u0027 - \u0027turkish\u0027 names the dried form on real labels, which is exactly why the fresh row excludes it; excludes at neighboring rigor (start from dried-cranberries\u0027 list: no yogurt-covered? judgement call, but exclude baby-food pouches, trail mix, jam/preserves, nectar, canned-in-syrup halves, granola bars); (2) add the pair apricots \u003c-\u003e dried-apricots to commodity-dupe-allowlist.json with reason \u0027fresh produce vs dried-fruit-aisle form flip\u0027 BECAUSE the audit\u0027s prefix/suffix rule WILL flag this pair - the id must arrive with its allowlist entry or the daily pages Brad on a pair already adjudicated here; (3) separately, the vocabulary needs a NEW ingredients.json row for the name \u0027dried apricots\u0027 (the pre-resolve found no core-word row) with macros fdc:173941 (Apricots, dried, sulfured, uncooked - the correct uncooked-dried row; 173943 is stewed-with-sugar, wrong food); the name row and the id are two acts and this ruling authorizes the id only. One watch item for capture QA, not a blocker: the fresh row\u0027s Hy-Vee cell reads $13.32/lb, ~4x the crown - worth an eyeball that a dried or specialty product hasn\u0027t leaked past the excludes there."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  653.0,
+                                                                   "carbs_g":  24.2,
+                                                                   "protein_g":  41.5
+                                                               },
+                              "ours_per_serving":  {
+                                                       "calories":  533,
+                                                       "carbs_g":  21.1,
+                                                       "protein_g":  40.9
+                                                   },
+                              "protein_gap_pct":  -1.4,
+                              "verdict":  "pass",
+                              "detail":  "Totals at source scale over all 12 lines: 4263 cal, 327 g protein, 169 g carbs, 8 servings. Protein lands within 1.5% of the source\u0027s own figure, which says the 4 lb pork shoulder and every other portion are right. Calories run 18% under, explained by our pork-shoulder row being a leaner basis (186 cal/100 g) than the source\u0027s; the spice blend is also uncounted because I returned no row for it. 533 cal / 21 g carbs sits inside this run\u0027s conditions. Note the 330 g of lemons is counted whole even though the halves are roasted and largely discarded, which if anything overstates our carbs slightly."
+                          }
+}

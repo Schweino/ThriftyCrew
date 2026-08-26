@@ -1,0 +1,31 @@
+{
+    "slug":  "cilantro-lime-beer-can-chicken-tacos",
+    "title":  "Cilantro Lime Beer Can Chicken Tacos",
+    "source_url":  "https://www.isabeleats.com/beer-can-chicken-tacos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:22:37",
+    "updated":  "2026-08-26T04:22:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cilantro-lime shredded chicken in tortillas shares the flavor identity of live slow-cooker-cilantro-lime-chicken-bowls (word-overlap 30) and chili-lime-chicken-burrito; taco vs bowl is a vehicle swap and Tex-Mex/cilantro-lime chicken is already crowded (the 3g-carb band also excludes the tortillas).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:22:37",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/beer-can-chicken-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:22:38",
+                        "by":  "decider",
+                        "detail":  "Cilantro-lime shredded chicken in tortillas shares the flavor identity of live slow-cooker-cilantro-lime-chicken-bowls (word-overlap 30) and chili-lime-chicken-burrito; taco vs bowl is a vehicle swap and Tex-Mex/cilantro-lime chicken is already crowded (the 3g-carb band also excludes the tortillas)."
+                    }
+                ]
+}

@@ -1,0 +1,66 @@
+{
+    "slug":  "kfc-oven-baked-fried-chicken-tenders",
+    "title":  "KFC Oven Baked \"Fried\" Chicken Tenders",
+    "source_url":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:26",
+    "updated":  "2026-08-26T05:14:45",
+    "terms":  [
+                  {
+                      "term":  "chicken tenderloins",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cornmeal",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "mustard powder",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:26",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:20:26",
+                        "by":  "decider",
+                        "detail":  "Oven-\u0027fried\u0027 buttermilk-breaded chicken tenders (panko/cornmeal, KFC spice blend) - a distinct crispy breaded-tender format not in the catalog and different from the glazed honey-balsamic tenders accepted this run; band verified 465/25/53."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:21:23",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:07:07",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:08:02",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "all 3 blocking ingredient(s) carried"
+                    }
+                ]
+}

@@ -1,0 +1,66 @@
+{
+    "slug":  "chicken-fried-steak",
+    "title":  "Chicken Fried Steak",
+    "source_url":  "https://thecozycook.com/chicken-fried-steak-recipe/",
+    "protein":  "beef",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:11:03",
+    "updated":  "2026-08-26T04:54:43",
+    "terms":  [
+                  {
+                      "term":  "cube steak",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "seasoned salt",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Pan Drippings",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Pan Drippings"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:11:03",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/chicken-fried-steak-recipe/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:11:04",
+                        "by":  "decider",
+                        "detail":  "Distinct Southern comfort dinner (breaded cube steak with peppered cream gravy) not represented in the catalog; verified band, no dupe (name-shared neighbours are unrelated dishes)."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:12:20",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:46:14",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected, 1 not-purchased (pan drippings - excluded from `lines` because it is not purchasable). 3 food-macros-db rows returned. MISSING ROW, called out loudly: Cube Steak has NO row and I am not supplying one. FDC was asked and returned only bouillon-cube rows; my label reads then failed - mynetdiary (Hy-Vee beef cube steak) served the page without its nutrition table, "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:47:00",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "waiting on: Pan Drippings"
+                    }
+                ]
+}

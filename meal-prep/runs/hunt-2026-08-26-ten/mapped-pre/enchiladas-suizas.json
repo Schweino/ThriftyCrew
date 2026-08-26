@@ -1,0 +1,185 @@
+﻿{
+    "slug":  "enchiladas-suizas",
+    "title":  "Enchiladas Suizas",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "servings":  4,
+    "built_at":  "2026-08-26T04:53:37",
+    "line_count":  9,
+    "resolved_count":  5,
+    "residual_count":  4,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "Mexican crema",
+                           "cooked shredded chicken",
+                           "shredded Chihuahua cheese",
+                           "Sliced onions"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "2 cups salsa verde",
+                     "term":  "salsa verde",
+                     "canon_item":  "Salsa Verde",
+                     "bid":  "salsa-verde",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salsa-verde, 5 of 7 stores, cheapest 0.165 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  480
+                 },
+                 {
+                     "raw":  "¼ cup packed cilantro ((optional))",
+                     "term":  "cilantro",
+                     "canon_item":  "Fresh Cilantro",
+                     "bid":  "cilantro",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027cilantro\u0027 -\u003e cilantro (by mapper on 2026-08-26T04:51:58); nearest vocabulary rows: Fresh Cilantro [cilantro] DIFFERENT FORM: fresh",
+                     "source":  "cache",
+                     "optional":  true,
+                     "grams_source_basis":  4
+                 },
+                 {
+                     "raw":  "1 tablespoon vegetable oil, (plus more if frying)",
+                     "term":  "vegetable oil",
+                     "canon_item":  "Vegetable Oil",
+                     "bid":  "vegetable-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: vegetable-oil, 7 of 7 stores, cheapest 0.0666 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  14
+                 },
+                 {
+                     "raw":  "¾ cup Mexican crema, (plus more if you want it extra creamy)",
+                     "term":  "Mexican crema",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171288 Cheese, Mexican blend [SR Legacy] per 100 g: 384.0 cal, 23.5 P, 0.13 C, 32.1 F, 0.0 fiber | fdc:169031 ON THE BORDER, Mexican rice [SR Legacy] per 100 g: 195.0 cal, 3.56 P, 34.2 C, 4.86 F, 1.1 fiber | fdc:167999 Baking chocolate, mexican, squares [SR Legacy] per 100 g: 426.0 cal, 3.64 P, 77.4 C, 15.6 F, 4.0 fiber | fdc:174078 Bread, roll, Mexican, bollilo [SR Legacy] per 100 g: 318.0 cal, 10.6 P, 55.8 C, 5.8 F, 2.2 fiber; board ABSENT: no commodity and no capture match",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 ½ cups cooked shredded chicken",
+                     "term":  "cooked shredded chicken",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: cooked/shredded | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: cooked/shredded/boneless | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: cooked/shredded/boneless; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172957 Bratwurst, chicken, cooked [SR Legacy] per 100 g: 176.0 cal, 19.4 P, 0.0 C, 10.4 F, 0.0 fiber | fdc:171513 Chicken patty, frozen, cooked [SR Legacy] per 100 g: 287.0 cal, 14.8 P, 12.8 C, 19.6 F, 0.3 fiber | fdc:174466 Chicken, capons, giblets, cooked, simmered [SR Legacy] per 100 g: 164.0 cal, 26.4 P, 0.76 C, 5.4 F, 0.0 fiber | fdc:172397 Chicken, roasting, giblets, cooked, simmered [SR Legacy] per 100 g: 165.0 cal, 26.8 P, 0.86 C, 5.22 F, 0.0 fiber; board MAPPED: cooked-shredded-chicken, 3 of 7 stores, cheapest 0.3744 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Kosher salt, (to taste)",
+                     "term":  "Kosher salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "cache",
+                     "optional":  true,
+                     "grams_source_basis":  20,
+                     "grams_basis_fallback":  "no-qty-\u003ehouse staple"
+                 },
+                 {
+                     "raw":  "12 corn tortillas",
+                     "term":  "corn tortillas",
+                     "canon_item":  "Corn Tortillas",
+                     "bid":  "corn-tortillas",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: corn-tortillas, 3 of 7 stores, cheapest 0.0561 at Baker\u0027s",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "3 cups shredded Chihuahua cheese",
+                     "term":  "shredded Chihuahua cheese",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Cheddar Cheese, Shredded [cheddar-cheese-shredded] same form | Swiss Cheese [swiss-cheese] DIFFERENT FORM: shredded | Provolone Cheese [provolone-cheese] DIFFERENT FORM: shredded; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:173438 Cheese, mexican, queso chihuahua [SR Legacy] per 100 g: 374.0 cal, 21.6 P, 5.56 C, 29.7 F, 0.0 fiber | fdc:173431 Cheese, parmesan, shredded [SR Legacy] per 100 g: 415.0 cal, 37.9 P, 3.41 C, 27.3 F, 0.0 fiber | fdc:170900 Cheese, mozzarella, low moisture, part-skim, shredded [SR Legacy] per 100 g: 304.0 cal, 23.6 P, 8.06 C, 19.7 F, 0.0 fiber | fdc:168586 Nuts, coconut meat, dried (desiccated), sweetened, shredded [SR Legacy] per 100 g: 501.0 cal, 2.88 P, 47.7 C, 35.5 F, 4.5 fiber; board MAPPED: shredded-cheese, 7 of 7 stores, cheapest 0.1521 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "Sliced onions, (for topping)",
+                     "term":  "Sliced onions",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Green Onions [green-onions] DIFFERENT FORM: sliced; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170000 Onions, raw [SR Legacy] per 100 g: 40.0 cal, 1.1 P, 9.34 C, 0.1 F, 1.7 fiber | fdc:169844 DENNY\u0027S, onion rings [SR Legacy] per 100 g: 385.0 cal, 5.29 P, 41.0 C, 22.2 F, 2.4 fiber | fdc:170002 Onions, dehydrated flakes [SR Legacy] per 100 g: 349.0 cal, 8.95 P, 83.3 C, 0.46 F, 9.2 fiber | fdc:790577 Onions, red, raw [Foundation] per 100 g: 44.0 cal, 0.94 P, 9.93 C, 0.1 F, 2.2 fiber; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                     "source":  null,
+                     "optional":  true,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 5 of 9 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  519.0,
+                                          "carbs":  29.0,
+                                          "protein_g":  41.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  5,
+                           "lines_total":  9,
+                           "uncovered_lines":  [
+                                                   "Mexican crema",
+                                                   "cooked shredded chicken",
+                                                   "shredded Chihuahua cheese",
+                                                   "Sliced onions"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

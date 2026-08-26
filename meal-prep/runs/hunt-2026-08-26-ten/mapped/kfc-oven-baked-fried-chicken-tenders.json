@@ -1,0 +1,280 @@
+﻿{
+    "slug":  "kfc-oven-baked-fried-chicken-tenders",
+    "title":  "KFC Oven Baked \"Fried\" Chicken Tenders",
+    "source_url":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1/2 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp celery salt ((Note 1))",
+                            "item":  "Celery Salt",
+                            "bid":  "celery-salt",
+                            "board":  "recipe",
+                            "grams":  56,
+                            "buy":  "3 1/2 tbsp celery salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: celery-salt, 4 of 7 stores, cheapest 0.415 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tsp garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  22,
+                            "buy":  "2 tbsp plus 1 tsp garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp dried thyme",
+                            "item":  "Dried Thyme",
+                            "bid":  "dried-thyme",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 3/4 tsp dried thyme",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-thyme, 5 of 7 stores, cheapest 0.8776 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp dried basil",
+                            "item":  "Dried Basil",
+                            "bid":  "dried-basil",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 3/4 tsp dried basil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-basil, 6 of 7 stores, cheapest 0.7312 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp dried oregano",
+                            "item":  "Dried Oregano",
+                            "bid":  "dried-oregano",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 3/4 tsp dried oregano",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-oregano, 7 of 7 stores, cheapest 0.9307 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tbsp coarsely ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  null,
+                            "grams":  12,
+                            "buy":  "1 3/4 tbsp coarsely ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Coarse vs fine is a grind within one pepper SKU, not a form flip, exactly as \u0027ground oregano\u0027 was ruled to dried-oregano; board carries black-pepper 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tbsp mustard powder",
+                            "item":  "Mustard Powder",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  23,
+                            "buy":  "3 1/2 tbsp mustard powder",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Dry ground seed, not the prepared condiment: different price class and different gram weight per spoon, so the `mustard` bridge is refused. Pantry-static pricing at 1 tbsp is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp paprika ((not smoked, use sweet or plain))",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  48,
+                            "buy":  "7 tbsp paprika (sweet or plain, not smoked)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp ground ginger",
+                            "item":  "Ground Ginger",
+                            "bid":  "ground-ginger",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "1 tbsp plus 1/2 tsp ground ginger",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-ginger, 6 of 7 stores, cheapest 0.7971 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp cayenne pepper or ground pure chili ((optional - for KFC \"Zinger\" flavour!))",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  null,
+                            "grams":  6,
+                            "buy":  "1 tbsp plus 1/2 tsp cayenne pepper (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "The source marks the line optional. cayenne-pepper is a live board id (6 of 7) and the DB already holds the Cayenne Pepper row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1.2 - 1.4 lb / 600 - 700 g chicken tenderloin ((10 - 12 pieces) (Note 2))",
+                            "item":  "Chicken Tenderloins",
+                            "bid":  "chicken-tenderloins",
+                            "board":  null,
+                            "grams":  2275,
+                            "buy":  "5 lb chicken tenderloins (about 35 to 42 pieces)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Range midpoint of 600 - 700 g, raw. The main protein: no commodity claims it but today\u0027s captures carry matching products, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no chicken-breast bridge.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup buttermilk OR 1/3 cup plain yoghurt + 2/3 cup milk ((Note 3))",
+                            "item":  "Buttermilk",
+                            "bid":  "buttermilk",
+                            "board":  null,
+                            "grams":  858,
+                            "buy":  "3 1/2 cups buttermilk",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Exact prior ruling from 2026-08-26 and a live board id at 5 of 7 stores - a reuse. The line states 1 cup, so 245 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup flour",
+                            "item":  "All-Purpose Flour",
+                            "bid":  "flour",
+                            "board":  "recipe",
+                            "grams":  438,
+                            "buy":  "3 1/2 cups all-purpose flour",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027flour\u0027 -\u003e flour (by mapper on 2026-08-26T04:46:59); nearest vocabulary rows: All-Purpose Flour [flour] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup panko breadcrumbs",
+                            "item":  "Panko Breadcrumbs",
+                            "bid":  "bread-crumbs",
+                            "board":  "weekly",
+                            "grams":  210,
+                            "buy":  "3 1/2 cups panko breadcrumbs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed here because the table computed no weight: 1 cup panko is 60 g on the DB\u0027s own 0.5 cup = 30 g row.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/4 cup cornmeal ((Note 4))",
+                            "item":  "Cornmeal",
+                            "bid":  "cornmeal",
+                            "board":  null,
+                            "grams":  121,
+                            "buy":  "7/8 cup cornmeal",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "No commodity claims it and today\u0027s captures carry it; a distinct food from cornstarch and from corn flour, so neither existing id can carry it.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp butter ((unsalted))",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tbsp unsalted butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp vegetable or canola oil",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  null,
+                            "grams":  48,
+                            "buy":  "3 1/2 tbsp vegetable or canola oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Oil spray",
+                            "item":  "Cooking Spray",
+                            "bid":  "cooking-spray",
+                            "board":  null,
+                            "grams":  10,
+                            "buy":  "oil spray, for the racks and trays",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "cooking-spray is a live board id at 7 of 7, so a reuse; 3 g is a light coating, following the 2026-08-26 cooking-spray ruling.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "chicken tenderloins",
+                                 "cornmeal",
+                                 "mustard powder"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "chicken tenderloin",
+                                        "proposed_bid":  "chicken-tenderloins",
+                                        "evidence":  "The main protein: no commodity claims it but today\u0027s captures carry matching products, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no chicken-breast bridge.",
+                                        "declared":  false
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "chicken-tenderloins",
+                                  "verdict":  "approve",
+                                  "bid":  "chicken-tenderloins",
+                                  "reason":  "No id prices this cut: chicken-breast, whole-chicken and cooked-shredded-chicken each EXCLUDE \u0027tender\u0027 in commodities.json (lines 20, 5206, 66494), so tenderloins are deliberately walled out of every existing chicken id rather than carried by one; the live feed\u0027s only \u0027tenderloin\u0027 cell is pork-tenderloin, and chicken-nuggets is a breaded frozen cooked form, i.e. a different purchase. Approve chicken-tenderloins as recipe-only (recipe-board baseline + recipe-commodities.json). Follow-ups: (1) include must be tight — e.g. chicken\\s+tender(?:loin)?s?\\b — with a full ~150-pattern exclude list copied from chicken-breast\u0027s rigor, and it MUST exclude breaded|battered|crispy|frozen|fully\\s+cooked|nugget|popcorn|dipping|strips so breaded \u0027chicken tenders\u0027 SKUs cannot crown a raw-tray id; (2) add commodity-dupe-allowlist.json pairs chicken-tenderloins~chicken-breast (different cut, distinct tray SKU priced above breast) and chicken-tenderloins~pork-tenderloin (different animal, shared word only) so the daily audit never re-flags them; (3) separately, meal-prep vocabulary has no \u0027chicken tenderloin\u0027 row (nearest is Pork Tenderloin) — a new NAME row is needed via the sanctioned editor, and this ruling does not mint it."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u00271 tbsp celery salt ((Note 1))\u0027: the qty engine could not ground this weight (default tbsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  ""
+}

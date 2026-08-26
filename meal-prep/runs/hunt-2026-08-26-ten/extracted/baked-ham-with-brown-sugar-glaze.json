@@ -1,0 +1,103 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Ham with Brown Sugar Glaze",
+  "source_url": "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/",
+  "servings": 12,
+  "time_total": "155 minutes",
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "1 spiral ham (approx 7-9 pounds)",
+      "item": "spiral ham",
+      "qty": "1",
+      "unit": null,
+      "prep": "approx 7-9 pounds",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons Dijon mustard",
+      "item": "Dijon mustard",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup pineapple juice (or orange juice)",
+      "item": "pineapple juice",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": "(or orange juice)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup pineapple juice (or orange juice)",
+      "item": "pineapple juice",
+      "qty": "½",
+      "unit": "cup",
+      "prep": "(or orange juice)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup brown sugar",
+      "item": "brown sugar",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons Dijon mustard",
+      "item": "Dijon mustard",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon ground ginger",
+      "item": "ground ginger",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons cornstarch",
+      "item": "cornstarch",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 325°F.",
+    "Combine dijon mustard and pineapple juice.  Brush over ham.",
+    "If your ham has a plastic disk on the bone, this should be removed and discarded. Place the ham, flat side down in a roasting pan, and cover tightly with foil.  Roast 12-15 minutes per pound (or according to package directions).",
+    "Meanwhile, combine glaze ingredients and bring to a boil. Turn heat down and simmer 2-3 minutes.  Cool.",
+    "15 minutes before ham is done, remove from the oven and turn the oven up to 425°F.",
+    "Brush with glaze and return to the oven until the glaze is caramelized and the ham has reached the safe cook temperature."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 8,
+    "verified": 8,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

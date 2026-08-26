@@ -1,0 +1,185 @@
+{
+ "slug": "grilled-garlic-parmesan-wings-with-cilantro",
+ "lines": [
+  {
+   "raw": "8 cups water",
+   "buy": "about 4 3/4 quarts, for the brine (discarded)",
+   "grams_source": 1893,
+   "notes": "Tap water for the brine; nothing is bought and it carries no macros."
+  },
+  {
+   "raw": "1/3 cup kosher salt",
+   "buy": "3/4 cup plus 1 tablespoon kosher salt, for the brine",
+   "grams_source": 76,
+   "notes": "Brine salt, almost all discarded; weighed at Morton kosher (1 cup = 227 g)."
+  },
+  {
+   "raw": "1 tablespoon granulated sugar",
+   "buy": "2 1/3 tablespoons, for the brine",
+   "grams_source": 12.5,
+   "notes": "Brine sugar, largely discarded."
+  },
+  {
+   "raw": "3-4 pounds chicken wings, (tips removed; drumettes and flats separated)",
+   "buy": "8 lb, tips removed, drumettes and flats separated",
+   "grams_source": 1588,
+   "notes": "Midpoint of the stated 3-4 lb range, bone-in weight."
+  },
+  {
+   "raw": "1 tablespoon oil, (for grilling)",
+   "buy": "2 1/3 tablespoons, for oiling the grill grates",
+   "grams_source": 13.6,
+   "notes": "Goes on the grates, not into the food."
+  },
+  {
+   "raw": "1/2 cup unsalted butter ((1 stick))",
+   "buy": "1 1/6 cups (2 1/3 sticks) unsalted butter, melted",
+   "grams_source": 113,
+   "notes": "1 stick = 113 g."
+  },
+  {
+   "raw": "4 garlic cloves, (minced)",
+   "buy": "9 cloves, minced",
+   "grams_source": 12,
+   "notes": "3 g per clove."
+  },
+  {
+   "raw": "1 teaspoon smoked paprika",
+   "buy": "2 1/3 teaspoons",
+   "grams_source": 2.3,
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 teaspoon kosher salt",
+   "buy": "2 1/3 teaspoons kosher salt",
+   "grams_source": 6,
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1/4 teaspoon freshly ground black pepper",
+   "buy": "generous 1/2 teaspoon, freshly ground",
+   "grams_source": 0.6,
+   "notes": "Settled-form spice; 2.3 g per tsp."
+  },
+  {
+   "raw": "1/4 cup grated Parmesan cheese, (divided)",
+   "buy": "1/2 cup plus 1 1/2 tablespoons grated Parmesan, divided",
+   "grams_source": 25,
+   "notes": "1/4 cup grated = 25 g."
+  },
+  {
+   "raw": "1/4 cup chopped cilantro (for garnish)",
+   "buy": "generous 1/2 cup chopped, for garnish",
+   "grams_source": 4,
+   "notes": "Chopped fresh leaves."
+  },
+  {
+   "raw": "2 tablespoons shredded Parmesan cheese, (for garnish)",
+   "buy": "1/4 cup plus 1 teaspoon shredded Parmesan, for garnish",
+   "grams_source": 10,
+   "notes": "Same cheese as the grated line, coarser cut."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "8 cups water",
+   "term": "water",
+   "canon_item": "Water",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 1893,
+   "evidence": "Brine water: nothing is bought and it is poured off. Follows the 'cold water' -> not-purchased ruling of 2026-08-26."
+  },
+  {
+   "raw": "1 tablespoon granulated sugar",
+   "term": "granulated sugar",
+   "canon_item": "Sugar",
+   "bid": "sugar",
+   "decision": "mapped",
+   "grams_source": 12.5,
+   "evidence": "Vocabulary row Sugar [sugar] is same form ('granulated' is what plain sugar is); board carries sugar 7 of 7."
+  },
+  {
+   "raw": "3-4 pounds chicken wings, (tips removed; drumettes and flats separated)",
+   "term": "chicken wings",
+   "canon_item": "Chicken Wings",
+   "bid": "chicken-wings",
+   "decision": "mapped",
+   "grams_source": 1588,
+   "evidence": "Exact prior ruling for this phrase on 2026-08-26; chicken-wings is a live board id at 7 of 7, so a reuse. Raw bone-in wings."
+  },
+  {
+   "raw": "1 tablespoon oil, (for grilling)",
+   "term": "oil",
+   "canon_item": "Vegetable Oil",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 13.6,
+   "evidence": "No commodity claims a generic neutral oil and I will not bridge it onto olive-oil (different price class). 1 tbsp on the grates: pantry-static pricing is safe."
+  },
+  {
+   "raw": "1/2 cup unsalted butter ((1 stick))",
+   "term": "unsalted butter",
+   "canon_item": "Butter",
+   "bid": "butter",
+   "decision": "mapped",
+   "grams_source": 113,
+   "evidence": "Salted vs unsalted is the same product at the same shelf price, unlike a true form flip; board carries butter 7 of 7 and the DB has the row."
+  },
+  {
+   "raw": "4 garlic cloves, (minced)",
+   "term": "garlic cloves",
+   "canon_item": "Garlic",
+   "bid": "garlic",
+   "decision": "mapped",
+   "grams_source": 12,
+   "evidence": "The 'ground cloves' near-row is a keyword miss on the word clove - this is fresh bulb garlic, board 6 of 7."
+  },
+  {
+   "raw": "1/4 teaspoon freshly ground black pepper",
+   "term": "freshly ground black pepper",
+   "canon_item": "Black Pepper",
+   "bid": "black-pepper",
+   "decision": "mapped",
+   "grams_source": 0.6,
+   "evidence": "'Freshly ground' is a grinder instruction, not a different food; board carries black-pepper 7 of 7."
+  },
+  {
+   "raw": "1/4 cup grated Parmesan cheese, (divided)",
+   "term": "grated Parmesan cheese",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 25,
+   "evidence": "Vocabulary row Parmesan Cheese [parmesan]; grated is the standard sold cut of parmesan. Board showed no commodity claim, so the term is reported absent for pricing."
+  },
+  {
+   "raw": "1/4 cup chopped cilantro (for garnish)",
+   "term": "cilantro",
+   "canon_item": "Fresh Cilantro",
+   "bid": "cilantro",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "The 'fresh' form flag is spurious - chopped cilantro for garnish IS the fresh bunch; board 6 of 7."
+  },
+  {
+   "raw": "2 tablespoons shredded Parmesan cheese, (for garnish)",
+   "term": "shredded Parmesan cheese",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 10,
+   "evidence": "REFUSED the board's shredded-cheese bridge: that id prices bagged cheddar/blend, a different cheese and price class from parmesan."
+  }
+ ],
+ "absent_terms": [
+  "parmesan cheese"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Source band 660 cal / 50 g protein per serving over 6. My build: 1588 g bone-in wings (about 65% edible) = 175 g edible per serving -> ~389 cal / 32 g P, plus butter 18.8 g (135 cal) and parmesan 5.8 g (24 cal, 1.7 P) = about 548 cal and 34 g protein. Calories sit inside the 400-650 band; PROTEIN IS 32% UNDER the published figure. The gap is explained by bone yield: 50 g/serving requires treating the full bone-in 265 g as edible meat, which no wing does. I did not raise the grams to chase it - flagging instead, and the DB row for Chicken Wings (which I cannot read) should be checked for whether it is on an edible or a bone-in basis."
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-and-stuffing-casserole",
+    "title":  "Chicken and Stuffing Casserole",
+    "source_url":  "https://thecozycook.com/chicken-and-stuffing-casserole/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:27",
+    "updated":  "2026-08-26T04:15:27",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-protein twin of live turkey-and-stuffing-casserole: same stuffing-mix + cream-of-chicken/sour-cream casserole dinner, only the poultry cut differs.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:27",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/chicken-and-stuffing-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:15:27",
+                        "by":  "decider",
+                        "detail":  "Cross-protein twin of live turkey-and-stuffing-casserole: same stuffing-mix + cream-of-chicken/sour-cream casserole dinner, only the poultry cut differs."
+                    }
+                ]
+}

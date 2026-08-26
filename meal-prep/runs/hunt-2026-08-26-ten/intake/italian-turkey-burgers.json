@@ -1,0 +1,150 @@
+{
+ "name": "Italian Turkey Burgers",
+ "slug": "italian-turkey-burgers",
+ "protein": "turkey",
+ "cuisine": "Italian-American",
+ "source_url": "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "93/7 Ground Turkey",
+   "grams": 1058,
+   "buy": "2 1/3 lb"
+  },
+  {
+   "item": "Turkey Sausage",
+   "grams": 1058,
+   "buy": "2 1/3 lb, casings removed"
+  },
+  {
+   "item": "Panko Breadcrumbs",
+   "grams": 47,
+   "buy": "3/4 cup"
+  },
+  {
+   "item": "Dried Basil",
+   "grams": 7,
+   "buy": "1 1/2 tbsp"
+  },
+  {
+   "item": "Dried Oregano",
+   "grams": 7,
+   "buy": "1 1/2 tbsp"
+  },
+  {
+   "item": "Fennel Seeds",
+   "grams": 5,
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 7,
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "item": "Salt",
+   "grams": 3,
+   "buy": "generous 1/2 tsp"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 1,
+   "buy": "generous 1/2 tsp"
+  },
+  {
+   "item": "Red Pepper Flakes",
+   "grams": 1,
+   "buy": "1/2 tsp"
+  },
+  {
+   "item": "Asiago Cheese",
+   "grams": 529,
+   "buy": "1 lb 2 1/2 oz, shredded"
+  },
+  {
+   "item": "Mozzarella Cheese",
+   "grams": 529,
+   "buy": "1 lb 2 1/2 oz, sliced"
+  },
+  {
+   "item": "Whole Wheat Hamburger Buns",
+   "grams": 602,
+   "buy": "14 buns, split and toasted"
+  },
+  {
+   "item": "Red Onion",
+   "grams": 350,
+   "buy": "2 large red onions, halved and thinly sliced"
+  },
+  {
+   "item": "Green Bell Pepper",
+   "grams": 280,
+   "buy": "2 large green bell peppers, thinly sliced"
+  },
+  {
+   "item": "Red Bell Pepper",
+   "grams": 280,
+   "buy": "2 large red bell peppers, thinly sliced"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 63,
+   "buy": "4 2/3 tbsp"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 675,
+  "protein_g": 53.1,
+  "carbs_g": 30.8,
+  "fat_g": 36.2
+ },
+ "writer_notes": [
+  "All 17 costed ingredients are used by a step; no orphans and no step uses an unbought item. Salt and black pepper serve both the meat blend and the veggie toss.",
+  "Source recipe makes 6 patties; locked buys scale ~2.33x to 14 servings, so prose says shape 14 patties.",
+  "DATA FLAG: locked calories are 675 per serving, which exceeds this run's stated ceiling of 650 calories per serving. Carbs 30.8 g are within the 35 g limit. Value came from the skeleton locked view; flagged, not fixed.",
+  "No cost_lines were provided in dispatch, so shop_smart makes no per-package or per-ounce price claims; only the spec cost_ps token appears in cost prose.",
+  "Cost figures written as ${{cost_ps}} token; calories and protein as {{cal}} and {{protein}} tokens per templating rule.",
+  "Turkey sausage prose notes casings removed and sweet-or-spicy choice, matching the locked buy string and the source page."
+ ],
+ "forbidden_prose_terms": [
+  "—",
+  "–",
+  "cheap",
+  "seafood",
+  "diet"
+ ],
+ "prose": {
+  "intro_html": "<p>Some nights you want a burger without the drive-thru math working against you. These Italian turkey burgers are the answer. We take lean ground turkey, fold in Italian turkey sausage for the flavor that makes people close their eyes on the first bite, and season the whole bowl with basil, oregano, fennel, and garlic. Then we melt asiago and mozzarella over the top and pile on grilled onions and peppers. At {{cal}} calories and {{protein}} grams of protein a serving, this eats like a treat and still shows up for your goals.</p>",
+  "shop_smart": "<p>The two meats are the heart of this build, so start there. You want lean ground turkey and turkey sausage with the casings removed. If your store only sells the sausage in links, that is fine, just slit the casing and squeeze the meat into the bowl. Buy the sausage in the heat level your table likes, sweet or spicy, because the seasoning blend carries either one just as well.</p><p>For the cheese, grab blocks of asiago and mozzarella and shred or slice them yourself. A block holds up longer in the fridge than an open bag and gives you a cleaner melt. The onions and bell peppers do the heavy lifting on flavor and volume, so pick peppers that feel firm and heavy for their size and onions with tight, papery skins. The whole wheat buns and the pantry spices round it out, and most of those spices are probably already in your cabinet.</p>",
+  "make_it": "<p>Fire up your grill to medium high. While it heats, build the burger blend. In a large bowl combine the ground turkey, the turkey sausage with its casings removed, the panko, basil, oregano, fennel seeds, garlic powder, salt, black pepper, and red pepper flakes.</p><p>Mix it with your fingers just until the seasoning is spread evenly through the meat. Do not pack it or squeeze it, because a compacted turkey burger cooks up dense and dry. Shape the blend into 14 patties.</p><p>Lay the patties on the grill and cook until the bottoms are browned, about 5 minutes. Flip them and keep grilling until they are cooked through, about 5 more minutes. When they are nearly done, top each one with mozzarella and asiago so the cheese melts over the last minute.</p><p>Meanwhile, put the sliced red onion and the green and red bell peppers in a bowl, drizzle with the olive oil, and sprinkle with a little salt and pepper. Toss to coat. Move them to a grill basket and cook until soft and lightly charred, about 8 minutes, turning often so they do not scorch. Toast the buns while you are at it. Serve each burger on a bun, piled with the grilled veggies, and eat it while it is hot.</p>",
+  "portion_html": "<p>This batch is built to fill 14 containers, one turkey burger apiece. The honest way to keep every portion even is to weigh as you go. The patties should land close to the same size since you shaped 14 from one bowl, but drop the grilled veggies onto a scale and split the pile into 14 equal shares so nobody gets shorted on the peppers and onions.</p><p>Pack the burger and its share of veggies together, and keep the bun bagged separately so it does not go soft before you eat. Reheat the burger and veggies gently, then toast the bun fresh. Each container comes in at {{cal}} calories with {{protein}} grams of protein.</p>",
+  "cost_closing_html": "<p>Here is the part your wallet cares about. This whole thing runs about ${{cost_ps}} per serving. That is a restaurant-style Italian burger, cheese and grilled veggies and all, for less than the tip you would leave on the same plate out. Cook it once, eat it all week, and let the math work for you instead of against you.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, that is exactly what we do here every week. Thrifty Crew membership is a dollar a month, and it gets you the full library of high-protein meal prep recipes with the costs and the macros already worked out. Come cook with the crew.</p>"
+ },
+ "head": {
+  "description": "Italian turkey burgers made with lean ground turkey and Italian turkey sausage, melted asiago and mozzarella, and grilled onions and peppers. A budget high-protein meal prep dinner scaled to 14 servings.",
+  "keywords": "italian turkey burgers, turkey burger meal prep, high protein burgers, ground turkey recipes, meal prep dinner, grilled turkey burgers",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT20M",
+  "totalTime": "PT30M",
+  "steps": [
+   "Heat the grill to medium high. In a large bowl combine the ground turkey, turkey sausage with casings removed, panko, basil, oregano, fennel seeds, garlic powder, salt, black pepper, and red pepper flakes.",
+   "Mix gently with your fingers until the seasoning is evenly incorporated, without compacting the meat.",
+   "Shape the mixture into 14 patties.",
+   "Grill the patties until the bottoms are browned, about 5 minutes.",
+   "Flip and grill until cooked through, about 5 more minutes, topping each patty with mozzarella and asiago near the end.",
+   "Toss the sliced red onion and green and red bell peppers with the olive oil, salt, and pepper, then grill in a basket until soft and lightly charred, about 8 minutes, turning often. Toast the buns.",
+   "Serve each burger on a toasted bun topped with the grilled veggies."
+  ],
+  "step_names": [
+   "Mix the blend",
+   "Combine gently",
+   "Shape patties",
+   "Grill first side",
+   "Flip and cheese",
+   "Grill the veggies",
+   "Assemble"
+  ]
+ }
+}

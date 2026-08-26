@@ -1,0 +1,982 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-ten",
+ "batch": 4,
+ "generated": "2026-08-26T04:55:21",
+ "batch_terms": [
+  "parmesan cheese",
+  "bourbon",
+  "mozzarella cheese"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "parmesan cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "parmesan cheese",
+     "attempts": [
+      {
+       "term": "parmesan cheese",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sartori SarVecchio Parmesan Cheese",
+       "price": 6.49,
+       "size": "5.3 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001186311870"
+      },
+      {
+       "item": "Sartori Grated Parmesan Cheese 7 oz",
+       "price": 6.99,
+       "size": "7 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001186310976"
+      },
+      {
+       "item": "Private Selection® Parmesan Cheese Wedge",
+       "price": 5.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111009606"
+      },
+      {
+       "item": "Simple Truth Organic® Grated Parmesan Cheese",
+       "price": 4.29,
+       "size": "5 oz tub",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111078922"
+      },
+      {
+       "item": "Private Selection® Grated Parmesan Cheese Cup",
+       "price": 5.49,
+       "size": "5 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111063674"
+      },
+      {
+       "item": "Private Selection® Shaved Parmesan Cheese Cup",
+       "price": 5.49,
+       "size": "4.5 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111063677"
+      },
+      {
+       "item": "Cello Extra Aged Copper Kettle Parmesan Cheese Wedge",
+       "price": 19.99,
+       "size": "1 lb",
+       "relevance": 127,
+       "url": "https://www.bakersplus.com/p/0028257850000"
+      },
+      {
+       "item": "Kraft Parmesan Grated Cheese",
+       "price": 8.49,
+       "size": "16 ounce",
+       "relevance": 93,
+       "url": "https://www.bakersplus.com/p/0084037090050"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "parmesan cheese",
+     "attempts": [
+      {
+       "term": "parmesan cheese",
+       "state": "OK",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kraft Grated Cheese, Parmesan Cheese, 8 Oz",
+       "price": 6.79,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_grated_cheese_parmesan_cheese_8_oz/p/1564405684716409165"
+      },
+      {
+       "item": "Bel Gioioso Power Full Snack Parmesan Cheese 8 Ea",
+       "price": 4.99,
+       "size": "8 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_power_full_snack_parmesan_cheese_8_ea/p/8215973"
+      },
+      {
+       "item": "Kraft Refrigerated Shredded Parmesan Cheese, 5 Oz Tub",
+       "price": 4.89,
+       "size": "5 oz",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_refrigerated_shredded_parmesan_cheese_5_oz_tub/p/1764405684715372806"
+      },
+      {
+       "item": "Pasta Roni Parmesan Cheese Flavor Angel Hair Pasta 5.1 Oz",
+       "price": 1.79,
+       "size": "5.1 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sides/pasta_roni_parmesan_cheese_flavor_angel_hair_pasta_5_1_oz/p/15972"
+      },
+      {
+       "item": "Prego® Alfredo Pasta Sauce With Roasted Garlic And Parmesan Cheese 14.500 Oz",
+       "price": 3.29,
+       "size": "14.500 oz",
+       "relevance": 121,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sauce_cream_based/prego_alfredo_pasta_sauce_with_roasted_garlic_and_parmesan_cheese_14_500_oz/p/34105"
+      },
+      {
+       "item": "Bel Gioioso Cheese, Parmesan 5 Oz",
+       "price": 5.99,
+       "size": "5 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_cheese_parmesan_5_oz/p/85596"
+      },
+      {
+       "item": "Parmesan Shredded Cheese Our Family",
+       "price": 2.79,
+       "size": "5 oz",
+       "relevance": 91,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/crackers/toppers_dips/parmesan_shredded_cheese_our_family/p/1564405684712451100"
+      },
+      {
+       "item": "Kraft Natural Cheese Grated Parmesan",
+       "price": 4.89,
+       "size": "5 oz",
+       "relevance": 91,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_natural_cheese_grated_parmesan/p/1764405684715840522"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "parmesan cheese",
+     "attempts": [
+      {
+       "term": "parmesan cheese",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Parmesan Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713413-fareway-cheese-parmesan-fancy-shredded-6-oz"
+      },
+      {
+       "item": "Fareway Grated Parmesan Cheese",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24501059-fareway-cheese-parmesan-grated-8-oz"
+      },
+      {
+       "item": "BelGioioso Freshly Shredded Parmesan Cheese",
+       "price": 4.49,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72161-belgioioso-cheese-freshly-shredded-parmesan-cheese-cup-5-oz"
+      },
+      {
+       "item": "BelGioioso Parmesan Wedge",
+       "price": 4.49,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/247155-belgioioso-parmesan-cheese-wedge-5-oz"
+      },
+      {
+       "item": "Kraft Grated Parmesan Cheese Shaker Bottle",
+       "price": 4.44,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/64564288-kraft-grated-parm-pp-499"
+      },
+      {
+       "item": "Crystal Farms Cheese, Parmesan, Finely Shredded",
+       "price": 2.67,
+       "size": "5.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27152419-crystal-farms-cf-shredded-parmesan-cheese-5-5-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "parmesan cheese",
+     "attempts": [
+      {
+       "term": "parmesan cheese",
+       "state": "MATCHES",
+       "hits": 27
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+       "price": 6.44,
+       "size": "",
+       "unit_price": "$0.64/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/16343160365"
+      },
+      {
+       "item": "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+       "price": 6.54,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3620022163"
+      },
+      {
+       "item": "Member's Mark Grated Parmesan Cheese, 24 oz.",
+       "price": 7.42,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XOCVA61RIFC"
+      },
+      {
+       "item": "Member's Mark Shredded Parmesan Cheese, 24 oz.",
+       "price": 10.74,
+       "size": "",
+       "unit_price": "$0.45/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/35CJCISKI68K"
+      },
+      {
+       "item": "Kraft Parmesan Cheese Grated 4.5 lb.",
+       "price": 25.88,
+       "size": "",
+       "unit_price": "$5.75/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3T9R2XRIKCMH"
+      },
+      {
+       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$4.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13571669511"
+      },
+      {
+       "item": "Member's Mark Parmesan Cheese Wedge, priced per pound",
+       "price": 16.45,
+       "size": "",
+       "unit_price": "$6.58/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/78RG19NPUFZD"
+      },
+      {
+       "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+       "price": 9.86,
+       "size": "",
+       "unit_price": "$5.63/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "bourbon",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "bourbon",
+     "attempts": [
+      {
+       "term": "bourbon",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Jim Beam Bourbon Whiskey",
+       "price": 0.99,
+       "size": "50 ml",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0008068600190"
+      },
+      {
+       "item": "Jim Beam Bourbon Whiskey",
+       "price": 9.99,
+       "size": "375 ml",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0008068600160"
+      },
+      {
+       "item": "Jim Beam Bourbon Whiskey",
+       "price": 18.99,
+       "size": "750 ml",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0008068600143"
+      },
+      {
+       "item": "Knob Creek Bourbon Whiskey",
+       "price": 35.99,
+       "size": "750 ml",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0008068601676"
+      },
+      {
+       "item": "Maker's Mark Bourbon Whisky",
+       "price": 28.99,
+       "size": "750 ml",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0008524613943"
+      },
+      {
+       "item": "Maker's Mark Bourbon Whisky",
+       "price": 52.99,
+       "size": "1.75 l",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0008524613941"
+      },
+      {
+       "item": "Elijah Craig Small Batch Bourbon",
+       "price": 29.99,
+       "size": "750 ml",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0009674900006"
+      },
+      {
+       "item": "Bulleit Whiskey - American Bourbon",
+       "price": 30.99,
+       "size": "750 ml",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0008700000552"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "bourbon",
+     "attempts": [
+      {
+       "term": "bourbon",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Woodford Reserve Bourbon 750 Ml",
+       "price": 61.99,
+       "size": "750 ml",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/woodford_reserve_bourbon_750_ml/p/7102049"
+      },
+      {
+       "item": "Lean Cuisine Maple Bourbon Chicken 9 Oz",
+       "price": 3.99,
+       "size": "9 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/lean_cuisine_maple_bourbon_chicken_9_oz/p/2319762"
+      },
+      {
+       "item": "Jim Beam Whiskey, Kentucky Straight Bourbon 50 Ml",
+       "price": 0.99,
+       "size": "50 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/jim_beam_whiskey_kentucky_straight_bourbon_50_ml/p/2020766"
+      },
+      {
+       "item": "Jim Beam Kentucky Straight Bourbon Whiskey 750 Ml",
+       "price": 21.99,
+       "size": "750 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/jim_beam_kentucky_straight_bourbon_whiskey_750_ml/p/1318577"
+      },
+      {
+       "item": "Jim Beam Kentucky Straight Bourbon Whiskey 750 Ml",
+       "price": 21.99,
+       "size": "750 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/jim_beam_kentucky_straight_bourbon_whiskey_750_ml/p/5592695"
+      },
+      {
+       "item": "Old Crow Whiskey, Kentucky Straight Bourbon 1.75 L",
+       "price": 23.99,
+       "size": "1.75 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/old_crow_whiskey_kentucky_straight_bourbon_1_75_l/p/2018004"
+      },
+      {
+       "item": "Larceny Whiskey, Kentucky Straight Bourbon 750 Ml",
+       "price": 34.99,
+       "size": "750 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/larceny_whiskey_kentucky_straight_bourbon_750_ml/p/5718895"
+      },
+      {
+       "item": "Ten High Whiskey, Kentucky Bourbon, Sour Mash 1.75 L",
+       "price": 19.49,
+       "size": "1.75 ltr",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/beer_wine_spirits/spirits/bourbon/ten_high_whiskey_kentucky_bourbon_sour_mash_1_75_l/p/2019302"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "bourbon",
+     "attempts": [
+      {
+       "term": "bourbon",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bulleit Bourbon Whiskey",
+       "price": 32.99,
+       "size": "750 ml",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2678191-bulleit-bourbon-whiskey-750-ml"
+      },
+      {
+       "item": "Evan Williams Black Bourbon",
+       "price": 29.99,
+       "size": "1.75 L",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45643-evan-williams-straight-bourbon-black-label-1-75-l"
+      },
+      {
+       "item": "Four Roses Distillery Four Roses Bourbon Whiskey, 80 Proof",
+       "price": 19.99,
+       "size": "750 ml",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2678201-four-roses-yellow-label-bourbon-750-ml"
+      },
+      {
+       "item": "Rebel Kentucky Straight Bourbon Whiskey 100 Proof 100 Proof Straight Bourbon",
+       "price": 23.99,
+       "size": "750 ml",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984899-rebel-kentucky-straight-bourbon-whiskey-100-proof-100-proof-straight-bourbon-750-ml"
+      },
+      {
+       "item": "Elijah Craig 94PR Kentucky Straight Bourbon Whiskey",
+       "price": 29.99,
+       "size": "750 ml",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/57365-elijah-craig-94pr-kentucky-straight-bourbon-whiskey-750-ml"
+      },
+      {
+       "item": "Jim Beam Bourbon Whiskey",
+       "price": 17.99,
+       "size": "750 ml",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45619-jim-beam-bourbon-whiskey-kentucky-straight-750-ml"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "bourbon",
+     "attempts": [
+      {
+       "term": "bourbon",
+       "state": "MATCHES",
+       "hits": 31
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Kentucky Straight Bourbon Whiskey, 750 ml",
+       "price": 16.94,
+       "size": "",
+       "unit_price": "$0.67/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4PNSSUZA82L2"
+      },
+      {
+       "item": "Woodford Reserve Kentucky Straight Bourbon Whiskey (750 ml)",
+       "price": 26.97,
+       "size": "",
+       "unit_price": "$1.06/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5V1QES5BXF4W"
+      },
+      {
+       "item": "Jim Beam Bourbon Whiskey 1.75 L",
+       "price": 22.97,
+       "size": "",
+       "unit_price": "$0.39/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/53G70NHP4D9X"
+      },
+      {
+       "item": "Angel's Envy Kentucky Straight Bourbon Whiskey, 750 ml",
+       "price": 33.97,
+       "size": "",
+       "unit_price": "$1.34/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61HLS5N1HPMP"
+      },
+      {
+       "item": "Russell's Reserve 10-Year-Old Bourbon Whiskey, 750 ml",
+       "price": 30.97,
+       "size": "",
+       "unit_price": "$1.22/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/42OATCLGEXMA"
+      },
+      {
+       "item": "Maker's Mark Bourbon Whisky, 1.75 L",
+       "price": 39.17,
+       "size": "",
+       "unit_price": "$0.66/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FYM5ASUQI84"
+      },
+      {
+       "item": "Basil Hayden's Kentucky Straight Bourbon Whiskey 750 ml",
+       "price": 28.97,
+       "size": "",
+       "unit_price": "$1.14/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7C8B9ILS69MW"
+      },
+      {
+       "item": "Maker's Mark 46 Kentucky Straight Bourbon Whisky 750 ml",
+       "price": 29.27,
+       "size": "",
+       "unit_price": "$1.15/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6IVJE048JRHL"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "mozzarella cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "mozzarella cheese",
+     "attempts": [
+      {
+       "term": "mozzarella cheese",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "8 OZ SLICED MOZZARELLA CHEESE",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0004610000125"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0003114200088"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 4.49,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004375"
+      },
+      {
+       "item": "BelGioioso® Sliced Fresh Mozzarella Cheese",
+       "price": 6.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003114200069"
+      },
+      {
+       "item": "Private Selection® Fresh Mozzarella Cheese",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111004374"
+      },
+      {
+       "item": "Kroger® Mozzarella Sliced Cheese",
+       "price": 2,
+       "size": "8 slices / 6 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0001111058795"
+      },
+      {
+       "item": "Kroger® Mozzarella Shredded Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0001111050159"
+      },
+      {
+       "item": "Kroger® Mozzarella Block Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0001111058608"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "mozzarella cheese",
+     "attempts": [
+      {
+       "term": "mozzarella cheese",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kraft Shred Mozzarella Cheese",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_shred_mozzarella_cheese/p/1764405684715840494"
+      },
+      {
+       "item": "Kraft Fine Shred Mozzarella Cheese",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_fine_shred_mozzarella_cheese/p/1764405684715840498"
+      },
+      {
+       "item": "Bel Gioioso Fresh Mozzarella Cheese 226 G",
+       "price": 5.89,
+       "size": "226 g",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_fresh_mozzarella_cheese_226_g/p/22599"
+      },
+      {
+       "item": "Our Family Part Skim Mozzarella Cheese Slices 10 Ea",
+       "price": 2.49,
+       "size": "10 ea",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/packaged_sliced/our_family_part_skim_mozzarella_cheese_slices_10_ea/p/7081819"
+      },
+      {
+       "item": "Our Family Part Skim Low Moisture Natural Mozzarella Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/our_family_part_skim_low_moisture_natural_mozzarella_cheese_8_oz/p/6787419"
+      },
+      {
+       "item": "Our Family Low Moisture Part Skim Natural Mozzarella Cheese 16 Oz",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_low_moisture_part_skim_natural_mozzarella_cheese_16_oz/p/7081803"
+      },
+      {
+       "item": "Crystal Farms Crystal Farms Low Moisture Part Skim Mozzarella Cheese 8 Oz",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 122,
+       "url": "https://www.shopfamilyfare.com/shop/crystal_farms_crystal_farms_low_moisture_part_skim_mozzarella_cheese_8_oz/p/44157"
+      },
+      {
+       "item": "Aidells Smoked Chicken Sausage, Italian Style With Mozzarella Cheese (4 Fully Cooked Links) 12 Oz",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": 116,
+       "url": "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/aidells_smoked_chicken_sausage_italian_style_with_mozzarella_cheese_4_fully_cooked_links_12_oz/p/56308"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "mozzarella cheese",
+     "attempts": [
+      {
+       "term": "mozzarella cheese",
+       "state": "OK",
+       "hits": 28
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Mozzarella Shredded Cheese",
+       "price": 7.48,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712164-fareway-cheese-mozzarella-shredded-32-oz"
+      },
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+      },
+      {
+       "item": "Fareway Low-Moisture Part-Skim Mozzarella Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24474018-fareway-cheese-mozzarella-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Shredded Mozzarella Cheese",
+       "price": 3.98,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712269-fareway-cheese-mozzarella-shredded-16-oz"
+      },
+      {
+       "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
+      },
+      {
+       "item": "Crystal Farms String Cheese, Light, Mozzarella, Low-Moisture, Part-Skim",
+       "price": 3.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/346945-crystal-farms-light-string-cheese-12-ct"
+      },
+      {
+       "item": "Italia Garden Smoked String Cheese",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19040648-italia-brand-cheese-string-cheese-smoked-natural-wisconsin-8-0-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "mozzarella cheese",
+     "attempts": [
+      {
+       "term": "mozzarella cheese",
+       "state": "MATCHES",
+       "hits": 33
+      }
+     ],
+     "hits": [
+      {
+       "item": "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+       "price": 9.47,
+       "size": "",
+       "unit_price": "$0.20/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13879914072"
+      },
+      {
+       "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
+       "price": 12.87,
+       "size": "",
+       "unit_price": "$7.35/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13878908387"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+       "price": 12.42,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+      },
+      {
+       "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
+       "price": 9.64,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/17272174871"
+      },
+      {
+       "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+       "price": 8.28,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
+      },
+      {
+       "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

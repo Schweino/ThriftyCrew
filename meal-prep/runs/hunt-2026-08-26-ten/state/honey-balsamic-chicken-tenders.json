@@ -1,0 +1,49 @@
+{
+    "slug":  "honey-balsamic-chicken-tenders",
+    "title":  "Honey Balsamic Chicken Tenders",
+    "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:04",
+    "updated":  "2026-08-26T04:52:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:04",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:18:05",
+                        "by":  "decider",
+                        "detail":  "Honey-balsamic glazed chicken skillet — a distinct balsamic sauce family with no live match (existing honey chicken is hot-honey, chipotle or sesame; honey-mustard is in-flight), well-costed budgetbytes source, band verified 452/16/67."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:19:00",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 2, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:51:59",
+                        "by":  "mapper",
+                        "detail":  "2 residual lines ruled, 0 rejected. New DB row returned: Boneless Skinless Chicken Breast. No row returned for \u0027Salt and Pepper\u0027 - it is a pinch of two foods the DB already carries separately (Salt, Black Pepper), and any single row for the pair would be a reconstruction, not a label."
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T04:52:01",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board"
+                    }
+                ]
+}

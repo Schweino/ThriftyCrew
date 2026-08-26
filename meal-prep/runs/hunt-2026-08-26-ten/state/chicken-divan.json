@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-divan",
+    "title":  "Chicken Divan",
+    "source_url":  "https://thecozycook.com/chicken-divan/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:15:25",
+    "updated":  "2026-08-26T04:15:26",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken Divan is already live as chicken-divan-broccoli-bake (word-overlap 20, bge 0.88) - same chicken/broccoli/cream-cheddar casserole dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:15:25",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/chicken-divan/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:15:26",
+                        "by":  "decider",
+                        "detail":  "Chicken Divan is already live as chicken-divan-broccoli-bake (word-overlap 20, bge 0.88) - same chicken/broccoli/cream-cheddar casserole dinner."
+                    }
+                ]
+}

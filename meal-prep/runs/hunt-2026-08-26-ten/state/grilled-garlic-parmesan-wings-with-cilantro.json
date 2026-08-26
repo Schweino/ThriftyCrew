@@ -1,0 +1,68 @@
+{
+    "slug":  "grilled-garlic-parmesan-wings-with-cilantro",
+    "title":  "Grilled Garlic Parmesan Wings with Cilantro",
+    "source_url":  "https://www.isabeleats.com/grilled-garlic-parmesan-wings/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:18:01",
+    "updated":  "2026-08-26T04:54:43",
+    "terms":  [
+                  {
+                      "term":  "parmesan cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Vegetable Oil",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "parmesan cheese",
+                      "Vegetable Oil",
+                      "Water"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:18:01",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/grilled-garlic-parmesan-wings/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:18:01",
+                        "by":  "decider",
+                        "detail":  "Garlic-parmesan-butter grilled chicken wings with cilantro; no wing dish in the catalog, saturation 2, band verified 660/1/50, a distinct low-carb batch protein."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:18:28",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:51:55",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected. New DB rows returned: Water, Sugar, Vegetable Oil, Parmesan Cheese, Fresh Cilantro. The table says a Chicken Wings row exists but could not be read, so I returned none rather than risk a conflicting transcription - please confirm its basis given the protein gap above."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:51:59",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:54:43",
+                        "by":  "derive",
+                        "detail":  "waiting on: parmesan cheese, Vegetable Oil, Water"
+                    }
+                ]
+}

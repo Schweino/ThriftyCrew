@@ -1,0 +1,132 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T04:54:44",
+    "slug":  "italian-turkey-burgers",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Whole Wheat Hamburger Buns\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Italian Turkey Burgers",
+                   "slug":  "italian-turkey-burgers",
+                   "protein":  "turkey",
+                   "cuisine":  "",
+                   "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "93/7 Ground Turkey",
+                                           "grams":  1058,
+                                           "buy":  "2 1/3 lb"
+                                       },
+                                       {
+                                           "item":  "Turkey Sausage",
+                                           "grams":  1058,
+                                           "buy":  "2 1/3 lb, casings removed"
+                                       },
+                                       {
+                                           "item":  "Panko Breadcrumbs",
+                                           "grams":  47,
+                                           "buy":  "3/4 cup"
+                                       },
+                                       {
+                                           "item":  "Dried Basil",
+                                           "grams":  7,
+                                           "buy":  "1 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Dried Oregano",
+                                           "grams":  7,
+                                           "buy":  "1 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Fennel Seeds",
+                                           "grams":  5,
+                                           "buy":  "2 1/3 tsp"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  7,
+                                           "buy":  "2 1/3 tsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  3,
+                                           "buy":  "generous 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  1,
+                                           "buy":  "generous 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  1,
+                                           "buy":  "1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Asiago Cheese",
+                                           "grams":  529,
+                                           "buy":  "1 lb 2 1/2 oz, shredded"
+                                       },
+                                       {
+                                           "item":  "Mozzarella Cheese",
+                                           "grams":  529,
+                                           "buy":  "1 lb 2 1/2 oz, sliced"
+                                       },
+                                       {
+                                           "item":  "Whole Wheat Hamburger Buns",
+                                           "grams":  602,
+                                           "buy":  "14 buns, split and toasted"
+                                       },
+                                       {
+                                           "item":  "Red Onion",
+                                           "grams":  350,
+                                           "buy":  "2 large red onions, halved and thinly sliced"
+                                       },
+                                       {
+                                           "item":  "Green Bell Pepper",
+                                           "grams":  280,
+                                           "buy":  "2 large green bell peppers, thinly sliced"
+                                       },
+                                       {
+                                           "item":  "Red Bell Pepper",
+                                           "grams":  280,
+                                           "buy":  "2 large red bell peppers, thinly sliced"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  63,
+                                           "buy":  "4 2/3 tbsp"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  675,
+                                              "protein_g":  53.1,
+                                              "carbs_g":  30.8,
+                                              "fat_g":  36.2
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT20M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,149 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Mediterranean Chicken w/ Marinade",
+  "source_url": "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+  "servings": 5,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 lbs boneless skinless chicken breasts ((See Note 1))",
+      "item": "boneless skinless chicken breasts",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": "(See Note 1)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp red pepper flakes",
+      "item": "red pepper flakes",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "5 oz fresh spinach",
+      "item": "fresh spinach",
+      "qty": "5",
+      "unit": "oz",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "15.5 oz artichoke hearts (drained)",
+      "item": "artichoke hearts",
+      "qty": "15.5 oz",
+      "unit": null,
+      "prep": "drained",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups grape tomatoes",
+      "item": "grape tomatoes",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "14.5 oz black olives (drained)",
+      "item": "black olives",
+      "qty": "14.5",
+      "unit": "oz",
+      "prep": "drained",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz feta cheese (crumbled)",
+      "item": "feta cheese",
+      "qty": "8",
+      "unit": "oz",
+      "prep": "crumbled",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup olive oil",
+      "item": "olive oil",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lemons (juiced)",
+      "item": "lemons",
+      "qty": "2",
+      "unit": null,
+      "prep": "juiced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 garlic cloves (minced)",
+      "item": "garlic cloves",
+      "qty": "3",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp dried oregano",
+      "item": "dried oregano",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp black pepper",
+      "item": "black pepper",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a small bowl whisk together the marinade ingredients: olive oil, lemon juice, garlic, oregano, kosher salt and pepper.",
+    "In a or bowl sealable plastic bag, add the chicken and marinade. Toss to coat or squeeze air out of bag and seal. Massage chicken with marinade and refrigerate 4 hours or overnight.",
+    "Preheat oven to 400°F.",
+    "Place the spinach in a rectangle 9x12\" casserole dish that has been sprayed with cooking spray or olive oil and sprinkle with the red pepper flakes.",
+    "Layer the chicken breasts on top of the spinach. Sprinkle the artichoke hearts, baby tomatoes, black olives and marinade on top of and around the chicken.",
+    "Bake covered for 25 minutes, depending on the thickness of your chicken breasts. (See Note 1)",
+    "Remove from oven and add feta cheese crumbles to each piece of chicken. Put it back in the oven, uncovered for 5 minutes. Allow to rest 5 minutes before slicing or serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

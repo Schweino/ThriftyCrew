@@ -1,0 +1,113 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Enchiladas Suizas",
+  "source_url": "https://www.isabeleats.com/enchiladas-suizas/",
+  "servings": 4,
+  "time_total": "25 minutes",
+  "time_active": "8 minutes",
+  "ingredients": [
+    {
+      "raw": "2 cups salsa verde",
+      "item": "salsa verde",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ cup packed cilantro ((optional))",
+      "item": "cilantro",
+      "qty": "¼",
+      "unit": "cup",
+      "prep": "packed, optional",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon vegetable oil, (plus more if frying)",
+      "item": "vegetable oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "(plus more if frying)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ cup Mexican crema, (plus more if you want it extra creamy)",
+      "item": "Mexican crema",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": "(plus more if you want it extra creamy)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 ½ cups cooked shredded chicken",
+      "item": "cooked shredded chicken",
+      "qty": "2 ½",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Kosher salt, (to taste)",
+      "item": "Kosher salt",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "12 corn tortillas",
+      "item": "corn tortillas",
+      "qty": "12",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups shredded Chihuahua cheese",
+      "item": "shredded Chihuahua cheese",
+      "qty": "3",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Sliced onions, (for topping)",
+      "item": "Sliced onions",
+      "qty": null,
+      "unit": null,
+      "prep": "for topping",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 375°F. Blend the salsa verde and cilantro (if using) in a large blender until smooth.",
+    "Heat the oil in a medium saucepan over medium heat. Add the salsa verde and cook for 1 minute, stirring occasionally. Remove it from the heat and stir in the Mexican crema. For an extra creamy sauce, add in ¼ - ½ cup extra Mexican crema.",
+    "In a large bowl, mix together the shredded chicken and ½ cup of the green cream sauce until fully coated. Taste and season with salt if necessary.",
+    "If warming the tortillas in the microwave: Wrap the tortillas in a damp paper towel and heat them in the microwave for 1 minute, flipping them halfway through until all of them are warm and pliable.If frying the tortillas: Heat about 2-3 tablespoons of oil in a small skillet over medium-high heat. When hot, lightly fry each tortilla for 10 seconds, flipping halfway through until softened. Transfer the tortillas to a paper towel lined plate to drain off any excess oil.",
+    "Pour ¼ cup of the green cream sauce into a 9x13-inch baking dish. Spread it all over the bottom to coat.",
+    "Assemble the enchiladas by filling the tortillas with the shredded chicken mixture and 1 ½ cups of shredded cheese. Place the enchiladas seam-side down in the prepared baking dish, then pour the remaining green cream sauce on top. Sprinkle with the remaining shredded cheese.",
+    "Bake for 15-20 minutes until the cheese is melted and bubbly. Garnish with sliced onions and serve immediately."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 9,
+    "verified": 9,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Quinoa Casserole with Chicken",
+  "source_url": "https://www.nospoonnecessary.com/mexican-chicken-quinoa-casserole/",
+  "servings": 6,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "1 ¼ Cups Uncooked Quinoa",
+      "item": "quinoa",
+      "qty": "1 ¼",
+      "unit": "cup",
+      "prep": "uncooked",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 Cups Cooked Chicken – skin discarded if applicable; chicken shredded or chopped",
+      "item": "cooked chicken",
+      "qty": "3",
+      "unit": "cup",
+      "prep": "skin discarded if applicable; chicken shredded or chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/3 Cup Salsa Verde",
+      "item": "salsa verde",
+      "qty": "1 1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ small Yellow Onion – finely diced",
+      "item": "yellow onion",
+      "qty": "½",
+      "unit": "small",
+      "prep": "finely diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 (4.5 ounce) Can Chopped Green Chiles – drained",
+      "item": "chopped green chiles",
+      "qty": "1",
+      "unit": "4.5 ounce can",
+      "prep": "drained",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ Cup Roasted Corn Kernels – canned or frozen (drained if using canned)",
+      "item": "roasted corn kernels",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": "canned or frozen (drained if using canned)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ Cup Black Beans – drained and rinsed",
+      "item": "black beans",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": "drained and rinsed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp EACH: Garlic Powder, Cumin, and Chili Powder",
+      "item": "garlic powder, cumin, and chili powder",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": "1 tsp of each spice listed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ Cups Colby Jack, Monterey Jack OR Pepper Jack Cheese – freshly shredded, divided",
+      "item": "colby jack, monterey jack or pepper jack cheese",
+      "qty": "1 ½",
+      "unit": "cup",
+      "prep": "freshly shredded, divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ¼ Cup Mozzarella Cheese – freshly shredded, divided",
+      "item": "mozzarella cheese",
+      "qty": "1 ¼",
+      "unit": "cup",
+      "prep": "freshly shredded, divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Optional Garnishes: Pico de Gallo Sliced Scallions, Chopped Cilantro, Sliced Avocados or Guacamole, Sour Cream",
+      "item": "pico de gallo, sliced scallions, chopped cilantro, sliced avocados or guacamole, sour cream",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat Oven and Prep Casserole Dish: Arrange oven rack to the center position and then preheat the oven to 375 degrees F. Grease a 9×13'' baking dish (or similar-size casserole dish) with non-stick cooking spray and then set aside.",
+    "Cook the Quinoa: Follow the package instructions and cook the quinoa according to directions. Once cooked, remove the quinoa from the heat, fluff and season generously with salt and pepper. Then, transfer the cooked quinoa to a large bowl. (Tip: See the notes section below for how to perfectly cook quinoa!)",
+    "Mix Casserole Ingredients: Add the cooked chicken, salsa, onion, green chiles, corn, black beans, garlic powder, cumin and chili powder to the bowl of quinoa. Stir to combine. Fold in 1 cup of jack cheese and ½ cup of mozzarella. Generously season with salt and pepper. (SEE NOTES) Grab a spoon and try the casserole, then adjust the flavors to suit your tastebuds.",
+    "Transfer Quinoa Mixture to Prepared Casserole Dish: Carefully dump the casserole mixture into the prepared baking dish. Use a spoon or spatula to smooth down the top.",
+    "Top with Cheese and Bake: Sprinkle the remaining cheeses evenly over the top of the casserole. Then, transfer the quinoa casserole to the preheated oven and bake for 20-22 minutes or until the cheese is melted and bubbly.",
+    "Serve Mexican Quinoa Casserole: Remove baking dish from the oven and let rest for 5 minutes. After cooling slightly, sprinkle your favorite Mexican garnishes, like pico, cilantro, and diced avocado over the top and dollop with sour cream, if using. Serve warm and enjoy immediately!"
+  ],
+  "concerns": [
+    "The line '1 tsp EACH: Garlic Powder, Cumin, and Chili Powder' is a single line on the page covering three spices at 1 tsp apiece; it is transcribed as one line per the no-split rule, so the mapping stage must handle the EACH distribution.",
+    "The '½ small Yellow Onion' line has no true measurement unit; 'small' is a size descriptor recorded in the unit field as printed.",
+    "The optional garnish line reads 'Pico de Gallo Sliced Scallions' with no separator between the first two garnishes; transcribed verbatim as printed.",
+    "Salt and pepper are called for 'generously' in the instructions but do not appear in the ingredient list on the page.",
+    "rung-3 transcription verified only 27% of its lines against the cached page; unverified: 1 ¼ Cups Uncooked Quinoa, 3 Cups Cooked Chicken – skin discarded if applicable; chicken shredded or chopped, ½ small Yellow Onion – finely diced, 1 (4.5 ounce) Can Chopped Green Chiles – drained, ¾ Cup Roasted Corn Kernels – canned or frozen (drained if using canned), ¾ Cup Black Beans – drained and rinsed, 1 ½ Cups Colby Jack, Monterey Jack OR Pepper Jack Cheese – freshly shredded, divided, 1 ¼ Cup Mozzarella Cheese – freshly shredded, divided"
+  ],
+  "extracted_by": "claude",
+  "verification": {
+    "lines": 11,
+    "verified": 3,
+    "unverified": 8,
+    "verified_rate": 0.2727,
+    "unverified_lines": [
+      "1 ¼ Cups Uncooked Quinoa",
+      "3 Cups Cooked Chicken – skin discarded if applicable; chicken shredded or chopped",
+      "½ small Yellow Onion – finely diced",
+      "1 (4.5 ounce) Can Chopped Green Chiles – drained",
+      "¾ Cup Roasted Corn Kernels – canned or frozen (drained if using canned)",
+      "¾ Cup Black Beans – drained and rinsed",
+      "1 ½ Cups Colby Jack, Monterey Jack OR Pepper Jack Cheese – freshly shredded, divided",
+      "1 ¼ Cup Mozzarella Cheese – freshly shredded, divided"
+    ],
+    "passed": false
+  }
+}

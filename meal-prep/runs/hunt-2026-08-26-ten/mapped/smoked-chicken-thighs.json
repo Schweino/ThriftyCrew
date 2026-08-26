@@ -1,0 +1,218 @@
+﻿{
+    "slug":  "smoked-chicken-thighs",
+    "title":  "Smoked Chicken Thighs",
+    "source_url":  "https://www.wellplated.com/smoked-chicken-thighs/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 1/2 pounds bone-in skin-on chicken thighs ( about 6)",
+                            "item":  "Bone-In Skin-On Chicken Thighs",
+                            "bid":  "chicken-thighs",
+                            "board":  null,
+                            "grams":  3969,
+                            "buy":  "8 3/4 lb bone-in skin-on chicken thighs (about 21)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "chicken-thighs is a live board id at 7 of 7 and its price (0.98/lb at Sam\u0027s Club) is the bone-in tray SKU, the same product concept as this line; boneless-skinless-chicken-thigh is a different cut at 2 to 3 times the price and a different yield.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Charcoal (pellets, or whatever fuels your smoker, we use hardwood lump charcoal)",
+                            "item":  "Charcoal",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Smoker fuel, not a food: it carries no macros and does not belong in the food cost, even though the board happens to price a charcoal id."
+                        },
+                        {
+                            "source_raw":  "Wood chips or chunks (such as pecan, apple, or oak)",
+                            "item":  "Wood Chips",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Smoker fuel, not a food; the board shows no commodity and no capture, and none is wanted."
+                        },
+                        {
+                            "source_raw":  "1/3 cup Homemade Barbecue Sauce (or your favorite store-bought BBQ sauce)",
+                            "item":  "BBQ Sauce",
+                            "bid":  "bbq-sauce",
+                            "board":  null,
+                            "grams":  318,
+                            "buy":  "1 1/8 cups barbecue sauce",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The line itself allows store-bought, and bbq-sauce is a live board id at 7 of 7 - a reuse. 1/3 cup is 5 1/3 tbsp at 17 g each.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons unsalted butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tbsp unsalted butter",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027unsalted butter\u0027 -\u003e butter (by mapper on 2026-08-26T04:45:13); nearest vocabulary rows: Peanut Butter [peanut-butter] DIFFERENT FORM: unsalted | Butter [butter] DIFFERENT FORM: unsalted; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons brown sugar",
+                            "item":  "Brown Sugar",
+                            "bid":  "brown-sugar",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tbsp brown sugar",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: brown-sugar, 6 of 7 stores, cheapest 0.925 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  63,
+                            "buy":  "3 1/2 tbsp kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon smoked paprika",
+                            "item":  "Smoked Paprika",
+                            "bid":  "smoked-paprika",
+                            "board":  "recipe",
+                            "grams":  24,
+                            "buy":  "3 1/2 tbsp smoked paprika",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: smoked-paprika, 5 of 7 stores, cheapest 0.631 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "1 tbsp plus 1/2 tsp garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "1 tbsp plus 1/2 tsp onion powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon chili powder",
+                            "item":  "Chili Powder",
+                            "bid":  "chili-powder",
+                            "board":  "recipe",
+                            "grams":  9,
+                            "buy":  "1 tbsp plus 1/2 tsp chili powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chili-powder, 7 of 7 stores, cheapest 0.3462 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "1 tbsp plus 1/2 tsp ground cumin",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-cumin, 7 of 7 stores, cheapest 0.4321 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "1 tbsp plus 1/2 tsp ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground black pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-16T11:53:04); nearest vocabulary rows: Black Pepper [black-pepper] DIFFERENT FORM: ground | Yellow Bell Pepper [yellow-bell-pepper] DIFFERENT FORM: ground | Red Bell Pepper [red-bell-pepper] DIFFERENT FORM: ground; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground cloves or cardamom",
+                            "item":  "Ground Cloves",
+                            "bid":  "ground-cloves",
+                            "board":  null,
+                            "grams":  2,
+                            "buy":  "7/8 tsp ground cloves",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The line offers either; ground-cloves is the vocabulary\u0027s own row and the cheap shelf spice, while the board\u0027s cardamom match is 2 of 7 at 10.52 and would misprice a 1/4 tsp line. Listed as an absent term so it can be priced.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon cayenne pepper",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "7/8 tsp cayenne pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cayenne-pepper, 6 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "ground cloves"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  ""
+}

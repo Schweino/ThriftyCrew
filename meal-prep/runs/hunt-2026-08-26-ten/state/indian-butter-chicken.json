@@ -1,0 +1,31 @@
+{
+    "slug":  "indian-butter-chicken",
+    "title":  "Indian Butter Chicken",
+    "source_url":  "https://www.wellplated.com/butter-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T04:11:05",
+    "updated":  "2026-08-26T04:11:06",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same dinner as live slow-cooker-butter-chicken-rice-bowls: butter chicken (chicken + tomato-cream/garam-masala sauce) served over rice; stovetop vs slow-cooker does not distinguish the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:11:05",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/butter-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T04:11:06",
+                        "by":  "decider",
+                        "detail":  "Same dinner as live slow-cooker-butter-chicken-rice-bowls: butter chicken (chicken + tomato-cream/garam-masala sauce) served over rice; stovetop vs slow-cooker does not distinguish the plate."
+                    }
+                ]
+}

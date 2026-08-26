@@ -1,0 +1,67 @@
+{
+    "slug":  "smoked-chicken-thighs",
+    "title":  "Smoked Chicken Thighs",
+    "source_url":  "https://www.wellplated.com/smoked-chicken-thighs/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:20:27",
+    "updated":  "2026-08-26T05:14:45",
+    "terms":  [
+                  {
+                      "term":  "ground cloves",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Charcoal",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Wood Chips",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Charcoal",
+                      "Wood Chips"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:20:27",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/smoked-chicken-thighs/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:20:27",
+                        "by":  "decider",
+                        "detail":  "BBQ dry-rubbed, wood-smoked bone-in chicken thighs finished with barbecue sauce - a distinct smoked/BBQ preparation absent from the catalog (hunter\u0027s chicken is an oven bacon-cheese bake); band verified 656/19/40."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:21:43",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T05:08:02",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T05:08:05",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T05:14:45",
+                        "by":  "derive",
+                        "detail":  "waiting on: Charcoal, Wood Chips"
+                    }
+                ]
+}

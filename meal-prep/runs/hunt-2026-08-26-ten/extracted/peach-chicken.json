@@ -1,0 +1,188 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Peach Chicken",
+  "source_url": "https://thecozycook.com/peach-chicken/",
+  "servings": 4,
+  "time_total": "40 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "2 large boneless skinless chicken breast",
+      "item": "large boneless skinless chicken breast",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons Italian seasoning",
+      "item": "Italian seasoning",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/Pepper",
+      "item": "Salt/Pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1-2 tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "1-2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup dry white wine (see notes)",
+      "item": "dry white wine",
+      "qty": "½",
+      "unit": "cup",
+      "prep": "(see notes)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cloves garlic (minced)",
+      "item": "garlic",
+      "qty": "3",
+      "unit": "cloves",
+      "prep": "(minced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons butter",
+      "item": "butter",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2-3 peaches (sliced)",
+      "item": "peaches",
+      "qty": "2-3",
+      "unit": null,
+      "prep": "sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz. Burrata Cheese ((2 balls) See notes for subs.)",
+      "item": "Burrata Cheese",
+      "qty": "8",
+      "unit": "oz.",
+      "prep": "(2 balls) See notes for subs.",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ cup Honey glazed almonds (or pecans)",
+      "item": "Honey glazed almonds",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": "or pecans",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ cup chicken broth",
+      "item": "chicken broth",
+      "qty": "¾",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup balsamic vinegar",
+      "item": "balsamic vinegar",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ chicken bouillon cube",
+      "item": "chicken bouillon cube",
+      "qty": "½",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons honey",
+      "item": "honey",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon cornstarch",
+      "item": "cornstarch",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon EACH: Worcestershire sauce, mustard powder",
+      "item": "Worcestershire sauce, mustard powder",
+      "qty": "1 teaspoon EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ teaspoon EACH: dried thyme, dried basil, onion powder",
+      "item": "dried thyme, dried basil, onion powder",
+      "qty": "½ teaspoon EACH",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Combine all ingredients in the sauce section above and set aside. Measure out remaining ingredients before beginning.",
+    "Note: Burrata cheese is best enjoyed at room temperature, so take it out of the fridge and let it sit out for 30 minutes while you prepare the dish.",
+    "Slice the chicken in half lengthwise to create 2-3 thinner slices. Cover with saran wrap and use the textured side of a meat mallet to pound it to ½-inch thick. Pat the chicken dry.",
+    "Sprinkle each side of the chicken with salt, pepper, and Italian seasoning.",
+    "Heat olive oil in a large skillet over medium-high heat. Sear the chicken in batches for 4 minutes per side, until a golden crust has developed. Set aside.",
+    "Turn the heat off and add the white wine. Use a silicone spatula to “clean” the bottom and sides of the skillet.",
+    "Set heat to medium and add the garlic. Let it bubble gently and reduce by half, about 4 minutes. Add the butter and let it melt.",
+    "Stir in the sauce mixture from step 1. Bring to a boil and let it thicken. Once thickened, reduce heat to medium-low and add the peaches. Let them soften for 4 minutes.",
+    "Add the chicken back and spoon the sauce on top. Simmer until heated through, about 2 minutes.",
+    "Add the burrata cheese to serving plates along with the chicken and peaches and spoon the sauce on top. Sprinkle with almonds and serve!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

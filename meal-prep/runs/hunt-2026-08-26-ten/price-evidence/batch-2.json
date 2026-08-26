@@ -1,0 +1,1359 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-ten",
+ "batch": 2,
+ "generated": "2026-08-26T04:37:31",
+ "batch_terms": [
+  "beef stew meat",
+  "wide egg noodles",
+  "Moroccan seven spice blend",
+  "dried apricots",
+  "spiral ham"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "beef stew meat",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "beef stew meat",
+     "attempts": [
+      {
+       "term": "beef stew meat",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Boneless Stew Beef",
+       "price": 9.99,
+       "size": "1 lb",
+       "relevance": 63,
+       "url": "https://www.bakersplus.com/p/0027157800000"
+      },
+      {
+       "item": "Boneless Stew Beef Family Pack",
+       "price": 8.99,
+       "size": "1 lb",
+       "relevance": 59,
+       "url": "https://www.bakersplus.com/p/0029101750000"
+      },
+      {
+       "item": "Beef Cross-Cut Hind Shank (Chamorro De Res Cortado)",
+       "price": 10.99,
+       "size": "1 lb",
+       "relevance": 20,
+       "url": "https://www.bakersplus.com/p/0029138350000"
+      },
+      {
+       "item": "Private Selection® Premium Blend Chuck and Brisket Ground Beef",
+       "price": 15,
+       "size": "2 lb",
+       "relevance": 17,
+       "url": "https://www.bakersplus.com/p/0001111069173"
+      },
+      {
+       "item": "Pork Cubed Steak (About 2 Steaks per Pack)",
+       "price": 3.79,
+       "size": "1 lb",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0024381200000"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "beef stew meat",
+     "attempts": [
+      {
+       "term": "beef stew meat",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh Beef Stew Meat",
+       "price": 11.49,
+       "size": "lb",
+       "relevance": 135,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/fresh/fresh_beef_stew_meat/p/1564405684713030796"
+      },
+      {
+       "item": "Choice Boneless Beef Stew Meat",
+       "price": 11.99,
+       "size": "18 pk",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/fresh/choice_boneless_beef_stew_meat/p/1564405684714117387"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "beef stew meat",
+     "attempts": [
+      {
+       "term": "beef stew meat",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "USDA Choice Premium Stew Meat",
+       "price": 8.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388685-premium-usda-choice-stew-meat-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "beef stew meat",
+     "attempts": [
+      {
+       "term": "beef stew meat",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Dinty Moore Beef Stew, 15 oz., 6 pk.",
+       "price": 13.84,
+       "size": "",
+       "unit_price": "$2.31/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13862221989"
+      },
+      {
+       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+       "price": 31.47,
+       "size": "",
+       "unit_price": "$15.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13586071223"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Stew Meat, priced per pound",
+       "price": 32.92,
+       "size": "",
+       "unit_price": "$7.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3V5FYSSY1FXX"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+       "price": 32.12,
+       "size": "",
+       "unit_price": "$7.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1MLJW43LIF1U"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Steak, priced per pound",
+       "price": 20.16,
+       "size": "",
+       "unit_price": "$6.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5BSZU85M9MXG"
+      },
+      {
+       "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
+       "price": 17.93,
+       "size": "",
+       "unit_price": "$0.75/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13843866537"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Round Tip, priced per pound",
+       "price": 24.05,
+       "size": "",
+       "unit_price": "$7.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5EX4YTJGHG5W"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Flank Steak, priced per pound",
+       "price": 34.85,
+       "size": "",
+       "unit_price": "$13.94/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/58AZ337FZL1H"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "wide egg noodles",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "wide egg noodles",
+     "attempts": [
+      {
+       "term": "wide egg noodles",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Wide Egg Noodles",
+       "price": 1.99,
+       "size": "16 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111085127"
+      },
+      {
+       "item": "Kroger® Extra Wide Egg Noodles",
+       "price": 1.99,
+       "size": "16 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111085126"
+      },
+      {
+       "item": "Mrs. Miller's Wide Egg Noodles",
+       "price": 3.49,
+       "size": "13.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0009281924040"
+      },
+      {
+       "item": "Simple Truth Organic® Wide Egg Noodles",
+       "price": 2.49,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111081992"
+      },
+      {
+       "item": "American Beauty Extra Wide Egg Noodles",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0002680000464"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "wide egg noodles",
+     "attempts": [
+      {
+       "term": "wide egg noodles",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Wide Egg Noodles 12 Oz",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/our_family_wide_egg_noodles_12_oz/p/1764405684715638428"
+      },
+      {
+       "item": "Extra Wide Egg Noodles Our Family",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/extra_wide_egg_noodles_our_family/p/1764405684715880870"
+      },
+      {
+       "item": "Creamette Egg Noodles, Wide 12 Oz",
+       "price": 3.79,
+       "size": "12 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/creamette_egg_noodles_wide_12_oz/p/2048433"
+      },
+      {
+       "item": "Creamette Egg Noodles, Extra Wide 12 Oz",
+       "price": 3.79,
+       "size": "12 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/creamette_egg_noodles_extra_wide_12_oz/p/2055737"
+      },
+      {
+       "item": "Amish Kitchens Egg Noodles, Homestyle, Wide 12 Oz",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/amish_kitchens_egg_noodles_homestyle_wide_12_oz/p/260273"
+      },
+      {
+       "item": "Light 'N Fluffy Egg Noodles, Enriched, Wide 12 Oz",
+       "price": 3.89,
+       "size": "12 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/light_n_fluffy_egg_noodles_enriched_wide_12_oz/p/23553"
+      },
+      {
+       "item": "Light 'N Fluffy Egg Noodles, Enriched, Extra Wide 12 Oz",
+       "price": 3.89,
+       "size": "12 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/light_n_fluffy_egg_noodles_enriched_extra_wide_12_oz/p/23551"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "wide egg noodles",
+     "attempts": [
+      {
+       "term": "wide egg noodles",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Wide Egg Noodles",
+       "price": 2.79,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25446742-fareway-enriched-egg-noodle-product-wide-12-oz"
+      },
+      {
+       "item": "Fareway Extra Wide Egg Noodles",
+       "price": 2.79,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24905747-fareway-egg-noodles-extra-wide-12-oz"
+      },
+      {
+       "item": "Creamette Egg Noodles, Wide",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16902851-creamette-wide-egg-noodles-12-0-oz"
+      },
+      {
+       "item": "AMISH KITCHENS Egg Noodles, Homestyle Extra Wide",
+       "price": 3.49,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/320008-amish-kitchens-egg-noodles-extra-wide-12-oz"
+      },
+      {
+       "item": "Creamette Egg Noodles, Extra Wide",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16519592-creamette-extra-wide-egg-noodles-12-0-oz"
+      },
+      {
+       "item": "Neva's Noodles Egg Noodles, Wide",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28495255-neva-s-noodles-old-fashion-homemade-egg-noodles-wide-10-00-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "wide egg noodles",
+     "attempts": [
+      {
+       "term": "wide egg noodles",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7680800646"
+      },
+      {
+       "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15256606257"
+      },
+      {
+       "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
+      },
+      {
+       "item": "Member's Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.91/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/623SPZIXWOJT"
+      },
+      {
+       "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$1.42/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
+      },
+      {
+       "item": "Annie's Shells and White Cheddar Mac and Cheese 6 oz.,12 pk.",
+       "price": 12.98,
+       "size": "",
+       "unit_price": "$1.08/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13577516430"
+      },
+      {
+       "item": "Barilla Elbow Pasta, 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$1.42/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/62GDX0FGUKF5"
+      },
+      {
+       "item": "Velveeta Shells & Cheese Original, 12 oz., 8 pk.",
+       "price": 12.98,
+       "size": "",
+       "unit_price": "$0.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2654GM0LU6AH"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "Moroccan seven spice blend",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "Moroccansevenspiceblend",
+     "attempts": [
+      {
+       "term": "Moroccan seven spice blend",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "Moroccansevenspiceblend",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "Moroccansevenspiceblend",
+     "attempts": [
+      {
+       "term": "Moroccan seven spice blend",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "Moroccansevenspiceblend",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "Moroccan seven spice blend",
+     "attempts": [
+      {
+       "term": "Moroccan seven spice blend",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+       "price": 7.99,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+      },
+      {
+       "item": "Badia Spices Coriander, Ground",
+       "price": 1.68,
+       "size": "1.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+      },
+      {
+       "item": "Badia Spices Paprika",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+      },
+      {
+       "item": "Spice Islands Beau Monde Seasoning",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+      },
+      {
+       "item": "McCormick Smoked Paprika",
+       "price": 3.99,
+       "size": "0.9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/222010-mccormick-smoked-paprika-0-9-oz"
+      },
+      {
+       "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
+       "price": 5.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "Moroccan seven spice blend",
+     "attempts": [
+      {
+       "term": "Moroccan seven spice blend",
+       "state": "MATCHES",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tone's Pickling Spice, 14 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.71/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/301P1X1G0812"
+      },
+      {
+       "item": "Lawry's Seasoned Salt, 40 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+      },
+      {
+       "item": "Durkee Six Pepper Blend, 22 oz.",
+       "price": 11.34,
+       "size": "",
+       "unit_price": "$0.52/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U41EZL1WH6P"
+      },
+      {
+       "item": "Member's Mark Himalayan Pink Salt, 38 oz.",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4EAHNLWA0JJP"
+      },
+      {
+       "item": "Member's Mark Pumpkin Pie Spice Seasoning Blend, 5.6 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$1.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Z0VOJK74W29"
+      },
+      {
+       "item": "Kinder’s Crispy Panko Blend Seasoned Coating Mix, Buttery Garlic & Herb Seasoned, 13 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.54/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ANBYCFH95BP"
+      },
+      {
+       "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$1.16/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+      },
+      {
+       "item": "Member's Mark Parsley Flakes, 3.2 oz",
+       "price": 6.44,
+       "size": "",
+       "unit_price": "$2.01/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3F1K23CN8VC8"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "dried apricots",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "dried apricots",
+     "attempts": [
+      {
+       "term": "dried apricots",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Dried Apricots",
+       "price": 13.99,
+       "size": "32 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111016279"
+      },
+      {
+       "item": "Simple Truth® Unsulfured and Dried Apricots",
+       "price": 3.49,
+       "size": "5 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0001111016489"
+      },
+      {
+       "item": "Mariani® Premium Mediterranean Dried Apricots",
+       "price": 4.99,
+       "size": "6 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0007102214009"
+      },
+      {
+       "item": "Sun-Maid® Charcuterie Pairings Dried Apricots, Blueberries & Cranberries",
+       "price": 5.99,
+       "size": "4.5 oz",
+       "relevance": 122,
+       "url": "https://www.bakersplus.com/p/0004114307405"
+      },
+      {
+       "item": "Mariani® Mediterranean Apricots",
+       "price": 20.99,
+       "size": "32 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0007102232126"
+      },
+      {
+       "item": "Aussie Total Miracle Conditioner with Apricot and Macadamia Oil Paraben Free for Dry Damaged Hair",
+       "price": 8.59,
+       "size": "26.2 fl oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0038151918340"
+      },
+      {
+       "item": "Aussie Total Miracle Shampoo with Apricot and Macadamia Oil Paraben Free for Dry Damaged Hair",
+       "price": 8.59,
+       "size": "26.2 fl oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0038151918337"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "dried apricots",
+     "attempts": [
+      {
+       "term": "dried apricots",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Regal Health Foods Dried Apricots",
+       "price": 10,
+       "size": "11 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/dried_fruit/regal_health_foods_dried_apricots/p/1764405684716072092"
+      },
+      {
+       "item": "Sunsweet Mediterranean Apricots 6 Oz",
+       "price": 5.49,
+       "size": "6 oz",
+       "relevance": 41,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/dried_fruit/sunsweet_mediterranean_apricots_6_oz/p/2457080"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "dried apricots",
+     "attempts": [
+      {
+       "term": "dried apricots",
+       "state": "OK",
+       "hits": 68
+      }
+     ],
+     "hits": [
+      {
+       "item": "Mariani Apricots",
+       "price": 3.99,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69367-mariani-apricots-mediterranean-6-oz"
+      },
+      {
+       "item": "Sun-Maid Mediterranean Pitted Dried Apricots",
+       "price": 8.99,
+       "size": "425 g",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/266077-sun-maid-apricots-mediterranean-15-oz"
+      },
+      {
+       "item": "Mariani Probiotic Apricots",
+       "price": 4.99,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19043393-mariani-probiotic-dried-apricots-6-0-oz"
+      },
+      {
+       "item": "Fareway Unpeeled in Heavy Syrup Apricots Halves",
+       "price": 1.99,
+       "size": "15.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24083028-fareway-apricots-halves-in-heavy-syrup-unpeeled-1525-oz"
+      },
+      {
+       "item": "Sunsweet Prunes, Pitted",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3120723-sunsweet-prunes-pitted-8-oz"
+      },
+      {
+       "item": "Sunsweet Pitted Dates",
+       "price": 4.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19015303-sunsweet-pitted-dates-8-oz"
+      },
+      {
+       "item": "Prune Plums",
+       "price": 0.31,
+       "size": "$2.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314168-plums-prune"
+      },
+      {
+       "item": "Sun-Maid California Sun-Dried Raisins",
+       "price": 3.49,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/75670-sun-maid-natural-california-raisins-10-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "dried apricots",
+     "attempts": [
+      {
+       "term": "dried apricots",
+       "state": "MATCHES",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sun-Maid California Sun-Dried Raisins, 30 oz., 2 pk.",
+       "price": 9.78,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4114312907"
+      },
+      {
+       "item": "That's It Crunchable Variety Pack, 18 pk.",
+       "price": 11.48,
+       "size": "",
+       "unit_price": "$0.64/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/15288010163"
+      },
+      {
+       "item": "Ocean Spray® Craisins®, 50% Less Sugar Dried Cranberries, Dried Fruit, 43 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4YAUO3IC6N4Y"
+      },
+      {
+       "item": "SnakYard Dried Mangoes, Unsweetened, 24 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.42/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/45HZL6OD6OZN"
+      },
+      {
+       "item": "Member's Mark Freeze Dried Fruit Variety Pack, 15 pk.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$1.78/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7FU2WLF6APPC"
+      },
+      {
+       "item": "Member's Mark Freeze Dried Strawberry Slices, 3 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$1.99/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/112Z0QYW675N"
+      },
+      {
+       "item": "Member's Mark Dried Pitted Prunes, 40 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1TM7ESLO7EQ0"
+      },
+      {
+       "item": "Ocean Spray Craisins, Original Dried Cranberries, 48 oz.",
+       "price": 7.62,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5Y3JY0NUS2IP"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "spiral ham",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "spiral ham",
+     "attempts": [
+      {
+       "term": "spiral ham",
+       "state": "OK",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Honestly Good Smoked Ham",
+       "price": 3,
+       "size": "6 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0007740068123"
+      },
+      {
+       "item": "Smithfield® Cooked Ham",
+       "price": 5,
+       "size": "20 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0007080023648"
+      },
+      {
+       "item": "Smithfield Sliced Cooked Ham",
+       "price": 5,
+       "size": "16 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0007080023481"
+      },
+      {
+       "item": "Kroger® Deli Style Smoked Ham",
+       "price": 5.49,
+       "size": "16 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0001111097419"
+      },
+      {
+       "item": "Kroger® Smoked Ham Deli Sliced",
+       "price": 5,
+       "size": "12 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0027584500000"
+      },
+      {
+       "item": "Hillshire Applewood Smoked Ham",
+       "price": 6.99,
+       "size": "7 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0004450000434"
+      },
+      {
+       "item": "Frick's™ Sliced Hickory Smoked Ham",
+       "price": 8.99,
+       "size": "24 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0004952116280"
+      },
+      {
+       "item": "Private Selection® Double Smoked Ham",
+       "price": 9.99,
+       "size": "1 lb",
+       "relevance": 41,
+       "url": "https://www.bakersplus.com/p/0023578650000"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "spiral",
+     "attempts": [
+      {
+       "term": "spiral ham",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "spiralham",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "spiral",
+       "state": "OK",
+       "hits": 10
+      }
+     ],
+     "hits": [
+      {
+       "item": "Memo Book, Spiral 5x3 Inches Top Flight",
+       "price": 2.29,
+       "size": "1 ea",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/household/office_school/note_pads_books/memo_book_spiral_5x3_inches_top_flight/p/2399731"
+      },
+      {
+       "item": "Our Family Mac & Cheese Dinner, Spiral 5.5 Oz",
+       "price": 0.79,
+       "size": "5.5 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/our_family_mac_cheese_dinner_spiral_5_5_oz/p/6787336"
+      },
+      {
+       "item": "Goody Dentless Spiral Elastics, Medium Hair",
+       "price": 5.99,
+       "size": "10 pk",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/brushes_more/goody_dentless_spiral_elastics_medium_hair/p/1564405684710390032"
+      },
+      {
+       "item": "Betty Crocker White Spiral Birthday Candles 24 Ea",
+       "price": 1.89,
+       "size": "24 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/cake_decorations/betty_crocker_white_spiral_birthday_candles_24_ea/p/2379994"
+      },
+      {
+       "item": "Betty Crocker Rainbow Spiral Birthday Candles 24 Ea",
+       "price": 1.89,
+       "size": "24 ea",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/cake_decorations/betty_crocker_rainbow_spiral_birthday_candles_24_ea/p/2379997"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Mac & Cheese 3.5 Oz",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_mac_cheese_3_5_oz/p/1564405684706044183"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Mac & Cheese 4 Ea",
+       "price": 5.99,
+       "size": "4 ea",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_mac_cheese_4_ea/p/1564405684716192197"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Pasta And Cheese Sauce Mix 5.5 Oz",
+       "price": 1.89,
+       "size": "5.5 oz",
+       "relevance": 122,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_pasta_and_cheese_sauce_mix_5_5_oz/p/17722"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "spiral ham",
+     "attempts": [
+      {
+       "term": "spiral ham",
+       "state": "OK",
+       "hits": 51
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Boneless Half Ham",
+       "price": 34.95,
+       "size": "$6.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386969-fareway-boneless-half-ham-1-each"
+      },
+      {
+       "item": "Frick's Sliced Quarter Applewood Ham",
+       "price": 10.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17616704-fricks-smoked-ham-applewood-sliced-24-oz"
+      },
+      {
+       "item": "Fareway Boneless Quarter Ham",
+       "price": 17.48,
+       "size": "$6.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387408-fareway-boneless-quarter-ham-1-each"
+      },
+      {
+       "item": "Fareway Boneless Ham Steaks",
+       "price": 4.0,
+       "size": "$7.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387422-fareway-boneless-ham-steaks-1-each"
+      },
+      {
+       "item": "Farmland Diced Ham",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/233565-farmland-ham-16-oz"
+      },
+      {
+       "item": "Hormel Diced Ham Classic",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410938-hormel-diced-boneless-ham-8-oz"
+      },
+      {
+       "item": "Frick's Ham, Diced",
+       "price": 5.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17399049-fricks-diced-ham-12-oz"
+      },
+      {
+       "item": "Smoked Ham Shanks",
+       "price": 5.98,
+       "size": "$3.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388298-smoked-ham-shanks"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "spiral ham",
+     "attempts": [
+      {
+       "term": "spiral ham",
+       "state": "MATCHES",
+       "hits": 16
+      }
+     ],
+     "hits": [
+      {
+       "item": "Extra Lean Premium Ham, 1.25 lbs each., 2 pk.",
+       "price": 8.24,
+       "size": "",
+       "unit_price": "$3.30/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4POJC00HFA8K"
+      },
+      {
+       "item": "Member's Mark Uncured Boneless Quarter Sliced Ham, priced per pound",
+       "price": 15.18,
+       "size": "",
+       "unit_price": "$4.67/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CGKBNSJPF74"
+      },
+      {
+       "item": "Smithfield Hardwood Smoked Bone In Ham Steak, priced per pound",
+       "price": 20.28,
+       "size": "",
+       "unit_price": "$3.38/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KIX0S0F5W5I"
+      },
+      {
+       "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+       "price": 24.73,
+       "size": "",
+       "unit_price": "$3.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
+      },
+      {
+       "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+       "price": 9.6,
+       "size": "",
+       "unit_price": "$2.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+      },
+      {
+       "item": "Pork Belly, Tray, priced per pound",
+       "price": 14.89,
+       "size": "",
+       "unit_price": "$4.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
+      },
+      {
+       "item": "Member’s Mark Bone-In Pork Shoulder Blade Steaks, Tray, priced per pound",
+       "price": 20.28,
+       "size": "",
+       "unit_price": "$3.87/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XRN59WFW66B"
+      },
+      {
+       "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+       "price": 20.58,
+       "size": "",
+       "unit_price": "$2.94/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

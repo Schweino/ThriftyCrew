@@ -1,0 +1,171 @@
+{
+ "slug": "baked-stuffed-pork-chops",
+ "lines": [
+  {
+   "raw": "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+   "buy": "7 lb boneless pork loin chops, 1 1/4 inches thick (about 14), with a pocket cut in each",
+   "grams_source": 907,
+   "notes": "2 lb at 453.592 g/lb."
+  },
+  {
+   "raw": "2 tbsp olive oil",
+   "buy": "7 tablespoons olive oil, for the ranch paprika paste",
+   "notes": ""
+  },
+  {
+   "raw": "2 tbsp Ranch Seasoning Mix",
+   "buy": "7 tablespoons ranch seasoning mix, for the paste",
+   "notes": ""
+  },
+  {
+   "raw": "1 tsp paprika",
+   "buy": "1 tablespoon plus 1/2 teaspoon paprika",
+   "notes": ""
+  },
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 teaspoons salt, for the chops",
+   "notes": ""
+  },
+  {
+   "raw": "1/2 tsp black pepper",
+   "buy": "1 3/4 teaspoons black pepper",
+   "notes": ""
+  },
+  {
+   "raw": "1 tbsp olive oil",
+   "buy": "3 1/2 tablespoons olive oil, for the stuffing",
+   "notes": ""
+  },
+  {
+   "raw": "1 tbsp butter",
+   "buy": "3 1/2 tablespoons butter",
+   "notes": ""
+  },
+  {
+   "raw": "1/2 cup small white onion (diced)",
+   "buy": "1 3/4 cups diced white onion (about 2 small onions)",
+   "grams_source": 80,
+   "notes": "1/2 cup diced onion = 80 g."
+  },
+  {
+   "raw": "1/2 cup celery stalk (diced)",
+   "buy": "1 3/4 cups diced celery (about 5 stalks)",
+   "grams_source": 60,
+   "notes": "1/2 cup diced celery = 60 g."
+  },
+  {
+   "raw": "1/2 cup cranberries",
+   "buy": "1 3/4 cups fresh cranberries",
+   "grams_source": 50,
+   "notes": "1/2 cup whole fresh berries = 50 g."
+  },
+  {
+   "raw": "1/4 cup carrot (shredded)",
+   "buy": "scant 1 cup shredded carrot (about 2 medium carrots)",
+   "grams_source": 27,
+   "notes": "1/4 cup shredded = 27 g."
+  },
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 teaspoons salt, for the stuffing",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup bread cubes",
+   "buy": "3 1/2 cups bread cubes (about 3 1/2 slices of white sandwich bread, cubed)",
+   "grams_source": 40,
+   "notes": "1 cup of 1/2-inch soft bread cubes = 40 g."
+  },
+  {
+   "raw": "2/3 cup chicken broth",
+   "buy": "2 1/3 cups chicken broth",
+   "notes": ""
+  },
+  {
+   "raw": "1 tbsp Ranch Seasoning Mix",
+   "buy": "3 1/2 tablespoons ranch seasoning mix, for the stuffing",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+   "term": "boneless pork chops",
+   "canon_item": "Boneless Pork Chops",
+   "bid": "boneless-pork-chops",
+   "decision": "mapped",
+   "grams_source": 907,
+   "evidence": "Bone-in loin chops carry 15-25% bone and price roughly 30-50% lower per lb, so the generic pork-chops id is a different price class - the same reasoning the estate used on 2026-08-26 to refuse the bone-in/boneless chicken thigh bridge. Registrar should ALIAS to pork-chops if that commodity's captured products are in fact boneless loin chops."
+  },
+  {
+   "raw": "1/2 cup small white onion (diced)",
+   "term": "small white onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 80,
+   "evidence": "White and yellow cooking onions sell from the same bulk bags at the same price class, unlike red (which the estate rejects on variety pricing); precedent 'small yellow onion' -> onions, board 7 of 7."
+  },
+  {
+   "raw": "1/2 cup celery stalk (diced)",
+   "term": "celery stalk",
+   "canon_item": "Celery",
+   "bid": "celery",
+   "decision": "mapped",
+   "grams_source": 60,
+   "evidence": "celery is a live board id (6 of 7, cheapest 1.88 Hy-Vee) - a reuse; 'stalk' is the cut, not a different food. Only a vocabulary name row is missing."
+  },
+  {
+   "raw": "1/2 cup cranberries",
+   "term": "cranberries",
+   "canon_item": "Fresh Cranberries",
+   "bid": "fresh-cranberries",
+   "decision": "mapped",
+   "grams_source": 50,
+   "evidence": "The line says cranberries with no 'dried', and the method sautes them with the vegetables until soft, which is the fresh berry; fresh-cranberries is a live id (1 of 7 is carriage, not identity). Dried would be a different food at 60 g and 190 cal."
+  },
+  {
+   "raw": "1/4 cup carrot (shredded)",
+   "term": "carrot",
+   "canon_item": "Carrots",
+   "bid": "carrots",
+   "decision": "mapped",
+   "grams_source": 27,
+   "evidence": "carrots is a live board id at 7 of 7 - a reuse; shredded is a knife cut of the same whole carrot, not a form flip to a bagged product at this quantity."
+  },
+  {
+   "raw": "1 cup bread cubes",
+   "term": "bread cubes",
+   "canon_item": "Bread",
+   "bid": "bread",
+   "decision": "mapped",
+   "grams_source": 40,
+   "evidence": "Plain sandwich bread cubed for a stuffing; `bread` is a live board id (4 of 7, cheapest 1.69 Fareway), so a reuse. Not the dry bouillon-cube foods the FDC shelf offered."
+  }
+ ],
+ "absent_terms": [
+  "boneless pork chops"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "boneless pork chops",
+   "proposed_bid": "boneless-pork-chops",
+   "evidence": "Bone-in loin chops carry 15-25% bone and price roughly 30-50% lower per lb, so the generic pork-chops id is a different price class - the same reasoning the estate used on 2026-08-26 to refuse the bone-in/boneless chicken thigh bridge. Registrar should ALIAS to pork-chops if that commodity's captured products are in fact boneless loin chops.",
+   "declared": false
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "boneless-pork-chops",
+   "verdict": "approve",
+   "bid": "boneless-pork-chops",
+   "reason": "The mapper's alias condition fails on the evidence: pork-chops' live crown (Sam's Club $2.52/lb, url /ip/17799324269) is 'Member's Mark Bone-In Pork Chops', and product-urls.json shows 6 of its 7 store cells are explicitly bone-in (Aldi 'Premium Bone-In Assorted', Baker's 'Loin End Chop Bone In', Walmart 'Loin Chops, Bone-In', Family Fare 'Bone In', Sam's 'Bone-In') — so pork-chops IS the bone-in price class and boneless is the same food in a different purchase form at a materially different $/lb, the same ruling the estate made on the bone-in/boneless chicken-thigh pair (boneless-skinless-chicken-thigh exists beside chicken-thighs). No other namespace carries it: boneless-pork-chops is absent from all three id files and has no feed cell; pork-loin (recipe-board) and pork-tenderloin are whole-primal purchases, not chops; recipe-floor-id-map has no bridging pair. FOLLOW-UP EDITS REQUIRED WITH THE MINT: (1) recipe-only namespace — recipe-board-everyday baseline + recipe-commodities.json; (2) include must REQUIRE the form word, e.g. 'boneless.{0,25}pork.{0,30}chops?' / 'pork\\s+(?:loin\\s+)?(?:ribeye\\s+)?chops?.{0,20}boneless', and clone pork-chops' full ~40-pattern exclude list plus 'bone[\\s-]?in', breaded/stuffed/seasoned/marinated; (3) add the allowlist pair (boneless-pork-chops, pork-chops) to commodity-dupe-allowlist.json with reason 'bone-in vs boneless, 15-25% bone, different $/lb class' so the daily audit never re-flags it; (4) DEFECT FOUND IN PASSING: pork-chops' Fareway cell is 'Boneless Pork Ribeye Chops' at $1.25 — a boneless product already contaminating the bone-in id's cheapest-cell math; that capture belongs to the new id and pork-chops' Fareway cell needs re-capture as bone-in, and pork-chops' own include ('pork\\b.{0,25}\\bchops?\\b') will keep claiming boneless products unless it gains a 'boneless' exclude once the new id exists."
+  }
+ ],
+ "macro_cross_check": "Ours (4-serving source basis, all 16 lines costed): 532 cal / 50.5 g protein / 13.3 g carbs per serving. Source published 495 cal / 51 P / 17 C. Protein is 1% off and calories 7.5% over - both well inside tolerance, which confirms the 907 g of boneless chops (227 g raw per serving) is the right portion for the main protein. Within this run's 400-650 cal band and well under the 35 g carb cap."
+}

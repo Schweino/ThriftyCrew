@@ -1,0 +1,130 @@
+{
+ "slug": "enchiladas-suizas",
+ "lines": [
+  {
+   "raw": "¾ cup Mexican crema, (plus more if you want it extra creamy)",
+   "buy": "2 2/3 cups Mexican crema, plus more for drizzling",
+   "grams_source": 180,
+   "notes": "12 tbsp at 15 g per tbsp off the Cacique label."
+  },
+  {
+   "raw": "2 ½ cups cooked shredded chicken",
+   "buy": "8 3/4 cups cooked shredded chicken (about 2 3/4 lb)",
+   "grams_source": 350,
+   "notes": "1 cup packed shredded cooked chicken = 140 g."
+  },
+  {
+   "raw": "3 cups shredded Chihuahua cheese",
+   "buy": "10 1/2 cups shredded Chihuahua cheese (about 2 1/2 lb)",
+   "grams_source": 336,
+   "notes": "1 cup shredded semi-soft cheese = 112 g (4 oz)."
+  },
+  {
+   "raw": "Sliced onions, (for topping)",
+   "buy": "1 1/2 medium onions, thinly sliced, for topping",
+   "grams_source": 50,
+   "notes": "No quantity stated; weighed as half a medium onion at source scale."
+  },
+  {
+   "raw": "2 cups salsa verde",
+   "buy": "7 cups salsa verde",
+   "notes": ""
+  },
+  {
+   "raw": "¼ cup packed cilantro ((optional))",
+   "buy": "scant 1 cup packed fresh cilantro, chopped (optional)",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon vegetable oil, (plus more if frying)",
+   "buy": "3 1/2 tablespoons vegetable oil, plus more for frying the tortillas",
+   "notes": ""
+  },
+  {
+   "raw": "Kosher salt, (to taste)",
+   "buy": "about 5 tablespoons kosher salt, to taste, divided",
+   "notes": "Buy string matches the settled 20 g source basis at Morton kosher density."
+  },
+  {
+   "raw": "12 corn tortillas",
+   "buy": "42 corn tortillas (6 inch)",
+   "grams_source": 300,
+   "notes": "No weight was computed upstream; 25 g per 6-inch tortilla, matching the existing Corn Tortillas DB row (2 = 50 g)."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "¾ cup Mexican crema, (plus more if you want it extra creamy)",
+   "term": "Mexican crema",
+   "canon_item": "Mexican Crema",
+   "bid": "mexican-crema",
+   "decision": "mapped",
+   "grams_source": 180,
+   "evidence": "Board reports no commodity and no capture. Cultured table cream is its own 15 oz Hispanic-dairy SKU, not sour cream, so a new id is proposed rather than a bridge; 630 g at batch scale is far too much to leave pantry-static."
+  },
+  {
+   "raw": "2 ½ cups cooked shredded chicken",
+   "term": "cooked shredded chicken",
+   "canon_item": "Cooked Shredded Chicken",
+   "bid": "cooked-shredded-chicken",
+   "decision": "mapped",
+   "grams_source": 350,
+   "evidence": "cooked-shredded-chicken is a live board id (3 of 7, cheapest 0.3744 Aldi) that names exactly this food, so a reuse and not a proposal; only the vocabulary name row is missing. Preferred over the 'cooked chicken' -> rotisserie-chicken precedent because a purpose-built id exists."
+  },
+  {
+   "raw": "3 cups shredded Chihuahua cheese",
+   "term": "shredded Chihuahua cheese",
+   "canon_item": "Chihuahua Cheese",
+   "bid": "chihuahua-cheese",
+   "decision": "mapped",
+   "grams_source": 336,
+   "evidence": "REFUSED the board's shredded-cheese bridge - that id prices bagged cheddar/blend and the estate refused the same bridge twice on 2026-08-26 (parmesan, mozzarella). Queso Chihuahua is a specialty 10-12 oz melting cheese at a higher price class."
+  },
+  {
+   "raw": "Sliced onions, (for topping)",
+   "term": "Sliced onions",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped-optional",
+   "grams_source": 50,
+   "evidence": "Garnish line with no stated quantity, so optional; onions is live 7 of 7 and the 'med onion' -> onions precedent binds. Weighed as half a medium onion."
+  }
+ ],
+ "absent_terms": [
+  "Mexican crema",
+  "Chihuahua cheese"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "Mexican crema",
+   "proposed_bid": "mexican-crema",
+   "evidence": "Board reports no commodity and no capture. Cultured table cream is its own 15 oz Hispanic-dairy SKU, not sour cream, so a new id is proposed rather than a bridge; 630 g at batch scale is far too much to leave pantry-static.",
+   "declared": false
+  },
+  {
+   "term": "shredded Chihuahua cheese",
+   "proposed_bid": "chihuahua-cheese",
+   "evidence": "REFUSED the board's shredded-cheese bridge - that id prices bagged cheddar/blend and the estate refused the same bridge twice on 2026-08-26 (parmesan, mozzarella). Queso Chihuahua is a specialty 10-12 oz melting cheese at a higher price class.",
+   "declared": false
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "mexican-crema",
+   "verdict": "approve",
+   "bid": "mexican-crema",
+   "reason": "Not priced under any spelling: sour-cream is live at $0.1025/oz but crema is a different purchase (cultured pourable table cream, 15 oz Hispanic-dairy SKU, different fat/salt/price class), and the estate already agrees - the creme-fraiche commodity and one other row both carry '\\bcrema\\s+(?:mexicana|salvadorena|agria)\\b' as an EXCLUDE, i.e. crema was twice deliberately kept out of neighboring dairy ids and never claimed. Deliberate variant, not duplicate. Mint in the recipe-only namespace (recipe-board baseline + recipe-commodities). Follow-ups: (1) allowlist pairs mexican-crema<->sour-cream and mexican-crema<->creme-fraiche with reason 'distinct cultured-cream SKUs, different form/price class'; (2) include patterns around 'crema\\s+mexicana', 'mexican(\\s+style)?\\s+crema', 'crema\\s+salvadorena' - do NOT include bare 'crema' (espresso crema, crema agria = sour cream) or 'table cream' alone (Nestle media crema is uncultured, a different product); build excludes to neighbor rigor (~150 patterns) covering coffee creamer, media crema, sour cream, dips."
+  },
+  {
+   "proposed_bid": "chihuahua-cheese",
+   "verdict": "approve",
+   "bid": "chihuahua-cheese",
+   "reason": "Not priced under any spelling: the true nearest neighbor is monterey-jack-cheese (live, $0.2188/oz Aldi, 5 stores, all plain domestic Jack blocks per the board rows) - the common SUBSTITUTE for queso Chihuahua but a different cheese and SKU; the shredded-cheese bridge the mapper refused prices bagged cheddar/blend at $0.1521/oz, a different food, and its refusal matches the estate's parmesan/mozzarella precedents of 2026-08-26. No chihuahua/oaxaca/quesadilla/asadero string exists anywhere in the three namespaces or the feed. Deliberate variant, not duplicate. Mint in the recipe-only namespace. Follow-ups: (1) allowlist pairs chihuahua-cheese<->monterey-jack-cheese and chihuahua-cheese<->shredded-cheese with reason 'distinct specialty melting cheese vs domestic substitute/blend'; (2) include patterns 'chihuahua', 'queso\\s+chihuahua', 'quesadilla\\s+cheese', 'queso\\s+menonita' - and because 'quesadilla' also names prepared foods, excludes MUST cover tortilla, frozen quesadillas, kits, seasoning, taquitos, dips, at neighbor rigor (~150 patterns); (3) capture caveat: this is a Hispanic-dairy specialty SKU (V&V Supremo class) - if the seven-store capture finds no genuine Chihuahua SKU, fall back to monterey-jack-cheese via a floor-map alias rather than letting the include claim a Jack or blend product."
+  }
+ ],
+ "macro_cross_check": "Ours (4-serving source basis, all 9 lines now costed): 752 cal / 49.3 g protein / 48 g carbs per serving. Source published 519 cal / 41 P / 29 C. Protein +20% and calories +45% - OUTSIDE the 15% protein band, so I looked for the wrong portion rather than rounding. No single line is wrong: 12 tortillas at 25 g, 3 cups shredded cheese at 112 g/cup and 2.5 cups shredded chicken at 140 g/cup are all standard, and 3 tortillas plus 1/2 cup salsa alone already exceed the published 29 g carbs, so the source's panel is internally impossible at 4 servings. Our totals divided by SIX servings give 501 cal / 32 C, which matches the published panel closely - i.e. Isabel Eats' numbers are per 2 enchiladas while the card says 4 servings of 3. FLAG: on the card's own 4-serving basis this dish is about 752 cal and 48 g carbs per serving, which breaks BOTH this run's 650 cal ceiling and its 35 g carb cap. That is a screening call for the orchestrator, not a mapping defect; the grams above are what the recipe actually contains."
+}

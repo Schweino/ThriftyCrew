@@ -1,0 +1,75 @@
+{
+    "slug":  "slow-cooker-beef-stroganoff",
+    "title":  "Slow Cooker Beef Stroganoff",
+    "source_url":  "https://thecozycook.com/slow-cooker-beef-stroganoff/",
+    "protein":  "beef",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-26T04:12:57",
+    "updated":  "2026-08-26T04:42:15",
+    "terms":  [
+                  {
+                      "term":  "beef stew meat",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "wide egg noodles",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Garlic Salt",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "condensed cream of mushroom soup",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Garlic Salt",
+                      "Water"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T04:12:57",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/slow-cooker-beef-stroganoff/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T04:12:58",
+                        "by":  "decider",
+                        "detail":  "Classic slow-cooker braised chuck-cube stroganoff (white wine, mushrooms, sour cream over egg noodles) is a distinct dinner from the only live stroganoff, ground-beef-stroganoff-pasta; chunk-braised vs ground skillet is a real plate difference, saturation 1, verified band 500cal/27carb."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T04:13:38",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T04:34:00",
+                        "by":  "mapper",
+                        "detail":  "11 residual lines ruled: 8 mapped, 1 mapped-optional, 1 mapped-null, 1 not-purchased. No rejections. 8 food-db rows returned. \u0027wide egg noodles\u0027 is in absent_terms because the table gave no evidence any board id prices egg-noodles (its only board hit was the fuzzy \u0027eggs\u0027); same reasoning puts the optional soup in optional_absent. Both are vocabulary ids that already exist, so neither is a registra"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T04:34:49",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-26T04:42:15",
+                        "by":  "derive",
+                        "detail":  "waiting on: Garlic Salt, Water"
+                    }
+                ]
+}

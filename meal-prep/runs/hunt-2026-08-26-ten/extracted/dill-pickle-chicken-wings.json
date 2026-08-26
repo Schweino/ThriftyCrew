@@ -1,0 +1,118 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Dill Pickle Chicken Wings",
+  "source_url": "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "4 lbs chicken wings (See Note 1)",
+      "item": "chicken wings",
+      "qty": "4",
+      "unit": "lbs",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 cups dill pickle juice/brine (from empty pickle jar)",
+      "item": "dill pickle juice/brine",
+      "qty": "4",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "5 tsp baking powder (NOT BAKING SODA and make sure it's aluminum free baking powder)",
+      "item": "baking powder",
+      "qty": "5",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp dried dill",
+      "item": "dried dill",
+      "qty": "2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 tsp salt",
+      "item": "salt",
+      "qty": "3/4",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp white pepper (optional)",
+      "item": "white pepper",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "PAM/Oil spray",
+      "item": "cooking spray",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Place chicken in a shallow dish or resealable plastic bag. Pour pickle juice over the top and try to ensure all chicken is submerged. Cover and refrigerate for 1-4 hours (longer the better flavor penetration).",
+    "Remove from fridge, rinse and pat dry.",
+    "Heat oven to 250°F with racks in upper and lower positions. Line a rimmed baking sheet with aluminum foil.",
+    "In a small bowl whisk together the aluminum free baking powder, dried dill, garlic powder, salt and white pepper.",
+    "Remove any moisture from chicken wings using a paper towel, patting dry all over.",
+    "Place chicken wings in a large bowl or zipper lock plastic bag and add the baking powder/spice mixture. Stir to coat or seal bag and shake to coat evenly all over.",
+    "Lay the chicken wing pieces in a single layer skin side up on a wire rack sprayed with cooking spray (PAM/Oil) in the prepared baking sheet.",
+    "Bake on lower rack for 30 minutes (this slowly renders the fat UNDER the skin). Move wings to upper rack, increasing the temperature to 425°F and bake for 40-45 minutes, rotating sheet pan if necessary for even golden brown crispiness.",
+    "Remove from oven and rest 5 minutes. Serve with sauce of choice. I prefer Ranch dressing with chopped dill and a diced dill pickle.",
+    "Note: the recipe card groups these steps under the headings Marinate (steps 1-2), Prep (steps 3-6), and Bake (steps 7-9)."
+  ],
+  "concerns": [
+    "Page re-fetched directly and every ingredient line was found verbatim; the local pass's 1/8 verification failure appears to have been a rendering/verifier artifact, not a page discrepancy — its transcription matched the live page exactly.",
+    "The 4 cups of pickle juice is a marinade that is discarded after brining; it will be priced as a full ingredient unless the pricing stage accounts for that.",
+    "time_active reported as the page's stated Prep time (1 hour 10 minutes); the page labels times as Prep/Cook/Total, not active.",
+    "rung-3 transcription verified only 12% of its lines against the cached page; unverified: 4 lbs chicken wings (See Note 1), 4 cups dill pickle juice/brine (from empty pickle jar), 5 tsp baking powder (NOT BAKING SODA and make sure it's aluminum free baking powder), 2 tsp dried dill, 1 tsp garlic powder, 3/4 tsp salt, 1/8 tsp white pepper (optional)"
+  ],
+  "extracted_by": "claude",
+  "verification": {
+    "lines": 8,
+    "verified": 1,
+    "unverified": 7,
+    "verified_rate": 0.125,
+    "unverified_lines": [
+      "4 lbs chicken wings (See Note 1)",
+      "4 cups dill pickle juice/brine (from empty pickle jar)",
+      "5 tsp baking powder (NOT BAKING SODA and make sure it's aluminum free baking powder)",
+      "2 tsp dried dill",
+      "1 tsp garlic powder",
+      "3/4 tsp salt",
+      "1/8 tsp white pepper (optional)"
+    ],
+    "passed": false
+  }
+}
