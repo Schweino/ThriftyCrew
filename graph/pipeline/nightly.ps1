@@ -194,6 +194,46 @@ function Get-FreeVramMiB {
 }
 function Test-LlamaUp { return [bool](Get-Process -Name 'llama-server' -ErrorAction SilentlyContinue) }
 
+function Get-CiBlockDetail {
+  <#
+    .SYNOPSIS Did Windows Code Integrity refuse to load our binaries during this stage? '' if not.
+    .DESCRIPTION A Code Integrity kill is invisible everywhere anyone would think to look. The
+                 process exits 0xC0E90002 having written no output, llama.cpp never reaches the
+                 line that opens its own log, and NOTHING is written to the Application event log.
+                 It is recorded in Microsoft-Windows-CodeIntegrity/Operational and nowhere else.
+                 On 2026-08-25 this stage recorded the bare 'llama-server did not come up' and a
+                 day went into a CUDA fault that did not exist, while the answer sat one event log
+                 away. A BLIND line that does not say WHY is the failure this chain exists to end.
+                 Event messages carry NT device paths (\Device\HarddiskVolumeN\Codex\...) and
+                 never drive letters, so the match is on the drive-stripped tail of the path.
+  #>
+  param([datetime]$Since, [string]$PathHint = 'C:\Codex\llm\bin')
+  $needle = $PathHint -replace '^[A-Za-z]:', ''
+  $ev = @()
+  try {
+    $ev = @(Get-WinEvent -FilterHashtable @{
+              LogName = 'Microsoft-Windows-CodeIntegrity/Operational'
+              Id      = 3077
+              StartTime = $Since.AddSeconds(-5)
+            } -ErrorAction Stop | Where-Object { $_.Message -like "*$needle*" })
+  } catch { return '' }
+  if ($ev.Count -eq 0) { return '' }
+
+  $files = @($ev | ForEach-Object {
+               if ($_.Message -match 'attempted to load (\S+)') { Split-Path $matches[1] -Leaf }
+             } | Select-Object -Unique)
+  $sac = ''
+  try {
+    $st = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy' -ErrorAction Stop).VerifiedAndReputablePolicyState
+    if ($st -eq 1) {
+      $sac = ' Smart App Control is ON and enforcing and the llama.cpp binaries are unsigned;' +
+             ' rebuilding or re-downloading them will NOT fix it, a new build is equally unsigned.'
+    }
+  } catch { }
+  return ('BLOCKED BY WINDOWS CODE INTEGRITY - {0} event(s) refusing to load {1}.{2}' -f `
+          $ev.Count, ($files -join ', '), $sac)
+}
+
 function Stop-Llama {
   <#
     .SYNOPSIS Put the card back. Idempotent, and it VERIFIES rather than assuming.
@@ -364,6 +404,13 @@ if ($SelfTest) {
   # CLEAN TWIN: the plan line names it too, or -WhatIfOnly describes a chain that is not the chain.
   if (-not $src.Contains($nPlan)) { Write-Output '  X CLEAN TWIN: -WhatIfOnly must print the hunter stage'; $bad++ }
 
+  # MUST-FIRE: the serve stage must ASK Windows why, not just report that it did not come up. The
+  # Code Integrity block that killed 2026-08-25 is absent from the Application log, from
+  # llama.cpp's own log and from the process output, so a stage that does not read the
+  # CodeIntegrity log cannot tell a blocked start from a crashed one. Needle built, not written.
+  $nCiAsk = 'Get-CiBlock' + 'Detail -Since $serveStart'
+  if (-not $src.Contains($nCiAsk)) { Write-Output '  X MUST-FIRE: the serve stage must check Code Integrity before recording BLIND'; $bad++ }
+
   if ($bad) { Write-Output "SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'self-test OK'
   exit 0
@@ -483,9 +530,16 @@ try {
   if ((Remaining) -lt ($MinMinutes * 60)) { Record 'serve' 'SKIPPED' 'not enough of the window left after the sweep' 0; throw 'WINDOW' }
   $why = Test-LlamaStartable -FreeMiB (Get-FreeVramMiB) -SidecarRunning (Test-SidecarUp)
   if ($why) { Record 'serve' 'BLIND' $why 0; throw 'WINDOW' }
+  $serveStart = Get-Date
   $r = Invoke-Stage 'serve' 'powershell' @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $root 'tools\local-llm\serve.ps1'), '-Slots', $Jobs) 420
   $llamaStarted = Test-LlamaUp
-  if (-not $r.Ok -or -not $llamaStarted) { Record 'serve' 'BLIND' 'llama-server did not come up; no model stages this run' $r.Elapsed; throw 'WINDOW' }
+  if (-not $r.Ok -or -not $llamaStarted) {
+    # Ask Windows before shrugging. 'did not come up' is true of every cause and useful for none.
+    $ciWhy  = Get-CiBlockDetail -Since $serveStart
+    $detail = if ($ciWhy) { $ciWhy } else { 'llama-server did not come up; no model stages this run' }
+    Record 'serve' 'BLIND' $detail $r.Elapsed
+    throw 'WINDOW'
+  }
   Record 'serve' 'OK' ("{0} slots" -f $Jobs) $r.Elapsed
 
   # -- 4. resolve. Bounded by what is left of the window, and safe to kill: resolve_pending
