@@ -901,6 +901,29 @@ $script:ENGINE_FALLBACK_FLAGS = @('default tbsp', 'default tsp', 'handful w/o de
 $script:GARNISH_PHRASES = @('to garnish', 'for garnish', 'for garnishing', 'as garnish',
                             'as a garnish', 'to serve', 'for serving', 'for topping', 'to top')
 
+# A LEADING LABEL DECLARES THE WHOLE LINE A SERVING SUGGESTION (2026-08-26, Brad's ruling after the
+# smoke run). The phrases above are all TRAILING qualifiers on one food ("Fresh parsley (to garnish)"),
+# and they cannot see the other shape a source uses for the same thing: a LABEL at the front, with the
+# foods listed after a colon.
+#
+# MEASURED on `easy-beef-enchiladas`, run hunt-2026-08-26-smoke, which parked on:
+#
+#     "optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce"
+#
+# The mapper ruled it correctly - `mapped-null`, zero grams, evidence "Four distinct foods on one
+# unsplittable line with no quantity, so no single bid can carry it ... Garnish to taste, pantry-static
+# and safe." The row is `optional: true`. But `mapped-null` + optional maps to `mapped-optional` in
+# Get-AssembledDecision, NOT to `optional-note`, and `mapped-optional` then demands a gram weight this
+# line can never have. So the assembler refused a line every stage before it had settled correctly.
+#
+# Across every rulings file this estate has (40 runs), 2 lines reach the assembler needing grams and
+# stating none: this one, and the rice-blend alternatives line D5 already settles.
+#
+# SAFE BY CONSTRUCTION, the same way the garnish ruling is: the caller reaches this ONLY where neither
+# the qty engine nor the mapper could weigh the line, so it can only ever fire where the recipe dies
+# today. A toppings label on a line that STATES a measure gets grams from the engine and never arrives.
+$script:GARNISH_LABEL_RX = '^\s*(optional(\s+(toppings?|garnishes?|extras?))?|toppings?|garnishes?|for\s+serving|to\s+serve|serve\s+with)\s*:'
+
 # A PANTRY SEASONING STATED "TO TASTE" IS NOT A PURCHASABLE LINE (T1, Brad's ruling 2026-08-25,
 # after the m1 drill parked a recipe in EACH of its two batches on "salt and pepper to taste").
 #
@@ -1177,6 +1200,8 @@ function Test-IsGarnishLine([string]$Raw) {
   foreach ($p in $script:GARNISH_PHRASES) { if ($s.Contains($p)) { return $true } }
   # trailing bare ", garnish" - the same statement with the preposition dropped
   if ($s -match ',\s*garnish(es)?\s*$') { return $true }
+  # a LEADING label - "optional toppings: a, b, c" - which no trailing qualifier can see
+  if ($s -match $script:GARNISH_LABEL_RX) { return $true }
   return $false
 }
 
@@ -2253,6 +2278,73 @@ if ($runSelfTest) {
   T 'MUST FIRE  a weightless line that is NOT a garnish still parks - the never-a-silent-zero refusal is untouched' `
     ((@($resG2.findings) -join ' ') -match 'has no gram weight') `
     ("findings=" + (@($resG2.findings) -join '; '))
+
+  # ---- FIXTURE A1g-2. THE LEADING TOPPINGS LABEL (2026-08-26). ----------------------------------
+  # FROZEN FIXTURE, verbatim from `easy-beef-enchiladas` in run hunt-2026-08-26-smoke. Found while
+  # fixing the notes-vs-bid false positive on the SAME recipe: with that gone, this is what still
+  # parked it. The mapper ruled the line `mapped-null` with zero grams on an `optional: true` row and
+  # said in its evidence "Garnish to taste, pantry-static and safe" - every stage had it right, and the
+  # assembler refused it because `mapped-null` + optional becomes `mapped-optional`, which needs grams.
+  #
+  # The trailing GARNISH_PHRASES cannot see this shape: the label is at the FRONT and the foods follow
+  # a colon. Note the line contains "sour cream" and "diced onions" - real foods with real board ids -
+  # so nothing about the food names marks it; only the label does.
+  $rowsGL = @((New-Row 'l1' 'l1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+              (New-Row 'l2' 'toppings' 'Optional Toppings' '' 'new-food-suspect' $null $true))
+  $payGL = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='l1'; buy='1 lb kielbasa'; notes='' },
+              [pscustomobject]@{ raw='l2'; buy=''; notes='' })
+    rulings = @([pscustomobject]@{ raw='l2'; term='diced onions, chopped cilantro, sour cream, shredded lettuce'
+                                   canon_item='Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce'
+                                   bid=$null; decision='mapped-null'; grams_source=0
+                                   evidence='Four distinct foods on one unsplittable line with no quantity, so no single bid can carry it. Garnish to taste, pantry-static and safe.' }) }
+  $tblGL = New-Tbl $rowsGL 4
+  @($tblGL.rows)[1].raw = 'optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce'
+  @($payGL.lines)[1].raw = 'optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce'
+  @($payGL.rulings)[0].raw = 'optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce'
+  $resGL = New-MappedDecisionFile $tblGL $payGL $stateRow $known 14
+  $glNote = @(@($resGL.doc.ingredients) | Where-Object { $_.decision -eq 'optional-note' })
+  T 'MUST FIRE  a LEADING `optional toppings:` label is a serving suggestion, not a parked recipe - the real line easy-beef-enchiladas died on' `
+    (@($resGL.findings).Count -eq 0 -and $null -ne $resGL.doc -and $glNote.Count -eq 1) `
+    ("findings=" + (@($resGL.findings) -join '; '))
+  T 'MUST FIRE  ...and it is NAMED with zero grams and nothing to buy, so the reader still sees the toppings and neither cost nor macros move' `
+    ($glNote.Count -eq 1 -and @($glNote)[0].grams -eq 0 -and -not @($glNote)[0].buy -and @($glNote)[0].optional) `
+    (($glNote | ForEach-Object { [string]$_.source_raw + ' g=' + [string]$_.grams }) -join ' | ')
+  # THE LABEL FORMS, as a predicate - a collection fixture takes at least three, and each is a shape a
+  # real source uses. `serve with:` and `garnishes:` are the same statement with a different noun.
+  T 'MUST FIRE  the other leading-label forms read the same way' `
+    ((Test-IsGarnishLine 'Toppings: shredded cheese, salsa') -and
+     (Test-IsGarnishLine 'Garnishes: lime wedges') -and
+     (Test-IsGarnishLine 'For serving: warm tortillas') -and
+     (Test-IsGarnishLine 'Serve with: steamed rice') -and
+     (Test-IsGarnishLine 'Optional: chopped cilantro')) 'a label form was missed'
+  # THE OVER-REACH TWINS. The label must be a LABEL: one of these words IMMEDIATELY followed by a
+  # colon, introducing a list. A food whose NAME merely contains one of these words is an ordinary
+  # purchasable line, and demoting it would be the silent-zero defect this whole branch exists to
+  # refuse - a line the shopper buys that the card prices at nothing.
+  T 'CLEAN TWIN a food that merely NAMES a topping is not a label - `Ice cream topping, 2 tbsp` and `Sour cream` are ordinary lines' `
+    ((-not (Test-IsGarnishLine 'Ice cream topping, 2 tbsp')) -and
+     (-not (Test-IsGarnishLine 'Sour cream')) -and
+     (-not (Test-IsGarnishLine '2 cups shredded Mexican-blend cheese, (divided)'))) `
+    'demoted an ordinary purchasable line'
+  # THE COLON IS WHAT MAKES IT A LABEL, and this is the twin that proves it. Without the `\s*:` the
+  # pattern would demote any line merely STARTING with one of these words, and "Optional but
+  # recommended, ..." is a real ingredient-line opening that names a food the shopper buys.
+  # MEASURED: neuter the colon and this goes red; the twins above pass either way, because none of
+  # them starts with a label word at all.
+  T 'CLEAN TWIN the COLON is what makes a label - a line merely STARTING with `Optional` or `Toppings` and then naming a food is an ordinary line' `
+    ((-not (Test-IsGarnishLine 'Optional but recommended, 2 tbsp sour cream')) -and
+     (-not (Test-IsGarnishLine 'Toppings of your choice work here too')) -and
+     (-not (Test-IsGarnishLine 'Serve with a green salad'))) `
+    'demoted a line whose label word carried no colon'
+  # THE `^` ANCHOR IS BELT-AND-BRACES AND IS NOT SEPARATELY PINNED, said plainly rather than left for
+  # the next reader to discover. The COLON carries this pattern: to reach the anchor a line would have
+  # to put one of these words DIRECTLY before a colon somewhere other than the start ("...my favourite
+  # toppings: ..."), and no line in this estate's 40 runs does. Neutering the anchor alone leaves every
+  # fixture here green - measured 2026-08-26 - so the anchor is kept as cheap insurance and this
+  # comment, not a fixture, is what records that it is untested. The estate has been here before: the
+  # first pair of notes-vs-bid boundary fixtures also passed with or without the guard they claimed to
+  # prove.
 
   # ---- FIXTURE A1t. T1: A PANTRY SEASONING "TO TASTE" IS AN OPTIONAL NOTE, NOT A PARKED RECIPE ----
   # FROZEN FIXTURE (Brad's ruling 2026-08-25). The m1 drill sent 6 recipes down the pipe and parked one
