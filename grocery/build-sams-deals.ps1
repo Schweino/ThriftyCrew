@@ -53,7 +53,11 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocer
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
-$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+# -Encoding UTF8 is NOT optional here. These functions are lifted as SOURCE TEXT and re-parsed, so
+# their non-ASCII regex literals have to survive the read. compare-deals.ps1 carries a BOM today and
+# Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
+# mark nothing asserts. Name the encoding and the dependency is gone.
+$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UTF8
 foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "build-sams-deals: could not lift $fn from compare-deals.ps1" }
@@ -450,7 +454,7 @@ if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found:
 if (-not $Date -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $Date = $m.Value } }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
-if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
+if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 # THE ROLLBACK / INSTANT-SAVINGS WINDOW (2026-08-21). Same rule and same reason as Walmart: Brad's

@@ -223,12 +223,15 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   # 'x' (and the U+00D7 times sign) are the same count-first form with a different separator ("12 x 12 fl
   # oz" - Hy-Vee's everyday feed): without them the scan slid to the SECOND number and priced a 144-floz
   # case as 12 fl oz ($0.3933 vs true $0.0328 on soda|Hy-Vee, band-flagged 2026-07-29). The times sign
-  # rides as the \u00d7 regex escape, NEVER a literal: this file is BOM-less, PS 5.1 reads it as ANSI, and
-  # a literal times sign saved as UTF-8 decodes to two ANSI chars, so that branch silently never matches.
-  # (The 2026-07-30 batch SHIPPED exactly that literal despite documenting the trap - the branch was dead
-  # on arrival, caught by the post-batch review; the cent sign in Get-ItemPrice's cents regex still has the
-  # mojibake as a worked example. The self-test now carries a real [char]0x00D7 case so it cannot go dead
-  # silently again.)
+  # rides as the \u00d7 regex escape, NEVER a literal. CORRECTED 2026-08-26: this file DOES carry a
+  # UTF-8 BOM now, so PS 5.1 reads it as UTF-8 and a literal would in fact survive - but the escape
+  # stays, because that BOM is the only thing holding the guarantee up and nothing tests for it. Strip
+  # it and PS 5.1 falls back to ANSI, and every non-ASCII literal in this file silently decodes to a
+  # pair that can never match. (The 2026-07-30 batch SHIPPED exactly that literal despite documenting
+  # the trap - the branch was dead on arrival, caught by the post-batch review. The self-test carries a
+  # real [char]0x00D7 case so it cannot go dead silently again, and as of 2026-08-26 a [char]0x00A2 twin
+  # guards the cents branch, which had been carrying the MOJIBAKE pair as a deliberate worked example
+  # and so could price only CORRUPTED input - see the cents branch in Get-ItemPrice.)
   # THE x/times BRANCH REQUIRES THE EACH-NUMBER IMMEDIATELY (whitespace/hyphen only, no \D+? gap): with the
   # lazy gap, concentration-marketing tokens parse as pack counts - 'Fabuloso ... 2X Concentrated Formula,
   # ..., 33.8 fl oz' read count=2, each=33.8 and HALVED the per-unit (4 live names measured, all currently
@@ -359,8 +362,14 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
     $n=[double]$m.Groups[1].Value; $tot=[double]$m.Groups[2].Value
     if ($n -gt 0) { return @{ per_item = $tot/$n; kind=@{perlb=$perlb;pereach=$pereach}; note="$n for `$$tot" } }
   }
-  # cents: "88" with cent sign or explicit cents
-  $m = [regex]::Match($p, '(\d+)\s*(?:Â¢|cents?)')
+  # cents: "88" with cent sign or explicit cents.
+  # THE GLYPH RIDES AS \u00XX ESCAPES, NEVER A LITERAL - same rule as the times sign above. Until
+  # 2026-08-26 this alternative was the literal PAIR U+00C2 U+00A2, i.e. the MOJIBAKE, because the
+  # capture sink decoded every POST body as cp1252 and a real cent sign never reached here. The sink
+  # now decodes UTF-8, so a clean U+00A2 is what arrives - and the old pattern could not match it,
+  # returning no price at all rather than a wrong one. The leading U+00C2 stays OPTIONAL so captures
+  # still inside the carry window, written before that fix, keep pricing.
+  $m = [regex]::Match($p, '(\d+)\s*(?:\u00C2?\u00A2|cents?)')
   if ($m.Success) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
   # plain dollar amount (take the LAST one, which is usually the sale/ad price)
   $dm = [regex]::Matches($p, '\$\s*([\d]+(?:\.\d{1,2})?)')
@@ -702,11 +711,19 @@ if ($SelfTest) {
   _Near 'weight-first pack "16 oz 6 pk"'   (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '16 oz 6 pk') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'pack-first order (must stay)'     (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '6 pk 16 oz') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'x-separator "12 x 12 fl oz"'      (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null '12 x 12 fl oz') (_C 'floz')).unit_price 0.0328 0.001
-  # the times-sign twin, built from [char]0x00D7 so this ASCII file never carries the literal. MUST-FIRE:
-  # the 2026-07-30 batch shipped the times branch as a literal in this BOM-less (ANSI-read) file - two
-  # mojibake chars that can never match a real U+00D7 - and every suite stayed green because only ASCII 'x'
-  # was fixtured. This case is the one that goes red if the escape ever regresses to a literal again.
+  # the times-sign twin, built from [char]0x00D7 so this file never carries the literal. MUST-FIRE:
+  # the 2026-07-30 batch shipped the times branch as a literal while this file was BOM-less and read
+  # as ANSI - two mojibake chars that can never match a real U+00D7 - and every suite stayed green
+  # because only ASCII 'x' was fixtured. This case is the one that goes red if the escape regresses.
   _Near ('times-sign "12 ' + [char]0x00D7 + ' 12 fl oz"') (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null ('12 ' + [char]0x00D7 + ' 12 fl oz')) (_C 'floz')).unit_price 0.0328 0.001
+  # THE CENT-SIGN TWIN of the times-sign case above, and the one that goes red if the cents branch ever
+  # regresses to a literal. Until 2026-08-26 that branch carried the MOJIBAKE pair U+00C2 U+00A2, so it
+  # priced corrupted input and returned NOTHING for a real cent sign - and no fixture noticed, because the
+  # only cent-bearing case in this suite ("SAVE! 50c" above) is answered by the savings branch long before
+  # the cents branch is reached, and passes either way. Both spellings are asserted: the clean glyph the
+  # fixed capture sink delivers, and the mangled pair still present in captures inside the carry window.
+  _Near ('cent-sign "88' + [char]0x00A2 + '"')                (Get-UnitPrice (_D ('88' + [char]0x00A2) 'Store brand cabbage' $null $null) (_C 'each')).unit_price 0.88 0.001
+  _Near ('cent-sign mojibake twin (carry window)')            (Get-UnitPrice (_D ('88' + [char]0x00C2 + [char]0x00A2) 'Store brand cabbage' $null $null) (_C 'each')).unit_price 0.88 0.001
   # the x-branch must NOT read marketing '2X' as a pack count (the each-number is required immediately):
   # with the lazy gap this halved 4 live cleaner names ('2X Concentrated ... 33.8 fl oz' -> 67.6).
   _Near '2X-marketing not a pack count'     (Get-UnitPrice (_D '$4.24' 'cleaner' $null 'fabuloso multi-purpose cleaner, 2x concentrated formula, lavender, 33.8 fl oz') (_C 'floz')).unit_price 0.1254 0.001
