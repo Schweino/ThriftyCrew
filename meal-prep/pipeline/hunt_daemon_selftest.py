@@ -214,6 +214,43 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
     return tmp
 
 
+# EVERY SCRATCH DIR THIS SUITE MAKES IS TRACKED AND SWEPT ON EXIT, and nothing below calls
+# tempfile.mkdtemp directly any more.
+#
+# TWO DEFECTS, ONE ROOT, both measured 2026-08-26. daemon()'s run_dir defaulted to the bare string
+# "R", so a fixture that took it and reached a lane which WRITES into the run dir - qa_lane's
+# write_qa_verdict is the one that does it - created R\qa\ relative to the CURRENT WORKING
+# DIRECTORY, which for the documented invocation is this source directory. A clean run left an
+# untracked meal-prep\pipeline\R\ behind carrying three verdict files, and the estate's daily bot
+# sweeps up anything staged in the main tree at ~07:00, so that is a real risk of being COMMITTED.
+#
+# The same measurement found the other half: seven fixtures allocated a temp dir and never removed
+# it, so every run left 16 directories in %TEMP% forever. Over ~380 runs that had become 6,577
+# directories holding 23,038 files. 40.6 MB - the COUNT is the cost, not the bytes.
+#
+# BOTH ARE THE SAME DEFECT: an allocation whose cleanup is a thing a fixture has to REMEMBER. So it
+# is not remembered any more. scratch_dir() is the only way to get a directory in this file, it
+# registers what it hands out, and sweep_scratch() takes every one on exit however the process ends.
+# A fixture that ALSO cleans up locally in a `finally` - most do, and should, so a long run does not
+# hold 118 dirs open at once - is simply a no-op for the sweep. There is no path left where
+# forgetting leaks.
+_SCRATCH_DIRS = []
+
+
+def scratch_dir(prefix="daemon-run-"):
+    p = tempfile.mkdtemp(prefix=prefix)
+    _SCRATCH_DIRS.append(p)
+    return p
+
+
+def sweep_scratch():
+    while _SCRATCH_DIRS:
+        shutil.rmtree(_SCRATCH_DIRS.pop(), ignore_errors=True)
+
+
+atexit.register(sweep_scratch)
+
+
 # THE MEMORY SEAMS, DEFAULTED FOR THE WHOLE SUITE (PLAN-ingredient-memory D1).
 #
 # assemble_mapped now writes ingredient-events.jsonl and, through -Record, the resolutions ledger -
@@ -222,46 +259,15 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
 # believe. So the suite's OWN scratch paths are the default here rather than something each fixture
 # has to remember, which is the H2 lesson (three live ledgers a no-publish drill was still writing)
 # applied before the first drill instead of after it. `_learn_seams_are_never_live` asserts it.
-LEARN_SCRATCH = tempfile.mkdtemp(prefix="daemon-learn-seam-")
+LEARN_SCRATCH = scratch_dir(prefix="daemon-learn-seam-")
 SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
-
-
-# THE RUN DIR IS NEVER A BARE RELATIVE PATH. daemon()'s default used to be the string "R". Any
-# fixture that took it and reached a lane which WRITES into the run dir - qa_lane's
-# write_qa_verdict is the one that does it - created R\qa\ relative to the CURRENT WORKING
-# DIRECTORY, which for the documented invocation is this source directory. Measured 2026-08-26: a
-# clean run left an untracked meal-prep\pipeline\R\ behind carrying three verdict files. The
-# estate's daily bot sweeps up anything staged in the main tree at ~07:00, so a stray directory in
-# the source tree is a real risk of being COMMITTED, and it is noise in every `git status` after a
-# run besides. The fix is not a gitignore line - the suite must not write outside a temp dir AT ALL.
-# So there is no source-relative default left to take: a fixture that names no run dir is handed a
-# temp dir of its own.
-_SCRATCH_RUN_DIRS = []
-
-
-def scratch_run_dir(prefix="daemon-run-"):
-    p = tempfile.mkdtemp(prefix=prefix)
-    _SCRATCH_RUN_DIRS.append(p)
-    return p
-
-
-def sweep_scratch():
-    """Remove every temp dir the suite owns. Cleaning up locally in a `finally` is the norm here;
-    this is the backstop for the run dirs handed out by the daemon() default, and it also takes
-    LEARN_SCRATCH, which nothing had ever removed."""
-    while _SCRATCH_RUN_DIRS:
-        shutil.rmtree(_SCRATCH_RUN_DIRS.pop(), ignore_errors=True)
-    shutil.rmtree(LEARN_SCRATCH, ignore_errors=True)
-
-
-atexit.register(sweep_scratch)
 
 
 def daemon(run_dir=None, run_id="drill-run", dispatcher=None, ps=None, **kw):
     kw.setdefault("events_path", SCRATCH_EVENTS)
     kw.setdefault("resolutions_path", SCRATCH_RESOLUTIONS)
-    return HD.Daemon(run_dir or scratch_run_dir(), run_id, dispatcher=dispatcher or FakeDispatch(),
+    return HD.Daemon(run_dir or scratch_dir(), run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
 
 
@@ -293,7 +299,7 @@ def run():
     # =================================================================================================
     H("B5 - a null is STUCK, never a verdict")
     # =================================================================================================
-    _b5tmp = tempfile.mkdtemp(prefix="daemon-b5-")
+    _b5tmp = scratch_dir(prefix="daemon-b5-")
     skeletoned(_b5tmp, ["s1"])
     for lane_name, agent, seed_ch, schema in (
             ("write", "recipe-writer", "write", hunt_lib.WRITE),
@@ -319,7 +325,7 @@ def run():
     # =================================================================================================
     H("B6 - retry budgets are keyed PER SLUG, and the breaker watches run-wide")
     # =================================================================================================
-    _b6tmp = tempfile.mkdtemp(prefix="daemon-b6-")
+    _b6tmp = scratch_dir(prefix="daemon-b6-")
     skeletoned(_b6tmp, ["s1"])
     d = daemon(run_dir=_b6tmp,
                dispatcher=FakeDispatch({"recipe-writer": [None, None, None, {"slug": "s1",
@@ -333,7 +339,7 @@ def run():
       d.retry_counts.get("write:s1") == hunt_lib.MAX_STAGE_RETRIES + 1
       and d.outcomes and d.outcomes[0]["status"] == "stuck",
       "counts=%s outcomes=%s" % (json.dumps(d.retry_counts), json.dumps(d.outcomes)))
-    _brtmp = tempfile.mkdtemp(prefix="daemon-breaker-")
+    _brtmp = scratch_dir(prefix="daemon-breaker-")
     skeletoned(_brtmp, ["s%d" % i for i in range(4)])
     d = daemon(run_dir=_brtmp, dispatcher=FakeDispatch({"recipe-writer": [None] * 30}))
     for i in range(4):
@@ -357,7 +363,7 @@ def run():
                            "recipe-writer": [{}]})
         # THE QA LANE WRITES qa\<slug>.json, so this case needs a run dir of its own and takes it
         # away again - the same shape every other writing fixture in this suite uses.
-        _b7tmp = tempfile.mkdtemp(prefix="daemon-b7-")
+        _b7tmp = scratch_dir(prefix="daemon-b7-")
         try:
             d = daemon(run_dir=_b7tmp, dispatcher=fd)
             d.ch["qa"].push({"slug": "s1"})
@@ -379,7 +385,7 @@ def run():
         {"results": [{"slug": "s1", "status": "ok", "state": "pricing", "absent_terms": terms,
                       "optional_absent": ["cilantro"]}]}]})
     ps = FakePS()
-    _b8tmp = tempfile.mkdtemp(prefix="daemon-b8map-")
+    _b8tmp = scratch_dir(prefix="daemon-b8map-")
     d = daemon(run_dir=preresolved(_b8tmp, ["s1"]), dispatcher=fd, ps=ps)
     d.ch["map"].push({"slug": "s1"})
     d.ch["map"].close()
@@ -1134,7 +1140,7 @@ def run():
 # =====================================================================================================
 
 def _m4_prompt(seam=True):
-    tmp = tempfile.mkdtemp(prefix="daemon-m4-")
+    tmp = scratch_dir(prefix="daemon-m4-")
     doc = _m2_table(tmp)
     db_path = os.path.join(tmp, "food-db.json")
     with open(db_path, "w", encoding="utf-8") as f:
@@ -1285,7 +1291,7 @@ def _m2_prompt(tmp, db=M2_SCRATCH_DB, seam=True, **kw):
 
 
 def _m2_food_db_rows_come_from_the_seam():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2a-")
+    tmp = scratch_dir(prefix="daemon-m2a-")
     try:
         prompt, d = _m2_prompt(tmp)
         # THE NUMBERS, NOT THE NAMES. A name proves the row was listed; only the scratch DB's own
@@ -1301,7 +1307,7 @@ def _m2_food_db_rows_come_from_the_seam():
 
 
 def _m2_the_precheck_rides_whole():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2b-")
+    tmp = scratch_dir(prefix="daemon-m2b-")
     try:
         prompt, _d = _m2_prompt(tmp)
         want = ["tuning: added Rice base 200g (src scale)",
@@ -1318,7 +1324,7 @@ def _m2_the_precheck_rides_whole():
 
 
 def _m2_the_yield_arrives_and_the_lines_are_not_doubled():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2c-")
+    tmp = scratch_dir(prefix="daemon-m2c-")
     try:
         prompt, _d = _m2_prompt(tmp)
         yielded = ("6 servings" in prompt and "Skillet Chicken And Rice" in prompt
@@ -1332,7 +1338,7 @@ def _m2_the_yield_arrives_and_the_lines_are_not_doubled():
 
 
 def _m2_unreadable_is_announced():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2d-")
+    tmp = scratch_dir(prefix="daemon-m2d-")
     try:
         # No DB file written at all, and no extraction either.
         prompt, _d = _m2_prompt(tmp, db=None, extraction=False)
@@ -1348,7 +1354,7 @@ def _m2_unreadable_is_announced():
 
 
 def _m2_the_cap_announces_itself():
-    tmp = tempfile.mkdtemp(prefix="daemon-m2e-")
+    tmp = scratch_dir(prefix="daemon-m2e-")
     try:
         # 60 tuning lines is well past 4,000 characters, and a real precheck can carry dozens.
         tuning = ["tuning line %02d: added something at source scale" % i for i in range(60)]
@@ -1461,7 +1467,7 @@ def _t7_pickup(tmp, servings=4, protein="chicken"):
 def _t7_no_servings_is_refused_before_the_mapper():
     """MUST FIRE. A source that never stated its yield can never become a costed 14-serving recipe,
     so it is rejected-unreadable BEFORE the dispatch - not discovered after one is paid for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7a-")
+    tmp = scratch_dir(prefix="daemon-t7a-")
     try:
         d, ps, fd = _t7_pickup(tmp, servings=None)
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1477,7 +1483,7 @@ def _t7_no_servings_is_refused_before_the_mapper():
 def _t7_no_protein_is_stuck_not_rejected():
     """MUST FIRE. Missing protein is RUN BOOKKEEPING, not a defect in the source, so the recipe is
     STUCK and resumable - rejecting it would throw away a perfectly good page over our own omission."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7b-")
+    tmp = scratch_dir(prefix="daemon-t7b-")
     try:
         d, ps, fd = _t7_pickup(tmp, protein="")
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1491,7 +1497,7 @@ def _t7_no_protein_is_stuck_not_rejected():
 
 def _t7_a_complete_candidate_still_dispatches():
     """CLEAN TWIN, and the one that matters most: the gate must not start refusing good recipes."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t7c-")
+    tmp = scratch_dir(prefix="daemon-t7c-")
     try:
         d, _ps, fd = _t7_pickup(tmp, servings=4, protein="chicken")
         dispatched = len(fd.prompts("recipe-ingredient-mapper"))
@@ -1519,7 +1525,7 @@ def _t8_ps(sweep=None, rc=0):
 def _t8_an_undeclared_bid_still_reaches_the_registrar():
     """MUST FIRE - the T-shakedown defect exactly. The mapper ruled a new id and declared NOTHING;
     the registrar must still be asked, because the prompt promises it cannot be skipped by omission."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8a-")
+    tmp = scratch_dir(prefix="daemon-t8a-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         d = daemon(run_dir=tmp, ps=_t8_ps())
@@ -1542,7 +1548,7 @@ def _t8_the_call_site_actually_uses_the_sweep():
     `res.get("new_commodity_proposals")` line restored, MEASURED 2026-08-25 when exactly that neuter
     came back 0 red. So this drives assemble_mapped and asserts the REGISTRAR WAS DISPATCHED for an
     id the mapper never declared."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8c-")
+    tmp = scratch_dir(prefix="daemon-t8c-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         fd = FakeDispatch({"commodity-registrar": [{"rulings": [
@@ -1563,7 +1569,7 @@ def _t8_a_blocked_sweep_degrades_and_says_so():
     """CLEAN TWIN. A sweep that cannot run must fall back to what the mapper declared and ANNOUNCE
     it - that is today's behaviour, not a new failure mode, and the assembler is still the backstop
     that refuses any id nothing approved. Silence here would re-open the hole invisibly."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t8b-")
+    tmp = scratch_dir(prefix="daemon-t8b-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["ground chicken"]})
         d = daemon(run_dir=tmp, ps=_t8_ps(sweep={}, rc=2))
@@ -1590,7 +1596,7 @@ import learn_apply as _LA                                        # noqa: E402
 
 def _learn_scratch(prefix):
     """A run dir plus its OWN event log and ledger, so no two cases can read each other's writes."""
-    tmp = tempfile.mkdtemp(prefix=prefix)
+    tmp = scratch_dir(prefix=prefix)
     return tmp, os.path.join(tmp, "events.jsonl"), os.path.join(tmp, "ledger.json")
 
 
@@ -1830,7 +1836,7 @@ def _prior_table(tmp, terms):
 
 def _prior_renders_the_shelf():
     """MUST FIRE. The neighbours reach the DOSSIER, each carrying the phrase it was ruled for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-a-")
+    tmp = scratch_dir(prefix="daemon-prior-a-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
         d, _py = _prior_daemon(tmp)
@@ -1848,7 +1854,7 @@ def _prior_renders_the_shelf():
 def _prior_uses_the_sidecar_interpreter():
     """MUST FIRE. bge-m3 lives in sidecar\\.venv and nowhere else; C:\\Codex\\Python312 has no torch,
     and a surface run under the wrong interpreter reports its own ImportError as a failure."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-b-")
+    tmp = scratch_dir(prefix="daemon-prior-b-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, py = _prior_daemon(tmp)
@@ -1864,7 +1870,7 @@ def _prior_uses_the_sidecar_interpreter():
 def _prior_blind_is_announced():
     """MUST FIRE. A retrieval that could not run renders BLIND. An empty list pretending it looked is
     how a judge concludes there is no precedent when nobody checked."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-c-")
+    tmp = scratch_dir(prefix="daemon-prior-c-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, rc=2, write=False)
@@ -1881,7 +1887,7 @@ def _prior_blind_is_announced():
 def _prior_empty_is_not_blind():
     """CLEAN TWIN. Day one: the log is empty, the retriever RAN, and the shelf says so per term.
     `empty` and `blind` are different weeks and must never print the same line."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-d-")
+    tmp = scratch_dir(prefix="daemon-prior-d-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, reply={"state": "empty", "corpus": 0, "terms": [
@@ -1900,7 +1906,7 @@ def _prior_every_decision_stays_visible():
     """MUST FIRE. A `rejected` and a `mapped-null` neighbour render with their decision words. The
     estate measured that rejections transfer and confirmations do not - that is for the judge to
     weigh, and encoding it as a filter here would be this file ruling on an identity."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-e-")
+    tmp = scratch_dir(prefix="daemon-prior-e-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp)
@@ -1915,7 +1921,7 @@ def _prior_every_decision_stays_visible():
 def _prior_only_residual_terms_are_asked():
     """MUST FIRE. Settled lines are not questions. Asking about them would spend the retrieval on
     the very terms the exact-key cache already answered, and crowd the shelf with them."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-f-")
+    tmp = scratch_dir(prefix="daemon-prior-f-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
         d, py = _prior_daemon(tmp)
@@ -1932,7 +1938,7 @@ def _prior_only_residual_terms_are_asked():
 def _prior_the_prompt_names_the_field():
     """MUST FIRE. hunt-daemon's own scar: a prompt that said "unchanged contract" without naming one
     new field broke a clean batch. A shelf the judge was never told about is an unexplained block."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-g-")
+    tmp = scratch_dir(prefix="daemon-prior-g-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp)
@@ -1947,7 +1953,7 @@ def _prior_the_prompt_names_the_field():
 def _prior_never_blocks_the_lane():
     """CLEAN TWIN. A blind retrieval costs the batch a channel and nothing else: the dossier is still
     built, the settled lines are still there, and the recipe still maps."""
-    tmp = tempfile.mkdtemp(prefix="daemon-prior-h-")
+    tmp = scratch_dir(prefix="daemon-prior-h-")
     try:
         tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
         d, _py = _prior_daemon(tmp, rc=2, write=False)
@@ -1960,7 +1966,7 @@ def _prior_never_blocks_the_lane():
 
 
 def _m3_zero_absent_routes_to_write():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3a-")
+    tmp = scratch_dir(prefix="daemon-m3a-")
     try:
         d, ps = _m3_map(tmp, absent=[], state="mapped")
         states = _m3_advanced_to(ps)
@@ -1974,7 +1980,7 @@ def _m3_zero_absent_routes_to_write():
 
 
 def _m3_the_disagreement_is_logged():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3b-")
+    tmp = scratch_dir(prefix="daemon-m3b-")
     try:
         d, _ps = _m3_map(tmp, absent=[], state="mapped")
         line = next((m for m in d.m3_log if "ZERO absent terms" in m), "")
@@ -1984,7 +1990,7 @@ def _m3_the_disagreement_is_logged():
 
 
 def _m3_absent_terms_still_price():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3c-")
+    tmp = scratch_dir(prefix="daemon-m3c-")
     try:
         d, ps = _m3_map(tmp, absent=["saffron", "harissa", "tteok"], state="pricing")
         adds = _m3_queue_terms(ps)
@@ -1997,7 +2003,7 @@ def _m3_absent_terms_still_price():
 
 
 def _m3_the_unbid_hold_returns_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3d-")
+    tmp = scratch_dir(prefix="daemon-m3d-")
     try:
         holds = {"s1": [{"term": "sumac", "why": "Sumac has no bid wired"},
                         {"term": "labneh", "why": "Labneh has no bid wired"},
@@ -2014,7 +2020,7 @@ def _m3_the_unbid_hold_returns_first():
 
 
 def _m3_optional_still_reaches_the_queue():
-    tmp = tempfile.mkdtemp(prefix="daemon-m3e-")
+    tmp = scratch_dir(prefix="daemon-m3e-")
     try:
         d, ps = _m3_map(tmp, absent=[], optional=["fresh dill", "chives", "mint"], state="mapped")
         adds = _m3_queue_terms(ps)
@@ -2088,7 +2094,7 @@ def _lookup_writer(states):
 
 def _price_daemon(terms=None, probe=None, py=None, run_dir=None):
     """The price lane, driven end to end with every shell and every dispatch injected."""
-    tmp = run_dir or tempfile.mkdtemp(prefix="daemon-price-")
+    tmp = run_dir or scratch_dir(prefix="daemon-price-")
     ps = FakePS({"probe-ingredient": probe or _probe_ok})
     d = daemon(run_dir=tmp, ps=ps, pyrun=py or FakePy(),
                dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"note": "free text"}]}))
@@ -2210,7 +2216,7 @@ def _t6_qa_battery_and_mtimes_follow_the_seam():
     """MUST FIRE. Two more readers of the live store: the QA battery graded the live spec, and the
     staleness mtimes compared a freshly built spec against the live file's clock - the changed-
     nothing guard reasoning about the wrong file."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t6-")
+    tmp = scratch_dir(prefix="daemon-t6-")
     try:
         specs = os.path.join(tmp, "specs")
         os.makedirs(specs, exist_ok=True)
@@ -2255,7 +2261,7 @@ def _t2_narrative_is_written_and_stamped():
     """MUST FIRE (T2). say() printed to stdout and nowhere else, so the run's findings, parks and
     STUCK messages lived only in scrollback while the lane log and the artifacts sat on disk looking
     complete."""
-    tmp = tempfile.mkdtemp(prefix="daemon-t2-")
+    tmp = scratch_dir(prefix="daemon-t2-")
     try:
         path = os.path.join(tmp, "daemon.log")
         HD.set_log_file(path)
@@ -2295,7 +2301,7 @@ def _t2_a_log_line_can_never_end_a_run():
     finally:
         HD.set_log_file(None)
     # and the U+FFFD line that actually killed 6a still survives, now through the tee as well
-    tmp = tempfile.mkdtemp(prefix="daemon-t2b-")
+    tmp = scratch_dir(prefix="daemon-t2b-")
     try:
         path = os.path.join(tmp, "daemon.log")
         HD.set_log_file(path)
@@ -2318,7 +2324,7 @@ def _t2_a_quiet_daemon_writes_no_narrative():
     """CLEAN TWIN: every fixture in this suite builds a quiet daemon, and none of them may start
     writing a log into a temp dir as a side effect of being constructed."""
     HD.set_log_file(None)
-    tmp = tempfile.mkdtemp(prefix="daemon-t2c-")
+    tmp = scratch_dir(prefix="daemon-t2c-")
     try:
         daemon(run_dir=tmp)
         return (HD._LOG_PATH[0] is None
@@ -2394,7 +2400,7 @@ def _pregather_no_schema():
 def _pregather_inline_and_numbered():
     """12 terms is two batches at PRICE_BATCH=10, which is what proves n is the LANE's counter."""
     terms = ["guacamole", "pico de gallo", "korean-rice-cakes"] + ["t%d" % i for i in range(9)]
-    tmp = tempfile.mkdtemp(prefix="daemon-price-n-")
+    tmp = scratch_dir(prefix="daemon-price-n-")
     ps = FakePS({"probe-ingredient": _probe_ok})
     d = daemon(run_dir=tmp, ps=ps, pyrun=FakePy(),
                dispatcher=FakeDispatch({"recipe-hunter-pricer": [{"a": 1}, {"a": 2}]}))
@@ -2416,7 +2422,7 @@ def _rejects_explicitly():
     fd = FakeDispatch({"recipe-ingredient-mapper": [
         {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-not-carried",
                       "detail": "nobody carries it"}]}]})
-    tmp = tempfile.mkdtemp(prefix="daemon-mapreject-")
+    tmp = scratch_dir(prefix="daemon-mapreject-")
     try:
         d = daemon(run_dir=preresolved(tmp, ["s1"]), dispatcher=fd)
         d.ch["map"].push({"slug": "s1"})
@@ -2428,7 +2434,7 @@ def _rejects_explicitly():
 
 
 def _ps_array_roundtrip(terms):
-    tmp = tempfile.mkdtemp(prefix="daemon-b8-")
+    tmp = scratch_dir(prefix="daemon-b8-")
     try:
         p = os.path.join(tmp, "t.ps1")
         with open(p, "w", encoding="utf-8") as f:
@@ -2458,7 +2464,7 @@ def _wave_daemon(audit_seq, run_dir, ps=None, repair_touches=None):
 
 def _wave_scratch():
     """A scratch run dir with a wave manifest and an audit file, so the wave lane's real reads work."""
-    tmp = tempfile.mkdtemp(prefix="daemon-wave-")
+    tmp = scratch_dir(prefix="daemon-wave-")
     os.makedirs(os.path.join(tmp, "waves"), exist_ok=True)
     with open(os.path.join(tmp, "waves", "wave-1.json"), "w", encoding="utf-8") as f:
         json.dump({"wave": 1, "run": "drill-run", "batch": "drill-run-w1",
@@ -2561,7 +2567,7 @@ def _wave_mid_run():
     # THREE PASSING VERDICTS ARE THREE FILES the qa lane writes into the run dir, so this fixture
     # owns one and takes it away again. It used to take daemon()'s bare "R" default and leave
     # R\qa\s1.json, s2.json and s3.json in whatever directory the suite was started from.
-    tmp = tempfile.mkdtemp(prefix="daemon-wavemid-")
+    tmp = scratch_dir(prefix="daemon-wavemid-")
     try:
         d = daemon(run_dir=tmp, dispatcher=fd, wave_size=2)
         seen = []
@@ -2599,7 +2605,7 @@ def _cost_mutex():
     """Two write-lane completions landing together. The cost engine is a real subprocess-free stub
     that APPENDS to costed.json under the lock; without serialization the two interleave and the file
     stops parsing, which is the failure v2 actually watched happen mid-audit."""
-    tmp = tempfile.mkdtemp(prefix="daemon-cost-")
+    tmp = scratch_dir(prefix="daemon-cost-")
     try:
         costed = os.path.join(tmp, "costed.json")
         with open(costed, "w", encoding="utf-8") as f:
@@ -2674,7 +2680,7 @@ def _verdict(slug, verdict="accepted"):
 
 
 def _decide_threads_accepted():
-    tmp = tempfile.mkdtemp(prefix="daemon-decide-")
+    tmp = scratch_dir(prefix="daemon-decide-")
     try:
         slugs = ["cand-%02d" % i for i in range(1, 13)]
         d, fd, _p = _decide_daemon(tmp, slugs,
@@ -2705,7 +2711,7 @@ def _decide_threads_accepted():
 
 
 def _taken_before_dispatch():
-    tmp = tempfile.mkdtemp(prefix="daemon-taken-")
+    tmp = scratch_dir(prefix="daemon-taken-")
     try:
         d, fd, pool_path = _decide_daemon(tmp, ["cand-a", "cand-b"],
                                           [{"decisions": [_verdict("cand-a"), _verdict("cand-b")]}])
@@ -2739,7 +2745,7 @@ def _taken_before_dispatch():
 
 
 def _taken_refusal_drops():
-    tmp = tempfile.mkdtemp(prefix="daemon-taken2-")
+    tmp = scratch_dir(prefix="daemon-taken2-")
     try:
         d, fd, pool_path = _decide_daemon(tmp, ["cand-a", "cand-b"],
                                           [{"decisions": [_verdict("cand-b")]}])
@@ -2763,7 +2769,7 @@ def _taken_refusal_drops():
 
 
 def _inflight_scratch():
-    tmp = tempfile.mkdtemp(prefix="daemon-inflight-")
+    tmp = scratch_dir(prefix="daemon-inflight-")
     other = os.path.join(tmp, "runs", "hunt-other", "state")
     os.makedirs(other, exist_ok=True)
     with open(os.path.join(other, "jalapeno-popper-chicken-casserole.json"), "w",
@@ -2793,7 +2799,7 @@ def _inflight_side():
 
 
 def _inflight_blind():
-    tmp = tempfile.mkdtemp(prefix="daemon-blind-")
+    tmp = scratch_dir(prefix="daemon-blind-")
     try:
         empty = os.path.join(tmp, "not-find-similar.ps1")
         with open(empty, "w", encoding="utf-8") as f:
@@ -2918,7 +2924,7 @@ def _never_touches_the_server():
              and any(b in v.lower() for b in banned)]
     if named:
         return False, "a script constant points at the server: %s" % ", ".join(named)
-    tmp = tempfile.mkdtemp(prefix="daemon-gpu-")
+    tmp = scratch_dir(prefix="daemon-gpu-")
     try:
         lad, _inner = _retry_ladder([None])
         ps = FakePS()
@@ -2943,7 +2949,7 @@ def _never_touches_the_server():
 
 
 def _pending_narrow_pass():
-    tmp = tempfile.mkdtemp(prefix="daemon-narrow-")
+    tmp = scratch_dir(prefix="daemon-narrow-")
     try:
         lad, inner = _retry_ladder([[{"raw": "x", "coverage": 0.4, "reasons": ["r"]}]],
                                    ctx=4096)     # the 4-slot default: rung 2 does not fit
@@ -2958,7 +2964,7 @@ def _pending_narrow_pass():
 
 
 def _blocked_is_not_escalated():
-    tmp = tempfile.mkdtemp(prefix="daemon-blocked-")
+    tmp = scratch_dir(prefix="daemon-blocked-")
     try:
         lad, _inner = _retry_ladder([None])
         fd = FakeDispatch({"recipe-hunter-extractor": [{"state": "ok", "ingredients": [],
@@ -3007,7 +3013,7 @@ def _rung3_daemon(tmp, returned):
 
 
 def _rung3_verifies_stripped_text():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3-")
+    tmp = scratch_dir(prefix="daemon-rung3-")
     try:
         d, _esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One", "servings": 4,
@@ -3025,7 +3031,7 @@ def _rung3_verifies_stripped_text():
 
 
 def _rung3_cleans_up():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3b-")
+    tmp = scratch_dir(prefix="daemon-rung3b-")
     try:
         d, esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One",
@@ -3040,7 +3046,7 @@ def _rung3_cleans_up():
 
 
 def _rung3_records_not_gates():
-    tmp = tempfile.mkdtemp(prefix="daemon-rung3c-")
+    tmp = scratch_dir(prefix="daemon-rung3c-")
     try:
         d, esc = _rung3_daemon(tmp, {
             "state": "ok", "title": "P One",
@@ -3075,7 +3081,7 @@ def judgment_lanes(ps):
 def _lane_daemon():
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    tmp = tempfile.mkdtemp(prefix="daemon-lane-")
+    tmp = scratch_dir(prefix="daemon-lane-")
     skeletoned(tmp, ["s1"])
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (500, 20, 40)
@@ -3109,7 +3115,7 @@ def _lane_tokens():
 
 
 def _lane_local():
-    tmp = tempfile.mkdtemp(prefix="daemon-lanelocal-")
+    tmp = scratch_dir(prefix="daemon-lanelocal-")
     try:
         lad, _inner = _retry_ladder([None])
         ps = FakePS()
@@ -3154,7 +3160,7 @@ def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None, *
 
 
 def _preresolve_runs_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre1-")
+    tmp = scratch_dir(prefix="daemon-pre1-")
     try:
         ps = FakePS()
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
@@ -3179,7 +3185,7 @@ def _preresolve_runs_first():
 
 
 def _preresolve_two_blocks():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre2-")
+    tmp = scratch_dir(prefix="daemon-pre2-")
     try:
         ps = FakePS({"map-preresolve.ps1": lambda a: (2, "map-preresolve: BLOCKED - no extraction", "")})
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
@@ -3193,7 +3199,7 @@ def _preresolve_two_blocks():
 
 
 def _preresolve_zero_still_dispatches():
-    tmp = tempfile.mkdtemp(prefix="daemon-pre0-")
+    tmp = scratch_dir(prefix="daemon-pre0-")
     try:
         ps = FakePS({"map-preresolve.ps1": lambda a: (0, "map-preresolve: 3 slug(s), 0 residual", "")})
         d, fd = _map_daemon(tmp, ["s1", "s2", "s3"],
@@ -3207,7 +3213,7 @@ def _preresolve_zero_still_dispatches():
 
 
 def _map_prompt_is_residual():
-    tmp = tempfile.mkdtemp(prefix="daemon-preP-")
+    tmp = scratch_dir(prefix="daemon-preP-")
     try:
         d, fd = _map_daemon(tmp, ["s1"], {"results": [{"slug": "s1", "status": "ok", "state": "priced"}]},
                             residual={"s1": ["ras el hanout", "dry white wine", "gochujang"]})
@@ -3258,7 +3264,7 @@ def _assemble_is_the_daemons():
     ingredient" over a recipe it had just settled cleanly. With the pen here, that shape is not
     reachable.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-asm1-")
+    tmp = scratch_dir(prefix="daemon-asm1-")
     try:
         ps = _asm_ps(0)
         d, fd = _map_daemon(tmp, ["s1"], {"results": [_mapper_result("s1")]}, ps=ps,
@@ -3285,7 +3291,7 @@ def _assemble_is_the_daemons():
 def _assemble_failure_is_stuck():
     """A1. Nothing partly-settled advances. The old failure was an exit 1 a whole stage later, after
     the prose had been paid for; this is a STUCK at the map lane with the lines named."""
-    tmp = tempfile.mkdtemp(prefix="daemon-asm2-")
+    tmp = scratch_dir(prefix="daemon-asm2-")
     try:
         findings = ("map-preresolve -Assemble: 1 finding(s) - NOTHING was written\n"
                     "    FINDING  'tteok' has no gram weight from the engine or from a ruling\n")
@@ -3310,7 +3316,7 @@ def _registrar_is_dispatched():
     """A4 / pin P6. A3 strips `Agent` from the mapper, which severs the road its own definition orders
     new ids down. The daemon rebuilds it - and as a STAMPED dispatch, not the invisible 21-turn
     subagent that cost $1.64 in no ledger on the phase-5 run."""
-    tmp = tempfile.mkdtemp(prefix="daemon-reg1-")
+    tmp = scratch_dir(prefix="daemon-reg1-")
     try:
         ps = _asm_ps(0)
         res = _mapper_result("s1", proposals=[
@@ -3345,7 +3351,7 @@ def _registrar_is_dispatched():
 
 
 def _no_proposal_no_registrar():
-    tmp = tempfile.mkdtemp(prefix="daemon-reg2-")
+    tmp = scratch_dir(prefix="daemon-reg2-")
     try:
         fd = FakeDispatch({"recipe-ingredient-mapper": [{"results": [_mapper_result("s1")]}]})
         preresolved(tmp, ["s1"], residual={"s1": ["gochujang", "tteok"]})
@@ -3363,7 +3369,7 @@ def _registrar_null_is_not_approval():
     """SILENCE IS NOT CONSENT about whether a commodity is born. A duplicate id lets the same food
     carry two disagreeing prices while every per-file guard reads green - bread-crumbs vs breadcrumbs
     sat 2.9x apart across two boards until somebody spotted it by eye."""
-    tmp = tempfile.mkdtemp(prefix="daemon-reg3-")
+    tmp = scratch_dir(prefix="daemon-reg3-")
     try:
         ps = _asm_ps(0)
         res = _mapper_result("s1", proposals=[{"term": "tteok", "proposed_bid": "korean-rice-cakes",
@@ -3392,7 +3398,7 @@ def _map_prompt_inlines_and_bans_reads():
     220 characters - which cut the near-miss list off the end, the single most useful sentence in the
     table. A prompt that hides what it already knows sends the model back to the estate to re-derive
     it, and every one of those reads is a turn that re-reads the accumulated context with it."""
-    tmp = tempfile.mkdtemp(prefix="daemon-preQ-")
+    tmp = scratch_dir(prefix="daemon-preQ-")
     try:
         long_ev = ("prior ruling: none; nearest vocabulary rows: White Wine Vinegar "
                    "[white-wine-vinegar] DIFFERENT FORM: vinegar | Rice Vinegar [rice-vinegar] "
@@ -3427,7 +3433,7 @@ def _map_prompt_inlines_and_bans_reads():
 
 
 def _unbid_holds():
-    tmp = tempfile.mkdtemp(prefix="daemon-hold-")
+    tmp = scratch_dir(prefix="daemon-hold-")
     try:
         ps = FakePS()
         holds = {"s1": [{"term": "sumac", "canon_item": "Sumac", "bid": "",
@@ -3446,7 +3452,7 @@ def _unbid_holds():
 
 
 def _no_hold_routes_normally():
-    tmp = tempfile.mkdtemp(prefix="daemon-nohold-")
+    tmp = scratch_dir(prefix="daemon-nohold-")
     try:
         ps = FakePS()
         d, _fd = _map_daemon(tmp, ["s1"],
@@ -3472,7 +3478,7 @@ def _unhold_between_seeds():
     The scratch vocabulary is the thing being edited between the seeds, which is what "the bid is
     wired" means mechanically - a row in db\\ingredients.json gaining a bid.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-unhold-")
+    tmp = scratch_dir(prefix="daemon-unhold-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
@@ -3578,7 +3584,7 @@ def _ok_write(slug="s1"):
 
 
 def _skeleton_runs_first():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel1-")
+    tmp = scratch_dir(prefix="daemon-skel1-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
@@ -3598,7 +3604,7 @@ def _prewrite_band_retires():
     """The whole point of moving the gate: v2 checked the band on the WRITE result, after the most
     expensive per-recipe stage had already run. Here the skeleton says 700 cal and no prose is paid
     for at all - the assertion that matters is `dispatches == 0`."""
-    tmp = tempfile.mkdtemp(prefix="daemon-skel2-")
+    tmp = scratch_dir(prefix="daemon-skel2-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=700)
@@ -3613,7 +3619,7 @@ def _prewrite_band_retires():
 
 
 def _prewrite_band_passes():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel3-")
+    tmp = scratch_dir(prefix="daemon-skel3-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps, cal=500)
@@ -3626,7 +3632,7 @@ def _prewrite_band_passes():
 
 
 def _skeleton_incomplete_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel4-")
+    tmp = scratch_dir(prefix="daemon-skel4-")
     try:
         # The real script prints its summary, then TWO path lines, then the findings - so a blind
         # `detail[-400:]` handed the operator half a file path where the reason should be. Measured on
@@ -3652,7 +3658,7 @@ def _skeleton_incomplete_is_stuck():
 
 
 def _skeleton_blocked_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-skel5-")
+    tmp = scratch_dir(prefix="daemon-skel5-")
     try:
         ps = FakePS({"build-intake-skeleton.ps1":
                      lambda a: (2, "build-intake-skeleton: BLOCKED - required input missing", "")})
@@ -3695,7 +3701,7 @@ def _read_skeleton(tmp, slug="s1"):
 def _write_prompt_is_a_dossier():
     """CHANGE W. v2's line was "Produce ONE intake JSON"; D8's was "COMPLETE its intake IN PLACE".
     Both are gone: the writer has no file access at all, and its whole deliverable is the payload."""
-    tmp = tempfile.mkdtemp(prefix="daemon-skel6-")
+    tmp = scratch_dir(prefix="daemon-skel6-")
     try:
         os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
         with open(os.path.join(tmp, "extracted", "s1.json"), "w", encoding="utf-8") as f:
@@ -3721,7 +3727,7 @@ def _write_prompt_is_a_dossier():
 
 
 def _fields_patch_exactly():
-    tmp = tempfile.mkdtemp(prefix="daemon-fields1-")
+    tmp = scratch_dir(prefix="daemon-fields1-")
     try:
         d, fd = _write_daemon(tmp, ["s1"], [_write_result()])
         got, skel = _read_intake(tmp), _read_skeleton(tmp)
@@ -3746,7 +3752,7 @@ def _fields_patch_exactly():
 def _fields_nest_correctly():
     """`prose.cost_closing_html` is a TWO level path, not three. A naive split on every dot would
     invent a nesting build-v2-spec cannot read, and the value would vanish without an error."""
-    tmp = tempfile.mkdtemp(prefix="daemon-fields2-")
+    tmp = scratch_dir(prefix="daemon-fields2-")
     try:
         fields = {"prose.cost_closing_html": "<p>What it costs.</p>",
                   "head.step_names": ["Brown", "Add", "Simmer"],
@@ -3786,7 +3792,7 @@ def _fields_unknown_key_refused():
 
 
 def _patcher_refuses_unknown_key():
-    tmp = tempfile.mkdtemp(prefix="daemon-fields3-")
+    tmp = scratch_dir(prefix="daemon-fields3-")
     try:
         skeletoned(tmp, ["s1"])
         before = _read_intake(tmp)
@@ -3810,7 +3816,7 @@ def _post_patch_drift_is_stuck():
     THE DISPATCH COUNT IS THE PROOF THE REDRIFT ROAD IS GONE. Two writer results are queued; if the
     old road survived anywhere, the second would be consumed.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-drift1-")
+    tmp = scratch_dir(prefix="daemon-drift1-")
     try:
         drifted = ["ingredients[1].grams: issued '630', returned '900'",
                    "macros_per_serving.calories: issued '500', returned '640'",
@@ -3857,7 +3863,7 @@ def _redrift_road_is_gone():
 
 
 def _status_names_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-statusstuck-")
+    tmp = scratch_dir(prefix="daemon-statusstuck-")
     try:
         ps = FakePS({"build-v2-spec.ps1": lambda a: (1, "", "UNKNOWN INGREDIENT NAME: Marsala Wine")})
         d, _fd = _write_daemon(tmp, ["s1", "s2", "s3"],
@@ -3878,7 +3884,7 @@ def _spec_build_refusal_is_stuck():
     The band read then found no spec, and hunt_lib.in_band answers "not reported -> ok" BY DESIGN
     (v2 parity: a band nobody reported is not a rejection), so a refused build read as a pass.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-specrc-")
+    tmp = scratch_dir(prefix="daemon-specrc-")
     try:
         refusal = ("UNKNOWN INGREDIENT NAME: Marsala Wine are not in the ingredient vocabulary "
                    "(db\\ingredients.json). THE PRICE IS PROBABLY NOT MISSING - THE NAME IS WRONG.\n"
@@ -3896,7 +3902,7 @@ def _spec_build_refusal_is_stuck():
 
 
 def _unreadable_spec_is_stuck():
-    tmp = tempfile.mkdtemp(prefix="daemon-specnone-")
+    tmp = scratch_dir(prefix="daemon-specnone-")
     try:
         ps = FakePS()
         skeletoned(tmp, ["s1"])
@@ -3915,7 +3921,7 @@ def _unreadable_spec_is_stuck():
 
 
 def _spec_build_clean():
-    tmp = tempfile.mkdtemp(prefix="daemon-specok-")
+    tmp = scratch_dir(prefix="daemon-specok-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_ok_write()], ps=ps)
@@ -3927,7 +3933,7 @@ def _spec_build_clean():
 
 
 def _clean_fill_no_reask():
-    tmp = tempfile.mkdtemp(prefix="daemon-drift3-")
+    tmp = scratch_dir(prefix="daemon-drift3-")
     try:
         ps = FakePS()
         d, fd = _write_daemon(tmp, ["s1"], [_write_result()], ps=ps)
@@ -3941,7 +3947,7 @@ def _clean_fill_no_reask():
 def _verify_blocked_is_stuck():
     """A diff with nothing to diff against is not a pass and it is not a drift either. Re-asking the
     writer here would be asking it to fix fields nobody can name."""
-    tmp = tempfile.mkdtemp(prefix="daemon-drift4-")
+    tmp = scratch_dir(prefix="daemon-drift4-")
     try:
         ps = FakePS({"build-intake-skeleton.ps1":
                      lambda a: ((2, "BLOCKED - no skeleton snapshot", "") if "-Verify" in a
@@ -3972,7 +3978,7 @@ def _band(cal, carbs, prot=40):
     passes and these fixtures exercise the postcondition over the BUILT SPEC, which D8 keeps."""
     fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
     ps = FakePS()
-    tmp = tempfile.mkdtemp(prefix="daemon-band-")
+    tmp = scratch_dir(prefix="daemon-band-")
     skeletoned(tmp, ["s1"], cal=500, carbs=20)
     d = daemon(run_dir=tmp, dispatcher=fd, ps=ps)
     d.spec_band = lambda slug, specs_dir=None: (cal, carbs, prot)
@@ -4005,7 +4011,7 @@ def _band_gate_real_machine():
     """The band rejection, against the REAL hunt-run.ps1 on a scratch run dir. This is the fixture
     the FakePS blind spot demands: it proves every advance in the route is LEGAL, so the on-disk
     state is the rejection rather than a refused transition nobody saw."""
-    tmp = tempfile.mkdtemp(prefix="daemon-bandreal-")
+    tmp = scratch_dir(prefix="daemon-bandreal-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4093,7 +4099,7 @@ def _band_gate_clean():
 
 
 def _wip_gates_pops():
-    tmp = tempfile.mkdtemp(prefix="daemon-wip-")
+    tmp = scratch_dir(prefix="daemon-wip-")
     try:
         slugs = ["c%02d" % i for i in range(40)]
         d, fd, _p = _decide_daemon(tmp, slugs, [])
@@ -4193,7 +4199,7 @@ def _b5_reseed_from_queue():
     is not ours).
     """
     out = []
-    tmp = tempfile.mkdtemp(prefix="daemon-b5-reseed-")
+    tmp = scratch_dir(prefix="daemon-b5-reseed-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4383,7 +4389,7 @@ def _c1_daemon(model_usage, tokens_in=1234, tokens_out=56, cache_read=900, cache
         res.model_usage = model_usage
         return res
 
-    tmp = tempfile.mkdtemp(prefix="daemon-c1-")
+    tmp = scratch_dir(prefix="daemon-c1-")
     preresolved(tmp, ["s1"])
     d = HD.Daemon(tmp, "c1-drill", dispatcher=dispatcher, ps=ps, quiet=True)
     d.ch["map"].push({"slug": "s1"})
@@ -4471,7 +4477,7 @@ def _lane_c1_delegation_finding():
 def _resume_seed_table():
     """The section 4.5 seed table, against a REAL scratch run dir driven by hunt-run.ps1 itself."""
     out = []
-    tmp = tempfile.mkdtemp(prefix="daemon-resume-")
+    tmp = scratch_dir(prefix="daemon-resume-")
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
@@ -4579,7 +4585,7 @@ def _band_pool(tmp, spec):
 
 
 def _popped(spec, band=None):
-    tmp = tempfile.mkdtemp(prefix="daemon-popband-")
+    tmp = scratch_dir(prefix="daemon-popband-")
     try:
         p = _band_pool(tmp, spec)
         d = daemon(run_dir=os.path.join(tmp, "run"), pool_path=p,
@@ -4618,7 +4624,7 @@ def _band_absent_is_unbounded():
     by two gates for a whole run - a real failure mode. The ABSENCE of a constraint has none: it cannot
     wrongly reject anything. So an unstated band now runs with no limits, and what the refusal bought
     (a reader knowing what the gates enforced) is kept by run.json and by the logged effective band."""
-    tmp = tempfile.mkdtemp(prefix="daemon-bandstate-")
+    tmp = scratch_dir(prefix="daemon-bandstate-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"run": "r", "conditions": "c"}, f)
@@ -4631,7 +4637,7 @@ def _band_absent_is_unbounded():
 
 
 def _band_partial_is_honoured():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandpart-")
+    tmp = scratch_dir(prefix="daemon-bandpart-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"band": {"calMin": None, "calMax": None, "carbMax": None, "proteinMin": 45}}, f)
@@ -4646,7 +4652,7 @@ def _band_partial_is_honoured():
 
 
 def _band_read_from_run_json():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandread-")
+    tmp = scratch_dir(prefix="daemon-bandread-")
     try:
         with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
             json.dump({"band": {"calMin": 500, "calMax": 650, "carbMax": 40, "proteinMin": 50}}, f)
@@ -4660,7 +4666,7 @@ def _band_read_from_run_json():
 
 
 def _band_inverted_refused():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandinv-")
+    tmp = scratch_dir(prefix="daemon-bandinv-")
     try:
         band, why = HD.resolve_band(tmp, 700.0, 500.0, 40.0, 0.0)
         return band is None and "above its ceiling" in why, "band=%s why=%s" % (json.dumps(band), why[:120])
@@ -4669,7 +4675,7 @@ def _band_inverted_refused():
 
 
 def _band_zero_floor_is_no_floor():
-    tmp = tempfile.mkdtemp(prefix="daemon-bandzero-")
+    tmp = scratch_dir(prefix="daemon-bandzero-")
     try:
         band, _w = HD.resolve_band(tmp, 500.0, 650.0, 40.0, 0.0)
         # ...and the predicate agrees: a 12 g dish is in band when the floor was stated as 0
@@ -5135,7 +5141,7 @@ def _extract_run(n_pages):
     against the unfixed code and proved nothing. What distinguishes batching is WHEN the pushes happen
     relative to the settles - all at the end, or one after each settle.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-batch-")
+    tmp = scratch_dir(prefix="daemon-batch-")
     try:
         lad, _inner = _retry_ladder([None] * max(n_pages, 1))
         ps = FakePS()
@@ -5192,7 +5198,7 @@ def _extract_releases_a_lone_recipe():
     and demands the recipe reach the map lane WITHOUT the channel ever closing. That is the difference
     between "flushed because the run ended" and "flushed because nothing else was queued".
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-lone-")
+    tmp = scratch_dir(prefix="daemon-lone-")
     try:
         lad, _inner = _retry_ladder([None, None])
         ps = FakePS()
@@ -5247,7 +5253,7 @@ def _extract_strands_nothing():
 
 def _extract_respects_map_batch():
     # The daemon logs each flush with its count; no flush may carry more than MAP_BATCH.
-    tmp = tempfile.mkdtemp(prefix="daemon-batchcap-")
+    tmp = scratch_dir(prefix="daemon-batchcap-")
     try:
         n = hunt_lib.MAP_BATCH + 3
         lad, _inner = _retry_ladder([None] * n)
@@ -5287,7 +5293,7 @@ def _extract_drain_flush_releases_held():
     pages are still queued (so no size() flush), and the lane then exits early because the breaker
     tripped. Without the drain flush that recipe is stranded in `pending` and never mapped.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-drain-")
+    tmp = scratch_dir(prefix="daemon-drain-")
     try:
         lad, _inner = _retry_ladder([None, None, None])
         ps = FakePS()
@@ -5336,7 +5342,7 @@ def _extract_drain_flush_releases_held():
 # =====================================================================================================
 
 def _band_pair_run(cal, carbs, prot, source_band, band=None):
-    tmp = tempfile.mkdtemp(prefix="daemon-pair-")
+    tmp = scratch_dir(prefix="daemon-pair-")
     try:
         fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
         ps = FakePS()
@@ -5415,7 +5421,7 @@ def _any_limit_restores_verification():
 # =====================================================================================================
 
 def _bandgate_run(protein, food_rows):
-    tmp = tempfile.mkdtemp(prefix="daemon-nv-")
+    tmp = scratch_dir(prefix="daemon-nv-")
     try:
         fd = FakeDispatch({"recipe-writer": [{"slug": "s1", "status": "ok", "state": "written"}]})
         ps = FakePS()
@@ -5486,7 +5492,7 @@ def _food_db_run(rows_by_slug, existing=None, readme="fixture DB"):
     live DB even by accident, and now it can. Every fixture here writes a temp file and none of them
     can reach meal-prep\food-macros-db.json.
     """
-    tmp = tempfile.mkdtemp(prefix="daemon-fooddb-")
+    tmp = scratch_dir(prefix="daemon-fooddb-")
     path = os.path.join(tmp, "food-macros-db.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump({"readme": readme, "items": list(existing or [])}, f)
@@ -5823,7 +5829,7 @@ def _h2_seam_daemon(tmp, **kw):
 def _h2_queue_calls_carry_the_seams():
     """MUST FIRE: every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath,
     and the live paths are never passed."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2q-")
+    tmp = scratch_dir(prefix="daemon-h2q-")
     try:
         d = _h2_seam_daemon(tmp)
         # the three shapes the daemon actually calls: -Add from the map lane, -Add from the unhold,
@@ -5852,7 +5858,7 @@ def _h2_live_run_passes_no_override():
 def _h2_map_lane_queues_through_the_seam():
     """MUST FIRE, end to end: a mapper returning absent terms enqueues them through the SCRATCH
     queue - the costed_path pattern, asserted on the real call the lane makes."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2map-")
+    tmp = scratch_dir(prefix="daemon-h2map-")
     try:
         preresolved(tmp, ["s1"], residual={"s1": ["saffron", "harissa", "tteok"]})
         ps = _asm_ps(0)
@@ -5880,7 +5886,7 @@ def _h2_considered_seam_reaches_decide_apply():
     """MUST FIRE: the decider's ruling goes to the SCRATCH dish ledger. considered-dishes.ps1 already
     had -Store and decide_apply already threaded it; the daemon was passing an empty string, so every
     drill wrote the estate's real prior-art memory."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2cd-")
+    tmp = scratch_dir(prefix="daemon-h2cd-")
     try:
         seen = {}
         import decide_apply                                        # noqa: PLC0415
@@ -5916,7 +5922,7 @@ def _h2_pricer_is_told_the_seams():
     """MUST FIRE: the PRICER holds the -Record/-Verdict/-Promote pen itself, so no daemon-side
     threading can reach those calls. On a seamed run its prompt names the flags; on a real run the
     note is absent entirely."""
-    tmp = tempfile.mkdtemp(prefix="daemon-h2price-")
+    tmp = scratch_dir(prefix="daemon-h2price-")
     try:
         d = _h2_seam_daemon(tmp)
         p = d.price_prompt(["saffron", "harissa", "tteok"])
@@ -6054,7 +6060,7 @@ def _f1_map_run(tmp, stat=None, raises=False, warm=True, slugs=("s1", "s2", "s3"
 
 
 def _f1_order_is_preresolve_fill_preresolve_dispatch():
-    tmp = tempfile.mkdtemp(prefix="daemon-f1ord-")
+    tmp = scratch_dir(prefix="daemon-f1ord-")
     try:
         d, fd, ps, order = _f1_map_run(tmp)
         prompt = (fd.prompts("recipe-ingredient-mapper") or [""])[0]
@@ -6072,7 +6078,7 @@ def _f1_order_is_preresolve_fill_preresolve_dispatch():
 def _f1_nothing_added_skips_the_rerun():
     """CLEAN TWIN: a batch whose terms were all already cached is as warm as it can get, so the
     second mechanical pass is not paid for."""
-    tmp = tempfile.mkdtemp(prefix="daemon-f1warm-")
+    tmp = scratch_dir(prefix="daemon-f1warm-")
     try:
         d, fd, ps, order = _f1_map_run(tmp, stat={"added": 0, "skipped": 3, "failed": 0, "size": 3})
         pre = [c for c in ps.find("map-preresolve.ps1") if "-Slugs" in c["args"]]
@@ -6085,7 +6091,7 @@ def _f1_nothing_added_skips_the_rerun():
 def _f1_a_failed_fill_degrades_and_still_dispatches():
     """MUST FIRE: DEGRADE, NEVER BLOCK. The fill can only add evidence, so a fill that throws is one
     finding naming the count and a mapper dispatched exactly as it was before F1 existed."""
-    tmp = tempfile.mkdtemp(prefix="daemon-f1boom-")
+    tmp = scratch_dir(prefix="daemon-f1boom-")
     try:
         d, fd, ps, order = _f1_map_run(tmp, raises=True)
         named = [f for f in d.findings if f.startswith("F1: the FDC fill could not run")]
@@ -6128,7 +6134,7 @@ def _f1_cache_fill_with_gate(path, gate):
 
 
 def _f1_two_fills(no_lock=False):
-    tmp = tempfile.mkdtemp(prefix="daemon-f1lock-")
+    tmp = scratch_dir(prefix="daemon-f1lock-")
     path = os.path.join(tmp, "fdc-cache.json")
     HD.fdc_lookup.cache_write({"terms": {}}, path)
     d = daemon(run_dir=tmp)
@@ -6501,7 +6507,7 @@ def _patch_road_no_change_still_guards():
 
 def _qa_dossier_run(spec=None, battery=None, extraction=True):
     """A run dir with the three artifacts a QA dossier renders, plus a scratch spec store."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qadoss-")
+    tmp = scratch_dir(prefix="daemon-qadoss-")
     specs = os.path.join(tmp, "specs")
     os.makedirs(specs, exist_ok=True)
     os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
@@ -6569,7 +6575,7 @@ def _qa_dossier_missing_battery_is_announced():
 def _qa_daemon_holds_the_verdict_pen():
     """MUST FIRE: the DAEMON writes qa\\<slug>.json from the payload, and it matches the schema
     fields. The agent's Write is retired."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qapen-")
+    tmp = scratch_dir(prefix="daemon-qapen-")
     try:
         skeletoned(tmp, ["s1"])
         fd = FakeDispatch({"recipe-source-qa": [
@@ -6593,7 +6599,7 @@ def _qa_no_verdict_writes_nothing():
     """MUST FIRE: B5 - no verdict is never a pass. A payload carrying none writes NO file (a file on
     disk saying nothing is worse than no file, because it looks like a ruling) and the recipe is
     STUCK."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qanov-")
+    tmp = scratch_dir(prefix="daemon-qanov-")
     try:
         skeletoned(tmp, ["s1"])
         fd = FakeDispatch({"recipe-source-qa": [None, None, None]})   # transport failures: no verdict
@@ -6617,7 +6623,7 @@ def _qa_no_verdict_writes_nothing():
 
 
 def _qa_writer_repair_is_a_patch():
-    tmp = tempfile.mkdtemp(prefix="daemon-qapatch-")
+    tmp = scratch_dir(prefix="daemon-qapatch-")
     try:
         skeletoned(tmp, ["s1"])
         script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "writer",
@@ -6650,7 +6656,7 @@ def _qa_writer_repair_is_a_patch():
 def _qa_mapper_repair_keeps_its_road():
     """CLEAN TWIN. A QA finding owned by the mapper needs re-mapping, which no field patch reaches.
     Its owner routing and its prompt are both unchanged."""
-    tmp = tempfile.mkdtemp(prefix="daemon-qamapper-")
+    tmp = scratch_dir(prefix="daemon-qamapper-")
     try:
         skeletoned(tmp, ["s1"])
         script = {"recipe-source-qa": [{"slug": "s1", "verdict": "fail", "owner": "mapper",
