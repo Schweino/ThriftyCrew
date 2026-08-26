@@ -754,6 +754,34 @@ STAGE = {"type": "object", "properties": {
 # is keyed by.
 MAPPED_RULING_DECISIONS = ("mapped", "mapped-null", "mapped-optional", "not-purchased", "rejected")
 
+# THE REJECTION STATES A MAPPER MAY NAME - AND THIS IS PROMPT COPY, NOT A GATE (2026-08-26).
+#
+# WHAT IT IS FOR. The map lane rules on a recipe that is STILL AT `extracted` - the lane's own advance
+# to `mapped` sits below its rejection branch - so a mapper rejection may only name a state hunt-run.ps1
+# will actually accept from there. This tuple is that set, and its ONE job is to say so IN THE SCHEMA
+# DESCRIPTION the mapper reads. Told nothing, a live mapper reaches for the words it actually means -
+# "not carried" - and every recipe it rejects becomes a STUCK a person has to clear by hand.
+#
+# IT IS NOT WHAT ENFORCES ANYTHING, AND THAT DISTINCTION IS LOAD-BEARING. Daemon.settle() is the gate,
+# and it holds no copy of $script:NEXT at all: it offers the transition to hunt-run.ps1 and believes the
+# answer, so a refusal is a STUCK whatever this tuple happens to say. Nothing routes on this constant.
+# If it ever disagrees with hunt-run, the cost is a worse PROMPT - never a wrong verdict - and the Q3
+# drift case in hunt_daemon_selftest.py fails the day that happens, because it ASKS the real
+# hunt-run.ps1 which rejection states `extracted` accepts rather than reading this line.
+#
+# `rejected-not-carried` IS DELIBERATELY ABSENT, AND IT WAS THE DAEMON'S DEFAULT UNTIL TODAY. It is a
+# CARRIAGE verdict, and since Q2 carriage is DERIVED by hunt-run - Get-CarriageBlockingTerms on the road
+# into `pricing`, Get-DerivedPricingState on the way out - never claimed by an agent. Every legitimate
+# writer of that state reads it off a derivation over real store answers (hunt-run.ps1 ~198, the
+# daemon's reap_priced). Widening `extracted` to accept it instead would let an unevidenced claim mint a
+# carriage verdict for a recipe nothing has even mapped - Q2's founding case arriving through a
+# different door, which is exactly the door-beside-the-gate that comment refuses.
+#
+# WHERE A REAL "NOTHING CARRIES THIS" GOES. Into `absent_terms`, not into a rejection. That is the road
+# that ends at `rejected-not-carried` legitimately - through `pricing`, with the ingredient queue's
+# answer behind it - and it is open to the mapper on every result it returns.
+MAPPER_REJECTION_STATES = ("rejected-unreadable", "rejected-dupe", "rejected-macros")
+
 MAPPED = {"type": "object", "properties": {
     "results": {"type": "array", "items": {"type": "object", "properties": {
         "slug": {"type": "string"},
@@ -762,8 +790,11 @@ MAPPED = {"type": "object", "properties": {
                   "`pricing` when absent_terms is non-empty, `priced` when it is EMPTY - the two "
                   "must agree. On a status=ok result this is ADVISORY: the orchestrator routes on "
                   "the TERMS and only logs a disagreement. On status=rejected this field IS the "
-                  "outcome and must name a terminal state (rejected-macros for an out-of-band "
-                  "recipe)"},
+                  "outcome and must name exactly one of: " + " | ".join(MAPPER_REJECTION_STATES) +
+                  ". Those are the only verdicts a recipe at `extracted` can be moved to, so a "
+                  "rejection naming anything else cannot be recorded and the recipe is held for a "
+                  "person instead. An ingredient no Omaha store carries is NOT a rejection here - "
+                  "report it in absent_terms and the pricing road rules on it"},
         "absent_terms": {"type": "array", "items": {"type": "string"},
                          "description":
                              "YOUR half of the blocking-term list: the terms the board could not "

@@ -1156,6 +1156,10 @@ def run():
     T("CLEAN TWIN a rejection that IS legal from `extracted` (`rejected-macros`) is still recorded "
       "and still LANDS on disk - the mapper can reject, it just cannot invent a route",
       *_q3_clean_twin_a_legal_rejection_still_lands())
+    T("MUST FIRE  THE PROMPT HALF: hunt_lib.MAPPER_REJECTION_STATES - which is what TELLS the mapper "
+      "which verdicts `extracted` can take, and is the one line of Python restating hunt-run's table - "
+      "is exactly the set the real hunt-run.ps1 accepts, asked of it rather than copied from it",
+      *_q3_the_constant_is_asked_of_hunt_run_not_copied_from_it())
 
     # =================================================================================================
     H("T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)")
@@ -2767,6 +2771,102 @@ def _q3_clean_twin_a_legal_rejection_still_lands():
 
 PRICE_TERMS = ["guacamole", "pico de gallo", "korean-rice-cakes"]
 
+
+
+# THE PROMPT HALF OF Q3, AND WHY IT NEEDS A CASE OF ITS OWN (2026-08-26).
+#
+# settle() closed the defect: it offers the transition to hunt-run.ps1 and records nothing the state
+# file refused, holding NO copy of $script:NEXT to drift. That is the whole correctness story, and the
+# three cases above pin it.
+#
+# WHAT IT DOES NOT DO IS TELL THE MAPPER ANYTHING. A live mapper reaching for the words it actually
+# means - "not carried" - now produces a correct STUCK instead of a faked rejection, which is right and
+# is still a recipe a person has to clear by hand, every time. So hunt_lib.MAPPER_REJECTION_STATES
+# names the legal set INSIDE THE SCHEMA DESCRIPTION the mapper reads, and this case exists because that
+# tuple is the one place in Python that now restates something hunt-run.ps1 owns.
+#
+# IT IS ASKED, NOT READ. The candidate universe comes off hunt-run.ps1's own $script:REJECTED_STATES
+# line, and the verdict on each candidate comes from hunt-run.ps1 REFUSING OR ACCEPTING IT for real. A
+# fixture that parsed $script:NEXT and compared two Python lists would be a third copy of the table,
+# which is the thing being guarded against.
+#
+# ONE SLUG STRETCHES ACROSS THE REFUSALS, and that is not a shortcut - it USES the property the edge
+# case above pins: a refused advance leaves the state file exactly where it was, so the same recipe can
+# be offered every illegal state in turn. Only an ACCEPTED one spends it, so this costs one staging per
+# LEGAL state (three) rather than one per candidate.
+#
+# NEUTER PROOFS, RUN AND REVERTED 2026-08-26, both restored byte-identical by md5, and the FULL case
+# count read on each rather than the red count alone. The guard is bidirectional and the two directions
+# fire differently, which is the point of running both:
+#   * `rejected-not-carried` added to $script:NEXT['extracted'] in hunt-run.ps1
+#         -> 2 red / 273, exit 2: this case, AND the live-shape case above (which then records the
+#         rejection, because the state machine now allows it). The table moving is caught twice.
+#   * `rejected-not-carried` added to MAPPER_REJECTION_STATES instead, table untouched
+#         -> 1 red / 273, exit 2: THIS CASE ALONE. Nothing else can see it, because nothing else reads
+#         the tuple - which is exactly the hole this case exists to cover. A prompt that tells the
+#         mapper a lie breaks no assertion anywhere else in this suite.
+# Measured cost: 5.8s, one -Init plus three stagings and six probes against the real hunt-run.ps1.
+def _q3_the_constant_is_asked_of_hunt_run_not_copied_from_it():
+    """hunt_lib.MAPPER_REJECTION_STATES must be EXACTLY the rejection states the real hunt-run.ps1
+    accepts from `extracted`. Nothing routes on it, so drift costs a worse prompt rather than a wrong
+    verdict - and a worse prompt is what turns every mapper rejection into a stuck somebody clears by
+    hand."""
+    import re as _re
+    tmp = scratch_dir(prefix="daemon-q3d-")
+    try:
+        src = io.open(HUNT_RUN_PS, encoding="utf-8-sig").read()
+        m = _re.search(r"\$script:REJECTED_STATES\s*=\s*@\(([^)]*)\)", src)
+        if not m:
+            return False, "could not find $script:REJECTED_STATES in hunt-run.ps1 - the candidate " \
+                          "universe must come from hunt-run, so this case fails rather than guesses"
+        candidates = _re.findall(r"'([^']+)'", m.group(1))
+        if not candidates:
+            return False, "$script:REJECTED_STATES parsed to an EMPTY list, which would make this " \
+                          "case pass by finding nothing"
+
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+            "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
+            "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35",
+            "-ProteinMin", "0"])
+        if rc != 0:
+            return False, "could not init a scratch run dir: %s" % o.strip()[:200]
+
+        def fresh(n):
+            """A slug parked at `extracted`, built by the REAL transition chain."""
+            slug = "q3d-%d" % n
+            for k, st in enumerate(("sourced", "selected", "extracted")):
+                a = ["-Advance", "-RunDir", run_dir, "-Slug", slug, "-To", st, "-By", "drill",
+                     "-Detail", "drill"]
+                if k == 0:
+                    a += ["-Title", "Q3D %d" % n, "-SourceUrl", "https://d/q3d", "-Protein",
+                          "chicken"]
+                r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, a)
+                if r != 0:
+                    return None, "could not stage %s for %s: %s" % (st, slug, (oo + ee).strip()[:160])
+            return slug, ""
+
+        accepted, spent = [], 0
+        slug, why = fresh(spent)
+        if why:
+            return False, why
+        for st in candidates:
+            r, _oo, _ee = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+                "-Advance", "-RunDir", run_dir, "-Slug", slug, "-To", st, "-By", "drill"])
+            if r == 0:
+                accepted.append(st)
+                spent += 1
+                slug, why = fresh(spent)      # that recipe is no longer at `extracted`
+                if why:
+                    return False, why
+        want = sorted(hunt_lib.MAPPER_REJECTION_STATES)
+        return (sorted(accepted) == want,
+                "hunt-run accepts %s from `extracted`; MAPPER_REJECTION_STATES says %s (candidates "
+                "probed: %s)" % (json.dumps(sorted(accepted)), json.dumps(want),
+                                 json.dumps(candidates)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 def _probe_ok(args):
     return 0, json.dumps(price_evidence.PROBE_JSON_SAMPLE), ""
