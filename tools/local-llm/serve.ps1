@@ -166,6 +166,110 @@ New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $logFile = Join-Path $logDir 'llama-server.log'
 $serverArgs += @('--log-file', $logFile)
 
+# Failure-path forensics, captured BEFORE the launch.
+#
+# The old failure path ran `Get-Content $logFile -Tail 25` unconditionally. When
+# the server dies before writing anything -- which is exactly what a Code
+# Integrity block looks like -- that prints the PREVIOUS run's log: slot timings,
+# a clean startup banner, a model that loaded fine. On 2026-08-25 that stale tail
+# sent the diagnosis chasing a CUDA/driver fault for a day while the real cause
+# (Smart App Control had flipped from evaluation to enforcing at 15:47 and was
+# refusing to load unsigned ggml.dll) sat unread in the CodeIntegrity event log.
+# A log line this attempt did not write is not evidence about this attempt.
+$logPreLen   = if (Test-Path $logFile) { (Get-Item $logFile).Length } else { -1 }
+$startedAt   = Get-Date
+
+function Show-StartFailure {
+    <#
+      .SYNOPSIS
+        Report why THIS start attempt died, using only what THIS attempt produced.
+      .DESCRIPTION
+        Three things the old path did not say and should have:
+          1. the exit code (0xC0E90002 names a Code Integrity kill on sight);
+          2. whether the server wrote any log at all this run, said plainly
+             rather than papered over with an earlier run's tail;
+          3. whether Windows Code Integrity blocked the load, which is invisible
+             in the Application event log and in llama.cpp's own output.
+    #>
+    param(
+        [int]$ServerPid,
+        [System.Diagnostics.Process]$Proc,
+        [datetime]$Since,
+        [long]$PreLen,
+        [string]$LogPath,
+        [string]$BinPath
+    )
+
+    $code = $null
+    if ($Proc) { try { if ($Proc.HasExited) { $code = $Proc.ExitCode } } catch { } }
+    if ($null -ne $code) {
+        Write-Host ("llama-server (pid {0}) exited early with code {1} (0x{2:X8})." -f $ServerPid, $code, $code) -ForegroundColor Red
+    } else {
+        Write-Host ("llama-server (pid {0}) exited early (exit code not retrievable - it died before we could open a handle)." -f $ServerPid) -ForegroundColor Red
+    }
+
+    # -- this run's log lines, or an honest statement that there are none.
+    if (-not (Test-Path $LogPath)) {
+        Write-Host "  log: $LogPath does not exist. The server wrote nothing." -ForegroundColor Yellow
+    } else {
+        $item = Get-Item $LogPath
+        if ($item.LastWriteTime -lt $Since) {
+            Write-Host ("  log: THE SERVER WROTE NOTHING THIS RUN. {0} was last written {1}, before this attempt began at {2}." -f $LogPath, $item.LastWriteTime.ToString('s'), $Since.ToString('s')) -ForegroundColor Yellow
+            Write-Host "       Everything in that file belongs to an earlier run and says nothing about this failure." -ForegroundColor Yellow
+        } else {
+            $new = ''
+            if ($PreLen -ge 0 -and $item.Length -gt $PreLen) {
+                $fs = [System.IO.File]::Open($LogPath, 'Open', 'Read', 'ReadWrite')
+                try {
+                    $null = $fs.Seek($PreLen, 'Begin')
+                    $sr = New-Object System.IO.StreamReader($fs)
+                    $new = $sr.ReadToEnd()
+                } finally { $fs.Dispose() }
+            } else {
+                # truncated or rewritten in place: all of it belongs to this run.
+                $new = Get-Content $LogPath -Raw -ErrorAction SilentlyContinue
+            }
+            $lines = @($new -split "`r?`n" | Where-Object { $_ -match '\S' })
+            if ($lines.Count -eq 0) {
+                Write-Host "  log: opened but left empty this run. The server wrote nothing." -ForegroundColor Yellow
+            } else {
+                Write-Host ("  log: {0} line(s) written by THIS run:" -f $lines.Count) -ForegroundColor Yellow
+                $lines | Select-Object -Last 25 | ForEach-Object { Write-Host "    $_" }
+            }
+        }
+    }
+
+    # -- a silent death with no log is the signature of a Code Integrity block.
+    # Event messages carry the NT device path (\Device\HarddiskVolumeN\Codex\...),
+    # never the drive letter, so match on the drive-stripped tail of $BinPath.
+    $needle = $BinPath -replace '^[A-Za-z]:', ''
+    $ci = @()
+    try {
+        $ci = @(Get-WinEvent -FilterHashtable @{
+                    LogName   = 'Microsoft-Windows-CodeIntegrity/Operational'
+                    Id        = 3077
+                    StartTime = $Since.AddSeconds(-30)
+                } -ErrorAction Stop | Where-Object { $_.Message -like "*$needle*" })
+    } catch { }
+
+    if ($ci.Count -gt 0) {
+        Write-Host ''
+        Write-Host ("  CODE INTEGRITY BLOCKED THIS START - {0} event(s) in Microsoft-Windows-CodeIntegrity/Operational:" -f $ci.Count) -ForegroundColor Red
+        $ci | Select-Object -First 3 | ForEach-Object {
+            Write-Host ("    [{0}] {1}" -f $_.TimeCreated.ToString('HH:mm:ss'), $_.Message) -ForegroundColor Red
+        }
+        $sac = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy' -ErrorAction SilentlyContinue).VerifiedAndReputablePolicyState
+        if ($sac -eq 1) {
+            Write-Host ''
+            Write-Host '    Smart App Control is ON and ENFORCING (VerifiedAndReputablePolicyState = 1).' -ForegroundColor Red
+            Write-Host '    The llama.cpp binaries are unsigned, so SAC refuses to load them.' -ForegroundColor Red
+            Write-Host '    This is NOT a CUDA, driver, GPU, model or build fault. Rebuilding or' -ForegroundColor Red
+            Write-Host '    re-downloading llama.cpp will NOT fix it: a new build is equally unsigned.' -ForegroundColor Red
+            Write-Host '    Fix: Windows Security -> App & browser control -> Smart App Control -> Off.' -ForegroundColor Red
+        }
+    }
+}
+
 # WHY Win32_Process.Create AND NOT Start-Process.
 #
 # Start-Process with -RedirectStandardOutput/-RedirectStandardError calls
@@ -195,13 +299,19 @@ if ($create.ReturnValue -ne 0) {
 $serverPid = [int]$create.ProcessId
 Write-Host "  pid     : $serverPid  (log: $logFile)"
 
+# Grab a handle NOW, while it is (probably) still alive. .ExitCode is only
+# readable after exit if the handle was opened before it -- and the exit code is
+# the single most diagnostic byte we get when the server dies silently.
+$serverProc = Get-Process -Id $serverPid -ErrorAction SilentlyContinue
+if ($serverProc) { try { $null = $serverProc.Handle } catch { } }
+
 # Wait for readiness. A 27B load off NVMe into VRAM takes a while on a cold cache.
 $deadline = (Get-Date).AddSeconds(300)
 while ((Get-Date) -lt $deadline) {
     Start-Sleep -Seconds 3
     if (-not (Get-Process -Id $serverPid -ErrorAction SilentlyContinue)) {
-        Write-Host "llama-server exited early. Tail of its log:" -ForegroundColor Red
-        if (Test-Path $logFile) { Get-Content $logFile -Tail 25 }
+        Show-StartFailure -ServerPid $serverPid -Proc $serverProc -Since $startedAt `
+                          -PreLen $logPreLen -LogPath $logFile -BinPath $BinDir
         throw "llama-server failed to start"
     }
     try {
