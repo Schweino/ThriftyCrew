@@ -62,6 +62,7 @@ $KNOWN = [ordered]@{
   'build-pull-order.ps1'             = 'SKILL grocery-browser-stores-refresh - priority term order for the walled stores'
   'notify-desktop.ps1'               = 'SKILL grocery-browser-stores-refresh - operator toast during the browser run'
   'resolve-chips-hyvee.ps1'          = 'SKILL grocery-browser-stores-refresh - Hy-Vee link chips'
+  'capture-sink.ps1'                 = 'SKILL grocery-browser-stores-refresh step 2 - the localhost file drop the attended-Chrome capture page POSTs its CSV to, because the browser tool channel truncates a returned string at ~1KB and a store sweep is 40-60KB. Uncalled here BY CONSTRUCTION: the caller is the agent''s own background command line, and the SKILL that carries it lives in ~\.claude\scheduled-tasks\. It is committed rather than hand-written each run ON PURPOSE - the throwaway it replaced was headed "CSV exfil receiver" and explained how a form POST defeats walmart.com''s CSP, which is the likeliest reason a safety check refused the browser tools for the rest of the 2026-08-25 run. The SKILL now tells the operator to use this one and not write another; deleting it would restore the practice that cost that run its whole browser half.'
   'fareway-daily-due.ps1'            = 'SKILL grocery-fareway-daily-check - due gate'
   'select-fareway-shop.ps1'          = 'SKILL grocery-fareway-daily-check - Omaha store picker'
   'pull-fareway-ads.ps1'             = 'SKILL grocery-fareway-daily-check + browser-stores-refresh; stamped into ad-schedule.json'
