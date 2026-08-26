@@ -100,13 +100,62 @@
       ]
     }
   },
+  "_cronsComment": [
+    "crons[] is the DECLARED schedule set for each worker. The audit reads live schedules and reports",
+    "UNDECLARED CRON / MISSING CRON / CRON DRIFT against these lists.",
+    "",
+    "Added 2026-08-25, because this file could describe buckets and a database but not the one thing",
+    "that was actually running: tc-grocery-v3 held a '*/15 * * * *' trigger that survived the deletion",
+    "of its own code on 2026-08-14 and kept executing scheduled stages for eleven days. It emailed Brad",
+    "through smp-feed's /ops-alert every time D1 evicted its connection mid-stage. It also inflated the",
+    "worker's own request count enough to make it look like the busiest worker on the account: 725",
+    "invocations in the 7 days to 08-25, of which ~672 were the cron itself at 96/day.",
+    "",
+    "All three are empty as of 2026-08-25. An empty list is a real declaration, not a placeholder: any",
+    "schedule appearing on any of these workers is drift and should be explained before it is declared."
+  ],
   "workers": {
     "tc-grocery-v3": {
-      "status": "LIVE - busiest worker on the account despite RUNTIME-MAP.md calling it dead",
-      "requestsAug16to20": 480,
-      "bindings": ["r2:EVIDENCE", "r2:ARCHIVE", "r2:BACKUPS", "r2:BACKUPS_SECONDARY", "d1:DB"]
+      "status": "LIVE for serving, INERT for compute - cron removed 2026-08-25, fetch routes still answer",
+      "crons": [],
+      "cronsRemoved": [
+        "'*/15 * * * *' removed 2026-08-25 (created 2026-08-09, last modified 2026-08-15).",
+        "Rollback if a scheduled stage is ever needed again:",
+        "  PUT /accounts/<acct>/workers/scripts/tc-grocery-v3/schedules  body [{\"cron\":\"*/15 * * * *\"}]",
+        "Removing it destroyed no data. Business writes had already stopped 2026-08-14/15; the only",
+        "remaining writer was the cron's own job_runs/triage_items bookkeeping."
+      ],
+      "requestsAug18to25": 725,
+      "realHttpRequestsPerWeek": "~53 - the rest was the cron. The 480-in-five-days figure recorded on 2026-08-20 was 96/day of self-counting.",
+      "bindings": ["r2:EVIDENCE", "r2:ARCHIVE", "r2:BACKUPS", "r2:BACKUPS_SECONDARY", "d1:DB"],
+      "alsoBoundNotYetDeclaredElsewhere": [
+        "workflows: tc-grocery-v3-d1-backup, tc-grocery-v3-capture-validation, tc-grocery-v3-d1-restore-drill",
+        "analytics engine dataset: tc_grocery_funnel",
+        "secrets incl. GHOST_ADMIN_KEY and GITHUB_DISPATCH_TOKEN - live credentials on unmaintained code",
+        "custom domain beta.thriftycrew.com, plus a zone route serving www.thriftycrew.com/api/v2/*"
+      ],
+      "frozenReleaseHazard": [
+        "www.thriftycrew.com/api/v2/recipe-feed/<slug> still returns 200 from a release frozen at",
+        "2026-08-15 01:14 (week_of 2026-08-14). Nothing reads it - the cards were repointed to",
+        "feed.thriftycrew.com/smp-feed.json on 2026-08-15 - but it does not fail loudly, it answers",
+        "confidently and wrongly. Closing that route needs Zone -> Workers Routes -> Edit."
+      ],
+      "d1BackupOnDisk": [
+        "C:\\Codex\\backups\\v3-d1\\tc-grocery-v3-2026-08-25.sql - 3.19GB, 184 CREATE TABLE,",
+        "1,938,613 INSERT INTO. Outside the git tree on purpose. Verified full dump, which the weekly",
+        "'d1-backup' workflow was NOT producing: backup_exports records 293KB lake-manifests/*.json",
+        "objects against a 3.6GB database. Do not delete the D1 without a dump at least this size."
+      ]
     },
-    "smp-feed": { "status": "LIVE - the repo's own worker (wrangler.jsonc)", "requestsAug16to20": 383 },
-    "tc-grocery-public": { "status": "near-idle", "requestsAug16to20": 10 }
+    "smp-feed": {
+      "status": "LIVE - the repo's own worker (wrangler.jsonc)",
+      "crons": [],
+      "requestsAug18to25": 821
+    },
+    "tc-grocery-public": {
+      "status": "near-idle",
+      "crons": [],
+      "requestsAug18to25": 36
+    }
   }
 }

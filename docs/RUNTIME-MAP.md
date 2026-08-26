@@ -12,19 +12,40 @@ site the entire time — and its own exit gates stood at 1/14 parity days and 0/
 started on top of it. If you find a reference to it, that reference is stale. The code is recoverable with
 `git checkout pre-platform-removal -- platform/`.
 
-**Its RUNTIME was not deleted, and the sentence that used to sit here — that the Cloudflare workers
-`tc-grocery-v3` and `tc-grocery-public` "are no longer in any serving path" — was wrong.** Measured
-2026-08-20: `tc-grocery-v3` took **480 requests in five days, more than `smp-feed`**, making it the
-busiest worker on the account, and all 542 live recipe cards hydrate their prices from a route it
-serves (see the open `/api/v2/recipe-feed/` item in `grocery\triage-queue.json`). It is bound to a
-4GB D1 database and all four `tc-grocery-v3-*` R2 buckets. **Do not delete any of it as dead V3
-debris.** Deleting the code from this repo did not delete the estate; it only made it invisible.
+**Its RUNTIME was not deleted.** The sentence that first sat here — that `tc-grocery-v3` and
+`tc-grocery-public` "are no longer in any serving path" — was wrong. So was the correction that
+replaced it. Measured 2026-08-25: the worker took **725 invocations in seven days, but ~672 of those
+were its own `*/15` cron** firing 96 times a day. Real HTTP traffic is about **53 requests a week**,
+against `smp-feed`'s 821. It was never the busiest worker on the account; it was counting its own
+alarm clock. The companion claim — that all 542 live recipe cards hydrate from a route it serves —
+was already stale when written: the cards were repointed to `feed.thriftycrew.com/smp-feed.json` on
+2026-08-15, and 597 of 597 built cards now carry the new URL.
+
+**The cron was removed 2026-08-25.** (`PUT .../schedules` with `[]`. Last `job_runs` row 23:45:58Z;
+the 00:00 tick wrote nothing.) That ends the `Scheduled stage <name> failed` emails, which reached
+Brad through smp-feed's `/ops-alert` whenever D1 evicted the worker's connection mid-stage. It also
+freezes the database: business writes had already stopped 2026-08-14/15, and the only writer left was
+the cron's own bookkeeping.
+
+**Do not delete the rest of it as dead V3 debris.** It is bound to a 3.6GB D1 database, all four
+`tc-grocery-v3-*` R2 buckets, three Workflows, and secrets including a live Ghost Admin key. And
+`www.thriftycrew.com/api/v2/recipe-feed/<slug>` still answers **200 from a release frozen at
+2026-08-15 01:14** — nothing reads it today, but anything that ever points back at it gets
+confidently wrong prices, which is exactly how two recipes shipped broken on 2026-08-15. A verified
+3.19GB dump of the D1 sits at `C:\Codex\backups\v3-d1\tc-grocery-v3-2026-08-25.sql` (184 tables,
+1,938,613 INSERTs), deliberately outside the git tree. Deleting the code from this repo did not
+delete the estate; it only made it invisible.
 
 That invisibility had a price. Nine R2 lifecycle rules nobody could see moved objects into
 Infrequent Access, which bills per whole million operations with no free tier — 499 transitions on
 2026-08-19 bought a full $9.00 block, about 95% of the Cloudflare bill, to save roughly six cents of
 storage. The rules were removed 2026-08-20. The estate is now declared in `ops\cloudflare-estate.json`
 and checked on every push by `ops\audit-cloudflare-estate.ps1`.
+
+**Cron triggers are declared in that file too, as of 2026-08-25.** The audit compared buckets and D1
+size but was blind to schedules, which is how a `*/15` trigger kept running — and kept emailing — for
+eleven days after the code that justified it was deleted. All three workers now declare `crons: []`,
+so any schedule appearing anywhere on the account trips `UNDECLARED CRON` on the next push.
 
 ## The four runtimes
 
