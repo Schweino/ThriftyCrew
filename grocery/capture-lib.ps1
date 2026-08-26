@@ -114,7 +114,13 @@ function Import-CaptureCsv {
   param(
     [Parameter(Mandatory = $true)][string]$Path,
     [string]$Delimiter = '|',
-    [string[]]$RepairColumns = @('n', 'name', 'item')
+    # PRICE TEXT IS REPAIRED TOO, NOT JUST NAMES. The cent sign only ever appears in the unit-price
+    # column ('up' on the Walmart and Sam's shapes, 'prices'/'unit' on Aldi's) - 275 rows carried it
+    # on 2026-08-26 alone - and a mangled price is worse than a mangled name: it drops the row as
+    # 'no unitPrice' instead of showing up wrong where a reader would catch it. Columns absent from a
+    # given shape are skipped, so one list serves all three. Repair-Mojibake is guarded and idempotent,
+    # so listing a column that is already clean costs nothing and can never damage it.
+    [string[]]$RepairColumns = @('n', 'name', 'item', 'up', 'lp', 'was', 'prices', 'unit', 'size')
   )
   if (-not (Test-Path $Path)) { throw "Import-CaptureCsv: no such capture: $Path" }
   $rows = @(Import-Csv -Path $Path -Delimiter $Delimiter -Encoding UTF8)

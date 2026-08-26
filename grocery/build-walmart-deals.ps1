@@ -80,7 +80,11 @@ if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
-$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+# -Encoding UTF8 is NOT optional here. These functions are lifted as SOURCE TEXT and re-parsed, so
+# their non-ASCII regex literals have to survive the read. compare-deals.ps1 carries a BOM today and
+# Get-Content would honour it - but that leaves the whole pricing engine depending on a byte order
+# mark nothing asserts. Name the encoding and the dependency is gone.
+$engineSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw -Encoding UTF8
 foreach ($fn in @('ConvertTo-DigitNumerals','Get-ItemPrice','Get-PackCount','Get-UnitPrice','Get-SizeAmount','Convert-ToUnit')) {
   $m = [regex]::Match($engineSrc, "(?ms)^function\s+$([regex]::Escape($fn))\s*\(.*?^\}")
   if (-not $m.Success) { throw "${Me}: could not lift $fn from compare-deals.ps1" }
@@ -221,8 +225,12 @@ function Build-Row($raw) {
   # 184 priced rows instead of ~1,350. It reads as "the pull came back thin" and gets blamed on the bot wall.
   # Which notation you get depends on where the price was read: priceInfo.unitPrice gives dollars, the
   # priceDetails.priceLines UNIT_PRICE fallback gives cents. Accept both.
-  # NOTE the cent sign arrives mangled (UTF-8 read as Latin-1) as "A-cedilla cent", so match on the DIGITS +
-  # slash shape and any non-digit run before the slash rather than on the glyph itself.
+  # CORRECTED 2026-08-26: the cent sign no longer arrives mangled. The capture sink used to decode every
+  # POST body as cp1252, so this field read as A-circumflex + cent (U+00C2 U+00A2, not A-cedilla as this
+  # comment said); the sink now decodes UTF-8 and a bare U+00A2 arrives. The pattern still matches on the
+  # DIGITS + slash shape rather than the glyph, which covers both spellings for free - captures inside the
+  # carry window predate the fix. Note the {1,3} run: a DOUBLE-mangled cent is 4 glyphs and drops the row
+  # as 'no unitPrice' rather than mispricing it, which is the right failure but a silent one.
   $upRaw = ("" + $raw.up)
   $upm = [regex]::Match($upRaw, '\$\s*([\d,]+(?:\.\d{1,3})?)\s*/\s*(.+)$')
   if ($upm.Success) {
@@ -599,7 +607,7 @@ if ($SelfTest) {
 if (-not $In -or -not (Test-Path $In)) { throw "${Me}: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
-if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }
+if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled field(s) on ingest (UTF-8 read as ANSI upstream)") }
 $rows = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[object]
 # THE ROLLBACK WINDOW (2026-08-21). Brad: a rollback gets "a 30 day TTL from when we first detect".

@@ -61,8 +61,14 @@ real one, which is both fuller and more restricted.
      PowerShell Start-Job dies with its shell):
          powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir <dir>
      It binds localhost ONLY, writes each POST to <OutDir>\<name>.txt, and echoes char and line
-     counts back to the page so you can confirm both sides agree BEFORE running a builder. It
-     also exits on its own after 30 idle minutes, and -Stop shuts it down.
+     counts back to the page. It also exits on its own after 30 idle minutes, and -Stop shuts
+     it down.
+     POST TO /<name>?chars=<n>, n being the length of the string you are posting. The sink
+     compares it to what it decoded and prints chars=AGREE, chars=MISMATCH, or chars=UNVERIFIED
+     if you left it off. DO NOT RUN A BUILDER ON A MISMATCHED OR UNVERIFIED FILE. On 2026-08-26
+     the counts were printed, disagreed by 774 characters, and the run continued: the LINE counts
+     matched exactly (463 = 463) while the char counts did not, so an eyeball on the wrong number
+     saw agreement. That is the whole reason the comparison is now the sink's job and not yours.
      The page posts with a hidden form rather than fetch(): store pages set a Content-Security-
      Policy governing where the PAGE may send data (walmart.com sets connect-src 'self'), and a
      form POST is a separate mechanism that connect-src does not cover. aldi.us sets no CSP at
