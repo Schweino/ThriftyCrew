@@ -525,6 +525,36 @@ decision, bid, predicted, surprise, projected, held_reason, evidence, by`. The K
 and are implemented verbatim; the count in the prose was miscounted. `learn_apply.EVENT_FIELDS`
 holds the 15 authored fields, `event_id` is derived, and the fixture asserts `len(event) == 16`.
 
+### C3 (B3) — `rebid-ingredient.ps1` is not under `grocery\`
+
+§4.3 says "In `grocery\rebid-ingredient.ps1`" and adds "if it does not exist under `grocery\`,
+locate with Glob and write the CORRECTED block". It does not: the script lives at
+**`meal-prep\pipeline\rebid-ingredient.ps1`**, which is the right home — it edits
+`meal-prep\db\ingredients.json` and every `meal-prep\db\recipes\*.json` spec that costs the item.
+The hook is built there, and the invalidation goes through
+`meal-prep\pipeline\ingredient-resolutions.ps1` (a sibling), so §4.3's `$mealPrepPipeline` path
+variable is unnecessary — `$here` already is that directory.
+
+Two further deltas from §4.3's sketch, both because the sketch could not run as written:
+
+* The invalidation is a FUNCTION (`Invoke-MemoryInvalidation`) rather than an inline `& powershell`
+  line, so its behaviour is fixturable against a scratch ledger. Its returned object carries
+  `Ran`/`Invalidated`/`Why`, and the applied path prints whichever happened. Best-effort with a
+  visible warning, exactly as §4.3 requires; never a throw, and never a silent skip.
+* The `invalidate` event goes to `learn_apply.py --append-event` through a **temp FILE**, not a
+  JSON string on a command line. A JSON object as an argv token is one quoting accident away from a
+  truncated event, which is the estate's own B8 class wearing a different hat.
+
+### C4 (B3) — a source-level call-site pin needs the FIRST match and the count, not the last
+
+Driving the real `-Apply` road would need a whole scratch estate (`smp-feed.json`,
+`db\ingredients.json`, `db\recipes\*.json`), so the call site is pinned by source position. Written
+as `LastIndexOf`, that pin came back **0 RED** against a neuter that hoisted a SECOND call ABOVE the
+dry-run gate — under which a DRY RUN would wipe the identity cache for a rebid it never performed.
+Rewritten to assert "exactly one occurrence, and it is after the gate", the same neuter returns
+**1 RED**. Third time this build's lineage has watched a pin miss a call site (PLAN-map-judge-split
+§4 records the first two).
+
 Final report, numbers not adjectives: events written in the drill, ledger count before/after,
 cache-hit re-resolve proof, every selftest's pass count, every neuter proof's red count, and
 anything CORRECTED. If a bar was missed, say which and by how much — a miss reported plainly
