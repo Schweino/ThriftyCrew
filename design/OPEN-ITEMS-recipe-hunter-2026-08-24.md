@@ -81,7 +81,7 @@ came from an alternate cut the recipe is not built as, with the writer's own fla
 offers both cuts. The auditor: needs either its own rule or a prose rephrase, and if the lib rule is
 judged too risky the fallback owner is the WRITER stage (give each rider its own display line).
 
-### 2.6 A MAPPER BID THAT CONTRADICTS ITS OWN WRITTEN RULING (found in the 6b post-run read)
+### 2.6 A MAPPER BID THAT CONTRADICTS ITS OWN WRITTEN RULING (found in the 6b post-run read) — **BUILT 9cf35766**
 `mapped/turmeric-braised-chicken-with-golden-beets-and-leeks.json`:
 
 ```
@@ -102,6 +102,28 @@ from thigh rows - exactly the mispricing its own note forbids.
 
 **Proposed check (mechanical, cheap):** if a ruling's `notes` say it refused / rejected an id, that id
 may not be the `bid`. A string check over the decision file, no model needed.
+
+**BUILT 2026-08-25, commit 9cf35766** (PLAN-ingredient-memory-2026-08-25 §3.4), as
+`learn_apply.notes_refuse_bid` — applied per ruling at the PEN, before anything is cached. A ruling
+whose own evidence refuses the id it bid does NOT project into the identity ledger: it is recorded
+as an event with `surprise: true`, `held_reason: "notes refuse the bid"`, and a finding that names
+it. The check reads the ruling's own `evidence` and nothing else, because the contradiction this
+item found is INSIDE one ruling.
+
+Two things worth carrying forward from building it:
+
+* **The check is at the pen, not at the decision file.** The proposal above says "a string check
+  over the decision file". Doing it there would have been a check that runs after the assembler has
+  already accepted the line; at the pen it is the difference between a wrong identity being cached
+  for every future recipe and a wrong identity living in one run dir.
+* **The obvious regex does not fire on this item's own evidence.** The first-drafted pattern
+  required the refusal word and the id to be separated only by NON-WORD characters, and the text
+  above reads "Refused **the** chicken-thighs bridge" — one word in between, and the check silently
+  never fires. Measured: 3 RED with the widened pattern, 0 with the narrow one. The shipped gap
+  class is `[^.;:!?]{0,80}?` (up to 80 characters that do not end the clause), and BOTH halves are
+  pinned against the verbatim evidence above — MUST-FIRE with `chicken-thighs`, CLEAN TWIN with
+  `chicken-drumsticks`, which is §2.7's correct ruling and whose id appears only after the colon
+  that ends the refusal clause.
 
 ### 2.7 CORRECTED same day: the thigh/drumstick grouping is DELIBERATE, and the real defect is
 ### an EXCLUDE pattern that removes the food the id claims to carry

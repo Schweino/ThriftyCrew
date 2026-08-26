@@ -485,6 +485,163 @@ Units, in order, one commit each (suggested messages in quotes):
   `nightly.ps1 -SelfTest`, `scorecard.ps1 -SelfTest`, `test_gates.py`. All green.
 - **B8** OPEN-ITEMS §2.6 marked BUILT; this doc's CORRECTED blocks (if any) landed; push.
 
+## 8b. B7 — the drill, and §1's falsification numbers as measured (2026-08-25)
+
+Three fabricated recipes through the REAL road: `map-preresolve.ps1` (scratch vocab-live,
+`-ResolutionsFile` scratch, `-NoBoard -NoPrecheck`) → `learn_apply.apply_learn` → a SECOND
+`map-preresolve` over the same run dir → `resolution_embed.py --query` under the sidecar venv →
+`ingest_hunter_events.py` against a scratch graph db, twice → `learn_apply.py --apply-reviews`.
+The scratch ledger is **seeded byte-for-byte from the live `ingredient-resolutions.json`**, so the
+before/after counts are the estate's own numbers. Nothing live was written; the worktree was clean
+before and after. 35 assertions, all green.
+
+| §1's question | measured |
+| --- | --- |
+| residual rulings ruled | **7** (6 residual + 1 on a cache-settled line the judge disagreed with) |
+| registrar rulings | **1** |
+| events written (primary) | **8** — 7 rulings + 1 registrar, exactly `rulings + registrar` |
+| event lines on disk | **9** — the 8 above plus 1 `supersede` |
+| **ledger count before → after** | **23 → 26**, and **27** after the morning verb recorded one held case |
+| projections | 4 (2 + 1 + 1); the ledger grew by 3 because the 4th REPLACED an existing row |
+| held, event-only | 3 — `labneh cheese` (bid unknown to every namespace), `duck fat` (decision rejected), `ras el hanout` (decision mapped-null) |
+| surprises | 2 (the contrary ruling and its supersede) |
+| **cache-hit re-resolve** | **3 of 3** projected terms came back `source: cache` on the second pass, at the bid they were ruled to; residual count fell **6 → 4** |
+| what did NOT cache | the `mapped-null` and the `rejected` line stayed residual on the warm pass — a judgment about a LINE is not an identity |
+| attend | corpus 7; the UNSEEN phrase "shaved beef for cheesesteaks" retrieved "thin sliced beef for sandwiches" at **cos 0.7016**, ahead of every other ruling, and the ruled term did not get itself back |
+| sleep | 9 events filed, 3 review cases, 5 gold rows (4 MATCH, 1 NO_MATCH for the superseded id), 2 surprises queued behind a pre-existing queue row; second night filed **0** duplicates (11 decision_log rows over two nights, the +2 being the two `hunter_ingest_complete` rows) |
+| promote | the ingest changed the ledger by **0** rows; only `--apply-reviews` moved it, and a verdict on an event_id the packet never held was refused |
+
+Gates, all green on a clean tree: `learn_apply --selftest` 53, `decide_apply --selftest` 43,
+`hunt-daemon --selftest` 245, `hunt_lib --parity` 63/63, `rebid-ingredient -SelfTest` 12,
+`ingredient-resolutions -SelfTest` 9, `resolution_embed --selftest` 25,
+`ingest_hunter_events --selftest` 24, `scorecard.ps1 -SelfTest` 23,
+`scorecard_query --selftest` 15, `graph/learning/test_gates.py` 12, `nightly.ps1 -SelfTest` OK,
+`nightly.ps1 -WhatIfOnly` prints the new `1c hunter` stage.
+
+## 9. CORRECTED blocks, written during the build (2026-08-25)
+
+Each block landed in the same commit as the unit it affects, per §0.1.
+
+### C1 (B1) — §3.4's `REFUSE_NEAR_BID` regex cannot fire on its own founding case
+
+The plan freezes:
+
+```python
+REFUSE_NEAR_BID = re.compile(
+    r"(refus\w*|reject\w*|not\s+the|is\s+not)\W{0,80}" + re.escape(bid), re.I)
+```
+
+`\W` matches only NON-word characters, so the span between the refusal word and the id may hold
+spaces and punctuation but **not a single letter**. Run against the verbatim evidence OPEN-ITEMS
+§2.6 is written from —
+
+> "...Refused the chicken-thighs bridge on the standing 'leg quarters are not thighs' precedent:
+> drumsticks are a distinct cut ... so the thigh id would overprice and mis-weigh."
+
+— with `bid: chicken-thighs`, the word `the` sits between `Refused` and the id, so `\W{0,80}`
+cannot reach it. **MEASURED**: with the literal regex restored, `learn_apply.py --selftest` came
+back **3 RED**, the first being "the 2.6 slip: the prose refuses `chicken-thighs` and the bid IS
+`chicken-thighs` — got: did not fire" (the other two were the drill's downstream cases: the ruling
+got cached, and the extra row produced a second supersede). A must-fire that cannot fire on the
+only real example the estate owns is gate theater.
+
+REALITY PREFERRED: the gap class is `[^.;:!?]{0,80}?` — up to 80 characters that do not end the
+clause. The bound still does the plan's intended work (the refusal has to be about THIS id in THIS
+clause), and both halves are pinned against the 2.6 text: MUST-FIRE with `chicken-thighs`, CLEAN
+TWIN with `chicken-drumsticks` (§2.7's correct ruling, whose id appears only after the colon that
+ends the refusal clause).
+
+### C2 (B1) — §3.1 says "ALL 14 fields" over a 16-key JSON block
+
+The frozen event JSON in §3.1 lists sixteen keys: `event_id, at, run, slug, kind, key, term, raw,
+decision, bid, predicted, surprise, projected, held_reason, evidence, by`. The KEYS are the spec
+and are implemented verbatim; the count in the prose was miscounted. `learn_apply.EVENT_FIELDS`
+holds the 15 authored fields, `event_id` is derived, and the fixture asserts `len(event) == 16`.
+
+### C3 (B3) — `rebid-ingredient.ps1` is not under `grocery\`
+
+§4.3 says "In `grocery\rebid-ingredient.ps1`" and adds "if it does not exist under `grocery\`,
+locate with Glob and write the CORRECTED block". It does not: the script lives at
+**`meal-prep\pipeline\rebid-ingredient.ps1`**, which is the right home — it edits
+`meal-prep\db\ingredients.json` and every `meal-prep\db\recipes\*.json` spec that costs the item.
+The hook is built there, and the invalidation goes through
+`meal-prep\pipeline\ingredient-resolutions.ps1` (a sibling), so §4.3's `$mealPrepPipeline` path
+variable is unnecessary — `$here` already is that directory.
+
+Two further deltas from §4.3's sketch, both because the sketch could not run as written:
+
+* The invalidation is a FUNCTION (`Invoke-MemoryInvalidation`) rather than an inline `& powershell`
+  line, so its behaviour is fixturable against a scratch ledger. Its returned object carries
+  `Ran`/`Invalidated`/`Why`, and the applied path prints whichever happened. Best-effort with a
+  visible warning, exactly as §4.3 requires; never a throw, and never a silent skip.
+* The `invalidate` event goes to `learn_apply.py --append-event` through a **temp FILE**, not a
+  JSON string on a command line. A JSON object as an argv token is one quoting accident away from a
+  truncated event, which is the estate's own B8 class wearing a different hat.
+
+### C4 (B3) — a source-level call-site pin needs the FIRST match and the count, not the last
+
+Driving the real `-Apply` road would need a whole scratch estate (`smp-feed.json`,
+`db\ingredients.json`, `db\recipes\*.json`), so the call site is pinned by source position. Written
+as `LastIndexOf`, that pin came back **0 RED** against a neuter that hoisted a SECOND call ABOVE the
+dry-run gate — under which a DRY RUN would wipe the identity cache for a rebid it never performed.
+Rewritten to assert "exactly one occurrence, and it is after the gate", the same neuter returns
+**1 RED**. Third time this build's lineage has watched a pin miss a call site (PLAN-map-judge-split
+§4 records the first two).
+
+### C5 (B5) — `open_db` takes no path, and `log_event` requires a timestamp
+
+§6.1 step 2 quotes `db.log_event(run=…, etype=…, decision=…, detail=…, output_hash=…)` and B7 says
+"scratch graph db is fine — `open_db` takes a path". Neither is the code:
+
+* `graph\lib\graphdb.py:504` — `def open_db(create: bool = True) -> GraphDB`. No path parameter.
+  The path lives on the class: `GraphDB(path=DB_PATH, create=True, restore_learning=True)`. The
+  ingest therefore constructs `GraphDB(path=…)` directly, and passes `restore_learning=False` for a
+  scratch db so a drill does not pull the estate's learning tables into a throwaway file.
+* `log_event`'s signature is `(self, run, timestamp, etype, …)` — `timestamp` is REQUIRED and
+  positional-adjacent, because graphdb's stated rule is "No implicit clock. Timestamps are passed
+  in. A replayed run reproduces byte-identical ids and rows."
+
+### C6 (B5) — the idempotency mechanism §6.1 step 2 names cannot work
+
+§6.1 says "idempotency via the content-addressed event_id inside detail". It cannot be:
+`GraphDB.log_event` mints its OWN primary key as
+`event_id(run, step_id, etype, hash_obj([decision, detail, output_hash]))`, and the run id carries
+a per-night stamp — so re-filing yesterday's event tonight produces a DIFFERENT primary key and the
+`ON CONFLICT(event_id) DO NOTHING` never fires. The dedupe truth is a `SELECT output_hash FROM
+decision_log WHERE type='hunter_identity'`, which IS the event's own content-addressed id, through
+the column that actually holds it. The cursor file stays what §6.1 calls it — a cheap skip, never
+the truth.
+
+**MEASURED, and it caught a bad fixture first.** Deleting `already_ingested()` outright came back
+**0 RED**: the fixture's two ingests ran inside the same second, so the run ids matched, so
+log_event's own primary key collided and hid the missing dedupe. A `--run` seam was added so the
+two halves of the fixture are two NIGHTS rather than two calls, and the same neuter then returns
+**1 RED**.
+
+### C0 (B8) — the one thing this build did NOT do, and why
+
+§0.7 requires the estate's agent-def sync step after the one agent-definition edit (§5.4). The
+mapper's definition was edited and `ops\prompt-backup\agents\recipe-ingredient-mapper.md` was
+brought byte-identical to it in the same commit — so the REPO half of that step is done, and the
+live project-scope file at `C:\Codex\ThriftyCrew\.claude\agents\` becomes correct the moment this
+branch merges, because that path IS the repo.
+
+`ops\audit-prompt-backup.ps1 -Sync` was **not run**. It writes to `C:\Users\Owner\.claude\agents`
+— outside the repository entirely — which this build was explicitly forbidden to touch. The
+USER-scope copy of `recipe-ingredient-mapper.md` is therefore still the pre-edit text, and
+`audit-prompt-backup.ps1` will report SCOPE DRIFT on it until someone runs `-Sync` after the merge.
+That is one command and it is named here so it cannot be forgotten: **run
+`ops\audit-prompt-backup.ps1 -Sync` after merging.**
+
+### C7 (B5) — a source-position fixture that can see itself is reading the wrong file
+
+The nightly `-SelfTest` pins the new stage's SLOT by source position. Written with literal needles,
+three of its checks matched THEIR OWN source lines: `$iSweep = $src.IndexOf('if (-not $SkipSweep)
+{')` found itself at index 21,230 and reported the real sweep block as running before a stage
+7,600 characters further down, and the BLIND-branch check was satisfied by the text of the check
+itself. Two neuters came back 0 RED before the needles were built from parts. Same class as C4,
+in a different file, on the same day — this idiom needs the built needle every time.
+
 Final report, numbers not adjectives: events written in the drill, ledger count before/after,
 cache-hit re-resolve proof, every selftest's pass count, every neuter proof's red count, and
 anything CORRECTED. If a bar was missed, say which and by how much — a miss reported plainly

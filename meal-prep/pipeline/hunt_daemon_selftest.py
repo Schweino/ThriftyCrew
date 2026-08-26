@@ -131,9 +131,13 @@ class FakePy(object):
         self.calls = []
         self.replies = replies or {}
 
-    def __call__(self, script, args, timeout=600):
+    def __call__(self, script, args, timeout=600, exe=""):
         name = os.path.basename(script)
-        self.calls.append({"script": name, "args": list(args), "timeout": timeout})
+        # `exe` IS RECORDED, not swallowed. The estate has three interpreters and they are not
+        # interchangeable - a surface importing torch run under C:\Codex\Python312 reports its own
+        # ImportError as a script failure - so which one a call site chose is a fact a fixture must
+        # be able to assert on.
+        self.calls.append({"script": name, "args": list(args), "timeout": timeout, "exe": exe})
         for key, val in self.replies.items():
             if key in name:
                 return val(args) if callable(val) else val
@@ -209,7 +213,22 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
     return tmp
 
 
+# THE MEMORY SEAMS, DEFAULTED FOR THE WHOLE SUITE (PLAN-ingredient-memory D1).
+#
+# assemble_mapped now writes ingredient-events.jsonl and, through -Record, the resolutions ledger -
+# and that ledger is consulted as STEP 1 of the per-line resolution ladder on EVERY recipe the
+# estate maps. A fixture row in it is not a test artifact; it is an identity every future run would
+# believe. So the suite's OWN scratch paths are the default here rather than something each fixture
+# has to remember, which is the H2 lesson (three live ledgers a no-publish drill was still writing)
+# applied before the first drill instead of after it. `_learn_seams_are_never_live` asserts it.
+LEARN_SCRATCH = tempfile.mkdtemp(prefix="daemon-learn-seam-")
+SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
+SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
+
+
 def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
+    kw.setdefault("events_path", SCRATCH_EVENTS)
+    kw.setdefault("resolutions_path", SCRATCH_RESOLUTIONS)
     return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
 
@@ -992,6 +1011,67 @@ def run():
       *_t8_a_blocked_sweep_degrades_and_says_so())
 
     # =================================================================================================
+    H("D1/D2 - the map lane's rulings become memory, and error writes too")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as this suite printed them:
+    #   * delete the apply_learn call from assemble_mapped   -> 5 red;
+    #   * move it ABOVE the rc==EXIT_CLEAN check (learn from a failed assemble) -> 1 red;
+    #   * drop the postcondition_finding call at the call site -> 1 red;
+    #   * route learn_qa_fail off owner_agent()'s answer instead of the RAW owner field -> 1 red
+    #     (the twin: owner_agent maps anything unrecognised to recipe-writer, so a writer-owned
+    #     fail would file itself as a mapper fail);
+    #   * drop the two seam defaults from daemon()           -> 1 red.
+    T("MUST FIRE  assemble_mapped LEARNS: two clean rulings become two events and two ledger rows, "
+      "and it is the CALL SITE that does it - pinning apply_learn alone passes with the hook deleted",
+      *_learn_the_call_site_writes_events())
+    T("MUST FIRE  a FAILED assemble teaches NOTHING - no event, no ledger. The run refused to build "
+      "a decision file over that ruling, so it must not become an identity",
+      *_learn_a_failed_assemble_teaches_nothing())
+    T("MUST FIRE  a writer that drops one of two rulings trips the 44-class postcondition AT THE "
+      "CALL SITE, naming both counts", *_learn_the_44_class_fires_at_the_call_site())
+    T("CLEAN TWIN the same road with an honest writer trips nothing",
+      *_learn_a_clean_batch_trips_nothing())
+    T("MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and "
+      "the REJECTED id is held rather than cached", *_learn_registrar_rulings_get_events())
+    T("MUST FIRE  a QA fail owned by the MAPPER writes exactly one slug-level event carrying the "
+      "slug's residual keys", *_qa_mapper_fail_writes_one_event())
+    T("CLEAN TWIN a QA fail owned by the WRITER writes none - the raw owner field decides, not "
+      "owner_agent(), which maps everything it does not recognise to recipe-writer",
+      *_qa_writer_fail_writes_none())
+    T("MUST FIRE  the suite's memory seams are never the live estate files (H2's lesson, applied "
+      "with the writer instead of after it)", *_learn_seams_are_never_live())
+
+    # =================================================================================================
+    H("D3 - attend: the nearest PAST rulings, as a shelf and never as an answer")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as this suite printed them:
+    #   * render the BLIND state as an empty channel        -> 2 red;
+    #   * drop the `exe=SIDECAR_PY` from the call site      -> 1 red;
+    #   * ask about SETTLED lines as well as residual ones  -> 1 red;
+    #   * drop the map_prompt sentence                      -> 1 red;
+    #   * render neighbours without their own term/date     -> 2 red.
+    T("MUST FIRE  the neighbours reach the DOSSIER, each carrying the phrase it was ruled for, its "
+      "id, its decision and its date - and a term with none says so",
+      *_prior_renders_the_shelf())
+    T("MUST FIRE  the retrieval runs under the SIDECAR interpreter, on a 120 s budget - bge-m3 lives "
+      "in sidecar\\.venv and C:\\Codex\\Python312 has no torch",
+      *_prior_uses_the_sidecar_interpreter())
+    T("MUST FIRE  a retrieval that could not run renders BLIND and says absent evidence is not "
+      "absence of precedent - an empty list pretending it looked is the one thing this may not do",
+      *_prior_blind_is_announced())
+    T("CLEAN TWIN an EMPTY corpus is not BLIND: the retriever ran, and the shelf says so per term",
+      *_prior_empty_is_not_blind())
+    T("MUST FIRE  a REJECTED and a MAPPED-NULL neighbour render with their decision words - the "
+      "estate's transfer asymmetry is for the judge to weigh, not a filter to apply here",
+      *_prior_every_decision_stays_visible())
+    T("MUST FIRE  only RESIDUAL terms are asked about - a settled line is not a question",
+      *_prior_only_residual_terms_are_asked())
+    T("MUST FIRE  map_prompt NAMES the new field. A prompt that said `unchanged contract` without "
+      "naming one field broke a clean batch on 2026-08-24", *_prior_the_prompt_names_the_field())
+    T("CLEAN TWIN a BLIND shelf costs the batch a channel and nothing else - the dossier still "
+      "carries its settled lines and the recipe still maps", *_prior_never_blocks_the_lane())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -1457,6 +1537,386 @@ def _t8_a_blocked_sweep_degrades_and_says_so():
         said = any("could not run" in f and "falling back" in f for f in d.findings)
         return (bids == ["declared-one"] and said,
                 "proposals=%s findings=%s" % (json.dumps(bids), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# D1/D2 - THE ENCODE HOOK. Every case here drives assemble_mapped or qa_lane, never learn_apply
+# directly: learn_apply has its own suite, and TWICE this estate has watched a neuter come back 0 red
+# because a fixture pinned a function while the bug lived at its call site (PLAN-map-judge-split 4).
+# =====================================================================================================
+
+import learn_apply as _LA                                        # noqa: E402
+
+
+def _learn_scratch(prefix):
+    """A run dir plus its OWN event log and ledger, so no two cases can read each other's writes."""
+    tmp = tempfile.mkdtemp(prefix=prefix)
+    return tmp, os.path.join(tmp, "events.jsonl"), os.path.join(tmp, "ledger.json")
+
+
+def _learn_events(path):
+    if not os.path.exists(path):
+        return []
+    return [json.loads(l) for l in io.open(path, encoding="utf-8").read().split("\n") if l.strip()]
+
+
+def _learn_ps(assemble_rc=0):
+    """FakePS answering -NewBids with no proposals and -Assemble with the given code."""
+    def handler(args):
+        if "-NewBids" in args:
+            return 0, json.dumps({"slug": "s1", "count": 0, "proposals": []}), ""
+        if "-Assemble" in args:
+            return assemble_rc, ("FINDING  the drill said no" if assemble_rc else ""), ""
+        return 0, "", ""
+    return FakePS({"map-preresolve": handler})
+
+
+def _learn_res(slug="s1"):
+    """A mapper result whose two rulings are BOTH cachable: real board ids, real evidence."""
+    return {"slug": slug, "status": "ok", "state": "priced",
+            "lines": [{"raw": "1 lb chicken", "buy": "3 1/2 lb"}],
+            "rulings": [
+                {"raw": "1 lb chicken breast", "term": "Boneless Chicken Breast",
+                 "canon_item": "Boneless Skinless Chicken Breast", "bid": "chicken-breast",
+                 "decision": "mapped", "evidence": "the trimmed breast the board prices"},
+                {"raw": "2 eggs", "term": "Large Eggs", "canon_item": "Eggs", "bid": "eggs",
+                 "decision": "mapped", "evidence": "grade A large, the board's own basis"}],
+            "new_commodity_proposals": []}
+
+
+def _learn_the_call_site_writes_events():
+    """MUST FIRE, at the CALL SITE. assemble_mapped is what must learn - a fixture over apply_learn
+    alone passes with the hook deleted, which is the exact shape of the T8 0-red neuter."""
+    tmp, ev, led = _learn_scratch("daemon-learn-a-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        evs = _learn_events(ev)
+        rows = _LA.read_ledger(led)[0]
+        return (ok and len(evs) == 2 and all(e["kind"] == "ruling" and e["projected"] for e in evs)
+                and sorted(rows) == ["boneless chicken breast", "large eggs"],
+                "ok=%s why=%s events=%d rows=%s" % (ok, why[:80], len(evs), sorted(rows)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_a_failed_assemble_teaches_nothing():
+    """MUST FIRE. A ruling that failed assembly must NOT become memory: the run refused to build a
+    decision file over it, and an identity the estate would not write down is worse than none."""
+    tmp, ev, led = _learn_scratch("daemon-learn-b-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(assemble_rc=1), events_path=ev, resolutions_path=led)
+        ok, _why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        return (not ok and _learn_events(ev) == [] and not os.path.exists(led),
+                "ok=%s events=%d ledger=%s" % (ok, len(_learn_events(ev)), os.path.exists(led)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_the_44_class_fires_at_the_call_site():
+    """MUST FIRE. The postcondition, driven through assemble_mapped with a writer that drops one.
+
+    The whole apply_learn road stays REAL - only the log's append is stubbed - so this pins the
+    daemon's own counter rather than a hand-built summary dict.
+    """
+    tmp, ev, led = _learn_scratch("daemon-learn-c-")
+    real = _LA.EventLog
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+
+        class Dropping(real):
+            def append(self, e):
+                self.seen = getattr(self, "seen", 0) + 1
+                if self.seen == 1:
+                    return "dropped-by-fixture"
+                return real.append(self, e)
+
+        _LA.EventLog = Dropping
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, _why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        gap = [f for f in d.findings if "the 44-class" in f]
+        return (ok and len(gap) == 1 and "2 residual rulings but 1 learn events" in gap[0],
+                "ok=%s findings=%s" % (ok, json.dumps(d.findings)[:220]))
+    finally:
+        _LA.EventLog = real
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_a_clean_batch_trips_nothing():
+    """CLEAN TWIN. The same road with an honest writer produces no 44-class finding at all."""
+    tmp, ev, led = _learn_scratch("daemon-learn-d-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        arun(d.assemble_mapped("s1", _learn_res(), None))
+        return (not [f for f in d.findings if "the 44-class" in f],
+                json.dumps(d.findings)[:220])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_registrar_rulings_get_events():
+    """MUST FIRE. Registrar rulings decide whether a commodity is BORN and were invisible across
+    runs - no registrar ledger has ever existed. This is the first."""
+    tmp, ev, led = _learn_scratch("daemon-learn-e-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Gochujang Deluxe"]})
+
+        def handler(args):
+            if "-NewBids" in args:
+                return 0, json.dumps({"slug": "s1", "count": 1, "proposals": [
+                    {"term": "Gochujang Deluxe", "proposed_bid": "gochujang-deluxe-x",
+                     "evidence": "a distinct purchase", "declared": True}]}), ""
+            return 0, "", ""
+        fd = FakeDispatch({"commodity-registrar": [{"rulings": [
+            {"proposed_bid": "gochujang-deluxe-x", "verdict": "reject",
+             "reason": "already priced under gochujang"}]}]})
+        d = daemon(run_dir=tmp, ps=FakePS({"map-preresolve": handler}), dispatcher=fd,
+                   events_path=ev, resolutions_path=led)
+        res = {"slug": "s1", "status": "ok", "state": "priced", "lines": [],
+               "rulings": [{"raw": "1 tbsp gochujang deluxe", "term": "Gochujang Deluxe",
+                            "canon_item": "Gochujang Deluxe", "bid": "gochujang-deluxe-x",
+                            "decision": "mapped", "evidence": "the Korean fermented chili paste"}],
+               "new_commodity_proposals": []}
+        arun(d.assemble_mapped("s1", res, None))
+        evs = _learn_events(ev)
+        reg = [e for e in evs if e["kind"] == "registrar"]
+        ruled = [e for e in evs if e["kind"] == "ruling"]
+        return (len(reg) == 1 and reg[0]["decision"] == "reject" and reg[0]["by"] == "registrar"
+                and len(ruled) == 1 and ruled[0]["projected"] is False
+                and ruled[0]["held_reason"] == "bid unknown to every namespace"
+                and not os.path.exists(led),
+                "events=%s" % json.dumps([(e["kind"], e["decision"]) for e in evs]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_run(owner):
+    """Drive the WHOLE qa_lane for one slug that fails QA twice, owned by `owner`."""
+    tmp, ev, led = _learn_scratch("daemon-learn-qa-")
+    try:
+        os.makedirs(os.path.join(tmp, "mapped-pre"), exist_ok=True)
+        with io.open(os.path.join(tmp, "mapped-pre", "s1.rulings.json"), "w",
+                     encoding="utf-8") as f:
+            json.dump({"slug": "s1", "rulings": _learn_res()["rulings"]}, f)
+        fail = {"slug": "s1", "verdict": "FAIL", "owner": owner,
+                "findings": "the mapper bridged a form flip"}
+        fd = FakeDispatch({"recipe-source-qa": [fail, fail],
+                           "recipe-ingredient-mapper": [{}],
+                           "recipe-writer": [{"no_change": True}]})
+        d = daemon(run_dir=tmp, ps=FakePS(), dispatcher=fd, events_path=ev, resolutions_path=led)
+
+        async def noop(_slug):
+            return 0
+        d.qa_battery = noop                     # the battery shells coverage_check; not under test
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.qa_lane())
+        return _learn_events(ev), d
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_mapper_fail_writes_one_event():
+    evs, _d = _qa_run("mapper")
+    qa = [e for e in evs if e["kind"] == "qa_mapper_fail"]
+    ok = (len(qa) == 1 and qa[0]["key"] == "" and qa[0]["by"] == "qa"
+          and qa[0]["decision"] == "fail" and qa[0]["projected"] is False
+          and "boneless chicken breast" in qa[0]["evidence"])
+    return ok, "events=%s" % json.dumps([(e["kind"], e.get("evidence", "")[:60]) for e in evs])
+
+
+def _qa_writer_fail_writes_none():
+    evs, _d = _qa_run("writer")
+    return (not [e for e in evs if e["kind"] == "qa_mapper_fail"],
+            json.dumps([e["kind"] for e in evs]))
+
+
+def _learn_seams_are_never_live():
+    """MUST FIRE. The suite's default seams may never be the live estate files - H2's whole lesson.
+
+    Checked on the DAEMON the fixtures actually build, not on the constants, because the defect
+    would be a fixture that forgot to thread them.
+    """
+    d = daemon(run_dir="R")
+    live_ev = os.path.join(HD.MP, "db", "ingredient-events.jsonl")
+    live_led = os.path.join(HD.MP, "db", "ingredient-resolutions.json")
+    return (bool(d.events_path) and bool(d.resolutions_path)
+            and os.path.abspath(d.events_path) != os.path.abspath(live_ev)
+            and os.path.abspath(d.resolutions_path) != os.path.abspath(live_led),
+            "events=%s ledger=%s" % (d.events_path, d.resolutions_path))
+
+
+# =====================================================================================================
+# D3 - ATTEND. The three states, and the framing that keeps a shelf from reading as an answer.
+# =====================================================================================================
+
+_PRIOR_NEIGHBOURS = {
+    "state": "ok", "corpus": 3, "terms": [
+        {"key": "thin sliced beef for sandwiches", "term": "thin sliced beef for sandwiches",
+         "neighbours": [
+             {"term": "Shaved Beef Steak", "key": "shaved beef steak", "bid": "shaved-beef-steak",
+              "decision": "mapped", "evidence": "the thin-sliced sandwich steak, not a roast",
+              "cos": 0.82, "at": "2026-08-15T10:00:00", "slug": "philly"},
+             {"term": "Duck Fat", "key": "duck fat", "bid": "", "decision": "rejected",
+              "evidence": "no Omaha store carries it", "cos": 0.31,
+              "at": "2026-08-14T10:00:00", "slug": "confit"},
+             {"term": "Mustard Powder", "key": "mustard powder", "bid": "",
+              "decision": "mapped-null", "evidence": "dry ground seed, not the condiment",
+              "cos": 0.20, "at": "2026-08-13T10:00:00", "slug": "rub"}]},
+        {"key": "harissa paste", "term": "harissa paste", "neighbours": []}]}
+
+
+def _prior_daemon(tmp, reply=None, rc=0, write=True):
+    """A daemon whose python road answers resolution_embed with a scripted neighbours file."""
+    def handler(args):
+        if "--query" in args and write:
+            out = args[args.index("--out") + 1]
+            with io.open(out, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(reply if reply is not None else _PRIOR_NEIGHBOURS, f)
+        return rc, "", ("the venv is not here" if rc else "")
+    py = FakePy({"resolution_embed": handler})
+    d = daemon(run_dir=tmp, ps=FakePS(), pyrun=py)
+    return d, py
+
+
+def _prior_table(tmp, terms):
+    preresolved(tmp, ["s1"], residual={"s1": list(terms)})
+    with io.open(os.path.join(tmp, "mapped-pre", "s1.json"), encoding="utf-8-sig") as f:
+        return {"s1": json.load(f)}
+
+
+def _prior_renders_the_shelf():
+    """MUST FIRE. The neighbours reach the DOSSIER, each carrying the phrase it was ruled for."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-a-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        ok = ("PRIOR RULINGS NEAR THESE TERMS - a shelf, not an answer" in text
+              and "'Shaved Beef Steak' -> shaved-beef-steak (mapped, 2026-08-15, cos 0.82)" in text
+              and "the thin-sliced sandwich steak, not a roast" in text
+              and "no prior rulings near this term (we looked)" in text)
+        return ok, text[-500:]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_uses_the_sidecar_interpreter():
+    """MUST FIRE. bge-m3 lives in sidecar\\.venv and nowhere else; C:\\Codex\\Python312 has no torch,
+    and a surface run under the wrong interpreter reports its own ImportError as a failure."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-b-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        calls = py.find("resolution_embed")
+        return (len(calls) == 1 and calls[0].get("exe") == HD.SIDECAR_PY
+                and calls[0]["timeout"] == 120,
+                "calls=%d exe=%s" % (len(calls), (calls[0].get("exe") if calls else None)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_blind_is_announced():
+    """MUST FIRE. A retrieval that could not run renders BLIND. An empty list pretending it looked is
+    how a judge concludes there is no precedent when nobody checked."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-c-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, rc=2, write=False)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        said = any("BLIND" in f for f in d.findings)
+        return ("PRIOR RULINGS: BLIND" in text and "Absent evidence, not absence of precedent" in text
+                and "NEAR THESE TERMS" not in text and said,
+                "findings=%s tail=%s" % (json.dumps(d.findings)[:160], text[-220:]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_empty_is_not_blind():
+    """CLEAN TWIN. Day one: the log is empty, the retriever RAN, and the shelf says so per term.
+    `empty` and `blind` are different weeks and must never print the same line."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-d-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, reply={"state": "empty", "corpus": 0, "terms": [
+            {"key": "thin sliced beef for sandwiches", "term": "thin sliced beef for sandwiches",
+             "neighbours": []}]})
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        return ("no prior rulings near this term (we looked)" in text
+                and "BLIND" not in text and not d.findings,
+                "findings=%s tail=%s" % (json.dumps(d.findings)[:160], text[-220:]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_every_decision_stays_visible():
+    """MUST FIRE. A `rejected` and a `mapped-null` neighbour render with their decision words. The
+    estate measured that rejections transfer and confirmations do not - that is for the judge to
+    weigh, and encoding it as a filter here would be this file ruling on an identity."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-e-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        text = d.map_dossier_extras("s1", tables["s1"])
+        return ("(rejected, 2026-08-14" in text and "(mapped-null, 2026-08-13" in text
+                and "-> no id (rejected" in text, text[-400:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_only_residual_terms_are_asked():
+    """MUST FIRE. Settled lines are not questions. Asking about them would spend the retrieval on
+    the very terms the exact-key cache already answered, and crowd the shelf with them."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-f-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches", "harissa paste"])
+        d, py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        qin = py.find("resolution_embed")[0]["args"]
+        with io.open(qin[qin.index("--query") + 1], encoding="utf-8-sig") as f:
+            asked = [t["term"] for t in json.load(f)["terms"]]
+        return (sorted(asked) == ["harissa paste", "thin sliced beef for sandwiches"],
+                json.dumps(asked))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_the_prompt_names_the_field():
+    """MUST FIRE. hunt-daemon's own scar: a prompt that said "unchanged contract" without naming one
+    new field broke a clean batch. A shelf the judge was never told about is an unexplained block."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-g-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        p = d.map_prompt(["s1"], tables)
+        return ("PRIOR RULINGS shelf" in p and "they resolve nothing and you may disagree" in p
+                and "absent evidence and not absence of precedent" in p, p[:0])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _prior_never_blocks_the_lane():
+    """CLEAN TWIN. A blind retrieval costs the batch a channel and nothing else: the dossier is still
+    built, the settled lines are still there, and the recipe still maps."""
+    tmp = tempfile.mkdtemp(prefix="daemon-prior-h-")
+    try:
+        tables = _prior_table(tmp, ["thin sliced beef for sandwiches"])
+        d, _py = _prior_daemon(tmp, rc=2, write=False)
+        arun(d.fill_prior_rulings(["s1"], tables))
+        p = d.map_prompt(["s1"], tables)
+        return ("SETTLED lines - identity is DONE" in p and "1 lb chicken" in p
+                and "PRIOR RULINGS: BLIND" in p, p[-300:])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -4046,10 +4506,6 @@ def _resume_seed_table():
     return out
 
 
-if __name__ == "__main__":
-    sys.exit(run())
-
-
 # =====================================================================================================
 # THE BAND AS A RUN PARAMETER (Brad's ruling 2026-08-24, before the 6b proving run).
 #
@@ -6374,3 +6830,11 @@ def _mechanical_lane_events():
                 "future - an unpairable start reads as a stage that never finished",
                 *_t3_stamp_ago_is_hunt_runs_own_format()))
     return res
+
+
+# The entry point MUST be the LAST thing in this file. It used to sit at old line 4509 with ~2,300
+# lines of fixture definitions BELOW it, so `run()` executed before those `def`s were bound and the
+# suite died on the first one it referenced (`_registrar_gets_evidence`, section B). Measured
+# 2026-08-25: 38 of 245+ assertions ran; everything from section B down had NEVER run, in any tree.
+if __name__ == "__main__":
+    sys.exit(run())

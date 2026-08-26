@@ -55,6 +55,7 @@ import fdc_lookup                                                # noqa: E402
 import harvest                                                   # noqa: E402
 import hunt_dispatch                                             # noqa: E402
 import hunt_lib                                                  # noqa: E402
+import learn_apply                                               # noqa: E402
 import local_extract                                             # noqa: E402
 import price_evidence                                            # noqa: E402
 
@@ -69,6 +70,12 @@ PROBE_TIMEOUT = 900
 LOOKUP_TIMEOUT_MIN = 40
 LOOKUP_TIMEOUT = LOOKUP_TIMEOUT_MIN * 60 + 300
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
+RESOLUTION_EMBED_PY = os.path.join(HERE, "resolution_embed.py")
+# THE SIDECAR'S OWN INTERPRETER, and it is not a preference. torch and sentence-transformers live in
+# sidecar\.venv and nowhere else on this box; C:\Codex\Python312 has neither, and the graph's
+# interpreter has no numpy at all (graph\pipeline\resolve.py says so in its own header). Named here
+# so the ONE call site that needs it cannot drift into shelling `python`.
+SIDECAR_PY = os.path.join(REPO, "sidecar", ".venv", "Scripts", "python.exe")
 BUILD_SKELETON_PS = os.path.join(HERE, "build-intake-skeleton.ps1")
 WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
 WAVE_PUBLISH_PS = os.path.join(HERE, "wave-publish.ps1")
@@ -277,7 +284,7 @@ class Daemon(object):
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
                  costed_path="", pyrun=None, food_db_path="", queue_path="",
-                 carriage_path="", considered_path=""):
+                 carriage_path="", considered_path="", events_path="", resolutions_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         # T2: the narrative gets a file the moment the run dir is known. A QUIET daemon is a fixture
@@ -327,6 +334,16 @@ class Daemon(object):
         self.queue_path = queue_path
         self.carriage_path = carriage_path
         self.considered_path = considered_path
+        # TWO MORE SEAMS, AND THE H2 LESSON IS WHY THEY EXIST BEFORE THE FIRST DRILL RATHER THAN
+        # AFTER IT (PLAN-ingredient-memory D1). This build makes the daemon a WRITER of two more
+        # estate-wide files: meal-prep\db\ingredient-events.jsonl and, through
+        # ingredient-resolutions.ps1 -Record, meal-prep\db\ingredient-resolutions.json. The second
+        # is read as STEP 1 of the per-line resolution ladder on every recipe the estate ever maps,
+        # so a drill row in it is not a test artifact - it is an identity every future run will
+        # believe. H2 found three live ledgers a no-publish drill was still writing precisely
+        # because their seams were added late; these are added with the writer.
+        self.events_path = events_path
+        self.resolutions_path = resolutions_path
         self.food_db_lock = asyncio.Lock()
         # F1 (2026-08-25): THE SAME ONE-PEN-ONE-LOCK RULE FOR THE FDC CACHE. fdc_lookup.cache_write is
         # a whole-file write and two map workers can fill overlapping term lists at the same moment;
@@ -514,12 +531,17 @@ class Daemon(object):
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: self._ps(script, args, timeout))
 
-    async def py(self, script, args, timeout=600):
+    async def py(self, script, args, timeout=600, exe=""):
         """EVERY Python surface goes through hunt_lib.py_invoke, for the same one-road reason `ps`
         exists - and never through ps_invoke, which would try to marshal a Python script as a
-        PowerShell command line."""
+        PowerShell command line.
+
+        `exe` names a DIFFERENT interpreter for the surfaces that need one. The estate has three and
+        they are not interchangeable: resolution_embed.py imports torch, which lives only in
+        sidecar\\.venv. It still rides this road, because a second subprocess style in the daemon is
+        the thing the one-road rule exists to prevent."""
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, lambda: self._py(script, args, timeout))
+        return await loop.run_in_executor(None, lambda: self._py(script, args, timeout, exe))
 
     @staticmethod
     def _stamp_ago(seconds):
@@ -2196,6 +2218,32 @@ class Daemon(object):
                                           MAP_PRERESOLVE_PS, args, timeout=600)
         text = ((out or "") + (err or "")).strip()
         if rc == hunt_lib.EXIT_CLEAN:
+            # ---- D1: THE RULINGS BECOME MEMORY, AND ONLY AFTER THE ASSEMBLE SAID OK ---------------
+            #
+            # WHY HERE AND NOT IN THE MAP LANE. A ruling that failed assembly must not become an
+            # identity: the run refused to build a decision file over it, and caching something the
+            # estate would not write down is worse than caching nothing. This is the only point
+            # where "the mapper ruled it AND the assembler accepted it" is both true and known.
+            #
+            # ADVISORY, ALWAYS. Every problem apply_learn reports joins the findings road below; not
+            # one of them fails the assemble. Memory must never block the lane - a broken pen is a
+            # finding, not a parked recipe.
+            learned, lfindings = await asyncio.get_running_loop().run_in_executor(
+                None, learn_apply.apply_learn, self.run_dir, slug, res, tables, payload,
+                self.resolutions_path, self.events_path)
+            for f in lfindings:
+                self.findings.append("learn/" + f)
+            # THE 44-CLASS POSTCONDITION, ENFORCED AT THE CALL SITE. `Events / mapped residuals = 1`,
+            # made mechanical. On 2026-08-15 forty-four decide rejections left no trace outside a run
+            # dir and the next run re-sourced every one of them; the only reason anyone knows the
+            # number is that a human counted afterwards. This is the counter that would have said so
+            # the same night.
+            gap = learn_apply.postcondition_finding(slug, learned, payload)
+            if gap:
+                self.findings.append("learn/" + gap)
+            self.log("  map: %s learned %d event(s) (%d projected, %d held, %d surprise)"
+                     % (slug, learned.get("events_written", 0), learned.get("projected", 0),
+                        learned.get("held", 0), learned.get("surprises", 0)))
             return True, ""
         found = [ln.strip() for ln in text.replace("\r", "").split("\n")
                  if ln.strip().startswith("FINDING")]
@@ -2242,6 +2290,11 @@ class Daemon(object):
                         self.findings.append(
                             "F1: the post-fill re-resolve could not run (%s) - the batch of %d rides "
                             "the pre-fill table" % (why2[:120], len(slugs)))
+                # D3: THE PRIOR-RULINGS SHELF, FETCHED BEFORE THE DOSSIER IS BUILT.
+                # Same stretch as the FDC fill and for the same reason: everything the judge is
+                # going to want must be on the page before the page is written, or it goes and
+                # fetches it a turn at a time.
+                await self.fill_prior_rulings(slugs, tables)
                 self.log_shelf_coverage(tables)
                 # ---- T7: THE COMPLETENESS GATE, AND IT IS A PICK-UP CHECK ON PURPOSE ---------------
                 #
@@ -2461,6 +2514,93 @@ class Daemon(object):
         self._food_db_index = idx
         return idx
 
+    # D3 (PLAN-ingredient-memory 5.2). The retrieval's three states, and the daemon must be able to
+    # tell them apart at RENDER time - which is why the state travels with the answer instead of
+    # being inferred from an empty list.
+    PRIOR_TIMEOUT = 120
+
+    async def fill_prior_rulings(self, slugs, tables):
+        r"""Ask resolution_embed for the k nearest PAST rulings to this batch's residual terms.
+
+        WHY IT IS A SEPARATE PROCESS AND NOT AN IMPORT. bge-m3 lives in sidecar\.venv; this daemon
+        runs under C:\Codex\Python312, which has no torch. sweep.py's own header makes the same call
+        for the same reason ("the resolve lane runs under the graph's interpreter, which has no
+        numpy, and adding it there would put the nightly matching chain's dependencies at the mercy
+        of a retrieval feature"). One road, hunt_lib.py_invoke, with the interpreter named.
+
+        THREE STATES, NEVER FAKED. `ok` with neighbours, `ok`/`empty` with none, and `blind` when it
+        could not run at all. The third is the one that matters: an empty list pretending it looked
+        is how a judge concludes there is no precedent when nobody checked. The renderer says which.
+
+        NEVER BLOCKING. This is evidence, not a gate. A blind retrieval costs the batch a channel
+        and nothing else - the recipe still maps, exactly as it did before this existed.
+        """
+        self._prior = getattr(self, "_prior", {})
+        want = []
+        for slug in slugs:
+            t = (tables or {}).get(slug) or {}
+            for r in (t.get("rows") or []):
+                if r.get("resolution") not in ("unresolved", "different-form", "new-food-suspect"):
+                    continue
+                term = str(r.get("term") or "").strip()
+                if not term:
+                    continue
+                want.append({"slug": slug, "key": learn_apply.term_key(term), "term": term,
+                             "raw": str(r.get("raw") or "")})
+        if not want:
+            for slug in slugs:
+                self._prior[slug] = {"state": "ok", "terms": []}
+            return
+        d = os.path.join(self.run_dir, "mapped-pre")
+        qin = os.path.join(d, "prior-query.json")
+        qout = os.path.join(d, "prior-neighbours.json")
+        try:
+            os.makedirs(d, exist_ok=True)
+            with open(qin, "w", encoding="utf-8") as f:
+                json.dump({"terms": [{"key": w["key"], "term": w["term"], "raw": w["raw"]}
+                                     for w in want]}, f, ensure_ascii=False)
+        except Exception as e:                                    # noqa: BLE001
+            for slug in slugs:
+                self._prior[slug] = {"state": "blind", "why": "the query could not be written (%s)" % e,
+                                     "terms": []}
+            return
+        args = ["--query", qin, "--out", qout]
+        if self.events_path:
+            args += ["--events", self.events_path]
+        rc, out, err = await self.py(RESOLUTION_EMBED_PY, args, timeout=self.PRIOR_TIMEOUT,
+                                     exe=SIDECAR_PY)
+        why = ""
+        doc = None
+        if rc != hunt_lib.EXIT_CLEAN:
+            why = "exit %s: %s" % (rc, ((out or "") + (err or "")).strip()[:160])
+        else:
+            try:
+                with open(qout, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+            except Exception as e:                                # noqa: BLE001
+                why = "the neighbours file could not be read (%s)" % e
+        if doc is None:
+            for slug in slugs:
+                self._prior[slug] = {"state": "blind", "why": why, "terms": []}
+            self.findings.append("map: the prior-rulings shelf is BLIND for this batch of %d (%s) - "
+                                 "the dossier says so rather than showing an empty list"
+                                 % (len(slugs), why))
+            return
+        by_key = {str(t.get("key") or ""): t for t in (doc.get("terms") or [])}
+        state = str(doc.get("state") or "ok")
+        for slug in slugs:
+            rows = []
+            for w in want:
+                if w["slug"] != slug:
+                    continue
+                t = by_key.get(w["key"]) or {}
+                rows.append({"term": w["term"], "key": w["key"],
+                             "neighbours": list(t.get("neighbours") or [])})
+            self._prior[slug] = {"state": state, "why": str(doc.get("why") or ""), "terms": rows}
+        n = sum(len(x["neighbours"]) for s in slugs for x in self._prior[s]["terms"])
+        self.log("  map: prior-rulings shelf %s - %d neighbour(s) over %d term(s) from %d past "
+                 "ruling(s)" % (state, n, len(want), doc.get("corpus", 0)))
+
     def map_dossier_extras(self, slug, table):
         """M2: the three things lf1 round 2 measurably went to disk for, rendered into the prompt.
 
@@ -2541,6 +2681,9 @@ class Daemon(object):
                        % (ex.get("servings"), ex.get("title") or "(untitled)",
                           ex.get("source_url") or "no source_url"))
 
+        # ---- 4. the prior-rulings shelf (D3) -----------------------------------------------------
+        out.extend(self.render_prior_rulings(slug))
+
         if not out:
             return ""
         text = "\n".join(out)
@@ -2552,6 +2695,52 @@ class Daemon(object):
                           "shown - read the DB and mapped-pre\\%s.json for those."
                     % (self.MAP_EXTRAS_CAP, dropped, slug))
         return text
+
+    def render_prior_rulings(self, slug):
+        r"""The fourth dossier channel, in map-preresolve's FDC-shelf framing. Returns a line list.
+
+        THE FRAMING IS THE FEATURE. map-preresolve's FDC block is the model and its wording is
+        load-bearing for the same reason: FDC's top hit for "chicken drumstick" is
+        "Chicken, skin (drumsticks and thighs)", a real row with real numbers that is not the food.
+        Here the hazard is one step subtler - every neighbour IS a real ruling this estate made and
+        stands by, and it was made about a DIFFERENT PHRASE. "Ruled X for a different phrase" must
+        never render as "ruled X for this phrase", which is why each line carries the phrase it was
+        ruled for, its decision and its date, and why the heading says a shelf and not an answer.
+
+        DECISIONS ARE ALL SHOWN AND NONE ARE RANKED. sidecar measured that rejections transfer
+        across foods and confirmations do not - the worst cross-food examples score HIGHEST - but
+        that is a fact for the judge to weigh, not a filter to apply here. Encoding it as a filter
+        would be this file deciding an identity question, which is the one thing it may not do.
+
+        BLIND IS SAID OUT LOUD (hunt-daemon's own announced-unreadable idiom). Absent evidence is
+        not evidence of absence, and a judge shown nothing concludes there is no precedent.
+        """
+        p = (getattr(self, "_prior", {}) or {}).get(slug)
+        if p is None:
+            return []
+        if p.get("state") == "blind":
+            return ["  PRIOR RULINGS: BLIND - %s. Absent evidence, not absence of precedent - the "
+                    "estate may well have ruled on a phrase like these and this run could not look."
+                    % (p.get("why") or "the retriever could not run")]
+        rows = [t for t in (p.get("terms") or []) if t.get("term")]
+        if not rows:
+            return []
+        out = ["  PRIOR RULINGS NEAR THESE TERMS - a shelf, not an answer. Each was ruled for a "
+               "DIFFERENT phrase; cosine ranks wording likeness, not food identity, so any of these "
+               "can be the wrong precedent. Weigh them; you still rule this line yourself:"]
+        for t in rows:
+            hits = t.get("neighbours") or []
+            if not hits:
+                out.append("    %s: no prior rulings near this term (we looked)" % t["term"])
+                continue
+            out.append("    %s:" % t["term"])
+            for n in hits:
+                bid = n.get("bid") or "no id"
+                out.append("      '%s' -> %s (%s, %s, cos %.2f): \"%s\""
+                           % (n.get("term"), bid, n.get("decision") or "?",
+                              str(n.get("at") or "")[:10], float(n.get("cos") or 0.0),
+                              str(n.get("evidence") or "").replace("\n", " ")))
+        return out
 
     def read_extraction(self, slug):
         """(doc, why). A missing or unparseable extraction is ANNOUNCED, never silently absent."""
@@ -2659,6 +2848,14 @@ class Daemon(object):
             "     goes IN THE POT at the %d-serving batch scale, not what a package is called: \"3 lb,\n"
             "     sliced into thin rounds\", \"an 8 oz brick minus 2 tbsp\", \"5 1/4 cups grated, divided\".\n"
             "  3. The macro cross-check, per recipe, as described in each block above.\n\n"
+            # D3: NAME THE FIELD. The lesson three paragraphs down is that a prompt saying
+            # \"unchanged contract\" without naming one new field broke a clean batch, and a shelf
+            # the judge does not know is a shelf reads as an unexplained block of quotes.
+            "Some residual lines carry a PRIOR RULINGS shelf - rulings on SIMILAR past phrases,\n"
+            "evidence only; they resolve nothing and you may disagree with them. Each one was ruled\n"
+            "for a DIFFERENT phrase and carries that phrase, its decision and its date, because\n"
+            "cosine ranks wording likeness and not food identity. A shelf that says BLIND means the\n"
+            "lookup could not run, which is absent evidence and not absence of precedent.\n\n"
             "READS. The table above is the estate, already read for you. Do NOT open the vocabulary, the\n"
             "commodity files, the board, the feed or the resolutions ledger - every question they answer\n"
             "is answered above, and a re-read costs a turn that re-reads the whole accumulated context\n"
@@ -3545,6 +3742,14 @@ class Daemon(object):
                 if not hunt_lib.is_pass(q.get("verdict")):
                     owner = self.owner_agent(q.get("owner"))
                     self.log("QA FAIL %s -> one repair cycle by %s" % (slug, owner))
+                    # D2: ERROR HAS TO WRITE. A QA fail the MAPPER owns is the estate discovering
+                    # that an identity it settled was wrong, and until now that discovery lived in
+                    # one run dir and died there. The event does not touch the ledger - a fail is not
+                    # a new identity - but it is what makes the correction loop legible afterwards:
+                    # the repair re-ruling re-projects, the old row is superseded, and this event is
+                    # the reason anyone can see WHY.
+                    await asyncio.get_running_loop().run_in_executor(
+                        None, self.learn_qa_fail, slug, q)
                     # CHANGE A (section 5.3): THE SAME SPLIT, ONE LANE OVER. A QA finding the WRITER
                     # owns lives in the fillable fields, so it is a field patch through the same
                     # road. A finding owned by the extractor or the mapper needs re-extraction or
@@ -3581,6 +3786,34 @@ class Daemon(object):
     def owner_agent(owner):
         return {"extractor": "recipe-hunter-extractor",
                 "mapper": "recipe-ingredient-mapper"}.get(owner, "recipe-writer")
+
+    def learn_qa_fail(self, slug, q):
+        r"""One `qa_mapper_fail` event, and ONLY when the raw owner field is `mapper`.
+
+        THE RAW FIELD, NOT owner_agent()'s ANSWER, and the difference is the whole check.
+        owner_agent maps anything it does not recognise to `recipe-writer`, so routing tells you
+        who repairs it; only the raw field tells you the QA agent actually blamed the MAPPING. An
+        event keyed off the routed name would file every unowned fail under the writer and none of
+        them here.
+
+        The slug's residual keys ride inside `evidence`, read from the run's own
+        mapped-pre\<slug>.rulings.json - and when that file cannot be read the event SAYS SO rather
+        than listing nothing, because "this recipe had no residual terms" and "we could not find out
+        which terms it had" are different facts about a failure.
+
+        Sync on purpose: it appends ONE line and is called through run_in_executor, so nothing here
+        holds a file handle across an await.
+        """
+        if str((q or {}).get("owner") or "").strip().lower() != "mapper":
+            return None
+        keys, why = learn_apply.residual_keys_for(self.run_dir, slug)
+        how, _ev = learn_apply.qa_fail_event(
+            slug, as_text(q.get("findings"), 600), run=self.run_id,
+            residual_keys=keys, why_keys=why, events=self.events_path)
+        if how == "failed":
+            self.findings.append("learn/%s: the QA mapper-fail could not be recorded as an event"
+                                 % slug)
+        return how
 
     def qa_battery_args(self, slug):
         """The battery's command line, SPLIT OUT so its seam is assertable.
@@ -4934,6 +5167,17 @@ def main(argv=None):
                     help="a scratch meal-prep\\db\\considered-dishes.json, for a drill. Empty means "
                          "the live one. It is the estate's dish-rulings memory, so a drill ruling in "
                          "it changes what a later real run treats as prior art.")
+    # D1/D2 (PLAN-ingredient-memory-2026-08-25). The two files this build makes the daemon a writer
+    # of. --resolutions is the one that matters most: that ledger is STEP 1 of the per-line
+    # resolution ladder on every recipe the estate maps, so a drill row in it is an identity every
+    # future run will believe.
+    ap.add_argument("--events", default="",
+                    help="a scratch meal-prep\\db\\ingredient-events.jsonl, for a drill. Empty means "
+                         "the live log.")
+    ap.add_argument("--resolutions", default="",
+                    help="a scratch meal-prep\\db\\ingredient-resolutions.json, for a drill. Empty "
+                         "means the live ledger - which map-preresolve consults FIRST on every line "
+                         "of every recipe, so a drill row there is not a test artifact.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
@@ -4963,7 +5207,8 @@ def main(argv=None):
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
                specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None),
                food_db_path=a.food_db, queue_path=a.queue, carriage_path=a.carriage,
-               considered_path=a.considered)
+               considered_path=a.considered, events_path=a.events,
+               resolutions_path=a.resolutions)
 
     async def go():
         ok, err = await d.seed()
