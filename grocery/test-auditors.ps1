@@ -45,12 +45,40 @@ function PSChild {
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
 $pass = 0; $failed = 0; $skipped = 0
 
+# EVERY SCRATCH PATH THIS HARNESS MAKES IS REGISTERED AND SWEPT, and the sweep is a `finally`.
+#
+# MEASURED 2026-08-26. Cleaning up was a thing each fixture had to REMEMBER, and most do - but the ones
+# that forgot forgot on EVERY run, forever: cg-alert- (888 dirs), arrdock- (648 files), rf-ack- (421),
+# ffc-selftest- (366), taudit-rep- (350). ~2,673 entries in %TEMP% from this one file. The sibling
+# defect in meal-prep\pipeline\hunt_daemon_selftest.py had the same shape and the same cause, and was
+# fixed the same way the same day: the allocator does the remembering, not the caller.
+#
+# Register-Fx is now the only way a scratch path is named here. A fixture that ALSO removes its own dir
+# inline - most do, and should, so a 467-second run does not hold fifty of them open at once - is simply
+# a no-op for the sweep.
+#
+# WHY A `finally` AND NOT `Register-EngineEvent PowerShell.Exiting`: the engine event was tried first and
+# does NOT fire under `powershell.exe -File` on either exit path (probed both, 2026-08-26; the scratch dir
+# survived both times). A try/finally around the body DOES run on all three ways out of this script -
+# `exit 0`, `exit 2`, and an uncaught throw - and it preserves the exit code, which the completion
+# contract below depends on. Probed the same day, all three, zero leftovers.
+$script:FxPaths = New-Object System.Collections.ArrayList
+function Register-Fx([string]$path) { [void]$script:FxPaths.Add($path); return $path }
+function Sweep-FxPaths {
+  foreach ($fx in $script:FxPaths) { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
+  $script:FxPaths.Clear()
+}
+
+try {
+
 # FIXTURES RUN COPIES OF DETECTORS OUT OF $env:TEMP, and every detector carrying the completion contract
 # dot-sources lib\guard-contract.ps1 from its PARENT directory. For a fixture copy that parent is $env:TEMP,
 # which has no lib\ - so the copy died on its second line and every tile-integrity, name-drift,
 # coverage-ledger and match-soundness assertion failed with "the term ...\Temp\lib\guard-contract.ps1 is not
 # recognized". The harness already ships SIBLING libs into fixture dirs (verdict-lib, alert-lib,
 # coverage-lib); this is the same convention one level up, done once for all 50 fixture directories.
+# NOT Register-Fx'd, deliberately: this one has a FIXED name, so it does not accumulate, and two
+# concurrent runs of this harness share it - a sweep would pull it out from under the other run.
 $fxLibDir = Join-Path $env:TEMP 'lib'
 if (-not (Test-Path $fxLibDir)) { New-Item -ItemType Directory -Force $fxLibDir | Out-Null }
 Copy-Item (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1') (Join-Path $fxLibDir 'guard-contract.ps1') -Force
@@ -142,7 +170,7 @@ Write-Output 'test-auditors: can each watcher still see the bug it was written f
 # Both audits now take -ReportDir (default out\, so live behaviour is untouched) and every fixture call below
 # points it here. Temp, not the fixture folder itself: fixtures are FROZEN, and a run that writes into them
 # is how a frozen fixture stops being frozen.
-$fixRep = Join-Path $env:TEMP ('taudit-rep-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$fixRep = Register-Fx (Join-Path $env:TEMP ('taudit-rep-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $fixRep -Force
 
 # ---------------------------------------------------------------- 1. basis reconciler
@@ -265,7 +293,7 @@ else { Bad ("coverage-gaps paged on gaps the engine itself explains (rc=$($r.rc)
 
 # ---------------------------------------------------------------- 3. triage-due must FAIL CLOSED
 # Run a COPY of the guard in a temp dir so the live queue is never touched ($PSScriptRoot decides its paths).
-$tmp = Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$tmp = Register-Fx (Join-Path $env:TEMP ('triage-fixture-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 New-Item -ItemType Directory -Force $tmp | Out-Null
 Copy-Item (Join-Path $root 'triage-due.ps1') (Join-Path $tmp 'triage-due.ps1')
 function RunTriage($content) {
@@ -325,7 +353,7 @@ if ($offenders.Count -eq 0) { Ok 'no live script or workflow wraps a JSON-array-
 else { Bad ("the PS 5.1 no-unroll trap is back in " + $offenders.Count + " place(s):`n      " + ($offenders -join "`n      ")) }
 
 # and prove the trap is real, so nobody "fixes" the check by deleting it
-$probe = Join-Path $env:TEMP ('arr-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.json')
+$probe = Register-Fx (Join-Path $env:TEMP ('arr-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.json'))
 '[{"a":1},{"a":2},{"a":3}]' | Set-Content $probe -Encoding UTF8
 $wrapped = @(Get-Content $probe -Raw | ConvertFrom-Json)
 $assigned = Get-Content $probe -Raw | ConvertFrom-Json
@@ -403,7 +431,7 @@ if ($mg.Success) {
 # check-ad-cycles died mid-run TWICE - with no log line explaining it, because logging WAS the failure. An
 # editor with the log open, a backup or an antivirus scan does the same. Reproduce the exact condition:
 # hold an exclusive handle on a log file and assert the Log pattern survives it.
-$logProbe = Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.txt')
+$logProbe = Register-Fx (Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.txt'))
 'seed' | Set-Content $logProbe -Encoding UTF8
 $fs = [IO.File]::Open($logProbe, 'Open', 'ReadWrite', 'None')   # 'None' = no sharing, exactly like a lock
 try {
@@ -419,7 +447,7 @@ Log 'first'
 Log 'second'
 Write-Output 'SURVIVED'
 '@
-  $pf = Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.ps1')
+  $pf = Register-Fx (Join-Path $env:TEMP ('logprobe-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.ps1'))
   Set-Content $pf $probeScript -Encoding UTF8
   $out = (PSChild $pf $logProbe | ForEach-Object { [string]$_ }) -join ' '
   Remove-Item $pf -Force -ErrorAction SilentlyContinue
@@ -534,7 +562,7 @@ foreach ($imp in @('import-walmart-batch.ps1','import-instacart-batch.ps1')) {
   } else { Bad "$imp reads its capture with the default (ANSI) encoding again - the next staples batch will ship mangled names" }
 }
 # Behavioural: a UTF-8-no-BOM line with an umlaut must survive the read the importers now perform.
-$tmpU = Join-Path $env:TEMP ('utf8probe-' + [guid]::NewGuid().ToString('N') + '.txt')
+$tmpU = Register-Fx (Join-Path $env:TEMP ('utf8probe-' + [guid]::NewGuid().ToString('N') + '.txt'))
 try {
   $UML = [char]0x00FC   # u-umlaut, built from a code point so THIS file stays pure ASCII
   $want = 'eggs' + "`t" + 'Deutsche K' + $UML + 'che German Style Sauerkraut~~$3.49'
@@ -704,7 +732,7 @@ else { Bad 'import-walmart-batch no longer lifts Build-Row - the second Walmart 
 # from the live board (the two live clean-twins below are deliberate: a machine where they fail is itself
 # page-worthy).
 function NewFxDir([string]$tag) {
-  $d = Join-Path $env:TEMP ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+  $d = Register-Fx (Join-Path $env:TEMP ($tag + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
   New-Item -ItemType Directory -Force $d | Out-Null
   return $d
 }
@@ -1881,7 +1909,7 @@ function Get-MisnamedEmitters([string]$scanDir) {
 # the bug they encode cannot evaporate the way a regenerated fixture does. The honest twin carries BOTH silence
 # conditions at once (it signs its own name AND labels a child it really invokes), which is the exact shape of
 # the legitimate sites in the estate.
-$fxSg = Join-Path $env:TEMP ('ta-signs-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$fxSg = Register-Fx (Join-Path $env:TEMP ('ta-signs-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 New-Item -ItemType Directory -Path $fxSg -Force | Out-Null
 Set-Content (Join-Path $fxSg 'fx-sams-twin.ps1') "Write-Output 'fx-sams-twin: 1 raw -> 1 priced'" -Encoding UTF8
 Set-Content (Join-Path $fxSg 'fx-forked-builder.ps1') @'
@@ -2186,7 +2214,7 @@ Remove-Item $fxSc, $fxScB, $fxWt -Recurse -Force -ErrorAction SilentlyContinue
 # and the bath soap scores a PERFECT 0.00 divergence - measured, along with the cat-food-as-salmon case
 # falling off the docket entirely. If someone "simplifies" Get-ArrivalHead to score the whole name, this test
 # is what stops it, so do not relax it to a rank or a substring of the item text.
-$r = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+$r = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 if ($r.text -match 'FLAG#1' -and $r.text -match 'coconut-oil' -and $r.text -match 'div=1\.00' -and $r.text -match 'CROWN') { Ok 'arrivals-docket RANKS the bath-soap-as-coconut-oil crown arrival FIRST' }
 else { Bad ('arrivals-docket MISSED its founding bug (head cut broken, or crowns no longer ranked first): ' + $r.text) }
 # MUST FIRE: a commodity with ONE other priced cell cannot be scored at all. 41 of 492 commodities are in that
@@ -2195,14 +2223,14 @@ if ($r.text -match 'BLIND' -and $r.text -match 'harissa-paste' -and $r.text -mat
 else { Bad ('arrivals-docket silently passed an unscorable thin cohort: ' + $r.text) }
 # MUST BE SILENT: the SAME arrival, the SAME crown, the SAME 17c/oz - with a real coconut oil. If this flags,
 # the score is tracking novelty or cheapness rather than divergence and the whole docket is noise.
-$r2 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+$r2 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 if ($r2.text -match 'FLAGGED at div >= 0\.75: 0') { Ok 'arrivals-docket SILENT on the same crown arrival with the right product' }
 else { Bad ('arrivals-docket flagged a correct new product - it is scoring novelty, not divergence: ' + $r2.text) }
 if ($r2.text -match 'harissa-paste' -and $r2.text -match 'thin-cohort') { Ok 'arrivals-docket still reports the thin cohort BLIND on the clean board' }
 else { Bad 'arrivals-docket dropped its BLIND report on a clean board - BLIND must describe the cohort, not the verdict' }
 # MUST FIRE: with no baseline there is no delta, and "every cell is an arrival" is not a review queue. A check
 # that examined nothing must say so rather than emit 2,792 rows that read like findings.
-$r3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')), '-N', '0')
+$r3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'), '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))), '-N', '0')
 if ($r3.rc -eq 3 -and $r3.text -match 'ZERO baseline boards') { Ok 'arrivals-docket exits 3 when it has NO baseline to diff against' }
 else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $r3.rc + ')') }
 
@@ -2216,7 +2244,7 @@ else { Bad ('arrivals-docket claimed a usable delta with zero baseline (rc=' + $
 $proArgs = @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
   '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'arrivals-prospects.json'),
   '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'),
-  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+  '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 $rp = RunPS 'build-arrivals-docket.ps1' $proArgs
 # MUST FIRE: the 2026-07-28 bath soap, re-staged as a PROSPECT. It has to rank first, carry div 1.00 from the
 # head cut, and be named a crown-taker - a prospect that cannot win changes no shopper's price, so that
@@ -2243,7 +2271,7 @@ if ($rp.text -match 'PROSPECTS awaiting a ruling: 2 \(1 would take a crown, 1 fl
 $rp2 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-clean-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
   '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'no-such-discovery-docket.json'),
   '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'),
-  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+  '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 if ($rp2.text -match 'BLIND' -and $rp2.text -match 'discovery has not run') { Ok 'prospects: a missing docket reports BLIND rather than a clean zero' }
 else { Bad ('prospects turned a missing discovery docket into "no candidates": ' + $rp2.text) }
 # MUST FIRE: the prospects section must not overwrite the ARRIVALS baseline-adequacy reason. Shipped and
@@ -2254,7 +2282,7 @@ else { Bad ('prospects turned a missing discovery docket into "no candidates": '
 $rp3 = RunPS 'build-arrivals-docket.ps1' @('-CompareFile', (Join-Path $fix 'arrivals-mustfire-board.json'), '-BaselineDir', (Join-Path $fix 'arrivals-baseline'),
   '-CommoditiesFile', (Join-Path $fix 'arrivals-commodities.json'), '-DiscoveryFile', (Join-Path $fix 'arrivals-prospects-offboard.json'),
   '-VerdictsFile', (Join-Path $fix 'arrivals-prospect-verdicts.json'), '-N', '0',
-  '-OutFile', (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')))
+  '-OutFile', (Register-Fx (Join-Path $env:TEMP ('arrdock-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))))
 if ($rp3.text -match 'DEGRADED: ZERO baseline boards' -and $rp3.text -match 'no-board-row') {
   Ok 'prospects: an off-board prospect is reported as unscorable WITHOUT overwriting the docket-level DEGRADED reason'
 } else { Bad ('the prospects loop clobbered the arrivals baseline-adequacy reason again: ' + $rp3.text) }
@@ -2295,7 +2323,7 @@ else { Bad ('adjudicate-discovery self-test FAILED: ' + $r.text) }
 # the link opened 4.5 oz) - and guard 3 reported 10 pins whose board cell has no product name to check.
 # The fixture is COPIED to a temp dir first: this script writes its proposal and report into -OutDir, and a
 # fixture run must never write where the live run writes.
-$fxRf = Join-Path $env:TEMP ('taudit-rf-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$fxRf = Register-Fx (Join-Path $env:TEMP ('taudit-rf-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 New-Item -ItemType Directory -Path $fxRf -Force | Out-Null
 Copy-Item (Join-Path $fix 'recipe-floors\*.json') $fxRf -Force
 $r = RunPS 'derive-recipe-floors.ps1' @('-Root', $fxRf, '-OutDir', $fxRf)
@@ -2492,7 +2520,7 @@ else { Bad ('commodity-search.json shape findings: ' + ($stLiveFindings -join ' 
 # F4 asked for tolerances narrowed "from the week's accumulated ledger data" and there WAS none - the ledger
 # is a single overwritten snapshot, so every tolerance had been hand-seeded from one green run with no
 # reason recorded. These pin the three defects that turned up while looking.
-$fxCl = Join-Path $env:TEMP ('taudit-cl-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$fxCl = Register-Fx (Join-Path $env:TEMP ('taudit-cl-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 New-Item -ItemType Directory -Path $fxCl -Force | Out-Null
 Copy-Item (Join-Path $fix 'coverage-ledger\coverage-ledger.json') $fxCl -Force
 $clBase = Join-Path $fxCl 'coverage-baseline.json'
@@ -2570,7 +2598,7 @@ if ($ffcSelfIdx -ge 0 -and $ffcGateIdx -ge 0 -and $ffcGateIdx -lt $ffcSelfIdx -a
 } else { Ok 'audit-ff-carry skips its pull-state exits under -SelfTest (fixtures run in every data state)' }
 # Hermetic: -OutDir points at an empty scratch dir, so a PASS here proves the fixtures ran WITHOUT an FF file
 # present. That is precisely the state that used to fake a pass, so it doubles as the regression test.
-$ffcOut = Join-Path $env:TEMP ('ffc-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$ffcOut = Register-Fx (Join-Path $env:TEMP ('ffc-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,8)))
 $null = New-Item -ItemType Directory -Path $ffcOut -Force
 $r = RunPS 'audit-ff-carry.ps1' @('-SelfTest', '-OutDir', $ffcOut)
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'ff-carry -SelfTest passes with NO FF file present (fixtures are data-state independent)' }
@@ -2668,7 +2696,7 @@ else { Bad 'the cursor write is no longer behind Get-FfCursorCommit - a failed m
 # from a board) and they run from a COPY in TEMP, because the audit writes everyday-mismatches.json and a
 # coverage row into its -OutDir and a fixture that mutates itself is not frozen.
 $emFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
-$emTmp = Join-Path $env:TEMP ('emfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$emTmp = Register-Fx (Join-Path $env:TEMP ('emfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $emTmp -Force
 function EmFixture([string]$name) {
   $d = Join-Path $emTmp $name
@@ -2771,7 +2799,7 @@ else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only chec
 # -OutDir and a fixture that mutates itself is not frozen. -AsOf is what makes them freezable at all: the
 # tool calls Get-Date nowhere except to default that one parameter.
 $rwFxSrc = Join-Path $root 'regression-inputs\guard-fixtures'
-$rwTmp = Join-Path $env:TEMP ('rwfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+$rwTmp = Register-Fx (Join-Path $env:TEMP ('rwfx-' + [guid]::NewGuid().ToString('N').Substring(0, 8)))
 $null = New-Item -ItemType Directory -Path $rwTmp -Force
 function RwFixture([string]$name) {
   $d = Join-Path $rwTmp $name
@@ -4070,7 +4098,7 @@ else {
 
   # THE PRODUCTION REFUSAL, END TO END. Everything above tests judgement or source; this runs the REAL guard
   # against a feed with pricing_inputs stripped and requires a findings exit that still carries the marker.
-  $fcTmp = Join-Path $env:TEMP ('feedcov-stripped-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json')
+  $fcTmp = Register-Fx (Join-Path $env:TEMP ('feedcov-stripped-' + [guid]::NewGuid().ToString('N').Substring(0,8) + '.json'))
   $fcCanon = Join-Path $root 'out\smp-feed.json'
   if (Test-Path $fcCanon) {
     try {
@@ -4506,4 +4534,5 @@ if ($failed -eq 0) {
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed$skipNote) - a watcher has gone blind. Fix it before trusting a quiet board.")
 Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed skipped=$skipped"
 exit 2
+} finally { Sweep-FxPaths }
 
