@@ -4506,10 +4506,6 @@ def _resume_seed_table():
     return out
 
 
-if __name__ == "__main__":
-    sys.exit(run())
-
-
 # =====================================================================================================
 # THE BAND AS A RUN PARAMETER (Brad's ruling 2026-08-24, before the 6b proving run).
 #
@@ -6834,3 +6830,11 @@ def _mechanical_lane_events():
                 "future - an unpairable start reads as a stage that never finished",
                 *_t3_stamp_ago_is_hunt_runs_own_format()))
     return res
+
+
+# The entry point MUST be the LAST thing in this file. It used to sit at old line 4509 with ~2,300
+# lines of fixture definitions BELOW it, so `run()` executed before those `def`s were bound and the
+# suite died on the first one it referenced (`_registrar_gets_evidence`, section B). Measured
+# 2026-08-25: 38 of 245+ assertions ran; everything from section B down had NEVER run, in any tree.
+if __name__ == "__main__":
+    sys.exit(run())
