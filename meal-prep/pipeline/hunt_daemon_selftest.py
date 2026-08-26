@@ -340,7 +340,9 @@ def run():
     fd = FakeDispatch({"recipe-ingredient-mapper": [
         {"results": [{"slug": "s1", "status": "ok", "state": "pricing", "absent_terms": terms,
                       "optional_absent": ["cilantro"]}]}]})
-    ps = FakePS()
+    # _asm_ps, NOT a bare FakePS: since Q1 the lane enqueues what hunt-run RECORDED, so an injected
+    # hunt-run that writes no state file leaves nothing to enqueue and this case reads empty.
+    ps = _asm_ps()
     _b8tmp = tempfile.mkdtemp(prefix="daemon-b8map-")
     d = daemon(run_dir=preresolved(_b8tmp, ["s1"]), dispatcher=fd, ps=ps)
     d.ch["map"].push({"slug": "s1"})
@@ -977,6 +979,34 @@ def run():
     T("MUST FIRE  zero absent WITH an optional_absent term advances to `priced` AND the optional "
       "term still reaches the queue - optional never blocked and does not start blocking here",
       *_m3_optional_still_reaches_the_queue())
+
+    # =================================================================================================
+    H("Q1 - a term recorded as BLOCKING is a term on the QUEUE (2026-08-26)")
+    # =================================================================================================
+    # These five run the REAL hunt-run.ps1 and the REAL ingredient-queue.ps1 against a scratch run dir
+    # and a scratch -QueueFile. Every M3 case above injects hunt-run, which is exactly why none of them
+    # could see this defect: an injected hunt-run cannot union a carriage term, so the claim and the
+    # record can never disagree inside a FakePS fixture. Pinning blocking_terms() or
+    # Get-CarriageBlockingTerms alone would have reproduced the call-site trap PLAN-map-judge-split
+    # section 4 names, so the pin is on the LANE.
+    T("MUST FIRE  after the map lane routes a recipe to `pricing`, EVERY non-optional term on its "
+      "state file exists in the ingredient queue - the postcondition, over the real scripts",
+      *_q1_every_blocking_term_is_on_the_queue())
+    T("MUST FIRE  a term the CARRIAGE UNION added and the mapper never claimed is enqueued too - the "
+      "8 stranded terms on hunt-2026-08-26-ten were every one of them this shape",
+      *_q1_the_carriage_half_is_enqueued_too())
+    T("MUST FIRE  NET 1: a line the mapper ruled `optional-note` is RECORDED on the recipe as "
+      "optional and never reaches the queue - it cannot block, and it must not vanish either",
+      *_q1_net1_the_mappers_own_ruling())
+    T("MUST FIRE  NET 2: a tap line the mapper MISLABELLED as a real purchase is still stopped, by "
+      "the stoplist - the two nets are tested apart because together they hide each other",
+      *_q1_net2_the_stoplist())
+    T("MUST FIRE  a derived item holding three spices is SPLIT - no comma survives onto the state "
+      "file and all three parts are on the queue",
+      *_q1_a_composite_line_is_split_and_each_part_queued())
+    T("CLEAN TWIN a recipe with nothing derived, nothing composite and nothing un-buyable queues "
+      "EXACTLY the mapper's claim - the fix does not turn the queue into a dumping ground",
+      *_q1_clean_twin_nothing_extra_is_queued())
 
     # =================================================================================================
     H("T7 / T8 - the two defects the T-shakedown run measured (2026-08-25)")
@@ -1991,6 +2021,305 @@ def _m3_optional_still_reaches_the_queue():
                  and "s1" not in d.pricing_slugs and not d.absent_terms),
                 "advanced=%s adds=%s absent_terms=%s" % (json.dumps(states), json.dumps(adds),
                                                          json.dumps(d.absent_terms)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# Q1 (2026-08-26) - A TERM RECORDED AS BLOCKING IS A TERM ON THE QUEUE. THE POSTCONDITION, AT THE CALL
+# SITE, OVER THE REAL SCRIPTS.
+#
+# THE DEFECT, measured on run hunt-2026-08-26-ten at 05:15. 5 of its 7 parked recipes were permanently
+# stranded: their state files carried BLOCKING term rows (optional=false) that were never added to
+# grocery\ingredient-queue.json, so -Derive scored them PENDING on every pass (an unchecked term is
+# never not-carried, which is correct) and they could never leave `parked`. Eight terms across five
+# recipes, none of them ever asked of anybody.
+#
+# AND THE CAUSE WAS NOT WHERE IT LOOKED. The map lane's -Add loop was honest: every term it advanced
+# with, it enqueued. But `hunt-run.ps1 -Advance -To pricing` is ITSELF A WRITER of the term list - it
+# unions in Get-CarriageBlockingTerms, ingredients the mapper mapped cleanly that no Omaha store
+# carries - and nothing enqueued THOSE. Two writers of the blocking list, one writer of the queue, and
+# no reconciliation between them. So the claim and the record were free to differ, and did.
+#
+# WHY THIS FIXTURE RUNS THE REAL SCRIPTS, and it is the whole reason it exists. Every M3 case below
+# injects hunt-run.ps1 through FakePS. An injected hunt-run cannot union anything, so not one of them
+# could ever have seen this - `_m3_absent_terms_still_price` asserts adds == the mapper's list and was
+# GREEN through all five stranded recipes. That is the call-site trap PLAN-map-judge-split section 4
+# names ("twice this build a neuter came back 0 red because a fixture pinned a function while the bug
+# lived at its call site"), and pinning Get-CarriageBlockingTerms or blocking_terms alone would repeat
+# it exactly. So the map lane runs for real here, against the real hunt-run.ps1 and the real
+# ingredient-queue.ps1, and the assertion is made over the two artifacts a person would read: the
+# recipe's state file and the queue.
+#
+# FIVE INGREDIENT ROWS, NOT ONE, and each is a way this can be wrong:
+#   * Gochujang     - claimed by the mapper AND derived. The overlap case: enqueued exactly once.
+#   * Doubanjiang   - derived ONLY (bid=null, mapped-null). THE REGRESSION: on disk as blocking,
+#                     never on the queue. This is the row that was red before the fix.
+#   * Water         - decision=optional-note. Must be RECORDED and must NOT block.
+#   * the spice line- one source line holding three spices. Must split, and each part must be queued.
+#   * Chicken       - a plain mapped row, present so the recipe is not made entirely of edge cases.
+# =====================================================================================================
+
+class MapLaneRealPS(object):
+    r"""Real ps_invoke for the two scripts this postcondition is ABOUT - hunt-run.ps1, which writes the
+    term list, and ingredient-queue.ps1, which is that list's other half - and an injected clean exit
+    for everything else the map lane shells (map-preresolve, whose own behaviour is fixtured in its own
+    suite and whose -Assemble would otherwise overwrite the mapped artifact this case hand-builds).
+
+    -QueueFile IS PINNED HERE, not on the daemon. Same reasoning as QueueScopedPS: the estate's
+    standing rule is that no drill touches the live worklist, the daemon has no queue-file seam and
+    must not grow one, so the seam lives at the injection point the daemon already has. Note the
+    daemon is therefore constructed WITHOUT queue_path - queue_args would append a SECOND -QueueFile
+    and PowerShell refuses a duplicated parameter.
+    """
+
+    def __init__(self, queue_file):
+        self.queue_file = queue_file
+        self.calls = []
+
+    def __call__(self, script, args, timeout=600):
+        name = os.path.basename(script)
+        a = list(args)
+        if "ingredient-queue" in name:
+            a += ["-QueueFile", self.queue_file]
+        self.calls.append({"script": name, "args": a})
+        if "hunt-run" in name and "-Derive" in a:
+            # NOT SKIPPED TO MAKE THE FIXTURE PASS - skipped because -Derive reads the LIVE ingredient
+            # queue by its own internal path, which no -QueueFile of ours reaches. Its behaviour is
+            # fixtured in hunt-run.ps1's own suite. Same call QueueScopedPS makes, same reason.
+            return 0, "", ""
+        if "hunt-run" in name or "ingredient-queue" in name:
+            return hunt_lib.ps_invoke(script, a, timeout)
+        return 0, "", ""
+
+    def find(self, script_part, flag=None):
+        return [c for c in self.calls
+                if script_part in c["script"] and (flag is None or flag in c["args"])]
+
+
+Q1_SLUG = "q1-dish"
+
+Q1_INGREDIENTS = [
+    {"source_raw": "1 lb chicken", "item": "Chicken", "bid": "chicken", "grams": 454,
+     "buy": "1 lb", "optional": False, "decision": "mapped", "notes": ""},
+    {"source_raw": "2 tbsp gochujang", "item": "Gochujang", "bid": "gochujang", "grams": 34,
+     "buy": "1 tub", "optional": False, "decision": "mapped", "notes": ""},
+    {"source_raw": "1 tbsp doubanjiang", "item": "Doubanjiang", "bid": None, "grams": 17,
+     "buy": "", "optional": False, "decision": "mapped-null",
+     "notes": "the Sichuan fermented broad-bean paste; no board id and no capture"},
+    # ONE ROW PER NET, AND EACH IS CAUGHT BY ITS OWN NET ALONE. The first attempt used a single
+    # optional-note row named 'Water' and the N1 neuter came back 0 RED: 'water' is also on the
+    # stoplist, so net 2 rescued it and the case could not tell the two nets apart. A fixture that
+    # stays green when you delete the thing it is named after is not testing that thing.
+    #   'Water'                    - decision=mapped-null, NOT optional. The mapper mislabelled a tap
+    #                                line as a real purchase, which is the only case net 2 exists for.
+    #                                Net 1 does not see it. Only the stoplist can catch it.
+    #   'Reserved Braising Liquid' - decision=optional-note, and deliberately NOT on the stoplist,
+    #                                because no list of names could hold every byproduct a recipe
+    #                                invents. Only the mapper's own ruling can catch it.
+    {"source_raw": "2 cups water", "item": "Water", "bid": None, "grams": 0, "buy": "",
+     "optional": False, "decision": "mapped-null",
+     "notes": "the mapper called a tap line a purchase - only the stoplist catches this"},
+    {"source_raw": "1/2 cup reserved braising liquid", "item": "Reserved Braising Liquid",
+     "bid": None, "grams": 0, "buy": "", "optional": True, "decision": "optional-note",
+     "notes": "what the pot leaves behind - nothing the shopper buys, and no stoplist knows it"},
+    {"source_raw": "1 tsp each garlic powder, cumin, and chili powder",
+     "item": "Garlic Powder, Cumin, and Chili Powder", "bid": None, "grams": 6, "buy": "",
+     "optional": False, "decision": "mapped-null",
+     "notes": "one source line holding three separate spices"},
+]
+
+Q1_SPICES = ["Garlic Powder", "Cumin", "Chili Powder"]
+
+
+def _q1_stage(tmp, ingredients=None):
+    """Stage ONE recipe at `extracted` in a scratch run dir, with the mapped artifact already on disk,
+    and return (run_dir, queue_file) - or (None, why) if the staging itself failed.
+
+    The state file is built by the REAL hunt-run.ps1, through -Init and the real transition chain,
+    because a hand-written state file is a state file this fixture invented and the whole point here is
+    that the real writer is under test.
+    """
+    run_dir = os.path.join(tmp, "run")
+    os.makedirs(run_dir, exist_ok=True)
+    qf = os.path.join(tmp, "scratch-queue.json")
+    rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+        "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
+        "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35", "-ProteinMin", "0"])
+    if rc != 0:
+        return None, "could not init a scratch run dir: %s" % o.strip()[:200]
+    for i, st in enumerate(("sourced", "selected", "extracted")):
+        args = ["-Advance", "-RunDir", run_dir, "-Slug", Q1_SLUG, "-To", st, "-By", "drill",
+                "-Detail", "drill"]
+        if i == 0:
+            args += ["-Title", "Q1 Dish", "-SourceUrl", "https://d/q1", "-Protein", "chicken"]
+        r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+        if r != 0:
+            return None, "could not stage %s: %s" % (st, (oo + ee).strip()[:200])
+
+    preresolved(run_dir, [Q1_SLUG], residual={Q1_SLUG: ["gochujang"]})
+    os.makedirs(os.path.join(run_dir, "extracted"), exist_ok=True)
+    with io.open(os.path.join(run_dir, "extracted", "%s.json" % Q1_SLUG), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"slug": Q1_SLUG, "title": "Q1 Dish", "source_url": "https://d/q1",
+                            "servings": 4, "ingredients": [], "instructions": []}))
+    # THE MAPPED ARTIFACT IS THE INPUT TO THE CARRIAGE UNION, so it is written here rather than left
+    # to map-preresolve -Assemble (which this fixture injects, so it writes nothing).
+    os.makedirs(os.path.join(run_dir, "mapped"), exist_ok=True)
+    with io.open(os.path.join(run_dir, "mapped", "%s.json" % Q1_SLUG), "w", encoding="utf-8") as f:
+        f.write(json.dumps({"slug": Q1_SLUG, "title": "Q1 Dish", "source_url": "https://d/q1",
+                            "source_servings": 4, "target_servings": 14, "protein": "chicken",
+                            "ingredients": list(Q1_INGREDIENTS if ingredients is None else ingredients),
+                            "pricing_terms_needed": ["gochujang"], "rejected": [],
+                            "new_commodity_proposals": [], "registrar_rulings": []}))
+    return (run_dir, qf), ""
+
+
+def _q1_run(tmp, ingredients=None, absent=("gochujang",)):
+    """One map-lane run over the staged recipe, with hunt-run.ps1 and ingredient-queue.ps1 REAL.
+    Returns (state_rows, queued_terms, why) - `why` non-empty means the drill could not be set up."""
+    staged, why = _q1_stage(tmp, ingredients=ingredients)
+    if why:
+        return [], [], why
+    run_dir, qf = staged
+
+    res = _mapper_result(Q1_SLUG)
+    res["state"] = "mapped"
+    res["absent_terms"] = list(absent)
+    res["optional_absent"] = []
+    ps = MapLaneRealPS(qf)
+    d = daemon(run_dir=run_dir, dispatcher=FakeDispatch({"recipe-ingredient-mapper": [{"results": [res]}]}),
+               ps=ps)
+    d.ch["map"].push({"slug": Q1_SLUG})
+    d.ch["map"].close()
+    arun(d.run(("map",)))
+
+    rows = []
+    try:
+        with io.open(os.path.join(run_dir, "state", "%s.json" % Q1_SLUG), encoding="utf-8-sig") as f:
+            doc = json.load(f)
+        raw = doc.get("terms") or []
+        if isinstance(raw, dict):
+            raw = [raw]
+        rows = [{"term": str(t.get("term") or ""), "optional": bool(t.get("optional")),
+                 "state": str(doc.get("state") or "")} for t in raw]
+    except Exception as e:                                        # noqa: BLE001
+        return [], [], "the state file could not be read back: %s" % e
+    # THE QUEUE FILE IS READ DIRECTLY. ingredient-queue.ps1 is its only writer and this is the artifact
+    # it writes - going back through -List -Json here would test the reader, and what is under test is
+    # whether the term is IN there at all.
+    queued = []
+    try:
+        if os.path.exists(qf):
+            with io.open(qf, encoding="utf-8-sig") as f:
+                queued = [str(i.get("term") or "") for i in (json.load(f).get("items") or [])]
+    except Exception as e:                                        # noqa: BLE001
+        return rows, [], "the scratch queue could not be read: %s" % e
+    return rows, queued, ""
+
+
+def _q1_every_blocking_term_is_on_the_queue():
+    """THE POSTCONDITION ITSELF. After the map lane routes a recipe to `pricing`, every non-optional
+    term on its state file exists in the queue. No exceptions, no allowance for the carriage half."""
+    tmp = tempfile.mkdtemp(prefix="daemon-q1a-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        if not rows:
+            return False, "the recipe reached `pricing` with NO term rows at all"
+        blocking = [r["term"] for r in rows if not r["optional"]]
+        missing = [t for t in blocking if t not in queued]
+        at = rows[0]["state"]
+        return (at == "pricing" and blocking and not missing,
+                "state=%s blocking=%s queued=%s MISSING=%s"
+                % (at, json.dumps(blocking), json.dumps(queued), json.dumps(missing)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_the_carriage_half_is_enqueued_too():
+    """The named regression. 'Doubanjiang' is derived by the carriage union and claimed by NOBODY -
+    the mapper never reports it. Before 2026-08-26 it landed on the state file as blocking and was
+    never enqueued, which is chicken-fried-steak's 'Pan Drippings' and stroganoff's 'Garlic Salt'."""
+    tmp = tempfile.mkdtemp(prefix="daemon-q1b-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        row = next((r for r in rows if r["term"] == "Doubanjiang"), None)
+        return (row is not None and not row["optional"] and "Doubanjiang" in queued,
+                "row=%s queued=%s" % (json.dumps(row), json.dumps(queued)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_recorded_not_blocking(term):
+    """Shared shape for the two nets: the term is ON the recipe, marked optional, and NOT on the queue.
+    Recorded because dropping it silently trades one invisible failure for another; not queued because
+    there is no store answer that could ever settle it."""
+    tmp = tempfile.mkdtemp(prefix="daemon-q1c-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        row = next((r for r in rows if r["term"] == term), None)
+        return (row is not None and row["optional"] and term not in queued,
+                "row=%s queued=%s" % (json.dumps(row), json.dumps(queued)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_net1_the_mappers_own_ruling():
+    """Defect 1, NET 1 - the ruling that was already on the row and was being discarded. 'Reserved
+    Braising Liquid' is on no stoplist and never could be; the only thing that knows it is a byproduct
+    is the mapper's own decision=optional-note, which is exactly what the carriage union used to throw
+    away before stamping optional=false over it."""
+    return _q1_recorded_not_blocking("Reserved Braising Liquid")
+
+
+def _q1_net2_the_stoplist():
+    """Defect 1, NET 2 - the backstop. Here the mapper got it WRONG and called a tap line a real
+    purchase (decision=mapped-null, optional=false), so net 1 lets it through and only
+    grocery\\non-purchasable-terms.json can stop it blocking."""
+    return _q1_recorded_not_blocking("Water")
+
+
+def _q1_a_composite_line_is_split_and_each_part_queued():
+    """Defect 2 (B8 class, reached from the derived side). One source line holding three spices can
+    never key a queue entry. It is SPLIT here rather than refused - Brad's ruling 2026-08-26 - and the
+    proof is that no comma survives onto the state file and all three spices are on the queue."""
+    tmp = tempfile.mkdtemp(prefix="daemon-q1d-")
+    try:
+        rows, queued, why = _q1_run(tmp)
+        if why:
+            return False, why
+        commas = [r["term"] for r in rows if "," in r["term"]]
+        blocking = [r["term"] for r in rows if not r["optional"]]
+        got = [s for s in Q1_SPICES if s in blocking and s in queued]
+        return (not commas and len(got) == 3,
+                "commas=%s spices_blocking_and_queued=%s blocking=%s"
+                % (json.dumps(commas), json.dumps(got), json.dumps(blocking)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _q1_clean_twin_nothing_extra_is_queued():
+    """CLEAN TWIN. A mapped artifact with no derived blockers, no composite and no un-buyable line must
+    queue EXACTLY the mapper's claim - the fix must not turn the queue into a dumping ground for every
+    ingredient in the recipe, which is the obvious over-correction."""
+    tmp = tempfile.mkdtemp(prefix="daemon-q1e-")
+    try:
+        clean = [dict(Q1_INGREDIENTS[1])]              # Gochujang alone: claimed AND derived
+        # THE CLAIM IS SPELLED AS THE ARTIFACT SPELLS IT, so the overlap collapses to one row. The
+        # main case above deliberately does NOT do this - it claims 'gochujang' against an item named
+        # 'Gochujang', which is how the two writers really spell things (the mapper lowercases, the
+        # artifact keeps the label's case) and which is worth seeing in a `got` line.
+        rows, queued, why = _q1_run(tmp, ingredients=clean, absent=("Gochujang",))
+        if why:
+            return False, why
+        blocking = sorted(r["term"] for r in rows if not r["optional"])
+        return (sorted(queued) == ["Gochujang"] and blocking == ["Gochujang"],
+                "blocking=%s queued=%s" % (json.dumps(blocking), json.dumps(sorted(queued))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -3179,14 +3508,62 @@ def _map_prompt_is_residual():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _asm_ps(rc=0, out=""):
-    """A FakePS whose map-preresolve -Assemble call answers with a chosen exit code. The pre-resolve
-    road must keep answering 0, or the batch is blocked before the mapper is ever dispatched."""
+def _asm_ps(rc=0, out="", derived=None, skipped=None):
+    r"""A FakePS whose map-preresolve -Assemble call answers with a chosen exit code. The pre-resolve
+    road must keep answering 0, or the batch is blocked before the mapper is ever dispatched.
+
+    AND, SINCE Q1 (2026-08-26), its hunt-run.ps1 -Advance actually WRITES the recipe's state file.
+    That is not decoration: the map lane no longer enqueues the mapper's CLAIM, it advances first and
+    then enqueues whatever hunt-run RECORDED, so an injected hunt-run that writes nothing leaves the
+    lane reading an absent state file and every M3 case goes STUCK. The write here mirrors the real
+    -Advance union - -Terms plus `derived` as blocking rows, -OptionalTerms plus `skipped` as optional
+    ones, first spelling wins - so these cases keep testing the ROUTE for zero tokens.
+
+    THEY DO NOT TEST THE UNION, and must not be read as if they did: `derived` is this helper's
+    simulation of it. The union itself, and the postcondition over it, are pinned in the Q1 section
+    against the REAL hunt-run.ps1 - which is the whole reason that section exists.
+    """
     def reply(args):
         if "-Assemble" in args:
             return rc, out, ""
         return 0, "", ""
-    return FakePS(replies={"map-preresolve": reply})
+
+    def hunt_run(args):
+        if "-Advance" not in args:
+            return 0, "", ""
+        slug = FakePS.value_after(args, "-Slug")
+        run_dir = FakePS.value_after(args, "-RunDir")
+        to = FakePS.value_after(args, "-To")
+        # NEVER CREATE THE RUN DIR ITSELF. daemon() defaults run_dir to "R", so a fixture that takes
+        # that default would have this helper mkdir a stray `R\state` INSIDE meal-prep\pipeline - a
+        # test artifact committed to the repo. Only a run dir that already exists is written to.
+        if not slug or not run_dir or not os.path.isdir(run_dir):
+            return 0, "", ""
+        sd = os.path.join(run_dir, "state")
+        os.makedirs(sd, exist_ok=True)
+        sp = os.path.join(sd, "%s.json" % slug)
+        try:
+            with io.open(sp, encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            doc = {"slug": slug, "history": [], "terms": []}
+        doc["state"] = to
+        if to == "pricing":
+            rows, seen = [], set()
+            for t in list(FakePS.value_after(args, "-Terms") or []) + list(derived or []):
+                if t and t not in seen:
+                    seen.add(t)
+                    rows.append({"term": t, "optional": False})
+            for t in list(FakePS.value_after(args, "-OptionalTerms") or []) + list(skipped or []):
+                if t and t not in seen:
+                    seen.add(t)
+                    rows.append({"term": t, "optional": True})
+            doc["terms"] = rows
+        with io.open(sp, "w", encoding="utf-8") as f:
+            f.write(json.dumps(doc))
+        return 0, "", ""
+
+    return FakePS(replies={"map-preresolve": reply, "hunt-run": hunt_run})
 
 
 def _mapper_result(slug, proposals=None):
@@ -3403,7 +3780,7 @@ def _unbid_holds():
 def _no_hold_routes_normally():
     tmp = tempfile.mkdtemp(prefix="daemon-nohold-")
     try:
-        ps = FakePS()
+        ps = _asm_ps()          # Q1: the -Add is driven off the state file hunt-run writes
         d, _fd = _map_daemon(tmp, ["s1"],
                              {"results": [{"slug": "s1", "status": "ok", "state": "pricing",
                                            "absent_terms": ["sumac"]}]}, ps=ps)
