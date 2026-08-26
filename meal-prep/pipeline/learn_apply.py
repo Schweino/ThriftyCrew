@@ -362,11 +362,36 @@ class EventLog(object):
 # THIS clause. Both halves are pinned below against the verbatim 2.6 text - the MUST-FIRE with bid
 # `chicken-thighs` (the slip), and the CLEAN TWIN with bid `chicken-drumsticks` (the correct ruling
 # 2.7 describes, whose id appears only after the colon that ends the refusal).
+#
+# **CORRECTED AGAIN 2026-08-26**: THE BID HAD NO TOKEN BOUNDARY, so it matched INSIDE a longer
+# hyphenated id. `re.escape(bid)` on its own makes `tortillas` a match inside `corn-tortillas`, and
+# `chicken-thighs` a match inside `boneless-chicken-thighs` - so a ruling that REFUSED A SIBLING id
+# and bid the correct one read as refusing its own bid. That is the exact reasoning a good mapper
+# ruling contains ("corn and flour tortillas are different products"), so the check was punishing the
+# rulings it should trust most.
+#
+# Found when the sibling check's PowerShell twin, `map-preresolve.Test-BidContradictsNotes`, produced
+# this estate's first production firing of the notes-vs-bid check - a FALSE POSITIVE on
+# `easy-beef-enchiladas`, run hunt-2026-08-26-smoke - and the two implementations turned out to
+# disagree about boundaries: the PowerShell one had the lookarounds and this one did not. The pen was
+# not what stuck that recipe (it passes the MAPPER's bid, `flour-tortillas`, which never matched), but
+# the same defect was sitting here waiting for a bid that IS a token of a refused sibling.
+#
+# A REFUSED SIBLING IS NOT A REFUSED BID. The lookarounds below are `(?<![a-z0-9-])` and
+# `(?![a-z0-9-])` - an id character on either side means the match landed inside a DIFFERENT id, and
+# ids in this estate are lowercase alphanumerics joined by hyphens. Non-id characters (whitespace,
+# quotes, backticks, punctuation) and the string ends are all real boundaries.
 _REFUSE_HEAD = r"(refus\w*|reject\w*|not\s+the|is\s+not)"
+
+# an id character - the estate's ids are lowercase alphanumerics joined by hyphens, so a match with
+# one of these on either side is a match INSIDE some other id, not a mention of this one
+_ID_CH = r"[a-z0-9-]"
 
 
 def refuse_near_bid(bid):
-    return re.compile(_REFUSE_HEAD + r"[^.;:!?]{0,80}?" + re.escape(str(bid)), re.I)
+    return re.compile(_REFUSE_HEAD + r"[^.;:!?]{0,80}?"
+                      + r"(?<!" + _ID_CH + r")" + re.escape(str(bid)) + r"(?!" + _ID_CH + r")",
+                      re.I)
 
 
 def notes_refuse_bid(evidence, bid):
@@ -838,6 +863,21 @@ OI26 = ("Bone-in skinless chicken drumstick. Refused the chicken-thighs bridge o
         "'leg quarters are not thighs' precedent: drumsticks are a distinct cut, so the thigh id "
         "would overprice and mis-weigh.")
 
+# THE FALSE POSITIVE, FROZEN. Verbatim from `easy-beef-enchiladas` in run hunt-2026-08-26-smoke - the
+# notes-vs-bid check's first production firing, and it stuck a CORRECT recipe. The mapper bid
+# `flour-tortillas` and refused `corn-tortillas`. Three ids are named here and each reads differently:
+#   `corn-tortillas`  - genuinely refused, and the only id this evidence refuses
+#   `tortillas`       - a token INSIDE `corn-tortillas`, and separately a standalone mention in the
+#                       clause after the colon that EXPLAINS the refusal. Neither is a refusal.
+#   `flour-tortillas` - the bid, never refused; it appears in the prose only as "flour tortillas"
+# The backticks around `tortillas` are the real evidence's own, and they are a boundary character.
+TORT_2608 = ("Refused the corn-tortillas bridge: corn and flour tortillas are different products at "
+             "different per-unit prices and gram weights. New id proposed with an alias instruction "
+             "against the generic `tortillas` board id. 8 x 71 g.")
+
+# A REFUSED SIBLING WHOSE ID ENDS IN THE BID, the direction the enchiladas text does not cover.
+SIBLING_2608 = "Refused boneless-chicken-thighs: this line is the bone-in cut, sold by a different id."
+
 
 def _ruling(raw, term, bid, decision="mapped", evidence="e", canon=None):
     return {"raw": raw, "term": term, "canon_item": canon if canon is not None else term.title(),
@@ -958,6 +998,32 @@ def cmd_selftest(_a):
       "fired")
     T("CLEAN TWIN  a refusal in a PREVIOUS clause does not reach across the punctuation",
       not notes_refuse_bid("rejected the bridge; salt is the right id here", "salt"), "fired")
+
+    # ---- the 2026-08-26 false positive, and the boundary that was missing ----------------------
+    # A REFUSED SIBLING IS NOT A REFUSED BID. Before the boundary fix, `re.escape(bid)` matched
+    # inside a longer hyphenated id, so evidence refusing `corn-tortillas` read as refusing
+    # `tortillas` - and the reasoning that distinguishes two neighbouring products, which is
+    # exactly what a good ruling contains, was what tripped the check.
+    T("CLEAN TWIN  the enchiladas MAPPER bid `flour-tortillas` does not fire on evidence that "
+      "refuses `corn-tortillas` - this is the ruling the check stuck on 2026-08-26",
+      not notes_refuse_bid(TORT_2608, "flour-tortillas"), "flagged a correct ruling")
+    T("CLEAN TWIN  the ALIAS-RESOLVED `tortillas` does not fire either: it is a token INSIDE the "
+      "refused `corn-tortillas`, and its standalone mention is past the colon that ends the refusal",
+      not notes_refuse_bid(TORT_2608, "tortillas"), "the false positive fired again")
+    T("MUST FIRE  ...and the id that WAS refused still fires on the very same evidence, so the "
+      "boundary narrowed this check rather than disabling it",
+      notes_refuse_bid(TORT_2608, "corn-tortillas"), "missed the real refusal")
+    T("CLEAN TWIN  a refused SIBLING sharing a token - `chicken-thighs` inside "
+      "`boneless-chicken-thighs` - is sound reasoning, not a contradiction",
+      not notes_refuse_bid(SIBLING_2608, "chicken-thighs"), "matched inside a longer id")
+    T("MUST FIRE  ...and bidding the exact sibling that was refused still fires",
+      notes_refuse_bid(SIBLING_2608, "boneless-chicken-thighs"), "missed an exact contradiction")
+    # THE BOUNDARY IN BOTH DIRECTIONS. The enchiladas case has the bid at the TAIL of the refused id
+    # (`tortillas` in `corn-tortillas`); this has it at the HEAD, which only the lookAHEAD catches.
+    T("CLEAN TWIN  a bid that is the HEAD of a longer refused id does not fire either - the "
+      "lookahead carries this direction and the lookbehind carries the other",
+      not notes_refuse_bid("Refused chicken-thighs-boneless here", "chicken-thighs"),
+      "matched at the head of a longer id")
     T("an empty bid or empty evidence never fires", not notes_refuse_bid("", "x")
       and not notes_refuse_bid("refused x", ""), "fired")
 

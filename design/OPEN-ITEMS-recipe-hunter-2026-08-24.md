@@ -125,6 +125,60 @@ Two things worth carrying forward from building it:
   `chicken-drumsticks`, which is §2.7's correct ruling and whose id appears only after the colon
   that ends the refusal clause.
 
+**CORRECTED 2026-08-26, after the check's FIRST production firing was a FALSE POSITIVE.**
+`easy-beef-enchiladas` in run `hunt-2026-08-26-smoke` was STUCK on a ruling that was correct and
+internally consistent: bid `flour-tortillas`, evidence *"Refused the corn-tortillas bridge: corn and
+flour tortillas are different products at different per-unit prices and gram weights. New id proposed
+with an alias instruction against the generic `tortillas` board id."* It refused CORN tortillas and bid
+FLOUR tortillas. Nothing contradicted anything. Two independent defects compounded, and there turned
+out to be TWO implementations of this check that had drifted apart:
+
+* **The assembler ran it on the WRONG BID.** `map-preresolve.ps1` rewrites `$bid` to the registrar's
+  alias target before assembling (here `flour-tortillas` -> `tortillas`, correctly - commodities.json
+  labels that id "Tortillas (flour)"), and the check then asked whether evidence written about the
+  PRE-resolution ids refused an id the mapper never bid. The question has no meaning. The mapper's own
+  bid is now frozen as `$ruledBid` before the registrar gate, and the check and its finding both read
+  that. `learn_apply` was already right here - it checks at the pen, before alias resolution.
+* **The clause bound did not include the COLON**, in the PowerShell twin only (`[^.;]` against
+  `learn_apply`'s `[^.;:!?]`). The token guards correctly refused to match `tortillas` inside
+  `corn-tortillas`; what fired was the STANDALONE `tortillas` 45 characters later, in the clause that
+  EXPLAINS the refusal. Naming the bid there is what a good ruling looks like.
+* **And `learn_apply` had NO TOKEN BOUNDARY AT ALL** - a latent copy of the same class, found only by
+  reading the two implementations side by side. Bare `re.escape(bid)` matches inside a longer
+  hyphenated id, so evidence refusing `boneless-chicken-thighs` read as refusing `chicken-thighs`. A
+  refused SIBLING is not a refused bid; both predicates now require an id boundary on both sides.
+
+C1's widened gap class was NOT reverted - it fixed a real false negative ("Refused **the**
+chicken-thighs bridge") and the founding MUST-FIRE still needs it. Measured: the founding fixture
+passes with the colon in or out of the gap class, because `drumsticks` sits 91 characters from the
+refusal word and the LENGTH bound was already excluding it. The clause bound and the token bounds carry
+this check; the gap WIDTH does not.
+
+Pinned at the PREDICATE and at the CALL SITE (the PLAN-map-judge-split section 4 trap - a predicate can
+be right while the call site feeds it the wrong argument, and every predicate fixture still reads
+green). map-preresolve 128 -> 136 assertions, learn_apply 53 -> 59, no assertion NAME lost in either.
+Each half was neutered separately and measured red: colon revert 1 red, call-site revert 2 red, PS token
+bounds 3 red, PY token bounds 3 red.
+
+**A SECOND, SEPARATE BLOCKER ON THE SAME RECIPE - also fixed, 2026-08-26.** With the false positive
+gone `easy-beef-enchiladas` still did not assemble. Its `optional toppings: diced onions, chopped
+cilantro, sour cream, shredded lettuce` line is ruled `mapped-null` on an `optional: true` row, which
+`Get-AssembledDecision` maps to `mapped-optional` - a decision that then REQUIRES a gram weight the line
+can never have. Every stage before the assembler had it right; the mapper's own evidence says "Garnish
+to taste, pantry-static and safe".
+
+`GARNISH_PHRASES` could not see it: every phrase there is a TRAILING qualifier on ONE food ("Fresh
+parsley (to garnish)"), and this is the other shape a source uses for the same statement - a LABEL at
+the front with the foods listed after a colon. Added `GARNISH_LABEL_RX` for that shape, rather than
+widening `Get-AssembledDecision`, because the blast radius is provably nothing: `Test-IsGarnishLine` is
+reached ONLY where neither the qty engine nor the mapper could weigh the line, so it can only fire where
+the recipe dies today. `mapped-optional` is untouched for every line that already works.
+
+Measured across all 40 rulings files in `meal-prepuns`: exactly 2 lines reach the assembler needing
+grams and stating none - this one, and the rice-blend alternatives line D5 already settles. So it was
+about 1 recipe in 40 on the wide run. The recipe now assembles with 0 findings: tortillas 994 g
+(568 x 1.75) on the registrar's alias, toppings a zero-gram `optional-note` NAMED in the file.
+
 ### 2.7 CORRECTED same day: the thigh/drumstick grouping is DELIBERATE, and the real defect is
 ### an EXCLUDE pattern that removes the food the id claims to carry
 
