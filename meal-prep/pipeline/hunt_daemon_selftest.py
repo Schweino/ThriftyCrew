@@ -820,6 +820,26 @@ def run():
     T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
       "agree with each other, never that they are this food's numbers",
       *_fooddb_needs_a_source())
+    T("MUST FIRE  H3: a row landing beside a name that differs only by plural or punctuation is "
+      "NAMED - the exact-name check is why this DB holds Apple/Apples, Lemon/Lemons, Green Bell "
+      "Pepper(s) and Fresh Thyme twice",
+      *_fooddb_near_name_twin_is_named_but_still_written())
+    T("MUST FIRE  H3: ...and the key is the PRECISE one, not the head-noun scoring - it keeps digits "
+      "so 93/7 and 90/10 Ground Beef stay apart, and keeps noise words so Hot Sauce and Alfredo "
+      "Sauce do too",
+      *_fooddb_near_name_key_is_precise_not_recall())
+    T("CLEAN TWIN H3: both halves of a collision can be NEW in one payload - an index built only "
+      "from what was already on disk would miss it",
+      *_fooddb_near_name_catches_two_new_rows_in_one_payload())
+    T("CLEAN TWIN H3: a real new variant says NOTHING - a check that questioned every ground-beef "
+      "ratio would be trained out of existence inside a week",
+      *_fooddb_near_name_is_silent_on_a_real_variant())
+    T("LOCKSTEP  the LIVE food DB still holds exactly the four known name collisions - a fifth is a "
+      "real find and this is where it surfaces",
+      *_fooddb_near_name_matches_the_live_db())
+    T("the key's 'ss' guard is DORMANT and says so - no live name ends in ss, its neuter fires "
+      "nothing, and inventing a fixture to hide that would prove only the fixture",
+      *_fooddb_near_name_ss_guard_is_dormant())
     T("MUST FIRE  two concurrent map workers each carrying three rows leave SIX rows in the file",
       *_fooddb_concurrent_writers())
     T("MUST FIRE  ...and the neuter is REPRODUCED here: with a no-op lock the same two writers lose "
@@ -6325,6 +6345,139 @@ def _fooddb_a_different_basis_is_always_a_conflict():
         return ok, "written=%s finding=%s" % (written, json.dumps(named)[:400])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_twin_is_named_but_still_written():
+    """H3 (2026-08-26). THE FOUR LIVE COLLISIONS, and every one is a food the DB already had:
+    'Apple'/'Apples', 'Lemon'/'Lemons', 'Green Bell Pepper'/'Green Bell Peppers' and 'Fresh Thyme'
+    TWICE. They landed because every check above the write asked only "is there a row called EXACTLY
+    that". The lookup is a name-keyed dict here and in Get-MacroRecompute, so a duplicate does not
+    announce itself - one row shadows the other and a recipe can be costed off whichever won.
+
+    IT IS A FINDING AND THE ROW STILL LANDS. Refusing would park the recipe over a NAMING question,
+    which is the failure class this whole commit removes.
+    """
+    prior = _good_row("Apple", serving_grams=100, calories=52, protein_g=0.3, carbs_g=14, fat_g=0.2)
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        twin = _good_row("Apples", serving_grams=100, calories=63, protein_g=0.2, carbs_g=15.2,
+                         fat_g=0.18)
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [twin, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
+        names = sorted(r.get("item") for r in _db_items(path)["items"])
+        named = [f for f in findings if "'Apple'" in f and "'Apples'" in f]
+        ok = (len(named) == 1
+              # the row LANDED - a naming question must never park a recipe
+              and "Apples" in names and "Apple" in names and "Apples" in written
+              # ...and the finding says the lookup is name-keyed, or nobody knows why it matters
+              and "shadows" in named[0])
+        return ok, "written=%s finding=%s" % (json.dumps(written), json.dumps(named)[:300])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_key_is_precise_not_recall():
+    """THE KEY IS THE DESIGN, and this is the case that chooses it. Measured over the live 369-row DB
+    the day this was written: this key finds 4 collisions and all 4 are real duplicates; the
+    head-noun scoring finds 103 pairs of which 21 are the single word "sauce". A write-time check
+    that fires on every new sauce row forever is a check nobody reads, so recall belongs on the
+    mapper's shelf and precision belongs here."""
+    k = daemon(run_dir=".")._loose_name_key
+    same = [("Apple", "Apples"), ("Lemon", "Lemons"),
+            ("Green Bell Pepper", "Green Bell Peppers"),
+            ("Fresh Thyme", "fresh  thyme"), ("Bok Choy", "bok-choy")]
+    apart = [("93/7 Ground Beef", "90/10 Ground Beef"),   # digits KEPT - head-noun strips both to "beef"
+             ("Hot Sauce", "Alfredo Sauce"),              # "hot" is a NOISE word to the head-noun road
+             ("Honey", "Hot Honey"), ("Paprika", "Smoked Paprika"),
+             ("Monterey Jack Cheese", "Pepper Jack Cheese")]
+    bad = [(a, b) for a, b in same if k(a) != k(b)] + [(a, b) for a, b in apart if k(a) == k(b)]
+    return not bad, "misjudged: %s" % json.dumps(bad)
+
+
+def _fooddb_near_name_ss_guard_is_dormant():
+    """THE ONE PART OF THE KEY THAT IS NOT LOAD-BEARING, said out loud rather than dressed up.
+
+    The 'ss' guard is inherited from coverage_check's _words so the two normalisations read the same,
+    and it exists so a future 'Watercress' does not become 'watercres'. MEASURED 2026-08-26 across
+    the food DB and the vocabulary together: NOT ONE name ends in 'ss', and the collision set is
+    identical with the guard on or off. Its neuter therefore fires nothing, and a fixture invented to
+    make it look load-bearing would be a fixture that proves the fixture.
+
+    So this asserts the true thing - that the guard is DORMANT - and it starts meaning something the
+    day someone adds a food whose name ends in 'ss'.
+    """
+    k = daemon(run_dir=".")._loose_name_key
+    names = []
+    for rel in (("food-macros-db.json",), ("db", "ingredients.json")):
+        p = os.path.join(os.path.dirname(HERE), *rel)
+        if not os.path.exists(p):
+            return False, "cannot read %s" % p
+        with io.open(p, encoding="utf-8-sig") as fh:
+            doc = json.load(fh)
+        rows = doc.get("items") if isinstance(doc, dict) else doc
+        names += [r["item"] for r in rows if isinstance(r, dict) and r.get("item")]
+    ends_ss = [n for n in set(names) if re.sub(r"[^a-z0-9]+", "", n.lower()).endswith("ss")]
+    # and the guard genuinely separates the pair it exists for, whether or not one is in use yet
+    works = k("Watercress") != k("Watercres")
+    return (not ends_ss) and works, ("names ending in ss: %s (a non-empty list here means the guard "
+                                     "has woken up and wants a real fixture)" % json.dumps(ends_ss))
+
+
+def _fooddb_near_name_catches_two_new_rows_in_one_payload():
+    """CLEAN TWIN: the two colliding rows can BOTH be new. 'Fresh Thyme' is in the live DB twice and
+    neither copy carries added_by, so they arrived before the pen moved - but nothing stops one
+    payload carrying both halves, and an index built only from what was ALREADY on disk would miss
+    it."""
+    d, path, tmp = _food_db_run(None)
+    try:
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [_good_row("Fresh Thyme"), _good_row("Fresh Thymes"),
+                   _good_row("Fixture Beef")]))
+        named = [f for f in findings if "Fresh Thyme" in f]
+        ok = len(named) == 1 and sorted(written) == ["Fixture Beef", "Fresh Thyme", "Fresh Thymes"]
+        return ok, "written=%s finding=%s" % (json.dumps(written), json.dumps(named)[:260])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_is_silent_on_a_real_variant():
+    """CLEAN TWIN and the reason the key keeps its digits. A new ground-beef ratio is a REAL new food
+    the estate buys separately, and a check that questioned every one of them would be trained out of
+    existence inside a week."""
+    prior = _good_row("93/7 Ground Beef")
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [_good_row("90/10 Ground Beef"), _good_row("80/20 Ground Beef"),
+                   _good_row("Fixture Lamb")]))
+        ok = (not findings and len(written) == 3)
+        return ok, "written=%s findings=%s" % (json.dumps(written), json.dumps(findings)[:260])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_near_name_matches_the_live_db():
+    """LOCKSTEP with the real file. The key's whole claim is a measurement - 4 collisions, all real -
+    and a measurement nobody re-runs is a comment. This re-runs it: if the live DB grows a fifth
+    collision, or the key starts pairing foods that are genuinely distinct, this says so."""
+    live = os.path.join(os.path.dirname(HERE), "food-macros-db.json")
+    if not os.path.exists(live):
+        return False, "no live food DB at %s" % live
+    with io.open(live, encoding="utf-8-sig") as fh:
+        rows = json.load(fh).get("items") or []
+    k = daemon(run_dir=".")._loose_name_key
+    groups = {}
+    for r in rows:
+        if isinstance(r, dict) and r.get("item"):
+            groups.setdefault(k(r["item"]), []).append(r["item"])
+    hits = sorted(v for v in groups.values() if len(v) > 1)
+    want = sorted([["Apple", "Apples"], ["Fresh Thyme", "Fresh Thyme"],
+                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
+                  key=lambda v: sorted(v))
+    got = sorted(hits, key=lambda v: sorted(v))
+    ok = [sorted(v) for v in got] == [sorted(v) for v in want]
+    return ok, ("the live DB's collision set is %s (expected the four known duplicates; a NEW one "
+                "here is a real find, not a broken fixture)" % json.dumps(hits))
 
 
 def _fooddb_agreeing_bases_are_not_a_conflict():
