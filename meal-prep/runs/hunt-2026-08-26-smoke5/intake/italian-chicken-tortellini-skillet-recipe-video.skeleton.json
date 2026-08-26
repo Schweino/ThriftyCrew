@@ -1,0 +1,132 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T13:31:01",
+    "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Italian Chicken Tortellini Skillet + RECIPE VIDEO",
+                   "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Vegetable Oil",
+                                           "grams":  49,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1400,
+                                           "buy":  "3 lb, cut into 1/2-inch pieces (about 7 breasts)"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  32,
+                                           "buy":  "10 to 11 cloves, finely minced"
+                                       },
+                                       {
+                                           "item":  "Dried Basil",
+                                           "grams":  4,
+                                           "buy":  "1 tablespoon plus 1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Dried Oregano",
+                                           "grams":  4,
+                                           "buy":  "1 tablespoon plus 1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  21,
+                                           "buy":  "1 tablespoon plus 1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Dried Thyme",
+                                           "grams":  2,
+                                           "buy":  "1 3/4 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  1,
+                                           "buy":  "a scant 1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Diced Tomatoes",
+                                           "grams":  1438,
+                                           "buy":  "6 cups with their juice (about three and a half 14 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Roasted Red Peppers",
+                                           "grams":  245,
+                                           "buy":  "1 3/4 cups, chopped"
+                                       },
+                                       {
+                                           "item":  "Heavy Cream",
+                                           "grams":  416,
+                                           "buy":  "1 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Chicken Broth",
+                                           "grams":  420,
+                                           "buy":  "1 3/4 cups low-sodium"
+                                       },
+                                       {
+                                           "item":  "Cornstarch",
+                                           "grams":  19,
+                                           "buy":  "2 tablespoons plus 1 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Cheese Tortellini",
+                                           "grams":  1225,
+                                           "buy":  "2 lb 11 oz (about 10 1/2 cups)"
+                                       },
+                                       {
+                                           "item":  "Spinach",
+                                           "grams":  105,
+                                           "buy":  "3 1/2 cups, chopped"
+                                       },
+                                       {
+                                           "item":  "Mozzarella Cheese",
+                                           "grams":  392,
+                                           "buy":  "3 1/2 cups, shredded"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  49,
+                                           "buy":  "7 tablespoons, grated"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  535,
+                                              "protein_g":  36.8,
+                                              "carbs_g":  39.9,
+                                              "fat_g":  24.4
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT20M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

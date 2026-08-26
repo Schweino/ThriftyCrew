@@ -1,0 +1,252 @@
+﻿{
+    "slug":  "copycat-longhorn-parmesan-crusted-chicken",
+    "title":  "Copycat Longhorn Parmesan Crusted Chicken",
+    "source_url":  "https://thecozycook.com/parmesan-crusted-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "4 skinless/boneless chicken breasts",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  2380,
+                            "buy":  "14 boneless skinless breasts (about 5 1/4 lb), pounded to even thickness",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "170 g (6 oz) raw per breast, one breast per serving. Word-for-word the vocabulary row\u0027s own name reordered, board 7 of 7. No stated weight, so 170 g (6 oz) raw per breast - the standard tray breast and close to the estate\u0027s 167 g/serving average; the source\u0027s implied ~110 g per breast is not supportable (see macro check).",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Salt/Pepper (to taste)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "Salt and pepper, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027salt pepper\u0027 -\u003e salt (by mapper on 2026-08-26T05:08:04); nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 Tablespoons vegetable oil",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  147,
+                            "buy":  "2/3 cup (for the marinade, mostly discarded)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: vegetable-oil, 7 of 7 stores, cheapest 0.0666 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/3 cup olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  252,
+                            "buy":  "1 cup plus 2 1/2 tablespoons (for the marinade, mostly discarded)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/3 cup ranch dressing",
+                            "item":  "Ranch Dressing",
+                            "bid":  "ranch-dressing",
+                            "board":  "weekly",
+                            "grams":  261,
+                            "buy":  "1 cup plus 2 1/2 tablespoons (for the marinade, mostly discarded)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ranch-dressing, 7 of 7 stores, cheapest 0.08 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons Worcestershire sauce",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  "worcestershire",
+                            "board":  "recipe",
+                            "grams":  119,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: worcestershire, 6 of 7 stores, cheapest 0.1 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon Distilled white vinegar",
+                            "item":  "White Vinegar",
+                            "bid":  "white-vinegar",
+                            "board":  null,
+                            "grams":  18,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed water-like. Same-form vocabulary row White Vinegar [white-vinegar], board 7 of 7; \u0027distilled\u0027 is how the same jug is labelled, not a different food.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon lemon juice",
+                            "item":  "Lemon Juice",
+                            "bid":  "lemon-juice",
+                            "board":  "recipe",
+                            "grams":  18,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: lemon-juice, 7 of 7 stores, cheapest 0.0675 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon minced garlic",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  30,
+                            "buy":  "3 1/2 tablespoons minced (about 10 cloves)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027minced garlic\u0027 -\u003e garlic (by mapper on 2026-08-26T04:52:59); nearest vocabulary rows: Garlic Powder [garlic-powder] DIFFERENT FORM: minced/powder | Garlic [garlic] DIFFERENT FORM: minced; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  null,
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "2.3 g per tsp ground black pepper. Bare \u0027pepper\u0027 beside salt in a marinade is ground black pepper, not a bell pepper - the same-form vocabulary row Black Pepper [black-pepper] is the estate\u0027s own name and id. The pre-resolver found no commodity claiming the term (captures only), so I also report it absent.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup Parmesan cheese (chopped into bits)",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  "recipe",
+                            "grams":  196,
+                            "buy":  "1 3/4 cups, chopped into bits",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: parmesan, 7 of 7 stores, cheapest 0.3092 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup Provolone cheese (chopped into bits)",
+                            "item":  "Provolone Cheese",
+                            "bid":  "provolone-cheese",
+                            "board":  "recipe",
+                            "grams":  196,
+                            "buy":  "1 3/4 cups, chopped into bits (about 7 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "56 g per 1/2 cup chopped deli provolone.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "6 Tablespoons Buttermilk Ranch salad dressing (regular Ranch is fine as well)",
+                            "item":  "Ranch Dressing",
+                            "bid":  "ranch-dressing",
+                            "board":  null,
+                            "grams":  294,
+                            "buy":  "1 1/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "14 g per tbsp, the basis the DB\u0027s Ranch Dressing row already uses. Buttermilk ranch is the standard ranch bottle and the line itself says regular ranch is fine; same-form vocabulary row, board 7 of 7.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 Tablespoons melted butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  196,
+                            "buy":  "14 tablespoons (1 3/4 sticks), melted",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3/4 cup panko breadcrumbs",
+                            "item":  "Panko Breadcrumbs",
+                            "bid":  "bread-crumbs",
+                            "board":  "weekly",
+                            "grams":  158,
+                            "buy":  "2 2/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "30 g per 1/2 cup from the DB row.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  22,
+                            "buy":  "2 tablespoons plus 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "black pepper"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "copycat-longhorn-parmesan-crusted-chicken: the food DB already carries \u0027White Vinegar\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, carbs_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 0 vs 18; carbs_g 0 vs 0.9. existing={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 18, \"carbs_g\": 0.9} new={\"serving_grams\": 15, \"serving_qty\": 1, \"serving_unit\": \"tbsp\", \"calories\": 0, \"carbs_g\": 0}",
+                            "copycat-longhorn-parmesan-crusted-chicken: the food DB already carries \u0027Black Pepper\u0027 and the mapper\u0027s row DIFFERS on calories, carbs_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 tsp = 2.3 g) they still disagree: calories 0 vs 6; carbs_g 0 vs 1. existing={\"calories\": 6, \"carbs_g\": 1} new={\"calories\": 0, \"carbs_g\": 0}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u0027Salt/Pepper (to taste)\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  660,
+                                                                   "carbs_g":  13,
+                                                                   "protein_g":  35
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  891,
+                                                               "carbs_g":  15.1,
+                                                               "protein_g":  48.7
+                                                           },
+                              "deltas":  {
+                                             "calories_pct":  35.0,
+                                             "carbs_pct":  16.2,
+                                             "protein_pct":  39.1
+                                         },
+                              "verdict":  "EXPLAINED, not a portion error. Carbs agree within 16% (15.1 vs 13), and carbs here come entirely from the crust - panko, parmesan, provolone, garlic powder - so the crust gram weights are right. The calorie gap is the MARINADE: 3 tbsp vegetable oil + 1/3 cup olive oil + 1/3 cup ranch = about 1341 cal source-basis, nearly all of it poured off before cooking. Excluding it gives 556 cal/serving, i.e. our purchased-grams figure brackets the source\u0027s 660 from both sides.",
+                              "protein_note":  "I deliberately did NOT lower the chicken to match the published 35 g. Backing the crust\u0027s ~11 g/serving out of 35 leaves only ~24 g from chicken, i.e. ~108 g per breast - far under a 6 oz tray breast and under the estate\u0027s 167 g/serving average, and the source\u0027s own 660 cal cannot be reached at that weight. 170 g per breast is the honest each-weight; the published protein looks understated.",
+                              "condition_flag":  "Carbs 15.1 g/serving clear the 35 g condition easily. Calories are the problem: my purchased-grams figure is 891 and even the source\u0027s own 660 is over the 650 ceiling, though the discarded marinade means real intake is nearer 556. The macro gate needs to decide whether discarded marinade counts before this one ships."
+                          }
+}

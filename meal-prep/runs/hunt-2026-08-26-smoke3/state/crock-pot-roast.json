@@ -1,0 +1,31 @@
+{
+    "slug":  "crock-pot-roast",
+    "title":  "Crock Pot Roast",
+    "source_url":  "https://thecozycook.com/crock-pot-roast/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:32",
+    "updated":  "2026-08-26T12:00:33",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Classic chuck pot roast braised with baby potatoes and carrots is the same dinner as live slow-cooker-pot-roast-potatoes-carrots; the pot-roast lane is already dense (5 live).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:32",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/crock-pot-roast/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:00:33",
+                        "by":  "decider",
+                        "detail":  "Classic chuck pot roast braised with baby potatoes and carrots is the same dinner as live slow-cooker-pot-roast-potatoes-carrots; the pot-roast lane is already dense (5 live)."
+                    }
+                ]
+}

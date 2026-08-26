@@ -1,0 +1,31 @@
+{
+    "slug":  "braised-beef",
+    "title":  "Braised Beef",
+    "source_url":  "https://www.wellplated.com/braised-beef/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:20",
+    "updated":  "2026-08-26T11:58:20",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chuck braised in red wine with carrots/celery/onion over mashed potatoes is the red-wine beef braise the estate has repeatedly ruled a dupe of live beef-bourguignon-bowls; collides with batch-mate beef-bourguignon too.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:20",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/braised-beef/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:20",
+                        "by":  "decider",
+                        "detail":  "Chuck braised in red wine with carrots/celery/onion over mashed potatoes is the red-wine beef braise the estate has repeatedly ruled a dupe of live beef-bourguignon-bowls; collides with batch-mate beef-bourguignon too."
+                    }
+                ]
+}

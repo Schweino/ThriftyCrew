@@ -1,0 +1,161 @@
+{
+ "slug": "chicken-and-rice-one-pot",
+ "lines": [
+  {
+   "raw": "1 ½ lbs. chicken breast (diced)",
+   "buy": "5 1/4 lb, diced",
+   "grams_source": 680.4,
+   "notes": "Source states the weight, so no each-weight assumption is needed."
+  },
+  {
+   "raw": "3 tablespoons butter (divided)",
+   "buy": "10 1/2 tablespoons (1 1/3 sticks), divided",
+   "notes": ""
+  },
+  {
+   "raw": "1 yellow onion (diced)",
+   "buy": "3 1/2 medium onions, diced (about 2 1/2 cups)",
+   "notes": ""
+  },
+  {
+   "raw": "3 cloves garlic (minced)",
+   "buy": "10 to 11 cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "Salt/Pepper",
+   "buy": "Salt and pepper, to taste",
+   "notes": "Seasoning-to-taste line; no number printed so nothing can disagree with the grams."
+  },
+  {
+   "raw": "2 teaspoons Italian seasoning",
+   "buy": "2 tablespoons plus 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1/3 cup dry white wine (see notes)",
+   "buy": "1 cup plus 2 1/2 tablespoons",
+   "grams_source": 79,
+   "notes": "Weighed water-like at 29.57 g per fl oz (2.67 fl oz)."
+  },
+  {
+   "raw": "2 ½ cups chicken broth",
+   "buy": "8 3/4 cups",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup uncooked white long grain rice",
+   "buy": "3 1/2 cups uncooked",
+   "grams_source": 185,
+   "notes": "185 g per cup dry long grain white rice, consistent with the 45 g per 1/4 cup label."
+  },
+  {
+   "raw": "½ cup half and half",
+   "buy": "1 3/4 cups",
+   "grams_source": 120,
+   "notes": "From the DB row's own basis (2 tbsp = 30 g)."
+  },
+  {
+   "raw": "½ cup Parmesan cheese (freshly grated)",
+   "buy": "1 3/4 cups, freshly grated",
+   "notes": ""
+  },
+  {
+   "raw": "2 cups spinach (roughly chopped)",
+   "buy": "7 cups, roughly chopped (about 7 oz)",
+   "grams_source": 60,
+   "notes": "30 g per cup chopped fresh spinach."
+  },
+  {
+   "raw": "1 tablespoon lemon juice",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon dried parsley",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "½ teaspoon dried oregano",
+   "buy": "1 3/4 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "½ teaspoon paprika",
+   "buy": "1 3/4 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "¼ teaspoon salt",
+   "buy": "3/4 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon mustard powder",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "grams_source": 2,
+   "notes": "Dry ground mustard, not the prepared condiment; pantry-static pricing."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 ½ lbs. chicken breast (diced)",
+   "term": "chicken breast",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 680.4,
+   "evidence": "Diced breast for a skillet is plain boneless skinless breast; the vocabulary row simply carries those words in its name, so the form flag is a wording artefact. Board 7 of 7, and the source states 1.5 lb so no each-weight guess."
+  },
+  {
+   "raw": "1 cup uncooked white long grain rice",
+   "term": "white long grain rice",
+   "canon_item": "Rice",
+   "bid": "rice",
+   "decision": "mapped",
+   "grams_source": 185,
+   "evidence": "Same-form vocabulary row Rice [rice], board 7 of 7; long grain is the default white rice the id prices, not a variety premium like wild or arborio."
+  },
+  {
+   "raw": "1 teaspoon mustard powder",
+   "term": "mustard powder",
+   "canon_item": "Mustard Powder",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 2,
+   "evidence": "Dry ground mustard seed is not the prepared condiment `mustard` - different price class and a completely different gram weight per teaspoon, so I refuse that bridge. 1 tsp does not justify minting an id; pantry-static pricing is safe."
+  }
+ ],
+ "absent_terms": [
+  "mustard powder"
+ ],
+ "db_entries_written": [
+  "Mustard Powder"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 566,
+   "carbs_g": 43,
+   "protein_g": 46
+  },
+  "our_computed_per_serving": {
+   "calories": 577,
+   "carbs_g": 44.7,
+   "protein_g": 48.7
+  },
+  "deltas": {
+   "calories_pct": 1.9,
+   "carbs_pct": 4.0,
+   "protein_pct": 5.9
+  },
+  "verdict": "PASS - protein within 6%, well inside the 15% band, so the 680 g chicken and 185 g dry rice portions are right.",
+  "condition_flag": "LOUD: this recipe is over the run's 35 g carbohydrate condition on BOTH numbers - the source's own 43 g and my computed 44.7 g per serving (the 185 g of dry rice alone is 148 g carbs). Calories 577 are inside the 400-650 band. I did NOT reject it: the carb gate is the macro gate's ruling to make on the estate's own scaled compute, not an identity question, but it should be ruled before this ships."
+ }
+}

@@ -1,0 +1,179 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Copycat Longhorn Parmesan Crusted Chicken",
+  "source_url": "https://thecozycook.com/parmesan-crusted-chicken/",
+  "servings": 4,
+  "time_total": "55 minutes",
+  "time_active": "35 minutes",
+  "ingredients": [
+    {
+      "raw": "4 skinless/boneless chicken breasts",
+      "item": "skinless/boneless chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/Pepper (to taste)",
+      "item": "Salt/Pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "3 Tablespoons vegetable oil",
+      "item": "vegetable oil",
+      "qty": "3",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup olive oil",
+      "item": "olive oil",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup ranch dressing",
+      "item": "ranch dressing",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon Distilled white vinegar",
+      "item": "Distilled white vinegar",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon lemon juice",
+      "item": "lemon juice",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon minced garlic",
+      "item": "minced garlic",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon pepper",
+      "item": "pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup Parmesan cheese (chopped into bits)",
+      "item": "Parmesan cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "chopped into bits",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup Provolone cheese (chopped into bits)",
+      "item": "Provolone cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "chopped into bits",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 Tablespoons Buttermilk Ranch salad dressing (regular Ranch is fine as well)",
+      "item": "Buttermilk Ranch salad dressing",
+      "qty": "6",
+      "unit": "Tablespoons",
+      "prep": "(regular Ranch is fine as well)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 Tablespoons melted butter",
+      "item": "butter",
+      "qty": "4",
+      "unit": "Tablespoons",
+      "prep": "melted",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 cup panko breadcrumbs",
+      "item": "panko breadcrumbs",
+      "qty": "3/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons garlic powder",
+      "item": "garlic powder",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Whisk all marinade ingredients together until well-combined and uniform in consistency.",
+    "Place the chicken in a gallon freezer bag, remove the air, and seal. Use a meat tenderizer to pound it to about 1/2 inch thick. Note: It will plump up more when cooked.",
+    "Sprinkle each side of the chicken lightly with salt and pepper if desired.",
+    "Place the chicken in a new freezer bag and add the marinade. Seal out the air and refrigerate for a minimum of 30 minutes, or overnight.",
+    "Heat 2-3 Tbsp. vegetable oil in a skillet over medium-high heat. (A cast iron skillet will provide the best sear.)",
+    "Sear the chicken on each side for 4-5 minutes. Refrain from moving the chicken around as it sizzles, it will hinder the nice golden sear color. If the pan gets too hot, reduce the heat to medium. Once each side is a nice, golden brown and the middle is cooked, transfer the chicken to a clean skillet or baking sheet and tent with foil to keep it warm while you prepare the Parmesan crust.",
+    "Preheat the oven to a low broil. (450° F.)",
+    "Combine Parmesan, Provolone, and Ranch dressing. Stir to combine and microwave in 15 seconds increments, stirring in between, until melted. (A little bit of a lumpy consistency is okay.) Spread it over the top of the chicken.",
+    "Combine the melted butter, garlic powder, and panko breadcrumbs and spoon it on top of the cheese.",
+    "Broil for 3-4 minutes, the top begins to brown slightly. (Watch it closely during this time.) Serve with mashed potatoes and enjoy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 16,
+    "verified": 16,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

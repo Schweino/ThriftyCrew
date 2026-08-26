@@ -1,0 +1,37 @@
+{
+    "slug":  "grilled-pesto-chicken-couscous-bowls",
+    "title":  "Grilled Pesto Chicken Couscous Bowls",
+    "source_url":  "https://www.skinnytaste.com/grilled-pesto-chicken-couscous-bowls/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:11",
+    "updated":  "2026-08-26T11:59:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:11",
+                        "by":  "harvest",
+                        "detail":  "https://www.skinnytaste.com/grilled-pesto-chicken-couscous-bowls/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T11:58:11",
+                        "by":  "decider",
+                        "detail":  "Mediterranean grilled-pesto-chicken couscous grain bowl with zucchini/tomato; verified 505/41/48 band, widens catalog toward Mediterranean, and the couscous grain-bowl plate distinguishes it from the parked in-flight sheet-pan pesto chicken."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T11:59:43",
+                        "by":  "extractor",
+                        "detail":  "rung 3 (Claude), verification recorded"
+                    }
+                ]
+}

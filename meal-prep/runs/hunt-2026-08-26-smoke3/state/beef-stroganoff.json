@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-stroganoff",
+    "title":  "Beef Stroganoff",
+    "source_url":  "https://www.wellplated.com/beef-stroganoff/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:19",
+    "updated":  "2026-08-26T11:58:19",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Sirloin-and-mushroom stroganoff over egg noodles is the same dinner as live ground-beef-stroganoff-pasta (and collides with in-flight slow-cooker-beef-stroganoff); ground vs sirloin cut is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:19",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/beef-stroganoff/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:19",
+                        "by":  "decider",
+                        "detail":  "Sirloin-and-mushroom stroganoff over egg noodles is the same dinner as live ground-beef-stroganoff-pasta (and collides with in-flight slow-cooker-beef-stroganoff); ground vs sirloin cut is not a distinct plate."
+                    }
+                ]
+}

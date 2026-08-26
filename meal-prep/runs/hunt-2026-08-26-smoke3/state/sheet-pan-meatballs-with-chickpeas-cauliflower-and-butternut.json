@@ -1,0 +1,64 @@
+{
+    "slug":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
+    "title":  "Sheet Pan Meatballs with Chickpeas Cauliflower and Butternut",
+    "source_url":  "https://www.skinnytaste.com/sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut-squash/",
+    "protein":  "beef",
+    "state":  "pricing",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:18",
+    "updated":  "2026-08-26T12:06:20",
+    "terms":  [
+                  {
+                      "term":  "lean ground bison",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh dill",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Tzatziki",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Harissa Paste",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:18",
+                        "by":  "harvest",
+                        "detail":  "https://www.skinnytaste.com/sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut-squash/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T11:58:18",
+                        "by":  "decider",
+                        "detail":  "Mediterranean/Middle-Eastern spiced sheet-pan meatballs (cumin/coriander/dill, harissa, tzatziki) with roasted chickpeas, cauliflower and butternut; novel format, saturation 0, verified 490/41.5/36 band, widens cuisine spread."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T11:59:35",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T12:05:39",
+                        "by":  "mapper",
+                        "detail":  "COUNTS. 12 residual lines ruled: 10 mapped, 2 not-purchased, 0 rejected. 21 buy strings written (all lines, settled included). 11 new food-DB rows returned, 0 declared absent. 2 new commodity ids proposed (ground-bison, fresh-dill); every other bid used is an existing live id and a reuse, not a proposal.\n\nREJECTIONS AND REFUSALS. No line was rejected outright. Three form flips were refused rather "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T12:06:20",
+                        "by":  "mapper",
+                        "detail":  ""
+                    }
+                ]
+}

@@ -1,0 +1,37 @@
+{
+    "slug":  "tacos-de-alambre",
+    "title":  "Tacos de Alambre",
+    "source_url":  "https://www.isabeleats.com/tacos-de-alambre/",
+    "protein":  "beef",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T12:49:44",
+    "updated":  "2026-08-26T12:51:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:49:44",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/tacos-de-alambre/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T12:49:45",
+                        "by":  "decider",
+                        "detail":  "Authentic Mexican alambre of shaved steak + bacon + chorizo + Oaxaca cheese; no neighbours anywhere and distinct from the ground-beef Tex-Mex taco skillets in prior rulings."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T12:51:56",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

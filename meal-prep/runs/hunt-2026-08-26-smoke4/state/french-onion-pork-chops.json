@@ -1,0 +1,37 @@
+{
+    "slug":  "french-onion-pork-chops",
+    "title":  "French Onion Pork Chops",
+    "source_url":  "https://thecozycook.com/french-onion-pork-chops/",
+    "protein":  "pork",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T12:49:43",
+    "updated":  "2026-08-26T12:51:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:49:43",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/french-onion-pork-chops/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T12:49:43",
+                        "by":  "decider",
+                        "detail":  "Seared pork chops in caramelized-onion/white-wine/thyme sauce with gruyere; distinct French-onion flavor not present on any live or in-flight pork chop (which are cream-mushroom, cajun, smothered, or creamy-garlic-wine)."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T12:51:31",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

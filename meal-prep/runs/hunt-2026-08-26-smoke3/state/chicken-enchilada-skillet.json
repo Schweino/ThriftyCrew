@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-enchilada-skillet",
+    "title":  "Chicken Enchilada Skillet",
+    "source_url":  "https://www.isabeleats.com/chicken-enchilada-skillet/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:16",
+    "updated":  "2026-08-26T11:58:16",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + enchilada sauce + cheese is already the live chicken-enchilada-rice-bowls, and this is the chicken sibling of the existing beef- and turkey-enchilada-skillet-bowls; no distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:16",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/chicken-enchilada-skillet/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:16",
+                        "by":  "decider",
+                        "detail":  "Chicken + enchilada sauce + cheese is already the live chicken-enchilada-rice-bowls, and this is the chicken sibling of the existing beef- and turkey-enchilada-skillet-bowls; no distinguishing plate."
+                    }
+                ]
+}

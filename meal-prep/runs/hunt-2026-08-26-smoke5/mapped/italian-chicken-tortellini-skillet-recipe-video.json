@@ -1,0 +1,263 @@
+﻿{
+    "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+    "title":  "Italian Chicken Tortellini Skillet + RECIPE VIDEO",
+    "source_url":  "https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 tablespoon oil",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  null,
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Unqualified \u0027oil\u0027 for searing is neutral cooking oil; vegetable-oil is a live board id already used by a settled line in this same batch, so a reuse. Precedent \u0027vegetable or canola oil\u0027 -\u003e vegetable-oil, 2026-08-26.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 boneless, skinless chicken breasts, cut into ½\" pieces ((about 1 lb))",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1400,
+                            "buy":  "3 lb, cut into 1/2-inch pieces (about 7 breasts)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027boneless skinless chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T05:09:07); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: boneless/skinless/breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/thigh | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/breast",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cloves garlic ((finely minced))",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "10 to 11 cloves, finely minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon dried basil",
+                            "item":  "Dried Basil",
+                            "bid":  "dried-basil",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-basil, 6 of 7 stores, cheapest 0.7312 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon dried oregano",
+                            "item":  "Dried Oregano",
+                            "bid":  "dried-oregano",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-oregano, 7 of 7 stores, cheapest 0.9307 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon dried thyme",
+                            "item":  "Dried Thyme",
+                            "bid":  "dried-thyme",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-thyme, 5 of 7 stores, cheapest 0.8776 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "⅛ teaspoon red chili flakes",
+                            "item":  "Red Pepper Flakes",
+                            "bid":  "red-pepper-flakes",
+                            "board":  null,
+                            "grams":  1,
+                            "buy":  "a scant 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Red chili flakes and red pepper flakes are one jar under two shelf names; same-form vocabulary row and a 2026-08-26 ruling already mapped \u0027crushed red pepper flakes\u0027 here. Board found no commodity or capture, so the term is reported absent.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 can diced tomatoes (with juice (14oz or 398ml))",
+                            "item":  "Diced Tomatoes",
+                            "bid":  "diced-tomatoes",
+                            "board":  "recipe",
+                            "grams":  1438,
+                            "buy":  "6 cups with their juice (about three and a half 14 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Measure stated because 3.5 cans is not a package a cook buys whole.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup roasted red peppers ((chopped))",
+                            "item":  "Roasted Red Peppers",
+                            "bid":  "roasted-red-peppers",
+                            "board":  "recipe",
+                            "grams":  245,
+                            "buy":  "1 3/4 cups, chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: roasted-red-peppers, 4 of 7 stores, cheapest 0.1775 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ cup heavy whipping cream",
+                            "item":  "Heavy Cream",
+                            "bid":  "heavy-cream",
+                            "board":  null,
+                            "grams":  416,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "238 g per cup. Same-form vocabulary row Heavy Cream [heavy-cream], board 7 of 7; \u0027whipping\u0027 is part of the carton\u0027s printed name at the same fat class, not a different product.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ cup low-sodium chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  420,
+                            "buy":  "1 3/4 cups low-sodium",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027low sodium chicken broth\u0027 -\u003e chicken-broth (by mapper on 2026-08-16T11:53:02); nearest vocabulary rows: Chicken Broth [chicken-broth] DIFFERENT FORM: low | Beef Broth [beef-broth] DIFFERENT FORM: low; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons cornstarch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  19,
+                            "buy":  "2 tablespoons plus 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cornstarch, 7 of 7 stores, cheapest 0.1181 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cups fresh or frozen cheese tortellini ((12oz or 350g))",
+                            "item":  "Cheese Tortellini",
+                            "bid":  "cheese-tortellini",
+                            "board":  null,
+                            "grams":  1225,
+                            "buy":  "2 lb 11 oz (about 10 1/2 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The line states its own gram weight. The DIFFERENT FORM flag is spurious - cheese tortellini is only sold refrigerated or frozen and the line accepts either, which is exactly what the cheese-tortellini id prices (board 7 of 7). Line states 350 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup chopped fresh spinach",
+                            "item":  "Spinach",
+                            "bid":  "spinach",
+                            "board":  "weekly",
+                            "grams":  105,
+                            "buy":  "3 1/2 cups, chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "30 g per cup chopped fresh spinach.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 cup shredded mozzarella cheese",
+                            "item":  "Mozzarella Cheese",
+                            "bid":  "shredded-cheese",
+                            "board":  null,
+                            "grams":  392,
+                            "buy":  "3 1/2 cups, shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "112 g per cup shredded. A bag of shredded cheese is the purchased product here, and shredded-cheese is the board\u0027s own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class from a shred bag.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons grated Parmesan cheese",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "7 tablespoons, grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: parmesan, 7 of 7 stores, cheapest 0.3092 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "red pepper flakes"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "italian-chicken-tortellini-skillet-recipe-video: the food DB already carries \u0027Heavy Cream\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 tbsp = 15 g) they still disagree: carbs_g 0.426 vs 1. existing={\"serving_grams\": 15, \"serving_qty\": 1, \"serving_unit\": \"tbsp\", \"calories\": 50, \"protein_g\": 0, \"carbs_g\": 1, \"fat_g\": 5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 340, \"protein_g\": 2.84, \"carbs_g\": 2.84, \"fat_g\": 36.1}",
+                            "italian-chicken-tortellini-skillet-recipe-video: the food DB already carries \u0027Cheese Tortellini\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 1 cup (120g) frozen, 4.5 servings per container = 120 g) they still disagree: calories 368.4 vs 210; protein_g 16.2 vs 7; carbs_g 56.4 vs 38; fat_g 8.676 vs 2.5. existing={\"serving_grams\": 120, \"serving_qty\": 1, \"serving_unit\": \"1 cup (120g) frozen, 4.5 servings per container\", \"calories\": 210, \"protein_g\": 7, \"carbs_g\": 38, \"fat_g\": 2.5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 307, \"protein_g\": 13.5, \"carbs_g\": 47.0, \"fat_g\": 7.23}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  562,
+                                                                   "carbs_g":  44,
+                                                                   "protein_g":  46
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  652,
+                                                               "carbs_g":  51.2,
+                                                               "protein_g":  44.3
+                                                           },
+                              "deltas":  {
+                                             "calories_pct":  16.0,
+                                             "carbs_pct":  16.4,
+                                             "protein_pct":  -3.7
+                                         },
+                              "verdict":  "PASS on the sharp instrument - protein 44.3 vs 46 is under 4% off, so the 400 g chicken, 350 g tortellini and 112 g mozzarella portions are right. The calorie and carb overshoot both trace to the SR Legacy tortellini row (307 cal/100 g as purchased) being richer than whatever brand the source costed, plus 119 g of heavy cream; neither is a portion error.",
+                              "condition_flag":  "LOUD: over the run\u0027s 35 g carbohydrate condition on BOTH numbers - the source\u0027s own 44 g and my 51.2 g per serving, with 350 g of tortellini supplying about 165 g of the total. My calorie figure of 652 also just clears the 650 ceiling (the source\u0027s 562 does not). Not rejected here, because that is the macro gate\u0027s ruling on the estate\u0027s own scaled compute, but this recipe should not ship without it."
+                          }
+}

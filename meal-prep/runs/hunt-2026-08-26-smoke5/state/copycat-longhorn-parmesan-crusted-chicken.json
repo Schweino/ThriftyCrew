@@ -1,0 +1,68 @@
+{
+    "slug":  "copycat-longhorn-parmesan-crusted-chicken",
+    "title":  "Copycat Longhorn Parmesan Crusted Chicken",
+    "source_url":  "https://thecozycook.com/parmesan-crusted-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-26T13:16:55",
+    "updated":  "2026-08-26T13:31:02",
+    "terms":  [
+                  {
+                      "term":  "black pepper",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 892 cal above the 750 ceiling",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:16:55",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/parmesan-crusted-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T13:16:55",
+                        "by":  "decider",
+                        "detail":  "Ranch-marinated pan-seared chicken under a provolone/parmesan/panko crust (no marinara); distinct from live chicken-parmesan-pasta and from the in-flight cheese-stuffed chicken parmesan (marinara/mozz) and keto chicken-parm meatballs, band verified 660/13/35."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T13:17:45",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T13:26:49",
+                        "by":  "mapper",
+                        "detail":  "16 lines, 12 pre-resolved, 4 residual ruled: all 4 mapped (chicken-breast, white-vinegar, black-pepper, ranch-dressing). Rejections: none outright, but I refused to take the source\u0027s published 35 g protein as an each-weight signal for the breasts (reasoning in macro_cross_check). New DB rows returned: White Vinegar, Black Pepper. Absent term reported: black pepper. Lowest confidence in this batch "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T13:26:52",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T13:31:00",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-26T13:31:02",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 892 cal above the 750 ceiling"
+                    }
+                ]
+}

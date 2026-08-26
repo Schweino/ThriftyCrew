@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-26T10:11:24",
-    "count":  137,
+    "updated":  "2026-08-26T13:26:55",
+    "count":  148,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -1236,6 +1236,105 @@
                             "evidence":  "Board absent and the vocabulary lookup is blind here (the phrase \u0027large rolls\u0027 shares no core word with a \u0027Hamburger Buns\u0027 style row), so a new id is proposed with an explicit alias instruction. 6 x 71 g large roll. [slug salisbury-steak-burgers, run hunt-2026-08-26-smoke]",
                             "by":  "mapper",
                             "at":  "2026-08-26T10:11:24"
+                        },
+                        {
+                            "key":  "chicken breast",
+                            "term":  "chicken breast",
+                            "item_id":  "chicken-breast",
+                            "bid_exists":  true,
+                            "evidence":  "Diced breast for a skillet is plain boneless skinless breast; the vocabulary row simply carries those words in its name, so the form flag is a wording artefact. Board 7 of 7, and the source states 1.5 lb so no each-weight guess. [slug chicken-and-rice-one-pot, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:47"
+                        },
+                        {
+                            "key":  "white long grain rice",
+                            "term":  "white long grain rice",
+                            "item_id":  "rice",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row Rice [rice], board 7 of 7; long grain is the default white rice the id prices, not a variety premium like wild or arborio. [slug chicken-and-rice-one-pot, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:48"
+                        },
+                        {
+                            "key":  "skinless boneless chicken breasts",
+                            "term":  "skinless/boneless chicken breasts",
+                            "item_id":  "chicken-breast",
+                            "bid_exists":  true,
+                            "evidence":  "Word-for-word the vocabulary row\u0027s own name reordered, board 7 of 7. No stated weight, so 170 g (6 oz) raw per breast - the standard tray breast and close to the estate\u0027s 167 g/serving average; the source\u0027s implied ~110 g per breast is not supportable (see macro check). [slug copycat-longhorn-parmesan-crusted-chicken, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:51"
+                        },
+                        {
+                            "key":  "distilled white vinegar",
+                            "term":  "Distilled white vinegar",
+                            "item_id":  "white-vinegar",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row White Vinegar [white-vinegar], board 7 of 7; \u0027distilled\u0027 is how the same jug is labelled, not a different food. [slug copycat-longhorn-parmesan-crusted-chicken, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:51"
+                        },
+                        {
+                            "key":  "pepper",
+                            "term":  "pepper",
+                            "item_id":  "black-pepper",
+                            "bid_exists":  true,
+                            "evidence":  "Bare \u0027pepper\u0027 beside salt in a marinade is ground black pepper, not a bell pepper - the same-form vocabulary row Black Pepper [black-pepper] is the estate\u0027s own name and id. The pre-resolver found no commodity claiming the term (captures only), so I also report it absent. [slug copycat-longhorn-parmesan-crusted-chicken, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:51"
+                        },
+                        {
+                            "key":  "buttermilk ranch salad dressing",
+                            "term":  "Buttermilk Ranch salad dressing",
+                            "item_id":  "ranch-dressing",
+                            "bid_exists":  true,
+                            "evidence":  "Buttermilk ranch is the standard ranch bottle and the line itself says regular ranch is fine; same-form vocabulary row, board 7 of 7. [slug copycat-longhorn-parmesan-crusted-chicken, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:51"
+                        },
+                        {
+                            "key":  "oil",
+                            "term":  "oil",
+                            "item_id":  "vegetable-oil",
+                            "bid_exists":  true,
+                            "evidence":  "Unqualified \u0027oil\u0027 for searing is neutral cooking oil; vegetable-oil is a live board id already used by a settled line in this same batch, so a reuse. Precedent \u0027vegetable or canola oil\u0027 -\u003e vegetable-oil, 2026-08-26. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:54"
+                        },
+                        {
+                            "key":  "red chili flakes",
+                            "term":  "red chili flakes",
+                            "item_id":  "red-pepper-flakes",
+                            "bid_exists":  true,
+                            "evidence":  "Red chili flakes and red pepper flakes are one jar under two shelf names; same-form vocabulary row and a 2026-08-26 ruling already mapped \u0027crushed red pepper flakes\u0027 here. Board found no commodity or capture, so the term is reported absent. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:55"
+                        },
+                        {
+                            "key":  "heavy whipping cream",
+                            "term":  "heavy whipping cream",
+                            "item_id":  "heavy-cream",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row Heavy Cream [heavy-cream], board 7 of 7; \u0027whipping\u0027 is part of the carton\u0027s printed name at the same fat class, not a different product. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:55"
+                        },
+                        {
+                            "key":  "fresh or frozen cheese tortellini",
+                            "term":  "fresh or frozen cheese tortellini",
+                            "item_id":  "cheese-tortellini",
+                            "bid_exists":  true,
+                            "evidence":  "The DIFFERENT FORM flag is spurious - cheese tortellini is only sold refrigerated or frozen and the line accepts either, which is exactly what the cheese-tortellini id prices (board 7 of 7). Line states 350 g. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:55"
+                        },
+                        {
+                            "key":  "shredded mozzarella cheese",
+                            "term":  "shredded mozzarella cheese",
+                            "item_id":  "shredded-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board\u0027s own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class from a shred bag. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
+                            "by":  "mapper",
+                            "at":  "2026-08-26T13:26:55"
                         }
                     ]
 }

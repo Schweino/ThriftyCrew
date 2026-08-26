@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-cranberry-chicken-dinner",
+    "title":  "Sheet Pan Cranberry Chicken Dinner",
+    "source_url":  "https://www.budgetbytes.com/sheet-pan-cranberry-chicken-dinner/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T13:16:59",
+    "updated":  "2026-08-26T13:16:59",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken with sweet potatoes and Brussels sprouts in a cranberry-balsamic glaze is the same harvest dinner as live sheet-pan-chicken-sweet-potato-brussels and the accepted one-pan chicken with sweet potatoes, kale and cranberries (chicken/bake/sweet-potato/cranberry-balsamic across 4 axes).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:16:59",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/sheet-pan-cranberry-chicken-dinner/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T13:16:59",
+                        "by":  "decider",
+                        "detail":  "Chicken with sweet potatoes and Brussels sprouts in a cranberry-balsamic glaze is the same harvest dinner as live sheet-pan-chicken-sweet-potato-brussels and the accepted one-pan chicken with sweet potatoes, kale and cranberries (chicken/bake/sweet-potato/cranberry-balsamic across 4 axes)."
+                    }
+                ]
+}

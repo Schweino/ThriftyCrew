@@ -1,0 +1,31 @@
+{
+    "slug":  "taco-pasta-one-pot",
+    "title":  "Taco Pasta - (One Pot!)",
+    "source_url":  "https://thecozycook.com/taco-pasta/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:14",
+    "updated":  "2026-08-26T11:58:15",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cheesy ground-beef taco pasta with taco seasoning, Rotel and melted cheese duplicates live cheesy-taco-spaghetti; same Tex-Mex beef-pasta dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:14",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/taco-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:15",
+                        "by":  "decider",
+                        "detail":  "Cheesy ground-beef taco pasta with taco seasoning, Rotel and melted cheese duplicates live cheesy-taco-spaghetti; same Tex-Mex beef-pasta dinner."
+                    }
+                ]
+}

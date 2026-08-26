@@ -1,0 +1,31 @@
+{
+    "slug":  "cheesy-chicken-potato-casserole",
+    "title":  "Cheesy Chicken \u0026 Potato Casserole",
+    "source_url":  "https://www.spendwithpennies.com/cheesy-chicken-ranch-potatoes/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:36",
+    "updated":  "2026-08-26T12:00:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + red potatoes + cheddar + bacon + ranch/sour cream + green onion is the loaded-potato profile; word-overlap 30 and bge 0.88 to live loaded-chicken-and-potato-casserole, the same dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:36",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/cheesy-chicken-ranch-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:00:36",
+                        "by":  "decider",
+                        "detail":  "Chicken + red potatoes + cheddar + bacon + ranch/sour cream + green onion is the loaded-potato profile; word-overlap 30 and bge 0.88 to live loaded-chicken-and-potato-casserole, the same dinner."
+                    }
+                ]
+}

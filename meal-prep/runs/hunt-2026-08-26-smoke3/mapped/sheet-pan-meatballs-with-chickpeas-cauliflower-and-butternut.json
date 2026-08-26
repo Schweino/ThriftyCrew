@@ -1,0 +1,306 @@
+﻿{
+    "slug":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
+    "title":  "Sheet Pan Meatballs with Chickpeas Cauliflower and Butternut",
+    "source_url":  "https://www.skinnytaste.com/sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut-squash/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "beef",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3 cups cauliflower florets",
+                            "item":  "Cauliflower",
+                            "bid":  "cauliflower",
+                            "board":  null,
+                            "grams":  1120,
+                            "buy":  "10 1/2 cups cauliflower florets (about 2 1/2 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup florets = 107 g. Florets are a knife cut of the same whole head, not a form flip to a bagged or frozen product, so the live cauliflower id (5 of 7) is a reuse. Same precedent as shredded carrot to carrots.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 cups broccoli florets",
+                            "item":  "Broccoli Florets",
+                            "bid":  "frozen-broccoli-florets",
+                            "board":  "recipe",
+                            "grams":  892,
+                            "buy":  "10 1/2 cups broccoli florets (about 2 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; weight carried from the table.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cups cubed butternut squash",
+                            "item":  "Butternut Squash",
+                            "bid":  "butternut-squash",
+                            "board":  null,
+                            "grams":  1470,
+                            "buy":  "10 1/2 cups cubed butternut squash (about 3 1/4 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup 3/4-inch cubes = 140 g. butternut-squash is a live board id at 5 of 7, so a reuse and not a proposal; only a vocabulary name row is missing, exactly like the spaghetti-squash ruling on the shelf. Cubed is a cut, not a form.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 15-ounce can chickpeas (rinsed and drained well)",
+                            "item":  "Chickpeas",
+                            "bid":  "chickpeas",
+                            "board":  "recipe",
+                            "grams":  892,
+                            "buy":  "5 1/2 cups chickpeas, rinsed and drained (three and a half 15-ounce cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drained basis, 255 g per can.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons extra virgin olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tablespoons extra virgin olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027extra virgin olive oil\u0027 -\u003e olive-oil (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 ½ teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "5 1/4 teaspoons kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Vegetable-pan seasoning.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "3 1/2 teaspoons garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 teaspoons onion powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "3 1/2 teaspoons ground cumin",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Meatball mix; second cumin line, same food. Second cumin line, in the meatball mix, same rename and same 2.1 g per teaspoon.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon ground coriander",
+                            "item":  "Ground Coriander",
+                            "bid":  "ground-coriander",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "1 3/4 teaspoons ground coriander",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-coriander, 4 of 7 stores, cheapest 0.7331 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "7/8 teaspoon black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 large egg (lightly beaten)",
+                            "item":  "Eggs",
+                            "bid":  "eggs",
+                            "board":  null,
+                            "grams":  175,
+                            "buy":  "3 1/2 large eggs, lightly beaten (beat 4 and reserve about 2 tablespoons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 large egg out of shell = 50 g; the scale lands mid-egg, so the measure says how to hit it. eggs is a live board id at 7 of 7, so a reuse; the vocabulary lookup missed only on the singular/qualifier wording. Whole egg out of shell = 50 g, not the 148 g/100 g figure applied to a shell weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "3 1/2 teaspoons kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Meatball mix.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "3 1/2 teaspoons ground cumin",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Meatball mix; second cumin line, same food. Second cumin line, in the meatball mix, same rename and same 2.1 g per teaspoon.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 tablespoons chopped dill (plus more for garnish)",
+                            "item":  "Fresh Dill",
+                            "bid":  "fresh-dill",
+                            "board":  null,
+                            "grams":  28,
+                            "buy":  "14 tablespoons chopped fresh dill (a scant cup), plus more for garnish",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Chopped fronds, about 2 g per tablespoon. Fresh, not the dried-dill vocabulary row: 4 tbsp chopped into a meatball mix is the fresh herb, and dried is a different price class and roughly a tenfold gram difference per tablespoon, so no alias. New id proposed; board found no commodity but today\u0027s captures carry matching products.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 tablespoons chopped parsley",
+                            "item":  "Fresh Parsley",
+                            "bid":  "fresh-parsley",
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "14 tablespoons chopped fresh parsley (a scant cup)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup chopped = 60 g. Chopped, 4 tbsp, into a raw mix is the fresh herb, so the Fresh Parsley [fresh-parsley] vocabulary row is the same form and an existing id, a reuse. Dried parsley is refused as a form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon lemon zest",
+                            "item":  "Lemon Zest",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "3 1/2 teaspoons lemon zest (from about 2 lemons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Zest only; the whole lemon is the purchase, 2 g of peel is what enters the mix. Zest is the peel of the fruit you buy, so the live lemons id (5 of 7) prices it; the shelf\u0027s Orange Zest to orange-juice row is the wrong precedent, juice is not peel. 1 tsp zest = 2 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "¼ cup breadcrumbs (plain or gluten-free)",
+                            "item":  "Bread Crumbs",
+                            "bid":  "bread-crumbs",
+                            "board":  null,
+                            "grams":  94,
+                            "buy":  "3/4 cup plus 2 tablespoons breadcrumbs, plain or gluten-free",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Plain dry crumbs, 1 cup = 108 g. bread-crumbs is a live generic id at 7 of 7 and the same product concept and price class; the vocabulary just names it Panko Breadcrumbs, so a plain-form name row is wanted. Grams supplied for plain crumbs (1 cup = 108 g), not panko, so no weight is inherited.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 pound lean ground bison (beef or lamb)",
+                            "item":  "Lean Ground Bison",
+                            "bid":  "ground-bison",
+                            "board":  null,
+                            "grams":  1588,
+                            "buy":  "3 1/2 pounds lean ground bison, or lean ground beef or lamb",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Raw basis, lb = 453.592 g. Board reports ABSENT (no commodity, no capture) and no vocabulary row shares a core word, so a new id goes to the registrar. Bison is a different species and price class from any beef or lamb id and must not be aliased onto one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Tzatziki (optional for serving)",
+                            "item":  "Tzatziki",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Optional condiment offered at serving with no quantity anywhere in the source, so it cannot be costed or weighed; inventing an amount would move the published macros."
+                        },
+                        {
+                            "source_raw":  "Harissa (optional for serving)",
+                            "item":  "Harissa Paste",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Same as tzatziki: optional at serving with no quantity. harissa-paste (2 of 7) is the correct id the day a version quantifies it, but nothing can be priced against a blank amount."
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "lean ground bison",
+                                 "fresh dill"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Butternut Squash",
+                               "Fresh Dill",
+                               "Lemon Zest",
+                               "Lean Ground Bison",
+                               "Tzatziki"
+                           ],
+    "db_row_findings":  [
+                            "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut: the food DB already carries \u0027Bread Crumbs\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 387 vs 380; carbs_g 71 vs 72. existing={\"calories\": 380, \"protein_g\": 13, \"carbs_g\": 72, \"fat_g\": 5} new={\"calories\": 387, \"protein_g\": 12.9, \"carbs_g\": 71.0, \"fat_g\": 4.84}",
+                            "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut: the food DB already carries \u0027Harissa Paste\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 1 tbsp (15g) = 15 g) they still disagree: carbs_g 2.505 vs 1. existing={\"serving_grams\": 15, \"serving_qty\": 1, \"serving_unit\": \"1 tbsp (15g)\", \"calories\": 10, \"carbs_g\": 1, \"fat_g\": 0.5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 83, \"carbs_g\": 16.7, \"fat_g\": 0.0}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "lean ground bison",
+                                        "proposed_bid":  "ground-bison",
+                                        "evidence":  "Board reports ABSENT: no commodity claims it and no capture matches. It is not a spelling variant of anything already priced - bison is a distinct species sold at 2 to 3 times ground beef, so ground-beef-8020, any lean-beef id and any lamb id are all different price classes, not synonyms; the only word overlap (\u0027ground\u0027) belongs to the cut, not the meat. If you reject, note the source line itself sanctions \u0027beef or lamb\u0027, so an existing lean ground beef id is the sanctioned human substitution rather than a silent bridge by me.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "ground-bison",
+                                  "verdict":  "approve",
+                                  "bid":  "ground-bison",
+                                  "reason":  "Bison is unpriced anywhere in the estate and the estate already knows it is not beef: the only two \u0027bison\u0027 strings in all three namespaces are EXCLUDE patterns inside ground-beef-93-7 and ground-beef-9010 (commodities.json lines 55032, 55198), deliberately pushing bison products out of beef pricing; no id, label, floor-map pair, or smp-feed price cell carries bison, and the board\u0027s only \u0027buffalo\u0027 string is buffalo-wing-sauce, a condiment. Different species at a 2-3x price class = different purchase, not a variant of any ground-beef/turkey/pork id. Mint as RECIPE-ONLY (recipe-board baseline + recipe-commodities.json, not the weekly staples worklist). Prescription: include patterns anchored on the species word only - \u0027ground\\s+bison\u0027, \u0027bison[^.]*ground\u0027, \u0027\\bbison\\b(?=[^.]*(?:ground|lean))\u0027 - and do NOT include bare \u0027buffalo\u0027 (it collides with buffalo wing sauce and buffalo-style prepared foods); excludes need the full meat-commodity rigor (~150 patterns; copy ground-beef-93-7\u0027s exclude list and add \u0027buffalo\u0027, \u0027wing\u0027, \u0027sauce\u0027, \u0027jerky\u0027, \u0027sticks\u0027, \u0027burgers\u0027, \u0027patties\u0027, \u0027meatball\u0027). Follow-up: add commodity-dupe-allowlist.json pairs ground-bison\u003c-\u003eground-beef-8020, \u003c-\u003eground-beef-93-7, \u003c-\u003eground-beef-9010, \u003c-\u003e93-7-ground-beef, \u003c-\u003eground-turkey, \u003c-\u003eground-pork, reason \u0027different species, shared cut word ground\u0027, so audit-commodity-dupes.ps1 never pages Brad on the shared token. Separately, per the two-question rule: the ingredient NAME \u0027lean ground bison\u0027 needs its own vocabulary ruling (fdc:175293 Bison, ground, grass-fed, raw is the correct macros row for a raw purchase - use raw, not the cooked 173847); this id ruling does not mint that name."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "COUNTS. 12 residual lines ruled: 10 mapped, 2 not-purchased, 0 rejected. 21 buy strings written (all lines, settled included). 11 new food-DB rows returned, 0 declared absent. 2 new commodity ids proposed (ground-bison, fresh-dill); every other bid used is an existing live id and a reuse, not a proposal.\n\nREJECTIONS AND REFUSALS. No line was rejected outright. Three form flips were refused rather than bridged: dried-dill for fresh dill (different price class, roughly tenfold gram difference per tablespoon), dried-parsley for the chopped fresh parsley, and any beef or lamb id for bison (different species and price class - the source\u0027s own \u0027(beef or lamb)\u0027 is a cook\u0027s substitution, not evidence that the commodities are the same food). I also declined the shelf\u0027s Orange Zest -\u003e orange-juice precedent for lemon zest: juice is not peel; zest comes off the fruit, so lemons prices it.\n\nTWO LINES CARRY NO QUANTITY. Tzatziki and harissa are offered \u0027for serving\u0027 with no amount anywhere in the source, so both are not-purchased at 0 g. I supplied macro rows for both anyway so no food in this recipe is silent, but neither affects a number here. Read the harissa row\u0027s note before trusting it - its printed label rounds protein and fat to zero and will likely fail the Atwater gate; I left it as printed rather than reconstructing it.\n\nCALLED OUT LOUDLY - THE CARB CEILING. This run\u0027s conditions say 35 g carbohydrate or less per serving. The source publishes 41.5 g and my independent recompute lands on 41.5 g, so the recipe is over the stated ceiling on a TOTAL carb basis and only clears it on a NET basis (roughly 38 g of fiber across the chickpeas, butternut, cauliflower and broccoli puts net near 32 g). The candidate pool banded it in with those exact published numbers, so an upstream gate has already seen 41.5 and admitted it. I am not rejecting a recipe whose macros reproduce the source almost exactly on a total-vs-net ambiguity, but a person should settle which basis the condition means, because this dish sits on the wrong side of it either way if the answer is \u0027total\u0027.\n\nLOWER-CONFIDENCE ITEMS, in order. (1) Chopped fresh dill at 2 g per tablespoon - dill fronds are feathery and published cup weights vary widely; 4 tbsp is 3.4 calories here, so the exposure is cost, not macros. (2) Breadcrumbs onto bread-crumbs, whose vocabulary name is \u0027Panko Breadcrumbs\u0027 - same commodity and price class, and I supplied plain-crumb grams (1 cup = 108 g) rather than letting a panko weight ride along, but a plain-form vocabulary name row is wanted. (3) The egg line lands mid-egg at 14 servings (3 1/2 eggs), so the buy string tells the cook to beat 4 and reserve about 2 tablespoons; that keeps the printed measure and the 175 g target in agreement instead of rounding to 4 eggs and silently adding 25 g.\n\nThe pre-resolve table was present, complete and looked right: 9 settled lines, 12 residual, evidence and FDC shelves attached per term, and the prior-rulings shelf capped at 4000 characters as advertised. I did not re-derive any settled line. Note the shelf\u0027s nearest neighbours for \u0027cauliflower florets\u0027 were flour, cranberries, carrot, large rolls and mushrooms - only the carrot ruling transferred (a knife cut is not a form flip), which is a fair example of cosine ranking wording rather than food."
+}

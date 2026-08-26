@@ -1,0 +1,31 @@
+{
+    "slug":  "cheese-chicken",
+    "title":  "Cheese Chicken",
+    "source_url":  "https://thecozycook.com/cheese-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:31",
+    "updated":  "2026-08-26T12:00:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken smothered in a broccoli-cheddar cheese sauce is the same dinner as live chicken-divan-broccoli-bake (chicken + broccoli + cheddar cheese); only skillet-vs-bake format differs, which does not distinguish the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:31",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/cheese-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:00:31",
+                        "by":  "decider",
+                        "detail":  "Chicken smothered in a broccoli-cheddar cheese sauce is the same dinner as live chicken-divan-broccoli-bake (chicken + broccoli + cheddar cheese); only skillet-vs-bake format differs, which does not distinguish the plate."
+                    }
+                ]
+}

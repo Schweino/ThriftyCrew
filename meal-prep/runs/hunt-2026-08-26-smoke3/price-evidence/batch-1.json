@@ -1,0 +1,580 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-smoke3",
+ "batch": 1,
+ "generated": "2026-08-26T12:06:52",
+ "batch_terms": [
+  "lean ground bison",
+  "fresh dill"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "lean ground bison",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "lean bison",
+     "attempts": [
+      {
+       "term": "lean ground bison",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "lean bison",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger Condensed Bean with Bacon Soup",
+       "price": 1.25,
+       "size": "11.25 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0001111016040"
+      },
+      {
+       "item": "Campbell's® Condensed 25% Less Sodium Bean With Bacon Soup",
+       "price": 1.99,
+       "size": "11.25 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0005100029113"
+      },
+      {
+       "item": "Campbell's® Condensed Bean With Bacon Soup",
+       "price": 1.99,
+       "size": "11.25 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0005100025301"
+      },
+      {
+       "item": "Saucy Spoon Applewood Smoked Bacon Baked Beans 28 oz",
+       "price": 2.19,
+       "size": "28 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0007227344920"
+      },
+      {
+       "item": "Bush's Maple & Cured Bacon Baked Beans 16 oz",
+       "price": 2.49,
+       "size": "16 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0003940001969"
+      },
+      {
+       "item": "Bush's Maple & Cured Bacon Baked Beans 28 oz",
+       "price": 2.99,
+       "size": "28 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0003940001970"
+      },
+      {
+       "item": "WENDYS Bacon Bean Beef Chilli",
+       "price": 5.49,
+       "size": "15 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0019937567891"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "leanbison",
+     "attempts": [
+      {
+       "term": "lean ground bison",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "lean bison",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "leangroundbison",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "leanbison",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 4 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "lean ground bison",
+     "attempts": [
+      {
+       "term": "lean ground bison",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "93% Lean 7% Fat Ground Beef",
+       "price": 7.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387862-93-lean-7-fat-ground-beef-1-each"
+      },
+      {
+       "item": "85% Lean 15% Fat Ground Beef",
+       "price": 6.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387270-85-lean-15-fat-ground-beef-1-each"
+      },
+      {
+       "item": "93% Lean 7% Fat Ground Beef Bulk",
+       "price": 74.9,
+       "size": "$7.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386242-93-lean-7-fat-ground-beef-10-lb"
+      },
+      {
+       "item": "High Plains Bison Bison Sirloin",
+       "price": 12.99,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17381291-high-plains-bison-bison-sirloin-6-oz"
+      },
+      {
+       "item": "High Plains Bison Bison New York Strip",
+       "price": 17.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3301390-high-plains-bison-bison-new-york-strip-8-oz"
+      },
+      {
+       "item": "80% Lean 20% Fat Ground Beef",
+       "price": 6.49,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386578-80-lean-20-fat-ground-beef-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "lean ground bison",
+     "attempts": [
+      {
+       "term": "lean ground bison",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+       "price": 31.47,
+       "size": "",
+       "unit_price": "$15.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+      },
+      {
+       "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
+       "price": 28.64,
+       "size": "",
+       "unit_price": "$7.16/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Roast, priced per pound",
+       "price": 24.88,
+       "size": "",
+       "unit_price": "$5.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DQ2WC7XLN1V"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+       "price": 32.12,
+       "size": "",
+       "unit_price": "$7.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1MLJW43LIF1U"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Ribeye Steak, priced per pound",
+       "price": 52.4,
+       "size": "",
+       "unit_price": "$14.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CE7TCUT2WCP"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Bone-In Short Ribs, priced per pound",
+       "price": 40.92,
+       "size": "",
+       "unit_price": "$10.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JWYLTGBGO49"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks, priced per pound",
+       "price": 35.89,
+       "size": "",
+       "unit_price": "$9.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61EZCPH9RV60"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Whole Beef Cowboy Ribeye, Cryovac, priced per pound",
+       "price": 344.83,
+       "size": "",
+       "unit_price": "$13.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1PL7R0CSUE1D"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "fresh dill",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "fresh dill",
+     "attempts": [
+      {
+       "term": "fresh dill",
+       "state": "OK",
+       "hits": 9
+      }
+     ],
+     "hits": [
+      {
+       "item": "Oh Snap!® Dilly Bites® Fresh Dill Pickle Snack Pack",
+       "price": 1,
+       "size": "3.25 fl oz",
+       "relevance": 127,
+       "url": "https://www.bakersplus.com/p/0007432912338"
+      },
+      {
+       "item": "OH SNAP!® Chil-Lime Bites Fresh Dill Pickle Snack Pack",
+       "price": 1,
+       "size": "3.25 fl oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0007432912305"
+      },
+      {
+       "item": "Fresh Gourmet® Crispy Dillies™",
+       "price": 3.19,
+       "size": "3.5 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0078735917683"
+      },
+      {
+       "item": "Litehouse® Freeze Dried Dill",
+       "price": 6.49,
+       "size": "0.35 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0007766133630"
+      },
+      {
+       "item": "Simple Truth Organic® Baby Dill",
+       "price": 2.49,
+       "size": "0.5 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0001111001816"
+      },
+      {
+       "item": "OH SNAP!® Dilly Bites® Pickle Pouches",
+       "price": 6.79,
+       "size": "6 ct / 3.25 fl oz",
+       "relevance": 41,
+       "url": "https://www.bakersplus.com/p/0007432912334"
+      },
+      {
+       "item": "Taylor Farms Dill Pickle Chopped Salad Kit",
+       "price": 3.67,
+       "size": "11.75 oz",
+       "relevance": 40,
+       "url": "https://www.bakersplus.com/p/0003022304186"
+      },
+      {
+       "item": "Litehouse Dill Ranch Dressing & Dip, 20 fl oz",
+       "price": 6.99,
+       "size": "20 fl oz",
+       "relevance": 39,
+       "url": "https://www.bakersplus.com/p/0007766116206"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "fresh dill",
+     "attempts": [
+      {
+       "term": "fresh dill",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Vlasic Pickles, Kosher Dill, Stackers, Fresh Packed 16 Fl Oz",
+       "price": 3.69,
+       "size": "16 oz",
+       "relevance": 85,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickles/vlasic_pickles_kosher_dill_stackers_fresh_packed_16_fl_oz/p/35377"
+      },
+      {
+       "item": "Local Roots Organic Dill",
+       "price": 2.99,
+       "size": "0.5 oz",
+       "relevance": 44,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_dill/p/1764405684715974005"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "fresh dill",
+     "attempts": [
+      {
+       "term": "fresh dill",
+       "state": "OK",
+       "hits": 54
+      }
+     ],
+     "hits": [
+      {
+       "item": "Crazy Fresh Baby Dill Herb",
+       "price": 2.99,
+       "size": "0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1169680-crazy-fresh-baby-dill-herb-75-oz"
+      },
+      {
+       "item": "Baby Dill",
+       "price": 3.99,
+       "size": "1 bunch",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345991-baby-dill-each"
+      },
+      {
+       "item": "Fareway Whole Kosher Dill Pickles",
+       "price": 2.77,
+       "size": "32 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20544876-fareway-fresh-pack-kosher-dill-whole-pickles-32-fl-oz"
+      },
+      {
+       "item": "McCormick Dill Weed",
+       "price": 4.99,
+       "size": "0.3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87621-mccormick-dill-weed-0-3-oz"
+      },
+      {
+       "item": "Fareway Kosher Baby Dill Pickles",
+       "price": 2.77,
+       "size": "16 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25835332-fareway-pickles-kosher-baby-dill-16-fl-oz"
+      },
+      {
+       "item": "Vlasic Pickle Balls, Dill Pickle Flavored Corn Puffs",
+       "price": 1.99,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/55104799-vlasic-pickle-balls-dill-pickle-flavored-corn-puffs-2-oz"
+      },
+      {
+       "item": "Fareway Dill Relish",
+       "price": 1.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24090990-fareway-relish-dill-10-oz"
+      },
+      {
+       "item": "Fareway Spears Kosher Dill Pickles",
+       "price": 2.77,
+       "size": "24 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25807308-fareway-pickles-kosher-dill-spears-24-fl-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "fresh dill",
+     "attempts": [
+      {
+       "term": "fresh dill",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Envy Apples, 4 lbs.",
+       "price": 6.22,
+       "size": "",
+       "unit_price": "$1.55/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7IEL6D2PRYYW"
+      },
+      {
+       "item": "Bartlett Pears, 4 lbs.",
+       "price": 6.62,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1A1PCVOK5D9R"
+      },
+      {
+       "item": "Mt. Olive Kosher Dills Fresh Pack Pickles, 1 gal.",
+       "price": 6.34,
+       "size": "",
+       "unit_price": "$0.05/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4YE3V97M2NID"
+      },
+      {
+       "item": "Member's Mark Petite Dill Pickles, 46 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6WUCA2OCO6EC"
+      },
+      {
+       "item": "Early California Sliced Olives, 6.5 oz., 6 pk.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3LC4FS153UNO"
+      },
+      {
+       "item": "Lindsay Large Pitted Olives, 6 oz., 6 pk.",
+       "price": 11.48,
+       "size": "",
+       "unit_price": "$0.32/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/69XXFWHZ0MGX"
+      },
+      {
+       "item": "Early California Extra-Large Pitted Olives, 6 oz., 8 pk.",
+       "price": 14.78,
+       "size": "",
+       "unit_price": "$1.85/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3P4S1OZTUIQZ"
+      },
+      {
+       "item": "Pearls Sliced Olives, 6.5 oz., 6 pk.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$2.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6DCBHOLLY4NC"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,167 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T12:06:43",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "lean ground bison",
+   "state": "MATCHES",
+   "term_used": "lean ground bison",
+   "attempts": [
+    {
+     "term": "lean ground bison",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+    },
+    {
+     "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
+     "price": 28.64,
+     "size": "",
+     "unit_price": "$7.16/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Bottom Round Roast, priced per pound",
+     "price": 24.88,
+     "size": "",
+     "unit_price": "$5.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2DQ2WC7XLN1V"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+     "price": 32.12,
+     "size": "",
+     "unit_price": "$7.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1MLJW43LIF1U"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Ribeye Steak, priced per pound",
+     "price": 52.4,
+     "size": "",
+     "unit_price": "$14.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5CE7TCUT2WCP"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Bone-In Short Ribs, priced per pound",
+     "price": 40.92,
+     "size": "",
+     "unit_price": "$10.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JWYLTGBGO49"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks, priced per pound",
+     "price": 35.89,
+     "size": "",
+     "unit_price": "$9.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/61EZCPH9RV60"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Whole Beef Cowboy Ribeye, Cryovac, priced per pound",
+     "price": 344.83,
+     "size": "",
+     "unit_price": "$13.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1PL7R0CSUE1D"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "fresh dill",
+   "state": "MATCHES",
+   "term_used": "fresh dill",
+   "attempts": [
+    {
+     "term": "fresh dill",
+     "state": "MATCHES",
+     "hits": 17
+    }
+   ],
+   "hits": [
+    {
+     "item": "Envy Apples, 4 lbs.",
+     "price": 6.22,
+     "size": "",
+     "unit_price": "$1.55/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7IEL6D2PRYYW"
+    },
+    {
+     "item": "Bartlett Pears, 4 lbs.",
+     "price": 6.62,
+     "size": "",
+     "unit_price": "$1.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1A1PCVOK5D9R"
+    },
+    {
+     "item": "Mt. Olive Kosher Dills Fresh Pack Pickles, 1 gal.",
+     "price": 6.34,
+     "size": "",
+     "unit_price": "$0.05/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4YE3V97M2NID"
+    },
+    {
+     "item": "Member's Mark Petite Dill Pickles, 46 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6WUCA2OCO6EC"
+    },
+    {
+     "item": "Early California Sliced Olives, 6.5 oz., 6 pk.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3LC4FS153UNO"
+    },
+    {
+     "item": "Lindsay Large Pitted Olives, 6 oz., 6 pk.",
+     "price": 11.48,
+     "size": "",
+     "unit_price": "$0.32/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/69XXFWHZ0MGX"
+    },
+    {
+     "item": "Early California Extra-Large Pitted Olives, 6 oz., 8 pk.",
+     "price": 14.78,
+     "size": "",
+     "unit_price": "$1.85/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3P4S1OZTUIQZ"
+    },
+    {
+     "item": "Pearls Sliced Olives, 6.5 oz., 6 pk.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$2.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6DCBHOLLY4NC"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

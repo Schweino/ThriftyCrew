@@ -1,0 +1,138 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T13:27:34",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "mustard powder",
+   "state": "MATCHES",
+   "term_used": "mustard powder",
+   "attempts": [
+    {
+     "term": "mustard powder",
+     "state": "OK",
+     "hits": 3
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tone's Mustard, Ground",
+     "price": 3.49,
+     "size": "1.55 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21443924-tone-s-ground-mustard-1-55-oz"
+    },
+    {
+     "item": "McCormick Ground Mustard",
+     "price": 4.99,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97841-mccormick-ground-mustard-1-75-oz"
+    },
+    {
+     "item": "Simply Organic Mustard, Ground",
+     "price": 6.99,
+     "size": "2.65 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43336220-simply-organic-ground-mustard-seed-2-65-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "black pepper",
+   "state": "MATCHES",
+   "term_used": "black pepper",
+   "attempts": [
+    {
+     "term": "black pepper",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Pure Ground Black Pepper",
+     "price": 2.79,
+     "size": "1.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1926265-mccormick-pure-ground-black-pepper-1-5-oz"
+    },
+    {
+     "item": "Badia Spices Ground Black Pepper",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258044-badia-spices-pepper-black-ground-2-oz"
+    },
+    {
+     "item": "McCormick Pure Ground Black Pepper",
+     "price": 4.49,
+     "size": "3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24812677-mccormick-pure-ground-black-pepper-3-oz"
+    },
+    {
+     "item": "McCormick Black Peppercorn Adjustable Grinder",
+     "price": 2.99,
+     "size": "1.24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1862169-mccormick-black-pepper-grinder-1-oz"
+    },
+    {
+     "item": "Badia Spices Ground Black Pepper",
+     "price": 7.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136-badia-spices-black-pepper-ground-16-oz"
+    },
+    {
+     "item": "Badia Spices Ground Black Pepper",
+     "price": 3.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314327-badia-spices-black-pepper-ground-7-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "red pepper flakes",
+   "state": "MATCHES",
+   "term_used": "red pepper flakes",
+   "attempts": [
+    {
+     "term": "red pepper flakes",
+     "state": "OK",
+     "hits": 3
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Crushed Red Pepper",
+     "price": 3.99,
+     "size": "1.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
+    },
+    {
+     "item": "Badia Spices Crushed Red Pepper",
+     "price": 3.99,
+     "size": "4.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+    },
+    {
+     "item": "Simply Organic Red Pepper, Crushed",
+     "price": 6.99,
+     "size": "1.59 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

@@ -1,0 +1,138 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Cheeseburger Baked Tacos",
+  "source_url": "https://www.thereciperebel.com/cheeseburger-baked-tacos/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1½ lbs lean ground beef",
+      "item": "lean ground beef",
+      "qty": "1½",
+      "unit": "lbs",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ medium onion (diced)",
+      "item": "medium onion",
+      "qty": "½",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¾ teaspoon salt",
+      "item": "salt",
+      "qty": "¾",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ teaspoon pepper",
+      "item": "pepper",
+      "qty": "¼",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ cup barbecue sauce",
+      "item": "barbecue sauce",
+      "qty": "½",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon yellow mustard",
+      "item": "yellow mustard",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon sweet relish",
+      "item": "sweet relish",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10 hard taco shells ((I recommend Stand 'n' Stuff with the flat bottom))",
+      "item": "hard taco shells",
+      "qty": "10",
+      "unit": null,
+      "prep": "(I recommend Stand 'n' Stuff with the flat bottom)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded cheddar cheese",
+      "item": "shredded cheddar cheese",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tomato (chopped)",
+      "item": "tomato",
+      "qty": "1",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup shredded lettuce",
+      "item": "shredded lettuce",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Optional: 1000 islands dressing, mayo, pickles or bacon",
+      "item": "1000 islands dressing, mayo, pickles or bacon",
+      "qty": null,
+      "unit": null,
+      "prep": "Optional:",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a large skillet, cook ground beef and onion until browned. Season with salt and pepper. Stir in barbecue sauce.",
+    "Preheat oven to 350 degrees F.",
+    "Line taco shells up in a 9x13\" pan -- you will want just enough room so they don't fall over! (My pan was a little smaller this time, so I only got 9 in but this recipe does make 10 tacos)",
+    "Sprinkle half of the cheese in the bottom of the taco shells. Divide beef between shells. Top with remaining cheese and bake for 10 minutes until cheese is melted and tacos are heated through.",
+    "Remove from the oven and top as desired with tomato, lettuce, mayo, pickles or cooked bacon as desired."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

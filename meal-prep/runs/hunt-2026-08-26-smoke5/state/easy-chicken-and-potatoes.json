@@ -1,0 +1,31 @@
+{
+    "slug":  "easy-chicken-and-potatoes",
+    "title":  "Easy Chicken and Potatoes",
+    "source_url":  "https://www.spendwithpennies.com/easy-chicken-and-potatoes/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T13:17:02",
+    "updated":  "2026-08-26T13:17:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Plain lemon-pepper baked chicken thighs with potatoes and carrots is the same roast-chicken-and-potatoes dinner as live parmesan-garlic-sheet-pan-chicken-potatoes across all four structural axes (chicken/bake/potato/plain); only the seasoning differs and this is the more generic version.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:17:02",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/easy-chicken-and-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T13:17:02",
+                        "by":  "decider",
+                        "detail":  "Plain lemon-pepper baked chicken thighs with potatoes and carrots is the same roast-chicken-and-potatoes dinner as live parmesan-garlic-sheet-pan-chicken-potatoes across all four structural axes (chicken/bake/potato/plain); only the seasoning differs and this is the more generic version."
+                    }
+                ]
+}

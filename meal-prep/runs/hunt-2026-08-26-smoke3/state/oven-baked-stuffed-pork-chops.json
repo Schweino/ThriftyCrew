@@ -1,0 +1,31 @@
+{
+    "slug":  "oven-baked-stuffed-pork-chops",
+    "title":  "Oven Baked Stuffed Pork Chops",
+    "source_url":  "https://thecozycook.com/stuffed-pork-chops/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:39",
+    "updated":  "2026-08-26T12:00:39",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Bread-stuffing/sausage/cranberry stuffed baked pork chops collide with in-flight baked-stuffed-pork-chops (word-overlap 30, priced in hunt-2026-08-26-ten) - same stuffed-baked-chop dinner; keep the further-along in-flight recipe.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:39",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/stuffed-pork-chops/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:00:39",
+                        "by":  "decider",
+                        "detail":  "Bread-stuffing/sausage/cranberry stuffed baked pork chops collide with in-flight baked-stuffed-pork-chops (word-overlap 30, priced in hunt-2026-08-26-ten) - same stuffed-baked-chop dinner; keep the further-along in-flight recipe."
+                    }
+                ]
+}

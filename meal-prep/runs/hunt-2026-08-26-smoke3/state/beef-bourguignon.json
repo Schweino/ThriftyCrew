@@ -1,0 +1,31 @@
+{
+    "slug":  "beef-bourguignon",
+    "title":  "Beef Bourguignon",
+    "source_url":  "https://www.wellplated.com/beef-bourguignon/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:12",
+    "updated":  "2026-08-26T11:58:12",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same dinner as live beef-bourguignon-bowls: chuck braised in red wine with bacon, mushrooms and pearl onions; the un-bowled plating is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:12",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/beef-bourguignon/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:12",
+                        "by":  "decider",
+                        "detail":  "Same dinner as live beef-bourguignon-bowls: chuck braised in red wine with bacon, mushrooms and pearl onions; the un-bowled plating is not a distinct plate."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-and-vegetable-meal-prep",
+    "title":  "Chicken and Vegetable Meal Prep",
+    "source_url":  "https://www.budgetbytes.com/easy-chicken-and-vegetable-meal-prep/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T13:17:00",
+    "updated":  "2026-08-26T13:17:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast roasted with Brussels sprouts and sweet potatoes is essentially the live Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts (same protein/method/veg), and collides with the cranberry version this same batch.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:17:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/easy-chicken-and-vegetable-meal-prep/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T13:17:01",
+                        "by":  "decider",
+                        "detail":  "Chicken breast roasted with Brussels sprouts and sweet potatoes is essentially the live Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts (same protein/method/veg), and collides with the cranberry version this same batch."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "thai-chicken-curry",
+    "title":  "Thai Chicken Curry",
+    "source_url":  "https://www.wellplated.com/thai-chicken-curry/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:58:17",
+    "updated":  "2026-08-26T11:58:17",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Red-curry-paste + coconut-milk chicken over rice is the same dinner as live thai-red-curry-chicken-rice-bowls; Thai chicken curry region is heavily saturated (pressure 15).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:58:17",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/thai-chicken-curry/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:58:17",
+                        "by":  "decider",
+                        "detail":  "Red-curry-paste + coconut-milk chicken over rice is the same dinner as live thai-red-curry-chicken-rice-bowls; Thai chicken curry region is heavily saturated (pressure 15)."
+                    }
+                ]
+}

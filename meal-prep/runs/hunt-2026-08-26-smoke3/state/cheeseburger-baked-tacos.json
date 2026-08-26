@@ -1,0 +1,43 @@
+{
+    "slug":  "cheeseburger-baked-tacos",
+    "title":  "Cheeseburger Baked Tacos",
+    "source_url":  "https://www.thereciperebel.com/cheeseburger-baked-tacos/",
+    "protein":  "beef",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:33",
+    "updated":  "2026-08-26T12:06:08",
+    "terms":  [
+
+              ],
+    "reject_reason":  "RULED 10 residual lines, 0 rejected as unmappable, 1 ruled not-purchased, 1 ruled mapped-null, 8 mapped to existing ids. 9 new food-DB rows returned (93/7 Ground Beef, Yellow Onion, Black Pepper, Barb",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:33",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/cheeseburger-baked-tacos/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T12:00:34",
+                        "by":  "decider",
+                        "detail":  "Ground-beef cheeseburger filling (BBQ/mustard/relish) baked in hard taco shells is a distinct format from the live cheeseburger rice bowls and cheeseburger pasta; verified 562cal/41c/54p and batch-assembles."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T12:00:55",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-26T12:06:08",
+                        "by":  "mapper",
+                        "detail":  "RULED 10 residual lines, 0 rejected as unmappable, 1 ruled not-purchased, 1 ruled mapped-null, 8 mapped to existing ids. 9 new food-DB rows returned (93/7 Ground Beef, Yellow Onion, Black Pepper, Barb"
+                    }
+                ]
+}

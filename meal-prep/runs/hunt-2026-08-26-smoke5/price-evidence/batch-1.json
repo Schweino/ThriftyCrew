@@ -1,0 +1,865 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-26-smoke5",
+ "batch": 1,
+ "generated": "2026-08-26T13:27:34",
+ "batch_terms": [
+  "mustard powder",
+  "black pepper",
+  "red pepper flakes"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "mustard powder",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "UNUSABLE",
+     "term_used": "mustard powder",
+     "attempts": [
+      {
+       "term": "mustard powder",
+       "state": "ERROR",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "ERROR: The remote server returned an error: (503) Server Unavailable.",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "mustard",
+     "attempts": [
+      {
+       "term": "mustard powder",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "mustard",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "French's Honey Mustard 12 Oz",
+       "price": 4.79,
+       "size": "12 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/french_s_honey_mustard_12_oz/p/29581"
+      },
+      {
+       "item": "Our Family Mustard, Yellow 8 Oz",
+       "price": 0.99,
+       "size": "8 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_yellow_8_oz/p/7081428"
+      },
+      {
+       "item": "Our Family Mustard, Yellow 14 Oz",
+       "price": 1.69,
+       "size": "14 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_yellow_14_oz/p/7081425"
+      },
+      {
+       "item": "Our Family Mustard, Yellow 20 Oz",
+       "price": 1.99,
+       "size": "20 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_yellow_20_oz/p/6787059"
+      },
+      {
+       "item": "Our Family Mustard, Dijon 12 Oz",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_dijon_12_oz/p/7081422"
+      },
+      {
+       "item": "Our Family Mustard, Honey 12 Oz",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_honey_12_oz/p/7081423"
+      },
+      {
+       "item": "Horseradish Mustard Our Family",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/horseradish_mustard_our_family/p/7081424"
+      },
+      {
+       "item": "Our Family Sweet & Spicy Mustard",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_sweet_spicy_mustard/p/1564405684715662393"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "mustard powder",
+     "attempts": [
+      {
+       "term": "mustard powder",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tone's Mustard, Ground",
+       "price": 3.49,
+       "size": "1.55 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21443924-tone-s-ground-mustard-1-55-oz"
+      },
+      {
+       "item": "McCormick Ground Mustard",
+       "price": 4.99,
+       "size": "1.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97841-mccormick-ground-mustard-1-75-oz"
+      },
+      {
+       "item": "Simply Organic Mustard, Ground",
+       "price": 6.99,
+       "size": "2.65 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43336220-simply-organic-ground-mustard-seed-2-65-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "mustard powder",
+     "attempts": [
+      {
+       "term": "mustard powder",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Dan-O's Original Seasoning, 8.9 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.78/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+      },
+      {
+       "item": "Member's Mark Organic Ground Turmeric, 9.5 oz.",
+       "price": 5.54,
+       "size": "",
+       "unit_price": "$0.58/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/25VRW1LELOFE"
+      },
+      {
+       "item": "Member's Mark Ground Turmeric, 20 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DTR8SZPG3Y7"
+      },
+      {
+       "item": "Member's Mark Onion Powder, 21 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.43/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7IBDI3RE7DHD"
+      },
+      {
+       "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 27 oz.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6L8RR6SB5QMG"
+      },
+      {
+       "item": "Member's Mark Garlic Powder, 22.5 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4AO1496894LO"
+      },
+      {
+       "item": "Member's Mark Minced Garlic, 48 oz.",
+       "price": 5.68,
+       "size": "",
+       "unit_price": "$0.12/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/519FEIRI4HPG"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "black pepper",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "black pepper",
+     "attempts": [
+      {
+       "term": "black pepper",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tampico Black Pepper Whole",
+       "price": 1.69,
+       "size": "1 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0007654940007"
+      },
+      {
+       "item": "Tampico Black Pepper Ground",
+       "price": 1.69,
+       "size": "1 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0007654940006"
+      },
+      {
+       "item": "Smart Way™ Ground Black Pepper",
+       "price": 1.25,
+       "size": "2.25 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111011742"
+      },
+      {
+       "item": "McCormick Pure Ground Black Pepper",
+       "price": 2.95,
+       "size": "1.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0005210002992"
+      },
+      {
+       "item": "Kroger® Coarse Ground Black Pepper",
+       "price": 3.29,
+       "size": "1.75 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111000301"
+      },
+      {
+       "item": "McCormick Black Peppercorn Grinder",
+       "price": 7.49,
+       "size": "2.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0005210003065"
+      },
+      {
+       "item": "McCormick Pure Ground Black Pepper",
+       "price": 9.99,
+       "size": "6 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0005210003010"
+      },
+      {
+       "item": "McCormick Black Pepper Grinder, 1.0 oz",
+       "price": 2.99,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0005210003026"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "black pepper",
+     "attempts": [
+      {
+       "term": "black pepper",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Dan's Pantry Black Pepper",
+       "price": 7.19,
+       "size": "6.3 oz",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/dan_s_pantry_black_pepper/p/5920266"
+      },
+      {
+       "item": "That's Smart! Ground Black Pepper",
+       "price": 1.39,
+       "size": "2 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/that_s_smart_ground_black_pepper/p/1564405684704741125"
+      },
+      {
+       "item": "Badia Ground Black Pepper 7 Oz",
+       "price": 5.49,
+       "size": "7 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/badia_ground_black_pepper_7_oz/p/23838"
+      },
+      {
+       "item": "Mc Cormick Black Pepper Grinder 1 Oz",
+       "price": 3.99,
+       "size": "1 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_black_pepper_grinder_1_oz/p/2371287"
+      },
+      {
+       "item": "Mc Cormick Whole Black Pepper 1.87 Oz",
+       "price": 4.99,
+       "size": "1.87 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_whole_black_pepper_1_87_oz/p/2371286"
+      },
+      {
+       "item": "Sartori Cheese, Black Pepper 5.3 Oz",
+       "price": 6.99,
+       "size": "5.3 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/sartori_cheese_black_pepper_5_3_oz/p/2030340"
+      },
+      {
+       "item": "Spice Supreme Black Pepper, Pure Ground",
+       "price": null,
+       "size": "1.25 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_black_pepper_pure_ground/p/2089713"
+      },
+      {
+       "item": "That's Smart! Black Pepper, Ground 4 Oz",
+       "price": 3.79,
+       "size": "4 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/that_s_smart_black_pepper_ground_4_oz/p/1564405684704741121"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "black pepper",
+     "attempts": [
+      {
+       "term": "black pepper",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Pure Ground Black Pepper",
+       "price": 2.79,
+       "size": "1.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1926265-mccormick-pure-ground-black-pepper-1-5-oz"
+      },
+      {
+       "item": "Badia Spices Ground Black Pepper",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258044-badia-spices-pepper-black-ground-2-oz"
+      },
+      {
+       "item": "McCormick Pure Ground Black Pepper",
+       "price": 4.49,
+       "size": "3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24812677-mccormick-pure-ground-black-pepper-3-oz"
+      },
+      {
+       "item": "McCormick Black Peppercorn Adjustable Grinder",
+       "price": 2.99,
+       "size": "1.24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1862169-mccormick-black-pepper-grinder-1-oz"
+      },
+      {
+       "item": "Badia Spices Ground Black Pepper",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136-badia-spices-black-pepper-ground-16-oz"
+      },
+      {
+       "item": "Badia Spices Ground Black Pepper",
+       "price": 3.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314327-badia-spices-black-pepper-ground-7-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "black pepper",
+     "attempts": [
+      {
+       "term": "black pepper",
+       "state": "MATCHES",
+       "hits": 35
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.66/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4KBPWOZW3WU1"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Member's Mark Fine Ground Black Pepper, 18 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/10L5HWIEQNVJ"
+      },
+      {
+       "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+      },
+      {
+       "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
+       "price": 33.48,
+       "size": "",
+       "unit_price": "$6.70/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+      },
+      {
+       "item": "Dan-O's Original Seasoning, 8.9 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.78/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+      },
+      {
+       "item": "Member's Mark Organic Ground Black Pepper, 7 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GI5ITFDZYTC"
+      },
+      {
+       "item": "Member's Mark Black Pepper Grinder, 7 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/74XJVQ0KEZE0"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "red pepper flakes",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Grated Parmesan Cheese and Red Pepper Flakes Shaker",
+       "price": 3,
+       "size": "8 oz",
+       "relevance": 125,
+       "url": "https://www.bakersplus.com/p/0001111016336"
+      },
+      {
+       "item": "Smart Way™ Crushed Red Pepper",
+       "price": 1.25,
+       "size": "1.5 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0001111011745"
+      },
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 6.99,
+       "size": "4.62 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0005210003835"
+      },
+      {
+       "item": "Kroger® Crushed Red Pepper Shaker",
+       "price": 5.49,
+       "size": "4.25 oz",
+       "relevance": 59,
+       "url": "https://www.bakersplus.com/p/0001111000320"
+      },
+      {
+       "item": "Spice Islands Crushed Red Pepper, Kosher",
+       "price": 7.99,
+       "size": "1.4 oz",
+       "relevance": 57,
+       "url": "https://www.bakersplus.com/p/0001732400303"
+      },
+      {
+       "item": "Simple Truth Organic® Crushed Red Pepper Shaker",
+       "price": 3.99,
+       "size": "1.19 oz",
+       "relevance": 55,
+       "url": "https://www.bakersplus.com/p/0001111002384"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red pepper",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "red pepper",
+       "state": "OK",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Peppers",
+       "price": 1.79,
+       "size": "1 ct",
+       "relevance": 137,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/red_peppers/p/78440"
+      },
+      {
+       "item": "Our Family Red Pepper, Crushed 1.5 Oz",
+       "price": 2.99,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_red_pepper_crushed_1_5_oz/p/7081493"
+      },
+      {
+       "item": "Mc Cormick Crushed Red Pepper 1.5 Oz",
+       "price": 3.79,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_crushed_red_pepper_1_5_oz/p/34736"
+      },
+      {
+       "item": "Mt. Olive Roasted Red Peppers 12 Fl Oz",
+       "price": 3.29,
+       "size": "12 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_roasted_red_peppers_12_fl_oz/p/12781"
+      },
+      {
+       "item": "Mc Cormick Ground Cayenne Red Pepper 1 Oz",
+       "price": 3.69,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_ground_cayenne_red_pepper_1_oz/p/34668"
+      },
+      {
+       "item": "Full Circle Market Crushed Red Pepper 1.2 Oz",
+       "price": 4.99,
+       "size": "1.2 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_crushed_red_pepper_1_2_oz/p/8028177"
+      },
+      {
+       "item": "Fresh & Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
+       "price": 4.49,
+       "size": "10 oz",
+       "relevance": 125,
+       "url": "https://www.shopfamilyfare.com/shop/deli/party_trays_dips/fresh_finest_by_our_family_roasted_red_pepper_hummus_10_oz/p/1564405684713576563"
+      },
+      {
+       "item": "Mezzetta Roasted Red Peppers, California Fresh Pack, Mild 16 Oz",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mezzetta_roasted_red_peppers_california_fresh_pack_mild_16_oz/p/41756"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 3.99,
+       "size": "1.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
+      },
+      {
+       "item": "Badia Spices Crushed Red Pepper",
+       "price": 3.99,
+       "size": "4.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+      },
+      {
+       "item": "Simply Organic Red Pepper, Crushed",
+       "price": 6.99,
+       "size": "1.59 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "MATCHES",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$1.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+       "price": 20.98,
+       "size": "",
+       "unit_price": "$5.59/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+      },
+      {
+       "item": "Dan-O's Original Seasoning, 8.9 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.78/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+      },
+      {
+       "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 10.5 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.47/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AZ9M02O6XSN"
+      },
+      {
+       "item": "Member's Mark Ground White Pepper, 18 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.83/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+      },
+      {
+       "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

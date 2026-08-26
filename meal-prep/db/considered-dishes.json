@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-26T10:01:16",
-    "count":  181,
+    "updated":  "2026-08-26T13:17:02",
+    "count":  219,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -2725,6 +2725,579 @@
                        "run":  "hunt-2026-08-26-smoke",
                        "by":  "decider",
                        "at":  "2026-08-26T10:01:16"
+                   },
+                   {
+                       "key":  "pork|bake|bbq",
+                       "slug":  "fall-apart-oven-baked-ribs-with-chipotle-bbq-sauce",
+                       "name":  "Fall Apart Oven Baked Ribs with Chipotle BBQ Sauce",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Chipotle-adobo BBQ oven pork ribs, distinct from catalog country-style and Brazilian rib dishes; verified 723cal/26.5c band, batch-scalable at 10 servings.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:29:55"
+                   },
+                   {
+                       "key":  "chicken|skillet|soy",
+                       "slug":  "stir-fry-noodles",
+                       "name":  "Stir Fry Noodles",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Soy-hoisin chicken noodle stir-fry; distinct from catalog beef/turkey stir-fries and from Andong jjimdak / pad kee mao noodle dishes, verified band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:29:57"
+                   },
+                   {
+                       "key":  "chicken|stew|plain",
+                       "slug":  "spanish-chicken-stew",
+                       "name":  "Spanish Chicken Stew",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Spanish smoked-paprika chicken thigh stew (olives, raisins, sherry vinegar); widens catalog beyond Jamaican/Senegalese/Persian chicken stews, verified 479cal band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:29:58"
+                   },
+                   {
+                       "key":  "beef|stew|wine",
+                       "slug":  "beef-bourguignon-beef-burgundy",
+                       "name":  "Beef Bourguignon (Beef Burgundy)",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dish as catalog beef-bourguignon-bowls: beef braised in red wine with bacon, mushrooms and pearl onions; French red-wine-braise niche already filled.",
+                       "dupe_of":  [
+                                       "beef-bourguignon-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:30:00"
+                   },
+                   {
+                       "key":  "pork|skillet|plain",
+                       "slug":  "pork-chops-with-apples",
+                       "name":  "Pork Chops With Apples",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Skillet pork chops with apples/onion pan sauce duplicates the in-flight apple-spice-pork-chops and backlog fried-pork-chops-with-apples; same core plate, avoid double-through.",
+                       "dupe_of":  [
+                                       "apple-spice-pork-chops"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:30:01"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "crockpot-chicken-and-potatoes",
+                       "name":  "Crockpot Chicken and Potatoes",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Garlic-parmesan-herb chicken + potatoes; same plate as catalog parmesan-garlic-sheet-pan-chicken-thighs-and-potatoes, method (crockpot vs sheet pan) is not a distinguishing difference.",
+                       "dupe_of":  [
+                                       "parmesan-garlic-sheet-pan-chicken-potatoes"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:30:02"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "instant-pot-whole-chicken",
+                       "name":  "Instant Pot Whole Chicken",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Plain whole-chicken pressure-cook base recipe (onion/broth/herbs/gravy), no distinctive dish identity and not a batch-scalable dinner concept.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:30:03"
+                   },
+                   {
+                       "key":  "chicken|braised|tomato",
+                       "slug":  "chicken-tinga-tinga-de-pollo-video",
+                       "name":  "Chicken Tinga (Tinga de Pollo)",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chipotle-tomato braised shredded chicken tinga; duplicates catalog slow-cooker-chicken-tinga-bowls (same dish, sauce and method).",
+                       "dupe_of":  [
+                                       "slow-cooker-chicken-tinga-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke2",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:30:04"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "crock-pot-chicken-wings",
+                       "name":  "Crock Pot Chicken Wings",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Slow-cooker buffalo wings with celery/blue-cheese are an appetizer/snack format, not a portioned dinner entree the catalog carries.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:10"
+                   },
+                   {
+                       "key":  "chicken|bake|herb",
+                       "slug":  "grilled-pesto-chicken-couscous-bowls",
+                       "name":  "Grilled Pesto Chicken Couscous Bowls",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Grilled pesto chicken over couscous with roasted zucchini/tomato; distinct Mediterranean grain-bowl format, verified band, adds cuisine spread.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:12"
+                   },
+                   {
+                       "key":  "beef|braised|wine",
+                       "slug":  "beef-bourguignon",
+                       "name":  "Beef Bourguignon",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Classic red-wine beef braise with bacon/mushrooms/pearl onions already live as beef-bourguignon-bowls; identical dinner.",
+                       "dupe_of":  [
+                                       "beef-bourguignon-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:13"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "crock-pot-chicken-pot-pie",
+                       "name":  "Crock Pot Chicken Pot Pie",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Creamy chicken-and-mixed-veg pot pie filling duplicates live chicken-pot-pie-biscuit-casserole; method change alone does not make a new dinner.",
+                       "dupe_of":  [
+                                       "chicken-pot-pie-biscuit-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:14"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "taco-pasta-one-pot",
+                       "name":  "Taco Pasta (One Pot)",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "One-pot cheesy taco beef pasta is the same dinner as live cheesy-taco-spaghetti.",
+                       "dupe_of":  [
+                                       "cheesy-taco-spaghetti"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:15"
+                   },
+                   {
+                       "key":  "chicken|skillet|tomato",
+                       "slug":  "chicken-enchilada-skillet",
+                       "name":  "Chicken Enchilada Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Shredded-chicken enchilada-sauce skillet duplicates live chicken-enchilada-rice-bowls and mirrors the existing beef/turkey enchilada-skillet-bowls; enchilada region is saturated.",
+                       "dupe_of":  [
+                                       "chicken-enchilada-rice-bowls",
+                                       "beef-enchilada-skillet-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:16"
+                   },
+                   {
+                       "key":  "chicken|skillet|curry",
+                       "slug":  "thai-chicken-curry",
+                       "name":  "Thai Chicken Curry",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Thai red curry chicken with coconut milk over rice duplicates live thai-red-curry-chicken-rice-bowls.",
+                       "dupe_of":  [
+                                       "thai-red-curry-chicken-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:17"
+                   },
+                   {
+                       "key":  "beef|bake|plain",
+                       "slug":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
+                       "name":  "Sheet Pan Meatballs with Chickpeas Cauliflower and Butternut",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Harissa/tzatziki-spiced sheet-pan meatballs with roasted chickpeas and vegetables; distinct Mediterranean roasted-tray dinner unlike existing meatball bowls, verified band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:18"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "beef-stroganoff",
+                       "name":  "Beef Stroganoff",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Classic beef-and-mushroom stroganoff over noodles duplicates live ground-beef-stroganoff-pasta; also collides with an in-flight slow-cooker stroganoff.",
+                       "dupe_of":  [
+                                       "ground-beef-stroganoff-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:20"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "braised-beef",
+                       "name":  "Braised Beef",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Red-wine braised beef chuck with mirepoix over mash duplicates live beef-bourguignon-bowls; matches prior beef|any|wine dupe rulings.",
+                       "dupe_of":  [
+                                       "beef-bourguignon-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T11:58:21"
+                   },
+                   {
+                       "key":  "chicken|skillet|cheese",
+                       "slug":  "cheese-chicken",
+                       "name":  "Cheese Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Broccoli-cheddar cheese-sauce chicken duplicates live chicken-divan-broccoli-bake (same chicken+broccoli+cheddar identity); skillet vs casserole format is not a distinguishing difference.",
+                       "dupe_of":  [
+                                       "chicken-divan-broccoli-bake"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:32"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "crock-pot-roast",
+                       "name":  "Crock Pot Roast",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chuck roast braised with potatoes and carrots duplicates live slow-cooker-pot-roast-potatoes-carrots; already 5 pot-roast dinners in catalog.",
+                       "dupe_of":  [
+                                       "slow-cooker-pot-roast-potatoes-carrots"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:33"
+                   },
+                   {
+                       "key":  "beef|bake|cheese",
+                       "slug":  "cheeseburger-baked-tacos",
+                       "name":  "Cheeseburger Baked Tacos",
+                       "protein":  "beef",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Distinct baked-taco cheeseburger format, not the same dinner as live cheeseburger-rice-bowls or cheeseburger-pasta; verified band 562cal/41c/54p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:34"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "cheesy-chicken-potato-casserole",
+                       "name":  "Cheesy Chicken \u0026 Potato Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Loaded chicken-potato-cheddar-bacon-ranch casserole duplicates live loaded-chicken-and-potato-casserole (word-overlap 30, bge 0.88); same loaded-potato dinner.",
+                       "dupe_of":  [
+                                       "loaded-chicken-and-potato-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:36"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "carne-asada-vampiro-tacos",
+                       "name":  "Carne Asada Vampiro Tacos",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Carne asada steak in tortilla form duplicates the flavor identity of live carne-asada-burrito and carne-asada-rice-bowls; vampiro format re-plates an already twice-covered carne asada lane.",
+                       "dupe_of":  [
+                                       "carne-asada-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:38"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "oven-baked-stuffed-pork-chops",
+                       "name":  "Oven Baked Stuffed Pork Chops",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Bread-stuffing stuffed baked pork chops duplicate the in-flight baked-stuffed-pork-chops (priced, hunt-2026-08-26-ten); same stuffed-baked-chop dinner, in-flight recipe retained.",
+                       "dupe_of":  [
+                                       "baked-stuffed-pork-chops"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke3",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:00:39"
+                   },
+                   {
+                       "key":  "beef|skillet|soy",
+                       "slug":  "steak-stir-fry-recipe",
+                       "name":  "Steak Stir Fry Recipe",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Seared steak in butter/lemon/thyme with zucchini and red pepper; verified 555cal/5c/36p. Sauce_family \u0027soy\u0027 is a misclassification (no soy in ingredients). Distinct from live beef-mushroom-stir-fry-rice-plate (different veg + no cream/mushroom); low-carb steak skillet the catalog lacks.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:42"
+                   },
+                   {
+                       "key":  "pork|skillet|plain",
+                       "slug":  "french-onion-pork-chops",
+                       "name":  "French Onion Pork Chops",
+                       "protein":  "pork",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Bone-in center-cut chops seared then simmered in caramelized onion, dry white wine and gruyere; verified 540cal/13c/39p. Distinct from all live pork-chop dinners (cajun-rice, smothered-rice, scalloped-potato, bacon-gravy) and from in-flight creamy-garlic-herb-wine chop — French-onion profile the catalog lacks.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:44"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "tacos-de-alambre",
+                       "name":  "Tacos de Alambre",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Shaved steak griddled with bacon, Mexican chorizo, peppers and melted Oaxaca cheese; verified 709cal/8c/50p. Empty neighbour set (562 live + 57 in-flight searched). Distinct authentic Mexican dish from the ground-beef taco skillets already covered; widens the regional Mexican lane.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:45"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "buffalo-chicken-quesadillas",
+                       "name":  "Buffalo Chicken Quesadillas",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Shredded buffalo chicken with ranch and Mexican cheese in flour tortillas; duplicates live buffalo-chicken-burrito on all four axes (chicken + buffalo/cheese + tortilla + skillet, bge 0.89). Buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl); folded-vs-rolled adds no new dinner.",
+                       "dupe_of":  [
+                                       "buffalo-chicken-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:47"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "hawaiian-chicken-salad",
+                       "name":  "Hawaiian Chicken Salad",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Coconut-pineapple marinated chicken plated cold over lettuce with avocado, red onion and a lime-oil dressing; a composed salad that wilts and doesn\u0027t batch as meal-prep, matching prior chicken-salad not-fit rulings. Coconut-lime rice is a side, not the dish.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:48"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "southwest-chicken-salad",
+                       "name":  "Southwest Chicken Salad",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Chili-lime chicken breast served cold over romaine with cherry tomato, black bean, corn, avocado and Greek-yogurt dressing; a composed salad that does not hold for batch meal prep, consistent with prior cold-salad not-fit rulings.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:49"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-burrito-bowls",
+                       "name":  "Chicken Burrito Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Archetypal Tex-Mex chicken burrito bowl (chili/cumin/ancho chicken thighs, cilantro-lime rice, lettuce/cheese/pico/guac); verified 552cal/42c/48p. Not a clean dupe of a single live dish but adds no novelty to a saturated Tex-Mex chicken lane the catalog already skews toward; cut rather than pad.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke4",
+                       "by":  "decider",
+                       "at":  "2026-08-26T12:49:49"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-and-rice-one-pot",
+                       "name":  "Chicken and Rice (One Pot!)",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; distinct from maqluba/butter/adobo/curry/mole chicken-rice dishes, band verified 566cal/43c/46p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:16:54"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "copycat-longhorn-parmesan-crusted-chicken",
+                       "name":  "Copycat Longhorn Parmesan Crusted Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Ranch-marinated pan-seared chicken with a provolone/parmesan/panko crust and no tomato sauce; distinct restaurant copycat, not chicken parmesan or meatballs, band verified 660cal/13c/35p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:16:56"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+                       "name":  "Italian Chicken Tortellini Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Creamy tomato-cream chicken-tortellini skillet with roasted red peppers and spinach; distinct from slow-cooker Italian chicken penne (different starch/method), band verified 562cal/44c/46p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:16:57"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "coconut-marinated-chicken-grill-or-stove",
+                       "name":  "Coconut Marinated Chicken (Grill or Stove)",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Coconut-milk + curry-powder + lime chicken is the same coconut-curry-chicken identity as live Kuku Paka (Swahili coconut chicken curry); coconut/curry chicken region already saturated.",
+                       "dupe_of":  [
+                                       "kuku-paka-swahili-coconut-chicken-curry"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:16:58"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-cranberry-chicken-dinner",
+                       "name":  "Sheet Pan Cranberry Chicken Dinner",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken + sweet potato + Brussels sprouts + cranberry-balsamic glaze duplicates the live harvest sheet-pan chicken and the accepted balsamic-cranberry sweet-potato chicken across all four axes.",
+                       "dupe_of":  [
+                                       "sheet-pan-chicken-sweet-potato-brussels",
+                                       "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:16:59"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-and-vegetable-meal-prep",
+                       "name":  "Chicken and Vegetable Meal Prep",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Roast chicken breast with Brussels sprouts and sweet potatoes duplicates the live harvest sheet-pan chicken with the same veg and method; only seasoning differs.",
+                       "dupe_of":  [
+                                       "sheet-pan-chicken-sweet-potato-brussels",
+                                       "sheet-pan-cranberry-chicken-dinner"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:17:01"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "easy-chicken-and-potatoes",
+                       "name":  "Easy Chicken and Potatoes",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Lemon-pepper baked chicken thighs with baby potatoes and carrots duplicates the live parmesan-garlic sheet-pan chicken and potatoes; same chicken+potato bake, seasoning-only difference, generic version.",
+                       "dupe_of":  [
+                                       "parmesan-garlic-sheet-pan-chicken-potatoes"
+                                   ],
+                       "run":  "hunt-2026-08-26-smoke5",
+                       "by":  "decider",
+                       "at":  "2026-08-26T13:17:02"
                    }
                ]
 }

@@ -1,0 +1,246 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-26T13:27:25",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "mustard powder",
+   "state": "MATCHES",
+   "term_used": "mustard powder",
+   "attempts": [
+    {
+     "term": "mustard powder",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Dan-O's Original Seasoning, 8.9 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.78/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+    },
+    {
+     "item": "Member's Mark Organic Ground Turmeric, 9.5 oz.",
+     "price": 5.54,
+     "size": "",
+     "unit_price": "$0.58/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/25VRW1LELOFE"
+    },
+    {
+     "item": "Member's Mark Ground Turmeric, 20 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.40/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2DTR8SZPG3Y7"
+    },
+    {
+     "item": "Member's Mark Onion Powder, 21 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.43/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7IBDI3RE7DHD"
+    },
+    {
+     "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 27 oz.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6L8RR6SB5QMG"
+    },
+    {
+     "item": "Member's Mark Garlic Powder, 22.5 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4AO1496894LO"
+    },
+    {
+     "item": "Member's Mark Minced Garlic, 48 oz.",
+     "price": 5.68,
+     "size": "",
+     "unit_price": "$0.12/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/519FEIRI4HPG"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "black pepper",
+   "state": "MATCHES",
+   "term_used": "black pepper",
+   "attempts": [
+    {
+     "term": "black pepper",
+     "state": "MATCHES",
+     "hits": 35
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick All Purpose Garlic Onion Black Pepper Sea Salt, 9.12 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.66/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4KBPWOZW3WU1"
+    },
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Member's Mark Fine Ground Black Pepper, 18 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/10L5HWIEQNVJ"
+    },
+    {
+     "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+    },
+    {
+     "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
+     "price": 33.48,
+     "size": "",
+     "unit_price": "$6.70/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+    },
+    {
+     "item": "Dan-O's Original Seasoning, 8.9 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.78/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+    },
+    {
+     "item": "Member's Mark Organic Ground Black Pepper, 7 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.14/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6GI5ITFDZYTC"
+    },
+    {
+     "item": "Member's Mark Black Pepper Grinder, 7 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.14/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/74XJVQ0KEZE0"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "red pepper flakes",
+   "state": "MATCHES",
+   "term_used": "red pepper flakes",
+   "attempts": [
+    {
+     "term": "red pepper flakes",
+     "state": "MATCHES",
+     "hits": 21
+    }
+   ],
+   "hits": [
+    {
+     "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$1.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
+    },
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+    },
+    {
+     "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+     "price": 20.98,
+     "size": "",
+     "unit_price": "$5.59/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+    },
+    {
+     "item": "Dan-O's Original Seasoning, 8.9 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.78/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+    },
+    {
+     "item": "Kinder's The Blend Seasoning Salt, Pepper and Garlic, 10.5 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.47/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5AZ9M02O6XSN"
+    },
+    {
+     "item": "Member's Mark Ground White Pepper, 18 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.83/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+    },
+    {
+     "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

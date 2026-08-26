@@ -1,0 +1,274 @@
+﻿{
+    "slug":  "chicken-and-rice-one-pot",
+    "title":  "Chicken and Rice (One Pot!)",
+    "source_url":  "https://thecozycook.com/chicken-and-rice/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-26",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3 tablespoons butter (divided)",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  147,
+                            "buy":  "10 1/2 tablespoons (1 1/3 sticks), divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 yellow onion (diced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium onions, diced (about 2 1/2 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cloves garlic (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "10 to 11 cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 ½ lbs. chicken breast (diced)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source states the weight, so no each-weight assumption is needed. Diced breast for a skillet is plain boneless skinless breast; the vocabulary row simply carries those words in its name, so the form flag is a wording artefact. Board 7 of 7, and the source states 1.5 lb so no each-weight guess.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Salt/Pepper",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "Salt and pepper, to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Seasoning-to-taste line; no number printed so nothing can disagree with the grams.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons Italian seasoning",
+                            "item":  "Italian Seasoning",
+                            "bid":  "italian-seasoning",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "2 tablespoons plus 1 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: italian-seasoning, 7 of 7 stores, cheapest 0.698 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/3 cup dry white wine (see notes)",
+                            "item":  "Dry White Wine",
+                            "bid":  "white-wine",
+                            "board":  "weekly",
+                            "grams":  276,
+                            "buy":  "1 cup plus 2 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Weighed water-like at 29.57 g per fl oz (2.67 fl oz).",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 ½ cups chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  2100,
+                            "buy":  "8 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup uncooked white long grain rice",
+                            "item":  "Rice",
+                            "bid":  "rice",
+                            "board":  null,
+                            "grams":  648,
+                            "buy":  "3 1/2 cups uncooked",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "185 g per cup dry long grain white rice, consistent with the 45 g per 1/4 cup label. Same-form vocabulary row Rice [rice], board 7 of 7; long grain is the default white rice the id prices, not a variety premium like wild or arborio.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ cup half and half",
+                            "item":  "Half and Half",
+                            "bid":  "half-and-half",
+                            "board":  "recipe",
+                            "grams":  420,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "From the DB row\u0027s own basis (2 tbsp = 30 g).",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "½ cup Parmesan cheese (freshly grated)",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  "recipe",
+                            "grams":  196,
+                            "buy":  "1 3/4 cups, freshly grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: parmesan, 7 of 7 stores, cheapest 0.3092 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups spinach (roughly chopped)",
+                            "item":  "Spinach",
+                            "bid":  "spinach",
+                            "board":  "weekly",
+                            "grams":  210,
+                            "buy":  "7 cups, roughly chopped (about 7 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "30 g per cup chopped fresh spinach.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon lemon juice",
+                            "item":  "Lemon Juice",
+                            "bid":  "lemon-juice",
+                            "board":  "recipe",
+                            "grams":  52,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: lemon-juice, 7 of 7 stores, cheapest 0.0675 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon dried parsley",
+                            "item":  "Dried Parsley",
+                            "bid":  "dried-parsley",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-parsley, 7 of 7 stores, cheapest 1.4394 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon mustard powder",
+                            "item":  "Mustard Powder",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  7,
+                            "buy":  "1 tablespoon plus 1/2 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "Dry ground mustard, not the prepared condiment; pantry-static pricing. Dry ground mustard seed is not the prepared condiment `mustard` - different price class and a completely different gram weight per teaspoon, so I refuse that bridge. 1 tsp does not justify minting an id; pantry-static pricing is safe.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon dried oregano",
+                            "item":  "Dried Oregano",
+                            "bid":  "dried-oregano",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dried-oregano, 7 of 7 stores, cheapest 0.9307 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "3/4 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "mustard powder"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Mustard Powder"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+                           "\u0027Salt/Pepper\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  566,
+                                                                   "carbs_g":  43,
+                                                                   "protein_g":  46
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  577,
+                                                               "carbs_g":  44.7,
+                                                               "protein_g":  48.7
+                                                           },
+                              "deltas":  {
+                                             "calories_pct":  1.9,
+                                             "carbs_pct":  4.0,
+                                             "protein_pct":  5.9
+                                         },
+                              "verdict":  "PASS - protein within 6%, well inside the 15% band, so the 680 g chicken and 185 g dry rice portions are right.",
+                              "condition_flag":  "LOUD: this recipe is over the run\u0027s 35 g carbohydrate condition on BOTH numbers - the source\u0027s own 43 g and my computed 44.7 g per serving (the 185 g of dry rice alone is 148 g carbs). Calories 577 are inside the 400-650 band. I did NOT reject it: the carb gate is the macro gate\u0027s ruling to make on the estate\u0027s own scaled compute, not an identity question, but it should be ruled before this ships."
+                          }
+}

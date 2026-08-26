@@ -1,0 +1,137 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-26T12:06:52",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "lean ground bison",
+   "state": "MATCHES",
+   "term_used": "lean ground bison",
+   "attempts": [
+    {
+     "term": "lean ground bison",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "93% Lean 7% Fat Ground Beef",
+     "price": 7.99,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387862-93-lean-7-fat-ground-beef-1-each"
+    },
+    {
+     "item": "85% Lean 15% Fat Ground Beef",
+     "price": 6.99,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387270-85-lean-15-fat-ground-beef-1-each"
+    },
+    {
+     "item": "93% Lean 7% Fat Ground Beef Bulk",
+     "price": 74.9,
+     "size": "$7.49 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386242-93-lean-7-fat-ground-beef-10-lb"
+    },
+    {
+     "item": "High Plains Bison Bison Sirloin",
+     "price": 12.99,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17381291-high-plains-bison-bison-sirloin-6-oz"
+    },
+    {
+     "item": "High Plains Bison Bison New York Strip",
+     "price": 17.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3301390-high-plains-bison-bison-new-york-strip-8-oz"
+    },
+    {
+     "item": "80% Lean 20% Fat Ground Beef",
+     "price": 6.49,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386578-80-lean-20-fat-ground-beef-1-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "fresh dill",
+   "state": "MATCHES",
+   "term_used": "fresh dill",
+   "attempts": [
+    {
+     "term": "fresh dill",
+     "state": "OK",
+     "hits": 54
+    }
+   ],
+   "hits": [
+    {
+     "item": "Crazy Fresh Baby Dill Herb",
+     "price": 2.99,
+     "size": "0.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1169680-crazy-fresh-baby-dill-herb-75-oz"
+    },
+    {
+     "item": "Baby Dill",
+     "price": 3.99,
+     "size": "1 bunch",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345991-baby-dill-each"
+    },
+    {
+     "item": "Fareway Whole Kosher Dill Pickles",
+     "price": 2.77,
+     "size": "32 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20544876-fareway-fresh-pack-kosher-dill-whole-pickles-32-fl-oz"
+    },
+    {
+     "item": "McCormick Dill Weed",
+     "price": 4.99,
+     "size": "0.3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/87621-mccormick-dill-weed-0-3-oz"
+    },
+    {
+     "item": "Fareway Kosher Baby Dill Pickles",
+     "price": 2.77,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25835332-fareway-pickles-kosher-baby-dill-16-fl-oz"
+    },
+    {
+     "item": "Vlasic Pickle Balls, Dill Pickle Flavored Corn Puffs",
+     "price": 1.99,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/55104799-vlasic-pickle-balls-dill-pickle-flavored-corn-puffs-2-oz"
+    },
+    {
+     "item": "Fareway Dill Relish",
+     "price": 1.99,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24090990-fareway-relish-dill-10-oz"
+    },
+    {
+     "item": "Fareway Spears Kosher Dill Pickles",
+     "price": 2.77,
+     "size": "24 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25807308-fareway-pickles-kosher-dill-spears-24-fl-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

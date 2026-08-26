@@ -1,0 +1,68 @@
+{
+    "slug":  "chicken-and-rice-one-pot",
+    "title":  "Chicken and Rice (One Pot!)",
+    "source_url":  "https://thecozycook.com/chicken-and-rice/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-26T13:16:53",
+    "updated":  "2026-08-26T13:31:02",
+    "terms":  [
+                  {
+                      "term":  "mustard powder",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 45.1g carbs above the 45 limit",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:16:53",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/chicken-and-rice/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T13:16:54",
+                        "by":  "decider",
+                        "detail":  "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; the chicken-rice live neighbours (maqluba, butter/adobo/curry/mole bowls) are all distinct flavor families, no dupe, band verified 566/43/46."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T13:17:25",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T13:26:46",
+                        "by":  "mapper",
+                        "detail":  "18 lines, 15 pre-resolved, 3 residual ruled: 2 mapped (chicken-breast, rice), 1 mapped-null (Mustard Powder). Rejections: mustard powder onto `mustard` (prepared condiment - wrong price class and wrong gram weight per tsp). New DB rows returned: Rice, Mustard Powder. Absent term reported: mustard powder. Confidence: high on all three; the only thing I am not confident about is the carb condition f"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T13:26:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T13:31:00",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-26T13:31:02",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 45.1g carbs above the 45 limit"
+                    }
+                ]
+}

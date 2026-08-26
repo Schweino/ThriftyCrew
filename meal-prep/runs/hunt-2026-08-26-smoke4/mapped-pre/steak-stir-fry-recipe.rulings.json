@@ -1,0 +1,171 @@
+{
+ "slug": "steak-stir-fry-recipe",
+ "lines": [
+  {
+   "raw": "1 ½ pounds Steaks – excess fat trimmed & cut into generous 1-inch pieces (SEE NOTES)",
+   "buy": "5 1/4 lb top sirloin steak, trimmed of excess fat and cut into 1-inch pieces",
+   "grams_source": 680,
+   "notes": "1 1/2 lb source basis = 680 g raw. Cut read as top sirloin: the source says only 'Steaks (SEE NOTES)' and the notes text is not in the transcription, but 201 cal/100 g raw sirloin is what reproduces the source's own 555 cal / 36 g protein."
+  },
+  {
+   "raw": "1 heaping TBS Fresh Thyme Leaves – chopped",
+   "buy": "3 1/2 tbsp chopped fresh thyme leaves (about one 3/4 oz package)",
+   "grams_source": 4,
+   "notes": "Heaping tbsp of chopped fresh leaves weighed at 4 g. Fresh only; dried thyme is a different price class and about half the weight per spoon."
+  },
+  {
+   "raw": "1 tsp EACH: Smoked Paprika & Onion Powder",
+   "buy": "3 1/2 tsp each smoked paprika and onion powder",
+   "grams_source": 4.7,
+   "notes": "Two spices on one line (2.3 g smoked paprika + 2.4 g onion powder). The extraction flagged it and could not split it; costed and macro'd here as onion powder, a difference of about 1 cal per serving, but the line wants splitting upstream."
+  },
+  {
+   "raw": "½ tsp Cayenne Pepper – or more to taste",
+   "buy": "1 3/4 tsp cayenne pepper, or more to taste",
+   "notes": "Settled line; measure derived from the settled 0.9 g source basis."
+  },
+  {
+   "raw": "to taste Kosher Salt and Ground Black Pepper [split: kosher salt]",
+   "buy": "about 3 1/2 tsp kosher salt, or to taste",
+   "notes": "DISAGREEMENT, flagged not fixed: the settled 20 g source basis is a to-taste default worth about 12 tsp at batch scale, while the source's own method uses 1 tsp per 4 servings (3 1/2 tsp here). Printed the cook-correct measure; salt is 0 cal so macros are unaffected, but the gram figure should be re-checked."
+  },
+  {
+   "raw": "to taste Kosher Salt and Ground Black Pepper [split: ground black pepper]",
+   "buy": "1 3/4 tsp freshly ground black pepper, or to taste",
+   "notes": "Same disagreement as the salt line: settled 4 g source basis against the source method's 1/2 tsp per 4 servings. Worth about 7 cal across the whole batch either way."
+  },
+  {
+   "raw": "2 ½ TBS Good-Quality Olive Oil – DIVIDED, plus more as needed",
+   "buy": "1/2 cup plus 1 tbsp olive oil, divided, plus more as needed",
+   "notes": "Settled line; 33.8 g source basis x 3.5 = 118 g."
+  },
+  {
+   "raw": "4 TBS Butter – cut into pats",
+   "buy": "1 3/4 sticks (14 tbsp) butter, cut into pats",
+   "notes": "Settled line; 56 g source basis x 3.5 = 196 g."
+  },
+  {
+   "raw": "3-4 cloves Garlic – minced",
+   "buy": "12 cloves garlic, minced",
+   "notes": "Settled line; 10.5 g source basis (3 1/2 cloves at 3 g) x 3.5 = 12 cloves."
+  },
+  {
+   "raw": "1 medium Zucchini – medium dice or cut into ½-inch-thick rounds",
+   "buy": "1 1/2 lb zucchini (3 to 4 medium), diced or cut into 1/2-inch-thick rounds",
+   "notes": "Settled line; 196 g source basis x 3.5 = 686 g."
+  },
+  {
+   "raw": "1 large Red Bell Pepper – medium dice",
+   "buy": "1 lb red bell peppers (about 4 medium), diced",
+   "notes": "Settled line; 120 g source basis x 3.5 = 420 g."
+  },
+  {
+   "raw": "1 whole Lemon – juice",
+   "buy": "juice of 3 to 4 lemons (about 2/3 cup)",
+   "grams_source": 100,
+   "notes": "Weighed as one whole lemon purchased (100 g, matching the existing DB row) rather than the ~47 g of juice it yields, so the cost line buys what the cook actually needs."
+  },
+  {
+   "raw": "Fresh Basil and Lemon Wedges",
+   "buy": "optional: a handful of fresh basil leaves, torn, and lemon wedges for serving",
+   "grams_source": 0,
+   "notes": "Garnish under the source's 'Optional for Garnish' heading with no quantity; carried at 0 g so it changes neither cost nor macros."
+  },
+  {
+   "raw": "Rice, Quinoa, or Cauliflower Rice",
+   "buy": "optional, for serving: cooked rice, quinoa or cauliflower rice (not included in the nutrition)",
+   "grams_source": 0,
+   "notes": "A serving base the reader chooses, not an ingredient of the dish; the source's own 5 g carb figure excludes it and this run's 35 g carb ceiling depends on that exclusion."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 ½ pounds Steaks – excess fat trimmed & cut into generous 1-inch pieces (SEE NOTES)",
+   "term": "steaks",
+   "canon_item": "Sirloin Steak",
+   "bid": "sirloin-steak",
+   "decision": "mapped",
+   "grams_source": 680,
+   "evidence": "Whole-muscle beef steak cubed for a stir fry: no existing beef id covers it (ground-beef-8020 is a grind, beef-stew-meat is chuck cubes, cube-steak is tenderized round), so a new id is proposed. Sirloin is confirmed by arithmetic, since 201 cal / 20.3 g protein per 100 g raw reproduces the source's published 555 cal and 36 g protein per serving almost exactly; a null here would pantry-price 1 1/2 lb of beef."
+  },
+  {
+   "raw": "1 heaping TBS Fresh Thyme Leaves – chopped",
+   "term": "fresh thyme leaves",
+   "canon_item": "Fresh Thyme",
+   "bid": "fresh-thyme",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "fresh-thyme is a live board id (4 of 7 per the prior ruling of 2026-08-26), so this is a reuse and not a proposal. Refusing the bridge to dried-thyme: different price class and roughly half the gram weight per spoon."
+  },
+  {
+   "raw": "1 tsp EACH: Smoked Paprika & Onion Powder",
+   "term": "smoked paprika & onion powder",
+   "canon_item": "Onion Powder",
+   "bid": "onion-powder",
+   "decision": "mapped",
+   "grams_source": 4.7,
+   "evidence": "The vocabulary's Onion Powder row is exactly one half of this line; deliberately NOT onions, which is a fresh bulb at a different price and weight. The smoked paprika half cannot get its own ruling because the extraction printed both spices on one raw line, so all 4.7 g is costed as onion powder - stated openly, worth about 1 cal and a couple of cents, and the line should be split upstream."
+  },
+  {
+   "raw": "1 whole Lemon – juice",
+   "term": "lemon",
+   "canon_item": "Lemon",
+   "bid": "lemons",
+   "decision": "mapped",
+   "grams_source": 100,
+   "evidence": "The cook buys and squeezes a whole fresh lemon, so lemons (5 of 7 stores) is the right commodity; bottled lemon-juice is a different product at a different price class and would misprice the line."
+  },
+  {
+   "raw": "Fresh Basil and Lemon Wedges",
+   "term": "fresh basil and lemon wedges",
+   "canon_item": "Fresh Basil",
+   "bid": null,
+   "decision": "mapped-optional",
+   "grams_source": 0,
+   "evidence": "Optional garnish with no stated quantity; named as fresh basil (the lemon wedges come off the lemons already bought). No bid because there is no amount to price, which is pantry-safe."
+  },
+  {
+   "raw": "Rice, Quinoa, or Cauliflower Rice",
+   "term": "rice, quinoa, or cauliflower rice",
+   "canon_item": "Rice",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 0,
+   "evidence": "A three-way serving-base suggestion with no quantity, excluded from the source's own 5 g carb per serving figure; counting any of the three would both invent a quantity and break the run's 35 g carb ceiling."
+  }
+ ],
+ "absent_terms": [
+  "sirloin steak",
+  "smoked paprika"
+ ],
+ "db_entries_written": [
+  "Sirloin Steak"
+ ],
+ "db_row_findings": [
+  "steak-stir-fry-recipe: the food DB already carries 'Fresh Thyme' and the mapper's row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper's row scaled onto the DB's 100 g = 100 g) they still disagree: protein_g 5.56 vs 5; carbs_g 24.4 vs 25. existing={\"calories\": 100, \"protein_g\": 5, \"carbs_g\": 25, \"fat_g\": 1.6} new={\"calories\": 101, \"protein_g\": 5.56, \"carbs_g\": 24.4, \"fat_g\": 1.68}"
+ ],
+ "db_row_notes": [
+  "steak-stir-fry-recipe: 'Onion Powder' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tsp = 2.4 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "steak-stir-fry-recipe: 'Fresh Basil' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 2 tbsp chopped = 5 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 555.0,
+   "protein_g": 36.0,
+   "carbs_g": 5.0
+  },
+  "computed_per_serving_source_scale": {
+   "calories": 553,
+   "protein_g": 36.2,
+   "carbs_g": 8.2
+  },
+  "servings": 4,
+  "protein_gap_pct": 0.6,
+  "verdict": "pass",
+  "detail": "Computed over all 14 lines at the source's own 4-serving scale using the settled grams plus the six I weighed: steak 680 g at 201 cal / 20.3 P per 100 g gives 1368 cal and 138 g protein, and the remaining lines add 845 cal and 6.6 g protein (olive oil 298, butter 402, veg 69, lemon 29, spices and herbs 33, garlic 14). Totals 2213 cal and 144.7 g protein, i.e. 553 cal and 36.2 g protein per serving against the published 555 and 36.0 - a 0.6% protein gap, which is what makes top sirloin (and not ribeye at 240-290 cal/100 g, which would land near 620) the cut this recipe was written for. Carbs compute 8.2 vs the published 5.0 because I count the whole lemon rather than its juice and total rather than net carbs; either figure is far under the 35 g ceiling, and 553 cal sits inside the 400-650 band."
+ }
+}

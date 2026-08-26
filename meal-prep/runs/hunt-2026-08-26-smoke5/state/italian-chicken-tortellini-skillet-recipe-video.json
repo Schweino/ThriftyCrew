@@ -1,0 +1,76 @@
+{
+    "slug":  "italian-chicken-tortellini-skillet-recipe-video",
+    "title":  "Italian Chicken Tortellini Skillet + RECIPE VIDEO",
+    "source_url":  "https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/",
+    "protein":  "chicken",
+    "state":  "rejected-qa",
+    "wave":  null,
+    "created":  "2026-08-26T13:16:56",
+    "updated":  "2026-08-26T13:38:33",
+    "terms":  [
+                  {
+                      "term":  "red pepper flakes",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "failed QA twice: ANCHORS: extraction + live-page (thereciperebel.com fetched clean; the live page\u0027s 17 ingredients, 4 servings, and 6-step method match the transcripti",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T13:16:56",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/italian-chicken-tortellini-skillet-recipe-video/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T13:16:56",
+                        "by":  "decider",
+                        "detail":  "Creamy tomato chicken-tortellini skillet with roasted red peppers, spinach and mozzarella; distinct starch/method from the live slow-cooker Italian chicken penne, no dupe, band verified 562/44/46."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T13:18:07",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T13:26:53",
+                        "by":  "mapper",
+                        "detail":  "17 lines, 12 pre-resolved, 5 residual ruled: all 5 mapped (vegetable-oil, red-pepper-flakes, heavy-cream, cheese-tortellini, shredded-cheese). Rejections: mozzarella-cheese refused for the shred line (block vs bag is a real price class difference; used the board\u0027s shredded-cheese instead). New DB rows returned: Heavy Cream, Cheese Tortellini, Mozzarella Cheese. ONE ROW IS STILL MISSING - Red Peppe"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-26T13:26:56",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T13:31:00",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-26T13:32:58",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-26T13:32:58",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "rejected-qa",
+                        "at":  "2026-08-26T13:38:33",
+                        "by":  "source-qa",
+                        "detail":  "failed QA twice: ANCHORS: extraction + live-page (thereciperebel.com fetched clean; the live page\u0027s 17 ingredients, 4 servings, and 6-step method match the transcripti"
+                    }
+                ]
+}

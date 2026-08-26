@@ -1,0 +1,43 @@
+{
+    "slug":  "steak-stir-fry-recipe",
+    "title":  "Steak Stir Fry Recipe",
+    "source_url":  "https://www.nospoonnecessary.com/steak-stir-fry-with-zucchini/",
+    "protein":  "beef",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-26T12:49:41",
+    "updated":  "2026-08-26T12:58:15",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:49:41",
+                        "by":  "harvest",
+                        "detail":  "https://www.nospoonnecessary.com/steak-stir-fry-with-zucchini/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T12:49:42",
+                        "by":  "decider",
+                        "detail":  "Butter-lemon-thyme seared steak skillet with zucchini and bell pepper (no soy despite signature); low-carb (5g) and distinct from live beef-mushroom-stir-fry-rice-plate on veg and sauce."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T12:52:07",
+                        "by":  "extractor",
+                        "detail":  "rung 3 (Claude), verification recorded"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-26T12:58:15",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled, 0 rejected: steaks -\u003e Sirloin Steak (new id proposed), fresh thyme leaves -\u003e fresh-thyme (reuse of a live board id, no bridge to dried), smoked paprika \u0026 onion powder -\u003e onion-powder, lemon -\u003e lemons (no bridge to bottled lemon-juice), fresh basil garnish -\u003e mapped-optional at 0 g, rice/quinoa/cauliflower rice -\u003e not-purchased at 0 g. 4 new food-DB rows returned (Sirloin St"
+                    }
+                ]
+}

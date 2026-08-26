@@ -1,0 +1,31 @@
+{
+    "slug":  "carne-asada-vampiro-tacos",
+    "title":  "Carne Asada Vampiro Tacos",
+    "source_url":  "https://www.isabeleats.com/vampiro-tacos/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:00:37",
+    "updated":  "2026-08-26T12:00:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Marinated sirloin carne asada in a tortiy with salsa is the same carne asada dinner already double-covered by live carne-asada-burrito and slow-cooker-carne-asada-rice-bowls; the vampiro/taco format is a re-plating that deepens a dense lane rather than a new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:00:37",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/vampiro-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:00:38",
+                        "by":  "decider",
+                        "detail":  "Marinated sirloin carne asada in a tortiy with salsa is the same carne asada dinner already double-covered by live carne-asada-burrito and slow-cooker-carne-asada-rice-bowls; the vampiro/taco format is a re-plating that deepens a dense lane rather than a new dinner."
+                    }
+                ]
+}

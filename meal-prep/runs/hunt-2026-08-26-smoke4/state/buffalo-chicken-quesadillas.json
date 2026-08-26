@@ -1,0 +1,31 @@
+{
+    "slug":  "buffalo-chicken-quesadillas",
+    "title":  "Buffalo Chicken Quesadillas",
+    "source_url":  "https://www.isabeleats.com/buffalo-chicken-quesadillas/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T12:49:46",
+    "updated":  "2026-08-26T12:49:47",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Buffalo chicken + Mexican cheese folded in a flour tortilla is the same dinner as live buffalo-chicken-burrito (protein, buffalo/cheese sauce, tortilla starch, skillet all match; bge 0.89); quesadilla-vs-burrito is a format nuance in an already-dense buffalo-chicken lane.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T12:49:46",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/buffalo-chicken-quesadillas/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T12:49:47",
+                        "by":  "decider",
+                        "detail":  "Buffalo chicken + Mexican cheese folded in a flour tortilla is the same dinner as live buffalo-chicken-burrito (protein, buffalo/cheese sauce, tortilla starch, skillet all match; bge 0.89); quesadilla-vs-burrito is a format nuance in an already-dense buffalo-chicken lane."
+                    }
+                ]
+}

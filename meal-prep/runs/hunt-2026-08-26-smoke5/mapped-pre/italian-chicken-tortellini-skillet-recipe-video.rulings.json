@@ -1,0 +1,175 @@
+{
+ "slug": "italian-chicken-tortellini-skillet-recipe-video",
+ "lines": [
+  {
+   "raw": "2 boneless, skinless chicken breasts, cut into ½\" pieces ((about 1 lb))",
+   "buy": "3 lb, cut into 1/2-inch pieces (about 7 breasts)",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon oil",
+   "buy": "3 1/2 tablespoons",
+   "grams_source": 14,
+   "notes": ""
+  },
+  {
+   "raw": "3 cloves garlic ((finely minced))",
+   "buy": "10 to 11 cloves, finely minced",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon dried basil",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon dried oregano",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon salt",
+   "buy": "1 tablespoon plus 1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "½ teaspoon dried thyme",
+   "buy": "1 3/4 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "⅛ teaspoon red chili flakes",
+   "buy": "a scant 1/2 teaspoon",
+   "grams_source": 0.25,
+   "notes": ""
+  },
+  {
+   "raw": "1 can diced tomatoes (with juice (14oz or 398ml))",
+   "buy": "6 cups with their juice (about three and a half 14 oz cans)",
+   "notes": "Measure stated because 3.5 cans is not a package a cook buys whole."
+  },
+  {
+   "raw": "½ cup roasted red peppers ((chopped))",
+   "buy": "1 3/4 cups, chopped",
+   "notes": ""
+  },
+  {
+   "raw": "½ cup low-sodium chicken broth",
+   "buy": "1 3/4 cups low-sodium",
+   "notes": ""
+  },
+  {
+   "raw": "½ cup heavy whipping cream",
+   "buy": "1 3/4 cups",
+   "grams_source": 119,
+   "notes": "238 g per cup."
+  },
+  {
+   "raw": "2 teaspoons cornstarch",
+   "buy": "2 tablespoons plus 1 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "3 cups fresh or frozen cheese tortellini ((12oz or 350g))",
+   "buy": "2 lb 11 oz (about 10 1/2 cups)",
+   "grams_source": 350,
+   "notes": "The line states its own gram weight."
+  },
+  {
+   "raw": "1 cup chopped fresh spinach",
+   "buy": "3 1/2 cups, chopped",
+   "grams_source": 30,
+   "notes": "30 g per cup chopped fresh spinach."
+  },
+  {
+   "raw": "1 cup shredded mozzarella cheese",
+   "buy": "3 1/2 cups, shredded",
+   "grams_source": 112,
+   "notes": "112 g per cup shredded."
+  },
+  {
+   "raw": "2 tablespoons grated Parmesan cheese",
+   "buy": "7 tablespoons, grated",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 tablespoon oil",
+   "term": "oil",
+   "canon_item": "Vegetable Oil",
+   "bid": "vegetable-oil",
+   "decision": "mapped",
+   "grams_source": 14,
+   "evidence": "Unqualified 'oil' for searing is neutral cooking oil; vegetable-oil is a live board id already used by a settled line in this same batch, so a reuse. Precedent 'vegetable or canola oil' -> vegetable-oil, 2026-08-26."
+  },
+  {
+   "raw": "⅛ teaspoon red chili flakes",
+   "term": "red chili flakes",
+   "canon_item": "Red Pepper Flakes",
+   "bid": "red-pepper-flakes",
+   "decision": "mapped",
+   "grams_source": 0.25,
+   "evidence": "Red chili flakes and red pepper flakes are one jar under two shelf names; same-form vocabulary row and a 2026-08-26 ruling already mapped 'crushed red pepper flakes' here. Board found no commodity or capture, so the term is reported absent."
+  },
+  {
+   "raw": "½ cup heavy whipping cream",
+   "term": "heavy whipping cream",
+   "canon_item": "Heavy Cream",
+   "bid": "heavy-cream",
+   "decision": "mapped",
+   "grams_source": 119,
+   "evidence": "Same-form vocabulary row Heavy Cream [heavy-cream], board 7 of 7; 'whipping' is part of the carton's printed name at the same fat class, not a different product."
+  },
+  {
+   "raw": "3 cups fresh or frozen cheese tortellini ((12oz or 350g))",
+   "term": "fresh or frozen cheese tortellini",
+   "canon_item": "Cheese Tortellini",
+   "bid": "cheese-tortellini",
+   "decision": "mapped",
+   "grams_source": 350,
+   "evidence": "The DIFFERENT FORM flag is spurious - cheese tortellini is only sold refrigerated or frozen and the line accepts either, which is exactly what the cheese-tortellini id prices (board 7 of 7). Line states 350 g."
+  },
+  {
+   "raw": "1 cup shredded mozzarella cheese",
+   "term": "shredded mozzarella cheese",
+   "canon_item": "Mozzarella Cheese",
+   "bid": "shredded-cheese",
+   "decision": "mapped",
+   "grams_source": 112,
+   "evidence": "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board's own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class from a shred bag."
+  }
+ ],
+ "absent_terms": [
+  "red pepper flakes"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "italian-chicken-tortellini-skillet-recipe-video: the food DB already carries 'Heavy Cream' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper's row scaled onto the DB's 1 tbsp = 15 g) they still disagree: carbs_g 0.426 vs 1. existing={\"serving_grams\": 15, \"serving_qty\": 1, \"serving_unit\": \"tbsp\", \"calories\": 50, \"protein_g\": 0, \"carbs_g\": 1, \"fat_g\": 5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 340, \"protein_g\": 2.84, \"carbs_g\": 2.84, \"fat_g\": 36.1}",
+  "italian-chicken-tortellini-skillet-recipe-video: the food DB already carries 'Cheese Tortellini' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis (the mapper's row scaled onto the DB's 1 1 cup (120g) frozen, 4.5 servings per container = 120 g) they still disagree: calories 368.4 vs 210; protein_g 16.2 vs 7; carbs_g 56.4 vs 38; fat_g 8.676 vs 2.5. existing={\"serving_grams\": 120, \"serving_qty\": 1, \"serving_unit\": \"1 cup (120g) frozen, 4.5 servings per container\", \"calories\": 210, \"protein_g\": 7, \"carbs_g\": 38, \"fat_g\": 2.5} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 307, \"protein_g\": 13.5, \"carbs_g\": 47.0, \"fat_g\": 7.23}"
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 562,
+   "carbs_g": 44,
+   "protein_g": 46
+  },
+  "our_computed_per_serving": {
+   "calories": 652,
+   "carbs_g": 51.2,
+   "protein_g": 44.3
+  },
+  "deltas": {
+   "calories_pct": 16.0,
+   "carbs_pct": 16.4,
+   "protein_pct": -3.7
+  },
+  "verdict": "PASS on the sharp instrument - protein 44.3 vs 46 is under 4% off, so the 400 g chicken, 350 g tortellini and 112 g mozzarella portions are right. The calorie and carb overshoot both trace to the SR Legacy tortellini row (307 cal/100 g as purchased) being richer than whatever brand the source costed, plus 119 g of heavy cream; neither is a portion error.",
+  "condition_flag": "LOUD: over the run's 35 g carbohydrate condition on BOTH numbers - the source's own 44 g and my 51.2 g per serving, with 350 g of tortellini supplying about 165 g of the total. My calorie figure of 652 also just clears the 650 ceiling (the source's 562 does not). Not rejected here, because that is the macro gate's ruling on the estate's own scaled compute, but this recipe should not ship without it."
+ }
+}

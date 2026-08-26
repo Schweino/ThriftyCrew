@@ -1,0 +1,153 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "French Onion Pork Chops",
+  "source_url": "https://thecozycook.com/french-onion-pork-chops/",
+  "servings": 4,
+  "time_total": "80 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 pork chops (center cut, bone-in)",
+      "item": "pork chops",
+      "qty": "4",
+      "unit": null,
+      "prep": "center cut, bone-in",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Salt/Pepper (to taste)",
+      "item": "Salt/Pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 Tablespoons flour",
+      "item": "flour",
+      "qty": "2",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tablespoons olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "Tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 slices gruyere or swiss cheese (optional)",
+      "item": "gruyere or swiss cheese",
+      "qty": "4",
+      "unit": "slices",
+      "prep": "(optional)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "6 Tablespoons butter (divided)",
+      "item": "butter",
+      "qty": "6",
+      "unit": "Tablespoons",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large yellow onions (sliced 1/4 inch thick)",
+      "item": "large yellow onions",
+      "qty": "2",
+      "unit": null,
+      "prep": "sliced 1/4 inch thick",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tablespoon flour",
+      "item": "flour",
+      "qty": "1",
+      "unit": "Tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz. button mushrooms (sliced)",
+      "item": "button mushrooms",
+      "qty": "8",
+      "unit": "oz.",
+      "prep": "sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cloves garlic minced",
+      "item": "garlic",
+      "qty": "2",
+      "unit": "cloves",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/3 cup dry white wine",
+      "item": "dry white wine",
+      "qty": "1/3",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ¼ cup chicken broth",
+      "item": "chicken broth",
+      "qty": "1 ¼",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 sprig fresh Thyme (or 1 tsp dried thyme)",
+      "item": "Thyme",
+      "qty": "1",
+      "unit": "sprig",
+      "prep": "fresh (or 1 tsp dried thyme)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat the oven to 400 degrees.",
+    "Season the pork with salt and pepper and dredge each side with flour.",
+    "Melt 2 Tablespoons olive oil in a large cast iron skillet over medium-high heat. Sear the pork chops for about 2 minutes per side. Transfer them to a baking sheet and let them rest while you prepare the sauce as outlined below.",
+    "Melt 4 Tablespoons of butter in the same skillet over medium-low heat. (Don’t clean the pan in between.)",
+    "Add the onions and toss to coat them in the butter. They will take a good 45-60 minutes to sufficiently caramelize. Use a silicone spatula to stir them occasionally as they cook.",
+    "Increase the heat to medium-high and add the white wine. Let it reduce by half, about 4 minutes. Use a silicone spatula to \"clean\" the bottom of the pan with the wine.",
+    "Toss the onions with 1 Tablespoon of flour. Heat and stir for 1-2 minutes.",
+    "Add the mushrooms and remaining 2 tablespoons of butter. Heat for 5 minutes. Add the garlic and cook for 1 more minute.",
+    "Add the chicken broth and fresh thyme. Bring to a gentle boil, then reduce to a simmer. Let it simmer and reduce while you bake the pork chops.",
+    "Bake the pork chops for 10-15 minutes, then return them to the skillet and spoon the sauce on top. Note: Thinner, (3/4 inch pork chops) can be cooked in the sauce instead.",
+    "Optional: Top each pork chop with cheese. Let it melt in the oven or in the skillet covered with foil. Serve!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

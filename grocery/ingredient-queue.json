@@ -2707,7 +2707,8 @@
                       "recipes":  [
                                       "jalape-o-popper-chicken",
                                       "lentil-sausage-soup",
-                                      "kfc-oven-baked-fried-chicken-tenders"
+                                      "kfc-oven-baked-fried-chicken-tenders",
+                                      "chicken-and-rice-one-pot"
                                   ],
                       "added":  "2026-08-24T08:32:01",
                       "why":  "jalape-o-popper-chicken needs it",
@@ -2718,56 +2719,56 @@
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027mustard powder\u0027 returns Great Value Yellow Mustard 20 oz via commodity \u0027mustard\u0027 - prepared condiment, adjudicated out; no ground-mustard capture row exists.",
+                                                     "checked":  "2026-08-26T13:30:31"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  3.49,
                                                      "size":  "1.55 oz",
                                                      "item":  "Tone\u0027s Mustard, Ground",
-                                                     "evidence":  "driver rung 1 \u0027mustard powder\u0027 = 45 hits; the top three retained rows are all dry ground mustard - Tone\u0027s Mustard Ground 1.55 oz $3.49, McCormick Ground Mustard 1.75 oz $4.99, Simply Organic Mustard Ground 2.65 oz $6.99. Dijon squeeze bottle, horseradish sauce and honey mustard dressing in the same grid ruled out as condiments. Ruled in.",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "pre-pass driver rung 1 \u0027mustard powder\u0027 = 3 priced Apollo rows, all genuine spice-aisle ground mustard: Tone\u0027s Mustard Ground 1.55 oz $3.49; McCormick Ground Mustard 1.75 oz $4.99; Simply Organic Mustard Ground 2.65 oz $6.99. Cheapest base row taken.",
+                                                     "checked":  "2026-08-26T13:30:31"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
-                                                         "price":  1.99,
-                                                         "size":  "0.45 oz",
-                                                         "item":  "Tone\u0027s Mustard, Ground 0.45 Oz",
-                                                         "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 2026-08-26, Freshop store_id 6401 Omaha, 5 hits. Dry ground mustard spice; McCormick Ground Mustard 1.75 oz $7.99 and Sugar \u0027N Spice Mustard Ground 1.5 oz $2.09 also present. The pre-pass had laddered to bare \u0027mustard\u0027 and returned 25 condiment squeeze bottles, which is why this looked absent. Koops\u0027 and French\u0027s Stone Ground 12 oz jars ruled out as condiment. Ruled in.",
-                                                         "checked":  "2026-08-26T05:14:04"
+                                                         "price":  7.99,
+                                                         "size":  "1.75 oz",
+                                                         "item":  "Mc Cormick Ground Mustard 1.75 Oz",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 -Json, Freshop store_id 6401 Omaha: 5 hits. Mc Cormick Ground Mustard 1.75 Oz $7.99 is filed under pantry/mixes_spices_seasoning/spices and is the powder; Tone\u0027s Mustard, Ground 0.45 Oz $1.99 also qualifies. Batch-1\u0027s rung-2 \u0027mustard\u0027 grid returned only squeeze-bottle condiments, which is why the pre-pass looked negative.",
+                                                         "checked":  "2026-08-26T13:30:31"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:14:04"
+                                                    "evidence":  "blocked - no browser in this session. Disk checked first: price-ingredient.ps1 -Name \u0027mustard powder\u0027 resolves to commodity \u0027mustard\u0027 (yellow condiment) and returns That\u0027s Smart! Yellow Mustard - the condiment, not ground mustard seed, so it is not a carriage row for this term.",
+                                                    "checked":  "2026-08-26T13:30:31"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027mustard powder\u0027 = 19 hits, 8 retained and every one is a different spice (turmeric, onion powder, garlic powder, black pepper, steak seasoning) - the search matched \u0027powder\u0027 and ignored \u0027mustard\u0027. 8 of 19 rows seen and the productive rung \u0027ground mustard\u0027 was never run, so no negative ruling is supported.",
-                                                             "checked":  "2026-08-26T05:14:04"
+                                                             "evidence":  "pre-pass driver rung 1 \u0027mustard powder\u0027 = 20 hits, none is ground mustard (Montreal Steak Seasoning, Dan-O\u0027s, Member\u0027s Mark turmeric/onion/garlic powder). Rung 1 ONLY - the driver does not walk the ladder, and with no browser this session I cannot search \u0027ground mustard\u0027 at Sam\u0027s. Unchecked past rung 1, not an empty shelf.",
+                                                             "checked":  "2026-08-26T13:30:31"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T05:14:04"
+                                                  "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027mustard powder\u0027 returns Burman\u0027s Traditional Yellow Mustard via commodity \u0027mustard\u0027 - prepared condiment, adjudicated out; no ground-mustard capture row exists.",
+                                                  "checked":  "2026-08-26T13:30:31"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  1.99,
                                                           "size":  "1.55 oz",
                                                           "item":  "Kroger Ground Mustard Shaker",
-                                                          "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 2026-08-26 (rung 2, qualifier form of the term), kroger-public-api locationId 61500319, 9 hits. This is the dry spice. Also Simple Truth Organic Ground Mustard 1.64 oz $3.99 and Private Selection Ground Mustard Shaker 1.38 oz $3.79. The Kroger/Simple Truth/French\u0027s STONE GROUND MUSTARD 12 oz jars in the same grid are prepared condiment and were ruled out. Ruled in.",
-                                                          "checked":  "2026-08-26T05:14:04"
+                                                          "evidence":  "probe-ingredient.ps1 \u0027ground mustard\u0027 -Json (rung 2 qualifier swap; the batch-1 503 was transient and Baker\u0027s answered on re-probe): 9 hits, kroger-public-api locationId 61500319. Kroger Ground Mustard Shaker 1.55 oz $1.99 is spice-aisle ground mustard seed. Stone-ground/Dijon/French\u0027s rows in the same grid are prepared condiments and were excluded.",
+                                                          "checked":  "2026-08-26T13:30:31"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5688,6 +5689,184 @@
                                                           "item":  "Bakery Fresh Goodness Kaiser Rolls",
                                                           "evidence":  "pre-pass probe rung 1 \u0027kaiser rolls\u0027 = 2 hits; top row rel 132 is the plain kaiser roll 6-pack at $4.99, exactly the ingredient a cook buys",
                                                           "checked":  "2026-08-26T10:13:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "lean ground bison",
+                      "recipes":  [
+                                      "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+                                  ],
+                      "added":  "2026-08-26T12:06:20",
+                      "why":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh dill",
+                      "recipes":  [
+                                      "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+                                  ],
+                      "added":  "2026-08-26T12:06:20",
+                      "why":  "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "black pepper",
+                      "recipes":  [
+                                      "copycat-longhorn-parmesan-crusted-chicken"
+                                  ],
+                      "added":  "2026-08-26T13:26:52",
+                      "why":  "copycat-longhorn-parmesan-crusted-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  7.36,
+                                                     "size":  "8.75 oz",
+                                                     "item":  "McCormick Pure Ground Black Pepper, 8.75 oz",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027black pepper\u0027 -Json: Walmart row McCormick Pure Ground Black Pepper 8.75 oz at $0.8411/oz = $7.36 line. Plain ground black pepper.",
+                                                     "checked":  "2026-08-26T13:30:31"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.79,
+                                                     "size":  "1.5 oz",
+                                                     "item":  "McCormick Pure Ground Black Pepper",
+                                                     "evidence":  "pre-pass driver rung 1 \u0027black pepper\u0027 = 6 priced rows, all real pepper. McCormick Pure Ground Black Pepper 1.5 oz $2.79 taken; Badia Ground Black Pepper 2 oz $1.68 also qualifies.",
+                                                     "checked":  "2026-08-26T13:30:31"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.39,
+                                                         "size":  "2 oz",
+                                                         "item":  "That\u0027s Smart! Ground Black Pepper",
+                                                         "evidence":  "pre-pass server ladder \u0027black pepper\u0027 = 25 hits. That\u0027s Smart! Ground Black Pepper 2 oz $1.39 is the plain spice. Sartori Cheese Black Pepper 5.3 oz is a cheese flavoured with pepper and was excluded.",
+                                                         "checked":  "2026-08-26T13:30:31"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.25,
+                                                    "size":  "3 oz",
+                                                    "item":  "Thats Smart Black Pepper",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027black pepper\u0027 -Json, board comparison-2026-08-26.json, commodity black-pepper, 7 of 7 stores. Hy-Vee row: Thats Smart Black Pepper, 3 oz, $0.4167/oz = $1.25 line. Plain ground black pepper, adjudicated in.",
+                                                    "checked":  "2026-08-26T13:30:31"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  7.98,
+                                                             "size":  "18 oz",
+                                                             "item":  "Member\u0027s Mark Fine Ground Black Pepper, 18 oz.",
+                                                             "evidence":  "pre-pass driver rung 1 \u0027black pepper\u0027 = 35 hits. Member\u0027s Mark Fine Ground Black Pepper 18 oz $7.98 ($0.44/oz) is the base Member\u0027s Mark ground pepper. Seasoning blends (Montreal Steak, Kinder\u0027s, Dan-O\u0027s) excluded as not the ingredient.",
+                                                             "checked":  "2026-08-26T13:30:31"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.45,
+                                                  "size":  "3 oz (capture size field; product name reads 4 OZ - discrepancy)",
+                                                  "item":  "Stonemill Pure Ground Black Pepper",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027black pepper\u0027 -Json: Aldi row Stonemill Pure Ground Black Pepper 4 OZ at $1.15/oz with capture size field 3 oz. Carriage is unambiguous (Stonemill is Aldi\u0027s own spice label, plain ground pepper); the $3.45 line is DERIVED from the 3 oz size field and the name/size disagree, so the capture pipeline must settle the size before any board cell.",
+                                                  "checked":  "2026-08-26T13:30:31"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.25,
+                                                          "size":  "2.25 oz",
+                                                          "item":  "Smart Way Ground Black Pepper",
+                                                          "evidence":  "pre-pass server ladder \u0027black pepper\u0027 = 25 hits, no no-results banner. Smart Way Ground Black Pepper 2.25 oz $1.25 is plain ground black pepper and the cheapest base row; McCormick Pure Ground 1.5 oz $2.95 corroborates.",
+                                                          "checked":  "2026-08-26T13:30:31"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "red pepper flakes",
+                      "recipes":  [
+                                      "italian-chicken-tortellini-skillet-recipe-video"
+                                  ],
+                      "added":  "2026-08-26T13:26:56",
+                      "why":  "italian-chicken-tortellini-skillet-recipe-video needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  7.78,
+                                                     "size":  "12 oz",
+                                                     "item":  "Great Value Crushed Red Pepper, 12 oz",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json: Walmart row Great Value Crushed Red Pepper 12 oz at $0.6483/oz = $7.78 line.",
+                                                     "checked":  "2026-08-26T13:30:31"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.99,
+                                                     "size":  "1.5 oz",
+                                                     "item":  "McCormick Crushed Red Pepper",
+                                                     "evidence":  "pre-pass driver rung 1 \u0027red pepper flakes\u0027 = 3 priced rows, all genuine crushed red pepper: McCormick 1.5 oz $3.99; Badia 4.5 oz $3.99; Simply Organic 1.59 oz $6.99.",
+                                                     "checked":  "2026-08-26T13:30:31"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "1.5 oz",
+                                                         "item":  "Our Family Red Pepper, Crushed 1.5 Oz",
+                                                         "evidence":  "pre-pass server ladder \u0027red pepper flakes\u0027=0 -\u003e \u0027red pepper\u0027=23 hits. Our Family Red Pepper, Crushed 1.5 Oz $2.99 is the flakes. Fresh red peppers, roasted red peppers, hummus and ground cayenne in the same grid were excluded.",
+                                                         "checked":  "2026-08-26T13:30:31"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.25,
+                                                    "size":  "2 oz",
+                                                    "item":  "That\u0027s Smart! Crushed Red Pepper",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json, commodity red-pepper-flakes, 7 of 7 stores. Hy-Vee row: That\u0027s Smart! Crushed Red Pepper 2 oz at $0.625/oz = $1.25 line.",
+                                                    "checked":  "2026-08-26T13:30:31"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.98,
+                                                             "size":  "13.5 oz",
+                                                             "item":  "Member\u0027s Mark Crushed Red Pepper, 13.5 oz.",
+                                                             "evidence":  "pre-pass driver rung 1 \u0027red pepper flakes\u0027 = 21 hits. Member\u0027s Mark Crushed Red Pepper 13.5 oz $5.98 ($0.44/oz) is the ingredient; a 3.75 lb $20.98 pack is also stocked. Beef jerky and seasoning blends excluded.",
+                                                             "checked":  "2026-08-26T13:30:31"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  0.99,
+                                                  "size":  "1.5 oz",
+                                                  "item":  "Stonemill Crushed Red Pepper",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json: Aldi row Stonemill Crushed Red Pepper 1.5 OZ at $0.66/oz = $0.99 line. Aldi private-label spice, the ingredient exactly.",
+                                                  "checked":  "2026-08-26T13:30:31"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.25,
+                                                          "size":  "1.5 oz",
+                                                          "item":  "Smart Way Crushed Red Pepper",
+                                                          "evidence":  "pre-pass server ladder \u0027red pepper flakes\u0027 = 6 hits. Smart Way Crushed Red Pepper 1.5 oz $1.25 is the ingredient (crushed red pepper = red pepper flakes). The top-relevance row, Kroger Grated Parmesan and Red Pepper Flakes Shaker, is a cheese product and was excluded.",
+                                                          "checked":  "2026-08-26T13:30:31"
                                                       }
                                  },
                       "verdict":  "CARRIED",
