@@ -1158,6 +1158,134 @@ def validate_writer_fields(payload):
     return problems
 
 
+def _ruling_identity(ru):
+    """What a ruling actually SETTLES, normalised: (decision, bid, canon_item).
+
+    Two rulings that agree on all three settle the same thing about their line, whatever else
+    differs between them (evidence, grams source, wording). That is the test `map_problems` uses to
+    tell a line ruled TWICE from a line ruled twice DIFFERENTLY.
+    """
+    if not isinstance(ru, dict):
+        return None
+    return (str(ru.get("decision") or "").strip().lower(),
+            str(ru.get("bid") or "").strip().lower(),
+            str(ru.get("canon_item") or "").strip().lower())
+
+
+def map_problems(payload):
+    """`validate_map`'s three rules, with every problem ATTRIBUTED to the rulings it implicates.
+
+    Returns `(problems, notes)`. Each entry is
+    `{"result": int, "slug": str, "rulings": [int], "rule": str, "message": str}`, in the order
+    `validate_map` has always printed them.
+
+      - `problems[i]["rulings"]` names the indices into THAT result's `rulings` array that the
+        problem condemns. It is EMPTY when the problem condemns the whole result or the whole
+        payload (`results` missing, `rulings` not an array): nothing can be salvaged from a shape
+        nobody can walk.
+      - `notes` are not problems. Today it holds one kind: a raw line ruled twice by rulings that
+        settle the SAME identity, collapsed rather than refused (see rule 3 below).
+
+    WHY THE ATTRIBUTION EXISTS, MEASURED. Run hunt-2026-08-26-smoke3, slug
+    sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut: the recipe legitimately lists
+    "1 teaspoon cumin" twice (once in the meatballs, once on the vegetables), the mapper ruled both
+    lines, and `validate_map` refused the WHOLE payload for it. The pen has no per-ruling verdict to
+    fall back on, so learn_apply held all 13 events with "the map result did not validate" - among
+    them ten rulings with real bids (cauliflower, butternut-squash, ground-cumin, eggs, fresh-dill,
+    fresh-parsley, lemons, bread-crumbs, ground-bison) that had nothing to do with the duplicate.
+    Every other recipe that day projected most of its rulings (5 of 8, 9 of 12, 6 of 8, 5 of 5);
+    this one projected ZERO. The RULE was right and its BLAST RADIUS was wrong, and PLAN-ingredient-
+    memory 3.2 already says what right looks like: every other refusal in the pen is per-ruling with
+    its own held_reason.
+    """
+    problems = []
+    notes = []
+
+    def prob(result, slug, rulings, rule, message):
+        problems.append({"result": result, "slug": slug, "rulings": list(rulings),
+                         "rule": rule, "message": message})
+
+    if not isinstance(payload, dict):
+        prob(-1, "", [], "shape", "the map payload is not an object")
+        return problems, notes
+    results = payload.get("results")
+    if not isinstance(results, list):
+        prob(-1, "", [], "shape", "the map payload has no `results` array")
+        return problems, notes
+    if not results:
+        prob(-1, "", [], "shape",
+             "`results` is empty - a map dispatch that settled nothing is not a result")
+    for i, r in enumerate(results):
+        if not isinstance(r, dict):
+            prob(i, "", [], "shape", "results[%d] is not an object" % i)
+            continue
+        slug = str(r.get("slug") or "").strip() or "results[%d]" % i
+        rulings = r.get("rulings")
+        if rulings is not None and not isinstance(rulings, list):
+            prob(i, slug, [], "shape", "%s: `rulings` must be an array, got %s"
+                 % (slug, type(rulings).__name__))
+            continue
+        rulings = rulings or []
+        seen_raw = {}
+        for j, ru in enumerate(rulings):
+            where = "%s ruling %d" % (slug, j)
+            if not isinstance(ru, dict):
+                prob(i, slug, [j], "shape", "%s is not an object" % where)
+                continue
+            dec = str(ru.get("decision") or "").strip().lower()
+            if dec not in MAPPED_RULING_DECISIONS:
+                prob(i, slug, [j], "decision",
+                     "%s decision %r is not one of %s - a value outside the closed set "
+                     "mints an identity nothing downstream will ever match again"
+                     % (where, ru.get("decision"), " | ".join(MAPPED_RULING_DECISIONS)))
+            if dec in ("mapped", "mapped-optional"):
+                if not str(ru.get("bid") or "").strip() and not str(ru.get("canon_item") or "").strip():
+                    prob(i, slug, [j], "identity",
+                         "%s is %s with neither a `bid` nor a `canon_item` - it settles "
+                         "no identity and names no food, so nothing can cost or weigh it"
+                         % (where, dec))
+            raw = str(ru.get("raw") or "")
+            if raw in seen_raw:
+                first = seen_raw[raw]
+                if _ruling_identity(rulings[first]) == _ruling_identity(ru):
+                    # THE SAME RULING WRITTEN TWICE, and the hazard rule 3 names cannot happen here:
+                    # whichever of the two the assembler's join keeps, the line is settled the same
+                    # way. A recipe that lists one ingredient in two of its components (the smoke3
+                    # meatballs: cumin in the mix and cumin on the vegetables) is a real recipe, not
+                    # a malformed payload. Collapsed for validation; both still leave EVENTS, because
+                    # the pen's postcondition counts one event per ruling.
+                    notes.append({"result": i, "slug": slug, "rulings": [first, j],
+                                  "rule": "duplicate-raw-agreed",
+                                  "message": "%s and ruling %d rule the same raw line (%r) the same "
+                                             "way (%s -> %s) - the same ruling written twice, "
+                                             "collapsed rather than refused: the assembler's join "
+                                             "keeps one of them and the answer it keeps is identical"
+                                             % (where, first, raw[:80], dec,
+                                                str(ru.get("bid") or "").strip()
+                                                or str(ru.get("canon_item") or "").strip()
+                                                or "(no identity)")})
+                else:
+                    # A GENUINE CONFLICT, AND BOTH SIDES ARE IMPLICATED. Nothing here knows which of
+                    # the two the assembler's iteration order kept, so neither may become memory.
+                    prob(i, slug, [first, j], "duplicate-raw",
+                         "%s rules on the same raw line as ruling %d (%r) and rules it DIFFERENTLY "
+                         "(%s vs %s) - `raw` is the key the assembler joins rulings to table rows "
+                         "on, so one of the two would silently never have happened"
+                         % (where, first, raw[:80],
+                            _describe_ruling(rulings[first]), _describe_ruling(ru)))
+            else:
+                seen_raw[raw] = j
+    return problems, notes
+
+
+def _describe_ruling(ru):
+    """`decision -> identity`, for a conflict message that says WHAT the two rulings disagree on."""
+    ident = _ruling_identity(ru)
+    if not ident:
+        return "(not a ruling)"
+    return "%s -> %s" % (ident[0] or "(no decision)", ident[1] or ident[2] or "(no identity)")
+
+
 def validate_map(payload):
     """The MAP lane's semantic validator - the one judge that had none (PLAN-ingredient-memory 3.5).
 
@@ -1179,53 +1307,21 @@ def validate_map(payload):
          distinct values across 550 v2 lines;
       2. a `mapped` / `mapped-optional` ruling with BOTH an empty `bid` and an empty `canon_item`
          is refused - it settles nothing and names no food, so it can neither be cached nor costed;
-      3. a `raw` line ruled twice inside ONE slug is refused - `raw` is the join key the assembler
-         matches rulings to table rows on, so two rulings on one raw means the assembler picks one
-         of them by iteration order and the other ruling silently never happened.
+      3. a `raw` line ruled twice inside ONE slug, BY RULINGS THAT SETTLE IT DIFFERENTLY, is refused
+         - `raw` is the join key the assembler matches rulings to table rows on, so two rulings on
+         one raw means the assembler picks one of them by iteration order and the other ruling
+         silently never happened. Two rulings that settle the line the SAME way are the same ruling
+         written twice (a recipe listing cumin in the meatballs and again on the vegetables), and
+         `map_problems` collapses them into a note instead: whichever one the join keeps, the answer
+         it keeps is identical, so there is nothing here for this rule to protect.
+
+    THE LIST IS FLAT AND THAT IS WHY IT IS NOT THE WHOLE STORY. A caller that must decide what to do
+    with EACH ruling - the pen does - calls `map_problems` and reads the ruling indices each problem
+    implicates. Refusing a whole recipe's memory over one bad line was this validator's first
+    production defect (map_problems' docstring carries the measurement).
     """
-    problems = []
-    if not isinstance(payload, dict):
-        return ["the map payload is not an object"]
-    results = payload.get("results")
-    if not isinstance(results, list):
-        return ["the map payload has no `results` array"]
-    if not results:
-        problems.append("`results` is empty - a map dispatch that settled nothing is not a result")
-    for i, r in enumerate(results):
-        if not isinstance(r, dict):
-            problems.append("results[%d] is not an object" % i)
-            continue
-        slug = str(r.get("slug") or "").strip() or "results[%d]" % i
-        rulings = r.get("rulings")
-        if rulings is not None and not isinstance(rulings, list):
-            problems.append("%s: `rulings` must be an array, got %s"
-                            % (slug, type(rulings).__name__))
-            continue
-        seen_raw = {}
-        for j, ru in enumerate(rulings or []):
-            where = "%s ruling %d" % (slug, j)
-            if not isinstance(ru, dict):
-                problems.append("%s is not an object" % where)
-                continue
-            dec = str(ru.get("decision") or "").strip().lower()
-            if dec not in MAPPED_RULING_DECISIONS:
-                problems.append("%s decision %r is not one of %s - a value outside the closed set "
-                                "mints an identity nothing downstream will ever match again"
-                                % (where, ru.get("decision"), " | ".join(MAPPED_RULING_DECISIONS)))
-            if dec in ("mapped", "mapped-optional"):
-                if not str(ru.get("bid") or "").strip() and not str(ru.get("canon_item") or "").strip():
-                    problems.append("%s is %s with neither a `bid` nor a `canon_item` - it settles "
-                                    "no identity and names no food, so nothing can cost or weigh it"
-                                    % (where, dec))
-            raw = str(ru.get("raw") or "")
-            if raw in seen_raw:
-                problems.append("%s rules on the same raw line as ruling %d (%r) - `raw` is the key "
-                                "the assembler joins rulings to table rows on, so one of the two "
-                                "would silently never have happened"
-                                % (where, seen_raw[raw], raw[:80]))
-            else:
-                seen_raw[raw] = j
-    return problems
+    problems, _notes = map_problems(payload)
+    return [p["message"] for p in problems]
 
 
 QA = {"type": "object", "properties": {

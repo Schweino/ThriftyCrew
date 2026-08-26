@@ -1289,6 +1289,11 @@ def run():
     #     (the twin: owner_agent maps anything unrecognised to recipe-writer, so a writer-owned
     #     fail would file itself as a mapper fail);
     #   * drop the two seam defaults from daemon()           -> 1 red.
+    # NEUTER PROOFS FOR THE PER-RULING PRE-FLIGHT, RUN AND REVERTED BY md5 2026-08-26, counts as the
+    # suites printed them (this suite / learn_apply's):
+    #   * hunt_lib: refuse AGREEING duplicate raws again (the smoke3 bug)  -> 1 red / 8 red;
+    #   * learn_apply: let any problem hold every ruling again            -> 1 red / 2 red;
+    #   * hunt_lib: collapse DISAGREEING duplicates too (rule loses its teeth) -> 1 red / 5 red.
     T("MUST FIRE  assemble_mapped LEARNS: two clean rulings become two events and two ledger rows, "
       "and it is the CALL SITE that does it - pinning apply_learn alone passes with the hook deleted",
       *_learn_the_call_site_writes_events())
@@ -1301,6 +1306,12 @@ def run():
       *_learn_a_clean_batch_trips_nothing())
     T("MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and "
       "the REJECTED id is held rather than cached", *_learn_registrar_rulings_get_events())
+    T("MUST FIRE  a recipe that rules ONE raw line twice, identically, still learns every ruling - "
+      "smoke3's meatballs learned 13 events and projected NONE over a duplicated 'cumin' line",
+      *_learn_a_duplicate_raw_line_holds_only_itself())
+    T("MUST FIRE  two rulings on one raw line that DISAGREE are both held with a stated reason, and "
+      "the ruling beside them still learns - the rule keeps its teeth, not its blast radius",
+      *_learn_a_conflicted_raw_line_is_still_refused())
     T("MUST FIRE  a QA fail owned by the MAPPER writes exactly one slug-level event carrying the "
       "slug's residual keys", *_qa_mapper_fail_writes_one_event())
     T("CLEAN TWIN a QA fail owned by the WRITER writes none - the raw owner field decides, not "
@@ -1965,6 +1976,65 @@ def _learn_registrar_rulings_get_events():
                 and ruled[0]["held_reason"] == "bid unknown to every namespace"
                 and not os.path.exists(led),
                 "events=%s" % json.dumps([(e["kind"], e["decision"]) for e in evs]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _dup_res(second):
+    """`_learn_res` with a THIRD ruling that repeats ruling 0's raw line - `second` says how."""
+    res = _learn_res()
+    twin = dict(res["rulings"][0])
+    twin.update(second)
+    res["rulings"] = [res["rulings"][0], twin, res["rulings"][1]]
+    return res
+
+
+def _learn_a_duplicate_raw_line_holds_only_itself():
+    """MUST FIRE, at the CALL SITE. One duplicated raw line used to void a whole recipe's memory.
+
+    MEASURED, run hunt-2026-08-26-smoke3: sheet-pan-meatballs-... lists "1 teaspoon cumin" twice
+    (meatballs and vegetables), `validate_map` refused the whole payload, and the daemon logged
+    "learned 13 event(s) (0 projected, 12 held, 0 surprise)" over ten rulings with live bids. Every
+    other recipe that day projected most of its rulings. This is that shape, driven through
+    assemble_mapped, because the daemon is what builds the payload the pen indexes into.
+    """
+    tmp, ev, led = _learn_scratch("daemon-learn-dup-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, why = arun(d.assemble_mapped("s1", _dup_res(
+            {"evidence": "the same cut again, ruled the same way in the second component"}), None))
+        evs = _learn_events(ev)
+        rows = _LA.read_ledger(led)[0]
+        return (ok and len(evs) == 3 and all(e["projected"] for e in evs)
+                and sorted(rows) == ["boneless chicken breast", "large eggs"],
+                "ok=%s why=%s events=%s rows=%s"
+                % (ok, why[:60], json.dumps([(e["projected"], e["held_reason"]) for e in evs]),
+                   sorted(rows)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_a_conflicted_raw_line_is_still_refused():
+    """MUST FIRE. The rule itself is SOUND and stays: two rulings on one raw line that settle it
+    DIFFERENTLY mean the assembler's join keeps one and the other silently never happened. Both are
+    held, with a stated reason - and the untouched ruling beside them still learns."""
+    tmp, ev, led = _learn_scratch("daemon-learn-conflict-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, _why = arun(d.assemble_mapped("s1", _dup_res(
+            {"bid": "eggs", "canon_item": "Eggs",
+             "evidence": "no, this line is the eggs - a genuine conflict on one raw line"}), None))
+        evs = _learn_events(ev)
+        held = [e for e in evs if e["held_reason"]]
+        rows = _LA.read_ledger(led)[0]
+        return (ok and len(evs) == 3 and len(held) == 2
+                and all("did not validate" in e["held_reason"] and "DIFFERENTLY" in e["held_reason"]
+                        for e in held)
+                and sorted(rows) == ["large eggs"],
+                "ok=%s events=%s rows=%s"
+                % (ok, json.dumps([e["held_reason"][:70] for e in evs]), sorted(rows)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
