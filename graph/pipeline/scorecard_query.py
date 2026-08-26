@@ -148,6 +148,92 @@ def helper_filter_counts(conn: sqlite3.Connection, since: str, until: str) -> di
         return {"rejected": None, "why": str(e)}
 
 
+def hunter_identity(conn: sqlite3.Connection, repo: str, since: str, until: str) -> dict:
+    r"""The ingredient-identity brain's week (PLAN-ingredient-memory 6.4).
+
+    THIS BLOCK IS THE FALSIFYING READ. Section 1 of that plan says it plainly: the estate's
+    identity ledger sat at 23 rows from 2026-08-16 to 2026-08-25 because nothing called its writer.
+    If `resolutions_count` is still 23 after a real 30-recipe week, the brain is a bystander and the
+    build failed - and that sentence belongs in the report, not softened. So the count is read
+    DIRECTLY off the ledger file rather than inferred from events: events are what the encoder
+    claims it wrote, and the row count is what a future recipe will actually be handed.
+
+    A MISSING LEDGER IS BLIND, NEVER ZERO - the rule this module opens with. "The file is gone" and
+    "the file is empty" are different weeks, and a scorecard that conflates them is worse than no
+    scorecard: a zero here reads as "the encoder wrote nothing", which is the exact alarm this
+    block exists to raise, and raising it for a missing file would train its reader to ignore it.
+    """
+    out: dict = {}
+
+    led = os.path.join(repo, "meal-prep", "db", "ingredient-resolutions.json")
+    doc = read_json(led)
+    if doc is None:
+        out["resolutions"] = {"state": "BLIND",
+                              "why": "no meal-prep/db/ingredient-resolutions.json at %s - the "
+                                     "identity ledger could not be read, which is not the same as "
+                                     "its being empty" % led}
+    else:
+        rows = doc.get("resolutions") or []
+        out["resolutions"] = {"state": "ran", "count": len(rows),
+                              "declared": doc.get("count"), "updated": doc.get("updated")}
+
+    ev = os.path.join(repo, "meal-prep", "db", "ingredient-events.jsonl")
+    if not os.path.exists(ev):
+        out["events_log"] = {"state": "BLIND", "why": "no ingredient-events.jsonl at %s" % ev}
+    else:
+        out["events_log"] = {"state": "ran", "bytes": os.path.getsize(ev)}
+
+    # The GROUP BY idiom above, one type over. `decision` carries the event's KIND, so this is the
+    # week's ruling / registrar / qa_mapper_fail / supersede / invalidate / review split.
+    win = (since, until + "T23:59:59")
+    kinds: dict[str, int] = {}
+    surprises = projected = 0
+    try:
+        for r in conn.execute(
+                """SELECT decision, detail_json FROM decision_log
+                   WHERE type='hunter_identity' AND decision <> 'hunter_ingest_complete'
+                     AND timestamp >= ? AND timestamp <= ?""", win):
+            k = r["decision"] or "unknown"
+            kinds[k] = kinds.get(k, 0) + 1
+            try:
+                d = json.loads(r["detail_json"] or "{}")
+            except json.JSONDecodeError:
+                continue
+            if d.get("surprise"):
+                surprises += 1
+            if d.get("projected"):
+                projected += 1
+        out["events"] = kinds
+        out["surprises"] = surprises
+        out["projected"] = projected
+    except sqlite3.Error as e:
+        out["events"] = {}
+        out["events_why"] = str(e)[:120]
+
+    # The ingest's own last word. Not window-bounded: "when did the brain last sleep" is a fact
+    # about today, the way the queue backlog is.
+    try:
+        r = conn.execute(
+            """SELECT run_id, timestamp, detail_json FROM decision_log
+               WHERE type='hunter_identity' AND decision='hunter_ingest_complete'
+               ORDER BY timestamp DESC LIMIT 1""").fetchone()
+    except sqlite3.Error as e:
+        r = None
+        out["ingest_why"] = str(e)[:120]
+    if r is None:
+        out["ingest"] = {"state": "BLIND",
+                         "why": "no hunter_ingest_complete row - the nightly ingest has never run "
+                                "against this database"}
+    else:
+        try:
+            counts = json.loads(r["detail_json"] or "{}")
+        except json.JSONDecodeError:
+            counts = {}
+        out["ingest"] = {"state": "ran", "last_run": r["run_id"], "at": r["timestamp"],
+                         "counts": counts}
+    return out
+
+
 def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
     win = (since, until)
 
@@ -228,7 +314,9 @@ def collect(conn: sqlite3.Connection, since: str, until: str) -> dict:
             "prior_authority_tiers": tiers,
             "learning_proposals": learning,
             "local_lane": {**local_lane(os.path.join(HERE, "..", "..")),
-                           "helper_filter_window": helper_filter_counts(conn, since, until)}}
+                           "helper_filter_window": helper_filter_counts(conn, since, until)},
+            "hunter_identity": hunter_identity(conn, os.path.join(HERE, "..", ".."),
+                                               since, until)}
 
 
 def _selftest() -> int:
@@ -275,9 +363,64 @@ def _selftest() -> int:
         T("settled_by totals equal the status tally",
           sum(out["settled_by"].values()) == sum(out["by_status"].values()),
           f"{out['settled_by']} vs {sum(out['by_status'].values())}")
+        hi = out.get("hunter_identity") or {}
+        T("MUST FIRE  the hunter_identity block is collected, and it reads the LEDGER's own row "
+          "count rather than inferring it from events - that count is the falsifying read of "
+          "PLAN-ingredient-memory (23 rows, frozen since 2026-08-16)",
+          set(["resolutions", "events", "ingest"]).issubset(hi)
+          and (hi["resolutions"].get("state") == "BLIND"
+               or isinstance(hi["resolutions"].get("count"), int)),
+          json.dumps(hi.get("resolutions")))
+        T("MUST FIRE  an ingest that has never run reads BLIND, never as zero events",
+          hi["ingest"]["state"] in ("ran", "BLIND")
+          and (hi["ingest"]["state"] == "ran" or hi["ingest"].get("why")),
+          json.dumps(hi.get("ingest")))
         conn.close()
     else:
         T(f"graph db present at {db} (skipped, not an error in a fresh worktree)", True)
+
+    # MUST FIRE, WITHOUT A DATABASE: a missing identity ledger is BLIND, not 0. This is the rule
+    # this module opens with, applied to the one number the whole ingredient-memory build is
+    # falsified by - a zero here reads as "the encoder wrote nothing", which is exactly the alarm
+    # it exists to raise, so raising it for a missing FILE would train its reader to ignore it.
+    import sqlite3 as _sq
+    _mem = _sq.connect(":memory:")
+    _mem.row_factory = _sq.Row
+    _mem.execute("CREATE TABLE decision_log (event_id TEXT, run_id TEXT, timestamp TEXT, "
+                 "type TEXT, decision TEXT, detail_json TEXT)")
+    blind_hi = hunter_identity(_mem, os.path.join(HERE, "no-such-repo-dir"),
+                               "1970-01-01", "2999-01-01")
+    T("MUST FIRE  a missing ingredient-resolutions.json reads BLIND, not 0",
+      blind_hi["resolutions"]["state"] == "BLIND" and "count" not in blind_hi["resolutions"],
+      json.dumps(blind_hi["resolutions"]))
+    T("MUST FIRE  a missing ingredient-events.jsonl reads BLIND, not 0",
+      blind_hi["events_log"]["state"] == "BLIND", json.dumps(blind_hi["events_log"]))
+    _mem.execute("INSERT INTO decision_log VALUES ('e1','r1','2026-08-25T01:00:00',"
+                 "'hunter_identity','ruling','{\"surprise\": true, \"projected\": false}')")
+    _mem.execute("INSERT INTO decision_log VALUES ('e2','r1','2026-08-25T01:00:00',"
+                 "'hunter_identity','ruling','{\"surprise\": false, \"projected\": true}')")
+    _mem.execute("INSERT INTO decision_log VALUES ('e3','r1','2026-08-25T01:00:00',"
+                 "'hunter_identity','registrar','{}')")
+    _mem.execute("INSERT INTO decision_log VALUES ('e4','r1','2026-08-25T01:00:00',"
+                 "'hunter_identity','hunter_ingest_complete','{\"events\": 3, \"logged\": 3}')")
+    _mem.execute("INSERT INTO decision_log VALUES ('e5','r1','2026-08-25T01:00:00',"
+                 "'resolve','resolve_pending','{}')")
+    hi2 = hunter_identity(_mem, os.path.join(HERE, "no-such-repo-dir"), "2026-08-20", "2026-08-26")
+    T("MUST FIRE  the block counts events by KIND, and the ingest's own completion row is not one "
+      "of them", hi2["events"] == {"ruling": 2, "registrar": 1}, json.dumps(hi2["events"]))
+    T("MUST FIRE  surprises and projections are counted out of the events' own detail",
+      hi2["surprises"] == 1 and hi2["projected"] == 1,
+      f"surprises={hi2['surprises']} projected={hi2['projected']}")
+    T("MUST FIRE  a `resolve` row is not a hunter_identity event - the type filter is real",
+      sum(hi2["events"].values()) == 3, json.dumps(hi2["events"]))
+    T("the ingest's last word is reported with its counts",
+      hi2["ingest"]["state"] == "ran" and hi2["ingest"]["counts"]["events"] == 3,
+      json.dumps(hi2["ingest"]))
+    hi3 = hunter_identity(_mem, os.path.join(HERE, "no-such-repo-dir"), "2026-01-01", "2026-01-02")
+    T("MUST FIRE  the window is honoured - a week with no identity events counts zero, and that is "
+      "a REAL zero because the rows exist and are outside it",
+      hi3["events"] == {} and hi3["ingest"]["state"] == "ran", json.dumps(hi3["events"]))
+    _mem.close()
 
     if bad:
         print(f"scorecard_query SELF-TEST FAIL ({bad})")

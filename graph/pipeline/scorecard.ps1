@@ -125,6 +125,25 @@ function Format-Rate {
   return ('{0:N0}' -f ($Numerator / $Denominator))
 }
 
+function Format-HunterCount {
+  <#
+    .SYNOPSIS The identity ledger's row count, or 'BLIND'. Never a zero standing in for a BLIND.
+    .DESCRIPTION THIS IS THE FALSIFYING NUMBER of PLAN-ingredient-memory: the ledger sat at 23 rows
+                 from 2026-08-16 to 2026-08-25 because nothing called its writer, and if it is still
+                 23 after a real 30-recipe week the brain is a bystander. A zero here would read as
+                 "the encoder wrote nothing", which is precisely the alarm - so a file that could
+                 not be READ must never print as one, or the alarm stops meaning anything.
+                 Reading the property through PSObject.Properties on purpose: `$o.count` on a
+                 PSCustomObject is one shadowing away from the collection's own Count.
+  #>
+  param($Resolutions)
+  if ($null -eq $Resolutions) { return 'BLIND' }
+  if ([string]$Resolutions.state -ne 'ran') { return 'BLIND' }
+  $p = $Resolutions.PSObject.Properties['count']
+  if (-not $p -or $null -eq $p.Value) { return 'BLIND' }
+  return ('{0:N0}' -f [int]$p.Value)
+}
+
 # ---- self-test -------------------------------------------------------------------------------------
 if ($runSelfTest) {
   $bad = 0
@@ -154,6 +173,17 @@ if ($runSelfTest) {
 
   T 'MUST FIRE  tokens per ruling with zero rulings is n/a, never a divide' ((Format-Rate 1000 0) -eq 'n/a') (Format-Rate 1000 0)
   T 'tokens per ruling divides' ((Format-Rate 1000 4) -eq '250') (Format-Rate 1000 4)
+
+  # ---- the ingredient-identity block (PLAN-ingredient-memory 6.4) --------------------------------
+  T 'MUST FIRE  a BLIND identity ledger renders BLIND and NEVER 0 - a zero here reads as "the encoder wrote nothing", which is the alarm this line exists to raise' `
+    ((Format-HunterCount ([pscustomobject]@{ state='BLIND'; why='no file' })) -eq 'BLIND') (Format-HunterCount ([pscustomobject]@{ state='BLIND' }))
+  T 'MUST FIRE  a missing block renders BLIND rather than throwing' ((Format-HunterCount $null) -eq 'BLIND') (Format-HunterCount $null)
+  T 'CLEAN TWIN  a real count renders as the number - 23 is the frozen row count this build exists to move' `
+    ((Format-HunterCount ([pscustomobject]@{ state='ran'; count=23 })) -eq '23') (Format-HunterCount ([pscustomobject]@{ state='ran'; count=23 }))
+  T 'MUST FIRE  a REAL zero still renders 0 - an empty ledger and an unreadable one are different weeks' `
+    ((Format-HunterCount ([pscustomobject]@{ state='ran'; count=0 })) -eq '0') (Format-HunterCount ([pscustomobject]@{ state='ran'; count=0 }))
+  T 'MUST FIRE  a `ran` block with no count at all is BLIND, not 0' `
+    ((Format-HunterCount ([pscustomobject]@{ state='ran' })) -eq 'BLIND') (Format-HunterCount ([pscustomobject]@{ state='ran' }))
 
   $py = Get-Python
   T 'a real python interpreter is resolved (never the Store shim)' ($null -ne $py) 'none found'
@@ -259,6 +289,7 @@ $card = [ordered]@{
   queue_now             = $g.queue_now
   prior_authority_tiers = $g.prior_authority_tiers
   learning_proposals    = $g.learning_proposals
+  hunter_identity       = $g.hunter_identity
   transcripts_scanned   = $scanned
   transcripts_attributed = $used
 }
@@ -351,6 +382,32 @@ if (-not $ll) {
   } else {
     Write-Output ("      filter   rejected {0} question(s) before the model saw them" -f $hf.rejected)
   }
+}
+
+# ---- THE INGREDIENT-IDENTITY BRAIN (PLAN-ingredient-memory 6.4) -----------------------------------
+# The falsifying read of that whole build, and it is deliberately the LAST thing printed, because it
+# is the only section here that is a claim about the FUTURE: every row in that ledger is an answer a
+# recipe the estate has not sourced yet will be handed for free, on the first rung of the resolution
+# ladder, before the vocabulary and before the board. The ledger was FROZEN at 23 rows from
+# 2026-08-16 to 2026-08-25 because nothing called its writer. If this line still reads 23 after a
+# real 30-recipe week, the brain is a bystander and the build failed - unsoftened, on purpose.
+Write-Output ''
+Write-Output '  the ingredient-identity brain (encode / attend / sleep):'
+$hi = $g.hunter_identity
+if (-not $hi) {
+  Write-Output '      BLIND    this scorecard predates the identity block; re-run scorecard_query.py'
+} else {
+  Write-Output ("      ledger   {0,10}   cached identity rulings, updated {1}" -f (Format-HunterCount $hi.resolutions), $(if ($hi.resolutions.updated) { $hi.resolutions.updated } else { 'never' }))
+  if ([string]$hi.resolutions.state -ne 'ran') { Write-Output ("               {0}" -f $hi.resolutions.why) }
+  if ([string]$hi.events_log.state -ne 'ran') { Write-Output ("      events   BLIND    {0}" -f $hi.events_log.why) }
+  else {
+    $kinds = @()
+    if ($hi.events) { foreach ($p in $hi.events.PSObject.Properties) { $kinds += ("{0} {1}" -f $p.Value, $p.Name) } }
+    Write-Output ("      events   {0,10}   in this window ({1})" -f (@($kinds | ForEach-Object { ($_ -split ' ')[0] } | Measure-Object -Sum).Sum, $(if ($kinds.Count) { $kinds -join ', ' } else { 'none' })))
+    Write-Output ("      of those {0,10}   projected into the ledger, {1} surprising" -f $hi.projected, $hi.surprises)
+  }
+  if ([string]$hi.ingest.state -ne 'ran') { Write-Output ("      ingest   BLIND    {0}" -f $hi.ingest.why) }
+  else { Write-Output ("      ingest   last ran {0} ({1})" -f $hi.ingest.at, $hi.ingest.last_run) }
 }
 
 if ($rulings -eq 0) {
