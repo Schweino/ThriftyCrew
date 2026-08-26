@@ -414,6 +414,17 @@ def run():
       *_one_marshalling_road())
 
     # =================================================================================================
+    H("--target N bounds ACCEPTANCES, not pops (2026-08-26: --target 10 accepted 20)")
+    # =================================================================================================
+    for name, ok, got in _target_bounds_acceptances():
+        T(name, ok, got)
+    T("CLEAN TWIN a run with NO target is not throttled by the same road - 0 means no limit, and a "
+      "bound that fired there would silently halve every untargeted run",
+      *_no_target_caps_nothing())
+    for name, ok, got in _cap_arithmetic():
+        T(name, ok, got)
+
+    # =================================================================================================
     H("The extraction lane (the 2026-08-24 pins)")
     # =================================================================================================
     T("MUST FIRE  a near-miss rung-1 escalation is re-rolled ONCE and settles",
@@ -2614,10 +2625,11 @@ def _decide_pool(tmp, slugs, band=None):
     return p
 
 
-def _decide_daemon(tmp, slugs, verdicts, run_dir=None):
+def _decide_daemon(tmp, slugs, verdicts, run_dir=None, target=0):
     pool_path = _decide_pool(tmp, slugs)
     fd = FakeDispatch({"recipe-dedup-selector": list(verdicts)})
-    d = daemon(run_dir=run_dir or os.path.join(tmp, "run"), dispatcher=fd, pool_path=pool_path)
+    d = daemon(run_dir=run_dir or os.path.join(tmp, "run"), dispatcher=fd, pool_path=pool_path,
+               target=target)
     os.makedirs(d.run_dir, exist_ok=True)
     return d, fd, pool_path
 
@@ -2715,6 +2727,196 @@ def _taken_refusal_drops():
                 "the dispatched batch still mentions cand-a" if "cand-a" in body else "dropped")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# THE TARGET BOUND (2026-08-26). `--target 10` accepted 20.
+#
+# THE RUN THAT PAID FOR THIS: hunt-2026-08-26-ten. The pool printed "target of 10 reached - popping
+# nothing further" after batch 4 and batches 5 and 6 ruled anyway, because the pool checks the target
+# BEFORE it pops while up to 2*DECIDE_BATCH dossiers are already buffered in the decide channel.
+# accepted-slugs.json closed with twenty slugs. Every acceptance is paid for DOWNSTREAM - extraction,
+# the Opus mapper, the Opus pricer, the writer, source-QA, the batch auditor - so that is double the
+# run's intended spend, and Thursday's wide proving run would have multiplied it.
+#
+# PINNED AT THE CALL SITE, NOT ONLY AT THE HELPER, and that is the whole point of the shape below.
+# The arithmetic was never the defect; the defect was that nothing called any arithmetic. A fixture
+# over cap_accepts_to_target alone goes green against a daemon that never invokes it - which is the
+# trap PLAN-map-judge-split-2026-08-25 s4 records twice over ("a neuter came back 0 red because a
+# fixture pinned a function while the bug lived at its call site"). So the load-bearing case below
+# runs the REAL pool and decide lanes over a real scratch pool and reads the run's own numbers.
+#
+# WHY IT SPIES ON apply_verdict RATHER THAN STUBBING IT BLIND. apply_verdict is what advances the
+# state machine, writes considered-dishes and appends accepted-slugs.json. A cap applied after it is
+# a cap on money already spent, so the fixture asserts on the payload THAT FUNCTION WAS HANDED - a
+# cap that only trimmed the daemon's in-memory list afterwards goes red here.
+#
+# NEUTER PROOFS, RUN AND REVERTED 2026-08-26, counts exactly as the suite printed them. Baseline
+# 259 ok / 0 red / exit 0, and EVERY neuter below reported 259 cases - the count is asserted with the
+# reds because a lost case and a passing case are indistinguishable in a count of failures:
+#   1. delete the half-2 cap call from decide_lane (helper intact, uncalled)  -> 4 red, exit 2
+#      - which is the call-site pin doing its job: the arithmetic fixtures below all stayed GREEN.
+#   2. delete the half-1 skip, so every buffered batch is dispatched again    -> 3 red, exit 2
+#   3. make cap_accepts_to_target return the payload untouched                -> 5 red, exit 2
+#   4. rewrite the overshoot to `rejected-not-fit` instead of `deferred`      -> 3 red, exit 2
+#      - two of them the validator and the shelf; burying a candidate nobody rejected is the harm.
+#   5. delete BOTH halves - the tree exactly as it ran on 2026-08-26          -> 6 red, exit 2,
+#      reporting `extract holds 12` against a target of 3, which is the measured defect in miniature.
+# =====================================================================================================
+
+def _target_spy(d):
+    """Replace decide_apply.apply_verdict with a recorder that answers as the real one would: every
+    decision applied, in the payload's own order. Returns (payloads, restore)."""
+    import decide_apply                                           # noqa: PLC0415
+    real = decide_apply.apply_verdict
+    seen = []
+
+    def spy(payload, *a, **k):
+        seen.append(payload)
+        return ([(x["slug"], x["verdict"], "applied") for x in payload["decisions"]], [])
+    decide_apply.apply_verdict = spy
+
+    def restore():
+        decide_apply.apply_verdict = real
+    return seen, restore
+
+
+def _target_bounds_acceptances():
+    """MUST FIRE, at the call site: a `--target N` run cannot accept more than N.
+
+    Twelve candidates, a target of THREE, and a decider that says accept to everything it is shown -
+    the measured shape in miniature. Before the fix this run accepted twelve.
+    """
+    out = []
+    tmp = tempfile.mkdtemp(prefix="daemon-target-")
+    try:
+        slugs = ["cand-%02d" % i for i in range(1, 13)]
+        d, fd, pool_path = _decide_daemon(
+            tmp, slugs,
+            [{"decisions": [_verdict(x) for x in slugs[:10]], "note": ""},
+             {"decisions": [_verdict(x) for x in slugs[10:]], "note": ""}],
+            target=3)
+        seen, restore = _target_spy(d)
+        try:
+            arun(d.run(("pool", "decide")))
+        finally:
+            restore()
+
+        decisions = [x for pay in seen for x in pay["decisions"]]
+        accepted = [x for x in decisions if x["verdict"] == "accepted"]
+        deferred = [x for x in decisions if x["verdict"] == "deferred"]
+
+        out.append(("MUST FIRE  a --target 3 run accepts THREE - the count the pool gate reads is "
+                    "stale by everything already buffered in the decide channel, so the bound has "
+                    "to live where the counter is written (--target 10 accepted 20 on 2026-08-26)",
+                    len(d.accepted_slugs) == 3,
+                    "accepted_slugs=%s" % json.dumps(d.accepted_slugs)))
+        out.append(("MUST FIRE  ...and decide_apply - which advances the state machine, records the "
+                    "ruling and appends accepted-slugs.json - was HANDED three acceptances, not "
+                    "handed twelve and corrected afterwards",
+                    len(accepted) == 3,
+                    "%d acceptance(s) reached apply_verdict" % len(accepted)))
+        out.append(("MUST FIRE  ...and only three recipes were released downstream, which is where "
+                    "an acceptance actually costs money",
+                    d.ch["extract"].size() == 3, "extract holds %d" % d.ch["extract"].size()))
+        out.append(("MUST FIRE  the acceptances past the target are DEFERRED, never rejected - the "
+                    "decider looked and its ruling was overruled by arithmetic, so the candidate "
+                    "goes back on the shelf rather than into the ledger as unfit",
+                    len(deferred) == 7 and not [x for x in decisions
+                                                if x["verdict"].startswith("rejected")],
+                    "verdicts=%s" % json.dumps(sorted(set(x["verdict"] for x in decisions)))))
+        out.append(("MUST FIRE  ...and the second buffered batch is never dispatched at all, so the "
+                    "run stops paying a decider once it has bought what it asked for",
+                    len(fd.prompts("recipe-dedup-selector")) == 1,
+                    "%d decide dispatch(es)" % len(fd.prompts("recipe-dedup-selector"))))
+
+        import harvest                                            # noqa: PLC0415
+        status = [c["status"] for c in harvest.read_pool(pool_path)["candidates"]]
+        out.append(("MUST FIRE  ...and those undispatched candidates were never marked taken - they "
+                    "stay `available` for the next run instead of being stranded by a run that "
+                    "declined to rule on them",
+                    status.count("available") == 2 and status.count("taken:drill-run") == 10,
+                    "pool statuses=%s" % json.dumps(sorted(status))))
+
+        problems = [pr for pay in seen for pr in hunt_lib.validate_decide(pay, methods={"any"})]
+        out.append(("MUST FIRE  the capped payload is still a LEGAL decide verdict - a deferral the "
+                    "validator would reject is a payload apply_verdict must never be handed",
+                    not problems, "; ".join(problems[:3])))
+        out.append(("  and a deferred decision carries no `record` block - DECIDE_RECORDS_RULING "
+                    "says nothing reads it, and a decision that says deferred while recording "
+                    "`accepted` lies about itself",
+                    not [x for x in deferred if x.get("record")],
+                    "%d deferral(s) still carry a record"
+                    % len([x for x in deferred if x.get("record")])))
+        out.append(("  and each deferral carries the ruling it overruled, so the reason the "
+                    "candidate is back on the shelf is legible without the run log",
+                    all("ACCEPT" in (x.get("reason") or "") for x in deferred),
+                    json.dumps([x.get("reason") for x in deferred[:1]])))
+        return out
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _no_target_caps_nothing():
+    """CLEAN TWIN: a run with no target is not quietly throttled by the same code path. `--target 0`
+    is the estate's normal shape - it runs until the backlog is dry or the WIP limit parks the lane -
+    and a bound that fired there would silently halve every untargeted run."""
+    tmp = tempfile.mkdtemp(prefix="daemon-notarget-")
+    try:
+        slugs = ["cand-%02d" % i for i in range(1, 13)]
+        d, fd, _p = _decide_daemon(
+            tmp, slugs,
+            [{"decisions": [_verdict(x) for x in slugs[:10]], "note": ""},
+             {"decisions": [_verdict(x) for x in slugs[10:]], "note": ""}],
+            target=0)
+        seen, restore = _target_spy(d)
+        try:
+            arun(d.run(("pool", "decide")))
+        finally:
+            restore()
+        deferred = [x for pay in seen for x in pay["decisions"] if x["verdict"] == "deferred"]
+        return (len(d.accepted_slugs) == 12 and not deferred
+                and len(fd.prompts("recipe-dedup-selector")) == 2,
+                "accepted=%d deferred=%d dispatches=%d"
+                % (len(d.accepted_slugs), len(deferred),
+                   len(fd.prompts("recipe-dedup-selector"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _cap_arithmetic():
+    """The helper's own cases - the mid-batch crossing, which the call-site fixture cannot isolate
+    because a live batch either fits wholly under the target or does not."""
+    out = []
+    cap = HD.cap_accepts_to_target
+    batch = {"decisions": [_verdict("a"), _verdict("b"), _verdict("c")], "note": "keep me"}
+
+    pay, over = cap(batch, 2, 3)
+    verdicts = [x["verdict"] for x in pay["decisions"]]
+    out.append(("MUST FIRE  a batch that CROSSES the target mid-verdict keeps the room it has and "
+                "defers the rest - the run's fourth and fifth acceptances are the expensive ones",
+                verdicts == ["accepted", "deferred", "deferred"] and over == ["b", "c"],
+                "verdicts=%s over=%s" % (verdicts, over)))
+    out.append(("  and the rest of the payload rides through untouched - the note, and the slug on "
+                "every ruling",
+                pay.get("note") == "keep me"
+                and [x["slug"] for x in pay["decisions"]] == ["a", "b", "c"],
+                json.dumps(pay)[:160]))
+
+    mixed = {"decisions": [_verdict("a", "rejected-dupe"), _verdict("b", "rejected-not-fit"),
+                           _verdict("c", "deferred")]}
+    pay, over = cap(mixed, 9, 3)
+    out.append(("MUST FIRE  a target already met touches NO ruling but an acceptance - rejections "
+                "are free, and losing one would cost the next run the memory of it",
+                [x["verdict"] for x in pay["decisions"]] == ["rejected-dupe", "rejected-not-fit",
+                                                             "deferred"] and not over,
+                json.dumps([x["verdict"] for x in pay["decisions"]])))
+
+    pay, over = cap(batch, 99, 0)
+    out.append(("CLEAN TWIN a target of 0 is NO target - the payload comes back exactly as the "
+                "decider wrote it, however many acceptances the run already holds",
+                pay is batch and not over, "over=%s" % over))
+    return out
 
 
 def _inflight_scratch():
