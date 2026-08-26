@@ -989,6 +989,77 @@ def validate_writer_fields(payload):
                             % (k, type(fields[k]).__name__))
     return problems
 
+
+def validate_map(payload):
+    """The MAP lane's semantic validator - the one judge that had none (PLAN-ingredient-memory 3.5).
+
+    DECIDE has validate_decide, the REGISTRAR has validate_registrar/_batch, the WRITER has
+    validate_writer_fields. The mapper had only the MAPPED json-schema, which checks SHAPE and
+    nothing about MEANING: `decision` is typed `string` with the closed set stated only in a
+    description, so `"decision": "sure"` conforms. The assembler refuses it one stage later
+    (map-preresolve's ASM_RULING_DECISIONS check), which is a park, not a validation.
+
+    WHERE THIS IS CALLED, AND WHERE IT DELIBERATELY IS NOT. It guards the PEN - learn_apply's
+    pre-flight - the way validate_decide guards decide_apply's. It is NOT wired into the daemon's
+    dispatch path in this build: changing what the daemon ACCEPTS from the mapper would change the
+    map lane's routing, which PLAN-map-judge-split reserves (its U1-U4 are not ordered). A payload
+    the assembler accepted and this refuses becomes an EVENT-only ruling with a named held_reason,
+    never a silent cache row.
+
+    Three rules, and each one is a way a bad row would become a permanent identity:
+      1. every ruling's `decision` is in MAPPED_RULING_DECISIONS - free text here produced 21
+         distinct values across 550 v2 lines;
+      2. a `mapped` / `mapped-optional` ruling with BOTH an empty `bid` and an empty `canon_item`
+         is refused - it settles nothing and names no food, so it can neither be cached nor costed;
+      3. a `raw` line ruled twice inside ONE slug is refused - `raw` is the join key the assembler
+         matches rulings to table rows on, so two rulings on one raw means the assembler picks one
+         of them by iteration order and the other ruling silently never happened.
+    """
+    problems = []
+    if not isinstance(payload, dict):
+        return ["the map payload is not an object"]
+    results = payload.get("results")
+    if not isinstance(results, list):
+        return ["the map payload has no `results` array"]
+    if not results:
+        problems.append("`results` is empty - a map dispatch that settled nothing is not a result")
+    for i, r in enumerate(results):
+        if not isinstance(r, dict):
+            problems.append("results[%d] is not an object" % i)
+            continue
+        slug = str(r.get("slug") or "").strip() or "results[%d]" % i
+        rulings = r.get("rulings")
+        if rulings is not None and not isinstance(rulings, list):
+            problems.append("%s: `rulings` must be an array, got %s"
+                            % (slug, type(rulings).__name__))
+            continue
+        seen_raw = {}
+        for j, ru in enumerate(rulings or []):
+            where = "%s ruling %d" % (slug, j)
+            if not isinstance(ru, dict):
+                problems.append("%s is not an object" % where)
+                continue
+            dec = str(ru.get("decision") or "").strip().lower()
+            if dec not in MAPPED_RULING_DECISIONS:
+                problems.append("%s decision %r is not one of %s - a value outside the closed set "
+                                "mints an identity nothing downstream will ever match again"
+                                % (where, ru.get("decision"), " | ".join(MAPPED_RULING_DECISIONS)))
+            if dec in ("mapped", "mapped-optional"):
+                if not str(ru.get("bid") or "").strip() and not str(ru.get("canon_item") or "").strip():
+                    problems.append("%s is %s with neither a `bid` nor a `canon_item` - it settles "
+                                    "no identity and names no food, so nothing can cost or weigh it"
+                                    % (where, dec))
+            raw = str(ru.get("raw") or "")
+            if raw in seen_raw:
+                problems.append("%s rules on the same raw line as ruling %d (%r) - `raw` is the key "
+                                "the assembler joins rulings to table rows on, so one of the two "
+                                "would silently never have happened"
+                                % (where, seen_raw[raw], raw[:80]))
+            else:
+                seen_raw[raw] = j
+    return problems
+
+
 QA = {"type": "object", "properties": {
     "slug": {"type": "string"}, "verdict": {"type": "string"},
     "owner": {"type": "string"}, "findings": {"type": "string"}},

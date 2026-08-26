@@ -485,6 +485,46 @@ Units, in order, one commit each (suggested messages in quotes):
   `nightly.ps1 -SelfTest`, `scorecard.ps1 -SelfTest`, `test_gates.py`. All green.
 - **B8** OPEN-ITEMS §2.6 marked BUILT; this doc's CORRECTED blocks (if any) landed; push.
 
+## 9. CORRECTED blocks, written during the build (2026-08-25)
+
+Each block landed in the same commit as the unit it affects, per §0.1.
+
+### C1 (B1) — §3.4's `REFUSE_NEAR_BID` regex cannot fire on its own founding case
+
+The plan freezes:
+
+```python
+REFUSE_NEAR_BID = re.compile(
+    r"(refus\w*|reject\w*|not\s+the|is\s+not)\W{0,80}" + re.escape(bid), re.I)
+```
+
+`\W` matches only NON-word characters, so the span between the refusal word and the id may hold
+spaces and punctuation but **not a single letter**. Run against the verbatim evidence OPEN-ITEMS
+§2.6 is written from —
+
+> "...Refused the chicken-thighs bridge on the standing 'leg quarters are not thighs' precedent:
+> drumsticks are a distinct cut ... so the thigh id would overprice and mis-weigh."
+
+— with `bid: chicken-thighs`, the word `the` sits between `Refused` and the id, so `\W{0,80}`
+cannot reach it. **MEASURED**: with the literal regex restored, `learn_apply.py --selftest` came
+back **3 RED**, the first being "the 2.6 slip: the prose refuses `chicken-thighs` and the bid IS
+`chicken-thighs` — got: did not fire" (the other two were the drill's downstream cases: the ruling
+got cached, and the extra row produced a second supersede). A must-fire that cannot fire on the
+only real example the estate owns is gate theater.
+
+REALITY PREFERRED: the gap class is `[^.;:!?]{0,80}?` — up to 80 characters that do not end the
+clause. The bound still does the plan's intended work (the refusal has to be about THIS id in THIS
+clause), and both halves are pinned against the 2.6 text: MUST-FIRE with `chicken-thighs`, CLEAN
+TWIN with `chicken-drumsticks` (§2.7's correct ruling, whose id appears only after the colon that
+ends the refusal clause).
+
+### C2 (B1) — §3.1 says "ALL 14 fields" over a 16-key JSON block
+
+The frozen event JSON in §3.1 lists sixteen keys: `event_id, at, run, slug, kind, key, term, raw,
+decision, bid, predicted, surprise, projected, held_reason, evidence, by`. The KEYS are the spec
+and are implemented verbatim; the count in the prose was miscounted. `learn_apply.EVENT_FIELDS`
+holds the 15 authored fields, `event_id` is derived, and the fixture asserts `len(event) == 16`.
+
 Final report, numbers not adjectives: events written in the drill, ledger count before/after,
 cache-hit re-resolve proof, every selftest's pass count, every neuter proof's red count, and
 anything CORRECTED. If a bar was missed, say which and by how much — a miss reported plainly
