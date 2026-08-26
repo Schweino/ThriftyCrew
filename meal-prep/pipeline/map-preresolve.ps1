@@ -1048,14 +1048,47 @@ function Select-CheapestAlternative {
 #
 # WORD BOUNDARIES MATTER: `chicken-breast` is a substring of `bone-in-chicken-breast`, and a ruling
 # that refuses one while bidding the other is CORRECT reasoning, not a contradiction.
+#
+# **CORRECTED 2026-08-26**, after this check's FIRST production firing was a FALSE POSITIVE that stuck
+# a CORRECT recipe: `easy-beef-enchiladas` in run hunt-2026-08-26-smoke. Two separate faults compounded
+# there. Only ONE of them is this predicate's, and the other is at the call site - see the -Assemble
+# loop, where the mapper's own bid is now captured before the registrar can rewrite it.
+#
+# THE PREDICATE'S FAULT: THE CLAUSE BOUND DID NOT INCLUDE THE COLON. The gap class was `[^.;]{0,60}?`,
+# so a match could walk straight through the colon that ENDS a refusal clause and land on a mention in
+# the NEXT one. The enchiladas evidence reads:
+#
+#     "Refused the corn-tortillas bridge: corn and flour tortillas are different products at
+#      different per-unit prices and gram weights. New id proposed with an alias instruction
+#      against the generic `tortillas` board id. 8 x 71 g."
+#
+# Against bid `tortillas` the token guards below did their job on `corn-tortillas` - the `tortillas`
+# INSIDE it is correctly not a match, and a refused SIBLING id must never count as refusing the bid.
+# What fired was the STANDALONE `tortillas` in "corn and flour tortillas are different products", 45
+# characters past the refusal word and one clause too late. That clause does not refuse anything; it
+# EXPLAINS the refusal, and naming the bid there is what a good ruling looks like.
+#
+# So the gap class is now `[^.;:!?]{0,60}?` - the same clause-ending set `learn_apply.refuse_near_bid`
+# has always used, which had this right. MEASURED against the founding chicken-thighs fixture: it
+# fires either way, because `drumsticks` sits 91 characters from the refusal word and the LENGTH bound
+# was already excluding it. The colon was never carrying the founding case, so tightening it costs
+# that MUST-FIRE nothing and removes the only false positive this check has ever produced.
+#
+# DO NOT "fix" this by narrowing the gap back to `\W{0,80}` (non-word characters only). That is what
+# PLAN-ingredient-memory 3.4 froze, and it cannot cross the word "the" in "Refused THE chicken-thighs
+# bridge" - the founding case's own text - so the MUST-FIRE silently stops firing. The clause bound
+# and the token bounds are what carry this check; the gap WIDTH is not.
 $script:REFUSAL_WORDS = 'refus\w*|reject\w*|declin\w*|rul\w*\s+out|not\s+bridg\w*'
 
 function Test-BidContradictsNotes {
   param([string]$Bid, [string]$Notes)
   if (-not $Bid -or -not $Notes) { return $false }
   $b = [regex]::Escape($Bid.Trim())
-  # the bid, as a whole token, appearing within ~60 characters AFTER a refusal word
-  $rx = ('(?i)(?:' + $script:REFUSAL_WORDS + ')(?:[^.;]{0,60}?)(?<![a-z0-9-])' + $b + '(?![a-z0-9-])')
+  # The bid, AS A WHOLE TOKEN, within ~60 characters after a refusal word AND INSIDE THE SAME CLAUSE.
+  # `.` `;` `:` `!` `?` all end the refusal being read; the lookarounds keep a bid from matching inside
+  # a longer hyphenated id in either direction (`tortillas` in `corn-tortillas`, `chicken-thighs` in
+  # `boneless-chicken-thighs`), because a refused sibling is sound reasoning, not a contradiction.
+  $rx = ('(?i)(?:' + $script:REFUSAL_WORDS + ')(?:[^.;:!?]{0,60}?)(?<![a-z0-9-])' + $b + '(?![a-z0-9-])')
   return [bool]([regex]::IsMatch($Notes, $rx))
 }
 
@@ -1318,6 +1351,20 @@ function New-MappedDecisionFile {
       # value is the pre-resolve's own reading, so a ruling that says nothing leaves it alone.
     }
 
+    # THE BID THE MAPPER ACTUALLY WROTE, frozen here because the registrar gate below may REWRITE
+    # `$bid` to an alias target, and the notes-vs-bid check reads evidence the MAPPER wrote about the
+    # ids the MAPPER was choosing between. Asking whether that evidence refused an id the mapper never
+    # bid is not a question with a meaning.
+    #
+    # MEASURED, 2026-08-26, `easy-beef-enchiladas` in run hunt-2026-08-26-smoke - the first production
+    # firing of this check, and a FALSE POSITIVE that stuck a correct recipe. The mapper bid
+    # `flour-tortillas` and wrote "Refused the corn-tortillas bridge: corn and flour tortillas are
+    # different products...". The registrar ruled `alias` -> `tortillas` (right: commodities.json
+    # labels that id "Tortillas (flour)"), the line below rewrote `$bid`, and the check then asked
+    # whether evidence written about `flour-tortillas` and `corn-tortillas` refused `tortillas`.
+    # Nothing in that ruling contradicts anything.
+    $ruledBid = $bid
+
     # ---- THE REGISTRAR GATE (A4 / pin P6). ------------------------------------------------------
     # A3 strips the Agent tool from the mapper, which severs the road its own definition orders new
     # ids down ("through the commodity-registrar gate"). A4 rebuilds it daemon-side, and the
@@ -1548,8 +1595,11 @@ function New-MappedDecisionFile {
     # THE RULING MUST NOT REFUSE THE ID IT IS BIDDING (2026-08-24). See Test-BidContradictsNotes for
     # the founding case. Which side is wrong is not knowable here, so both halves are quoted back and
     # the recipe parks - the same safe direction every other finding in this assembler takes.
-    if (Test-BidContradictsNotes -Bid $bid -Notes $notes) {
-      $findings.Add(("'{0}': the ruling BIDS '{1}' and its own evidence says it refused that id - '{2}'. One of the two is wrong and this file cannot tell which, so nothing is assembled over it" -f $raw, $bid, ($notes -replace '\s+', ' ').Trim().Substring(0, [Math]::Min(160, ($notes -replace '\s+', ' ').Trim().Length)))) | Out-Null
+    # PINNED TO `$ruledBid`, THE MAPPER'S OWN BID - never `$bid`, which the registrar gate above may
+    # have rewritten to an alias target the mapper never saw. See the capture site for the measured
+    # false positive that rewrite produced.
+    if (Test-BidContradictsNotes -Bid $ruledBid -Notes $notes) {
+      $findings.Add(("'{0}': the ruling BIDS '{1}' and its own evidence says it refused that id - '{2}'. One of the two is wrong and this file cannot tell which, so nothing is assembled over it" -f $raw, $ruledBid, ($notes -replace '\s+', ' ').Trim().Substring(0, [Math]::Min(160, ($notes -replace '\s+', ' ').Trim().Length)))) | Out-Null
     }
     if ($item -and -not $terms.Contains($item)) { $terms.Add($item) | Out-Null }
   }
@@ -2002,6 +2052,103 @@ if ($runSelfTest) {
   T 'MUST FIRE  a SHORT bid inside a LONGER refused id is not a contradiction - substring matching would park a good recipe' `
     (-not (Test-BidContradictsNotes -Bid 'chicken-breast' -Notes $longRefusal)) `
     'matched chicken-breast inside bone-in-chicken-breast'
+
+  # ---- FIXTURE A1c-2. THE FALSE POSITIVE THIS CHECK ACTUALLY PRODUCED (2026-08-26). --------------
+  # FROZEN FIXTURE, verbatim from `easy-beef-enchiladas` in run hunt-2026-08-26-smoke - the FIRST
+  # production firing of the notes-vs-bid check, and a FALSE POSITIVE that stuck a CORRECT recipe.
+  # The mapper bid `flour-tortillas` and refused `corn-tortillas`; nothing contradicted anything.
+  #
+  # The evidence names THREE ids and every one of them has to be read differently:
+  #   `corn-tortillas`  - genuinely refused, and the ONLY id this evidence refuses
+  #   `tortillas`       - a token INSIDE `corn-tortillas`, and separately a standalone mention in the
+  #                       clause AFTER the colon that EXPLAINS the refusal. Neither is a refusal.
+  #   `flour-tortillas` - the bid, never refused; it appears in the prose only as "flour tortillas"
+  # SINGLE-QUOTED, so the BACKTICKS around `tortillas` survive verbatim - they are the boundary
+  # character the real evidence puts there, and a double-quoted PowerShell string would eat them.
+  $tortNotes = ('Refused the corn-tortillas bridge: corn and flour tortillas are different products ' +
+                'at different per-unit prices and gram weights. New id proposed with an alias ' +
+                'instruction against the generic `tortillas` board id. 8 x 71 g.')
+  T 'CLEAN TWIN the MAPPER OWN BID `flour-tortillas`, against evidence that refuses `corn-tortillas`, is not a contradiction' `
+    (-not (Test-BidContradictsNotes -Bid 'flour-tortillas' -Notes $tortNotes)) `
+    'flagged the correct enchiladas ruling'
+  # THE ONE THAT ACTUALLY FIRED. `tortillas` is a token of `corn-tortillas` AND appears standalone one
+  # clause later - the token guards handled the first, and the gap class walking through the colon let
+  # the second through. Both readings must be silent: neither is this ruling refusing its own bid.
+  T 'CLEAN TWIN the ALIAS-RESOLVED id `tortillas` does not fire either - it is a token of the refused sibling, and its standalone mention sits past the colon, in the clause that EXPLAINS the refusal' `
+    (-not (Test-BidContradictsNotes -Bid 'tortillas' -Notes $tortNotes)) `
+    'the 2026-08-26 false positive fired again'
+  T 'MUST FIRE  ...and the id that WAS refused still fires on the very same evidence, so the fix narrowed this check rather than disabling it' `
+    (Test-BidContradictsNotes -Bid 'corn-tortillas' -Notes $tortNotes) 'the real refusal was missed'
+  # A REFUSED SIBLING SHARING A TOKEN, in the direction the enchiladas case does not cover: the refused
+  # id is LONGER and the bid is its TAIL rather than its head.
+  $sibNotes = 'Refused boneless-chicken-thighs: this line is the bone-in cut, sold by a different id.'
+  T 'CLEAN TWIN a refused SIBLING sharing a token with the bid - `chicken-thighs` inside `boneless-chicken-thighs` - is sound reasoning, not a contradiction' `
+    (-not (Test-BidContradictsNotes -Bid 'chicken-thighs' -Notes $sibNotes)) `
+    'matched chicken-thighs inside boneless-chicken-thighs'
+  T 'MUST FIRE  ...and bidding the exact sibling that was refused still fires' `
+    (Test-BidContradictsNotes -Bid 'boneless-chicken-thighs' -Notes $sibNotes) 'missed an exact contradiction'
+
+  # ---- FIXTURE A1c-3. THE CALL SITE, NOT THE PREDICATE. -----------------------------------------
+  # PLAN-map-judge-split-2026-08-25 section 4 records the trap: a predicate can be right while the call
+  # site feeds it the wrong argument, and every predicate fixture above would still read green. That is
+  # EXACTLY what happened on 2026-08-26 - the enchiladas false positive needed BOTH the colon-crossing
+  # gap AND a call site that had let the registrar rewrite the bid out from under the evidence.
+  #
+  # So this runs the WHOLE -Assemble path in the enchiladas shape: the mapper bids a NEW id, the
+  # registrar aliases it onto an existing one, and the evidence refuses a SIBLING while naming the
+  # alias target as a standalone token. `onions` stands in for `tortillas` because it is a wired id in
+  # this fixture namespace; the shape is identical. If the call site ever reverts to passing the
+  # rewritten bid, this fixture parks a clean recipe and says so.
+  $aliasEvidence = ('Refused the green-onions bridge: green and yellow onions are different products ' +
+                    'at different per-unit prices. New id proposed with an alias instruction against ' +
+                    'the generic `onions` board id.')
+  $rowsT  = @((New-Row 't' 't' '' '' 'new-food-suspect' $null))
+  $linesT = @([pscustomobject]@{ raw='t'; buy='14 large'; notes='' })
+  $ruleT  = @([pscustomobject]@{ raw='t'; term='t'; canon_item='Yellow Onions'; bid='yellow-onions'
+                                 decision='mapped'; grams_source=568; evidence=$aliasEvidence })
+  $payT = [pscustomobject]@{ slug='drill-dish'; lines=$linesT; rulings=$ruleT
+    registrar_rulings=@([pscustomobject]@{ proposed_bid='yellow-onions'; verdict='alias'; bid='onions'
+                                           reason='the board id already prices this food' }) }
+  $resT = New-MappedDecisionFile (New-Tbl $rowsT 4) $payT $stateRow $known 14
+  T 'MUST FIRE  CALL SITE: the notes-vs-bid check reads the MAPPER bid, not the registrar alias rewrite - the enchiladas shape assembles cleanly and the alias still lands' `
+    (@($resT.findings).Count -eq 0 -and $null -ne $resT.doc -and
+     @($resT.doc.ingredients)[0].bid -eq 'onions') `
+    ("findings=" + (@($resT.findings) -join '; '))
+  # AND THE CALL SITE STILL CATCHES A REAL ONE. Same alias rewrite, but now the MAPPER OWN bid is the
+  # id its own evidence refused - the 2.6 defect, arriving through a registrar alias. Reading the
+  # rewritten bid would MISS this, which is the false-NEGATIVE half of the same call-site mistake.
+  $ruleTC = @([pscustomobject]@{ raw='t'; term='t'; canon_item='Yellow Onions'; bid='yellow-onions'
+                                 decision='mapped'; grams_source=568
+                                 evidence='Refused yellow-onions: this line is the green cut, sold by a different id.' })
+  $payTC = [pscustomobject]@{ slug='drill-dish'; lines=$linesT; rulings=$ruleTC
+    registrar_rulings=@([pscustomobject]@{ proposed_bid='yellow-onions'; verdict='alias'; bid='onions'
+                                           reason='the board id already prices this food' }) }
+  $resTC = New-MappedDecisionFile (New-Tbl $rowsT 4) $payTC $stateRow $known 14
+  T 'MUST FIRE  CALL SITE: a ruling that refuses its OWN bid is still caught THROUGH a registrar alias, and the finding quotes the mapper id rather than the rewritten one' `
+    ($null -eq $resTC.doc -and (@($resTC.findings) -join ' ') -match "BIDS 'yellow-onions'") `
+    ((@($resTC.findings) -join '; '))
+  # THE CALL SITE IN THE FALSE-POSITIVE DIRECTION, which the two fixtures above do NOT pin between
+  # them: the first stays clean whichever bid is passed, and the second is a false NEGATIVE.
+  #
+  # This is the enchiladas hazard in its purest form. The mapper refuses the GENERIC board id and
+  # proposes a specific one; the registrar then aliases the specific id straight back onto the generic
+  # one it just argued against - which is exactly what happened to `flour-tortillas` -> `tortillas`.
+  # Read the REWRITTEN bid and the check asks "does this evidence refuse `onions`?", and the evidence
+  # says yes, in so many words. Read the MAPPER'S bid and there is no contradiction: it bid
+  # `yellow-onions` and it never refused `yellow-onions`. The registrar overriding the mapper is a
+  # DISAGREEMENT BETWEEN TWO AGENTS, and the registrar wins it by design - it is not this check's
+  # business, and it is not a reason to park a recipe.
+  $ruleTG = @([pscustomobject]@{ raw='t'; term='t'; canon_item='Yellow Onions'; bid='yellow-onions'
+                                 decision='mapped'; grams_source=568
+                                 evidence='Refused the generic onions id as too coarse for this line, so a specific id is proposed.' })
+  $payTG = [pscustomobject]@{ slug='drill-dish'; lines=$linesT; rulings=$ruleTG
+    registrar_rulings=@([pscustomobject]@{ proposed_bid='yellow-onions'; verdict='alias'; bid='onions'
+                                           reason='the board id already prices this food' }) }
+  $resTG = New-MappedDecisionFile (New-Tbl $rowsT 4) $payTG $stateRow $known 14
+  T 'MUST FIRE  CALL SITE: a registrar alias onto an id the mapper EXPLICITLY refused is not a self-contradiction - the mapper never bid that id, and reading the rewritten bid parks a good recipe' `
+    (@($resTG.findings).Count -eq 0 -and $null -ne $resTG.doc -and
+     @($resTG.doc.ingredients)[0].bid -eq 'onions') `
+    ("findings=" + (@($resTG.findings) -join '; '))
 
   # ---- FIXTURE A1e. B2: A GUESS IS NOT A CROSS-CHECK --------------------------------------------
   # FROZEN FIXTURE, and the founding case is verbatim from the 2026-08-24 no-band drill.
