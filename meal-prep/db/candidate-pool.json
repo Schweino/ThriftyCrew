@@ -1,6 +1,6 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-26T10:01:16",
+ "updated": "2026-08-26T11:55:37",
  "count": 2982,
  "candidates": [
   {
@@ -25554,91 +25554,10 @@
     "reason": ""
    },
    "servings": 10,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Oven-baked pork ribs in a scratch chipotle BBQ sauce; distinct from live country-style ribs-over-rice and Brazilian ribs bowls (chipotle-tomato sauce, baked, no starch), band verified.",
-   "ruled_at": "2026-08-26T10:01:15",
-   "ingredients_verbatim": [
-    "1 1/2 tbsp sweet paprika",
-    "1 tbsp salt",
-    "1 1/2 tbsp garlic powder",
-    "1/2 tbsp black pepper",
-    "1 tbsp onion powder",
-    "1/2 tbsp cayenne pepper",
-    "1/2 tbsp dried thyme",
-    "1/2 tbsp dried oregano",
-    "5 lb / 2.5 kg American style pork ribs (, cut into individual ribs (to fit into one baking dish))",
-    "1 bottle dark beer ((About 12 oz / 375 ml. Stout, porter or a dark ale))",
-    "14 oz / 400g can crushed tomato",
-    "3.5 oz / 100g can Chipotle in Adobo Sauce (, chipotle and sauce (1/2 a standard can) (Note 1))",
-    "1 large onion ((brown, white or yellow), diced)",
-    "2 garlic cloves (, minced)",
-    "1 tbsp tomato paste",
-    "2 tbsp brown sugar",
-    "1/4 cup white wine vinegar ((or 2 tbsp normal white vinegar + 1 tsp sugar))",
-    "1/3 cup Worcestershire sauce",
-    "2 tbsp Tabasco sauce (, or other hot sauce. Adjust to taste.)",
-    "1/2 tbsp salt",
-    "Black pepper",
-    "Fresh coriander/cilantro leaves",
-    "Lime wedges"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 20,
-     "shared": [
-      "ribs",
-      "bbq"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "albondigas-en-chipotle-rice-bowls",
-     "name": "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
-     "score": 20,
-     "shared": [
-      "chipotle",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "brazilianstyle-pork-ribs-bowls",
-     "name": "Brazilian-Style Pork Ribs Bowls",
-     "score": 10,
-     "shared": [
-      "ribs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "dutch-oven-pork-loin-roast-gravy",
-     "name": "Dutch Oven Pork Loin Roast with Potatoes and Gravy",
-     "score": 10,
-     "shared": [
-      "oven"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "chipotle-sweet-potato-pork-chili",
-     "name": "Chipotle Sweet Potato Pork Chili",
-     "score": 10,
-     "shared": [
-      "chipotle"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 4
+   "ruled_reason": "rib cut: standing exclusion (Brad D2, 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling. Purged 2026-08-26 when the ingest filter was widened to the generic plural; the phrase list had missed these.",
+   "ruled_at": "2026-08-26T11:55:36"
   },
   {
    "slug": "orecchiette-with-sausage-and-broccoli-rabe",
@@ -28120,7 +28039,6 @@
    "url": "https://www.wellplated.com/pork-chops-with-apples/",
    "domain": "wellplated.com",
    "first_seen": "2026-08-23T17:07:32",
-   "last_verified": "2026-08-23T17:43:46",
    "signature": {
     "protein": "pork",
     "method": "skillet",
@@ -28135,136 +28053,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "4 bone-in pork chops at least 3/4-inch thick",
-    "Brine if using (see notes*)",
-    "2 tablespoons canola oil",
-    "1/4 cup all-purpose flour",
-    "1 teaspoon kosher salt* divided",
-    "1/2 teaspoon black pepper divided",
-    "2 tablespoons unsalted butter",
-    "2 medium apples (thinly sliced (I leave the peels on); use any apples you like)",
-    "1 medium yellow onion (thinly sliced)",
-    "2 teaspoons Dijon mustard",
-    "1 cup low sodium chicken broth",
-    "1 tablespoon chopped fresh sage (plus additional for serving)"
-   ],
-   "neighbours": [
-    {
-     "slug": "chuletas-guisadas-stewed-pork-chops-and-rice",
-     "name": "Chuletas Guisadas Stewed Pork Chops and Rice",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "pork-chops-scalloped-potatoes-casserole",
-     "name": "Pork Chops and Scalloped Potatoes Casserole",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-pork-sauerkraut-apples",
-     "name": "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
-     "score": 20,
-     "shared": [
-      "pork",
-      "apples"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "southern-smothered-pork-chops-and-rice",
-     "name": "Southern Smothered Pork Chops and Rice",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "creamy-mushroom-pork-chops-over-mashed-potatoes",
-     "name": "Creamy Mushroom Pork Chops over Mashed Potatoes",
-     "score": 20,
-     "shared": [
-      "pork",
-      "chops"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "apple-pork-chops",
-     "name": "Apple Pork Chops",
-     "score": 0.9657,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "apple-spice-pork-chops",
-     "name": "Apple Spice Pork Chops",
-     "score": 0.9302,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "fried-pork-chops-with-apples",
-     "name": "Fried Pork Chops with Apples",
-     "score": 0.8853,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "baked-pork-chops",
-     "name": "Baked Pork Chops",
-     "score": 0.8754,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "ranch-pork-chops",
-     "name": "Ranch Pork Chops",
-     "score": 0.8555,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "pork|skillet|plain",
-     "slug": "greek-pork-chops-zucchini-feta-skillet",
-     "name": "Greek Pork Chops Zucchini Feta Skillet",
-     "protein": "pork",
-     "method": "skillet",
-     "verdict": "rejected-unreadable",
-     "reason": "HTTP 404 at source URL; site search on themediterraneandish.com finds no matching recipe - page does not exist",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 1,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Seared pork chops with sauteed apples and onion is the same dinner as the priced in-flight apple-spice-pork-chops (and near-identical to backlog apple/fried-pork-chops-with-apples, bge 0.87-0.97); pork-chop+apple niche is crowded and already advancing elsewhere.",
+   "ruled_at": "2026-08-26T11:30:01"
   },
   {
    "slug": "roasted-turkey-breast-recipe",
@@ -37258,102 +37050,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Spanish-style chicken thigh stew with smoked paprika, olives, sweet potato and raisins over rice; widens cuisine spread, distinct from other regional chicken stews, prior doro-wat ruling is a different dish.",
-   "ruled_at": "2026-08-26T10:01:16",
-   "ingredients_verbatim": [
-    "2 tablespoons extra-virgin olive oil (plus additional as needed)",
-    "1 teaspoon kosher salt",
-    "½ teaspoon ground black pepper",
-    "1 ½ pounds boneless skinless chicken thighs (about 8 thighs)",
-    "1 medium yellow onion (cut into 1/4-inch dice)",
-    "1 green bell pepper (cut into ½-inch dice)",
-    "1 red bell pepper (cut into ½-inch dice)",
-    "1 1/2 teaspoons smoked paprika",
-    "1 teaspoon dried oregano",
-    "1/2 teaspoon dried rosemary",
-    "1 bay leaf",
-    "4 garlic cloves (minced)",
-    "1 medium sweet potato (peeled and cut into ½-inch dice (or swap Yukon gold or russet potato))",
-    "1 28- ounce can crushed tomatoes",
-    "1 14-ounce can low-sodium chicken broth",
-    "1/2 cup green olives (pitted and chopped)",
-    "1/4 cup raisins (optional)",
-    "1 tablespoon plus 1 teaspoon sherry vinegar",
-    "For serving: cooked brown rice or steamed cauliflower rice"
-   ],
-   "neighbours": [
-    {
-     "slug": "jamaican-brown-stew-chicken",
-     "name": "Jamaican Brown Stew Chicken",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "senegalese-chicken-mafe-peanut-stew",
-     "name": "Senegalese Chicken Mafe (Peanut Stew)",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "persian-fesenjan-chicken-bowls",
-     "name": "Persian Fesenjan Chicken (Walnut-Pomegranate Stew) Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "stew"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|stew|plain",
-     "slug": "doro-wat-ethiopian-chicken-stew",
-     "name": "Doro Wat Ethiopian Chicken Stew",
-     "protein": "chicken",
-     "method": "stew",
-     "verdict": "rejected-dupe",
-     "reason": "Catalog dup of ethiopian-doro-wat-chicken-bowls: same Doro Wat (berbere, browned onions, chicken thighs, tomato paste, eggs, lemon).",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 0
+   "ruled_reason": "Smoked-paprika Spanish chicken stew with olives, raisins and sherry vinegar; a cuisine absent from the catalog's chicken-stew set (Jamaican/Senegalese/Persian), saturation 0, verified band.",
+   "ruled_at": "2026-08-26T11:29:59"
   },
   {
    "slug": "skillet-pineapple-bbq-chicken",
@@ -37468,93 +37168,10 @@
     "reason": ""
    },
    "servings": 6,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:15:51",
-   "ingredients_verbatim": [
-    "2.5 tsp paprika powder",
-    "2 tsp garlic powder ((sub with onion powder))",
-    "1.5 tsp onion powder ((sub with garlic powder))",
-    "1 tsp cayenne pepper ((omit for not spicy))",
-    "1.5 tsp dried thyme",
-    "1.5 tsp dried oregano",
-    "1.5 tsp salt",
-    "0.5 tsp black pepper",
-    "2 - 2.5kg / 4 - 5lb pork ribs (2 racks)",
-    "3/4 cup sweet alcoholic apple cider (hard cider) (, or apple juice (Note 2))",
-    "1 tbsp olive oil",
-    "1/2 cup apple cider vinegar ((Note 3))",
-    "1 1/2 cups tomato ketchup ((or Aussie tomato sauce))",
-    "1/2 cup water ((or use remaining apple cider!))",
-    "1 1/2 tbsp molasses (, orginal (not blackstrap, Note 4))",
-    "1/3 cup brown sugar",
-    "2 tsp mustard powder",
-    "1 1/2 tsp garlic powder",
-    "2 tsp Worcestershire sauce",
-    "1 tsp salt",
-    "1 tsp black pepper",
-    "1 tsp Tabasco or cayenne pepper ((optional, for spiciness))"
-   ],
-   "neighbours": [
-    {
-     "slug": "brazilianstyle-pork-ribs-bowls",
-     "name": "Brazilian-Style Pork Ribs Bowls",
-     "score": 20,
-     "shared": [
-      "pork",
-      "ribs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "oven-baked-country-pork-chops-potatoes",
-     "name": "Oven Baked Country-Style Pork Chops with Potatoes",
-     "score": 20,
-     "shared": [
-      "oven",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 20,
-     "shared": [
-      "pork",
-      "ribs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "colombian-pork-loin-blackberry-sauce",
-     "name": "Colombian Pork Loin with Blackberry Sauce",
-     "score": 20,
-     "shared": [
-      "pork",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "dutch-oven-pork-loin-roast-gravy",
-     "name": "Dutch Oven Pork Loin Roast with Potatoes and Gravy",
-     "score": 20,
-     "shared": [
-      "oven",
-      "pork"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 5
+   "ruled_reason": "rib cut: standing exclusion (Brad D2, 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling. Purged 2026-08-26 when the ingest filter was widened to the generic plural; the phrase list had missed these.",
+   "ruled_at": "2026-08-26T11:55:36"
   },
   {
    "slug": "slow-cooker-chicken-black-bean-tacos",
@@ -64176,10 +63793,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "ruled:accepted",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "BBQ-rubbed baked beef back ribs; no dupe in catalog (neighbours are Korean/Indian beef bowls and stews), fills a bare oven-BBQ-rib slot, verified band.",
-   "ruled_at": "2026-08-24T12:09:59"
+   "ruled_reason": "rib cut: standing exclusion (Brad D2, 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling. Purged 2026-08-26 when the ingest filter was widened to the generic plural; the phrase list had missed these.",
+   "ruled_at": "2026-08-26T11:55:37"
   },
   {
    "slug": "fragrant-coconut-pot-roasted-chicken-1-150x150-jpg",
@@ -90305,8 +89922,8 @@
    "servings": 4,
    "status": "available",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:16:40",
+   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Mediterranean basil-pesto chicken over couscous with zucchini and tomato; the only pesto-chicken neighbour is parked (not advancing) and differs in starch/format, couscous is a scarce catalog starch, verified band.",
+   "ruled_at": "2026-08-26T11:30:04",
    "ingredients_verbatim": [
     "1 cup couscous",
     "1 1/3 cups boiling water",
@@ -120857,97 +120474,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:17:10",
-   "ingredients_verbatim": [
-    "1 pound baby Yukon gold potatoes (or baby red potatoes)",
-    "1 pound baby carrots",
-    "1 1/2 pounds boneless skinless chicken breasts* (or boneless skinless thighs)",
-    "5 tablespoons unsalted butter",
-    "5 cloves garlic (minced (about 5 teaspoons))",
-    "1 tablespoon Italian seasoning (or herbs de Provence or Greek seasoning)",
-    "1/2 teaspoon onion powder",
-    "1/8 teaspoon cayenne pepper or red pepper flakes",
-    "1 teaspoon kosher salt (plus additional as needed)",
-    "1/4 teaspoon ground black pepper (plus additional as needed)",
-    "1 1/2 lemons (juice of both, zest of 1 lemon)",
-    "2 tablespoons honey**",
-    "1/2 cup grated Parmesan cheese (or feta, grana Pardana)",
-    "Chopped fresh parsley (optional for serving)"
-   ],
-   "neighbours": [
-    {
-     "slug": "sheet-pan-chicken-sweet-potato-brussels",
-     "name": "Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-braised-chicken-potatoes-dakdoritang",
-     "name": "Korean Braised Chicken and Potatoes (Dakdoritang)",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "parmesan-garlic-sheet-pan-chicken-potatoes",
-     "name": "Parmesan Garlic Sheet-Pan Chicken Thighs and Potatoes",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "potatoes"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|braised|plain",
-     "slug": "turmeric-braised-chicken-with-golden-beets-and-leeks",
-     "name": "Turmeric Braised Chicken with Golden Beets and Leeks",
-     "protein": "chicken",
-     "method": "braised",
-     "verdict": "accepted",
-     "reason": "Novel turmeric-ginger-lemon white-wine chicken braise with golden beets and leeks; widens catalog beyond existing braised-chicken dishes, verified band.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-24-v3-phase6b",
-     "by": "decider",
-     "at": "2026-08-24T12:09:54"
-    }
-   ],
-   "saturation_pressure": 3
+   "ruled_reason": "Garlic-parmesan-herb chicken with potatoes matches catalog parmesan-garlic-sheet-pan-chicken-thighs-and-potatoes on protein, seasoning family and starch; only the crockpot-vs-sheet-pan method differs and the lemon-honey note doesn't make it a distinct dinner.",
+   "ruled_at": "2026-08-26T11:30:02"
   },
   {
    "slug": "spicy-beef-hokkien-stir-fry-1-jpg",
@@ -126434,7 +125964,6 @@
    "url": "https://www.spendwithpennies.com/instant-pot-whole-chicken/",
    "domain": "spendwithpennies.com",
    "first_seen": "2026-08-23T17:16:54",
-   "last_verified": "2026-08-23T17:43:48",
    "signature": {
     "protein": "chicken",
     "method": "braised",
@@ -126449,126 +125978,10 @@
     "reason": ""
    },
    "servings": 4,
-   "ingredients_verbatim": [
-    "1 whole chicken (4 to 4 ½ pounds)",
-    "1 large yellow onion",
-    "1 cup chicken broth",
-    "2 tablespoons olive oil",
-    "salt and black pepper (to taste)",
-    "1 small handful fresh herbs (parsley, thyme, rosemary, sage; optional)",
-    "2 tablespoons all-purpose flour (or cornstarch, for gravy)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-chicken-chile-verde-bowls",
-     "name": "Slow Cooker Chicken Chile Verde Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-gyro-bowls",
-     "name": "Slow Cooker Chicken Gyro Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-buffalo-chicken-bowl",
-     "name": "Slow Cooker Buffalo Chicken and Rice Bowl",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "instant-pot-chicken",
-     "name": "Instant Pot Chicken",
-     "score": 0.9592,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-chicken-and-vegetables",
-     "name": "Instant Pot Chicken and Vegetables",
-     "score": 0.9252,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "how-to-make-instant-pot-chicken-stock",
-     "name": "How to Make Instant Pot Chicken Stock",
-     "score": 0.877,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-pork-chops",
-     "name": "Instant Pot Pork Chops",
-     "score": 0.8684,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    },
-    {
-     "slug": "instant-pot-beef-stew",
-     "name": "Instant Pot Beef Stew",
-     "score": 0.866,
-     "shared": [],
-     "source": "bge-m3",
-     "side": "backlog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|braised|plain",
-     "slug": "turmeric-braised-chicken-with-golden-beets-and-leeks",
-     "name": "Turmeric Braised Chicken with Golden Beets and Leeks",
-     "protein": "chicken",
-     "method": "braised",
-     "verdict": "accepted",
-     "reason": "Novel turmeric-ginger-lemon white-wine chicken braise with golden beets and leeks; widens catalog beyond existing braised-chicken dishes, verified band.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-24-v3-phase6b",
-     "by": "decider",
-     "at": "2026-08-24T12:09:54"
-    }
-   ],
-   "saturation_pressure": 3,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Plain pressure-cooked whole chicken with onion, broth, herbs and a flour gravy is a technique base recipe with no distinctive cuisine or flavor identity, not a batch-format meal-prep dinner; widens nothing.",
+   "ruled_at": "2026-08-26T11:30:03"
   },
   {
    "slug": "tilapia-fish-tacos",
@@ -138550,8 +137963,8 @@
    "servings": 6,
    "status": "available",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:17:28",
+   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Frank's-hot-sauce buffalo crock-pot wings; distinct sauce from the in-flight dill-pickle-chicken-wings and a different plate than the shredded slow-cooker-buffalo-chicken-bowl, verified low-carb band, wings format already accepted this run.",
+   "ruled_at": "2026-08-26T11:30:01",
    "ingredients_verbatim": [
     "4 lbs. chicken wings",
     "1 ½ Sticks salted butter ((12 TBS))",
@@ -189438,99 +188851,10 @@
     "reason": ""
    },
    "servings": 5,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:18:25",
-   "ingredients_verbatim": [
-    "800g/ 1.6 lb chuck beef (, cut in 4-5 cm / 2” cubes (Note 1))",
-    "2 large carrots ((~300g/10oz), cut on an angle into 4-5 cm / 2” pieces)",
-    "16 pearl onions or small, round pickling onions ((Note 2))",
-    "1 bay leaf (, fresh (sub: dried))",
-    "3 sprigs thyme",
-    "750ml/ 25 oz pinot noir or other red wine ((Note 3))",
-    "3 tbsp oil (, olive, canola or vegetable)",
-    "3/4 tsp salt",
-    "1/2 tsp pepper",
-    "200g/ 7oz mushrooms (, halved (quarters if large))",
-    "150g/ 5oz bacon piece (, cut into 1cm / 1/2” thick batons (Note 4))",
-    "50g/3 tbsp unsalted butter",
-    "3 garlic cloves (, minced)",
-    "2 tbsp tomato paste",
-    "6 tbsp flour (, plain/all purpose)",
-    "3 cups beef stock (low sodium)",
-    "1/4 tsp salt",
-    "2 tbsp chopped parsley (, for garnish)"
-   ],
-   "neighbours": [
-    {
-     "slug": "beef-bourguignon-bowls",
-     "name": "Beef Bourguignon Bowls",
-     "score": 20,
-     "shared": [
-      "beef",
-      "bourguignon"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-japchae-noodle-bowls",
-     "name": "Korean Beef Japchae Noodle Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "kerala-beef-ularthiyathu-rice-bowls",
-     "name": "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
-     "score": 10,
-     "shared": [
-      "beef"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "beef|any|wine",
-     "slug": "slow-cooker-red-wine-beef-cheeks",
-     "name": "Slow Cooker Red Wine Beef Cheeks",
-     "protein": "beef",
-     "method": "any",
-     "verdict": "rejected-dupe",
-     "reason": "Near-duplicate of catalog beef-bourguignon-bowls: same dinner (beef braised in red wine, slow method); only the cut (cheeks vs chuck) differs. Adjudicator missed beef-bourguignon-bowls. French red-wine-braise niche already filled.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 1
+   "ruled_reason": "Literal Beef Bourguignon (chuck braised in pinot noir with bacon, mushrooms, pearl onions) — same dinner as catalog beef-bourguignon-bowls; prior ruling already rejected a red-wine beef braise against that slug.",
+   "ruled_at": "2026-08-26T11:30:00"
   },
   {
    "slug": "buffalo-chickpea-salad",
@@ -219602,81 +218926,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:accepted",
    "entered_by": "crawl",
-   "ruled_reason": "held back by this run's target of 3 acceptance(s), which was already met - back on the shelf unruled, not rejected. The decider's own ruling was ACCEPT: Chicken soy/hoisin stir-fry with noodles and vegetables; no direct dupe (neighbours are beef/turkey stir-fries and specific regional noodle dishes), verified band, though region is saturated.",
-   "ruled_at": "2026-08-26T10:01:15",
-   "ingredients_verbatim": [
-    "1 1/4 pounds boneless skinless chicken breasts or thighs (thinly sliced then cut into bite-sized pieces)",
-    "4 tablespoons low sodium soy sauce (plus additional to taste, divided)",
-    "3 cloves garlic (minced)",
-    "1 small bunch green onions (thinly sliced (about 1 cup), divided)",
-    "2 tablespoons hoisin sauce",
-    "1 tablespoon minced fresh ginger",
-    "1 tablespoon rice wine vinegar",
-    "2 tablespoons grapeseed oil or canola oil (divided)",
-    "6 ounces dry long noodles (such as soba (udon) noodles or whole wheat spaghetti or whole wheat linguine noodles)",
-    "6 cups thinly sliced vegetables",
-    "2 large eggs (lightly beaten)",
-    "1 to 2 teaspoons sriracha or other hot sauce (or to taste)"
-   ],
-   "neighbours": [
-    {
-     "slug": "beef-mushroom-stir-fry-rice-plate",
-     "name": "Beef and Mushroom Stir-Fry Rice Plate",
-     "score": 20,
-     "shared": [
-      "stir",
-      "fry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "ground-turkey-stir-fry-bowls",
-     "name": "Ground Turkey Stir Fry Bowls",
-     "score": 20,
-     "shared": [
-      "stir",
-      "fry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "xinjiang-cumin-turkey-stir-fry",
-     "name": "Xinjiang Cumin Turkey Stir-Fry",
-     "score": 20,
-     "shared": [
-      "stir",
-      "fry"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "andong-jjimdak-braised-chicken",
-     "name": "Andong Jjimdak (Korean Soy-Braised Chicken with Noodles)",
-     "score": 10,
-     "shared": [
-      "noodles"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "thai-drunken-noodles-chicken",
-     "name": "Thai Drunken Noodles with Chicken (Pad Kee Mao)",
-     "score": 10,
-     "shared": [
-      "noodles"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 5
+   "ruled_reason": "Chicken soy-hoisin noodle stir-fry; catalog stir-fries are beef/turkey and its noodle neighbours are Thai/Korean specific dishes, so no duplicate, verified band, Asian widens American-skewed catalog.",
+   "ruled_at": "2026-08-26T11:29:57"
   },
   {
    "slug": "slow-cooker-lentil-soup",
@@ -242540,79 +241793,10 @@
     "reason": ""
    },
    "servings": 4,
-   "status": "available",
+   "status": "ruled:rejected-not-fit",
    "entered_by": "crawl",
-   "ruled_reason": "the ingest band is gone (Brad 2026-08-24) - this was buried by harvest's hard-coded 400-650 / <=35, not by any run's band",
-   "ruled_at": "2026-08-24T16:19:27",
-   "ingredients_verbatim": [
-    "3 lbs pork ribs ($8.82)",
-    "4 Tbsp butter, melted ($0.37)",
-    "2 tsp salt ($0.10)",
-    "1 tsp black pepper ($0.10)",
-    "2 tsp garlic powder ($0.20)",
-    "2 tsp onion powder ($0.20)",
-    "2 tsp smoked paprika ($0.20)",
-    "1 Tbsp brown sugar ($0.04)",
-    "2 tsp cayenne ($0.20)",
-    "2 tsp ground mustard ($0.20)",
-    "3 cups chicken broth ($0.39)",
-    "1 1/2 cups BBQ sauce ($0.94)"
-   ],
-   "neighbours": [
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 20,
-     "shared": [
-      "bbq",
-      "ribs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "brazilianstyle-pork-ribs-bowls",
-     "name": "Brazilian-Style Pork Ribs Bowls",
-     "score": 10,
-     "shared": [
-      "ribs"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "bbq-pulled-pork-stuffed-sweet-potatoes",
-     "name": "BBQ Pulled Pork Stuffed Sweet Potatoes",
-     "score": 10,
-     "shared": [
-      "bbq"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-pulled-pork-bowl",
-     "name": "BBQ Pulled Pork Rice Bowl",
-     "score": 10,
-     "shared": [
-      "bbq"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "sheet-pan-bbq-turkey-meatballs-over-rice",
-     "name": "Sheet-Pan BBQ Turkey Meatballs over Rice",
-     "score": 10,
-     "shared": [
-      "bbq"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 5
+   "ruled_reason": "rib cut: standing exclusion (Brad D2, 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling. Purged 2026-08-26 when the ingest filter was widened to the generic plural; the phrase list had missed these.",
+   "ruled_at": "2026-08-26T11:55:37"
   },
   {
    "slug": "bow-tie-pasta-salad",
@@ -247547,7 +246731,6 @@
    "url": "https://www.recipetineats.com/slow-cooked-beef-ribs-in-korean-bbq-sauce/",
    "domain": "recipetineats.com",
    "first_seen": "2026-08-24T14:59:12",
-   "last_verified": "2026-08-24T14:59:12",
    "signature": {
     "protein": "any",
     "method": "any",
@@ -247562,68 +246745,10 @@
     "reason": "no JSON-LD Recipe block on the page"
    },
    "servings": null,
-   "ingredients_verbatim": [],
-   "neighbours": [
-    {
-     "slug": "beef-honey-black-pepper-sauce-bowls",
-     "name": "Chinese Beef with Honey Black Pepper Sauce",
-     "score": 20,
-     "shared": [
-      "beef",
-      "sauce"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-ground-beef-rice-bowls",
-     "name": "Korean Ground Beef Rice Bowls",
-     "score": 20,
-     "shared": [
-      "beef",
-      "korean"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-country-style-pork-ribs-rice",
-     "name": "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-     "score": 20,
-     "shared": [
-      "ribs",
-      "bbq"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-bulgogi-beef-burrito",
-     "name": "Korean Bulgogi Beef Burrito",
-     "score": 20,
-     "shared": [
-      "beef",
-      "korean"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "korean-beef-bibimbap-bowls",
-     "name": "Korean Beef Bibimbap Bowls",
-     "score": 20,
-     "shared": [
-      "beef",
-      "korean"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [],
-   "saturation_pressure": 0,
-   "status": "available",
-   "entered_by": "crawl"
+   "status": "ruled:rejected-not-fit",
+   "entered_by": "crawl",
+   "ruled_reason": "rib cut: standing exclusion (Brad D2, 2026-08-24) - rib racks cannot reach a high-protein floor inside the calorie ceiling. Purged 2026-08-26 when the ingest filter was widened to the generic plural; the phrase list had missed these.",
+   "ruled_at": "2026-08-26T11:55:37"
   },
   {
    "slug": "green-detox-soup-with-toasted-hemp-gremolata",
@@ -270204,7 +269329,6 @@
    "url": "https://keviniscooking.com/chicken-tinga-tacos/",
    "domain": "keviniscooking.com",
    "first_seen": "2026-08-24T18:01:46",
-   "last_verified": "2026-08-24T18:01:46",
    "signature": {
     "protein": "chicken",
     "method": "braised",
@@ -270219,97 +269343,10 @@
     "reason": ""
    },
    "servings": 8,
-   "ingredients_verbatim": [
-    "4 lbs boneless skinless chicken thighs ((See Note 1))",
-    "1 large white onion (sliced)",
-    "1 cup chicken stock",
-    "28 oz fire roasted tomatoes",
-    "7 oz chipotle peppers in adobo sauce",
-    "4 tomatillos",
-    "4 cloves garlic",
-    "1 tbsp honey",
-    "2 tsp salt",
-    "2 tsp oregano (Mexican oregano, if you can find it)",
-    "1/2 tsp ground cloves",
-    "1 tbsp olive oil",
-    "corn tortillas",
-    "cotija cheese (or queso fresco)",
-    "diced white onion",
-    "cilantro (chopped)"
-   ],
-   "neighbours": [
-    {
-     "slug": "arroz-con-pollo-bowls",
-     "name": "Arroz con Pollo (Chicken and Rice) Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "pollo"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-tinga-bowls",
-     "name": "Slow Cooker Chicken Tinga Bowls",
-     "score": 20,
-     "shared": [
-      "chicken",
-      "tinga"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-cacciatore-pasta",
-     "name": "Slow Cooker Chicken Cacciatore Pasta",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-adobo-rice-bowls",
-     "name": "Slow Cooker Chicken Adobo Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    },
-    {
-     "slug": "slow-cooker-chicken-curry-rice-bowls",
-     "name": "Slow Cooker Chicken Curry Rice Bowls",
-     "score": 10,
-     "shared": [
-      "chicken"
-     ],
-     "source": "word-overlap",
-     "side": "live-catalog"
-    }
-   ],
-   "prior_rulings": [
-    {
-     "key": "chicken|any|tomato",
-     "slug": "chicken-tinga-shredded-chipotle",
-     "name": "Chicken Tinga Shredded Chipotle",
-     "protein": "chicken",
-     "method": "any",
-     "verdict": "rejected-dupe",
-     "reason": "Catalog dupe of slow-cooker-chicken-tinga-bowls: literally chicken tinga, chipotle-tomato-onion braised shredded chicken, same dish/name/sauce/method.",
-     "dupe_of": [],
-     "run": "hunt-2026-08-15-lowcarb-100",
-     "by": "backfill",
-     "at": "2026-08-16T07:30:14"
-    }
-   ],
-   "saturation_pressure": 4,
-   "status": "available",
+   "status": "ruled:rejected-dupe",
    "entered_by": "crawl",
-   "batch_concerns": []
+   "ruled_reason": "Chipotle-tomato-tomatillo braised shredded chicken tinga is the same dish as catalog slow-cooker-chicken-tinga-bowls; a prior ruling already rejected a chicken tinga against that same slug.",
+   "ruled_at": "2026-08-26T11:30:04"
   },
   {
    "slug": "chicken-stir-fry-recipe",

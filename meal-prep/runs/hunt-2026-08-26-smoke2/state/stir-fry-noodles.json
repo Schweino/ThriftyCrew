@@ -1,0 +1,37 @@
+{
+    "slug":  "stir-fry-noodles",
+    "title":  "Stir Fry Noodles",
+    "source_url":  "https://www.wellplated.com/stir-fry-noodles/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T11:29:56",
+    "updated":  "2026-08-26T11:30:51",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:29:56",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/stir-fry-noodles/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T11:29:56",
+                        "by":  "decider",
+                        "detail":  "Chicken soy-hoisin noodle stir-fry; catalog stir-fries are beef/turkey and its noodle neighbours are Thai/Korean specific dishes, so no duplicate, verified band, Asian widens American-skewed catalog."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T11:30:51",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

@@ -1,0 +1,143 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Stir Fry Noodles",
+  "source_url": "https://www.wellplated.com/stir-fry-noodles/",
+  "servings": 4,
+  "time_total": "30 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 1/4 pounds boneless skinless chicken breasts or thighs (thinly sliced then cut into bite-sized pieces)",
+      "item": "boneless skinless chicken breasts or thighs",
+      "qty": "1 1/4",
+      "unit": "pounds",
+      "prep": "thinly sliced then cut into bite-sized pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons low sodium soy sauce (plus additional to taste, divided)",
+      "item": "low sodium soy sauce",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": "plus additional to taste, divided",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "3 cloves garlic (minced)",
+      "item": "garlic",
+      "qty": "3",
+      "unit": "cloves",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 small bunch green onions (thinly sliced (about 1 cup), divided)",
+      "item": "green onions",
+      "qty": "1",
+      "unit": "bunch",
+      "prep": "small, thinly sliced (about 1 cup), divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons hoisin sauce",
+      "item": "hoisin sauce",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon minced fresh ginger",
+      "item": "fresh ginger",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon rice wine vinegar",
+      "item": "rice wine vinegar",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons grapeseed oil or canola oil (divided)",
+      "item": "grapeseed oil or canola oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 ounces dry long noodles (such as soba (udon) noodles or whole wheat spaghetti or whole wheat linguine noodles)",
+      "item": "dry long noodles",
+      "qty": "6",
+      "unit": "ounces",
+      "prep": "(such as soba (udon) noodles or whole wheat spaghetti or whole wheat linguine noodles)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "6 cups thinly sliced vegetables",
+      "item": "thinly sliced vegetables",
+      "qty": "6",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 large eggs (lightly beaten)",
+      "item": "large eggs",
+      "qty": "2",
+      "unit": null,
+      "prep": "lightly beaten",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 to 2 teaspoons sriracha or other hot sauce (or to taste)",
+      "item": "sriracha or other hot sauce",
+      "qty": "1 to 2",
+      "unit": "teaspoons",
+      "prep": "or to taste",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Place the chicken in a bowl and toss with 1 tablespoon soy sauce. Let sit while you prep the remaining ingredients.",
+    "In a small bowl or large liquid measuring cup, combine the three-quarters of the green onions, the remaining 3 tablespoons soy sauce, hoisin, garlic, ginger, and vinegar. Set near the stove. Reserve the remaining green onions for serving.",
+    "Bring a large pot of salted water to a boil. Cook noodles until they are about 1 to 2 minutes from done, according to package instructions. They should be very al dente, still a little too firm to eat, but not excessively hard and chewy. Drain and toss with 1/2 tablespoon of the oil to prevent sticking.",
+    "In a large skillet over medium-high heat, heat 1/2 tablespoon oil. Once the oil is hot, add the chicken. Cook until golden and fully cooked through, about 3 to 4 minutes. Remove to a plate.",
+    "To the now-empty skillet, add the remaining 1 tablespoon oil. Add the vegetables and cook until they begin to brown and soften but are still fairly crisp, about 3 to 4 minutes.",
+    "Add half the scallion mixture and saute until fragrant, about 1 minute.",
+    "Add the noodles. Cook, using tongs to toss the noodles and coat them with the sauce, for 30 seconds.",
+    "Add the eggs, sriracha, chicken, and remaining scallion mixture.",
+    "Continue to stir fry and toss the noodles, until the eggs are cooked through and the noodles are tender, 1 to 2 minutes longer.",
+    "Remove from heat. Sprinkle with the reserved green onions."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

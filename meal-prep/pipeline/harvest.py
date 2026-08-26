@@ -140,7 +140,14 @@ GROUND_CHICKEN = ("ground chicken",)
 # and a bare "rib" substring would take them along with the racks - which is the class of silent
 # over-rejection this file's own comments warn about. If Brad wants those out too, they are one
 # phrase each.
-RIB_CUTS = ("back ribs", "baby back", "spare ribs", "spareribs", "short ribs", "shortribs",
+# GENERIC `ribs` IS THE CLASS, and leaving it out let one through. Measured 2026-08-26: this list is
+# phrase-specific, so "Fall-Apart Oven Baked Ribs with Chipotle BBQ Sauce" and "Oven Pork Ribs with
+# Barbecue Sauce" matched NOTHING and the first was accepted into hunt-2026-08-26-smoke2 at 723 cal -
+# through a band whose ceiling had just been raised to 750, which is exactly the calorie-density Brad's
+# ruling names. The plural is the safe form: `ribs` cannot appear inside `ribeye`, `rib eye` or
+# `prime rib`, so the deliberate exemption for those cuts survives untouched. The specific phrases stay
+# because they catch the SINGULAR forms (`rib tips`, `baby back`, `riblet`) that a bare plural misses.
+RIB_CUTS = ("ribs", "back ribs", "baby back", "spare ribs", "spareribs", "short ribs", "shortribs",
             "riblet", "rib tips", "country style ribs", "country-style ribs", "rack of ribs")
 
 # ---------------------------------------------------------------------------------------------------
@@ -2382,6 +2389,16 @@ def cmd_selftest(_a):
     T("MUST FIRE  a rib recipe with NO ingredient lines is excluded on its NAME - the pool held no "
       "lines for beef-back-ribs, so an ingredient-only filter would have missed the motivating case",
       exclusions([], "Beef Back Ribs") != [], "not excluded")
+    T("MUST FIRE  a GENERIC rib title is excluded - the phrase list missed 'Fall-Apart Oven Baked "
+      "Ribs' and it was accepted at 723 cal into hunt-2026-08-26-smoke2 on 2026-08-26",
+      exclusions([], "Fall-Apart Oven Baked Ribs with Chipotle BBQ Sauce") != [], "not excluded")
+    T("MUST FIRE  ...and so is 'Oven Pork Ribs with Barbecue Sauce', which sat available at 814 cal",
+      exclusions([], "Oven Pork Ribs with Barbecue Sauce") != [], "not excluded")
+    T("CLEAN TWIN a RIBEYE is still not a rib rack - the exemption the bare-substring trap was written "
+      "to protect survives the plural",
+      exclusions([], "Reverse Sear Ribeye Steak") == [], "wrongly excluded")
+    T("CLEAN TWIN and PRIME RIB is still not a rib rack either",
+      exclusions([], "Prime Rib Roast") == [], "wrongly excluded")
     T("MUST FIRE  ...and the ingredient side still catches ribs a title does not advertise",
       exclusions(["14 lb beef back ribs (about 3 1/2 racks)"], "Mystery Dinner") != [], "not excluded")
     T("MUST FIRE  three more rack cuts, because a collection fixture takes at least three",

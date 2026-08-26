@@ -1,0 +1,37 @@
+{
+    "slug":  "fall-apart-oven-baked-ribs-with-chipotle-bbq-sauce",
+    "title":  "Fall Apart Oven Baked Ribs with Chipotle BBQ Sauce",
+    "source_url":  "https://www.recipetineats.com/fall-apart-pork-ribs-chipotle-bbq-sauce-baked/",
+    "protein":  "pork",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T11:29:55",
+    "updated":  "2026-08-26T11:30:34",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:29:55",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/fall-apart-pork-ribs-chipotle-bbq-sauce-baked/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T11:29:55",
+                        "by":  "decider",
+                        "detail":  "Chipotle-BBQ oven-braised pork ribs; no catalog rib dish shares the chipotle-adobo/crushed-tomato sauce (country-style and Brazilian ribs are distinct plates), verified band, scales to 10."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T11:30:34",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

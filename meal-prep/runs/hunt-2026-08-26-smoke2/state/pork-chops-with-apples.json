@@ -1,0 +1,31 @@
+{
+    "slug":  "pork-chops-with-apples",
+    "title":  "Pork Chops With Apples",
+    "source_url":  "https://www.wellplated.com/pork-chops-with-apples/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:30:00",
+    "updated":  "2026-08-26T11:30:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Seared pork chops with sauteed apples and onion is the same dinner as the priced in-flight apple-spice-pork-chops (and near-identical to backlog apple/fried-pork-chops-with-apples, bge 0.87-0.97); pork-chop+apple niche is crowded and already advancing elsewhere.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:30:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/pork-chops-with-apples/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:30:00",
+                        "by":  "decider",
+                        "detail":  "Seared pork chops with sauteed apples and onion is the same dinner as the priced in-flight apple-spice-pork-chops (and near-identical to backlog apple/fried-pork-chops-with-apples, bge 0.87-0.97); pork-chop+apple niche is crowded and already advancing elsewhere."
+                    }
+                ]
+}

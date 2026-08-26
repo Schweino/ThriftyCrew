@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-tinga-tinga-de-pollo-video",
+    "title":  "Chicken Tinga (Tinga de Pollo) + Video",
+    "source_url":  "https://keviniscooking.com/chicken-tinga-tacos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:30:03",
+    "updated":  "2026-08-26T11:30:04",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chipotle-tomato-tomatillo braised shredded chicken tinga is the same dish as catalog slow-cooker-chicken-tinga-bowls; a prior ruling already rejected a chicken tinga against that same slug.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:30:03",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/chicken-tinga-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:30:04",
+                        "by":  "decider",
+                        "detail":  "Chipotle-tomato-tomatillo braised shredded chicken tinga is the same dish as catalog slow-cooker-chicken-tinga-bowls; a prior ruling already rejected a chicken tinga against that same slug."
+                    }
+                ]
+}

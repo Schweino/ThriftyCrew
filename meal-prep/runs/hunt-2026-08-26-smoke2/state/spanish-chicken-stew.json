@@ -1,0 +1,37 @@
+{
+    "slug":  "spanish-chicken-stew",
+    "title":  "Spanish Chicken Stew",
+    "source_url":  "https://www.wellplated.com/spanish-chicken-stew/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-26T11:29:58",
+    "updated":  "2026-08-26T11:31:15",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:29:58",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/spanish-chicken-stew/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-26T11:29:58",
+                        "by":  "decider",
+                        "detail":  "Smoked-paprika Spanish chicken stew with olives, raisins and sherry vinegar; a cuisine absent from the catalog\u0027s chicken-stew set (Jamaican/Senegalese/Persian), saturation 0, verified band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-26T11:31:15",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

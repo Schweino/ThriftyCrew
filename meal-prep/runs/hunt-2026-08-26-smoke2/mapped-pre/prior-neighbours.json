@@ -1,0 +1,1189 @@
+{
+ "generated": "2026-08-26T11:31:54",
+ "model": "BAAI/bge-m3",
+ "device": "cpu",
+ "corpus": 131,
+ "cache_dir": "C:\\Codex\\ThriftyCrew\\sidecar\\out\\resolution-embed-cache",
+ "cache_misses": 20,
+ "elapsed_sec": 4.48,
+ "state": "ok",
+ "why": "",
+ "terms": [
+  {
+   "key": "sweet paprika",
+   "term": "sweet paprika",
+   "neighbours": [
+    {
+     "term": "white pepper",
+     "key": "white pepper",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "No commodity claims it (captures only), and black-pepper is a different spice at a different price, so I will not bridge it. Optional line at 1/8 tsp: pantry-static pricing is safe and the term is rep",
+     "cos": 0.6169,
+     "at": "2026-08-26T04:36:36",
+     "slug": "dill-pickle-chicken-wings"
+    },
+    {
+     "term": "green bell pepper",
+     "key": "green bell pepper",
+     "bid": "green-bell-pepper",
+     "decision": "mapped",
+     "evidence": "Standing rejection: green-pepper pricing is not red-bell-pepper (green is routinely the cheaper pepper). No commodity claims it, so a new id is proposed.",
+     "cos": 0.6162,
+     "at": "2026-08-26T04:46:11",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "salt and pepper",
+     "key": "salt and pepper",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Two distinct pantry foods on one unsplittable line, so no single bid can carry it - the 2026-08-26 precedent. Pantry-static pricing at 3 pinches is safe.",
+     "cos": 0.5789,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5761,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "freshly ground black pepper",
+     "key": "freshly ground black pepper",
+     "bid": "black-pepper",
+     "decision": "mapped",
+     "evidence": "'Freshly ground' is a grinder instruction, not a different food; board carries black-pepper 7 of 7.",
+     "cos": 0.5737,
+     "at": "2026-08-26T04:51:57",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    }
+   ]
+  },
+  {
+   "key": "american style pork ribs",
+   "term": "American style pork ribs",
+   "neighbours": [
+    {
+     "term": "boneless pork chops",
+     "key": "boneless pork chops",
+     "bid": "boneless-pork-chops",
+     "decision": "mapped",
+     "evidence": "Bone-in loin chops carry 15-25% bone and price roughly 30-50% lower per lb, so the generic pork-chops id is a different price class - the same reasoning the estate used on 2026-08-26 to refuse the bon",
+     "cos": 0.6329,
+     "at": "2026-08-26T05:07:22",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "cooked chicken",
+     "key": "cooked chicken",
+     "bid": "rotisserie-chicken",
+     "decision": "mapped",
+     "evidence": "The pre-resolver flagged rotisserie-chicken as DIFFERENT FORM 'cooked', but rotisserie chicken is SOLD cooked and this line calls for cooked shredded meat with skin discarded: same form, same price cl",
+     "cos": 0.5573,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "wide homestyle egg noodles",
+     "key": "wide homestyle egg noodles",
+     "bid": "egg-noodles",
+     "decision": "mapped",
+     "evidence": "Same-form vocabulary row Egg Noodles [egg-noodles]; 'wide homestyle' is a cut of the same dry product. The board match shown ('eggs') is a fuzzy miss and would price the wrong food.",
+     "cos": 0.5571,
+     "at": "2026-08-26T04:34:47",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw sausage sold by the pound with casings to remove; smoked-turkey-sausage is a fully cooked rope at a different price class and italian-sausage is pork. No commodity claims it today, so a new ",
+     "cos": 0.5557,
+     "at": "2026-08-26T04:46:09",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "thick-sliced center-cut bacon",
+     "key": "thick sliced center cut bacon",
+     "bid": "bacon",
+     "decision": "mapped",
+     "evidence": "Thick-sliced and center-cut are cut descriptors on the same smoked pork bacon the id prices; deliberately NOT turkey-bacon, which is a different meat. Board 7 of 7.",
+     "cos": 0.5551,
+     "at": "2026-08-26T04:53:06",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    }
+   ]
+  },
+  {
+   "key": "dark beer",
+   "term": "dark beer",
+   "neighbours": [
+    {
+     "term": "dark brown sugar",
+     "key": "dark brown sugar",
+     "bid": "brown-sugar",
+     "decision": "mapped",
+     "evidence": "Dark vs light brown sugar is the same bagged product at the same price; refused the board's plain 'sugar' match, which is a different food and gram weight.",
+     "cos": 0.7217,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "bourbon",
+     "key": "bourbon",
+     "bid": "bourbon",
+     "decision": "mapped",
+     "evidence": "No commodity claims it but captures carry matching products, and the estate already prices cooking alcohol (white-wine is a live id), so a null would pantry-price a spirits purchase. Proposed to the r",
+     "cos": 0.6121,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "black beans",
+     "key": "black beans",
+     "bid": "canned-black-beans",
+     "decision": "mapped",
+     "evidence": "'Drained and rinsed' is canned usage, not dry beans, so the canned row is the same form and not a flip; board carries canned-black-beans 7 of 7 stores. Seasoned Black Beans is a different seasoned pro",
+     "cos": 0.5879,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "cold butter",
+     "key": "cold butter",
+     "bid": "butter",
+     "decision": "mapped",
+     "evidence": "'Cold' is a temperature instruction, not a form: same product as Butter [butter], which the board carries 7 of 7 and the DB already has a row for.",
+     "cos": 0.5876,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "cold water",
+     "key": "cold water",
+     "bid": "",
+     "decision": "not-purchased",
+     "evidence": "Tap water for the cornstarch slurry: nothing is bought and it contributes no macros. Kept on the line list so the method still reads.",
+     "cos": 0.5787,
+     "at": "2026-08-26T04:34:47",
+     "slug": "slow-cooker-beef-stroganoff"
+    }
+   ]
+  },
+  {
+   "key": "crushed tomato",
+   "term": "crushed tomato",
+   "neighbours": [
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.7245,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "crushed red pepper flakes",
+     "key": "crushed red pepper flakes",
+     "bid": "red-pepper-flakes",
+     "decision": "mapped",
+     "evidence": "\"Crushed\" is part of the product's own shelf name, not a form flip - crushed red pepper and red pepper flakes are one jar.",
+     "cos": 0.7049,
+     "at": "2026-08-26T04:46:10",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "shredded Parmesan cheese",
+     "key": "shredded parmesan cheese",
+     "bid": "parmesan",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's shredded-cheese bridge: that id prices bagged cheddar/blend, a different cheese and price class from parmesan.",
+     "cos": 0.6381,
+     "at": "2026-08-26T04:51:58",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "cooked shredded chicken",
+     "key": "cooked shredded chicken",
+     "bid": "cooked-shredded-chicken",
+     "decision": "mapped",
+     "evidence": "cooked-shredded-chicken is a live board id (3 of 7, cheapest 0.3744 Aldi) that names exactly this food, so a reuse and not a proposal; only the vocabulary name row is missing. Preferred over the 'cook",
+     "cos": 0.6278,
+     "at": "2026-08-26T05:05:59",
+     "slug": "enchiladas-suizas"
+    },
+    {
+     "term": "cooked chicken",
+     "key": "cooked chicken",
+     "bid": "rotisserie-chicken",
+     "decision": "mapped",
+     "evidence": "The pre-resolver flagged rotisserie-chicken as DIFFERENT FORM 'cooked', but rotisserie chicken is SOLD cooked and this line calls for cooked shredded meat with skin discarded: same form, same price cl",
+     "cos": 0.6207,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    }
+   ]
+  },
+  {
+   "key": "chipotle in adobo sauce",
+   "term": "Chipotle in Adobo Sauce",
+   "neighbours": [
+    {
+     "term": "Homemade Barbecue Sauce",
+     "key": "homemade barbecue sauce",
+     "bid": "bbq-sauce",
+     "decision": "mapped",
+     "evidence": "The line itself allows store-bought, and bbq-sauce is a live board id at 7 of 7 - a reuse. 1/3 cup is 5 1/3 tbsp at 17 g each.",
+     "cos": 0.5249,
+     "at": "2026-08-26T05:08:04",
+     "slug": "smoked-chicken-thighs"
+    },
+    {
+     "term": "chopped green chiles",
+     "key": "chopped green chiles",
+     "bid": "canned-green-chilies",
+     "decision": "mapped",
+     "evidence": "The 'DIFFERENT FORM: canned' flag is spurious here - the recipe line IS a can ('1 (4.5 ounce) Can'). Chopped and diced green chiles are the same product; board carries it 6 of 7 stores.",
+     "cos": 0.5199,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.5156,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "shredded Chihuahua cheese",
+     "key": "shredded chihuahua cheese",
+     "bid": "chihuahua-cheese",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's shredded-cheese bridge - that id prices bagged cheddar/blend and the estate refused the same bridge twice on 2026-08-26 (parmesan, mozzarella). Queso Chihuahua is a specialty 10-12",
+     "cos": 0.5136,
+     "at": "2026-08-26T05:05:59",
+     "slug": "enchiladas-suizas"
+    },
+    {
+     "term": "Salt/Pepper",
+     "key": "salt pepper",
+     "bid": "salt",
+     "decision": "mapped",
+     "evidence": "One line carrying two pantry seasonings; costed as salt (7 of 7) with the black pepper noted pantry-static, following the 'Kosher Salt & Freshly Cracked Black Pepper' -> salt precedent rather than nul",
+     "cos": 0.5102,
+     "at": "2026-08-26T05:08:04",
+     "slug": "peach-chicken"
+    }
+   ]
+  },
+  {
+   "key": "large onion",
+   "term": "large onion",
+   "neighbours": [
+    {
+     "term": "large red onion",
+     "key": "large red onion",
+     "bid": "red-onion",
+     "decision": "mapped",
+     "evidence": "Standing estate rejection binds: red onion is not `onions` (variety pricing), so the board's fallback to onions is refused. red-onion is the vocabulary's own id; listed as an absent term in case it ca",
+     "cos": 0.927,
+     "at": "2026-08-26T04:46:11",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "onion",
+     "key": "onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "An unqualified onion in a savoury gravy is the yellow cooking onion, per the 'med onion' -> onions precedent; red is refused on variety pricing. Board 7 of 7.",
+     "cos": 0.8274,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "large lemons",
+     "key": "large lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; 'large' is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignore",
+     "cos": 0.7813,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "small white onion",
+     "key": "small white onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "White and yellow cooking onions sell from the same bulk bags at the same price class, unlike red (which the estate rejects on variety pricing); precedent 'small yellow onion' -> onions, board 7 of 7.",
+     "cos": 0.7734,
+     "at": "2026-08-26T05:07:22",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "small yellow onion",
+     "key": "small yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g.",
+     "cos": 0.7645,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    }
+   ]
+  },
+  {
+   "key": "tabasco sauce",
+   "term": "Tabasco sauce",
+   "neighbours": [
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw sausage sold by the pound with casings to remove; smoked-turkey-sausage is a fully cooked rope at a different price class and italian-sausage is pork. No commodity claims it today, so a new ",
+     "cos": 0.5826,
+     "at": "2026-08-26T04:46:09",
+     "slug": "italian-turkey-burgers"
+    },
+    {
+     "term": "Homemade Barbecue Sauce",
+     "key": "homemade barbecue sauce",
+     "bid": "bbq-sauce",
+     "decision": "mapped",
+     "evidence": "The line itself allows store-bought, and bbq-sauce is a live board id at 7 of 7 - a reuse. 1/3 cup is 5 1/3 tbsp at 17 g each.",
+     "cos": 0.5786,
+     "at": "2026-08-26T05:08:04",
+     "slug": "smoked-chicken-thighs"
+    },
+    {
+     "term": "garlic salt",
+     "key": "garlic salt",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "The board's 'garlic' match is fresh bulb garlic - a different food, price class and gram weight, exactly the 2026-08-26 garlic-powder precedent. Garlic salt is a pantry blend at 1 tsp; pantry-static p",
+     "cos": 0.5732,
+     "at": "2026-08-26T04:34:45",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "pesto",
+     "key": "pesto",
+     "bid": "pesto",
+     "decision": "mapped",
+     "evidence": "Same-form vocabulary row Basil Pesto [pesto] and a live board id at 5 of 7 - a reuse. 1/4 cup jarred pesto is 64 g.",
+     "cos": 0.5732,
+     "at": "2026-08-26T05:09:07",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "Caesar dressing",
+     "key": "caesar dressing",
+     "bid": "caesar-dressing",
+     "decision": "mapped",
+     "evidence": "caesar-dressing is a live board id (6 of 7) - a reuse; ranch is a different dressing, so no bridge to ranch-dressing.",
+     "cos": 0.5668,
+     "at": "2026-08-26T05:09:08",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    }
+   ]
+  },
+  {
+   "key": "fresh coriander cilantro leaves",
+   "term": "Fresh coriander/cilantro leaves",
+   "neighbours": [
+    {
+     "term": "fresh sage leaves",
+     "key": "fresh sage leaves",
+     "bid": "fresh-sage",
+     "decision": "mapped",
+     "evidence": "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure.",
+     "cos": 0.7067,
+     "at": "2026-08-26T05:07:06",
+     "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish"
+    },
+    {
+     "term": "cilantro",
+     "key": "cilantro",
+     "bid": "cilantro",
+     "decision": "mapped",
+     "evidence": "The 'fresh' form flag is spurious - chopped cilantro for garnish IS the fresh bunch; board 6 of 7.",
+     "cos": 0.6574,
+     "at": "2026-08-26T04:51:58",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "fresh spinach",
+     "key": "fresh spinach",
+     "bid": "spinach",
+     "decision": "mapped",
+     "evidence": "The `spinach` id is the fresh bagged leaf (frozen has its own id, frozen-chopped-spinach), so 'fresh' is not a flip here; board 7 of 7.",
+     "cos": 0.6458,
+     "at": "2026-08-26T05:08:07",
+     "slug": "mediterranean-chicken-w-marinade"
+    },
+    {
+     "term": "fresh rosemary",
+     "key": "fresh rosemary",
+     "bid": "fresh-rosemary",
+     "decision": "mapped",
+     "evidence": "Sprigs can only be the fresh herb; dried-rosemary is a different price class and gram weight, so no bridge. Board 5 of 7.",
+     "cos": 0.6381,
+     "at": "2026-08-26T04:53:03",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "fresh ginger",
+     "key": "fresh ginger",
+     "bid": "fresh-ginger",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Ginger [fresh-ginger] is exactly this food; deliberately NOT ground-ginger, which is a different price class and gram weight. Board 6 of 7.",
+     "cos": 0.6362,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    }
+   ]
+  },
+  {
+   "key": "lime wedges",
+   "term": "Lime wedges",
+   "neighbours": [
+    {
+     "term": "lemons",
+     "key": "lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "Live board id at 5 of 7, the same reuse as the Jamie Oliver line; 2 medium lemons at 58 g.",
+     "cos": 0.717,
+     "at": "2026-08-26T05:08:08",
+     "slug": "mediterranean-chicken-w-marinade"
+    },
+    {
+     "term": "large lemons",
+     "key": "large lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; 'large' is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignore",
+     "cos": 0.6855,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "chicken wings",
+     "key": "chicken wings",
+     "bid": "chicken-wings",
+     "decision": "mapped",
+     "evidence": "Exact prior ruling for this phrase on 2026-08-26; chicken-wings is a live board id at 7 of 7, so a reuse. Raw bone-in wings.",
+     "cos": 0.6315,
+     "at": "2026-08-26T04:51:56",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "fresh sage leaves",
+     "key": "fresh sage leaves",
+     "bid": "fresh-sage",
+     "decision": "mapped",
+     "evidence": "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure.",
+     "cos": 0.6205,
+     "at": "2026-08-26T05:07:06",
+     "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish"
+    },
+    {
+     "term": "Sliced onions",
+     "key": "sliced onions",
+     "bid": "onions",
+     "decision": "mapped-optional",
+     "evidence": "Garnish line with no stated quantity, so optional; onions is live 7 of 7 and the 'med onion' -> onions precedent binds. Weighed as half a medium onion.",
+     "cos": 0.6023,
+     "at": "2026-08-26T05:05:59",
+     "slug": "enchiladas-suizas"
+    }
+   ]
+  },
+  {
+   "key": "boneless skinless chicken breasts or thighs",
+   "term": "boneless skinless chicken breasts or thighs",
+   "neighbours": [
+    {
+     "term": "boneless skinless chicken thighs",
+     "key": "boneless skinless chicken thighs",
+     "bid": "boneless-skinless-chicken-thigh",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's chicken-thighs bridge: bone-in skin-on thighs are roughly half the price per lb and about 70% edible, so both price and gram weight differ. Used the vocabulary's own row for this e",
+     "cos": 0.8949,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "boneless, skinless chicken breasts",
+     "key": "boneless skinless chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Exact vocabulary row Boneless Skinless Chicken Breast [chicken-breast], board 7 of 7; the source states 1.3 lb total, so no each-weight assumption is needed.",
+     "cos": 0.8839,
+     "at": "2026-08-26T05:09:07",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "large boneless skinless chicken breast",
+     "key": "large boneless skinless chicken breast",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Word-for-word the vocabulary row's own name; 'large' is a size word and the board carries chicken-breast 7 of 7. 250 g per large raw breast reproduces the source's published 41 g protein per serving (",
+     "cos": 0.8161,
+     "at": "2026-08-26T05:08:04",
+     "slug": "peach-chicken"
+    },
+    {
+     "term": "bone-in skin-on chicken thighs",
+     "key": "bone in skin on chicken thighs",
+     "bid": "chicken-thighs",
+     "decision": "mapped",
+     "evidence": "chicken-thighs is a live board id at 7 of 7 and its price (0.98/lb at Sam's Club) is the bone-in tray SKU, the same product concept as this line; boneless-skinless-chicken-thigh is a different cut at ",
+     "cos": 0.7167,
+     "at": "2026-08-26T05:08:04",
+     "slug": "smoked-chicken-thighs"
+    },
+    {
+     "term": "chicken breasts",
+     "key": "chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "The source slices these into tenders, i.e. plain boneless skinless breast; the vocabulary's own name carries the boneless/skinless words, so the form flag is a wording artefact. Board 7 of 7.",
+     "cos": 0.7002,
+     "at": "2026-08-26T04:52:01",
+     "slug": "honey-balsamic-chicken-tenders"
+    }
+   ]
+  },
+  {
+   "key": "low sodium soy sauce",
+   "term": "low sodium soy sauce",
+   "neighbours": [
+    {
+     "term": "less sodium soy sauce",
+     "key": "less sodium soy sauce",
+     "bid": "soy-sauce",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same bottle at the same shelf price; vocabulary row Soy Sauce [soy-sauce] is same form, board 7 of 7.",
+     "cos": 0.9233,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "reduced sodium beef broth",
+     "key": "reduced sodium beef broth",
+     "bid": "beef-broth",
+     "decision": "mapped",
+     "evidence": "Reduced sodium is a label variant of the same carton at the same shelf price, the same call as 'less sodium soy sauce' -> soy-sauce; board 7 of 7. Not a form flip: no gram-weight or price change.",
+     "cos": 0.6766,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "No Sodium Beef Stock",
+     "key": "no sodium beef stock",
+     "bid": "beef-broth",
+     "decision": "mapped",
+     "evidence": "The source itself offers no-sodium beef broth as the substitute; beef-broth is the same carton class and is priced 7/7. Sodium level is not a price class.",
+     "cos": 0.6082,
+     "at": "2026-08-26T04:45:14",
+     "slug": "roast-eye-of-round-beef"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.6009,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "turkey sausage",
+     "key": "turkey sausage",
+     "bid": "fresh-sweet-italian-turkey-sausage",
+     "decision": "mapped",
+     "evidence": "Fresh raw sausage sold by the pound with casings to remove; smoked-turkey-sausage is a fully cooked rope at a different price class and italian-sausage is pork. No commodity claims it today, so a new ",
+     "cos": 0.5649,
+     "at": "2026-08-26T04:46:09",
+     "slug": "italian-turkey-burgers"
+    }
+   ]
+  },
+  {
+   "key": "rice wine vinegar",
+   "term": "rice wine vinegar",
+   "neighbours": [
+    {
+     "term": "white wine",
+     "key": "white wine",
+     "bid": "white-wine",
+     "decision": "mapped",
+     "evidence": "Same-form row Dry White Wine [white-wine], board 4 of 7. Deliberately NOT white-wine-vinegar - that is the wrong dinner and the standing form-flip rejection.",
+     "cos": 0.6839,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "Dry Red Wine",
+     "key": "dry red wine",
+     "bid": "red-wine",
+     "decision": "mapped",
+     "evidence": "red-wine is a live board id (4/7 stores) - a reuse, not a proposal; the vocabulary only lacks the name row. Red wine vinegar is a different food and is refused.",
+     "cos": 0.6119,
+     "at": "2026-08-26T04:45:14",
+     "slug": "roast-eye-of-round-beef"
+    },
+    {
+     "term": "extra-virgin olive oil",
+     "key": "extra virgin olive oil",
+     "bid": "olive-oil",
+     "decision": "mapped",
+     "evidence": "Extra virgin is the grade the olive-oil commodity is sold at, not a different food. Board 7 of 7.",
+     "cos": 0.5719,
+     "at": "2026-08-26T04:53:05",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    },
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.5406,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "vegetable or canola oil",
+     "key": "vegetable or canola oil",
+     "bid": "vegetable-oil",
+     "decision": "mapped",
+     "evidence": "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class.",
+     "cos": 0.5383,
+     "at": "2026-08-26T05:08:00",
+     "slug": "kfc-oven-baked-fried-chicken-tenders"
+    }
+   ]
+  },
+  {
+   "key": "grapeseed oil or canola oil",
+   "term": "grapeseed oil or canola oil",
+   "neighbours": [
+    {
+     "term": "vegetable or canola oil",
+     "key": "vegetable or canola oil",
+     "bid": "vegetable-oil",
+     "decision": "mapped",
+     "evidence": "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class.",
+     "cos": 0.7648,
+     "at": "2026-08-26T05:08:00",
+     "slug": "kfc-oven-baked-fried-chicken-tenders"
+    },
+    {
+     "term": "oil",
+     "key": "oil",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "No commodity claims a generic neutral oil and I will not bridge it onto olive-oil (different price class). 1 tbsp on the grates: pantry-static pricing is safe.",
+     "cos": 0.5753,
+     "at": "2026-08-26T04:51:57",
+     "slug": "grilled-garlic-parmesan-wings-with-cilantro"
+    },
+    {
+     "term": "Oil spray",
+     "key": "oil spray",
+     "bid": "cooking-spray",
+     "decision": "mapped",
+     "evidence": "cooking-spray is a live board id at 7 of 7, so a reuse; 3 g is a light coating, following the 2026-08-26 cooking-spray ruling.",
+     "cos": 0.5308,
+     "at": "2026-08-26T05:08:00",
+     "slug": "kfc-oven-baked-fried-chicken-tenders"
+    },
+    {
+     "term": "grape tomatoes",
+     "key": "grape tomatoes",
+     "bid": "cherry-tomatoes",
+     "decision": "mapped",
+     "evidence": "Same ruling as the Mediterranean line: one pint clamshell of small tomatoes at the same price class as cherry; the board's `grapes` match is fruit.",
+     "cos": 0.5293,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "extra-virgin olive oil",
+     "key": "extra virgin olive oil",
+     "bid": "olive-oil",
+     "decision": "mapped",
+     "evidence": "Extra virgin is the grade the olive-oil commodity is sold at, not a different food. Board 7 of 7.",
+     "cos": 0.5254,
+     "at": "2026-08-26T04:53:05",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    }
+   ]
+  },
+  {
+   "key": "dry long noodles",
+   "term": "dry long noodles",
+   "neighbours": [
+    {
+     "term": "wide homestyle egg noodles",
+     "key": "wide homestyle egg noodles",
+     "bid": "egg-noodles",
+     "decision": "mapped",
+     "evidence": "Same-form vocabulary row Egg Noodles [egg-noodles]; 'wide homestyle' is a cut of the same dry product. The board match shown ('eggs') is a fuzzy miss and would price the wrong food.",
+     "cos": 0.6813,
+     "at": "2026-08-26T04:34:47",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "dried apricots",
+     "key": "dried apricots",
+     "bid": "dried-apricots",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's 'apricots' bridge: fresh is not dried is a standing rejection, and dried fruit is a different price class (6-8 oz bags on the dried-fruit shelf) and a completely different gram wei",
+     "cos": 0.6418,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "Dry Red Wine",
+     "key": "dry red wine",
+     "bid": "red-wine",
+     "decision": "mapped",
+     "evidence": "red-wine is a live board id (4/7 stores) - a reuse, not a proposal; the vocabulary only lacks the name row. Red wine vinegar is a different food and is refused.",
+     "cos": 0.6144,
+     "at": "2026-08-26T04:45:14",
+     "slug": "roast-eye-of-round-beef"
+    },
+    {
+     "term": "large rolls",
+     "key": "large rolls",
+     "bid": "hamburger-buns",
+     "decision": "mapped",
+     "evidence": "Board absent and the vocabulary lookup is blind here (the phrase 'large rolls' shares no core word with a 'Hamburger Buns' style row), so a new id is proposed with an explicit alias instruction. 6 x 7",
+     "cos": 0.5706,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "dark brown sugar",
+     "key": "dark brown sugar",
+     "bid": "brown-sugar",
+     "decision": "mapped",
+     "evidence": "Dark vs light brown sugar is the same bagged product at the same price; refused the board's plain 'sugar' match, which is a different food and gram weight.",
+     "cos": 0.5618,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    }
+   ]
+  },
+  {
+   "key": "thinly sliced vegetables",
+   "term": "thinly sliced vegetables",
+   "neighbours": [
+    {
+     "term": "Sliced onions",
+     "key": "sliced onions",
+     "bid": "onions",
+     "decision": "mapped-optional",
+     "evidence": "Garnish line with no stated quantity, so optional; onions is live 7 of 7 and the 'med onion' -> onions precedent binds. Weighed as half a medium onion.",
+     "cos": 0.7803,
+     "at": "2026-08-26T05:05:59",
+     "slug": "enchiladas-suizas"
+    },
+    {
+     "term": "minced garlic",
+     "key": "minced garlic",
+     "bid": "garlic",
+     "decision": "mapped",
+     "evidence": "Minced is a knife instruction, not a form: fresh garlic minced by the cook, same as the 'cold butter' -> butter precedent. Reuses the live garlic id and the existing DB row.",
+     "cos": 0.6983,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "thick-sliced center-cut bacon",
+     "key": "thick sliced center cut bacon",
+     "bid": "bacon",
+     "decision": "mapped",
+     "evidence": "Thick-sliced and center-cut are cut descriptors on the same smoked pork bacon the id prices; deliberately NOT turkey-bacon, which is a different meat. Board 7 of 7.",
+     "cos": 0.6953,
+     "at": "2026-08-26T04:53:06",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    },
+    {
+     "term": "Chopped Fresh Thyme",
+     "key": "chopped fresh thyme",
+     "bid": "fresh-thyme",
+     "decision": "mapped",
+     "evidence": "fresh-thyme is a live board id (4/7); refusing the bridge to dried-thyme because 2 tsp fresh is 1.6 g of herb against about 2 g of dried leaf at a different price.",
+     "cos": 0.6923,
+     "at": "2026-08-26T04:45:13",
+     "slug": "roast-eye-of-round-beef"
+    },
+    {
+     "term": "chopped green chiles",
+     "key": "chopped green chiles",
+     "bid": "canned-green-chilies",
+     "decision": "mapped",
+     "evidence": "The 'DIFFERENT FORM: canned' flag is spurious here - the recipe line IS a can ('1 (4.5 ounce) Can'). Chopped and diced green chiles are the same product; board carries it 6 of 7 stores.",
+     "cos": 0.6745,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    }
+   ]
+  },
+  {
+   "key": "sriracha or other hot sauce",
+   "term": "sriracha or other hot sauce",
+   "neighbours": [
+    {
+     "term": "pico de gallo, sliced scallions, chopped cilantro, sliced avocados or guacamole, sour cream",
+     "key": "pico de gallo sliced scallions chopped cilantro sliced avocados or guacamole sour cream",
+     "bid": "",
+     "decision": "not-purchased",
+     "evidence": "A garnish bundle of five distinct foods with no quantity given for any of them; costing or weighing it would mean inventing every number. Excluded from the shopping list and from macros at 0 g.",
+     "cos": 0.6119,
+     "at": "2026-08-26T04:22:00",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "salt and pepper",
+     "key": "salt and pepper",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "Two distinct pantry foods on one unsplittable line, so no single bid can carry it - the 2026-08-26 precedent. Pantry-static pricing at 3 pinches is safe.",
+     "cos": 0.5993,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5961,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "garlic salt",
+     "key": "garlic salt",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "The board's 'garlic' match is fresh bulb garlic - a different food, price class and gram weight, exactly the 2026-08-26 garlic-powder precedent. Garlic salt is a pantry blend at 1 tsp; pantry-static p",
+     "cos": 0.5891,
+     "at": "2026-08-26T04:34:45",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "cooking spray",
+     "key": "cooking spray",
+     "bid": "cooking-spray",
+     "decision": "mapped",
+     "evidence": "cooking-spray is a live board id at 7 of 7, so a REUSE, not a proposal; the source names PAM, which is exactly that product. 3 g is a light coating for the racks.",
+     "cos": 0.5786,
+     "at": "2026-08-26T04:36:36",
+     "slug": "dill-pickle-chicken-wings"
+    }
+   ]
+  },
+  {
+   "key": "bay leaf",
+   "term": "bay leaf",
+   "neighbours": [
+    {
+     "term": "lemons",
+     "key": "lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "Live board id at 5 of 7, the same reuse as the Jamie Oliver line; 2 medium lemons at 58 g.",
+     "cos": 0.5639,
+     "at": "2026-08-26T05:08:08",
+     "slug": "mediterranean-chicken-w-marinade"
+    },
+    {
+     "term": "fresh sage leaves",
+     "key": "fresh sage leaves",
+     "bid": "fresh-sage",
+     "decision": "mapped",
+     "evidence": "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure.",
+     "cos": 0.5567,
+     "at": "2026-08-26T05:07:06",
+     "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish"
+    },
+    {
+     "term": "ground beef",
+     "key": "ground beef",
+     "bid": "ground-beef-8020",
+     "decision": "mapped",
+     "evidence": "Unqualified ground beef in a patty recipe is the standard 80/20 grind, and ground-beef-8020 is the estate's existing id for it (the 2026-08-16 dupe record names it as the incumbent), so this is a reus",
+     "cos": 0.5529,
+     "at": "2026-08-26T10:11:22",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "large lemons",
+     "key": "large lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "lemons is a live board id (5 of 7 stores), so a REUSE and not a proposal; 'large' is a size word, not a form. The FDC shelf for this term returned cottage cheese and eggs, a pure keyword miss I ignore",
+     "cos": 0.5406,
+     "at": "2026-08-26T04:35:26",
+     "slug": "slow-roasted-pork-shoulder"
+    },
+    {
+     "term": "water",
+     "key": "water",
+     "bid": "",
+     "decision": "not-purchased",
+     "evidence": "Tap water for the cornstarch slurry: no commodity, no cost, no macros. 4 tbsp x 14.79 g.",
+     "cos": 0.5194,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    }
+   ]
+  },
+  {
+   "key": "medium sweet potato",
+   "term": "medium sweet potato",
+   "neighbours": [
+    {
+     "term": "medium yellow onion",
+     "key": "medium yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions], board 7 of 7; 'medium' is a size word. Follows the 'small yellow onion' ruling of 2026-08-26.",
+     "cos": 0.7271,
+     "at": "2026-08-26T04:53:02",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "baby potatoes",
+     "key": "baby potatoes",
+     "bid": "baby-potatoes",
+     "decision": "mapped",
+     "evidence": "Small creamer potatoes are their own bagged SKU priced well above bulk russets, and no commodity claims them though today's captures carry them; sweet-potatoes is a different food.",
+     "cos": 0.7115,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "medium tart apple",
+     "key": "medium tart apple",
+     "bid": "apples",
+     "decision": "mapped",
+     "evidence": "apples is a live board id 7 of 7, so a reuse; Granny Smith is a mainstream bagged apple at the generic apple price, exactly the 'fuji apples' precedent.",
+     "cos": 0.6992,
+     "at": "2026-08-26T04:53:02",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "spaghetti squash",
+     "key": "spaghetti squash",
+     "bid": "spaghetti-squash",
+     "decision": "mapped",
+     "evidence": "spaghetti-squash is a live board id at 4 of 7 stores, so this is a reuse and not a new id; only a vocabulary row for the name is missing.",
+     "cos": 0.5663,
+     "at": "2026-08-26T04:53:05",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    },
+    {
+     "term": "small yellow onion",
+     "key": "small yellow onion",
+     "bid": "onions",
+     "decision": "mapped",
+     "evidence": "Exact same-form vocabulary row Yellow Onion [onions]; board 7 of 7. Small onion weighed at 70 g.",
+     "cos": 0.5659,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    }
+   ]
+  },
+  {
+   "key": "raisins",
+   "term": "raisins",
+   "neighbours": [
+    {
+     "term": "lemons",
+     "key": "lemons",
+     "bid": "lemons",
+     "decision": "mapped",
+     "evidence": "Live board id at 5 of 7, the same reuse as the Jamie Oliver line; 2 medium lemons at 58 g.",
+     "cos": 0.6768,
+     "at": "2026-08-26T05:08:08",
+     "slug": "mediterranean-chicken-w-marinade"
+    },
+    {
+     "term": "cranberries",
+     "key": "cranberries",
+     "bid": "fresh-cranberries",
+     "decision": "mapped",
+     "evidence": "The line says cranberries with no 'dried', and the method sautes them with the vegetables until soft, which is the fresh berry; fresh-cranberries is a live id (1 of 7 is carriage, not identity). Dried",
+     "cos": 0.6668,
+     "at": "2026-08-26T05:07:23",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "fresh rosemary",
+     "key": "fresh rosemary",
+     "bid": "fresh-rosemary",
+     "decision": "mapped",
+     "evidence": "Sprigs can only be the fresh herb; dried-rosemary is a different price class and gram weight, so no bridge. Board 5 of 7.",
+     "cos": 0.6304,
+     "at": "2026-08-26T04:53:03",
+     "slug": "rosemary-chicken-thighs"
+    },
+    {
+     "term": "mushrooms",
+     "key": "mushrooms",
+     "bid": "mushrooms",
+     "decision": "mapped",
+     "evidence": "Same-form vocabulary row White Mushrooms [mushrooms], board 7 of 7; portobello is a different price class and is refused.",
+     "cos": 0.6275,
+     "at": "2026-08-26T10:11:23",
+     "slug": "salisbury-steak-burgers"
+    },
+    {
+     "term": "chicken breasts",
+     "key": "chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "The source slices these into tenders, i.e. plain boneless skinless breast; the vocabulary's own name carries the boneless/skinless words, so the form flag is a wording artefact. Board 7 of 7.",
+     "cos": 0.6214,
+     "at": "2026-08-26T04:52:01",
+     "slug": "honey-balsamic-chicken-tenders"
+    }
+   ]
+  },
+  {
+   "key": "sherry vinegar",
+   "term": "sherry vinegar",
+   "neighbours": [
+    {
+     "term": "rice wine vinegar",
+     "key": "rice wine vinegar",
+     "bid": "",
+     "decision": "mapped-null",
+     "evidence": "The board's 'rice' match is the grain, not a vinegar - an outright wrong food. No rice-vinegar id exists and 1 tbsp does not justify minting one; pantry-static pricing is safe.",
+     "cos": 0.7059,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "fresh ginger",
+     "key": "fresh ginger",
+     "bid": "fresh-ginger",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Ginger [fresh-ginger] is exactly this food; deliberately NOT ground-ginger, which is a different price class and gram weight. Board 6 of 7.",
+     "cos": 0.5983,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "extra-virgin olive oil",
+     "key": "extra virgin olive oil",
+     "bid": "olive-oil",
+     "decision": "mapped",
+     "evidence": "Extra virgin is the grade the olive-oil commodity is sold at, not a different food. Board 7 of 7.",
+     "cos": 0.59,
+     "at": "2026-08-26T04:53:05",
+     "slug": "spaghetti-squash-boats-with-chicken"
+    },
+    {
+     "term": "seasoned salt",
+     "key": "seasoned salt",
+     "bid": "seasoned-salt",
+     "decision": "mapped",
+     "evidence": "Second occurrence of the same blend, in the gravy.",
+     "cos": 0.5657,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "white wine",
+     "key": "white wine",
+     "bid": "white-wine",
+     "decision": "mapped",
+     "evidence": "Same-form row Dry White Wine [white-wine], board 4 of 7. Deliberately NOT white-wine-vinegar - that is the wrong dinner and the standing form-flip rejection.",
+     "cos": 0.5628,
+     "at": "2026-08-26T04:34:46",
+     "slug": "slow-cooker-beef-stroganoff"
+    }
+   ]
+  },
+  {
+   "key": "brown rice or cauliflower rice",
+   "term": "brown rice or cauliflower rice",
+   "neighbours": [
+    {
+     "term": "vegetable or canola oil",
+     "key": "vegetable or canola oil",
+     "bid": "vegetable-oil",
+     "decision": "mapped",
+     "evidence": "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class.",
+     "cos": 0.5796,
+     "at": "2026-08-26T05:08:00",
+     "slug": "kfc-oven-baked-fried-chicken-tenders"
+    },
+    {
+     "term": "better than bouillon",
+     "key": "better than bouillon",
+     "bid": "bouillon",
+     "decision": "mapped",
+     "evidence": "The line itself names a bouillon cube as the equal alternative, so the concentrated-bouillon concept is what the recipe buys; board carries bouillon 6 of 7. Flagging that I could not verify the board ",
+     "cos": 0.5327,
+     "at": "2026-08-26T04:34:47",
+     "slug": "slow-cooker-beef-stroganoff"
+    },
+    {
+     "term": "cranberries",
+     "key": "cranberries",
+     "bid": "fresh-cranberries",
+     "decision": "mapped",
+     "evidence": "The line says cranberries with no 'dried', and the method sautes them with the vegetables until soft, which is the fresh berry; fresh-cranberries is a live id (1 of 7 is carriage, not identity). Dried",
+     "cos": 0.5088,
+     "at": "2026-08-26T05:07:23",
+     "slug": "baked-stuffed-pork-chops"
+    },
+    {
+     "term": "dark brown sugar",
+     "key": "dark brown sugar",
+     "bid": "brown-sugar",
+     "decision": "mapped",
+     "evidence": "Dark vs light brown sugar is the same bagged product at the same price; refused the board's plain 'sugar' match, which is a different food and gram weight.",
+     "cos": 0.5056,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "corn starch",
+     "key": "corn starch",
+     "bid": "cornstarch",
+     "decision": "mapped",
+     "evidence": "Two-word spelling of the existing Cornstarch row and the `cornstarch` id priced 7/7 - a reuse, not a new food. 1 cup is 128 g.",
+     "cos": 0.4969,
+     "at": "2026-08-26T04:46:58",
+     "slug": "chicken-fried-steak"
+    }
+   ]
+  }
+ ]
+}

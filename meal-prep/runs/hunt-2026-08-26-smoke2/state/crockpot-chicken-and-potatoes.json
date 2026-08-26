@@ -1,0 +1,31 @@
+{
+    "slug":  "crockpot-chicken-and-potatoes",
+    "title":  "Crockpot Chicken and Potatoes",
+    "source_url":  "https://www.wellplated.com/crockpot-chicken-and-potatoes/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-26T11:30:02",
+    "updated":  "2026-08-26T11:30:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Garlic-parmesan-herb chicken with potatoes matches catalog parmesan-garlic-sheet-pan-chicken-thighs-and-potatoes on protein, seasoning family and starch; only the crockpot-vs-sheet-pan method differs and the lemon-honey note doesn\u0027t make it a distinct dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-26T11:30:02",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/crockpot-chicken-and-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-26T11:30:02",
+                        "by":  "decider",
+                        "detail":  "Garlic-parmesan-herb chicken with potatoes matches catalog parmesan-garlic-sheet-pan-chicken-thighs-and-potatoes on protein, seasoning family and starch; only the crockpot-vs-sheet-pan method differs and the lemon-honey note doesn\u0027t make it a distinct dinner."
+                    }
+                ]
+}
