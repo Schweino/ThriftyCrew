@@ -160,11 +160,24 @@ green). map-preresolve 128 -> 136 assertions, learn_apply 53 -> 59, no assertion
 Each half was neutered separately and measured red: colon revert 1 red, call-site revert 2 red, PS token
 bounds 3 red, PY token bounds 3 red.
 
-**STILL OPEN, and NOT this defect:** `easy-beef-enchiladas` does not assemble even with the false
-positive gone. Its `optional toppings: diced onions, chopped cilantro, sour cream, shredded lettuce`
-line is ruled `mapped-null` on an `optional: true` row, which `Get-AssembledDecision` maps to
-`mapped-optional` - a decision that then REQUIRES a gram weight the line can never have. `not-purchased`
-would have produced `optional-note` and passed. A separate blocker on the same recipe.
+**A SECOND, SEPARATE BLOCKER ON THE SAME RECIPE - also fixed, 2026-08-26.** With the false positive
+gone `easy-beef-enchiladas` still did not assemble. Its `optional toppings: diced onions, chopped
+cilantro, sour cream, shredded lettuce` line is ruled `mapped-null` on an `optional: true` row, which
+`Get-AssembledDecision` maps to `mapped-optional` - a decision that then REQUIRES a gram weight the line
+can never have. Every stage before the assembler had it right; the mapper's own evidence says "Garnish
+to taste, pantry-static and safe".
+
+`GARNISH_PHRASES` could not see it: every phrase there is a TRAILING qualifier on ONE food ("Fresh
+parsley (to garnish)"), and this is the other shape a source uses for the same statement - a LABEL at
+the front with the foods listed after a colon. Added `GARNISH_LABEL_RX` for that shape, rather than
+widening `Get-AssembledDecision`, because the blast radius is provably nothing: `Test-IsGarnishLine` is
+reached ONLY where neither the qty engine nor the mapper could weigh the line, so it can only fire where
+the recipe dies today. `mapped-optional` is untouched for every line that already works.
+
+Measured across all 40 rulings files in `meal-prepuns`: exactly 2 lines reach the assembler needing
+grams and stating none - this one, and the rice-blend alternatives line D5 already settles. So it was
+about 1 recipe in 40 on the wide run. The recipe now assembles with 0 findings: tortillas 994 g
+(568 x 1.75) on the registrar's alias, toppings a zero-gram `optional-note` NAMED in the file.
 
 ### 2.7 CORRECTED same day: the thigh/drumstick grouping is DELIBERATE, and the real defect is
 ### an EXCLUDE pattern that removes the food the id claims to carry
