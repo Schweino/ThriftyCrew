@@ -23,6 +23,7 @@ B11 (the repair-claim mtime check) and the cost-engine mutex, plus the five phas
 from __future__ import annotations
 
 import asyncio
+import atexit
 import datetime as dt
 import importlib.util
 import io
@@ -226,10 +227,41 @@ SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
 
 
-def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
+# THE RUN DIR IS NEVER A BARE RELATIVE PATH. daemon()'s default used to be the string "R". Any
+# fixture that took it and reached a lane which WRITES into the run dir - qa_lane's
+# write_qa_verdict is the one that does it - created R\qa\ relative to the CURRENT WORKING
+# DIRECTORY, which for the documented invocation is this source directory. Measured 2026-08-26: a
+# clean run left an untracked meal-prep\pipeline\R\ behind carrying three verdict files. The
+# estate's daily bot sweeps up anything staged in the main tree at ~07:00, so a stray directory in
+# the source tree is a real risk of being COMMITTED, and it is noise in every `git status` after a
+# run besides. The fix is not a gitignore line - the suite must not write outside a temp dir AT ALL.
+# So there is no source-relative default left to take: a fixture that names no run dir is handed a
+# temp dir of its own.
+_SCRATCH_RUN_DIRS = []
+
+
+def scratch_run_dir(prefix="daemon-run-"):
+    p = tempfile.mkdtemp(prefix=prefix)
+    _SCRATCH_RUN_DIRS.append(p)
+    return p
+
+
+def sweep_scratch():
+    """Remove every temp dir the suite owns. Cleaning up locally in a `finally` is the norm here;
+    this is the backstop for the run dirs handed out by the daemon() default, and it also takes
+    LEARN_SCRATCH, which nothing had ever removed."""
+    while _SCRATCH_RUN_DIRS:
+        shutil.rmtree(_SCRATCH_RUN_DIRS.pop(), ignore_errors=True)
+    shutil.rmtree(LEARN_SCRATCH, ignore_errors=True)
+
+
+atexit.register(sweep_scratch)
+
+
+def daemon(run_dir=None, run_id="drill-run", dispatcher=None, ps=None, **kw):
     kw.setdefault("events_path", SCRATCH_EVENTS)
     kw.setdefault("resolutions_path", SCRATCH_RESOLUTIONS)
-    return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
+    return HD.Daemon(run_dir or scratch_run_dir(), run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
 
 
@@ -323,11 +355,17 @@ def run():
         fd = FakeDispatch({"recipe-source-qa": [{"slug": "s1", "verdict": verdict, "owner": "writer"},
                                                 {"slug": "s1", "verdict": "PASS"}],
                            "recipe-writer": [{}]})
-        d = daemon(dispatcher=fd)
-        d.ch["qa"].push({"slug": "s1"})
-        d.ch["qa"].close()
-        arun(d.run(("qa",)))
-        repaired = bool(fd.prompts("recipe-writer"))
+        # THE QA LANE WRITES qa\<slug>.json, so this case needs a run dir of its own and takes it
+        # away again - the same shape every other writing fixture in this suite uses.
+        _b7tmp = tempfile.mkdtemp(prefix="daemon-b7-")
+        try:
+            d = daemon(run_dir=_b7tmp, dispatcher=fd)
+            d.ch["qa"].push({"slug": "s1"})
+            d.ch["qa"].close()
+            arun(d.run(("qa",)))
+            repaired = bool(fd.prompts("recipe-writer"))
+        finally:
+            shutil.rmtree(_b7tmp, ignore_errors=True)
         T("%s verdict %-18s -> %s" % ("MUST FIRE " if expect_pass else "CLEAN TWIN", repr(verdict),
                                       "passes with no repair cycle" if expect_pass
                                       else "buys its one repair cycle"),
@@ -1742,7 +1780,7 @@ def _learn_seams_are_never_live():
     Checked on the DAEMON the fixtures actually build, not on the constants, because the defect
     would be a fixture that forgot to thread them.
     """
-    d = daemon(run_dir="R")
+    d = daemon()
     live_ev = os.path.join(HD.MP, "db", "ingredient-events.jsonl")
     live_led = os.path.join(HD.MP, "db", "ingredient-resolutions.json")
     return (bool(d.events_path) and bool(d.resolutions_path)
@@ -2312,7 +2350,7 @@ def _t3_store_lookup_is_timed():
 def _t3_backdated_start_reaches_hunt_run():
     """MUST FIRE with its CLEAN TWIN in one case, because the twin is the whole safety story: -At is
     opt-in, so every existing call site must still be stamped by hunt-run itself."""
-    d = daemon(run_dir="R")
+    d = daemon()
     arun(d.lane("extract", "local rung 1", ["s1"], "local", "start", at="2026-08-24T10:00:00"))
     arun(d.lane("extract", "local rung 1", ["s1"], "local", "start"))
     calls = d._ps.find("hunt-run.ps1", "-Lane")
@@ -2520,34 +2558,41 @@ def _wave_mid_run():
     fd = FakeDispatch({"recipe-source-qa": [{"slug": "s1", "verdict": "PASS"},
                                             {"slug": "s2", "verdict": "PASS"},
                                             {"slug": "s3", "verdict": "PASS"}]})
-    d = daemon(dispatcher=fd, wave_size=2)
-    seen = []
+    # THREE PASSING VERDICTS ARE THREE FILES the qa lane writes into the run dir, so this fixture
+    # owns one and takes it away again. It used to take daemon()'s bare "R" default and leave
+    # R\qa\s1.json, s2.json and s3.json in whatever directory the suite was started from.
+    tmp = tempfile.mkdtemp(prefix="daemon-wavemid-")
+    try:
+        d = daemon(run_dir=tmp, dispatcher=fd, wave_size=2)
+        seen = []
 
-    async def fake_wave(k, drain=False):
-        seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
-    d.run_wave = fake_wave
+        async def fake_wave(k, drain=False):
+            seen.append({"wave": k, "drain": drain, "qa_open": not d.ch["qa"].is_closed()})
+        d.run_wave = fake_wave
 
-    async def drill():
-        task = asyncio.ensure_future(d.qa_lane())
-        d.ch["qa"].push({"slug": "s1"})
-        d.ch["qa"].push({"slug": "s2"})
-        for _ in range(600):
-            if seen:
-                break
-            await asyncio.sleep(0.01)
-        mid = list(seen)                       # what had closed while the lane was still open
-        d.ch["qa"].push({"slug": "s3"})
-        d.ch["qa"].close()
-        await task
-        d.schedule_wave(True)                  # the drain, as run() performs it
-        if d._wave_chain is not None:
-            await d._wave_chain
-        return mid, list(seen)
+        async def drill():
+            task = asyncio.ensure_future(d.qa_lane())
+            d.ch["qa"].push({"slug": "s1"})
+            d.ch["qa"].push({"slug": "s2"})
+            for _ in range(600):
+                if seen:
+                    break
+                await asyncio.sleep(0.01)
+            mid = list(seen)                   # what had closed while the lane was still open
+            d.ch["qa"].push({"slug": "s3"})
+            d.ch["qa"].close()
+            await task
+            d.schedule_wave(True)              # the drain, as run() performs it
+            if d._wave_chain is not None:
+                await d._wave_chain
+            return mid, list(seen)
 
-    mid, all_waves = arun(drill())
-    ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
-          and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
-    return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
+        mid, all_waves = arun(drill())
+        ok = (len(mid) == 1 and mid[0]["wave"] == 1 and mid[0]["drain"] is False
+              and mid[0]["qa_open"] and len(all_waves) == 2 and all_waves[1]["drain"] is True)
+        return ok, "mid=%s all=%s" % (json.dumps(mid), json.dumps(all_waves))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _cost_mutex():
@@ -4256,7 +4301,7 @@ def _b3_prompt(terms=("korean-rice-cakes", "gochujang", "doubanjiang")):
     probe = price_evidence.probe_failed(["Baker's", "Family Fare"], terms,
                                         "transport ERROR (400) Bad Request - likely Freshop throttling")
     doc = price_evidence.build("drill-run", 1, terms, probe_by_term=probe, roster=roster)
-    d = daemon(run_dir="R")
+    d = daemon()
     return d.price_prompt(terms, doc, path="R\\price-evidence\\batch-1.json"), doc, terms
 
 
@@ -4654,7 +4699,7 @@ _REG_ROWS = [
 
 
 def _reg_daemon():
-    d = daemon(run_dir="R")
+    d = daemon()
     d._commodity_rows = list(_REG_ROWS)
     return d
 
@@ -4899,7 +4944,7 @@ def _g1_note_does_not_leak_into_prompts_that_do_not_sweep():
     """CLEAN TWIN: the pricer and the decider carry Grep and neither sweeps a namespace - the pricer
     adjudicates pre-gathered store rows, the decider ruled 3 candidates in 1 turn off a whole dossier.
     Prompt weight buys nothing where nobody greps, and this pins that omission as deliberate."""
-    d = daemon(run_dir="R")
+    d = daemon()
     price = d.price_prompt(["saffron", "harissa", "tteok"])
     decide = d.decide_prompt([{"slug": "x", "name": "X", "dossier": {"slug": "x", "name": "X"}}], "3")
     leaked = [n for n, p in (("price", price), ("decide", decide))
@@ -4946,7 +4991,7 @@ _REG_FLOOR = {"chicken-drumsticks": "chicken-thighs", "jasmine-rice": "brown-ric
 
 
 def _reg_batch_daemon(feed=None, floor=None, dispatcher=None):
-    d = daemon(run_dir="R", dispatcher=dispatcher)
+    d = daemon(dispatcher=dispatcher)
     d._commodity_rows = list(_REG_ROWS)
     # The caches are seeded so these fixtures never depend on the LIVE feed, which another session
     # rewrites daily - the tuple wrapper is what lets a seeded None mean "could not be read".
@@ -5059,7 +5104,7 @@ def _registrar_evidence_shows_include():
     rows = [r for r in _REG_ROWS if r["id"] != "chicken-thighs"]
     rows.append({"id": "chicken-thighs", "label": "Poultry Dark Meat", "ns": "commodities",
                  "include": "['chicken\s+(thigh|drumstick|leg)']"})
-    d = daemon(run_dir="R")
+    d = daemon()
     d._commodity_rows = rows
     near = d.commodity_near_misses("drumstick", "drumsticks")
     return (any(r["id"] == "chicken-thighs" for r in near),
@@ -5798,7 +5843,7 @@ def _h2_queue_calls_carry_the_seams():
 def _h2_live_run_passes_no_override():
     """CLEAN TWIN: with no seams set the calls are byte-identical to what they always were. A seam
     that leaks a flag into a real run is its own defect."""
-    d = daemon(run_dir="R")
+    d = daemon()
     args = d.queue_args(["-Add", "-Term", "saffron", "-Recipe", "s1"])
     return (args == ["-Add", "-Term", "saffron", "-Recipe", "s1"]
             and d.queue_seam_note() == "", "args=%s note=%r" % (json.dumps(args), d.queue_seam_note()))
@@ -5875,7 +5920,7 @@ def _h2_pricer_is_told_the_seams():
     try:
         d = _h2_seam_daemon(tmp)
         p = d.price_prompt(["saffron", "harissa", "tteok"])
-        live = daemon(run_dir="R").price_prompt(["saffron", "harissa", "tteok"])
+        live = daemon().price_prompt(["saffron", "harissa", "tteok"])
         return (("-QueueFile '%s'" % os.path.join(tmp, "queue.json")) in p
                 and ("-CarriagePath '%s'" % os.path.join(tmp, "carriage.json")) in p
                 and "DRILL ON SCRATCH LEDGERS" in p
