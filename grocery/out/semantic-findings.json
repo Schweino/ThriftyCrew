@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-25 21:31",
-    "board":  "comparison-2026-08-25.json",
-    "sidecar_generated":  "2026-08-25 21:31:54",
+    "generated":  "2026-08-26 08:20",
+    "board":  "comparison-2026-08-26.json",
+    "sidecar_generated":  "2026-08-26 08:20:19",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3074,
-                     "corpus":  37557,
-                     "rule_invisible":  6588
+                     "board_pairs":  3078,
+                     "corpus":  37564,
+                     "rule_invisible":  6592
                  },
     "identity_count":  0,
-    "coverage_count":  55,
+    "coverage_count":  54,
     "identity":  [
 
                  ],
@@ -141,6 +141,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "almond-milk",
+                         "commodity":  "Almond Milk",
+                         "store":  "Aldi",
+                         "product":  "Friendly Farms Almond Original Milk",
+                         "cos":  0.6879,
+                         "score":  0.962393,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
@@ -191,22 +201,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7495,
-                         "score":  0.953225,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "almond-milk",
-                         "commodity":  "Almond Milk",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Aldi",
-                         "product":  "Friendly Farms Almond Original Milk",
-                         "cos":  0.688,
-                         "score":  0.951356,
+                         "product":  "Kirkwood Boneless Skinless Thin Sliced Chicken Breasts, Per LB",
+                         "cos":  0.7521,
+                         "score":  0.952026,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -261,16 +261,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "almond-flour",
-                         "commodity":  "Almond Flour",
-                         "store":  "Walmart",
-                         "product":  "Nature’s Eats Ultimate Almond+ Flour Blend, Gluten-Free, 16 oz",
-                         "cos":  0.7636,
-                         "score":  0.940266,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "sandwich-bags",
                          "commodity":  "Sandwich Bags",
                          "store":  "Walmart",
@@ -285,8 +275,8 @@
                          "commodity":  "Sparkling Water",
                          "store":  "Aldi",
                          "product":  "Puraqua Flavored Water Bottles, 24 Pack",
-                         "cos":  0.6295,
-                         "score":  0.936553,
+                         "cos":  0.6312,
+                         "score":  0.93682,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -311,16 +301,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
-                         "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.6922,
-                         "score":  0.935499,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "ground-beef-93-7",
                          "commodity":  "93/7 Lean Ground Beef",
                          "store":  "Aldi",
@@ -331,22 +311,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
-                         "cos":  0.7599,
-                         "score":  0.931774,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "white-wine",
                          "commodity":  "White Wine",
                          "store":  "Family Fare",
                          "product":  "Vendange Chardonnay White Wine 1.5 L",
                          "cos":  0.5637,
                          "score":  0.931691,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
+                         "cos":  0.7379,
+                         "score":  0.928458,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -411,12 +391,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Baker\u0027s",
-                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
-                         "cos":  0.7207,
-                         "score":  0.924141,
+                         "id":  "almond-flour",
+                         "commodity":  "Almond Flour",
+                         "store":  "Walmart",
+                         "product":  "Nature’s Eats Ultimate Almond+ Flour Blend, Gluten-Free, 16 oz",
+                         "cos":  0.7513,
+                         "score":  0.924117,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
+                         "store":  "Walmart",
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.6889,
+                         "score":  0.923328,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -427,6 +417,16 @@
                          "product":  "Southern Grove Pumpkin Seeds 6 OZ",
                          "cos":  0.6622,
                          "score":  0.923174,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "chicken-breast",
+                         "commodity":  "Boneless Skinless Chicken Breast",
+                         "store":  "Baker\u0027s",
+                         "product":  "Heritage Farm Boneless Skinless Thin Sliced Chicken Breasts",
+                         "cos":  0.7193,
+                         "score":  0.922547,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -447,16 +447,6 @@
                          "product":  "FoodSaver Quart Vacuum Seal Bags, 19 Count Pre-Cut BPA-Free Freezer Bags, Align to Seal \u0026 Tear to Open for Food Storage, Sous Vide, and Meal Prep",
                          "cos":  0.6617,
                          "score":  0.915625,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "chicken-breast",
-                         "commodity":  "Boneless Skinless Chicken Breast",
-                         "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.85 - 3.5 lb Tray",
-                         "cos":  0.7621,
-                         "score":  0.913394,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -554,9 +544,9 @@
                          "id":  "chicken-breast",
                          "commodity":  "Boneless Skinless Chicken Breast",
                          "store":  "Walmart",
-                         "product":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
-                         "cos":  0.5862,
-                         "score":  0.902819,
+                         "product":  "Freshness Guaranteed Thin-Sliced Boneless Skinless Chicken Breasts, 0.8 - 3.5 lb Tray",
+                         "cos":  0.7433,
+                         "score":  0.902771,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

@@ -9,6 +9,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "adobo-seasoning",
+        "store":  "Family Fare",
+        "product":  "Badia Adobo Seasoning With Pepper 7 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "air-freshener",
         "store":  "Family Fare",
         "product":  "Glade Soft Mist Air Freshener Room Spray, Sea Mist \u0026 Cypress, 7.3oz., 1 Count 7.3 Oz",
@@ -3107,7 +3116,7 @@
     {
         "id":  "tomato-sauce",
         "store":  "Family Fare",
-        "product":  "Our Family Tomato Sauce 15 Oz",
+        "product":  "Our Family Tomato Sauce 29 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -3220,6 +3229,15 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "vienna-sausage",
+        "store":  "Family Fare",
+        "product":  "Libby\u0027s Vienna Sausage 4.6 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027meat\u0027; category \u0027canned\u0027 allows only: pantry"
     },
     {
         "id":  "walnuts",

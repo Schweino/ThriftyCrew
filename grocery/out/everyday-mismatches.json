@@ -47,7 +47,7 @@
         "ratio":  1.04,
         "price":  6.19,
         "size":  "14 oz",
-        "boardItem":  "Southern Grove Oil Roasted And Salted Almonds",
+        "boardItem":  "Southern Grove Unsalted Whole Almonds",
         "linkItem":  "Southern Grove Oil Roasted Salted Almonds 14 OZ",
         "board_src":  "main"
     },
@@ -86,7 +86,7 @@
         "ratio":  0.91,
         "price":  2.69,
         "size":  "1 lb",
-        "boardItem":  "Asparagus 1 LB",
+        "boardItem":  "Freshire Farms Asparagus",
         "linkItem":  "Asparagus, Package",
         "board_src":  "main"
     },
@@ -101,6 +101,19 @@
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
         "linkItem":  "Avocados, 5 ct.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bacon",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  3.986,
+        "link":  3.784,
+        "ratio":  0.95,
+        "price":  37.84,
+        "size":  "10 lb",
+        "boardItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
+        "linkItem":  "Member\u0027s Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.",
         "board_src":  "main"
     },
     {
@@ -140,19 +153,6 @@
         "size":  "2.85 oz",
         "boardItem":  "Jack Link\u0027s Beef Jerky, Original",
         "linkItem":  "Jack Link\u0027s Beef Jerky, Original",
-        "board_src":  "main"
-    },
-    {
-        "id":  "bell-peppers",
-        "store":  "Aldi",
-        "unit":  "each",
-        "board":  0.8967,
-        "link":  0.83,
-        "ratio":  0.93,
-        "price":  2.49,
-        "size":  "3 ct",
-        "boardItem":  "Green Bell Pepper 3 CT",
-        "linkItem":  "Green Bell Peppers, Package",
         "board_src":  "main"
     },
     {
@@ -403,6 +403,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cocoa-powder",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.499,
+        "link":  0.5209,
+        "ratio":  1.04,
+        "price":  11.98,
+        "size":  "23 oz",
+        "boardItem":  "Rising Star Baking Supply Cocoa Powder, 20 oz Bag",
+        "linkItem":  "Hershey\u0027s Cocoa 100% Cacao Natural Unsweetened, 23 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "cod",
         "store":  "Aldi",
         "unit":  "lb",
@@ -426,6 +439,19 @@
         "size":  "43.1 oz",
         "boardItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
         "linkItem":  "Maxwell House Original Roast Medium Ground Coffee, 43.1 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "coffee",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.4997,
+        "link":  0.4824,
+        "ratio":  0.97,
+        "price":  13.99,
+        "size":  "29 oz",
+        "boardItem":  "Kroger Original Medium Roast Ground Coffee",
+        "linkItem":  "Kroger Original Medium Roast Ground Coffee",
         "board_src":  "main"
     },
     {
@@ -481,6 +507,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "cream-cheese",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.13,
+        "link":  0.1381,
+        "ratio":  1.06,
+        "price":  6.63,
+        "size":  "48 oz",
+        "boardItem":  "Member\u0027s Mark Cream Cheese Brick, 48 oz.",
+        "linkItem":  "Member\u0027s Mark Cream Cheese Brick, 48 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "croissants",
         "store":  "Hy-Vee",
         "unit":  "each",
@@ -515,7 +554,7 @@
         "ratio":  1.03,
         "price":  4.06,
         "size":  "3 oz",
-        "boardItem":  "Old Spice Anti Perspirant Deodorant For Men Pure Sport Scent 3 OZ",
+        "boardItem":  "Old Spice Pure Sport Anti-Perspirant \u0026 Deodorant",
         "linkItem":  "Old Spice Pure Sport Deodorant",
         "board_src":  "main"
     },
@@ -742,6 +781,19 @@
     },
     {
         "id":  "kielbasa",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  2.2781,
+        "link":  2.659,
+        "ratio":  1.17,
+        "price":  6.98,
+        "size":  "2.625 lb",
+        "boardItem":  "Eckrich Hardwood Smoked Sausage Family Pack 42 oz.",
+        "linkItem":  "Eckrich Hardwood Smoked Sausage Family Pack 42 oz.",
+        "board_src":  "main"
+    },
+    {
+        "id":  "kielbasa",
         "store":  "Hy-Vee",
         "unit":  "lb",
         "board":  4.7289,
@@ -814,7 +866,7 @@
         "ratio":  1.03,
         "price":  1.19,
         "size":  "each",
-        "boardItem":  "Red Mango Each",
+        "boardItem":  "Mango, Each",
         "linkItem":  "Red Mango Each",
         "board_src":  "main"
     },
@@ -827,7 +879,7 @@
         "ratio":  1.05,
         "price":  3.01,
         "size":  "1 gal",
-        "boardItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
+        "boardItem":  "Friendly Farms 2 Milk 1 Gal",
         "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
         "board_src":  "main"
     },
@@ -949,19 +1001,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "plums",
-        "store":  "Aldi",
-        "unit":  "lb",
-        "board":  1.895,
-        "link":  1.49,
-        "ratio":  0.79,
-        "price":  2.98,
-        "size":  "2 lb",
-        "boardItem":  "Plum Bag 2 Lbs",
-        "linkItem":  "Plums, Bag",
-        "board_src":  "main"
-    },
-    {
         "id":  "popsicles",
         "store":  "Fareway",
         "unit":  "each",
@@ -978,12 +1017,12 @@
         "id":  "pork-chops",
         "store":  "Aldi",
         "unit":  "lb",
-        "board":  2.99,
+        "board":  2.9889,
         "link":  2.69,
         "ratio":  0.9,
         "price":  2.69,
         "size":  "per lb",
-        "boardItem":  "Bone IN Assorted Pork Chops Per LB",
+        "boardItem":  "Assorted Pork Chops",
         "linkItem":  "Premium Bone-In Assorted Pork Chops, per lb",
         "board_src":  "main"
     },
@@ -1089,6 +1128,19 @@
         "size":  "lb",
         "boardItem":  "USDA Choice Sirloin Tip Steak",
         "linkItem":  "USDA Choice Sirloin Tip Steak",
+        "board_src":  "main"
+    },
+    {
+        "id":  "smoked-turkey-sausage",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  2.8838,
+        "link":  3.6457,
+        "ratio":  1.26,
+        "price":  9.57,
+        "size":  "42 oz",
+        "boardItem":  "Hillshire Farm Turkey Polska Kielbasa Smoked Sausage, 14 oz., 3 pk.",
+        "linkItem":  "Hillshire Farm Turkey Polska Kielbasa Smoked Sausage, 14 oz., 3 pk.",
         "board_src":  "main"
     },
     {
@@ -1258,6 +1310,19 @@
         "size":  "13 oz",
         "boardItem":  "Hy-Vee White Corn Restaurant Style Tortilla Chips",
         "linkItem":  "Hy-Vee White Corn Restaurant Style Tortilla Chips",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tortillas",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  0.2312,
+        "link":  0.2612,
+        "ratio":  1.13,
+        "price":  2.09,
+        "size":  "8 ct",
+        "boardItem":  "L\u0027oven Fresh Original Low Carb Tortillas, 8 Count",
+        "linkItem":  "Pueblo Lindo Burrito Flour Tortillas 8 CT",
         "board_src":  "main"
     },
     {

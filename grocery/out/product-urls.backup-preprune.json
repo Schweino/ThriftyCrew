@@ -264,13 +264,6 @@
                                                                 "name":  "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
                                                                 "board_pu":  0.1453
                                                             },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/Great-Value-Classic-Alfredo-Pasta-Sauce-22-oz/115523442",
-                                                        "name":  "Great Value Classic Alfredo Pasta Sauce, 22 oz",
-                                                        "price":  "$2.48",
-                                                        "size":  "22 oz",
-                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Aldi":  {
                                                      "url":  "https://www.aldi.us/store/aldi/products/21032686-priano-creamy-alfredo-sauce-15-oz",
                                                      "name":  "Priano Creamy Alfredo Sauce 15 OZ",
@@ -284,7 +277,14 @@
                                                              "price":  1.99,
                                                              "size":  "16 oz",
                                                              "verified":  "2026-08-23"
-                                                         }
+                                                         },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/115523442",
+                                                        "name":  "Great Value Classic Alfredo Pasta Sauce, 22 oz",
+                                                        "price":  "$2.48",
+                                                        "size":  "22 oz",
+                                                        "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                    }
                                     },
                   "all-purpose-cleaner":  {
                                               "commodity":  "all-purpose-cleaner",
@@ -425,20 +425,20 @@
                                                               "name":  "Silk Unsweetened Almond Milk, 32 fl. oz., 6 pk.",
                                                               "board_pu":  0.0582
                                                           },
-                                      "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/bettergoods-Plant-Based-Vanilla-Almondmilk-Half-Gallon/5450553426",
-                                                      "name":  "bettergoods Plant-Based Vanilla Almond Milk, Half Gallon",
-                                                      "price":  "$2.54",
-                                                      "size":  "63.5 fl oz",
-                                                      "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/simple-truth-dairy-free-unsweetened-vanilla-almond-milk-half-gallon/0001111013268",
                                                            "name":  "Simple Truth Dairy Free Unsweetened Vanilla Almond Milk Half Gallon",
                                                            "price":  2.79,
                                                            "size":  "1/2 gal",
                                                            "verified":  "2026-08-23"
-                                                       }
+                                                       },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/5326649789",
+                                                      "name":  "bettergoods Plant-Based Unsweetened Original Almond Milk, Half Gallon",
+                                                      "price":  "$2.54",
+                                                      "size":  "63.5 fl oz",
+                                                      "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "almonds":  {
                                   "commodity":  "almonds",
@@ -577,11 +577,11 @@
                                                          "board_pu":  5
                                                      },
                                           "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/Fresh-Anaheim-Peppers-1-Pound-Bag/430906516",
-                                                          "name":  "Fresh Anaheim Peppers, 16 oz",
-                                                          "price":  "$2.94",
-                                                          "size":  "16 oz",
-                                                          "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                          "url":  "https://www.walmart.com/ip/44391184",
+                                                          "name":  "Anaheim Peppers, Each",
+                                                          "price":  "$0.64",
+                                                          "size":  "0.239 lb",
+                                                          "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                       }
                                       },
                   "apple":  {
@@ -1253,11 +1253,11 @@
                                                                "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                            },
                                        "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/comforts-infant-premium-immune-blend-6-non-gmo-baby-formula-with-iron-big-deal-/0004126001792",
-                                                            "name":  "Comforts Infant Premium Immune Blend 6 Non GMO Baby Formula with Iron BIG DEAL!",
-                                                            "price":  31.99,
-                                                            "size":  "34 oz",
-                                                            "verified":  "2026-08-23"
+                                                            "url":  "https://www.bakersplus.com/p/enfamil-neuropro-triple-prebiotic-immune-blend-baby-formula/0030087512129",
+                                                            "name":  "Enfamil NeuroPro Triple Prebiotic Immune Blend Baby Formula",
+                                                            "price":  "$10.99",
+                                                            "size":  "6 pk 2 fl oz",
+                                                            "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                         }
                                    },
                   "baby-wipes":  {
@@ -1328,13 +1328,6 @@
                                                 "price":  "$5.94",
                                                 "size":  "1.5 lb",
                                                 "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                            },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73357-farmland-bacon-rtc-16-oz",
-                                                "name":  "Farmland Thick Cut Naturally Hickory Smoked Bacon",
-                                                "price":  "$4.99",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                             },
                                 "Aldi":  {
                                              "url":  "https://www.aldi.us/store/aldi/products/20047386-appleton-farms-lower-sodium-bacon-16-oz",
@@ -2095,13 +2088,6 @@
                             },
                   "bell-peppers":  {
                                        "commodity":  "bell-peppers",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/16560629-green-bell-pepper-3-ct",
-                                                    "price":  2.49,
-                                                    "size":  "3 ct",
-                                                    "name":  "Green Bell Peppers, Package",
-                                                    "board_pu":  0.8967
-                                                },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/fresh-large-green-bell-pepper/0000000004065",
                                                             "price":  0.99,
@@ -2143,7 +2129,14 @@
                                                        "price":  "$2.97",
                                                        "size":  "3 ct",
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/64392816-mixed-bell-peppers",
+                                                    "name":  "Mixed Bell Peppers",
+                                                    "price":  "$2.69",
+                                                    "size":  "3 ct",
+                                                    "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                }
                                    },
                   "berbere-seasoning":  {
                                             "commodity":  "Berbere Seasoning",
@@ -4532,11 +4525,11 @@
                                                              "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                          },
                                              "Aldi":  {
-                                                          "url":  "https://www.aldi.us/store/aldi/products/18649664-dakota-s-pride-great-northern-beans-15-5-oz",
-                                                          "name":  "Dakota S Pride Great Northern Beans 15.5 OZ",
+                                                          "url":  "https://www.aldi.us/store/aldi/products/19688306-dakota-s-pride-cannellini-beans-15-5-oz",
+                                                          "name":  "Dakota S Pride Cannellini Beans 15.5 OZ",
                                                           "price":  "$0.85",
                                                           "size":  "15.5 oz",
-                                                          "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                       }
                                          },
                   "canned-yams":  {
@@ -5563,11 +5556,11 @@
                                                              "verified":  "2026-08-23"
                                                          },
                                         "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/25530497-chef-s-cupboard-chicken-broth-48-oz",
-                                                     "name":  "Chef S Cupboard Chicken Broth 48 OZ",
-                                                     "price":  "$1.79",
-                                                     "size":  "48 oz",
-                                                     "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                     "url":  "https://www.aldi.us/store/aldi/products/18647589-fit-active-reduced-sodium-chicken-broth-32-oz",
+                                                     "name":  "Fit Active Reduced Sodium Chicken Broth 32 OZ",
+                                                     "price":  "$1.25",
+                                                     "size":  "32 oz",
+                                                     "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                  }
                                     },
                   "chicken-livers":  {
@@ -5722,13 +5715,6 @@
                                                          "price":  1.99,
                                                          "size":  "lb",
                                                          "name":  "Bone-In Chicken Thighs"
-                                                     },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Chicken-Thighs-Family-Pack-4-75-6-0-lb-Tray/51259108",
-                                                         "name":  "Tyson All Natural, Fresh Chicken Thighs, Family Pack, 4.75 - 6.0 lb Tray",
-                                                         "price":  "$8.62",
-                                                         "size":  "4.87 lb",
-                                                         "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                      },
                                          "Aldi":  {
                                                       "url":  "https://www.aldi.us/store/aldi/products/20363180-fresh-chicken-thighs-family-pack-per-lb",
@@ -14048,11 +14034,11 @@
                                                     "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                 },
                                     "Baker\u0027s":  {
-                                                         "url":  "https://www.bakersplus.com/p/valentina-extra-hot-mexican-hot-sauce/0009733900004",
-                                                         "name":  "Valentina Extra Hot Mexican Hot Sauce",
-                                                         "price":  3.69,
-                                                         "size":  "34 fl oz",
-                                                         "verified":  "2026-08-23"
+                                                         "url":  "https://www.bakersplus.com/p/valentina-mexican-hot-sauce/0009733900003",
+                                                         "name":  "Valentina Mexican Hot Sauce",
+                                                         "price":  "$3.69",
+                                                         "size":  "34 oz",
+                                                         "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                      }
                                 },
                   "hummus":  {
@@ -14086,20 +14072,20 @@
                                                  "size":  "10 oz",
                                                  "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                              },
-                                 "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/19546421-park-street-deli-garlic-topped-hummus-10-oz",
-                                              "name":  "Park Street Deli Garlic Topped Hummus 10 OZ",
-                                              "price":  "$2.59",
-                                              "size":  "10 oz",
-                                              "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                          },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/deli/party_trays_dips/fresh_finest_by_our_family_roasted_red_pepper_hummus_10_oz/p/1564405684713576563",
                                                      "name":  "Fresh \u0026 Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
                                                      "price":  "$4.49",
                                                      "size":  "10 oz",
                                                      "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/21991059-park-street-deli-classic-hummus-10-oz",
+                                              "name":  "Park Street Deli Classic Hummus 10 OZ",
+                                              "price":  "$2.59",
+                                              "size":  "10 oz",
+                                              "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                          }
                              },
                   "ice-cream":  {
                                     "commodity":  "ice-cream",
@@ -14429,11 +14415,11 @@
                                                                "verified":  "2026-08-23"
                                                            },
                                           "Aldi":  {
-                                                       "url":  "https://www.aldi.us/store/aldi/products/19374778-italian-mild-sausage-19-oz",
-                                                       "name":  "Italian Mild Sausage 19 OZ",
+                                                       "url":  "https://www.aldi.us/store/aldi/products/19400441-italian-hot-sausage-19-oz",
+                                                       "name":  "Italian Hot Sausage 19 OZ",
                                                        "price":  "$2.95",
                                                        "size":  "19 oz",
-                                                       "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
+                                                       "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                    }
                                       },
                   "italian-seasoning":  {
@@ -15741,14 +15727,6 @@
                               },
                   "maple-syrup":  {
                                       "commodity":  "maple-syrup",
-                                      "Aldi":  {
-                                                   "url":  "https://www.aldi.us/store/aldi/products/21306158-aunt-maple-s-lite-pancake-syrup-24-fl-oz",
-                                                   "name":  "Aunt Maple S Lite Pancake Syrup 24 FL OZ",
-                                                   "price":  "$2.35",
-                                                   "size":  "24 fl oz",
-                                                   "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                                   "board_pu":  0.0979
-                                               },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/smart-way-original-pancake-syrup/0001111014892",
                                                            "name":  "Smart Way Original Pancake Syrup",
@@ -15784,7 +15762,14 @@
                                                       "price":  "$3.12",
                                                       "size":  "36 fl oz",
                                                       "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/21181322-aunt-maple-s-original-syrup-24-fl-oz",
+                                                   "name":  "Aunt Maple S Original Syrup 24 FL OZ",
+                                                   "price":  "$2.35",
+                                                   "size":  "24 fl oz",
+                                                   "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                               }
                                   },
                   "marinara-sauce":  {
                                          "commodity":  "Marinara Sauce",
@@ -16158,11 +16143,11 @@
                                                                      "board_pu":  0.2146
                                                                  },
                                              "Walmart":  {
-                                                             "url":  "https://www.walmart.com/ip/Sweet-Mini-Peppers-Each/5657933143",
+                                                             "url":  "https://www.walmart.com/ip/5657933143",
                                                              "name":  "Fresh Mini Sweet Peppers, 16 oz",
                                                              "price":  "$3.28",
                                                              "size":  "16 oz",
-                                                             "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                          }
                                          },
                   "miracle-whip":  {
@@ -16974,11 +16959,11 @@
                                                                "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                            },
                                        "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/kroger-orange-juice-with-calcium-and-vitamin-c-d/0001111048815",
-                                                            "name":  "Kroger Orange Juice with Calcium and Vitamin C \u0026 D",
-                                                            "price":  8.79,
+                                                            "url":  "https://www.bakersplus.com/p/kroger-100-orange-juice-pulp-free/0001111048482",
+                                                            "name":  "Kroger 100% Orange Juice Pulp Free",
+                                                            "price":  "$8.79",
                                                             "size":  "1 gal",
-                                                            "verified":  "2026-08-23"
+                                                            "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                         }
                                    },
                   "oranges":  {
@@ -17304,20 +17289,20 @@
                                                             "size":  "6 ct",
                                                             "verified":  "2026-08-23"
                                                         },
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/122352351-crofton-12pk-reusable-paper-towels-botanical-1-each",
-                                                    "name":  "Crofton 12pk Reusable Paper Towels Botanical 1 Each",
-                                                    "price":  "$6.99",
-                                                    "size":  "12 ct",
-                                                    "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39625112-bnty-essnt-sas-wht-4dbr",
                                                        "name":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
                                                        "price":  "$6.98",
                                                        "size":  "4 ct",
                                                        "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/122347879-crofton-12pk-resuable-paper-towels-floral-1-each",
+                                                    "name":  "Crofton 12pk Resuable Paper Towels Floral 1 Each",
+                                                    "price":  "$6.99",
+                                                    "size":  "12 ct",
+                                                    "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                }
                                    },
                   "paprika":  {
                                   "commodity":  "Paprika",
@@ -17578,13 +17563,6 @@
                                                     "size":  "16 oz",
                                                     "verified":  "2026-08-19 DERIVED from the price row (same record the board priced)"
                                                 },
-                                "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/kroger-100-whole-grain-spaghetti/0001111087270",
-                                                     "name":  "Kroger 100% Whole Grain Spaghetti",
-                                                     "price":  1.33,
-                                                     "size":  "16 oz",
-                                                     "verified":  "2026-08-23"
-                                                 },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Penne-32-oz/5144705712",
                                                 "name":  "Great Value Penne, 32 oz (Shelf Stable)",
@@ -17605,7 +17583,14 @@
                                                "price":  "$1.19",
                                                "size":  "16 oz",
                                                "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
-                                           }
+                                           },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/kroger-100-whole-grain-penne-rigate/0001111087268",
+                                                     "name":  "Kroger 100% Whole Grain Penne Rigate",
+                                                     "price":  "$1.33",
+                                                     "size":  "16 oz",
+                                                     "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                 }
                             },
                   "pasta-sauce":  {
                                       "commodity":  "pasta-sauce",
@@ -18581,7 +18566,14 @@
                                                             "price":  "$9.98",
                                                             "size":  "52 ct",
                                                             "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                        }
+                                                        },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kroger-fruity-ice-pops/0001111013809",
+                                                         "name":  "Kroger Fruity Ice Pops",
+                                                         "price":  "$2.99",
+                                                         "size":  "20 ct",
+                                                         "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                     }
                                 },
                   "pork-chops":  {
                                      "commodity":  "Pork Chops",
@@ -18833,14 +18825,6 @@
                              },
                   "potato-chips":  {
                                        "commodity":  "potato-chips",
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/kroger-original-wavy-potato-chips-party-size/0001111008893",
-                                                            "name":  "Kroger Original Wavy Potato Chips Party Size",
-                                                            "price":  2.79,
-                                                            "size":  "13 oz",
-                                                            "verified":  "2026-08-23",
-                                                            "board_pu":  0.2146
-                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16758378-lay-s-classic-potato-chips-8-oz",
                                                        "name":  "Lay\u0027s Potato Chips, Classic",
@@ -18882,7 +18866,14 @@
                                                            "price":  "$1.99",
                                                            "size":  "7.75 oz",
                                                            "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-classic-potato-chips-family-size/0001111008890",
+                                                            "name":  "Kroger Classic Potato Chips Family Size",
+                                                            "price":  "$2.79",
+                                                            "size":  "13 oz",
+                                                            "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                        }
                                    },
                   "potato-gnocchi":  {
                                          "commodity":  "Potato Gnocchi",
@@ -20628,11 +20619,11 @@
                                                           "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                       },
                                           "Aldi":  {
-                                                       "url":  "https://www.aldi.us/store/aldi/products/3063807-russet-potato-10-lbs",
-                                                       "name":  "Russet Potato 10 Lbs",
+                                                       "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
+                                                       "name":  "Russet Potato Bag 10 Lbs",
                                                        "price":  "$4.09",
                                                        "size":  "10 lb",
-                                                       "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                       "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                    }
                                       },
                   "rutabagas":  {
@@ -21479,7 +21470,14 @@
                                               "price":  "$16.49",
                                               "size":  "32 oz",
                                               "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                          }
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/shrimp-raw-white-p-d-large-31-40-count-farm-raised-previously-frozen-/0026950600000",
+                                                      "name":  "Shrimp Raw White P\u0026D Large 31/40 Count (Farm Raised Previously Frozen)",
+                                                      "price":  "$8.99",
+                                                      "size":  "lb",
+                                                      "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                  }
                              },
                   "sirloin-steak":  {
                                         "commodity":  "sirloin-steak",
@@ -21963,13 +21961,6 @@
                                                           "size":  "33.8 fl oz",
                                                           "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                       },
-                                          "Baker\u0027s":  {
-                                                               "url":  "https://www.bakersplus.com/p/kroger-zero-sugar-lemon-lime-sparkling-water/0001111014840",
-                                                               "name":  "Kroger Zero Sugar Lemon Lime Sparkling Water",
-                                                               "price":  1,
-                                                               "size":  "33.8 fl oz",
-                                                               "verified":  "2026-08-23"
-                                                           },
                                           "Aldi":  {
                                                        "url":  "https://www.aldi.us/store/aldi/products/57199254-puraqua-white-grape-sparkling-flavored-water-33-8-fl-oz",
                                                        "name":  "Puraqua White Grape Sparkling Flavored Water 33.8 FL OZ",
@@ -21983,7 +21974,14 @@
                                                               "price":  "$1.39",
                                                               "size":  "17 fl oz",
                                                               "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-zero-sugar-peach-sparkling-water/0001111014834",
+                                                               "name":  "Kroger Zero Sugar Peach Sparkling Water",
+                                                               "price":  "$1.00",
+                                                               "size":  "33.8 fl oz",
+                                                               "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                           }
                                       },
                   "spinach":  {
                                   "commodity":  "spinach",
@@ -22063,11 +22061,11 @@
                                                           "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                       },
                                   "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/91761670-power-force-non-scratch-scrub-sponge-3-ct",
-                                               "name":  "Power Force Non Scratch Scrub Sponge 3 CT",
+                                               "url":  "https://www.aldi.us/store/aldi/products/91761991-power-force-heavy-duty-scrub-sponge-3-ct",
+                                               "name":  "Power Force Heavy Duty Scrub Sponge 3 CT",
                                                "price":  "$1.59",
                                                "size":  "3 ct",
-                                               "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
+                                               "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                            }
                               },
                   "sports-drinks":  {
@@ -22108,7 +22106,14 @@
                                                                 "price":  "$14.38",
                                                                 "size":  "480 fl oz",
                                                                 "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                            },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/gatorade-glacier-freeze-sports-drink-multipack-bottles/0005200020808",
+                                                             "name":  "Gatorade Glacier Freeze Sports Drink Multipack Bottles",
+                                                             "price":  "$7.99",
+                                                             "size":  "8 pk 20 fl oz",
+                                                             "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "spring-mix":  {
                                      "commodity":  "Spring Mix Salad Greens",
@@ -23356,13 +23361,6 @@
                                                            "name":  "Great Value Frosted Cherry Toaster Pastries",
                                                            "board_pu":  0.1883
                                                        },
-                                           "Fareway":  {
-                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16951406-toast-em-frosted-smores-pastry-tart-6-ct",
-                                                           "name":  "Toast\u0027em Pop-ups Toaster Pastries, S\u0027mores",
-                                                           "price":  "$1.50",
-                                                           "size":  "6 ct",
-                                                           "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
-                                                       },
                                            "Family Fare":  {
                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/cereal_bars_pastries/our_family_toaster_pastries_brown_sugar_cinnamon_frosted_12_ea/p/1564405684715497305",
                                                                "name":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
@@ -23370,12 +23368,19 @@
                                                                "size":  "12 ea",
                                                                "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                                            },
+                                           "Fareway":  {
+                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz",
+                                                           "name":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
+                                                           "price":  "$1.50",
+                                                           "size":  "6 ct",
+                                                           "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                       },
                                            "Baker\u0027s":  {
-                                                                "url":  "https://www.bakersplus.com/p/pop-tarts-toaster-pastries-variety-pack/0003800030305",
-                                                                "name":  "Pop-Tarts Toaster Pastries Variety Pack",
-                                                                "price":  4.29,
-                                                                "size":  "12 ct",
-                                                                "verified":  "2026-08-23"
+                                                                "url":  "https://www.bakersplus.com/p/pop-tarts-frosted-brown-sugar-cinnamon-toaster-pastries/0003800022114",
+                                                                "name":  "Pop-Tarts Frosted Brown Sugar Cinnamon Toaster Pastries",
+                                                                "price":  "$9.99",
+                                                                "size":  "32 ct",
+                                                                "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                             }
                                        },
                   "toilet-bowl-cleaner":  {
@@ -23724,11 +23729,11 @@
                                                        "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                    },
                                        "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomato_sauce_15_oz/p/6786997",
-                                                           "name":  "Our Family Tomato Sauce 15 Oz",
-                                                           "price":  "$1.09",
-                                                           "size":  "15 oz",
-                                                           "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomato_sauce_29_oz/p/6786996",
+                                                           "name":  "Our Family Tomato Sauce 29 Oz",
+                                                           "price":  "$1.99",
+                                                           "size":  "29 oz",
+                                                           "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                        }
                                    },
                   "tomato-soup":  {
@@ -23925,20 +23930,20 @@
                                                                  "size":  "96 oz",
                                                                  "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
                                                              },
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/kroger-white-corn-rounds-tortilla-chips/0001111010585",
-                                                              "name":  "Kroger White Corn Rounds Tortilla Chips",
-                                                              "price":  2.69,
-                                                              "size":  "18 oz",
-                                                              "verified":  "2026-08-23"
-                                                          },
                                          "Aldi":  {
                                                       "url":  "https://www.aldi.us/store/aldi/products/29478168-clancy-s-bite-size-white-round-tortilla-chips-13-oz",
                                                       "name":  "Clancy S Bite Size White Round Tortilla Chips 13 OZ",
                                                       "price":  "$2.15",
                                                       "size":  "13 oz",
                                                       "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-white-corn-restaurant-style-tortilla-chips-family-size/0001111008657",
+                                                              "name":  "Kroger White Corn Restaurant Style Tortilla Chips Family Size",
+                                                              "price":  "$2.69",
+                                                              "size":  "18 oz",
+                                                              "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
+                                                          }
                                      },
                   "tortillas":  {
                                     "commodity":  "tortillas",
@@ -24433,11 +24438,11 @@
                                                         "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
                                                     },
                                         "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/7874222699",
-                                                                "name":  "Member\u0027s Mark Canola Oil, 192 fl. oz.",
+                                                                "url":  "https://www.samsclub.com/ip/13588950739",
+                                                                "name":  "Member\u0027s Mark Vegetable Oil, 192 oz.",
                                                                 "price":  "$13.88",
                                                                 "size":  "192 fl oz",
-                                                                "verified":  "2026-08-22 DERIVED from the price row (same record the board priced)"
+                                                                "verified":  "2026-08-26 DERIVED from the price row (same record the board priced)"
                                                             }
                                     },
                   "vegetable-soup":  {
