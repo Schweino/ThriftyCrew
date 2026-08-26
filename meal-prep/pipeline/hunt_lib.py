@@ -863,6 +863,33 @@ MAPPED = {"type": "object", "properties": {
                 "source": {"type": "string", "description":
                     "where the label came from: 'fdc:<fdcId>' when chosen off the shelf, else the URL"}},
                 "required": ["item", "serving_grams", "calories", "protein_g", "carbs_g", "fat_g"]}},
+        # THE OTHER HALF OF food_db_rows, AND THE POSTCONDITION'S ONLY OTHER LEGAL ANSWER
+        # (2026-08-26). The prompt has told the mapper since 2026-08-25 to "return NO row for that
+        # food and say why in `detail`" when two label reads produce nothing. Measured over run
+        # hunt-2026-08-26-ten, it did not: the table named between 1 and 9 rowless foods on all 22
+        # recipes, TWELVE returned no row at all, not one recipe returned a row for every food that
+        # needed one, and no recipe said why. A rule a model must remember is a rule it sometimes
+        # forgets - the same finding that moved the unbid hold out of the map prompt and into the
+        # daemon - so the answer moved from prose into a field, where validate_map_food_rows can
+        # check that it was given.
+        #
+        # AND IT IS A FIELD RATHER THAN A SENTENCE FOR ONE MEASURED REASON. The founding payload
+        # carried `detail` = "New DB rows returned: Yellow Onion, Apple, Chicken Thighs, Fresh
+        # Rosemary" against an EMPTY food_db_rows. The prose is what lied, so the prose cannot be
+        # what clears the silence.
+        "food_db_absent": {"type": "array", "description":
+            "One entry per food the table marks as having NO food-macros-db row that you could NOT "
+            "acquire a label for: {item, why}. `item` is the food's name as you would have written "
+            "the row's `item`. This does NOT unblock the recipe - the row is still missing and the "
+            "skeleton still refuses - it makes the block carry YOUR sentence instead of nothing. A "
+            "food that genuinely carries no macros is not an entry here: it is a ROW OF ZEROES in "
+            "food_db_rows, which is the label-accurate answer for salt, and it costs the recipe "
+            "nothing.",
+            "items": {"type": "object", "properties": {
+                "item": {"type": "string"},
+                "why": {"type": "string", "description":
+                        "what you looked at and what was missing, in a sentence a person can act on"}},
+                "required": ["item", "why"]}},
         "rejected": {"type": "array", "items": {"type": "string"}},
         "ruled_substitutions": {"type": "array", "items": {"type": "string"}},
         # NO `type` ON THESE THREE, AND IT IS DELIBERATE (phase-6a gate drill, 2026-08-24).
@@ -996,6 +1023,73 @@ def validate_registrar_batch(payload, expected=()):
     stray = [b for b in sorted(seen) if expected and b not in expected]
     if stray:
         problems.append("ruling(s) for id(s) this dossier did not ask about: %s" % ", ".join(stray))
+    return problems
+
+
+def validate_map_food_rows(payload, debts):
+    """THE MAP LANE'S "SILENCE IS NOT CONSENT" POSTCONDITION - the registrar's `expected=` contract,
+    arriving at the stage that needed it most.
+
+    `debts` is {slug: [names]}: the foods the pre-resolve table named as having NO food-macros-db row,
+    minus the ones this payload's own rulings excuse (not-purchased, rejected) and the ones the
+    mapper's ruling maps onto a name the DB already carries. The daemon computes it from THIS payload,
+    because a debt depends on how the lines were ruled and nothing knows that until the answer is in.
+
+    WHY IT IS A DISPATCH VALIDATOR AND NOT A FINDING. There already was a finding - food_db_shortfall,
+    built the same day - and a finding does not stop a recipe reaching a write lane that will
+    certainly refuse it. What a validator buys that a finding cannot is the RE-ASK: the adapter quotes
+    every named violation back, so the mapper is told which foods it silently dropped while its
+    session still has the table, the shelf and the source page in hand. That is the one moment the
+    row can still be acquired for the price of one re-ask instead of a stuck recipe.
+
+    MEASURED, AND THIS IS WHY IT IS MECHANICAL RATHER THAN A BETTER PROMPT. The prompt has ordered
+    this since 2026-08-25, in as many words. On run hunt-2026-08-26-ten the mapper returned ZERO rows
+    for twelve of twenty-two recipes and gave no reason for any of them, and the run published
+    nothing; on the 3-recipe proving run of 2026-08-26, salisbury-steak-burgers died at the write lane
+    over 'Kaiser Rolls' and easy-beef-enchiladas over four more.
+
+    TWO LEGAL ANSWERS PER FOOD AND NO THIRD. A row in `food_db_rows`, or an entry in `food_db_absent`
+    saying what was looked at and what was missing. A mention in `detail` is NOT one of them: the
+    founding payload's `detail` claimed rows it had not returned.
+
+    AN UNKNOWN SLUG IS NOT THIS VALIDATOR'S PROBLEM. The map lane already handles a batch that says
+    nothing about a slug (it re-queues, then sticks), and a debt this cannot join is not a violation
+    it can name usefully.
+    """
+    problems = []
+    if not isinstance(payload, dict):
+        return problems
+    for r in (payload.get("results") or []):
+        if not isinstance(r, dict):
+            continue
+        slug = str(r.get("slug") or "").strip()
+        need = [n for n in ((debts or {}).get(slug) or []) if n]
+        if not need:
+            continue
+        # A REJECTED RECIPE OWES NOTHING. It is not being built, so no row it lacks can block it, and
+        # demanding labels for a dish the mapper just threw out is a re-ask nobody can act on.
+        if is_rejected(r.get("status")):
+            continue
+        answered = set()
+        for row in (r.get("food_db_rows") or []):
+            if isinstance(row, dict) and str(row.get("item") or "").strip():
+                answered.add(str(row["item"]).strip().lower())
+        for a in (r.get("food_db_absent") or []):
+            if isinstance(a, dict) and str(a.get("item") or "").strip():
+                answered.add(str(a["item"]).strip().lower())
+        missing = [n for n in need if str(n).strip().lower() not in answered]
+        if missing:
+            problems.append(
+                "%s: the pre-resolve table names %d food(s) with no food-macros-db row and this "
+                "payload answers for neither a row nor an absence on %d of them: %s. Every one of "
+                "those needs EITHER an entry in `food_db_rows` (a label you read, transcribed as "
+                "printed - a food that truly carries no macros is a row of ZEROES, not an omission) "
+                "OR an entry in `food_db_absent` as {item, why} naming what you looked at and what "
+                "was missing. Silence is not an answer: the write lane refuses this recipe for a "
+                "missing row, and a row nobody said was missing is a block nobody can act on."
+                % (slug, len(need), len(missing),
+                   ", ".join(repr(m) for m in missing[:8])
+                   + (" and %d more" % (len(missing) - 8) if len(missing) > 8 else "")))
     return problems
 
 

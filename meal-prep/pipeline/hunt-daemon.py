@@ -2440,27 +2440,16 @@ class Daemon(object):
             self._food_db = None
         return written, findings, notes
 
-    def food_db_shortfall(self, slug, res, tables, written, findings):
-        r"""The finding for rows the pre-resolve table ASKED FOR and the mapper never returned, or
-        None when every food that needed a row got one ruled on.
+    def food_db_debt(self, slug, res, tables):
+        r"""The NAMES this recipe still owes a food-macros-db row, from the table plus the mapper's
+        own rulings. One computation, asked two different questions by the two readers below.
 
-        WHY THIS EXISTS, MEASURED ON RUN hunt-2026-08-26-ten. The table named between 1 and 9 foods
-        with no food-DB row on every one of the run's 22 recipes. The mapper returned ZERO rows for
-        TWELVE of them - including recipes whose own `detail` said in words that rows were returned
-        ("New DB rows returned: Yellow Onion, Apple, Chicken Thighs, Fresh Rosemary" against an empty
-        payload) - and NOT ONE recipe in the run returned a row for every food that needed one. The
-        recipes then went STUCK a whole lane later at the write gate, over a missing row nobody had
-        said was missing. `food_db_rows` is optional in the MAPPED schema and write_food_db_rows
-        returns silently on an empty list, so between the table asking and the skeleton refusing there
-        was no place the shortfall could be seen. This is that place.
-
-        NOT A GATE, ON PURPOSE. A missing row is already refused downstream by the skeleton builder,
-        and refusing here as well would turn one honest block into two. What this buys is that the
-        block is NAMED where it is caused, in the lane that could still act on it, instead of being
-        discovered by a stage that only knows the row is absent.
-
-        A ROW THAT WAS RETURNED AND REFUSED IS NOT A SHORTFALL - it was ruled on, and its own finding
-        already says why. Only silence counts.
+        THE DEBT IS A FACT ABOUT THE DB; A SHORTFALL IS A FINDING ABOUT THE MAPPER. Keeping the two
+        in one function was itself a defect: `food_db_shortfall` excuses a row that came back and was
+        REFUSED - it was ruled on, and its own finding already says why - which is the right way to
+        judge the MAPPER and the wrong way to judge the RECIPE. A refused row is exactly as absent
+        from the DB as a silent one, and the skeleton builder refuses on absence. So the debt is
+        computed once, here, and the two readers subtract different things from it.
         """
         table = (tables or {}).get(slug) or {}
         # THE TABLE ASKS IN THE RECIPE'S WORDS AND THE DB ANSWERS IN THE ESTATE'S. A residual row's
@@ -2500,15 +2489,115 @@ class Daemon(object):
                 continue
             if name not in need:
                 need.append(name)
+        return need
+
+    @staticmethod
+    def food_db_declared_absent(res, names):
+        """The subset of `names` the mapper DECLARED it could not acquire a row for, in
+        `food_db_absent`.
+
+        A declaration is an ANSWER, not a pass: the recipe still blocks on the missing row, because
+        `food_db_outstanding` subtracts only what landed. What the declaration buys is that the block
+        carries the mapper's own sentence instead of carrying nothing.
+        """
+        out = set()
+        low = set(str(n).strip().lower() for n in (names or []))
+        for a in ((res or {}).get("food_db_absent") or []):
+            item = (str(a.get("item") or "") if isinstance(a, dict) else str(a or "")).strip().lower()
+            if item in low:
+                out.add(item)
+        return out
+
+    @staticmethod
+    def food_db_absent_reason(res, name):
+        """The mapper's stated reason for a declared-absent row, or "" when it declared none."""
+        want = str(name or "").strip().lower()
+        for a in ((res or {}).get("food_db_absent") or []):
+            if isinstance(a, dict) and str(a.get("item") or "").strip().lower() == want:
+                return str(a.get("why") or "").strip()
+        return ""
+
+    def map_row_debts(self, payload, tables):
+        """{slug: [names]} for a whole map payload - the input validate_map_food_rows needs.
+
+        THE DEBT IS READ OFF THE ANSWER, not off the dispatch. Which foods still need a row depends on
+        how the lines were RULED - a term the mapper ruled `not-purchased` needs no label, and a term
+        it ruled onto a canon_item the DB already carries needs no new row - and nothing knows either
+        until the payload is in hand. That is the whole reason this is computed inside the validator's
+        closure rather than before the dispatch.
+        """
+        out = {}
+        for r in ((payload or {}).get("results") or []):
+            if not isinstance(r, dict):
+                continue
+            slug = str(r.get("slug") or "").strip()
+            if not slug:
+                continue
+            try:
+                out[slug] = self.food_db_debt(slug, r, tables)
+            except Exception:                                     # noqa: BLE001
+                # A DEBT NOBODY COULD COMPUTE IS NOT A VIOLATION. The food DB may be mid-write by
+                # another worker; refusing the batch over that would turn a read race into a re-ask.
+                out[slug] = []
+        return out
+
+    def food_db_outstanding(self, slug, res, tables, written):
+        """The names that STILL HAVE NO ROW IN THE DB after this map dispatch - the fact the write
+        lane will refuse on, computed in the lane that caused it.
+
+        THE ONLY SUBTRACTION IS WHAT ACTUALLY LANDED. Not what was ruled on, not what was explained,
+        not what was refused for a good reason: `written` is the list write_food_db_rows returned,
+        and a name outside it has no row however well its absence was argued. That is the whole
+        difference between this and `food_db_shortfall`, and it is why they are two functions.
+        """
+        need = self.food_db_debt(slug, res, tables)
+        if not need:
+            return []
+        have = set(str(n).strip().lower() for n in (written or []))
+        return [n for n in need if n.strip().lower() not in have]
+
+    def food_db_shortfall(self, slug, res, tables, written, findings):
+        r"""The finding for rows the pre-resolve table ASKED FOR and the mapper never returned, or
+        None when every food that needed a row got one ruled on.
+
+        WHY THIS EXISTS, MEASURED ON RUN hunt-2026-08-26-ten. The table named between 1 and 9 foods
+        with no food-DB row on every one of the run's 22 recipes. The mapper returned ZERO rows for
+        TWELVE of them - including recipes whose own `detail` said in words that rows were returned
+        ("New DB rows returned: Yellow Onion, Apple, Chicken Thighs, Fresh Rosemary" against an empty
+        payload) - and NOT ONE recipe in the run returned a row for every food that needed one. The
+        recipes then went STUCK a whole lane later at the write gate, over a missing row nobody had
+        said was missing. `food_db_rows` is optional in the MAPPED schema and write_food_db_rows
+        returns silently on an empty list, so between the table asking and the skeleton refusing there
+        was no place the shortfall could be seen. This is that place.
+
+        IT JUDGES THE MAPPER, NOT THE RECIPE, and that split is the 2026-08-26 postcondition work.
+        The RECIPE is judged by `food_db_outstanding` above, which BLOCKS. This stays a finding,
+        because what it reports is a CONTRACT the mapper did not keep - and a contract violation and
+        a missing row are two different facts that happened to share one detector.
+
+        A ROW THAT WAS RETURNED AND REFUSED IS NOT A SHORTFALL - it was ruled on, and its own finding
+        already says why. Only silence counts, and a row the mapper explicitly declared it could not
+        acquire in `food_db_absent` is not silence either.
+        """
+        need = self.food_db_debt(slug, res, tables)
         if not need:
             return None
-        # Every name the mapper ACCOUNTED FOR: written, or refused by name in a finding - a refused
-        # row was ruled on and its own finding already says why.
+        # Every name the mapper ACCOUNTED FOR: written, refused BY NAME in a finding, or declared
+        # absent in `food_db_absent`.
+        #
+        # AND `detail` IS NOT ON THAT LIST, WHICH THIS FUNCTION'S OWN FIXTURE INSISTED ON. The first
+        # cut of the postcondition let a name appearing anywhere in the mapper's prose count as an
+        # answer, and _shortfall_reaches_the_run_findings went red on the spot - because the founding
+        # payload of run hunt-2026-08-26-ten carried exactly that: `detail` reading "New DB rows
+        # returned: Spaghetti Squash, Fresh Basil" against an EMPTY food_db_rows. The prose is the
+        # thing that lied. An answer has to be somewhere a claim can be CHECKED, which is why the
+        # declaration road is a structured array and not a sentence.
         seen = set(str(n).strip().lower() for n in (written or []))
         for f in (findings or []):
             for n in need:
                 if ("'%s'" % n) in f or ('"%s"' % n) in f:
                     seen.add(n.strip().lower())
+        seen |= self.food_db_declared_absent(res, need)
         missing = [n for n in need if n.strip().lower() not in seen]
         if not missing:
             return None
@@ -2604,6 +2693,7 @@ class Daemon(object):
         shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
         if shortfall:
             db_findings = db_findings + [shortfall]
+        outstanding = self.food_db_outstanding(slug, res, tables, db_written)
         for f in db_findings:
             self.findings.append(f)
         payload = {
@@ -2671,6 +2761,38 @@ class Daemon(object):
             self.log("  map: %s learned %d event(s) (%d projected, %d held, %d surprise)"
                      % (slug, learned.get("events_written", 0), learned.get("projected", 0),
                         learned.get("held", 0), learned.get("surprises", 0)))
+            # ---- THE ROW DEBT BLOCKS, HERE, AND ONLY AFTER EVERYTHING ELSE SUCCEEDED --------------
+            #
+            # WHY IT BLOCKS AT ALL, reversing this detector's own founding note. That note argued a
+            # missing row "is already refused downstream by the skeleton builder, and refusing here as
+            # well would turn one honest block into two". It does not: it is ONE recipe and only one
+            # of the two gates can ever fire on it. What the reversal actually changes is WHERE the
+            # recipe stops - in the lane that caused it, with the map dossier still on disk, before
+            # the price lane enqueues terms and the spec lane builds over macros that are computed
+            # WITHOUT the missing food (build-intake-skeleton.ps1's own words). Measured 2026-08-26:
+            # salisbury-steak-burgers travelled a whole lane past its cause to die at the write gate
+            # over 'Kaiser Rolls'.
+            #
+            # AND IT BLOCKS ON WHAT LANDED, NOT ON WHO IS AT FAULT. A row the mapper never mentioned,
+            # a row it declared it could not find, and a row that came back and FAILED the Atwater
+            # check are three different findings about the mapper and one identical fact about the
+            # recipe: there is no row, so the skeleton cannot be completed. The shortfall finding
+            # above judges the mapper; this judges the recipe.
+            #
+            # AFTER THE LEARN, ON PURPOSE. The identity work is good work - it assembled, so the
+            # estate wants it - and a STUCK is resumable: add the row and the recipe walks on from
+            # `mapped`. Refusing before the learn would make a missing nutrition label cost the run
+            # every ruling in the recipe.
+            if outstanding:
+                why = []
+                for n in outstanding:
+                    said = self.food_db_absent_reason(res, n)
+                    why.append("%r (%s)" % (n, said or "the mapper said nothing about it"))
+                return False, ("%d food(s) the recipe needs still have NO food-macros-db row, so the "
+                               "intake skeleton cannot be completed and the macros would be computed "
+                               "WITHOUT them: %s. The map dossier IS on disk and the rulings were "
+                               "learned - add the row(s) and this recipe resumes from `mapped`."
+                               % (len(outstanding), "; ".join(why)))
             return True, ""
         found = [ln.strip() for ln in text.replace("\r", "").split("\n")
                  if ln.strip().startswith("FINDING")]
@@ -2781,10 +2903,27 @@ class Daemon(object):
                     slugs = [b["slug"] for b in batch]
                     self.log("  map: dispatching %d of the batch after the pick-up check (%s)"
                              % (len(slugs), ", ".join(slugs)))
+                # THE FOOD-ROW POSTCONDITION IS PINNED HERE, AT THE CALL SITE (2026-08-26), because
+                # a predicate nothing calls is the F1 shape this file already has scars from -
+                # validate_map sits one module over, fully built, wired into nothing.
+                #
+                # WHAT IT CHANGES: a payload that answers for neither a row nor an absence on a food
+                # the table asked about is RE-ASKED, once, with those foods named. That is the only
+                # moment in the run when the row can still be acquired cheaply - the session still
+                # holds the table, the FDC shelf and the source page. A finding could not do it; the
+                # shortfall detector built the same morning proved that by watching
+                # salisbury-steak-burgers die at the write lane over 'Kaiser Rolls' anyway.
+                #
+                # THE BLAST RADIUS IS THE BATCH AND THAT IS ACCEPTED, on the registrar's own
+                # precedent: a batch is refused ENTIRE and re-asked, never applied in part. If the
+                # re-ask still will not answer, with_retry below returns None and the batch is
+                # requeued INDIVIDUALLY, so one unanswerable slug cannot hold the other two.
                 r = await self.with_retry(
                     lambda: self.dispatch("recipe-ingredient-mapper", self.map_prompt(slugs, tables),
                                           "map", "map:%dx" % len(slugs), slugs,
-                                          schema=hunt_lib.MAPPED, stage="mapper"),
+                                          schema=hunt_lib.MAPPED, stage="mapper",
+                                          validator=lambda pay: hunt_lib.validate_map_food_rows(
+                                              pay, self.map_row_debts(pay, tables))),
                     slugs, "map")
                 if r is None:
                     if self.breaker.open:
@@ -3427,12 +3566,28 @@ class Daemon(object):
             "and could transcribe. A WebSearch is NOT a read: it returns snippets, it is how you FIND\n"
             "the label, and it never spends the allowance. Two searches that found nothing leave both\n"
             "your reads unspent, so go and read. If two LABEL READS have not produced a printed label\n"
-            "you can transcribe, return NO row for that food and say why in `detail` - a missing row\n"
-            "is a finding a person can act on, and a fifth fetch is a turn that re-reads this whole\n"
-            "session. Measured 2026-08-25, both directions in one drill: 9 web calls on 2 foods on one\n"
-            "batch, and on the other the mapper spent 2 SEARCHES, read no label at all, returned no\n"
-            "row and gave no reason - and the write lane then refused the recipe. A row you did not\n"
-            "even look for is not a cap working.\n\n"
+            "you can transcribe, return NO row for that food and say why in `food_db_absent` - a\n"
+            "missing row is a finding a person can act on, and a fifth fetch is a turn that re-reads\n"
+            "this whole session. Measured 2026-08-25, both directions in one drill: 9 web calls on 2\n"
+            "foods on one batch, and on the other the mapper spent 2 SEARCHES, read no label at all,\n"
+            "returned no row and gave no reason - and the write lane then refused the recipe. A row\n"
+            "you did not even look for is not a cap working.\n\n"
+            "EVERY FOOD THE TABLE MARKS AS HAVING NO ROW COMES BACK ONE OF EXACTLY TWO WAYS, and this\n"
+            "is now CHECKED before your answer is accepted - a payload that answers for neither is\n"
+            "re-asked with the foods named:\n"
+            "  a row in `food_db_rows`      - a label you actually read, transcribed as printed; or\n"
+            "  an entry in `food_db_absent` - {item, why}, naming what you looked at and what was\n"
+            "                                 missing. This does NOT unblock the recipe; the row is\n"
+            "                                 still gone and the skeleton still refuses. It makes the\n"
+            "                                 block carry your sentence instead of nothing.\n"
+            "A FOOD THAT CARRIES NO MACROS IS NOT AN ABSENCE - IT IS A ROW OF ZEROES. Salt, black\n"
+            "pepper and plain water have printed labels reading 0 calories, 0 protein, 0 carbs, 0 fat,\n"
+            "and that row is label-accurate, passes the Atwater check for free and costs the recipe\n"
+            "nothing. Declaring salt absent stops a recipe over a number the label states.\n"
+            "Measured 2026-08-26 on why this is a field and not a sentence: a mapper returned an EMPTY\n"
+            "food_db_rows while its own `detail` read \"New DB rows returned: Yellow Onion, Apple,\n"
+            "Chicken Thighs, Fresh Rosemary\". The prose is the thing that lied, so the prose is not\n"
+            "what clears the silence.\n\n"
             "YOU DO NOT EDIT meal-prep\\food-macros-db.json ANY MORE EITHER. No file access to it.\n"
             "Return each new row in `food_db_rows` and the ORCHESTRATOR writes the DB: same shape as the\n"
             "DB's own entries, one row per food the table marks as having none.\n"

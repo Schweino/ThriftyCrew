@@ -272,6 +272,27 @@ _RX_ENUM = re.compile(r"(?i)\s*,\s*(?:and\s+)?|\s+and\s+")
 # lime, jalapeno, cheese" is not an ingredient line and must not become five of them.
 COMPOSITE_MAX_PARTS = 4
 
+# ...AND A FOUR-PART HEADING SLIPS STRAIGHT UNDER THAT CAP, which is the thing the count guard above
+# could not see about its own example. Measured 2026-08-26 on easy-beef-enchiladas: the extractor read
+# the heading "Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce" as an
+# ingredient term. Four parts, so the cap passes it; onion, cilantro, cream and lettuce are all heads
+# the estate knows, so the head guard passes it; and _words strips the colon, so the first part comes
+# out as "Optional Toppings: Diced Onion" with the head noun 'onion' and nothing left to catch it.
+# That is a term no food DB can carry a row for and no commodity id can price.
+#
+# THE LABEL IS NOT THE FOOD, AND THE FOODS AFTER IT ARE REAL. "For the sauce: soy sauce, honey,
+# garlic" names three ingredients under a heading, so REFUSING the line would drop three real
+# ingredients and DROPPED is what the coverage check would then call them. Stripping the label keeps
+# every one of them and removes only the thing that was never a food. The parts still face every
+# guard below, unchanged.
+#
+# TWO CLAUSES, AND THE SECOND IS THE ONE DOING THE WORK. What follows the colon must ENUMERATE: "Salt
+# and pepper: to taste" is a phrase with a note, not a heading over a list, so there is no label to
+# strip and the ordinary road rules it exactly as before. The label itself is held to a short phrase
+# carrying no separator of its own, which is narrowing rather than a guard with a case behind it -
+# said plainly here because this function's own header promises every extra guard is named.
+_RX_LABEL = re.compile(r"^([^:,]{1,40}):\s+(?=\S)")
+
 
 def known_heads(*name_lists) -> set:
     r"""The set of head nouns the estate already uses, from any lists of item names.
@@ -304,6 +325,13 @@ def split_composite(term: str, heads: set, resolved_whole: bool = False) -> list
     low = t.lower()
     if any(k in low for k in COMPOSITE_KEEP_WHOLE):
         return []
+    # BEFORE THE ENUMERATION IS READ, NEVER AFTER. Leaving the label on makes the first part a phrase
+    # like "Optional Toppings: Diced Onion", and every guard below then sees a known head noun.
+    m = _RX_LABEL.match(t)
+    if m:
+        rest = t[m.end():].strip()
+        if len(_RX_ENUM.split(rest)) > 1:
+            t = rest
     parts = [p.strip(" ,") for p in _RX_ENUM.split(t)]
     parts = [p for p in parts if p]
     if len(parts) < 2 or len(parts) > COMPOSITE_MAX_PARTS:
@@ -1228,6 +1256,53 @@ def _selftest() -> int:
     T('MUST FIRE  a five-part list is a section heading, not an ingredient line, and is left whole',
       split_composite('sour cream, cilantro, lime, jalapeno, and cheddar cheese', H) == [],
       split_composite('sour cream, cilantro, lime, jalapeno, and cheddar cheese', H))
+    # NEUTER PROOF, RUN AND REVERTED 2026-08-26: delete the four label-strip lines from
+    # split_composite -> 3 RED (the label case, the survive case and the enumeration clause). The
+    # "still left whole" case and the clean twin stay green, which is correct - neither turns on the
+    # strip, and a neuter that reddens everything proves nothing about which case tests what.
+    #
+    # THE HEADING SHAPE THE FIVE-PART CAP CANNOT REACH (2026-08-26), measured on easy-beef-enchiladas
+    # in run hunt-2026-08-26-smoke. Four parts, so the cap passes it, and _words strips the colon, so
+    # the first part's head noun reads as 'onion' and the head guard passes it too. Without the label
+    # road this splits and hands the batch "Optional Toppings: Diced Onion" as a food.
+    T('MUST FIRE  a heading LABEL before a comma list is stripped, not carried into the first part - '
+      "'Optional Toppings: Diced Onion' is a term no food DB can ever carry a row for",
+      split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream', H)
+      == ['Diced Onion', 'Cilantro', 'Sour Cream'],
+      split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream', H))
+    # AND THE MEASURED TERM ITSELF IS STILL LEFT WHOLE, WHICH IS RECORDED HERE RATHER THAN QUIETLY
+    # NOT TESTED. 'Shredded Lettuce' has the head noun 'lettuce' and no vocabulary or food-DB item in
+    # this estate ends in it, so the head guard refuses the whole split - correctly, by its own rule -
+    # and the heading reaches the mapper as one term exactly as it did on 2026-08-26. The label road
+    # fixes the SHAPE and does not fix this line; what stops this line sailing past the map lane is
+    # the food-row postcondition in hunt-daemon.py, which now demands a row or a stated absence for
+    # it and holds the recipe when neither arrives. Add 'lettuce' to the estate and this case flips,
+    # which is why it asserts the reason and not just the empty list.
+    T('MUST FIRE  the measured enchiladas term is STILL left whole, and the head noun the estate '
+      "lacks is why - the label road fixed the shape, not this line",
+      split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce', H)
+      == [] and _head(_words('Shredded Lettuce')) not in H,
+      'split=%s lettuce_head_known=%s'
+      % (split_composite('Optional Toppings: Diced Onion, Cilantro, Sour Cream, Shredded Lettuce', H),
+         _head(_words('Shredded Lettuce')) in H))
+    T('MUST FIRE  ...and the foods UNDER the heading survive it - refusing the line would drop three '
+      'real ingredients, which is why the label is stripped rather than the term left whole',
+      split_composite('For the sauce: soy sauce, honey, and garlic', H)
+      == ['soy sauce', 'honey', 'garlic'],
+      split_composite('For the sauce: soy sauce, honey, and garlic', H))
+    # THE ENUMERATION CLAUSE, ASSERTED AS THE DIFFERENCE IT MAKES - the same label, once over a list
+    # and once over a single food. Only the first is a heading; the second is one ingredient with a
+    # note in front of it, and a bare "soy sauce" must not become a part of anything.
+    T('MUST FIRE  a colon with NO list after it is not a heading and nothing is stripped, while the '
+      'very same label over a list is',
+      split_composite('For the sauce: soy sauce', H) == []
+      and len(split_composite('For the sauce: soy sauce, honey, and garlic', H)) == 3,
+      '%s vs %s' % (split_composite('For the sauce: soy sauce', H),
+                    split_composite('For the sauce: soy sauce, honey, and garlic', H)))
+    T('CLEAN TWIN a food with a measurement note behind a colon is left whole - the head-noun guard '
+      'rules the fragment exactly as it did before the label road existed',
+      split_composite('Chicken Thighs, boneless: 2 lbs', H) == [],
+      split_composite('Chicken Thighs, boneless: 2 lbs', H))
     T('MUST FIRE  two parts denoting the SAME food are one food said twice and never split - a '
       'duplicate line would put one ingredient on the card twice',
       split_composite('Chicken Broth and Chicken Broth', H) == [],

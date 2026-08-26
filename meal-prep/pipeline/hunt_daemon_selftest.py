@@ -71,7 +71,12 @@ class FakeDispatch(object):
         self.calls = []
 
     def __call__(self, agent, prompt, schema=None, validator=None, **kw):
-        self.calls.append({"agent": agent, "prompt": prompt, "schema": schema})
+        # THE VALIDATOR IS RECORDED, NOT JUST ACCEPTED. A dispatch that takes `validator=None` and one
+        # that takes a real predicate are indistinguishable to every other assertion in this file, so
+        # a postcondition could be written, fixtured and never wired - which is exactly what happened
+        # to hunt_lib.validate_map, and what the call-site cases below exist to make impossible.
+        self.calls.append({"agent": agent, "prompt": prompt, "schema": schema,
+                           "validator": validator})
         q = self.script.get(agent)
         payload = q.pop(0) if q else {}
         res = HD.hunt_dispatch.DispatchResult(agent)
@@ -85,6 +90,9 @@ class FakeDispatch(object):
 
     def prompts(self, agent):
         return [c["prompt"] for c in self.calls if c["agent"] == agent]
+
+    def validators(self, agent):
+        return [c.get("validator") for c in self.calls if c["agent"] == agent]
 
 
 class FakePS(object):
@@ -152,12 +160,22 @@ class FakePy(object):
 MAP_PRERESOLVE_PS = os.path.join(HERE, "map-preresolve.ps1")
 
 
-def preresolved(tmp, slugs, holds=None, residual=None):
+def preresolved(tmp, slugs, holds=None, residual=None, fooddb_unknown=()):
     """Write the map-preresolve tables the real script would have written, so a map-lane fixture has
     its mechanical half without shelling PowerShell. Same injection philosophy as FakePS: the daemon's
     OWN behaviour over the table is what these fixtures are about, and map-preresolve's behaviour is
     fixtured in its own suite (which is where wiring a bid and watching the hold clear belongs).
+
+    A RESIDUAL ROW HAS A FOOD-DB ROW UNLESS THE CASE SAYS OTHERWISE, and that default flipped on
+    2026-08-26 when the food-row postcondition started BLOCKING. It used to be False for every
+    residual term, which was fine while a missing row was only a finding and became a landmine the
+    moment it became a hold: six end-to-end cases about queue seams, FDC degradation and M3 routing
+    went STUCK on a nutrition label none of them is about, and every one of them stopped testing its
+    own subject. `fooddb_unknown` is how a case that IS about the missing row asks for the old shape,
+    which keeps the two facts - unresolved by the vocabulary, unknown to the food DB - independent
+    here, exactly as they are in the live table.
     """
+    unknown = set(str(t).strip().lower() for t in (fooddb_unknown or ()))
     out = os.path.join(tmp, "mapped-pre")
     os.makedirs(out, exist_ok=True)
     for slug in slugs:
@@ -169,8 +187,8 @@ def preresolved(tmp, slugs, holds=None, residual=None):
         for t in r:
             rows.append({"raw": t, "term": t, "canon_item": None, "bid": None, "board": None,
                          "resolution": "unresolved", "gpu_known": False, "density_known": False,
-                         "fooddb_known": False, "evidence": "no vocabulary row shares a core word",
-                         "source": None})
+                         "fooddb_known": str(t).strip().lower() not in unknown,
+                         "evidence": "no vocabulary row shares a core word", "source": None})
         for x in h:
             rows.append({"raw": x["term"], "term": x["term"], "canon_item": x.get("canon_item"),
                          "bid": x.get("bid"), "board": "recipe", "resolution": "unbid",
@@ -940,6 +958,55 @@ def run():
       *_shortfall_reaches_the_run_findings())
 
     # =================================================================================================
+    H("THE FOOD-ROW POSTCONDITION - a finding does not stop a recipe reaching a lane that refuses it")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-26, with the counts the suite printed:
+    #   * drop `validator=` from the map dispatch call site   -> 1 red, the call-site case alone. The
+    #     five predicate cases stay GREEN, which is the point of having both: hunt_lib is still right
+    #     and the daemon is no longer asking it.
+    #   * accept a name appearing in `detail` as an answer    -> 2 red, the prose case here and
+    #     _shortfall_reaches_the_run_findings up in the section above - the founding payload refuses
+    #     that road from two directions at once.
+    #   * return [] from food_db_outstanding                  -> 4 red (hold / reason / refused-row /
+    #     after-the-learn); the CLEAN TWIN stays green, which is what says the twin is a twin.
+    #   * subtract the declared absences in food_db_outstanding as well as the written rows -> 1 red,
+    #     the reason case. That neuter is the tempting one - it reads like mercy - and the red is the
+    #     recipe sailing on to a write lane that refuses it for a row everyone agreed was missing.
+    T("MUST FIRE  a payload answering for NEITHER a row nor an absence is refused, and every food it "
+      "stayed silent about is NAMED - a re-ask nobody can act on is not a re-ask",
+      *_postcondition_silence_is_refused())
+    T("CLEAN TWIN a row that came back IS the answer and the payload passes untouched",
+      *_postcondition_a_row_answers())
+    T("MUST FIRE  a declared `food_db_absent` is the OTHER legal answer - two label reads that found "
+      "nothing is a report, and a report is not silence",
+      *_postcondition_a_declared_absence_answers())
+    T("MUST FIRE  a name appearing only in `detail` does NOT clear the postcondition - the ten-run's "
+      "payload claimed four rows in prose against an EMPTY array, so prose cannot be the answer",
+      *_postcondition_prose_is_not_an_answer())
+    T("CLEAN TWIN a REJECTED recipe owes no rows at all - it is not being built, so no row it lacks "
+      "can block it", *_postcondition_a_rejected_recipe_owes_nothing())
+    T("MUST FIRE  ...and the CALL SITE hands the map dispatch that predicate, fed by the daemon's OWN "
+      "debt sweep off the pre-resolve table - validate_map is the scar this case exists for",
+      *_postcondition_is_wired_into_the_map_dispatch())
+    T("MUST FIRE  a row that never LANDED holds the recipe AT MAP with the food named, instead of "
+      "travelling a whole lane to die of it - salisbury-steak-burgers, 2026-08-26",
+      *_pc_block_holds_the_recipe_at_map())
+    T("MUST FIRE  a DECLARED absence still blocks and the block carries the mapper's own sentence - "
+      "the row is gone either way, and only the reason differs",
+      *_pc_block_quotes_the_mappers_own_reason())
+    T("MUST FIRE  a row REFUSED by the Atwater check blocks too, though it is deliberately NOT a "
+      "shortfall - judging the mapper and judging the recipe are two questions",
+      *_pc_block_fires_on_a_refused_row_too())
+    T("CLEAN TWIN the row lands and the recipe routes on exactly as before - a gate that fires on "
+      "everything is not a gate", *_pc_block_is_silent_when_the_row_lands())
+    T("MUST FIRE  the block is the LAST thing assemble_mapped does: the rulings still became events "
+      "and ledger rows, so a missing label costs the run no identity work",
+      *_pc_block_comes_after_the_learn())
+    T("MUST FIRE  map_prompt names `food_db_absent`, says a payload answering for neither is re-asked, "
+      "and says a food carrying no macros is a ROW OF ZEROES rather than an absence",
+      *_pc_prompt_names_the_field_and_the_zero_row())
+
+    # =================================================================================================
     H("H2 - a no-publish drill must not write a LIVE grocery ledger (2026-08-25)")
     # =================================================================================================
     T("MUST FIRE  every ingredient-queue call the daemon makes carries -QueueFile and -CarriagePath, "
@@ -1320,8 +1387,8 @@ def _m4_bans_the_direct_fdc_query():
 def _m4_caps_the_hunt():
     prompt, _d, _p = _m4_prompt()
     want = ["ONE fetch and ONE fallback per food",
-            "return NO row for that food and say why in `detail`",
-            "a fifth fetch is a turn that re-reads this whole"]
+            "return NO row for that food and say why in `food_db_absent`",
+            "a fifth fetch is a turn that re-reads"]
     missing = [w for w in want if w not in prompt]
     return not missing, "missing=%s" % json.dumps(missing)
 
@@ -1337,7 +1404,7 @@ def _t5_cap_counts_reads_not_searches():
             "A WebSearch is NOT a read",
             "never spends the allowance",
             "leave both\nyour reads unspent",
-            "A row you did not\neven look for is not a cap working"]
+            "A row\nyou did not even look for is not a cap working"]
     missing = [w for w in want if w not in prompt]
     return not missing, "missing=%s" % json.dumps(missing)
 
@@ -4241,8 +4308,9 @@ def _lane_local():
 # D7 - map-preresolve, the unbid hold, and the unhold
 # =====================================================================================================
 
-def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None, **kw):
-    preresolved(tmp, slugs, holds=holds, residual=residual)
+def _map_daemon(tmp, slugs, mapper_result, ps=None, holds=None, residual=None,
+                fooddb_unknown=(), **kw):
+    preresolved(tmp, slugs, holds=holds, residual=residual, fooddb_unknown=fooddb_unknown)
     fd = FakeDispatch({"recipe-ingredient-mapper": [mapper_result]})
     # _asm_ps(), NOT a bare FakePS: since Q2 (2026-08-26) EVERY road out of the map lane reads the
     # term list back off the state file, so an injected hunt-run that writes nothing sends every
@@ -7204,6 +7272,252 @@ def _shortfall_a_food_nobody_buys_needs_no_row():
         return f is None, str(f)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# THE FOOD-ROW POSTCONDITION (2026-08-26). The shortfall detector above NAMES the silence; it does not
+# stop the recipe. On the 3-recipe proving run of the same day salisbury-steak-burgers travelled a
+# whole lane past its own diagnosis and died at the write gate over 'Kaiser Rolls', and
+# easy-beef-enchiladas over four more foods. Two things are pinned here and they are different things:
+#
+#   THE PREDICATE   - hunt_lib.validate_map_food_rows: a payload that answers for neither a row nor an
+#                     absence is refused, which is what buys the RE-ASK while the mapper still holds
+#                     the table, the FDC shelf and the source page;
+#   THE BLOCK       - food_db_outstanding + assemble_mapped: a row that never LANDED holds the recipe
+#                     at map, with the mapper's own sentence where it gave one.
+#
+# AND BOTH ARE PINNED AT THE CALL SITE AS WELL, because this estate has the scar: validate_map has sat
+# in hunt_lib fully built and wired into nothing since the day it was written.
+# =====================================================================================================
+
+def _debts(*names):
+    return {"s1": list(names)}
+
+
+def _pc_payload(**kw):
+    r = {"slug": "s1", "status": "ok", "state": "priced"}
+    r.update(kw)
+    return {"results": [r]}
+
+
+def _postcondition_silence_is_refused():
+    """MUST FIRE: the founding payload. An EMPTY food_db_rows against a table asking for two is
+    refused, and BOTH foods are named - a re-ask the mapper cannot act on is not a re-ask."""
+    probs = HD.hunt_lib.validate_map_food_rows(
+        _pc_payload(food_db_rows=[]), _debts("Kaiser Rolls", "Jalapeno Pepper"))
+    ok = (len(probs) == 1 and "Kaiser Rolls" in probs[0] and "Jalapeno Pepper" in probs[0]
+          and "food_db_absent" in probs[0])
+    return ok, "; ".join(probs)[:300]
+
+
+def _postcondition_a_row_answers():
+    """CLEAN TWIN: a row that came back is an answer, and the payload passes untouched."""
+    probs = HD.hunt_lib.validate_map_food_rows(
+        _pc_payload(food_db_rows=[{"item": "Kaiser Rolls", "calories": 180}]),
+        _debts("Kaiser Rolls"))
+    return not probs, "; ".join(probs)[:200]
+
+
+def _postcondition_a_declared_absence_answers():
+    """MUST FIRE: the OTHER legal answer, and the whole reason the field exists. A mapper that read
+    two labels and found nothing may say so - and this is the difference between a recipe blocked
+    with a sentence and a recipe blocked with nothing. It does not unblock it; see the block cases."""
+    probs = HD.hunt_lib.validate_map_food_rows(
+        _pc_payload(food_db_rows=[],
+                    food_db_absent=[{"item": "Dill Pickle Juice",
+                                     "why": "no printed label on either brand page"}]),
+        _debts("Dill Pickle Juice"))
+    return not probs, "; ".join(probs)[:200]
+
+
+def _postcondition_prose_is_not_an_answer():
+    """MUST FIRE, and this is the case the whole design turns on. `detail` naming the food does NOT
+    clear the postcondition: run hunt-2026-08-26-ten's payload carried `detail` reading "New DB rows
+    returned: Yellow Onion, Apple, Chicken Thighs, Fresh Rosemary" against an EMPTY food_db_rows.
+    The prose is the thing that lied, so accepting prose would re-open the exact hole."""
+    probs = HD.hunt_lib.validate_map_food_rows(
+        _pc_payload(food_db_rows=[],
+                    detail="New DB rows returned: Chicken Thighs, Fresh Rosemary"),
+        _debts("Chicken Thighs", "Fresh Rosemary"))
+    return (len(probs) == 1 and "Chicken Thighs" in probs[0] and "Fresh Rosemary" in probs[0],
+            "; ".join(probs)[:300])
+
+
+def _postcondition_a_rejected_recipe_owes_nothing():
+    """CLEAN TWIN: a recipe the mapper just threw out is not being built, so no row it lacks can
+    block it. Demanding nutrition labels for a rejected dish is a re-ask nobody can act on."""
+    probs = HD.hunt_lib.validate_map_food_rows(
+        {"results": [{"slug": "s1", "status": "rejected", "state": "rejected-macros",
+                      "food_db_rows": []}]},
+        _debts("Kaiser Rolls"))
+    return not probs, "; ".join(probs)[:200]
+
+
+def _postcondition_is_wired_into_the_map_dispatch():
+    r"""MUST FIRE, AT THE CALL SITE, and this case is the one that would have caught the F1 shape.
+    A predicate in hunt_lib proves nothing about the daemon: validate_map has been sitting there
+    complete and unwired since it was written. So this drives the real map lane, CAPTURES the
+    validator the daemon handed the adapter, and runs it on the founding empty payload.
+    """
+    tmp = scratch_dir(prefix="daemon-pcwire-")
+    try:
+        d, fd = _map_daemon(tmp, ["s1"], {"results": [{"slug": "s1", "status": "ok",
+                                                       "state": "priced",
+                                                       "food_db_rows": [_good_row("Kaiser Rolls")]}]},
+                            residual={"s1": ["kaiser rolls"]},
+                            fooddb_unknown=["kaiser rolls"],
+                            food_db_path=os.path.join(tmp, "fdb.json"))
+        vs = [v for v in fd.validators("recipe-ingredient-mapper") if v]
+        if not vs:
+            return False, "the map dispatch was handed NO validator"
+        probs = vs[0]({"results": [{"slug": "s1", "status": "ok", "state": "priced",
+                                    "food_db_rows": []}]})
+        # ...and the daemon's OWN debt sweep is what fed it: nothing in the payload above names
+        # 'kaiser rolls', so the only way it can appear in the violation is off the pre-resolve table.
+        return (len(probs) == 1 and "kaiser rolls" in probs[0].lower(),
+                "validators=%d problems=%s" % (len(vs), json.dumps(probs)[:280]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_block_daemon(tmp, rows, absent=None, existing=None, term="kaiser rolls",
+                     canon="Kaiser Rolls"):
+    """The map lane run end to end against a SCRATCH food DB, with one residual term the table marks
+    as having no row. Returns (daemon, path)."""
+    path = os.path.join(tmp, "food-macros-db.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"readme": "fixture DB", "items": list(existing or [])}, f)
+    res = {"slug": "s1", "status": "ok", "state": "priced",
+           "lines": [{"raw": term, "buy": "12 rolls"}],
+           "rulings": [{"raw": term, "term": term, "canon_item": canon, "bid": None,
+                        "decision": "mapped-null", "evidence": "the bakery bun the dish is built on"}],
+           "food_db_rows": list(rows or [])}
+    if absent is not None:
+        res["food_db_absent"] = list(absent)
+    d, _fd = _map_daemon(tmp, ["s1"], {"results": [res]}, residual={"s1": [term]},
+                         fooddb_unknown=[term], food_db_path=path)
+    return d
+
+
+def _pc_block_holds_the_recipe_at_map():
+    r"""MUST FIRE, END TO END, and it is the measured case: run hunt-2026-08-26-smoke, slug
+    salisbury-steak-burgers, "FINDING no food-macros-db row for 'Kaiser Rolls'" - raised by the WRITE
+    lane, a whole lane after the map lane had already diagnosed it in its own findings.
+
+    The recipe now stops at map, NAMING the food, and never reaches pricing.
+    """
+    tmp = scratch_dir(prefix="daemon-pcblock-")
+    try:
+        d = _pc_block_daemon(tmp, rows=[])
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        detail = stuck[0]["detail"] if stuck else ""
+        return (len(stuck) == 1 and "Kaiser Rolls" in detail and "map" in detail
+                and "no food-macros-db row" in detail.lower()
+                and "resumes from `mapped`" in detail,
+                "stuck=%d detail=%s" % (len(stuck), detail[:260]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_block_quotes_the_mappers_own_reason():
+    """MUST FIRE: a DECLARED absence still blocks - the row is still gone - but the block carries the
+    mapper's sentence instead of carrying nothing. That is the whole return on the new field, and
+    asserting the block alone would not prove the field is read."""
+    tmp = scratch_dir(prefix="daemon-pcsaid-")
+    try:
+        d = _pc_block_daemon(tmp, rows=[], absent=[
+            {"item": "Kaiser Rolls", "why": "both bakery pages state no nutrition panel"}])
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        detail = stuck[0]["detail"] if stuck else ""
+        shortfall = [f for f in d.findings if "returned nothing at all" in f]
+        # ...and it is NOT reported as silence: a mapper that answered kept the contract.
+        return (len(stuck) == 1 and "no nutrition panel" in detail and not shortfall,
+                "stuck=%d shortfall=%d detail=%s" % (len(stuck), len(shortfall), detail[:240]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_block_fires_on_a_refused_row_too():
+    r"""MUST FIRE, and this is where the two detectors DISAGREE ON PURPOSE. A row that came back and
+    FAILED the Atwater check is explicitly NOT a shortfall - it was ruled on and its own finding says
+    why - and it is exactly as absent from the DB as a silent one. Judging the mapper and judging the
+    recipe are two different questions, and before this they shared one answer.
+    """
+    tmp = scratch_dir(prefix="daemon-pcref-")
+    try:
+        bad = _good_row("Kaiser Rolls", calories=900)      # 25*4+3*4+5*9 = 157, nowhere near 900
+        d = _pc_block_daemon(tmp, rows=[bad])
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        refused = [f for f in d.findings if "Kaiser Rolls" in f and "Atwater" in f]
+        shortfall = [f for f in d.findings if "returned nothing at all" in f]
+        return (len(stuck) == 1 and len(refused) == 1 and not shortfall
+                and "Kaiser Rolls" in stuck[0]["detail"],
+                "stuck=%d refused=%d shortfall=%d" % (len(stuck), len(refused), len(shortfall)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_block_is_silent_when_the_row_lands():
+    """CLEAN TWIN, and the one that keeps this from being a gate that fires on everything: the row
+    comes back, it is written, and the recipe routes on exactly as it did before any of this."""
+    tmp = scratch_dir(prefix="daemon-pcclean-")
+    try:
+        d = _pc_block_daemon(tmp, rows=[_good_row("Kaiser Rolls")])
+        stuck = [o for o in d.outcomes if o.get("status") == "stuck"]
+        return (not stuck, "stuck=%d detail=%s"
+                % (len(stuck), (stuck[0]["detail"][:200] if stuck else "")))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_block_comes_after_the_learn():
+    """MUST FIRE: the block is the LAST thing assemble_mapped does, and the ordering is the claim.
+    The identity work assembled, so the estate wants it, and a STUCK is resumable - add the row and
+    the recipe walks on from `mapped`. Refusing before the learn would make one missing nutrition
+    label cost the run every ruling in the recipe."""
+    tmp, ev, led = _learn_scratch("daemon-pclearn-")
+    try:
+        path = os.path.join(tmp, "food-macros-db.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"readme": "fixture DB", "items": []}, f)
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]},
+                    fooddb_unknown=["Large Eggs"])
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led,
+                   food_db_path=path)
+        tables = _read_tables(tmp, ["s1"])
+        ok, why = arun(d.assemble_mapped("s1", _learn_res(), tables))
+        evs = _learn_events(ev)
+        return (not ok and "Eggs" in why and len(evs) == 2
+                and sorted(_LA.read_ledger(led)[0]) == ["boneless chicken breast", "large eggs"],
+                "ok=%s events=%d why=%s" % (ok, len(evs), why[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _pc_prompt_names_the_field_and_the_zero_row():
+    """MUST FIRE: the prompt and the postcondition ship together or the mapper is refused for
+    breaking a contract nobody told it about. And the ZERO ROW is half the contract - 'Salt and
+    Pepper' and 'Mustard Powder' are on the ten-run's stuck list, and a printed 0/0/0/0 label is the
+    label-accurate answer for those, not an absence."""
+    tmp = scratch_dir(prefix="daemon-pcprompt-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["kaiser rolls"]}, fooddb_unknown=["kaiser rolls"])
+        d = daemon(run_dir=tmp, ps=_asm_ps())
+        prompt = d.map_prompt(["s1"], _read_tables(tmp, ["s1"]))
+        want = ["`food_db_absent`", "EXACTLY TWO WAYS", "ROW OF ZEROES",
+                "answers for neither is\nre-asked"]
+        missing = [w for w in want if w not in prompt]
+        return not missing, "missing=%s" % json.dumps(missing)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _read_tables(tmp, slugs):
+    out = {}
+    for s in slugs:
+        with open(os.path.join(tmp, "mapped-pre", "%s.json" % s), "r", encoding="utf-8-sig") as f:
+            out[s] = json.load(f)
+    return out
 
 
 def _shortfall_reaches_the_run_findings():
