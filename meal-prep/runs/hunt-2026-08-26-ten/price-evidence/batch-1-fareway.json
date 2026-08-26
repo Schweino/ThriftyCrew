@@ -1,198 +1,134 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-26T04:22:39",
+ "generated": "2026-08-26T09:27:59",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "rotisserie chicken",
+   "term": "Moroccan seven spice blend",
    "state": "MATCHES",
-   "term_used": "rotisserie chicken",
+   "term_used": "Moroccan seven spice blend",
    "attempts": [
     {
-     "term": "rotisserie chicken",
+     "term": "Moroccan seven spice blend",
      "state": "OK",
-     "hits": 5
+     "hits": 6
     }
    ],
    "hits": [
     {
-     "item": "Roasted Whole Chicken",
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
      "price": 7.99,
-     "size": "1 ct",
+     "size": "5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386572-rotisserie-whole-chicken-1-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
     },
     {
-     "item": "Shredded Roasted Chicken",
+     "item": "Badia Spices Coriander, Ground",
+     "price": 1.68,
+     "size": "1.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "McCormick Smoked Paprika",
+     "price": 3.99,
+     "size": "0.9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/222010-mccormick-smoked-paprika-0-9-oz"
+    },
+    {
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+    },
+    {
+     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
      "price": 5.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "spiral ham",
+   "state": "MATCHES",
+   "term_used": "spiral ham",
+   "attempts": [
+    {
+     "term": "spiral ham",
+     "state": "OK",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Boneless Half Ham",
+     "price": 34.95,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386969-fareway-boneless-half-ham-1-each"
+    },
+    {
+     "item": "Frick's Sliced Quarter Applewood Ham",
+     "price": 10.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17616704-fricks-smoked-ham-applewood-sliced-24-oz"
+    },
+    {
+     "item": "Fareway Boneless Quarter Ham",
+     "price": 17.48,
+     "size": "$6.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387408-fareway-boneless-quarter-ham-1-each"
+    },
+    {
+     "item": "Fareway Boneless Ham Steaks",
+     "price": 4.0,
      "size": "$7.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387958-shredded-rotisserie-chicken-1-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387422-fareway-boneless-ham-steaks-1-each"
     },
     {
-     "item": "Oscar Mayer Rotisserie Seasoned Chicken Breast Sliced Lunch Meat, for a Low Carb Lifestyle",
-     "price": 3.76,
-     "size": "9 oz",
+     "item": "Farmland Diced Ham",
+     "price": 5.99,
+     "size": "16 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35899-oscar-mayer-deli-fresh-rotisserie-seasoned-chicken-breast-9-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/233565-farmland-ham-16-oz"
     },
     {
-     "item": "Hillshire Farm Ultra Thin Rotisserie Seasoned Chicken Breast",
+     "item": "Hormel Diced Ham Classic",
+     "price": 3.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410938-hormel-diced-boneless-ham-8-oz"
+    },
+    {
+     "item": "Hillshire Farm Ultra Thin Sliced Black Forest Ham Sandwich Meat, 9 oz",
      "price": 4.49,
      "size": "9 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/111034-hillshire-farm-chicken-breast-rotisserie-seasoned-ultra-thin-9-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/124759-hillshire-farm-ultra-thin-sliced-black-forest-ham-deli-meat-9-oz"
     },
     {
-     "item": "Oscar Mayer Deli Fresh Rotisserie Seasoned Chicken Breast Sandwich Lunch Meat Family Size",
-     "price": 7.99,
-     "size": "16 oz",
+     "item": "Buddig Black Forest Ham",
+     "price": 0.99,
+     "size": "2 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/42661-oscar-mayer-deli-fresh-rotisserie-seasoned-chicken-breast-1-lb"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "roasted corn kernels",
-   "state": "MATCHES",
-   "term_used": "roasted corn kernels",
-   "attempts": [
-    {
-     "term": "roasted corn kernels",
-     "state": "OK",
-     "hits": 72
-    }
-   ],
-   "hits": [
-    {
-     "item": "Del Monte Whole Kernel Fire-Roasted Corn Blend",
-     "price": 2.49,
-     "size": "14.75 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1334027-del-monte-corn-blend-fire-roasted-whole-kernel-14-75-oz"
-    },
-    {
-     "item": "Fareway Whole Kernel Corn",
-     "price": 0.78,
-     "size": "15.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300907-fareway-corn-whole-kernel-1525-oz"
-    },
-    {
-     "item": "Fareway Whole Kernel Corn",
-     "price": 2.88,
-     "size": "4 x 4 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24227311-fareway-corn-whole-kernel-4-each"
-    },
-    {
-     "item": "Corner Store Corn, Kernel, Whole",
-     "price": 0.77,
-     "size": "15.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20628216-corner-store-corn-kernel-whole-1525-oz"
-    },
-    {
-     "item": "Fareway Whole Kernel Organic Corn",
-     "price": 1.68,
-     "size": "15 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24226429-fareway-corn-organic-whole-kernel-15-oz"
-    },
-    {
-     "item": "Fareway Whole Kernel Corn",
-     "price": 0.94,
-     "size": "8.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20557329-fareway-corn-whole-kernel-85-oz"
-    },
-    {
-     "item": "Fareway Whole Kernel Corn No Salt Added",
-     "price": 0.78,
-     "size": "15.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20613147-fareway-corn-no-salt-added-whole-kernel-1525-oz"
-    },
-    {
-     "item": "Fareway Cut Corn",
-     "price": 1.98,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20584642-fareway-cut-corn-16-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "monterey jack cheese",
-   "state": "MATCHES",
-   "term_used": "monterey jack cheese",
-   "attempts": [
-    {
-     "term": "monterey jack cheese",
-     "state": "OK",
-     "hits": 27
-    }
-   ],
-   "hits": [
-    {
-     "item": "Fareway Monterey Jack Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30532635-fareway-monterey-jack-shredded-cheese-8-oz"
-    },
-    {
-     "item": "Fareway Monterey Jack Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720386-fareway-cheese-monterey-jack-8-oz"
-    },
-    {
-     "item": "Kraft Chunk Colby Jack",
-     "price": 3.18,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73753557-kraft-colby-monterey-jack-natural-cheese-block-oz-vacuum-packed-8-oz"
-    },
-    {
-     "item": "Kraft Colby & Monterey Jack Shredded Cheese",
-     "price": 3.18,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73542416-kraft-colby-jack-shredded-colby-monterey-jack-cheeses-8-oz"
-    },
-    {
-     "item": "Crystal Farms Marble Jack Cheese",
-     "price": 2.67,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/219658-crystal-farms-marble-jack-cheese-8-0-oz"
-    },
-    {
-     "item": "Fareway Colby & Monterey Jack Cheese Cubes",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24552406-fareway-cheese-cubes-colby-monterey-jack-8-oz"
-    },
-    {
-     "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24495714-fareway-cheese-mexican-style-blend-fancy-shredded-8-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/317187-buddig-black-forest-ham-2-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

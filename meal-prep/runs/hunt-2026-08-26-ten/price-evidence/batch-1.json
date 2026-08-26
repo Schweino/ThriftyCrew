@@ -2,11 +2,10 @@
  "schema": "price-evidence/1",
  "run": "hunt-2026-08-26-ten",
  "batch": 1,
- "generated": "2026-08-26T04:22:39",
+ "generated": "2026-08-26T09:27:59",
  "batch_terms": [
-  "rotisserie chicken",
-  "roasted corn kernels",
-  "monterey jack cheese"
+  "Moroccan seven spice blend",
+  "spiral ham"
  ],
  "roster": [
   "Baker's",
@@ -20,151 +19,47 @@
  "findings": [],
  "terms": [
   {
-   "term": "rotisserie chicken",
-   "unit": "each",
+   "term": "Moroccan seven spice blend",
+   "unit": "",
    "stores": [
     {
      "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "rotisserie chicken",
+     "state": "EMPTY",
+     "term_used": "Moroccansevenspiceblend",
      "attempts": [
       {
-       "term": "rotisserie chicken",
+       "term": "Moroccan seven spice blend",
        "state": "OK",
-       "hits": 25
+       "hits": 0
+      },
+      {
+       "term": "Moroccansevenspiceblend",
+       "state": "OK",
+       "hits": 0
       }
      ],
-     "hits": [
-      {
-       "item": "Reser's® Rotisserie Chicken Salad",
-       "price": 7.99,
-       "size": "12 oz",
-       "relevance": 132,
-       "url": "https://www.bakersplus.com/p/0007111719008"
-      },
-      {
-       "item": "McCormick PERFECT PINCH Rotisserie Chicken Seasoning",
-       "price": 6.29,
-       "size": "5 oz",
-       "relevance": 127,
-       "url": "https://www.bakersplus.com/p/0005210004968"
-      },
-      {
-       "item": "Simple Truth® Cold Deli Fresh Whole Rotisserie Chicken",
-       "price": 8.99,
-       "size": "2 lb",
-       "relevance": 126,
-       "url": "https://www.bakersplus.com/p/0001111006809"
-      },
-      {
-       "item": "Cesar Filets in Gravy Wet Dog Food Mini-Pouch Rotisserie Chicken",
-       "price": 0.79,
-       "size": "1.76 oz",
-       "relevance": 124,
-       "url": "https://www.bakersplus.com/p/0002310014563"
-      },
-      {
-       "item": "Simple Truth Fresh Hot Roasted Whole Rotisserie Chicken - Available 11am-8pm",
-       "price": 8.99,
-       "size": "2 lb",
-       "relevance": 121,
-       "url": "https://www.bakersplus.com/p/0001111006806"
-      },
-      {
-       "item": "Cesar Adult Wet Dog Food Rotisserie Chicken with Bacon & Cheese Loaf & Topper in Sauce",
-       "price": 1.25,
-       "size": "3.5 ounce",
-       "relevance": 118,
-       "url": "https://www.bakersplus.com/p/0002310010269"
-      },
-      {
-       "item": "Cesar Small Breed Dry Dog Food Rotisserie Chicken Flavor with Spring Vegetables Garnish",
-       "price": 8.99,
-       "size": "2.7 lbs",
-       "relevance": 118,
-       "url": "https://www.bakersplus.com/p/0002310011625"
-      },
-      {
-       "item": "Cesar Small Breed Dry Dog Food Rotisserie Chicken Flavor with Spring Vegetables Garnish",
-       "price": 14.49,
-       "size": "5 lbs",
-       "relevance": 118,
-       "url": "https://www.bakersplus.com/p/0002310011628"
-      }
-     ],
-     "reason": "",
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
      "tier": "server"
     },
     {
      "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "rotisserie chicken",
+     "state": "EMPTY",
+     "term_used": "Moroccansevenspiceblend",
      "attempts": [
       {
-       "term": "rotisserie chicken",
+       "term": "Moroccan seven spice blend",
        "state": "OK",
-       "hits": 11
+       "hits": 0
+      },
+      {
+       "term": "Moroccansevenspiceblend",
+       "state": "OK",
+       "hits": 0
       }
      ],
-     "hits": [
-      {
-       "item": "Rotisserie Chicken Hot",
-       "price": 8.99,
-       "size": "1 ea",
-       "relevance": 134,
-       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_hot/rotisserie_chicken_hot/p/1564405684714631683"
-      },
-      {
-       "item": "Whole Rotisserie Chicken, Savory Cold",
-       "price": 8.99,
-       "size": "1 ea",
-       "relevance": 131,
-       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/whole_rotisserie_chicken_savory_cold/p/1564405684714631758"
-      },
-      {
-       "item": "Mc Cormick Rotisserie Chicken Seasoning 5 Oz",
-       "price": 6.99,
-       "size": "5 oz",
-       "relevance": 129,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/mc_cormick_rotisserie_chicken_seasoning_5_oz/p/1564405684708551893"
-      },
-      {
-       "item": "Whole Rotisserie Chicken, Savory Hot (No Pick Up/Delivery Before 11am)",
-       "price": 8.99,
-       "size": "1 ea",
-       "relevance": 122,
-       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_hot/whole_rotisserie_chicken_savory_hot_no_pick_up_delivery_before_11am/p/1564405684714631732"
-      },
-      {
-       "item": "Cesar Loaf & Topper Rotisserie Chicken Flavor With Bacon And Cheese In Sauce Canine Cuisine 3.5 Oz",
-       "price": 1.69,
-       "size": "3.5 oz",
-       "relevance": 116,
-       "url": "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/canned_fresh_dog_food/cesar_loaf_topper_rotisserie_chicken_flavor_with_bacon_and_cheese_in_sauce_canine_cuisine_3_5_oz/p/544713"
-      },
-      {
-       "item": "Oscar Mayer Rotisserie Seasoned Chicken Breast 9 Oz",
-       "price": 4.99,
-       "size": "9 oz",
-       "relevance": 87,
-       "url": "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_rotisserie_seasoned_chicken_breast_9_oz/p/91988"
-      },
-      {
-       "item": "Oscar Mayer Rotisserie Seasoned Chicken Breast Family Pack 16 Oz",
-       "price": 9.49,
-       "size": "16 oz",
-       "relevance": 84,
-       "url": "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_rotisserie_seasoned_chicken_breast_family_pack_16_oz/p/539606"
-      },
-      {
-       "item": "Kretschmar® Off The Bone Rotisserie Seasoned Chicken Breast Slices 8 Oz.",
-       "price": 6.99,
-       "size": "8 oz",
-       "relevance": 82,
-       "url": "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/kretschmar_off_the_bone_rotisserie_seasoned_chicken_breast_slices_8_oz/p/594041"
-      }
-     ],
-     "reason": "",
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
      "tier": "server"
     },
     {
@@ -188,49 +83,56 @@
     {
      "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "rotisserie chicken",
+     "term_used": "Moroccan seven spice blend",
      "attempts": [
       {
-       "term": "rotisserie chicken",
+       "term": "Moroccan seven spice blend",
        "state": "OK",
-       "hits": 5
+       "hits": 6
       }
      ],
      "hits": [
       {
-       "item": "Roasted Whole Chicken",
+       "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
        "price": 7.99,
-       "size": "1 ct",
+       "size": "5 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386572-rotisserie-whole-chicken-1-each"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
       },
       {
-       "item": "Shredded Roasted Chicken",
+       "item": "Badia Spices Coriander, Ground",
+       "price": 1.68,
+       "size": "1.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+      },
+      {
+       "item": "Badia Spices Paprika",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+      },
+      {
+       "item": "McCormick Smoked Paprika",
+       "price": 3.99,
+       "size": "0.9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/222010-mccormick-smoked-paprika-0-9-oz"
+      },
+      {
+       "item": "Spice Islands Beau Monde Seasoning",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+      },
+      {
+       "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
        "price": 5.99,
-       "size": "$7.99 / lb",
+       "size": "7 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387958-shredded-rotisserie-chicken-1-each"
-      },
-      {
-       "item": "Oscar Mayer Rotisserie Seasoned Chicken Breast Sliced Lunch Meat, for a Low Carb Lifestyle",
-       "price": 3.76,
-       "size": "9 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35899-oscar-mayer-deli-fresh-rotisserie-seasoned-chicken-breast-9-oz"
-      },
-      {
-       "item": "Hillshire Farm Ultra Thin Rotisserie Seasoned Chicken Breast",
-       "price": 4.49,
-       "size": "9 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/111034-hillshire-farm-chicken-breast-rotisserie-seasoned-ultra-thin-9-oz"
-      },
-      {
-       "item": "Oscar Mayer Deli Fresh Rotisserie Seasoned Chicken Breast Sandwich Lunch Meat Family Size",
-       "price": 7.99,
-       "size": "16 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/42661-oscar-mayer-deli-fresh-rotisserie-seasoned-chicken-breast-1-lb"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -239,78 +141,78 @@
     {
      "store": "Sam's Club",
      "state": "MATCHES",
-     "term_used": "rotisserie chicken",
+     "term_used": "Moroccan seven spice blend",
      "attempts": [
       {
-       "term": "rotisserie chicken",
+       "term": "Moroccan seven spice blend",
        "state": "MATCHES",
-       "hits": 22
+       "hits": 8
       }
      ],
      "hits": [
       {
-       "item": "Member's Mark Garlic Butter With Parmesan Cheese & Basil,10 oz.",
+       "item": "Tone's Pickling Spice, 14 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.71/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/301P1X1G0812"
+      },
+      {
+       "item": "Lawry's Seasoned Salt, 40 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+      },
+      {
+       "item": "Durkee Six Pepper Blend, 22 oz.",
+       "price": 11.34,
+       "size": "",
+       "unit_price": "$0.52/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U41EZL1WH6P"
+      },
+      {
+       "item": "Member's Mark Himalayan Pink Salt, 38 oz.",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4EAHNLWA0JJP"
+      },
+      {
+       "item": "Member's Mark Pumpkin Pie Spice Seasoning Blend, 5.6 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$1.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Z0VOJK74W29"
+      },
+      {
+       "item": "Kinder’s Crispy Panko Blend Seasoned Coating Mix, Buttery Garlic & Herb Seasoned, 13 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.54/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ANBYCFH95BP"
+      },
+      {
+       "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$1.16/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+      },
+      {
+       "item": "Member's Mark Parsley Flakes, 3.2 oz",
        "price": 6.44,
        "size": "",
-       "unit_price": "$0.64/oz",
+       "unit_price": "$2.01/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/16343160365"
-      },
-      {
-       "item": "Soules Kitchen Chicken Breast Fajitas Strips, 32 oz., 2 pk.",
-       "price": 9.96,
-       "size": "",
-       "unit_price": "$4.98/ea",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13589509720"
-      },
-      {
-       "item": "Member's Mark Seasoned Rotisserie Chicken",
-       "price": 4.98,
-       "size": "",
-       "unit_price": "",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/1BVSEIPL4UL2"
-      },
-      {
-       "item": "Member's Mark Rotisserie Chicken Bites, 2 lbs.",
-       "price": 11.48,
-       "size": "",
-       "unit_price": "$5.74/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2GTC9SQ266N4"
-      },
-      {
-       "item": "Member's Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
-       "price": 9.57,
-       "size": "",
-       "unit_price": "$6.96/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6ZLFIIYVJSHV"
-      },
-      {
-       "item": "John Soules Fully Cooked Angus Beef Fajitas 24 oz.",
-       "price": 17.93,
-       "size": "",
-       "unit_price": "$0.75/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13843866537"
-      },
-      {
-       "item": "Member's Mark Rotisserie Chicken Enchiladas, priced per pound",
-       "price": 15.12,
-       "size": "",
-       "unit_price": "$3.98/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3RPD20STXXPK"
-      },
-      {
-       "item": "Rossetti Prosciutto Italiano, 7 oz., 2 pk.",
-       "price": 13.44,
-       "size": "",
-       "unit_price": "$0.96/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13871009552"
+       "url": "https://www.samsclub.com/p/-/3F1K23CN8VC8"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
@@ -328,47 +230,161 @@
    ]
   },
   {
-   "term": "roasted corn kernels",
+   "term": "spiral ham",
    "unit": "",
    "stores": [
     {
      "store": "Baker's",
-     "state": "EMPTY",
-     "term_used": "roastedcornkernels",
+     "state": "MATCHES",
+     "term_used": "spiral ham",
      "attempts": [
       {
-       "term": "roasted corn kernels",
+       "term": "spiral ham",
        "state": "OK",
-       "hits": 0
-      },
-      {
-       "term": "roastedcornkernels",
-       "state": "OK",
-       "hits": 0
+       "hits": 19
       }
      ],
-     "hits": [],
-     "reason": "no candidates on any of 2 ladder rung(s)",
+     "hits": [
+      {
+       "item": "Honestly Good Smoked Ham",
+       "price": 3,
+       "size": "6 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0007740068123"
+      },
+      {
+       "item": "Smithfield® Cooked Ham",
+       "price": 5,
+       "size": "20 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0007080023648"
+      },
+      {
+       "item": "Smithfield Sliced Cooked Ham",
+       "price": 5,
+       "size": "16 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0007080023481"
+      },
+      {
+       "item": "Kroger® Deli Style Smoked Ham",
+       "price": 5.49,
+       "size": "16 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0001111097419"
+      },
+      {
+       "item": "Kroger® Smoked Ham Deli Sliced",
+       "price": 5,
+       "size": "12 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0027584500000"
+      },
+      {
+       "item": "Hillshire Applewood Smoked Ham",
+       "price": 6.99,
+       "size": "7 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0004450000434"
+      },
+      {
+       "item": "Frick's™ Sliced Hickory Smoked Ham",
+       "price": 8.99,
+       "size": "24 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0004952116280"
+      },
+      {
+       "item": "Private Selection® Double Smoked Ham",
+       "price": 9.99,
+       "size": "1 lb",
+       "relevance": 41,
+       "url": "https://www.bakersplus.com/p/0023578650000"
+      }
+     ],
+     "reason": "",
      "tier": "server"
     },
     {
      "store": "Family Fare",
-     "state": "EMPTY",
-     "term_used": "roastedcornkernels",
+     "state": "MATCHES",
+     "term_used": "spiral",
      "attempts": [
       {
-       "term": "roasted corn kernels",
+       "term": "spiral ham",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "spiralham",
        "state": "OK",
        "hits": 0
       },
       {
-       "term": "roastedcornkernels",
+       "term": "spiral",
        "state": "OK",
-       "hits": 0
+       "hits": 10
       }
      ],
-     "hits": [],
-     "reason": "no candidates on any of 2 ladder rung(s)",
+     "hits": [
+      {
+       "item": "Memo Book, Spiral 5x3 Inches Top Flight",
+       "price": 2.29,
+       "size": "1 ea",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/household/office_school/note_pads_books/memo_book_spiral_5x3_inches_top_flight/p/2399731"
+      },
+      {
+       "item": "Our Family Mac & Cheese Dinner, Spiral 5.5 Oz",
+       "price": 0.79,
+       "size": "5.5 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/our_family_mac_cheese_dinner_spiral_5_5_oz/p/6787336"
+      },
+      {
+       "item": "Goody Dentless Spiral Elastics, Medium Hair",
+       "price": 5.99,
+       "size": "10 pk",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/brushes_more/goody_dentless_spiral_elastics_medium_hair/p/1564405684710390032"
+      },
+      {
+       "item": "Betty Crocker White Spiral Birthday Candles 24 Ea",
+       "price": 1.89,
+       "size": "24 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/cake_decorations/betty_crocker_white_spiral_birthday_candles_24_ea/p/2379994"
+      },
+      {
+       "item": "Betty Crocker Rainbow Spiral Birthday Candles 24 Ea",
+       "price": 1.89,
+       "size": "24 ea",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/cake_decorations/betty_crocker_rainbow_spiral_birthday_candles_24_ea/p/2379997"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Mac & Cheese 3.5 Oz",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_mac_cheese_3_5_oz/p/1564405684706044183"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Mac & Cheese 4 Ea",
+       "price": 5.99,
+       "size": "4 ea",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_mac_cheese_4_ea/p/1564405684716192197"
+      },
+      {
+       "item": "Kraft Spirals Original Cheese Flavor Pasta And Cheese Sauce Mix 5.5 Oz",
+       "price": 1.89,
+       "size": "5.5 oz",
+       "relevance": 122,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_spirals_original_cheese_flavor_pasta_and_cheese_sauce_mix_5_5_oz/p/17722"
+      }
+     ],
+     "reason": "",
      "tier": "server"
     },
     {
@@ -392,70 +408,70 @@
     {
      "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "roasted corn kernels",
+     "term_used": "spiral ham",
      "attempts": [
       {
-       "term": "roasted corn kernels",
+       "term": "spiral ham",
        "state": "OK",
-       "hits": 72
+       "hits": 22
       }
      ],
      "hits": [
       {
-       "item": "Del Monte Whole Kernel Fire-Roasted Corn Blend",
-       "price": 2.49,
-       "size": "14.75 oz",
+       "item": "Fareway Boneless Half Ham",
+       "price": 34.95,
+       "size": "$6.99 / lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1334027-del-monte-corn-blend-fire-roasted-whole-kernel-14-75-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386969-fareway-boneless-half-ham-1-each"
       },
       {
-       "item": "Fareway Whole Kernel Corn",
-       "price": 0.78,
-       "size": "15.25 oz",
+       "item": "Frick's Sliced Quarter Applewood Ham",
+       "price": 10.99,
+       "size": "24 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300907-fareway-corn-whole-kernel-1525-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17616704-fricks-smoked-ham-applewood-sliced-24-oz"
       },
       {
-       "item": "Fareway Whole Kernel Corn",
-       "price": 2.88,
-       "size": "4 x 4 oz",
+       "item": "Fareway Boneless Quarter Ham",
+       "price": 17.48,
+       "size": "$6.99 / lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24227311-fareway-corn-whole-kernel-4-each"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387408-fareway-boneless-quarter-ham-1-each"
       },
       {
-       "item": "Corner Store Corn, Kernel, Whole",
-       "price": 0.77,
-       "size": "15.25 oz",
+       "item": "Fareway Boneless Ham Steaks",
+       "price": 4.0,
+       "size": "$7.99 / lb",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20628216-corner-store-corn-kernel-whole-1525-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387422-fareway-boneless-ham-steaks-1-each"
       },
       {
-       "item": "Fareway Whole Kernel Organic Corn",
-       "price": 1.68,
-       "size": "15 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24226429-fareway-corn-organic-whole-kernel-15-oz"
-      },
-      {
-       "item": "Fareway Whole Kernel Corn",
-       "price": 0.94,
-       "size": "8.5 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20557329-fareway-corn-whole-kernel-85-oz"
-      },
-      {
-       "item": "Fareway Whole Kernel Corn No Salt Added",
-       "price": 0.78,
-       "size": "15.25 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20613147-fareway-corn-no-salt-added-whole-kernel-1525-oz"
-      },
-      {
-       "item": "Fareway Cut Corn",
-       "price": 1.98,
+       "item": "Farmland Diced Ham",
+       "price": 5.99,
        "size": "16 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20584642-fareway-cut-corn-16-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/233565-farmland-ham-16-oz"
+      },
+      {
+       "item": "Hormel Diced Ham Classic",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410938-hormel-diced-boneless-ham-8-oz"
+      },
+      {
+       "item": "Hillshire Farm Ultra Thin Sliced Black Forest Ham Sandwich Meat, 9 oz",
+       "price": 4.49,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/124759-hillshire-farm-ultra-thin-sliced-black-forest-ham-deli-meat-9-oz"
+      },
+      {
+       "item": "Buddig Black Forest Ham",
+       "price": 0.99,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/317187-buddig-black-forest-ham-2-oz"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -464,400 +480,78 @@
     {
      "store": "Sam's Club",
      "state": "MATCHES",
-     "term_used": "roasted corn kernels",
+     "term_used": "spiral ham",
      "attempts": [
       {
-       "term": "roasted corn kernels",
+       "term": "spiral ham",
        "state": "MATCHES",
        "hits": 16
       }
      ],
      "hits": [
       {
-       "item": "Corn Nuts Ranch Crunchy Corn Kernels 1.7 oz., 18 pk.",
-       "price": 9.98,
+       "item": "Extra Lean Premium Ham, 1.25 lbs each., 2 pk.",
+       "price": 8.24,
        "size": "",
-       "unit_price": "$0.33/oz",
+       "unit_price": "$3.30/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/4KUM84A3OF28"
+       "url": "https://www.samsclub.com/p/-/4POJC00HFA8K"
       },
       {
-       "item": "Go Raw Organic Dry Roasted Pumpkin Seeds with Sea Salt, 20 oz.",
-       "price": 9.98,
+       "item": "Member's Mark Uncured Boneless Quarter Sliced Ham, priced per pound",
+       "price": 15.18,
        "size": "",
-       "unit_price": "",
+       "unit_price": "$4.67/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/14ZEE273GS5K"
+       "url": "https://www.samsclub.com/p/-/5CGKBNSJPF74"
       },
       {
-       "item": "Corn Nuts Chile Picante con Limon Crunchy Corn Kernels, 1.7 oz., 18 pk.",
-       "price": 9.98,
+       "item": "Smithfield Hardwood Smoked Bone In Ham Steak, priced per pound",
+       "price": 20.28,
        "size": "",
-       "unit_price": "$0.33/oz",
+       "unit_price": "$3.38/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6UHAOFIEEZPI"
+       "url": "https://www.samsclub.com/p/-/7KIX0S0F5W5I"
       },
       {
-       "item": "Corn Nuts Crunchy Corn Snacks, Variety Pack, 1.7 oz., 24 pk.",
-       "price": 10.98,
+       "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+       "price": 24.73,
        "size": "",
-       "unit_price": "$0.26/oz",
+       "unit_price": "$3.97/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/5396Q5KTFW08"
+       "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
       },
       {
-       "item": "Planters Salted Dry Roasted Peanuts Canister, 52 oz.",
-       "price": 8.58,
+       "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+       "price": 9.6,
        "size": "",
-       "unit_price": "$0.17/oz",
+       "unit_price": "$2.98/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/573HWWVWL90H"
+       "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
       },
       {
-       "item": "Del Monte Mexican Style Street Corn, 14.75 oz., 6 pk.",
-       "price": 10.78,
+       "item": "Pork Belly, Tray, priced per pound",
+       "price": 14.89,
        "size": "",
-       "unit_price": "$1.80/ea",
+       "unit_price": "$4.47/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6XQL19VX7A3O"
+       "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
       },
       {
-       "item": "Premium Gold Organic Golden Flaxseed, 4 lbs.",
-       "price": 15.98,
+       "item": "Member’s Mark Bone-In Pork Shoulder Blade Steaks, Tray, priced per pound",
+       "price": 20.28,
        "size": "",
-       "unit_price": "$0.25/oz",
+       "unit_price": "$3.87/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/132JP340LC1T"
+       "url": "https://www.samsclub.com/p/-/4XRN59WFW66B"
       },
       {
-       "item": "Members Mark Organic Chia Seeds, 48 oz.",
-       "price": 8.48,
+       "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+       "price": 20.58,
        "size": "",
-       "unit_price": "$0.18/oz",
+       "unit_price": "$2.94/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/55KBLYXQR8DH"
-      }
-     ],
-     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
-     "tier": "driver"
-    },
-    {
-     "store": "Walmart",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    }
-   ]
-  },
-  {
-   "term": "monterey jack cheese",
-   "unit": "",
-   "stores": [
-    {
-     "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "monterey jack cheese",
-     "attempts": [
-      {
-       "term": "monterey jack cheese",
-       "state": "OK",
-       "hits": 23
-      }
-     ],
-     "hits": [
-      {
-       "item": "Kroger® Colby & Monterey Jack Cheese Sticks",
-       "price": 3,
-       "size": "12 ct / .75 oz each",
-       "relevance": 129,
-       "url": "https://www.bakersplus.com/p/0001111088639"
-      },
-      {
-       "item": "Private Selection® Hatch Monterey Jack Cheese Fresh Sliced Deli Cheese",
-       "price": 9.99,
-       "size": "1 lb",
-       "relevance": 122,
-       "url": "https://www.bakersplus.com/p/0022637610000"
-      },
-      {
-       "item": "Sargento Mighty Bites™ Oven Roasted Turkey and Monterey Jack Cheese Snack Kit",
-       "price": 3,
-       "size": "2.8 oz",
-       "relevance": 121,
-       "url": "https://www.bakersplus.com/p/0004610035862"
-      },
-      {
-       "item": "Simple Truth® Protein Reduced Fat Monterey Jack Cheese with Jalapeño Peppers Snack Bars",
-       "price": 4.99,
-       "size": "10 ct / 0.75 oz",
-       "relevance": 118,
-       "url": "https://www.bakersplus.com/p/0001111005545"
-      },
-      {
-       "item": "El Monterey Signature Chicken & Monterey Jack Cheese Grilled Quesadillas, 5 count (Frozen)",
-       "price": 7.99,
-       "size": "5 ct / 20 oz",
-       "relevance": 118,
-       "url": "https://www.bakersplus.com/p/0007100700207"
-      },
-      {
-       "item": "Jimmy Dean® Protein Breakfast Bowl Chipotle Chicken Scrambled Egg & Monterey Jack Cheese Frozen",
-       "price": 4.49,
-       "size": "7.22 oz",
-       "relevance": 116,
-       "url": "https://www.bakersplus.com/p/0007790000350"
-      },
-      {
-       "item": "Kroger® Monterey Jack Block Cheese",
-       "price": 2,
-       "size": "8 oz",
-       "relevance": 92,
-       "url": "https://www.bakersplus.com/p/0001111058624"
-      },
-      {
-       "item": "Kroger® Monterey Jack Block Cheese",
-       "price": 3.69,
-       "size": "16 oz",
-       "relevance": 92,
-       "url": "https://www.bakersplus.com/p/0001111011882"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "monterey jack cheese",
-     "attempts": [
-      {
-       "term": "monterey jack cheese",
-       "state": "OK",
-       "hits": 7
-      }
-     ],
-     "hits": [
-      {
-       "item": "Our Family Natural Monterey Jack Cheese 8 Oz",
-       "price": 2.59,
-       "size": "8 oz",
-       "relevance": 129,
-       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_natural_monterey_jack_cheese_8_oz/p/7081816"
-      },
-      {
-       "item": "Kraft Flavor Fusions Buffalo Ranch Monterey Jack Cheese 7 Oz Block",
-       "price": 3.99,
-       "size": "7 oz",
-       "relevance": 124,
-       "url": "https://www.shopfamilyfare.com/shop/kraft_flavor_fusions_buffalo_ranch_monterey_jack_cheese_7_oz_block/p/1564405684715372247"
-      },
-      {
-       "item": "Kraft Flavor Fusions Tomato Basil Monterey Jack Cheese 7 Oz Block",
-       "price": 3.99,
-       "size": "7 oz",
-       "relevance": 124,
-       "url": "https://www.shopfamilyfare.com/shop/kraft_flavor_fusions_tomato_basil_monterey_jack_cheese_7_oz_block/p/1564405684715372251"
-      },
-      {
-       "item": "Our Family Natural Monterey Jack Shredded Cheese 8 Oz",
-       "price": 2.59,
-       "size": "8 oz",
-       "relevance": 87,
-       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_monterey_jack_shredded_cheese_8_oz/p/1564405684689268141"
-      },
-      {
-       "item": "Kraft Monterey Jack Caramelized Onion Mac & Cheese 9.5 Oz",
-       "price": 3.49,
-       "size": "9.5 oz",
-       "relevance": 86,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/mac_cheese/kraft_monterey_jack_caramelized_onion_mac_cheese_9_5_oz/p/1764405684715889054"
-      },
-      {
-       "item": "Sargento Balanced Breaks, Cheese & Crackers, Monterey Jack & Mild Cheddar Cheeses/Wheat Thins Mini Original Snacks, 3 Pack 3 Ea",
-       "price": 4.99,
-       "size": "3 ea",
-       "relevance": 68,
-       "url": "https://www.shopfamilyfare.com/shop/deli/snacks_desserts/sargento_balanced_breaks_cheese_crackers_monterey_jack_mild_cheddar_cheeses_wheat_thins_mini_original_snacks_3_pack_3_ea/p/1564405684710559805"
-      },
-      {
-       "item": "Kraft Monterey Jack With Peppers",
-       "price": 3.79,
-       "size": "8 oz",
-       "relevance": 59,
-       "url": "https://www.shopfamilyfare.com/shop/kraft_monterey_jack_with_peppers/p/1764405684716090796"
-      }
-     ],
-     "reason": "",
-     "tier": "server"
-    },
-    {
-     "store": "Hy-Vee",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
-     "tier": "pricer-tab"
-    },
-    {
-     "store": "Aldi",
-     "state": "UNUSABLE",
-     "term_used": "",
-     "attempts": [],
-     "hits": [],
-     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
-     "tier": "attended"
-    },
-    {
-     "store": "Fareway",
-     "state": "MATCHES",
-     "term_used": "monterey jack cheese",
-     "attempts": [
-      {
-       "term": "monterey jack cheese",
-       "state": "OK",
-       "hits": 27
-      }
-     ],
-     "hits": [
-      {
-       "item": "Fareway Monterey Jack Shredded Cheese",
-       "price": 2.48,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30532635-fareway-monterey-jack-shredded-cheese-8-oz"
-      },
-      {
-       "item": "Fareway Monterey Jack Cheese",
-       "price": 2.48,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720386-fareway-cheese-monterey-jack-8-oz"
-      },
-      {
-       "item": "Kraft Chunk Colby Jack",
-       "price": 3.18,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73753557-kraft-colby-monterey-jack-natural-cheese-block-oz-vacuum-packed-8-oz"
-      },
-      {
-       "item": "Kraft Colby & Monterey Jack Shredded Cheese",
-       "price": 3.18,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73542416-kraft-colby-jack-shredded-colby-monterey-jack-cheeses-8-oz"
-      },
-      {
-       "item": "Crystal Farms Marble Jack Cheese",
-       "price": 2.67,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/219658-crystal-farms-marble-jack-cheese-8-0-oz"
-      },
-      {
-       "item": "Fareway Colby & Monterey Jack Cheese Cubes",
-       "price": 2.48,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24552406-fareway-cheese-cubes-colby-monterey-jack-8-oz"
-      },
-      {
-       "item": "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
-       "price": 2.48,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713408-fareway-cheese-mozzarella-shredded-8-oz"
-      },
-      {
-       "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
-       "price": 2.48,
-       "size": "8 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24495714-fareway-cheese-mexican-style-blend-fancy-shredded-8-oz"
-      }
-     ],
-     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
-     "tier": "driver"
-    },
-    {
-     "store": "Sam's Club",
-     "state": "MATCHES",
-     "term_used": "monterey jack cheese",
-     "attempts": [
-      {
-       "term": "monterey jack cheese",
-       "state": "MATCHES",
-       "hits": 25
-      }
-     ],
-     "hits": [
-      {
-       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
-       "price": 10.46,
-       "size": "",
-       "unit_price": "$4.18/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13571669511"
-      },
-      {
-       "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
-       "price": 10.14,
-       "size": "",
-       "unit_price": "$4.06/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13598620787"
-      },
-      {
-       "item": "Member's Mark Colby and Monterey Jack Shredded Cheese 16 oz., 2 pk.",
-       "price": 5.97,
-       "size": "",
-       "unit_price": "$0.19/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6WSZE44AG1FN"
-      },
-      {
-       "item": "Member's Mark Colby and Monterey Jack Cheese Chunk 2 lbs.",
-       "price": 5.42,
-       "size": "",
-       "unit_price": "$2.71/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/45XSL96F8EFD"
-      },
-      {
-       "item": "Member's Mark Colby and Monterey Jack Cheese Sticks, 36 ct.",
-       "price": 7.87,
-       "size": "",
-       "unit_price": "$0.22/ea",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6UYJVG9YVPZO"
-      },
-      {
-       "item": "Tillamook Sharp Cheddar Cheese, 2.5 lbs.",
-       "price": 11.47,
-       "size": "",
-       "unit_price": "$4.59/lb",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/13585574608"
-      },
-      {
-       "item": "Member's Mark Fancy Shredded Colby and Monterey Jack Cheese 5 lbs.",
-       "price": 12.22,
-       "size": "",
-       "unit_price": "$0.15/oz",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2JOOO9D4WVS8"
-      },
-      {
-       "item": "Member's Mark Smoked Sausage Made with Bacon, Jalapeno & Monterey Jack Cheese, 4 oz., 12 ct.",
-       "price": 12.96,
-       "size": "",
-       "unit_price": "$1.08/ea",
-       "relevance": null,
-       "url": "https://www.samsclub.com/p/-/732A56Y7U2AS"
+       "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",

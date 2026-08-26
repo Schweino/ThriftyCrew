@@ -3,19 +3,19 @@
     "title":  "Baked Ham with Brown Sugar Glaze",
     "source_url":  "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/",
     "protein":  "pork",
-    "state":  "parked",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-26T04:15:31",
-    "updated":  "2026-08-26T04:42:15",
+    "updated":  "2026-08-26T09:30:42",
     "terms":  [
                   {
                       "term":  "spiral ham",
                       "optional":  false
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 437 cal below the 450 floor",
     "parked_on":  [
-                      "spiral ham"
+
                   ],
     "history":  [
                     {
@@ -53,6 +53,18 @@
                         "at":  "2026-08-26T04:42:15",
                         "by":  "derive",
                         "detail":  "waiting on: spiral ham"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-26T09:30:41",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-26T09:30:42",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 437 cal below the 450 floor"
                     }
                 ]
 }

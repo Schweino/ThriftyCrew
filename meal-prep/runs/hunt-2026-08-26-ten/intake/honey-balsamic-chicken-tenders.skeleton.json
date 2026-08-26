@@ -1,6 +1,6 @@
 ﻿{
     "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
-    "built_at":  "2026-08-26T04:52:02",
+    "built_at":  "2026-08-26T09:27:29",
     "slug":  "honey-balsamic-chicken-tenders",
     "findings":  [
                      "no food-macros-db row for \u0027Salt and Pepper\u0027 - the macros are computed WITHOUT it"

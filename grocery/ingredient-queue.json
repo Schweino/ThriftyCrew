@@ -4100,7 +4100,7 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T04:41:16"
+                                                     "checked":  "2026-08-26T09:30:06"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
@@ -4124,7 +4124,7 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T04:41:16"
+                                                    "checked":  "2026-08-26T09:30:06"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
@@ -4140,7 +4140,7 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T04:41:16"
+                                                  "checked":  "2026-08-26T09:30:06"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -4230,7 +4230,7 @@
                                   ],
                       "added":  "2026-08-26T04:36:33",
                       "why":  "baked-ham-with-brown-sugar-glaze needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
                                      "Walmart":  {
                                                      "state":  "blocked",
@@ -4238,7 +4238,7 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T04:41:16"
+                                                     "checked":  "2026-08-26T09:30:06"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
@@ -4249,12 +4249,12 @@
                                                      "checked":  "2026-08-26T04:41:16"
                                                  },
                                      "Family Fare":  {
-                                                         "state":  "not-carried",
-                                                         "price":  null,
-                                                         "size":  "",
-                                                         "item":  "",
-                                                         "evidence":  "server tier, FULL ladder: rung 1 \u0027spiral ham\u0027 = 1, rung 3 \u0027spiralham\u0027 = 0, rung 4 head noun \u0027spiral\u0027 = 10 candidates and not one is food-adjacent to ham - Top Flight spiral memo book, Our Family spiral mac and cheese, Goody spiral hair elastics, Betty Crocker spiral birthday candles, Kraft Spirals. The store\u0027s entire \u0027spiral\u0027 inventory contains no ham product, and the ham rung produced a single non-spiral hit.",
-                                                         "checked":  "2026-08-26T04:41:16"
+                                                         "state":  "carried",
+                                                         "price":  3.49,
+                                                         "size":  "lb",
+                                                         "item":  "Fresh Ham, Half Spiral Sliced Our Family",
+                                                         "evidence":  "OVERTURNS the earlier server-tier not-carried. No browser this session; ruled from disk instead - today\u0027s own Family Fare capture grocery\\out\\regular\\family-fare-regular-2026-08-26.json contains the row \u0027Fresh Ham, Half Spiral Sliced Our Family (Limit 1. See Ad For Details)\u0027, $3.49 per lb, source_ad \u0027everyday shelf price\u0027, as_of 2026-08-17, product_id 1564405684713031943, canonical_url .../shop/meat/ham/fresh/fresh_ham_half_spiral_sliced_our_family.../p/1564405684713031943. The URL sits in the store\u0027s MEAT \u003e HAM \u003e FRESH aisle and the name says Half Spiral Sliced, so this is a spiral-cut half ham a cook buys to bake and glaze - the ingredient itself, not a deli near-miss. The Freshop search lane missed it because its head-noun rung \u0027spiral\u0027 returns memo books and mac \u0026 cheese; price-ingredient.ps1 -Name \u0027spiral ham\u0027 also misses it by mapping the term to commodity deli-ham. Re-runnable: rg -i spiral grocery\\out\\regular\\family-fare-regular-2026-08-26.json",
+                                                         "checked":  "2026-08-26T09:30:06"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -4262,7 +4262,7 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T04:41:16"
+                                                    "checked":  "2026-08-26T09:30:06"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
@@ -4278,7 +4278,7 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T04:41:16"
+                                                  "checked":  "2026-08-26T09:30:06"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
@@ -4289,7 +4289,7 @@
                                                           "checked":  "2026-08-26T04:41:16"
                                                       }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {

@@ -1,0 +1,78 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-26T09:30:42",
+    "slug":  "baked-ham-with-brown-sugar-glaze",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "merged a second \u0027Pineapple Juice\u0027 line into the first - 217 g total",
+                  "merged a second \u0027Dijon Mustard\u0027 line into the first - 70 g total"
+              ],
+    "intake":  {
+                   "name":  "Baked Ham with Brown Sugar Glaze",
+                   "slug":  "baked-ham-with-brown-sugar-glaze",
+                   "protein":  "pork",
+                   "cuisine":  "",
+                   "source_url":  "https://www.spendwithpennies.com/baked-ham-with-brown-sugar-glaze/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Spiral Ham",
+                                           "grams":  4234,
+                                           "buy":  "one 9 lb bone-in spiral-sliced ham"
+                                       },
+                                       {
+                                           "item":  "Dijon Mustard",
+                                           "grams":  70,
+                                           "buy":  "2 1/3 tbsp"
+                                       },
+                                       {
+                                           "item":  "Pineapple Juice",
+                                           "grams":  217,
+                                           "buy":  "scant 1/3 cup (5 tbsp); generous 1/2 cup (9 tbsp)"
+                                       },
+                                       {
+                                           "item":  "Brown Sugar",
+                                           "grams":  124,
+                                           "buy":  "generous 1/2 cup, packed (about 9 1/2 tbsp)"
+                                       },
+                                       {
+                                           "item":  "Ground Ginger",
+                                           "grams":  1,
+                                           "buy":  "scant 1/3 tsp"
+                                       },
+                                       {
+                                           "item":  "Cornstarch",
+                                           "grams":  6,
+                                           "buy":  "2 1/3 tsp"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  437,
+                                              "protein_g":  56.8,
+                                              "carbs_g":  14.9,
+                                              "fat_g":  17.6
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT5M",
+                                "cookTime":  "PT2H30M",
+                                "totalTime":  "PT2H35M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}
