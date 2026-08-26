@@ -55,6 +55,7 @@ import fdc_lookup                                                # noqa: E402
 import harvest                                                   # noqa: E402
 import hunt_dispatch                                             # noqa: E402
 import hunt_lib                                                  # noqa: E402
+import learn_apply                                               # noqa: E402
 import local_extract                                             # noqa: E402
 import price_evidence                                            # noqa: E402
 
@@ -277,7 +278,7 @@ class Daemon(object):
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
                  costed_path="", pyrun=None, food_db_path="", queue_path="",
-                 carriage_path="", considered_path=""):
+                 carriage_path="", considered_path="", events_path="", resolutions_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         # T2: the narrative gets a file the moment the run dir is known. A QUIET daemon is a fixture
@@ -327,6 +328,16 @@ class Daemon(object):
         self.queue_path = queue_path
         self.carriage_path = carriage_path
         self.considered_path = considered_path
+        # TWO MORE SEAMS, AND THE H2 LESSON IS WHY THEY EXIST BEFORE THE FIRST DRILL RATHER THAN
+        # AFTER IT (PLAN-ingredient-memory D1). This build makes the daemon a WRITER of two more
+        # estate-wide files: meal-prep\db\ingredient-events.jsonl and, through
+        # ingredient-resolutions.ps1 -Record, meal-prep\db\ingredient-resolutions.json. The second
+        # is read as STEP 1 of the per-line resolution ladder on every recipe the estate ever maps,
+        # so a drill row in it is not a test artifact - it is an identity every future run will
+        # believe. H2 found three live ledgers a no-publish drill was still writing precisely
+        # because their seams were added late; these are added with the writer.
+        self.events_path = events_path
+        self.resolutions_path = resolutions_path
         self.food_db_lock = asyncio.Lock()
         # F1 (2026-08-25): THE SAME ONE-PEN-ONE-LOCK RULE FOR THE FDC CACHE. fdc_lookup.cache_write is
         # a whole-file write and two map workers can fill overlapping term lists at the same moment;
@@ -2196,6 +2207,32 @@ class Daemon(object):
                                           MAP_PRERESOLVE_PS, args, timeout=600)
         text = ((out or "") + (err or "")).strip()
         if rc == hunt_lib.EXIT_CLEAN:
+            # ---- D1: THE RULINGS BECOME MEMORY, AND ONLY AFTER THE ASSEMBLE SAID OK ---------------
+            #
+            # WHY HERE AND NOT IN THE MAP LANE. A ruling that failed assembly must not become an
+            # identity: the run refused to build a decision file over it, and caching something the
+            # estate would not write down is worse than caching nothing. This is the only point
+            # where "the mapper ruled it AND the assembler accepted it" is both true and known.
+            #
+            # ADVISORY, ALWAYS. Every problem apply_learn reports joins the findings road below; not
+            # one of them fails the assemble. Memory must never block the lane - a broken pen is a
+            # finding, not a parked recipe.
+            learned, lfindings = await asyncio.get_running_loop().run_in_executor(
+                None, learn_apply.apply_learn, self.run_dir, slug, res, tables, payload,
+                self.resolutions_path, self.events_path)
+            for f in lfindings:
+                self.findings.append("learn/" + f)
+            # THE 44-CLASS POSTCONDITION, ENFORCED AT THE CALL SITE. `Events / mapped residuals = 1`,
+            # made mechanical. On 2026-08-15 forty-four decide rejections left no trace outside a run
+            # dir and the next run re-sourced every one of them; the only reason anyone knows the
+            # number is that a human counted afterwards. This is the counter that would have said so
+            # the same night.
+            gap = learn_apply.postcondition_finding(slug, learned, payload)
+            if gap:
+                self.findings.append("learn/" + gap)
+            self.log("  map: %s learned %d event(s) (%d projected, %d held, %d surprise)"
+                     % (slug, learned.get("events_written", 0), learned.get("projected", 0),
+                        learned.get("held", 0), learned.get("surprises", 0)))
             return True, ""
         found = [ln.strip() for ln in text.replace("\r", "").split("\n")
                  if ln.strip().startswith("FINDING")]
@@ -3545,6 +3582,14 @@ class Daemon(object):
                 if not hunt_lib.is_pass(q.get("verdict")):
                     owner = self.owner_agent(q.get("owner"))
                     self.log("QA FAIL %s -> one repair cycle by %s" % (slug, owner))
+                    # D2: ERROR HAS TO WRITE. A QA fail the MAPPER owns is the estate discovering
+                    # that an identity it settled was wrong, and until now that discovery lived in
+                    # one run dir and died there. The event does not touch the ledger - a fail is not
+                    # a new identity - but it is what makes the correction loop legible afterwards:
+                    # the repair re-ruling re-projects, the old row is superseded, and this event is
+                    # the reason anyone can see WHY.
+                    await asyncio.get_running_loop().run_in_executor(
+                        None, self.learn_qa_fail, slug, q)
                     # CHANGE A (section 5.3): THE SAME SPLIT, ONE LANE OVER. A QA finding the WRITER
                     # owns lives in the fillable fields, so it is a field patch through the same
                     # road. A finding owned by the extractor or the mapper needs re-extraction or
@@ -3581,6 +3626,34 @@ class Daemon(object):
     def owner_agent(owner):
         return {"extractor": "recipe-hunter-extractor",
                 "mapper": "recipe-ingredient-mapper"}.get(owner, "recipe-writer")
+
+    def learn_qa_fail(self, slug, q):
+        r"""One `qa_mapper_fail` event, and ONLY when the raw owner field is `mapper`.
+
+        THE RAW FIELD, NOT owner_agent()'s ANSWER, and the difference is the whole check.
+        owner_agent maps anything it does not recognise to `recipe-writer`, so routing tells you
+        who repairs it; only the raw field tells you the QA agent actually blamed the MAPPING. An
+        event keyed off the routed name would file every unowned fail under the writer and none of
+        them here.
+
+        The slug's residual keys ride inside `evidence`, read from the run's own
+        mapped-pre\<slug>.rulings.json - and when that file cannot be read the event SAYS SO rather
+        than listing nothing, because "this recipe had no residual terms" and "we could not find out
+        which terms it had" are different facts about a failure.
+
+        Sync on purpose: it appends ONE line and is called through run_in_executor, so nothing here
+        holds a file handle across an await.
+        """
+        if str((q or {}).get("owner") or "").strip().lower() != "mapper":
+            return None
+        keys, why = learn_apply.residual_keys_for(self.run_dir, slug)
+        how, _ev = learn_apply.qa_fail_event(
+            slug, as_text(q.get("findings"), 600), run=self.run_id,
+            residual_keys=keys, why_keys=why, events=self.events_path)
+        if how == "failed":
+            self.findings.append("learn/%s: the QA mapper-fail could not be recorded as an event"
+                                 % slug)
+        return how
 
     def qa_battery_args(self, slug):
         """The battery's command line, SPLIT OUT so its seam is assertable.
@@ -4934,6 +5007,17 @@ def main(argv=None):
                     help="a scratch meal-prep\\db\\considered-dishes.json, for a drill. Empty means "
                          "the live one. It is the estate's dish-rulings memory, so a drill ruling in "
                          "it changes what a later real run treats as prior art.")
+    # D1/D2 (PLAN-ingredient-memory-2026-08-25). The two files this build makes the daemon a writer
+    # of. --resolutions is the one that matters most: that ledger is STEP 1 of the per-line
+    # resolution ladder on every recipe the estate maps, so a drill row in it is an identity every
+    # future run will believe.
+    ap.add_argument("--events", default="",
+                    help="a scratch meal-prep\\db\\ingredient-events.jsonl, for a drill. Empty means "
+                         "the live log.")
+    ap.add_argument("--resolutions", default="",
+                    help="a scratch meal-prep\\db\\ingredient-resolutions.json, for a drill. Empty "
+                         "means the live ledger - which map-preresolve consults FIRST on every line "
+                         "of every recipe, so a drill row there is not a test artifact.")
     ap.add_argument("--publish", action="store_true",
                     help="publish for real. WITHOUT this the wave lane runs wave-publish -DryRun.")
     ap.add_argument("--no-start-model", dest="no_start_model", action="store_true",
@@ -4963,7 +5047,8 @@ def main(argv=None):
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
                specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None),
                food_db_path=a.food_db, queue_path=a.queue, carriage_path=a.carriage,
-               considered_path=a.considered)
+               considered_path=a.considered, events_path=a.events,
+               resolutions_path=a.resolutions)
 
     async def go():
         ok, err = await d.seed()

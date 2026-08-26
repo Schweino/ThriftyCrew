@@ -209,7 +209,22 @@ def skeletoned(tmp, slugs, cal=500, carbs=20, protein=35.0):
     return tmp
 
 
+# THE MEMORY SEAMS, DEFAULTED FOR THE WHOLE SUITE (PLAN-ingredient-memory D1).
+#
+# assemble_mapped now writes ingredient-events.jsonl and, through -Record, the resolutions ledger -
+# and that ledger is consulted as STEP 1 of the per-line resolution ladder on EVERY recipe the
+# estate maps. A fixture row in it is not a test artifact; it is an identity every future run would
+# believe. So the suite's OWN scratch paths are the default here rather than something each fixture
+# has to remember, which is the H2 lesson (three live ledgers a no-publish drill was still writing)
+# applied before the first drill instead of after it. `_learn_seams_are_never_live` asserts it.
+LEARN_SCRATCH = tempfile.mkdtemp(prefix="daemon-learn-seam-")
+SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
+SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
+
+
 def daemon(run_dir="R", run_id="drill-run", dispatcher=None, ps=None, **kw):
+    kw.setdefault("events_path", SCRATCH_EVENTS)
+    kw.setdefault("resolutions_path", SCRATCH_RESOLUTIONS)
     return HD.Daemon(run_dir, run_id, dispatcher=dispatcher or FakeDispatch(),
                      ps=ps or FakePS(), quiet=True, **kw)
 
@@ -992,6 +1007,37 @@ def run():
       *_t8_a_blocked_sweep_degrades_and_says_so())
 
     # =================================================================================================
+    H("D1/D2 - the map lane's rulings become memory, and error writes too")
+    # =================================================================================================
+    # NEUTER PROOFS, RUN AND REVERTED 2026-08-25, counts as this suite printed them:
+    #   * delete the apply_learn call from assemble_mapped   -> 5 red;
+    #   * move it ABOVE the rc==EXIT_CLEAN check (learn from a failed assemble) -> 1 red;
+    #   * drop the postcondition_finding call at the call site -> 1 red;
+    #   * route learn_qa_fail off owner_agent()'s answer instead of the RAW owner field -> 1 red
+    #     (the twin: owner_agent maps anything unrecognised to recipe-writer, so a writer-owned
+    #     fail would file itself as a mapper fail);
+    #   * drop the two seam defaults from daemon()           -> 1 red.
+    T("MUST FIRE  assemble_mapped LEARNS: two clean rulings become two events and two ledger rows, "
+      "and it is the CALL SITE that does it - pinning apply_learn alone passes with the hook deleted",
+      *_learn_the_call_site_writes_events())
+    T("MUST FIRE  a FAILED assemble teaches NOTHING - no event, no ledger. The run refused to build "
+      "a decision file over that ruling, so it must not become an identity",
+      *_learn_a_failed_assemble_teaches_nothing())
+    T("MUST FIRE  a writer that drops one of two rulings trips the 44-class postcondition AT THE "
+      "CALL SITE, naming both counts", *_learn_the_44_class_fires_at_the_call_site())
+    T("CLEAN TWIN the same road with an honest writer trips nothing",
+      *_learn_a_clean_batch_trips_nothing())
+    T("MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and "
+      "the REJECTED id is held rather than cached", *_learn_registrar_rulings_get_events())
+    T("MUST FIRE  a QA fail owned by the MAPPER writes exactly one slug-level event carrying the "
+      "slug's residual keys", *_qa_mapper_fail_writes_one_event())
+    T("CLEAN TWIN a QA fail owned by the WRITER writes none - the raw owner field decides, not "
+      "owner_agent(), which maps everything it does not recognise to recipe-writer",
+      *_qa_writer_fail_writes_none())
+    T("MUST FIRE  the suite's memory seams are never the live estate files (H2's lesson, applied "
+      "with the writer instead of after it)", *_learn_seams_are_never_live())
+
+    # =================================================================================================
     H("G - the mechanical stages are lane events, and lane() does not recurse")
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
@@ -1459,6 +1505,216 @@ def _t8_a_blocked_sweep_degrades_and_says_so():
                 "proposals=%s findings=%s" % (json.dumps(bids), json.dumps(d.findings)[:200]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# D1/D2 - THE ENCODE HOOK. Every case here drives assemble_mapped or qa_lane, never learn_apply
+# directly: learn_apply has its own suite, and TWICE this estate has watched a neuter come back 0 red
+# because a fixture pinned a function while the bug lived at its call site (PLAN-map-judge-split 4).
+# =====================================================================================================
+
+import learn_apply as _LA                                        # noqa: E402
+
+
+def _learn_scratch(prefix):
+    """A run dir plus its OWN event log and ledger, so no two cases can read each other's writes."""
+    tmp = tempfile.mkdtemp(prefix=prefix)
+    return tmp, os.path.join(tmp, "events.jsonl"), os.path.join(tmp, "ledger.json")
+
+
+def _learn_events(path):
+    if not os.path.exists(path):
+        return []
+    return [json.loads(l) for l in io.open(path, encoding="utf-8").read().split("\n") if l.strip()]
+
+
+def _learn_ps(assemble_rc=0):
+    """FakePS answering -NewBids with no proposals and -Assemble with the given code."""
+    def handler(args):
+        if "-NewBids" in args:
+            return 0, json.dumps({"slug": "s1", "count": 0, "proposals": []}), ""
+        if "-Assemble" in args:
+            return assemble_rc, ("FINDING  the drill said no" if assemble_rc else ""), ""
+        return 0, "", ""
+    return FakePS({"map-preresolve": handler})
+
+
+def _learn_res(slug="s1"):
+    """A mapper result whose two rulings are BOTH cachable: real board ids, real evidence."""
+    return {"slug": slug, "status": "ok", "state": "priced",
+            "lines": [{"raw": "1 lb chicken", "buy": "3 1/2 lb"}],
+            "rulings": [
+                {"raw": "1 lb chicken breast", "term": "Boneless Chicken Breast",
+                 "canon_item": "Boneless Skinless Chicken Breast", "bid": "chicken-breast",
+                 "decision": "mapped", "evidence": "the trimmed breast the board prices"},
+                {"raw": "2 eggs", "term": "Large Eggs", "canon_item": "Eggs", "bid": "eggs",
+                 "decision": "mapped", "evidence": "grade A large, the board's own basis"}],
+            "new_commodity_proposals": []}
+
+
+def _learn_the_call_site_writes_events():
+    """MUST FIRE, at the CALL SITE. assemble_mapped is what must learn - a fixture over apply_learn
+    alone passes with the hook deleted, which is the exact shape of the T8 0-red neuter."""
+    tmp, ev, led = _learn_scratch("daemon-learn-a-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        evs = _learn_events(ev)
+        rows = _LA.read_ledger(led)[0]
+        return (ok and len(evs) == 2 and all(e["kind"] == "ruling" and e["projected"] for e in evs)
+                and sorted(rows) == ["boneless chicken breast", "large eggs"],
+                "ok=%s why=%s events=%d rows=%s" % (ok, why[:80], len(evs), sorted(rows)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_a_failed_assemble_teaches_nothing():
+    """MUST FIRE. A ruling that failed assembly must NOT become memory: the run refused to build a
+    decision file over it, and an identity the estate would not write down is worse than none."""
+    tmp, ev, led = _learn_scratch("daemon-learn-b-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(assemble_rc=1), events_path=ev, resolutions_path=led)
+        ok, _why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        return (not ok and _learn_events(ev) == [] and not os.path.exists(led),
+                "ok=%s events=%d ledger=%s" % (ok, len(_learn_events(ev)), os.path.exists(led)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_the_44_class_fires_at_the_call_site():
+    """MUST FIRE. The postcondition, driven through assemble_mapped with a writer that drops one.
+
+    The whole apply_learn road stays REAL - only the log's append is stubbed - so this pins the
+    daemon's own counter rather than a hand-built summary dict.
+    """
+    tmp, ev, led = _learn_scratch("daemon-learn-c-")
+    real = _LA.EventLog
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+
+        class Dropping(real):
+            def append(self, e):
+                self.seen = getattr(self, "seen", 0) + 1
+                if self.seen == 1:
+                    return "dropped-by-fixture"
+                return real.append(self, e)
+
+        _LA.EventLog = Dropping
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        ok, _why = arun(d.assemble_mapped("s1", _learn_res(), None))
+        gap = [f for f in d.findings if "the 44-class" in f]
+        return (ok and len(gap) == 1 and "2 residual rulings but 1 learn events" in gap[0],
+                "ok=%s findings=%s" % (ok, json.dumps(d.findings)[:220]))
+    finally:
+        _LA.EventLog = real
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_a_clean_batch_trips_nothing():
+    """CLEAN TWIN. The same road with an honest writer produces no 44-class finding at all."""
+    tmp, ev, led = _learn_scratch("daemon-learn-d-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Boneless Chicken Breast", "Large Eggs"]})
+        d = daemon(run_dir=tmp, ps=_learn_ps(), events_path=ev, resolutions_path=led)
+        arun(d.assemble_mapped("s1", _learn_res(), None))
+        return (not [f for f in d.findings if "the 44-class" in f],
+                json.dumps(d.findings)[:220])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _learn_registrar_rulings_get_events():
+    """MUST FIRE. Registrar rulings decide whether a commodity is BORN and were invisible across
+    runs - no registrar ledger has ever existed. This is the first."""
+    tmp, ev, led = _learn_scratch("daemon-learn-e-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["Gochujang Deluxe"]})
+
+        def handler(args):
+            if "-NewBids" in args:
+                return 0, json.dumps({"slug": "s1", "count": 1, "proposals": [
+                    {"term": "Gochujang Deluxe", "proposed_bid": "gochujang-deluxe-x",
+                     "evidence": "a distinct purchase", "declared": True}]}), ""
+            return 0, "", ""
+        fd = FakeDispatch({"commodity-registrar": [{"rulings": [
+            {"proposed_bid": "gochujang-deluxe-x", "verdict": "reject",
+             "reason": "already priced under gochujang"}]}]})
+        d = daemon(run_dir=tmp, ps=FakePS({"map-preresolve": handler}), dispatcher=fd,
+                   events_path=ev, resolutions_path=led)
+        res = {"slug": "s1", "status": "ok", "state": "priced", "lines": [],
+               "rulings": [{"raw": "1 tbsp gochujang deluxe", "term": "Gochujang Deluxe",
+                            "canon_item": "Gochujang Deluxe", "bid": "gochujang-deluxe-x",
+                            "decision": "mapped", "evidence": "the Korean fermented chili paste"}],
+               "new_commodity_proposals": []}
+        arun(d.assemble_mapped("s1", res, None))
+        evs = _learn_events(ev)
+        reg = [e for e in evs if e["kind"] == "registrar"]
+        ruled = [e for e in evs if e["kind"] == "ruling"]
+        return (len(reg) == 1 and reg[0]["decision"] == "reject" and reg[0]["by"] == "registrar"
+                and len(ruled) == 1 and ruled[0]["projected"] is False
+                and ruled[0]["held_reason"] == "bid unknown to every namespace"
+                and not os.path.exists(led),
+                "events=%s" % json.dumps([(e["kind"], e["decision"]) for e in evs]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_run(owner):
+    """Drive the WHOLE qa_lane for one slug that fails QA twice, owned by `owner`."""
+    tmp, ev, led = _learn_scratch("daemon-learn-qa-")
+    try:
+        os.makedirs(os.path.join(tmp, "mapped-pre"), exist_ok=True)
+        with io.open(os.path.join(tmp, "mapped-pre", "s1.rulings.json"), "w",
+                     encoding="utf-8") as f:
+            json.dump({"slug": "s1", "rulings": _learn_res()["rulings"]}, f)
+        fail = {"slug": "s1", "verdict": "FAIL", "owner": owner,
+                "findings": "the mapper bridged a form flip"}
+        fd = FakeDispatch({"recipe-source-qa": [fail, fail],
+                           "recipe-ingredient-mapper": [{}],
+                           "recipe-writer": [{"no_change": True}]})
+        d = daemon(run_dir=tmp, ps=FakePS(), dispatcher=fd, events_path=ev, resolutions_path=led)
+
+        async def noop(_slug):
+            return 0
+        d.qa_battery = noop                     # the battery shells coverage_check; not under test
+        d.ch["qa"].push({"slug": "s1"})
+        d.ch["qa"].close()
+        arun(d.qa_lane())
+        return _learn_events(ev), d
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _qa_mapper_fail_writes_one_event():
+    evs, _d = _qa_run("mapper")
+    qa = [e for e in evs if e["kind"] == "qa_mapper_fail"]
+    ok = (len(qa) == 1 and qa[0]["key"] == "" and qa[0]["by"] == "qa"
+          and qa[0]["decision"] == "fail" and qa[0]["projected"] is False
+          and "boneless chicken breast" in qa[0]["evidence"])
+    return ok, "events=%s" % json.dumps([(e["kind"], e.get("evidence", "")[:60]) for e in evs])
+
+
+def _qa_writer_fail_writes_none():
+    evs, _d = _qa_run("writer")
+    return (not [e for e in evs if e["kind"] == "qa_mapper_fail"],
+            json.dumps([e["kind"] for e in evs]))
+
+
+def _learn_seams_are_never_live():
+    """MUST FIRE. The suite's default seams may never be the live estate files - H2's whole lesson.
+
+    Checked on the DAEMON the fixtures actually build, not on the constants, because the defect
+    would be a fixture that forgot to thread them.
+    """
+    d = daemon(run_dir="R")
+    live_ev = os.path.join(HD.MP, "db", "ingredient-events.jsonl")
+    live_led = os.path.join(HD.MP, "db", "ingredient-resolutions.json")
+    return (bool(d.events_path) and bool(d.resolutions_path)
+            and os.path.abspath(d.events_path) != os.path.abspath(live_ev)
+            and os.path.abspath(d.resolutions_path) != os.path.abspath(live_led),
+            "events=%s ledger=%s" % (d.events_path, d.resolutions_path))
 
 
 def _m3_zero_absent_routes_to_write():
