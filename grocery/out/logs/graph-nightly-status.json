@@ -1,50 +1,44 @@
 ﻿{
-    "generated":  "2026-08-24T21:32:44",
-    "started":  "2026-08-24T21:30:01",
-    "deadline":  "2026-08-25T00:00:01",
+    "generated":  "2026-08-25T21:31:59",
+    "started":  "2026-08-25T21:30:01",
+    "deadline":  "2026-08-26T00:00:01",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  163,
+    "elapsed_sec":  118,
     "card_free":  true,
-    "free_vram_mib":  14627,
-    "llama_started":  true,
+    "free_vram_mib":  14274,
+    "llama_started":  false,
     "stages":  [
                    {
                        "stage":  "emit",
                        "state":  "OK",
-                       "detail":  "contested: 0 question(s) of 20507 (20507 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 2.4s",
-                       "sec":  3
+                       "detail":  "contested: 0 question(s) of 20507 (20507 settled by the deterministic layers), 4070 text(s) to embed -\u003e C:\\Codex\\ThriftyCrew\\sidecar\\data\\contested-pairs.json in 1.8s",
+                       "sec":  2
                    },
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:05] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
-                       "sec":  1
+                       "detail":  "[21:30:04] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "sec":  0
+                   },
+                   {
+                       "stage":  "hunter",
+                       "state":  "OK",
+                       "detail":  "ingest_hunter_events: 0 events - a clean zero-event day (the log is present and empty, which is not the same as absent)",
+                       "sec":  0
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  123
+                       "sec":  112
                    },
                    {
                        "stage":  "serve",
-                       "state":  "OK",
-                       "detail":  "4 slots",
-                       "sec":  8
-                   },
-                   {
-                       "stage":  "resolve",
-                       "state":  "OK",
-                       "detail":  "resolved 22140 rows in 1.9s (20507 distinct questions, 0 model calls)",
-                       "sec":  2
-                   },
-                   {
-                       "stage":  "stage1",
-                       "state":  "OK",
-                       "detail":  "Next: python graph/learning/stage2_review.py --emit-packet",
-                       "sec":  21
+                       "state":  "BLIND",
+                       "detail":  "llama-server did not come up; no model stages this run",
+                       "sec":  3
                    },
                    {
                        "stage":  "stop",
