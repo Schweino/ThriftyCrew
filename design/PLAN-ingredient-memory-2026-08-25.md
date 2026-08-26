@@ -618,6 +618,21 @@ log_event's own primary key collided and hid the missing dedupe. A `--run` seam 
 two halves of the fixture are two NIGHTS rather than two calls, and the same neuter then returns
 **1 RED**.
 
+### C0 (B8) — the one thing this build did NOT do, and why
+
+§0.7 requires the estate's agent-def sync step after the one agent-definition edit (§5.4). The
+mapper's definition was edited and `ops\prompt-backup\agents\recipe-ingredient-mapper.md` was
+brought byte-identical to it in the same commit — so the REPO half of that step is done, and the
+live project-scope file at `C:\Codex\ThriftyCrew\.claude\agents\` becomes correct the moment this
+branch merges, because that path IS the repo.
+
+`ops\audit-prompt-backup.ps1 -Sync` was **not run**. It writes to `C:\Users\Owner\.claude\agents`
+— outside the repository entirely — which this build was explicitly forbidden to touch. The
+USER-scope copy of `recipe-ingredient-mapper.md` is therefore still the pre-edit text, and
+`audit-prompt-backup.ps1` will report SCOPE DRIFT on it until someone runs `-Sync` after the merge.
+That is one command and it is named here so it cannot be forgotten: **run
+`ops\audit-prompt-backup.ps1 -Sync` after merging.**
+
 ### C7 (B5) — a source-position fixture that can see itself is reading the wrong file
 
 The nightly `-SelfTest` pins the new stage's SLOT by source position. Written with literal needles,
