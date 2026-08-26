@@ -387,6 +387,211 @@ The recipe-dedup-selector agent definition's dossier-contract rewrite shipped wi
 2026-08-23 (the parallel per-protein selectors and selected-*.json outputs are retired, and after
 round 1 wrote one anyway, the agent's frontmatter tool list is read-only - see the D5 record).
 
+
+<!-- RECOVERED 2026-08-26. Ratified and committed 2026-08-24 in d2a9280c on branch
+     claude/eloquent-dewdney-47b0e7, and it NEVER REACHED main - `grep S2a design/` returned
+     nothing here for two days while a memory and two sessions believed it was present. Spliced
+     back ALONE: merging that branch would have reverted candidate-pool.json by 23,394 lines and
+     harvest.py by 620, taking the same day's rib purge and rib-filter fix with it. The 1,862
+     lines main has gained since 08-24 are untouched. D12 is ORDERED as of 2026-08-26, rungs 1-2
+     only. -->
+
+### S2a THE IDENTITY INSTRUMENTS, RE-FOUNDED ON MEASUREMENT (ADDED 2026-08-24 - ratified on paper before build; D12 is the build, and it is NOT ordered yet)
+
+Written at Brad's direction after the 2026-08-23 --classify pass filed 180 dishes under bbq (S1
+item 4's correction of 2026-08-24 dissects that incident; the immediate fixes shipped the same
+night). His question was the right one and it is bigger than the incident: not "how do we patch the
+classifier" but "what is the SMARTEST, most accurate architecture, and does it scale as the catalog
+adds hundreds more recipes." This section is the answer. Every number in it was measured on
+2026-08-24 against the live pool (476 available candidates after the not-a-recipe ruling) and the
+live digest (540 recipes); nothing here is projected.
+
+**The governing principle: instruments are engineered for RECALL; precision belongs to the
+decider.** Section 1.4 already assigned the roles from measurement: local saying NO is 0 wrong of
+117; local asserting a MATCH is 37% false at 0.90-0.98 confidence; the Opus decider is the only
+layer allowed to rule identity. System accuracy is therefore (completeness of the evidence shown to
+the decider) x (the decider's judgment) - and the decider is already the best tier we buy. That
+leaves exactly one lever. A spurious neighbour in a dossier costs one line the decider reads and
+dismisses; a MISSING neighbour is an invisible error - the decider cannot rule on a duplicate it
+was never shown, and no downstream gate catches it, because coverage_check and source-QA compare
+against the transcription and the source page, never against the catalog. So every accuracy dollar
+goes into never missing evidence, and every number a dossier carries must be auditable: it names
+the recipe and the score, never a bare integer.
+
+Against that principle, three defects in the current instruments, each measured:
+
+1. **The embedding lane starves the side that matters.** `harvest_embed.py --build` argsorts one
+   row over catalog and pool CONCATENATED and keeps the top 5 overall, so the backlog (476 rows,
+   and it is the side that grows) crowds out the live catalog (540): 330 of 3,395 stored neighbour
+   entries are live-catalog, and **40 of 476 available candidates carry no live neighbour at
+   all** - and S2 defines exactly what their dossiers then say, because `catalog_checked` plus an
+   empty live block reads as evidence of absence, the strongest accept signal there is. The scores
+   for both sides are already computed; keeping the top 5 PER SIDE costs nothing and closes the
+   hole.
+2. **The ingredient channel is built and unplugged.** find-similar.ps1's Get-Score awards a bonus
+   for shared commodity items, with its own fixture proving it ("shared commodity items add
+   signal") - and `score_pool` sends `"items": []` for every candidate, so the word-overlap channel
+   runs on names alone. Names are where duplicates hide: "Marry Me Chicken" and "Creamy Sun-Dried
+   Tomato Chicken" share no name word and one ingredient list. The embedding channel does not cover
+   for it - its signature string is name + protein by design (symmetry with the digest shape), so
+   ingredients are today invisible to BOTH channels. Candidates have no canonical ids before the
+   mapper runs, so the plug is a normalization of `ingredients_verbatim` words into the item-id
+   word namespace (the ids are kebab-case English; split and match), not a one-line change.
+3. **The load-bearing crowding number is keyed on a vocabulary that misfiles 57% of the catalog.**
+   make-saturation.ps1 derives the family with Get-Family over the recipe NAME only, while the
+   digest rows it is iterating already carry each recipe's canonical items. Measured: 306 of 540
+   live recipes change family when the items are read; beef|tomato reads 5 where the truth is 55;
+   turkey|tomato 7 vs 48; the four `plain` buckets hold 391 recipes where roughly 124 are genuinely
+   plain. The error runs in the expensive direction - an undercount says a full shelf is empty,
+   which is the 2026-08-15 five-creamy-pork-chop-skillets run this file exists to prevent. And the
+   deeper problem is the SHAPE, not the derivation: 9 families x 4 proteins is a fixed 36-cell
+   histogram, ~15 recipes per cell at 540 and ~55 per cell at 2,000, so the instrument gets BLUNTER
+   as the catalog grows, and every cuisine expansion needs hand-added vocabulary in two files with
+   every existing recipe silently re-bucketing. A fixed-vocabulary histogram is the wrong shape for
+   a number a decider reads.
+
+**The re-foundation, four parts:**
+
+- **(a) Identity evidence: three orthogonal channels, union, all recall-tuned.** bge-m3 name
+  embeddings with top-5 live AND top-5 backlog; word overlap on names; ingredient overlap (the
+  plugged channel). Every neighbour ships as it does today - name, score, shared evidence, source,
+  side - so the decider sees WHY each one is there.
+- **(b) Calibration is derived from the corpus, never hand-set.** bge-m3 on short dish names runs
+  high: the live-catalog neighbour scores on record measure median 0.839, p90 0.899, max 0.965, so
+  a hand-picked 0.85 would flag half of everything. The principled null distribution is the live
+  catalog's own internal pairwise similarity: 540 published recipes are all ruled-distinct by
+  construction, so the score at which two PUBLISHED recipes sit is by definition "not a duplicate."
+  Every neighbour score is reported with its percentile against that distribution, and the
+  distribution is recomputed beside the digest whenever the digest is rebuilt. **This is the
+  scaling property: the calibration tracks the corpus, so nothing goes stale at 1,000 recipes - the
+  space gets denser and the instrument gets sharper, which is the exact opposite of the
+  histogram.** The ledger's 5 rejected-dupe rulings are a sanity check on the threshold, never the
+  anchor - n is too small to calibrate on.
+- **(c) The dossier's crowding number becomes auditable and vocabulary-free.**
+  `saturation_pressure` (an opaque integer keyed protein|family) is replaced by
+  `crowding: {live_over_threshold, nearest: {slug, name, score, percentile}}`, derived from the
+  live-side neighbours already attached to the candidate, at a calibrated same-shelf percentile (a
+  lower bar than the dupe threshold). When the embedding lane has not run, the block REFUSES -
+  states could-not-look - rather than reporting 0, the same blind-lane rule score_pool has enforced
+  since 2026-08-24. This also retires the null-family question outright: with the field gone,
+  `sauce_family: null` costs nothing anywhere.
+- **(d) The family and the region map are demoted to the roles that fit them.** `sauce_family`
+  becomes what S1 item 4 always declared: a shortlist key steering the neighbour search, never
+  feeding a decider-visible number - after (c), the 2026-08-23 bbq bug CLASS is structurally
+  harmless rather than merely patched. saturation.json survives scoped to SOURCER guidance only,
+  which is the one question a coarse region map is the right shape for ("where should a hunt look"
+  precedes having any candidate to embed), with its derivation fixed to read the digest's items for
+  the item-DEFINED families only - cream, tomato, soy, curry, wine, bbq, in the taxonomy's declared
+  precedence. cheese, herb and spice stay name-only: their ingredient needles fire on garnishes
+  (shredded cheese on top, parsley at the end), and the conservative set still captures 267 of the
+  306 measured misfilings. **Get-Family and Get-DishKey are NOT touched** - Get-DishKey builds dish
+  identity for the 822-ruling ledger, and changing it re-keys history.
+
+**What deliberately does not move:** no auto-rejection on similarity at any score (section 1.4
+rule 2 - local ranks, the decider rules; a threshold-reject would trade accuracy for cost, and
+accuracy is the constraint Brad has twice restated as non-negotiable); the decider's pin; the
+supersede-not-prune ledger; and the dossier stays bounded at top-5 per side per channel, so the
+decider's cost per candidate is CONSTANT in catalog size - the catalog growing to hundreds more
+recipes makes the instruments sharper and the dossiers no bigger.
+
+- **Unattended browser pre-pass (mechanical):** pull-browser-stores.py CDP sweeps for Fareway and
+  Hy-Vee single lookups, with the existing pacing profiles and wall detection (a wall stops the
+  lane and leaves UNUSABLE, which reads as PENDING - never not-carried). This is the same code the
+  capture estate already trusts daily. **Sam's Club sweeps only when the driver profile carries a
+  Drunken Noodles is not saffron") and drive the attended browser surfaces per its existing
+  two-surface contract (Walmart and Aldi today) plus any store the pre-pass left UNUSABLE.
+  parse-compute, so an out-of-band recipe is retired at skeleton build (state `rejected-macros`, as
+  the existing state machine already supports) before any prose is paid for. v2 checked the band on
+  the WRITE result - after the most expensive per-recipe stage had already run.
+Judgment calls go out as headless Claude Code invocations. **`claude -p` cannot invoke a named
+subagent as its top-level agent** - subagents in `.claude\agents\` are things a running session
+delegates to, not entry points - and prompting a headless main loop to "use the recipe-writer
+subagent" pays for TWO contexts per call (the main loop plus the subagent), which quietly defeats
+the plan. The adapter therefore reconstructs each agent from its definition file:
+4. Where a frontmatter field has no CLI flag (e.g. `effort`), record the gap in the drill report
+   rather than silently dropping it; if it materially changes an agent's behavior, that is a
+   phase-3 finding to resolve before go-live, not after.
+measurement, not for this document's assumption. If measured overhead is large, the counter-move is
+bigger dossiers per call (the batch sizes are caps, not quotas), and the recorded fallback in §4.2
+remains.
+| local 27B calls (line-split, full extract, enum, adversarial) | 4 (serve.ps1 default `-Slots 4`; more queues). **AUDITED 2026-08-23, and there is a CONTEXT-BUDGET CONFLICT D6 must resolve by measurement, not discover mid-sweep:** serve.ps1's `-c 16384` is the TOTAL KV budget SPLIT across slots - 4 slots = 4,096 tokens per slot - while rung-2 full-page transcription sends ~24k chars of page (~6k tokens) plus `max_tokens=4096`, roughly 10k tokens, which fits only a 1-slot split at the default context. Rung-1 line-splits (~100-200-token prompts) fit 4 or even 8 slots trivially (serve.ps1's own header measured 8 slots at 2.2x aggregate, flat past 8). So the sweep's shape is: rung-1 fans wide, rung-2 runs narrow or the server runs with raised `-Context` if VRAM allows - a measured decision recorded at D6 build time. The fan-out pattern is the estate's existing one: ThreadPoolExecutor with jobs <= Slots (graph\bench\adversarial_probe.py, `--jobs ... coupled to serve.ps1 -Slots`). **RESOLVED 2026-08-23 (D6 build, measured on the box, and the audit's prediction was exactly right).** llama-server's `/props` reports the per-slot budget rather than the total, which is the only honest source since `-c` and `--parallel` are start-time flags: at serve.ps1's defaults it reports **4,096 tokens per slot**, and rung 2 needs **~11,465** (a 24k-char page at 3.5 chars/token plus 4,096 out plus headroom). Raising `-c` is not the way out - measured free VRAM with the 4-slot server up was **1,200 MiB**, against the ~1.5-2 GB doubling the KV cache would need. What DOES work costs nothing: **`-Slots 1` at the same `-c 16384` gives one slot the whole 16,384** and measured **14,688 MiB used, i.e. LESS VRAM than the 4-slot server**, because `-c` is the total either way. So the sweep is two passes on two server shapes - rung 1 fanned at 4 slots, rung 2 narrow at 1 - and `extract_sweep.py --from-report` exists precisely so pass 2 targets only what pass 1 escalated instead of re-earning 45 settled answers. The dangerous alternative is named in code: local_extract REFUSES rung 2 on a too-small slot (exit 2) rather than truncating the page, because a page cut at the slot ceiling still substring-verifies line by line - the checker proves what IS there and can never prove what is absent | GPU |
+| recipe-ingredient-mapper | fable / high | residual-only: the judgment lines, pre-resolved table supplied | HOLD |
+| mapper decision file | `<RunDir>\mapped\<slug>.json` | mapper agent (unchanged contract) -> skeleton builder, auditor |
+- **Pre-resolve rows:** per ingredient `{raw, canon_item, bid, board, resolution: "resolved" |
+  fooddb_known, evidence, source: "cache" | "vocab" | "alias"}`.
+  slug, protein, cuisine, source_url, visibility, `ingredients[]` (item/grams/buy),
+  `macros_per_serving`, head.prepTime/cookTime/totalTime. WRITER-FILLABLE - `prose.*`,
+  attempts: [], hits: [{item, price, size, url}] (cap 8), reason}` - the search-verdict-lib shape,
+  serialized. The pricer adjudicates from it and records via ingredient-queue exactly as today.
+
+  **NOTE (2026-08-24): `saturation_pressure` in this contract is slated for replacement by
+  the `crowding` block S2a part (c) specifies. The contract line above stays the live truth
+  until D12 rung 3 lands - the replacement, the agent brief, and this document move in that
+  one commit, not before.**
+| mapped with open holds (unbid / vocab follow-ups) | held list in -Status output; NOT dispatched |
+| waved | wave lane, resuming at the first un-stamped ledger stage |
+| STUCK (per the prior run's report) | re-enter the lane that stalled |
+  with **37 fixtures** including an end-to-end drill that runs the CLI as a child against a dead
+- **D9 `hunt-daemon.py` + `hunt_lib.py` + the dispatch adapter (§4.1a)** - the port, under §4.2's
+
+- **D12 identity-instrument accuracy (S2a, ratified 2026-08-24 - NOT yet ordered).** Four rungs,
+  in this order because rungs 1-2 are pure recall and measurement with no contract change, and they
+  produce the numbers that justify rung 3 to anyone reading later. Independent of the daemon; may
+  land before or after phase 3. Per the run-budget practice, each rung (or 1+2 together) is its own
+  fresh session with the usage % asked first.
+  1. **Recall fixes**: harvest_embed keeps top-5 PER SIDE (live and backlog separately), and
+     score_pool passes the candidate's normalized ingredient words so find-similar's shared-items
+     bonus stops running on empty input. No GPU. Gate: with the digest present, 0 available
+     candidates carry an empty live-side block; a known composition-duplicate pair (same
+     ingredients, disjoint names) surfaces in each other's word-overlap matches with a non-empty
+     shared_items.
+  2. **The calibration emitter**: whenever the digest is rebuilt, compute the live catalog's
+     internal pairwise similarity distribution and write it beside the digest ({p50, p90, p99, n,
+     generated_from}). Gate: the file exists, dates itself against the digest, and the dupe
+     threshold it implies sits ABOVE the distribution's p99 - two published recipes must never read
+     as duplicates of each other, that is what published means.
+  3. **The dossier crowding block** replaces saturation_pressure, with the section 4.5 contract and
+     the recipe-dedup-selector brief updated IN THE SAME COMMIT (and audit-prompt-backup -Sync run,
+     per D11's standing rule). Gate: a 10-dossier decider round whose notes never mention re-reading
+     the digest and never cite an unexplained integer; the blind-lane fixture proves a missing
+     embedding pass REFUSES rather than reporting crowding 0.
+  4. **The sourcer map fix + one vocabulary home**: make-saturation derives the family from items
+     for the six item-defined families (S2a part d), and FAMILY_EVIDENCE moves from harvest.py into
+     considered-dishes.ps1 with harvest.py parsing it at runtime exactly as it parses
+     $script:FAMILIES - one source of record. The 2026-08-24 comment in harvest.py arguing the
+     table should live in Python is REWRITTEN in the same commit; its argument held only while
+     nothing else wanted the table, and a stale justification left standing is how the next session
+     re-derives the wrong conclusion.
+  Fixtures, per the guard-fixture rule: starvation MUST FIRE (a candidate whose 5 nearest overall
+  are all backlog still carries its live neighbours); calibration MUST FIRE (no hand-set threshold
+  constant exists in code - the threshold is read from the emitted distribution, and its absence is
+  could-not-run); crowding-blind MUST FIRE; and the garnish CLEAN TWIN (a dinner with shredded
+  cheese on top does not become a cheese dish in the sourcer map).
+| 3 | D9 (the daemon + §4.1a adapter) | hunt-lib parity suite green; adapter drill: per-agent behavior diff vs Workflow twins + measured per-dispatch overhead; drain drill per §4.2; audit-lane-shape clean on the daemon's log |
+| 4 | D7 + D8 (map/write slimming) | mapper residual rate measured; one wave written from skeletons with guards green |
+| 5 | D10 (price pre-pass) | one real absent-term batch priced with pre-gathered evidence; ladder states honest per store |
+| 6 | **the proving run**: ~20 recipes, wave size 10, Brad-directed conditions | success criteria written before the run, incl.: per-recipe tokens (billed measure) and steady-state wall-clock per published recipe both measured against §7's targets; >=5x fewer Claude invocations per published recipe than the 27 measured; zero gate weakened; every new defect class frozen as a fixture same-day |
+| 1 (as first written) | 38/50 = **76%** | 2 of 12 attempted | 10/50 = **20%** | 40/50 = 80% | 9.6 s |
+| 2 (after the corrections below) | 46/50 = **92%** | 1 of 4 attempted | **3/50 = 6%** | 47/50 = **94%** | 9.5 s |
+Round 1's 13 escalations are what produced the section 4.5 corrections: 9 of them were a single
+line each, of one narrow class (a for-serving / for-topping / adjust-to-taste note the model left
+out of prep), and one was the HTML-entity defect in the shared parser. Round 2 fixed the prompt
+and the parser - **not the threshold** - and the escalation rate fell from 20% to 6%. **The plan's
+own estimate for this deliverable was "~5-15% of pages" reaching the Claude extractor; the
+measured figure is 6%.** The three survivors are honest hard pages, and one of them names the
+known brand class ("1/3 cup Specially Selected Sicilian Extra Virgin Olive Oil").
+(That pass is the one S1 item 4's 2026-08-24 correction dissects - 180 of its 370 answers were
+the grammar's first alternative, and the corrected classifier's re-run replaced them on
+2026-08-24.)
+`jalape-o-popper-chicken` escalated at 88% coverage on one pass and settled on the next with no
+- **D12 (identity-instrument accuracy, ratified 2026-08-24 - NOT ordered):** rungs and gates
+  live in the D12 entry; independent of the daemon, may land before or after phase 3. Rungs
+  1-2 first, always - they are pure recall and measurement, and they produce the numbers rung
+  3's contract change is justified by.
+
+| local classifier guesses under a closed grammar (bbq pile-up, 2026-08-23) | nothing - the guess fed saturation_pressure unchecked | plain-default prompt + ingredient corroboration + no-evidence rows never asked (shipped 2026-08-24); D12 then removes the family from every decider-visible number, killing the class |
+| sitemap asset URL enrolled as a candidate | nothing - 185 reached the pool and the classifier | _locs parent-check + is_asset_url at refuse_entry, both roads (shipped 2026-08-24) |
+
 ### S3 EXTRACT -> mechanical first, local second, Claude last
 
 Priority ladder, run by the orchestrator (no Claude wrapper):
