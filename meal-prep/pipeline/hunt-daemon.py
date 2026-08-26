@@ -5698,7 +5698,12 @@ def ensure_local_model(now=None, start=True, wait_sec=300, log=say):
     if not os.path.isfile(SERVE_PS1):
         return False, "llama-server is down and there is no serve.ps1 at %s to start" % SERVE_PS1
     log("preflight: llama-server is down and the card is free - starting %s" % SERVE_PS1)
-    spawned, why = hunt_lib.ps_spawn_detached(SERVE_PS1)          # the one marshalling road
+    spawned, why = hunt_lib.ps_spawn_detached(SERVE_PS1, ["-Slots", "1"])   # the one marshalling road
+    # -Slots 1 OR THE EXTRACT LANE GOES HALF-BLIND. serve.ps1 defaults to 4 slots and splits its
+    # context between them: floor(16384/4) = 4096 tokens/slot, under local_extract.RUNG2_MIN_SLOT_CTX
+    # (~11,465). A server this preflight started itself would therefore announce RUNG 2 UNAVAILABLE
+    # and send every page rung 1 could not settle to the Claude extractor. Measured 2026-08-26 on the
+    # hunt-2026-08-26-ten resume, which started its own server and lost rung 2 for the whole run.
     if not spawned:
         return False, "could not launch serve.ps1: %s" % why
     waited = 0

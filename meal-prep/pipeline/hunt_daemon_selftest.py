@@ -461,6 +461,13 @@ def run():
       *_inflight_blind())
     T("  every PowerShell call the daemon makes goes through ps_invoke and nothing else",
       *_one_marshalling_road())
+    T("MUST FIRE  the preflight starts serve.ps1 with -Slots 1, or a server it started itself runs "
+      "at 4096 tokens/slot and the extract lane loses rung 2 for the whole run",
+      *_preflight_asks_for_one_slot())
+    T("MUST FIRE  ps_spawn_detached puts scalar args on the command line in order",
+      *_spawn_marshals_scalar_args())
+    T("CLEAN TWIN a spawn with no args is byte-identical to the old one",
+      *_spawn_with_no_args_is_unchanged())
 
     # =================================================================================================
     H("--target N bounds ACCEPTANCES, not pops (2026-08-26: --target 10 accepted 20)")
@@ -3838,6 +3845,68 @@ def _inflight_blind():
                 "%s / the dossier does not say the search was skipped" % why)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _preflight_asks_for_one_slot():
+    """CALL-SITE PIN. The bug was never in ps_spawn_detached - it was in what the daemon asked for.
+
+    serve.ps1 defaults to -Slots 4 and splits its context across them, so a server this preflight
+    started itself ran at floor(16384/4) = 4096 tokens/slot, under RUNG2_MIN_SLOT_CTX (~11,465), and
+    the extract lane announced RUNG 2 UNAVAILABLE for the whole run (measured 2026-08-26). A fixture
+    over ps_spawn_detached alone would have stayed green through all of it.
+
+    The needle is built from PARTS so this assertion cannot match its own source line - three
+    nightly.ps1 source checks did exactly that on 2026-08-26 and passed while proving nothing.
+    """
+    with open(os.path.join(HERE, "hunt-daemon.py"), "r", encoding="utf-8") as f:
+        src = f.read()
+    flag = "-" + "Slots"
+    call = "ps_spawn_detached(SERVE_PS1"
+    i = src.find(call)
+    if i < 0:
+        return (False, "the preflight no longer calls ps_spawn_detached(SERVE_PS1 ...)")
+    line = src[i:src.find(chr(10), i)]
+    if flag not in line:
+        return (False, "the preflight starts serve.ps1 without %s - it will default to 4 slots and "
+                       "lose rung 2: %s" % (flag, line.strip()))
+    return ("1" in line.split(flag, 1)[1][:12],
+            "the preflight asks for a slot count that is not 1: %s" % line.strip())
+
+
+def _spawn_marshals_scalar_args():
+    """ps_spawn_detached must actually put the args on the command line, in order, as strings."""
+    seen = {}
+
+    class _P(object):
+        def __init__(self, cmd, **kw):
+            seen["cmd"] = list(cmd)
+
+    real = hunt_lib.subprocess.Popen
+    hunt_lib.subprocess.Popen = _P
+    try:
+        ok, why = hunt_lib.ps_spawn_detached("X.ps1", ["-Slots", 1])
+    finally:
+        hunt_lib.subprocess.Popen = real
+    cmd = seen.get("cmd") or []
+    return (ok and cmd[-3:] == ["X.ps1", "-Slots", "1"],
+            "spawn built %s" % json.dumps(cmd))
+
+
+def _spawn_with_no_args_is_unchanged():
+    """CLEAN TWIN - the no-args call must still be exactly the old command line."""
+    seen = {}
+
+    class _P(object):
+        def __init__(self, cmd, **kw):
+            seen["cmd"] = list(cmd)
+
+    real = hunt_lib.subprocess.Popen
+    hunt_lib.subprocess.Popen = _P
+    try:
+        hunt_lib.ps_spawn_detached("X.ps1")
+    finally:
+        hunt_lib.subprocess.Popen = real
+    return (seen.get("cmd", [])[-1:] == ["X.ps1"], "spawn built %s" % json.dumps(seen.get("cmd")))
 
 
 def _one_marshalling_road():

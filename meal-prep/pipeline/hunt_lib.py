@@ -272,7 +272,7 @@ def ps_invoke(script, args, timeout=180):
             (p.stderr or b"").decode("utf-8", errors="replace"))
 
 
-def ps_spawn_detached(script):
+def ps_spawn_detached(script, args=None):
     """Start a long-running PowerShell script and DO NOT wait for it. Returns (ok, why_not).
 
     The sibling of ps_invoke, and it lives here for the same reason ps_invoke does: the daemon's
@@ -284,9 +284,20 @@ def ps_spawn_detached(script):
     SEPARATE FROM ps_invoke BECAUSE WAITING IS THE DIFFERENCE. ps_invoke runs a script to completion
     and reads its output; this starts a SERVER, which by definition never completes, and whose output
     must not be piped into a buffer nobody drains. The only caller today is the llama-server
-    preflight."""
+    preflight.
+
+    ARGS ARE SCALARS ONLY, and that is not a limitation worth removing. `-File` cannot bind a
+    multi-element [string[]] from argv at all - that is the B8 class, frozen in decide_apply.py's
+    selftest - so anything needing a real array must use ps_invoke instead. The one caller passes
+    `-Slots 1`, an [int], which binds fine. Measured 2026-08-26: without it serve.ps1 took its own
+    default of 4 slots, floor(16384/4) = 4096 tokens per slot, and the extract lane announced
+    RUNG 2 UNAVAILABLE (it needs ~11,465) - so every page rung 1 could not settle escalated to the
+    Claude extractor instead of the local model, at width."""
+    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script]
+    for a in (args or []):
+        cmd.append(str(a))
     try:
-        subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script],
+        subprocess.Popen(cmd,
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                          stdin=subprocess.DEVNULL)
     except Exception as e:                                       # noqa: BLE001
