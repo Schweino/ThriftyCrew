@@ -803,9 +803,20 @@ def run():
     T("MUST FIRE  H1: same serving basis and macros a ROUNDING apart is the identical-row case - "
       "silent skip, no finding, the existing row stands (jc1 filed 2 of 5 conflicts on this noise)",
       *_fooddb_rounding_is_not_a_conflict())
-    T("CLEAN TWIN H1: ...and ANY serving-basis difference is a full conflict however close the "
-      "macros look - a different basis is a different claim about the food (the Pork Chops save)",
+    T("CLEAN TWIN H1/H2: the Pork Chops save survives normalisation - 155 cal per 112 g is 138 per "
+      "100 g against a stated 155, so the two rows still disagree once put on one basis",
       *_fooddb_a_different_basis_is_always_a_conflict())
+    T("MUST FIRE  H2: a per-100 g row and the DB's HOUSEHOLD row for the same food are not in "
+      "conflict - Dried Basil 233/100 g IS 2 cal per 1 g tsp, and 10 of 13 findings on run "
+      "hunt-2026-08-26-ten were this false alarm burying the real ones",
+      *_fooddb_agreeing_bases_are_not_a_conflict())
+    T("MUST FIRE  H2: ...and a REAL disagreement across two bases is still a conflict - Beef Broth "
+      "at 0.83 g protein per 100 g against 1.97 is more than double, and normalising is what proves "
+      "it rather than forgiving it",
+      *_fooddb_normalising_still_catches_a_real_disagreement())
+    T("CLEAN TWIN H2: two bases can only be compared when BOTH carry a weight - a row with no usable "
+      "serving_grams stays a conflict, because nobody could check is not the same as they agree",
+      *_fooddb_unweighable_basis_is_still_a_conflict())
     T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
       "agree with each other, never that they are this food's numbers",
       *_fooddb_needs_a_source())
@@ -823,6 +834,25 @@ def run():
     T("MUST FIRE  map_prompt tells the mapper it has no file access to the DB, names the Atwater and "
       "conflict rules, and prefers the FDC shelf",
       *_fooddb_prompt_moved_the_pen())
+
+    # =================================================================================================
+    H("THE SHORTFALL DETECTOR - rows the table ASKED FOR that never came back (2026-08-26)")
+    # =================================================================================================
+    T("MUST FIRE  the foods the pre-resolve table asked for and the mapper never mentioned are NAMED "
+      "at map time - on hunt-2026-08-26-ten the mapper returned zero rows for 12 of 22 recipes and "
+      "each was discovered a whole lane later as a STUCK nobody had predicted",
+      *_shortfall_names_what_never_came_back())
+    T("CLEAN TWIN a batch where every asked-for row came back says nothing at all",
+      *_shortfall_is_silent_when_every_row_arrived())
+    T("MUST FIRE  a row that came back and was REFUSED is not counted as absent - it was ruled on, "
+      "and its own finding already says why",
+      *_shortfall_a_refused_row_is_not_a_shortfall())
+    T("CLEAN TWIN a term ruled not-purchased needs no nutrition label - charcoal is on a real "
+      "ingredient line and demanding a row for it is a finding nobody can ever clear",
+      *_shortfall_a_food_nobody_buys_needs_no_row())
+    T("MUST FIRE  end to end: an EMPTY food_db_rows against a table asking for two lands on the "
+      "mapped artifact AND the run findings, which is the exact payload that shipped nothing",
+      *_shortfall_reaches_the_run_findings())
 
     # =================================================================================================
     H("H2 - a no-publish drill must not write a LIVE grocery ledger (2026-08-25)")
@@ -6149,7 +6179,7 @@ def _fooddb_writes():
     try:
         # 3+ elements, per the estate's collection rule
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         names = [r.get("item") for r in doc["items"]]
         ok = (sorted(written) == ["Fixture Beef", "Fixture Chicken", "Fixture Pork"]
@@ -6172,7 +6202,7 @@ def _fooddb_atwater_refuses():
         # numbers that do not describe one food, which is what a fabricated label looks like.
         bad = _good_row("Fixture Fabrication", calories=900)
         rows = [_good_row("Fixture Chicken"), bad, _good_row("Fixture Pork")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Fabrication" in f and "Atwater" in f]
         ok = ("Fixture Fabrication" not in names and "Fixture Fabrication" not in written
@@ -6192,7 +6222,7 @@ def _fooddb_conflict_never_overwrites():
         # same item, DIFFERENT macros, and its own arithmetic is fine (30*4 + 3*4 + 5*9 = 177)
         clash = _good_row("Fixture Chicken", protein_g=30, calories=177)
         rows = [clash, _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chicken = [r for r in doc["items"] if r.get("item") == "Fixture Chicken"]
         named = [f for f in findings if "Fixture Chicken" in f and "DIFFERS" in f]
@@ -6215,7 +6245,7 @@ def _fooddb_identical_is_silent():
     d, path, tmp = _food_db_run(None, existing=[prior])
     try:
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         ok = (not findings and "Fixture Chicken" not in written
               and names.count("Fixture Chicken") == 1
@@ -6260,7 +6290,7 @@ def _fooddb_rounding_is_not_a_conflict():
                 _good_row("Fixture Parsley", calories=36, protein_g=3.0, carbs_g=6.3, fat_g=0.8,
                           fiber_g=3.3),                                    # hundredths, every field
                 _good_row("Fixture Chicken", calories=158)]                # 3 cal apart
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         spinach = [r for r in doc["items"] if r.get("item") == "Fixture Spinach"]
         ok = (not findings and not written and len(doc["items"]) == 3
@@ -6282,7 +6312,7 @@ def _fooddb_a_different_basis_is_always_a_conflict():
     try:
         clash = _good_row("Fixture Pork Chops", serving_grams=112, calories=155, protein_g=25.2)
         rows = [clash, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chops = [r for r in doc["items"] if r.get("item") == "Fixture Pork Chops"]
         named = [f for f in findings if "Fixture Pork Chops" in f and "DIFFERS" in f]
@@ -6297,13 +6327,195 @@ def _fooddb_a_different_basis_is_always_a_conflict():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _fooddb_agreeing_bases_are_not_a_conflict():
+    """H2 (2026-08-26). THE DEFECT, MEASURED: on run hunt-2026-08-26-ten, 10 of the 13 conflict
+    findings were the mapper's per-100 g FDC row against a household row this DB already held, and
+    every one of them was the SAME FOOD. These are the live numbers off that run - Dried Basil at
+    2 cal per 1 g tsp against 233 cal per 100 g, which is 2.33 against 2.
+
+    Reporting that as DIFFERS is a false statement about the data, and at width the noise buries the
+    real conflicts - the same sentence H1 wrote about rounding, one layer up.
+    """
+    prior = {"item": "Dried Basil", "brand": "Great Value", "serving_grams": 1, "serving_qty": 1,
+             "serving_unit": "tsp", "calories": 2, "protein_g": 0.2, "carbs_g": 0.5, "fat_g": 0.04,
+             "source": "fdc:170925"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        per100 = {"item": "Dried Basil", "serving_grams": 100, "serving_qty": 100,
+                  "serving_unit": "g", "calories": 233, "protein_g": 23.0, "carbs_g": 47.8,
+                  "fat_g": 4.07, "fiber_g": 37.7, "source": "fdc:170925"}
+        rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
+        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        doc = _db_items(path)
+        basil = [r for r in doc["items"] if r.get("item") == "Dried Basil"]
+        ok = (# NOT a finding - the two agree
+              not [f for f in findings if "Dried Basil" in f]
+              # the HOUSEHOLD row is the one that stands, per Brad's standing rule
+              and len(basil) == 1 and basil[0].get("serving_unit") == "tsp"
+              and basil[0].get("calories") == 2
+              # ...and it was LOOKED AT, which is the difference between agreement and silence
+              and len([n for n in notes if "Dried Basil" in n]) == 1
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, "findings=%s notes=%s kept=%s" % (
+            json.dumps([f for f in findings if "Dried Basil" in f]),
+            json.dumps(notes)[:220], json.dumps(basil))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_normalising_still_catches_a_real_disagreement():
+    """MUST FIRE, and it is the whole reason H2 normalises instead of forgiving. Beef Broth from the
+    SAME run: the DB holds 2 g protein per 240 g cup and the mapper returned 1.97 per 100 g. Those
+    are 0.83 and 1.97 on one basis - more than double - so it is a real disagreement and it stays a
+    conflict. A rule that merely widened the tolerance for a basis difference would have lost this.
+    """
+    prior = {"item": "Beef Broth", "serving_grams": 240, "serving_qty": 1, "serving_unit": "cup",
+             "calories": 10, "protein_g": 2, "carbs_g": 0, "fat_g": 0, "source": "fdc:174312"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        per100 = {"item": "Beef Broth", "serving_grams": 100, "serving_qty": 100,
+                  "serving_unit": "g", "calories": 13, "protein_g": 1.97, "carbs_g": 1.2,
+                  "fat_g": 0.09, "source": "fdc:174312"}
+        rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
+        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        broth = [r for r in _db_items(path)["items"] if r.get("item") == "Beef Broth"]
+        named = [f for f in findings if "Beef Broth" in f and "DIFFERS" in f]
+        ok = (len(named) == 1
+              # the finding now says WHY on one basis, or a person cannot tell it from the noise
+              and "still disagree" in named[0] and "protein_g" in named[0]
+              and not [n for n in notes if "Beef Broth" in n]
+              and len(broth) == 1 and broth[0].get("serving_unit") == "cup"
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, "finding=%s" % json.dumps(named)[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_unweighable_basis_is_still_a_conflict():
+    """CLEAN TWIN: two bases can only be compared when both carry a weight. A row with no usable
+    serving_grams cannot be put on the other's basis at all, and an unanswerable question is a
+    conflict a person rules on - never a pass on the grounds that nobody could check."""
+    prior = {"item": "Mystery Spice", "serving_grams": 2, "serving_qty": 1, "serving_unit": "tsp",
+             "calories": 6, "protein_g": 0.2, "carbs_g": 1.0, "fat_g": 0.1, "source": "fdc:1"}
+    d, path, tmp = _food_db_run(None, existing=[prior])
+    try:
+        noweight = {"item": "Mystery Spice", "serving_grams": 0, "serving_qty": 1,
+                    "serving_unit": "pinch", "calories": 6, "protein_g": 0.2, "carbs_g": 1.0,
+                    "fat_g": 0.1, "source": "fdc:1"}
+        written, findings, notes = arun(d.write_food_db_rows(
+            "s1", [noweight, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
+        named = [f for f in findings if "Mystery Spice" in f]
+        ok = (len(named) == 1 and not [n for n in notes if "Mystery Spice" in n]
+              and sorted(written) == ["Fixture Beef", "Fixture Lamb"])
+        return ok, json.dumps(named)[:300]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# THE SHORTFALL DETECTOR (2026-08-26). The pre-resolve table names the foods with no food-DB row; the
+# mapper is asked for one row each; NOTHING compared the two. On run hunt-2026-08-26-ten the mapper
+# returned ZERO rows for twelve of twenty-two recipes and not one recipe got a row for every food that
+# needed one, and the run published nothing.
+# =====================================================================================================
+
+def _shortfall_daemon(rows):
+    d, path, tmp = _food_db_run(None)
+    tables = {"s1": {"rows": rows}}
+    return d, tables, tmp
+
+
+def _shortfall_names_what_never_came_back():
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "chicken thighs", "canon_item": "Chicken Thighs", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False},
+        {"term": "yellow onion", "canon_item": "Yellow Onion", "fooddb_known": False},
+        {"term": "brussels sprouts", "canon_item": "Brussels Sprouts", "fooddb_known": True}])
+    try:
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables, [], [])
+        ok = (f is not None and "'Chicken Thighs'" in f and "'Fresh Rosemary'" in f
+              and "'Yellow Onion'" in f and "Brussels Sprouts" not in f
+              and "named 3 food(s)" in f and "nothing at all for 3" in f)
+        return ok, str(f)[:400]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_is_silent_when_every_row_arrived():
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "chicken thighs", "canon_item": "Chicken Thighs", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables,
+                                ["Chicken Thighs", "Fresh Rosemary"], [])
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_a_refused_row_is_not_a_shortfall():
+    """A row that CAME BACK and was refused was ruled on, and its own finding already says why.
+    Counting it twice would make the honest gates look like the silent ones."""
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "dry red wine", "canon_item": "Dry Red Wine", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        refused = ["s1: the food-DB row for 'Dry Red Wine' FAILED the Atwater check (x) and was "
+                   "NOT written"]
+        f = d.food_db_shortfall("s1", {"rulings": []}, tables, ["Fresh Rosemary"], refused)
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_a_food_nobody_buys_needs_no_row():
+    """CLEAN TWIN: charcoal and wood chips are on real ingredient lines and are not food. A term the
+    mapper ruled not-purchased is accounted for, and demanding a nutrition label for it would be a
+    finding that can never be cleared."""
+    d, tables, tmp = _shortfall_daemon([
+        {"term": "charcoal", "canon_item": "Charcoal", "fooddb_known": False},
+        {"term": "fresh rosemary", "canon_item": "Fresh Rosemary", "fooddb_known": False}])
+    try:
+        res = {"rulings": [{"term": "charcoal", "canon_item": "Charcoal",
+                            "decision": "not-purchased"}]}
+        f = d.food_db_shortfall("s1", res, tables, ["Fresh Rosemary"], [])
+        return f is None, str(f)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _shortfall_reaches_the_run_findings():
+    """END TO END, and this is the case that would have caught the live run: a mapper that returns
+    an EMPTY food_db_rows against a table asking for two. Before this existed the payload was
+    accepted in silence and the recipe went STUCK a whole lane later."""
+    d, path, tmp = _food_db_run(None)
+    try:
+        d.registrar_rulings = lambda slug, proposals, tables=None: _immediate([])
+        tables = {"s1": {"rows": [
+            {"term": "spaghetti squash", "canon_item": "Spaghetti Squash", "fooddb_known": False},
+            {"term": "fresh basil", "canon_item": "Fresh Basil", "fooddb_known": False}]}}
+        res = {"slug": "s1", "status": "ok", "state": "mapped", "lines": [], "rulings": [],
+               "detail": "New DB rows returned: Spaghetti Squash, Fresh Basil",
+               "food_db_rows": []}
+        arun(d.assemble_mapped("s1", res, tables))
+        with open(os.path.join(tmp, "mapped-pre", "s1.rulings.json"), "r", encoding="utf-8") as fh:
+            doc = json.load(fh)
+        named = [f for f in (doc.get("db_row_findings") or []) if "ABSENT" in f]
+        ok = (len(named) == 1 and "'Spaghetti Squash'" in named[0]
+              and "'Fresh Basil'" in named[0]
+              and any("ABSENT" in f for f in d.findings))
+        return ok, json.dumps(doc.get("db_row_findings"))[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _fooddb_needs_a_source():
     d, path, tmp = _food_db_run(None)
     try:
         rows = [_good_row("Fixture Chicken"),
                 _good_row("Fixture Hearsay", source=""),
                 _good_row("Fixture Pork")]
-        written, findings = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Hearsay" in f and "source" in f]
         ok = ("Fixture Hearsay" not in names and len(named) == 1
@@ -6338,7 +6550,7 @@ def _fooddb_concurrent_writers():
         names = sorted(r.get("item") for r in _db_items(path)["items"])
         want = sorted(["Worker One A", "Worker One B", "Worker One C",
                        "Worker Two A", "Worker Two B", "Worker Two C"])
-        written = sorted([n for w, _ in res for n in w])
+        written = sorted([n for w, _f, _n in res for n in w])
         ok = names == want and written == want
         return ok, "items(%d)=%s" % (len(names), json.dumps(names))
     finally:

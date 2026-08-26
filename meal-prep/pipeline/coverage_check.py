@@ -229,6 +229,110 @@ def _requirements(source_names: list[str]) -> list[dict]:
     return reqs
 
 
+# ---------------------------------------------------------------------------------------------------
+# A COMPOSITE TERM CAN NEVER HAVE A ROW OF ITS OWN, and until 2026-08-26 nothing said so upstream.
+#
+# WHAT IT COST. On run hunt-2026-08-26-ten, "Salt and Pepper" reached the write lane as one food and
+# took apple-spice-pork-chops and honey-balsamic-chicken-tenders STUCK with it - the food DB cannot
+# carry a row for two foods, so the intake skeleton refused to complete and the band could not be
+# ruled. The same defect PARKED four more recipes one lane earlier, where "Garlic Powder, Cumin, and
+# Chili Powder" and "Dried Thyme, Dried Basil and Onion Powder" waited on a commodity id no single
+# id can be. The mapper wrote "two pantry foods on one unsplittable line" and it was right about the
+# line and wrong about splittable: its own `buy` string already read "1/2 tsp salt and 1/2 tsp black
+# pepper", which is two measurements of two foods.
+#
+# WHY IT LIVES HERE. `_requirements` below already splits a SOURCE line on AND, and has since
+# 2026-08-23. The rule is the same rule; what differs is the cost of being wrong. Down in the
+# coverage check a bad split only makes the check STRICTER and a person reads the finding. Up at term
+# formation a bad split creates a second shopping line and a second priced ingredient, so this road
+# is deliberately narrower than that one and every extra guard is named below.
+#
+# NOT A FORK OF THE SCORING. _words/_head are imported from the same functions the coverage check
+# scores with, because a second head-noun implementation in PowerShell is the forked-taxonomy defect
+# this estate already has scars from.
+
+# Fixed culinary compounds: ONE food whose name happens to contain "and", where BOTH halves are also
+# heads the estate knows, so the head-noun guard below cannot separate them. Kept short on purpose -
+# it is the exception list, not the mechanism. Matched as a substring of the lowercased term.
+COMPOSITE_KEEP_WHOLE = (
+    "macaroni and cheese", "mac and cheese", "sweet and sour", "half and half",
+    "bread and butter", "biscuits and gravy", "chicken and rice", "rice and beans",
+    "beans and rice", "pork and beans", "franks and beans", "ham and cheese",
+    "beef and broccoli", "corned beef and cabbage", "chips and salsa", "cookies and cream",
+    "peaches and cream", "surf and turf", "bangers and mash", "hot and sour",
+    "salt and vinegar", "oil and vinegar", "black and white", "sweet and spicy",
+    "chicken and dumplings", "shrimp and grits", "spaghetti and meatballs",
+)
+
+# A separator list, not a sentence parser: "a, b, and c" and "a and b" are the two shapes real
+# ingredient lines use. The comma road runs first so "a, b, and c" yields three parts, not two.
+_RX_ENUM = re.compile(r"(?i)\s*,\s*(?:and\s+)?|\s+and\s+")
+
+# FOUR IS AN ENUMERATION; FIVE IS A SECTION HEADING. "Optional Garnishes: sour cream, cilantro,
+# lime, jalapeno, cheese" is not an ingredient line and must not become five of them.
+COMPOSITE_MAX_PARTS = 4
+
+
+def known_heads(*name_lists) -> set:
+    r"""The set of head nouns the estate already uses, from any lists of item names.
+
+    This is the guard that does the real work, and it is checkable against live data: measured over
+    db\ingredients.json plus food-macros-db.json on 2026-08-26 it holds 179 heads, and 'sweet',
+    'macaroni', 'gravy' and 'turf' are all absent from it while 'pepper', 'cumin', 'basil' and
+    'powder' are all present. That is exactly the line between "Sweet and Sour Sauce" (one food) and
+    "Salt and Pepper" (two).
+    """
+    out = set()
+    for names in name_lists:
+        for n in (names or []):
+            h = _head(_words(n))
+            if h:
+                out.add(h)
+    return out
+
+
+def split_composite(term: str, heads: set, resolved_whole: bool = False) -> list:
+    """The parts a composite term names, or [] when it is one food.
+
+    `resolved_whole` is the FIRST guard and the cheapest: a term the estate already resolves as a
+    whole IS a food it carries, so it is never split however its name reads. "Half and Half" and
+    "Old Bay Seasoning" never reach the rest of this function.
+    """
+    t = " ".join(str(term or "").split())
+    if not t or resolved_whole:
+        return []
+    low = t.lower()
+    if any(k in low for k in COMPOSITE_KEEP_WHOLE):
+        return []
+    parts = [p.strip(" ,") for p in _RX_ENUM.split(t)]
+    parts = [p for p in parts if p]
+    if len(parts) < 2 or len(parts) > COMPOSITE_MAX_PARTS:
+        return []
+    # EVERY part has to be a food this estate would recognise the SHAPE of. A part whose head noun
+    # appears nowhere in the vocabulary or the food DB is a fragment, not an ingredient - which is
+    # what stops "Sweet and Sour Sauce" becoming "Sweet" plus "Sour Sauce".
+    for p in parts:
+        h = _head(_words(p))
+        if not h or h not in heads:
+            return []
+    # Two parts that denote the SAME food are one food said twice ("salt and salt"), and splitting
+    # them would put the same ingredient on the card twice - the duplicate-line defect the skeleton
+    # builder's own merge exists to prevent.
+    keys = [_key(p) for p in parts]
+    for i in range(len(keys)):
+        for j in range(i + 1, len(keys)):
+            if _pairs(keys[i], keys[j]):
+                return []
+    return parts
+
+
+def _strip_bom(text: str) -> str:
+    """PowerShell's pipe into a native exe writes a UTF-8 BOM ahead of the payload, and json.loads
+    calls that "Unexpected UTF-8 BOM". Measured 2026-08-26 by map-preresolve's own fixture, which is
+    the only caller of --split-terms and is a PowerShell one."""
+    return (text or "").lstrip("﻿ \t\r\n") or "{}"
+
+
 def coverage(spec_doc, source_doc) -> dict:
     spec, source = _names(spec_doc), _names(source_doc)
     spec_w = [(n, _key(n)) for n in spec]
@@ -1066,6 +1170,77 @@ def _selftest() -> int:
     else:
         T('LOCKSTEP  spec-contradiction-lib.ps1 is readable so the patterns can be compared', False, 'not found')
 
+    # ---- COMPOSITE TERM SPLITTING (2026-08-26) ------------------------------------------------------
+    # The founding case: run hunt-2026-08-26-ten shipped nothing, and "Salt and Pepper" was the single
+    # named blocker on two of the twelve STUCK recipes. The food DB cannot carry a row for two foods.
+    # The head set is the REAL one, read from the live vocabulary and food DB, so a fixture cannot pass
+    # on a hand-picked set that the estate does not actually have.
+    _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    _voc, _fdb = [], []
+    try:
+        with io.open(os.path.join(_root, 'db', 'ingredients.json'), encoding='utf-8-sig') as fh:
+            _voc = [r.get('item') for r in json.load(fh) if isinstance(r, dict) and r.get('item')]
+        with io.open(os.path.join(_root, 'food-macros-db.json'), encoding='utf-8-sig') as fh:
+            _fdb = [r.get('item') for r in json.load(fh).get('items', []) if r.get('item')]
+    except Exception as _exc:                                       # noqa: BLE001
+        _voc, _fdb = [], []
+    T('the live vocabulary and food DB are readable, so the split fixtures run on real head nouns',
+      len(_voc) > 200 and len(_fdb) > 200, 'vocab=%d fooddb=%d' % (len(_voc), len(_fdb)))
+    H = known_heads(_voc, _fdb)
+    T('MUST FIRE  "Salt and Pepper" is TWO foods and splits - it is the term that took two recipes '
+      'STUCK at the write lane on 2026-08-26',
+      split_composite('Salt and Pepper', H) == ['Salt', 'Pepper'],
+      split_composite('Salt and Pepper', H))
+    T('MUST FIRE  a comma enumeration splits into all THREE, not two - "a, b, and c" is the shape '
+      'that parked quinoa-casserole-with-chicken',
+      split_composite('Garlic Powder, Cumin, and Chili Powder', H)
+      == ['Garlic Powder', 'Cumin', 'Chili Powder'],
+      split_composite('Garlic Powder, Cumin, and Chili Powder', H))
+    T('MUST FIRE  ...and the mixed comma-then-and shape too, which parked peach-chicken',
+      split_composite('Dried Thyme, Dried Basil and Onion Powder', H)
+      == ['Dried Thyme', 'Dried Basil', 'Onion Powder'],
+      split_composite('Dried Thyme, Dried Basil and Onion Powder', H))
+    # THE GUARDS. A false split up at term formation buys a second shopping line and a second priced
+    # ingredient, so each of these is a case the estate would have got WRONG without its own guard.
+    # THE HEAD-NOUN GUARD, ON ITS OWN. This phrase is NOT on the denylist, so nothing else here can
+    # keep it whole: "Freshly Ground" is a truncated modifier, its head noun is 'freshly', and no
+    # vocabulary or food-DB item ends in that word. Neuter the head test and this fixture fires.
+    T('MUST FIRE  a part that is a MODIFIER FRAGMENT, not a food, stops the split - "Freshly Ground" '
+      'has no head noun the estate knows',
+      split_composite('Salt and Freshly Ground', H) == [],
+      split_composite('Salt and Freshly Ground', H))
+    T('CLEAN TWIN "Sweet and Sour Sauce" and "Macaroni and Cheese" are ONE food each - the head-noun '
+      'test alone would hold both, and the denylist holds them again',
+      split_composite('Sweet and Sour Sauce', H) == [] and split_composite('Macaroni and Cheese', H) == [],
+      '%s / %s' % (split_composite('Sweet and Sour Sauce', H), split_composite('Macaroni and Cheese', H)))
+    # THE RESOLVED-WHOLE GUARD, ON ITS OWN, asserted as the DIFFERENCE it makes: the same phrase that
+    # splits when the estate does not carry it stays whole the moment the estate does. That is what
+    # keeps a real product like Half and Half - a live row in this very food DB - from becoming two.
+    T('MUST FIRE  a term the estate ALREADY resolves as a whole is NEVER split, however its name '
+      'reads, and the very same term splits when it does not',
+      split_composite('Salt and Pepper', H, resolved_whole=True) == []
+      and split_composite('Salt and Pepper', H) == ['Salt', 'Pepper'],
+      '%s vs %s' % (split_composite('Salt and Pepper', H, resolved_whole=True),
+                    split_composite('Salt and Pepper', H)))
+    T('MUST FIRE  the denylist holds a fixed compound whose halves are BOTH known heads',
+      split_composite('Bread and Butter Pickles', H) == [],
+      split_composite('Bread and Butter Pickles', H))
+    T('MUST FIRE  a five-part list is a section heading, not an ingredient line, and is left whole',
+      split_composite('sour cream, cilantro, lime, jalapeno, and cheddar cheese', H) == [],
+      split_composite('sour cream, cilantro, lime, jalapeno, and cheddar cheese', H))
+    T('MUST FIRE  two parts denoting the SAME food are one food said twice and never split - a '
+      'duplicate line would put one ingredient on the card twice',
+      split_composite('Chicken Broth and Chicken Broth', H) == [],
+      split_composite('Chicken Broth and Chicken Broth', H))
+    T('CLEAN TWIN an ordinary single-food term is untouched',
+      split_composite('Boneless Skinless Chicken Breast', H) == [], '')
+    # LOCKSTEP: this road and the coverage check split the same way on the founding phrase, because
+    # they read the same _words/_head. If one is tightened and the other is not, a spec that carries
+    # two lines would satisfy two requirements here and one there.
+    T('LOCKSTEP  the coverage check reads "salt and pepper to taste" as two requirements too',
+      len(_requirements(['salt and pepper to taste'])) == 2,
+      [r['text'] for r in _requirements(['salt and pepper to taste'])])
+
     # ---- the battery as a whole ------------------------------------------------------------------------
     spec, src = mk(even_spec, even_src, intro_html='524 calories', name='Fixture')
     spec['stat']['cal'] = 524
@@ -1099,10 +1274,38 @@ def main() -> int:
                                               "when --run-dir is given, else beside the spec)")
     ap.add_argument("--run-dir", default="")
     ap.add_argument("--selftest", action="store_true")
+    # --split-terms is the TERM-FORMATION road and it takes neither --spec nor --source. One call per
+    # map batch, exactly like the vocabulary and board lookups beside it: stdin carries
+    # {terms:[...], resolved:[...], names:[...]} and stdout carries {parts:{term:[part,...]}}, holding
+    # only the terms that actually split. Kept in this file because it is THIS file's head-noun
+    # scoring; a PowerShell reimplementation would be a second taxonomy.
+    ap.add_argument("--split-terms", action="store_true",
+                    help="read {terms, resolved, names} on stdin, write {parts} on stdout")
     args = ap.parse_args()
 
     if args.selftest:
         return _selftest()
+    if args.split_terms:
+        try:
+            # PowerShell's pipe into a native exe writes a UTF-8 BOM ahead of the payload, and
+            # json.loads calls that "Unexpected UTF-8 BOM". Measured 2026-08-26 by this road's own
+            # map-preresolve fixture, which is the only caller and is a PowerShell one.
+            req = json.loads(_strip_bom(sys.stdin.read()))
+        except Exception as exc:                                    # noqa: BLE001
+            # Exit 2 is could-not-run, and the caller treats it as "nothing was split" rather than
+            # as "nothing is composite" - a splitter that cannot answer must not read as one that
+            # answered no.
+            print(json.dumps({"ok": False, "why": "stdin does not parse: %s" % exc}))
+            return 2
+        heads = known_heads(req.get("names") or [])
+        done = set(str(x).strip().lower() for x in (req.get("resolved") or []))
+        parts = {}
+        for t in (req.get("terms") or []):
+            got = split_composite(t, heads, resolved_whole=str(t).strip().lower() in done)
+            if got:
+                parts[t] = got
+        print(json.dumps({"ok": True, "heads": len(heads), "parts": parts}, ensure_ascii=False))
+        return 0
     if not args.spec or not args.source:
         print("coverage_check: BLOCKED - --spec and --source are both required")
         return 2

@@ -2016,16 +2016,65 @@ class Daemon(object):
         tol = self.FOOD_DB_CAL_TOLERANCE if field == "calories" else self.FOOD_DB_MACRO_TOLERANCE
         return abs(float(new) - float(old)) <= tol
 
+    MACRO_FIELDS = ("calories", "protein_g", "carbs_g", "fat_g")
+
+    @staticmethod
+    def _basis_text(r):
+        """How a row states its serving, in the row's own words."""
+        qty, unit, g = r.get("serving_qty"), r.get("serving_unit"), r.get("serving_grams")
+        if qty is not None and unit:
+            return "%s %s = %s g" % (qty, unit, g)
+        return "%s g" % g
+
+    def _same_food_other_basis(self, new, old):
+        """(agree, why) - do two rows on DIFFERENT serving bases state the SAME food?
+
+        Returns agree=False with an empty reason when the question cannot be asked, which is the
+        honest answer for a row that carries no usable weight: an unanswerable question is a conflict
+        a person rules on, never a pass.
+
+        THE COMPARISON RUNS ON THE EXISTING ROW'S OWN BASIS, not on a neutral per-100 g one, and that
+        is deliberate. The tolerances below are the estate's own (5 kcal, 0.5 g) and they were set
+        against a SERVING - forgiving 5 kcal per 100 g of dried basil would forgive 0.05 kcal per
+        tsp, which is a tolerance that has stopped meaning anything. Scaling the incoming row down
+        onto the household serving keeps the numbers the size the tolerance was written for.
+        """
+        gn, go = new.get("serving_grams"), old.get("serving_grams")
+        if not isinstance(gn, (int, float)) or not isinstance(go, (int, float)) or gn <= 0 or go <= 0:
+            return False, ""
+        f = float(go) / float(gn)
+        apart = []
+        for k in self.MACRO_FIELDS:
+            a, b = new.get(k), old.get(k)
+            if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+                # A macro missing on either side is a difference nobody can measure - the same rule
+                # _rounding_apart states, arriving here.
+                return False, ""
+            scaled = float(a) * f
+            tol = self.FOOD_DB_CAL_TOLERANCE if k == "calories" else self.FOOD_DB_MACRO_TOLERANCE
+            if abs(scaled - float(b)) > tol:
+                apart.append("%s %.4g vs %.4g" % (k, scaled, float(b)))
+        onto = "the mapper's row scaled onto the DB's %s" % self._basis_text(old)
+        if apart:
+            return False, "On one basis (%s) they still disagree: %s." % (onto, "; ".join(apart))
+        return True, "%s reproduces the DB's own numbers within %g kcal and %g g" % (
+            onto, self.FOOD_DB_CAL_TOLERANCE, self.FOOD_DB_MACRO_TOLERANCE)
+
     async def write_food_db_rows(self, slug, rows):
-        r"""Returns (written_names, findings). Never raises on a bad row - a bad row is a FINDING.
+        r"""Returns (written_names, findings, notes). Never raises on a bad row - a bad row is a FINDING.
 
         Order per row: shape, then source, then Atwater, then conflict. Nothing is written until
         every check on that row has passed, and one bad row never costs a good one its write.
+
+        NOTES ARE NOT FINDINGS. A row that agrees with the DB on a different serving basis is not a
+        problem anybody has to act on, so it does not go in the run's findings list - but it is worth
+        recording on the mapped artifact, because it is the difference between "we looked and they
+        agree" and "nobody looked".
         """
-        written, findings = [], []
+        written, findings, notes = [], [], []
         rows = [r for r in (rows or []) if isinstance(r, dict)]
         if not rows:
-            return written, findings
+            return written, findings, notes
         # THE WHOLE READ-MODIFY-WRITE IS INSIDE THE LOCK, not just the write. Two map workers can
         # carry rows for this one file at the same time (the MAP cap is 2), and a read outside the
         # lock is exactly the last-writer-wins shape that cost ingredient-resolutions 97% of its
@@ -2054,7 +2103,7 @@ class Daemon(object):
                 doc = await loop.run_in_executor(None, _read)
             except Exception as e:                                # noqa: BLE001
                 return written, ["%s: the food DB could not be read, so %d new row(s) were NOT "
-                                 "written (%s)" % (slug, len(rows), e)]
+                                 "written (%s)" % (slug, len(rows), e)], notes
             # THE FILE IS {readme, items:[...]} - A LIST OF ROWS, not a dict keyed by item name.
             # Measured 2026-08-25 on the live file. PLAN-hunter-judge-contract said "the DB is a DICT
             # keyed by item name - preserve that shape" and is CORRECTED in the same commit.
@@ -2062,7 +2111,7 @@ class Daemon(object):
             # `items` as an array, and a dict written here would be a silently unreadable DB.
             if not isinstance(doc, dict) or not isinstance(doc.get("items"), list):
                 return written, ["%s: the food DB is not the expected {readme, items:[...]} shape, "
-                                 "so %d new row(s) were NOT written" % (slug, len(rows))]
+                                 "so %d new row(s) were NOT written" % (slug, len(rows))], notes
             items = doc["items"]
             by_name = {}
             for r in items:
@@ -2118,14 +2167,38 @@ class Daemon(object):
                         # The identical-row case, reached through rounding: silent skip, no finding,
                         # and the existing row stands exactly as it does for a byte-identical row.
                         macro = []
+                    # H2 (2026-08-26): A DIFFERENT BASIS IS NOT A DIFFERENT CLAIM.
+                    # The line above this - "the basis is judged first and ABSOLUTELY" - was written
+                    # from the Pork Chops save and it over-reached. Measured on run
+                    # hunt-2026-08-26-ten: 10 of the 13 conflict findings were the mapper returning a
+                    # per-100 g FDC row against a household row this DB already held, and every one of
+                    # them was the SAME FOOD. Dried Basil 2 cal per 1 g tsp against 233 cal per 100 g
+                    # is 2.33 against 2. Reporting that as a DIFFERS conflict is not a save, it is a
+                    # false statement about the data, and at width it buries the real ones - which is
+                    # the same sentence H1 wrote about rounding, one layer up.
+                    # WHAT SURVIVES: the refusal. Nothing is overwritten either way, and per Brad's
+                    # standing rule the HOUSEHOLD row is the one to keep, so agreement is silence and
+                    # the existing row stands untouched. Only DISAGREEMENT is reported.
+                    # AND IT IS STILL A GATE. Beef Broth in the same run states 2 g protein per 240 g
+                    # cup against the mapper's 1.97 per 100 g - 0.83 against 1.97 once put on one
+                    # basis, more than twice - and that stays a conflict, which is the fixture.
+                    agree, why_basis = self._same_food_other_basis(row, prior)
+                    if basis and agree:
+                        basis, macro = [], []
+                        notes.append(
+                            "%s: %r arrived on a different serving basis (%s) than the row the DB "
+                            "holds, and the two AGREE once put on one basis - %s. Nothing was written "
+                            "and the household row stands, which is the rule."
+                            % (slug, name, self._basis_text(row), why_basis))
                     diff = basis + macro
                     if diff:
                         # NEVER OVERWRITE ON A CONFLICT. Both rows are quoted so a person can rule;
                         # the recipe proceeds on the row that is already there.
                         findings.append(
                             "%s: the food DB already carries %r and the mapper's row DIFFERS on %s. "
-                            "Nothing was written and the existing row stands. existing=%s new=%s"
+                            "Nothing was written and the existing row stands.%s existing=%s new=%s"
                             % (slug, name, ", ".join(diff),
+                               (" " + why_basis) if why_basis else "",
                                json.dumps(dict((k, prior.get(k)) for k in diff), ensure_ascii=False),
                                json.dumps(dict((k, row.get(k)) for k in diff), ensure_ascii=False)))
                     continue                      # an identical row is skipped silently, per plan 3.2
@@ -2136,17 +2209,97 @@ class Daemon(object):
                 by_name[name.lower()] = clean
                 written.append(name)
             if not added:
-                return written, findings
+                return written, findings, notes
             try:
                 items.extend(added)
                 await loop.run_in_executor(None, _write, doc)
             except Exception as e:                                # noqa: BLE001
                 out = ["%s: the food DB could not be written, so the row for %r did NOT land (%s)"
                        % (slug, n, e) for n in written]
-                return [], findings + out
+                return [], findings + out, notes
             # the daemon's own cached index is now stale, and unverified_foods reads it
             self._food_db = None
-        return written, findings
+        return written, findings, notes
+
+    def food_db_shortfall(self, slug, res, tables, written, findings):
+        r"""The finding for rows the pre-resolve table ASKED FOR and the mapper never returned, or
+        None when every food that needed a row got one ruled on.
+
+        WHY THIS EXISTS, MEASURED ON RUN hunt-2026-08-26-ten. The table named between 1 and 9 foods
+        with no food-DB row on every one of the run's 22 recipes. The mapper returned ZERO rows for
+        TWELVE of them - including recipes whose own `detail` said in words that rows were returned
+        ("New DB rows returned: Yellow Onion, Apple, Chicken Thighs, Fresh Rosemary" against an empty
+        payload) - and NOT ONE recipe in the run returned a row for every food that needed one. The
+        recipes then went STUCK a whole lane later at the write gate, over a missing row nobody had
+        said was missing. `food_db_rows` is optional in the MAPPED schema and write_food_db_rows
+        returns silently on an empty list, so between the table asking and the skeleton refusing there
+        was no place the shortfall could be seen. This is that place.
+
+        NOT A GATE, ON PURPOSE. A missing row is already refused downstream by the skeleton builder,
+        and refusing here as well would turn one honest block into two. What this buys is that the
+        block is NAMED where it is caused, in the lane that could still act on it, instead of being
+        discovered by a stage that only knows the row is absent.
+
+        A ROW THAT WAS RETURNED AND REFUSED IS NOT A SHORTFALL - it was ruled on, and its own finding
+        already says why. Only silence counts.
+        """
+        table = (tables or {}).get(slug) or {}
+        # THE TABLE ASKS IN THE RECIPE'S WORDS AND THE DB ANSWERS IN THE ESTATE'S. A residual row's
+        # `term` is the page's own phrase - "med onion", "bone-in skin-on chicken thighs" - and its
+        # canon_item is null precisely because the table could not settle it. The name that has to be
+        # checked against the food DB is the one the MAPPER ruled, so the ruling is joined first and
+        # the raw term is only the fallback. Comparing "med onion" against a written "Yellow Onion"
+        # would report a shortfall on every residual line in the run.
+        ruled = {}
+        for r in (res.get("rulings") or []):
+            if not isinstance(r, dict):
+                continue
+            for k in ("raw", "term"):
+                if r.get(k):
+                    ruled[str(r[k]).strip().lower()] = r
+        # NOT EVERY DECISION NEEDS A LABEL. not-purchased is charcoal and wood chips; rejected is a
+        # line the mapper threw out. Everything else - mapped, mapped-null, mapped-optional - IS
+        # counted in the macros by the skeleton builder, so every one of them needs a row.
+        no_label = ("not-purchased", "rejected")
+        db = dict((str(k).strip().lower(), v) for k, v in (self.food_db() or {}).items())
+        need = []
+        for r in (table.get("rows") or []):
+            if not isinstance(r, dict) or r.get("fooddb_known"):
+                continue
+            rule = ruled.get(str(r.get("raw") or "").strip().lower()) \
+                or ruled.get(str(r.get("term") or "").strip().lower()) or {}
+            if str(rule.get("decision") or "").strip().lower() in no_label:
+                continue
+            name = rule.get("canon_item") or r.get("canon_item") or r.get("term")
+            if not name:
+                continue
+            name = str(name)
+            # The row may have been unknown to the TABLE and known to the DB all along - the table
+            # asks by the page's phrase and the mapper's ruling is what maps it onto a name the DB
+            # already carries. That is a lookup the table could not do, not a missing row.
+            if name.strip().lower() in db:
+                continue
+            if name not in need:
+                need.append(name)
+        if not need:
+            return None
+        # Every name the mapper ACCOUNTED FOR: written, or refused by name in a finding - a refused
+        # row was ruled on and its own finding already says why.
+        seen = set(str(n).strip().lower() for n in (written or []))
+        for f in (findings or []):
+            for n in need:
+                if ("'%s'" % n) in f or ('"%s"' % n) in f:
+                    seen.add(n.strip().lower())
+        missing = [n for n in need if n.strip().lower() not in seen]
+        if not missing:
+            return None
+        return ("map/%s: the pre-resolve table named %d food(s) with no food-DB row and the mapper "
+                "returned nothing at all for %d of them (%s). Those rows are not refused, they are "
+                "ABSENT - the write lane will refuse this recipe for a missing row that nobody said "
+                "was missing. A row the mapper could not acquire is a finding it is asked to state in "
+                "`detail`; silence is not."
+                % (slug, len(need), len(missing), ", ".join(repr(m) for m in missing[:8])
+                   + (" and %d more" % (len(missing) - 8) if len(missing) > 8 else "")))
 
     async def new_bid_proposals(self, slug, res):
         r"""Every bid the three namespaces do NOT already wire - declared or not.
@@ -2227,7 +2380,11 @@ class Daemon(object):
         """
         proposals = await self.new_bid_proposals(slug, res)
         rulings = await self.registrar_rulings(slug, proposals, tables)
-        db_written, db_findings = await self.write_food_db_rows(slug, res.get("food_db_rows"))
+        db_written, db_findings, db_notes = await self.write_food_db_rows(
+            slug, res.get("food_db_rows"))
+        shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
+        if shortfall:
+            db_findings = db_findings + [shortfall]
         for f in db_findings:
             self.findings.append(f)
         payload = {
@@ -2240,6 +2397,10 @@ class Daemon(object):
             # one cannot mistake the two.
             "db_entries_written": db_written,
             "db_row_findings": db_findings,
+            # Rows that were LOOKED AT and agreed with the DB on a different serving basis. Not
+            # findings - nobody has to act on them - but the difference between "we compared them"
+            # and "nobody compared them" is worth keeping on the artifact.
+            "db_row_notes": db_notes,
             "rejected": res.get("rejected") or [],
             "ruled_substitutions": res.get("ruled_substitutions") or [],
             "new_commodity_proposals": proposals,
