@@ -291,6 +291,10 @@ grocery/logs-archive/
 /grocery/out/coverage-ledger.json
 /meal-prep/db/published-hashes.json
 /meal-prep/pipeline/catalog-digest.json
+# The digest's similarity calibration (D12 rung 2) is derived from the digest in the same act and is
+# meaningless without it, so it follows the digest out of the repo. It is never a default: a reader
+# that cannot find it, or finds it fingerprinted to a different digest, reports BLIND.
+/meal-prep/pipeline/catalog-similarity.json
 *.bak-*
 
 # compute-v2 downloads the public feed here as a cache

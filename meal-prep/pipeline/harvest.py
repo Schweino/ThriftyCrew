@@ -41,6 +41,7 @@ that walls the harvester is skipped and reported, never hammered - the same doct
   python harvest.py --mark-ruled <slug> --verdict <v> [--reason '...']
   python harvest.py --dossier [--count 10] [--run <id>] [--out <file>]
   python harvest.py --status [--json]
+  python harvest.py --calibration [--json]          BLIND (exit 2) when the calibration is missing/stale
   python harvest.py --selftest
 
 EXIT CODES (v3 section 4.5, and they differ from lib\\guard-contract.ps1's older vocabulary on purpose):
@@ -92,6 +93,9 @@ CONSIDERED_JSON = os.path.join(MP, "db", "considered-dishes.json")
 SOURCE_DOMAINS_JSON = os.path.join(MP, "db", "source-domains.json")
 SATURATION_JSON = os.path.join(MP, "db", "saturation.json")
 CATALOG_DIGEST = os.path.join(HERE, "catalog-digest.json")
+# Written by harvest_embed.py --calibrate, beside the digest it is a property of (D12 rung 2, S2a
+# part b). Absent or stale is BLIND here - never a default number.
+CALIBRATION_FILE = os.path.join(HERE, "catalog-similarity.json")
 
 UA = "Mozilla/5.0 (compatible; ThriftyCrew recipe pipeline)"   # the same UA fetch-recipe.ps1 sends
 
@@ -1204,6 +1208,65 @@ def _batch_call(script, args, rows, payload, key_name, timeout=600):
             pass
 
 
+# ---- the ingredient channel (D12 rung 1, S2a defect 2) ----------------------------------------------
+# find-similar.ps1's Get-Score has always awarded a bonus for shared commodity items, with its own
+# fixture proving it - and score_pool sent `"items": []` for every candidate, so the channel ran on
+# names alone. Names are exactly where duplicates hide: "Marry Me Chicken" and "Creamy Sun-Dried Tomato
+# Chicken" share no name word and one ingredient list, and the embedding channel does not cover for it
+# (its signature string is name + protein by design, so ingredients are invisible to BOTH channels).
+#
+# A candidate has no canonical item ids - the mapper has not run and will not run until after the
+# decider rules - so the plug is a NORMALISATION into the item-id word namespace: the board's ids are
+# kebab-case English, so verbatim ingredient lines are reduced to their content words and find-similar
+# matches those words against the words of each digest row's ids. The matching rule and the singular/
+# plural fold live in find-similar.ps1 with Get-Score, in ONE place; this side only extracts words.
+#
+# WHY THIS STOP LIST IS HERE AND NOT PARSED FROM A LEDGER. It is a tokeniser's stop list, not a
+# taxonomy: it classifies nothing and no other file rules on it. The two vocabularies that ARE
+# taxonomies - the sauce families and the method enum - are still parsed from the files that own them.
+INGREDIENT_STOP = set("""
+tsp tsps teaspoon teaspoons tbsp tbsps tablespoon tablespoons cup cups ounce ounces pound pounds
+gram grams kilogram pint pints quart quarts gallon liter liters litre millilitre milliliter
+pinch dash handful package packages pkg jar jars bag bags box boxes bottle bottles carton container
+slice slices piece pieces inch inches clove cloves stick sticks sprig sprigs bunch bunches head heads
+about approximately plus more less taste optional divided room temperature needed serving servings
+garnish garnishing topping toppings for and the with into from your our each any some such well
+cut chopped finely roughly thinly coarsely halved quartered peeled seeded rinsed drained trimmed
+lengthwise crosswise cubed minced diced sliced grated melted softened beaten cooked uncooked
+warm cold hot large medium small extra plain plenty
+""".split())
+
+# WHAT IS DELIBERATELY NOT IN THAT LIST. `canned`, `frozen`, `shredded`, `boneless`, `skinless`,
+# `ground` and their kind look like prep words and are ID words - canned-corn, frozen-broccoli-florets,
+# boneless-skinless-chicken-thigh, 93-7-ground-turkey. Dropping them would cost the channel exactly the
+# specificity it is being plugged in for, since an id only counts as shared when every word of it is
+# known (find-similar.ps1's Get-ItemWords).
+
+_ING_PAREN = re.compile(r"\([^)]*\)")
+_ING_NONALPHA = re.compile(r"[^a-z]+")
+
+
+def ingredient_words(lines, cap=120):
+    """Verbatim ingredient lines -> the content words find-similar matches against item ids.
+
+    Quantities, units and prep verbs go; the nouns and the qualifiers the board's ids are built from
+    stay. Deliberately crude and lossy in the safe direction: an extra word costs a spurious +1 the
+    decider sees named in shared_items, a missing word costs a duplicate nobody is ever shown.
+    """
+    out = []
+    seen = set()
+    for line in (lines or []):
+        text = _ING_PAREN.sub(" ", str(line).lower())
+        for w in _ING_NONALPHA.split(text):
+            if len(w) < 3 or w in INGREDIENT_STOP or w in seen:
+                continue
+            seen.add(w)
+            out.append(w)
+            if len(out) >= cap:
+                return out
+    return out
+
+
 def batch_find_similar(rows, top=DOSSIER_NEIGHBOUR_CAP):
     """find-similar.ps1's word-overlap shortlist for many candidates in ONE process.
 
@@ -1253,6 +1316,71 @@ def load_embed_neighbours(path=NEIGHBOUR_FILE):
         return {}
 
 
+def load_similarity_calibration(path=CALIBRATION_FILE, digest_path=CATALOG_DIGEST):
+    """The live catalog's own pairwise similarity distribution, or a REASON we cannot see it.
+
+    Returns (record, reason). Exactly one of the two is ever set, and `reason` is the whole point:
+    a missing or stale calibration is could-not-look, and could-not-look is never a clean bill. There
+    is no default distribution and no fallback threshold - S2a part b puts the threshold in the corpus,
+    so a reader without the corpus's answer has NO answer and says so.
+
+    STALE IS BLIND TOO. The record names the digest it was computed from by content fingerprint; if the
+    digest on disk has moved since, the numbers describe a catalog that no longer exists. The
+    fingerprint function is harvest_embed's own - the writer's - imported rather than re-implemented,
+    so the two can never drift apart on what "the same digest" means. That import is safe under the
+    graph interpreter: harvest_embed guards its torch/numpy imports and reports them at main().
+    """
+    if not os.path.exists(path):
+        return None, ("no calibration at %s - run harvest_embed.py --calibrate under the sidecar venv "
+                      "(make-catalog-digest.ps1 does it for you)" % path)
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            rec = json.load(f)
+    except Exception as e:
+        return None, "the calibration at %s could not be read (%s)" % (path, e)
+    for k in ("p50", "p90", "p99", "n", "dupe_threshold", "generated_from"):
+        if k not in rec:
+            return None, "the calibration is missing `%s` - it cannot be the file S2a part b specifies" % k
+    try:
+        sys.path.insert(0, HERE)
+        import harvest_embed
+        fp = harvest_embed.digest_fingerprint(digest_path)
+    except Exception as e:
+        return None, "the digest could not be fingerprinted to date the calibration against (%s)" % e
+    if (rec.get("generated_from") or {}).get("sha256") != fp["sha256"]:
+        return None, ("the calibration is STALE: it was computed from a digest of %s recipes "
+                      "(%s...), the digest on disk is %s recipes (%s...)"
+                      % ((rec.get("generated_from") or {}).get("recipe_count"),
+                         str((rec.get("generated_from") or {}).get("sha256"))[:12],
+                         fp["recipe_count"], fp["sha256"][:12]))
+    return rec, ""
+
+
+def cmd_calibration(a):
+    """Report the corpus calibration, or REFUSE. No verb in this file hand-sets a similarity number."""
+    rec, reason = load_similarity_calibration()
+    if rec is None:
+        say("harvest --calibration: BLIND - %s" % reason)
+        say("  There is no default. A threshold nobody measured is a threshold nobody can defend.")
+        say("HARVEST-COMPLETE")
+        return 2
+    if a.json:
+        print(json.dumps(rec, indent=1))
+        say("HARVEST-COMPLETE")
+        return 0
+    say("harvest --calibration: %d live recipes, %d pairs, %s"
+        % (rec.get("recipes") or 0, rec["n"], rec.get("model") or "?"))
+    say("  p50 %.4f   p90 %.4f   p99 %.4f   max %.4f"
+        % (rec["p50"], rec["p90"], rec["p99"], rec.get("max") or rec["dupe_threshold"]))
+    say("  dupe threshold READ from the corpus: %.4f  (%s)"
+        % (rec["dupe_threshold"], rec.get("dupe_threshold_basis") or "basis not stated"))
+    for p in (rec.get("closest_published_pairs") or [])[:3]:
+        say("    closest published pair: %s <-> %s  %.4f" % (p["a"], p["b"], p["score"]))
+    say("  Calibration only - S2a: no auto-rejection on similarity at any score.")
+    say("HARVEST-COMPLETE")
+    return 0
+
+
 def score_pool(pool, quiet=False):
     """Refresh neighbours / prior rulings / saturation pressure for every AVAILABLE candidate."""
     rows = []
@@ -1262,14 +1390,17 @@ def score_pool(pool, quiet=False):
         sig = c.get("signature") or {}
         rows.append({"slug": c["slug"], "name": c.get("name") or c["slug"],
                      "protein": sig.get("protein") or "", "method": sig.get("method") or "",
-                     "items": []})
+                     # THE PLUGGED CHANNEL (D12 rung 1). This was `[]` from the day the batch road was
+                     # built, which meant find-similar's shared-items bonus - fixture and all - ran on
+                     # empty input for every candidate the harvest has ever scored.
+                     "items": ingredient_words(c.get("ingredients_verbatim"))})
     if not rows:
         return 0
     sim = batch_find_similar(rows)
     prior = batch_prior_rulings(rows)
     sat = load_saturation()
     emb = load_embed_neighbours()
-    n = 0
+    n, blind_live, with_items = 0, 0, 0
     for c in pool["candidates"]:
         if c.get("status") != "available":
             continue
@@ -1279,8 +1410,23 @@ def score_pool(pool, quiet=False):
             # returns is a LIVE recipe by construction.
             neigh.append({"slug": m.get("slug"), "name": m.get("name"), "score": m.get("score"),
                           "shared": m.get("shared_words") or [], "source": "word-overlap",
-                          "side": "live-catalog"})
-        for m in (emb.get(c["slug"]) or [])[:DOSSIER_NEIGHBOUR_CAP]:
+                          "side": "live-catalog",
+                          # The ingredient channel's evidence, NAMED. S2a: every number a dossier
+                          # carries must be auditable - it names the recipe and the score, never a
+                          # bare integer, and a shared-items bonus with no items listed is exactly
+                          # the bare integer that rule exists to forbid.
+                          "shared_items": m.get("shared_items") or []})
+        # PER SIDE, not the first five of a concatenated list (D12 rung 1). harvest_embed now hands
+        # back up to `top` catalog rows followed by up to `top` pool rows; a flat [:CAP] here would
+        # throw the backlog side away and re-open the starvation from the other end.
+        emb_rows = emb.get(c["slug"]) or []
+        per_side = {}
+        for m in emb_rows:
+            side = "live-catalog" if m.get("side") == "catalog" else "backlog"
+            if len(per_side.setdefault(side, [])) >= DOSSIER_NEIGHBOUR_CAP:
+                continue
+            per_side[side].append(m)
+        for m in per_side.get("live-catalog", []) + per_side.get("backlog", []):
             # THE EMBEDDING LANE SCORES AGAINST BOTH the live catalog AND the rest of the backlog, and
             # the two mean completely different things to a decider: a live neighbour is a published
             # dinner it would be duplicating, a backlog neighbour is another candidate nobody has
@@ -1298,9 +1444,19 @@ def score_pool(pool, quiet=False):
         fam = sig.get("sauce_family")
         c["saturation_pressure"] = sat.get("%s|%s" % (sig.get("protein") or "any", fam), 0) if fam else 0
         n += 1
+        if not [x for x in neigh if x.get("side") == "live-catalog"]:
+            blind_live += 1
+        if [x for x in neigh if x.get("shared_items")]:
+            with_items += 1
     if not quiet:
         say("  scored %d available candidate(s): word-overlap%s + prior rulings + saturation"
             % (n, "+bge-m3" if emb else ""))
+        # THE D12 RUNG-1 GATE, MEASURED ON EVERY RUN rather than once at build time. A candidate with
+        # no live-catalog neighbour hands the decider an empty live block next to `catalog_checked`,
+        # which reads as evidence of absence. Zero is the number this is supposed to say.
+        say("  %d of %d carry NO live-catalog neighbour%s; %d carry ingredient evidence (shared_items)"
+            % (blind_live, n, " - the catalog digest is missing" if not catalog_size() else "",
+               with_items))
     return n
 
 
@@ -2008,10 +2164,30 @@ def catalog_size(digest_path=CATALOG_DIGEST):
         return 0
 
 
+def dossier_neighbours(neigh, cap=DOSSIER_NEIGHBOUR_CAP):
+    """Top `cap` per CHANNEL per SIDE - the bound S2a sets, and the reason it is not a flat slice.
+
+    `neighbours` arrives as word-overlap rows (live only) then bge-m3 live then bge-m3 backlog, each
+    already ordered and already capped by score_pool. A flat [:2*cap] cut looks equivalent and is not:
+    once the embedding lane carries both sides, the flat cut lands inside the bge-m3 block and drops
+    the backlog rows entirely - the same starvation D12 rung 1 just closed, arriving from the other
+    end. The dossier's cost per candidate stays CONSTANT in catalog size either way, which is the
+    property the cap exists for.
+    """
+    kept, seen = [], {}
+    for x in neigh:
+        key = (x.get("source"), x.get("side"))
+        if seen.get(key, 0) >= cap:
+            continue
+        seen[key] = seen.get(key, 0) + 1
+        kept.append(x)
+    return kept
+
+
 def build_dossier(c, catalog_n=None):
     sig = c.get("signature") or {}
     band = c.get("band") or {}
-    neigh = c.get("neighbours") or []
+    neigh = dossier_neighbours(c.get("neighbours") or [])
     live = [n for n in neigh if n.get("side") == "live-catalog"]
     return {
         "slug": c["slug"], "name": c.get("name"), "url": c.get("url"), "domain": c.get("domain"),
@@ -2022,7 +2198,7 @@ def build_dossier(c, catalog_n=None):
                  "reason": band.get("reason") or ""},
         "servings": c.get("servings"),
         "ingredients_verbatim": (c.get("ingredients_verbatim") or [])[:DOSSIER_INGREDIENT_CAP],
-        "neighbours": neigh[:2 * DOSSIER_NEIGHBOUR_CAP],
+        "neighbours": neigh,
         # An empty neighbour block is ambiguous unless the dossier says the search HAPPENED. Without
         # this, "no neighbours" and "nobody looked" are the same bytes, and a decider that cannot tell
         # them apart will go and read the corpus itself - which is what it did.
@@ -2592,10 +2768,66 @@ def cmd_selftest(_a):
     T("CLEAN TWIN a candidate with no neighbours still reports the search",
       build_dossier(ing, catalog_n=544)["catalog_checked"]["live_recipes_searched"] == 544,
       "search not reported")
+    # ---- D12 rung 1: the dossier's cap is per CHANNEL per SIDE, never a flat cut ------------------
+    many = ([{"source": "word-overlap", "side": "live-catalog", "slug": "w%d" % i} for i in range(5)]
+            + [{"source": "bge-m3", "side": "live-catalog", "slug": "l%d" % i} for i in range(5)]
+            + [{"source": "bge-m3", "side": "backlog", "slug": "b%d" % i} for i in range(5)])
+    T("MUST FIRE  a flat 2xCAP cut lands inside the bge-m3 block and throws the whole backlog side "
+      "away - the starvation arriving from the other end",
+      not [x for x in many[:2 * DOSSIER_NEIGHBOUR_CAP] if x["side"] == "backlog"],
+      str([x["slug"] for x in many[:2 * DOSSIER_NEIGHBOUR_CAP]]))
+    kept = dossier_neighbours(many)
+    T("MUST FIRE  the per-channel-per-side cap keeps all three blocks whole",
+      len([x for x in kept if x["source"] == "word-overlap"]) == 5
+      and len([x for x in kept if x["source"] == "bge-m3" and x["side"] == "live-catalog"]) == 5
+      and len([x for x in kept if x["source"] == "bge-m3" and x["side"] == "backlog"]) == 5,
+      str(len(kept)))
+    T("CLEAN TWIN and it is still BOUNDED - the decider's cost per candidate stays constant in "
+      "catalog size, which is what the cap is for",
+      len(dossier_neighbours(many * 4)) == 15, str(len(dossier_neighbours(many * 4))))
+    # THROUGH THE DOSSIER ITSELF, not just the helper. A guard on the rule that leaves the call site
+    # unwatched is how a fixed function ends up beside an unfixed caller.
+    wide = build_dossier({"slug": "wide", "name": "Wide", "neighbours": many}, catalog_n=1)
+    T("MUST FIRE  the dossier a decider actually receives carries all three blocks - the backlog "
+      "side is not what falls off the end",
+      len([x for x in wide["neighbours"] if x["side"] == "backlog"]) == 5,
+      str([x["slug"] for x in wide["neighbours"]]))
+    T("and its catalog_checked counts what the dossier SHIPS, not what was scored",
+      wide["catalog_checked"]["live_matches"] == 10
+      and wide["catalog_checked"]["backlog_matches"] == 5,
+      json.dumps(wide["catalog_checked"]))
+
     T("a dossier carries signature, band, neighbours, prior rulings and saturation",
       set(["signature", "band", "neighbours", "prior_rulings", "saturation_pressure"]).issubset(d),
       ",".join(sorted(d)))
     T("MUST FIRE  a dossier stays inside the 2-3 KB budget section S2 sets", size <= 3072, str(size))
+    # AND THE REAL ONE, MEASURED. The fixture above runs on a two-neighbour candidate, so it can pass
+    # while a real dossier does not - the trap where an agreeing number escapes scrutiny. D12 rung 1
+    # fills every block: 5 word-overlap + 5 bge-m3 live + 5 bge-m3 backlog, each carrying its evidence.
+    # MEASURED 2026-08-26 over the rescored live pool, 10 popped dossiers: 3,524-4,153 bytes, against
+    # 2,603-3,118 for the same ten in the pre-D12 shape. So section S2's "2-3 KB each" line is no
+    # longer true of a full dossier, and this estate does not leave a stale budget standing as a
+    # guard: the assertion below bounds GROWTH at 1.5x the measured worst case - it catches an
+    # unbounded neighbour block, and it does not pretend 4 KB is 3 KB.
+    full = build_dossier({"slug": "full", "name": "A Fairly Long Candidate Dish Name Bowls",
+                          "url": "https://example.com/" + "x" * 60, "domain": "example.com",
+                          "signature": {"protein": "chicken", "method": "skillet"},
+                          "ingredients_verbatim": ["1 1/2 lbs boneless skinless chicken thighs, "
+                                                   "cut into bite-sized pieces"] * 22,
+                          "neighbours": [{"slug": "neighbour-slug-%d" % i,
+                                          "name": "Some Live Catalog Recipe Name %d" % i,
+                                          "score": 0.9123, "shared": ["chicken", "skillet"],
+                                          "shared_items": ["chicken-breast", "heavy-cream"],
+                                          "source": s, "side": d}
+                                         for s, d in (("word-overlap", "live-catalog"),
+                                                      ("bge-m3", "live-catalog"),
+                                                      ("bge-m3", "backlog"))
+                                         for i in range(5)]}, catalog_n=562)
+    full_size = len(json.dumps(full, ensure_ascii=False))
+    # The measured size goes in the `got` field, never in the assertion NAME: a name that carries a
+    # number changes every run, and the name set is the instrument that catches a vanished case.
+    T("MUST FIRE  a FULL dossier - every channel and side at cap - stays bounded",
+      full_size <= 6144, "%d bytes" % full_size)
     ranked = sorted([{"slug": "b", "band": {"verified": False}, "prior_rulings": [],
                       "saturation_pressure": 0, "ingredients_verbatim": []},
                      {"slug": "a", "band": {"verified": True}, "prior_rulings": [],
@@ -2629,6 +2861,77 @@ def cmd_selftest(_a):
                     "saturation_pressure": 0, "ingredients_verbatim": [],
                     "batch_concerns": ["cold-plate"]}) is not None, "removed")
 
+    # ================================================================================================
+    # D12 RUNG 1 - THE INGREDIENT CHANNEL, PLUGGED IN.
+    # ================================================================================================
+    verbatim = ["2 boneless, skinless chicken breasts (about 1.5 lbs, $4.20)",
+                "1 cup heavy cream ($1.20)", "1/2 cup sun-dried tomatoes, chopped",
+                "2 Tbsp butter", "2 cups fresh spinach", "salt and pepper to taste"]
+    iw = ingredient_words(verbatim)
+    T("MUST FIRE  the ingredient words carry the nouns the board's ids are built from",
+      set(["chicken", "breasts", "heavy", "cream", "sun", "dried", "tomatoes", "spinach",
+           "butter"]).issubset(iw), ",".join(iw))
+    T("MUST FIRE  and they drop the measure, the price and the prep verb - none of which is a food",
+      not (set(["cup", "cups", "tbsp", "lbs", "about", "chopped", "taste"]) & set(iw)), ",".join(iw))
+    T("a parenthetical is dropped whole, so a publisher's cost note never becomes an ingredient",
+      "4.20" not in iw and "1.5" not in iw, ",".join(iw))
+    T("CLEAN TWIN no ingredient lines yields no words - which is exactly what score_pool sent for "
+      "every candidate it has ever scored, and why the shared-items bonus never fired",
+      ingredient_words([]) == [] and ingredient_words(None) == [], str(ingredient_words([])))
+
+    # END TO END, through the real find-similar process and the LIVE digest: harvest.py's words in,
+    # named ingredient evidence out. The two halves of this contract live in different languages and
+    # this is the only fixture that proves they meet.
+    if os.path.exists(CATALOG_DIGEST) and os.path.exists(FIND_SIMILAR_PS):
+        twin_pool = {"candidates": [{
+            "slug": "fixture-date-night-skillet", "name": "Date Night Skillet", "status": "available",
+            "signature": {"protein": "chicken", "method": "skillet"},
+            "ingredients_verbatim": verbatim}]}
+        score_pool(twin_pool, quiet=True)
+        nb = twin_pool["candidates"][0].get("neighbours") or []
+        twin = [x for x in nb if x.get("slug") == "creamy-tuscan-chicken-skillet"]
+        T("MUST FIRE  a composition duplicate under a disjoint name reaches the dossier through the "
+          "real lane, not just through Get-Score",
+          len(twin) == 1 and not twin[0].get("shared"),
+          ",".join(x.get("slug") or "?" for x in nb))
+        T("MUST FIRE  and its ingredient evidence is NAMED in the neighbour row",
+          bool(twin) and "heavy-cream" in (twin[0].get("shared_items") or []),
+          json.dumps(twin[0].get("shared_items") if twin else None))
+
+    # ================================================================================================
+    # D12 RUNG 2 - THE CALIBRATION IS READ, AND ITS ABSENCE IS BLIND.
+    # ================================================================================================
+    rec, why = load_similarity_calibration(path=os.path.join(HERE, "no-such-calibration.json"))
+    T("MUST FIRE  a missing calibration is a REASON, never a default distribution",
+      rec is None and "no calibration at" in why, why)
+    if os.path.exists(CALIBRATION_FILE) and os.path.exists(CATALOG_DIGEST):
+        rec, why = load_similarity_calibration()
+        T("the emitted calibration reads back clean against the digest on disk", rec is not None, why)
+        if rec:
+            T("MUST FIRE  the threshold READ from the corpus sits above its own p99 - two published "
+              "recipes must never read as duplicates of each other",
+              float(rec["dupe_threshold"]) > float(rec["p99"]),
+              "%s vs %s" % (rec["dupe_threshold"], rec["p99"]))
+            T("the distribution names its corpus and its size, so a number in a dossier can be traced",
+              int(rec["n"]) > 0 and (rec.get("generated_from") or {}).get("recipe_count"),
+              json.dumps(rec.get("generated_from")))
+        # STALE IS BLIND TOO. Same file, a digest it was not computed from.
+        import tempfile as _tf
+        fd, other = _tf.mkstemp(suffix=".json")
+        os.close(fd)
+        try:
+            with open(other, "w", encoding="utf-8") as f:
+                json.dump({"recipe_count": 1, "by_protein": {}}, f)
+            rec2, why2 = load_similarity_calibration(digest_path=other)
+            T("MUST FIRE  a calibration that does not match the digest on disk is STALE, and stale "
+              "is could-not-look",
+              rec2 is None and "STALE" in why2, why2)
+        finally:
+            try:
+                os.remove(other)
+            except OSError:
+                pass
+
     # ---- llama-server refusal ------------------------------------------------------------------------
     T("MUST FIRE  --classify's health probe is a real probe, not an assumption",
       llama_up("http://127.0.0.1:1", timeout=1) is False, "claimed up")
@@ -2653,6 +2956,10 @@ def main(argv=None):
     ap.add_argument("--dossier", action="store_true")
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--rescore", action="store_true")
+    ap.add_argument("--calibration", action="store_true",
+                    help="report the corpus similarity calibration (harvest_embed --calibrate "
+                         "writes it). Exit 2 - BLIND - when it is missing or stale against the "
+                         "digest; there is no default threshold.")
     ap.add_argument("--classify-nutrition", dest="classify_nutrition", action="store_true",
                     help="transcribe printed nutrition panels for candidates whose JSON-LD has "
                          "none. Needs llama-server; every number is proved against the page.")
@@ -2708,6 +3015,8 @@ def main(argv=None):
         return cmd_reingredients(a)
     if a.rescore:
         return cmd_rescore(a)
+    if a.calibration:
+        return cmd_calibration(a)
     if a.status:
         return cmd_status(a)
     ap.print_help()
