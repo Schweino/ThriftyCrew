@@ -1231,6 +1231,48 @@ function Test-IsPantrySeasoningToTaste([string]$Raw) {
   return $hasCore
 }
 
+# A DELIBERATE ZERO IS NOT A MISSING WEIGHT (Brad's D1 ruling, 2026-08-24, arriving at the assembler).
+#
+# MEASURED 2026-08-26, `steak-stir-fry-recipe` in run hunt-2026-08-26-smoke4, on the line
+# "Fresh Basil and Lemon Wedges". EVERY stage before this one settled it exactly as D1 says to:
+# extraction marked the row `optional: true` under the source's "Optional for Garnish" heading, the
+# mapper ruled it `mapped-optional` with `bid: null` and `grams_source: 0` and wrote "No bid because
+# there is no amount to price, which is pantry-safe". The assembler then refused it as "a purchasable
+# line with no weight".
+#
+# THE MECHANISM, CONFIRMED BY INSTRUMENTING THE GATE RATHER THAN BY READING IT. The refusal is
+# `if ($null -eq $grams -or $grams -le 0)`, and it is the SECOND arm that fires: with the debug print
+# in place this line reported `grams_isnull=False grams='0' gramsFrom='ruling'`. So the ruling DID
+# state a weight - the gate's own finding text ("no gram weight from the engine or from a ruling") is
+# wrong about its own input - and `-le 0` is where "nobody weighed this" and "the estate ruled this
+# weighs nothing" become the same value. It is NOT the `-not $g` falsiness trap: no falsiness test
+# exists on this path, and $grams is a [double] 0, never $null, on the failing line.
+#
+# WHY THE EXEMPTION IS KEYED ON SIGNALS AND NOT ON THE ZERO. A zero on its own says nothing: the
+# engine writes one too (`no-qty zero (minor item)` is in ENGINE_FALLBACK_FLAGS), and a line the
+# mapper thinks the shopper BUYS that happens to carry 0 g is the fabricated-band defect this refusal
+# exists for. So four things must all hold, and each is something a stage deliberately WROTE:
+#   * the weight is 0 and it came from the MAPPER ($GramsFrom 'ruling' or 'line'). A weight the engine
+#     guessed, or no weight at all ($GramsFrom ''), is not a ruling and is still refused.
+#   * NO BID. A line with a wired commodity id is a line the shopper buys, whatever it weighs.
+#   * the line is OPTIONAL - the extraction's `optional: true`, or the mapper's `mapped-optional`,
+#     either one. Both are explicit; a non-optional line with an explicit 0 g still parks the recipe,
+#     which is the fixture that keeps this gate's teeth.
+# `mapped-optional` is in hunt_lib.MAPPED_RULING_DECISIONS and in ASM_RULING_DECISIONS above, so this
+# reads the closed enum rather than a word the mapper invented.
+function Test-IsRuledZeroOptional {
+  param([bool]$Optional, [string]$RulingDecision, [string]$Bid, $Grams, [string]$GramsFrom)
+  if ($null -eq $Grams) { return $false }            # NO WEIGHT GIVEN - the case this gate is for
+  $g = 0.0
+  try { $g = [double]$Grams } catch { return $false }
+  if ($g -ne 0) { return $false }                    # a negative weight is a bug, not a ruling
+  if ($GramsFrom -ne 'ruling' -and $GramsFrom -ne 'line') { return $false }
+  if ($Bid) { return $false }                        # a wired id is a food the shopper buys
+  $d = ([string]$RulingDecision).Trim().ToLower()
+  if (-not $Optional -and $d -ne 'mapped-optional') { return $false }
+  return $true
+}
+
 function Get-AssembledDecision {
   <# The ruling enum (or a pre-resolved line's absence of one) onto Get-LineClass's vocabulary. #>
   param([string]$Ruling, [bool]$Optional)
@@ -1579,6 +1621,28 @@ function New-MappedDecisionFile {
           grams = 0; buy = ''; optional = $true; decision = 'optional-note'
           notes = ("pantry seasoning stated 'to taste' - no quantity to buy, weigh or cost; recorded so the reader still sees it") }) | Out-Null
         $paraphrased.Add(("'{0}' is a pantry seasoning stated 'to taste', so it is recorded as an optional note rather than costed" -f $raw)) | Out-Null
+        continue
+      }
+      # THE ESTATE ALREADY RULED THIS LINE WEIGHS NOTHING (D1, arriving as a ruling rather than as a
+      # phrase). See Test-IsRuledZeroOptional for the mechanism and for why all four signals are
+      # required. LAST of the four exemptions on purpose: the three above read the RAW LINE and can
+      # settle a line no ruling covers, and this one reads what the mapper WROTE, so it is the last
+      # chance before the honest refusal and it cannot pre-empt D5's alternatives pick.
+      #
+      # IT LANDS AS `optional-note`, NOT AS `mapped-optional` AT 0 g, and that is not cosmetic - it is
+      # the only shape that survives the next stage. build-intake-skeleton's Get-LineClass sends
+      # `mapped-optional` to class `optional`, which is COUNTED, and its own `$g -le 0` arm then raises
+      # "'Fresh Basil' is included (mapped-optional) but carries no grams" and the recipe dies one
+      # stage further along. `optional-note` classes `not-purchased`: excluded from cost and macros,
+      # and NAMED in the intake's notes, which is exactly what D1 asks for.
+      if (Test-IsRuledZeroOptional -Optional $optional -RulingDecision $rulingDecision -Bid $bid -Grams $grams -GramsFrom $gramsFrom) {
+        $ings.Add([pscustomobject]@{
+          source_raw = $raw; item = $item; bid = $null; board = $null
+          grams = 0; buy = ''; optional = $true; decision = 'optional-note'
+          notes = $(if ($ruling -and $ruling.evidence) { [string]$ruling.evidence }
+                    elseif ($line -and $line.notes) { [string]$line.notes }
+                    else { 'ruled optional with an explicit zero weight - nothing to buy, weigh or cost; recorded so the reader still sees it' }) }) | Out-Null
+        $paraphrased.Add(("'{0}' was ruled optional with an explicit 0 g and no bid, so it is recorded as an optional note rather than costed" -f $raw)) | Out-Null
         continue
       }
       # NEVER A SILENT ZERO. A zero-gram line is an ingredient the reader buys and the card ignores,
@@ -2413,6 +2477,111 @@ if ($runSelfTest) {
   T 'MUST FIRE  end to end, a REAL ingredient stated "to taste" still parks the recipe - no price or macro is silently dropped' `
     ((@($resT2.findings) -join ' ') -match 'has no gram weight') `
     ("findings=" + (@($resT2.findings) -join '; '))
+
+  # ---- FIXTURE A1z. A DELIBERATE ZERO IS NOT A MISSING WEIGHT (2026-08-26). ----------------------
+  # FROZEN FIXTURE, verbatim from `steak-stir-fry-recipe` in run hunt-2026-08-26-smoke4 - the raw line,
+  # the buy string, the ruling and its evidence are copied off disk character for character. D1 says a
+  # quantity-less garnish is dropped from cost and macros and kept named for the reader; extraction
+  # marked the row optional, the mapper ruled it `mapped-optional` with no bid and an explicit 0 g, and
+  # the assembler still refused it as "a purchasable line with no weight".
+  #
+  # THE THREE OTHER EXEMPTIONS CANNOT REACH THIS LINE, AND THAT IS PINNED FIRST. Without these three
+  # twins the fixture below would pass through the garnish branch and prove nothing about the new one:
+  # "Fresh Basil and Lemon Wedges" carries no trailing garnish phrase, no leading label with a colon,
+  # no "to taste", and no top-level `, or ` menu. The signals it DOES carry are the ones the mapper and
+  # the extraction wrote, which is the whole argument for keying the exemption on them.
+  T 'MUST FIRE  the smoke4 line reaches the NEW exemption and no other - it is no garnish phrase, no to-taste seasoning and no alternatives menu' `
+    ((-not (Test-IsGarnishLine 'Fresh Basil and Lemon Wedges')) -and
+     (-not (Test-IsPantrySeasoningToTaste 'Fresh Basil and Lemon Wedges')) -and
+     (@(Split-AlternativeFoods 'Fresh Basil and Lemon Wedges').Count -eq 0)) `
+    'another exemption claimed the line, so this fixture proves nothing about the new one'
+  # THE PREDICATE, every signal one at a time. A zero on its own is never enough.
+  T 'MUST FIRE  optional + mapped-optional + no bid + an explicit 0 g FROM THE MAPPER is a ruled zero' `
+    (Test-IsRuledZeroOptional -Optional $true -RulingDecision 'mapped-optional' -Bid '' -Grams 0 -GramsFrom 'ruling') `
+    'the smoke4 shape was not recognised'
+  T 'CLEAN TWIN either optional signal alone carries it - the extraction flag with no ruling, or the mapper''s word on a row nobody flagged' `
+    ((Test-IsRuledZeroOptional -Optional $true -RulingDecision '' -Bid '' -Grams 0 -GramsFrom 'line') -and
+     (Test-IsRuledZeroOptional -Optional $false -RulingDecision 'mapped-optional' -Bid '' -Grams 0 -GramsFrom 'ruling')) `
+    'one of the two optional signals was ignored'
+  T 'MUST FIRE  NO WEIGHT GIVEN is still refused - $null is the case this gate exists for, and it is not a ruling' `
+    (-not (Test-IsRuledZeroOptional -Optional $true -RulingDecision 'mapped-optional' -Bid '' -Grams $null -GramsFrom '')) `
+    'a missing weight was read as a deliberate zero'
+  T 'MUST FIRE  a NON-OPTIONAL line with an explicit 0 g is still refused - the teeth, and the reason this reads signals and not the number' `
+    (-not (Test-IsRuledZeroOptional -Optional $false -RulingDecision 'mapped' -Bid '' -Grams 0 -GramsFrom 'ruling')) `
+    'a purchasable line was let through on its zero alone'
+  T 'MUST FIRE  a WIRED BID is a food the shopper buys, whatever it weighs' `
+    (-not (Test-IsRuledZeroOptional -Optional $true -RulingDecision 'mapped-optional' -Bid 'onions' -Grams 0 -GramsFrom 'ruling')) `
+    'a bid line was demoted to an optional note'
+  T 'MUST FIRE  the ENGINE''s zero is not a ruling - `no-qty zero (minor item)` is one of its own fallback flags' `
+    (-not (Test-IsRuledZeroOptional -Optional $true -RulingDecision 'mapped-optional' -Bid '' -Grams 0 -GramsFrom 'engine')) `
+    'the engine`s guess was read as a ruling'
+  T 'CLEAN TWIN a line with a REAL weight is not this rule''s business at all' `
+    (-not (Test-IsRuledZeroOptional -Optional $true -RulingDecision 'mapped-optional' -Bid '' -Grams 5 -GramsFrom 'ruling')) `
+    'a weighted line was demoted'
+  # ---- AND NOW THE CALL SITE, which is where the bug actually lived. PLAN-map-judge-split-2026-08-25
+  # section 4 records a neuter coming back 0 red because a fixture pinned a function while the defect
+  # sat at its call site, so the predicate twins above are not the proof - these are. The vector runs
+  # through New-MappedDecisionFile with a CLEAN TWIN line beside it, because a one-line fixture cannot
+  # tell "assembled correctly" from "assembled nothing".
+  $rowsZ = @((New-Row 'z1' 'z1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+             (New-Row 'zg' 'fresh basil and lemon wedges' '' '' 'new-food-suspect' $null $true))
+  $payZ = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='z1'; buy='1 lb kielbasa'; notes='' },
+              [pscustomobject]@{ raw='zg'; grams_source=0
+                                 buy='optional: a handful of fresh basil leaves, torn, and lemon wedges for serving'
+                                 notes="Garnish under the source's 'Optional for Garnish' heading with no quantity; carried at 0 g so it changes neither cost nor macros." })
+    rulings = @([pscustomobject]@{ raw='zg'; term='fresh basil and lemon wedges'; canon_item='Fresh Basil'
+                                   bid=$null; decision='mapped-optional'; grams_source=0
+                                   evidence='Optional garnish with no stated quantity; named as fresh basil (the lemon wedges come off the lemons already bought). No bid because there is no amount to price, which is pantry-safe.' }) }
+  $tblZ = New-Tbl $rowsZ 4
+  @($tblZ.rows)[1].raw = 'Fresh Basil and Lemon Wedges'
+  @($payZ.lines)[1].raw = 'Fresh Basil and Lemon Wedges'
+  @($payZ.rulings)[0].raw = 'Fresh Basil and Lemon Wedges'
+  $resZ = New-MappedDecisionFile $tblZ $payZ $stateRow $known 14
+  $zNote = @(@($resZ.doc.ingredients) | Where-Object { $_.source_raw -eq 'Fresh Basil and Lemon Wedges' })
+  T 'MUST FIRE  CALL SITE: the verbatim smoke4 line ASSEMBLES instead of parking the recipe - optional, no bid, an explicit 0 g' `
+    (@($resZ.findings).Count -eq 0 -and $null -ne $resZ.doc -and $zNote.Count -eq 1) `
+    ("findings=" + (@($resZ.findings) -join '; '))
+  T 'MUST FIRE  ...and it is NAMED for the reader with NO cost and NO macros - `optional-note`, zero grams, no bid, nothing to buy' `
+    ($zNote.Count -eq 1 -and @($zNote)[0].item -eq 'Fresh Basil' -and @($zNote)[0].decision -eq 'optional-note' -and
+     @($zNote)[0].grams -eq 0 -and $null -eq @($zNote)[0].bid -and -not @($zNote)[0].buy -and @($zNote)[0].optional) `
+    (($zNote | ForEach-Object { [string]$_.item + ' d=' + [string]$_.decision + ' g=' + [string]$_.grams + ' bid=' + [string]$_.bid }) -join ' | ')
+  # `optional-note` AND NOT `mapped-optional` AT 0 g, pinned against the REAL classifier read out of
+  # build-intake-skeleton.ps1 above. `mapped-optional` classes `optional`, which is COUNTED, and that
+  # script's own `-le 0` arm would then raise "included but carries no grams" - the same recipe dying
+  # one stage further along, which is not a fix.
+  T 'MUST FIRE  ...and the decision it lands on is NOT-PURCHASED under the real Get-LineClass, so the next stage excludes it rather than counting a zero' `
+    ((Get-LineClass @($zNote)[0].decision) -eq 'not-purchased' -and (Get-LineClass 'mapped-optional') -eq 'optional') `
+    ("class=" + (Get-LineClass @($zNote)[0].decision))
+  $zKiel = @(@($resZ.doc.ingredients) | Where-Object { $_.source_raw -eq 'z1' })
+  T 'CLEAN TWIN the ordinary weighted line beside it is untouched - 200 g of source at 3.5x is still 700 g, still `mapped`, still bid and still bought' `
+    ($zKiel.Count -eq 1 -and @($zKiel)[0].grams -eq 700 -and @($zKiel)[0].decision -eq 'mapped' -and
+     @($zKiel)[0].bid -eq 'kielbasa' -and @($zKiel)[0].buy -eq '1 lb kielbasa') `
+    (($zKiel | ForEach-Object { [string]$_.grams + ' ' + [string]$_.decision + ' ' + [string]$_.bid }) -join ' | ')
+  # ---- THE TEETH, AT THE CALL SITE. Two shapes, because "still refused" has two halves: a line nobody
+  # weighed, and a line weighed at zero that nobody ruled optional. Both must still park the recipe
+  # with the SAME finding text, or this fix widened the gate instead of narrowing it.
+  $rowsZ2 = @((New-Row 'z1' 'z1' 'Kielbasa' 'kielbasa' 'resolved' 200.0),
+              (New-Row 'zp' 'sumac' 'Sumac' '' 'unresolved' $null))
+  $payZ2 = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='z1'; buy='1 lb kielbasa'; notes='' },
+              [pscustomobject]@{ raw='zp'; buy='2 tbsp sumac'; notes='' })
+    rulings = @([pscustomobject]@{ raw='zp'; term='sumac'; canon_item='Sumac'; bid=$null
+                                   decision='mapped'; grams_source=$null; evidence='a real spice the shopper buys' }) }
+  $resZ2 = New-MappedDecisionFile (New-Tbl $rowsZ2 4) $payZ2 $stateRow $known 14
+  T 'MUST FIRE  TEETH, CALL SITE: a NON-OPTIONAL purchasable line with NO weight is STILL refused, with the same finding text' `
+    ($null -eq $resZ2.doc -and
+     (@($resZ2.findings) -join ' ') -match 'has no gram weight from the engine or from a ruling') `
+    ("findings=" + (@($resZ2.findings) -join '; '))
+  $payZ3 = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='z1'; buy='1 lb kielbasa'; notes='' },
+              [pscustomobject]@{ raw='zp'; buy='2 tbsp sumac'; notes='' })
+    rulings = @([pscustomobject]@{ raw='zp'; term='sumac'; canon_item='Sumac'; bid=$null
+                                   decision='mapped'; grams_source=0; evidence='a real spice the shopper buys' }) }
+  $resZ3 = New-MappedDecisionFile (New-Tbl $rowsZ2 4) $payZ3 $stateRow $known 14
+  T 'MUST FIRE  TEETH, CALL SITE: a NON-OPTIONAL line the mapper weighed at ZERO is refused too - the exemption reads the signals, never the number' `
+    ($null -eq $resZ3.doc -and (@($resZ3.findings) -join ' ') -match 'has no gram weight from the engine or from a ruling') `
+    ("findings=" + (@($resZ3.findings) -join '; '))
 
   # ---- FIXTURE A1d. D5: AN ALTERNATIVES LINE NAMES A CHOICE, SO CHOOSE ---------------------------
   # FROZEN FIXTURE (Brad's ruling 2026-08-24). 6b parked a recipe on
