@@ -92,7 +92,10 @@ param(
   # cells that never get priced, so it is a parameter with a measured default, not a constant.
   [double]$HelperThreshold = 1e-4,
   [switch]$SkipSweep,
-  [switch]$SkipStage1
+  [switch]$SkipStage1,
+  # PLAN-ingredient-memory D4. CPU-only, read-mostly, ~2 s, and it runs BEFORE the card changes
+  # hands - it has nothing to do with the GPU window and must never be able to eat into it.
+  [switch]$SkipHunterIngest
 )
 $ErrorActionPreference = 'Stop'
 
@@ -319,6 +322,48 @@ if ($SelfTest) {
   $captured = @(Log 'self-test: this line must not be a return value')
   if ($captured.Count -ne 0) { Write-Output ("  X MUST-FIRE: Log leaked {0} object(s) into the success stream - Stop-Llama would return its own log" -f $captured.Count); $bad++ }
 
+  # -- the hunter-identity ingest's SLOT, which is the whole of what this script decides about it.
+  #    PURE ONLY: no data files, no processes, no graph. The ingest's own behaviour is fixtured in
+  #    graph\learning\ingest_hunter_events.py --selftest; what belongs HERE is the ordering rule -
+  #    it must sit before anything holds the card and it must not be in the teardown.
+  $src = [IO.File]::ReadAllText($PSCommandPath)
+  # EVERY occurrence, not the first. Measured here on 2026-08-25: a neuter that left the original
+  # call in place and added a SECOND one inside `finally` came back 0 RED against IndexOf, because
+  # the first match was still in the right place. A chain with two hunter stages is a chain that
+  # runs one of them in teardown, which is the thing these three checks exist to forbid.
+  $hunters = @([regex]::Matches($src, [regex]::Escape("Invoke-Stage " + "'hunter'")) |
+               ForEach-Object { $_.Index })
+  # EVERY needle is BUILT. Measured, twice, in this one block: written out as literals, the check
+  # lines matched THEMSELVES - `$iSweep` found its own source line at index 21230 and reported the
+  # real sweep as running before a stage 7,600 characters later. A source-reading fixture that can
+  # see itself is a fixture reading the wrong file.
+  $iSweep  = $src.IndexOf('if (-not $Skip' + 'Sweep) {')
+  $iServe  = $src.IndexOf("Invoke-Stage " + "'serve'")
+  $iFinal  = $src.IndexOf('finally' + ' {')
+  if ($hunters.Count -ne 1) { Write-Output ("  X MUST-FIRE: the chain must hold EXACTLY ONE hunter-identity stage, found " + $hunters.Count); $bad++ }
+  # MUST-FIRE: it runs BEFORE the sweep, which is the first thing that takes the card. A stage that
+  # crept below `serve` would be spending the GPU window on a CPU job.
+  foreach ($h in $hunters) {
+    if ($iSweep -ge 0 -and $h -gt $iSweep) { Write-Output '  X MUST-FIRE: the hunter ingest must run BEFORE the sweep takes the card'; $bad++ }
+    if ($iServe -ge 0 -and $h -gt $iServe) { Write-Output '  X MUST-FIRE: the hunter ingest must run before llama-server takes the card'; $bad++ }
+    # MUST-FIRE: never in the finally. Teardown's one job is handing the card back, and a teardown
+    # that does work is a teardown that can fail at it.
+    if ($iFinal -ge 0 -and $h -gt $iFinal) { Write-Output '  X MUST-FIRE: the hunter ingest must not run in the teardown block'; $bad++ }
+  }
+  # MUST-FIRE: exit 3 is BLIND, not FAILED. The ingest returns 3 when the event log is absent, which
+  # is a real outcome and not a failure of this chain; recording it as FAILED would train its owner
+  # to ignore the line.
+  # THE NEEDLES ARE BUILT, NOT WRITTEN OUT, or each check would be its own match. Measured here on
+  # 2026-08-25: deleting the stage's BLIND branch came back 0 RED because the CHECK LINE contained
+  # the literal it was searching for. Same class as the rebid call-site pin, one script over.
+  $nBlind   = "Record 'hunter' " + "'BLIND'"
+  $nSkipped = "Record 'hunter' " + "'SKIPPED'"
+  $nPlan    = '1c' + ' hunter'
+  if (-not $src.Contains($nBlind)) { Write-Output '  X MUST-FIRE: the hunter stage must record BLIND on the could-not-evaluate exit'; $bad++ }
+  if (-not $src.Contains($nSkipped)) { Write-Output '  X MUST-FIRE: -SkipHunterIngest must record SKIPPED rather than vanishing'; $bad++ }
+  # CLEAN TWIN: the plan line names it too, or -WhatIfOnly describes a chain that is not the chain.
+  if (-not $src.Contains($nPlan)) { Write-Output '  X CLEAN TWIN: -WhatIfOnly must print the hunter stage'; $bad++ }
+
   if ($bad) { Write-Output "SELF-TEST FAILED ($bad)"; exit 2 }
   Write-Output 'self-test OK'
   exit 0
@@ -350,6 +395,7 @@ if ($WhatIfOnly) {
   Log 'plan only:'
   Write-Output "  1 emit     $py graph\pipeline\resolve.py --emit-contested sidecar\data\contested-pairs.json"
   Write-Output "  1b defs    $py graph\pipeline\emit_commodity_defs.py --out sidecar\data\commodity-defs-graph.json"
+  Write-Output "  1c hunter  $py graph\learning\ingest_hunter_events.py   (CPU only, read-mostly, before the card changes hands)"
   Write-Output "  2 sweep    grocery\audit-semantic-identity.ps1        (sidecar takes and releases the card)"
   Write-Output "  3 serve    tools\local-llm\serve.ps1 -Slots $Jobs"
   Write-Output "  4 resolve  $py graph\pipeline\resolve.py --llm --jobs $Jobs --adversarial --helper-scores sidecar\out\contested-scores.json --helper-threshold $HelperThreshold"
@@ -393,6 +439,24 @@ try {
   $r = Invoke-Stage 'defs' $py @('graph\pipeline\emit_commodity_defs.py', '--out', $gdefsF) 300
   if ($r.Ok) { Record 'defs' 'OK' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
   else { Record 'defs' 'BLIND' 'the contested lane falls back to the staple catalogue (15 of 435)' $r.Elapsed }
+
+  # -- 1c. the day's INGREDIENT IDENTITY events, filed into the graph (PLAN-ingredient-memory D4).
+  #        CPU-only, read-mostly, ~2 s, and it runs HERE - after defs, before anything holds the
+  #        card - for two reasons. It has no business inside the GPU window, which is the scarce
+  #        thing this whole script exists to schedule; and it must not be in the `finally`, because
+  #        teardown's one job is handing the card back and a teardown that does work is a teardown
+  #        that can fail at it.
+  #
+  #        BLIND-NOT-FATAL, like every stage here. Exit 3 is the ingest's own could-not-evaluate
+  #        (no event log at all - the map lane has never written one), which is a real outcome and
+  #        not a failure of this chain. It PROMOTES NOTHING: everything it cannot settle goes into
+  #        graph\learning\hunter-review-packet.json for a morning verb.
+  if (-not $SkipHunterIngest) {
+    $r = Invoke-Stage 'hunter' $py @('graph\learning\ingest_hunter_events.py') 300
+    if ($r.Ok) { Record 'hunter' 'OK' (($r.Tail | Where-Object { $_ -match 'event' } | Select-Object -Last 1)) $r.Elapsed }
+    elseif ($r.ExitCode -eq 3) { Record 'hunter' 'BLIND' (($r.Tail | Select-Object -Last 1)) $r.Elapsed }
+    else { Record 'hunter' 'FAILED' ("rc=" + $r.ExitCode + ' ' + (($r.Tail | Select-Object -Last 1))) $r.Elapsed }
+  } else { Record 'hunter' 'SKIPPED' '-SkipHunterIngest' 0 }
 
   # -- 2. the sweep. The chain must not OOM its own sidecar, so llama-server goes down FIRST even
   #       though this script has not started it yet: a leftover from a human session is exactly the

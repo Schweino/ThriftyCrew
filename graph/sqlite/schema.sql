@@ -152,6 +152,18 @@ CREATE TABLE IF NOT EXISTS decision_log (
     timestamp     TEXT NOT NULL,
     type          TEXT NOT NULL,   -- extract|resolve|verify|escalate|state_transition
                                    -- |learning_proposal|learning_approval|gate|tool
+                                   -- |hunter_identity
+                                   -- This list is a COMMENT and not a CHECK constraint, deliberately:
+                                   -- decision_log is an append-only audit trail and a new writer must
+                                   -- never need a table rebuild to record what it did. Verified before
+                                   -- `hunter_identity` was added (2026-08-25, PLAN-ingredient-memory
+                                   -- 6.3) - there is no CHECK here, so this edit changes nothing that
+                                   -- executes and everything that a reader can rely on.
+                                   -- hunter_identity: one row per ingredient-identity event filed by
+                                   -- graph\learning\ingest_hunter_events.py, `decision` carrying the
+                                   -- event's kind (ruling|registrar|qa_mapper_fail|supersede|
+                                   -- invalidate|review) and output_hash carrying the event's own
+                                   -- content-addressed id, which is what makes re-ingest idempotent.
     step_id       TEXT,
     model         TEXT,
     input_hash    TEXT,

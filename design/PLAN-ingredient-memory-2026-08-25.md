@@ -555,6 +555,45 @@ Rewritten to assert "exactly one occurrence, and it is after the gate", the same
 **1 RED**. Third time this build's lineage has watched a pin miss a call site (PLAN-map-judge-split
 §4 records the first two).
 
+### C5 (B5) — `open_db` takes no path, and `log_event` requires a timestamp
+
+§6.1 step 2 quotes `db.log_event(run=…, etype=…, decision=…, detail=…, output_hash=…)` and B7 says
+"scratch graph db is fine — `open_db` takes a path". Neither is the code:
+
+* `graph\lib\graphdb.py:504` — `def open_db(create: bool = True) -> GraphDB`. No path parameter.
+  The path lives on the class: `GraphDB(path=DB_PATH, create=True, restore_learning=True)`. The
+  ingest therefore constructs `GraphDB(path=…)` directly, and passes `restore_learning=False` for a
+  scratch db so a drill does not pull the estate's learning tables into a throwaway file.
+* `log_event`'s signature is `(self, run, timestamp, etype, …)` — `timestamp` is REQUIRED and
+  positional-adjacent, because graphdb's stated rule is "No implicit clock. Timestamps are passed
+  in. A replayed run reproduces byte-identical ids and rows."
+
+### C6 (B5) — the idempotency mechanism §6.1 step 2 names cannot work
+
+§6.1 says "idempotency via the content-addressed event_id inside detail". It cannot be:
+`GraphDB.log_event` mints its OWN primary key as
+`event_id(run, step_id, etype, hash_obj([decision, detail, output_hash]))`, and the run id carries
+a per-night stamp — so re-filing yesterday's event tonight produces a DIFFERENT primary key and the
+`ON CONFLICT(event_id) DO NOTHING` never fires. The dedupe truth is a `SELECT output_hash FROM
+decision_log WHERE type='hunter_identity'`, which IS the event's own content-addressed id, through
+the column that actually holds it. The cursor file stays what §6.1 calls it — a cheap skip, never
+the truth.
+
+**MEASURED, and it caught a bad fixture first.** Deleting `already_ingested()` outright came back
+**0 RED**: the fixture's two ingests ran inside the same second, so the run ids matched, so
+log_event's own primary key collided and hid the missing dedupe. A `--run` seam was added so the
+two halves of the fixture are two NIGHTS rather than two calls, and the same neuter then returns
+**1 RED**.
+
+### C7 (B5) — a source-position fixture that can see itself is reading the wrong file
+
+The nightly `-SelfTest` pins the new stage's SLOT by source position. Written with literal needles,
+three of its checks matched THEIR OWN source lines: `$iSweep = $src.IndexOf('if (-not $SkipSweep)
+{')` found itself at index 21,230 and reported the real sweep block as running before a stage
+7,600 characters further down, and the BLIND-branch check was satisfied by the text of the check
+itself. Two neuters came back 0 RED before the needles were built from parts. Same class as C4,
+in a different file, on the same day — this idiom needs the built needle every time.
+
 Final report, numbers not adjectives: events written in the drill, ledger count before/after,
 cache-hit re-resolve proof, every selftest's pass count, every neuter proof's red count, and
 anything CORRECTED. If a bar was missed, say which and by how much — a miss reported plainly
