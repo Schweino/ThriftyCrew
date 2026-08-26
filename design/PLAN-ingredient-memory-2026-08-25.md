@@ -485,6 +485,39 @@ Units, in order, one commit each (suggested messages in quotes):
   `nightly.ps1 -SelfTest`, `scorecard.ps1 -SelfTest`, `test_gates.py`. All green.
 - **B8** OPEN-ITEMS §2.6 marked BUILT; this doc's CORRECTED blocks (if any) landed; push.
 
+## 8b. B7 — the drill, and §1's falsification numbers as measured (2026-08-25)
+
+Three fabricated recipes through the REAL road: `map-preresolve.ps1` (scratch vocab-live,
+`-ResolutionsFile` scratch, `-NoBoard -NoPrecheck`) → `learn_apply.apply_learn` → a SECOND
+`map-preresolve` over the same run dir → `resolution_embed.py --query` under the sidecar venv →
+`ingest_hunter_events.py` against a scratch graph db, twice → `learn_apply.py --apply-reviews`.
+The scratch ledger is **seeded byte-for-byte from the live `ingredient-resolutions.json`**, so the
+before/after counts are the estate's own numbers. Nothing live was written; the worktree was clean
+before and after. 35 assertions, all green.
+
+| §1's question | measured |
+| --- | --- |
+| residual rulings ruled | **7** (6 residual + 1 on a cache-settled line the judge disagreed with) |
+| registrar rulings | **1** |
+| events written (primary) | **8** — 7 rulings + 1 registrar, exactly `rulings + registrar` |
+| event lines on disk | **9** — the 8 above plus 1 `supersede` |
+| **ledger count before → after** | **23 → 26**, and **27** after the morning verb recorded one held case |
+| projections | 4 (2 + 1 + 1); the ledger grew by 3 because the 4th REPLACED an existing row |
+| held, event-only | 3 — `labneh cheese` (bid unknown to every namespace), `duck fat` (decision rejected), `ras el hanout` (decision mapped-null) |
+| surprises | 2 (the contrary ruling and its supersede) |
+| **cache-hit re-resolve** | **3 of 3** projected terms came back `source: cache` on the second pass, at the bid they were ruled to; residual count fell **6 → 4** |
+| what did NOT cache | the `mapped-null` and the `rejected` line stayed residual on the warm pass — a judgment about a LINE is not an identity |
+| attend | corpus 7; the UNSEEN phrase "shaved beef for cheesesteaks" retrieved "thin sliced beef for sandwiches" at **cos 0.7016**, ahead of every other ruling, and the ruled term did not get itself back |
+| sleep | 9 events filed, 3 review cases, 5 gold rows (4 MATCH, 1 NO_MATCH for the superseded id), 2 surprises queued behind a pre-existing queue row; second night filed **0** duplicates (11 decision_log rows over two nights, the +2 being the two `hunter_ingest_complete` rows) |
+| promote | the ingest changed the ledger by **0** rows; only `--apply-reviews` moved it, and a verdict on an event_id the packet never held was refused |
+
+Gates, all green on a clean tree: `learn_apply --selftest` 53, `decide_apply --selftest` 43,
+`hunt-daemon --selftest` 245, `hunt_lib --parity` 63/63, `rebid-ingredient -SelfTest` 12,
+`ingredient-resolutions -SelfTest` 9, `resolution_embed --selftest` 25,
+`ingest_hunter_events --selftest` 24, `scorecard.ps1 -SelfTest` 23,
+`scorecard_query --selftest` 15, `graph/learning/test_gates.py` 12, `nightly.ps1 -SelfTest` OK,
+`nightly.ps1 -WhatIfOnly` prints the new `1c hunter` stage.
+
 ## 9. CORRECTED blocks, written during the build (2026-08-25)
 
 Each block landed in the same commit as the unit it affects, per §0.1.
