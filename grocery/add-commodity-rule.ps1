@@ -50,7 +50,13 @@ foreach ($p in ($Include + $Exclude)) {
 
 $raw = [IO.File]::ReadAllText($File)
 $before = $raw | ConvertFrom-Json
-$bList = New-Object System.Collections.ArrayList; foreach ($x in $before) { [void]$bList.Add($x) }
+# TWO FILE SHAPES, ONE TOOL (2026-08-27) - the same gap new-commodity.ps1 carried, in its sibling.
+# commodities.json is a bare top-level array; recipe-commodities.json nests its entries under a
+# `commodities` key. Without this, every id in the RECIPE namespace answered "no commodity with id" -
+# and the recipe namespace is exactly where the registrar sends form-splits, so a ruling could be
+# approved and then be unexecutable by the two tools that exist to execute it.
+$Entries = { param($doc) if ($null -ne $doc -and $doc.PSObject.Properties.Name -contains 'commodities') { return @($doc.commodities) } return @($doc) }
+$bList = New-Object System.Collections.ArrayList; foreach ($x in (& $Entries $before)) { [void]$bList.Add($x) }
 $target = $bList | Where-Object { [string]$_.id -eq $Id }
 if ($null -eq $target) { Die ('no commodity with id ''' + $Id + '''. It must exist already; this script does not create commodities.') }
 
@@ -135,7 +141,7 @@ $newRaw = $raw.Substring(0, $start) + $newBlock + $raw.Substring($end + 1)
 # ---- prove it ---------------------------------------------------------------------------------------------
 $after = $null
 try { $after = $newRaw | ConvertFrom-Json } catch { Die ('the edit produced invalid JSON, nothing written: ' + $_.Exception.Message) }
-$aList = New-Object System.Collections.ArrayList; foreach ($x in $after) { [void]$aList.Add($x) }
+$aList = New-Object System.Collections.ArrayList; foreach ($x in (& $Entries $after)) { [void]$aList.Add($x) }
 if ($aList.Count -ne $bList.Count) { Die ('entry count changed ' + $bList.Count + ' -> ' + $aList.Count + '; refusing.') }
 
 $collateral = New-Object System.Collections.ArrayList

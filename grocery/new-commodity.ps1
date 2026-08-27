@@ -47,7 +47,19 @@ foreach ($p in ($Include + $ExtraExclude)) {
 
 $raw = [IO.File]::ReadAllText($File)
 $before = $raw | ConvertFrom-Json
-$bList = New-Object System.Collections.ArrayList; foreach ($x in $before) { [void]$bList.Add($x) }
+# TWO FILE SHAPES, ONE TOOL (2026-08-27). commodities.json is a bare top-level array; the RECIPE
+# namespace file, recipe-commodities.json, nests its entries under a `commodities` key beside a readme
+# and a global_exclude. This script only understood the first, so it answered "clone source not found"
+# for every id in the recipe namespace - which is where form-splits like boneless-skinless-chicken-thigh
+# actually live, and therefore where the commodity-registrar sends them. A registrar ruling that can be
+# approved but not executed is a ruling that quietly does not happen: boneless-pork-chops sat approved
+# and unminted from 2026-08-26 until this was found, while a recipe priced its main protein on the
+# bone-in id it was ruled off.
+#
+# ONLY THE ENTRY LIST MOVES. The text surgery below is shape-agnostic already - it finds the clone
+# source's own braces and inserts after them - and the proof compares parsed entry against parsed entry.
+$Entries = { param($doc) if ($null -ne $doc -and $doc.PSObject.Properties.Name -contains 'commodities') { return @($doc.commodities) } return @($doc) }
+$bList = New-Object System.Collections.ArrayList; foreach ($x in (& $Entries $before)) { [void]$bList.Add($x) }
 if ($bList | Where-Object { [string]$_.id -eq $Id }) { Die ('a commodity with id ''' + $Id + ''' already exists.') }
 $src = $bList | Where-Object { [string]$_.id -eq $CloneExcludeFrom }
 if ($null -eq $src) { Die ('clone source ''' + $CloneExcludeFrom + ''' not found.') }
@@ -60,7 +72,13 @@ $obj['include'] = @($Include)
 $obj['exclude'] = @(@($ExtraExclude) + @($src.exclude))
 $blockJson = ([pscustomobject]$obj | ConvertTo-Json -Depth 6)
 # indent the whole object by 4 to sit inside the top-level array
-$indented = (($blockJson -split "`r?`n" | ForEach-Object { '    ' + $_ }) -join "`r`n")
+# INDENT TO MATCH THE CLONE SOURCE'S OWN LINE. Hardcoding 4 put a recipe-namespace entry (6) at the
+# wrong depth - valid JSON, unreadable diff, and the next hand-edit lands in the wrong place.
+$srcLineStart = $raw.LastIndexOf("`n", $m.Index) + 1
+$srcIndent = ''
+for ($ci = $srcLineStart; $ci -lt $raw.Length -and $raw[$ci] -eq ' '; $ci++) { $srcIndent += ' ' }
+if ($srcIndent.Length -lt 2) { $srcIndent = '    ' } else { $srcIndent = $srcIndent.Substring(0, $srcIndent.Length - 2) }
+$indented = (($blockJson -split "`r?`n" | ForEach-Object { $srcIndent + $_ }) -join "`r`n")
 
 # ---- insert immediately after the clone source's entry ----------------------------------------------------
 $idPat = '"id":\s*"' + [regex]::Escape($CloneExcludeFrom) + '"'
@@ -79,7 +97,7 @@ $newRaw = $raw.Substring(0, $end + 1) + ",`r`n" + $indented + $raw.Substring($en
 # ---- prove it ---------------------------------------------------------------------------------------------
 $after = $null
 try { $after = $newRaw | ConvertFrom-Json } catch { Die ('edit produced invalid JSON, nothing written: ' + $_.Exception.Message) }
-$aList = New-Object System.Collections.ArrayList; foreach ($x in $after) { [void]$aList.Add($x) }
+$aList = New-Object System.Collections.ArrayList; foreach ($x in (& $Entries $after)) { [void]$aList.Add($x) }
 if ($aList.Count -ne $bList.Count + 1) { Die ('entry count went ' + $bList.Count + ' -> ' + $aList.Count + ', expected +1; refusing.') }
 $newIdx = -1
 for ($i = 0; $i -lt $aList.Count; $i++) { if ([string]$aList[$i].id -eq $Id) { $newIdx = $i; break } }
