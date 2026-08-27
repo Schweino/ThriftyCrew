@@ -39,6 +39,13 @@
 
   Exit 0 = written (or dry run clean). Exit 1 = refused, nothing written.
 #>
+# [CmdletBinding()] IS LOAD-BEARING, NOT DECORATION (2026-08-27). Without it a plain param() block
+# SILENTLY SWALLOWS undeclared parameters: -PantryPkgG 737 -PantryPkgLabel '26oz canister' was passed
+# to this script, every one of them ignored, and the tool printed its full success banner - "0 collateral
+# changes, JSON re-parsed clean" - over a Sea Salt row that had landed with NO package basis at all. A
+# gated writer that reports success for an argument it did not honour is worse than one that refuses,
+# because the operator has a receipt. With this attribute PowerShell rejects the unknown name outright.
+[CmdletBinding()]
 param(
   [string]$Item = '',
   [string]$Bid = '',
@@ -46,6 +53,14 @@ param(
   [double]$Gpu = 0,
   [double]$BuyPkgG = -1,
   [string]$BuyPkgLabel = '',
+  # A PANTRY STAPLE IS A DIFFERENT PURCHASE, and the vocabulary has always said so - Salt carries
+  # pantry_pkg_g 737 / '26oz canister' / bulk, not a buy package. The two are not interchangeable:
+  # buy_pkg charges the whole package to the recipe, so booking a 24 g salt line against a 737 g
+  # canister would add about $2.80 to one recipe for a teaspoon of salt. Only 2 of 308 bid rows carry
+  # no package basis at all, so "leave it off" is not the house shape either.
+  [double]$PantryPkgG = -1,
+  [string]$PantryPkgLabel = '',
+  [switch]$Bulk,
   [string]$Board = 'weekly',
   [string[]]$Aliases = @(),
   [string]$Note = '',
@@ -194,6 +209,9 @@ $fields = New-Object System.Collections.ArrayList
 [void]$fields.Add('"board":  "' + $Board + '"')
 if ($BuyPkgG -ge 0)  { [void]$fields.Add('"buy_pkg_g":  ' + $BuyPkgG) }
 if ($BuyPkgLabel)    { [void]$fields.Add('"buy_pkg_label":  "' + $BuyPkgLabel + '"') }
+if ($PantryPkgG -ge 0)  { [void]$fields.Add('"pantry_pkg_g":  ' + $PantryPkgG) }
+if ($PantryPkgLabel)    { [void]$fields.Add('"pantry_pkg_label":  "' + $PantryPkgLabel + '"') }
+if ($Bulk)              { [void]$fields.Add('"bulk":  true') }
 if ($Note)           { [void]$fields.Add('"note":  "' + ($Note -replace '\\', '\\' -replace '"', '\"') + '"') }
 if ($Aliases.Count -gt 0) {
   [void]$fields.Add('"aliases":  [' + "`r`n" + (($Aliases | ForEach-Object { '                        "' + $_ + '"' }) -join ",`r`n") + "`r`n" + '                    ]')

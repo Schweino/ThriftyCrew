@@ -2883,5 +2883,56 @@
         "buy_pkg_g":  750,
         "buy_pkg_label":  "750ml bottle",
         "note":  "Dry red wine for braising (bid red-wine, Baker's $0.2358/floz on the 2026-08-26 board). \"Dry\" is in the name because a sweet/cooking wine is a different sugar load and a different price; the food-DB already carries a Dry Red Wine row."
+    },
+    {
+        "item":  "Ground Turkey",
+        "bid":  "ground-turkey",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Generic line, generic id (ruled 2026-08-27, hunt-2026-08-27-highprotein). The vocabulary carries 93/7 and 99/1 Ground Turkey but no bare row, so a recipe line reading only \"Ground Turkey\" had no name. Ruled onto the generic weekly id rather than 93/7: choosing a lean ratio the source never stated would invent specificity the recipe did not ask for. Board receipt read before ruling - cheapest cell is Kirkwood USDA Fresh Ground Turkey 85/15 at $2.6633/lb (Aldi), which is what a bare ground-turkey line buys. Highest cost exposure of this batch at 2117 g / $12.43."
+    },
+    {
+        "item":  "Bell Peppers",
+        "bid":  "bell-peppers",
+        "gpu":  120,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  120,
+        "buy_pkg_label":  "each",
+        "note":  "Generic line, generic id (ruled 2026-08-27). Green/Red/Yellow Bell Pepper rows exist but no bare row, and the source line says only \"Bell Peppers\". gpu 120 matches the Green and Red rows. Board receipt: Green Bell Pepper $0.77/each at Fareway."
+    },
+    {
+        "item":  "Shredded Cheese",
+        "bid":  "shredded-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz bag",
+        "note":  "Generic line, generic id (ruled 2026-08-27). \"Cheddar Cheese, Shredded\" exists but the source line says only \"Shredded Cheese\", and the weekly id is itself the deliberately generic Shredded / Block Cheese basket. Board receipt: Member's Mark Part-Skim Shredded Mozzarella at $0.1521/oz (Sam's Club) - a generic basket whose cheapest member is mozzarella, which is the right answer for a line that names no variety. buy package matches the Cheddar row's 8oz bag."
+    },
+    {
+        "item":  "Lime",
+        "bid":  "limes",
+        "gpu":  67,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  67,
+        "buy_pkg_label":  "each",
+        "note":  "Whole fresh lime (ruled 2026-08-27). gpu 67 = one fruit, the USDA basis the food-DB Lime row already carries. Board receipt: Fresh Lime $0.25/each at Walmart. Distinct from the Lime Juice row, which points at the same id with gpu 30 - the juice YIELD per lime - and is the estate's existing pattern for pricing a juice line as the fruit it is squeezed from."
+    },
+    {
+        "item":  "Sea Salt",
+        "bid":  "sea-salt",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  737,
+        "pantry_pkg_label":  "26oz canister",
+        "bulk":  true,
+        "note":  "Specific line, specific id (ruled 2026-08-27). The line says SEA salt, and sea-salt is its own weekly id; the generic Salt row points at `salt`. Ruled to the specific id rather than folding onto Salt, on the same principle that decided the generic rows in this batch: match the specificity the source actually stated. Board receipt: Member's Mark Sea Salt 36 oz at $0.1106/oz. Cost exposure is negligible either way (24 g, about $0.09), so this row is about naming, not money."
     }
 ]
