@@ -1,432 +1,77 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T05:15:14",
+ "generated": "2026-08-27T06:06:52",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "mexican crema",
+   "term": "Boneless Eye of Round Roast",
    "state": "MATCHES",
-   "term_used": "mexican crema",
+   "term_used": "Boneless Eye of Round Roast",
    "attempts": [
     {
-     "term": "mexican crema",
+     "term": "Boneless Eye of Round Roast",
      "state": "OK",
-     "hits": 58
+     "hits": 72
     }
    ],
    "hits": [
     {
-     "item": "Chobani Plain Whole Milk Greek Yogurt",
-     "price": 5.0,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72081-chobani-whole-milk-plain-greek-yogurt-32-oz"
-    },
-    {
-     "item": "Chobani Plain Nonfat Greek Yogurt",
-     "price": 5.0,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29327-chobani-yogurt-greek-non-fat-plain-32-oz"
-    },
-    {
-     "item": "FAGE 0%, Plain Greek Yogurt",
-     "price": 6.98,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32502-fage-total-0-milkfat-all-natural-nonfat-greek-strained-yogurt-35-3-oz"
-    },
-    {
-     "item": "Chobani Plain Nonfat Greek Yogurt",
-     "price": 1.38,
-     "size": "5.3 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/7260-chobani-non-fat-greek-yogurt-plain-5-3-oz"
-    },
-    {
-     "item": "Greek Gods Greek Style Plain Traditional Yogurt",
-     "price": 5.99,
-     "size": "24 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17314100-greek-gods-plain-traditional-greek-style-yogurt-24-oz"
-    },
-    {
-     "item": "Oikos Triple Zero Vanilla Greek Yogurt",
-     "price": 5.0,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3224581-oikos-triple-zero-vanilla-greek-yogurt-32-oz"
-    },
-    {
-     "item": "FAGE Total Milkfat Greek Strained Yogurt",
-     "price": 6.98,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2714404-fage-total-milkfat-greek-strained-yogurt-35-3-oz"
-    },
-    {
-     "item": "Oikos Triple Zero Vanilla Greek Yogurt",
-     "price": 4.98,
-     "size": "4 x 5.3 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2754125-oikos-triple-zero-vanilla-greek-yogurt-5-3-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "chihuahua cheese",
-   "state": "MATCHES",
-   "term_used": "chihuahua cheese",
-   "attempts": [
-    {
-     "term": "chihuahua cheese",
-     "state": "OK",
-     "hits": 64
-    }
-   ],
-   "hits": [
-    {
-     "item": "Kraft Mexican Style Four Cheese Finely Shredded Cheese",
-     "price": 3.18,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74508760-kraft-mexican-style-four-cheese-8-00-oz"
-    },
-    {
-     "item": "The Mad Butcher's Habanero Queso Blanco Cheese",
-     "price": 3.49,
-     "size": "1 each",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/95292159-the-mad-butchers-habanero-queso-blanco-cheese-1-each"
-    },
-    {
-     "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24495714-fareway-cheese-mexican-style-blend-fancy-shredded-8-oz"
-    },
-    {
-     "item": "Jisa Farmer's Cheese",
-     "price": 4.99,
-     "size": "1 each",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90056188-jisas-farmstead-cheese-farmers-cheese-1-each"
-    },
-    {
-     "item": "El Terrifico Tamale Co. White Cheese Dip, Mexican Restaurant Style, Mild",
-     "price": 4.99,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3141309-el-terrifico-tamale-white-cheese-dip-mexican-restaurant-style-mild-16-oz"
-    },
-    {
-     "item": "Jisa's Farmstand Smokin' Joes' Cheese Nuggets",
-     "price": 4.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18783702-jisa-s-farmstand-smokin-joes-cheese-nuggets-8-oz"
-    },
-    {
-     "item": "Sargento Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
-     "price": 3.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691924-sargento-sliced-provolone-natural-cheese-with-natural-smoke-flavor-8-oz"
-    },
-    {
-     "item": "Tillamook Farmstyle Provolone Cheese Slices, 7oz, 8ct",
-     "price": 3.99,
-     "size": "7 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16742439-tillamook-farmstyle-thick-cut-smoked-provolone-cheese-slices-7-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "italian turkey sausage",
-   "state": "MATCHES",
-   "term_used": "italian turkey sausage",
-   "attempts": [
-    {
-     "term": "italian turkey sausage",
-     "state": "OK",
-     "hits": 66
-    }
-   ],
-   "hits": [
-    {
-     "item": "Italian Pork Sausage",
-     "price": 3.99,
+     "item": "Hormel Top Round Roast Beef",
+     "price": 14.99,
      "size": "",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387940-italian-pork-sausage-1-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388901-top-round-roast-beef"
     },
     {
-     "item": "Johnsonville Italian Sausage Sweet - 5 CT",
-     "price": 5.99,
-     "size": "19 oz",
+     "item": "USDA Choice Boneless Chuck Roast",
+     "price": 23.64,
+     "size": "$7.88 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90855-johnsonville-italian-sausage-sweet-5-ct-82-grm"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386797-usda-choice-boneless-chuck-roast-1-each"
     },
     {
-     "item": "Johnsonville Fully Cooked Turkey Breakfast Sausage Patties",
-     "price": 5.99,
-     "size": "8 ct",
+     "item": "USDA Choice Boneless Beef Rump Roast",
+     "price": 23.97,
+     "size": "$7.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18263434-johnsonville-turkey-sausage-patties-8-ea"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388659-usda-choice-boneless-beef-rump-roast-1-each"
     },
     {
-     "item": "JENNIE-O TURKEY STORE 90% Lean 10% Fat Ground Turkey",
-     "price": 4.99,
-     "size": "16 oz",
+     "item": "USDA Choice Boneless Top Round Steak",
+     "price": 11.98,
+     "size": "$7.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2690041-jennie-o-fresh-all-natural-90-lean-10-fat-ground-turkey-16-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387770-usda-choice-boneless-top-round-steak-1-each"
     },
     {
-     "item": "Farmland Original Pork Sausage",
-     "price": 2.5,
-     "size": "12 oz",
+     "item": "USDA Choice Boneless Ribeye Roast",
+     "price": 109.95,
+     "size": "$21.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2663295-farmland-sausage-roll-12-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89321656-usda-choice-boneless-ribeye-roast"
     },
     {
-     "item": "Wimmer’s Meats Las Vegas Hot Dogs",
-     "price": 5.99,
-     "size": "16 oz",
+     "item": "USDA Prime Boneless Ribeye Roast",
+     "price": 164.95,
+     "size": "$32.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16968166-wimmer-s-las-vegas-brand-skinless-hot-dog-16-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89324190-usda-prime-boneless-ribeye-roast"
     },
     {
-     "item": "Amylu Caramelized Onion & White Cheddar Chicken Sausage",
-     "price": 6.99,
-     "size": "12 oz",
+     "item": "USDA Choice New York Strip Steak",
+     "price": 16.62,
+     "size": "$18.99 / lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69855181-amylu-caramel-onion-and-white-cheddar-sausage-12-oz-12-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387653-usda-choice-new-york-strip-steak-1-each"
     },
     {
-     "item": "Amylu Roasted Garlic & Asiago Chicken Sausage",
-     "price": 6.99,
-     "size": "12 oz",
+     "item": "Gary's Quick Steak Thinly Sliced Sirloin Beef",
+     "price": 8.49,
+     "size": "10.8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68987717-amylu-roasted-garlic-asiago-chicken-sausage"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "asiago cheese",
-   "state": "MATCHES",
-   "term_used": "asiago cheese",
-   "attempts": [
-    {
-     "term": "asiago cheese",
-     "state": "OK",
-     "hits": 68
-    }
-   ],
-   "hits": [
-    {
-     "item": "BelGioioso Asiago Wedge",
-     "price": 4.49,
-     "size": "5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1354318-belgioioso-asiago-cheese-wedge-5-oz"
-    },
-    {
-     "item": "Tillamook Sharp Cheddar Cheese Block, 8oz",
-     "price": 3.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/39602-tillamook-sharp-cheddar-cheese-block-8-oz"
-    },
-    {
-     "item": "Fareway Swiss Cheese Slices",
-     "price": 2.48,
-     "size": "16 each",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24721928-fareway-cheese-slices-swiss-16-ea"
-    },
-    {
-     "item": "Fareway Grated Parmesan Cheese",
-     "price": 5.88,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25577817-fareway-grated-cheese-parmesan-16-oz"
-    },
-    {
-     "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
-     "price": 7.48,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28263148-fareway-mexican-style-blend-monterey-jack-cheddar-queso-quesadilla-and-asadero-cheese-fancy-shredded-32-oz"
-    },
-    {
-     "item": "Fareway Parmesan Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "6 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713413-fareway-cheese-parmesan-fancy-shredded-6-oz"
-    },
-    {
-     "item": "Fareway Colby Jack Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24450064-fareway-cheese-colby-jack-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Colby & Monterey Jack Cheese Cubes",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24552406-fareway-cheese-cubes-colby-monterey-jack-8-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "chicken tenderloins",
-   "state": "MATCHES",
-   "term_used": "chicken tenderloins",
-   "attempts": [
-    {
-     "term": "chicken tenderloins",
-     "state": "OK",
-     "hits": 38
-    }
-   ],
-   "hits": [
-    {
-     "item": "Tyson Boneless Skinless Chicken Breast Tenderloins, 2.5 lb. (Frozen)",
-     "price": 12.99,
-     "size": "1.13 kg",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1523112-tyson-chicken-breast-tenderloins-2-5-lb"
-    },
-    {
-     "item": "Tyson Fully Cooked Southern Style Chicken Breast Tenderloins, Frozen",
-     "price": 7.76,
-     "size": "25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/129892-tyson-fully-cooked-southern-style-chicken-breast-tenderloins-frozen-25-onz"
-    },
-    {
-     "item": "Boneless Trimmed Chicken Breast",
-     "price": 5.68,
-     "size": "$6.99 / lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388188-boneless-trimmed-chicken-breast"
-    },
-    {
-     "item": "Perdue Chicken Breast Tenders",
-     "price": 6.99,
-     "size": "29 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/76971-perdue-breaded-chicken-breast-tenders-1-81-lb"
-    },
-    {
-     "item": "Perdue Gluten Free Organic Chicken Tenders",
-     "price": 10.59,
-     "size": "22 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/171979-perdue-s-breaded-chicken-breast-tenders-gluten-free-1-38-lb"
-    },
-    {
-     "item": "Boneless Skinless Chicken Breast",
-     "price": 7.8,
-     "size": "$4.99 / lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
-    },
-    {
-     "item": "Diced Chicken Breast",
-     "price": 6.99,
-     "size": "",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89322287-diced-chicken-breast"
-    },
-    {
-     "item": "Tyson Frozen Crispy Chicken Breast Strips, 25 oz",
-     "price": 7.76,
-     "size": "25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41987-tyson-fully-cooked-crispy-chicken-strips-frozen-25-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "cornmeal",
-   "state": "MATCHES",
-   "term_used": "cornmeal",
-   "attempts": [
-    {
-     "term": "cornmeal",
-     "state": "OK",
-     "hits": 62
-    }
-   ],
-   "hits": [
-    {
-     "item": "Quaker Corn Meal, Yellow",
-     "price": 2.99,
-     "size": "24 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69219-quaker-yellow-cornmeal-24-oz"
-    },
-    {
-     "item": "Early Morning Harvest Organic Corn Meal",
-     "price": 3.99,
-     "size": "1.75 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19061466-early-morning-harvest-organic-corn-meal-1-75-lb"
-    },
-    {
-     "item": "Fareway Corn Chips",
-     "price": 2.98,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387445-corn-chips"
-    },
-    {
-     "item": "Fareway Candy Corn",
-     "price": 2.99,
-     "size": "9 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50528381-fareway-candy-corn-9-oz"
-    },
-    {
-     "item": "Betty Crocker Cornbread and Muffin Baking Mix",
-     "price": 1.19,
-     "size": "6.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38637-betty-crocker-cornbread-and-muffin-mix-makes-6-muffins-6-500-oz"
-    },
-    {
-     "item": "Quaker Instant Oatmeal, Peaches & Cream - Pack",
-     "price": 2.99,
-     "size": "8 x 1.05 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24998349-quaker-peaches-cream-instant-oats-hot-cereal-8-4-oz"
-    },
-    {
-     "item": "Fareway Flour, All Purpose",
-     "price": 2.64,
-     "size": "5 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24491362-fareway-flour-all-purpose-5-lb"
-    },
-    {
-     "item": "Pillsbury Cornbread Swirls Refrigerated Dough",
-     "price": 3.49,
-     "size": "6 ct",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21458206-pillsbury-cornbread-swirls-11-000-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74010426-qs-thin-slcd-sirloin-beef"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

@@ -3,14 +3,14 @@
     "title":  "Apple Spice Pork Chops",
     "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
     "protein":  "pork",
-    "state":  "extracted",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T05:27:36",
-    "updated":  "2026-08-27T05:27:36",
+    "updated":  "2026-08-27T06:05:40",
     "terms":  [
 
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 442 cal below the 450 floor",
     "parked_on":  [
 
                   ],
@@ -32,6 +32,30 @@
                         "at":  "2026-08-27T05:27:36",
                         "by":  "local",
                         "detail":  "recovered from the advance-before-assemble stranding: state said mapped with no decision file, which seed() routes to held, so it could never re-enter the map lane"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T06:05:38",
+                        "by":  "mapper",
+                        "detail":  "All 11 lines were pre-resolved; my whole job here was buy strings and the cross-check. Buy strings are target (14-serving, 3.5x) prose and agree with the source-basis grams already in the table, so I stated no grams_source of my own. Two things called out loudly: (1) the band failure above, which is a base-tuning problem not a mapping problem; (2) the \u0027Pinch salt and pepper\u0027 split lines carry 0.4 "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T06:05:39",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T06:05:39",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T06:05:40",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 442 cal below the 450 floor"
                     }
                 ]
 }

@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T05:39:17",
+ "generated": "2026-08-27T06:00:23",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -18,32 +18,11 @@
    ],
    "hits": [
     {
-     "item": "Amylu Caramelized Onion & White Cheddar Chicken Sausage",
+     "item": "Isernio's Italian Chicken Sausage",
      "price": 6.99,
-     "size": "12 oz",
+     "size": "16 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69855181-amylu-caramel-onion-and-white-cheddar-sausage-12-oz-12-oz"
-    },
-    {
-     "item": "Amylu Roasted Garlic & Asiago Chicken Sausage",
-     "price": 6.99,
-     "size": "12 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68987717-amylu-roasted-garlic-asiago-chicken-sausage"
-    },
-    {
-     "item": "Hillshire Farm Polska Kielbasa Smoked Sausage, 14 oz.",
-     "price": 5.49,
-     "size": "14 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410886-hillshire-farm-polska-kielbasa-smoked-sausage-14-oz"
-    },
-    {
-     "item": "Amylu Apple & Gouda Chicken Sausage",
-     "price": 6.99,
-     "size": "12 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68982698-amylu-apple-gouda-chicken-sausages"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17457-isernio-s-italian-sausage-premium-chicken-16-oz"
     },
     {
      "item": "Amylu Italian-Style Chicken Sausage",
@@ -53,25 +32,46 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69859331-amylu-italian-chicken-sausage"
     },
     {
-     "item": "Amylu Andouille Chicken Sausages",
-     "price": 6.99,
-     "size": "12 oz",
+     "item": "Fareway Turkey Breakfast Sausage",
+     "price": 5.49,
+     "size": "16 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68974512-amylu-andouille-chicken-sausage"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24269938-fareway-breakfast-sausage-turkey-16-oz"
     },
     {
-     "item": "Johnsonville Smoked Brats",
-     "price": 4.49,
-     "size": "14 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89265-johnsonville-smoked-brats-14-oz"
-    },
-    {
-     "item": "Johnsonville Original Brats",
+     "item": "Johnsonville Italian Sausage, Mild",
      "price": 5.99,
      "size": "19 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16427623-johnsonville-sausage-original-holiday-promo-brats-82-grm"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3396397-johnsonville-sausage-italian-sausage-mild-5-ct"
+    },
+    {
+     "item": "Johnsonville Turkey Breakfast Links",
+     "price": 5.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/372325-johnsonville-sausage-fully-cooked-turkey-breakfast-sausage-12-count-45-grm"
+    },
+    {
+     "item": "Fareway Ground Turkey",
+     "price": 5.49,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24278214-fareway-turkey-ground-16-oz"
+    },
+    {
+     "item": "Italian Pork Sausage",
+     "price": 3.99,
+     "size": "",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387940-italian-pork-sausage-1-each"
+    },
+    {
+     "item": "Johnsonville Italian Sausage Sweet - 5 CT",
+     "price": 5.99,
+     "size": "19 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90855-johnsonville-italian-sausage-sweet-5-ct-82-grm"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

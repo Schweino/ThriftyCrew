@@ -3,104 +3,90 @@
  "lines": [
   {
    "raw": "3 to 3 ½ pounds Boneless Eye of Round Roast",
-   "buy": "5 3/4 lb boneless eye of round roast, tied (two roasts is fine)",
-   "grams_source": 1474.2,
-   "notes": "Range line: 3 1/4 lb midpoint taken as source basis. Whole-muscle roast weight as purchased, no bone."
+   "buy": "about 5 3/4 lb (2 roasts), tied",
+   "grams_source": 1474,
+   "notes": "Midpoint of the stated 3 to 3.5 lb range = 3.25 lb = 1474 g."
   },
   {
    "raw": "Kosher Salt & Freshly Cracked Black Pepper (- to taste)",
-   "buy": "4 1/2 tsp kosher salt and 1 3/4 tsp freshly cracked black pepper, divided",
-   "notes": "Composite line settled to salt only; the pepper half carries no food id but is 0-macro, so nothing is lost from the arithmetic."
+   "buy": "2 1/2 tsp kosher salt, plus freshly cracked black pepper to taste",
+   "grams_source": 8.6,
+   "notes": "Pre-resolve split no pepper off this composite line, so only the salt is mapped and weighed; 8.6 g source = about 15 g at batch, the estate precedent. Pepper is named in the buy string with no number so the printed measure and the grams stay in agreement."
   },
   {
    "raw": "8 TBS Unsalted Butter (– softened)",
-   "buy": "14 tbsp (1 3/4 sticks) unsalted butter, softened",
-   "notes": null
+   "buy": "14 Tbsp (1 3/4 sticks), softened"
   },
   {
    "raw": "5 cloves Garlic (– softened)",
-   "buy": "9 cloves garlic, minced",
-   "notes": null
+   "buy": "9 cloves, minced"
   },
   {
    "raw": "1 tsp Finely Chopped Fresh Rosemary ((substitute: ½ tsp Dried))",
-   "buy": "1 3/4 tsp finely chopped fresh rosemary",
-   "grams_source": 1.7,
-   "notes": "Fresh leaves, not the dried substitute the source offers in parentheses."
+   "buy": "1 3/4 tsp, finely chopped (or scant 1 tsp dried)"
   },
   {
    "raw": "2 tsp Chopped Fresh Thyme ((substitute: 1 tsp Dried))",
-   "buy": "3 1/2 tsp chopped fresh thyme leaves",
-   "grams_source": 1.6,
-   "notes": "Fresh leaves, not the dried substitute."
+   "buy": "3 1/2 tsp, chopped (or 1 3/4 tsp dried)",
+   "grams_source": 2.4
   },
   {
    "raw": "1 Yellow Onion ( – peeled & quartered through root)",
-   "buy": "2 medium yellow onions, peeled and quartered through the root",
-   "notes": null
+   "buy": "2 medium yellow onions, peeled and quartered through the root"
   },
   {
    "raw": "2 large Carrots (– peeled & cut into 2-inch chunks)",
-   "buy": "4 large carrots, peeled and cut into 2-inch chunks",
-   "notes": null
+   "buy": "about 7 1/2 oz carrots (3 to 4 large), peeled and cut into 2-inch chunks"
   },
   {
    "raw": "1 head Garlic (– loose skin removed & halved through root)",
-   "buy": "2 heads garlic, loose skin removed and halved through the root",
-   "notes": null
+   "buy": "2 heads, loose skin removed and halved through the root"
   },
   {
    "raw": "2 Bay Leaves",
-   "buy": "4 bay leaves",
-   "notes": null
-  },
-  {
-   "raw": "4 sprigs Fresh Thyme",
-   "buy": "7 sprigs fresh thyme",
-   "grams_source": 4,
-   "notes": "About 1 g per sprig; laid in the pan and discarded, but still purchased."
+   "buy": "3 to 4 leaves"
   },
   {
    "raw": "3 sprigs Fresh Rosemary",
-   "buy": "5 sprigs fresh rosemary",
-   "grams_source": 9,
-   "notes": "About 3 g per roasting sprig."
+   "buy": "5 sprigs",
+   "grams_source": 6,
+   "notes": "No weight computed by pre-resolve; 2 g per rosemary sprig."
+  },
+  {
+   "raw": "4 sprigs Fresh Thyme",
+   "buy": "7 sprigs",
+   "grams_source": 4
   },
   {
    "raw": "12 ounces Cremini Mushrooms (– stemmed & halved)",
-   "buy": "21 oz cremini mushrooms, stemmed and halved",
-   "notes": null
-  },
-  {
-   "raw": "2 TBS Olive Oil",
-   "buy": "3 1/2 tbsp olive oil",
-   "notes": null
+   "buy": "21 oz cremini, stemmed and halved"
   },
   {
    "raw": "1 Cup Dry Red Wine",
-   "buy": "1 3/4 cups dry red wine",
-   "grams_source": 236,
-   "notes": "1 cup at 8 fl oz, wine near water density."
+   "buy": "1 3/4 cups",
+   "grams_source": 236
+  },
+  {
+   "raw": "2 TBS Olive Oil",
+   "buy": "3 1/2 Tbsp"
   },
   {
    "raw": "2 ½ Cups No Sodium Beef Stock ((substitute: no-sodium beef broth))",
-   "buy": "4 1/3 cups no-sodium beef stock",
-   "notes": null
+   "buy": "4 1/3 cups no-sodium beef stock"
   },
   {
    "raw": "1 TBS Worcestershire Sauce",
-   "buy": "1 3/4 tbsp Worcestershire sauce",
-   "notes": null
+   "buy": "1 3/4 Tbsp"
   },
   {
    "raw": "1 TBS Cornstarch (- mixed with 2 TBS Water)",
-   "buy": "1 3/4 tbsp cornstarch, mixed with 3 1/2 tbsp water",
-   "notes": null
+   "buy": "1 3/4 Tbsp, mixed with 3 1/2 Tbsp water"
   },
   {
    "raw": "OPTIONAL Heavy Cream (– to taste)",
-   "buy": "optional: a splash of heavy cream, to taste",
-   "notes": "Optional finish, not weighed by the source and not weighed here."
+   "buy": "1/3 cup, optional, to taste",
+   "grams_source": 45,
+   "notes": "No weight computed by pre-resolve; nominal 3 Tbsp at source scale for an optional finishing cream, which the shopper still buys."
   }
  ],
  "rulings": [
@@ -110,17 +96,8 @@
    "canon_item": "Boneless Eye of Round Roast",
    "bid": "eye-of-round-roast",
    "decision": "mapped",
-   "grams_source": 1474.2,
-   "evidence": "Distinct whole-muscle round cut with its own per-lb price class; board sweep found no commodity and no capture, so this is a genuine new id, not a reuse. 3 1/4 lb midpoint of the stated range reproduces the source's published protein within 6%."
-  },
-  {
-   "raw": "1 tsp Finely Chopped Fresh Rosemary ((substitute: ½ tsp Dried))",
-   "term": "Fresh Rosemary",
-   "canon_item": "Fresh Rosemary",
-   "bid": "fresh-rosemary",
-   "decision": "mapped",
-   "grams_source": 1.7,
-   "evidence": "Refused the Dried Rosemary bridge: fresh vs dried is a different price class and roughly a 3x gram difference for the same teaspoon. fresh-rosemary is a live board id (5 of 7 stores), so the bid is a reuse; only the vocabulary lacks the row."
+   "grams_source": 1474,
+   "evidence": "Agrees with the estate's own prior ruling of this exact phrase (2026-08-26). The board carries no commodity for it, so the id is new and goes to the registrar; 1474 g (3.25 lb midpoint) over 8 servings reproduces the source's published 40 g protein almost exactly (39.5 g), which is the check that matters on the main protein."
   },
   {
    "raw": "2 tsp Chopped Fresh Thyme ((substitute: 1 tsp Dried))",
@@ -128,8 +105,8 @@
    "canon_item": "Fresh Thyme",
    "bid": "fresh-thyme",
    "decision": "mapped",
-   "grams_source": 1.6,
-   "evidence": "Rename of the intake phrase to Fresh Thyme (the chop is prep, not identity); dried-thyme refused as a form flip. fresh-thyme is live on the board at 4 of 7 stores, so the id is a reuse and the existing Fresh Thyme food-DB row covers the macros."
+   "grams_source": 2.4,
+   "evidence": "'Chopped' is a prep word, so this is a RENAME onto the same food as the recipe's other thyme line, not a new item. REFUSED the dried-thyme bridge the near-miss row offers: dried is a different price class and about a third of the gram weight. fresh-thyme is already a live board id (4 of 7), so this is a reuse, not a proposal."
   },
   {
    "raw": "4 sprigs Fresh Thyme",
@@ -138,16 +115,7 @@
    "bid": "fresh-thyme",
    "decision": "mapped",
    "grams_source": 4,
-   "evidence": "Same food as the chopped line; a thyme sprig weighs about 1 g. Dried thyme refused as a form flip - sprigs cannot be substituted by a ground spice."
-  },
-  {
-   "raw": "3 sprigs Fresh Rosemary",
-   "term": "Fresh Rosemary",
-   "canon_item": "Fresh Rosemary",
-   "bid": "fresh-rosemary",
-   "decision": "mapped",
-   "grams_source": 9,
-   "evidence": "Same food as the chopped rosemary line; a roasting sprig is about 3 g."
+   "evidence": "Board-live fresh-thyme (4 of 7, cheapest 3.18 at Aldi) and the shelf's own 'fresh thyme -> fresh-thyme' ruling of 2026-08-26, whose 1 g per sprig I adopt for 4 sprigs. No bridge to dried-thyme."
   },
   {
    "raw": "1 Cup Dry Red Wine",
@@ -156,17 +124,16 @@
    "bid": "red-wine",
    "decision": "mapped",
    "grams_source": 236,
-   "evidence": "Drinking wine for deglazing, not vinegar: red-wine-vinegar and white-wine-vinegar refused as form flips. Parallels the existing Dry White Wine [white-wine] vocabulary row; red-wine is live on the board at 4 of 7 stores, so the id is a reuse."
+   "evidence": "Exactly parallel to the vocabulary's existing 'Dry White Wine -> white-wine' row: 'dry' is a style word on the same food, and red-wine is board-live (4 of 7, cheapest 0.2358 at Baker's), so this is a reuse. Explicitly NOT red-wine-vinegar, a standing form-flip rejection. 1 cup of wine = 236 g."
   }
  ],
  "absent_terms": [
-  "eye of round roast"
+  "Boneless Eye of Round Roast"
  ],
- "db_entries_written": [
-  "Boneless Eye of Round Roast",
-  "Dry Red Wine"
+ "db_entries_written": [],
+ "db_row_findings": [
+  "roast-eye-of-round-beef: the food DB already carries 'Fresh Thyme' and the mapper's row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 100.0 cal / 5.0 P / 25.0 C / 1.6 F  vs  mapper 101.0 / 5.6 / 24.4 / 1.7. On one basis (the mapper's row scaled onto the DB's 100 g = 100 g) they still disagree: protein_g 5.56 vs 5; carbs_g 24.4 vs 25. existing={\"calories\": 100, \"protein_g\": 5, \"carbs_g\": 25, \"fat_g\": 1.6} new={\"calories\": 101, \"protein_g\": 5.56, \"carbs_g\": 24.4, \"fat_g\": 1.68}"
  ],
- "db_row_findings": [],
  "db_row_notes": [],
  "rejected": [],
  "ruled_substitutions": [],
@@ -174,7 +141,7 @@
   {
    "term": "Boneless Eye of Round Roast",
    "proposed_bid": "eye-of-round-roast",
-   "evidence": "The pre-resolve board sweep returned 'no commodity and no capture match' for this term across the commodity namespaces and the capture feed, and no beef-roast id surfaced anywhere in this batch's tables. Eye of round is a distinct whole-muscle round roast, typically the cheapest oven roast on the beef case and priced per lb well under chuck roast or any steak cut, so it cannot be folded onto ground-beef-8020 or any stew-meat/chuck id without publishing a wrong price. I am forbidden from reading the namespace files directly, so this rests on the orchestrator's own sweep rather than a hand sweep - if a chuck-roast or beef-roast id already exists, it is a DIFFERENT cut and a different price, not an alias.",
+   "evidence": "The pre-resolve board check reports ABSENT across the commodity namespaces and the captures for this id, and no vocabulary row shares a core word with the name. Eye of round is a distinct whole-muscle lean roast from the round primal: it is not ground beef, not stew beef, not chuck roast and not any steak cut already on the board, so no existing id prices this food under another spelling - the near-miss shelf returned only chicken and pork boneless-cut rulings, which is what an unpriced beef cut looks like. It carries its own price class (a lean, cheap roasting cut sold whole) and its own gram basis, so bridging it to any existing beef id would publish a wrong price on the recipe's main protein. Requesting a new id, not an alias.",
    "declared": true
   }
  ],
@@ -183,24 +150,8 @@
    "proposed_bid": "eye-of-round-roast",
    "verdict": "approve",
    "bid": "eye-of-round-roast",
-   "reason": "No round-primal beef id exists in any namespace: swept commodities.json, recipe-commodities.json and recipe-board-everyday.json for round/rump/eye/sirloin/brisket and every hit resolved to unrelated rows (black-eyed in pea excludes, sirloin-steak's own include, sirloin/ribeye inside shaved-beef-steak's exclude list); smp-feed.json has no price cell for any eye-of-round/round-roast/rump string, so the food is neither present nor priced. chuck-roast ($6.64/lb, includes scoped to 'chuck\\s+roast') is a different cut from a different primal and would publish a wrong price for this cheaper whole-muscle roast, so reuse is ruled out. Mint eye-of-round-roast as recipe-only (recipe-board-everyday baseline + recipe-commodities.json for sale overlay), unit lb, include patterns 'eye\\s+of\\s+round' and 'eye\\s+round\\s+roast' with the full ~150-pattern beef exclude block copied from sirloin-steak plus 'ground', 'steak', 'chuck', 'jerky', 'deli', 'lunch\\s*meat', 'roast\\s+beef\\s+slice'; add commodity-dupe-allowlist.json pairs (eye-of-round-roast, chuck-roast) and (eye-of-round-roast, beef-chuck-roast) reason 'different beef cuts: round primal vs chuck primal' so the daily audit's shared-token 'roast' rule never re-flags them. Caller edits via add-commodity-rule.ps1; note this ruling mints the ID only - the ingredient-name row for 'Boneless Eye of Round Roast' in meal-prep\\db\\ingredients.json is a separate vocabulary act the mapper's pre-resolve already shows is missing."
+   "reason": "Verified clean, not just trusted: re-grepped all three namespaces and the minified feed for round/rump/sirloin/london/eye - every 'round' hit in the estate is 'ground-*', the only 'eye' strings are birds-eye brand excludes and one rib-eye pattern, and no bottom-round/top-round/rump/london-broil id exists, so no spelling seam can be hiding this food. Nearest real neighbors are different purchases: chuck-roast is a fatty chuck-primal braising cut ($6.64/lb crown), and sirloin-steak's include requires the literal word 'sirloin' so it cannot claim an eye-of-round label - though note its current Family Fare crown is a whole sirloin TIP (itself a round-primal roast), which is a lead the auditors should know, not a duplicate of this cut. Mint eye-of-round-roast in the recipe namespace (recipe-board-everyday baseline, plus recipe-commodities.json if it can go on sale). Prescriptions: include patterns around eye\\s+of\\s+round with optional beef/boneless/roast; excludes MUST block 'eye of round steak' (same muscle, different purchase/thickness pricing), 'ground', 'corned', deli/lunchmeat 'roast beef' slices, jerky, and pet food, at the ~150-pattern rigor of a neighboring beef commodity; add allowlist pairs eye-of-round-roast~chuck-roast and eye-of-round-roast~beef-chuck-roast (shared 'roast' token, different primal/purchase) so the daily audit never re-flags them. Separately, the vocabulary needs its own new ingredient row for 'Boneless Eye of Round Roast' - the dossier confirms no row shares a core word - and that is a distinct act from this id ruling."
   }
  ],
- "macro_cross_check": {
-  "source_published_per_serving": {
-   "calories": 486,
-   "carbs_g": 10,
-   "protein_g": 40
-  },
-  "our_computed_per_serving": {
-   "calories": 510,
-   "carbs_g": 8.7,
-   "protein_g": 42.3
-  },
-  "servings": 8,
-  "protein_delta_pct": 5.8,
-  "calorie_delta_pct": 4.9,
-  "verdict": "pass",
-  "note": "Recipe totals 4076 cal / 338.6 g protein at source scale. Protein is inside 6%, which is the sharp instrument, so the 3 1/4 lb beef weight is right. Band check on our own numbers: 510 cal (450-700 ok), 8.7 carbs (ok), 42.3 protein (ok). Had I used the shelf's cooked-roasted beef values against raw purchase grams this would have read 53 g protein and 620 cal - inflated on both counts."
- }
+ "macro_cross_check": "COMPUTED BY ME over all 19 lines (the precheck reached only 15, the 4 residuals being unnamed until now). Per serving at 8 servings: about 534 cal / 9.2 carbs / 42.4 protein / 32.4 fat, against the source's published 486 cal / 10.0 carbs / 40.0 protein. Protein agrees to 6% and carbs to within 0.8 g, which confirms both the 1474 g roast basis and the residual weights. BAND: 534 cal (450-700, passes), 9.2 carbs (<= 40, passes), 42.4 protein (>= 40, passes) - and note this is with NO starch base added, unlike the other two recipes in this batch."
 }

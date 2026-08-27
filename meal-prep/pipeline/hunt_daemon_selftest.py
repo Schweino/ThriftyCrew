@@ -1373,6 +1373,8 @@ def run():
 
     # =================================================================================================
     H("H - the run dir states the conditions, and a split line is explained (2026-08-27)")
+    for name, ok, got in _price_evidence_is_never_overwritten():
+        T(name, ok, got)
     for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
         T(name, ok, got)
     for name, ok, got in _a_failed_assembly_is_resumable():
@@ -8769,6 +8771,47 @@ def _qa_mapper_repair_keeps_its_road():
                 "mapper=%d writer=%d" % (len(mp), len(fd.prompts("recipe-writer"))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _price_evidence_is_never_overwritten():
+    r"""AN AUDIT TRAIL DESTROYED BY A FILENAME (2026-08-27).
+
+    The price lane's invocation counter restarts at 1 on every daemon start, and the evidence path
+    was `batch-<n>.json`. hunt-2026-08-27-ten was started five times, so the 06:00 dispatch wrote
+    batch-1 straight over the 04:23 dispatch whose verdict was CARRIED at 04:54 - the pricing
+    evidence for wave 3's MAIN PROTEIN. The wave-3 auditor could only audit that recipe because a
+    different run had happened to price the same term. Nothing restores the overwritten files.
+
+    A carriage verdict is the one thing this estate cannot re-derive: Rule B turns on what a store
+    carried at a moment, and the evidence IS the record.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-eviden-")
+    try:
+        ev = os.path.join(tmp, "price-evidence")
+        os.makedirs(ev, exist_ok=True)
+        free = HD.Daemon.free_evidence_batch
+
+        res.append(("CLEAN TWIN an empty evidence dir gives the counter back unchanged",
+                    free(ev, 1) == 1, str(free(ev, 1))))
+        with open(os.path.join(ev, "batch-1.json"), "w", encoding="utf-8") as f:
+            f.write("{}")
+        res.append(("MUST FIRE  a restarted counter does NOT land on an existing batch - this is the "
+                    "overwrite that destroyed a CARRIED verdict's evidence",
+                    free(ev, 1) == 2, str(free(ev, 1))))
+        # the per-store companions share the prefix; a half-overwritten set is worse than a new one
+        with open(os.path.join(ev, "batch-2-fareway.json"), "w", encoding="utf-8") as f:
+            f.write("{}")
+        res.append(("MUST FIRE  a number whose PER-STORE companion exists is skipped too, so a set "
+                    "is never half-overwritten",
+                    free(ev, 1) == 3, str(free(ev, 1))))
+        res.append(("  and it keeps walking until it finds a genuinely free number",
+                    free(ev, 2) == 3, str(free(ev, 2))))
+        res.append(("CLEAN TWIN a missing evidence dir is not an error - the caller creates it",
+                    free(os.path.join(tmp, "nope"), 4) == 4, str(free(os.path.join(tmp, "nope"), 4))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
 
 
 def _the_write_lane_does_not_block_on_its_own_intake():

@@ -3,17 +3,17 @@
     "title":  "Baked Stuffed Pork Chops",
     "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
     "protein":  "pork",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "rejected-audit",
+    "wave":  3,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:54:33",
+    "updated":  "2026-08-27T07:17:58",
     "terms":  [
                   {
                       "term":  "boneless pork chops",
                       "optional":  false
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "Report at waves\\wave-3.audit.md. Battery green and its chains verified; macro chain re-derived fully by hand (533 within 5% of 550): 532.61 cal / 50.64 P / 13.47 C / 29.14 F per serving, matches stat ",
     "parked_on":  [
 
                   ],
@@ -53,6 +53,48 @@
                         "at":  "2026-08-27T04:54:33",
                         "by":  "derive",
                         "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T06:29:57",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T06:29:57",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T06:39:25",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T06:39:25",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T06:48:50",
+                        "by":  "auditor",
+                        "detail":  "audit-clean, trimmed out of blocked wave 2"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T07:08:42",
+                        "by":  "wave-close",
+                        "detail":  "wave 3"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-27T07:17:58",
+                        "by":  "auditor",
+                        "detail":  "Report at waves\\wave-3.audit.md. Battery green and its chains verified; macro chain re-derived fully by hand (533 within 5% of 550): 532.61 cal / 50.64 P / 13.47 C / 29.14 F per serving, matches stat "
                     }
                 ]
 }

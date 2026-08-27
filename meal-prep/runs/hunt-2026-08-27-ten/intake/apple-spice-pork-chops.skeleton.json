@@ -1,0 +1,102 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T06:05:40",
+    "slug":  "apple-spice-pork-chops",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Apple Spice Pork Chops",
+                   "slug":  "apple-spice-pork-chops",
+                   "protein":  "pork",
+                   "cuisine":  "",
+                   "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Pork Chops",
+                                           "grams":  2380,
+                                           "buy":  "14 boneless chops, about 5 1/4 lb total"
+                                       },
+                                       {
+                                           "item":  "Vegetable Oil",
+                                           "grams":  98,
+                                           "buy":  "7 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  1,
+                                           "buy":  "1/4 tsp, or to taste"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  1,
+                                           "buy":  "1/2 tsp, or to taste"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  385,
+                                           "buy":  "3 1/2 medium yellow onions, diced"
+                                       },
+                                       {
+                                           "item":  "Apple",
+                                           "grams":  1260,
+                                           "buy":  "7 Fuji apples, cored and sliced"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  98,
+                                           "buy":  "7 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Brown Sugar",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 Tbsp, packed"
+                                       },
+                                       {
+                                           "item":  "Ground Cinnamon",
+                                           "grams":  2,
+                                           "buy":  "3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Ground Nutmeg",
+                                           "grams":  1,
+                                           "buy":  "1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Chicken Broth",
+                                           "grams":  840,
+                                           "buy":  "3 1/2 cups"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  442,
+                                              "protein_g":  35.8,
+                                              "carbs_g":  18.9,
+                                              "fat_g":  25.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT35M",
+                                "totalTime":  "PT45M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

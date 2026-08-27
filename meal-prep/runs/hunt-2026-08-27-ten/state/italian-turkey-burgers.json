@@ -3,10 +3,10 @@
     "title":  "Italian Turkey Burgers",
     "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
     "protein":  "turkey",
-    "state":  "parked",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T05:20:59",
+    "updated":  "2026-08-27T06:05:53",
     "terms":  [
                   {
                       "term":  "italian turkey sausage",
@@ -23,7 +23,7 @@
               ],
     "reject_reason":  null,
     "parked_on":  [
-                      "italian turkey sausage"
+
                   ],
     "history":  [
                     {
@@ -61,6 +61,12 @@
                         "at":  "2026-08-27T05:20:59",
                         "by":  "derive",
                         "detail":  "waiting on: italian turkey sausage"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T06:05:53",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
                     }
                 ]
 }

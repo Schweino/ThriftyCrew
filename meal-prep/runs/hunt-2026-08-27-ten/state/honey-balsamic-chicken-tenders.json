@@ -3,14 +3,21 @@
     "title":  "Honey Balsamic Chicken Tenders",
     "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T05:27:36",
-    "updated":  "2026-08-27T05:27:36",
+    "updated":  "2026-08-27T06:30:52",
     "terms":  [
-
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Black Pepper",
+                      "optional":  true
+                  }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 349 cal below the 450 floor",
     "parked_on":  [
 
                   ],
@@ -32,6 +39,30 @@
                         "at":  "2026-08-27T05:27:36",
                         "by":  "local",
                         "detail":  "recovered from the advance-before-assemble stranding: state said mapped with no decision file, which seed() routes to held, so it could never re-enter the map lane"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T06:30:50",
+                        "by":  "mapper",
+                        "detail":  "Nine of nine lines arrived pre-resolved, so this was buy strings plus the cross-check. No residual identities, no rejections, no new commodity ids, no absent terms, and no new food-DB rows needed - all eight foods already carry rows.\n\nTHE ONE MATERIAL DEFECT, and it is the rule-6 failure mode exactly: the pre-resolve weighed \u00272 medium 1.5 lbs. chicken breasts\u0027 at 400 g from a medium-breast each-we"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T06:30:50",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T06:30:50",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T06:30:52",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 349 cal below the 450 floor"
                     }
                 ]
 }

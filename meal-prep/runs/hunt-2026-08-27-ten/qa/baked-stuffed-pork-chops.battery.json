@@ -1,0 +1,247 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "baked-stuffed-pork-chops",
+  "generated": "2026-08-27T06:39:06",
+  "inputs": {
+    "spec": "C:/Codex/ThriftyCrew/meal-prep/db/recipes/baked-stuffed-pork-chops.json",
+    "source": "C:/Codex/ThriftyCrew/meal-prep/runs/hunt-2026-08-27-ten/extracted/baked-stuffed-pork-chops.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 13,
+        "source_ingredients": 16,
+        "matched": 11,
+        "invented": [
+          "Yellow Onion",
+          "Celery"
+        ],
+        "dropped": [
+          "small white onion",
+          "celery stalk"
+        ],
+        "consolidated": [
+          "olive oil",
+          "salt",
+          "Ranch Seasoning Mix"
+        ]
+      },
+      "detail": "INVENTED: 'Yellow Onion' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Celery' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'small white onion' and the built recipe has nothing that denotes it; DROPPED: the source lists 'celery stalk' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states 'olive oil' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'Ranch Seasoning Mix' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Yellow Onion' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Celery' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'small white onion' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'celery stalk' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'olive oil' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Ranch Seasoning Mix' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 11,
+        "unrated": 2,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Boneless Pork Chops",
+            "source": "2 lb",
+            "spec": "7 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "2 tbsp",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ranch Seasoning Mix",
+            "source": "2 tbsp",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Paprika",
+            "source": "1 tsp",
+            "spec": "3.5 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 tsp",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.5 tsp",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Butter",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Fresh Cranberries",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Carrots",
+            "source": "0.25 cup",
+            "spec": "0.875 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Sandwich Bread",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chicken Broth",
+            "source": "0.666667 cup",
+            "spec": "2.33333 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Yellow Onion",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Celery",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 11 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 8,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (8 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Baked Stuffed Pork Chops",
+        "spec_source_url": "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+        "transcription_source_url": "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

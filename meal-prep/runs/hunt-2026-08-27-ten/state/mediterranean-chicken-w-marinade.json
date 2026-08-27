@@ -3,10 +3,10 @@
     "title":  "Mediterranean Chicken w/ Marinade",
     "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
     "protein":  "chicken",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  1,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T05:14:10",
+    "updated":  "2026-08-27T06:09:45",
     "terms":  [
 
               ],
@@ -50,6 +50,30 @@
                         "at":  "2026-08-27T05:14:10",
                         "by":  "mapper",
                         "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T06:01:55",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T06:01:56",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T06:07:46",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T06:09:45",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
                     }
                 ]
 }

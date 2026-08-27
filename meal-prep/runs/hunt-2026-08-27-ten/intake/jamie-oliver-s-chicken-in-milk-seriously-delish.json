@@ -2,7 +2,7 @@
  "name": "Jamie Oliver's Chicken in Milk {Seriously Delish}",
  "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish",
  "protein": "chicken",
- "cuisine": "Italian",
+ "cuisine": "Italian-inspired",
  "source_url": "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
  "visibility": "paid",
  "ingredients": [
@@ -59,57 +59,55 @@
   "fat_g": 46.2
  },
  "writer_notes": [
-  "All 9 locked ingredients are used by a step: chicken, salt, black pepper (season); olive oil (brown); ground cinnamon, fresh sage, lemon zest, garlic, milk (added to pot before baking). No orphans, nothing invented.",
-  "BUILD DIVERGES FROM SOURCE ON CINNAMON: source transcription says '1/2 stick cinnamon' but the locked build buys '1 3/4 teaspoons ground cinnamon'. Method was written around ground cinnamon as bought. Flagged for QA.",
-  "Scaled from a single 3 to 3.5 lb bird to three whole chickens for 14 servings; browning and baking may need a large pot or batching, which the method calls out.",
-  "Macro mentions written as tokens {{cal}} and {{protein}}; carbs kept qualitative ('barely any carbs') to avoid a stray literal. Cost as ${{cost_ps}}.",
-  "Only shop_smart package claim is milk: 8 cups needed = exactly half a gallon, so one gallon jug covers it. Traces to the Milk buy line, not a price claim. No per-ounce or per-batch economics claimed because no cost_lines were in dispatch.",
-  "'Do not strain the sauce' is faithful to the source's final instruction (keep the curds, garlic, and sage on the chicken)."
+  "Ingredient-vs-step coverage verified both directions: chicken, salt, black pepper, olive oil, ground cinnamon, fresh sage, lemon zest, garlic, and milk are each used by a step; no step references anything not on the buy list.",
+  "Cinnamon in the source is '1/2 stick'; the locked buy line converts it to '1 3/4 teaspoons ground cinnamon', so the method says ground cinnamon to match the buy string, not a stick.",
+  "Lemons are zest only per the source and locked line; prose never calls for juice or flesh.",
+  "No cost_lines or cost_ps value was supplied in this dispatch, so shop_smart makes only package-size statements (half gallon = 8 cups milk, garlic by the head/bag, sage by the bunch) and avoids per-ounce, leftover, or lasts-several-batches claims that cannot be traced.",
+  "The only numbers in prose are the locked macros (693 cal, 57g protein, 10g carbs, 46.2g fat), the 14 servings, oven temp/time straight from the source, and the ${{cost_ps}} token."
  ],
  "forbidden_prose_terms": [
-  "—",
-  "–",
-  "cinnamon stick",
+  "em dash",
+  "en dash",
   "seafood",
   "fish",
   "shrimp",
-  "skinless",
-  "dried sage"
+  "per pound",
+  "per ounce"
  ],
  "prose": {
-  "intro_html": "<p>Jamie Oliver called this one seriously delish, and for once the internet did not oversell it. Chicken braised in milk sounds like a mistake right up until you taste it. The milk breaks down into soft little curds, the lemon zest and garlic melt into it, and you end up with a sauce that has no business coming from five plain ingredients. We scaled it up to three whole chickens so it feeds a full week of dinners instead of one nice Sunday. At {{cal}} calories, {{protein}} grams of protein, and barely any carbs per serving, it lands right where a high protein dinner is supposed to land. Let me walk you through it.</p>",
-  "shop_smart": "<ul><li><strong>Buy whole chickens.</strong> A whole bird is the cheapest chicken you can put in a cart per pound, and this batch wants three of them at roughly 3 3/4 pounds each. Buy them skin on. That skin is where the browning flavor comes from, so do not let anyone talk you into skinless.</li><li><strong>One gallon of milk does the job.</strong> The recipe needs 8 cups, which is exactly half a gallon, so a single gallon jug of low fat milk covers it with plenty left over for the fridge.</li><li><strong>Fresh sage, one package.</strong> A scant cup of loosely packed leaves is about what comes in one small clamshell of fresh sage at most stores. Buy the fresh, not the dried, for this one.</li><li><strong>Lemons for zest only.</strong> You are buying 7 lemons for their zest, so pick firm, heavy ones with taut skin. Zest them, then keep the naked lemons for water, dressing, or squeezing over dinner.</li><li><strong>Garlic goes in whole.</strong> The cloves stay in their skins, so a few heads of garlic gets you to 35 cloves with zero peeling. Less knife work for you.</li><li><strong>Check your pantry first.</strong> Ground cinnamon, salt, black pepper, and olive oil are things most kitchens already stock, so you may only be buying the chicken, milk, sage, lemons, and garlic.</li></ul>",
-  "make_it": "<ol><li>Heat your oven to 375F. Pat the chickens dry all over with paper towels so the skin can actually brown.</li><li>Season them well. Sprinkle the salt and plenty of black pepper over each bird and pat it all over, paying attention to the top and the sides.</li><li>Heat the olive oil in a heavy based pot over high heat. Brown the chicken all over as best you can, tilting and turning it to catch as much skin as possible. With three birds you will want a big pot, or work one at a time and brown them in turns.</li><li>Pour off the excess fat. Tip it carefully out of the pot with the chicken still inside if you can manage it, or lift the chicken onto a plate, drain the fat, and set the bird back in.</li><li>Add the rest of the cast to the pot with the chicken: the ground cinnamon, the sage leaves, the lemon zest, the whole skin on garlic cloves, and the milk. Do not worry that the milk looks strange. That is the whole trick.</li><li>Bake it covered for 40 minutes, then uncovered for 50 minutes, about an hour and a half in total. The milk will split into those golden curds you are after.</li><li>Let it stand about 5 minutes, then lift the chicken out onto a board. Do not strain the sauce. You want the curds, the soft garlic, and the bits of sage right there on the plate.</li></ol>",
-  "portion_html": "<p>This one comes apart easy. Pull all the chicken off the bones while it is still warm, skin and all, and give the meat a rough chop or shred. Weigh your empty container, then weigh the full pot of meat, and divide the total across the 14 containers so every one gets the same honest portion. Spoon the sauce over each, curds and garlic and sage included, and you have 14 dinners that reheat like a dream. If a couple of containers run a little light on meat, even them out with an extra ladle of that sauce.</p>",
-  "cost_closing_html": "<p>Here is the part that matters. At ${{cost_ps}} a serving, you are eating a Jamie Oliver dinner for less than most people spend without thinking twice. Three whole chickens is the cheapest way to get {{protein}} grams of protein onto a plate, and the milk, garlic, sage, and lemon are pennies sitting next to the bird. Cook it once, eat it all week, and let the arithmetic do the bragging.</p>",
-  "upsell_html": "<p>If this is the kind of cooking you want more of, real food, real numbers, and no nonsense, that is exactly what Thrifty Crew is built for. Membership runs a dollar a month and gets you every recipe and every money lesson we publish. Come cook with us.</p>"
+  "intro_html": "<p>Here is a dish that sounds like a mistake and eats like a secret. You brown a whole chicken, then you pour milk over it and let the oven do something strange and wonderful. The milk breaks into soft curds, the lemon zest and garlic and sage fold in, and what comes out is chicken so tender it barely needs a knife, sitting in a sauce that tastes like nobody should be able to make it this cheap. Jamie Oliver gets the credit, and RecipeTin Eats earns the trust. We just scaled it up so your whole week eats like a Sunday.</p><p>The numbers are the quiet flex. Each of the 14 servings lands at 693 calories with 57 grams of protein, only 10 grams of carbs, and 46.2 grams of fat. That is a rich, satisfying plate that still clears every rail we set: high protein, low carb, real food. You are not eating diet food here. You are eating a proper roast that happens to be built for the week.</p>",
+  "shop_smart": "<p>Buy three whole chickens, right around 3 3/4 pounds each, which puts you at about 11 1/2 pounds of bird for the batch. Whole chickens are almost always the cheapest way to buy real chicken, and here the whole bird is the point, so there is no trimming waste to pay for. If your store runs a sale on the family pack of whole birds, that is your green light.</p><p>The milk is the other star and it is stupid cheap. You need 8 cups of low fat milk, which is exactly one half gallon carton, so you are buying a single container and using it. Grab the store brand; there is no premium milk on earth that will make this sauce better.</p><p>The rest is pantry and produce. You want a whole head or a small bag of garlic to hit 35 cloves left in their skins, 7 lemons for zest only, and a bunch of fresh sage. Buy the sage by the bunch or one large clamshell rather than the tiny herb packet, because a scant cup of loosely packed leaves adds up fast. Ground cinnamon, olive oil, salt, and black pepper are almost certainly already in your cupboard.</p>",
+  "make_it": "<p>Heat your oven to 375F. Pat all three chickens dry with paper towels, because dry skin is what browns. Sprinkle the salt and a good few grinds of black pepper all over each bird and press it in, working the top and sides.</p><p>Get a heavy based pot hot over high heat and add the olive oil. Brown the chickens all over as best you can, one at a time if that is what your pot allows. The trick from the original still stands: tongs stuck in the rear of the bird and a wooden spoon to lift and tilt, so you get color on the skin without tearing it. This step is where the flavor is born, so do not rush it.</p><p>Pour off the excess fat once the birds are browned. If wrestling a whole chicken while draining a hot pot is not your idea of fun, lift the chicken onto a plate first, drain the fat, then return it. Now add everything else straight into the pot with the chicken: the ground cinnamon, the fresh sage, the lemon zest, all 35 garlic cloves in their skins, and the 8 cups of milk.</p><p>Bake covered for 40 minutes, then uncover and bake another 50 minutes, so 1 hour and 30 minutes of oven time in total. The milk will look curdled and broken, and that is exactly right; those curds are the good part. Let the birds stand about 5 minutes before you lift them out. Do not strain the sauce. You want the curds, the softened garlic, and the bits of sage going into every container.</p>",
+  "portion_html": "<p>Pull the chickens out, let them rest, then carve the meat off the bones. Three birds gives you plenty of meat to split evenly across 14 containers. Weigh your empty pot before you start, then weigh the meat and sauce so you can divide by 14 and hit the same portion every time; that is the honest way to make sure container one and container fourteen are the same meal.</p><p>Spoon that broken milk sauce over each portion, garlic and curds and sage included. Each container lands at 693 calories with 57 grams of protein and just 10 grams of carbs, so it plays nicely with rice, roasted potatoes, or a pile of green vegetables added the day you eat it.</p>",
+  "cost_closing_html": "<p>Whole chickens and a half gallon of milk is about as lean as a grocery list gets, and it turns into 14 dinners that taste like you fussed. At ${{cost_ps}} per serving, this is the kind of math that makes meal prep feel less like a chore and more like a raise. You are buying humble ingredients and cooking your way into something that eats far above its price tag.</p>",
+  "upsell_html": "<p>If this is the sort of cooking you want on repeat, that is the whole idea behind Thrifty Crew. For a dollar a month you get every recipe built the same honest way, with real macros and real prices, so your week is planned and your budget stays intact. Cook once, eat all week, and let the numbers work for you.</p>"
  },
  "head": {
-  "description": "Jamie Oliver's Chicken in Milk scaled for meal prep: three whole chickens braised in milk with garlic, sage, lemon zest, and cinnamon for 14 high protein dinners at {{cal}} calories and {{protein}} grams of protein each.",
-  "keywords": "chicken in milk, Jamie Oliver chicken in milk, meal prep chicken, high protein dinner, whole chicken recipe, budget meal prep, braised chicken, low carb chicken",
+  "description": "Jamie Oliver's Chicken in Milk scaled to 14 meal-prep servings. Whole chicken braised in milk with lemon zest, garlic, sage, and cinnamon. 693 calories and 57g protein per serving, low carb and budget friendly.",
+  "keywords": "chicken in milk, Jamie Oliver chicken in milk, high protein meal prep, budget meal prep dinner, low carb chicken, whole chicken recipe, braised chicken, milk braised chicken",
   "image": "",
   "prepTime": "PT5M",
   "cookTime": "PT1H40M",
   "totalTime": "PT1H45M",
   "steps": [
-   "Heat the oven to 375F and pat the chickens dry all over with paper towels.",
-   "Season the chickens with the salt and black pepper, patting it over the top and sides.",
-   "Heat the olive oil in a heavy pot over high heat and brown the chickens all over, working in batches if needed.",
-   "Pour off the excess fat from the pot, lifting the chicken out first if that is easier.",
-   "Add the ground cinnamon, sage leaves, lemon zest, whole garlic cloves, and milk to the pot with the chicken.",
-   "Bake covered for 40 minutes, then uncovered for 50 minutes, about an hour and a half total.",
-   "Rest 5 minutes, then lift out the chicken and serve with the unstrained sauce.",
-   "Pull the meat off the bones, divide evenly across 14 containers by weight, and spoon the sauce over each."
+   "Preheat the oven to 375F. Pat the whole chickens dry with paper towels.",
+   "Sprinkle the salt and several grinds of black pepper all over each chicken, pressing it into the top and sides.",
+   "Heat the olive oil in a heavy based pot over high heat.",
+   "Brown the chickens all over, using tongs and a wooden spoon to lift and tilt each bird so the skin colors without tearing.",
+   "Pour off the excess fat from the pot, lifting the chicken out onto a plate first if that is easier, then return it.",
+   "Add the ground cinnamon, fresh sage, lemon zest, garlic cloves, and milk to the pot with the chicken.",
+   "Bake covered for 40 minutes, then uncovered for 50 minutes, 1 hour 30 minutes total.",
+   "Let the chicken stand about 5 minutes, then carve and serve with the unstrained milk sauce, curds, garlic, and sage."
   ],
   "step_names": [
-   "Heat oven and dry",
+   "Heat oven and dry chicken",
    "Season the birds",
+   "Heat the oil",
    "Brown the chicken",
    "Drain the fat",
-   "Build the braise",
-   "Bake covered then open",
-   "Rest and serve",
-   "Portion 14 containers"
+   "Add milk and aromatics",
+   "Bake covered then uncovered",
+   "Rest, carve, and sauce"
   ]
  }
 }

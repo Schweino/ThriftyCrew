@@ -3,8 +3,7 @@
  "lines": [
   {
    "raw": "4 pork chops ($6.44)",
-   "buy": "14 chops (about 5 1/4 lb)",
-   "notes": "170 g per chop at source scale, unchanged from the table."
+   "buy": "14 boneless chops, about 5 1/4 lb total"
   },
   {
    "raw": "2 Tbsp vegetable oil ($0.08)",
@@ -12,23 +11,21 @@
   },
   {
    "raw": "Pinch salt and pepper ($0.05) [split: salt]",
-   "buy": "to taste (15 g)",
-   "grams_source": 4.3,
-   "notes": "Re-weighed: the table's 0.4 g source basis scales to 1.4 g of salt for 14 seasoned pork chops. Set to the live-estate norm of ~15 g at batch scale; zero-macro food, so the cross-check is unaffected."
+   "buy": "1/4 tsp, or to taste",
+   "notes": "Salt half of the composite line only; pre-resolve weighed the pinch at 0.4 g source (1.4 g at batch), which is light for 14 chops but is the source's own word."
   },
   {
    "raw": "Pinch salt and pepper ($0.05) [split: pepper]",
-   "buy": "to taste (4 g)",
-   "grams_source": 1.15,
-   "notes": "Re-weighed to the estate norm of ~4 g pepper at 14-serving batch scale; negligible macro effect."
+   "buy": "1/2 tsp, or to taste",
+   "notes": "Pepper half of the composite line only."
   },
   {
    "raw": "1 med onion ($0.38)",
-   "buy": "3 1/2 medium onions, thinly sliced"
+   "buy": "3 1/2 medium yellow onions, diced"
   },
   {
    "raw": "2 fuji apples ($1.99)",
-   "buy": "7 apples, cored and sliced"
+   "buy": "7 Fuji apples, cored and sliced"
   },
   {
    "raw": "2 Tbsp butter ($0.26)",
@@ -40,11 +37,11 @@
   },
   {
    "raw": "1/4 tsp cinnamon ($0.02)",
-   "buy": "scant 1 tsp"
+   "buy": "3/4 tsp"
   },
   {
    "raw": "1/8 tsp nutmeg ($0.02)",
-   "buy": "scant 1/2 tsp"
+   "buy": "1/2 tsp"
   },
   {
    "raw": "1 cup chicken broth ($0.13)",
@@ -60,5 +57,5 @@
  "ruled_substitutions": [],
  "new_commodity_proposals": [],
  "registrar_rulings": [],
- "macro_cross_check": "Verified, not re-derived. Ours 620 cal / 58.9 C / 39.1 P / 25.1 F vs source 498.6 / 24.3 / 40.73 (candidate-pool.band). PROTEIN gap is 39.1 vs 40.73 = 4%, well inside the 15% threshold, so no portion is wrong - the main protein (680 g source / 170 g per chop) is sound. The calorie and carb gaps are fully explained by the precheck's own tuning line, 'added Rice base 200g (src scale)': 50 g dry rice per serving is about +180 cal and +40 g carbs, which accounts for the entire +121 cal and +34.6 C difference against a source figure computed without a base. Check PASSES."
+ "macro_cross_check": "VERIFIED, and it FAILS this run's band on two of three axes. Pre-computed: ours 620 cal / 58.9 carbs / 39.1 protein / 25.1 fat vs source 498.6 cal / 24.3 carbs / 40.73 protein. Protein agrees to 4% (39.1 vs 40.73), well inside the 15% trigger, so the 680 g / 4 chops basis (170 g raw each, 6 oz) is sound. The carb gap is entirely the tuning's Rice base: 200 g dry at source scale is 50 g dry per serving = about 40 g carbs, and 58.9 - 40 = 18.9 which is what the ingredient lines alone compute to and is consistent with the source's 24.3. BAND: carbs 58.9 vs a 40 g ceiling (fails), protein 39.1 vs a 40 g floor (fails by 0.9), calories 620 (passes). Without any rice the dish is about 443 cal / 18.6 carbs / 35.7 protein, which then fails the 450 cal floor and the protein floor. This dish only clears the band with a low-carb base and more pork per serving; flagging rather than deciding."
 }

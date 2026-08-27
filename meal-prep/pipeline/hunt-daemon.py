@@ -3910,6 +3910,36 @@ class Daemon(object):
                             "no Omaha store carries a blocking ingredient")
             # parked stays in pricing_slugs; a later batch may resolve it
 
+    @staticmethod
+    def free_evidence_batch(ev_dir, n):
+        r"""The first batch number whose evidence files do not already exist.
+
+        THE COUNTER IS PER PROCESS AND THE EVIDENCE IS PER RUN (2026-08-27). `n` is the price lane's
+        own invocation counter, which restarts at 1 on every daemon start - and this run was started
+        five times. So the 06:00 dispatch for "italian turkey sausage" wrote batch-1 files straight
+        over the 04:23 dispatch for "boneless pork chops" + "white pepper", whose verdict was CARRIED
+        at 04:54. The run dir then held NO evidence for the pricing verdict on wave 3's MAIN PROTEIN,
+        and the wave-3 auditor could only audit it because a DIFFERENT run (hunt-2026-08-26-ten,
+        batch-5) happened to have priced the same term. Nothing can restore the overwritten files.
+        That is an audit trail for a carriage ruling, silently destroyed by a filename.
+
+        A CARRIAGE VERDICT IS THE ONE THING THIS ESTATE CANNOT RE-DERIVE. Prices move, stores change
+        their listings, and Rule B turns on what a store carried at a moment. The evidence IS the
+        record, so the write must never be able to land on an existing one.
+
+        Skips any number whose `batch-<k>` prefix is taken by ANY file - the per-store companions
+        (batch-1-fareway.json, batch-1-records.json, the .terms.json files) share the prefix and a
+        half-overwritten set is worse than a cleanly numbered new one.
+        """
+        try:
+            existing = os.listdir(ev_dir)
+        except OSError:
+            return n
+        k = max(1, int(n))
+        while any(f.startswith("batch-%d." % k) or f.startswith("batch-%d-" % k) for f in existing):
+            k += 1
+        return k
+
     async def gather_price_evidence(self, terms, n):
         r"""THE PRICE-EVIDENCE PRE-PASS (D10). Returns (path, doc).
 
@@ -3937,7 +3967,7 @@ class Daemon(object):
         (carried/not-carried/blocked/error) never mix; only the PRICER converts.
         """
         ev_dir = os.path.join(self.run_dir, "price-evidence")
-        path = os.path.join(ev_dir, "batch-%d.json" % n)
+        path = os.path.join(ev_dir, "batch-%d.json" % self.free_evidence_batch(ev_dir, n))
         await self.lane("price", "pre-pass batch %d" % n, terms, "pre-pass", "start")
         findings = []
         probe_by_term, units, lookups = {}, {}, {}

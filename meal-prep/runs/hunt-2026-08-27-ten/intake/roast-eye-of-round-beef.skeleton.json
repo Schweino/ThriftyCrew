@@ -1,0 +1,131 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T06:07:53",
+    "slug":  "roast-eye-of-round-beef",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Heavy Cream\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "merged a second \u0027Garlic\u0027 line into the first - 96 g total",
+                  "merged a second \u0027Fresh Thyme\u0027 line into the first - 11 g total",
+                  "merged a second \u0027Fresh Rosemary\u0027 line into the first - 19 g total"
+              ],
+    "intake":  {
+                   "name":  "Roast Eye of Round Beef",
+                   "slug":  "roast-eye-of-round-beef",
+                   "protein":  "any",
+                   "cuisine":  "",
+                   "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Eye of Round Roast",
+                                           "grams":  2580,
+                                           "buy":  "about 5 3/4 lb (2 roasts), tied"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  15,
+                                           "buy":  "2 1/2 tsp kosher salt, plus freshly cracked black pepper to taste"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  196,
+                                           "buy":  "14 Tbsp (1 3/4 sticks), softened"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  96,
+                                           "buy":  "9 cloves, minced; 2 heads, loose skin removed and halved through the root"
+                                       },
+                                       {
+                                           "item":  "Fresh Rosemary",
+                                           "grams":  19,
+                                           "buy":  "1 3/4 tsp, finely chopped (or scant 1 tsp dried); 5 sprigs"
+                                       },
+                                       {
+                                           "item":  "Fresh Thyme",
+                                           "grams":  11,
+                                           "buy":  "3 1/2 tsp, chopped (or 1 3/4 tsp dried); 7 sprigs"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  192,
+                                           "buy":  "2 medium yellow onions, peeled and quartered through the root"
+                                       },
+                                       {
+                                           "item":  "Carrots",
+                                           "grams":  214,
+                                           "buy":  "about 7 1/2 oz carrots (3 to 4 large), peeled and cut into 2-inch chunks"
+                                       },
+                                       {
+                                           "item":  "Bay Leaves",
+                                           "grams":  2,
+                                           "buy":  "3 to 4 leaves"
+                                       },
+                                       {
+                                           "item":  "White Mushrooms",
+                                           "grams":  595,
+                                           "buy":  "21 oz cremini, stemmed and halved"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Dry Red Wine",
+                                           "grams":  413,
+                                           "buy":  "1 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Beef Broth",
+                                           "grams":  1050,
+                                           "buy":  "4 1/3 cups no-sodium beef stock"
+                                       },
+                                       {
+                                           "item":  "Worcestershire Sauce",
+                                           "grams":  30,
+                                           "buy":  "1 3/4 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Cornstarch",
+                                           "grams":  14,
+                                           "buy":  "1 3/4 Tbsp, mixed with 3 1/2 Tbsp water"
+                                       },
+                                       {
+                                           "item":  "Heavy Cream",
+                                           "grams":  79,
+                                           "buy":  "1/3 cup, optional, to taste"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  528,
+                                              "protein_g":  42.4,
+                                              "carbs_g":  9.3,
+                                              "fat_g":  33.3
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT1H20M",
+                                "totalTime":  "PT1H35M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

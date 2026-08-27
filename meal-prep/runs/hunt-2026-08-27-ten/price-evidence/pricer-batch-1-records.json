@@ -1,0 +1,65 @@
+[
+ {
+  "term": "italian turkey sausage",
+  "store": "Baker's",
+  "state": "blocked",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "Pre-pass server tier returned ERROR: (503) Server Unavailable on rung 1 'italian turkey sausage'; 0 rungs actually answered. Transport refusal, not an empty shelf - not re-probed per dispatch instruction. Baker's does appear in today's captures for 'turkey sausage' (Jimmy Dean turkey crumbles/patties/links, breakfast sandwiches) and for 'chicken sausage' (Simple Truth Mild Italian Chicken Sausage $5.99/lb) - chicken, not turkey - but a capture miss is never not-carried."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Family Fare",
+  "state": "not-carried",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "Pre-pass server tier, FULL ladder, both rungs returned request state OK with 0 product rows (a successful query, not the 400/throttle refusal shape): rung 1 'italian turkey sausage'=0, rung 3 spacing variant 'italianturkeysausage'=0. Rung 2 inapplicable (no strippable qualifier) and rung 4 does not apply to a three-word term. Family Fare does stock pork Italian sausage (board cell italian-sausage, Our Family Ground Italian Sausage Mild $3.99/lb), so the search box is not blind to the phrase - it returns nothing when turkey is added. Commodity fresh-sweet-italian-turkey-sausage is NOT on audit-search-terms.ps1's suspect list."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Hy-Vee",
+  "state": "blocked",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "blocked - no browser in this session"
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Aldi",
+  "state": "blocked",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "blocked - no browser in this session"
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Fareway",
+  "state": "blocked",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "Driver rung 1 reported MATCHES with 66 rows but the evidence file carries only 8 of them; I adjudicated those 8 and none is Italian turkey sausage (Isernio's Italian Chicken Sausage $6.99/16oz and Amylu Italian-Style Chicken Sausage $6.99/12oz are CHICKEN; Johnsonville Italian Mild $5.99/19oz and Italian Pork Sausage $3.99 are PORK; Fareway Turkey Breakfast Sausage $5.49/16oz and Johnsonville Turkey Breakfast Links $5.99/12ct are turkey but BREAKFAST-seasoned, not Italian). The other 58 rows are not in front of me and I have no browser this session, so I cannot rule on rows I never saw - blocked, not not-carried."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Sam's Club",
+  "state": "not-carried",
+  "price": null,
+  "size": null,
+  "item": null,
+  "evidence": "Two independent searches, both adjudicated to nothing. (1) Driver rung 1 today, 'italian turkey sausage' = 15 rows, all pork/beef breakfast or smoked sausage (Johnsonville Original Pork Breakfast Links $6.48, Jimmy Dean Premium Pork Roll $7.34, Kiolbassa Beef Hickory Smoked $19.87, Aidells Chicken & Apple Smoked $9.84). (2) The estate's own complete Sam's grid for the commodity's exact search term - grep '^sweet Italian turkey sausage|' grocery/out/captures/sams-capture-2026-08-15.csv, all 14 rows - contains zero Italian turkey sausage; the only turkey item is Hillshire Farm Turkey Polska Kielbasa $9.57, which is smoked kielbasa (a different commodity), not fresh Italian turkey sausage. Warehouse club with no fresh Italian turkey sausage SKU."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Walmart",
+  "state": "carried",
+  "price": 5.76,
+  "size": "1.25 lb (6 ct tray)",
+  "item": "Honeysuckle White Sweet Italian Turkey Sausage 6 Count Tray, Fresh, Gluten-Free",
+  "evidence": "no browser this session; ruled from disk instead - grep 'Italian Turkey Sausage' grocery/out/captures/walmart-capture-2026-08-06.csv (Walmart's own search-result rows, query 'italian sausage'): Honeysuckle White Sweet Italian Turkey Sausage 6 Count Tray, Fresh, Gluten-Free, 1.25 lbs, $5.76 ($4.80/lb), id 46866279 - an exact match for commodity fresh-sweet-italian-turkey-sausage. Two more genuine hits in the same grid: JENNIE-O Sweet Italian Fresh Turkey Sausage Links, 19.5 oz tray, $5.76 ($4.72/lb), id 17247746; and JENNIE-O Ground Turkey Italian Sausage roll, 1 lb, $4.94/lb, id 720186971. The JENNIE-O roll appears at the same $4.94 in walmart-capture-2026-07-23.csv under query 'ground turkey', so the listing is stable across two capture dates. CAVEAT ON DATE: these rows are 2026-08-06 / 07-23, not today - the 2026-08-26 Walmart capture is a 462-line policy slice that never asked these terms, so its silence is not a delisting. Carriage is proven by the store's own listing; the price should be re-captured before it reaches a board cell."
+ }
+]

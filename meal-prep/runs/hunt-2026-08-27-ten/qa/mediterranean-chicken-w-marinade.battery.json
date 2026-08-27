@@ -1,0 +1,247 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "mediterranean-chicken-w-marinade",
+  "generated": "2026-08-27T06:07:13",
+  "inputs": {
+    "spec": "meal-prep/db/recipes/mediterranean-chicken-w-marinade.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-ten/extracted/mediterranean-chicken-w-marinade.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 13,
+        "source_ingredients": 13,
+        "matched": 11,
+        "invented": [
+          "Cherry Tomatoes",
+          "Garlic"
+        ],
+        "dropped": [
+          "grape tomatoes",
+          "garlic cloves"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Cherry Tomatoes' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'grape tomatoes' and the built recipe has nothing that denotes it; DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Cherry Tomatoes' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'grape tomatoes' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 9,
+        "unrated": 4,
+        "exempt": 0,
+        "recipe_ratio": 2.75,
+        "lines": [
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "2 lb",
+            "spec": "5.5 lb",
+            "ratio": 2.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Red Pepper Flakes",
+            "source": "0.125 tsp",
+            "spec": "0.333333 teaspoon",
+            "ratio": 2.6667,
+            "deviation": 0.0303,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Spinach",
+            "source": "5 oz",
+            "spec": "14 oz",
+            "ratio": 2.8,
+            "deviation": 0.0182,
+            "quantization_explained": false,
+            "severity": "pass"
+          },
+          {
+            "item": "Artichoke Hearts",
+            "source": "15.5 oz",
+            "spec": "2.75 lb",
+            "ratio": 2.8387,
+            "deviation": 0.0323,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Feta Cheese",
+            "source": "8 oz",
+            "spec": "1 lb",
+            "ratio": 2.0,
+            "deviation": 0.2727,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "0.25 cup",
+            "spec": "11 tablespoon",
+            "ratio": 2.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Dried Oregano",
+            "source": "1 tsp",
+            "spec": "2.75 teaspoon",
+            "ratio": 2.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "1 tsp",
+            "spec": "2.75 teaspoon",
+            "ratio": 2.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "1 tsp",
+            "spec": "2.75 teaspoon",
+            "ratio": 2.75,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Cherry Tomatoes",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Black Olives",
+            "why": "could not read a leading amount from 'about 1 1/2 lb drained black olives (three 14.5 oz cans)' / '14.5 oz'"
+          },
+          {
+            "item": "Lemons",
+            "why": "the two measures are not the same kind (count:lemon vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Feta Cheese scaled 2x while the recipe scaled 2.75x (27.3% off): the source says 8 oz and the spec buys 1 lb, where the exact scale is 1.37 lb. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Feta Cheese scaled 2x while the recipe scaled 2.75x (27.3% off): the source says 8 oz and the spec buys 1 lb, where the exact scale is 1.37 lb. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 10,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 8g protein, the stat says 52; intro_html says 1g carbs, the stat says 16; portion_html says 8g protein, the stat says 52; cost_closing_html says 8g protein, the stat says 52; head.description says 8g protein, the stat says 52",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 8g protein, the stat says 52"
+        },
+        {
+          "severity": "fail",
+          "detail": "intro_html says 1g carbs, the stat says 16"
+        },
+        {
+          "severity": "fail",
+          "detail": "portion_html says 8g protein, the stat says 52"
+        },
+        {
+          "severity": "fail",
+          "detail": "cost_closing_html says 8g protein, the stat says 52"
+        },
+        {
+          "severity": "fail",
+          "detail": "head.description says 8g protein, the stat says 52"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Mediterranean Chicken w/ Marinade",
+        "spec_source_url": "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+        "transcription_source_url": "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 5,
+        "claimed_ratio": 2.8,
+        "measured_ratio": 2.75
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 3
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

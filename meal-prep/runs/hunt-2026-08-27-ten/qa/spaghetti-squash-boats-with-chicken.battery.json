@@ -1,0 +1,222 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "spaghetti-squash-boats-with-chicken",
+  "generated": "2026-08-27T06:31:04",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\spaghetti-squash-boats-with-chicken.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten\\extracted\\spaghetti-squash-boats-with-chicken.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 11,
+        "source_ingredients": 13,
+        "matched": 10,
+        "invented": [
+          "Hickory Smoked Bacon"
+        ],
+        "dropped": [
+          "thick-sliced center-cut bacon"
+        ],
+        "consolidated": [
+          "kosher salt",
+          "ground black pepper"
+        ]
+      },
+      "detail": "INVENTED: 'Hickory Smoked Bacon' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'thick-sliced center-cut bacon' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states 'kosher salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'ground black pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Hickory Smoked Bacon' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'thick-sliced center-cut bacon' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'kosher salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'ground black pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 8,
+        "unrated": 3,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "2 teaspoon",
+            "spec": "2.33333 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1 pound",
+            "spec": "3.5 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Spinach",
+            "source": "2 cup",
+            "spec": "7 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Plain Yogurt",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Mozzarella Cheese",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Fresh Basil",
+            "source": "2 tablespoon",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Spaghetti Squash",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "could not read a leading amount from 'scant 1 tsp ground black pepper' / '1/4 teaspoon'"
+          },
+          {
+            "item": "Hickory Smoked Bacon",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 8 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 7,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 5g protein, the stat says 40; portion_html says 5g protein, the stat says 40; head.description says 5g protein, the stat says 40",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 5g protein, the stat says 40"
+        },
+        {
+          "severity": "fail",
+          "detail": "portion_html says 5g protein, the stat says 40"
+        },
+        {
+          "severity": "fail",
+          "detail": "head.description says 5g protein, the stat says 40"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Spaghetti Squash Boats with Chicken",
+        "spec_source_url": "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+        "transcription_source_url": "https://www.wellplated.com/spaghetti-squash-boats-chicken/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

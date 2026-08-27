@@ -3,12 +3,23 @@
     "title":  "Roast Eye of Round Beef",
     "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
     "protein":  "any",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T05:59:38",
-    "updated":  "2026-08-27T05:59:38",
+    "updated":  "2026-08-27T06:07:52",
     "terms":  [
-
+                  {
+                      "term":  "Boneless Eye of Round Roast",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Heavy Cream",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
@@ -32,6 +43,24 @@
                         "at":  "2026-08-27T05:59:38",
                         "by":  "local",
                         "detail":  "recovered from the advance-before-assemble stranding (pre-fix casualty): state said mapped with no decision file"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T06:06:25",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled, 0 rejected, 1 DB row returned. Ruled: the eye of round roast (new commodity id, to the registrar), both thyme lines (renamed onto the single existing \u0027Fresh Thyme\u0027 food, dried-thyme bridge refused on form), and dry red wine (reused the board-live red-wine id on the Dry White Wine precedent). Only the roast is reported in absent_terms; fresh-thyme (4/7) and red-wine (4/7) ar"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T06:06:25",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T06:07:52",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
                     }
                 ]
 }

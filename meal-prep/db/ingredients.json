@@ -2795,16 +2795,6 @@
         "note":  "FRESH broccoli, sold by the pound. Supersedes the 0c #4 alias to Broccoli Florets (frozen); commodity-registrar ruled REUSE of the existing priced weekly id broccoli, 2026-08-16. Fresh and frozen exclude each other in commodities.json, so neither can crown the other."
     },
     {
-        "item":  "Boneless Pork Chops",
-        "bid":  "pork-chops",
-        "gpu":  453.592,
-        "unit":  "lb",
-        "board":  "weekly",
-        "buy_pkg_g":  453.592,
-        "buy_pkg_label":  "lb",
-        "note":  "Boneless loin chops. Points at the existing priced pork-chops id (Sam's Club $2.52/lb on the 2026-08-26 board) - a NAME, not a new commodity. Boneless is in the name because bone-in and boneless are different gram weights per chop and the buy string has to say which."
-    },
-    {
         "item":  "Black Olives",
         "bid":  "black-olives",
         "gpu":  28.3495,

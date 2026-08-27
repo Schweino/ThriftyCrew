@@ -1,0 +1,176 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish",
+  "generated": "2026-08-27T06:29:37",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\jamie-oliver-s-chicken-in-milk-seriously-delish.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten\\extracted\\jamie-oliver-s-chicken-in-milk-seriously-delish.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 9,
+        "source_ingredients": 9,
+        "matched": 8,
+        "invented": [
+          "Fresh Sage"
+        ],
+        "dropped": [
+          "fresh sage leaves"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Fresh Sage' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'fresh sage leaves' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Fresh Sage' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'fresh sage leaves' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 3,
+        "unrated": 5,
+        "exempt": 1,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Salt",
+            "source": "2 tsp",
+            "spec": "2 tablespoon",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "2 tbsp",
+            "spec": "7 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Milk",
+            "source": "2.25 cup",
+            "spec": "8 cup",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Whole Chicken",
+            "why": "the two measures are not the same kind (count:whole vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Ground Cinnamon",
+            "why": "the two measures are not the same kind (volume vs count:stick), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Fresh Sage",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Lemons",
+            "why": "the two measures are not the same kind (count:lemon vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic",
+            "why": "the two measures are not the same kind (count:garlic vs count:clove), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Black Pepper",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "Salt scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 tsp and the spec buys 2 tablespoon, where the exact scale is 2.33 tablespoon. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Salt scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 tsp and the spec buys 2 tablespoon, where the exact scale is 2.33 tablespoon. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 12,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 2g fat, the stat says 46",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 2g fat, the stat says 46"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Jamie Oliver's Chicken in Milk {Seriously Delish}",
+        "spec_source_url": "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+        "transcription_source_url": "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 3
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

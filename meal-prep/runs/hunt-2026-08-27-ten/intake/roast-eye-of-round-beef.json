@@ -1,0 +1,155 @@
+{
+ "name": "Roast Eye of Round Beef",
+ "slug": "roast-eye-of-round-beef",
+ "protein": "any",
+ "cuisine": "American",
+ "source_url": "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Eye of Round Roast",
+   "grams": 2580,
+   "buy": "about 5 3/4 lb (2 roasts), tied"
+  },
+  {
+   "item": "Salt",
+   "grams": 15,
+   "buy": "2 1/2 tsp kosher salt, plus freshly cracked black pepper to taste"
+  },
+  {
+   "item": "Butter",
+   "grams": 196,
+   "buy": "14 Tbsp (1 3/4 sticks), softened"
+  },
+  {
+   "item": "Garlic",
+   "grams": 96,
+   "buy": "9 cloves, minced; 2 heads, loose skin removed and halved through the root"
+  },
+  {
+   "item": "Fresh Rosemary",
+   "grams": 19,
+   "buy": "1 3/4 tsp, finely chopped (or scant 1 tsp dried); 5 sprigs"
+  },
+  {
+   "item": "Fresh Thyme",
+   "grams": 11,
+   "buy": "3 1/2 tsp, chopped (or 1 3/4 tsp dried); 7 sprigs"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 192,
+   "buy": "2 medium yellow onions, peeled and quartered through the root"
+  },
+  {
+   "item": "Carrots",
+   "grams": 214,
+   "buy": "about 7 1/2 oz carrots (3 to 4 large), peeled and cut into 2-inch chunks"
+  },
+  {
+   "item": "Bay Leaves",
+   "grams": 2,
+   "buy": "3 to 4 leaves"
+  },
+  {
+   "item": "White Mushrooms",
+   "grams": 595,
+   "buy": "21 oz cremini, stemmed and halved"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 47,
+   "buy": "3 1/2 Tbsp"
+  },
+  {
+   "item": "Dry Red Wine",
+   "grams": 413,
+   "buy": "1 3/4 cups"
+  },
+  {
+   "item": "Beef Broth",
+   "grams": 1050,
+   "buy": "4 1/3 cups no-sodium beef stock"
+  },
+  {
+   "item": "Worcestershire Sauce",
+   "grams": 30,
+   "buy": "1 3/4 Tbsp"
+  },
+  {
+   "item": "Cornstarch",
+   "grams": 14,
+   "buy": "1 3/4 Tbsp, mixed with 3 1/2 Tbsp water"
+  },
+  {
+   "item": "Heavy Cream",
+   "grams": 79,
+   "buy": "1/3 cup, optional, to taste"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 528,
+  "protein_g": 42.4,
+  "carbs_g": 9.3,
+  "fat_g": 33.3
+ },
+ "writer_notes": [
+  "Source recipe is a single 3 to 3.5 lb roast; the locked view scaled it to two tied roasts (~5 3/4 lb) and butter 8 Tbsp -> 14 Tbsp for 14 servings. All prose is written for the scaled 2-roast / 14-serving batch.",
+  "All 16 locked ingredients are used by a make_it step: roast, salt, butter (compound + smear + dollop), garlic (9 minced + 2 heads halved), rosemary (chopped + 5 sprigs), thyme (chopped + 7 sprigs), onion, carrots, bay leaves, mushrooms, olive oil, red wine, beef stock, Worcestershire, cornstarch slurry, and optional heavy cream. No orphaned ingredients and no invented ones.",
+  "Macros and cost appear only as tokens ({{cal}}, {{protein}}, {{carbs}}, ${{cost_ps}}); 'under 600 calories' is used as a literal bound (528 < 600).",
+  "No per-ounce or package-economics claims were made in shop_smart because this hunt dispatch included no cost_lines to trace them to.",
+  "FLAG for repair pass: carrots locked line 'about 7 1/2 oz carrots (3 to 4 large)' has a count-vs-weight contradiction (3 to 4 large carrots usually run ~18 to 24 oz). Carrots are discarded aromatics so macros are unaffected, but the numbers should be reconciled.",
+  "FLAG minor: commodity label is 'White Mushrooms' while the buy string and source both specify 'cremini' (brown). Prose says cremini to stay faithful to the source."
+ ],
+ "forbidden_prose_terms": [
+  "USDA Prime",
+  "grass-fed",
+  "wagyu",
+  "organic",
+  "per pound",
+  "per ounce",
+  "seafood",
+  "shrimp",
+  "restaurant-quality guarantee"
+ ],
+ "prose": {
+  "intro_html": "<p>Eye of round has a reputation for being the cut people leave in the freezer, and that is exactly why your wallet likes it. It is one of the leanest, cheapest roasts in the whole case, and given a little patience it slices into tender, rosy roast beef that tastes like you spent money you did not actually spend.</p><p>Here is the deal. Two roasts, tied and roasted low and slow, fill all 14 containers, and every one lands at {{cal}} calories with {{protein}} grams of protein and only {{carbs}} grams of carbs. That is under 600 calories and a serious stack of protein for a dinner that costs a sliver of what a restaurant would charge for the same plate.</p>",
+  "shop_smart": "<p>Buy the eye of round whole and have the counter tie it, or tie it yourself with a few loops of kitchen twine so it roasts evenly. You are after about 5 3/4 pounds total, which is two roasts sitting side by side.</p><p>You need 21 ounces of cremini mushrooms, so if your store sells them loose from the bin, weigh out what the recipe calls for instead of guessing with a random tub. Fresh rosemary and thyme both pull double duty here, as chopped leaves in the compound butter and as whole sprigs tucked into the pan, so a bunch of each is working, not decorating your crisper drawer. One head of garlic covers the nine minced cloves, and you will want two more whole heads for the roasting bed. The dry red wine does not need to be fancy; if it is good enough to sip, it is good enough to deglaze with.</p>",
+  "make_it": "<p>Start early. Pull the beef out at least 90 minutes and up to 2 hours before it goes in the oven, because a room-temperature roast cooks evenly instead of gray on the outside and cold in the middle. The second it is out, salt it: sprinkle 3/4 teaspoon of kosher salt over the top, rub it in with your hands, flip it, and do the same underneath. Then set it aside to warm up.</p><p>While it rests, make the compound butter. Mash the softened butter together with the minced garlic, the chopped rosemary and thyme, a teaspoon of salt and a teaspoon of cracked pepper until it is one smooth mixture, and set it aside. Move your oven rack to the bottom third and crank the oven to 500 degrees, or 475 on convection.</p><p>Pat the beef dry, then smear about 2 tablespoons of the butter over one side. If your roast has a fat cap, butter the other side, because that fat cap is going up. Scatter the quartered onions, the carrot chunks and the halved garlic heads across the bottom of a roasting pan to build a bed, set the beef on top butter side down, and spread another 4 tablespoons of butter over it.</p><p>Roast hot for 10 minutes to build a crust, then pull the pan and drop the oven all the way down to 225 degrees. Add the rosemary and thyme sprigs and the bay leaves to the pan, dollop the last of the butter over the beef, and push a meat thermometer into the center. Slide it back in and slow roast for 30 minutes.</p><p>Meanwhile, toss the halved mushrooms with the olive oil, salt and pepper. Add them to the pan around the beef and keep roasting, another 40 to 60 minutes, until the center reads 115 to 118 degrees for medium-rare. Move the beef and the mushrooms to a board, tent loosely with foil, and rest at least 20 minutes; the temperature keeps climbing while it sits, and this is where the juices settle back in instead of running out on your cutting board.</p><p>Now the gravy. You should have about 2 tablespoons of fat in the pan; if it looks dry, add a little butter. Fish out and discard the onion, carrots and garlic. Set the pan over medium-high heat, pour in the red wine, and scrape up every brown bit as it simmers down by half, about 5 minutes. Add the beef stock and the Worcestershire, season it, and simmer 10 minutes until it reduces by half again. Whisk the cornstarch and water together, drizzle it in while whisking so it does not clump, and simmer about 2 more minutes until it coats a spoon. If you like it silkier, stir in the heavy cream off the heat. Slice the beef thin against the grain and serve with the mushrooms and gravy.</p>",
+  "portion_html": "<p>This is a plate-it batch, not a scoop-it batch. When the roast has rested, weigh it and divide by 14 so every container gets the same slice of beef, then split the mushrooms and gravy evenly across those same 14 lids. Weighing beats eyeballing every single time, because the gap between a generous portion and a skinny one is real protein and real calories walking out the door.</p><p>Slice thin and against the grain, fan the slices over your starch or greens, spoon the mushrooms alongside, and ladle the gravy last so it does not soak everything before reheating. Each container lands at {{cal}} calories with {{protein}} grams of protein.</p>",
+  "cost_closing_html": "<p>Here is what makes eye of round a Thrifty Crew favorite: it takes one of the cheapest roasts in the case and turns it into 14 dinners at ${{cost_ps}} a serving. That is steakhouse roast beef for pocket change, and you got there by doing the math instead of trusting a menu.</p>",
+  "upsell_html": "<p>Fourteen containers of tender, high-protein roast beef with mushrooms and pan gravy, all built from a lean cut most people walk right past. If you want more numbers-first recipes like this one, Thrifty Crew membership runs a dollar a month. That is right, $1 a month for a whole catalog that treats your grocery budget like it actually matters.</p>"
+ },
+ "head": {
+  "description": "Budget meal-prep roast eye of round beef for 14 servings: tender, high-protein sliced roast beef with cremini mushrooms and red wine pan gravy at {{cal}} calories and {{protein}} grams of protein per serving.",
+  "keywords": "eye of round roast, roast beef meal prep, high protein meal prep, budget beef dinner, slow roasted eye of round, roast beef and gravy, lean beef meal prep, roast beef containers",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT1H20M",
+  "totalTime": "PT1H35M",
+  "steps": [
+   "Salt the beef all over with kosher salt and let it come to room temperature at least 90 minutes before roasting.",
+   "Make the compound butter by mashing softened butter with minced garlic, chopped rosemary and thyme, salt and pepper until smooth.",
+   "Move the oven rack to the bottom third and preheat to 500 degrees F (475 convection).",
+   "Pat the beef dry, smear one side with butter, and set it butter side down on a bed of quartered onions, carrot chunks and halved garlic heads, then spread more butter on top.",
+   "Roast at 500 degrees for 10 minutes to brown, then reduce the oven to 225 degrees F.",
+   "Add the rosemary and thyme sprigs and bay leaves, dollop on the remaining butter, insert a thermometer, and slow roast 30 minutes.",
+   "Toss the mushrooms with olive oil, salt and pepper, add them around the beef, and roast 40 to 60 minutes more until the center reads 115 to 118 degrees F for medium-rare.",
+   "Rest the beef and mushrooms under loose foil at least 20 minutes.",
+   "Make the gravy: discard the vegetables, deglaze the pan with red wine, add stock and Worcestershire, reduce, thicken with the cornstarch slurry, and stir in the optional cream off the heat.",
+   "Slice the beef thin against the grain and portion across 14 containers with the mushrooms and gravy."
+  ],
+  "step_names": [
+   "Salt and temper",
+   "Compound butter",
+   "Preheat oven",
+   "Butter and build the bed",
+   "Sear roast hot",
+   "Add herbs, slow roast",
+   "Mushrooms and roast to temp",
+   "Rest",
+   "Pan gravy",
+   "Slice and portion"
+  ]
+ }
+}
