@@ -62,7 +62,7 @@
 # build-specs path). It never round-trips an EXISTING spec (the \uXXXX prose corruption trap); on
 # -Force it rebuilds from the intake file, it does not read-modify-write the old spec.
 param(
-  [Parameter(Mandatory=$true)][string]$InFile,
+  [string]$InFile,
   [string]$OutDir,          # default <meal-prep>\db\recipes  (point at a scratch dir to stage/test)
   [string]$CostedFile,      # default <meal-prep>\db\costed.json
   [string]$IngredientsDb,   # default <meal-prep>\db\ingredients.json
@@ -76,7 +76,8 @@ param(
   [switch]$RunCost,         # invoke engine\cost-recipes.ps1 -Slugs <slug> to cost a NEW recipe (writes db\costed.json; only valid when OutDir is the real db\recipes)
   [switch]$AllowUncosted,   # emit the spec with zeroed cost fields when no costed row exists yet
   [switch]$SkipMacroCheck,  # skip the food-macros-db stat recompute verification (items not in the DB yet)
-  [switch]$Force            # allow overwriting an existing spec file
+  [switch]$Force,           # allow overwriting an existing spec file
+  [switch]$SelfTest         # fixtures only: no file is read or written
 )
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
@@ -84,6 +85,39 @@ $mp   = Split-Path -Parent $here                            # ...\meal-prep
 . (Join-Path $here 'head-ingredients-lib.ps1')              # head.recipeIngredient derived from ingredients_display
 . (Join-Path $here 'cost-render-lib.ps1')                   # THE cost-block renderer, shared with recost-spec-cost-block
 . (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver - see the block comment below
+. (Join-Path $mp 'lib\dash-sweep.ps1')                      # Test-Dashes - shared with spec-guards, fixtured in -SelfTest
+
+# ---- SELF-TEST. This script had none, which is how a dash sweep that reads its own ban list shipped.
+# No file is read or written and nothing is dispatched; it exists so these guards cannot regress quietly.
+if($SelfTest){
+  $script:f=0
+  function T([string]$name,[bool]$ok,[string]$got=''){
+    if($ok){ Write-Output ("  ok    " + $name) } else { $script:f++; Write-Output ("  X     " + $name + "   got: " + $got) }
+  }
+  $em=[char]0x2014; $en=[char]0x2013
+  # THE REAL SHAPE. forbidden_prose_terms names the em dash in every recipe that carries one, and the
+  # sweep read that list as spec text: three recipes of hunt-2026-08-27-ten were refused with "EM DASH
+  # in spec text" without one em dash between them anywhere a reader could see.
+  $okSpec=[pscustomobject]@{ name='x'; intro_html='<p>clean prose</p>'; forbidden_prose_terms=@([string]$em,'delve') }
+  $threw=$false; try{ Test-Dashes $okSpec }catch{ $threw=$true }
+  T 'MUST FIRE  a spec whose forbidden_prose_terms NAMES the em dash still builds' (-not $threw) 'it refused its own ban list'
+  # CLEAN TWINS. The rule is about prose a READER gets, so every other string is swept exactly as before.
+  $badProse=[pscustomobject]@{ name='x'; intro_html=('<p>an ' + $em + ' here</p>'); forbidden_prose_terms=@([string]$em) }
+  $threw=$false; try{ Test-Dashes $badProse }catch{ $threw=$true }
+  T 'CLEAN TWIN a real em dash in PROSE still throws, ban list present or not' $threw 'an em dash in prose got through'
+  $badEn=[pscustomobject]@{ name='x'; intro_html=('<p>5' + $en + '6</p>'); forbidden_prose_terms=@() }
+  $threw=$false; try{ Test-Dashes $badEn }catch{ $threw=$true }
+  T 'CLEAN TWIN an en dash in prose still throws' $threw 'an en dash got through'
+  $badNested=[pscustomobject]@{ head=[pscustomobject]@{ description=('a ' + $em + ' here') }; forbidden_prose_terms=@() }
+  $threw=$false; try{ Test-Dashes $badNested }catch{ $threw=$true }
+  T 'CLEAN TWIN nested prose (head.description) is still swept' $threw 'nested prose was skipped'
+  $badArr=[pscustomobject]@{ ingredients_display=@('fine',('bad ' + $em)); forbidden_prose_terms=@() }
+  $threw=$false; try{ Test-Dashes $badArr }catch{ $threw=$true }
+  T 'CLEAN TWIN an em dash inside an ARRAY of prose is still swept' $threw 'array prose was skipped'
+  if($script:f -eq 0){ Write-Output 'build-v2-spec SELF-TEST PASS'; exit 0 }
+  Write-Output ("build-v2-spec SELF-TEST FAIL: " + $script:f + " case(s)"); exit 1
+}
+
 if(-not $OutDir){        $OutDir        = Join-Path $mp 'db\recipes' }
 if(-not $CostedFile){    $CostedFile    = Join-Path $mp 'db\costed.json' }
 if(-not $IngredientsDb){ $IngredientsDb = Join-Path $mp 'db\ingredients.json' }
@@ -451,23 +485,6 @@ function Build-Spec($cf){
   $spec.head = $head
   $spec.ingredients_grams = @($gramsArr)
   return $spec
-}
-function Test-Dashes($spec){
-  # em/en dash sweep over EVERY string (Brad's rule; spec-guards enforces the same)
-  $q=New-Object System.Collections.Generic.Queue[object]
-  $q.Enqueue($spec)
-  while($q.Count -gt 0){
-    $v=$q.Dequeue()
-    if($null -eq $v){ continue }
-    if($v -is [string]){
-      if($v -match [char]0x2014){ throw ('EM DASH in spec text: ' + $v.Substring(0,[Math]::Min(70,$v.Length))) }
-      if($v -match [char]0x2013){ throw ('EN DASH in spec text: ' + $v.Substring(0,[Math]::Min(70,$v.Length))) }
-      continue
-    }
-    if($v -is [System.Collections.IDictionary]){ foreach($vv in $v.Values){ $q.Enqueue($vv) }; continue }
-    if($v -is [System.Collections.IEnumerable]){ foreach($vv in $v){ $q.Enqueue($vv) }; continue }
-    if($v -is [psobject] -and $v.PSObject.Properties.Count -gt 0){ foreach($p in $v.PSObject.Properties){ $q.Enqueue($p.Value) } }
-  }
 }
 function Write-Spec($spec,[string]$path){
   Test-Dashes $spec
