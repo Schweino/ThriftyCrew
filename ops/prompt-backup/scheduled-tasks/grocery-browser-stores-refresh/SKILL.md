@@ -61,14 +61,8 @@ real one, which is both fuller and more restricted.
      PowerShell Start-Job dies with its shell):
          powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir <dir>
      It binds localhost ONLY, writes each POST to <OutDir>\<name>.txt, and echoes char and line
-     counts back to the page. It also exits on its own after 30 idle minutes, and -Stop shuts
-     it down.
-     POST TO /<name>?chars=<n>, n being the length of the string you are posting. The sink
-     compares it to what it decoded and prints chars=AGREE, chars=MISMATCH, or chars=UNVERIFIED
-     if you left it off. DO NOT RUN A BUILDER ON A MISMATCHED OR UNVERIFIED FILE. On 2026-08-26
-     the counts were printed, disagreed by 774 characters, and the run continued: the LINE counts
-     matched exactly (463 = 463) while the char counts did not, so an eyeball on the wrong number
-     saw agreement. That is the whole reason the comparison is now the sink's job and not yours.
+     counts back to the page so you can confirm both sides agree BEFORE running a builder. It
+     also exits on its own after 30 idle minutes, and -Stop shuts it down.
      The page posts with a hidden form rather than fetch(): store pages set a Content-Security-
      Policy governing where the PAGE may send data (walmart.com sets connect-src 'self'), and a
      form POST is a separate mechanism that connect-src does not cover. aldi.us sets no CSP at
@@ -78,13 +72,6 @@ real one, which is both fuller and more restricted.
      filename and times out when idle; a fresh listener written under time pressure is both
      unreviewed and, on 2026-08-25, the thing that got the whole browser half of a run refused.
      What moves here is public product-listing data, on Brad's machine, to Brad's disk.
-     THE .txt IS ALREADY CORRECT UTF-8 - DO NOT RUN A REPAIR PASS OVER IT. Until 2026-08-26 the
-     sink decoded the POST body with the machine's ANSI codepage, so every cent sign, curly quote
-     and en dash landed double-encoded ("34.0 <cent>/oz" as A-circumflex + cent) and the agent had
-     to un-mangle each capture before saving the .csv. That is fixed in the listener itself: the
-     body is decoded as UTF-8 explicitly and the .txt is now byte-for-byte what the page sent.
-     Copy it straight to out\captures\<store>-capture-<date>.csv as UTF-8. A cp1252 round-trip
-     applied to clean text CORRUPTS it, so the old workaround is now the bug.
   3. THE TOOL CALL TIMES OUT AT 45s. Any sweep or long scroll must be started as a background promise
      (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
      through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
