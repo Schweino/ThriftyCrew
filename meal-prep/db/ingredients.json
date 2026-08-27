@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "item":  "_r300_note",
         "pantry_pkg_g":  0,
@@ -2793,5 +2793,85 @@
         "buy_pkg_g":  453.592,
         "buy_pkg_label":  "lb",
         "note":  "FRESH broccoli, sold by the pound. Supersedes the 0c #4 alias to Broccoli Florets (frozen); commodity-registrar ruled REUSE of the existing priced weekly id broccoli, 2026-08-16. Fresh and frozen exclude each other in commodities.json, so neither can crown the other."
+    },
+    {
+        "item":  "Boneless Pork Chops",
+        "bid":  "pork-chops",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Boneless loin chops. Points at the existing priced pork-chops id (Sam's Club $2.52/lb on the 2026-08-26 board) - a NAME, not a new commodity. Boneless is in the name because bone-in and boneless are different gram weights per chop and the buy string has to say which."
+    },
+    {
+        "item":  "Black Olives",
+        "bid":  "black-olives",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz can, drained",
+        "note":  "Canned ripe black olives, its own priced commodity (Aldi $0.265/oz, 2026-08-26 board). Deliberately NOT folded into the existing Olives row: near names never auto-match, and black-olives is a distinct id."
+    },
+    {
+        "item":  "Fresh Rosemary",
+        "bid":  "fresh-rosemary",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  20,
+        "buy_pkg_label":  "0.7oz clamshell",
+        "note":  "FRESH herb, a form flip from the existing Dried Rosemary row and never an alias of it - different price class (Aldi $3.18/oz vs the dried jar) and different gram weight per sprig."
+    },
+    {
+        "item":  "Fresh Sage",
+        "bid":  "fresh-sage",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  20,
+        "buy_pkg_label":  "0.7oz clamshell",
+        "note":  "Fresh sage leaves (Baker's $4.98/oz, 2026-08-26 board). Fresh basis stated in the name."
+    },
+    {
+        "item":  "Fresh Cranberries",
+        "bid":  "fresh-cranberries",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz bag",
+        "note":  "Fresh whole cranberries (Baker's $0.2591/oz, 2026-08-26 board), not dried/sweetened - a different food and a different price."
+    },
+    {
+        "item":  "Spaghetti Squash",
+        "bid":  "spaghetti-squash",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Whole spaghetti squash sold by weight (Baker's $1.49/lb, 2026-08-26 board). Recipe grams are whole-squash grams; cooked strand yield is the recipe's business."
+    },
+    {
+        "item":  "Whole Chicken",
+        "bid":  "whole-chicken",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Whole raw broiler sold by weight (Walmart $1.32/lb, 2026-08-26 board). Grams are whole-bird grams including bone."
+    },
+    {
+        "item":  "Lemons",
+        "bid":  "lemons",
+        "gpu":  58,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  58,
+        "buy_pkg_label":  "each",
+        "note":  "gpu = whole medium lemon, USDA basis (~58 g). Priced per each (Walmart $0.4533 each, 2026-08-26 board). Distinct from the existing Lemon Juice row, which is a bottled floz commodity."
     }
 ]
