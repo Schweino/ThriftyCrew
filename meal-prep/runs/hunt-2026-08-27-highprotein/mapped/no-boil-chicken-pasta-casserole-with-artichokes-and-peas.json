@@ -62,7 +62,7 @@
                         {
                             "source_raw":  "1 5.2 oz package of Boursin cheese ((Garlic and Fine Herbs))",
                             "item":  "Boursin Cheese",
-                            "bid":  "boursin-cheese",
+                            "bid":  "garlic-herb-cheese-spread",
                             "board":  null,
                             "grams":  343,
                             "buy":  "12 oz (2 1/3 of the 5.2 oz packages), crumbled",
@@ -190,14 +190,14 @@
     "new_commodity_proposals":  [
                                     {
                                         "term":  "Boursin cheese",
-                                        "proposed_bid":  "boursin-cheese",
+                                        "proposed_bid":  "garlic-herb-cheese-spread",
                                         "evidence":  "Boursin Garlic \u0026 Fine Herbs is a branded Gournay cheese sold in 5.2 oz foil pucks at roughly $4.50-6.00 each (about $15/lb), against cream cheese at roughly $4/lb - not the same price class, and it is a spreadable cultured-cream cheese, not ricotta, provolone or parmesan (the only near vocabulary rows). The pre-resolver reports board ABSENT with no commodity and no capture match, so nothing prices this food under another spelling. If an existing id covers herbed cream-cheese spread, alias to it; otherwise this line is a real recurring ingredient and needs its own id, because pantry-static pricing on 12 oz of a $5 cheese would materially misprice the recipe.",
                                         "declared":  true
                                     }
                                 ],
     "registrar_rulings":  [
                               {
-                                  "proposed_bid":  "boursin-cheese",
+                                  "proposed_bid":  "garlic-herb-cheese-spread",
                                   "verdict":  "approve",
                                   "bid":  "garlic-herb-cheese-spread",
                                   "reason":  "The food is genuinely unpriced: zero hits for boursin/gournay/spread in all three id namespaces, the alias map, the dupe allowlist, and the live feed\u0027s product names (per-file re-sweep, not the batch grep). Nearest priced row is cream-cheese at $0.13/oz vs ~$0.87-1.15/oz for gournay pucks - a 6-9x gap and a different cultured/herbed product, so alias would silently misprice; but \u0027boursin\u0027 is a BRAND and brands never become ids, so mint the generic class id garlic-herb-cheese-spread in the recipe-only namespace (recipe-board-everyday baseline + recipe-commodities.json), with includes covering boursin|gournay|garlic\\s*(?:\u0026|and)?\\s*(?:fine\\s+)?herbs?\\s+(?:cheese\\s+spread|spreadable\\s+cheese|gournay), excludes at neighboring-commodity rigor (crackers, dip, queso, cream cheese, pub cheese, veggie/chive cream cheese tubs, snack packs), an allowlist pair garlic-herb-cheese-spread\u003c-\u003ecream-cheese (\u0027same food family, different form/price class: cultured herbed gournay vs plain cream cheese\u0027), and a recipe-floor-id-map entry boursin-cheese -\u003e garlic-herb-cheese-spread so the recipe spelling resolves; separately the ingredient NAME needs its own vocabulary row (nearest rows ricotta/provolone/parmesan are different foods) with fdc:169081 \u0027Cheese spread, cream cheese base\u0027 as a plausible macro source pending label confirmation - the name ruling does not mint the id and vice versa."

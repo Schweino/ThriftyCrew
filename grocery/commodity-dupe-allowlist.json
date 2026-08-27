@@ -1,28 +1,118 @@
 {
-    "readme":  "Reviewed near-duplicate commodity pairs for audit-commodity-dupes.ps1. An entry asserts a human checked BOTH ids and they are genuinely DIFFERENT PURCHASES, with the reason written down. NEVER add an entry to silence a finding - a real duplicate is merged (rebid the consumers, drop the loser row; see the 2026-08-15 bread-crumbs/breadcrumbs merge), not allowlisted. Pairs declared in recipe-floor-id-map.json are honored automatically and do NOT belong here (two copies of one ruling drift).",
-    "schema":  1,
-    "allow":  [
-                  {
-                      "a":  "broccoli",
-                      "b":  "broccolini",
-                      "reviewed":  "2026-08-15",
-                      "reviewed_by":  "claude, confirmed against both board rows",
-                      "reason":  "Different vegetables, not a spelling drift. Broccolini is a broccoli/gai-lan hybrid sold in bunches at a different price point; the suffix rule fires on the shared stem only."
-                  },
-                  {
-                      "a":  "honey",
-                      "b":  "honeydew",
-                      "reviewed":  "2026-08-15",
-                      "reviewed_by":  "claude",
-                      "reason":  "Honey is a sweetener, honeydew is a melon. The suffix rule fires on the shared stem only; the two never price the same food."
-                  },
-                  {
-                      "a":  "coconut",
-                      "b":  "coconut-oil",
-                      "reviewed":  "2026-08-15",
-                      "reviewed_by":  "claude",
-                      "reason":  "Whole coconut (produce, per each) versus coconut oil (pantry fat, per fl oz). Different foods, different aisles, different units."
-                  },
-                {"a": "boneless-pork-chops", "b": "pork-chops", "reviewed": "2026-08-27", "reviewed_by": "commodity-registrar (run hunt-2026-08-27-ten, baked-stuffed-pork-chops), executed on Brad's instruction", "reason": "bone-in vs boneless: different per-lb basis. pork-chops' live crown is literally \"Member's Mark Bone-In Pork Chops\", so it is the bone-in purchase and not a boneless-inclusive generic; boneless loin chops are the same food in a different form, ~30% different edible yield per lb. Same split the estate already holds for boneless-skinless-chicken-thigh vs chicken-thighs and boneless-beef-short-ribs vs beef-short-ribs."}
-              ]
+    "readme": "Reviewed near-duplicate commodity pairs for audit-commodity-dupes.ps1. An entry asserts a human checked BOTH ids and they are genuinely DIFFERENT PURCHASES, with the reason written down. NEVER add an entry to silence a finding - a real duplicate is merged (rebid the consumers, drop the loser row; see the 2026-08-15 bread-crumbs/breadcrumbs merge), not allowlisted. Pairs declared in recipe-floor-id-map.json are honored automatically and do NOT belong here (two copies of one ruling drift).",
+    "schema": 1,
+    "allow": [
+        {
+            "a": "broccoli",
+            "b": "broccolini",
+            "reviewed": "2026-08-15",
+            "reviewed_by": "claude, confirmed against both board rows",
+            "reason": "Different vegetables, not a spelling drift. Broccolini is a broccoli/gai-lan hybrid sold in bunches at a different price point; the suffix rule fires on the shared stem only."
+        },
+        {
+            "a": "honey",
+            "b": "honeydew",
+            "reviewed": "2026-08-15",
+            "reviewed_by": "claude",
+            "reason": "Honey is a sweetener, honeydew is a melon. The suffix rule fires on the shared stem only; the two never price the same food."
+        },
+        {
+            "a": "coconut",
+            "b": "coconut-oil",
+            "reviewed": "2026-08-15",
+            "reviewed_by": "claude",
+            "reason": "Whole coconut (produce, per each) versus coconut oil (pantry fat, per fl oz). Different foods, different aisles, different units."
+        },
+        {
+            "a": "boneless-pork-chops",
+            "b": "pork-chops",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "commodity-registrar (run hunt-2026-08-27-ten, baked-stuffed-pork-chops), executed on Brad's instruction",
+            "reason": "bone-in vs boneless: different per-lb basis. pork-chops' live crown is literally \"Member's Mark Bone-In Pork Chops\", so it is the bone-in purchase and not a boneless-inclusive generic; boneless loin chops are the same food in a different form, ~30% different edible yield per lb. Same split the estate already holds for boneless-skinless-chicken-thigh vs chicken-thighs and boneless-beef-short-ribs vs beef-short-ribs."
+        },
+        {
+            "a": "almond-butter",
+            "b": "butter",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Nut spread vs dairy butter, different foods. The estate already said so before the mint: dairy butter carries an explicit almond\\s+butter exclude and almonds excludes butter, so both neighbours fence this food out rather than carry it. Shared 'butter' token only."
+        },
+        {
+            "a": "almond-butter",
+            "b": "peanut-butter",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Different nut and a different price class - a deliberate variant, not a respelling. Board 2026-08-27: almond butter $0.3658/oz cheapest (Sam's Club)."
+        },
+        {
+            "a": "masa-harina",
+            "b": "cornmeal",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Nixtamalized vs plain corn grind: different product, different aisle, different price. The estate's only masa/harina strings were EXCLUDE patterns inside cornmeal and hominy, i.e. both corn neighbours deliberately refused this food."
+        },
+        {
+            "a": "masa-harina",
+            "b": "hominy",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Same nixtamal process, different purchase: whole canned kernel against dry flour."
+        },
+        {
+            "a": "fresh-mozzarella",
+            "b": "mozzarella-cheese",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Water-packed fresh against low-moisture shredded - a different moisture basis and a different price class. Every product under the shredded row is low-moisture part-skim; board 2026-08-27 has fresh at $0.2588/oz against shredded $0.1521/oz."
+        },
+        {
+            "a": "fresh-mozzarella",
+            "b": "reduced-fat-mozzarella",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Same distinction as the mozzarella-cheese pair: the reduced-fat row is also shredded low-moisture, not the water-packed product."
+        },
+        {
+            "a": "garlic-herb-cheese-spread",
+            "b": "cream-cheese",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Same food family, different form and price class: cultured herbed gournay against plain cream cheese. Board 2026-08-27: $1.0358/oz against $0.13/oz, a 6-9x gap that an alias would have silently mispriced."
+        },
+        {
+            "a": "bone-broth",
+            "b": "chicken-broth",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Deliberate variant: simmered bone broth, distinct macro and price class. The broth ids DO carry bone-broth include patterns, so their rules folded these SKUs into the commodity pool - but no bone-broth product string was on the feed, so the food was not actually priced."
+        },
+        {
+            "a": "bone-broth",
+            "b": "beef-broth",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "As the chicken-broth pair: beef-broth's includes carry beef\\s+bone\\s+broth, and the crown is an ordinary boxed broth at $0.0391/floz against bone broth's $0.0841/floz."
+        },
+        {
+            "a": "protein-pasta",
+            "b": "pasta",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Deliberate high-protein variant, 3-4x price class, distinct macros. Board 2026-08-27: Barilla Protein+ $0.2062/oz against the semolina crown $0.0571/oz."
+        },
+        {
+            "a": "breaded-chicken-breast-bites",
+            "b": "chicken-nuggets",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Whole-muscle breaded breast against formed nuggets, roughly 3x per ounce: $0.4496/oz against the nugget crown $0.1435/oz. Pricing the bites at a nugget floor would misprice every line using them."
+        },
+        {
+            "a": "breaded-chicken-breast-bites",
+            "b": "chicken-breast",
+            "reviewed": "2026-08-27",
+            "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
+            "reason": "Cooked breaded frozen against raw fresh - a different purchase, not a preparation note on the same one."
+        }
+    ]
 }

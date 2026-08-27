@@ -1,4 +1,4 @@
-﻿{
+{
     "week_of":  "2026-07-06",
     "comparison":  [
                        {
@@ -9260,8 +9260,223 @@
                                               "size":  "25.4 floz"
                                           }
                                       ]
-                       }
-                   ],
+                       },
+        {
+            "id":  "almond-butter",
+            "commodity":  "Almond Butter",
+            "category":  "Coffee, Oils \u0026 Spreads",
+            "unit":  "oz",
+            "cheapest_store":  "Sam\u0027s Club",
+            "stores":  [
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.3658,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Member\u0027s Mark Almond Butter, 24 oz.",
+                               "size":  "24 oz"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.4369,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Our Family Creamy Almond Butter",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.4681,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Simple Truth No Stir Creamy Almond Butter",
+                               "size":  "16 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.7869,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Barney Butter Smooth Almond Butter",
+                               "size":  "16 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "masa-harina",
+            "commodity":  "Masa Harina",
+            "category":  "Baking \u0026 Spices",
+            "unit":  "oz",
+            "cheapest_store":  "Sam\u0027s Club",
+            "stores":  [
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.0619,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Maseca Masa Corn Flour, 22 lbs.",
+                               "size":  "22 lb"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.0922,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Quaker Masa Harina de Maiz Corn Tortilla Mix",
+                               "size":  "70.4 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "fresh-mozzarella",
+            "commodity":  "Fresh Mozzarella",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Sam\u0027s Club",
+            "stores":  [
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  0.2588,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
+                               "size":  "32 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.4988,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "BelGioioso Fresh Mozzarella Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.6238,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "BelGioioso Fresh Mozzarella Cheese, Ball",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.7362,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Bel Gioioso Fresh Mozzarella Cheese",
+                               "size":  "8 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "garlic-herb-cheese-spread",
+            "commodity":  "Garlic \u0026 Herb Cheese Spread",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Fareway",
+            "stores":  [
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  1.0358,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Boursin Garlic \u0026 Fine Herbs Gournay Cheese",
+                               "size":  "5.3 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  1.3189,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Boursin Garlic \u0026 Fine Herbs Gourmet Cheese",
+                               "size":  "5.3 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "bone-broth",
+            "commodity":  "Bone Broth",
+            "category":  "Canned \u0026 Soup",
+            "unit":  "floz",
+            "cheapest_store":  "Family Fare",
+            "stores":  [
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.0841,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Our Family Beef Bone Broth 32 Fl Oz",
+                               "size":  "32 fl oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.1247,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Simple Truth Organic Beef Bone Broth",
+                               "size":  "32 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.2497,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Pacific Foods Organic Unsalted Chicken Bone Broth",
+                               "size":  "32 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "protein-pasta",
+            "commodity":  "Protein Pasta",
+            "category":  "Pasta, Rice \u0026 Grains",
+            "unit":  "oz",
+            "cheapest_store":  "Fareway",
+            "stores":  [
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.2062,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Barilla Protein+ (Plus) Penne Pasta",
+                               "size":  "14.5 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.5362,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Banza Chickpea Cavatappi Pasta - Gluten Free",
+                               "size":  "8 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "breaded-chicken-breast-bites",
+            "commodity":  "Breaded Chicken Breast Bites",
+            "category":  "Frozen",
+            "unit":  "oz",
+            "cheapest_store":  "Baker\u0027s",
+            "stores":  [
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.4496,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Simple Truth Frozen Fully Cooked Lightly Breaded Chicken Breast Bites",
+                               "size":  "24 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.4575,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites",
+                               "size":  "24 oz"
+                           }
+                       ]
+        }
+    ],
     "built_at":  "2026-08-21T06:29:41",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }

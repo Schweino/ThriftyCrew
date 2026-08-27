@@ -2924,5 +2924,76 @@
         "pantry_pkg_label":  "26oz canister",
         "bulk":  true,
         "note":  "Specific line, specific id (ruled 2026-08-27). The line says SEA salt, and sea-salt is its own weekly id; the generic Salt row points at `salt`. Ruled to the specific id rather than folding onto Salt, on the same principle that decided the generic rows in this batch: match the specificity the source actually stated. Board receipt: Member's Mark Sea Salt 36 oz at $0.1106/oz. Cost exposure is negligible either way (24 g, about $0.09), so this row is about naming, not money."
+    },
+    {
+        "item":  "Almond Butter",
+        "bid":  "almond-butter",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz jar",
+        "note":  "Registrar-approved mint (hunt-2026-08-27-highprotein): no id in any namespace priced an almond spread, and both neighbours fence it out - dairy butter excludes almond\\s+butter and almonds excludes butter. Board receipt: Member's Mark Almond Butter 24 oz at $0.3658/oz (Sam's Club); the 16 oz jar is the common shelf package."
+    },
+    {
+        "item":  "Masa Harina",
+        "bid":  "masa-harina",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  1996,
+        "pantry_pkg_label":  "70.4oz bag",
+        "bulk":  true,
+        "note":  "Registrar-approved mint: the estate's only masa/harina strings were EXCLUDE patterns inside hominy and cornmeal, so both corn neighbours deliberately fenced it out rather than carrying it. Nixtamalization makes it a different purchase from cornmeal and cornstarch. Board receipt: Maseca Masa Corn Flour 22 lb at $0.0619/oz (Sam's Club). PANTRY basis on purpose - the recipe uses 70 g and the shelf package is 4+ lb."
+    },
+    {
+        "item":  "Fresh Mozzarella",
+        "bid":  "fresh-mozzarella",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz ball",
+        "note":  "Registrar-approved mint: every product under mozzarella-cheese and reduced-fat-mozzarella is shredded LOW-MOISTURE part-skim, demonstrably not the water-packed product, so this is not the same purchase under another spelling. Board receipt: BelGioioso Pre-Sliced Fresh Mozzarella 32 oz at $0.2588/oz (Sam's Club) against the shredded row's $0.1521/oz."
+    },
+    {
+        "item":  "Boursin Cheese",
+        "bid":  "garlic-herb-cheese-spread",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  150,
+        "buy_pkg_label":  "5.3oz puck",
+        "note":  "Registrar-approved mint under a GENERIC id: Boursin is a brand and brands never become ids, so the class id is garlic-herb-cheese-spread and this vocabulary name points at it. Nearest priced row was cream-cheese at $0.13/oz against ~$1.04/oz for gournay pucks - a 6-9x gap and a different cultured product, so an alias would have silently mispriced. Board receipt: Boursin Garlic & Fine Herbs Gournay 5.3 oz at $1.0358/oz (Fareway)."
+    },
+    {
+        "item":  "Bone Broth",
+        "bid":  "bone-broth",
+        "gpu":  29.5735,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  946,
+        "buy_pkg_label":  "32floz carton",
+        "note":  "Registrar-approved mint, species-generic. The registrar corrected the mapper here: chicken-broth and beef-broth DO carry bone-broth include patterns, so the estate's rules folded these SKUs into the commodity broth pools - but no product string matching \"bone broth\" was on the feed, so the food was not actually priced. Board receipt: Our Family Beef Bone Broth 32 fl oz at $0.0841/floz (Family Fare)."
+    },
+    {
+        "item":  "High Protein Pasta",
+        "bid":  "protein-pasta",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  411,
+        "buy_pkg_label":  "14.5oz box",
+        "note":  "Registrar-approved mint: no protein/chickpea/lentil/Banza pasta string existed on the feed, and every pasta id is commodity semolina at $0.057-0.163/oz. A deliberate variant, not a duplicate - the recipe is named for the protein line. Board receipt: Barilla Protein+ Penne 14.5 oz at $0.2062/oz (Fareway), 3.6x the [pasta] crown, which is the price class the registrar predicted."
+    },
+    {
+        "item":  "Frozen Lightly Breaded Chicken Breast Bites",
+        "bid":  "breaded-chicken-breast-bites",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  680,
+        "buy_pkg_label":  "24oz bag",
+        "note":  "Registrar-approved mint: no id prices whole-muscle breaded chicken. The nearest row is chicken-nuggets at $0.1435/oz, a formed/ground product at roughly a third of this class, so a nugget floor would misprice every line using it by ~3x. Board receipt: Simple Truth Fully Cooked Lightly Breaded Chicken Breast Bites 24 oz at $0.4496/oz (Baker's) - inside the $0.38-0.56/oz band the registrar predicted before seeing the product."
     }
 ]
