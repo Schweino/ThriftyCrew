@@ -79,6 +79,29 @@ function Convert-FieldToTokens { param([string]$Text, [string]$CostPs, [int]$Cal
 # NOTE on $script:sw / $script:lf: [regex]::Replace evaluators cannot write a local of the enclosing
 # function in PS 5.1 (dynamic scoping reads work; writes create a NEW variable in the evaluator's scope and
 # vanish). Script-scoped accumulators are the one reliable channel; reset around each call below.
+function Test-TokenSwapIsNoOp {
+  <#
+    DID TOKENIZING CHANGE ANYTHING A READER WILL SEE? Returns $null when the swap is a pure no-op,
+    and the offending RENDERED text when it is not.
+
+    IT LIVES IN A FUNCTION SO A FIXTURE CAN REACH IT. The proof used to be two inline lines in the
+    live run, which -SelfTest never executes - so when the comparison basis was wrong, every case
+    passed and a real publish paid for it. Neutering the basis back to its old form left the suite
+    green, which is how it got there in the first place.
+
+    THE BASIS, AND WHY IT IS THIS ONE. Comparing Expand(after) to the SOURCE assumes the source was
+    entirely literal. It is not: the writer writes `${{cost_ps}}` itself and all 574 live specs carry
+    that token, so a field that also holds a swappable literal expands two tokens on one side and
+    none on the other. Expand(before) == Expand(after) is the invariant that was always meant, and on
+    a fully literal original it reduces to the old check exactly.
+  #>
+  param([string]$Before, [string]$After, $Spec)
+  $bOld = Expand-SpecTokens -Text $Before -Spec $Spec
+  $bNew = Expand-SpecTokens -Text $After  -Spec $Spec
+  if ($bNew -eq $bOld) { return $null }
+  return $bNew
+}
+
 function Invoke-FieldTokenize { param([string]$Text, [string]$CostPs, [int]$Cal, [int]$Protein)
   $script:sw = 0; $script:lf = @()
   $r = Convert-FieldToTokens -Text $Text -CostPs $CostPs -Cal $Cal -Protein $Protein
@@ -116,6 +139,39 @@ if ($runSelfTest) {
   $r6 = Invoke-FieldTokenize 'near {{cal}} calories at ${{cost_ps}} a bowl' '3.58' 610 57
   T 'idempotent over already-tokenized text' ($r6.Text -eq 'near {{cal}} calories at ${{cost_ps}} a bowl' -and $r6.Swaps -eq 0) $r6.Text
 
+  # ---- THE HALF-TOKENIZED FIELD, which is the shape the live writer actually produces. ------------
+  # The idempotence case above has NOTHING left to swap, so it never reaches the round-trip proof.
+  # This one does: the text already carries ${{cost_ps}} (the house convention, in all 574 live
+  # specs) AND a literal "52 grams of protein" for the tokenizer to take. Under the old
+  # Expand(after) -ne $original proof this refused, and it cost a real publish.
+  . (Join-Path $mp 'lib\render-tokens.ps1')
+  $specFx = [pscustomobject]@{ stat = [pscustomobject]@{ cost_ps = '4.04'; cal = 561; protein = 52 } }
+  $mixed  = 'comes out to ${{cost_ps}} per serving, with 52 grams of protein'
+  $rMix   = Invoke-FieldTokenize $mixed '4.04' 561 52
+  T 'the literal is tokenized even though the field already holds a token' `
+    ($rMix.Text -eq 'comes out to ${{cost_ps}} per serving, with {{protein}} grams of protein') $rMix.Text
+  $bNew = Expand-SpecTokens -Text $rMix.Text -Spec $specFx
+  $bOld = Expand-SpecTokens -Text $mixed     -Spec $specFx
+  T 'MUST FIRE  a half-tokenized field round-trips: rendered-before equals rendered-after' `
+    ($bNew -eq $bOld) ("before='" + $bOld + "' after='" + $bNew + "'")
+  T '  and the OLD proof really would have refused it, so this case is not decorative' `
+    ($bNew -ne $mixed) ("expanded='" + $bNew + "' original='" + $mixed + "'")
+  # ...AND THROUGH THE FUNCTION THE LIVE RUN ACTUALLY CALLS, which is the part the fixtures kept
+  # missing: three separate neuters of a comparison basis left this suite green because every case
+  # re-implemented the comparison instead of calling it.
+  T 'MUST FIRE  the live proof passes the half-tokenized field - the exact refusal that cost a publish' `
+    ($null -eq (Test-TokenSwapIsNoOp -Before $mixed -After $rMix.Text -Spec $specFx)) `
+    ([string](Test-TokenSwapIsNoOp -Before $mixed -After $rMix.Text -Spec $specFx))
+  $badSpecFx = [pscustomobject]@{ stat = [pscustomobject]@{ cost_ps = '9.99'; cal = 561; protein = 52 } }
+  T 'CLEAN TWIN the live proof still REFUSES a swap that lands a different number' `
+    ($null -ne (Test-TokenSwapIsNoOp -Before 'costs $4.04 a serving' -After 'costs ${{cost_ps}} a serving' -Spec $badSpecFx)) `
+    ([string](Test-TokenSwapIsNoOp -Before 'costs $4.04 a serving' -After 'costs ${{cost_ps}} a serving' -Spec $badSpecFx))
+  # CLEAN TWIN. The guard must still catch a swap that changes what a reader sees.
+  $badSpec = [pscustomobject]@{ stat = [pscustomobject]@{ cost_ps = '9.99'; cal = 561; protein = 52 } }
+  $bBad = Expand-SpecTokens -Text 'costs ${{cost_ps}} a serving' -Spec $badSpec
+  T 'CLEAN TWIN rendering still substitutes the stat, so a swap landing a DIFFERENT number is caught' `
+    ($bBad -eq 'costs $9.99 a serving') $bBad
+
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -140,8 +196,26 @@ foreach ($file in $files) {
     if ($r.Swaps -gt 0 -and $r.Text -ne $cur) {
       # PROOF OF NO-OP before anything is written: expanding the tokenized text against this spec's own
       # stat must reproduce the original byte-for-byte. If it cannot, the swap was not a pure copy.
-      $back = Expand-SpecTokens -Text $r.Text -Spec $spec
-      if ($back -ne $cur) { throw ("{0}/{1}: token round-trip does not reproduce the original - refusing (got '{2}')" -f $file.BaseName, $k, $back) }
+      # COMPARE RENDERED AGAINST RENDERED, NOT RENDERED AGAINST SOURCE (fixed 2026-08-27).
+      #
+      # This proof used to be `Expand(tokenized) -ne $cur`, which silently assumed the ORIGINAL text
+      # was entirely literal. It is not, and the house convention is why: the writer writes
+      # `${{cost_ps}}` itself - all 574 live specs carry that token in cost_closing_html - so a field
+      # that ALSO contains a swappable literal ("52 grams of protein") expands BOTH tokens on the left
+      # of the comparison and neither on the right. The check then refuses a perfectly correct swap.
+      # It cost mediterranean-chicken-w-marinade a publish: "token round-trip does not reproduce the
+      # original", on a field whose only sin was already being half-tokenized.
+      #
+      # THE INVARIANT WAS NEVER "the tokenized text expands to the source string". It is "tokenizing
+      # changed nothing a READER will see", and that is exactly Expand(before) == Expand(after). On a
+      # fully literal original Expand(before) IS the original, so every case this guard used to catch
+      # it still catches - including the one it exists for, a swap that lands a different number.
+      #
+      # THE SELF-TEST'S IDEMPOTENCE CASE DID NOT COVER THIS, and that is worth naming: its text is
+      # already tokenized and has no literal left to swap, so Swaps is 0 and this branch never runs.
+      # A guard needs a fixture that reaches IT, not one that merely resembles the situation.
+      $backBad = Test-TokenSwapIsNoOp -Before $cur -After $r.Text -Spec $spec
+      if ($backBad) { throw ("{0}/{1}: token round-trip does not reproduce the original - refusing (got '{2}')" -f $file.BaseName, $k, $backBad) }
       $edits[$k] = $r.Text
       $totalSwaps += $r.Swaps
     }
