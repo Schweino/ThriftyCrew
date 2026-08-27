@@ -1,7 +1,7 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-27T11:15:39",
- "count": 635,
+ "updated": "2026-08-27T11:35:57",
+ "count": 656,
  "candidates": [
   {
    "slug": "asian-lettuce-wrap-chicken-chopped-salad",
@@ -24849,6 +24849,3562 @@
    "band_conflict": null,
    "meets_round_band": true,
    "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "chicken-taco-poblano-rice-bowls",
+   "name": "Chicken Taco Poblano Rice Bowls",
+   "url": "https://www.skinnytaste.com/chicken-taco-poblano-rice-bowls/",
+   "domain": "skinnytaste.com",
+   "first_seen": "2026-08-27T11:32:44",
+   "last_verified": "2026-08-27T11:32:44",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 475.0,
+    "carbs": 52.0,
+    "protein_g": 40.5,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 1/4 pounds organic boneless skinless chicken breasts, cut 1/2 inch cubes (from 3 small)",
+    "2 teaspoons olive oil",
+    "1 medium red onion (peeled and diced)",
+    "1/4 cup cilantro (minced plus more for garnish)",
+    "1 poblano pepper (seeded and diced)",
+    "1 roma tomato (cored and diced)",
+    "1 lime (halved)",
+    "taco seasoning (see below)",
+    "kosher salt",
+    "1 cup frozen or fresh corn kernels",
+    "3 cups cooked brown rice (heated (use cauliflower rice for low-carb))",
+    "1/4 cup cheddar-jack cheese",
+    "1/4 cup 2% sour cream or Greek yogurt (optional)",
+    "1 teaspoon garlic powder",
+    "1 teaspoon cumin",
+    "1 teaspoon kosher salt",
+    "1/2 teaspoon chili powder",
+    "1/2 teaspoon paprika",
+    "1/2 teaspoon oregano"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-chicken-tacos-rice-bowls",
+     "name": "Slow Cooker Chicken Taco Rice Bowls",
+     "score": 44,
+     "shared": [
+      "chicken",
+      "taco",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "limes",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 35,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "greek-yogurt",
+      "olive-oil",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "harissa-chicken-rice-bowls",
+     "name": "Harissa Chicken Rice Bowls",
+     "score": 35,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "greek-yogurt",
+      "limes",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-butter-chicken-rice-bowls",
+     "name": "Slow Cooker Butter Chicken Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "greek-yogurt",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chicken-biryani-rice-bowls",
+     "name": "Chicken Biryani Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "greek-yogurt",
+      "onions",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|spice",
+     "slug": "chicken-fajita-quesadilla",
+     "name": "Chicken Fajita Quesadilla",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken fajita filling in a cheese tortilla, same dinner identity as live creamy-chicken-fajita-burrito (chicken, fajita/tomato sauce, tortilla, cheese); quesadilla vs burrito is not a distinguishing plate and fajita chicken is saturated.",
+     "dupe_of": [
+      "creamy-chicken-fajita-burrito"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:31"
+    },
+    {
+     "key": "chicken|any|spice",
+     "slug": "cilantro-lime-beer-can-chicken-tacos",
+     "name": "Cilantro Lime Beer Can Chicken Tacos",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Cilantro-lime shredded chicken tacos duplicating the live cilantro-lime chicken identity (bowls, chili-lime burrito); beer-can roasting and taco vehicle do not make a distinct plate in an already-crowded Tex-Mex chicken region.",
+     "dupe_of": [
+      "slow-cooker-cilantro-lime-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:38"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.421,
+    "lines": 19,
+    "resolved": 8,
+    "protein_share": 0.427,
+    "cal_floor": 77.0,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "chicken-taco-rice",
+   "name": "Chicken Taco Rice",
+   "url": "https://thecleaneatingcouple.com/chicken-taco-rice/",
+   "domain": "thecleaneatingcouple.com",
+   "first_seen": "2026-08-27T11:32:45",
+   "last_verified": "2026-08-27T11:32:45",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 552.0,
+    "carbs": 57.0,
+    "protein_g": 44.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 tablespoon extra virgin olive oil",
+    "1 lb boneless, skinless chicken breasts (cut in ½ inch cubes)",
+    "½ cup diced yellow onion",
+    "1 tablespoon minced garlic",
+    "3 cups diced red bell peppers",
+    "15 oz can tomato sauce",
+    "1 cup low sodium chicken broth",
+    "1 15 oz can low sodium black beans (rinsed and drained)",
+    "½ cup corn",
+    "½ cup dry white rice",
+    "1 ½ tablespoons taco seasoning",
+    "1 cup shredded cheddar cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-chicken-tacos-rice-bowls",
+     "name": "Slow Cooker Chicken Taco Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "taco",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "chicken-breast",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "halal-cart-chicken-and-rice",
+     "name": "Halal Cart Chicken and Rice",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "garlic",
+      "olive-oil",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "red-bell-pepper",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-curry-rice-bowls",
+     "name": "Slow Cooker Chicken Curry Rice Bowls",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-butter-chicken-rice-bowls",
+     "name": "Slow Cooker Butter Chicken Rice Bowls",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "onions",
+      "rice",
+      "tomato-sauce"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|spice",
+     "slug": "chicken-fajita-quesadilla",
+     "name": "Chicken Fajita Quesadilla",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken fajita filling in a cheese tortilla, same dinner identity as live creamy-chicken-fajita-burrito (chicken, fajita/tomato sauce, tortilla, cheese); quesadilla vs burrito is not a distinguishing plate and fajita chicken is saturated.",
+     "dupe_of": [
+      "creamy-chicken-fajita-burrito"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:31"
+    },
+    {
+     "key": "chicken|any|spice",
+     "slug": "cilantro-lime-beer-can-chicken-tacos",
+     "name": "Cilantro Lime Beer Can Chicken Tacos",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Cilantro-lime shredded chicken tacos duplicating the live cilantro-lime chicken identity (bowls, chili-lime burrito); beer-can roasting and taco vehicle do not make a distinct plate in an already-crowded Tex-Mex chicken region.",
+     "dupe_of": [
+      "slow-cooker-cilantro-lime-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:38"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.833,
+    "lines": 12,
+    "resolved": 10,
+    "protein_share": 0.313,
+    "cal_floor": 420.0,
+    "cal": 420.0,
+    "protein_g": 36.0,
+    "carbs_g": 52.2,
+    "fat_g": 7.3,
+    "verdict": "computed"
+   },
+   "band_conflict": false,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "broccoli-cheddar-chicken-and-rice",
+   "name": "Broccoli Cheddar Chicken Rice",
+   "url": "https://thecleaneatingcouple.com/broccoli-cheddar-chicken-rice/",
+   "domain": "thecleaneatingcouple.com",
+   "first_seen": "2026-08-27T11:32:49",
+   "last_verified": "2026-08-27T11:32:49",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "cheese",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 652.0,
+    "carbs": 57.0,
+    "protein_g": 57.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 tablespoon olive oil",
+    "1 ½ lbs boneless, skinless chicken breasts (cut in ¼ inch square pieces)",
+    "½ cup diced onion",
+    "2 tablespoons minced garlic",
+    "4 cups fresh broccoli spears cut into 1 inch pieces (10 oz bag)",
+    "1 cup grated carrots",
+    "3 ½ cups low sodium chicken broth",
+    "1 cup dry long grain white rice",
+    "3 teaspoons garlic powder",
+    "3 teaspoons onion powder",
+    "2 teaspoons dried parsley",
+    "¾ teaspoon black pepper",
+    "½ teaspoon dried thyme",
+    "¼ teaspoon salt",
+    "¼ teaspoon red pepper flakes (optional)",
+    "1 bay leaf",
+    "⅓ cup milk",
+    "1 cup freshly grated cheddar cheese",
+    "¼ cup grated Parmesan cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "ground-turkey-broccoli-cheddar-rice-skillet",
+     "name": "Ground Turkey Broccoli Cheddar Rice Skillet",
+     "score": 36,
+     "shared": [
+      "broccoli",
+      "cheddar",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "milk",
+      "olive-oil",
+      "onions",
+      "parmesan",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chicken-katsu-curry-rice-bowls",
+     "name": "Chicken Katsu Curry Rice Bowls",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "carrots",
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-curry-rice-bowls",
+     "name": "Slow Cooker Chicken Curry Rice Bowls",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "carrots",
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "hainanese-chicken-rice",
+     "name": "Hainanese Chicken Rice",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "garlic",
+      "rice",
+      "salt"
+     ]
+    },
+    {
+     "slug": "halal-cart-chicken-and-rice",
+     "name": "Halal Cart Chicken and Rice",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "garlic",
+      "olive-oil",
+      "red-onion",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "any|any|cheese",
+     "slug": "crustless-bacon-gruyere-quiche",
+     "name": "Crustless Bacon Gruyere Quiche",
+     "protein": "any",
+     "method": "any",
+     "verdict": "rejected-qa",
+     "reason": "macro gate: 369 cal / 2g carbs per serving",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "any|any|cheese",
+     "slug": "crustless-ham-gruyere-quiche",
+     "name": "Crustless Ham Gruyere Quiche",
+     "protein": "any",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cheese",
+     "slug": "cheese-chicken",
+     "name": "Cheese Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Broccoli-cheddar cheese-sauce chicken duplicates live chicken-divan-broccoli-bake (same chicken+broccoli+cheddar identity); skillet vs casserole format is not a distinguishing difference.",
+     "dupe_of": [
+      "chicken-divan-broccoli-bake"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:32"
+    }
+   ],
+   "saturation_pressure": 2,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.842,
+    "lines": 19,
+    "resolved": 16,
+    "protein_share": 0.402,
+    "cal_floor": 490.6,
+    "cal": 490.6,
+    "protein_g": 48.1,
+    "carbs_g": 50.6,
+    "fat_g": 10.4,
+    "verdict": "computed"
+   },
+   "band_conflict": false,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "chicken-rice-and-broccoli",
+   "name": "Healthy Chicken, Rice and Broccoli Skillet",
+   "url": "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+   "domain": "thecleaneatingcouple.com",
+   "first_seen": "2026-08-27T11:32:51",
+   "last_verified": "2026-08-27T11:32:51",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": null,
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 480.0,
+    "carbs": 46.0,
+    "protein_g": 47.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 tablespoon olive oil",
+    "1.5 lbs boneless, skinless chicken breasts (cut into small cubes)",
+    "½ cup onion (diced)",
+    "2 tablespoons garlic (minced)",
+    "1 cup long grain white rice (dry)",
+    "3 cups broccoli florets (about 10 oz)",
+    "3 cups chicken stock (low or no salt)",
+    "2 teaspoons dried basil",
+    "2 teaspoons dried parsley",
+    "2 teaspoons garlic powder",
+    "2 teaspoons onion powder",
+    "½ teaspoon salt",
+    "½ teaspoon black pepper",
+    "¼ cup grated parmesan cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "fajita-chicken-rice-bowl",
+     "name": "Fajita Chicken Rice Bowl",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "hainanese-chicken-rice",
+     "name": "Hainanese Chicken Rice",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "rice",
+      "salt"
+     ]
+    },
+    {
+     "slug": "ground-turkey-broccoli-cheddar-rice-skillet",
+     "name": "Ground Turkey Broccoli Cheddar Rice Skillet",
+     "score": 24,
+     "shared": [
+      "rice",
+      "broccoli"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "olive-oil",
+      "onions",
+      "parmesan",
+      "rice"
+     ]
+    },
+    {
+     "slug": "peri-peri-chicken-and-rice",
+     "name": "Peri Peri Chicken and Rice",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "olive-oil",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "hot-honey-chicken-bowls",
+     "name": "Hot Honey Chicken and Broccoli Bowls",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "broccoli"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+     "name": "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Balsamic-goat-cheese-cranberry harvest chicken skillet, distinct plate from the roasted sheet-pan brussels harvest chicken; borderline but different veg and sauce.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:09:55"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "crispy-chicken-salad",
+     "name": "Crispy Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold single-serve fried-chicken-over-iceberg salad with tortilla strips; does not batch or hold as a hot dinner, same rationale as prior cold chicken salad/wrap rejections.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:03"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "honey-balsamic-chicken-tenders",
+     "name": "Honey Balsamic Chicken Tenders",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Seared chicken breast in a honey-balsamic reduction; distinct balsamic sauce family with no live balsamic-chicken, separate from hot-honey/chipotle/sesame/honey-mustard chicken, verified 452cal/16c/67p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:05"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peanut-butter-chicken",
+     "name": "Peanut Butter Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Peanut-sauce chicken with broccoli/peppers over brown rice; same peanut-chicken-and-rice identity as live slow-cooker-thai-peanut-chicken-bowls, a region already saturated with thai-peanut-chicken-burrito and Senegalese peanut stew.",
+     "dupe_of": [
+      "slow-cooker-thai-peanut-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:06"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "sticky-bourbon-chicken",
+     "name": "Sticky Bourbon Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Bourbon-soy-brown-sugar sticky glazed chicken thighs over rice; distinct bourbon flavor with no live dupe, separate from slow-cooker honey-sesame chicken, verified 450cal/20c/45p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:07"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peach-chicken",
+     "name": "Peach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Skillet chicken breast in a peach-balsamic-white-wine sauce with burrata and honey-glazed almonds; distinctive summery plate with no live or backlog dupe (backlog braised-chicken-and-peaches is a braise), widens the catalog, verified 643cal/32c/41p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:15"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "spinach-chicken",
+     "name": "Spinach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Creamy spinach-parmesan chicken skillet, essentially creamy Tuscan chicken without the sun-dried tomato; saturated chicken-cream region (saturation 5), non-distinct and non-widening.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:16"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "buffalo-chicken-quesadillas",
+     "name": "Buffalo Chicken Quesadillas",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Shredded buffalo chicken with ranch and Mexican cheese in flour tortillas; duplicates live buffalo-chicken-burrito on all four axes (chicken + buffalo/cheese + tortilla + skillet, bge 0.89). Buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl); folded-vs-rolled adds no new dinner.",
+     "dupe_of": [
+      "buffalo-chicken-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:47"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "hawaiian-chicken-salad",
+     "name": "Hawaiian Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Coconut-pineapple marinated chicken plated cold over lettuce with avocado, red onion and a lime-oil dressing; a composed salad that wilts and doesn't batch as meal-prep, matching prior chicken-salad not-fit rulings. Coconut-lime rice is a side, not the dish.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:48"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "southwest-chicken-salad",
+     "name": "Southwest Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Chili-lime chicken breast served cold over romaine with cherry tomato, black bean, corn, avocado and Greek-yogurt dressing; a composed salad that does not hold for batch meal prep, consistent with prior cold-salad not-fit rulings.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-burrito-bowls",
+     "name": "Chicken Burrito Bowls",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Archetypal Tex-Mex chicken burrito bowl (chili/cumin/ancho chicken thighs, cilantro-lime rice, lettuce/cheese/pico/guac); verified 552cal/42c/48p. Not a clean dupe of a single live dish but adds no novelty to a saturated Tex-Mex chicken lane the catalog already skews toward; cut rather than pad.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-and-rice-one-pot",
+     "name": "Chicken and Rice (One Pot!)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; distinct from maqluba/butter/adobo/curry/mole chicken-rice dishes, band verified 566cal/43c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:54"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "copycat-longhorn-parmesan-crusted-chicken",
+     "name": "Copycat Longhorn Parmesan Crusted Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ranch-marinated pan-seared chicken with a provolone/parmesan/panko crust and no tomato sauce; distinct restaurant copycat, not chicken parmesan or meatballs, band verified 660cal/13c/35p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:56"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video",
+     "name": "Italian Chicken Tortellini Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy tomato-cream chicken-tortellini skillet with roasted red peppers and spinach; distinct from slow-cooker Italian chicken penne (different starch/method), band verified 562cal/44c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:57"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "coconut-marinated-chicken-grill-or-stove",
+     "name": "Coconut Marinated Chicken (Grill or Stove)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Coconut-milk + curry-powder + lime chicken is the same coconut-curry-chicken identity as live Kuku Paka (Swahili coconut chicken curry); coconut/curry chicken region already saturated.",
+     "dupe_of": [
+      "kuku-paka-swahili-coconut-chicken-curry"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:58"
+    }
+   ],
+   "saturation_pressure": 0,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.857,
+    "lines": 14,
+    "resolved": 12,
+    "protein_share": 0.432,
+    "cal_floor": 456.6,
+    "cal": 456.6,
+    "protein_g": 46.6,
+    "carbs_g": 44.3,
+    "fat_g": 9.7,
+    "verdict": "computed"
+   },
+   "band_conflict": false,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "easy-chicken-enchiladas",
+   "name": "Easy Chicken Enchiladas",
+   "url": "https://www.thereciperebel.com/easy-chicken-enchiladas/",
+   "domain": "thereciperebel.com",
+   "first_seen": "2026-08-27T11:32:54",
+   "last_verified": "2026-08-27T11:32:54",
+   "signature": {
+    "protein": "chicken",
+    "method": "bake",
+    "sauce_family": "tomato",
+    "starch": "tortilla"
+   },
+   "band": {
+    "cal": 681.0,
+    "carbs": 50.0,
+    "protein_g": 42.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "28 oz canned crushed tomatoes (798 ml, no salt added)",
+    "1 cup water",
+    "1 tablespoon garlic powder",
+    "1 teaspoon cumin",
+    "1 teaspoon onion powder",
+    "1 teaspoon dried oregano",
+    "1 teaspoon salt",
+    "½ teaspoon chipotle powder (you can substitute smoked paprika)",
+    "brown sugar",
+    "1 tablespoon oil",
+    "1 medium onion (diced)",
+    "1 green bell pepper (diced)",
+    "2 boneless skinless chicken breasts (about 1 lb)",
+    "8 medium flour or corn tortillas (about 7\" in diameter)",
+    "3 cups shredded Monterey Jack cheese",
+    "Garnish pico de gallo salsa, sour cream, cilantro, lime wedges"
+   ],
+   "neighbours": [
+    {
+     "slug": "chicken-scampi",
+     "name": "Chicken Scampi",
+     "score": 16,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "flour",
+      "garlic",
+      "green-bell-pepper",
+      "onions",
+      "salt"
+     ]
+    },
+    {
+     "slug": "chicken-pad-thai-noodle-bowls",
+     "name": "Chicken Pad Thai Noodle Bowls",
+     "score": 15,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "brown-sugar",
+      "chicken-breast",
+      "garlic",
+      "limes",
+      "onions"
+     ]
+    },
+    {
+     "slug": "hungarian-chicken-paprikash",
+     "name": "Hungarian Chicken Paprikash",
+     "score": 15,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "crushed-tomatoes",
+      "flour",
+      "garlic",
+      "onions",
+      "sour-cream"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-tortilla-soup-bowls",
+     "name": "Slow Cooker Chicken Tortilla Soup Bowls",
+     "score": 15,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "canned-corn",
+      "chicken-breast",
+      "crushed-tomatoes",
+      "limes",
+      "onions"
+     ]
+    },
+    {
+     "slug": "hainanese-chicken-rice",
+     "name": "Hainanese Chicken Rice",
+     "score": 15,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "green-onions",
+      "salt",
+      "sugar"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|any|tomato",
+     "slug": "chicken-tinga-shredded-chipotle",
+     "name": "Chicken Tinga Shredded Chipotle",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Catalog dupe of slow-cooker-chicken-tinga-bowls: literally chicken tinga, chipotle-tomato-onion braised shredded chicken, same dish/name/sauce/method.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|bake|tomato",
+     "slug": "enchiladas-suizas",
+     "name": "Enchiladas Suizas",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Shredded-chicken salsa-verde enchiladas with crema and Chihuahua cheese; no dupe found across catalog, backlog or in-flight, an authentic Mexican dish that widens cuisine spread with a verified band.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:36"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.438,
+    "lines": 16,
+    "resolved": 7,
+    "protein_share": 0.639,
+    "cal_floor": 206.1,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "no-neighbour"
+  },
+  {
+   "slug": "chicken-fajita-quinoa-bowls",
+   "name": "Chicken Fajita Bowls",
+   "url": "https://www.eatingbirdfood.com/chicken-fajita-quinoa-bowls/",
+   "domain": "eatingbirdfood.com",
+   "first_seen": "2026-08-27T11:32:55",
+   "last_verified": "2026-08-27T11:32:55",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "cheese",
+    "starch": "quinoa"
+   },
+   "band": {
+    "cal": 593.0,
+    "carbs": 41.0,
+    "protein_g": 61.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 avocado",
+    "2 Tablespoons goat cheese",
+    "2 Tablespoons lime juice",
+    "¼ teaspoon sea salt",
+    "1 cup of red or white quinoa (I used white)",
+    "2 cups water",
+    "½ teaspoon salt",
+    "1 teaspoon oil",
+    "1 clove garlic (minced)",
+    "1 red bell pepper (sliced)",
+    "1 yellow bell pepper (sliced)",
+    "1 yellow onion (sliced)",
+    "½ teaspoon salt",
+    "½ teaspoon chili powder",
+    "1½ pounds boneless (skinless chicken breast, cut into thin strips)",
+    "2 teaspoons lime juice",
+    "1 teaspoon olive oil",
+    "½ Tablespoon chili powder",
+    "1 teaspoon garlic powder",
+    "½ teaspoon cumin",
+    "½ teaspoon paprika",
+    "½-1 teaspoon salt",
+    "½ teaspoon ground pepper",
+    "romaine lettuce",
+    "cilantro",
+    "pico de gallo or salsa",
+    "hot sauce (optional )"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-chicken-tacos-rice-bowls",
+     "name": "Slow Cooker Chicken Taco Rice Bowls",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "limes",
+      "onions",
+      "salsa"
+     ]
+    },
+    {
+     "slug": "chicken-pad-thai-noodle-bowls",
+     "name": "Chicken Pad Thai Noodle Bowls",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "limes",
+      "onions"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "olive-oil",
+      "red-bell-pepper",
+      "red-onion"
+     ]
+    },
+    {
+     "slug": "slow-cooker-cilantro-lime-chicken-bowls",
+     "name": "Slow Cooker Cilantro Lime Chicken Bowls",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cilantro",
+      "limes",
+      "olive-oil"
+     ]
+    },
+    {
+     "slug": "chicken-lo-mein-noodle-bowls",
+     "name": "Chicken Lo Mein Noodle Bowls",
+     "score": 22,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "red-bell-pepper"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|spice",
+     "slug": "chicken-fajita-quesadilla",
+     "name": "Chicken Fajita Quesadilla",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken fajita filling in a cheese tortilla, same dinner identity as live creamy-chicken-fajita-burrito (chicken, fajita/tomato sauce, tortilla, cheese); quesadilla vs burrito is not a distinguishing plate and fajita chicken is saturated.",
+     "dupe_of": [
+      "creamy-chicken-fajita-burrito"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:31"
+    },
+    {
+     "key": "chicken|any|spice",
+     "slug": "cilantro-lime-beer-can-chicken-tacos",
+     "name": "Cilantro Lime Beer Can Chicken Tacos",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Cilantro-lime shredded chicken tacos duplicating the live cilantro-lime chicken identity (bowls, chili-lime burrito); beer-can roasting and taco vehicle do not make a distinct plate in an already-crowded Tex-Mex chicken region.",
+     "dupe_of": [
+      "slow-cooker-cilantro-lime-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:38"
+    }
+   ],
+   "saturation_pressure": 2,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.407,
+    "lines": 27,
+    "resolved": 11,
+    "protein_share": 0.477,
+    "cal_floor": 20.8,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "chicken-fajita-skillet-quinoa-bake",
+   "name": "Chicken Fajita Skillet Quinoa Bake",
+   "url": "https://whatsgabycooking.com/chicken-fajita-skillet-quinoa-bake/",
+   "domain": "whatsgabycooking.com",
+   "first_seen": "2026-08-27T11:32:56",
+   "last_verified": "2026-08-27T11:32:56",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "quinoa"
+   },
+   "band": {
+    "cal": 613.0,
+    "carbs": 44.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 lb boneless skinless chicken breasts",
+    "2 tablespoons lime juice",
+    "3 tablespoons olive oil",
+    "1 garlic clove (minced)",
+    "½ teaspoon salt",
+    "½ teaspoon ground cumin",
+    "½ teaspoon chili powder",
+    "½ teaspoon red pepper flakes",
+    "1 poblano pepper (medium dice)",
+    "1 red bell pepper (medium dice)",
+    "1 yellow pepper (medium dice)",
+    "1 red onion (medium dice)",
+    "1 cup quinoa",
+    "2 cups shredded cheese (divided)",
+    "1 ½ cups chipotle salsa",
+    "Kosher salt and pepper to taste",
+    "Finely chopped scallions as needed"
+   ],
+   "neighbours": [
+    {
+     "slug": "creamy-chicken-fajita-burrito",
+     "name": "Creamy Chicken Fajita Burrito",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "fajita"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "onions",
+      "red-bell-pepper"
+     ]
+    },
+    {
+     "slug": "fajita-chicken-rice-bowl",
+     "name": "Fajita Chicken Rice Bowl",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "fajita"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "onions"
+     ]
+    },
+    {
+     "slug": "chicken-scampi",
+     "name": "Chicken Scampi",
+     "score": 16,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "onions",
+      "red-bell-pepper",
+      "red-onion",
+      "salt"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "red-bell-pepper",
+      "red-onion"
+     ]
+    },
+    {
+     "slug": "chicken-pad-thai-noodle-bowls",
+     "name": "Chicken Pad Thai Noodle Bowls",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "limes",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|spice",
+     "slug": "chicken-fajita-quesadilla",
+     "name": "Chicken Fajita Quesadilla",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken fajita filling in a cheese tortilla, same dinner identity as live creamy-chicken-fajita-burrito (chicken, fajita/tomato sauce, tortilla, cheese); quesadilla vs burrito is not a distinguishing plate and fajita chicken is saturated.",
+     "dupe_of": [
+      "creamy-chicken-fajita-burrito"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:31"
+    },
+    {
+     "key": "chicken|any|spice",
+     "slug": "cilantro-lime-beer-can-chicken-tacos",
+     "name": "Cilantro Lime Beer Can Chicken Tacos",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Cilantro-lime shredded chicken tacos duplicating the live cilantro-lime chicken identity (bowls, chili-lime burrito); beer-can roasting and taco vehicle do not make a distinct plate in an already-crowded Tex-Mex chicken region.",
+     "dupe_of": [
+      "slow-cooker-cilantro-lime-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:38"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.471,
+    "lines": 17,
+    "resolved": 8,
+    "protein_share": 0.515,
+    "cal_floor": 255.6,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "bbq-chicken-bowls",
+   "name": "BBQ Chicken Bowls",
+   "url": "https://www.eatingbirdfood.com/bbq-chicken-bowl/",
+   "domain": "eatingbirdfood.com",
+   "first_seen": "2026-08-27T11:32:58",
+   "last_verified": "2026-08-27T11:32:58",
+   "signature": {
+    "protein": "chicken",
+    "method": "bake",
+    "sauce_family": "bbq",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 654.0,
+    "carbs": 77.0,
+    "protein_g": 57.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 ¼-½ lbs boneless skinless chicken breasts or thighs (I used chicken breasts )",
+    "1 teaspoon smoked paprika",
+    "1 teaspoon garlic powder",
+    "½ teaspoon onion powder",
+    "½ teaspoon salt",
+    "¼ teaspoon black pepper",
+    "¼ cup BBQ sauce (I like Stubb's or Primal Kitchen)",
+    "1 large sweet potato (chopped into chunks)",
+    "Avocado oil spray",
+    "Salt, pepper and garlic (to taste)",
+    "1 bag (16 oz) frozen sweet corn kernels (defrosted )",
+    "1 15 oz can black beans (drained and rinsed )",
+    "1 large red bell pepper (chopped)",
+    "½ large red onion (finely chopped)",
+    "2 Tablespoons red wine vinegar",
+    "3 Tablespoons parsley leaves (chopped)",
+    "1 Tablespoon olive oil",
+    "1 teaspoon sea salt",
+    "½ teaspoon fresh ground pepper",
+    "2 cups cooked rice (or half rice + half cauliflower rice)",
+    "2 cups black bean and corn salad",
+    "Roasted sweet potatoes",
+    "2 cups cherry tomatoes (halved)",
+    "2 cups shredded purple cabbage",
+    "1 avocado",
+    "pickled red onions (optional)",
+    "1 lime (cut into wedges)",
+    "1 small handful fresh cilantro",
+    "½ cup plain full-fat Greek yogurt",
+    "3 Tablespoons BBQ sauce",
+    "1 Tablespoon milk",
+    "2 teaspoons ranch seasoning mix",
+    "1 teaspoon apple cider vinegar",
+    "¼ teaspoon salt"
+   ],
+   "neighbours": [
+    {
+     "slug": "bbq-chicken-rice-bowls",
+     "name": "Lean BBQ Chicken and Rice Bowls",
+     "score": 33,
+     "shared": [
+      "bbq",
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-bbq-pulled-chicken-bowls",
+     "name": "Slow Cooker BBQ Pulled Chicken Bowls",
+     "score": 32,
+     "shared": [
+      "bbq",
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 27,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cherry-tomatoes",
+      "chicken-breast",
+      "greek-yogurt",
+      "olive-oil",
+      "red-bell-pepper",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-butter-chicken-rice-bowls",
+     "name": "Slow Cooker Butter Chicken Rice Bowls",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "greek-yogurt",
+      "milk",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-cilantro-lime-chicken-bowls",
+     "name": "Slow Cooker Cilantro Lime Chicken Bowls",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "cilantro",
+      "limes",
+      "olive-oil",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [
+    "cold-plate"
+   ],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.588,
+    "lines": 34,
+    "resolved": 20,
+    "protein_share": 0.311,
+    "cal_floor": 412.4,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+   "name": "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+   "url": "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+   "domain": "cookingclassy.com",
+   "first_seen": "2026-08-27T11:32:59",
+   "last_verified": "2026-08-27T11:32:59",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "soy",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 465.0,
+    "carbs": 38.0,
+    "protein_g": 40.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1/2 cup low-sodium soy sauce",
+    "1/2 cup water",
+    "3 Tbsp packed light-brown sugar",
+    "3 Tbsp honey",
+    "3 cloves garlic (, minced (1 Tbsp))",
+    "1 Tbsp minced ginger",
+    "1 Tbsp rice vinegar",
+    "1 1/2 Tbsp cornstarch",
+    "3 1/2 Tbsp olive oil (, divided, plus more for brushing grill)",
+    "1 1/2 lbs bonless skinless chicken breasts",
+    "Ground black pepper",
+    "1 medium zucchini (, diced into half moons and quartered (1 1/2 cups))",
+    "1 1/2 cups matchstick carrots",
+    "2 1/2 cups small diced broccoli florets",
+    "1 1/2 - 2 cups white or brown rice (, cooked according to directions on package (I prefer short grain brown rice))",
+    "Sesame seeds (, optional)"
+   ],
+   "neighbours": [
+    {
+     "slug": "baked-sweet-and-sour-chicken-rice-bowls",
+     "name": "Baked Sweet and Sour Chicken Rice Bowls",
+     "score": 35,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "cornstarch",
+      "rice",
+      "sugar",
+      "white-vinegar"
+     ]
+    },
+    {
+     "slug": "chicken-souvlaki-rice-bowls",
+     "name": "Chicken Souvlaki Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "rice",
+      "zucchini"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-adobo-rice-bowls",
+     "name": "Slow Cooker Chicken Adobo Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "rice",
+      "soy-sauce",
+      "white-vinegar"
+     ]
+    },
+    {
+     "slug": "slow-cooker-orange-chicken-rice-bowls",
+     "name": "Slow Cooker Orange Chicken Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "honey",
+      "rice",
+      "soy-sauce"
+     ]
+    },
+    {
+     "slug": "chicken-katsu-curry-rice-bowls",
+     "name": "Chicken Katsu Curry Rice Bowls",
+     "score": 33,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "carrots",
+      "chicken-breast",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|soy",
+     "slug": "stir-fry-noodles",
+     "name": "Stir Fry Noodles",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Soy-hoisin chicken noodle stir-fry; distinct from catalog beef/turkey stir-fries and from Andong jjimdak / pad kee mao noodle dishes, verified band.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke2",
+     "by": "decider",
+     "at": "2026-08-26T11:29:57"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.75,
+    "lines": 16,
+    "resolved": 12,
+    "protein_share": 0.316,
+    "cal_floor": 329.5,
+    "cal": 329.5,
+    "protein_g": 18.3,
+    "carbs_g": 36.6,
+    "fat_g": 13.8,
+    "verdict": "computed"
+   },
+   "band_conflict": true,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "chicken-fajita-rice-bowl",
+   "name": "Chicken Fajita Rice Bowls (One Pan)",
+   "url": "https://www.cookingclassy.com/chicken-fajita-rice-bowl/",
+   "domain": "cookingclassy.com",
+   "first_seen": "2026-08-27T11:33:02",
+   "last_verified": "2026-08-27T11:33:02",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 676.0,
+    "carbs": 72.0,
+    "protein_g": 50.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 1/4 lbs boneless skinless chicken breasts, (diced into 1-inch pieces)",
+    "Salt and freshly ground black pepper",
+    "2 1/2 Tbsp olive oil",
+    "1 cup diced yellow onion",
+    "3 cup chopped bell pepper ((about 2 medium))",
+    "3 cloves garlic, (minced)",
+    "1 2/3 cups low-sodium chicken broth",
+    "1 (15 oz) can fire roasted tomatoes",
+    "1 (15 oz) can black beans, (drained and rinsed)",
+    "2 1/2 tsp chili powder",
+    "1 1/2 tsp ground cumin",
+    "2 cups instant brown rice",
+    "1 1/2 Tbsp fresh lime juice",
+    "3/4 cup shredded Mexican cheese",
+    "1/3 cup chopped cilantro"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-chicken-tacos-rice-bowls",
+     "name": "Slow Cooker Chicken Taco Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "limes",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-korma-rice-bowls",
+     "name": "Slow Cooker Chicken Korma Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-curry-rice-bowls",
+     "name": "Slow Cooker Chicken Curry Rice Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "arroz-con-pollo-bowls",
+     "name": "Arroz con Pollo (Chicken and Rice) Bowls",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "rice",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "garlic",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "fajita-chicken-rice-bowl",
+     "name": "Fajita Chicken Rice Bowl",
+     "score": 34,
+     "shared": [
+      "chicken",
+      "fajita",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "onions",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|spice",
+     "slug": "chicken-fajita-quesadilla",
+     "name": "Chicken Fajita Quesadilla",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken fajita filling in a cheese tortilla, same dinner identity as live creamy-chicken-fajita-burrito (chicken, fajita/tomato sauce, tortilla, cheese); quesadilla vs burrito is not a distinguishing plate and fajita chicken is saturated.",
+     "dupe_of": [
+      "creamy-chicken-fajita-burrito"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:31"
+    },
+    {
+     "key": "chicken|any|spice",
+     "slug": "cilantro-lime-beer-can-chicken-tacos",
+     "name": "Cilantro Lime Beer Can Chicken Tacos",
+     "protein": "chicken",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Cilantro-lime shredded chicken tacos duplicating the live cilantro-lime chicken identity (bowls, chili-lime burrito); beer-can roasting and taco vehicle do not make a distinct plate in an already-crowded Tex-Mex chicken region.",
+     "dupe_of": [
+      "slow-cooker-cilantro-lime-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:38"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [
+    "cold-plate"
+   ],
+   "round_cut": "chicken breast",
+   "band_computed": {
+    "coverage": 0.733,
+    "lines": 15,
+    "resolved": 11,
+    "protein_share": 0.549,
+    "cal_floor": 583.1,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "turkey-chili-mac-and-cheese",
+   "name": "Turkey Chili Mac and Cheese",
+   "url": "https://www.thereciperebel.com/turkey-chili-mac-and-cheese/",
+   "domain": "thereciperebel.com",
+   "first_seen": "2026-08-27T11:35:34",
+   "last_verified": "2026-08-27T11:35:34",
+   "signature": {
+    "protein": "turkey",
+    "method": "stew",
+    "sauce_family": "tomato",
+    "starch": "bean"
+   },
+   "band": {
+    "cal": 662.0,
+    "carbs": 83.0,
+    "protein_g": 50.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "1 lb ground turkey",
+    "1 medium onion (finely diced)",
+    "2 tablespoons chili powder",
+    "1 ½ teaspoon salt",
+    "1 teaspoon minced garlic",
+    "540 ml canned kidney beans (rinsed (19oz))",
+    "1 ¾ cups tomato sauce",
+    "3 ½ cups low sodium vegetable (or poultry broth)",
+    "3 cups whole grain macaroni ( dry (340-375g))",
+    "½ cup milk",
+    "2 cups shredded cheddar cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "turkey-mac-and-cheese-bake",
+     "name": "Turkey Mac and Cheese Bake",
+     "score": 33,
+     "shared": [
+      "turkey",
+      "mac",
+      "cheese"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "milk",
+      "shredded-cheese"
+     ]
+    },
+    {
+     "slug": "turkey-chili-mac",
+     "name": "High-Protein Turkey Chili Mac",
+     "score": 32,
+     "shared": [
+      "turkey",
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "onions"
+     ]
+    },
+    {
+     "slug": "beef-chili-mac",
+     "name": "Beef Chili Mac",
+     "score": 24,
+     "shared": [
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "kidney-beans",
+      "onions",
+      "tomato-sauce"
+     ]
+    },
+    {
+     "slug": "kielbasa-mac-and-cheese-bake",
+     "name": "Kielbasa Mac and Cheese Bake",
+     "score": 23,
+     "shared": [
+      "mac",
+      "cheese"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "milk",
+      "onions"
+     ]
+    },
+    {
+     "slug": "turkey-pumpkin-chili",
+     "name": "Turkey Pumpkin Chili",
+     "score": 23,
+     "shared": [
+      "turkey",
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "garlic",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 7,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground turkey",
+   "band_computed": {
+    "coverage": 0.636,
+    "lines": 11,
+    "resolved": 7,
+    "protein_share": 0.428,
+    "cal_floor": 268.2,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "instant-pot-chili-mac",
+   "name": "Instant Pot Chili Mac",
+   "url": "https://www.thereciperebel.com/instant-pot-chili-mac/",
+   "domain": "thereciperebel.com",
+   "first_seen": "2026-08-27T11:35:36",
+   "last_verified": "2026-08-27T11:35:36",
+   "signature": {
+    "protein": "beef",
+    "method": "stew",
+    "sauce_family": "tomato",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 590.0,
+    "carbs": 52.0,
+    "protein_g": 43.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "1 lb lean ground beef",
+    "1 medium onion (finely chopped)",
+    "1 red bell pepper (finely chopped)",
+    "1 tablespoon chili powder ((2 if you like it spicy!))",
+    "1 1/2 teaspoons salt",
+    "1 teaspoon minced garlic",
+    "1/4 teaspoon cumin",
+    "3 cups low sodium beef or chicken broth",
+    "1 can red kidney beans or black beans (rinsed)",
+    "1 1/2 cups tomato pasta sauce",
+    "340-375 grams whole grain macaroni ((about 12-13oz))",
+    "1/2 cup low fat milk",
+    "3 cups shredded cheddar cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "beef-chili-mac",
+     "name": "Beef Chili Mac",
+     "score": 26,
+     "shared": [
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "cheddar-cheese-shredded",
+      "kidney-beans",
+      "onions",
+      "tomato-sauce"
+     ]
+    },
+    {
+     "slug": "turkey-chili-mac",
+     "name": "High-Protein Turkey Chili Mac",
+     "score": 22,
+     "shared": [
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "onions"
+     ]
+    },
+    {
+     "slug": "chili-cornbread-casserole",
+     "name": "Chili Cornbread Casserole",
+     "score": 15,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "chicken-broth",
+      "kidney-beans",
+      "milk",
+      "onions"
+     ]
+    },
+    {
+     "slug": "kielbasa-mac-and-cheese-bake",
+     "name": "Kielbasa Mac and Cheese Bake",
+     "score": 14,
+     "shared": [
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "milk",
+      "onions",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "turkey-mac-and-cheese-bake",
+     "name": "Turkey Mac and Cheese Bake",
+     "score": 14,
+     "shared": [
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "milk",
+      "pasta",
+      "shredded-cheese"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.615,
+    "lines": 13,
+    "resolved": 8,
+    "protein_share": 0.525,
+    "cal_floor": 216.8,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "high-protein-beef-tacos",
+   "name": "Beef Tacos",
+   "url": "https://www.theproteinplayground.com/beef-tacos/",
+   "domain": "theproteinplayground.com",
+   "first_seen": "2026-08-27T11:35:38",
+   "signature": {
+    "protein": null,
+    "method": null,
+    "sauce_family": null,
+    "starch": null
+   },
+   "band": {
+    "cal": 610.0,
+    "carbs": 56.0,
+    "protein_g": 54.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 3,
+   "status": "ruled:rejected-not-fit",
+   "entered_by": "ingest",
+   "exclusion": "main protein is not one of this round's four cuts (boneless chicken breast, ground beef, pork loin, ground turkey), or more than one of them is present, or a disqualifying cut is"
+  },
+  {
+   "slug": "easy-and-healthy-chili-mac",
+   "name": "Easy and Healthy Chili Mac",
+   "url": "https://easyeatsdietitian.com/easy-and-healthy-chili-mac/",
+   "domain": "easyeatsdietitian.com",
+   "first_seen": "2026-08-27T11:35:40",
+   "last_verified": "2026-08-27T11:35:40",
+   "signature": {
+    "protein": "turkey",
+    "method": "stew",
+    "sauce_family": "tomato",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 470.0,
+    "carbs": 47.0,
+    "protein_g": 47.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 Tablespoon Avocado Oil",
+    "1 Small Onion (Diced)",
+    "1 Pound Ground Turkey or Chicken",
+    "1 & 1/2 Cups Chicken Bone Broth",
+    "1 Package (8 ounces) Banza Elbow Pasta",
+    "1 Can (15 ounces) Organic Pinto Beans, drained (I used rinsed and drained chili beans because that's all I had)",
+    "1 Can (15 ounces) Organic Tomato Sauce",
+    "1/2-1 Packet Kinder's Woodfired Chili Seasoning (per taste preference (Use 1/2 to reduce sodium intake) )",
+    "1/2-1 Cup Low-Fat Cheddar Cheese (Shredded)"
+   ],
+   "neighbours": [
+    {
+     "slug": "turkey-chili-mac",
+     "name": "High-Protein Turkey Chili Mac",
+     "score": 23,
+     "shared": [
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "onions"
+     ]
+    },
+    {
+     "slug": "beef-chili-mac",
+     "name": "Beef Chili Mac",
+     "score": 22,
+     "shared": [
+      "chili",
+      "mac"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "onions",
+      "tomato-sauce"
+     ]
+    },
+    {
+     "slug": "turkey-pumpkin-chili",
+     "name": "Turkey Pumpkin Chili",
+     "score": 13,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "onions"
+     ]
+    },
+    {
+     "slug": "slow-cooker-turkey-chili-bowls",
+     "name": "Slow Cooker Turkey Chili Bowls",
+     "score": 13,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "onions"
+     ]
+    },
+    {
+     "slug": "turkey-chili-verde-white-beans",
+     "name": "Turkey Chili Verde with White Beans",
+     "score": 13,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 7,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground turkey",
+   "band_computed": {
+    "coverage": 0.444,
+    "lines": 9,
+    "resolved": 4,
+    "protein_share": 0.531,
+    "cal_floor": 323.9,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "high-protein-ground-beef-taco-bowl",
+   "name": "High Protein Ground Beef Taco Bowl",
+   "url": "https://nomastehungry.com/healthy-high-protein-ground-beef-taco-bowl-recipe/",
+   "domain": "nomastehungry.com",
+   "first_seen": "2026-08-27T11:35:41",
+   "last_verified": "2026-08-27T11:35:41",
+   "signature": {
+    "protein": "beef",
+    "method": "skillet",
+    "sauce_family": "cheese",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 676.0,
+    "carbs": 60.0,
+    "protein_g": 42.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 lb Ground Beef",
+    "1 can Black Beans",
+    "1 cup Mexican Cheese",
+    "1 cup Salsa",
+    "1 cup Greek yogurt (full fat)",
+    "1 oz Fresh Cilantro (finely chopped)",
+    "1 whole Lime (halved)",
+    "2 cups Chicken Bone Broth or Stock",
+    "1 cup White Rice"
+   ],
+   "neighbours": [
+    {
+     "slug": "beef-burrito-bowls",
+     "name": "High-Protein Beef Burrito Bowls",
+     "score": 32,
+     "shared": [
+      "high",
+      "protein",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "rice"
+     ]
+    },
+    {
+     "slug": "high-protein-beef-bean-burrito",
+     "name": "High-Protein Beef and Bean Burrito",
+     "score": 31,
+     "shared": [
+      "high",
+      "protein",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef"
+     ]
+    },
+    {
+     "slug": "highprotein-turkey-burger-bowl",
+     "name": "High-Protein Turkey Burger Bowl",
+     "score": 31,
+     "shared": [
+      "high",
+      "protein",
+      "bowl"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "greek-yogurt"
+     ]
+    },
+    {
+     "slug": "ground-beef-shawarma-bowls",
+     "name": "Ground Beef Shawarma Bowls",
+     "score": 24,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "greek-yogurt",
+      "rice"
+     ]
+    },
+    {
+     "slug": "philly-cheesesteak-skillet-bowls",
+     "name": "Ground Beef Philly Cheesesteak Bowls",
+     "score": 23,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|skillet|spice",
+     "slug": "beef-cauliflower-taco-skillet",
+     "name": "Beef Cauliflower Taco Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Near-dupe of catalog loaded-beef-taco-skillet-bowls: shares protein (ground beef), Tex-Mex taco flavor family, and skillet method; cauliflower-rice swap is the only structural change. Catalog Tex-Mex beef lane is already dense (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, beef-enchilada-skillet-bowls) so it deepens not widens; plus 34g carbs sits ~1g under the ceiling and a label-accurate recompute (15oz black beans) risks breaching 35g. Cut - run does not need padding.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|any|spice",
+     "slug": "slow-cooker-beef-barbacoa",
+     "name": "Slow Cooker Beef Barbacoa",
+     "protein": "beef",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "beef-and-cauliflower-taco-skillet",
+     "name": "Beef and Cauliflower Taco Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Ground-beef Tex-Mex taco skillet with black beans and cauliflower rice; duplicates live loaded-beef-taco-skillet-bowls (protein + taco spice family + skillet method), cauliflower swap does not distinguish the plate. Deepens an already-dense Tex-Mex beef lane rather than widening it; consistent with prior ruling on the same dish.",
+     "dupe_of": [
+      "loaded-beef-taco-skillet-bowls"
+     ],
+     "run": "jc1-drill",
+     "by": "decider",
+     "at": "2026-08-25T05:38:03"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "taco-pasta-one-pot",
+     "name": "Taco Pasta (One Pot)",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "One-pot cheesy taco beef pasta is the same dinner as live cheesy-taco-spaghetti.",
+     "dupe_of": [
+      "cheesy-taco-spaghetti"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T11:58:15"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "carne-asada-vampiro-tacos",
+     "name": "Carne Asada Vampiro Tacos",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Carne asada steak in tortilla form duplicates the flavor identity of live carne-asada-burrito and carne-asada-rice-bowls; vampiro format re-plates an already twice-covered carne asada lane.",
+     "dupe_of": [
+      "carne-asada-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:38"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "tacos-de-alambre",
+     "name": "Tacos de Alambre",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Shaved steak griddled with bacon, Mexican chorizo, peppers and melted Oaxaca cheese; verified 709cal/8c/50p. Empty neighbour set (562 live + 57 in-flight searched). Distinct authentic Mexican dish from the ground-beef taco skillets already covered; widens the regional Mexican lane.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:45"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.667,
+    "lines": 9,
+    "resolved": 6,
+    "protein_share": 0.377,
+    "cal_floor": 452.2,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "high-protein-ravioli-casserole",
+   "name": "Ravioli Casserole",
+   "url": "https://wholesomelymorgan.com/2024/07/19/high-protein-ravioli-casserole",
+   "domain": "wholesomelymorgan.com",
+   "first_seen": "2026-08-27T11:35:42",
+   "signature": {
+    "protein": null,
+    "method": null,
+    "sauce_family": null,
+    "starch": null
+   },
+   "band": {
+    "cal": 691.0,
+    "carbs": 46.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 8,
+   "status": "ruled:rejected-not-fit",
+   "entered_by": "ingest",
+   "exclusion": "main protein is not one of this round's four cuts (boneless chicken breast, ground beef, pork loin, ground turkey), or more than one of them is present, or a disqualifying cut is"
+  },
+  {
+   "slug": "burrito-bowl",
+   "name": "Burrito Bowls",
+   "url": "https://thecozycook.com/burrito-bowl-recipe/",
+   "domain": "thecozycook.com",
+   "first_seen": "2026-08-27T11:35:44",
+   "last_verified": "2026-08-27T11:35:44",
+   "signature": {
+    "protein": "beef",
+    "method": "skillet",
+    "sauce_family": "cream",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 790.0,
+    "carbs": 72.0,
+    "protein_g": 42.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "2 (8-inch) flour tortillas (taco size)",
+    "½ cup vegetable oil",
+    "1 ripe avocado",
+    "2 teaspoons lime juice",
+    "1/8 teaspoon salt",
+    "2 Roma tomatoes (diced)",
+    "4 oz. sour cream",
+    "1 cup shredded Mexican cheese blend (Cheddar and Monterey Jack are great)",
+    "3 cups cooked rice (see notes)",
+    "3 tablespoons butter (melted)",
+    "2 tablespoons lime juice",
+    "½ teaspoon ground cumin",
+    "1/3 cup cilantro (roughly chopped. Plus more to garnish bowls.)",
+    "1 cup whole kernel sweet corn (drained and rinsed)",
+    "1 cup black beans (drained and rinsed)",
+    "2 jalapeno peppers (seeded and diced)",
+    "1-2 teaspoons hot sauce",
+    "¼ teaspoon EACH: garlic powder, onion powder, salt",
+    "1 lb. ground beef",
+    "½ cup white onions (diced)",
+    "4 cloves garlic (minced)",
+    "1 oz. packet taco seasoning (see notes for my homemade recipe)",
+    "2/3 cup water"
+   ],
+   "neighbours": [
+    {
+     "slug": "beef-burrito-bowls",
+     "name": "High-Protein Beef Burrito Bowls",
+     "score": 22,
+     "shared": [
+      "burrito",
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "rice"
+     ]
+    },
+    {
+     "slug": "indian-keema-matar-bowls",
+     "name": "Indian Keema Matar (Ground Beef & Peas Curry) Bowls",
+     "score": 16,
+     "shared": [
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "garlic",
+      "jalapenos",
+      "onions",
+      "rice",
+      "vegetable-oil"
+     ]
+    },
+    {
+     "slug": "goan-pork-vindaloo-rice-bowls",
+     "name": "Goan Pork Vindaloo Rice Bowls",
+     "score": 16,
+     "shared": [
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "jalapenos",
+      "limes",
+      "onions",
+      "rice",
+      "vegetable-oil"
+     ]
+    },
+    {
+     "slug": "filipino-beef-pares-rice-bowls",
+     "name": "Filipino Beef Pares Rice Bowls",
+     "score": 15,
+     "shared": [
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "onions",
+      "rice",
+      "salt",
+      "vegetable-oil"
+     ]
+    },
+    {
+     "slug": "beef-rendang-rice-bowls",
+     "name": "Beef Rendang Rice Bowls",
+     "score": 15,
+     "shared": [
+      "bowls"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "jalapenos",
+      "onions",
+      "rice",
+      "vegetable-oil"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|skillet|plain",
+     "slug": "low-carb-cheesy-beef-broccoli-skillet",
+     "name": "Low Carb Cheesy Beef Broccoli Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "low-carb-unstuffed-cabbage-beef-skillet",
+     "name": "Low Carb Unstuffed Cabbage Beef Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of catalog unstuffed-cabbage-roll-bowls: same ground-beef + cabbage + tomato deconstructed cabbage-roll skillet; dropping rice + adding cheddar-jack are formulation tweaks. Also pool-dupe of beef-unstuffed-cabbage-skillet.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "how-to-cook-the-perfect-steak",
+     "name": "How to Cook the Perfect Steak",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Ribeye-cooking technique page (2 servings, herb butter); not a batch-scalable composed dinner and ribeye cost is implausible for the thrifty catalog.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:20"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "chicken-fried-steak",
+     "name": "Chicken Fried Steak",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Buttermilk-breaded pan-fried cube steak with peppered cream gravy; distinct Southern-comfort plate, verified 687cal/18c/42p, no catalog equivalent.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:11:04"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "steak-with-gravy",
+     "name": "Steak with Gravy",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Seared sirloin in a brown beef gravy; brown-gravy-beef family already covered by live salisbury-steak-potato-bowls and beef-tips-and-gravy, beef lane runaway and this does not widen cuisine (saturation 5).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "salisbury-steak-burgers",
+     "name": "Salisbury Steak Burgers",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ground-beef patties in brown gravy with onion/mushroom on Kaiser buns; not a dupe of salisbury-steak-potato-bowls (different format), verified band 542cal/43c.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke",
+     "by": "decider",
+     "at": "2026-08-26T10:01:07"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "air-fryer-steak-with-garlic-butter",
+     "name": "Air Fryer Steak with Garlic Butter",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Plain steak topped with garlic compound butter, 2 servings, no starch or composed sides; a single-protein cooking-method page rather than a batch-scalable dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-27-ten",
+     "by": "decider",
+     "at": "2026-08-27T06:00:39"
+    }
+   ],
+   "saturation_pressure": 0,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [
+    "cold-plate"
+   ],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.609,
+    "lines": 23,
+    "resolved": 14,
+    "protein_share": 0.406,
+    "cal_floor": 1182.7,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "pioneer-woman-chili",
+   "name": "The Pioneer Woman Chili",
+   "url": "https://thecozycook.com/pioneer-woman-chili/",
+   "domain": "thecozycook.com",
+   "first_seen": "2026-08-27T11:35:47",
+   "last_verified": "2026-08-27T11:35:47",
+   "signature": {
+    "protein": "beef",
+    "method": "stew",
+    "sauce_family": "tomato",
+    "starch": "tortilla"
+   },
+   "band": {
+    "cal": 613.0,
+    "carbs": 42.0,
+    "protein_g": 40.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "2 lbs. ground beef (80% lean)",
+    "2 cloves garlic (diced)",
+    "8 oz. tomato sauce",
+    "2 tablespoons chili powder",
+    "1 teaspoon ground cumin",
+    "1 teaspoon ground oregano",
+    "1 teaspoon salt",
+    "1/4 teaspoon cayenne pepper",
+    "1/4 cup masa harina (white or yellow)",
+    "15 oz. kidney beans (drained and rinsed)",
+    "15 oz. pinto beans (drained and rinsed)",
+    "14.5 oz. diced tomatoes (Instant Pot version only)",
+    "Shredded Cheddar",
+    "Lime Wedges",
+    "Sour Cream",
+    "Tortilla Chips or Fritos",
+    "Diced Green Onions"
+   ],
+   "neighbours": [
+    {
+     "slug": "beef-chili-mac",
+     "name": "Beef Chili Mac",
+     "score": 14,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "kidney-beans",
+      "onions",
+      "tomato-sauce"
+     ]
+    },
+    {
+     "slug": "chili-cornbread-casserole",
+     "name": "Chili Cornbread Casserole",
+     "score": 14,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "kidney-beans",
+      "onions",
+      "sour-cream"
+     ]
+    },
+    {
+     "slug": "chipotle-sweet-potato-pork-chili",
+     "name": "Chipotle Sweet Potato Pork Chili",
+     "score": 14,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "kidney-beans",
+      "onions",
+      "sour-cream",
+      "tortillas"
+     ]
+    },
+    {
+     "slug": "turkey-pumpkin-chili",
+     "name": "Turkey Pumpkin Chili",
+     "score": 13,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "onions",
+      "sour-cream"
+     ]
+    },
+    {
+     "slug": "turkey-chili-verde-white-beans",
+     "name": "Turkey Chili Verde with White Beans",
+     "score": 13,
+     "shared": [
+      "chili"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "onions",
+      "sour-cream"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.588,
+    "lines": 17,
+    "resolved": 10,
+    "protein_share": 0.55,
+    "cal_floor": 413.4,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "no-neighbour"
+  },
+  {
+   "slug": "instant-pot-meatloaf-mashed-potatoes",
+   "name": "Instant Pot Meatloaf Mashed Potatoes",
+   "url": "https://iwashyoudry.com/instant-pot-meatloaf-mashed-potatoes/",
+   "domain": "iwashyoudry.com",
+   "first_seen": "2026-08-27T11:35:48",
+   "last_verified": "2026-08-27T11:35:48",
+   "signature": {
+    "protein": "beef",
+    "method": "braised",
+    "sauce_family": "bbq",
+    "starch": "potato"
+   },
+   "band": {
+    "cal": 732.0,
+    "carbs": 83.0,
+    "protein_g": 44.8,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "2 lb. ground beef (I used a lean ground beef)",
+    "1 cup breadcrumbs",
+    "2 eggs",
+    "1/2 cup onion (diced)",
+    "2 tsp garlic powder",
+    "2 tsp dried parsley",
+    "1 tsp salt and pepper",
+    "1/2 cup honey bbq sauce",
+    "2 tbsp brown sugar",
+    "2 tsp mustard",
+    "1/3 cup ketchup",
+    "3 lbs. yellow potatoes (washed and quartered)",
+    "1 cup chicken broth",
+    "1 cup half and half",
+    "4 tbsp butter",
+    "3/4 cup sour cream",
+    "1 tsp garlic powder",
+    "salt and pepper"
+   ],
+   "neighbours": [
+    {
+     "slug": "turkey-meatloaf-with-mashed-potatoes",
+     "name": "Turkey Meatloaf with Mashed Potatoes",
+     "score": 34,
+     "shared": [
+      "meatloaf",
+      "mashed",
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "bbq-sauce",
+      "eggs",
+      "ketchup",
+      "onions"
+     ]
+    },
+    {
+     "slug": "country-pork-meatballs-onion-gravy",
+     "name": "Country Pork Meatballs with Onion Gravy over Mashed Potatoes",
+     "score": 24,
+     "shared": [
+      "mashed",
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "beef-broth",
+      "butter",
+      "eggs",
+      "onions"
+     ]
+    },
+    {
+     "slug": "creamy-mushroom-pork-chops-over-mashed-potatoes",
+     "name": "Creamy Mushroom Pork Chops over Mashed Potatoes",
+     "score": 23,
+     "shared": [
+      "mashed",
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-broth",
+      "salt"
+     ]
+    },
+    {
+     "slug": "massaman-beef-curry-potatoes",
+     "name": "Massaman Beef Curry with Potatoes",
+     "score": 13,
+     "shared": [
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "beef-broth",
+      "garlic",
+      "onions"
+     ]
+    },
+    {
+     "slug": "kafta-bil-sanieh-beef-potato-bake",
+     "name": "Lebanese Baked Kafta and Potatoes (Kafta bil Sanieh)",
+     "score": 13,
+     "shared": [
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "eggs",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|braised|plain",
+     "slug": "sauerbraten-german-braised-beef",
+     "name": "Sauerbraten German Braised Beef",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Catalog dupe of slow-cooker-sauerbraten-bowls: same German sweet-sour red-wine-vinegar/gingersnap braised beef chuck.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "carne-en-su-jugo",
+     "name": "Carne en su Jugo",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Same Jalisco carne en su jugo (bacon, steak, tomatillo-serrano-cilantro, pinto beans) already live as carne-en-su-jugo-bowls.",
+     "dupe_of": [
+      "carne-en-su-jugo-bowls"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:09:57"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "beef-tips",
+     "name": "Beef Tips",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Cubed-chuck beef tips in onion gravy; same dinner as live beef-tips-and-gravy-mashed-potatoes.",
+     "dupe_of": [
+      "beef-tips-and-gravy-mashed-potatoes"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:12:54"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "crock-pot-italian-beef-sandwiches",
+     "name": "Crock Pot Italian Beef Sandwiches",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Pepperoncini/Italian-dressing slow-cooker beef identical to live slow-cooker-italian-beef-bowl; roll-vs-rice format swap.",
+     "dupe_of": [
+      "slow-cooker-italian-beef-bowl"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:12:56"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "mississippi-pot-roast-recipe",
+     "name": "Mississippi Pot Roast",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Ranch/gravy-packet + pepperoncini + butter chuck roast identical to live mississippi-pot-roast-bowls.",
+     "dupe_of": [
+      "mississippi-pot-roast-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:12:57"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "slow-cooker-beef-stroganoff",
+     "name": "Slow Cooker Beef Stroganoff",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "accepted",
+     "reason": "Classic braised chuck-cube stroganoff over egg noodles; distinct from live ground-beef-stroganoff-pasta (whole-beef vs ground, slow-braise vs skillet).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:12:58"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "beef-stroganoff",
+     "name": "Beef Stroganoff",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Classic beef-and-mushroom stroganoff over noodles duplicates live ground-beef-stroganoff-pasta; also collides with an in-flight slow-cooker stroganoff.",
+     "dupe_of": [
+      "ground-beef-stroganoff-pasta"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T11:58:20"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "braised-beef",
+     "name": "Braised Beef",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Red-wine braised beef chuck with mirepoix over mash duplicates live beef-bourguignon-bowls; matches prior beef|any|wine dupe rulings.",
+     "dupe_of": [
+      "beef-bourguignon-bowls"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T11:58:21"
+    },
+    {
+     "key": "beef|braised|plain",
+     "slug": "crock-pot-roast",
+     "name": "Crock Pot Roast",
+     "protein": "beef",
+     "method": "braised",
+     "verdict": "rejected-dupe",
+     "reason": "Chuck roast braised with potatoes and carrots duplicates live slow-cooker-pot-roast-potatoes-carrots; already 5 pot-roast dinners in catalog.",
+     "dupe_of": [
+      "slow-cooker-pot-roast-potatoes-carrots"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:33"
+    }
+   ],
+   "saturation_pressure": 2,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.667,
+    "lines": 18,
+    "resolved": 12,
+    "protein_share": 0.386,
+    "cal_floor": 589.6,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "taco-casserole",
+   "name": "Taco Casserole",
+   "url": "https://amandascookin.com/taco-casserole/",
+   "domain": "amandascookin.com",
+   "first_seen": "2026-08-27T11:35:50",
+   "last_verified": "2026-08-27T11:35:50",
+   "signature": {
+    "protein": "beef",
+    "method": "casserole",
+    "sauce_family": "tomato",
+    "starch": "tortilla"
+   },
+   "band": {
+    "cal": 694.0,
+    "carbs": 59.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 8,
+   "ingredients_verbatim": [
+    "2 pounds lean ground beef",
+    "30 ounces canned black beans (two 15 ounce cans, drained and rinsed)",
+    "16 ounces salsa (smooth or chunky)",
+    "1/4 cup homemade taco seasoning (2 store bought packages)",
+    "3 cups broken tortilla chips",
+    "1 cup chopped bell peppers (red, yellow, and green)",
+    "5 green onions (chopped)",
+    "4.5 ounces canned sliced black olives (two 2.25 ounce cans, drained)",
+    "3 cups shredded cheddar and/or Monterey Jack cheese",
+    "1 large tomato (chopped)",
+    "1 cup chopped or shredded Romaine lettuce"
+   ],
+   "neighbours": [
+    {
+     "slug": "turkey-taco-casserole",
+     "name": "Turkey Taco Casserole",
+     "score": 26,
+     "shared": [
+      "taco",
+      "casserole"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "green-bell-pepper",
+      "green-olives",
+      "green-onions",
+      "salsa",
+      "shredded-cheese",
+      "tortillas"
+     ]
+    },
+    {
+     "slug": "frito-pie-walking-taco-casserole",
+     "name": "Frito Pie Walking Taco Casserole",
+     "score": 23,
+     "shared": [
+      "taco",
+      "casserole"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions",
+      "shredded-cheese"
+     ]
+    },
+    {
+     "slug": "johnny-marzetti-casserole",
+     "name": "Johnny Marzetti Casserole",
+     "score": 15,
+     "shared": [
+      "casserole"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "cheddar-cheese-shredded",
+      "green-bell-pepper",
+      "green-olives",
+      "onions"
+     ]
+    },
+    {
+     "slug": "cheesy-taco-spaghetti",
+     "name": "Cheesy Taco Spaghetti",
+     "score": 14,
+     "shared": [
+      "taco"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "green-olives",
+      "shredded-cheese",
+      "taco-seasoning"
+     ]
+    },
+    {
+     "slug": "mexican-chorizo-egg-casserole",
+     "name": "Mexican Chorizo and Egg Casserole",
+     "score": 14,
+     "shared": [
+      "casserole"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cheddar-cheese-shredded",
+      "green-onions",
+      "onions",
+      "pepper-jack-cheese"
+     ]
+    },
+    {
+     "slug": "turkey-taco-casserole",
+     "name": "Turkey Taco Casserole",
+     "score": 0.9188,
+     "shared": [],
+     "source": "bge-m3",
+     "side": "live-catalog"
+    },
+    {
+     "slug": "frito-pie-walking-taco-casserole",
+     "name": "Frito Pie Walking Taco Casserole",
+     "score": 0.8647,
+     "shared": [],
+     "source": "bge-m3",
+     "side": "live-catalog"
+    },
+    {
+     "slug": "turkey-taco-soup",
+     "name": "Turkey Taco Soup",
+     "score": 0.8458,
+     "shared": [],
+     "source": "bge-m3",
+     "side": "live-catalog"
+    },
+    {
+     "slug": "cheesy-taco-spaghetti",
+     "name": "Cheesy Taco Spaghetti",
+     "score": 0.8427,
+     "shared": [],
+     "source": "bge-m3",
+     "side": "live-catalog"
+    },
+    {
+     "slug": "burrito-casserole",
+     "name": "Burrito Casserole",
+     "score": 0.8881,
+     "shared": [],
+     "source": "bge-m3",
+     "side": "backlog"
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|any|spice",
+     "slug": "slow-cooker-beef-barbacoa",
+     "name": "Slow Cooker Beef Barbacoa",
+     "protein": "beef",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "band_computed": {
+    "coverage": 0.455,
+    "lines": 11,
+    "resolved": 5,
+    "protein_share": 0.539,
+    "cal_floor": 316.5,
+    "verdict": null
+   },
+   "band_conflict": null,
+   "meets_round_band": true,
+   "dedup_at_ingest": "unavailable"
+  },
+  {
+   "slug": "high-protein-baked-ziti",
+   "name": "High Protein Baked Ziti",
+   "url": "https://thebalancednutritionist.com/high-protein-baked-ziti/",
+   "domain": "thebalancednutritionist.com",
+   "first_seen": "2026-08-27T11:35:51",
+   "signature": {
+    "protein": null,
+    "method": null,
+    "sauce_family": null,
+    "starch": null
+   },
+   "band": {
+    "cal": 559.0,
+    "carbs": 57.0,
+    "protein_g": 41.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 8,
+   "status": "ruled:excluded",
+   "entered_by": "ingest",
+   "exclusion": "board exclusion: ground chicken"
   }
  ],
  "wiped_2026_08_27": {
