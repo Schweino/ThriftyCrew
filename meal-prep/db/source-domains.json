@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-08-26T18:03:29",
-    "count":  15,
+    "updated":  "2026-08-27T09:45:26",
+    "count":  28,
     "domains":  [
                     {
                         "domain":  "budgetbytes.com",
@@ -17,14 +17,14 @@
                     },
                     {
                         "domain":  "spendwithpennies.com",
-                        "ok":  158,
+                        "ok":  159,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-26T18:03:25"
+                        "updated":  "2026-08-27T09:45:12"
                     },
                     {
                         "domain":  "isabeleats.com",
@@ -39,14 +39,14 @@
                     },
                     {
                         "domain":  "wellplated.com",
-                        "ok":  98,
+                        "ok":  101,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-26T18:03:23"
+                        "updated":  "2026-08-27T09:45:09"
                     },
                     {
                         "domain":  "thecozycook.com",
@@ -61,14 +61,14 @@
                     },
                     {
                         "domain":  "recipetineats.com",
-                        "ok":  165,
+                        "ok":  166,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-26T18:03:24"
+                        "updated":  "2026-08-27T09:45:13"
                     },
                     {
                         "domain":  "skinnytaste.com",
@@ -168,6 +168,149 @@
                         "status":  "blocked",
                         "note":  "fetch-recipe: The remote server returned an error: (403) Forbidden.",
                         "updated":  "2026-08-24T16:45:33"
+                    },
+                    {
+                        "domain":  "feelgoodfoodie.net",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:10"
+                    },
+                    {
+                        "domain":  "lecremedelacrumb.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:14"
+                    },
+                    {
+                        "domain":  "thecleaneatingcouple.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:15"
+                    },
+                    {
+                        "domain":  "fitfoodiefinds.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:16"
+                    },
+                    {
+                        "domain":  "lemonsandzest.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:17"
+                    },
+                    {
+                        "domain":  "chelseajoyeats.com",
+                        "ok":  0,
+                        "fail":  1,
+                        "last_404":  null,
+                        "has_jsonld":  false,
+                        "forced_block":  false,
+                        "status":  "unreliable",
+                        "note":  "fetch-recipe: The remote server returned an error: (403) Forbidden.",
+                        "updated":  "2026-08-27T09:45:18"
+                    },
+                    {
+                        "domain":  "masonfit.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:19"
+                    },
+                    {
+                        "domain":  "eatingbirdfood.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:20"
+                    },
+                    {
+                        "domain":  "xoxobella.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:21"
+                    },
+                    {
+                        "domain":  "everydaydishes.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:23"
+                    },
+                    {
+                        "domain":  "wholesomelicious.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:24"
+                    },
+                    {
+                        "domain":  "laurafuentes.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:25"
+                    },
+                    {
+                        "domain":  "lynnskitchenadventures.com",
+                        "ok":  1,
+                        "fail":  0,
+                        "last_404":  null,
+                        "has_jsonld":  true,
+                        "forced_block":  false,
+                        "status":  "reliable",
+                        "note":  "",
+                        "updated":  "2026-08-27T09:45:26"
                     }
                 ]
 }

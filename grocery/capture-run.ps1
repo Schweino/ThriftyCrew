@@ -572,6 +572,13 @@ $inputPaths = @('grocery/out',
                 'grocery/carriage.json', 'grocery/ingredient-queue.json',
                 'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
                 'grocery/notify-log.txt',
+                # THE PUBLISHER LEDGER (2026-08-27). harvest and the sourcing agents learn which
+                # domains serve robots.txt, allow us, and carry a usable nutrition panel - and that
+                # knowledge was on no staging list. One probe added THIRTEEN new publishers
+                # (masonfit, eatingbirdfood, feelgoodfoodie and ten more) and every one of them
+                # existed only in this working tree. Re-earning it means re-probing the open web,
+                # so it is evidence in exactly the sense this list means.
+                'meal-prep/db/source-domains.json',
                 # THE PRODUCT IDENTITY TABLE. It is regenerated every morning, so if it is not staged here
                 # it never leaves this PC - which is exactly the last-mile failure found on 2026-08-22
                 # (public\board.json rebuilt daily, last bot commit four days old). It also has to be

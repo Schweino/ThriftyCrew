@@ -1262,7 +1262,7 @@ else { Bad 'capture-run no longer stages graph/provenance - the evaluation recor
 #     re-visited. Six scripts read carriage.json, including engine\cost-recipes.ps1 and engine\publish.ps1.
 foreach ($ledger in @('grocery/carriage.json', 'grocery/ingredient-queue.json',
                       'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
-                      'grocery/notify-log.txt')) {
+                      'grocery/notify-log.txt', 'meal-prep/db/source-domains.json')) {
   if ($crSrc2 -match [regex]::Escape("'" + $ledger + "'")) {
     Ok ("capture-run stages {0} (a discovered price is merged, never left in the working tree)" -f $ledger)
   } else {
