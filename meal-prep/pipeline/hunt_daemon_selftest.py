@@ -1378,6 +1378,8 @@ def run():
     for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
         T(name, ok, got)
     H("A wave that did not publish is resumable")
+    for name, ok, got in _the_rewave_moves_the_STATE_not_just_the_pool():
+        T(name, ok, got)
     for name, ok, got in _a_wave_that_did_not_publish_is_resumable():
         T(name, ok, got)
     for name, ok, got in _a_failed_assembly_is_resumable():
@@ -8979,6 +8981,75 @@ def _the_write_lane_does_not_block_on_its_own_intake():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res
+
+
+def _the_rewave_moves_the_STATE_not_just_the_pool():
+    r"""THE WIRING, THROUGH THE REAL SCRIPTS (2026-08-27).
+
+    The predicate fixtures beside this one prove wave_batch_closed answers correctly. They would all
+    stay green if seed() only appended the slug to its in-memory pool - and that is precisely what the
+    first cut did. hunt-run's closer reads the STATE FILES, so it answered
+
+        no qa-passed recipes waiting - nothing to close
+
+    over six recipes the daemon believed it was holding, and the run ended having published nothing
+    for the second time in a row. Four times today a fixture has covered a predicate and missed its
+    wiring, so this one drives the real hunt-run.ps1: it stages a recipe all the way to `waved`
+    against an UNCLOSED batch, seeds a real daemon, and reads the state file back off disk.
+
+    `waved` -> `qa-passed` is already a legal edge in hunt-run's own transition table, which is the
+    state machine having anticipated this return long before anything used it.
+    """
+    out = []
+    tmp = scratch_dir(prefix="daemon-rewave-")
+    try:
+        run_dir = os.path.join(tmp, "run")
+        os.makedirs(run_dir, exist_ok=True)
+        rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
+            "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
+            "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35",
+            "-ProteinMin", "0"])
+        if rc != 0:
+            return [("the rewave drill can init a scratch run dir", False, o.strip()[:200])]
+
+        led = os.path.join(tmp, "ledger.json")
+        with io.open(led, "w", encoding="utf-8") as fh:
+            json.dump({"batches": [{"batch": "rewave-drill-w1", "closed": False}]}, fh)
+
+        # the real route, off hunt-run's own table: mapped goes through `pricing` to reach `priced`.
+        chain = ["sourced", "selected", "extracted", "mapped", "pricing", "priced", "spec-built",
+                 "written", "qa-passed", "waved"]
+        for i, st in enumerate(chain):
+            args = ["-Advance", "-RunDir", run_dir, "-Slug", "r-waved", "-To", st, "-By", "drill",
+                    "-Detail", "drill"]
+            if i == 0:
+                args += ["-Title", "r-waved", "-SourceUrl", "https://d/r", "-Protein", "beef"]
+            r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
+            if r != 0:
+                return [("the rewave drill can stage a recipe at %s" % st, False, (oo + ee).strip()[:200])]
+
+        def state_of():
+            with io.open(os.path.join(run_dir, "state", "r-waved.json"), encoding="utf-8-sig") as fh:
+                return (json.load(fh) or {}).get("state")
+
+        out.append(("the drill really parked the recipe at waved before seeding", state_of() == "waved",
+                    "state=%s" % state_of()))
+
+        d = HD.Daemon(run_dir, "rewave-drill", quiet=True, ledger_path=led)
+        ok, err = arun(d.seed())
+        if not ok:
+            return out + [("the rewave daemon can seed", False, err)]
+
+        out.append(("MUST FIRE  seed MOVES THE STATE FILE back to qa-passed, not just its own pool - "
+                    "hunt-run's closer reads the file, and an in-memory-only pool closed nothing",
+                    state_of() == "qa-passed", "state after seed = %s" % state_of()))
+        out.append(("  ...and the slug really is in the pool a wave forms from",
+                    "r-waved" in d.qa_passed, json.dumps(d.qa_passed)))
+        out.append(("  ...and the seed SAYS how many it returned, so a silent recovery is visible",
+                    d.seed_counts.get("rewave") == 1, json.dumps(d.seed_counts)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return out
 
 
 def _a_wave_that_did_not_publish_is_resumable():

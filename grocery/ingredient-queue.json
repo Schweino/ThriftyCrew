@@ -6837,23 +6837,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T15:28:47"
+                                                     "checked":  "2026-08-27T15:43:49"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 reported 72 hits but only 8 priced Apollo rows were captured (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Fareway Seasoning Mix 10 oz, Badia Pumpkin Pie Spice, Badia Paprika, Cavender\u0027s Salt Free) - all generic OR-matches on \u0027spice/mix\u0027, none is a Moroccan blend or ras el hanout. 64 of 72 rows unseen and I have no browser to view them or to walk rungs 2-4, so this is unchecked, not empty. price-ingredient.ps1 -Name \u0027Moroccan Spice Mix\u0027 and -Name \u0027ras el hanout\u0027 both ABSENT on disk; -Name \u0027Moroccan\u0027 returns only RiceSelect couscous and two hair-care products.",
-                                                     "checked":  "2026-08-27T15:28:47"
+                                                     "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 returned 72 hits but only 8 priced Apollo rows were captured (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Fareway Seasoning Mix 10 oz, Badia Pumpkin Pie Spice, Papa Rico\u0027s Italian, Tasty Tacos Taco Seasoning) - the search clearly fuzz-matched \u0027seasoning mix\u0027 and ignored \u0027Moroccan\u0027; none of the 8 is a Moroccan blend or ras el hanout. I cannot see the other 64 rows and cannot walk the \u0027moroccan\u0027 / \u0027ras el hanout\u0027 rungs headless (no browser), so this is unchecked, not absent. price-ingredient.ps1 -Name \u0027Moroccan Spice Mix\u0027 and \u0027ras el hanout\u0027 are both ABSENT from today\u0027s captures - a capture miss is never not-carried.",
+                                                     "checked":  "2026-08-27T15:43:49"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "pre-pass server tier, FULL ladder: \u0027Moroccan Spice Mix\u0027=0 hits -\u003e \u0027MoroccanSpiceMix\u0027=0 hits. No candidates on any rung.",
-                                                         "checked":  "2026-08-27T15:28:47"
+                                                         "evidence":  "full-ladder server probe: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (pre-pass); my extra rungs: \u0027moroccan\u0027 = 3 hits, all Suave Moroccan Oil shampoo/conditioner and Nair Moroccan Argan hair remover (non-food); \u0027ras el hanout\u0027 = 0 on both rungs. No Moroccan seasoning blend at Family Fare.",
+                                                         "checked":  "2026-08-27T15:43:49"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6861,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T15:28:47"
+                                                    "checked":  "2026-08-27T15:43:49"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 returned 8 rows, all adjudicated NO (McCormick taco seasoning, Lawry\u0027s seasoned salt, Salad Supreme, Montreal Steak, Hidden Valley ranch, Old Bay 7.5 lb, Kinder\u0027s whiskey peppercorn, Kinder\u0027s onion burger rub) - no Moroccan blend or ras el hanout. Ladder rungs 2-4 (\u0027Moroccan seasoning\u0027, \u0027ras el hanout\u0027) not walked: no browser/driver in this dispatched session, so unchecked rather than EMPTY. price-ingredient.ps1 -Name \u0027ras el hanout\u0027 ABSENT on disk.",
-                                                             "checked":  "2026-08-27T15:28:47"
+                                                             "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 returned 8 hits, all generic seasonings (McCormick Taco Seasoning 12pk \\.78, Lawry\u0027s Seasoned Salt, McCormick Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5 lb, two Kinder\u0027s rubs) - none is a Moroccan blend or ras el hanout. The \u0027moroccan\u0027 and \u0027ras el hanout\u0027 rungs were never run and I have no browser this session to run them, so this store is unchecked rather than empty. price-ingredient.ps1 finds no Sam\u0027s capture row for either term (a capture miss is never not-carried).",
+                                                             "checked":  "2026-08-27T15:43:49"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,15 +6877,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T15:28:47"
+                                                  "checked":  "2026-08-27T15:43:49"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "pre-pass server tier, FULL ladder: \u0027Moroccan Spice Mix\u0027=0 hits -\u003e \u0027MoroccanSpiceMix\u0027=0 hits. No candidates on any rung; no explicit-blend or ras-el-hanout style product returned.",
-                                                          "checked":  "2026-08-27T15:28:47"
+                                                          "evidence":  "full-ladder server probe: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (pre-pass); I then walked two more rungs myself - probe-ingredient.ps1 \u0027moroccan\u0027 = 22 hits, all Tree Hut Moroccan Rose bath products, Stash Moroccan Mint tea and RiceSelect Moroccan-Style Couscous, no spice blend; probe-ingredient.ps1 \u0027ras el hanout\u0027 = 0 hits on both rungs. No Moroccan seasoning blend at Baker\u0027s.",
+                                                          "checked":  "2026-08-27T15:43:49"
                                                       }
                                  },
                       "verdict":  "PENDING",

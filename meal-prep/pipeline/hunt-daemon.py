@@ -5942,8 +5942,18 @@ class Daemon(object):
                 # `waved` either way, so the state cannot tell the two apart. An unclosed batch means
                 # the wave never landed, and its recipes go back to the pool the next wave forms from.
                 if not self.wave_batch_closed(self.state_wave(slug)):
-                    self.qa_passed.append(slug)
-                    counts["rewave"] = counts.get("rewave", 0) + 1
+                    # THE STATE FILE, NOT JUST THE IN-MEMORY POOL. The first cut appended to
+                    # self.qa_passed and stopped, and hunt-run's closer reads the state files: it
+                    # answered "no qa-passed recipes waiting - nothing to close" over six recipes the
+                    # daemon believed it was holding. `waved` -> `qa-passed` is already a legal edge in
+                    # hunt-run's transition table, which is the state machine having anticipated this
+                    # exact return; the durable move is what makes the pool real.
+                    if await self.advance(slug, "qa-passed", "daemon",
+                                          "returned to the wave pool: wave %d never published (its "
+                                          "batch is unclosed), so the recipe was stranded at waved"
+                                          % self.state_wave(slug)):
+                        self.qa_passed.append(slug)
+                        counts["rewave"] = counts.get("rewave", 0) + 1
         # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
         if mapped_holds:
             n = await self.unhold_mapped(mapped_holds)

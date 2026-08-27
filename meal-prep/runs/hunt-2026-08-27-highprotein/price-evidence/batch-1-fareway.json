@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T15:27:47",
+ "generated": "2026-08-27T15:42:39",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,18 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
     },
     {
-     "item": "Badia Spices Paprika",
-     "price": 1.68,
-     "size": "2 oz",
+     "item": "Papa Rico's Mild Italian Seasoning",
+     "price": 7.99,
+     "size": "6 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/116472224-papa-rico-s-mild-italian-seasoning-6-oz"
     },
     {
-     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
-     "price": 5.99,
-     "size": "7 oz",
+     "item": "Tasty Tacos Taco Seasoning Mix",
+     "price": 2.0,
+     "size": "0.7 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19545846-tasty-tacos-taco-seasoning-mix-each"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
