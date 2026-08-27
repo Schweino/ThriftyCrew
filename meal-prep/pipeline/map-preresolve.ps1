@@ -385,6 +385,94 @@ function Get-CompositeSplits {
   }
 }
 
+function Get-StatedMassGrams {
+  <#
+    THE MASS A RAW INGREDIENT LINE STATES ABOUT ITSELF, in grams, or $null if it states none.
+
+    Used to demote the quantity engine's number where the engine plainly did not read the line: on
+    "2 medium 1.5 lbs. chicken breasts" it takes the count and the each-noun and makes 400 g, while
+    the line says 1.5 lbs. See the call site in -Assemble for why that demotion, and not a change to
+    parse-compute's tokenizer, is the safe fix.
+
+    DELIBERATELY CONSERVATIVE. It reads the FIRST mass token it finds and nothing cleverer: no
+    ranges, no addition, no "plus more for serving". Anything it cannot read confidently is $null,
+    which leaves today's behaviour exactly as it was - this function can only ever demote a number,
+    never invent one.
+  #>
+  param([string]$Raw)
+  if (-not $Raw) { return $null }
+  if ($Raw -notmatch '(?<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)\s*(?<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kg|kilograms?|grams?|g)\b') { return $null }
+  $n = $Matches['n']; $u = ($Matches['u'] -replace '\.', '').ToLower()
+  $val = $null
+  if ($n -match '^\s*(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)\s*$') {
+    $den = [double]$Matches[2]
+    if ($den -ne 0) { $val = [double]$Matches[1] / $den }
+  } else {
+    try { $val = [double]$n } catch { $val = $null }
+  }
+  if ($null -eq $val -or $val -le 0) { return $null }
+  switch -regex ($u) {
+    '^(lbs?|pounds?)$'  { return $val * 453.592 }
+    '^(ozs?|ounces?)$'  { return $val * 28.3495 }
+    '^(kg|kilograms?)$' { return $val * 1000 }
+    '^(grams?|g)$'      { return $val }
+  }
+  return $null
+}
+
+function Get-EngineWeightGuessReason {
+  <#
+    IS THE ENGINE'S WEIGHT FOR THIS LINE A GUESS? Returns the reason when yes, $null when no. This is
+    the ONE question the cross-check turns on, and it has two roads:
+
+      1. parse-compute's own admission - `grams_basis_fallback` - default tbsp, default tsp, a
+         handful with no density. B2, 2026-08-24.
+      2. a count/each number on a line that STATES its own mass, which the engine never flagged
+         because it does not know it missed anything. 2026-08-27.
+
+    BOTH ROADS LIVE HERE ON PURPOSE. The stated-mass road was first wired straight into the call site
+    with the decision inline, and a neuter that reverted that one line left every fixture green -
+    twice in two days, in two different files, the wiring was the part nothing covered. Folding both
+    roads into the single function the cross-check must call removes the wiring: there is no longer a
+    line to revert that does not also take road 1 - which older fixtures already depend on - with it.
+  #>
+  param($Row, [string]$Raw)
+  if ($null -eq $Row) { return $null }
+  if ($Row.PSObject.Properties.Name -contains 'grams_basis_fallback' -and $Row.grams_basis_fallback) {
+    return [string]$Row.grams_basis_fallback
+  }
+  $basis = $null
+  if ($Row.PSObject.Properties.Name -contains 'grams_source_basis') { $basis = $Row.grams_source_basis }
+  return (Test-EngineIgnoredStatedMass $Raw $basis)
+}
+
+function Test-EngineIgnoredStatedMass {
+  <#
+    SHOULD THE ENGINE'S WEIGHT FOR THIS LINE BE DEMOTED TO A GUESS? Returns the reason string when
+    yes, $null when no.
+
+    THIS IS A SEPARATE FUNCTION BECAUSE THE PARSER ALONE IS NOT THE BEHAVIOUR. The first version of
+    this fix left the decision inline at the call site and fixtured only Get-StatedMassGrams; a
+    neuter that reverted the call site left every fixture green, which is a fixture testing a helper
+    nobody has to call. Same lesson the daemon's conditions wiring taught the day before, in a
+    different file. The decision lives here so a fixture can reach it.
+
+    THE RULE: the line states a mass, the engine landed materially away from it, so the engine did
+    not read the line. Ratio band matches the cross-check's own 1.5x / 0.667x, because the two are
+    answering the same question about the same pair of numbers.
+  #>
+  param([string]$Raw, $EngineGrams)
+  if ($null -eq $EngineGrams) { return $null }
+  $eng = 0.0
+  try { $eng = [double]$EngineGrams } catch { return $null }
+  if ($eng -le 0) { return $null }
+  $stated = Get-StatedMassGrams $Raw
+  if ($null -eq $stated -or $stated -lt 1) { return $null }
+  $r = $eng / $stated
+  if ($r -le 1.5 -and $r -ge 0.667) { return $null }
+  return ("count/each guess of {0} g against a line stating {1} g - the engine did not read the stated weight" -f [int]$eng, [int]$stated)
+}
+
 function Split-ExtractionComposites {
   <#
     Rewrite one extraction's ingredient list so a line naming two foods becomes two lines.
@@ -1556,7 +1644,34 @@ function New-MappedDecisionFile {
     # things blunt it - the line is RECORDED to the run's density-gaps file below, so it is visible
     # rather than silent; the mapper's ruling is evidence-gated already; and the band gate plus the
     # macro recompute still catch a gross error downstream.
-    $engineGuessed = ($row.PSObject.Properties.Name -contains 'grams_basis_fallback' -and $row.grams_basis_fallback)
+    $guessWhy = Get-EngineWeightGuessReason $row $raw
+    $engineGuessed = [bool]$guessWhy
+    if ($guessWhy -and -not ($row.PSObject.Properties.Name -contains 'grams_basis_fallback' -and $row.grams_basis_fallback)) {
+      $row | Add-Member -NotePropertyName 'grams_basis_fallback' -NotePropertyValue $guessWhy -Force
+    }
+    # B2's SECOND FAMILY, MEASURED 2026-08-27: A COUNT GUESS ON A LINE THAT STATES ITS OWN WEIGHT.
+    #
+    # `grams_basis_fallback` catches the derivations parse-compute KNOWS it could not ground - default
+    # tbsp, default tsp, a handful with no density. It does not catch this one, because the engine
+    # thinks it did fine: on "2 medium 1.5 lbs. chicken breasts" it read the leading count and the
+    # each-noun, made 2 x 200 g = 400 g, and set NO fallback flag. The line states 1.5 lbs - 680 g -
+    # and the engine simply did not look at it. So a guess arrived wearing the grounded flag, and the
+    # cross-check below then fired at full force against the mapper's correct 680 g reading and
+    # PARKED the recipe. honey-balsamic-chicken-tenders stuck on it three times in one run, the same
+    # 1.7x every time: deterministic, not a slip.
+    #
+    # THE FIX IS NOT TO RE-TOKENIZE THE LINE. parse-compute feeds all 574 live specs and their costed
+    # numbers; changing how it reads a count-plus-weight line is a blast radius nobody asked for
+    # inside a recipe run. What is safe, and is exactly B2's own argument, is to stop treating the
+    # engine's number as AUTHORITATIVE when the line itself carries a mass the engine's answer
+    # contradicts. Demoted to a gap, the cross-check is skipped and the mapper's grounded ruling
+    # stands - which on every line of this shape is the stated weight, the one thing on the line that
+    # is not an estimate.
+    #
+    # NARROW BY CONSTRUCTION: it fires only where the raw line states an explicit mass AND the engine
+    # landed materially away from it. A line with no stated mass is untouched, and so is one where
+    # the engine agrees with the mass it states. Both roads are inside
+    # Get-EngineWeightGuessReason above, which is what $engineGuessed is set from.
     if ($engineGuessed -and $null -ne $row.grams_source_basis) {
       $gapRows.Add([pscustomobject]@{
         slug = [string]$Table.slug; raw = $raw; item = $item
@@ -2069,6 +2184,33 @@ if ($runSelfTest) {
       [pscustomobject]@{ raw='1/4 cup heavy cream'; buy='3/4 cup plus 2 tbsp'; notes='14 tbsp at 15 g/tbsp' })
     rulings = @() }
   $resA = New-MappedDecisionFile (New-Tbl $rowsA 4) $payA $stateRow $known 14
+
+  # ---- FIXTURE: THE COUNT GUESS REACHES THE REAL CROSS-CHECK (2026-08-27, end to end). ------------
+  # This is the wiring, not the predicate. Two neuters of the predicate went red while a neuter of
+  # the LINE that calls it stayed green, twice - so the assembler itself is asked here, through the
+  # same function the map lane calls, with the exact row that stuck honey-balsamic-chicken-tenders
+  # three times: engine 400 g from "2 medium" x an each-noun, on a line that says 1.5 lbs.
+  $rowsCG = @((New-Row '2 medium 1.5 lbs. chicken breasts' 'chicken breasts' 'Cauliflower' 'cauliflower' 'resolved' 400.0))
+  $payCG = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='2 medium 1.5 lbs. chicken breasts'; buy='5 1/4 lb'; notes='the stated weight, 680 g of source'; grams_source=680.388 })
+    rulings = @() }
+  $resCG = New-MappedDecisionFile (New-Tbl $rowsCG 4) $payCG $stateRow $known 14
+  T 'MUST FIRE  the assembler does NOT refuse a stated weight over a count guess - this exact row parked a recipe three times in one run' `
+    ($null -ne $resCG.doc -and -not ((@($resCG.findings) -join ' ') -match 'disagreement')) `
+    ("findings=" + (@($resCG.findings) -join '; '))
+  T '  and the recipe keeps the STATED weight, scaled once: 680 g of source at 3.5x is 2381 g' `
+    ($null -ne $resCG.doc -and [Math]::Abs(@($resCG.doc.ingredients)[0].grams - 2381) -le 2) `
+    ("g=" + [string]@($resCG.doc.ingredients)[0].grams)
+  # CLEAN TWIN. The cross-check must keep its full force where the engine really is grounded, or this
+  # fix has quietly deleted the guard instead of narrowing it.
+  $rowsCG2 = @((New-Row '1.5 lbs chicken breasts' 'chicken breasts' 'Cauliflower' 'cauliflower' 'resolved' 680.388))
+  $payCG2 = [pscustomobject]@{ slug='drill-dish'
+    lines = @([pscustomobject]@{ raw='1.5 lbs chicken breasts'; buy='18 lb'; notes='a real basis error'; grams_source=2381.0 })
+    rulings = @() }
+  $resCG2 = New-MappedDecisionFile (New-Tbl $rowsCG2 4) $payCG2 $stateRow $known 14
+  T 'CLEAN TWIN an engine number that AGREES with the stated weight still refuses a 3.5x ruling - the guard is narrowed, not deleted' `
+    ((@($resCG2.findings) -join ' ') -match 'disagreement') `
+    ("findings=" + (@($resCG2.findings) -join '; '))
   T 'MUST FIRE  the frozen v2 vector: 453.592 g at 4 source servings scales ONCE to 1588 g at 14' `
     (@($resA.findings).Count -eq 0 -and $resA.doc.scale_factor -eq 3.5 -and
      @($resA.doc.ingredients)[0].grams -eq 1588) `
@@ -2966,6 +3108,67 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
   T 'MUST FIRE  the built table carries one row per PART, each stamped with the composite it came from' `
     (@($tblSplit.rows).Count -eq 3 -and [string]$rowSalt.item_split_from -eq 'Salt and Pepper') `
     ((@($tblSplit.rows | ForEach-Object { [string]$_.term }) -join '|') + ' split_from=' + [string]$rowSalt.item_split_from)
+
+  # ---- FIXTURE: THE COUNT GUESS ON A LINE THAT STATES ITS OWN WEIGHT (2026-08-27). ---------------
+  # honey-balsamic-chicken-tenders stuck three times in one run on "2 medium 1.5 lbs. chicken
+  # breasts": the engine read the count and the each-noun, made 2 x 200 g = 400 g, set NO fallback
+  # flag, and the cross-check then fired at full force against the mapper's correct 680 g. Same 1.7x
+  # every time - deterministic, and the recipe could not clear it by being re-asked.
+  T 'MUST FIRE  a line stating pounds is read as that weight, so a count/each guess beside it can be demoted' `
+    ([Math]::Abs((Get-StatedMassGrams '2 medium 1.5 lbs. chicken breasts') - 680.388) -lt 0.01) `
+    ([string](Get-StatedMassGrams '2 medium 1.5 lbs. chicken breasts'))
+  T '  ounces, grams and kilograms too, since the sources use all of them' `
+    (([Math]::Abs((Get-StatedMassGrams '14.5 oz black olives (drained)') - 411.07) -lt 0.1) -and
+     ([Math]::Abs((Get-StatedMassGrams '600 g chicken tenderloin') - 600) -lt 0.01) -and
+     ([Math]::Abs((Get-StatedMassGrams '1.8 kg whole chicken') - 1800) -lt 0.01)) `
+    ("oz=" + (Get-StatedMassGrams '14.5 oz black olives (drained)') + " g=" + (Get-StatedMassGrams '600 g chicken tenderloin'))
+  T '  and a fraction, which is how half these sources print a weight' `
+    ([Math]::Abs((Get-StatedMassGrams '1/2 lb ground beef') - 226.796) -lt 0.01) `
+    ([string](Get-StatedMassGrams '1/2 lb ground beef'))
+  # CLEAN TWINS. This function can only ever DEMOTE a number, so anything it reads wrongly would take
+  # a working line's cross-check away. It stays silent on everything it cannot read confidently.
+  T 'CLEAN TWIN a line with no mass at all states nothing - the cross-check keeps its full force there' `
+    ($null -eq (Get-StatedMassGrams '2 medium yellow onions, diced')) `
+    ([string](Get-StatedMassGrams '2 medium yellow onions, diced'))
+  T 'CLEAN TWIN a VOLUME is not a mass - floz and cups must not be read as weight' `
+    (($null -eq (Get-StatedMassGrams '1 cup buttermilk')) -and
+     ($null -eq (Get-StatedMassGrams '3 tablespoons honey'))) `
+    ("cup=" + [string](Get-StatedMassGrams '1 cup buttermilk') + " tbsp=" + [string](Get-StatedMassGrams '3 tablespoons honey'))
+  T 'CLEAN TWIN a zero or a bare unit reads as nothing rather than as 0 g' `
+    (($null -eq (Get-StatedMassGrams '0 lb nothing')) -and ($null -eq (Get-StatedMassGrams 'lb of something'))) `
+    ("zero=" + [string](Get-StatedMassGrams '0 lb nothing'))
+  # ---- AND THE DECISION ITSELF, not just the parser under it. The first cut of this fix fixtured
+  # only Get-StatedMassGrams, and a neuter that reverted the CALL SITE left every case green.
+  T 'MUST FIRE  the real stuck line demotes: 400 g from a count against a line stating 1.5 lbs' `
+    ((Test-EngineIgnoredStatedMass '2 medium 1.5 lbs. chicken breasts' 400) -match 'did not read the stated weight') `
+    ([string](Test-EngineIgnoredStatedMass '2 medium 1.5 lbs. chicken breasts' 400))
+  T 'CLEAN TWIN an engine that AGREES with the stated weight is NOT demoted - the cross-check keeps its force' `
+    ($null -eq (Test-EngineIgnoredStatedMass '2 medium 1.5 lbs. chicken breasts' 680)) `
+    ([string](Test-EngineIgnoredStatedMass '2 medium 1.5 lbs. chicken breasts' 680))
+  T 'CLEAN TWIN quantization is not a basis error - a few percent off the stated weight still stands' `
+    ($null -eq (Test-EngineIgnoredStatedMass '1 lb ground beef' 465)) `
+    ([string](Test-EngineIgnoredStatedMass '1 lb ground beef' 465))
+  T 'CLEAN TWIN a line stating NO mass is never demoted, whatever the engine said' `
+    ($null -eq (Test-EngineIgnoredStatedMass '2 medium yellow onions, diced' 400)) `
+    ([string](Test-EngineIgnoredStatedMass '2 medium yellow onions, diced' 400))
+  T 'CLEAN TWIN no engine number means nothing to demote' `
+    ($null -eq (Test-EngineIgnoredStatedMass '2 medium 1.5 lbs. chicken breasts' $null)) `
+    'demoted a null'
+  # ---- AND THE ONE FUNCTION THE CROSS-CHECK ACTUALLY CALLS, carrying BOTH roads. Neutering this is
+  # what neutering the wiring used to be, except now it cannot be done without taking parse-compute's
+  # own fallback road down with it - which is the point of folding them together.
+  $rowStated = [pscustomobject]@{ grams_source_basis = 400 }
+  $rowAgrees = [pscustomobject]@{ grams_source_basis = 680 }
+  $rowFlagged = [pscustomobject]@{ grams_source_basis = 48; grams_basis_fallback = 'default tbsp' }
+  T 'MUST FIRE  the cross-check''s own question demotes a count guess against a stated weight' `
+    ((Get-EngineWeightGuessReason $rowStated '2 medium 1.5 lbs. chicken breasts') -match 'did not read the stated weight') `
+    ([string](Get-EngineWeightGuessReason $rowStated '2 medium 1.5 lbs. chicken breasts'))
+  T 'MUST FIRE  ...and still carries parse-compute''s OWN fallback road (B2, 2026-08-24)' `
+    ((Get-EngineWeightGuessReason $rowFlagged '3 tablespoons chopped fresh parsley') -eq 'default tbsp') `
+    ([string](Get-EngineWeightGuessReason $rowFlagged '3 tablespoons chopped fresh parsley'))
+  T 'CLEAN TWIN a grounded engine number that agrees with the line is not a guess by either road' `
+    ($null -eq (Get-EngineWeightGuessReason $rowAgrees '2 medium 1.5 lbs. chicken breasts')) `
+    ([string](Get-EngineWeightGuessReason $rowAgrees '2 medium 1.5 lbs. chicken breasts'))
 
   if ($bad -gt 0) { Write-Output ("map-preresolve SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'map-preresolve SELF-TEST PASS'
