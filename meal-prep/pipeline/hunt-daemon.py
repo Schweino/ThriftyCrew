@@ -5295,11 +5295,37 @@ class Daemon(object):
         rc, out, err = await self.ps_timed("publish", "wave-publish", list(slugs),
                                           WAVE_PUBLISH_PS, pub_args, timeout=3600)
         if rc != 0:
-            refusal = ((out or "") + (err or "")).strip()[-800:]
-            self.log("WAVE %d: publish refused (exit %d)" % (wk, rc))
+            # THE WHOLE REFUSAL, ON DISK. Measured 2026-08-27 on wave 3: the tail-800 slice began
+            # mid-word - on a child process's stderr prefix - and captured only wave-publish's own E4 notes,
+            # so the finding read "publish refused - " followed by four slug names and no reason. The
+            # actual line - "REFUSED - 2 spec(s) were edited after the wave audit was written" - was
+            # above the cut, and wave_results is in-memory, so it died with the process. Recovering it
+            # took a manual re-run of wave-publish. A refusal that cannot be read is a refusal that
+            # gets guessed at, which is the same defect this file's build_skeleton comment already
+            # records for a blind detail[-400:].
+            full = ((out or "") + (err or "")).strip()
+            path = os.path.join(self.run_dir, "waves", "wave-%d.publish-refusal.txt" % wk)
+            try:
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("exit %d%s%s" % (rc, os.linesep, full))
+                where = path
+            except Exception as e:                                # noqa: BLE001
+                where = "(could not be written: %s)" % e
+            # The reason wave-publish states is on its Fail line; prefer that over any slice of the tail.
+            reason = ""
+            for ln in full.replace("\r", "").split("\n"):
+                if "REFUSED" in ln or "wave-publish:" in ln:
+                    reason = ln.strip()
+                    break
+            if not reason:
+                reason = full[-300:]
+            self.log("WAVE %d: publish refused (exit %d) - %s" % (wk, rc, reason[:200]))
+            self.log("WAVE %d: the full refusal is at %s" % (wk, where))
             self.wave_results.append({"wave": wk, "slugs": slugs, "published": [], "held": [],
-                                      "verdict": "PUBLISH-REFUSED", "refusal": refusal})
-            self.findings.append("wave %d: publish refused - %s" % (wk, refusal[:300]))
+                                      "verdict": "PUBLISH-REFUSED", "refusal": full[-4000:],
+                                      "refusal_file": where})
+            self.findings.append("wave %d: publish refused - %s (full text: %s)"
+                                 % (wk, reason[:300], where))
             return
         published, held, collateral, dry = self.read_publish(out, slugs)
         self.log("WAVE %d: %s %d, held %d, collateral %d"

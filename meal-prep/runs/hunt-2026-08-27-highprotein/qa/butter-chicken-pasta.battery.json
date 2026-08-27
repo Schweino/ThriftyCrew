@@ -1,0 +1,281 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "butter-chicken-pasta",
+  "generated": "2026-08-27T14:56:01",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\butter-chicken-pasta.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\butter-chicken-pasta.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 20,
+        "source_ingredients": 21,
+        "matched": 18,
+        "invented": [
+          "Ziti Pasta",
+          "Garlic"
+        ],
+        "dropped": [
+          "short pasta",
+          "garlic cloves"
+        ],
+        "consolidated": [
+          "half (from 'half and half')"
+        ]
+      },
+      "detail": "INVENTED: 'Ziti Pasta' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'short pasta' and the built recipe has nothing that denotes it; DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states \"half (from 'half and half')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Ziti Pasta' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'short pasta' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states \"half (from 'half and half')\" in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 14,
+        "unrated": 4,
+        "exempt": 2,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "1 tablespoon",
+            "spec": "3.5 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Butter",
+            "source": "1 tablespoon",
+            "spec": "3.5 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1 lb",
+            "spec": "3.5 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ginger",
+            "source": "1 tablespoon",
+            "spec": "3.5 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garam Masala",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Cumin",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Coriander",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chili Powder",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Turmeric",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Red Pepper Flakes",
+            "source": "0.25 teaspoon",
+            "spec": "0.75 teaspoon",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Paste",
+            "source": "1 tablespoon",
+            "spec": "3.5 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Sauce",
+            "source": "2 cup",
+            "spec": "7 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Almond Butter",
+            "source": "2 tablespoon",
+            "spec": "7 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Half and Half",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Ziti Pasta",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Yellow Onion",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Salt",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Fresh Cilantro",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 14 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 2,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (2 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Butter Chicken Pasta",
+        "spec_source_url": "https://skinnyspatula.com/butter-chicken-pasta/",
+        "transcription_source_url": "https://skinnyspatula.com/butter-chicken-pasta/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

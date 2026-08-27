@@ -1,0 +1,393 @@
+{
+    "name":  "Butter Chicken Pasta",
+    "slug":  "butter-chicken-pasta",
+    "cuisine":  "Indian Fusion",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+    "source_site":  "skinnyspatula.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "All 20 locked ingredient lines are used by a step; no step introduces an unbought item. Reserved pasta water is water, not a purchased line.",
+                         "No cost_lines or cost_ps were provided in the dispatch, so cost prose uses the ${{cost_ps}} token and shop_smart deliberately makes no traceable per-package cost arithmetic claim.",
+                         "Cal and protein rendered as {{cal}} and {{protein}} tokens; locked values are 630 cal and 40.2 g protein per serving.",
+                         "Cuisine labeled Indian Fusion, not authentic butter chicken, since this is a pasta adaptation.",
+                         "Scaling verified as source x3.5 across every line (base ~4 servings to 14)."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "authentic",
+                                  "traditional",
+                                  "em dash",
+                                  "en dash",
+                                  "seafood",
+                                  "fish",
+                                  "shrimp",
+                                  "cheap"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  630,
+                 "protein":  40,
+                 "carbs":  73,
+                 "fat":  21,
+                 "cost_ps":  "3.62"
+             },
+    "intro_html":  "\u003cp\u003eButter chicken is one of those restaurant orders that feels like a treat and hits your card like one too. This is the version that lives in your fridge instead. We take the same warm, creamy, lightly spiced tomato sauce that makes butter chicken worth craving, and we build it around chicken breast and a pot of short pasta so it stretches across fourteen dinners without asking you to stand at a stove every night.\u003c/p\u003e\u003cp\u003eHere is the honest pitch. It comes in at {{cal}} calories and {{protein}} grams of protein a serving, it tastes like you tried a lot harder than you did, and the whole thing is one pan of sauce plus one pot of pasta. If you have ever wanted takeout comfort on a meal-prep budget, this is the recipe that quietly does both.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 2 lb 5 oz dry short pasta (penne, rigatoni or rotini) (1050 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 1/2 tablespoons (47 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 1/2 tablespoons (49 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb, cut into bite-sized pieces (1575 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium onions, diced (about 4 cups) (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 cloves, finely chopped (21 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 1/2 tablespoons, finely chopped (21 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 3 1/2 teaspoons (7 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 3 1/2 teaspoons (7 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 3 1/2 teaspoons (6 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 3 1/2 teaspoons (9 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 3/4 teaspoons (5 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 3/4 teaspoon (1 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 1/2 tablespoons (56 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 7 cups (1715 g)",
+                                "\u003cstrong\u003eAlmond Butter:\u003c/strong\u003e 7 tablespoons (a scant 1/2 cup) (112 g)",
+                                "\u003cstrong\u003eHalf and Half (Great Value):\u003c/strong\u003e 3 1/2 cups (707 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/2 cups leaves, roughly chopped (25 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (about 2 1/2 teaspoons) (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (about 1 3/4 teaspoons) (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Ziti Pasta, 2 lb 5 oz dry short pasta (penne, rigatoni or rotini): ~$2.24. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Olive Oil, 3 1/2 tablespoons: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 3 1/2 tablespoons: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into bite-sized pieces: ~$7.74. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 medium onions, diced (about 4 cups): ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 7 cloves, finely chopped: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3 1/2 tablespoons, finely chopped: ~$0.17. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "Tomato Paste, 3 1/2 tablespoons: ~$0.20. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Tomato Sauce, 7 cups: ~$3.38. \u003cstrong\u003eBuy 5 15oz cans: $4.19.\u003c/strong\u003e",
+                       "Almond Butter, 7 tablespoons (a scant 1/2 cup): ~$1.45. \u003cstrong\u003eBuy 1 16oz jar: $5.86.\u003c/strong\u003e",
+                       "Half and Half, 3 1/2 cups: ~$1.86. \u003cstrong\u003eBuy 2 pints: $2.49.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 1/2 cups leaves, roughly chopped: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, ground cumin, ground coriander, chili powder, ground turmeric, red pepper flakes, salt, black pepper): ~$0.91. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.82 across 14 servings, so roughly $1.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.68 across 14 servings, roughly $2.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.61. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eSo what does butter chicken comfort cost when you make it fourteen at a time? It lands at ${{cost_ps}} a serving.\u003c/p\u003e\u003cp\u003ePut that next to a single butter chicken takeout order, which will run you the better part of fifteen dollars once you add the rice, and the math stops being close. You are getting the same craving satisfied, plus {{protein}} grams of protein to actually keep you full, for a fraction of one restaurant plate.\u003c/p\u003e\u003cp\u003eThat is the whole idea here. Eating well is not about spending less on worse food, it is about spending a little effort up front so good food costs you almost nothing per plate. Fourteen dinners, one afternoon, one honest price.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe spice rack is where this dish either saves you money or robs you, so let\u0027s shop it right.\u003c/p\u003e\u003cul\u003e\u003cli\u003eGaram masala, cumin, coriander, chili powder and turmeric are the whole personality of the sauce, and you use them by the teaspoon. Buy them from the bulk bins or the value-size jars rather than the little branded shakers, because you are pulling a few teaspoons from a jar that will season a dozen more batches.\u003c/li\u003e\u003cli\u003eTomato sauce (passata) is the body of the sauce and you need a good amount of it, so buy the larger bottles or cans instead of grabbing several small ones. Fewer packages, less packaging you are paying for.\u003c/li\u003e\u003cli\u003eChicken breast is the protein you are building the whole plan on, so buy the large family pack and portion it yourself at home. The small trays cost more for the same meat.\u003c/li\u003e\u003cli\u003eAlmond butter and half and half are the two things that make this taste rich. A jar of almond butter goes a long, long way when you only spoon in a few tablespoons, and it keeps for months, so one jar carries this dish and plenty of breakfasts after it.\u003c/li\u003e\u003cli\u003eShort pasta means penne, rigatoni or rotini. Any of the three grabs the sauce well, so buy whichever shape is cheapest on the shelf that week.\u003c/li\u003e\u003c/ul\u003e",
+    "make_it":  [
+                    "\u003cp\u003eThis is a one-pot sauce and one-pot pasta job. Get the pasta water going and the pan hot, and you are most of the way there.\u003c/p\u003e\u003col\u003e\u003cli\u003eCook the short pasta to al dente, following the package directions. Before you drain it, dip out a cup or two of the starchy pasta water and set it aside. That water is your thinning tool later, so do not skip it.\u003c/li\u003e\u003cli\u003eIn a large pan over medium heat, warm the olive oil and butter together. Add the chicken pieces and cook until they are golden on all sides.\u003c/li\u003e\u003cli\u003eStir in the diced onion, the garlic and the ginger. Keep it moving for two to three minutes, until everything softens and smells sweet.\u003c/li\u003e\u003cli\u003eAdd the garam masala, cumin, coriander, chili powder, turmeric and red chili flakes. Cook for one minute, stirring constantly, so the spices bloom in the fat instead of scorching.\u003c/li\u003e\u003cli\u003eStir in the tomato paste and the tomato sauce (passata) until it all comes together. If it looks too thick, loosen it with a splash of that reserved pasta water.\u003c/li\u003e\u003cli\u003eStir in the almond butter, then pour in the half and half. Bring it up to a boil, then drop the heat and let it simmer four to five minutes until the sauce thickens.\u003c/li\u003e\u003cli\u003eAdd the cooked pasta to the pan and toss until every piece is coated in the sauce.\u003c/li\u003e\u003cli\u003eStir in the chopped cilantro, season with salt and black pepper to taste, and it is ready to portion.\u003c/li\u003e\u003c/ol\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eHere is the trick that keeps fourteen containers honest. Do not eyeball it. Set your empty pan on the scale and note the weight, then weigh the pan again once it is full of finished pasta and sauce. Subtract the empty weight, and that is how much cooked food you actually have.\u003c/p\u003e\u003cp\u003eDivide that number by fourteen, and now you know the target weight for each container. Scoop to that weight, container by container, and every single one carries the same {{cal}} calories and {{protein}} grams of protein. No short portions on Thursday because Monday got greedy. Top each one with a little extra cilantro if you saved some, snap the lids, and you have two weeks of lunches or dinners that all pull the same weight.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyspatula.com/butter-chicken-pasta/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eIf this is the kind of cooking you want more of, every recipe on Thrifty Crew is built the same way: real macros, real board prices, and a per-serving cost you can trust. Membership is a dollar a month, which is less than the cilantro you just bought, and it opens the whole library of meal-prep dinners that eat like takeout and price like groceries. Come cook the rest of them with us.\u003c/p\u003e",
+    "cost_batch":  20.82,
+    "cost_batch_true":  33.68,
+    "cost_per_serving":  1.49,
+    "cost_per_serving_true":  2.41,
+    "cost_pantry_add":  16.93,
+    "cost_first_run":  50.61,
+    "scaler":  {
+                   "cost":  "33.68",
+                   "ing":  [
+                               {
+                                   "item":  "Ziti Pasta",
+                                   "canon":  "Ziti Pasta",
+                                   "grams":  1050,
+                                   "buy":  "2 lb 5 oz dry short pasta (penne, rigatoni or rotini)",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  47,
+                                   "buy":  "3 1/2 tablespoons",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3 1/2 tablespoons",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1575,
+                                   "buy":  "3 1/2 lb, cut into bite-sized pieces",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3 1/2 medium onions, diced (about 4 cups)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "7 cloves, finely chopped",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3 1/2 tablespoons, finely chopped",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  7,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  6,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  9,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "1 3/4 teaspoons",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  1,
+                                   "buy":  "3/4 teaspoon",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3 1/2 tablespoons",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  1715,
+                                   "buy":  "7 cups",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Almond Butter",
+                                   "canon":  "Almond Butter",
+                                   "grams":  112,
+                                   "buy":  "7 tablespoons (a scant 1/2 cup)",
+                                   "bid":  "almond-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Half and Half",
+                                   "canon":  "Half and Half",
+                                   "grams":  707,
+                                   "buy":  "3 1/2 cups",
+                                   "bid":  "half-and-half",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  25,
+                                   "buy":  "1 1/2 cups leaves, roughly chopped",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste (about 2 1/2 teaspoons)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste (about 1 3/4 teaspoons)",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Butter Chicken Pasta meal prep for 14: creamy, lightly spiced chicken breast and short pasta at {{cal}} calories and {{protein}} grams of protein per serving, on a budget.",
+                 "keywords":  "butter chicken pasta, meal prep, high protein pasta, chicken breast meal prep, budget dinner, batch cooking, Indian fusion pasta, creamy chicken pasta",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  3.62,
+                 "recipeIngredient":  [
+                                          "Ziti Pasta, 2 lb 5 oz dry short pasta (penne, rigatoni or rotini) (1050 g)",
+                                          "Olive Oil, 3 1/2 tablespoons (47 g)",
+                                          "Butter, 3 1/2 tablespoons (49 g)",
+                                          "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into bite-sized pieces (1575 g)",
+                                          "Yellow Onion, 3 1/2 medium onions, diced (about 4 cups) (385 g)",
+                                          "Garlic, 7 cloves, finely chopped (21 g)",
+                                          "Ginger, 3 1/2 tablespoons, finely chopped (21 g)",
+                                          "Garam Masala, 3 1/2 teaspoons (7 g)",
+                                          "Ground Cumin, 3 1/2 teaspoons (7 g)",
+                                          "Ground Coriander, 3 1/2 teaspoons (6 g)",
+                                          "Chili Powder, 3 1/2 teaspoons (9 g)",
+                                          "Ground Turmeric, 1 3/4 teaspoons (5 g)",
+                                          "Red Pepper Flakes, 3/4 teaspoon (1 g)",
+                                          "Tomato Paste, 3 1/2 tablespoons (56 g)",
+                                          "Tomato Sauce, 7 cups (1715 g)",
+                                          "Almond Butter, 7 tablespoons (a scant 1/2 cup) (112 g)",
+                                          "Half and Half, 3 1/2 cups (707 g)",
+                                          "Fresh Cilantro, 1 1/2 cups leaves, roughly chopped (25 g)",
+                                          "Salt, to taste (about 2 1/2 teaspoons) (15 g)",
+                                          "Black Pepper, to taste (about 1 3/4 teaspoons) (4 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the short pasta to al dente per the package directions, and reserve one to two cups of pasta water before draining.",
+                               "Warm the olive oil and butter in a large pan over medium heat, then add the chicken and cook until golden on all sides.",
+                               "Stir in the diced onion, garlic and ginger and cook two to three minutes until softened.",
+                               "Add the garam masala, cumin, coriander, chili powder, turmeric and red chili flakes, and cook one minute stirring constantly.",
+                               "Stir in the tomato paste and tomato sauce (passata), loosening with a splash of reserved pasta water if it looks too thick.",
+                               "Stir in the almond butter, add the half and half, bring to a boil, then simmer four to five minutes until thickened.",
+                               "Add the cooked pasta and toss to coat well in the sauce.",
+                               "Stir in chopped cilantro, season with salt and black pepper to taste, then weigh and portion across fourteen containers."
+                           ],
+                 "step_names":  [
+                                    "Cook the pasta",
+                                    "Brown the chicken",
+                                    "Soften the aromatics",
+                                    "Bloom the spices",
+                                    "Build the tomato base",
+                                    "Finish the sauce",
+                                    "Toss the pasta",
+                                    "Season and portion"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Ziti Pasta",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  47
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1575
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  9
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  1715
+                              },
+                              {
+                                  "item":  "Almond Butter",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Half and Half",
+                                  "grams":  707
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  25
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

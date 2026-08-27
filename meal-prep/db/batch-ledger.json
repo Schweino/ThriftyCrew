@@ -718,5 +718,54 @@
                          "detail":  "streamed per-recipe before wave close"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w3",
+      "opened":  "2026-08-27T14:59:20",
+      "last_activity":  "2026-08-27T15:13:19",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "butter-chicken-pasta",
+                    "pioneer-woman-chili"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T14:59:21",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T14:59:21",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T14:59:21",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T14:59:22",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-27T15:12:50",
+                         "detail":  "2/2 GO"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-27T15:13:18",
+                         "detail":  "compute-v2-perserving + reanchor on 2 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-27T15:13:19",
+                         "detail":  "2 row(s) via hunt-2026-08-27-highprotein-w3"
+                     }
+                 ]
   }
 ]

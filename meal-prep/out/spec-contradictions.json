@@ -1,18 +1,6 @@
 ﻿{
-    "specs":  579,
+    "specs":  581,
     "findings":  [
-                     {
-                         "run":  "live",
-                         "slug":  "beef-birria-burrito",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-burrito-tex-mex",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
-                     },
                      {
                          "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
@@ -105,12 +93,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "salsa-verde-chicken-burrito",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "sopa-de-fideo-con-carne-molida",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.05 cups (12 g)"
@@ -132,12 +114,6 @@
                          "slug":  "turkey-cordon-bleu-casserole",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Dijon Mustard (generic): 0.07 tbsp (1 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-florentine-rice-bake",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -179,7 +155,6 @@
     "generated":  "see git",
     "by_class":  {
                      "UNMEASURABLE-QTY":  21,
-                     "UNUSED":  4,
-                     "PHANTOM":  4
+                     "UNUSED":  4
                  }
 }

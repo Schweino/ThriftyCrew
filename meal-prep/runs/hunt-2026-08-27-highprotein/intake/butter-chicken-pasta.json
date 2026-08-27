@@ -2,7 +2,7 @@
  "name": "Butter Chicken Pasta",
  "slug": "butter-chicken-pasta",
  "protein": "chicken",
- "cuisine": "Indian fusion",
+ "cuisine": "Indian Fusion",
  "source_url": "https://skinnyspatula.com/butter-chicken-pasta/",
  "visibility": "paid",
  "ingredients": [
@@ -114,58 +114,54 @@
   "fat_g": 21.4
  },
  "writer_notes": [
-  "All 20 locked ingredient lines are used by a step; no orphans and no step uses an unbought item.",
-  "Only locked-view numbers appear in prose: 630 cal, 40.2 g protein, 14 servings. Cost shown only as the {{cost_ps}} token plus the standard $1/month membership line.",
-  "No cost_lines were provided in this dispatch, so shop_smart makes zero package-cost or per-ounce or lasts-N-batches claims; bullets cover form, substitution, and where-to-find only.",
-  "Source and locked view agree on a clean 3.5x scale from the origin recipe (1 lb chicken to 3.5 lb, 300 g pasta to ~1050 g, 1 tsp spices to 3.5 tsp).",
-  "Commodity label 'Ziti Pasta' differs from its own buy string (penne/rigatoni/rotini); prose uses the neutral 'short pasta' to stay faithful to both.",
-  "Tomato sauce is written as passata (plain strained tomatoes) per the source, not seasoned marinara.",
-  "Almond butter specified as plain unsweetened; flagged in report as the likely cost driver for mapping/audit to eyeball."
+  "All 20 locked ingredient lines are used by a step; no step introduces an unbought item. Reserved pasta water is water, not a purchased line.",
+  "No cost_lines or cost_ps were provided in the dispatch, so cost prose uses the ${{cost_ps}} token and shop_smart deliberately makes no traceable per-package cost arithmetic claim.",
+  "Cal and protein rendered as {{cal}} and {{protein}} tokens; locked values are 630 cal and 40.2 g protein per serving.",
+  "Cuisine labeled Indian Fusion, not authentic butter chicken, since this is a pasta adaptation.",
+  "Scaling verified as source x3.5 across every line (base ~4 servings to 14)."
  ],
  "forbidden_prose_terms": [
+  "authentic",
+  "traditional",
   "em dash",
   "en dash",
   "seafood",
-  "rice vinegar",
-  "naan side",
-  "per ounce",
-  "lasts several batches",
-  "cheaper than",
-  "guaranteed",
-  "diet"
+  "fish",
+  "shrimp",
+  "cheap"
  ],
  "prose": {
-  "intro_html": "<p>Butter chicken and a bowl of pasta walked into the same pan, and honestly, they should have done it years ago. This is the creamy, spiced, tomato-warmed sauce you love off a plate of naan, wrapped around short pasta so it holds a whole week of lunches without asking for a side of rice. The chicken breast keeps it lean and serious, the garam masala keeps it interesting, and a spoon of almond butter does the quiet work of making the sauce taste richer than it has any right to.</p><p>Here is the part I like. One batch lands at 630 calories and 40.2 grams of protein per serving, with 72.9 grams of carbs to actually fuel your afternoon. That is a real dinner doing a real job, not a sad container of plain grilled chicken. Cook it once, portion fourteen, and let future you thank present you every single day.</p>",
-  "shop_smart": "<ul><li>Any short pasta with ridges or tubes works here. Penne, rigatoni, or rotini all grab the sauce well, so buy whatever shape is on the shelf and skip the fancy imported box.</li><li>Boneless skinless chicken breast is the anchor. Buy a family pack and cut it into bite-sized pieces yourself instead of paying someone to pre-cube it for you.</li><li>Garam masala, cumin, coriander, chili powder, and turmeric are the whole personality of this dish. If you are building a spice drawer, the store-brand jars taste the same as the pretty ones and this recipe uses them all, so nothing sits unopened.</li><li>Tomato sauce here means plain passata, smooth strained tomatoes with no added onion or herbs. Read the can so you are not buying seasoned marinara by accident.</li><li>Almond butter is the secret handshake. Plain unsweetened is what you want, not the honey-roasted snacking kind. A little jar covers this and leaves you plenty for toast.</li><li>Half and half brings the creaminess. Fresh ginger and a bunch of cilantro round it out, and both keep in the fridge long enough to earn their spot.</li></ul>",
-  "make_it": "<p>Start the pasta first so it is ready when the sauce is. Cook your short pasta to al dente right by the package directions, and before you drain it, scoop out a cup or two of that starchy pasta water and set it aside. That water is your thickness dial later, so do not pour it all down the sink.</p><p>Heat the olive oil and butter together in a large pan over medium heat. Add the chicken and let it cook until it is golden on all sides. Stir in the onion, garlic, and ginger and keep it moving for two to three minutes until everything softens and smells like dinner.</p><p>Now the spices. Add the garam masala, cumin, coriander, chili powder, turmeric, and red pepper flakes, and cook for one minute stirring constantly so they bloom instead of scorch. Stir in the tomato paste and the tomato sauce and combine, adding a splash of that reserved pasta water if it looks too thick.</p><p>Stir in the almond butter until it melts into the sauce, then pour in the half and half. Bring it to a boil, then drop the heat and simmer four to five minutes until the sauce thickens and coats the back of a spoon. Add the cooked pasta to the pan and toss until every piece is dressed in sauce. Finish with freshly chopped cilantro, season with salt and pepper to taste, and it is done.</p>",
-  "portion_html": "<p>Here is the honest way to split fourteen even containers: weigh the pot. Set your empty pan on the scale before you start or note its weight, then weigh the whole finished dish, subtract the pot, and divide what is left by fourteen. That target number per container beats eyeballing every time, because the person who eats the last one deserves the same dinner as the person who eats the first.</p><p>Scoop to that weight, top each with a little of the reserved cilantro, and let them cool before the lids go on. Fourteen containers, each landing at 630 calories and 40.2 grams of protein, ready to grab on the way out the door.</p>",
-  "cost_closing_html": "<p>When the pan is empty and the fridge is full, this whole thing comes out to {{cost_ps}} per serving. Fourteen dinners of spiced, creamy butter chicken pasta for the price most places charge you for one, and yours has the protein numbers to prove it is doing something.</p><p>That is the entire Thrifty Crew idea in one pan. Cook with intention, portion with a scale, and eat well without watching your grocery budget catch fire.</p>",
-  "upsell_html": "<p>If a week of dinners this good for {{cost_ps}} a serving sounds like your kind of math, the membership is a dollar a month. That gets you every recipe, every macro breakdown, and every shopping tip we have, so the next batch is already planned before you get to the store. Come cook with the Crew.</p>"
+  "intro_html": "<p>Butter chicken is one of those restaurant orders that feels like a treat and hits your card like one too. This is the version that lives in your fridge instead. We take the same warm, creamy, lightly spiced tomato sauce that makes butter chicken worth craving, and we build it around chicken breast and a pot of short pasta so it stretches across fourteen dinners without asking you to stand at a stove every night.</p><p>Here is the honest pitch. It comes in at {{cal}} calories and {{protein}} grams of protein a serving, it tastes like you tried a lot harder than you did, and the whole thing is one pan of sauce plus one pot of pasta. If you have ever wanted takeout comfort on a meal-prep budget, this is the recipe that quietly does both.</p>",
+  "shop_smart": "<p>The spice rack is where this dish either saves you money or robs you, so let's shop it right.</p><ul><li>Garam masala, cumin, coriander, chili powder and turmeric are the whole personality of the sauce, and you use them by the teaspoon. Buy them from the bulk bins or the value-size jars rather than the little branded shakers, because you are pulling a few teaspoons from a jar that will season a dozen more batches.</li><li>Tomato sauce (passata) is the body of the sauce and you need a good amount of it, so buy the larger bottles or cans instead of grabbing several small ones. Fewer packages, less packaging you are paying for.</li><li>Chicken breast is the protein you are building the whole plan on, so buy the large family pack and portion it yourself at home. The small trays cost more for the same meat.</li><li>Almond butter and half and half are the two things that make this taste rich. A jar of almond butter goes a long, long way when you only spoon in a few tablespoons, and it keeps for months, so one jar carries this dish and plenty of breakfasts after it.</li><li>Short pasta means penne, rigatoni or rotini. Any of the three grabs the sauce well, so buy whichever shape is cheapest on the shelf that week.</li></ul>",
+  "make_it": "<p>This is a one-pot sauce and one-pot pasta job. Get the pasta water going and the pan hot, and you are most of the way there.</p><ol><li>Cook the short pasta to al dente, following the package directions. Before you drain it, dip out a cup or two of the starchy pasta water and set it aside. That water is your thinning tool later, so do not skip it.</li><li>In a large pan over medium heat, warm the olive oil and butter together. Add the chicken pieces and cook until they are golden on all sides.</li><li>Stir in the diced onion, the garlic and the ginger. Keep it moving for two to three minutes, until everything softens and smells sweet.</li><li>Add the garam masala, cumin, coriander, chili powder, turmeric and red chili flakes. Cook for one minute, stirring constantly, so the spices bloom in the fat instead of scorching.</li><li>Stir in the tomato paste and the tomato sauce (passata) until it all comes together. If it looks too thick, loosen it with a splash of that reserved pasta water.</li><li>Stir in the almond butter, then pour in the half and half. Bring it up to a boil, then drop the heat and let it simmer four to five minutes until the sauce thickens.</li><li>Add the cooked pasta to the pan and toss until every piece is coated in the sauce.</li><li>Stir in the chopped cilantro, season with salt and black pepper to taste, and it is ready to portion.</li></ol>",
+  "portion_html": "<p>Here is the trick that keeps fourteen containers honest. Do not eyeball it. Set your empty pan on the scale and note the weight, then weigh the pan again once it is full of finished pasta and sauce. Subtract the empty weight, and that is how much cooked food you actually have.</p><p>Divide that number by fourteen, and now you know the target weight for each container. Scoop to that weight, container by container, and every single one carries the same {{cal}} calories and {{protein}} grams of protein. No short portions on Thursday because Monday got greedy. Top each one with a little extra cilantro if you saved some, snap the lids, and you have two weeks of lunches or dinners that all pull the same weight.</p>",
+  "cost_closing_html": "<p>So what does butter chicken comfort cost when you make it fourteen at a time? It lands at ${{cost_ps}} a serving.</p><p>Put that next to a single butter chicken takeout order, which will run you the better part of fifteen dollars once you add the rice, and the math stops being close. You are getting the same craving satisfied, plus {{protein}} grams of protein to actually keep you full, for a fraction of one restaurant plate.</p><p>That is the whole idea here. Eating well is not about spending less on worse food, it is about spending a little effort up front so good food costs you almost nothing per plate. Fourteen dinners, one afternoon, one honest price.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, every recipe on Thrifty Crew is built the same way: real macros, real board prices, and a per-serving cost you can trust. Membership is a dollar a month, which is less than the cilantro you just bought, and it opens the whole library of meal-prep dinners that eat like takeout and price like groceries. Come cook the rest of them with us.</p>"
  },
  "head": {
-  "description": "Creamy butter chicken pasta made for meal prep, with lean chicken breast, warm garam masala, and a spiced tomato cream sauce. 630 calories and 40.2 g protein per serving, scaled to 14 containers.",
-  "keywords": "butter chicken pasta, high protein meal prep, chicken breast pasta, budget meal prep dinner, garam masala pasta, creamy tomato chicken pasta, 14 serving meal prep, macro friendly dinner",
+  "description": "Butter Chicken Pasta meal prep for 14: creamy, lightly spiced chicken breast and short pasta at 630 calories and 40 grams of protein per serving, on a budget.",
+  "keywords": "butter chicken pasta, meal prep, high protein pasta, chicken breast meal prep, budget dinner, batch cooking, Indian fusion pasta, creamy chicken pasta",
   "image": "",
   "prepTime": "PT10M",
   "cookTime": "PT20M",
   "totalTime": "PT30M",
   "steps": [
-   "Cook the short pasta to al dente per the package directions. Reserve one to two cups of pasta water, then drain.",
-   "Heat the olive oil and butter in a large pan over medium heat. Add the chicken and cook until golden on all sides.",
-   "Stir in the onion, garlic, and ginger and cook for two to three minutes until softened.",
-   "Add the garam masala, cumin, coriander, chili powder, turmeric, and red pepper flakes. Cook one minute, stirring constantly.",
-   "Add the tomato paste and tomato sauce and stir to combine, loosening with a bit of reserved pasta water if it is too thick.",
-   "Stir in the almond butter, then add the half and half. Bring to a boil, reduce heat, and simmer four to five minutes until thickened.",
-   "Add the cooked pasta to the pan and toss to coat well in the sauce.",
-   "Stir in chopped cilantro, season with salt and pepper to taste, and portion into containers."
+   "Cook the short pasta to al dente per the package directions, and reserve one to two cups of pasta water before draining.",
+   "Warm the olive oil and butter in a large pan over medium heat, then add the chicken and cook until golden on all sides.",
+   "Stir in the diced onion, garlic and ginger and cook two to three minutes until softened.",
+   "Add the garam masala, cumin, coriander, chili powder, turmeric and red chili flakes, and cook one minute stirring constantly.",
+   "Stir in the tomato paste and tomato sauce (passata), loosening with a splash of reserved pasta water if it looks too thick.",
+   "Stir in the almond butter, add the half and half, bring to a boil, then simmer four to five minutes until thickened.",
+   "Add the cooked pasta and toss to coat well in the sauce.",
+   "Stir in chopped cilantro, season with salt and black pepper to taste, then weigh and portion across fourteen containers."
   ],
   "step_names": [
    "Cook the pasta",
    "Brown the chicken",
-   "Soften aromatics",
+   "Soften the aromatics",
    "Bloom the spices",
-   "Build the tomato sauce",
-   "Finish the cream sauce",
+   "Build the tomato base",
+   "Finish the sauce",
    "Toss the pasta",
    "Season and portion"
   ]

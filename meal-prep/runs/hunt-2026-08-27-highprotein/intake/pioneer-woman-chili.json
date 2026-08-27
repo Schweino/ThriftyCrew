@@ -94,52 +94,53 @@
   "fat_g": 38
  },
  "writer_notes": [
-  "Diced tomatoes: source labels the 14.5 oz diced tomatoes as Instant Pot version only and no stovetop step uses them, but the skeleton buys 34 oz with juice. To avoid an orphaned bought ingredient (spec-guards hard fail), I wrote one stovetop one-pot method that adds the diced tomatoes with juice during the hour simmer. Repair pass should confirm the build intended diced tomatoes in the recipe.",
-  "Method choice: the source has three methods (stovetop, crock pot, Instant Pot). I wrote a single stovetop method for the card and did not name the other appliances.",
-  "Source garnishes tortilla chips / Fritos and cornbread are not in the 16 locked buy lines, so I omitted them from all prose and steps and added them to forbidden_prose_terms.",
-  "Cost: no cost_ps or cost_lines were in the dispatch, so cost prose uses the ${{cost_ps}} token and shop_smart makes no package-tracing (per-ounce or lasts-several-batches) claims.",
-  "Macros within gate band: 680 cal (450-800) and 41.8 g protein (>= 40). Real carbohydrate source satisfied by beans, masa, and tomatoes (42.2 g carbs).",
-  "Cal and protein written as {{cal}}/{{protein}} tokens per templating guidance."
+  "Consolidated the source's three methods (stovetop, crock pot, Instant Pot) into a single large-pot method because the skeleton buys 34 oz diced tomatoes with juice, which the source marks as Instant Pot only. Folding the tomatoes in with the beans keeps every bought ingredient used and avoids an orphaned-ingredient hard fail.",
+  "Deliberately omitted cornbread, tortilla chips, and Fritos from prose: the source mentions them but none appear in the locked buy list. They are also listed in forbidden_prose_terms.",
+  "Water for the masa slurry and the optional dry-adjustment splash is uncosted and not on the buy list, which is expected; it is not treated as a purchased ingredient.",
+  "No cost_lines were provided in this dispatch, so shop_smart makes zero per-package price or per-ounce comparison claims; every reference is to package size only. cost_closing uses the ${cost_ps} token, not a literal figure.",
+  "DATA FLAGS for the repair pass, none blocking: chili powder buy of 1/4 cup plus 2 1/2 tsp is heavy but consistent with the source's 2 Tbsp-per-batch ratio scaled to 14 servings; verify the jar spice quantities are what the engine intended. Beef at 4 2/3 lb across 14 servings is ~5.3 oz raw each, sensible for these macros."
  ],
  "forbidden_prose_terms": [
-  "Fritos",
-  "tortilla chips",
   "cornbread",
-  "seafood",
-  "shrimp"
+  "tortilla chips",
+  "Fritos",
+  "Instant Pot",
+  "Crock Pot",
+  "slow cooker",
+  "seafood"
  ],
  "prose": {
-  "intro_html": "<p>Chili is the meal prep MVP, and this one earns the title. It is The Pioneer Woman's chili built for a real week, a big pot of ground beef, two kinds of beans, and a little masa harina that thickens it into something that clings to the spoon instead of running off it. Fourteen containers out of one pot, right around {{cal}} calories and {{protein}} grams of protein a serving. That lands exactly where a dinner should land for a plan that keeps you honest.</p>",
-  "shop_smart": "<p>Ground beef is the whole game here, so buy the 80/20 and do not apologize for it. The fat carries the flavor and the masa binds everything together, so you are not draining money down the sink. Grab the family pack if your store runs one, since you need close to five pounds for the batch.</p><p>Canned beans and canned tomato sauce are the quiet heroes of a cheap high protein dinner. Kidney and pinto both go in, drained and rinsed, and the diced tomatoes go in with their juice, so leave that can undrained. Masa harina lives near the flour or in the Latin foods aisle, white or yellow both work, and you only need a little over half a cup for the whole pot. The garnishes, cheddar, sour cream, lime, and green onions, are where you make a container feel like a restaurant bowl for pocket change.</p>",
-  "make_it": "<p>Brown the ground beef in your biggest pot over medium heat, breaking it up as it cooks, then drain off the excess grease. You want it browned, not steamed, so give it room.</p><p>Add the diced garlic and the tomato sauce and cook for one minute, just enough to wake the garlic up. Now the seasonings all at once, the chili powder, cumin, oregano, salt, and cayenne. Stir until the meat is fully coated, then drop the heat to low.</p><p>Pour in the diced tomatoes with their juice, cover, and let it simmer for about an hour, stirring now and then. If it looks dry along the way, a splash of water sets it right. When the hour is up, whisk the masa harina with half a cup of water in a small bowl until smooth and stir it into the pot. That is what turns loose chili into real chili. Add the drained and rinsed kidney and pinto beans and simmer ten more minutes so they heat through and take on the flavor.</p><p>Taste it, add a little more masa or water until the consistency is where you like it, and you are done. Portion and garnish at serving time.</p>",
-  "portion_html": "<p>Here is the honest way to get fourteen even servings. Weigh your empty pot before you cook, or know its weight, then weigh the full pot when the chili is done and subtract. Divide that number by fourteen and you have your target grams per container, no eyeballing and no arguing over who got the big scoop. Ladle to the number and you hit {{cal}} calories and {{protein}} grams of protein a serving.</p><p>Keep the garnishes off until you eat. Store the chili plain in the fourteen containers, then top each bowl with shredded cheddar, a spoon of sour cream, a scatter of green onions, and a squeeze of lime when you heat it up. Cheese and sour cream stirred into a batch on day one is a sad reheat by day four.</p>",
-  "cost_closing_html": "<p>This is what a budget dinner is supposed to look like. Real beef, two kinds of beans, and enough of it to fill fourteen containers, all for ${{cost_ps}} a serving. That is drive through soda money for a bowl that actually feeds you, {{protein}} grams of protein and a stick to your ribs kind of full.</p><p>Run the math on your week. Fourteen dinners at ${{cost_ps}} each is the kind of number that makes a grocery budget behave, and it tastes like you tried a lot harder than you paid.</p>",
-  "upsell_html": "<p>One pot, fourteen dinners, and a membership that runs a dollar a month. If this chili saved you a single takeout order, it already paid for the year. Come get the rest of the plan.</p>"
+  "intro_html": "<p>Chili is the cheapest way I know to feed a crowd something that tastes like you fussed over it, and this one leans on the Pioneer Woman's trick of thickening with masa harina instead of a can of thickener you would never buy twice. Ground beef, two kinds of beans, tomatoes, and a spice drawer's worth of chili powder do the heavy lifting. It comes in at 680 calories and 42 grams of protein a serving, which is a real dinner, not a snack pretending to be one. You brown, you simmer, you portion. That is the whole game.</p>",
+  "shop_smart": "<p>This is a pantry recipe wearing a beef coat, so buy the beef right and the rest is cheap. Grab 4 2/3 pounds of 80/20 ground beef; the fat is where the flavor lives in chili, so do not talk yourself into leaner and drier. Beans are the value engine here, 35 ounces of kidney and 35 ounces of pinto, so buy whatever can size stacks up to those amounts on your shelf and drain and rinse them. You need 34 ounces of diced tomatoes with the juice and about 19 ounces of tomato sauce, both of which keep for a year in the cabinet, so there is no rush and no waste. The masa harina is the one aisle people wander looking for; it sits with the Latin foods or the flour, and a single bag runs this batch and a dozen more, so it is a buy-once item. Chili powder, cumin, oregano, salt, and cayenne you probably already own, and if you buy chili powder for this, get the bigger container because you are using a quarter cup of it. Garnishes are cheddar, limes, light sour cream, and green onions, all optional and all cheap, so buy them if your crew likes to dress a bowl.</p>",
+  "make_it": "<p>Get a big pot over medium heat and cook the ground beef, crumbling it as it goes, until it is browned through. Drain off the excess grease; you want the flavor, not a puddle. Stir in the garlic and the tomato sauce and let it cook about a minute so the garlic loses its raw edge.</p><p>Now the seasonings all at once: the chili powder, cumin, oregano, salt, and cayenne. Stir until the beef is coated and the pot smells like chili, then drop the heat to low. Cover it and let it simmer for an hour, stirring now and then. If it looks dry before the hour is up, splash in a half cup of water and keep going.</p><p>When the hour is done, stir the masa harina together with a half cup of water in a small bowl until it is smooth, then stir that slurry into the pot; that is what pulls the whole thing together into something you can eat with a spoon instead of drink. Add the diced tomatoes with their juice and the drained, rinsed kidney and pinto beans. Simmer another 10 minutes to marry it all, adding a little more masa or water until it is as thick as you like. Ladle it up and top each bowl with shredded cheddar, a wedge of lime to squeeze over, a dollop of light sour cream, and a scatter of diced green onions.</p>",
+  "portion_html": "<p>This batch fills 14 containers, and the honest way to split it even is the scale, not your eyeballs. Weigh the full pot, subtract what the empty pot weighs, and divide what is left by 14. That number in grams is one serving, and you ladle to it. Chili settles heavy at the bottom, so give the pot a stir between scoops or the last few containers end up all beans and the first few all broth. Keep the cheddar, lime, sour cream, and green onions on the side and add them the day you eat, not the day you cook, so they stay fresh.</p>",
+  "cost_closing_html": "<p>All in, this lands at ${{cost_ps}} a serving, which for 680 calories and 42 grams of protein is the kind of math that makes meal prep worth the hour of simmering. Beans and pantry tomatoes carry the cost down while the beef carries the protein up, and that is exactly the trade you want. Eat like this all week and the membership that got you the recipe runs a dollar a month, which is less than the sour cream.</p>",
+  "upsell_html": "<p>Fourteen containers of real chili, cooked once, waiting in the fridge all week. That is the Thrifty Crew move: do the work Sunday so Wednesday takes care of itself. Warm one up, hit it with the toppings you set aside, and get on with your day.</p>"
  },
  "head": {
-  "description": "The Pioneer Woman Chili made for meal prep. A big pot of 80/20 ground beef, kidney and pinto beans, and a masa harina thickener portioned into 14 high protein dinners at about {{cal}} calories and {{protein}} grams of protein each.",
-  "keywords": "pioneer woman chili, meal prep chili, high protein chili, ground beef chili, budget meal prep dinner, beef and bean chili, masa harina chili, make ahead chili",
+  "description": "Pioneer Woman chili scaled to 14 meal-prep servings: ground beef, kidney and pinto beans, and diced tomatoes thickened with masa harina, at 680 calories and 42 grams of protein per serving.",
+  "keywords": "pioneer woman chili, meal prep chili, high protein chili, beef and bean chili, masa harina chili, budget meal prep dinner, 14 servings chili",
   "image": "",
   "prepTime": "PT10M",
   "cookTime": "",
   "totalTime": "",
   "steps": [
-   "Brown the ground beef in a large pot over medium heat, breaking it up as it cooks, then drain off the excess grease.",
-   "Add the diced garlic and the tomato sauce and cook for 1 minute.",
-   "Stir in the chili powder, cumin, oregano, salt, and cayenne until the meat is coated, then reduce the heat to low.",
-   "Add the diced tomatoes with their juice, cover, and simmer for 1 hour, stirring occasionally and adding a splash of water if it looks dry.",
-   "Whisk the masa harina with 1/2 cup water until smooth and stir it into the pot to thicken.",
-   "Add the drained and rinsed kidney and pinto beans and simmer 10 minutes, adjusting with more masa or water until the consistency is right.",
-   "Portion into 14 containers and top each serving with shredded cheddar, sour cream, diced green onions, and a squeeze of lime."
+   "Cook and crumble the ground beef in a large pot over medium heat until browned, then drain off the excess grease.",
+   "Stir in the garlic and tomato sauce and cook for about 1 minute.",
+   "Add the chili powder, cumin, oregano, salt, and cayenne, stir until the beef is coated, then reduce the heat to low.",
+   "Cover and simmer for 1 hour, stirring occasionally, adding a splash of water if it looks dry.",
+   "Stir the masa harina with a half cup of water until smooth, then stir the slurry into the pot.",
+   "Add the diced tomatoes with juice and the drained, rinsed kidney and pinto beans, then simmer 10 minutes, adjusting thickness with more masa or water.",
+   "Ladle into bowls and top with shredded cheddar, a lime wedge, light sour cream, and diced green onions."
   ],
   "step_names": [
    "Brown the beef",
    "Garlic and tomato sauce",
-   "Add the seasonings",
-   "Simmer with tomatoes",
+   "Season it",
+   "Simmer an hour",
    "Thicken with masa",
-   "Add the beans",
-   "Portion and garnish"
+   "Beans and tomatoes",
+   "Serve and garnish"
   ]
  }
 }

@@ -1,0 +1,333 @@
+{
+    "name":  "The Pioneer Woman Chili",
+    "slug":  "pioneer-woman-chili",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
+    "source_site":  "thecozycook.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Consolidated the source\u0027s three methods (stovetop, crock pot, Instant Pot) into a single large-pot method because the skeleton buys 34 oz diced tomatoes with juice, which the source marks as Instant Pot only. Folding the tomatoes in with the beans keeps every bought ingredient used and avoids an orphaned-ingredient hard fail.",
+                         "Deliberately omitted cornbread, tortilla chips, and Fritos from prose: the source mentions them but none appear in the locked buy list. They are also listed in forbidden_prose_terms.",
+                         "Water for the masa slurry and the optional dry-adjustment splash is uncosted and not on the buy list, which is expected; it is not treated as a purchased ingredient.",
+                         "No cost_lines were provided in this dispatch, so shop_smart makes zero per-package price or per-ounce comparison claims; every reference is to package size only. cost_closing uses the ${cost_ps} token, not a literal figure.",
+                         "DATA FLAGS for the repair pass, none blocking: chili powder buy of 1/4 cup plus 2 1/2 tsp is heavy but consistent with the source\u0027s 2 Tbsp-per-batch ratio scaled to 14 servings; verify the jar spice quantities are what the engine intended. Beef at 4 2/3 lb across 14 servings is ~5.3 oz raw each, sensible for these macros."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "cornbread",
+                                  "tortilla chips",
+                                  "Fritos",
+                                  "Instant Pot",
+                                  "Crock Pot",
+                                  "slow cooker",
+                                  "seafood"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  680,
+                 "protein":  42,
+                 "carbs":  42,
+                 "fat":  38,
+                 "cost_ps":  "3.63"
+             },
+    "intro_html":  "\u003cp\u003eChili is the cheapest way I know to feed a crowd something that tastes like you fussed over it, and this one leans on the Pioneer Woman\u0027s trick of thickening with masa harina instead of a can of thickener you would never buy twice. Ground beef, two kinds of beans, tomatoes, and a spice drawer\u0027s worth of chili powder do the heavy lifting. It comes in at {{cal}} calories and {{protein}} grams of protein a serving, which is a real dinner, not a snack pretending to be one. You brown, you simmer, you portion. That is the whole game.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e80/20 Ground Beef (generic (USDA)):\u003c/strong\u003e 4 2/3 lb (2117 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves, diced (14 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 1/3 cups (about 19 oz) (529 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1/4 cup plus 2 1/2 teaspoons (37 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 1/3 teaspoons (5 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 1/3 teaspoons (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 1/3 teaspoons (14 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/2 teaspoon (1 g)",
+                                "\u003cstrong\u003eMasa Harina:\u003c/strong\u003e 1/2 cup plus 1 tablespoon (70 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 35 oz drained and rinsed (about 4 1/4 cups) (992 g)",
+                                "\u003cstrong\u003eCanned Pinto Beans (Great Value):\u003c/strong\u003e 35 oz drained and rinsed (about 4 1/4 cups) (992 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 34 oz with juice (about 4 cups) (959 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 3/4 cups shredded, for serving (196 g)",
+                                "\u003cstrong\u003eLime:\u003c/strong\u003e 3 limes, cut into wedges (233 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 1/4 cups, for serving (300 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4 stalks, diced, for serving (60 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "80/20 Ground Beef, 4 2/3 lb: ~$23.07. \u003cstrong\u003eBuy 5 lbs: $24.71.\u003c/strong\u003e",
+                       "Garlic, 5 cloves, diced: ~$0.19. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Tomato Sauce, 2 1/3 cups (about 19 oz): ~$1.04. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
+                       "Masa Harina, 1/2 cup plus 1 tablespoon: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Kidney Beans, 35 oz drained and rinsed (about 4 1/4 cups): ~$3.46. \u003cstrong\u003eBuy 4 cans: $3.56.\u003c/strong\u003e",
+                       "Canned Pinto Beans, 35 oz drained and rinsed (about 4 1/4 cups): ~$3.39. \u003cstrong\u003eBuy 4 15.5oz cans: $3.49.\u003c/strong\u003e",
+                       "Diced Tomatoes, 34 oz with juice (about 4 cups): ~$1.79. \u003cstrong\u003eBuy 3 cans: $2.30.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 1 3/4 cups shredded, for serving: ~$1.05. \u003cstrong\u003eBuy 1 8oz bag: $1.22.\u003c/strong\u003e",
+                       "Lime, 3 limes, cut into wedges: ~$0.87. \u003cstrong\u003eBuy 4 each: $1.00.\u003c/strong\u003e",
+                       "Light Sour Cream, 1 1/4 cups, for serving: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Green Onions, 4 stalks, diced, for serving: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, dried oregano, salt, cayenne pepper): ~$0.65. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.45 across 14 servings, so roughly $2.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.05 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.76 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.81. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eAll in, this lands at ${{cost_ps}} a serving, which for {{cal}} calories and {{protein}} grams of protein is the kind of math that makes meal prep worth the hour of simmering. Beans and pantry tomatoes carry the cost down while the beef carries the protein up, and that is exactly the trade you want. Eat like this all week and the membership that got you the recipe runs a dollar a month, which is less than the sour cream.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThis is a pantry recipe wearing a beef coat, so buy the beef right and the rest is cheap. Grab 4 2/3 pounds of 80/20 ground beef; the fat is where the flavor lives in chili, so do not talk yourself into leaner and drier. Beans are the value engine here, 35 ounces of kidney and 35 ounces of pinto, so buy whatever can size stacks up to those amounts on your shelf and drain and rinse them. You need 34 ounces of diced tomatoes with the juice and about 19 ounces of tomato sauce, both of which keep for a year in the cabinet, so there is no rush and no waste. The masa harina is the one aisle people wander looking for; it sits with the Latin foods or the flour, and a single bag runs this batch and a dozen more, so it is a buy-once item. Chili powder, cumin, oregano, salt, and cayenne you probably already own, and if you buy chili powder for this, get the bigger container because you are using a quarter cup of it. Garnishes are cheddar, limes, light sour cream, and green onions, all optional and all cheap, so buy them if your crew likes to dress a bowl.\u003c/p\u003e",
+    "make_it":  [
+                    "\u003cp\u003eGet a big pot over medium heat and cook the ground beef, crumbling it as it goes, until it is browned through. Drain off the excess grease; you want the flavor, not a puddle. Stir in the garlic and the tomato sauce and let it cook about a minute so the garlic loses its raw edge.\u003c/p\u003e\u003cp\u003eNow the seasonings all at once: the chili powder, cumin, oregano, salt, and cayenne. Stir until the beef is coated and the pot smells like chili, then drop the heat to low. Cover it and let it simmer for an hour, stirring now and then. If it looks dry before the hour is up, splash in a half cup of water and keep going.\u003c/p\u003e\u003cp\u003eWhen the hour is done, stir the masa harina together with a half cup of water in a small bowl until it is smooth, then stir that slurry into the pot; that is what pulls the whole thing together into something you can eat with a spoon instead of drink. Add the diced tomatoes with their juice and the drained, rinsed kidney and pinto beans. Simmer another 10 minutes to marry it all, adding a little more masa or water until it is as thick as you like. Ladle it up and top each bowl with shredded cheddar, a wedge of lime to squeeze over, a dollop of light sour cream, and a scatter of diced green onions.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eThis batch fills 14 containers, and the honest way to split it even is the scale, not your eyeballs. Weigh the full pot, subtract what the empty pot weighs, and divide what is left by 14. That number in grams is one serving, and you ladle to it. Chili settles heavy at the bottom, so give the pot a stir between scoops or the last few containers end up all beans and the first few all broth. Keep the cheddar, lime, sour cream, and green onions on the side and add them the day you eat, not the day you cook, so they stay fresh.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/pioneer-woman-chili/\" target=\"_blank\" rel=\"noopener\"\u003ethecozycook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eFourteen containers of real chili, cooked once, waiting in the fridge all week. That is the Thrifty Crew move: do the work Sunday so Wednesday takes care of itself. Warm one up, hit it with the toppings you set aside, and get on with your day.\u003c/p\u003e",
+    "cost_batch":  37.45,
+    "cost_batch_true":  42.05,
+    "cost_per_serving":  2.68,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  8.76,
+    "cost_first_run":  50.81,
+    "scaler":  {
+                   "cost":  "42.05",
+                   "ing":  [
+                               {
+                                   "item":  "80/20 Ground Beef",
+                                   "canon":  "80/20 Ground Beef",
+                                   "grams":  2117,
+                                   "buy":  "4 2/3 lb",
+                                   "bid":  "ground-beef-8020",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  14,
+                                   "buy":  "5 cloves, diced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  529,
+                                   "buy":  "2 1/3 cups (about 19 oz)",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  37,
+                                   "buy":  "1/4 cup plus 2 1/2 teaspoons",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "2 1/3 teaspoons",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "2 1/3 teaspoons",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2 1/3 teaspoons",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "1/2 teaspoon",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Masa Harina",
+                                   "canon":  "Masa Harina",
+                                   "grams":  70,
+                                   "buy":  "1/2 cup plus 1 tablespoon",
+                                   "bid":  "masa-harina",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  992,
+                                   "buy":  "35 oz drained and rinsed (about 4 1/4 cups)",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Canned Pinto Beans",
+                                   "canon":  "Canned Pinto Beans",
+                                   "grams":  992,
+                                   "buy":  "35 oz drained and rinsed (about 4 1/4 cups)",
+                                   "bid":  "canned-pinto-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  959,
+                                   "buy":  "34 oz with juice (about 4 cups)",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  196,
+                                   "buy":  "1 3/4 cups shredded, for serving",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime",
+                                   "canon":  "Lime",
+                                   "grams":  233,
+                                   "buy":  "3 limes, cut into wedges",
+                                   "bid":  "limes",
+                                   "gpu":  "67.000"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "canon":  "Light Sour Cream",
+                                   "grams":  300,
+                                   "buy":  "1 1/4 cups, for serving",
+                                   "bid":  "sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  60,
+                                   "buy":  "4 stalks, diced, for serving",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Pioneer Woman chili scaled to 14 meal-prep servings: ground beef, kidney and pinto beans, and diced tomatoes thickened with masa harina, at {{cal}} calories and {{protein}} grams of protein per serving.",
+                 "keywords":  "pioneer woman chili, meal prep chili, high protein chili, beef and bean chili, masa harina chili, budget meal prep dinner, 14 servings chili",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  3.63,
+                 "recipeIngredient":  [
+                                          "80/20 Ground Beef, 4 2/3 lb (2117 g)",
+                                          "Garlic, 5 cloves, diced (14 g)",
+                                          "Tomato Sauce, 2 1/3 cups (about 19 oz) (529 g)",
+                                          "Chili Powder, 1/4 cup plus 2 1/2 teaspoons (37 g)",
+                                          "Ground Cumin, 2 1/3 teaspoons (5 g)",
+                                          "Dried Oregano, 2 1/3 teaspoons (2 g)",
+                                          "Salt, 2 1/3 teaspoons (14 g)",
+                                          "Cayenne Pepper, 1/2 teaspoon (1 g)",
+                                          "Masa Harina, 1/2 cup plus 1 tablespoon (70 g)",
+                                          "Kidney Beans, 35 oz drained and rinsed (about 4 1/4 cups) (992 g)",
+                                          "Canned Pinto Beans, 35 oz drained and rinsed (about 4 1/4 cups) (992 g)",
+                                          "Diced Tomatoes, 34 oz with juice (about 4 cups) (959 g)",
+                                          "Cheddar Cheese, Shredded, 1 3/4 cups shredded, for serving (196 g)",
+                                          "Lime, 3 limes, cut into wedges (233 g)",
+                                          "Light Sour Cream, 1 1/4 cups, for serving (300 g)",
+                                          "Green Onions, 4 stalks, diced, for serving (60 g)"
+                                      ],
+                 "steps":  [
+                               "Cook and crumble the ground beef in a large pot over medium heat until browned, then drain off the excess grease.",
+                               "Stir in the garlic and tomato sauce and cook for about 1 minute.",
+                               "Add the chili powder, cumin, oregano, salt, and cayenne, stir until the beef is coated, then reduce the heat to low.",
+                               "Cover and simmer for 1 hour, stirring occasionally, adding a splash of water if it looks dry.",
+                               "Stir the masa harina with a half cup of water until smooth, then stir the slurry into the pot.",
+                               "Add the diced tomatoes with juice and the drained, rinsed kidney and pinto beans, then simmer 10 minutes, adjusting thickness with more masa or water.",
+                               "Ladle into bowls and top with shredded cheddar, a lime wedge, light sour cream, and diced green onions."
+                           ],
+                 "step_names":  [
+                                    "Brown the beef",
+                                    "Garlic and tomato sauce",
+                                    "Season it",
+                                    "Simmer an hour",
+                                    "Thicken with masa",
+                                    "Beans and tomatoes",
+                                    "Serve and garnish"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "80/20 Ground Beef",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  529
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Masa Harina",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  992
+                              },
+                              {
+                                  "item":  "Canned Pinto Beans",
+                                  "grams":  992
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  959
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Lime",
+                                  "grams":  233
+                              },
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  60
+                              }
+                          ]
+}
