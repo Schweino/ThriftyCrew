@@ -368,6 +368,14 @@ class Daemon(object):
         # is read by every spec build and every macro recompute in the estate. Empty means the live
         # one, which is what a real run wants.
         self.food_db_path = food_db_path or os.path.join(MP, "food-macros-db.json")
+        # WHERE A REFUSAL GOES TO BE READ A WEEK LATER (rung 3, 2026-08-26). The conflict rule's
+        # verdict was right and stays exactly as it is - nothing is ever overwritten - but its whole
+        # output was one line in one run's findings, which scrolls away with the run. A gate whose
+        # result nobody can find later is a gate that only ever fires once. BESIDE THE FOOD DB, not
+        # at a fixed path, so the food_db_path test seam carries the ledger with it and a drill can
+        # never append to the live one.
+        self.food_db_conflicts_path = os.path.join(
+            os.path.dirname(os.path.abspath(self.food_db_path)), "food-db-conflicts.jsonl")
         # ONE PEN, ONE LOCK. The map lane runs two workers and both may carry new rows for the same
         # single file, which is the ingredient-resolutions lesson (S4: 2,293 outcomes recorded as 65
         # under last-writer-wins) arriving at the food DB. Modelled on cost_lock above.
@@ -2212,6 +2220,50 @@ class Daemon(object):
             return "%s %s = %s g" % (qty, unit, g)
         return "%s g" % g
 
+    @staticmethod
+    def _per_100g(r):
+        """The four macros per 100 g, or None when the row states no usable weight.
+
+        ONE BASIS BEFORE ANYTHING IS CALLED DIFFERENT. This is H2's lesson pointed at the REPORT
+        rather than at the verdict. H2 already stopped the rule from CALLING a per-100-g row and a
+        household row different; it did not change what the finding PRINTS, so a real conflict still
+        read `existing={"calories": 2} new={"calories": 233}` - two true numbers that look like a
+        116x error and are a 1 g teaspoon against 100 g. A reader a week later has to do the
+        arithmetic before they can even see the question.
+        """
+        g = r.get("serving_grams")
+        if not isinstance(g, (int, float)) or g <= 0:
+            return None
+        out = {}
+        for k in ("calories", "protein_g", "carbs_g", "fat_g"):
+            v = r.get(k)
+            if not isinstance(v, (int, float)):
+                return None
+            out[k] = round(float(v) * 100.0 / float(g), 1)
+        return out
+
+    def _one_basis_text(self, prior, row):
+        """Both rows per 100 g in one line, or an honest sentence saying why they cannot be put
+        there. A row with no weight cannot be normalised, and printing nothing would read as though
+        the two had been compared."""
+        a, b = self._per_100g(prior), self._per_100g(row)
+        if a is None or b is None:
+            which = "the DB's row" if a is None else "the mapper's row"
+            return "%s states no usable serving weight, so the two cannot be put on one basis." % which
+        return ("On one basis, per 100 g: DB %s cal / %s P / %s C / %s F  vs  mapper %s / %s / %s / %s."
+                % (a["calories"], a["protein_g"], a["carbs_g"], a["fat_g"],
+                   b["calories"], b["protein_g"], b["carbs_g"], b["fat_g"]))
+
+    def _append_food_db_conflicts(self, entries):
+        """Append refusals to the ledger. NEVER raises: a ledger that cannot be written must not cost
+        a recipe its run, and the finding it duplicates has already been raised."""
+        try:
+            with open(self.food_db_conflicts_path, "a", encoding="utf-8") as f:
+                for e in entries:
+                    f.write(json.dumps(e, ensure_ascii=False) + "\n")
+        except Exception:                                          # noqa: BLE001
+            pass
+
     def _same_food_other_basis(self, new, old):
         """(agree, why) - do two rows on DIFFERENT serving bases state the SAME food?
 
@@ -2306,6 +2358,10 @@ class Daemon(object):
                     by_name[str(r["item"]).strip().lower()] = r
                     by_loose.setdefault(self._loose_name_key(r["item"]), str(r["item"]))
             added = []
+            # REFUSALS ARE COLLECTED AND FLUSHED ONCE, not appended row by row. One open-append per
+            # row inside the lock would put a file handle in the middle of the read-modify-write the
+            # concurrency fixture exists to protect.
+            conflicts = []
             for row in rows:
                 name = str(row.get("item") or "").strip()
                 if not name:
@@ -2380,15 +2436,35 @@ class Daemon(object):
                             % (slug, name, self._basis_text(row), why_basis))
                     diff = basis + macro
                     if diff:
-                        # NEVER OVERWRITE ON A CONFLICT. Both rows are quoted so a person can rule;
-                        # the recipe proceeds on the row that is already there.
+                        # NEVER OVERWRITE ON A CONFLICT - the verdict is untouched, and the Great
+                        # Value tortellini case is why. The mapper proposed 307 cal / 13.5 g protein
+                        # per 100 g against a row that a photographed label later proved EXACTLY
+                        # right at 175 / 5.8. The rule refused, and it was refusing a worse reading.
+                        #
+                        # WHAT CHANGED IS ONLY WHAT IT SAYS. Both rows are now put on per 100 g
+                        # before the reader is asked to judge them, and the refusal is appended to a
+                        # ledger that outlives the run.
+                        one = self._one_basis_text(prior, row)
                         findings.append(
                             "%s: the food DB already carries %r and the mapper's row DIFFERS on %s. "
-                            "Nothing was written and the existing row stands.%s existing=%s new=%s"
-                            % (slug, name, ", ".join(diff),
+                            "Nothing was written and the existing row stands. %s%s existing=%s new=%s"
+                            % (slug, name, ", ".join(diff), one,
                                (" " + why_basis) if why_basis else "",
                                json.dumps(dict((k, prior.get(k)) for k in diff), ensure_ascii=False),
                                json.dumps(dict((k, row.get(k)) for k in diff), ensure_ascii=False)))
+                        conflicts.append({
+                            "run": self.run_id, "slug": slug, "item": name,
+                            "verdict": "REFUSED - nothing written, the existing row stands",
+                            "differs_on": diff,
+                            "one_basis": one,
+                            "db_per_100g": self._per_100g(prior),
+                            "mapper_per_100g": self._per_100g(row),
+                            "db_row": dict((k, prior.get(k)) for k in self.MACRO_FIELDS
+                                           + ("serving_grams", "serving_qty", "serving_unit")),
+                            "mapper_row": dict((k, row.get(k)) for k in self.MACRO_FIELDS
+                                               + ("serving_grams", "serving_qty", "serving_unit")),
+                            "mapper_source": str(row.get("source") or ""),
+                            "why_basis": why_basis})
                     continue                      # an identical row is skipped silently, per plan 3.2
                 # H3 (2026-08-26): THE EXACT-NAME CHECK IS WHY THIS DB HAS DUPLICATES.
                 # Everything above this line asks "is there a row called exactly that", so 'Apples'
@@ -2427,6 +2503,8 @@ class Daemon(object):
                 by_name[name.lower()] = clean
                 by_loose.setdefault(self._loose_name_key(name), name)
                 written.append(name)
+            if conflicts:
+                await loop.run_in_executor(None, self._append_food_db_conflicts, conflicts)
             if not added:
                 return written, findings, notes
             try:

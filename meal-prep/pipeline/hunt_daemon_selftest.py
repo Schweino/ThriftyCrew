@@ -903,6 +903,22 @@ def run():
     T("MUST FIRE  a row citing neither an FDC id nor a URL is refused - Atwater proves four numbers "
       "agree with each other, never that they are this food's numbers",
       *_fooddb_needs_a_source())
+    T("MUST FIRE  RUNG 3: the Great Value tortellini refusal SURVIVES the reporting change - the "
+      "mapper's 307 cal / 13.5 g protein per 100 g is still refused against a row a photographed "
+      "label proved exactly right, and nothing is written",
+      *_fooddb_tortellini_is_still_refused())
+    T("MUST FIRE  RUNG 3: a refusal is readable a week later - it lands in the food-DB conflict "
+      "ledger beside the DB, with both rows and the verdict, not only in a run's findings",
+      *_fooddb_conflict_reaches_the_ledger())
+    T("MUST FIRE  RUNG 3: the finding puts BOTH rows on per 100 g before asking anyone to judge "
+      "them - 2 cal per 1 g tsp against 233 per 100 g printed raw reads as a 116x error and is not "
+      "one", *_fooddb_finding_states_one_basis())
+    T("CLEAN TWIN RUNG 3: agreement writes NOTHING to the ledger - a ledger that also collects the "
+      "cases the rule cleared is a ledger nobody reads",
+      *_fooddb_agreement_does_not_reach_the_ledger())
+    T("MUST FIRE  RUNG 3: the ledger follows the food_db_path SEAM, so a drill can never append to "
+      "the live one - the same rule that keeps a drill out of the DB itself",
+      *_fooddb_ledger_follows_the_seam())
     T("MUST FIRE  H3: a row landing beside a name that differs only by plural or punctuation is "
       "NAMED - the exact-name check is why this DB holds Apple/Apples, Lemon/Lemons, Green Bell "
       "Pepper(s) and Fresh Thyme twice",
@@ -7611,6 +7627,121 @@ def _shortfall_reaches_the_run_findings():
               and "'Fresh Basil'" in named[0]
               and any("ABSENT" in f for f in d.findings))
         return ok, json.dumps(doc.get("db_row_findings"))[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _tortellini_db_row():
+    """The row as it actually stands, and as the photographed Great Value 36 oz label states it:
+    8.5 servings per container, 1 cup (120 g), 210 cal, 7 g protein, 38 g carbs, 2.5 g fat."""
+    return {"item": "Cheese Tortellini", "brand": "Great Value", "serving_grams": 120,
+            "serving_qty": 1, "serving_unit": "cup", "calories": 210, "protein_g": 7,
+            "carbs_g": 38, "fat_g": 2.5, "notes": "label"}
+
+
+def _tortellini_mapper_row():
+    """What the mapper proposed on the live run: 307 cal / 13.5 g protein per 100 g. It is a real
+    reading of SOME tortellini - the premium brands run there - and it is not this package."""
+    return {"item": "Cheese Tortellini", "brand": "generic", "serving_grams": 100,
+            "serving_qty": 100, "serving_unit": "g", "calories": 307, "protein_g": 13.5,
+            "carbs_g": 45, "fat_g": 7.5, "source": "fdc:123456", "notes": "per 100 g"}
+
+
+def _ledger_lines(d):
+    if not os.path.exists(d.food_db_conflicts_path):
+        return []
+    with open(d.food_db_conflicts_path, "r", encoding="utf-8-sig") as f:
+        return [json.loads(x) for x in f.read().splitlines() if x.strip()]
+
+
+def _fooddb_tortellini_is_still_refused():
+    """MUST FIRE, and it is rung 3's whole gate. The plan's instruction was to change what the
+    conflict rule REPORTS and not one thing about what it DECIDES. If this case ever passes by
+    writing the mapper's row, the reporting work has quietly become a correctness regression on the
+    one row this estate has actually verified against a photograph."""
+    d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
+    try:
+        written, findings, _notes = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        row = [r for r in _db_items(path)["items"] if r["item"] == "Cheese Tortellini"][0]
+        ok = (written == [] and len(findings) == 1
+              and "Nothing was written and the existing row stands" in findings[0]
+              and row["calories"] == 210 and row["protein_g"] == 7
+              and row["serving_grams"] == 120)
+        return ok, "written=%s row=%s finding=%s" % (written, json.dumps(row), findings[:1])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_conflict_reaches_the_ledger():
+    """MUST FIRE. Before this, the refusal existed as one line in one run's findings - which is a
+    gate that fires once and is then gone. The ledger is the plan's "somewhere a human can review
+    it": both rows, the fields, the verdict, and the run that raised it."""
+    d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
+    try:
+        arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        lines = _ledger_lines(d)
+        e = lines[0] if lines else {}
+        ok = (len(lines) == 1
+              and e.get("item") == "Cheese Tortellini"
+              and e.get("verdict", "").startswith("REFUSED")
+              and e.get("db_per_100g", {}).get("calories") == 175.0
+              and e.get("mapper_per_100g", {}).get("calories") == 307.0
+              and e.get("slug") == "s1" and "calories" in (e.get("differs_on") or []))
+        return ok, json.dumps(lines)[:420]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_finding_states_one_basis():
+    """MUST FIRE. H2 stopped the rule CALLING a household row and a per-100-g row different; it left
+    the printout raw, so a real conflict across two bases still read like a 116x error. The reader
+    should not have to do the arithmetic before they can see the question."""
+    d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
+    try:
+        _w, findings, _n = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        f = findings[0] if findings else ""
+        ok = ("On one basis, per 100 g: DB 175.0 cal" in f and "vs  mapper 307.0" in f)
+        return ok, f[:320]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_agreement_does_not_reach_the_ledger():
+    """CLEAN TWIN. Dried Basil at 233 cal per 100 g against the DB's 2 cal per 1 g tsp is the SAME
+    food - H2's measured case, 10 of 13 findings on the ten-run. It raises no finding, and it must
+    leave no ledger line either: a ledger that also collects what the rule cleared is a ledger
+    nobody reads, which is the same sentence H1 wrote about rounding."""
+    db_row = {"item": "Dried Basil", "brand": "GV", "serving_grams": 1, "serving_qty": 1,
+              "serving_unit": "tsp", "calories": 2, "protein_g": 0.23, "carbs_g": 0.28,
+              "fat_g": 0.03, "notes": "household"}
+    mapper = {"item": "Dried Basil", "serving_grams": 100, "serving_qty": 100, "serving_unit": "g",
+              "calories": 233, "protein_g": 23, "carbs_g": 28, "fat_g": 3, "source": "fdc:171317"}
+    d, path, tmp = _food_db_run(None, existing=[db_row])
+    try:
+        _w, findings, notes = arun(d.write_food_db_rows("s1", [mapper]))
+        ok = (not findings and len(notes) == 1 and _ledger_lines(d) == []
+              and not os.path.exists(d.food_db_conflicts_path))
+        return ok, "findings=%s notes=%d ledger=%s" % (findings, len(notes),
+                                                       json.dumps(_ledger_lines(d))[:200])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _fooddb_ledger_follows_the_seam():
+    """MUST FIRE. The food_db_path seam exists because a drill must not be able to touch the live
+    food DB even by accident. A ledger pinned to a fixed estate path would reintroduce exactly that
+    hole one file over - every drill appending refusals to the real ledger."""
+    d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
+    try:
+        arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        live = os.path.join(os.path.dirname(os.path.abspath(
+            os.path.join(MP, "food-macros-db.json"))), "food-db-conflicts.jsonl")
+        ok = (os.path.dirname(os.path.abspath(d.food_db_conflicts_path))
+              == os.path.dirname(os.path.abspath(path))
+              and os.path.normcase(os.path.abspath(d.food_db_conflicts_path))
+              != os.path.normcase(os.path.abspath(live))
+              and os.path.exists(d.food_db_conflicts_path))
+        return ok, "ledger=%s live=%s" % (d.food_db_conflicts_path, live)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
