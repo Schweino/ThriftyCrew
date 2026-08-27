@@ -1,243 +1,85 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T11:56:27",
+ "generated": "2026-08-27T12:50:34",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "protein pasta",
+   "term": "Moroccan Spice Mix",
    "state": "MATCHES",
-   "term_used": "protein pasta",
+   "term_used": "Moroccan Spice Mix",
    "attempts": [
     {
-     "term": "protein pasta",
+     "term": "Moroccan Spice Mix",
      "state": "MATCHES",
-     "hits": 23
+     "hits": 8
     }
    ],
    "hits": [
     {
-     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
-     "price": 8.48,
+     "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+     "price": 7.78,
      "size": "",
-     "unit_price": "",
+     "unit_price": "$0.65/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+     "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
     },
     {
-     "item": "Brami Italian Protein Fusilli Pasta, 12 oz., 4pk.",
-     "price": 9.48,
-     "size": "",
-     "unit_price": "$2.37/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6QFDG45BXBSY"
-    },
-    {
-     "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
-     "price": 9.48,
-     "size": "",
-     "unit_price": "$1.58/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
-    },
-    {
-     "item": "GOODLES Mac and Cheese, Variety Pack, 6 pk.",
-     "price": 12.98,
-     "size": "",
-     "unit_price": "$0.36/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1G2T5BPVX0JX"
-    },
-    {
-     "item": "Kraft Easy Mac Original Flavor Single-Serve Pouches 18 pk.",
-     "price": 6.98,
-     "size": "",
-     "unit_price": "$0.39/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/66P38Z7VPN04"
-    },
-    {
-     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$0.09/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
-    },
-    {
-     "item": "Kraft Power Mac Macaroni and Cheese Dinner, 7.25 oz., 8 pk.",
-     "price": 14.62,
-     "size": "",
-     "unit_price": "$0.25/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5JJRJM8QC945"
-    },
-    {
-     "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
-     "price": 7.98,
-     "size": "",
-     "unit_price": "",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "bone broth",
-   "state": "MATCHES",
-   "term_used": "bone broth",
-   "attempts": [
-    {
-     "term": "bone broth",
-     "state": "MATCHES",
-     "hits": 27
-    }
-   ],
-   "hits": [
-    {
-     "item": "Kettle & Fire Chicken Bone Broth, 16.9 oz., 6 ct.",
-     "price": 21.98,
-     "size": "",
-     "unit_price": "$3.66/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2X5O8541TVVH"
-    },
-    {
-     "item": "Bare Bones Instant Beef Bone Broth, 12 ct.",
-     "price": 9.98,
-     "size": "",
-     "unit_price": "$0.83/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/68Y5QHYGQN2A"
-    },
-    {
-     "item": "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
-     "price": 8.48,
-     "size": "",
-     "unit_price": "$0.09/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2DBU8L0TGZ3D"
-    },
-    {
-     "item": "Bare Bones Instant Chicken Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
-     "price": 7.98,
-     "size": "",
-     "unit_price": "$1.00/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1Y1DHFRZJBTV"
-    },
-    {
-     "item": "Bare Bones Instant Beef Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
-     "price": 7.98,
-     "size": "",
-     "unit_price": "$1.00/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/46LJZ0HIWKPW"
-    },
-    {
-     "item": "Bare Bones Chicken Instant Bone Broth Stick, 12 ct.",
-     "price": 9.98,
-     "size": "",
-     "unit_price": "$0.83/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6AU9M6ZGMX0K"
-    },
-    {
-     "item": "Kinder's Roasted Turkey Bone Broth Gravy Mix, 4 oz.",
-     "price": 5.98,
-     "size": "",
-     "unit_price": "$1.50/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7FQQ4Z9L8A69"
-    },
-    {
-     "item": "Solid Gold Bone Broth with Turmeric Dog Food Topper,16 oz., 2 pk.",
-     "price": 12.47,
-     "size": "",
-     "unit_price": "$0.39/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3MNS3H6MT0RR"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "High Protein Pasta",
-   "state": "MATCHES",
-   "term_used": "High Protein Pasta",
-   "attempts": [
-    {
-     "term": "High Protein Pasta",
-     "state": "MATCHES",
-     "hits": 19
-    }
-   ],
-   "hits": [
-    {
-     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
-     "price": 8.48,
-     "size": "",
-     "unit_price": "",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
-    },
-    {
-     "item": "Brami Italian Protein Fusilli Pasta, 12 oz., 4pk.",
-     "price": 9.48,
-     "size": "",
-     "unit_price": "$2.37/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6QFDG45BXBSY"
-    },
-    {
-     "item": "Member's Mark High Protein Penne Pasta with Italian Sausage, priced per pound",
-     "price": 17.15,
-     "size": "",
-     "unit_price": "$5.12/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4Y6URBC6J0MS"
-    },
-    {
-     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$0.09/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
-    },
-    {
-     "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
-     "price": 8.98,
-     "size": "",
-     "unit_price": "$2.25/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
-    },
-    {
-     "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$1.42/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
-    },
-    {
-     "item": "Jovial Organic Brown Rice Gluten Free Pasta, Fusilli, 24 oz.",
+     "item": "Lawry's Seasoned Salt, 40 oz.",
      "price": 7.48,
      "size": "",
-     "unit_price": "$0.31/oz",
+     "unit_price": "$0.19/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0U6J91MT721R"
+     "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
     },
     {
-     "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
-     "price": 7.98,
+     "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+     "price": 6.98,
      "size": "",
-     "unit_price": "",
+     "unit_price": "$0.69/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
+     "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+    },
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$1.16/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+    },
+    {
+     "item": "Old Bay Seasoning, 7.5 lbs.",
+     "price": 39.88,
+     "size": "",
+     "unit_price": "$5.32/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6MGYI9AQ9VZA"
+    },
+    {
+     "item": "Kinder's Whiskey Peppercorn Seasoning, 9.7 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.72/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/538KLULEC35X"
+    },
+    {
+     "item": "Kinder's Caramelized Onion Burger Rub and Seasoning, 9.1 oz.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$0.60/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/13T9F65CNQL1"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

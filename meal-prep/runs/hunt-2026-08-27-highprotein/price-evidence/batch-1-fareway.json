@@ -1,191 +1,77 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T11:56:34",
+ "generated": "2026-08-27T12:50:38",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "protein pasta",
+   "term": "Moroccan Spice Mix",
    "state": "MATCHES",
-   "term_used": "protein pasta",
+   "term_used": "Moroccan Spice Mix",
    "attempts": [
     {
-     "term": "protein pasta",
+     "term": "Moroccan Spice Mix",
      "state": "OK",
-     "hits": 6
+     "hits": 72
     }
    ],
    "hits": [
     {
-     "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
+     "item": "McCormick Chili Seasoning Mix",
+     "price": 1.68,
+     "size": "1.25 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38758-mccormick-chili-seasoning-mix-1-25-oz"
     },
     {
-     "item": "Barilla Protein+ (Plus) Spaghetti Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88739-barilla-protein-grain-legume-pasta-spaghetti-14-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
     },
     {
-     "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Farfalle Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73693-barilla-protein-grain-legume-pasta-farfalle-14-5-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Cellentani Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40815135-barilla-protein-cellentani-grain-legume-pasta-14-5-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Angel Hair Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24734-barilla-protein-grain-legume-pasta-angel-hair-14-5-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "bone broth",
-   "state": "MATCHES",
-   "term_used": "bone broth",
-   "attempts": [
-    {
-     "term": "bone broth",
-     "state": "OK",
-     "hits": 6
-    }
-   ],
-   "hits": [
-    {
-     "item": "Kitchen Basics Original Chicken Bone Broth",
-     "price": 2.39,
-     "size": "8.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45565783-kitchen-basics-original-chicken-bone-broth-8-25-oz"
-    },
-    {
-     "item": "Pacific Foods Organic Unsalted Chicken Bone Broth",
-     "price": 7.99,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/395436-pacific-organic-unsalted-chicken-bone-broth-32-oz"
-    },
-    {
-     "item": "Kitchen Basics Original Beef Bone Broth",
-     "price": 2.39,
-     "size": "8.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/46246580-kitchen-basics-original-beef-bone-broth-8-25-oz"
-    },
-    {
-     "item": "Swanson's Sipping Chicken Bone Broth",
-     "price": 2.99,
-     "size": "10.75 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984850-swanson-sipping-chicken-bone-broth-10-75-oz"
-    },
-    {
-     "item": "Swanson's Sipping Chicken Bone Broth With Ginger and Turmeric",
-     "price": 2.99,
-     "size": "10.75 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984868-swanson-chicken-bone-broth-with-ginger-turmeric-10-75-oz"
-    },
-    {
-     "item": "EPIC Homestyle Savory Chicken Bone Broth",
-     "price": 7.99,
-     "size": "14 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17421647-epic-homestyle-savory-chicken-bone-broth-whole30-14-000-fl-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "High Protein Pasta",
-   "state": "MATCHES",
-   "term_used": "High Protein Pasta",
-   "attempts": [
-    {
-     "term": "High Protein Pasta",
-     "state": "OK",
-     "hits": 70
-    }
-   ],
-   "hits": [
-    {
-     "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
-    },
-    {
-     "item": "Goodles Loopdy Loos Cavatappi Protein Pasta",
-     "price": 3.49,
+     "item": "Cavender's Seasoning, Greek, All Purpose",
+     "price": 4.99,
      "size": "8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32001025-goodles-pasta-loopdy-loos-cavatappi-8-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
     },
     {
-     "item": "Barilla Protein+ (Plus) Spaghetti Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+     "price": 7.99,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
+     "price": 5.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+    },
+    {
+     "item": "McCormick Italian Seasoning",
      "price": 2.99,
-     "size": "14.5 oz",
+     "size": "0.75 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88739-barilla-protein-grain-legume-pasta-spaghetti-14-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/110108545-mccormick-italian-seasoning"
     },
     {
-     "item": "Goodles Lucky Penne Protein Pasta",
-     "price": 3.49,
-     "size": "8 oz",
+     "item": "Simply Organic Pumpkin Spice",
+     "price": 6.99,
+     "size": "1.94 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32000811-goodles-lucky-penne-pasta-8-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Cellentani Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40815135-barilla-protein-cellentani-grain-legume-pasta-14-5-oz"
-    },
-    {
-     "item": "Goodles Shella Good Aged White Cheddar Protein Mac & Cheese",
-     "price": 2.79,
-     "size": "6 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26548571-goodles-shella-good-mac-cheese-6-oz"
-    },
-    {
-     "item": "Barilla Whole Grain Spaghetti Pasta",
-     "price": 1.84,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2601739-barilla-whole-grain-pasta-spaghetti-16-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16401147-simply-organic-pumpkin-spice-1-94-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

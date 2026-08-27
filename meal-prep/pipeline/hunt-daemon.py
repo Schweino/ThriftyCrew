@@ -4183,12 +4183,35 @@ class Daemon(object):
         expensive per-recipe stage on every resume - and in the case that actually happened it would
         have bought nothing, because the mapper's decision file had not moved at all. What had moved
         was the ingredient VOCABULARY, two lanes downstream. The intake was already correct; only the
-        spec build had been failing. So the question is whether the intake's INPUTS changed:
+        spec build had been failing. So the question is whether the intake's INPUTS changed.
 
-          mapper file NEWER than the intake -> the ingredients moved under it. Rebuild, -Force, and
-                                               the prose is genuinely stale.
-          otherwise                          -> the intake still describes the mapper's own rulings.
-                                               Keep it, skip the skeleton, and carry on to the gate.
+        AND IT IS ASKED OF THE CONTENT, NOT OF mtime (2026-08-27). The first cut compared
+        mtime(mapped) > mtime(intake), and mtime does not survive contact with git. A `git rebase`
+        rewrote this run's whole tree in one pass; `intake/` sorts before `mapped/`, so every mapped
+        file landed ~20 MILLISECONDS after its own intake and all six recipes in the write lane read
+        as "the ingredients moved under it". Nothing had moved - the bytes were identical. The
+        rebuild then hit build-intake-skeleton's refusal to erase prose and every one of them STUCK,
+        permanently, because each later run repeated the same reasoning. ANY bulk file operation does
+        this: a checkout, a stash pop, and the ~07:00 bot's own autoStash rebase - which means it
+        would have fired every morning whether or not anyone had touched the tree by hand.
+
+        So the daemon stamps the mapper file's HASH when the skeleton is built (it already holds the
+        pen for the mapped file itself) and compares hashes here:
+
+          stamp present, hash DIFFERS -> the ingredients really moved. Rebuild, and prose is stale.
+          stamp present, hash MATCHES -> the intake still describes the mapper's own rulings. Keep it.
+          NO stamp at all             -> an intake built before stamping existed. KEEP the prose and
+                                         say so. The two errors are not symmetric: keeping prose that
+                                         turns out stale is caught downstream by the locked-field
+                                         diff and costs a re-ask, while erasing it destroys the most
+                                         expensive per-recipe stage and, as measured above, strands
+                                         the recipe rather than rebuilding it.
+
+        The hash is of the mapper file's BYTES. Reimplementing the skeleton's own projection here to
+        compare ingredients semantically was considered and refused: the projection is neither "every
+        mapped line" nor "every decision == mapped" - measured over this run, both rules are wrong on
+        4 of 11 recipes - so a Python copy of it would be a diverged twin of the PowerShell that owns
+        it. A byte hash can only err toward rebuilding, never toward a silent stale keep.
 
         Returns (current, why) where `current` True means "keep the intake you have".
         """
@@ -4207,11 +4230,56 @@ class Daemon(object):
             return False, "the intake carries no writer prose, so a rebuild erases nothing"
         if not os.path.exists(mapped):
             return False, "no mapper decision file to compare against"
-        if os.path.getmtime(mapped) > os.path.getmtime(intake):
-            return False, ("the mapper decision file is NEWER than the intake, so the ingredients "
-                           "moved under it and the prose is stale")
-        return True, ("the intake already carries writer prose and the mapper decision file has not "
-                      "moved since it was built")
+        live = self.mapper_file_hash(slug)
+        if live is None:
+            return False, "the mapper decision file will not read, so nothing can be compared"
+        stamped = self.read_mapper_stamp(slug)
+        if not stamped:
+            return True, ("the intake already carries writer prose and there is no mapper stamp to "
+                          "check it against - keeping the prose, because an unanswerable question "
+                          "must not erase the most expensive stage in the run")
+        if stamped != live:
+            return False, ("the mapper decision file's CONTENT changed since the skeleton was built "
+                           "(%s -> %s), so the ingredients moved under the intake and the prose is "
+                           "stale" % (stamped[:12], live[:12]))
+        return True, ("the intake already carries writer prose and the mapper decision file is "
+                      "byte-identical to the one it was built from (%s)" % live[:12])
+
+    def mapper_stamp_path(self, slug):
+        return os.path.join(self.run_dir, "intake", "%s.mapper-stamp.json" % slug)
+
+    def mapper_file_hash(self, slug):
+        """sha256 of the mapper decision file's BYTES, or None if it will not read."""
+        import hashlib                                            # noqa: PLC0415
+        path = os.path.join(self.run_dir, "mapped", "%s.json" % slug)
+        try:
+            with open(path, "rb") as f:
+                return hashlib.sha256(f.read()).hexdigest()
+        except Exception:                                         # noqa: BLE001
+            return None
+
+    def read_mapper_stamp(self, slug):
+        """The hash recorded when this slug's skeleton was last built, or '' if there is none."""
+        try:
+            with open(self.mapper_stamp_path(slug), "r", encoding="utf-8-sig") as f:
+                return str((json.load(f) or {}).get("mapper_sha256") or "")
+        except Exception:                                         # noqa: BLE001
+            return ""
+
+    def write_mapper_stamp(self, slug):
+        """Record the mapper file's hash as the skeleton's input. Best-effort BY DESIGN: a stamp that
+        cannot be written must not end a run, and a missing stamp reads as "keep the prose" above -
+        the same answer a freshly built skeleton would have earned anyway."""
+        h = self.mapper_file_hash(slug)
+        if not h:
+            return ""
+        try:
+            with open(self.mapper_stamp_path(slug), "w", encoding="utf-8") as f:
+                json.dump({"slug": slug, "mapper_sha256": h,
+                           "at": time.strftime("%Y-%m-%dT%H:%M:%S")}, f, indent=2)
+        except Exception:                                         # noqa: BLE001
+            return ""
+        return h
 
     def read_intake_macros(self, slug):
         """The macros off an intake we are keeping, in build_skeleton's own (ok, macros, detail)
@@ -4254,6 +4322,11 @@ class Daemon(object):
                 mac = (json.load(f) or {}).get("macros_per_serving") or {}
         except Exception as e:                                    # noqa: BLE001
             return False, None, "the skeleton reported clean but %s will not read (%s)" % (path, e)
+        # THE STAMP IS WRITTEN HERE AND NOWHERE ELSE - on the one path where a skeleton was actually
+        # built from the mapper file that is on disk right now. Recording it anywhere else would let
+        # the stamp claim an input the skeleton was never built from, which is the failure the whole
+        # mechanism exists to prevent. See intake_is_current for why the hash and not the mtime.
+        self.write_mapper_stamp(slug)
         return True, mac, detail[-400:]
 
     async def verify_skeleton(self, slug):
@@ -5883,7 +5956,15 @@ class Daemon(object):
         if stuck:
             lines += ["", "  STUCK (no verdict was rendered - resumable, and each one says why):"]
             for o in stuck:
-                lines.append("    %-38s %s" % (o["slug"], (o.get("detail") or "")[:150]))
+                # THE WHOLE REASON, because the header promises one. stuck() stores 250 characters
+                # and this printed 150 of them, and the two numbers were not doing the same job: the
+                # lane preamble plus "build-intake-skeleton: BLOCKED - " plus an absolute intake path
+                # spends about 180 before the reason starts. Measured 2026-08-27 on all six recipes
+                # of hunt-2026-08-27-highprotein, every one of which reported
+                #   "... BLOCKED - meal-prep\runs\hunt-2026-08-27-highpro"
+                # and cut off exactly where "already carries writer prose" would have been. The
+                # reason had to be reproduced by hand from the script instead of read from the run.
+                lines.append("    %-38s %s" % (o["slug"], (o.get("detail") or "")))
         if self.held:
             lines += ["", "  HELD (reported, never auto-dispatched):"]
             for slug, why in self.held:

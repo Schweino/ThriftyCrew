@@ -8824,17 +8824,30 @@ def _the_write_lane_does_not_block_on_its_own_intake():
 
     Five recipes of hunt-2026-08-27-ten sat there after build-v2-spec refused them over ingredient
     VOCABULARY names - a thing two lanes further on. The mapper's decision file had not moved at all.
-    The intakes were already correct, so forcing a rebuild would have erased good prose and re-bought
-    the most expensive per-recipe stage to produce the same file. The question is whether the
-    intake's INPUTS moved, not whether it is inconvenient.
+
+    AND THEN THE FIX'S OWN INSTRUMENT DID IT AGAIN, THE SAME DAY. The first cut asked the question of
+    mtime: mapper file newer than the intake -> the ingredients moved. mtime does not survive contact
+    with git. A `git rebase` rewrote hunt-2026-08-27-highprotein's whole tree in one pass, `intake/`
+    sorts before `mapped/`, and every mapped file landed ~20 MILLISECONDS after its own intake. All
+    six recipes in the write lane read as stale, hit the prose refusal, and stuck - over bytes that
+    were identical. Any bulk file operation reproduces it, the ~07:00 bot's autoStash rebase
+    included, so it would have fired every morning on its own.
+
+    The question is now asked of CONTENT: a sha256 of the mapper file's bytes, stamped when the
+    skeleton is built. The fixture that matters is the third one - same bytes, newer mtime, KEEP -
+    because that is the case the old instrument got wrong and no amount of re-running would clear.
     """
     res = []
     tmp = scratch_dir(prefix="daemon-intake-")
     try:
         os.makedirs(os.path.join(tmp, "intake"), exist_ok=True)
         os.makedirs(os.path.join(tmp, "mapped"), exist_ok=True)
+        d = daemon(run_dir=tmp)
 
-        def put(slug, prose, mapped_newer):
+        def put(slug, prose, mapped_body=None, stamp=True):
+            """Write an intake + a mapper file, and stamp the mapper file the way a real skeleton
+            build would. Returns nothing; callers mutate the mapper file afterwards to pose their
+            case."""
             ip = os.path.join(tmp, "intake", "%s.json" % slug)
             mp = os.path.join(tmp, "mapped", "%s.json" % slug)
             with open(ip, "w", encoding="utf-8") as f:
@@ -8842,14 +8855,22 @@ def _the_write_lane_does_not_block_on_its_own_intake():
                            "macros_per_serving": {"calories": 520, "carbs_g": 20,
                                                   "protein_g": 45}}, f)
             with open(mp, "w", encoding="utf-8") as f:
-                json.dump({"slug": slug}, f)
-            # mtimes are the whole mechanism, so they are set explicitly rather than raced for
+                json.dump(mapped_body or {"slug": slug, "ingredients": [{"item": "Rice"}]}, f)
+            if stamp:
+                d.write_mapper_stamp(slug)
+
+        def touch_newer(slug):
+            """Rewrite the mapper file with the SAME bytes and a later mtime - exactly what a rebase,
+            a checkout or a stash pop does to a tree."""
+            mp = os.path.join(tmp, "mapped", "%s.json" % slug)
+            ip = os.path.join(tmp, "intake", "%s.json" % slug)
+            body = open(mp, "rb").read()
+            with open(mp, "wb") as f:
+                f.write(body)
             base = os.path.getmtime(ip)
-            os.utime(mp, (base + 60, base + 60) if mapped_newer else (base - 60, base - 60))
+            os.utime(mp, (base + 60, base + 60))
 
-        d = daemon(run_dir=tmp)
-
-        put("keep", {"why_it_works": "real prose a writer was paid for"}, mapped_newer=False)
+        put("keep", {"why_it_works": "real prose a writer was paid for"})
         cur, why = d.intake_is_current("keep")
         res.append(("MUST FIRE  an intake carrying prose whose mapper file has NOT moved is KEPT - "
                     "the lane used to stick on it forever and no re-run could clear it",
@@ -8859,15 +8880,35 @@ def _the_write_lane_does_not_block_on_its_own_intake():
                     "two roads apart",
                     ok and mac.get("calories") == 520, "ok=%s macros=%s" % (ok, mac)))
 
-        put("stale", {"why_it_works": "prose about ingredients that have since changed"},
-            mapped_newer=True)
-        cur2, why2 = d.intake_is_current("stale")
-        res.append(("CLEAN TWIN a NEWER mapper decision file means the ingredients moved under the "
-                    "prose, so the intake is NOT kept - this must not become a licence to ship a "
-                    "recipe whose numbers have changed",
-                    not cur2 and "NEWER" in why2, why2))
+        # THE REGRESSION, FROZEN. Identical bytes, later mtime. The mtime instrument called this
+        # stale and stranded six recipes; the hash must call it current.
+        put("rebased", {"why_it_works": "prose that a git rebase must not be able to cost us"})
+        touch_newer("rebased")
+        curR, whyR = d.intake_is_current("rebased")
+        res.append(("MUST FIRE  a mapper file rewritten with the SAME BYTES and a NEWER mtime is "
+                    "still current - this is the git-rebase case that stranded all six recipes of "
+                    "hunt-2026-08-27-highprotein, and mtime alone cannot tell it from a real edit",
+                    curR and "byte-identical" in whyR, whyR))
 
-        put("bare", {}, mapped_newer=False)
+        put("stale", {"why_it_works": "prose about ingredients that have since changed"})
+        with open(os.path.join(tmp, "mapped", "stale.json"), "w", encoding="utf-8") as f:
+            json.dump({"slug": "stale", "ingredients": [{"item": "Quinoa"}]}, f)
+        cur2, why2 = d.intake_is_current("stale")
+        res.append(("CLEAN TWIN a mapper file whose CONTENT really changed means the ingredients "
+                    "moved under the prose, so the intake is NOT kept - the hash must not become a "
+                    "licence to ship a recipe whose numbers have changed",
+                    not cur2 and "CONTENT changed" in why2, why2))
+
+        # A one-byte edit, to prove the comparison is the bytes and not the size or the shape.
+        put("onebyte", {"why_it_works": "prose"}, mapped_body={"slug": "onebyte", "grams": 100})
+        with open(os.path.join(tmp, "mapped", "onebyte.json"), "w", encoding="utf-8") as f:
+            json.dump({"slug": "onebyte", "grams": 200}, f)
+        curB, whyB = d.intake_is_current("onebyte")
+        res.append(("CLEAN TWIN a mapper file edited by ONE character (100 g -> 200 g) is caught - "
+                    "a same-length edit is exactly what a re-map produces",
+                    not curB, whyB))
+
+        put("bare", {})
         cur3, why3 = d.intake_is_current("bare")
         res.append(("CLEAN TWIN an intake with no writer prose is NOT kept - nothing is at risk from "
                     "rebuilding it, and the skeleton is the cheaper truth",
@@ -8876,6 +8917,62 @@ def _the_write_lane_does_not_block_on_its_own_intake():
         cur4, why4 = d.intake_is_current("never-seen")
         res.append(("CLEAN TWIN a recipe with no intake at all still builds one",
                     not cur4 and "no intake" in why4, why4))
+
+        # THE LEGACY ROAD. Every intake built before stamping existed has no stamp, and the six that
+        # were stuck when this was written were all of them. Keeping unverifiable prose is the
+        # deliberate choice: the downstream locked-field diff can still catch stale prose and costs
+        # one re-ask, while erasing it destroys the run's most expensive stage AND, as measured,
+        # strands the recipe instead of rebuilding it.
+        put("unstamped", {"why_it_works": "prose from before the stamp existed"}, stamp=False)
+        cur5, why5 = d.intake_is_current("unstamped")
+        res.append(("MUST FIRE  an intake with prose and NO stamp is kept, and says that it is "
+                    "keeping it unverified - an unanswerable question must not erase the most "
+                    "expensive stage in the run",
+                    cur5 and "no mapper stamp" in why5, why5))
+
+        # ...and the stamp is only ever written where a skeleton was really built. A stamp minted
+        # anywhere else could vouch for an input the skeleton never saw.
+        h = d.write_mapper_stamp("keep")
+        res.append(("the stamp records the mapper file's own sha256, so the two sides of the "
+                    "comparison cannot drift apart",
+                    bool(h) and h == d.mapper_file_hash("keep") and h == d.read_mapper_stamp("keep"),
+                    "stamp=%s live=%s" % (str(h)[:12], str(d.mapper_file_hash("keep"))[:12])))
+        res.append(("CLEAN TWIN a slug with no mapper file at all stamps nothing rather than "
+                    "recording an empty hash that would later read as a match",
+                    d.write_mapper_stamp("never-seen") == ""
+                    and d.read_mapper_stamp("never-seen") == "",
+                    "wrote=%r" % d.write_mapper_stamp("never-seen")))
+
+        # THE WIRING, NOT THE PREDICATE. Every fixture above calls write_mapper_stamp itself, so all
+        # of them stay green if build_skeleton stops calling it - and a stamp nobody writes makes
+        # every later run take the unstamped road forever. That failure is silent and it is exactly
+        # the shape this file has been bitten by three times today, so the real path is driven here:
+        # a genuine build_skeleton over a FakePS that reports clean, asserting the stamp APPEARED and
+        # that it names the mapper file that was on disk during the build.
+        wt = scratch_dir(prefix="daemon-stampwire-")
+        try:
+            os.makedirs(os.path.join(wt, "intake"), exist_ok=True)
+            os.makedirs(os.path.join(wt, "mapped"), exist_ok=True)
+            with open(os.path.join(wt, "intake", "wired.json"), "w", encoding="utf-8") as f:
+                json.dump({"slug": "wired",
+                           "macros_per_serving": {"calories": 610, "protein_g": 44}}, f)
+            with open(os.path.join(wt, "mapped", "wired.json"), "w", encoding="utf-8") as f:
+                json.dump({"slug": "wired", "ingredients": [{"item": "Ground Beef"}]}, f)
+            dw = daemon(run_dir=wt)
+            okw, macw, _ = arun(dw.build_skeleton("wired"))
+            stamped = dw.read_mapper_stamp("wired")
+            res.append(("MUST FIRE  build_skeleton STAMPS the mapper file it built from - the "
+                        "predicate fixtures above all stamp by hand and would not notice if the "
+                        "live path stopped doing it",
+                        okw and bool(stamped) and stamped == dw.mapper_file_hash("wired"),
+                        "ok=%s macros=%s stamp=%s" % (okw, macw, str(stamped)[:12])))
+            res.append(("  and the intake it just built therefore reads as CURRENT on the next run, "
+                        "which is the whole point - an unstamped intake takes the unverified road "
+                        "forever",
+                        dw.intake_is_current("wired")[0] is False,
+                        "no prose yet, so not kept: %s" % dw.intake_is_current("wired")[1][:70]))
+        finally:
+            shutil.rmtree(wt, ignore_errors=True)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res
