@@ -550,6 +550,28 @@ $inputPaths = @('grocery/out',
                 'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/ff-sweep-log.txt',
                 'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
                 'grocery/sale-windows.json', 'grocery/rollback-first-seen.json',
+                # THE CARRIAGE LEDGERS (Brad's ruling, 2026-08-27): "if we find a price for an
+                # ingredient, it should always be merged after discovery on the seven stores."
+                #
+                # These five were on NO staging list - not this one, not $servedPaths, not
+                # push-data.ps1's sweep - so every carriage verdict since 2026-08-25 sat in the
+                # working tree only. Measured the day this line was added: carriage.json held 20 bids
+                # at HEAD and 59 in the tree. THIRTY-NINE CARRIED verdicts, from three sessions across
+                # three days, one `git checkout -- .` from gone and invisible in `git log` because the
+                # tracked file had not moved since 08-25.
+                #
+                # A CARRIAGE VERDICT IS AN OBSERVATION, NOT A COMPUTATION. Rule B turns on what a
+                # store carried at a moment; re-creating one means re-driving seven stores, and the
+                # moment itself cannot be re-visited. Six scripts read carriage.json - including
+                # engine\cost-recipes.ps1 and engine\publish.ps1 - so an unmerged verdict also means a
+                # clean clone prices from a different world than this box does.
+                #
+                # They belong in INPUTS, not SERVED: they are evidence of what a store told us, which
+                # is exactly what this list is for, and they must ship on a capture-only ad run that
+                # builds no board. On a quiet day these write identical bytes and stage nothing.
+                'grocery/carriage.json', 'grocery/ingredient-queue.json',
+                'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
+                'grocery/notify-log.txt',
                 # THE PRODUCT IDENTITY TABLE. It is regenerated every morning, so if it is not staged here
                 # it never leaves this PC - which is exactly the last-mile failure found on 2026-08-22
                 # (public\board.json rebuilt daily, last bot commit four days old). It also has to be

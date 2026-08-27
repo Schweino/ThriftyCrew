@@ -1250,6 +1250,40 @@ elseif ($csgRc -eq 0 -and $rTxt -match 'COMMIT-SIZE-GATE-COMPLETE cases=\d+ fail
 #    cookies were. Clean means the RIGHT things are tracked, not only that the wrong things are not.
 if ($crSrc2 -match "'graph/provenance'") { Ok 'capture-run stages graph/provenance (the audit record leaves this PC)' }
 else { Bad 'capture-run no longer stages graph/provenance - the evaluation record .gitignore promises is tracked never leaves this machine, and the cloud clone has none of it' }
+
+# 4b. THE CARRIAGE LEDGERS ARE STAGED (Brad's ruling, 2026-08-27): "if we find a price for an ingredient,
+#     it should always be merged after discovery on the seven stores." Same lesson as graph/provenance one
+#     check above, on the family where losing a record is worst. These five were on NO list - not
+#     $inputPaths, not $servedPaths, not push-data's sweep - so carriage.json held 20 bids at HEAD and 59
+#     in the working tree: 39 CARRIED verdicts from three sessions across three days, one
+#     `git checkout -- .` from gone and invisible in `git log` because the tracked file had not moved
+#     since 08-25. A carriage verdict is an OBSERVATION, not a computation - Rule B turns on what a store
+#     carried at a moment, so re-creating one means re-driving seven stores and the moment cannot be
+#     re-visited. Six scripts read carriage.json, including engine\cost-recipes.ps1 and engine\publish.ps1.
+foreach ($ledger in @('grocery/carriage.json', 'grocery/ingredient-queue.json',
+                      'grocery/board-price-overrides.json', 'grocery/sale-without-ad.json',
+                      'grocery/notify-log.txt')) {
+  if ($crSrc2 -match [regex]::Escape("'" + $ledger + "'")) {
+    Ok ("capture-run stages {0} (a discovered price is merged, never left in the working tree)" -f $ledger)
+  } else {
+    Bad ("capture-run no longer stages {0} - a carriage verdict found across the seven stores would live on ONE machine, unrecoverable by re-running anything, and a clean clone would price from a different world" -f $ledger)
+  }
+}
+# ...AND IN INPUTS, NOT SERVED. $servedPaths is gated on $shipServed, which a capture-only ad run never
+# sets - so a ledger placed there would be staged on chain days only, which is the same bug with a longer
+# fuse. Evidence of what a store told us belongs in INPUTS by this list's own stated split.
+# MATCH THE DECLARATIONS, NOT ANY MENTION. The first draft of this check used IndexOf('$servedPaths')
+# and matched the explanatory COMMENT that sits above both arrays, which put "served" before "inputs"
+# and failed on a correct file. A guard that fires on where a comment happens to sit is worse than no
+# guard: it teaches the next person to ignore it.
+$idxInputs = $crSrc2.IndexOf('$inputPaths = @(')
+$idxServed = $crSrc2.IndexOf('$servedPaths = @(')
+$idxCarriage = $crSrc2.IndexOf("'grocery/carriage.json'")
+if ($idxInputs -ge 0 -and $idxServed -gt $idxInputs -and $idxCarriage -gt $idxInputs -and $idxCarriage -lt $idxServed) {
+  Ok 'the carriage ledgers sit in INPUTS, so they ship on a capture-only ad run that builds no board'
+} else {
+  Bad 'the carriage ledgers are no longer inside $inputPaths - if they moved to $servedPaths they now ship only when the chain runs and guards pass, so an ad-only day loses every verdict it found'
+}
 }
 # THE ALERT GATE IS NOT A CHECK-THEN-ACT RACE ANY MORE (2026-08-23). send-alert reads alert-sent-<day>.txt,
 # decides, sends over the network, then appends the type. Serial callers made that window harmless; the
