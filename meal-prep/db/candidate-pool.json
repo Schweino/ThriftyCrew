@@ -1,7 +1,7 @@
 {
  "_doc": "Every candidate the harvester has ever looked at, with the numbers behind its verdict. harvest.py is the SOLE writer; --mark-taken / --mark-ruled / --ingest are the only roads in. A ruled candidate never resurfaces as available.",
- "updated": "2026-08-27T06:00:43",
- "count": 3342,
+ "updated": "2026-08-27T10:01:19",
+ "count": 603,
  "candidates": [
   {
    "slug": "asian-lettuce-wrap-chicken-chopped-salad",
@@ -14426,6 +14426,3800 @@
    "entered_by": "crawl",
    "ruled_reason": "A brine formula for a whole chicken (salt/sugar/aromatics in water) plus a bare roast; a preparation/technique page with no composed plate identity, mirroring the buttermilk-chicken-marinade rejection.",
    "ruled_at": "2026-08-27T06:00:42"
+  },
+  {
+   "slug": "ground-beef-cottage-cheese-bowl",
+   "name": "Ground Beef Cottage Cheese Bowl",
+   "url": "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+   "domain": "wellplated.com",
+   "first_seen": "2026-08-27T09:45:02",
+   "last_verified": "2026-08-27T09:45:02",
+   "signature": {
+    "protein": "beef",
+    "method": "bake",
+    "sauce_family": "tomato",
+    "starch": "potato"
+   },
+   "band": {
+    "cal": 559.0,
+    "carbs": 47.0,
+    "protein_g": 46.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 3,
+   "ingredients_verbatim": [
+    "2 medium sweet potatoes (cut into 1/2-inch cubes)",
+    "1 ½ tablespoons olive oil",
+    "½ teaspoon kosher salt",
+    "¼ teaspoon ground black pepper",
+    "1 tablespoon olive oil",
+    "1 pound lean ground beef",
+    "1 red onion (diced)",
+    "1 tablespoon tomato paste",
+    "1 tablespoon chili powder",
+    "1 teaspoon ground cumin",
+    "½ teaspoon garlic powder",
+    "½ teaspoon kosher salt",
+    "¼ teaspoon ground black pepper",
+    "3/4 cup Cottage cheese",
+    "Hot Honey",
+    "Avocado",
+    "Red pepper flakes"
+   ],
+   "neighbours": [
+    {
+     "slug": "indian-keema-matar-bowls",
+     "name": "Indian Keema Matar (Ground Beef & Peas Curry) Bowls",
+     "score": 23,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "garlic",
+      "onions"
+     ]
+    },
+    {
+     "slug": "japanese-ground-beef-curry",
+     "name": "Japanese Ground Beef Curry",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    },
+    {
+     "slug": "ground-beef-stroganoff-pasta",
+     "name": "Ground Beef Stroganoff Pasta",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    },
+    {
+     "slug": "ground-beef-teriyaki-bowls",
+     "name": "Ground Beef Teriyaki Bowls",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "honey"
+     ]
+    },
+    {
+     "slug": "baked-ziti-with-ground-beef",
+     "name": "Baked Ziti with Ground Beef",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "any|any|cheese",
+     "slug": "crustless-bacon-gruyere-quiche",
+     "name": "Crustless Bacon Gruyere Quiche",
+     "protein": "any",
+     "method": "any",
+     "verdict": "rejected-qa",
+     "reason": "macro gate: 369 cal / 2g carbs per serving",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "any|any|cheese",
+     "slug": "crustless-ham-gruyere-quiche",
+     "name": "Crustless Ham Gruyere Quiche",
+     "protein": "any",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Near-duplicate of accepted crustless-bacon-gruyere-quiche: same crustless gruyere egg-cream custard oven bake, only cured-pork cut differs (ham vs bacon)",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|bake|cheese",
+     "slug": "philly-cheesesteak-stuffed-peppers",
+     "name": "Philly Cheesesteak Stuffed Peppers",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Shaved-steak Philly cheesesteak baked in bell peppers; identical to the in-flight qa-passed philly-cheesesteak-stuffed-peppers from hunt-2026-08-15-lowcarb-100 (same protein/sauce/format), and distinct only in format from live philly-cheesesteak-skillet-bowls.",
+     "dupe_of": [
+      "philly-cheesesteak-stuffed-peppers"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:15:25"
+    },
+    {
+     "key": "beef|bake|cheese",
+     "slug": "cheeseburger-baked-tacos",
+     "name": "Cheeseburger Baked Tacos",
+     "protein": "beef",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Distinct baked-taco cheeseburger format, not the same dinner as live cheeseburger-rice-bowls or cheeseburger-pasta; verified band 562cal/41c/54p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:34"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "high-protein-pasta",
+   "name": "High Protein Pasta",
+   "url": "https://www.wellplated.com/high-protein-pasta/",
+   "domain": "wellplated.com",
+   "first_seen": "2026-08-27T09:45:05",
+   "last_verified": "2026-08-27T09:45:05",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 543.0,
+    "carbs": 48.0,
+    "protein_g": 60.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "8 ounces high protein pasta (such as Banza)",
+    "1 tablespoon olive oil (or neutral cooking oil of choice)",
+    "1 pound boneless, skinless chicken breasts (or thighs, cut into bite-sized pieces)",
+    "1 tablespoon Cajun seasoning",
+    "1 teaspoon Italian seasoning",
+    "1 (16-ounce) container low-fat cottage cheese (2 cups)",
+    "½ cup grated Parmesan cheese (plus additional for serving)",
+    "½ cup milk (I used 2%)",
+    "1 garlic clove (roughly chopped, about 1 teaspoon)",
+    "½ cup chopped sun-dried tomatoes; pat dry if packed in oil; if dehydrated",
+    "2 cups spinach (roughly chopped or torn)",
+    "½ cup chopped fresh basil"
+   ],
+   "neighbours": [
+    {
+     "slug": "cheeseburger-pasta",
+     "name": "High-Protein Cheeseburger Pasta",
+     "score": 30,
+     "shared": [
+      "high",
+      "protein",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": []
+    },
+    {
+     "slug": "highprotein-turkey-burger-bowl",
+     "name": "High-Protein Turkey Burger Bowl",
+     "score": 20,
+     "shared": [
+      "high",
+      "protein"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": []
+    },
+    {
+     "slug": "turkey-chili-mac",
+     "name": "High-Protein Turkey Chili Mac",
+     "score": 20,
+     "shared": [
+      "high",
+      "protein"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": []
+    },
+    {
+     "slug": "high-protein-beef-bean-burrito",
+     "name": "High-Protein Beef and Bean Burrito",
+     "score": 20,
+     "shared": [
+      "high",
+      "protein"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": []
+    },
+    {
+     "slug": "beef-burrito-bowls",
+     "name": "High-Protein Beef Burrito Bowls",
+     "score": 20,
+     "shared": [
+      "high",
+      "protein"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": []
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+     "name": "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Balsamic-goat-cheese-cranberry harvest chicken skillet, distinct plate from the roasted sheet-pan brussels harvest chicken; borderline but different veg and sauce.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:09:55"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "crispy-chicken-salad",
+     "name": "Crispy Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold single-serve fried-chicken-over-iceberg salad with tortilla strips; does not batch or hold as a hot dinner, same rationale as prior cold chicken salad/wrap rejections.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:03"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "honey-balsamic-chicken-tenders",
+     "name": "Honey Balsamic Chicken Tenders",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Seared chicken breast in a honey-balsamic reduction; distinct balsamic sauce family with no live balsamic-chicken, separate from hot-honey/chipotle/sesame/honey-mustard chicken, verified 452cal/16c/67p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:05"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peanut-butter-chicken",
+     "name": "Peanut Butter Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Peanut-sauce chicken with broccoli/peppers over brown rice; same peanut-chicken-and-rice identity as live slow-cooker-thai-peanut-chicken-bowls, a region already saturated with thai-peanut-chicken-burrito and Senegalese peanut stew.",
+     "dupe_of": [
+      "slow-cooker-thai-peanut-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:06"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "sticky-bourbon-chicken",
+     "name": "Sticky Bourbon Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Bourbon-soy-brown-sugar sticky glazed chicken thighs over rice; distinct bourbon flavor with no live dupe, separate from slow-cooker honey-sesame chicken, verified 450cal/20c/45p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:07"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peach-chicken",
+     "name": "Peach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Skillet chicken breast in a peach-balsamic-white-wine sauce with burrata and honey-glazed almonds; distinctive summery plate with no live or backlog dupe (backlog braised-chicken-and-peaches is a braise), widens the catalog, verified 643cal/32c/41p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:15"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "spinach-chicken",
+     "name": "Spinach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Creamy spinach-parmesan chicken skillet, essentially creamy Tuscan chicken without the sun-dried tomato; saturated chicken-cream region (saturation 5), non-distinct and non-widening.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:16"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "buffalo-chicken-quesadillas",
+     "name": "Buffalo Chicken Quesadillas",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Shredded buffalo chicken with ranch and Mexican cheese in flour tortillas; duplicates live buffalo-chicken-burrito on all four axes (chicken + buffalo/cheese + tortilla + skillet, bge 0.89). Buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl); folded-vs-rolled adds no new dinner.",
+     "dupe_of": [
+      "buffalo-chicken-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:47"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "hawaiian-chicken-salad",
+     "name": "Hawaiian Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Coconut-pineapple marinated chicken plated cold over lettuce with avocado, red onion and a lime-oil dressing; a composed salad that wilts and doesn't batch as meal-prep, matching prior chicken-salad not-fit rulings. Coconut-lime rice is a side, not the dish.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:48"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "southwest-chicken-salad",
+     "name": "Southwest Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Chili-lime chicken breast served cold over romaine with cherry tomato, black bean, corn, avocado and Greek-yogurt dressing; a composed salad that does not hold for batch meal prep, consistent with prior cold-salad not-fit rulings.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-burrito-bowls",
+     "name": "Chicken Burrito Bowls",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Archetypal Tex-Mex chicken burrito bowl (chili/cumin/ancho chicken thighs, cilantro-lime rice, lettuce/cheese/pico/guac); verified 552cal/42c/48p. Not a clean dupe of a single live dish but adds no novelty to a saturated Tex-Mex chicken lane the catalog already skews toward; cut rather than pad.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-and-rice-one-pot",
+     "name": "Chicken and Rice (One Pot!)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; distinct from maqluba/butter/adobo/curry/mole chicken-rice dishes, band verified 566cal/43c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:54"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "copycat-longhorn-parmesan-crusted-chicken",
+     "name": "Copycat Longhorn Parmesan Crusted Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ranch-marinated pan-seared chicken with a provolone/parmesan/panko crust and no tomato sauce; distinct restaurant copycat, not chicken parmesan or meatballs, band verified 660cal/13c/35p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:56"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video",
+     "name": "Italian Chicken Tortellini Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy tomato-cream chicken-tortellini skillet with roasted red peppers and spinach; distinct from slow-cooker Italian chicken penne (different starch/method), band verified 562cal/44c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:57"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "coconut-marinated-chicken-grill-or-stove",
+     "name": "Coconut Marinated Chicken (Grill or Stove)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Coconut-milk + curry-powder + lime chicken is the same coconut-curry-chicken identity as live Kuku Paka (Swahili coconut chicken curry); coconut/curry chicken region already saturated.",
+     "dupe_of": [
+      "kuku-paka-swahili-coconut-chicken-curry"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:58"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "ground-beef-pasta",
+   "name": "Ground Beef Pasta",
+   "url": "https://thecozycook.com/ground-beef-pasta/",
+   "domain": "thecozycook.com",
+   "first_seen": "2026-08-27T09:45:05",
+   "last_verified": "2026-08-27T09:45:05",
+   "signature": {
+    "protein": "beef",
+    "method": "any",
+    "sauce_family": "cream",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 668.0,
+    "carbs": 60.0,
+    "protein_g": 55.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 ½ lbs. ground beef (85% lean)",
+    "1 small yellow onion (diced)",
+    "3 cloves garlic (minced)",
+    "2 teaspoons Italian seasoning",
+    "1 teaspoon kosher salt",
+    "3 tablespoons flour (optional-helps thicken the sauce)",
+    "1 tablespoon Worcestershire Sauce",
+    "16 oz. tomato sauce",
+    "1 cup chicken broth",
+    "½ cup half and half ((half cream, half milk))",
+    "1 cup shredded cheddar cheese",
+    "½ pound Rotini pasta"
+   ],
+   "neighbours": [
+    {
+     "slug": "ground-beef-stroganoff-pasta",
+     "name": "Ground Beef Stroganoff Pasta",
+     "score": 35,
+     "shared": [
+      "ground",
+      "beef",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "flour",
+      "onions",
+      "rotini-pasta"
+     ]
+    },
+    {
+     "slug": "chile-relleno-casserole-ground-beef",
+     "name": "Chile Relleno Casserole with Ground Beef",
+     "score": 24,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "cheddar-cheese-shredded",
+      "flour",
+      "onions"
+     ]
+    },
+    {
+     "slug": "pastitsio",
+     "name": "Pastitsio (Greek Beef Pasta Bake)",
+     "score": 24,
+     "shared": [
+      "beef",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "flour",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "japanese-ground-beef-curry",
+     "name": "Japanese Ground Beef Curry",
+     "score": 24,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "flour",
+      "onions"
+     ]
+    },
+    {
+     "slug": "creamy-ground-turkey-shell-pasta",
+     "name": "Creamy Ground Turkey Shell Pasta",
+     "score": 24,
+     "shared": [
+      "ground",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "beef-broth",
+      "onions",
+      "pasta",
+      "tomato-sauce"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 0,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "cowboy-chicken",
+   "name": "Cowboy Chicken Recipe",
+   "url": "https://www.wellplated.com/cowboy-chicken/",
+   "domain": "wellplated.com",
+   "first_seen": "2026-08-27T09:45:09",
+   "last_verified": "2026-08-27T09:45:09",
+   "signature": {
+    "protein": "chicken",
+    "method": "bake",
+    "sauce_family": "tomato",
+    "starch": "bean"
+   },
+   "band": {
+    "cal": 531.0,
+    "carbs": 42.0,
+    "protein_g": 53.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "3 medium boneless, skinless chicken breasts ((about 1 ½ pounds))",
+    "1 tablespoon extra-virgin olive oil",
+    "2 teaspoons smoked paprika",
+    "1 teaspoon ground cumin",
+    "1 teaspoon garlic powder",
+    "1 teaspoon onion powder",
+    "1 teaspoon dried oregano",
+    "1 ½ teaspoons kosher salt",
+    "½ teaspoon ground black pepper",
+    "1 (14.5-ounce) can fire roasted diced tomatoes in their juices",
+    "1 (15-ounce) can reduced sodium black beans (rinsed and drained)",
+    "1 (11-ounce) can Mexican style corn (such as Fiesta Corn or Mexicorn, drained)",
+    "1 (4-ounce) can green chiles (drained)",
+    "4 ounces shredded pepper jack cheese (about 4 ounces; use Monterey Jack for a milder dish)",
+    "¼ cup chopped fresh cilantro",
+    "½ medium lime"
+   ],
+   "neighbours": [
+    {
+     "slug": "chicken-provencal",
+     "name": "Chicken Provencal",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "garlic",
+      "green-olives",
+      "olive-oil",
+      "onions"
+     ]
+    },
+    {
+     "slug": "chicken-pad-thai-noodle-bowls",
+     "name": "Chicken Pad Thai Noodle Bowls",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "limes",
+      "onions"
+     ]
+    },
+    {
+     "slug": "georgian-chicken-chakhokhbili",
+     "name": "Georgian Chicken Chakhokhbili",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "cilantro",
+      "garlic",
+      "onions",
+      "salt"
+     ]
+    },
+    {
+     "slug": "hainanese-chicken-rice",
+     "name": "Hainanese Chicken Rice",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "green-onions",
+      "salt"
+     ]
+    },
+    {
+     "slug": "chicken-scampi",
+     "name": "Chicken Scampi",
+     "score": 14,
+     "shared": [
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "garlic",
+      "onions",
+      "salt"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|bake|plain",
+     "slug": "jalapeno-popper-chicken-cauliflower-bake",
+     "name": "Jalapeno Popper Chicken Cauliflower Bake",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Near-dupe of accepted chicken-bacon-ranch-cauliflower-bake: same chicken + cauliflower + cream-cheese/cheddar/bacon oven bake; only the jalapeno-popper vs ranch accent differs (3-4 of 4 axes).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "low-carb-chicken-bacon-broccoli-cauliflower-bake",
+     "name": "Low Carb Chicken Bacon Broccoli Cauliflower Bake",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "CROSS-LANE dupe of chicken-bacon-ranch-cauliflower-bake (accepted earlier THIS run - invisible to the adjudicator, whose accepted_slugs_checked listed only creamy-tuscan). Both are low-carb crustless CHICKEN + BACON + CAULIFLOWER + CHEDDAR oven bakes with no starch: same protein, same method, same base, same bacon+cheddar signature - four of four structural axes. Difference is only binder (egg custard vs cream/cream-cheese), added broccoli, and garlic-mustard vs ranch seasoning - a seasoning/veg nuance, not a distinct plate. The ranch bake was accepted first and its own selection note pre-flagged this exact slug as the near-duplicate to reject. Cut.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "spinach-artichoke-chicken-bake",
+     "name": "Spinach Artichoke Chicken Bake",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Cross-lane dupe of accepted spinach-artichoke-chicken-casserole (adjudicator did not check the accepted list). Same protein/flavor-family/method/low-carb 4-of-4; source page is literally the same spinach-artichoke-chicken-casserole recipe.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "ina-garten-s-roast-chicken",
+     "name": "Ina Garten's Roast Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Whole-bird herb-and-lemon roast chicken with carrots/fennel/onion; no live roast-chicken match, distinct staple format, band verified 641cal/8c/54p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:12"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "french-onion-chicken",
+     "name": "French Onion Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Baked bone-in chicken breasts over sourdough with caramelized onion and thyme; distinct baked format from the existing slow-cooker french-onion chicken bowls (differs on method + starch), band verified 583/35/61.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:13"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "stuffed-chicken-breast",
+     "name": "Stuffed Chicken Breast",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Baked chicken breast stuffed with spinach, sun-dried tomato, cream cheese and mozzarella (Tuscan cream profile); no live near-match, distinct from chicken parmesan, band verified 559cal/10c/61p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:14"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "jamaican-jerk-chicken",
+     "name": "Jamaican Jerk Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Marinated jerk chicken, same flavor identity as live one-pot-jerk-chicken-and-rice; jerk/Jamaican chicken region already saturated (jerk rice, jerk burrito, brown stew chicken all live).",
+     "dupe_of": [
+      "one-pot-jerk-chicken-and-rice"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:16"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "easy-chicken-cordon-bleu",
+     "name": "Easy Chicken Cordon Bleu",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Rolled ham-and-swiss chicken cordon bleu with dijon cream; same dinner identity as live chicken-cordon-bleu-casserole (turkey cordon bleu casserole also live), flavor already saturated.",
+     "dupe_of": [
+      "chicken-cordon-bleu-casserole"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:21"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "hawaiian-chicken",
+     "name": "Hawaiian Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Baked chicken drumsticks in a pineapple-ketchup-soy-brown-sugar Hawaiian glaze served with coconut rice; distinct pineapple/Polynesian sauce family with no dupe in catalog or backlog, verified low-carb band and a cuisine that widens the American-skewed catalog.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:38"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "rotisserie-flavoured-chicken-and-potato-bake-amp-a-giveaway",
+     "name": "Rotisserie Flavoured Chicken and Potato Bake",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "One-pan chicken thighs over sliced-potato milk-and-parmesan gratin; reads as the same chicken-and-potato oven bake as live loaded-chicken-and-potato-casserole across all four structural axes (chicken, bake, potato, cream), differing only in the gratin vs bacon/cheddar loaded topping.",
+     "dupe_of": [
+      "loaded-chicken-and-potato-casserole"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T18:57:46"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "baked-honey-mustard-chicken",
+     "name": "Baked Honey Mustard Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Baked chicken breasts topped with mozzarella in a honey + grain-mustard glaze; distinct honey-mustard sauce family with no live match (existing honey chicken is hot-honey, chipotle or sesame), saturation 2, band verified 547cal/23c/62p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T18:57:47"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "how-to-roast-a-chicken",
+     "name": "How to Roast a Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Basic whole roast chicken with lemon, garlic and a bundle of fresh herbs; identical dinner identity to ina-garten-s-roast-chicken accepted earlier this same run (whole-bird herb-lemon roast), so the slot is already taken.",
+     "dupe_of": [
+      "ina-garten-s-roast-chicken"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T18:57:48"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "tex-mex-baked-chicken",
+     "name": "Tex Mex Baked Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Baked chicken breasts with black beans, red enchilada sauce and cheddar/cotija (no tortilla, no rice); a chicken enchilada-bean bake distinct from the live all-beef Tex-Mex dishes (carne guisada, beef burrito, beef rice skillet). Band verified 548cal/16c/64p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T18:57:50"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "one-skillet-oven-baked-chicken-shawarma-and-rice-pilaf",
+     "name": "One Skillet Oven Baked Chicken Shawarma and Rice Pilaf",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Shawarma-spiced chicken thighs baked over cardamom/cinnamon rice pilaf with chickpeas; verified 604cal/45.9c/37.6p. No shawarma or Levantine pilaf dinner in catalog - distinct from maqluba/mole/adobo/orange/curry chicken-rice neighbours and widens cuisine spread.",
+     "dupe_of": [],
+     "run": "jc1-drill",
+     "by": "decider",
+     "at": "2026-08-25T05:38:04"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "air-fryer-whole-chicken",
+     "name": "Air Fryer Whole Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Whole spice-rubbed chicken cooked as a single centerpiece; plain-protein method page, not a composed/portioned batch-prep dinner (consistent with roast-turkey precedent).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:11:01"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "rosemary-chicken-thighs",
+     "name": "Rosemary Chicken Thighs",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Bone-in chicken thighs roasted with Brussels sprouts, apple, onion and Dijon-honey-rosemary; distinct autumn herb-roast from the balsamic sweet-potato/kale/cranberry harvest chicken (different veg/fruit/sauce), saturation 0, verified 672cal/20c/43p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:09"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "dill-pickle-chicken-wings",
+     "name": "Dill Pickle Chicken Wings",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Dill-pickle-brine baked crispy chicken wings with dried dill; novel flavor with no live wing dupe, distinct from grilled garlic-parmesan wings on both flavor and method, verified 620cal/20c/45p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:10"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "crispy-baked-chicken-wings-video",
+     "name": "Crispy Baked Chicken Wings",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Unsauced baking-powder crispy wings (salt/garlic/white pepper only) - a technique base, not a distinct sauced dinner; wing region already filled twice this run (garlic-parm, dill-pickle).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:19"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "honey-mustard-baked-chicken-with-potatoes-amp-bacon",
+     "name": "Honey Mustard Baked Chicken with Potatoes & Bacon",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Same honey-mustard baked-chicken flavour identity as in-flight baked-honey-mustard-chicken; potato+bacon+wine one-pan dressing does not distinguish the sauce family (3 of 4 axes).",
+     "dupe_of": [
+      "baked-honey-mustard-chicken"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:21"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "spaghetti-squash-boats-with-chicken",
+     "name": "Spaghetti Squash Boats with Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Distinct spaghetti-squash boat format (chicken, bacon, spinach, greek-yogurt/mozzarella) with no catalog dupe; verified low-carb-ish band 538/37/42.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:22"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "cilantro-lime-chicken-drumsticks",
+     "name": "Cilantro Lime Chicken Drumsticks",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Thin cilantro-lime marinade drumstick; flavour already live (slow-cooker cilantro-lime chicken) and saturated in backlog, adds no distinct plate and does not widen cuisine.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:24"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "peruvian-chicken",
+     "name": "Peruvian Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Peruvian roasted chicken with cilantro-jalapeno green sauce; identical dish to live peruvian-sheet-pan-chicken-green-sauce (4 of 4 axes).",
+     "dupe_of": [
+      "peruvian-sheet-pan-chicken-green-sauce"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:25"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "kfc-oven-baked-fried-chicken-tenders",
+     "name": "KFC Oven Baked Fried Chicken Tenders",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Oven-fried buttermilk/panko breaded chicken tenders (copycat KFC); distinct crispy-breaded format with no dupe, verified 465/25/53.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:26"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "smoked-chicken-thighs",
+     "name": "Smoked Chicken Thighs",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Wood-smoked BBQ-rubbed chicken thighs with barbecue sauce; distinct smoked/BBQ format with no catalog dupe, verified 656/19/40.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:27"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "mediterranean-chicken-w-marinade",
+     "name": "Mediterranean Chicken with Marinade",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Greek/Mediterranean baked chicken (feta, olive, artichoke, tomato, lemon-oregano); distinct from slow-cooker mediterranean bowls and creamy spinach-artichoke bakes, widens cuisine, verified 673/18/49.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:29"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "buttermilk-chicken-marinade",
+     "name": "Buttermilk Chicken Marinade",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "A marinade recipe rather than a composed dinner (undefined chicken cut, implausible 101g protein/serving); no publishable plate identity.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:20:29"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "chicken-and-broccoli-pasta-bake",
+     "name": "Chicken and Broccoli Pasta Bake",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Cheesy chicken-broccoli pasta bake duplicating in-flight chicken-broccoli-ziti (same protein, bake method, pasta starch, cheese sauce, broccoli); pasta shape is the only difference.",
+     "dupe_of": [
+      "chicken-broccoli-ziti"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:28"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "baked-chicken-wings-with-honey-lime-sauce",
+     "name": "Baked Chicken Wings with Honey Lime Sauce",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Baked chicken wings in a honey-lime-butter glaze; a third wing dish in one run and a saturated American chicken-wing region, so it pads rather than widens the catalog despite the distinct sauce.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:22:29"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "chicken-cordon-bleu",
+     "name": "Chicken Cordon Bleu",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Breaded baked chicken cordon bleu with ham and gruyere; same cordon-bleu dinner as live chicken-cordon-bleu-casserole (turkey version also live, easy-chicken-cordon-bleu already rejected as the same), flavor saturated.",
+     "dupe_of": [
+      "chicken-cordon-bleu-casserole"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:17"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "truly-crispy-oven-baked-buffalo-wings",
+     "name": "Truly Crispy Oven Baked Buffalo Wings",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Baked buffalo wings with blue-cheese dip; buffalo-chicken flavor saturated (four live buffalo dishes) and two wing dinners already accepted this run, non-widening American plate over-indexing the wing format.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:17"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "sheet-pan-cranberry-chicken-dinner",
+     "name": "Sheet Pan Cranberry Chicken Dinner",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken + sweet potato + Brussels sprouts + cranberry-balsamic glaze duplicates the live harvest sheet-pan chicken and the accepted balsamic-cranberry sweet-potato chicken across all four axes.",
+     "dupe_of": [
+      "sheet-pan-chicken-sweet-potato-brussels",
+      "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:59"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "chicken-and-vegetable-meal-prep",
+     "name": "Chicken and Vegetable Meal Prep",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Roast chicken breast with Brussels sprouts and sweet potatoes duplicates the live harvest sheet-pan chicken with the same veg and method; only seasoning differs.",
+     "dupe_of": [
+      "sheet-pan-chicken-sweet-potato-brussels",
+      "sheet-pan-cranberry-chicken-dinner"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:17:01"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "easy-chicken-and-potatoes",
+     "name": "Easy Chicken and Potatoes",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Lemon-pepper baked chicken thighs with baby potatoes and carrots duplicates the live parmesan-garlic sheet-pan chicken and potatoes; same chicken+potato bake, seasoning-only difference, generic version.",
+     "dupe_of": [
+      "parmesan-garlic-sheet-pan-chicken-potatoes"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:17:02"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "chicken-brine-recipe",
+     "name": "Chicken Brine recipe",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "A brine recipe (salt, sugar, peppercorns, bay, lemon in water) for a whole bird, not a composed dinner; no publishable plate identity, consistent with prior marinade/technique-page rejections.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-27-ten",
+     "by": "decider",
+     "at": "2026-08-27T06:00:42"
+    },
+    {
+     "key": "chicken|bake|plain",
+     "slug": "grilled-spatchcock-chicken",
+     "name": "Grilled Spatchcock Chicken",
+     "protein": "chicken",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Whole spice-rubbed grilled chicken as a single centerpiece with no starch, sauce or composed sides; a method page rather than a batch-prep dinner (consistent with air-fryer-whole-chicken).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-27-ten",
+     "by": "decider",
+     "at": "2026-08-27T06:00:43"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [
+    "cold-plate"
+   ],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "no-neighbour"
+  },
+  {
+   "slug": "chicken-burrito-bowl-cilantro-lime-rice",
+   "name": "Chicken Burrito Protein Bowl",
+   "url": "https://feelgoodfoodie.net/recipe/chicken-burrito-bowl-cilantro-lime-rice/",
+   "domain": "feelgoodfoodie.net",
+   "first_seen": "2026-08-27T09:45:10",
+   "last_verified": "2026-08-27T09:45:10",
+   "signature": {
+    "protein": "chicken",
+    "method": "any",
+    "sauce_family": "tomato",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 597.0,
+    "carbs": 63.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "2 tablespoons olive oil",
+    "3 tablespoons lime juice",
+    "3 chipotle chilis in adobo sauce (finely chopped, plus 1 ½ tablespoon adobo sauce)",
+    "1 ½ teaspoon garlic powder",
+    "¾ teaspoon salt",
+    "1 ½ pounds chicken breast (cut into strips)",
+    "1 cup long-grain white rice (rinsed)",
+    "1 ½ cups water",
+    "¼ teaspoon salt (plus more to taste)",
+    "1 lime (zested plus 2 tbsp fresh lime juice)",
+    "¼ cup chopped cilantro",
+    "1 head romaine lettuce (chopped)",
+    "1 cup tomatoes (diced)",
+    "1 cup frozen corn (thawed)",
+    "1 (15-ounce) can black beans (rinsed and drained)",
+    "½ small red onion (chopped)",
+    "Guacamole (or diced avocado)"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-salsa-verde-chicken-bowl",
+     "name": "Salsa Verde Chicken Burrito Bowl",
+     "score": 33,
+     "shared": [
+      "chicken",
+      "burrito",
+      "bowl"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-salsa-chicken-bowl",
+     "name": "Slow Cooker Salsa Chicken Burrito Bowl",
+     "score": 32,
+     "shared": [
+      "chicken",
+      "burrito",
+      "bowl"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "rice"
+     ]
+    },
+    {
+     "slug": "filipino-adobo-chicken-burrito",
+     "name": "Filipino Chicken Adobo Burrito",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "burrito"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "limes",
+      "red-onion",
+      "rice"
+     ]
+    },
+    {
+     "slug": "fajita-chicken-rice-bowl",
+     "name": "Fajita Chicken Rice Bowl",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "bowl"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "grilled-pork-tenderloin-burrito-bowl",
+     "name": "Grilled Pork Tenderloin Burrito Bowl",
+     "score": 24,
+     "shared": [
+      "burrito",
+      "bowl"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "limes",
+      "onions",
+      "red-onion",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "chicken-cordon-bleu-pasta",
+   "name": "Chicken Cordon Bleu Pasta",
+   "url": "https://www.spendwithpennies.com/chicken-cordon-bleu-pasta/",
+   "domain": "spendwithpennies.com",
+   "first_seen": "2026-08-27T09:45:12",
+   "last_verified": "2026-08-27T09:45:12",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "cream",
+    "starch": "noodle"
+   },
+   "band": {
+    "cal": 626.0,
+    "carbs": 40.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "6 ounces egg noodles (measured dry, about 3 cups)",
+    "1 tablespoon salted butter",
+    "¼ teaspoon dried thyme leaves",
+    "1 pound boneless skinless chicken breasts (cubed)",
+    "¼ teaspoon salt",
+    "4 ounces cream cheese (cubed)",
+    "½ teaspoon onion powder",
+    "½ teaspoon garlic powder",
+    "1⅓ cups reduced sodium chicken broth",
+    "1 teaspoon cornstarch",
+    "1 teaspoon Dijon mustard (or ½ teaspoon dry mustard powder)",
+    "¾ cup shredded Swiss cheese",
+    "3 ounces deli ham (chopped)",
+    "3 tablespoons Panko bread crumbs",
+    "1 tablespoon salted butter",
+    "1 tablespoon grated Parmesan cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "chicken-cordon-bleu-casserole",
+     "name": "Chicken Cordon Bleu Casserole",
+     "score": 33,
+     "shared": [
+      "chicken",
+      "cordon",
+      "bleu"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast",
+      "swiss-cheese"
+     ]
+    },
+    {
+     "slug": "slow-cooker-tuscan-chicken-pasta",
+     "name": "Slow Cooker Tuscan Chicken Pasta",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "onions",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "chicken-parmesan-pasta",
+     "name": "Chicken Parmesan Pasta",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "turkey-cordon-bleu-casserole",
+     "name": "Turkey Cordon Bleu Casserole",
+     "score": 23,
+     "shared": [
+      "cordon",
+      "bleu"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "bread-crumbs",
+      "butter",
+      "swiss-cheese"
+     ]
+    },
+    {
+     "slug": "buffalo-chicken-pasta-bake",
+     "name": "Buffalo Chicken Pasta Bake",
+     "score": 22,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+     "name": "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Balsamic-goat-cheese-cranberry harvest chicken skillet, distinct plate from the roasted sheet-pan brussels harvest chicken; borderline but different veg and sauce.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:09:55"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "crispy-chicken-salad",
+     "name": "Crispy Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold single-serve fried-chicken-over-iceberg salad with tortilla strips; does not batch or hold as a hot dinner, same rationale as prior cold chicken salad/wrap rejections.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:03"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "honey-balsamic-chicken-tenders",
+     "name": "Honey Balsamic Chicken Tenders",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Seared chicken breast in a honey-balsamic reduction; distinct balsamic sauce family with no live balsamic-chicken, separate from hot-honey/chipotle/sesame/honey-mustard chicken, verified 452cal/16c/67p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:05"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peanut-butter-chicken",
+     "name": "Peanut Butter Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Peanut-sauce chicken with broccoli/peppers over brown rice; same peanut-chicken-and-rice identity as live slow-cooker-thai-peanut-chicken-bowls, a region already saturated with thai-peanut-chicken-burrito and Senegalese peanut stew.",
+     "dupe_of": [
+      "slow-cooker-thai-peanut-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:06"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "sticky-bourbon-chicken",
+     "name": "Sticky Bourbon Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Bourbon-soy-brown-sugar sticky glazed chicken thighs over rice; distinct bourbon flavor with no live dupe, separate from slow-cooker honey-sesame chicken, verified 450cal/20c/45p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:07"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peach-chicken",
+     "name": "Peach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Skillet chicken breast in a peach-balsamic-white-wine sauce with burrata and honey-glazed almonds; distinctive summery plate with no live or backlog dupe (backlog braised-chicken-and-peaches is a braise), widens the catalog, verified 643cal/32c/41p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:15"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "spinach-chicken",
+     "name": "Spinach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Creamy spinach-parmesan chicken skillet, essentially creamy Tuscan chicken without the sun-dried tomato; saturated chicken-cream region (saturation 5), non-distinct and non-widening.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:16"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "buffalo-chicken-quesadillas",
+     "name": "Buffalo Chicken Quesadillas",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Shredded buffalo chicken with ranch and Mexican cheese in flour tortillas; duplicates live buffalo-chicken-burrito on all four axes (chicken + buffalo/cheese + tortilla + skillet, bge 0.89). Buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl); folded-vs-rolled adds no new dinner.",
+     "dupe_of": [
+      "buffalo-chicken-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:47"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "hawaiian-chicken-salad",
+     "name": "Hawaiian Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Coconut-pineapple marinated chicken plated cold over lettuce with avocado, red onion and a lime-oil dressing; a composed salad that wilts and doesn't batch as meal-prep, matching prior chicken-salad not-fit rulings. Coconut-lime rice is a side, not the dish.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:48"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "southwest-chicken-salad",
+     "name": "Southwest Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Chili-lime chicken breast served cold over romaine with cherry tomato, black bean, corn, avocado and Greek-yogurt dressing; a composed salad that does not hold for batch meal prep, consistent with prior cold-salad not-fit rulings.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-burrito-bowls",
+     "name": "Chicken Burrito Bowls",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Archetypal Tex-Mex chicken burrito bowl (chili/cumin/ancho chicken thighs, cilantro-lime rice, lettuce/cheese/pico/guac); verified 552cal/42c/48p. Not a clean dupe of a single live dish but adds no novelty to a saturated Tex-Mex chicken lane the catalog already skews toward; cut rather than pad.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-and-rice-one-pot",
+     "name": "Chicken and Rice (One Pot!)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; distinct from maqluba/butter/adobo/curry/mole chicken-rice dishes, band verified 566cal/43c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:54"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "copycat-longhorn-parmesan-crusted-chicken",
+     "name": "Copycat Longhorn Parmesan Crusted Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ranch-marinated pan-seared chicken with a provolone/parmesan/panko crust and no tomato sauce; distinct restaurant copycat, not chicken parmesan or meatballs, band verified 660cal/13c/35p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:56"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video",
+     "name": "Italian Chicken Tortellini Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy tomato-cream chicken-tortellini skillet with roasted red peppers and spinach; distinct from slow-cooker Italian chicken penne (different starch/method), band verified 562cal/44c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:57"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "coconut-marinated-chicken-grill-or-stove",
+     "name": "Coconut Marinated Chicken (Grill or Stove)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Coconut-milk + curry-powder + lime chicken is the same coconut-curry-chicken identity as live Kuku Paka (Swahili coconut chicken curry); coconut/curry chicken region already saturated.",
+     "dupe_of": [
+      "kuku-paka-swahili-coconut-chicken-curry"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:58"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "mexican-ground-beef-casserole-with-rice",
+   "name": "Mexican Ground Beef Casserole with Rice (Beef mince!)",
+   "url": "https://www.recipetineats.com/mexican-ground-beef-casserole-with-rice/",
+   "domain": "recipetineats.com",
+   "first_seen": "2026-08-27T09:45:13",
+   "last_verified": "2026-08-27T09:45:13",
+   "signature": {
+    "protein": "beef",
+    "method": "casserole",
+    "sauce_family": "tomato",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 715.0,
+    "carbs": 73.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 5,
+   "ingredients_verbatim": [
+    "2 tbsp olive oil",
+    "1 onion (, finely chopped)",
+    "3 garlic cloves (, minced)",
+    "500g (1 lb) ground beef ((mince), lean)",
+    "1/3 cup tomato paste",
+    "1 1/4 cup long grain white rice (, uncooked (Note 1))",
+    "2.5 cups (625 ml) chicken broth/stock (, low sodium)",
+    "400g (14oz) can corn kernels (, drained (Note 2))",
+    "400g (14oz) can black beans (, drained (or other beans))",
+    "1 capsicum/bell pepper (, diced)",
+    "1 cup green onions/shallots",
+    "2 cups (200g) cheese (, shredded (anything that melts! Note 3))",
+    "0.5 tsp cayenne pepper ((Note 4))",
+    "1.5 tbsp dried oregano",
+    "3 tsp cumin",
+    "3 tsp coriander",
+    "3 tsp onion powder",
+    "2 tsp paprika",
+    "1.5 tsp salt"
+   ],
+   "neighbours": [
+    {
+     "slug": "ground-beef-fried-rice-bowls",
+     "name": "Ground Beef Fried Rice Bowls",
+     "score": 33,
+     "shared": [
+      "ground",
+      "beef",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "vietnamese-caramelized-ground-beef-rice-bowls",
+     "name": "Vietnamese Caramelized Ground Beef Rice Bowls",
+     "score": 33,
+     "shared": [
+      "ground",
+      "beef",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "green-onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "arroz-con-carne-molida",
+     "name": "Arroz con Carne Molida (Mexican Beef and Rice Skillet)",
+     "score": 33,
+     "shared": [
+      "mexican",
+      "beef",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "chile-relleno-casserole-ground-beef",
+     "name": "Chile Relleno Casserole with Ground Beef",
+     "score": 33,
+     "shared": [
+      "ground",
+      "beef",
+      "casserole"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "korean-ground-beef-rice-bowls",
+     "name": "Korean Ground Beef Rice Bowls",
+     "score": 32,
+     "shared": [
+      "ground",
+      "beef",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "rice"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|casserole|plain",
+     "slug": "ground-beef-stroganoff",
+     "name": "Ground Beef Stroganoff",
+     "protein": "beef",
+     "method": "casserole",
+     "verdict": "rejected-dupe",
+     "reason": "Same dinner as live ground-beef-stroganoff-pasta (bge 0.965); casserole/cheddar format not a distinct plate.",
+     "dupe_of": [
+      "ground-beef-stroganoff-pasta"
+     ],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:26"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "sheet-pan-pork-tenderloin-and-potatoes",
+   "name": "Sheet Pan Pork Tenderloin and Potatoes",
+   "url": "https://www.lecremedelacrumb.com/sheet-pan-pork-tenderloin-and-potatoes/",
+   "domain": "lecremedelacrumb.com",
+   "first_seen": "2026-08-27T09:45:14",
+   "last_verified": "2026-08-27T09:45:14",
+   "signature": {
+    "protein": "pork",
+    "method": "bake",
+    "sauce_family": "soy",
+    "starch": "potato"
+   },
+   "band": {
+    "cal": 722.0,
+    "carbs": 90.0,
+    "protein_g": 47.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 ½-2 pounds pork tenderloin",
+    "⅓ cup brown sugar",
+    "2 teapsoons garlic",
+    "2 tablespoons reduced sodium soy sauce",
+    "2 tablespoon balsamic vinegar",
+    "⅛ teaspoon crushed red pepper flakes",
+    "¼ teaspoon smoked paprika (optional)",
+    "1 ½ - 2 pounds baby red and/or gold potatoes (halved)",
+    "3 tablespoons oil",
+    "salt and pepper to taste",
+    "½ teaspoon Italian blend herbs",
+    "½ teaspoon garlic powder",
+    "⅓ cup grated parmesan cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "sheet-pan-pork-tenderloin-potatoes-green-beans",
+     "name": "Sheet Pan Pork Tenderloin with Potatoes and Green Beans",
+     "score": 31,
+     "shared": [
+      "pork",
+      "tenderloin",
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "pork-tenderloin"
+     ]
+    },
+    {
+     "slug": "pork-milanese-with-roasted-potatoes",
+     "name": "Pork Milanese with Roasted Potatoes",
+     "score": 22,
+     "shared": [
+      "pork",
+      "potatoes"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "pork-tenderloin",
+      "salt"
+     ]
+    },
+    {
+     "slug": "thai-peanut-pork-tenderloin-rice-bowl",
+     "name": "Thai Peanut Pork Tenderloin Rice Bowl",
+     "score": 22,
+     "shared": [
+      "pork",
+      "tenderloin"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "brown-sugar",
+      "pork-tenderloin"
+     ]
+    },
+    {
+     "slug": "creamy-pork-tenderloin-tagliatelle",
+     "name": "Creamy Pork Tenderloin Tagliatelle (alla Castellana)",
+     "score": 21,
+     "shared": [
+      "pork",
+      "tenderloin"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "pork-tenderloin"
+     ]
+    },
+    {
+     "slug": "pork-tenderloin-stroganoff-over-egg-noodles",
+     "name": "Pork Tenderloin Stroganoff over Egg Noodles",
+     "score": 21,
+     "shared": [
+      "pork",
+      "tenderloin"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "pork-tenderloin"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "pork|bake|plain",
+     "slug": "pork-roast-recipe",
+     "name": "Pork Roast Recipe",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Center-cut boneless pork loin roast with apples/onion; same pork-loin-roast dinner as live dutch-oven-pork-loin-roast-gravy and the slow-cooker pork loin roast accepted same run.",
+     "dupe_of": [
+      "dutch-oven-pork-loin-roast-gravy",
+      "slow-cooker-pork-loin-roast-or-pork-shoulder"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:17"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "mushroom-pork-chops",
+     "name": "Mushroom Pork Chops",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Breaded pork steaks in cream-of-mushroom sauce; near-identical to live creamy-mushroom-pork-chops-over-mashed-potatoes (same protein/method/cream-mushroom sauce, bge 0.90).",
+     "dupe_of": [
+      "creamy-mushroom-pork-chops-over-mashed-potatoes"
+     ],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:19"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "stuffed-baked-pork-chops-with-prosciutto-and-mozzarella",
+     "name": "Stuffed Baked Pork Chops with Prosciutto and Mozzarella",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Boneless center-cut chops stuffed with prosciutto/mozzarella/spinach, baked, no starch; verified 235cal/2.5c/36p. Distinct from all live pork-chop dinners (all sauced or starched) and from the in-flight creamy-garlic-herb-wine chop - a stuffed Italian format the catalog lacks.",
+     "dupe_of": [],
+     "run": "jc1-drill",
+     "by": "decider",
+     "at": "2026-08-25T05:38:02"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "slow-roasted-pork-shoulder",
+     "name": "Slow Roasted Pork Shoulder (Moroccan)",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Moroccan seven-spice bone-in pork shoulder roasted with carrots/sweet potato/apricots; verified 653cal/24c/42p. North-African cuisine the catalog lacks, distinct from in-flight fennel-tomato braise and live Ecuadorian hornado; saturation 0.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:15:30"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "baked-ham-with-brown-sugar-glaze",
+     "name": "Baked Ham with Brown Sugar Glaze",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Spiral ham with brown-sugar/pineapple/Dijon glaze; verified 690cal/11c/57p, 12 servings. Absent format - live catalog has ham-fried-rice and ham-white-bean-soup but no baked glazed ham.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:15:31"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "glazed-crown-roast-of-pork",
+     "name": "Glazed Crown Roast of Pork",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "rejected-not-fit",
+     "reason": "Peach/apricot-glazed 8-lb pork loin crown roast; costly special-occasion centerpiece off-format for thrifty batch meal-prep, and pork loin roast is already carried live (dutch-oven-pork-loin-roast-gravy, senfbraten).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:15:33"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "baked-stuffed-pork-chops",
+     "name": "Baked Stuffed Pork Chops",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "accepted",
+     "reason": "Boneless loin chops with a bread-and-cranberry celery/onion stuffing, baked; distinct American bread-stuffed format from the Italian prosciutto-mozzarella stuffed chop and from all sauced/starched live pork chops, verified 495cal/17c/51p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:13"
+    },
+    {
+     "key": "pork|bake|plain",
+     "slug": "oven-baked-stuffed-pork-chops",
+     "name": "Oven Baked Stuffed Pork Chops",
+     "protein": "pork",
+     "method": "bake",
+     "verdict": "rejected-dupe",
+     "reason": "Bread-stuffing stuffed baked pork chops duplicate the in-flight baked-stuffed-pork-chops (priced, hunt-2026-08-26-ten); same stuffed-baked-chop dinner, in-flight recipe retained.",
+     "dupe_of": [
+      "baked-stuffed-pork-chops"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:39"
+    }
+   ],
+   "saturation_pressure": 3,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "pork loin",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "cheesy-ground-turkey-pasta",
+   "name": "Ground Turkey Pasta",
+   "url": "https://thecleaneatingcouple.com/ground-turkey-pasta/",
+   "domain": "thecleaneatingcouple.com",
+   "first_seen": "2026-08-27T09:45:15",
+   "last_verified": "2026-08-27T09:45:15",
+   "signature": {
+    "protein": "turkey",
+    "method": "any",
+    "sauce_family": "tomato",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 540.0,
+    "carbs": 52.0,
+    "protein_g": 46.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 tablespoon extra virgin olive oil",
+    "1 pound ground turkey",
+    "½ cup minced yellow onion",
+    "1 tablespoon minced garlic",
+    "1 teaspoon dried basil",
+    "½ teaspoon dried oregano",
+    "¼ teaspoon red pepper flakes",
+    "½ pound dried penne pasta",
+    "1 ½ cups low sodium marinara sauce",
+    "2 ½ cups water",
+    "1 cup shredded mozzarella cheese",
+    "½ cup grated Parmesan cheese"
+   ],
+   "neighbours": [
+    {
+     "slug": "creamy-ground-turkey-shell-pasta",
+     "name": "Creamy Ground Turkey Shell Pasta",
+     "score": 35,
+     "shared": [
+      "ground",
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "olive-oil",
+      "onions",
+      "parmesan",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "creamy-ground-turkey-and-chorizo-pasta",
+     "name": "Creamy Ground Turkey and Chorizo Pasta",
+     "score": 33,
+     "shared": [
+      "ground",
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "parmesan",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "turkey-meatball-marinara-pasta",
+     "name": "Turkey Meatball Marinara Pasta",
+     "score": 26,
+     "shared": [
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "marinara-sauce",
+      "mozzarella-cheese",
+      "onions",
+      "parmesan",
+      "penne-pasta"
+     ]
+    },
+    {
+     "slug": "turkey-ragu-pasta",
+     "name": "Turkey Ragu Pasta",
+     "score": 24,
+     "shared": [
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "marinara-sauce",
+      "onions",
+      "penne-pasta"
+     ]
+    },
+    {
+     "slug": "ground-turkey-broccoli-cheddar-rice-skillet",
+     "name": "Ground Turkey Broccoli Cheddar Rice Skillet",
+     "score": 24,
+     "shared": [
+      "ground",
+      "turkey"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "olive-oil",
+      "onions",
+      "parmesan"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 7,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground turkey",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "ground-turkey-pasta",
+   "name": "Ground Turkey Pasta",
+   "url": "https://fitfoodiefinds.com/ground-turkey-pasta/",
+   "domain": "fitfoodiefinds.com",
+   "first_seen": "2026-08-27T09:45:16",
+   "signature": {
+    "protein": null,
+    "method": null,
+    "sauce_family": null,
+    "starch": null
+   },
+   "band": {
+    "cal": 645.0,
+    "carbs": 60.0,
+    "protein_g": 42.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "status": "ruled:excluded",
+   "entered_by": "ingest",
+   "exclusion": "seafood: anchovy"
+  },
+  {
+   "slug": "creamy-one-pot-ground-turkey-pasta",
+   "name": "One-Pot Ground Turkey Pasta",
+   "url": "https://lemonsandzest.com/ground-turkey-pasta/",
+   "domain": "lemonsandzest.com",
+   "first_seen": "2026-08-27T09:45:17",
+   "last_verified": "2026-08-27T09:45:17",
+   "signature": {
+    "protein": "turkey",
+    "method": "braised",
+    "sauce_family": "tomato",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 670.0,
+    "carbs": 59.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 Tbsp olive oil",
+    "3-4 garlic cloves (minced)",
+    "½ yellow onion (diced)",
+    "1 lb ground turkey",
+    "2 Tbsp tomato paste",
+    "2 ¾ cups chicken broth (approx. ¼ cup more if needed)",
+    "1-2 tsp balsamic vinegar",
+    "2 tsp Italian seasoning",
+    "14.5 oz can crushed tomatoes",
+    "8 oz uncooked pasta (we use medium shells)",
+    "½ tsp each: salt and pepper",
+    "2 large handfuls baby spinach",
+    "½ cup grated parmesan",
+    "⅔ - 1 c heavy cream",
+    "chopped fresh basil (for serving, optional)"
+   ],
+   "neighbours": [
+    {
+     "slug": "creamy-ground-turkey-shell-pasta",
+     "name": "Creamy Ground Turkey Shell Pasta",
+     "score": 36,
+     "shared": [
+      "ground",
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "heavy-cream",
+      "olive-oil",
+      "onions",
+      "parmesan",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "creamy-ground-turkey-and-chorizo-pasta",
+     "name": "Creamy Ground Turkey and Chorizo Pasta",
+     "score": 33,
+     "shared": [
+      "ground",
+      "turkey",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "parmesan",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "creamy-tomato-ground-turkey-gnocchi",
+     "name": "Creamy Tomato Ground Turkey Gnocchi",
+     "score": 26,
+     "shared": [
+      "ground",
+      "turkey"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "heavy-cream",
+      "onions",
+      "parmesan",
+      "tomato-paste"
+     ]
+    },
+    {
+     "slug": "ground-turkey-broccoli-cheddar-rice-skillet",
+     "name": "Ground Turkey Broccoli Cheddar Rice Skillet",
+     "score": 25,
+     "shared": [
+      "ground",
+      "turkey"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "olive-oil",
+      "onions",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "creamy-ground-turkey-tortellini-skillet",
+     "name": "Creamy Ground Turkey Tortellini Skillet",
+     "score": 25,
+     "shared": [
+      "ground",
+      "turkey"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-turkey",
+      "chicken-broth",
+      "heavy-cream",
+      "parmesan",
+      "tomato-paste"
+     ]
+    }
+   ],
+   "prior_rulings": [],
+   "saturation_pressure": 7,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground turkey",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "green-chile-ground-beef-and-goodles",
+   "name": "Ground Beef and Goodles",
+   "url": "https://masonfit.com/green-chile-ground-beef-and-goodles/",
+   "domain": "masonfit.com",
+   "first_seen": "2026-08-27T09:45:19",
+   "signature": {
+    "protein": null,
+    "method": null,
+    "sauce_family": null,
+    "starch": null
+   },
+   "band": {
+    "cal": 475.0,
+    "carbs": 43.0,
+    "protein_g": 40.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 5,
+   "status": "ruled:rejected-not-fit",
+   "entered_by": "ingest",
+   "exclusion": "no carbohydrate source - a cooked protein on its own is not a meal"
+  },
+  {
+   "slug": "chicken-fried-rice",
+   "name": "Chicken Fried Rice",
+   "url": "https://www.eatingbirdfood.com/chicken-fried-rice/",
+   "domain": "eatingbirdfood.com",
+   "first_seen": "2026-08-27T09:45:20",
+   "last_verified": "2026-08-27T09:45:20",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "soy",
+    "starch": "rice"
+   },
+   "band": {
+    "cal": 518.0,
+    "carbs": 46.0,
+    "protein_g": 42.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "½ Tablespoon avocado oil (or olive oil)",
+    "1.25 lbs boneless skinless chicken breast (diced into bite-sized pieces)",
+    "½ yellow onion (diced)",
+    "2 cloves garlic (minced)",
+    "2 teaspoons fresh ginger (minced)",
+    "¾ teaspoon salt (divided)",
+    "¼ teaspoon black pepper",
+    "12 oz bag frozen mixed veggies (about 3 cups - I did a mix of peas, carrots, corn, green beans)",
+    "4 eggs (beaten)",
+    "4 cups chilled cooked jasmine rice (about 1 cup uncooked)",
+    "½ cup low-sodium soy sauce (or tamari)",
+    "2 Tablespoons unsalted butter (divided)",
+    "⅓ - ½ cup sliced green onions (plus more for topping)",
+    "Optional: sriracha or red pepper flakes for heat"
+   ],
+   "neighbours": [
+    {
+     "slug": "chicken-fried-rice-skillet",
+     "name": "Chicken Fried Rice",
+     "score": 35,
+     "shared": [
+      "chicken",
+      "fried",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "eggs",
+      "onions",
+      "rice",
+      "soy-sauce"
+     ]
+    },
+    {
+     "slug": "hainanese-chicken-rice",
+     "name": "Hainanese Chicken Rice",
+     "score": 28,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast",
+      "fresh-ginger",
+      "garlic",
+      "green-onions",
+      "rice",
+      "salt",
+      "soy-sauce"
+     ]
+    },
+    {
+     "slug": "oyakodon",
+     "name": "Oyakodon (Japanese Chicken and Egg Rice Bowls)",
+     "score": 25,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "eggs",
+      "green-onions",
+      "onions",
+      "rice",
+      "soy-sauce"
+     ]
+    },
+    {
+     "slug": "cajun-chicken-etouffee-rice-bowls",
+     "name": "Cajun Chicken Etouffee Rice Bowls",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "green-onions",
+      "onions",
+      "rice"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-adobo-rice-bowls",
+     "name": "Slow Cooker Chicken Adobo Rice Bowls",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "rice"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "onions",
+      "rice",
+      "soy-sauce"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-salad-with-avocado-dressing",
+     "name": "Chicken Salad with Avocado Dressing",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold dressed salad; doesn't batch as a hot dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:22"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-caesar-wraps",
+     "name": "Chicken Caesar Wraps",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold soggy-prone wrap; doesn't hold for batch.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:23"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "jalape-o-popper-chicken",
+     "name": "Jalape�o Popper Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Distinct creamy jalape�o-popper chicken skillet; no live or pool dupe; hot batch main (cold-plate flag spurious).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "mushroom-chicken-pasta",
+     "name": "Mushroom Chicken Pasta",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy mushroom-spinach chicken farfalle; no live dupe (distinct from tuscan/parmesan/cacciatore chicken pastas).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:24"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-broccoli-ziti",
+     "name": "Chicken Broccoli Ziti",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Chicken-broccoli lemon-parm ziti; distinct from divan bake and hot-honey bowls; borderline vs other chicken pastas but different veg/sauce carries the plate.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-23-v3-phase1-mini",
+     "by": "decider",
+     "at": "2026-08-23T18:20:25"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries",
+     "name": "One Pan Chicken with Sweet Potatoes Kale and Cranberries",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Balsamic-goat-cheese-cranberry harvest chicken skillet, distinct plate from the roasted sheet-pan brussels harvest chicken; borderline but different veg and sauce.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:09:55"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "crispy-chicken-salad",
+     "name": "Crispy Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Cold single-serve fried-chicken-over-iceberg salad with tortilla strips; does not batch or hold as a hot dinner, same rationale as prior cold chicken salad/wrap rejections.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:03"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "honey-balsamic-chicken-tenders",
+     "name": "Honey Balsamic Chicken Tenders",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Seared chicken breast in a honey-balsamic reduction; distinct balsamic sauce family with no live balsamic-chicken, separate from hot-honey/chipotle/sesame/honey-mustard chicken, verified 452cal/16c/67p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:05"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peanut-butter-chicken",
+     "name": "Peanut Butter Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Peanut-sauce chicken with broccoli/peppers over brown rice; same peanut-chicken-and-rice identity as live slow-cooker-thai-peanut-chicken-bowls, a region already saturated with thai-peanut-chicken-burrito and Senegalese peanut stew.",
+     "dupe_of": [
+      "slow-cooker-thai-peanut-chicken-bowls"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:06"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "sticky-bourbon-chicken",
+     "name": "Sticky Bourbon Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Bourbon-soy-brown-sugar sticky glazed chicken thighs over rice; distinct bourbon flavor with no live dupe, separate from slow-cooker honey-sesame chicken, verified 450cal/20c/45p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:07"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "peach-chicken",
+     "name": "Peach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Skillet chicken breast in a peach-balsamic-white-wine sauce with burrata and honey-glazed almonds; distinctive summery plate with no live or backlog dupe (backlog braised-chicken-and-peaches is a braise), widens the catalog, verified 643cal/32c/41p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:15"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "spinach-chicken",
+     "name": "Spinach Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Creamy spinach-parmesan chicken skillet, essentially creamy Tuscan chicken without the sun-dried tomato; saturated chicken-cream region (saturation 5), non-distinct and non-widening.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:16"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "buffalo-chicken-quesadillas",
+     "name": "Buffalo Chicken Quesadillas",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Shredded buffalo chicken with ranch and Mexican cheese in flour tortillas; duplicates live buffalo-chicken-burrito on all four axes (chicken + buffalo/cheese + tortilla + skillet, bge 0.89). Buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl); folded-vs-rolled adds no new dinner.",
+     "dupe_of": [
+      "buffalo-chicken-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:47"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "hawaiian-chicken-salad",
+     "name": "Hawaiian Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Coconut-pineapple marinated chicken plated cold over lettuce with avocado, red onion and a lime-oil dressing; a composed salad that wilts and doesn't batch as meal-prep, matching prior chicken-salad not-fit rulings. Coconut-lime rice is a side, not the dish.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:48"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "southwest-chicken-salad",
+     "name": "Southwest Chicken Salad",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Chili-lime chicken breast served cold over romaine with cherry tomato, black bean, corn, avocado and Greek-yogurt dressing; a composed salad that does not hold for batch meal prep, consistent with prior cold-salad not-fit rulings.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-burrito-bowls",
+     "name": "Chicken Burrito Bowls",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Archetypal Tex-Mex chicken burrito bowl (chili/cumin/ancho chicken thighs, cilantro-lime rice, lettuce/cheese/pico/guac); verified 552cal/42c/48p. Not a clean dupe of a single live dish but adds no novelty to a saturated Tex-Mex chicken lane the catalog already skews toward; cut rather than pad.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:49"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "chicken-and-rice-one-pot",
+     "name": "Chicken and Rice (One Pot!)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy parmesan white-wine chicken-and-rice one-pot with spinach and lemon; distinct from maqluba/butter/adobo/curry/mole chicken-rice dishes, band verified 566cal/43c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:54"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "copycat-longhorn-parmesan-crusted-chicken",
+     "name": "Copycat Longhorn Parmesan Crusted Chicken",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ranch-marinated pan-seared chicken with a provolone/parmesan/panko crust and no tomato sauce; distinct restaurant copycat, not chicken parmesan or meatballs, band verified 660cal/13c/35p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:56"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video",
+     "name": "Italian Chicken Tortellini Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Creamy tomato-cream chicken-tortellini skillet with roasted red peppers and spinach; distinct from slow-cooker Italian chicken penne (different starch/method), band verified 562cal/44c/46p.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:57"
+    },
+    {
+     "key": "chicken|skillet|plain",
+     "slug": "coconut-marinated-chicken-grill-or-stove",
+     "name": "Coconut Marinated Chicken (Grill or Stove)",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Coconut-milk + curry-powder + lime chicken is the same coconut-curry-chicken identity as live Kuku Paka (Swahili coconut chicken curry); coconut/curry chicken region already saturated.",
+     "dupe_of": [
+      "kuku-paka-swahili-coconut-chicken-curry"
+     ],
+     "run": "hunt-2026-08-26-smoke5",
+     "by": "decider",
+     "at": "2026-08-26T13:16:58"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "high-protein-beef-stroganoff",
+   "name": "High Protein Beef Stroganoff",
+   "url": "https://everydaydishes.com/simple-food-recipes/dinner-recipes/high-protein-beef-stroganoff/",
+   "domain": "everydaydishes.com",
+   "first_seen": "2026-08-27T09:45:23",
+   "last_verified": "2026-08-27T09:45:23",
+   "signature": {
+    "protein": "beef",
+    "method": "skillet",
+    "sauce_family": "cheese",
+    "starch": "noodle"
+   },
+   "band": {
+    "cal": 709.0,
+    "carbs": 72.0,
+    "protein_g": 47.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 cup cottage cheese (room temperature)",
+    "2 tbsp olive oil",
+    "1/2 lb mushrooms (sliced)",
+    "pinch of salt and pepper",
+    "1 lb ground beef",
+    "1/2 cup diced onion (about a medium sized onion)",
+    "3 cloves garlic (grated)",
+    "1 tsp fresh thyme leaves",
+    "3 tbsp all-purpose flour",
+    "1 tbsp Worcestershire sauce",
+    "5 cups beef broth",
+    "12 oz egg noodles (or favorite pasta noodles)",
+    "fresh parsley (chopped, to serve)"
+   ],
+   "neighbours": [
+    {
+     "slug": "high-protein-beef-bean-burrito",
+     "name": "High-Protein Beef and Bean Burrito",
+     "score": 31,
+     "shared": [
+      "high",
+      "protein",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef"
+     ]
+    },
+    {
+     "slug": "beef-burrito-bowls",
+     "name": "High-Protein Beef Burrito Bowls",
+     "score": 31,
+     "shared": [
+      "high",
+      "protein",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef"
+     ]
+    },
+    {
+     "slug": "ground-beef-stroganoff-pasta",
+     "name": "Ground Beef Stroganoff Pasta",
+     "score": 25,
+     "shared": [
+      "beef",
+      "stroganoff"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "beef-broth",
+      "flour",
+      "mushrooms",
+      "onions"
+     ]
+    },
+    {
+     "slug": "low-carb-ground-beef-stroganoff-skillet",
+     "name": "Low Carb Ground Beef Stroganoff Skillet",
+     "score": 24,
+     "shared": [
+      "beef",
+      "stroganoff"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "mushrooms",
+      "onions",
+      "worcestershire"
+     ]
+    },
+    {
+     "slug": "cheeseburger-pasta",
+     "name": "High-Protein Cheeseburger Pasta",
+     "score": 22,
+     "shared": [
+      "high",
+      "protein"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|skillet|plain",
+     "slug": "low-carb-cheesy-beef-broccoli-skillet",
+     "name": "Low Carb Cheesy Beef Broccoli Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Cross-lane same-dinner twin of accepted keto-turkey-broccoli-cheddar-casserole (ground protein + broccoli + cheddar cream sauce, no starch); beef lane already runaway",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "low-carb-unstuffed-cabbage-beef-skillet",
+     "name": "Low Carb Unstuffed Cabbage Beef Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of catalog unstuffed-cabbage-roll-bowls: same ground-beef + cabbage + tomato deconstructed cabbage-roll skillet; dropping rice + adding cheddar-jack are formulation tweaks. Also pool-dupe of beef-unstuffed-cabbage-skillet.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "how-to-cook-the-perfect-steak",
+     "name": "How to Cook the Perfect Steak",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Ribeye-cooking technique page (2 servings, herb butter); not a batch-scalable composed dinner and ribeye cost is implausible for the thrifty catalog.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-24-v3-phase6b",
+     "by": "decider",
+     "at": "2026-08-24T12:13:20"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "chicken-fried-steak",
+     "name": "Chicken Fried Steak",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Buttermilk-breaded pan-fried cube steak with peppered cream gravy; distinct Southern-comfort plate, verified 687cal/18c/42p, no catalog equivalent.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:11:04"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "steak-with-gravy",
+     "name": "Steak with Gravy",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Seared sirloin in a brown beef gravy; brown-gravy-beef family already covered by live salisbury-steak-potato-bowls and beef-tips-and-gravy, beef lane runaway and this does not widen cuisine (saturation 5).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:26:14"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "salisbury-steak-burgers",
+     "name": "Salisbury Steak Burgers",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Ground-beef patties in brown gravy with onion/mushroom on Kaiser buns; not a dupe of salisbury-steak-potato-bowls (different format), verified band 542cal/43c.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke",
+     "by": "decider",
+     "at": "2026-08-26T10:01:07"
+    },
+    {
+     "key": "beef|skillet|plain",
+     "slug": "air-fryer-steak-with-garlic-butter",
+     "name": "Air Fryer Steak with Garlic Butter",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-not-fit",
+     "reason": "Plain steak topped with garlic compound butter, 2 servings, no starch or composed sides; a single-protein cooking-method page rather than a batch-scalable dinner.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-27-ten",
+     "by": "decider",
+     "at": "2026-08-27T06:00:39"
+    }
+   ],
+   "saturation_pressure": 4,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "lightened-up-marry-me-chicken-pasta-with-cottage-cheese",
+   "name": "Lightened up Marry Me Chicken Pasta with Cottage Cheese",
+   "url": "https://www.wholesomelicious.com/lightened-up-marry-me-chicken-pasta-with-cottage-cheese/",
+   "domain": "wholesomelicious.com",
+   "first_seen": "2026-08-27T09:45:24",
+   "last_verified": "2026-08-27T09:45:24",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "cream",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 475.0,
+    "carbs": 47.0,
+    "protein_g": 46.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "1.5 lbs Chicken breast*",
+    "1 tsp Smoked paprika",
+    "2 tsp Italian Seasoning",
+    "1 tsp Sea salt",
+    "1 tbsp Avocado oil or olive oil",
+    "10 oz Pasta",
+    "2 cups Low-fat cottage cheese",
+    "2/3 cups Chicken broth",
+    "1/3 cup White wine**",
+    "2 cloves Garlic, (diced or minced)",
+    "3/4 cup Marinated Sun-dried tomatoes, (oil drained)",
+    "1.5 cups Fresh spinach",
+    "2/3 cup Freshly grated parmesan cheese (+ more for serving)",
+    "1/3 cup Chopped fresh basil for serving ((optional))"
+   ],
+   "neighbours": [
+    {
+     "slug": "slow-cooker-tuscan-chicken-pasta",
+     "name": "Slow Cooker Tuscan Chicken Pasta",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "chicken-broth",
+      "parmesan",
+      "sun-dried-tomatoes"
+     ]
+    },
+    {
+     "slug": "marry-me-pork-chops-over-pasta",
+     "name": "Marry Me Pork Chops over Pasta",
+     "score": 24,
+     "shared": [
+      "marry",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-broth",
+      "garlic",
+      "parmesan",
+      "sun-dried-tomatoes"
+     ]
+    },
+    {
+     "slug": "chicken-parmesan-pasta",
+     "name": "Chicken Parmesan Pasta",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "olive-oil",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "buffalo-chicken-pasta-bake",
+     "name": "Buffalo Chicken Pasta Bake",
+     "score": 22,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "chicken-divan-broccoli-bake",
+     "name": "Chicken Divan (Broccoli Cheese Bake)",
+     "score": 21,
+     "shared": [
+      "chicken",
+      "cheese"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-bacon-spinach-chicken-skillet",
+     "name": "Creamy Garlic Bacon Spinach Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: same one-skillet creamy garlic chicken + spinach, no starch (4/4 protein/sauce/starch/method); bacon-vs-sundried-tomato is garnish-level. Tuscan is stronger (published macros).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-chicken-skillet",
+     "name": "Creamy Garlic Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: same seared chicken-breast + garlic cream skillet, no starch. Tuscan version (fully mapped) holds the slot.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-parmesan-mushroom-chicken-skillet",
+     "name": "Creamy Garlic Parmesan Mushroom Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet family: seared chicken breast in garlic-parmesan cream skillet, no starch; mushroom/onion adds no distinct plate. Re-anchored from adjudicator ref creamy-garlic-parmesan-chicken-skillet (not in accepted-slugs) to the accepted tuscan skillet.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-pesto-chicken-pepper-skillet",
+     "name": "Creamy Pesto Chicken Pepper Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: both creamy sun-dried-tomato chicken-breast skillets, no starch (4/4 but pesto+peppers vs spinach). Adjudicator recommended dupe; catalog already Italian-American-heavy.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "one-pan-tuscan-chicken-and-potato-skillet",
+     "name": "One Pan Tuscan Chicken and Potato Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Creamy Tuscan (spinach/tomato/parmesan/cream) chicken breast skillet; same dinner as live creamy-tuscan-chicken-skillet, potato addition is a side not a distinct plate. Tuscan-cream chicken region already saturated with multiple prior dupe rejections.",
+     "dupe_of": [
+      "creamy-tuscan-chicken-skillet"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:17:59"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "chicken-with-creamy-mushroom-sauce",
+     "name": "Chicken with Creamy Mushroom Sauce",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken-breast + garlic-parmesan cream + mushroom skillet, no starch; same creamy-chicken-skillet identity the estate has repeatedly folded into creamy-tuscan-chicken-skillet, and duplicated by live slow-cooker-creamy-chicken-mushroom-bowls.",
+     "dupe_of": [
+      "creamy-tuscan-chicken-skillet"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:01"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "cottage-cheese-chicken-alfredo",
+   "name": "Cottage Cheese Chicken Alfredo Pasta",
+   "url": "https://www.laurafuentes.com/cottage-cheese-chicken-alfredo/",
+   "domain": "laurafuentes.com",
+   "first_seen": "2026-08-27T09:45:25",
+   "last_verified": "2026-08-27T09:45:25",
+   "signature": {
+    "protein": "chicken",
+    "method": "skillet",
+    "sauce_family": "cream",
+    "starch": "pasta"
+   },
+   "band": {
+    "cal": 578.0,
+    "carbs": 74.0,
+    "protein_g": 48.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 4,
+   "ingredients_verbatim": [
+    "1 lb chicken breasts (butterflied)",
+    "Seasonings for the chicken: salt, pepper, and garlic powder",
+    "2 teaspoons of oil or butter (for cooking)",
+    "12 ounces pasta",
+    "1 cup pasta water",
+    "2 cups milk",
+    "1 cup cottage cheese",
+    "⅓ cup Parmesan cheese",
+    "1 tablespoon cornstarch",
+    "½ teaspoon salt",
+    "½ teaspoon pepper",
+    "½ teaspoon garlic powder",
+    "1 teaspoon Italian seasoning (or oregano)"
+   ],
+   "neighbours": [
+    {
+     "slug": "buffalo-chicken-pasta-bake",
+     "name": "Buffalo Chicken Pasta Bake",
+     "score": 24,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast",
+      "milk",
+      "pasta"
+     ]
+    },
+    {
+     "slug": "chicken-parmesan-pasta",
+     "name": "Chicken Parmesan Pasta",
+     "score": 23,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "butter",
+      "chicken-breast",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "chicken-divan-broccoli-bake",
+     "name": "Chicken Divan (Broccoli Cheese Bake)",
+     "score": 22,
+     "shared": [
+      "cheese",
+      "chicken"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "milk"
+     ]
+    },
+    {
+     "slug": "slow-cooker-tuscan-chicken-pasta",
+     "name": "Slow Cooker Tuscan Chicken Pasta",
+     "score": 22,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast",
+      "parmesan"
+     ]
+    },
+    {
+     "slug": "slow-cooker-chicken-cacciatore-pasta",
+     "name": "Slow Cooker Chicken Cacciatore Pasta",
+     "score": 21,
+     "shared": [
+      "chicken",
+      "pasta"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "chicken-breast"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-bacon-spinach-chicken-skillet",
+     "name": "Creamy Garlic Bacon Spinach Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: same one-skillet creamy garlic chicken + spinach, no starch (4/4 protein/sauce/starch/method); bacon-vs-sundried-tomato is garnish-level. Tuscan is stronger (published macros).",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-chicken-skillet",
+     "name": "Creamy Garlic Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: same seared chicken-breast + garlic cream skillet, no starch. Tuscan version (fully mapped) holds the slot.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-garlic-parmesan-mushroom-chicken-skillet",
+     "name": "Creamy Garlic Parmesan Mushroom Chicken Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet family: seared chicken breast in garlic-parmesan cream skillet, no starch; mushroom/onion adds no distinct plate. Re-anchored from adjudicator ref creamy-garlic-parmesan-chicken-skillet (not in accepted-slugs) to the accepted tuscan skillet.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "creamy-pesto-chicken-pepper-skillet",
+     "name": "Creamy Pesto Chicken Pepper Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Dupe of accepted creamy-tuscan-chicken-skillet: both creamy sun-dried-tomato chicken-breast skillets, no starch (4/4 but pesto+peppers vs spinach). Adjudicator recommended dupe; catalog already Italian-American-heavy.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "one-pan-tuscan-chicken-and-potato-skillet",
+     "name": "One Pan Tuscan Chicken and Potato Skillet",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Creamy Tuscan (spinach/tomato/parmesan/cream) chicken breast skillet; same dinner as live creamy-tuscan-chicken-skillet, potato addition is a side not a distinct plate. Tuscan-cream chicken region already saturated with multiple prior dupe rejections.",
+     "dupe_of": [
+      "creamy-tuscan-chicken-skillet"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:17:59"
+    },
+    {
+     "key": "chicken|skillet|cream",
+     "slug": "chicken-with-creamy-mushroom-sauce",
+     "name": "Chicken with Creamy Mushroom Sauce",
+     "protein": "chicken",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Chicken-breast + garlic-parmesan cream + mushroom skillet, no starch; same creamy-chicken-skillet identity the estate has repeatedly folded into creamy-tuscan-chicken-skillet, and duplicated by live slow-cooker-creamy-chicken-mushroom-bowls.",
+     "dupe_of": [
+      "creamy-tuscan-chicken-skillet"
+     ],
+     "run": "hunt-2026-08-26-ten",
+     "by": "decider",
+     "at": "2026-08-26T04:18:01"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "chicken breast",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
+  },
+  {
+   "slug": "ground-beef-fajitas",
+   "name": "Ground Beef Fajitas",
+   "url": "https://www.lynnskitchenadventures.com/ground-beef-fajitas/",
+   "domain": "lynnskitchenadventures.com",
+   "first_seen": "2026-08-27T09:45:26",
+   "last_verified": "2026-08-27T09:45:26",
+   "signature": {
+    "protein": "beef",
+    "method": "skillet",
+    "sauce_family": "tomato",
+    "starch": "tortilla"
+   },
+   "band": {
+    "cal": 469.0,
+    "carbs": 17.0,
+    "protein_g": 45.0,
+    "verified": true,
+    "reason": ""
+   },
+   "servings": 6,
+   "ingredients_verbatim": [
+    "2 pounds lean ground beef",
+    "2 tablespoons oil",
+    "1 tablespoon lime juice",
+    "2 teaspoons chili powder",
+    "1 teaspoon dry mustard",
+    "1 teaspoon dried oregano",
+    "1 teaspoon salt",
+    "1 teaspoon ground cumin",
+    "1/2 teaspoon coriander",
+    "2-3 green, yellow, orange, bell peppers sliced",
+    "1 onion, peeled and sliced",
+    "tortillas for serving"
+   ],
+   "neighbours": [
+    {
+     "slug": "philly-cheesesteak-skillet-bowls",
+     "name": "Ground Beef Philly Cheesesteak Bowls",
+     "score": 23,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "green-bell-pepper",
+      "onions"
+     ]
+    },
+    {
+     "slug": "ground-beef-gyro-bowls",
+     "name": "Ground Beef Gyro Bowls",
+     "score": 23,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "green-bell-pepper",
+      "onions"
+     ]
+    },
+    {
+     "slug": "japanese-ground-beef-curry",
+     "name": "Japanese Ground Beef Curry",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    },
+    {
+     "slug": "ground-beef-stroganoff-pasta",
+     "name": "Ground Beef Stroganoff Pasta",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    },
+    {
+     "slug": "chile-relleno-casserole-ground-beef",
+     "name": "Chile Relleno Casserole with Ground Beef",
+     "score": 22,
+     "shared": [
+      "ground",
+      "beef"
+     ],
+     "source": "word-overlap",
+     "side": "live-catalog",
+     "shared_items": [
+      "93-7-ground-beef",
+      "onions"
+     ]
+    }
+   ],
+   "prior_rulings": [
+    {
+     "key": "beef|skillet|spice",
+     "slug": "beef-cauliflower-taco-skillet",
+     "name": "Beef Cauliflower Taco Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Near-dupe of catalog loaded-beef-taco-skillet-bowls: shares protein (ground beef), Tex-Mex taco flavor family, and skillet method; cauliflower-rice swap is the only structural change. Catalog Tex-Mex beef lane is already dense (loaded-beef-taco-skillet-bowls, tex-mex-beef-rice-skillet-bowls, beef-enchilada-skillet-bowls) so it deepens not widens; plus 34g carbs sits ~1g under the ceiling and a label-accurate recompute (15oz black beans) risks breaching 35g. Cut - run does not need padding.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|any|spice",
+     "slug": "slow-cooker-beef-barbacoa",
+     "name": "Slow Cooker Beef Barbacoa",
+     "protein": "beef",
+     "method": "any",
+     "verdict": "rejected-dupe",
+     "reason": "Duplicates catalog slow-cooker-barbacoa-bowl: identical chuck-roast chipotle-adobo/lime/ACV slow-cooker barbacoa braise, 3-of-4 axes match; dropping the rice/beans is a low-carb re-plating, not a distinct dinner. Agrees with adjudicator DUPE verdict.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-15-lowcarb-100",
+     "by": "backfill",
+     "at": "2026-08-16T07:30:14"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "beef-and-cauliflower-taco-skillet",
+     "name": "Beef and Cauliflower Taco Skillet",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Ground-beef Tex-Mex taco skillet with black beans and cauliflower rice; duplicates live loaded-beef-taco-skillet-bowls (protein + taco spice family + skillet method), cauliflower swap does not distinguish the plate. Deepens an already-dense Tex-Mex beef lane rather than widening it; consistent with prior ruling on the same dish.",
+     "dupe_of": [
+      "loaded-beef-taco-skillet-bowls"
+     ],
+     "run": "jc1-drill",
+     "by": "decider",
+     "at": "2026-08-25T05:38:03"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "taco-pasta-one-pot",
+     "name": "Taco Pasta (One Pot)",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "One-pot cheesy taco beef pasta is the same dinner as live cheesy-taco-spaghetti.",
+     "dupe_of": [
+      "cheesy-taco-spaghetti"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T11:58:15"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "carne-asada-vampiro-tacos",
+     "name": "Carne Asada Vampiro Tacos",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "rejected-dupe",
+     "reason": "Carne asada steak in tortilla form duplicates the flavor identity of live carne-asada-burrito and carne-asada-rice-bowls; vampiro format re-plates an already twice-covered carne asada lane.",
+     "dupe_of": [
+      "carne-asada-burrito"
+     ],
+     "run": "hunt-2026-08-26-smoke3",
+     "by": "decider",
+     "at": "2026-08-26T12:00:38"
+    },
+    {
+     "key": "beef|skillet|spice",
+     "slug": "tacos-de-alambre",
+     "name": "Tacos de Alambre",
+     "protein": "beef",
+     "method": "skillet",
+     "verdict": "accepted",
+     "reason": "Shaved steak griddled with bacon, Mexican chorizo, peppers and melted Oaxaca cheese; verified 709cal/8c/50p. Empty neighbour set (562 live + 57 in-flight searched). Distinct authentic Mexican dish from the ground-beef taco skillets already covered; widens the regional Mexican lane.",
+     "dupe_of": [],
+     "run": "hunt-2026-08-26-smoke4",
+     "by": "decider",
+     "at": "2026-08-26T12:49:45"
+    }
+   ],
+   "saturation_pressure": 5,
+   "status": "available",
+   "entered_by": "ingest",
+   "batch_concerns": [],
+   "round_cut": "ground beef",
+   "meets_round_band": true,
+   "dedup_at_ingest": "llm"
   }
  ],
  "wiped_2026_08_27": {

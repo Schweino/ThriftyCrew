@@ -70,6 +70,7 @@ import threading
 import time
 import urllib.error
 import urllib.parse
+import band_precheck
 import urllib.request
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
@@ -958,6 +959,13 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
     # overturn it. Nothing is buried on a number the site got wrong.
     _b = entry.get("band") or {}
     _cal, _pro = _b.get("cal"), _b.get("protein_g")
+    # OUR OWN ARITHMETIC BESIDE THE PUBLISHER'S CLAIM (2026-08-27). The site's figure decides nothing
+    # here, and neither does this - both are recorded so the run can prefer a candidate whose numbers
+    # we can defend. Measured: on dill-pickle-chicken-wings the site said 620 and this says 854
+    # against a true 888, which is the difference between paying for extraction and not.
+    _pre = band_precheck.compute(lines, entry.get("servings") or 0)
+    entry["band_computed"] = _pre
+    entry["band_conflict"] = band_precheck.conflict(entry.get("band"), _pre)
     entry["meets_round_band"] = (
         None if not isinstance(_cal, (int, float)) or not isinstance(_pro, (int, float))
         else bool(450 <= _cal <= 800 and _pro >= 40))
@@ -1797,6 +1805,126 @@ def classify_one(cand, enum, url=None):
         return ""
 
 
+NL = chr(10)
+DEDUP_SHORTLIST_MIN = 20      # who to ASK about, never who to refuse - see the calibration below
+DEDUP_ASK_CAP = 3             # at most three neighbours per candidate; the top ones carry the signal
+
+
+def llm_same_dinner(cand, neighbour, url=None, timeout=60):
+    """Ask the LOCAL model whether a candidate is the same dinner as a live recipe. "yes" or "no".
+
+    Grammar-forced closed enum at temperature 0, exactly like classify_sauce_family above - the model
+    picks between two tokens and cannot free-text its way into an ambiguous answer.
+    """
+    url = (url or LLAMA_URL).rstrip("/") + "/completion"
+    ings = "; ".join((cand.get("ingredients_verbatim") or [])[:12])
+    shared = ", ".join((neighbour.get("shared_items") or neighbour.get("shared") or [])[:8])
+    prompt = NL.join([
+        "You are deduplicating a recipe catalog. Two dinners are THE SAME DINNER when a reader "
+        "would not buy both: same main protein, same cooking method, same sauce or flavour "
+        "identity. A different vehicle for the same filling (taco vs burrito vs bowl) is the SAME "
+        "dinner. A genuinely different plate that happens to share ingredients is NOT.",
+        "Already published: %s" % (neighbour.get("name") or neighbour.get("slug")),
+        "Candidate: %s" % (cand.get("name") or cand.get("slug")),
+        "Candidate ingredients: %s" % ings,
+        "Shared with the published one: %s" % (shared or "(not computed)"),
+        "Is the candidate the same dinner as the published recipe? Answer yes or no.",
+        "Answer:"])
+    body = json.dumps({"prompt": prompt, "grammar": 'root ::= ("yes" | "no")',
+                       "n_predict": 4, "temperature": 0.0}).encode("utf-8")
+    try:
+        req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="replace"))
+        return (out.get("content") or "").strip().lower()
+    except Exception:
+        return ""
+
+
+def llm_different_dinner(cand, neighbour, url=None, timeout=60):
+    """The MIRROR of llm_same_dinner. Its answer is only used to detect that the model is
+    agreeing with whatever it is asked - see the note at the call site."""
+    url = (url or LLAMA_URL).rstrip("/") + "/completion"
+    prompt = NL.join([
+        "Two recipe titles.",
+        "A: %s" % (neighbour.get("name") or neighbour.get("slug")),
+        "B: %s" % (cand.get("name") or cand.get("slug")),
+        "Are A and B DIFFERENT dinners that a reader might want both of? Answer yes or no.",
+        "Answer:"])
+    body = json.dumps({"prompt": prompt, "grammar": 'root ::= ("yes" | "no")',
+                       "n_predict": 4, "temperature": 0.0}).encode("utf-8")
+    try:
+        req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            out = json.loads(r.read().decode("utf-8", errors="replace"))
+        return (out.get("content") or "").strip().lower()
+    except Exception:
+        return ""
+
+
+def refuse_near_dupes(pool, quiet=False):
+    """Rule an obvious near-duplicate OUT before it sits in the pool as a candidate (Brad 2026-08-27:
+    "We need to send them through dedup FIRST before storing in the DB").
+
+    WHY A THRESHOLD CANNOT DO THIS, MEASURED. Scored against the live catalog, the estate's 68 known
+    rejected-dupes and its 51 known accepted candidates have the SAME word-overlap distribution -
+    both median 20, both max 40. At >= 20 a threshold catches 85% of the dupes and wrongly refuses
+    71% of the ACCEPTED ones; at >= 25 it catches 21% and still wrongly refuses 8%. There is no cut
+    point, because the signal genuinely does not separate "chicken cordon bleu pasta vs chicken
+    cordon bleu casserole" (a dupe) from "beef chili vs beef chili mac" (not one). So word overlap
+    picks WHO TO ASK ABOUT and the local model makes the call.
+
+    BEST EFFORT, NEVER BLOCKING, AND IT SAYS WHICH. The 18:00 crawl calls this and nothing starts
+    llama-server for it. A dedup pass that could not reach the model has not deduplicated anything,
+    and recording that as clean is the could-not-look-is-not-a-clean-bill failure this estate has
+    mechanised against repeatedly - so every candidate carries `dedup_at_ingest`: "llm" when it was
+    judged, "unavailable" when the model was down, "no-neighbour" when there was nothing to ask
+    about. The decide lane still rules on everything either way; this only stops the obvious ones
+    from ever being stored.
+    """
+    avail = [c for c in pool["candidates"] if c.get("status") == "available"
+             and not c.get("dedup_at_ingest")]
+    if not avail:
+        return 0
+    up = llama_up()
+    refused = 0
+    for c in avail:
+        near = [n for n in (c.get("neighbours") or [])
+                if n.get("side") == "live-catalog" and (n.get("score") or 0) >= DEDUP_SHORTLIST_MIN]
+        if not near:
+            c["dedup_at_ingest"] = "no-neighbour"
+            continue
+        if not up:
+            c["dedup_at_ingest"] = "unavailable"
+            continue
+        near.sort(key=lambda n: -(n.get("score") or 0))
+        verdict = ""
+        for n in near[:DEDUP_ASK_CAP]:
+            # TWO POLARITIES, AND THE MODEL MUST DISAGREE WITH ITSELF TO BE BELIEVED.
+            # Measured 2026-08-27 on seven labelled pairs: asked "are these the same dinner?"
+            # AND "are these different dinners?", the local model answered YES to BOTH on every
+            # single pair - including stroganoff vs burrito. A grammar-forced binary makes it
+            # answer, it does not make it discriminate, and a one-sided ask read that bias as 14
+            # near-duplicate refusals out of 15 candidates, ten of them plainly wrong. So a
+            # verdict counts ONLY when the mirrored question contradicts it. A model that agrees
+            # with both framings has told us nothing, and nothing is what we act on.
+            if llm_same_dinner(c, n) == "yes" and llm_different_dinner(c, n) == "no":
+                verdict = n.get("slug") or n.get("name")
+                break
+        if verdict:
+            c["status"] = "ruled:rejected-dupe"
+            c["exclusion"] = ("near-duplicate of live recipe '%s', ruled at ingest by the local model "
+                              "before storing" % verdict)
+            c["dedup_at_ingest"] = "llm"
+            refused += 1
+        else:
+            c["dedup_at_ingest"] = "llm"
+    if not quiet:
+        state = "local model" if up else "MODEL DOWN - candidates stored UNDEDUPED and tagged"
+        say("  dedup at ingest (%s): %d refused as near-duplicates of live recipes" % (state, refused))
+    return refused
+
+
 def cmd_ingest(a):
     """The ONE road in for a top-up sourcer's finds.
 
@@ -1857,6 +1985,10 @@ def cmd_ingest(a):
         by_url[norm_url(url)] = entry
         added += 1
     score_pool(pool)
+    # DEDUP BEFORE STORING (Brad 2026-08-27). score_pool has just attached the neighbours this
+    # needs and write_pool is the next line, so this is the last moment a near-duplicate can be
+    # stopped from entering the pool as a candidate rather than being ruled out of it later.
+    refuse_near_dupes(pool)
     write_pool(pool)
     say("harvest --ingest: %d added, %d already known or published, %d refused"
         % (added, skipped, len(failed)))
