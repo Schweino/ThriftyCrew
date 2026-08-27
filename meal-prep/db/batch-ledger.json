@@ -767,5 +767,58 @@
                          "detail":  "2 row(s) via hunt-2026-08-27-highprotein-w3"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w4",
+      "opened":  "2026-08-27T16:11:53",
+      "last_activity":  "2026-08-27T16:22:58",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "chicken-rice-and-broccoli",
+                    "butter-chicken-pasta",
+                    "pioneer-woman-chili",
+                    "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                    "ground-beef-cottage-cheese-bowl",
+                    "healthy-hamburger-helper"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T16:11:54",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T16:11:54",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T16:11:54",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T16:11:55",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-27T16:22:30",
+                         "detail":  "6/6 GO"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-27T16:22:57",
+                         "detail":  "compute-v2-perserving + reanchor on 6 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-27T16:22:58",
+                         "detail":  "6 row(s) via hunt-2026-08-27-highprotein-w4"
+                     }
+                 ]
   }
 ]

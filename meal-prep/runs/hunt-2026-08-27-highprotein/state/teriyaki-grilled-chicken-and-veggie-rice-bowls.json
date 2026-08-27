@@ -3,10 +3,10 @@
     "title":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
     "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
     "protein":  "chicken",
-    "state":  "qa-passed",
-    "wave":  1,
+    "state":  "waved",
+    "wave":  4,
     "created":  "2026-08-27T11:42:37",
-    "updated":  "2026-08-27T15:59:42",
+    "updated":  "2026-08-27T16:11:53",
     "terms":  [
                   {
                       "term":  "Water",
@@ -87,6 +87,12 @@
                         "at":  "2026-08-27T15:59:42",
                         "by":  "daemon",
                         "detail":  "returned to the wave pool: wave 1 never published (its batch is unclosed), so the recipe was stranded at waved"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T16:11:53",
+                        "by":  "wave-close",
+                        "detail":  "wave 4"
                     }
                 ]
 }

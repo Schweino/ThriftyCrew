@@ -101,6 +101,24 @@ function Test-LedgerStamped {
 # content comparison would either fire constantly or need a second copy of the "which fields count" rule.
 # The question here is only "did the auditor see the current bytes", and mtime ordering answers exactly
 # that and nothing more.
+function Get-AllowCreatePath {
+  <#
+    The create-authority file's path, ABSOLUTE, because the process that reads it does not share this
+    one's working directory. propagate-recipes.ps1 runs `Push-Location $mp` before it validates
+    -AllowCreateFile, so a relative path handed across that boundary re-roots and vanishes - the file
+    is there and the reader says it is not. A function rather than an inline Resolve-Path so the
+    fixture can prove the shape without a wave, a run dir or a publish.
+
+    Returns the input unchanged when it cannot be resolved (a path that does not exist yet), because
+    refusing here would turn a create-authority question into a crash, and the reader already has a
+    clear error for a missing file.
+  #>
+  param([string]$Path)
+  if (-not $Path) { return $Path }
+  try { return (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path }
+  catch { return $Path }
+}
+
 function Get-StaleAuditProblems {
   param([datetime]$AuditWritten, $SpecTimes)
   $problems = @()
@@ -184,6 +202,32 @@ if ($runSelfTest) {
   function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
 
   # ---- THE FOUNDING GATE, frozen. An auditor NO-GO blocks publish, full stop.
+  # ---- E4 create authority: the path crosses a working-directory change ---------------------------
+  # THE THING THAT KILLED WAVES 3 AND 4 (2026-08-27). The daemon passes a RELATIVE -RunDir, so the
+  # allow-create file was written at a relative path and handed to propagate, which does
+  # `Push-Location $mp` before validating it. The path re-rooted to meal-prep\meal-prep\runs\... and
+  # propagate threw "named ... but it does not exist" over a file sitting right there. Six audited-GO
+  # recipes, every preflight gate green through P8, refused at E4 by a directory change.
+  $acTmp = Join-Path ([IO.Path]::GetTempPath()) ("wp-ac-" + [Guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $acTmp -Force | Out-Null
+  try {
+    $acFile = Join-Path $acTmp 'wave-9.allow-create.txt'
+    Set-Content -LiteralPath $acFile -Value 'a-slug' -Encoding UTF8
+    Push-Location $acTmp
+    try {
+      # exactly the shape wave-publish builds from a relative -RunDir
+      $rel = '.\wave-9.allow-create.txt'
+      $got = Get-AllowCreatePath $rel
+      T 'MUST FIRE  the create-authority path is made ABSOLUTE - propagate validates it after a Push-Location, and a relative path re-roots and vanishes' `
+        ([IO.Path]::IsPathRooted($got)) ("still relative: " + $got)
+      T '  ...and it still points at the same file, so absolutising did not move the target' `
+        ((Test-Path -LiteralPath $got) -and ((Get-Content -LiteralPath $got -Raw).Trim() -eq 'a-slug')) $got
+    } finally { Pop-Location }
+    T 'CLEAN TWIN a path that does not resolve is returned unchanged rather than throwing - the reader already has a clear error for a missing file' `
+      ((Get-AllowCreatePath (Join-Path $acTmp 'no-such-file.txt')) -eq (Join-Path $acTmp 'no-such-file.txt')) 'it threw or rewrote a missing path'
+    T 'CLEAN TWIN an empty path is returned unchanged' ((Get-AllowCreatePath '') -eq '') 'an empty path was rewritten'
+  } finally { Remove-Item -LiteralPath $acTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
   T 'MUST FIRE  a NO-GO audit refuses to publish' `
     ((Get-AuditVerdict @('NO-GO', '', 'blocked: 3 recipes quote a stale price')) -eq 'NO-GO') 'not refused'
   T 'MUST FIRE  an empty audit file is not a GO'      ((Get-AuditVerdict @()) -eq 'UNREADABLE') 'read as GO'
@@ -681,6 +725,15 @@ if ($foreignTotal -gt 0) {
 # comma-joined string.
 $allowFile = Join-Path $RunDir ("waves\wave-{0}.allow-create.txt" -f $Wave)
 Set-Content -Path $allowFile -Value ($slugs -join "`n") -Encoding UTF8
+# ABSOLUTE, AND THAT IS THE WHOLE FIX (2026-08-27). The daemon runs this with a RELATIVE -RunDir
+# ("meal-prep\runs\<run>"), so this path was relative too - and propagate does `Push-Location $mp`
+# before it checks the file, which re-roots the relative path to meal-prep\meal-prep\runs\... So
+# propagate threw "-AllowCreateFile named ... but it does not exist" over a file that was sitting
+# right there, and the wave refused to publish. Twice, on waves 3 and 4: six audited GO recipes,
+# every preflight gate green through P8, killed at E4 by a working-directory change.
+# It cost two diagnosis cycles because the daemon truncated the refusal; the file it now writes is
+# what made this readable at all. Resolve-Path AFTER the write, because it requires the file to exist.
+$allowFile = Get-AllowCreatePath $allowFile
 Write-Output ("  E4  create authority: {0} wave slug(s) may be created; any other new slug is refused" -f $slugs.Count)
 $prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
 $propRc = $LASTEXITCODE

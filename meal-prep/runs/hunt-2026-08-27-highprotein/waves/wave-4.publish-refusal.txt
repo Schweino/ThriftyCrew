@@ -1,0 +1,55 @@
+exit 1
+wave-publish: hunt-2026-08-27-highprotein  wave 4  (6 recipe(s))
+
+== PREFLIGHT ==============================================================
+  P1  audit verdict          GO   (wave-4.audit.md)
+  P1b audit freshness        GO is newer than all 6 spec(s)   (audit 16:22:08)
+  P2  ledger audit stamp     present   (batch hunt-2026-08-27-highprotein-w4)
+  P3  recipe states          all 6 in wave 4
+  P4  v2 specs               6/6 present in db\recipes
+  P5  audit-spec-contradictions  clean
+  P5  audit-store-integrity      clean
+  P5  audit-vocab-integrity      clean
+  P5  audit-unbid-ingredients    clean
+  P5  audit-cost-plausibility    clean
+  P5  audit-cost-line-coverage   clean
+  P5  test-guards                clean
+  P6  dedup escape guard     clean   (6 slug(s) checked against live)
+  P7  recipes-db delta (dry run):
+        live recipes-db slugs: 564
+        ingredient-map ids available: 317
+        slug list: wave-4.slugs.txt
+        built + parse-validated new recipes: 4 (skipped already-present: 2)
+        item_id source: ingredient-map 56 rows | scaler-bid fallback 0 rows | no id (null) 0 rows
+        DRY RUN - would write 568 recipes (564 + 4 new). Nothing written.
+  P8  card price source      producible   (https://feed.thriftycrew.com/smp-feed.json)
+  P8  coverage guard feed    agrees with the cards
+  P8  feed liveness          200 + parseable   (562 recipes, generated 2026-08-27T14:50:26)
+
+== PUBLISH ================================================================
+  E1  prose tokens           2 spec(s) tokenized, 8 literal(s) swapped - APPLIED
+  E2  cost basis (new recipes are not in the manifest yet)
+      re-anchored cost_ps + costPerServing on 6 specs (skipped 0)
+      cost basis verified on 6/6 slug(s) against the everyday manifest
+  E3  recipes-db             recipes-db WRITTEN + reparsed: 568 total recipes (564 + 4 new)
+  E4  NOTE propagate reports 19 dirty spec(s) in total, so about 13 OUTSIDE this wave will be
+        carried and republished with it. That is propagate's design (it is the one command after
+        any spec edit), but this wave's ledger should not be read as having shipped only 6.
+        balsamic-sirloin-steak-sheet-pan
+        creamy-roasted-garlic-chicken
+        crustless-bacon-gruyere-quiche
+        italian-chicken-tortellini-skillet-recipe-video
+        italian-ground-turkey-white-bean-skillet
+        italian-sausage-peppers-onions-skillet
+        keto-crustless-pizza-casserole
+        low-carb-steak-fajita-skillet
+        low-carb-turkey-cauliflower-mushroom-casserole
+        mediterranean-chicken-w-marinade
+  E4  create authority: 6 wave slug(s) may be created; any other new slug is refused
+powershell.exe : propagate: -AllowCreateFile named 
+meal-prep\runs\hunt-2026-08-27-highprotein\waves\wave-4.allow-create.txt but it does 
+At C:\Codex\ThriftyCrew\meal-prep\pipeline\wave-publish.ps1:685 char:9
++ $prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-P ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (propagate: -All...xt but it does :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError

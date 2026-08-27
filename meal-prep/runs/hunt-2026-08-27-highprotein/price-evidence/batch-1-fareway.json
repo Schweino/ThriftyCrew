@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T16:00:03",
+ "generated": "2026-08-27T16:09:29",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -13,7 +13,7 @@
     {
      "term": "Moroccan Spice Mix",
      "state": "OK",
-     "hits": 6
+     "hits": 72
     }
    ],
    "hits": [
@@ -46,11 +46,11 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
     },
     {
-     "item": "Fareway Seasoning Mix",
-     "price": 1.98,
-     "size": "10 oz",
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
     },
     {
      "item": "Badia Spices Pumpkin Pie Spice",
@@ -58,6 +58,20 @@
      "size": "2 oz",
      "relevance": null,
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
+    },
+    {
+     "item": "Alpine Sugar Free Spiced Apple Cider Instant Drink Mix",
+     "price": 2.99,
+     "size": "10 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69496-alpine-sugar-free-spiced-apple-cider-instant-drink-mix-10-ct"
+    },
+    {
+     "item": "Misty's Natural All Purpose Seasoning",
+     "price": 6.99,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18784304-misty-s-natural-all-purpose-seasoning-4-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

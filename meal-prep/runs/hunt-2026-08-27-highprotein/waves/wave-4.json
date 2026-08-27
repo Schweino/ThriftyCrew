@@ -1,0 +1,52 @@
+{
+    "wave":  4,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w4",
+    "created":  "2026-08-27T16:11:53",
+    "slugs":  [
+                  "chicken-rice-and-broccoli",
+                  "butter-chicken-pasta",
+                  "pioneer-woman-chili",
+                  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                  "ground-beef-cottage-cheese-bowl",
+                  "healthy-hamburger-helper"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "chicken-rice-and-broccoli",
+                        "title":  "Healthy Chicken, Rice and Broccoli Skillet",
+                        "source_url":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "butter-chicken-pasta",
+                        "title":  "Butter Chicken Pasta",
+                        "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "pioneer-woman-chili",
+                        "title":  "The Pioneer Woman Chili",
+                        "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                        "title":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+                        "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "ground-beef-cottage-cheese-bowl",
+                        "title":  "Ground Beef Cottage Cheese Bowl",
+                        "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "healthy-hamburger-helper",
+                        "title":  "Healthy Hamburger Helper",
+                        "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+                        "protein":  "beef"
+                    }
+                ]
+}
