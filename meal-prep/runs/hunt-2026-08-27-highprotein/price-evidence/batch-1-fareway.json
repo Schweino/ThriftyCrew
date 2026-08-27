@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T16:25:41",
+ "generated": "2026-08-27T17:19:09",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,18 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
     },
     {
-     "item": "Kikkoman Seasoning Mix, Mongolian Beef",
-     "price": 0.99,
+     "item": "Old El Paso Taco Seasoning Mix, Original Flavor",
+     "price": 1.0,
      "size": "1 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/82683-kikkoman-seasoning-mix-mongolian-beef-1-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/78441-old-el-paso-original-taco-seasoning-mix-packet-1-000-oz"
     },
     {
-     "item": "McCormick® GRILL MATES Mesquite Seasoning",
-     "price": 2.49,
-     "size": "2.5 oz",
+     "item": "McCormick Less Sodium Chili Seasoning Mix",
+     "price": 1.68,
+     "size": "1.25 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41190-mccormick-grill-mates-mesquite-seasoning-2-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16409937-mccormick-less-sodium-chili-seasoning-mix-1-25-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

@@ -6837,23 +6837,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T16:26:20"
+                                                     "checked":  "2026-08-27T17:22:00"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 reported 72 hits but the evidence file retains only 8 rows (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Paprika, Badia Pumpkin Pie Spice, Kikkoman Mongolian Beef, Grill Mates Mesquite) - none is a Moroccan blend or ras el hanout, but 64 of 72 rows are unseen and I have no browser to re-search, so absence is not established; PENDING for an attended run",
-                                                     "checked":  "2026-08-27T16:26:20"
+                                                     "evidence":  "Driver returned MATCHES=72 rows at rung 1, but the evidence file retains only the top 8 relevance-ranked rows and I have no browser this session to page the rest. The 8 I can see are all ruled OUT - McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean Blend, Badia Paprika, Badia Pumpkin Pie Spice, Old El Paso Taco Seasoning - the 72 is Instacart matching the words \u0027spice\u0027 and \u0027mix\u0027, not \u0027Moroccan\u0027. 64 rows UNSEEN, so this is unchecked, not empty; not-carried is not available to me here.",
+                                                     "checked":  "2026-08-27T17:22:00"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "pre-pass server tier, FULL ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0 -\u003e \u0027MoroccanSpiceMix\u0027=0, no candidates on any rung",
-                                                         "checked":  "2026-08-27T16:26:20"
+                                                         "evidence":  "Full ladder, all EMPTY of the ingredient. Pre-pass: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. Walked further myself: \u0027ras el hanout\u0027=0 on both rungs; \u0027moroccan spice\u0027 laddered to bare \u0027moroccan\u0027 = 3 hits, all read: Suave Moroccan Oil conditioner, Suave Moroccan Oil shampoo, Nair Moroccan Argan Oil hair remover. All health-and-beauty, none is food. Freshop answered 200 OK on every rung - this is a real empty shelf, not a transport refusal.",
+                                                         "checked":  "2026-08-27T17:22:00"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6861,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T16:26:20"
+                                                    "checked":  "2026-08-27T17:22:00"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 = 8 hits, complete pile, adjudicated: McCormick Taco Seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, Perfect Pinch Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5lb, Kinder\u0027s Whiskey Peppercorn, Kinder\u0027s Caramelized Onion - all generic/other-cuisine seasonings, none is a Moroccan blend or ras el hanout. Ladder exhausted at rung 1: no strippable qualifier, no spacing variant, and a THREE-word term does not fall back to a head noun. price-ingredient.ps1 -Name \u0027Moroccan Spice Mix\u0027 = ABSENT, no capture row anywhere",
-                                                             "checked":  "2026-08-27T16:26:20"
+                                                             "evidence":  "Driver returned MATCHES=8 rows at rung 1 and the pile is complete (8 of 8 retained), so I adjudicated all of it: McCormick Taco Seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, McCormick Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5lb, Kinder\u0027s Whiskey Peppercorn, Kinder\u0027s Caramelized Onion Burger Rub. Not one is a Moroccan/North African blend or ras el hanout. Ladder terminates at rung 1 by contract (8 genuine hits \u003e= 2), and a 3-word term takes no head-noun fallback, so this is a completed search.",
+                                                             "checked":  "2026-08-27T17:22:00"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,15 +6877,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T16:26:20"
+                                                  "checked":  "2026-08-27T17:22:00"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "pre-pass server tier, FULL ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0 -\u003e \u0027MoroccanSpiceMix\u0027=0, no candidates on any rung; no Moroccan/ras el hanout blend surfaced",
-                                                          "checked":  "2026-08-27T16:26:20"
+                                                          "evidence":  "Full ladder, all EMPTY of the ingredient. Pre-pass: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. I then walked further myself via probe-ingredient.ps1: \u0027ras el hanout\u0027 (the trade name for a Moroccan blend) = 0 hits on both rungs; \u0027moroccan spice\u0027 laddered to bare \u0027moroccan\u0027 = 22 hits and I read them - Tree Hut Moroccan Rose sugar scrub/gel wash/shave butter/body butter/shave oil/fragrance mist, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. Zero are a spice blend; the couscous is a grain and the Tree Hut line is bath products. Also discarded a \u0027moroccan seasoning\u0027 rung because it fell back to the bare head noun \u0027seasoning\u0027 and returned the identical 8 generic rows as \u0027harissa seasoning\u0027 - a widened pool, not Moroccan presence.",
+                                                          "checked":  "2026-08-27T17:22:00"
                                                       }
                                  },
                       "verdict":  "PENDING",

@@ -9077,6 +9077,45 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
                     "move alone left it claimed, and the closer refuses a claimed pool",
                     manifest_slugs() == [],
                     "wave-1 manifest still lists %s" % json.dumps(manifest_slugs())))
+
+        # THE THIRD ROAD (2026-08-27). A recipe leaves a wave three ways: this resume re-wave, the
+        # audit TRIM, and a trim that happened on an EARLIER run before either fix existed. That last
+        # one is the case that kept biting: the recipe is ALREADY at qa-passed, so the re-wave branch
+        # never sees it, the trim never runs again, and the manifest goes on claiming it forever.
+        # Measured on wave 5 of hunt-2026-08-27-highprotein - four clean recipes returned to the pool
+        # and every close afterwards answered "ALL are already claimed by an open wave".
+        man2 = os.path.join(run_dir, "waves", "wave-2.json")
+        with io.open(man2, "w", encoding="utf-8") as fh:
+            # the REAL manifest shape: Sync-WaveManifest filters `recipes` alongside `slugs`, so a
+            # hand-written manifest missing it fails with "the property 'recipes' cannot be found".
+            json.dump({"wave": 2, "run": "rewave-drill", "batch": "rewave-drill-w2",
+                       "slugs": ["r-waved"],
+                       "recipes": [{"slug": "r-waved", "title": "r-waved",
+                                    "source_url": "https://d/r", "protein": "beef"}]}, fh)
+        d2 = HD.Daemon(run_dir, "rewave-drill", quiet=True, ledger_path=led)
+        arun(d2.sync_open_wave_manifests())
+        with io.open(man2, encoding="utf-8-sig") as fh:
+            left = (json.load(fh) or {}).get("slugs") or []
+        out.append(("MUST FIRE  a manifest claiming a recipe that is ALREADY back at qa-passed is "
+                    "reconciled too - no re-wave happens for it, so nothing else would ever free it",
+                    left == [], "wave-2 manifest still lists %s" % json.dumps(left)))
+
+        # ...and a PUBLISHED manifest is the shipping record: hunt-run refuses to rewrite it, so it
+        # must be skipped rather than called and apologised for once per resume.
+        man3 = os.path.join(run_dir, "waves", "wave-3.json")
+        with io.open(man3, "w", encoding="utf-8") as fh:
+            json.dump({"wave": 3, "run": "rewave-drill", "batch": "rewave-drill-w3",
+                       "slugs": ["r-waved"],
+                       "recipes": [{"slug": "r-waved", "title": "r-waved",
+                                    "source_url": "https://d/r", "protein": "beef"}],
+                       "published_at": "2026-08-27T00:00:00"}, fh)
+        d3 = HD.Daemon(run_dir, "rewave-drill", quiet=True, ledger_path=led)
+        synced = arun(d3.sync_open_wave_manifests())
+        out.append(("CLEAN TWIN a PUBLISHED manifest is left alone and raises no finding - it is the "
+                    "shipping record, and a finding per published wave per resume trains the reader "
+                    "to skip findings",
+                    3 not in synced and not d3.findings,
+                    "synced=%s findings=%s" % (json.dumps(synced), json.dumps(d3.findings))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return out

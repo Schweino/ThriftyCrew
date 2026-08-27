@@ -4273,6 +4273,38 @@ class Daemon(object):
             return False
         return True
 
+    async def sync_open_wave_manifests(self, also=()):
+        """Reconcile every UNPUBLISHED wave manifest in the run. Returns the waves it synced.
+
+        A PUBLISHED manifest is the shipping record and hunt-run refuses to rewrite it, so those are
+        skipped here rather than called and apologised for - a finding per published wave, every
+        resume, would be noise that trains the reader to skip findings.
+        """
+        waves = set(int(w) for w in (also or ()) if w)
+        d = os.path.join(self.run_dir, "waves")
+        try:
+            names = os.listdir(d)
+        except Exception:                                         # noqa: BLE001
+            names = []
+        for name in names:
+            m = re.match(r"^wave-(\d+)\.json$", name)
+            if not m:
+                continue
+            try:
+                with open(os.path.join(d, name), "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f) or {}
+            except Exception:                                     # noqa: BLE001
+                continue
+            if doc.get("published_at"):
+                continue
+            if doc.get("slugs"):
+                waves.add(int(m.group(1)))
+        done = []
+        for wk in sorted(waves):
+            if await self.sync_wave_manifest(wk):
+                done.append(wk)
+        return done
+
     async def learn_from_audit(self, wk, audit):
         """Every audit finding becomes an EVENT, and a finding that refutes an identity INVALIDATES
         the cached resolution that carries it. Returns (events_written, invalidated_bids).
@@ -6108,8 +6140,15 @@ class Daemon(object):
         # open wave" and refused - the recovered recipes were unclaimable forever, one layer further
         # on from where they were unresumable. hunt-run names the remedy in that very message, and
         # -WaveSync drops exactly the slugs whose state no longer matches the manifest.
-        for wk_open in sorted(rewaved_waves):
-            await self.sync_wave_manifest(wk_open)
+        # EVERY UNPUBLISHED MANIFEST, not just the ones this seed re-waved (2026-08-27). A recipe
+        # leaves a wave by three roads, not two: the resume re-wave above, the audit TRIM, and - the
+        # one that kept biting - a trim that happened on an EARLIER run, before either fix existed.
+        # Those recipes sit at qa-passed already, so the re-wave branch never sees them and neither
+        # does the trim; wave 5's manifest went on listing all six and every close answered "ALL are
+        # already claimed by an open wave". Reconciling the lot is idempotent (-WaveSync drops only
+        # slugs whose state no longer matches) and costs one call per wave, which is the right price
+        # for a resume that cannot strand a recipe behind a stale claim.
+        await self.sync_open_wave_manifests(rewaved_waves)
         # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
         if mapped_holds:
             n = await self.unhold_mapped(mapped_holds)
