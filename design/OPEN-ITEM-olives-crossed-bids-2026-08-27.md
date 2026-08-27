@@ -38,3 +38,33 @@ carrying the other's package.
   NOT part of this question.
 - Then, if it is a genuine crossing: rebid-ingredient.ps1 for each affected item, the standard
   cost chain, and a note in the vocabulary rows saying what was corrected and when.
+
+---
+
+## Measured 2026-08-27, after a peer session asked whether "Black Olives" duplicated "Olives"
+
+It does not, and checking answered a bigger question. The three ids are distinct on the board:
+
+    black-olives   -> "Black Olives (canned, ripe)"     Aldi $0.265/oz
+    green-olives   -> "Green Olives (stuffed)"
+    olives         -> present in recipe-commodities.json and out\recipe-board-everyday.json,
+                      ABSENT from commodities.json
+
+So `Black Olives -> black-olives` (added this morning) points at its own priced commodity and is a
+genuine third food, not a near-name of either existing row. That one is fine.
+
+**THE CROSSED PAIR HAS 24 LIVE CONSUMERS, WHICH IS THE PART THAT MATTERS.** 24 live specs carry the
+vocabulary name `Olives`, and that row points at bid `green-olives`, whose board commodity is
+literally "Green Olives (**stuffed**)". Any of those 24 that meant ripe black olives - a Mediterranean
+or Tex-Mex dish calling for "olives" usually does - is being priced as stuffed green olives, and the
+reader's buy line names the wrong jar. Meanwhile `Green Olives` points at `olives`, an id that is not
+in commodities.json at all.
+
+Sharpened, the question is no longer "are the two rows swapped" but:
+1. Which food do those 24 live recipes actually call for? That is a read of their prose and sources,
+   not a lookup.
+2. Is `olives` a live commodity or a stale id kept alive only by these rows? It resolves in two files
+   and is missing from the third.
+3. What do the 24 cost per serving if each is repointed at the food it actually means?
+
+Nothing here was changed. The blast radius is 24 published recipes' prices.
