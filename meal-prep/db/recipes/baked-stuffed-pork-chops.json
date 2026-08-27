@@ -1,0 +1,293 @@
+{
+    "name":  "Baked Stuffed Pork Chops",
+    "slug":  "baked-stuffed-pork-chops",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+    "source_site":  "keviniscooking.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Scale is 14 servings from a ~4-serving source, a clean 3.5x: 2 lb chops becomes 7 lb / 14 chops and aromatics scale to match.",
+                         "Olive oil, ranch seasoning and salt are each used TWICE in the source, and each spec line carries the SUM: the buy string names the first use, then the second, then states the total in parentheses so the printed measure agrees with the line\u0027s grams. Olive oil 7 + 3 1/2 = 10 1/2 Tbsp = 141 g; ranch 7 + 3 1/2 = 10 1/2 Tbsp = 73 g; salt 1 3/4 + 1 3/4 = 3 1/2 tsp = 21 g.",
+                         "QA repair 2026-08-27: the salt line printed only 1 3/4 tsp against grams of 20, so the measure contradicted its own weight by half; corrected to the full 3 1/2 tsp and 21 g (3 1/2 x 6 g/tsp). Olive oil and ranch already carried summed GRAMS and only their buy strings needed restating.",
+                         "Cranberries stay FRESH, not dried. The source says only \u0027cranberries\u0027 and calls them tart; its published macros are 17 g carbs per serving, and fresh reads 13.5 g against a dried-sweetened reading of roughly 23 g, so fresh is the far closer fit to the source\u0027s own label.",
+                         "Portioning is one stuffed chop per container, not a weigh-the-pot divide, because the protein is a whole cut; evenness comes from dividing the stuffing before baking.",
+                         "No per-unit or per-package price claims were made in shop_smart because this dispatch carried no cost_lines dollar data to trace them to; bullets reference only the locked buy quantities.",
+                         "Only the ${cost_ps} token and the $1 membership line appear as money; no literal dollar figures were written.",
+                         "Source note about adding bread cubes if the mix is loose was carried into make_it since the 5 oz bread against 3 1/2 cups may run light."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "em dash",
+                                  "en dash",
+                                  "seafood",
+                                  "per ounce",
+                                  "per pound cheaper",
+                                  "lasts several batches",
+                                  "cents per serving",
+                                  "guaranteed",
+                                  "cheapest anywhere"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  533,
+                 "protein":  51,
+                 "carbs":  14,
+                 "fat":  29,
+                 "cost_ps":  "2.31"
+             },
+    "intro_html":  "\u003cp\u003eHere is a trick worth knowing. The dishes that look like you fussed over them all afternoon are often the ones that cost the least to make. Baked stuffed pork chops are the proof. You cut a pocket in a plain loin chop, pack it with a savory ranch and cranberry stuffing, brush the top with a paprika paste, and slide it in the oven. What comes out looks like a holiday plate and eats like one too.\u003c/p\u003e\u003cp\u003eThe numbers are the part I like best. Each chop lands at 533 calories with a serious 51 grams of protein, and it does that on only 14 grams of carbs. That is a plate that keeps you full through the afternoon without wrecking the day. The stuffing brings the flavor and the color, the pork brings the muscle, and your wallet barely notices it happened.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Pork Chops:\u003c/strong\u003e 7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each (3174 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 Tbsp for the paste, plus 3 1/2 Tbsp for the saute (10 1/2 Tbsp total) (141 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 7 Tbsp for the paste, plus 3 1/2 Tbsp for the stuffing (10 1/2 Tbsp total) (73 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3 1/2 tsp (8 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 3/4 tsp on the chops, plus 1 3/4 tsp in the stuffing (3 1/2 tsp total) (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 tsp (4 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3 1/2 Tbsp (49 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 3/4 cups diced (about 2 small onions) (201 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 1 3/4 cups diced (about 4 stalks) (177 g)",
+                                "\u003cstrong\u003eFresh Cranberries:\u003c/strong\u003e 1 3/4 cups fresh cranberries (175 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7/8 cup shredded (about 2 medium carrots) (96 g)",
+                                "\u003cstrong\u003eSandwich Bread (generic white (USDA)):\u003c/strong\u003e 3 1/2 cups bread cubes (about 5 oz) (158 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 1/3 cups (560 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Pork Chops, 7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each: ~$22.88. \u003cstrong\u003eBuy 7 lbs: $22.89.\u003c/strong\u003e",
+                       "Olive Oil, 7 Tbsp for the paste, plus 3 1/2 Tbsp for the saute (10 1/2 Tbsp total): ~$1.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 7 Tbsp for the paste, plus 3 1/2 Tbsp for the stuffing (10 1/2 Tbsp total): ~$1.36. \u003cstrong\u003ePantry staple; this batch alone uses about 3 1oz packets.\u003c/strong\u003e",
+                       "Butter, 3 1/2 Tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Yellow Onion, 1 3/4 cups diced (about 2 small onions): ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 1 3/4 cups diced (about 4 stalks): ~$0.93. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Fresh Cranberries, 1 3/4 cups fresh cranberries: ~$1.60. \u003cstrong\u003eBuy 1 12oz bag: $3.11.\u003c/strong\u003e",
+                       "Carrots, 7/8 cup shredded (about 2 medium carrots): ~$0.20. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Sandwich Bread, 3 1/2 cups bread cubes (about 5 oz): ~$1.94. \u003cstrong\u003eBuy 1 20oz loaf: $6.97.\u003c/strong\u003e",
+                       "Chicken Broth, 2 1/3 cups: ~$0.85. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.39 across 14 servings, so roughly $2.31 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.42 across 14 servings, roughly $3.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.41. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eHere is where it adds up in your favor. All that work, the pockets and the stuffing and the paste, comes out to just ${cost_ps} per serving. That is a stuffed pork chop dinner, the kind a restaurant would charge you real money for, sitting in your fridge for the price of a snack. Fourteen of them, ready to grab.\u003c/p\u003e\u003cp\u003eCook this way a few times a month and the savings stop being pocket change and start being a number you notice. Our membership runs a dollar a month, and one batch like this pays for the whole year of it many times over.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe pork is the whole game here, so buy it right. You want 7 pounds of boneless loin chops cut about 1 1/4 inches thick, which comes out to 14 chops for the 14 containers. That thickness matters, because a thin chop has no room for a pocket. If the case only has thin ones, ask the butcher to cut you a few thick ones. They will, and it costs you nothing to ask.\u003c/p\u003e\u003cp\u003eRanch seasoning mix does double duty in this recipe, once in the paste on top and once in the stuffing, so grab enough to cover both. A standard packet or a small shaker jar carries you fine. The sandwich bread only needs to give up about 5 ounces of cubes, so this is the perfect place to use the heels and the slices that have gone a little stale. Stale bread actually holds the stuffing together better than fresh, so do not toss those ends.\u003c/p\u003e\u003cp\u003eFresh cranberries are cheapest and best in the fall, and they freeze well, so if you spot a bag in season it is worth keeping. Onion, celery, and carrot are the cheap backbone of the stuffing and you likely have them on hand already. Round out the cart with olive oil, butter, paprika, and a small carton of chicken broth, and you have everything the build calls for.\u003c/p\u003e",
+    "make_it":  [
+                    "\u003cp\u003eStart with the oven at 400 degrees so it is hot and waiting. In a small bowl, whisk the olive oil, ranch seasoning, and paprika into a loose paste and set it aside. That is the glaze that gives the tops their color, so do not skip it.\u003c/p\u003e\u003cp\u003eNow the pockets. Lay each chop flat and carefully cut a slit into the side, working the knife back and forth to open a pocket while leaving the fat side intact so the stuffing has a wall to lean on. Take your time here and do not cut through the far side. Set the chops aside.\u003c/p\u003e\u003cp\u003eBuild the stuffing base next. Put the butter and olive oil in a skillet over medium heat, then saute the onion, celery, cranberries, and carrot until the vegetables go soft, about 4 to 5 minutes. Season with salt, pull it off the heat, and let it cool. Warm stuffing going into raw pork is a mistake, so give it a few minutes. Once it is cool, transfer it to a bowl and toss it with the bread cubes, chicken broth, and the second measure of ranch seasoning. It should hold together in a loose clump. If it feels too wet, add a few more bread cubes; if it feels dry, that is fine, the pork will keep it moist.\u003c/p\u003e\u003cp\u003eSalt and pepper both sides of every chop, then divide the stuffing evenly among all 14 and spoon it gently into each pocket, being careful not to poke through the meat. Lay the stuffed chops on a lined sheet pan or a baking dish sprayed with cooking spray, then brush the tops with the ranch paprika paste. Bake uncovered for 28 to 35 minutes, until the thickest part of the meat reads 145 degrees on a thermometer. Let them rest 3 minutes before serving so the juices settle back into the meat.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eThis one portions itself, which is the beauty of it. One stuffed chop goes in one container, fourteen chops fill fourteen containers, and you are done counting. Because the stuffing was divided evenly before baking, every box carries the same load of pork and the same scoop of filling, so no container gets shorted.\u003c/p\u003e\u003cp\u003eIf you want them truly even, lay all 14 chops out before they go in the oven and eyeball them side by side, moving a spoonful of stuffing from the full ones to the lean ones until they match. It takes thirty seconds and it means every serving hits that same 533 calories and 51 grams of protein. Add a simple vegetable or a small starch on the side when you reheat and you have a full plate.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://keviniscooking.com/stuffed-baked-boneless-pork-chops/\" target=\"_blank\" rel=\"noopener\"\u003ekeviniscooking.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eEvery recipe on Thrifty Crew is built the same honest way. Real macros counted off the label, real prices off the board, and a per serving cost you can actually check. For a dollar a month you get the full library, so you can plan a week of dinners that feed you well and leave your budget standing. Come cook with the crew.\u003c/p\u003e",
+    "cost_batch":  32.39,
+    "cost_batch_true":  44.42,
+    "cost_per_serving":  2.31,
+    "cost_per_serving_true":  3.17,
+    "cost_pantry_add":  10.99,
+    "cost_first_run":  55.41,
+    "scaler":  {
+                   "cost":  "44.42",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Pork Chops",
+                                   "canon":  "Boneless Pork Chops",
+                                   "grams":  3174,
+                                   "buy":  "7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each",
+                                   "bid":  "pork-chops",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  141,
+                                   "buy":  "7 Tbsp for the paste, plus 3 1/2 Tbsp for the saute (10 1/2 Tbsp total)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "canon":  "Ranch Seasoning Mix",
+                                   "grams":  73,
+                                   "buy":  "7 Tbsp for the paste, plus 3 1/2 Tbsp for the stuffing (10 1/2 Tbsp total)",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "3 1/2 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1 3/4 tsp on the chops, plus 1 3/4 tsp in the stuffing (3 1/2 tsp total)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3 1/2 Tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  201,
+                                   "buy":  "1 3/4 cups diced (about 2 small onions)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  177,
+                                   "buy":  "1 3/4 cups diced (about 4 stalks)",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Fresh Cranberries",
+                                   "canon":  "Fresh Cranberries",
+                                   "grams":  175,
+                                   "buy":  "1 3/4 cups fresh cranberries",
+                                   "bid":  "fresh-cranberries",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  96,
+                                   "buy":  "7/8 cup shredded (about 2 medium carrots)",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sandwich Bread",
+                                   "canon":  "Sandwich Bread",
+                                   "grams":  158,
+                                   "buy":  "3 1/2 cups bread cubes (about 5 oz)",
+                                   "bid":  "bread",
+                                   "gpu":  "567.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  560,
+                                   "buy":  "2 1/3 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Baked stuffed pork chops for meal prep: boneless loin chops packed with a ranch and cranberry bread stuffing, 51 g protein and 533 calories per serving, scaled to 14 containers on a budget.",
+                 "keywords":  "baked stuffed pork chops, stuffed pork chops meal prep, ranch pork chops, cranberry stuffing pork chops, high protein pork chops, budget meal prep dinner, boneless pork loin chops, 14 serving meal prep",
+                 "image":  "",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  2.31,
+                 "recipeIngredient":  [
+                                          "Boneless Pork Chops, 7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each (3174 g)",
+                                          "Olive Oil, 7 Tbsp for the paste, plus 3 1/2 Tbsp for the saute (10 1/2 Tbsp total) (141 g)",
+                                          "Ranch Seasoning Mix, 7 Tbsp for the paste, plus 3 1/2 Tbsp for the stuffing (10 1/2 Tbsp total) (73 g)",
+                                          "Paprika, 3 1/2 tsp (8 g)",
+                                          "Salt, 1 3/4 tsp on the chops, plus 1 3/4 tsp in the stuffing (3 1/2 tsp total) (21 g)",
+                                          "Black Pepper, 1 3/4 tsp (4 g)",
+                                          "Butter, 3 1/2 Tbsp (49 g)",
+                                          "Yellow Onion, 1 3/4 cups diced (about 2 small onions) (201 g)",
+                                          "Celery, 1 3/4 cups diced (about 4 stalks) (177 g)",
+                                          "Fresh Cranberries, 1 3/4 cups fresh cranberries (175 g)",
+                                          "Carrots, 7/8 cup shredded (about 2 medium carrots) (96 g)",
+                                          "Sandwich Bread, 3 1/2 cups bread cubes (about 5 oz) (158 g)",
+                                          "Chicken Broth, 2 1/3 cups (560 g)"
+                                      ],
+                 "steps":  [
+                               "Heat the oven to 400 degrees. Whisk the olive oil, ranch seasoning, and paprika into a paste and set aside.",
+                               "Carefully cut a pocket into the side of each pork chop, leaving the fat side intact, and set the chops aside.",
+                               "Melt the butter with the olive oil in a skillet over medium heat. Saute the onion, celery, cranberries, and carrot until soft, 4 to 5 minutes, season with salt, and let cool.",
+                               "Transfer the cooled vegetables to a bowl and toss with the bread cubes, chicken broth, and ranch seasoning until the stuffing holds together, adding a few more bread cubes if it is too loose.",
+                               "Salt and pepper both sides of each chop, divide the stuffing evenly among all 14 and spoon it into each pocket, place on a lined sheet pan, and brush the tops with the ranch paprika paste.",
+                               "Bake uncovered 28 to 35 minutes until the thickest part reaches 145 degrees, then rest 3 minutes before serving."
+                           ],
+                 "step_names":  [
+                                    "Make the ranch paste",
+                                    "Cut the pockets",
+                                    "Cook the stuffing base",
+                                    "Bind the stuffing",
+                                    "Stuff and season the chops",
+                                    "Bake and rest"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Pork Chops",
+                                  "grams":  3174
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  141
+                              },
+                              {
+                                  "item":  "Ranch Seasoning Mix",
+                                  "grams":  73
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  201
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  177
+                              },
+                              {
+                                  "item":  "Fresh Cranberries",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  96
+                              },
+                              {
+                                  "item":  "Sandwich Bread",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  560
+                              }
+                          ]
+}

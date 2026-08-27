@@ -345,17 +345,17 @@
    "notes": "1/4 cup shredded (28g) per serving; from label"
   },
   {
-   "item": "Milk",
-   "brand": "Fairlife",
-   "serving_grams": 240,
-   "serving_qty": 1,
-   "serving_unit": "cup",
-   "calories": 80,
-   "protein_g": 13,
-   "carbs_g": 6,
-   "fat_g": 0,
-   "notes": "Fat Free/nonfat ultra-filtered; 1 cup (240 mL) per serving; from label",
-   "source": "USDA FDC 2756934 (Branded) Fairlife Fat Free Ultra- Filtered Milk; corroborates the stored row within tolerance, checked 2026-08-26"
+    "item": "Milk",
+    "brand": "store brand",
+    "serving_grams": 240,
+    "serving_qty": 1,
+    "serving_unit": "cup",
+    "calories": 120,
+    "protein_g": 7.9,
+    "carbs_g": 11.5,
+    "fat_g": 4.8,
+    "notes": "Store-brand 2% REDUCED-FAT milk, 1 cup (240 g). Brad's ruling 2026-08-27: a recipe that just says 'milk' means the generic store-brand carton, NOT Fairlife - see the separate Ultra-Filtered Fat Free Milk row, which is only for a recipe that names it. The `milk` commodity is fat-blind (its 7 board cells span whole, 1% and 2%), so 2% is the stated basis for all of them: protein and carbs are identical across fat levels, only calories and fat move.",
+    "source": "fdc:171267 (Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D; 50 cal / 3.3 P / 4.8 C / 1.98 F per 100 g, scaled to the 240 g cup)"
   },
   {
    "item": "Marinara Sauce",

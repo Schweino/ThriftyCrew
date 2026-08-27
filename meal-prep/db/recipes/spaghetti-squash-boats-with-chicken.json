@@ -1,0 +1,263 @@
+{
+    "name":  "Spaghetti Squash Boats with Chicken",
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+    "source_site":  "wellplated.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Each of the 7 squash is halved into 2 boats, giving 14 boats = 14 servings = one boat per container. Portioning is one boat per serving; only the filling needs to be divided evenly.",
+                         "Olive oil, the 1 3/4 tsp salt portion, and black pepper are folded into step 1 (the roast) because the source roasts the squash \u0027according to\u0027 a separate linked Roasted Spaghetti Squash recipe; keeping them there prevents orphaned ingredients. The scant 1 tsp salt and pepper season the chicken in step 3.",
+                         "FLAG for repair pass: black pepper appears under-scaled. Source seasons pepper twice at 1/4 tsp (squash + chicken) = 1/2 tsp, which at 3.5x should be 1 3/4 tsp, and salt kept exactly that two-portion shape. The locked view shows only one pepper line, scant 1 tsp (~the chicken portion alone). Confirm whether the squash pepper portion was dropped.",
+                         "Source step 7 typo \u0027until the cheesy is bubbly\u0027 rendered as \u0027cheese is bubbly\u0027.",
+                         "No cost_lines or cost_ps were supplied in this dispatch, so shop_smart deliberately avoids any per-ounce, per-package, or \u0027lasts N batches\u0027 claim. Only money in prose is the ${{cost_ps}} token and the $1/month membership line.",
+                         "Macros used only from the locked view: 475 cal and 40.5 g protein per serving. All in band (cal 450-700, carbs \u003c=40 at 36, protein \u003e=40 at 40.5)."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "em dash",
+                                  "en dash",
+                                  "pasta",
+                                  "spaghetti noodles",
+                                  "seafood",
+                                  "shrimp",
+                                  "keto",
+                                  "per ounce",
+                                  "lasts several batches"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  475,
+                 "protein":  40,
+                 "carbs":  36,
+                 "fat":  20,
+                 "cost_ps":  "2.68"
+             },
+    "intro_html":  "\u003cp\u003eHere is a trick your grocery budget will thank you for: turn a squash into the bowl. Spaghetti squash roasts down into tender strands that catch a warm filling the way pasta never quite does, and each half becomes its own container. No noodles to boil, no extra dish to wash, and the vegetable is doing the work of both the side and the plate.\u003c/p\u003e\u003cp\u003eInside these boats is the good stuff. Crisp bacon for smoke, seared chicken breast for the protein that keeps you full, wilted spinach, a spoon of Greek yogurt to make it creamy without a heavy cream bill, and part-skim mozzarella melted over the top. It lands at 475 calories and 40 grams of protein a serving, and it tastes like something you would happily pay restaurant prices for. Not bad for a dinner built around a cheap vegetable.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSpaghetti Squash:\u003c/strong\u003e 7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded (6350 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/3 tbsp extra-virgin olive oil (32 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 3/4 tsp kosher salt; scant 1 tsp kosher salt (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e scant 1 tsp ground black pepper (4 g)",
+                                "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 14 strips thick-sliced center-cut bacon, roughly chopped (168 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces (1588 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 3/4 tsp garlic powder (6 g)",
+                                "\u003cstrong\u003eSpinach:\u003c/strong\u003e 7 cups baby spinach, torn into pieces (210 g)",
+                                "\u003cstrong\u003ePlain Yogurt (generic (USDA)):\u003c/strong\u003e 1 3/4 cups nonfat plain Greek yogurt (427 g)",
+                                "\u003cstrong\u003eMozzarella Cheese (generic (USDA)):\u003c/strong\u003e 3 1/2 cups shredded part-skim mozzarella cheese, divided (396 g)",
+                                "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 7 tbsp chopped fresh basil, plus more for serving (10 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Spaghetti Squash, 7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded: ~$21.56. \u003cstrong\u003eBuy 14 lbs: $21.56.\u003c/strong\u003e",
+                       "Olive Oil, 2 1/3 tbsp extra-virgin olive oil: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 14 strips thick-sliced center-cut bacon, roughly chopped: ~$1.47. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces: ~$7.81. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Spinach, 7 cups baby spinach, torn into pieces: ~$1.48. \u003cstrong\u003eBuy 1 10oz bag: $2.00.\u003c/strong\u003e",
+                       "Plain Yogurt, 1 3/4 cups nonfat plain Greek yogurt: ~$1.73. \u003cstrong\u003eBuy 1 32oz tub: $3.68.\u003c/strong\u003e",
+                       "Mozzarella Cheese, 3 1/2 cups shredded part-skim mozzarella cheese, divided: ~$2.12. \u003cstrong\u003eBuy 2 8oz bags: $2.44.\u003c/strong\u003e",
+                       "Fresh Basil, 7 tbsp chopped fresh basil, plus more for serving: ~$0.85. \u003cstrong\u003eBuy 1 0.5oz pack: $1.20.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, garlic powder): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.56 across 14 servings, so roughly $2.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.30 across 14 servings, roughly $3.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.43. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eAdd it up and this comes out to ${{cost_ps}} a serving for a dinner that eats like a restaurant plate: real chicken, bacon, and melted cheese sitting in its own roasted squash bowl. That is the whole pitch of cooking this way. You buy in batch sizes, you let a cheap vegetable carry the plate, and you stop paying takeout prices for something you can make better at home.\u003c/p\u003e\u003cp\u003eOur members get every one of these recipes, with the costed shopping list and the macros already run, for a dollar a month. One skipped drive-thru run pays for the year.\u003c/p\u003e",
+    "shop_smart":  "\u003cul\u003e\u003cli\u003eBuy the spaghetti squash whole and firm, with a hard rind and no soft spots. This batch calls for seven of them at roughly two pounds each, so pick them up over a couple of store trips if your cart runs out of room. They keep for weeks on the counter, so buying ahead is fine.\u003c/li\u003e\u003cli\u003eBoneless skinless chicken breast is the anchor here at three and a half pounds. Buy the largest family pack your store stocks rather than the small tray, and cut it into bite-sized pieces yourself at home.\u003c/li\u003e\u003cli\u003eThick-sliced center-cut bacon is worth asking for by name. Center-cut gives you more meat and less fringe fat, and you only need the crisp bits and about a tablespoon of the rendered fat to cook the chicken in, so a single package carries the whole batch.\u003c/li\u003e\u003cli\u003eGrab nonfat plain Greek yogurt, not flavored and not regular. It brings the creamy body without the sugar, and the plain tub pulls double duty in dressings and breakfasts the rest of the week.\u003c/li\u003e\u003cli\u003eBaby spinach wilts down to almost nothing, so the seven cups here is one clamshell, not a wheelbarrow. Buy fresh basil as a small bunch and save a little to sprinkle at serving.\u003c/li\u003e\u003c/ul\u003e",
+    "make_it":  [
+                    "\u003cp\u003eSet an oven rack in the center and heat the oven to 400 degrees. Halve the spaghetti squash lengthwise, scoop the seeds, and rub the cut faces with the olive oil, then season with kosher salt and black pepper. Roast the halves until the flesh is tender and pulls into strands. Take them out to cool and drop the oven to 350 degrees.\u003c/p\u003e\u003cp\u003eWhile the squash roasts, heat a large saucepan over medium and add the chopped bacon. Cook until it is crisp and the fat has rendered, about 8 minutes, then lift the bacon out with a slotted spoon onto a paper towel lined plate and pat it dry. Pour off all but about a tablespoon of that bacon fat and turn the heat up to medium-high.\u003c/p\u003e\u003cp\u003eAdd the chicken pieces to the pan and season with the garlic powder, salt, and pepper. Saute until the chicken is cooked through, about 5 minutes. Pull the pan off the heat and stir in the spinach until it wilts, then fold in the Greek yogurt, half of the mozzarella, and the chopped basil so it all comes together creamy.\u003c/p\u003e\u003cp\u003eOnce the squash is cool enough to handle, run a fork through the inside to shred and fluff the strands until they pull away from the walls and make a nest. Divide the chicken filling evenly among the boats, lightly mixing it into the squash with the fork. Set the stuffed boats on a baking sheet, scatter the reserved bacon and the remaining mozzarella over the top, and bake at 350 until the cheese is bubbly, about 10 minutes. Let them cool a few minutes, then serve hot with a little extra basil.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eThis one portions itself, which is the beauty of it. Seven squash halved gives you 14 boats, and each boat is one serving in one container. No scale needed, no fighting over who got the bigger scoop.\u003c/p\u003e\u003cp\u003eThe only place to be even-handed is the filling. Split the chicken mixture across all 14 nests evenly before you top and bake, so every container lands near the same 475 calories and 40 grams of protein. Let the boats cool before you lid them, and they stack neatly in the fridge for the week.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/spaghetti-squash-boats-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ewellplated.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eMake it once and you will see why the boat beats the bowl. Same warm, cheesy, high-protein dinner, none of the noodle bill, and cleanup is basically the baking sheet. Pack the 14 containers, stack them in the fridge, and let future you thank present you every night this week.\u003c/p\u003e",
+    "cost_batch":  37.56,
+    "cost_batch_true":  44.3,
+    "cost_per_serving":  2.68,
+    "cost_per_serving_true":  3.16,
+    "cost_pantry_add":  11.13,
+    "cost_first_run":  55.43,
+    "scaler":  {
+                   "cost":  "44.30",
+                   "ing":  [
+                               {
+                                   "item":  "Spaghetti Squash",
+                                   "canon":  "Spaghetti Squash",
+                                   "grams":  6350,
+                                   "buy":  "7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded",
+                                   "bid":  "spaghetti-squash",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  32,
+                                   "buy":  "2 1/3 tbsp extra-virgin olive oil",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "1 3/4 tsp kosher salt; scant 1 tsp kosher salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "scant 1 tsp ground black pepper",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hickory Smoked Bacon",
+                                   "canon":  "Hickory Smoked Bacon",
+                                   "grams":  168,
+                                   "buy":  "14 strips thick-sliced center-cut bacon, roughly chopped",
+                                   "bid":  "bacon",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  6,
+                                   "buy":  "1 3/4 tsp garlic powder",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Spinach",
+                                   "canon":  "Spinach",
+                                   "grams":  210,
+                                   "buy":  "7 cups baby spinach, torn into pieces",
+                                   "bid":  "spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Plain Yogurt",
+                                   "canon":  "Plain Yogurt",
+                                   "grams":  427,
+                                   "buy":  "1 3/4 cups nonfat plain Greek yogurt",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mozzarella Cheese",
+                                   "canon":  "Mozzarella Cheese",
+                                   "grams":  396,
+                                   "buy":  "3 1/2 cups shredded part-skim mozzarella cheese, divided",
+                                   "bid":  "mozzarella-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Basil",
+                                   "canon":  "Fresh Basil",
+                                   "grams":  10,
+                                   "buy":  "7 tbsp chopped fresh basil, plus more for serving",
+                                   "bid":  "fresh-basil",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Spaghetti squash boats stuffed with chicken, bacon, spinach, Greek yogurt, and mozzarella. A budget high-protein meal prep dinner at 475 calories and 40g protein per serving.",
+                 "keywords":  "spaghetti squash boats, chicken spaghetti squash, high protein meal prep, budget dinner, stuffed spaghetti squash, low carb chicken dinner, meal prep containers",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT1H5M",
+                 "totalTime":  "PT1H15M",
+                 "costPerServing":  2.68,
+                 "recipeIngredient":  [
+                                          "Spaghetti Squash, 7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded (6350 g)",
+                                          "Olive Oil, 2 1/3 tbsp extra-virgin olive oil (32 g)",
+                                          "Salt, 1 3/4 tsp kosher salt; scant 1 tsp kosher salt (15 g)",
+                                          "Black Pepper, scant 1 tsp ground black pepper (4 g)",
+                                          "Hickory Smoked Bacon, 14 strips thick-sliced center-cut bacon, roughly chopped (168 g)",
+                                          "Boneless Skinless Chicken Breast, 3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces (1588 g)",
+                                          "Garlic Powder, 1 3/4 tsp garlic powder (6 g)",
+                                          "Spinach, 7 cups baby spinach, torn into pieces (210 g)",
+                                          "Plain Yogurt, 1 3/4 cups nonfat plain Greek yogurt (427 g)",
+                                          "Mozzarella Cheese, 3 1/2 cups shredded part-skim mozzarella cheese, divided (396 g)",
+                                          "Fresh Basil, 7 tbsp chopped fresh basil, plus more for serving (10 g)"
+                                      ],
+                 "steps":  [
+                               "Set an oven rack in the center and heat the oven to 400 degrees. Halve and seed the spaghetti squash, rub the cut faces with olive oil, and season with kosher salt and black pepper. Roast until tender, then set aside to cool and lower the oven to 350 degrees.",
+                               "Heat a large saucepan over medium and cook the chopped bacon until crisp and the fat has rendered, about 8 minutes. Lift the bacon out with a slotted spoon onto a paper towel lined plate and pat dry.",
+                               "Pour off all but about a tablespoon of the bacon fat and raise the heat to medium-high. Add the chicken pieces and season with garlic powder, salt, and pepper. Saute until cooked through, about 5 minutes.",
+                               "Take the pan off the heat and stir in the spinach until it wilts, then fold in the Greek yogurt, half of the mozzarella, and the chopped basil.",
+                               "Once the squash is cool enough to handle, run a fork through the flesh to shred and fluff the strands so they pull away from the walls and make a nest.",
+                               "Divide the chicken filling evenly among the boats, lightly mixing it into the squash with a fork. Set the boats on a baking sheet and top with the reserved bacon and the remaining mozzarella.",
+                               "Bake at 350 degrees until the cheese is bubbly, about 10 minutes. Let cool a few minutes, then serve hot with extra fresh basil."
+                           ],
+                 "step_names":  [
+                                    "Roast the squash",
+                                    "Crisp the bacon",
+                                    "Sear the chicken",
+                                    "Build the filling",
+                                    "Fluff the nests",
+                                    "Stuff and top",
+                                    "Bake and serve"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Spaghetti Squash",
+                                  "grams":  6350
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Hickory Smoked Bacon",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Spinach",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Plain Yogurt",
+                                  "grams":  427
+                              },
+                              {
+                                  "item":  "Mozzarella Cheese",
+                                  "grams":  396
+                              },
+                              {
+                                  "item":  "Fresh Basil",
+                                  "grams":  10
+                              }
+                          ]
+}

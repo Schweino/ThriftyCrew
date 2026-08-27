@@ -43,6 +43,8 @@ param(
   [string]$To = '',
   [string]$SpecsDir = '',
   [string]$FoodDbFile = '',
+  [switch]$Restat,          # recompute macros in place: the item did not move, its food-DB NUMBERS did
+  [string]$PriorFoodDb = '',# the food DB as it was BEFORE that change - the proof that we understand the spec
   [switch]$Apply,
   [switch]$SelfTest
 )
@@ -98,9 +100,33 @@ if ($SelfTest) {
 }
 
 if (-not $Slug) { Die 'pass -Slug (or -SelfTest)' }
-if (-not $From) { Die 'pass -From <the food-DB item the spec carries today>' }
-if (-not $To)   { Die 'pass -To <the food-DB item it should carry>' }
-if ($From -eq $To) { Die '-From and -To are the same item' }
+# -Restat: THE ITEM DID NOT MOVE, ITS NUMBERS DID (2026-08-27).
+#
+# WHY THIS MODE EXISTS. A food-DB row can be CORRECTED - and when it is, every built spec that used it
+# carries stale macros with nothing in the estate able to refresh them. rebase-spec-ingredient was the
+# only thing that recomputes a live spec's stat block, and it only did so for an item MOVE, so a
+# corrected row simply never reached the recipes. Measured: Brad ruled the generic "Milk" row is
+# store-brand 2% and not Fairlife, and 49 live specs needed their macros recomputed with no tool that
+# could do it.
+#
+# THE SAFETY ARGUMENT IS KEPT WHOLE, WHICH IS THE ONLY REASON THIS IS SAFE. The rebase path proves it
+# understands a spec by reproducing the stored stat from the CURRENT DB before writing anything. For a
+# restat that check must fail by construction - the stored numbers are exactly what is stale. So the
+# proof moves to the PRIOR DB: recomputing with the food DB as it was BEFORE the correction must
+# reproduce the stored stat, and only then are the numbers from the CURRENT DB written. Same argument,
+# same strength, evaluated against the right snapshot. Without -PriorFoodDb there is no proof and the
+# script refuses rather than rewriting macros it cannot vouch for.
+if ($Restat) {
+  if (-not $From) { Die 'pass -From <the food-DB item whose numbers changed>' }
+  if ($To -and $To -ne $From) { Die '-Restat recomputes in place; do not pass a different -To' }
+  $To = $From
+  if (-not $PriorFoodDb) { Die '-Restat needs -PriorFoodDb <the food DB before the change> - it is the proof that this script understands the spec, and without it macros would be rewritten on trust' }
+  if (-not (Test-Path $PriorFoodDb)) { Die ('no prior food DB at ' + $PriorFoodDb) }
+} else {
+  if (-not $From) { Die 'pass -From <the food-DB item the spec carries today>' }
+  if (-not $To)   { Die 'pass -To <the food-DB item it should carry>' }
+  if ($From -eq $To) { Die '-From and -To are the same item (did you mean -Restat?)' }
+}
 
 $db = Get-Content $FoodDbFile -Raw -Encoding utf8 | ConvertFrom-Json
 $items = @($db.items)
@@ -131,17 +157,44 @@ if ($hit.Count -eq 0) { Die ($Slug + " does not carry ingredient '" + $From + "'
 if ($hit.Count -gt 1) { Die ($Slug + " carries '" + $From + "' more than once - refusing rather than guessing which") }
 
 # THE SAFETY ARGUMENT: reproduce what is already stored before writing anything new.
-$check = Get-SpecMacros $before.ingredients_grams $before.servings $M
+# THE PROOF SNAPSHOT. For a rebase this is the current DB; for a restat it MUST be the prior one,
+# because the stored stat is stale against the current DB by definition - that is the whole point.
+$proofM = $M
+if ($Restat) {
+  $priorDb = Get-Content $PriorFoodDb -Raw -Encoding utf8 | ConvertFrom-Json
+  $priorItems = @($priorDb.items)
+  if ($priorItems.Count -lt 100) { Die ('prior food DB parsed only ' + $priorItems.Count + ' items - implausible; parse error, not data.') }
+  $proofM = @{}; foreach ($i in $priorItems) { $proofM[[string]$i.item] = $i }
+  if (-not $proofM.ContainsKey($From)) { Die ("the prior food DB has no item '" + $From + "' - it is not the snapshot this spec was built against") }
+}
+$check = Get-SpecMacros $before.ingredients_grams $before.servings $proofM
 if ($null -eq $check) { Die 'could not re-derive the spec''s existing macros (an ingredient has no food-DB row); refusing to write new ones' }
 foreach ($k in @('cal', 'protein', 'carbs', 'fat')) {
   $storedVal = [double]$before.stat.$k
-  if ([math]::Abs($check[$k] - $storedVal) -gt 1.0) {
-    Die ("recompute does not reproduce the stored stat." + $k + " (" + ("{0:N1}" -f $check[$k]) + " vs " + $storedVal + ") - this script does not understand this spec, so it will not rewrite its macros")
+  # THE TOLERANCE IS THE ESTATE'S, NOT THIS SCRIPT'S OWN (2026-08-27).
+  #
+  # A spec's stat is certified against a food-DB recompute at build time by build-v2-spec.ps1:335-336,
+  # at 5 cal / 2 g protein - 'same as spec-guards', its header says. This script demanded 1.0 on every
+  # field, with no rationale recorded, so it refused specs the estate's own build gate had passed.
+  # Measured: of the 49 live specs carrying Milk, twelve reproduce to within 2.2-4.9 cal - inside the
+  # gate that certified them, outside this one - and every one was blocked from a correction it needed.
+  # Two tools measuring the same agreement with different rulers is the diverged-check family; the
+  # build gate is the authority because it is what admitted the number in the first place.
+  #
+  # A MOVE KEEPS THE STRICTER RULER. Changing which food an ingredient IS deserves tighter confidence
+  # than recomputing the same food's numbers, and 1.0 has been the move path's standard all along.
+  $tol = if ($Restat) { if ($k -eq 'cal') { 5.0 } else { 2.0 } } else { 1.0 }
+  if ([math]::Abs($check[$k] - $storedVal) -gt $tol) {
+    Die ("recompute does not reproduce the stored stat." + $k + " (" + ("{0:N1}" -f $check[$k]) + " vs " + $storedVal + ") using " + $(if ($Restat) { "the PRIOR food DB - so this spec was not built against that snapshot" } else { "the current food DB" }) + " beyond a tolerance of " + $tol + " - this script does not understand this spec, so it will not rewrite its macros")
   }
 }
 
 # ---- the rename, across all four surfaces ----------------------------------------------------------------
-$fromB = [string]$M[$From].brand; $toB = [string]$M[$To].brand
+# THE BRAND THE SPEC CARRIES TODAY comes from the snapshot it was BUILT against, which for a restat
+# is the PRIOR db - the whole reason a restat exists is that the current row differs. Reading both
+# ends from the current DB made the display rename a no-op, so a card would keep printing
+# "(Fairlife)" while its macros had been recomputed as store brand: the worst of both, and silent.
+$fromB = [string]$proofM[$From].brand; $toB = [string]$M[$To].brand
 $new = $raw
 $n = 0
 # 1+2. ingredients_grams and scaler.ing item/canon: every bare "From" string value.
@@ -150,7 +203,9 @@ $new = [regex]::Replace($new, '("(?:item|canon)":\s*")' + [regex]::Escape($From)
 $new = $new.Replace(($From + ' (' + $fromB + '):'), ($To + ' (' + $toB + '):'))
 # 4. cost_lines / head.recipeIngredient labels: "From, <buy>"
 $new = $new.Replace(('"' + $From + ', '), ('"' + $To + ', '))
-if ($new -eq $raw) { Die 'the rename matched nothing in the raw text; refusing' }
+# On a RESTAT the text may legitimately be untouched - if only the numbers changed and the brand did
+# not, there is nothing to rename and the macro rewrite below is the whole edit.
+if (-not $Restat -and $new -eq $raw) { Die 'the rename matched nothing in the raw text; refusing' }
 
 $after = $null
 try { $after = $new | ConvertFrom-Json } catch { Die ('the edit produced invalid JSON, nothing written: ' + $_.Exception.Message) }
@@ -159,7 +214,11 @@ try { $after = $new | ConvertFrom-Json } catch { Die ('the edit produced invalid
 if (@($after.ingredients_grams).Count -ne @($before.ingredients_grams).Count) { Die 'ingredient count moved; refusing' }
 $still = @(@($after.ingredients_grams) | Where-Object { [string]$_.item -eq $From }).Count +
          @(@($after.scaler.ing) | Where-Object { [string]$_.item -eq $From -or [string]$_.canon -eq $From }).Count
-if ($still -gt 0) { Die ("'" + $From + "' still appears in " + $still + ' structured field(s) after the rename; refusing a half-done move') }
+# A RESTAT IS NOT A MOVE, so the item name SHOULD still be there - that is the point. What must have
+# changed is the brand-bearing display text and the macros. Applying the move's completeness check to
+# a restat refuses every one of them.
+if (-not $Restat -and $still -gt 0) { Die ("'" + $From + "' still appears in " + $still + ' structured field(s) after the rename; refusing a half-done move') }
+if ($Restat -and $still -eq 0) { Die ("'" + $From + "' vanished from the structured fields during a RESTAT - the item was supposed to stay put; refusing") }
 for ($i = 0; $i -lt @($before.ingredients_grams).Count; $i++) {
   if ([double]@($after.ingredients_grams)[$i].grams -ne [double]@($before.ingredients_grams)[$i].grams) { Die 'a gram figure moved; refusing' }
 }
