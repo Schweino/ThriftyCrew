@@ -119,6 +119,19 @@ if ($SelfTest) {
   $r4 = Test-CostLineCoverage $flank 'Flank steak, 4 lb: ~$30.87. Garlic: ~$2.13.' 33.0 0.20 0.75
   ok ($null -eq $r4) 'CLEAN TWIN a line named differently in prose is not a missing line' "$r4"
 
+  # ---- THE ARGUMENT SHAPE, which is what actually blocked this gate on every wave (2026-08-27).
+  # Its three sibling guards split a comma-joined -Slugs; this one did not, and wave-preaudit.ps1
+  # reaches all four through `powershell -File`, which cannot bind a multi-element array from argv.
+  # So the gate refused every time and the wave went to the auditor with the check not run.
+  $splitJoined = @(@('a,b,c') | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  ok ($splitJoined.Count -eq 3) 'MUST FIRE  a comma-joined -Slugs parses to THREE slugs, the shape -File can carry' ($splitJoined -join '|')
+  $splitSpaced = @(@('a, b') | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  ok (($splitSpaced -join '|') -eq 'a|b') 'MUST FIRE  and spaces after the comma are trimmed, exactly as the siblings do it' ($splitSpaced -join '|')
+  $splitArray = @(@('a','b') | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  ok ($splitArray.Count -eq 2) 'CLEAN TWIN a REAL array still works - this accepts a shape, it does not replace one' ($splitArray -join '|')
+  $splitEmpty = @(@('') | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  ok ($splitEmpty.Count -eq 0) 'CLEAN TWIN an empty -Slugs still means the whole catalog, not one blank slug' ([string]$splitEmpty.Count)
+
   # A sub-threshold line is rounding, not a defect.
   $tiny = [pscustomobject]@{ cost_batch = 10.05; lines = @(
       [pscustomobject]@{ item = 'Salt'; util_cost = 0.05 }
@@ -195,7 +208,25 @@ foreach ($r in @($costedParsed)) { $engine[[string]$r.slug] = $r }
 if ($engine.Count -lt 50) { throw "costed.json read as only $($engine.Count) row(s) - refusing to certify a catalog that cannot be that small" }
 
 $specDir = Join-Path $mp 'db\recipes'
-$targets = if ($Slugs -and @($Slugs).Count) { @($Slugs) } else { @(Get-ChildItem $specDir -Filter *.json | ForEach-Object { $_.BaseName }) }
+# ACCEPT THE COMMA-JOINED FORM ITS THREE SIBLINGS ALREADY ACCEPT (2026-08-27).
+#
+# audit-vocab-integrity, audit-unbid-ingredients and audit-cost-plausibility all split -Slugs on
+# commas; this one did not, and it is invoked by exactly the same line of wave-preaudit.ps1 as those
+# three. That caller reaches its children through `powershell -File`, which CANNOT bind a
+# multi-element [string[]] from argv at all - so the comma-join is not sloppiness, it is the only
+# shape that road can carry, and the refusal below told the caller to do the one thing it cannot do.
+#
+# The result: this gate REFUSED on every wave, and because a refusal is a blocked stage rather than a
+# failure, the wave still went to the auditor with the check silently not run. Wave 2 of
+# hunt-2026-08-27-ten is where it was caught - by the auditor re-running the gate by hand and finding
+# it clean, which is the only reason anyone learned the battery had been shipping it blocked.
+#
+# THE REFUSAL BELOW IS UNTOUCHED AND MUST STAY THAT WAY. This only changes how the argument is
+# PARSED. A named slug that matches no spec still refuses, still exits 1, and still says a sweep of
+# zero specs is not a clean sweep - which is the 2026-08-16 protection and is a different question
+# from what shape the caller could pass.
+$askedSlugs = @($Slugs | Where-Object { $_ } | ForEach-Object { ([string]$_).Split(',') } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$targets = if ($askedSlugs.Count) { $askedSlugs } else { @(Get-ChildItem $specDir -Filter *.json | ForEach-Object { $_.BaseName }) }
 
 $hits = @(); $checked = 0
 foreach ($s in $targets) {
