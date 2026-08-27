@@ -7100,7 +7100,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\btastykake\\b|dipp.?n|\\bdo(?:ugh)?nuts?\\b|\\bdanish\\b|\\bmuffins?\\b|\\bbrownies?\\b|snack\\s*cakes?"
                     ]
     },
     {

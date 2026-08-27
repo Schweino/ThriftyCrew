@@ -2,7 +2,7 @@
  "name": "Street Corn Chicken Rice Bowl",
  "slug": "street-corn-chicken-rice-bowls",
  "protein": "chicken",
- "cuisine": "Mexican",
+ "cuisine": "Mexican-inspired",
  "source_url": "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
  "visibility": "paid",
  "ingredients": [
@@ -114,63 +114,50 @@
   "fat_g": 21.5
  },
  "writer_notes": [
-  "Scaling is a clean 3.5x from the 4-serving source: chicken 1.35 lb -> 4 3/4 lb, corn 2 cups -> 7 cups, rice 1 cup -> 3 1/2 cups, jalapeno 1 -> 3 1/2. Consistent across every line.",
-  "All 20 locked ingredient lines are used by a step; no orphans, and no step introduces an unbought item. Two-amount buy strings map cleanly: Sea Salt (spice blend + rice), Cotija (salad + topping), Lime Juice/Lime Zest/Fresh Cilantro (rice + salad + topping).",
-  "The corn-salad quarter-teaspoon salt maps to the separate 'Salt' line (1 scant tsp scaled); the spice-blend and rice salt map to the 'Sea Salt' line. Kept prose generic ('salt', 'sea salt') to match.",
-  "Avocado browns in the fridge; portion_html instructs the reader to cube it day-of rather than at prep, and all fresh toppings are held to serving time.",
-  "Jalapeno and its heat are optional in the source; kept optional in the salad step.",
-  "No cost_lines were provided to me, so shop_smart makes only qualitative form/substitution claims (no per-ounce or 'lasts N batches' promises) that require no cost-line tracing. Only ${{cost_ps}}, {{cal}}, {{protein}} tokens used for figures; computed no numbers.",
-  "Macro self-check for the auditor: 44.6*4 + 53.8*4 + 21.5*9 = 587.1 kcal vs label 597, consistent within rounding/fiber.",
-  "Source title is singular 'Street Corn Chicken Rice Bowl'; slug is plural. Cosmetic only, no action needed."
+  "Macros rendered as tokens {{cal}} and {{protein}}; cost rendered as ${{cost_ps}}. No number was computed by the writer.",
+  "No cost_lines or cost_ps were supplied in this dispatch, so shop_smart makes no per-package or per-ounce price claims; all bullets trace to locked buy strings only.",
+  "All 20 locked ingredient lines are used by a step; no step calls for an unbought item. Water in the rice step is uncosted and left as a generic quantity.",
+  "Two distinct salt commodities (Sea Salt for spice blend and rice, Salt for the corn salad) both appear and both trace to the source page; this is faithful, not a duplicate defect.",
+  "Cotija and cilantro each split between a mix-in buy and a topping buy, matching the source's 'plus more for topping' pattern."
  ],
  "forbidden_prose_terms": [
-  "authentic",
-  "restaurant-quality",
-  "guilt-free",
-  "superfood",
-  "clean eating",
-  "—",
-  "–"
+  "seafood",
+  "shrimp",
+  "fish",
+  "sour cream",
+  "queso fresco",
+  "black beans",
+  "sazon",
+  "em dash"
  ],
  "prose": {
-  "intro_html": "<p>Mexican street corn is one of those things people line up for at a summer fair and then forget they can make at home for a fraction of the price. This bowl takes that same smoky, tangy, lime-soaked corn and builds a whole dinner around it. Seasoned chicken breast for the protein, cilantro lime rice for the base, and a creamy street corn salad that does the heavy lifting on flavor.</p><p>Here is the part that matters for your wallet and your week. One batch fills 14 containers, each one landing at {{cal}} calories with {{protein}} grams of protein for about ${{cost_ps}} a serving. That is a real dinner, not a sad desk lunch, and it costs less than the drive-through you were about to settle for.</p>",
-  "shop_smart": "<p>Chicken breast is the anchor, so buy it the way that makes sense: a large family pack rather than a little tray, then trim and cube it into one-inch chunks yourself. You handle the knife work, you keep the savings.</p><p>The original recipe used canned corn, drained, and that is exactly what I would reach for. It is already cooked, it drains in seconds, and it folds straight into the salad with no roasting or grilling to babysit. Fresh corn cut off the cob works if it is in season, but canned keeps this simple.</p><p>Greek yogurt carries the creamy tang that mayo usually owns, and it brings protein along for the ride instead of just fat. Look for cotija near the specialty cheese; if your store does not stock it, queso fresco or feta crumbles the same way and nobody will file a complaint. Round out the cart with limes, a bunch of cilantro, a jalapeno and a few avocados. Pick the limes firm and heavy, and choose avocados that are a day or two from ripe so they are ready when you build the bowls.</p>",
-  "make_it": "<p>Start the rice, because it sets the pace. Bring the water to a boil, stir in the rice and sea salt, then cover it, drop the heat to low, and let it simmer about 20 minutes until tender. When it is done, toss the warm rice with chopped cilantro, fresh lime juice and lime zest so every grain picks up that bright cilantro lime flavor.</p><p>While the rice goes, build the street corn salad. In a big bowl combine the drained corn, Greek yogurt, crumbled cotija, mayonnaise, lime juice and zest, the diced jalapeno if you want the heat, chopped cilantro and salt. Stir it gently until it comes together, taste it, and adjust the seasoning. Set it aside to let the flavors get acquainted.</p><p>Now the chicken. Stir the chili powder, cumin, smoked paprika, garlic powder, onion powder and sea salt together, then toss the cubed chicken until every piece is coated. Heat the olive oil in a large skillet over medium, and once it is hot, lay the chicken in and cook 4 to 5 minutes per side until it is cooked through and reaches 165 degrees inside. Work in batches if your skillet is crowded, because a crowded pan steams instead of sears.</p>",
-  "portion_html": "<p>This batch fills 14 containers, and the trick is to portion by weight, not by eyeball. Once the rice is done, spoon it across all 14 containers and even it out so each one carries the same base. Do the same with the chicken, dividing the cooked chunks evenly so nobody opens a container that is all rice and no protein.</p><p>The street corn salad goes on next, a generous scoop per container, spread over the chicken and rice. That is the part that makes each bowl taste like the fair.</p><p>Save the fresh toppings for the day you eat. Cubed avocado, sliced red onion, an extra crumble of cotija, a few cilantro leaves and a squeeze of lime go on right before it hits the table. Avocado browns in the fridge, so cut it fresh each morning rather than up front. Every container lands at {{cal}} calories with {{protein}} grams of protein, which is why this one keeps you full to the next meal.</p>",
-  "cost_closing_html": "<p>Here is the math that matters. Fourteen dinners out of one afternoon, each one at about ${{cost_ps}} a serving, all in. That is street corn chicken bowls for less than a single fast-food combo, and you made 14 of them.</p><p>Cooking once and eating all week is the cheat code. You buy in bulk, you cook in bulk, and your cost per plate drops through the floor while the protein stays high. That is how you eat well without watching your grocery bill eat you.</p>",
-  "upsell_html": "<p>If this is the kind of eating you want on repeat, the whole Thrifty Crew playbook runs on it: real food, real macros, real numbers, and a plan that costs a dollar a month to follow. Come cook with the crew and let the batch do the work.</p>"
+  "intro_html": "<p>Street corn is one of those things that tastes like a splurge and cooks like a weeknight. We took elote off the cob, folded it into a creamy salad, and set it over cilantro lime rice with seasoned chicken. The result eats like a food truck order and prices out like a home cook who actually reads the receipt.</p><p>Here is the honest math. Every container lands at {{cal}} calories with {{protein}} grams of protein, which clears our 40 gram floor and stays well under the 800 ceiling. That is a real dinner, not a sad diet plate.</p>",
+  "shop_smart": "<ul><li>Chicken breast is the anchor at 4 3/4 pounds, so grab a family pack and cover the whole batch in one purchase. You are cutting every piece into 1-inch chunks, so do not fuss over how the tray looks.</li><li>Canned corn is the practical move. You need 7 cups drained, so a few standard cans hit the mark and skip off-season cob prices.</li><li>Long grain white rice is your carbohydrate, and 3 1/2 cups uncooked is a small ask from a big bag. Buy the large bag and the rest keeps for months.</li><li>Limes pull triple duty here, in the rice, in the corn salad, and as the finish. Grab a full net bag so you are never rationing zest.</li><li>Cotija shows up in the salad and again on top. One block covers both jobs, and any firm crumbly cheese fills in if the shelf is bare.</li></ul>",
+  "make_it": "<p>This is a four-part build that comes together in about 45 minutes total. Nothing here is hard. It is a rice pot, a mixing bowl, and a skillet working in sequence.</p><ol><li><strong>Cilantro lime rice.</strong> Bring your water to a boil, then add the 3 1/2 cups of rice and the sea salt. Cover, drop the heat to low, and simmer until tender, about 20 minutes. Fold the chopped cilantro, fresh lime juice, and lime zest into the warm rice and set it aside.</li><li><strong>Street corn salad.</strong> In a large bowl combine the corn, Greek yogurt, cotija, mayonnaise, lime juice and zest, the diced jalapeno if you want the heat, cilantro, and the salt. Stir gently, taste, and adjust. Set it aside to let the flavors meet.</li><li><strong>Season the chicken.</strong> Mix the chili powder, cumin, smoked paprika, garlic powder, onion powder, and sea salt in a small bowl. Toss the chicken chunks in the blend until every piece is coated.</li><li><strong>Cook the chicken.</strong> Heat the olive oil in a large skillet over medium. Add the chicken and cook 4 to 5 minutes per side, until it is cooked through and the internal temperature reaches 165 degrees.</li><li><strong>Assemble.</strong> Lay a bed of cilantro lime rice in each container. Top with chicken, a generous scoop of street corn, cubed avocado, sliced red onion, a shower of cilantro, a sprinkle of cotija, and a squeeze of lime.</li></ol>",
+  "portion_html": "<p>This batch fills 14 containers, and the honest way to split it is by weight, not by eyeball. Weigh the full pot of rice, the bowl of corn salad, and the cooked chicken, then divide each total by 14. Now you know exactly how much of each goes in every box, and nobody gets shorted.</p><p>Build them in order. Rice as the base, then an even share of chicken, then a scoop of corn salad, and finish with avocado, red onion, cilantro, and cotija. The toppings are meant to stretch across all 14, so go light on the first few and you will not run dry on the last.</p>",
+  "cost_closing_html": "<p>Here is where it earns its place in the rotation. Each of these 14 containers comes out to ${{cost_ps}}, and for that you get {{protein}} grams of protein and a plate that tastes like you spent more. Food-truck flavor, grocery-list money.</p><p>Cook once, eat well all week, and let the receipt do the bragging.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want on repeat, the whole Thrifty Crew playbook runs a dollar a month. That is every recipe, every macro, and every shopping plan for less than the change in your couch cushions.</p><p>One good batch pays for a year of membership. The rest is just good eating.</p>"
  },
  "head": {
-  "description": "Meal prep street corn chicken rice bowls: smoky seasoned chicken, cilantro lime rice, and a creamy Mexican street corn salad. High protein, budget friendly, makes 14 servings.",
-  "keywords": [
-   "street corn chicken rice bowls",
-   "mexican street corn bowl",
-   "meal prep chicken bowls",
-   "cilantro lime rice",
-   "high protein meal prep",
-   "budget meal prep dinner",
-   "elote chicken bowl",
-   "chicken rice bowl meal prep"
-  ],
+  "description": "Meal prep street corn chicken rice bowls with cilantro lime rice and a creamy elote-style corn salad. Fourteen high-protein containers at {{cal}} calories and {{protein}} grams of protein each.",
+  "keywords": "street corn chicken rice bowls, meal prep chicken bowls, cilantro lime rice, mexican street corn chicken, high protein chicken meal prep, budget meal prep dinner",
   "image": "",
   "prepTime": "PT20M",
   "cookTime": "PT25M",
   "totalTime": "PT45M",
   "steps": [
-   "Cook the rice: Bring the water to a boil, add the rice and sea salt, cover, reduce the heat to low, and simmer about 20 minutes until tender. Toss the warm rice with chopped cilantro, fresh lime juice and lime zest.",
-   "Make the street corn salad: Combine the drained corn, Greek yogurt, crumbled cotija, mayonnaise, lime juice and zest, diced jalapeno if using, chopped cilantro and salt. Stir gently, taste, and adjust the seasoning. Set aside.",
-   "Season the chicken: Stir together the chili powder, cumin, smoked paprika, garlic powder, onion powder and sea salt, then toss the cubed chicken until every piece is fully coated.",
-   "Sear the chicken: Heat the olive oil in a large skillet over medium. Add the chicken and cook 4 to 5 minutes per side until cooked through and it reaches 165 degrees F, working in batches if the pan is crowded.",
-   "Portion the base: Divide the cilantro lime rice evenly among 14 containers, then divide the cooked chicken evenly over the rice.",
-   "Top the bowls: Add a generous scoop of the street corn salad to each container. Just before eating, add cubed avocado, sliced red onion, an extra crumble of cotija, cilantro leaves and a squeeze of fresh lime."
+   "Cook the rice in boiling salted water, covered on low, about 20 minutes until tender, then fold in chopped cilantro, fresh lime juice, and lime zest.",
+   "Make the street corn salad by combining corn, Greek yogurt, cotija, mayonnaise, lime juice and zest, optional diced jalapeno, cilantro, and salt; stir gently and set aside.",
+   "Season the chicken chunks with a blend of chili powder, cumin, smoked paprika, garlic powder, onion powder, and sea salt.",
+   "Heat olive oil in a large skillet over medium and cook the chicken 4 to 5 minutes per side until it reaches 165 degrees.",
+   "Assemble each container with cilantro lime rice, chicken, a scoop of street corn, avocado, red onion, cilantro, cotija, and a squeeze of lime."
   ],
   "step_names": [
    "Cook the rice",
-   "Make the street corn salad",
+   "Make the corn salad",
    "Season the chicken",
-   "Sear the chicken",
-   "Portion the base",
-   "Top the bowls"
+   "Cook the chicken",
+   "Assemble the bowls"
   ]
  }
 }
