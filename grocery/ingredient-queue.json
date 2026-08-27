@@ -640,23 +640,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  2.99,
                                                      "size":  "24 oz",
                                                      "item":  "Quaker Corn Meal, Yellow",
-                                                     "evidence":  "driver rung 1 \u0027cornmeal\u0027 = 2 hits, both genuine and the full pile was retained: Quaker Corn Meal Yellow 24 oz $2.99 and Early Morning Harvest Organic Corn Meal 1.75 lb $3.99. Ruled in on the base non-organic item.",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "driver rung 1, 62 hits, top row Quaker Corn Meal Yellow 24 oz at 2.99 - plain cornmeal, with Early Morning Harvest Organic Corn Meal 1.75 lb at 3.99 also present. Ruled out corn chips, candy corn and cornbread mixes.",
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  2.29,
                                                          "size":  "32 oz",
                                                          "item":  "Our Family Yellow Enriched Pre Sifted Corn Meal 32 Oz",
-                                                         "evidence":  "Family Fare server lane, spacing rung 3: \u0027cornmeal\u0027=0 -\u003e \u0027corn meal\u0027=10. Plain yellow cornmeal; Quaker Corn Meal Yellow 24 oz $4.29 also present. Corned beef hash, baby-food corn purees and Maseca masa flour in the same grid were ruled out. Ruled in.",
-                                                         "checked":  "2026-08-26T05:14:04"
+                                                         "evidence":  "\u0027cornmeal\u0027=0 then spacing rung \u0027corn meal\u0027=10 hits; Our Family Yellow Enriched Pre Sifted Corn Meal 32 Oz at 2.29 and Quaker Corn Meal Yellow 24 Oz at 4.29 are plain cornmeal. Ruled out Maseca masa flour, corned beef hash and the baby-food corn purees.",
+                                                         "checked":  "2026-08-27T05:20:04"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -664,15 +664,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:14:04"
+                                                    "checked":  "2026-08-27T05:20:04"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027cornmeal\u0027 = 16 hits, 8 retained. The only corn-meal-named rows are P.A.N. Precooked White Corn Meal and Maseca masa - precooked masarepa and nixtamalized masa are not interchangeable with cornmeal for a cornmeal recipe, so nothing qualified. But the spacing rung \u0027corn meal\u0027 was never run and is demonstrably material here (Family Fare: \u0027cornmeal\u0027=0 -\u003e \u0027corn meal\u0027=10), and I saw 8 of 16 rows. Not enough for not-carried.",
-                                                             "checked":  "2026-08-26T05:14:04"
+                                                             "evidence":  "driver rung 1 reported 15 hits, evidence retains 8; the only corn-meal row is PAN PRECOOKED White Corn Meal 5 lbs at 5.98, which is arepa flour rather than the baking cornmeal this term means, and the rest are Maseca masa, wheat flour and breading mixes. The spacing rung \u0027corn meal\u0027 was never walked (driver is rung 1 only) and I have no browser to walk it.",
+                                                             "checked":  "2026-08-27T05:20:04"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -680,15 +680,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T05:14:04"
+                                                  "checked":  "2026-08-27T05:20:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  2.29,
                                                           "size":  "24 oz",
                                                           "item":  "Kroger Yellow Corn Meal",
-                                                          "evidence":  "probe-ingredient.ps1 \u0027cornmeal\u0027 2026-08-26, kroger-public-api locationId 61500319, rung 1 = 7 hits. This is plain yellow cornmeal. Ruled out in the same grid: Dave\u0027s Killer Bread cornmeal-topped loaf (a bread), Andy\u0027s fish breading, and Goya/P.A.N. masarepa which is precooked arepa flour, not cornmeal. Pre-pass 503 was transient. Ruled in.",
-                                                          "checked":  "2026-08-26T05:14:04"
+                                                          "evidence":  "probe rung 1 \u0027cornmeal\u0027 = 7 hits; Kroger Yellow Corn Meal 24 oz at 2.29 and Quaker Yellow Corn Meal For Baking 24 oz at 3.59 are plain cornmeal. Ruled out Andy\u0027s fish breading, McCormick hush puppy mix, Goya masarepa and the Dave\u0027s Killer Bread loaf the disk capture surfaced.",
+                                                          "checked":  "2026-08-27T05:20:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -4300,17 +4300,66 @@
                                   ],
                       "added":  "2026-08-26T04:36:37",
                       "why":  "dill-pickle-chicken-wings lists it as optional",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T04:55:20"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.99,
+                                                     "size":  "1 oz",
+                                                     "item":  "McCormick Ground White Pepper",
+                                                     "evidence":  "pre-pass driver lookup rung 1 \u0027white pepper\u0027 = 49 priced Apollo rows; McCormick Ground White Pepper 1 oz $3.99 is the ingredient; remaining rows were black pepper, paprika, bell peppers, salt (suggestion tiles).",
+                                                     "checked":  "2026-08-27T04:55:20"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.29,
+                                                         "size":  "1 oz",
+                                                         "item":  "McCormick Ground White Pepper 1 Oz",
+                                                         "evidence":  "pre-pass probe-ingredient full ladder, rung 1 \u0027white pepper\u0027 = 2 matches; McCormick Ground White Pepper 1 oz $4.29 is the ingredient; the other row is a black \u0026 white peppercorn grinder (blend, ruled out).",
+                                                         "checked":  "2026-08-27T04:55:20"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T04:55:20"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  14.98,
+                                                             "size":  "18 oz",
+                                                             "item":  "Member\u0027s Mark Ground White Pepper, 18 oz",
+                                                             "evidence":  "pre-pass driver lookup rung 1 \u0027white pepper\u0027 = 23 rows; Member\u0027s Mark Ground White Pepper 18 oz $14.98 ($0.83/oz) is the ingredient in club size; other rows were steak seasoning, black pepper, salt, toilet paper.",
+                                                             "checked":  "2026-08-27T04:55:20"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T04:55:20"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.49,
+                                                          "size":  "1.87 oz",
+                                                          "item":  "Kroger Ground White Pepper Shaker",
+                                                          "evidence":  "pre-pass probe-ingredient full ladder, rung 1 \u0027white pepper\u0027 = 25 matches; adjudicated: Kroger Ground White Pepper Shaker 1.87 oz $4.49 is the ingredient (rest were Pepperidge Farm white bread/buns, peppermint gum, a candle).",
+                                                          "checked":  "2026-08-27T04:55:20"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -4535,55 +4584,55 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T04:53:44"
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  4.49,
                                                      "size":  "5 oz",
                                                      "item":  "BelGioioso Asiago Wedge",
-                                                     "evidence":  "driver rung 1 \u0027asiago cheese\u0027, 1 row and it is the ingredient: BelGioioso Asiago Wedge 5 oz $4.49. One hit could not support a negative, but a priced asiago wedge on the store\u0027s own listing is sufficient for a positive.",
-                                                     "checked":  "2026-08-26T04:53:44"
+                                                     "evidence":  "driver rung 1, 68 hits, top row is BelGioioso Asiago Wedge 5 oz at 4.49 - a plain asiago wedge, the form a cook would buy. The remaining visible rows are unrelated cheddar/parmesan/jack, which does not matter once one genuine row is confirmed.",
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  5.49,
                                                          "size":  "8 oz",
-                                                         "item":  "Culinary Tours Cheese, Asiago",
-                                                         "evidence":  "server probe rung 1 \u0027asiago cheese\u0027, 3 hits: Culinary Tours Cheese, Asiago 8 Oz $5.49 and Bel Gioioso Shredded Cheese, Asiago 5 Oz $6.49. Both are the cheese itself.",
-                                                         "checked":  "2026-08-26T04:53:44"
+                                                         "item":  "Culinary Tours Cheese, Asiago 8 Oz",
+                                                         "evidence":  "probe rung 1 = 3 hits; Culinary Tours Asiago 8 Oz at 5.49 and BelGioioso Shredded Asiago 5 Oz at 6.49 are both plain asiago. Ruled out BelGioioso Fresh Asiago with Calabrian Chili Peppers as a flavoured variant.",
+                                                         "checked":  "2026-08-27T05:20:04"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session; checked disk - price-ingredient.ps1 -Name \u0027asiago\u0027 returns only Hy-Vee \u0027Briannas Home Style Asiago Caesar Dressing 12 fl oz\u0027, a salad dressing and not the cheese. Capture miss, not not-carried.",
-                                                    "checked":  "2026-08-26T04:53:44"
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T05:20:04"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 returned 23 hits but only 8 are captured in the evidence file - feta, Dubliner, BelGioioso Shaved Cheese BLEND, Colby Jack, cheddar, Romano wheel, Gruyere, mozzarella - and none is asiago (the shaved blend is a blend and not adjudicable as asiago). 15 rows unseen and no browser this session, so absence is unproven. NOT not-carried.",
-                                                             "checked":  "2026-08-26T04:53:44"
+                                                             "evidence":  "driver rung 1 reported 22 hits, evidence retains 8; the nearest is BelGioioso Shaved Cheese BLEND 1.75 lbs, a blend rather than asiago, and the rest are feta/cheddar/gruyere/romano. Rows 9-22 unseen and no browser to walk the ladder.",
+                                                             "checked":  "2026-08-27T05:20:04"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session; checked disk - Aldi rows are \u0027Asiago Cheese Ciabatta Rolls\u0027 $3.69 and \u0027Brianna S Dressing Asiago Caesar\u0027 $3.79 - bread and dressing, not the cheese. Capture miss, not not-carried.",
-                                                  "checked":  "2026-08-26T04:53:44"
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T05:20:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
-                                                          "price":  5.49,
-                                                          "size":  "5 oz",
-                                                          "item":  "Shredded Asiago Cheese",
-                                                          "evidence":  "server probe rung 1 \u0027asiago cheese\u0027, 7 hits: Shredded Asiago Cheese 5 oz $5.49, plus Cello Asiago Cheese Wedge 1 lb $10.49. Real asiago in shredded and wedge form; the Brazi Bites bread and the parmesan-asiago mac and cheese were rejected as dishes flavoured with it.",
-                                                          "checked":  "2026-08-26T04:53:44"
+                                                          "price":  5.99,
+                                                          "size":  "8 oz",
+                                                          "item":  "Private Selection Asiago Wedge Cheese",
+                                                          "evidence":  "probe rung 1 \u0027asiago cheese\u0027 = 7 hits; Private Selection Asiago Wedge 8 oz at 5.99 is plain asiago (also Cello Asiago Wedge 1 lb at 10.49, Shredded Asiago 5 oz at 5.49). Ruled out Brazi Bites asiago bread, asiago mac-and-cheese and the cheddar/gouda/asiago slice blend.",
+                                                          "checked":  "2026-08-27T05:20:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5018,23 +5067,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only: \u0027Mexican crema\u0027 = 22 hits, of which the evidence file retains 8 - all plain sour cream (Daisy, Fareway, AE Dairy Mexican Style Sour Cream Dip) plus a tostada. No crema qualified in what I could see, but I saw 8 of 22 rows and the discriminating head-noun rung \u0027crema\u0027 was never run. Not enough to support not-carried; stays unchecked.",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "driver rung 1 reported 58 hits but the evidence file retains only the top 8, and all 8 are Greek yogurt (Chobani/FAGE/Oikos) - Instacart suggestion tiles, not crema. Rows 9-58 were never shown to me and I have no browser this session, so this is could-not-look, not an empty shelf.",
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  3.99,
                                                          "size":  "12 oz",
                                                          "item":  "Cacique Sour Cream, Original Crema, Mexican Style 12 Oz",
-                                                         "evidence":  "probe-ingredient.ps1 \u0027crema\u0027 2026-08-26, Freshop store_id 6401 Omaha pickup price. Head-noun rung \u0027crema\u0027 = 7 hits; the pre-pass had laddered to \u0027Mexican\u0027 instead, which returned 25 rice/hominy/hot-sauce rows and no crema. Cacique Crema Mexicana is the ingredient; Cacique Crema Salvadorena 15 oz $5.59 also present. Ruled in.",
-                                                         "checked":  "2026-08-26T05:14:04"
+                                                         "evidence":  "pre-pass ladder took the MODIFIER branch (\u0027mexican\u0027=25 hits, all rice/hominy/shredded cheese). I walked rung 4, the head noun: probe-ingredient.ps1 \u0027crema\u0027 -\u003e 6 hits including Cacique Sour Cream Original Crema Mexican Style 12 Oz at 3.99, which is the ingredient.",
+                                                         "checked":  "2026-08-27T05:20:04"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -5042,15 +5091,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:14:04"
+                                                    "checked":  "2026-08-27T05:20:04"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027Mexican crema\u0027 = 13 hits, 8 retained - almond milk, Horizon milk, blondies, Daisy sour cream, brie. The search plainly matched \u0027cream\u0027 and ignored \u0027Mexican\u0027. 8 of 13 rows seen and rung \u0027crema\u0027 never run, so no negative ruling is supported.",
-                                                             "checked":  "2026-08-26T05:14:04"
+                                                             "evidence":  "driver rung 1 reported 13 hits, evidence retains 8: almond milk, Horizon milk, Daisy sour cream, brie - no crema, and sour cream is not crema. Rows 9-13 unseen, ladder never walked, no browser this session.",
+                                                             "checked":  "2026-08-27T05:20:04"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -5058,15 +5107,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T05:14:04"
+                                                  "checked":  "2026-08-27T05:20:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
-                                                          "price":  5.99,
-                                                          "size":  "16 oz",
-                                                          "item":  "Queso Campesino Crema Mexicana",
-                                                          "evidence":  "probe-ingredient.ps1 \u0027crema\u0027 2026-08-26, kroger-public-api locationId 61500319, rung \u0027crema\u0027 = 25 hits. Baker\u0027s 503 on rung \u0027Mexican crema\u0027 in the pre-pass was transient and the store answered on re-probe. Row is genuine Mexican crema, not sour cream: also VV Supremo Crema Supremo 15 oz $3.59 and Nestle Media Crema. Ruled in.",
-                                                          "checked":  "2026-08-26T05:14:04"
+                                                          "price":  3.99,
+                                                          "size":  "15 fl oz",
+                                                          "item":  "Cacique Crema Mexicana Table Cream",
+                                                          "evidence":  "probe rung 1 \u0027mexican crema\u0027 = 8 hits; Cacique Crema Mexicana Table Cream 15 fl oz at 3.99 and Queso Campesino Crema Mexicana 16 oz at 5.99 are the dairy crema itself, not a dish. Ruled out Gamesa Cremax wafer cookies and Herdez queso dip.",
+                                                          "checked":  "2026-08-27T05:20:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5087,23 +5136,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only: \u0027Chihuahua cheese\u0027 = 22 hits, 8 retained - Fareway Monterey Jack, Mexican Style Blend, Taco Blend, mozzarella, gouda, provolone. A Mexican blend is not Chihuahua cheese, so nothing qualified in what I saw, but that was 8 of 22 rows and the discriminating rung \u0027Chihuahua\u0027 alone was never run. No negative ruling supported.",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "driver rung 1 reported 64 hits, evidence retains only the top 8 (Kraft Mexican blend, Fareway Mexican blend, provolone, Jisa farmer\u0027s cheese) - none is Chihuahua or queso quesadilla, but 56 rows were never shown to me and there is no browser this session to open them.",
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Full search-verdict ladder EMPTY, re-confirmed 2026-08-26: \u0027Chihuahua cheese\u0027=0 -\u003e \u0027Chihuahuacheese\u0027=0 -\u003e \u0027Chihuahua\u0027=0. Zero rows on every rung, no suggestion block, no truncation. The single discriminating word returns nothing in the Freshop catalog.",
-                                                         "checked":  "2026-08-26T05:14:04"
+                                                         "evidence":  "full ladder empty: \u0027chihuahua cheese\u0027=0, \u0027chihuahuacheese\u0027=0, \u0027chihuahua\u0027=0. I added a synonym rung myself - probe \u0027queso quesadilla\u0027 laddered to \u0027quesadilla\u0027=1 hit, Delimex frozen chicken quesadillas, not a cheese. No melting-cheese candidate on any rung.",
+                                                         "checked":  "2026-08-27T05:20:04"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -5111,15 +5160,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:14:04"
+                                                    "checked":  "2026-08-27T05:20:04"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027Chihuahua cheese\u0027 = 20 hits, 8 retained - Tillamook cheddars, Member\u0027s Mark mozzarella and Mexican Style shreds. Search matched \u0027cheese\u0027 and ignored \u0027Chihuahua\u0027. 8 of 20 rows seen, rung \u0027Chihuahua\u0027 never run, so unchecked rather than absent.",
-                                                             "checked":  "2026-08-26T05:14:04"
+                                                             "evidence":  "driver rung 1 reported 20 hits, evidence retains 8 (Tillamook cheddar, Member\u0027s Mark mozzarella and Mexican-style blend) - no Chihuahua. Rows 9-20 unseen, ladder not walked, no browser.",
+                                                             "checked":  "2026-08-27T05:20:04"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -5127,15 +5176,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-26T05:14:04"
+                                                  "checked":  "2026-08-27T05:20:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  6.99,
                                                           "size":  "16 oz",
                                                           "item":  "V\u0026V Supremo Chihuahua Queso Quesadilla Mexican Shredded Cheese",
-                                                          "evidence":  "probe-ingredient.ps1 \u0027Chihuahua cheese\u0027 2026-08-26, kroger-public-api locationId 61500319, rung 1 = 2 hits and both are the named cheese (16 oz $6.99, 32 oz $11.99). Pre-pass 503 was transient. This is Chihuahua/queso quesadilla itself, not a Mexican blend substitute. Ruled in.",
-                                                          "checked":  "2026-08-26T05:14:04"
+                                                          "evidence":  "probe rung 1 \u0027chihuahua cheese\u0027 = 2 hits, both V\u0026V Supremo Chihuahua Queso Quesadilla shredded (16 oz at 6.99, 32 oz at 11.99). Chihuahua is V\u0026V Supremo\u0027s trade name for queso quesadilla - exactly the melting cheese the recipe calls for.",
+                                                          "checked":  "2026-08-27T05:20:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5225,23 +5274,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  12.99,
                                                      "size":  "2.5 lb",
                                                      "item":  "Tyson Boneless Skinless Chicken Breast Tenderloins, 2.5 lb (Frozen)",
-                                                     "evidence":  "driver rung 1 = 6 hits. This row is raw frozen tenderloins. Perdue Chicken Tenders and the Southern Style fully-cooked row are breaded products and were ruled out; the two boneless breast rows are a different cut. Ruled in on the Tyson raw tenderloins.",
-                                                     "checked":  "2026-08-26T05:14:04"
+                                                     "evidence":  "driver rung 1, 38 hits, top row Tyson Boneless Skinless Chicken Breast Tenderloins 2.5 lb frozen at 12.99 - unbreaded raw tenderloins. Ruled out the Perdue and Tyson breaded strips and tenders on the same page.",
+                                                     "checked":  "2026-08-27T05:20:04"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  13.99,
                                                          "size":  "40 oz",
                                                          "item":  "Tyson Chicken Breast Tenderloins 40 Oz",
-                                                         "evidence":  "Family Fare server lane, rung 1 = 3 hits. This row is raw tenderloins. The Southern Style 25 oz $6.99 is breaded/cooked and the Pedigree dog food row was ruled out. One genuine hit, confirmed by re-probe 2026-08-26. Ruled in.",
-                                                         "checked":  "2026-08-26T05:14:04"
+                                                         "evidence":  "probe rung 1 = 3 hits; Tyson Chicken Breast Tenderloins 40 Oz at 13.99 is plain raw tenderloins. Ruled out Tyson Southern Style (breaded) and a Pedigree dog food row.",
+                                                         "checked":  "2026-08-27T05:20:04"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -5249,31 +5298,31 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:14:04"
+                                                    "checked":  "2026-08-27T05:20:04"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  21.97,
-                                                             "size":  "6 lbs",
-                                                             "item":  "Member\u0027s Mark Boneless and Skinless Chicken Breast Tenderloins, Frozen, 6 lbs.",
-                                                             "evidence":  "driver rung 1 = 27 hits; this row is raw frozen tenderloins at $3.66/lb. The Country Pride, Just Bare and Tyson rows in the same grid are all breaded/crispy prepared strips and were ruled out. Ruled in.",
-                                                             "checked":  "2026-08-26T05:14:04"
+                                                             "size":  "6 lb (3.66/lb)",
+                                                             "item":  "Member\u0027s Mark Boneless and Skinless Chicken Breast Tenderloins, Frozen",
+                                                             "evidence":  "driver rung 1, 25 hits; Member\u0027s Mark Boneless and Skinless Chicken Breast Tenderloins, Frozen, linePrice 21.97 with unitPrice 3.66/lb - raw unbreaded tenderloins. Ruled out Country Pride and Just Bare breaded strips and bites. Size inferred from 21.97 / 3.66 per lb = 6 lb; the pack size itself was not in the captured row.",
+                                                             "checked":  "2026-08-27T05:20:04"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  3.99,
-                                                  "size":  "lb",
+                                                  "size":  "per lb",
                                                   "item":  "Kirkwood Fresh Boneless Skinless Chicken Tenderloins Per LB",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027chicken tenderloins\u0027 returns this Aldi capture row, as_of 2026-08-22, board comparison-2026-08-25.json. Kirkwood is Aldi\u0027s own fresh-poultry label and the row is raw boneless skinless tenderloins, exactly the ingredient. Re-runnable.",
-                                                  "checked":  "2026-08-26T05:14:04"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027chicken tenderloins\u0027 returns Aldi 3.99 per lb Kirkwood Fresh Boneless Skinless Chicken Tenderloins Per LB in today\u0027s captures (comparison-2026-08-26.json). Fresh, unbreaded, raw - the ingredient.",
+                                                  "checked":  "2026-08-27T05:20:04"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  4.49,
                                                           "size":  "1 lb",
                                                           "item":  "Heritage Farm Boneless Skinless Chicken Tenderloins",
-                                                          "evidence":  "probe-ingredient.ps1 \u0027chicken tenderloins\u0027 2026-08-26, kroger-public-api locationId 61500319, rung 1 = 25 hits. Raw fresh tenderloins: also Smart Chicken Air-Chilled $7.99/lb and Kroger Frozen Raw 2.5 lb $9.99. Corroborated by today\u0027s capture on disk (same item, same $4.49/lb). Pre-pass 503 was transient. Ruled in.",
-                                                          "checked":  "2026-08-26T05:14:04"
+                                                          "evidence":  "probe rung 1 = 25 hits; Heritage Farm Boneless Skinless Chicken Tenderloins 1 lb at 4.49 is raw tenderloins (also Smart Chicken air-chilled 1 lb at 7.99, Kroger frozen 2.5 lb at 9.99). Ruled out the Tyson nugget rows, which are breaded product.",
+                                                          "checked":  "2026-08-27T05:20:04"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5867,6 +5916,144 @@
                                                           "item":  "Smart Way Crushed Red Pepper",
                                                           "evidence":  "pre-pass server ladder \u0027red pepper flakes\u0027 = 6 hits. Smart Way Crushed Red Pepper 1.5 oz $1.25 is the ingredient (crushed red pepper = red pepper flakes). The top-relevance row, Kroger Grated Parmesan and Red Pepper Flakes Shaker, is a cheese product and was excluded.",
                                                           "checked":  "2026-08-26T13:30:31"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "italian turkey sausage",
+                      "recipes":  [
+                                      "italian-turkey-burgers"
+                                  ],
+                      "added":  "2026-08-27T05:13:13",
+                      "why":  "italian-turkey-burgers needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  5.76,
+                                                     "size":  "1.25 lb (6 ct tray)",
+                                                     "item":  "Honeysuckle White Sweet Italian Turkey Sausage 6 Count Tray, Fresh, Gluten-Free",
+                                                     "evidence":  "no browser this session; ruled from disk instead - grep \u0027Italian Turkey Sausage\u0027 grocery/out/captures/walmart-capture-2026-08-06.csv (Walmart\u0027s own search-result rows, query \u0027italian sausage\u0027): Honeysuckle White Sweet Italian Turkey Sausage 6 Count Tray, Fresh, Gluten-Free, 1.25 lbs, $5.76 ($4.80/lb), id 46866279 - an exact match for commodity fresh-sweet-italian-turkey-sausage. Two more genuine hits in the same grid: JENNIE-O Sweet Italian Fresh Turkey Sausage Links, 19.5 oz tray, $5.76 ($4.72/lb), id 17247746; and JENNIE-O Ground Turkey Italian Sausage roll, 1 lb, $4.94/lb, id 720186971. The JENNIE-O roll appears at the same $4.94 in walmart-capture-2026-07-23.csv under query \u0027ground turkey\u0027, so the listing is stable across two capture dates. CAVEAT ON DATE: these rows are 2026-08-06 / 07-23, not today - the 2026-08-26 Walmart capture is a 462-line policy slice that never asked these terms, so its silence is not a delisting. Carriage is proven by the store\u0027s own listing; the price should be re-captured before it reaches a board cell.",
+                                                     "checked":  "2026-08-27T06:05:24"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Driver rung 1 reported MATCHES with 66 rows but the evidence file carries only 8 of them; I adjudicated those 8 and none is Italian turkey sausage (Isernio\u0027s Italian Chicken Sausage $6.99/16oz and Amylu Italian-Style Chicken Sausage $6.99/12oz are CHICKEN; Johnsonville Italian Mild $5.99/19oz and Italian Pork Sausage $3.99 are PORK; Fareway Turkey Breakfast Sausage $5.49/16oz and Johnsonville Turkey Breakfast Links $5.99/12ct are turkey but BREAKFAST-seasoned, not Italian). The other 58 rows are not in front of me and I have no browser this session, so I cannot rule on rows I never saw - blocked, not not-carried.",
+                                                     "checked":  "2026-08-27T06:05:24"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "Pre-pass server tier, FULL ladder, both rungs returned request state OK with 0 product rows (a successful query, not the 400/throttle refusal shape): rung 1 \u0027italian turkey sausage\u0027=0, rung 3 spacing variant \u0027italianturkeysausage\u0027=0. Rung 2 inapplicable (no strippable qualifier) and rung 4 does not apply to a three-word term. Family Fare does stock pork Italian sausage (board cell italian-sausage, Our Family Ground Italian Sausage Mild $3.99/lb), so the search box is not blind to the phrase - it returns nothing when turkey is added. Commodity fresh-sweet-italian-turkey-sausage is NOT on audit-search-terms.ps1\u0027s suspect list.",
+                                                         "checked":  "2026-08-27T06:05:24"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T06:05:24"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "not-carried",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Two independent searches, both adjudicated to nothing. (1) Driver rung 1 today, \u0027italian turkey sausage\u0027 = 15 rows, all pork/beef breakfast or smoked sausage (Johnsonville Original Pork Breakfast Links $6.48, Jimmy Dean Premium Pork Roll $7.34, Kiolbassa Beef Hickory Smoked $19.87, Aidells Chicken \u0026 Apple Smoked $9.84). (2) The estate\u0027s own complete Sam\u0027s grid for the commodity\u0027s exact search term - grep \u0027^sweet Italian turkey sausage|\u0027 grocery/out/captures/sams-capture-2026-08-15.csv, all 14 rows - contains zero Italian turkey sausage; the only turkey item is Hillshire Farm Turkey Polska Kielbasa $9.57, which is smoked kielbasa (a different commodity), not fresh Italian turkey sausage. Warehouse club with no fresh Italian turkey sausage SKU.",
+                                                             "checked":  "2026-08-27T06:05:24"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T06:05:24"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "blocked",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "Pre-pass server tier returned ERROR: (503) Server Unavailable on rung 1 \u0027italian turkey sausage\u0027; 0 rungs actually answered. Transport refusal, not an empty shelf - not re-probed per dispatch instruction. Baker\u0027s does appear in today\u0027s captures for \u0027turkey sausage\u0027 (Jimmy Dean turkey crumbles/patties/links, breakfast sandwiches) and for \u0027chicken sausage\u0027 (Simple Truth Mild Italian Chicken Sausage $5.99/lb) - chicken, not turkey - but a capture miss is never not-carried.",
+                                                          "checked":  "2026-08-27T06:05:24"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Boneless Eye of Round Roast",
+                      "recipes":  [
+                                      "roast-eye-of-round-beef"
+                                  ],
+                      "added":  "2026-08-27T06:06:26",
+                      "why":  "roast-eye-of-round-beef needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T06:07:31"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 only: 72 tiles, all other cuts (chuck roast, rump roast, top round steak, ribeye roast, Hormel deli top round). No eye of round roast in the grid, but the retry ladder was never walked and I have no browser this session to walk it, so this is not an absence verdict",
+                                                     "checked":  "2026-08-27T06:07:31"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server pre-pass, full ladder: \u0027Boneless Eye of Round Roast\u0027=1 (rejected, no candidate survived scoring), \u0027BonelessEyeofRoundRoast\u0027=0; no eye of round roast returned",
+                                                         "checked":  "2026-08-27T06:07:31"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T06:07:31"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  30.01,
+                                                             "size":  "priced per pound, $6.24/lb",
+                                                             "item":  "Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast",
+                                                             "evidence":  "driver pre-pass rung 1, 18 rows; row names the cut exactly - Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast, priced per pound, $30.01 ($6.24/lb). Boneless is inherent to the eye of round cut; this is the roast a cook would buy for the recipe (the other rows are sirloin tip / bottom round / top round roasts and whole ribeyes, ruled out)",
+                                                             "checked":  "2026-08-27T06:07:31"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T06:07:31"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "server pre-pass, full ladder: \u0027Boneless Eye of Round Roast\u0027=0, \u0027BonelessEyeofRoundRoast\u0027=0; no candidates on any rung, no bot wall or transport error",
+                                                          "checked":  "2026-08-27T06:07:31"
                                                       }
                                  },
                       "verdict":  "CARRIED",

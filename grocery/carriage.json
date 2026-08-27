@@ -104,12 +104,12 @@
                  "parmesan-cheese":  {
                                          "verdict":  "CARRIED",
                                          "store":  "Aldi",
-                                         "item":  "Reggano Grated Parmesan Cheese 8 OZ",
+                                         "item":  "Reggano Grated Parmesan Romano Cheese 8 OZ",
                                          "size":  "8 oz",
                                          "price":  2.79,
-                                         "as_of":  "2026-08-24",
-                                         "source":  "promoted from ingredient-queue term \u0027grated Parmesan cheese\u0027",
-                                         "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club"
+                                         "as_of":  "2026-08-26",
+                                         "source":  "promoted from ingredient-queue term \u0027parmesan cheese\u0027",
+                                         "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
                                      },
                  "chicken-thighs":  {
                                         "verdict":  "CARRIED",
@@ -187,9 +187,9 @@
                                            "item":  "Green Bell Pepper",
                                            "size":  "lb",
                                            "price":  0.79,
-                                           "as_of":  "2026-08-24",
+                                           "as_of":  "2026-08-26",
                                            "source":  "promoted from ingredient-queue term \u0027green bell pepper\u0027",
-                                           "why":  "carried by Baker\u0027s, Hy-Vee, Aldi, Fareway, Sam\u0027s Club"
+                                           "why":  "carried by Baker\u0027s, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
                                        },
                  "item:BelGioioso Fresh Mozzarella Cheese":  {
                                                                  "verdict":  "CARRIED",
@@ -220,7 +220,397 @@
                                                                    "as_of":  "2026-08-24",
                                                                    "source":  "promoted from ingredient-queue term \u0027cotija cheese\u0027",
                                                                    "why":  "carried by Baker\u0027s, Family Fare"
-                                                               }
+                                                               },
+                 "item:Fareway Low-Moisture Part-Skim Mozzarella Cheese Slices":  {
+                                                                                      "verdict":  "CARRIED",
+                                                                                      "store":  "Fareway",
+                                                                                      "item":  "Fareway Low-Moisture Part-Skim Mozzarella Cheese Slices",
+                                                                                      "size":  "8 x 8 each",
+                                                                                      "price":  2.48,
+                                                                                      "as_of":  "2026-08-25",
+                                                                                      "source":  "promoted from ingredient-queue term \u0027part skim mozzarella slices\u0027",
+                                                                                      "why":  "carried by Fareway"
+                                                                                  },
+                 "item:Prosciutto Deli Sliced":  {
+                                                     "verdict":  "CARRIED",
+                                                     "store":  "Baker\u0027s",
+                                                     "item":  "Private Selection Old World Prosciutto Deli Sliced",
+                                                     "size":  "3 oz",
+                                                     "price":  5.99,
+                                                     "as_of":  "2026-08-25",
+                                                     "source":  "promoted from ingredient-queue term \u0027prosciutto\u0027",
+                                                     "why":  "carried by Baker\u0027s, Fareway, Sam\u0027s Club"
+                                                 },
+                 "rotisserie-chicken":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Sam\u0027s Club",
+                                            "item":  "Member\u0027s Mark Seasoned Rotisserie Chicken",
+                                            "size":  "each",
+                                            "price":  4.98,
+                                            "as_of":  "2026-08-26",
+                                            "source":  "promoted from ingredient-queue term \u0027rotisserie chicken\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Fareway, Sam\u0027s Club, Walmart"
+                                        },
+                 "monterey-jack-cheese":  {
+                                              "verdict":  "CARRIED",
+                                              "store":  "Aldi",
+                                              "item":  "Happy Farms Monterey Jack Cheese Block",
+                                              "size":  "8 oz",
+                                              "price":  1.75,
+                                              "as_of":  "2026-08-26",
+                                              "source":  "promoted from ingredient-queue term \u0027monterey jack cheese\u0027",
+                                              "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Walmart"
+                                          },
+                 "item:Del Monte Whole Kernel Fire-Roasted Corn Blend":  {
+                                                                             "verdict":  "CARRIED",
+                                                                             "store":  "Fareway",
+                                                                             "item":  "Del Monte Whole Kernel Fire-Roasted Corn Blend",
+                                                                             "size":  "14.75 oz",
+                                                                             "price":  2.49,
+                                                                             "as_of":  "2026-08-26",
+                                                                             "source":  "promoted from ingredient-queue term \u0027roasted corn kernels\u0027",
+                                                                             "why":  "carried by Fareway"
+                                                                         },
+                 "item:Beef Stew Meat":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Fareway",
+                                             "item":  "USDA Choice Premium Stew Meat",
+                                             "size":  "",
+                                             "price":  8.99,
+                                             "as_of":  "2026-08-26",
+                                             "source":  "promoted from ingredient-queue term \u0027beef stew meat\u0027",
+                                             "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                         },
+                 "egg-noodles":  {
+                                     "verdict":  "CARRIED",
+                                     "store":  "Baker\u0027s",
+                                     "item":  "Kroger Wide Egg Noodles",
+                                     "size":  "16 oz",
+                                     "price":  1.99,
+                                     "as_of":  "2026-08-26",
+                                     "source":  "promoted from ingredient-queue term \u0027wide egg noodles\u0027",
+                                     "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                 },
+                 "item:Dried Apricots":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Fareway",
+                                             "item":  "Sun-Maid Mediterranean Pitted Dried Apricots",
+                                             "size":  "425 g",
+                                             "price":  8.99,
+                                             "as_of":  "2026-08-26",
+                                             "source":  "promoted from ingredient-queue term \u0027dried apricots\u0027",
+                                             "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                         },
+                 "item:Seasoned Salt":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Baker\u0027s",
+                                            "item":  "Lawry\u0027s Seasoned Salt",
+                                            "size":  "4 oz",
+                                            "price":  3.49,
+                                            "as_of":  "2026-08-26",
+                                            "source":  "promoted from ingredient-queue term \u0027seasoned salt\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                        },
+                 "red-onion":  {
+                                   "verdict":  "CARRIED",
+                                   "store":  "Aldi",
+                                   "item":  "Red Onion Bag 2 Lbs",
+                                   "size":  "lb (2 lb bag)",
+                                   "price":  1.095,
+                                   "as_of":  "2026-08-26",
+                                   "source":  "promoted from ingredient-queue term \u0027red onion\u0027",
+                                   "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                               },
+                 "item:Cremini Mushrooms":  {
+                                                "verdict":  "CARRIED",
+                                                "store":  "Fareway",
+                                                "item":  "Highline Whole Mini Bella Mushrooms",
+                                                "size":  "8 oz",
+                                                "price":  2.49,
+                                                "as_of":  "2026-08-26",
+                                                "source":  "promoted from ingredient-queue term \u0027cremini mushrooms\u0027",
+                                                "why":  "carried by Baker\u0027s, Fareway"
+                                            },
+                 "item:Asiago Cheese":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Fareway",
+                                            "item":  "BelGioioso Asiago Wedge",
+                                            "size":  "5 oz",
+                                            "price":  4.49,
+                                            "as_of":  "2026-08-26",
+                                            "source":  "promoted from ingredient-queue term \u0027asiago cheese\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                        },
+                 "item:Cube Steak":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Fareway",
+                                         "item":  "USDA Choice Cube Steak",
+                                         "size":  "7 oz",
+                                         "price":  4.5,
+                                         "as_of":  "2026-08-26",
+                                         "source":  "promoted from ingredient-queue term \u0027cube steak\u0027",
+                                         "why":  "carried by Baker\u0027s, Aldi, Fareway"
+                                     },
+                 "item:Eye Of Round Roast":  {
+                                                 "verdict":  "CARRIED",
+                                                 "store":  "Sam\u0027s Club",
+                                                 "item":  "Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast",
+                                                 "size":  "priced per pound ($6.24/lb)",
+                                                 "price":  30.01,
+                                                 "as_of":  "2026-08-26",
+                                                 "source":  "promoted from ingredient-queue term \u0027eye of round roast\u0027",
+                                                 "why":  "carried by Sam\u0027s Club"
+                                             },
+                 "item:Turkey Sausage":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Hy-Vee",
+                                             "item":  "Johnsonville Smoked Turkey Sausage, 6 Count",
+                                             "size":  "13.5 oz",
+                                             "price":  4.96,
+                                             "as_of":  "2026-08-26",
+                                             "source":  "promoted from ingredient-queue term \u0027turkey sausage\u0027",
+                                             "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Fareway, Sam\u0027s Club"
+                                         },
+                 "item:Bourbon":  {
+                                      "verdict":  "CARRIED",
+                                      "store":  "Sam\u0027s Club",
+                                      "item":  "Member\u0027s Mark Kentucky Straight Bourbon Whiskey, 750 ml",
+                                      "size":  "750 ml",
+                                      "price":  16.94,
+                                      "as_of":  "2026-08-26",
+                                      "source":  "promoted from ingredient-queue term \u0027bourbon\u0027",
+                                      "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                  },
+                 "item:Mozzarella Cheese":  {
+                                                "verdict":  "CARRIED",
+                                                "store":  "Aldi",
+                                                "item":  "Happy Farms Mozzarella Cheese Block 8 OZ",
+                                                "size":  "8 oz",
+                                                "price":  1.75,
+                                                "as_of":  "2026-08-26",
+                                                "source":  "promoted from ingredient-queue term \u0027mozzarella cheese\u0027",
+                                                "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                            },
+                 "item:Mexican Crema":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Family Fare",
+                                            "item":  "Cacique Sour Cream, Original Crema, Mexican Style 12 Oz",
+                                            "size":  "12 oz",
+                                            "price":  3.99,
+                                            "as_of":  "2026-08-26",
+                                            "source":  "promoted from ingredient-queue term \u0027Mexican crema\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare"
+                                        },
+                 "item:Chihuahua Cheese":  {
+                                               "verdict":  "CARRIED",
+                                               "store":  "Baker\u0027s",
+                                               "item":  "V\u0026V Supremo Chihuahua Queso Quesadilla Mexican Shredded Cheese",
+                                               "size":  "16 oz",
+                                               "price":  6.99,
+                                               "as_of":  "2026-08-26",
+                                               "source":  "promoted from ingredient-queue term \u0027Chihuahua cheese\u0027",
+                                               "why":  "carried by Baker\u0027s"
+                                           },
+                 "pork-chops":  {
+                                    "verdict":  "CARRIED",
+                                    "store":  "Fareway",
+                                    "item":  "Boneless Pork Chop",
+                                    "size":  "8 oz",
+                                    "price":  2.5,
+                                    "as_of":  "2026-08-26",
+                                    "source":  "promoted from ingredient-queue term \u0027boneless pork chops\u0027",
+                                    "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                },
+                 "item:Chicken Tenderloins":  {
+                                                  "verdict":  "CARRIED",
+                                                  "store":  "Aldi",
+                                                  "item":  "Kirkwood Fresh Boneless Skinless Chicken Tenderloins Per LB",
+                                                  "size":  "lb",
+                                                  "price":  3.99,
+                                                  "as_of":  "2026-08-26",
+                                                  "source":  "promoted from ingredient-queue term \u0027chicken tenderloins\u0027",
+                                                  "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                              },
+                 "cornmeal":  {
+                                  "verdict":  "CARRIED",
+                                  "store":  "Baker\u0027s",
+                                  "item":  "Kroger Yellow Corn Meal",
+                                  "size":  "24 oz",
+                                  "price":  2.29,
+                                  "as_of":  "2026-08-27",
+                                  "source":  "promoted from ingredient-queue term \u0027cornmeal\u0027",
+                                  "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                              },
+                 "item:Ground Mustard":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Baker\u0027s",
+                                             "item":  "Kroger Ground Mustard Shaker",
+                                             "size":  "1.55 oz",
+                                             "price":  1.99,
+                                             "as_of":  "2026-08-26",
+                                             "source":  "promoted from ingredient-queue term \u0027mustard powder\u0027",
+                                             "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                         },
+                 "ground-cloves":  {
+                                       "verdict":  "CARRIED",
+                                       "store":  "Walmart",
+                                       "item":  "Great Value Ground Cloves, 2 oz",
+                                       "size":  "2 oz",
+                                       "price":  2.18,
+                                       "as_of":  "2026-08-26",
+                                       "source":  "promoted from ingredient-queue term \u0027ground cloves\u0027",
+                                       "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Fareway, Walmart"
+                                   },
+                 "item:Burrata Cheese":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Baker\u0027s",
+                                             "item":  "BelGioioso Burrata Mini Mozzarella Cheese Balls",
+                                             "size":  "4 ct / 2 oz",
+                                             "price":  6.99,
+                                             "as_of":  "2026-08-26",
+                                             "source":  "promoted from ingredient-queue term \u0027burrata cheese\u0027",
+                                             "why":  "carried by Baker\u0027s"
+                                         },
+                 "cherry-tomatoes":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Aldi",
+                                         "item":  "Grape Tomatoes Package 10 5 OZ",
+                                         "size":  "10.5 oz",
+                                         "price":  1.99,
+                                         "as_of":  "2026-08-26",
+                                         "source":  "promoted from ingredient-queue term \u0027grape tomatoes\u0027",
+                                         "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                                     },
+                 "item:Baby Potatoes":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Aldi",
+                                            "item":  "MK Baby Potatoes Medley",
+                                            "size":  "24 oz",
+                                            "price":  3.29,
+                                            "as_of":  "2026-08-26",
+                                            "source":  "promoted from ingredient-queue term \u0027baby potatoes\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                        },
+                 "item:Fresh Mozzarella":  {
+                                               "verdict":  "CARRIED",
+                                               "store":  "Aldi",
+                                               "item":  "Emporium Selection Fresh Mozzarella Ball 8 OZ",
+                                               "size":  "8 oz",
+                                               "price":  3.29,
+                                               "as_of":  "2026-08-26",
+                                               "source":  "promoted from ingredient-queue term \u0027fresh mozzarella\u0027",
+                                               "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                           },
+                 "item:Spiral Ham":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Family Fare",
+                                         "item":  "Fresh Ham, Half Spiral Sliced Our Family",
+                                         "size":  "lb",
+                                         "price":  3.49,
+                                         "as_of":  "2026-08-26",
+                                         "source":  "promoted from ingredient-queue term \u0027spiral ham\u0027",
+                                         "why":  "carried by Family Fare"
+                                     },
+                 "item:Kaiser Rolls":  {
+                                           "verdict":  "CARRIED",
+                                           "store":  "Fareway",
+                                           "item":  "Bakery Fresh Kaiser Rolls",
+                                           "size":  "6 ct",
+                                           "price":  3.99,
+                                           "as_of":  "2026-08-26",
+                                           "source":  "promoted from ingredient-queue term \u0027kaiser rolls\u0027",
+                                           "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                       },
+                 "black-pepper":  {
+                                      "verdict":  "CARRIED",
+                                      "store":  "Baker\u0027s",
+                                      "item":  "Smart Way Ground Black Pepper",
+                                      "size":  "2.25 oz",
+                                      "price":  1.25,
+                                      "as_of":  "2026-08-26",
+                                      "source":  "promoted from ingredient-queue term \u0027black pepper\u0027",
+                                      "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                                  },
+                 "red-pepper-flakes":  {
+                                           "verdict":  "CARRIED",
+                                           "store":  "Aldi",
+                                           "item":  "Stonemill Crushed Red Pepper",
+                                           "size":  "1.5 oz",
+                                           "price":  0.99,
+                                           "as_of":  "2026-08-26",
+                                           "source":  "promoted from ingredient-queue term \u0027red pepper flakes\u0027",
+                                           "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                                       },
+                 "item:White Pepper":  {
+                                           "verdict":  "CARRIED",
+                                           "store":  "Fareway",
+                                           "item":  "McCormick Ground White Pepper",
+                                           "size":  "1 oz",
+                                           "price":  3.99,
+                                           "as_of":  "2026-08-27",
+                                           "source":  "promoted from ingredient-queue term \u0027white pepper\u0027",
+                                           "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                       },
+                 "item:Cacique Crema Mexicana Table Cream":  {
+                                                                 "verdict":  "CARRIED",
+                                                                 "store":  "Baker\u0027s",
+                                                                 "item":  "Cacique Crema Mexicana Table Cream",
+                                                                 "size":  "15 fl oz",
+                                                                 "price":  3.99,
+                                                                 "as_of":  "2026-08-27",
+                                                                 "source":  "promoted from ingredient-queue term \u0027mexican crema\u0027",
+                                                                 "why":  "carried by Baker\u0027s, Family Fare"
+                                                             },
+                 "item:V\u0026V Supremo Chihuahua Queso Quesadilla Mexican Shredded Cheese":  {
+                                                                                                  "verdict":  "CARRIED",
+                                                                                                  "store":  "Baker\u0027s",
+                                                                                                  "item":  "V\u0026V Supremo Chihuahua Queso Quesadilla Mexican Shredded Cheese",
+                                                                                                  "size":  "16 oz",
+                                                                                                  "price":  6.99,
+                                                                                                  "as_of":  "2026-08-27",
+                                                                                                  "source":  "promoted from ingredient-queue term \u0027chihuahua cheese\u0027",
+                                                                                                  "why":  "carried by Baker\u0027s"
+                                                                                              },
+                 "item:Private Selection Asiago Wedge Cheese":  {
+                                                                    "verdict":  "CARRIED",
+                                                                    "store":  "Fareway",
+                                                                    "item":  "BelGioioso Asiago Wedge",
+                                                                    "size":  "5 oz",
+                                                                    "price":  4.49,
+                                                                    "as_of":  "2026-08-27",
+                                                                    "source":  "promoted from ingredient-queue term \u0027asiago cheese\u0027",
+                                                                    "why":  "carried by Baker\u0027s, Family Fare, Fareway"
+                                                                },
+                 "item:Heritage Farm Boneless Skinless Chicken Tenderloins":  {
+                                                                                  "verdict":  "CARRIED",
+                                                                                  "store":  "Aldi",
+                                                                                  "item":  "Kirkwood Fresh Boneless Skinless Chicken Tenderloins Per LB",
+                                                                                  "size":  "per lb",
+                                                                                  "price":  3.99,
+                                                                                  "as_of":  "2026-08-27",
+                                                                                  "source":  "promoted from ingredient-queue term \u0027chicken tenderloins\u0027",
+                                                                                  "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                                                              },
+                 "fresh-sweet-italian-turkey-sausage":  {
+                                                            "verdict":  "CARRIED",
+                                                            "store":  "Walmart",
+                                                            "item":  "Honeysuckle White Sweet Italian Turkey Sausage 6 Count Tray, Fresh, Gluten-Free",
+                                                            "size":  "1.25 lb (6 ct tray)",
+                                                            "price":  5.76,
+                                                            "as_of":  "2026-08-27",
+                                                            "source":  "promoted from ingredient-queue term \u0027italian turkey sausage\u0027",
+                                                            "why":  "carried by Walmart"
+                                                        },
+                 "item:Beef Eye of Round Roast":  {
+                                                      "verdict":  "CARRIED",
+                                                      "store":  "Sam\u0027s Club",
+                                                      "item":  "Member\u0027s Mark USDA Choice Angus Beef Eye of Round Roast",
+                                                      "size":  "priced per pound, $6.24/lb",
+                                                      "price":  30.01,
+                                                      "as_of":  "2026-08-27",
+                                                      "source":  "promoted from ingredient-queue term \u0027Boneless Eye of Round Roast\u0027",
+                                                      "why":  "carried by Sam\u0027s Club"
+                                                  }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }
