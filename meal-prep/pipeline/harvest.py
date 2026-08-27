@@ -121,6 +121,32 @@ DOSSIER_NEIGHBOUR_CAP = 5
 
 STARCHES = ("rice", "noodle", "pasta", "potato", "tortilla", "bread", "bean", "quinoa", "couscous",
             "polenta")
+# A RECIPE NAMES ITS STARCH BY SHAPE, NOT BY FAMILY (2026-08-27). No page writes "1 lb pasta"; it
+# writes orzo, penne, elbow macaroni, shells. The generic list above missed every one of them, and
+# because the carb-source condition is a HARD filter, it refused real dinners: pesto-chicken-orzo,
+# cheeseburger-casserole (a hamburger helper) and one-pan-sloppy-joe-casserole were all rejected as
+# "a cooked protein on its own" while holding orzo, macaroni and buns respectively. That is the
+# failure mode worth fearing here - a gate that silently discards good candidates, in the densest
+# seam the sourcer found.
+#
+# THEY MAP TO THE FAMILY, NOT TO THEMSELVES. detect_starch's answer is the signature's `starch`, which
+# saturation and the neighbour scoring group on, so returning "orzo" would fragment a family that
+# "pasta" holds together. Shape in, family out.
+STARCH_SHAPES = {
+    "pasta": ("orzo", "penne", "ziti", "rigatoni", "macaroni", "elbow", "shells", "rotini",
+              "fusilli", "farfalle", "linguine", "fettuccine", "spaghetti", "lasagna", "lasagne",
+              "tortellini", "ravioli", "gnocchi", "bucatini", "cavatappi", "campanelle", "orecchiette"),
+    "noodle": ("egg noodle", "ramen", "udon", "soba", "rice noodle", "lo mein", "chow mein"),
+    "rice": ("basmati", "jasmine rice", "arborio", "risotto", "wild rice"),
+    "potato": ("gnocchi potato", "hash brown", "tater", "yukon", "russet", "sweet potato"),
+    "tortilla": ("taco shell", "wrap", "burrito shell"),
+    "bread": ("bun", "buns", "roll", "rolls", "hoagie", "baguette", "pita", "naan", "biscuit",
+              "sourdough", "ciabatta", "focaccia", "cornbread", "crouton"),
+    "bean": ("black bean", "pinto", "chickpea", "garbanzo", "cannellini", "kidney bean", "lentil"),
+    "quinoa": (),
+    "couscous": (),
+    "polenta": ("grits",),
+}
 # Exclusions the run's conditions already carry (SKILL.md: no seafood; ground chicken is a standing
 # board exclusion). Matched on ingredient nouns, not on the title, because a title lies more often.
 SEAFOOD = ("shrimp", "prawn", "salmon", "tuna", "cod fillet", "tilapia", "halibut", "crab", "lobster",
@@ -697,6 +723,11 @@ def detect_starch(lines):
     for st in STARCHES:
         if st in blob:
             return st
+    # ...then by SHAPE, mapped back to its family - see STARCH_SHAPES.
+    for fam, shapes in STARCH_SHAPES.items():
+        for sh in shapes:
+            if sh in blob:
+                return fam
     return "none"
 
 
@@ -2756,6 +2787,25 @@ def cmd_selftest(_a):
                             node("512 kcal", "9 g", ings=["2 lb boneless skinless chicken breast",
                                                           "2 tbsp olive oil"]),
                             fams, meths)
+    # A RECIPE NAMES ITS STARCH BY SHAPE. The generic list held "pasta" and no page writes that word;
+    # it writes orzo, elbow macaroni, buns. Because the carb condition is a HARD filter, the gap
+    # refused real dinners on 2026-08-27 - pesto-chicken-orzo, a hamburger-helper casserole and a
+    # sloppy-joe casserole, all rejected as "a cooked protein on its own" while holding orzo,
+    # macaroni and buns. A gate that discards good candidates is worse than no gate.
+    T("MUST FIRE  a pasta SHAPE is a carb source, and reports its FAMILY so saturation still groups it",
+      detect_starch(["1 lb chicken breast", "1 cup orzo"]) == "pasta"
+      and detect_starch(["1 lb ground beef", "8 oz elbow macaroni"]) == "pasta",
+      detect_starch(["1 lb chicken breast", "1 cup orzo"]))
+    T("MUST FIRE  buns and rolls are bread, egg noodles are noodle, jasmine is rice",
+      detect_starch(["1 lb turkey", "4 hamburger buns"]) == "bread"
+      and detect_starch(["1 lb beef", "12 oz egg noodles"]) == "noodle"
+      and detect_starch(["1 lb chicken", "2 cups jasmine rice"]) == "rice", "shape families")
+    T("CLEAN TWIN panko is BREADING, not a carb source - NOT_STARCH still wins",
+      detect_starch(["1 lb ground beef", "1 cup panko"]) == "none",
+      detect_starch(["1 lb ground beef", "1 cup panko"]))
+    T("CLEAN TWIN a protein with no starch of any spelling is still none",
+      detect_starch(["1 lb chicken breast", "olive oil", "salt"]) == "none",
+      detect_starch(["1 lb chicken breast", "olive oil", "salt"]))
     T("MUST FIRE  a conforming cut with NO carb source is refused - a cooked protein is not a meal",
       disp_ns == "not-fit-nostarch" and e_ns["status"] == "ruled:rejected-not-fit",
       "%s %s" % (disp_ns, e_ns["status"]))
