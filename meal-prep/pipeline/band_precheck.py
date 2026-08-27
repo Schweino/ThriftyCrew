@@ -38,13 +38,35 @@ MP = os.path.dirname(HERE)
 FOOD_DB = os.path.join(MP, "food-macros-db.json")
 DENSITIES = os.path.join(MP, "db", "densities.json")
 
-MIN_COVERAGE = 0.45          # some real dinners are three lines and a protein
+# 0.45 LET IT SPEAK FOR EVERYTHING AND BE WRONG (2026-08-27, measured on the 15 stored candidates).
+# With unit synonyms fixed, coverage rose from 4/15 to 15/15 - and the numbers came out 35-62% LOW
+# against the publishers, with one 77% HIGH. The estimate is only as good as the food DB's coverage
+# of THIS recipe's foods, and a new candidate is precisely the case where the DB has not met them
+# yet; the mapper is what adds them, one lane later. An earlier validation looked far better because
+# every recipe in it had already been through a run, so its rows had been added BY that run - the
+# sample was contaminated and the 8% error it reported was not transferable.
+# So the bar is set where the estimate is defensible rather than where it is available. Below it,
+# this says nothing, which is the honest answer and the cheap one.
+MIN_COVERAGE = 0.75
 MIN_PROTEIN_SHARE = 0.25     # the dominant line must carry at least this much of the calories
 # ...AND THE RESULT MUST BE A DINNER. Four resolved SPICE lines gave 100% coverage, a 45% "dominant"
 # share and 5.5 cal a serving - every ratio green, describing nothing anyone eats. A share is a
 # statement about the lines we read; this is a statement about whether we read the dinner at all.
 MIN_PLAUSIBLE_CAL = 150
 CONFLICT_RATIO = 0.25        # 25% apart is not rounding; every measured failure was 40%+
+
+# THE PAGE'S UNIT WORDS AND THE DENSITY TABLE'S KEYS ARE NOT THE SAME VOCABULARY. A recipe writes
+# "1 tablespoon olive oil"; densities.json keys that weight under "tbsp". parse_amount correctly
+# returns the PAGE's word - normalising it there would change a contract the scale-ratio check
+# depends on - so the translation belongs here, at the lookup. And a SIZE word is a count: "3 medium
+# chicken breasts" is three of them, which densities answers under "each".
+# Measured: this alone was most of the missing coverage - cowboy-chicken matched 15 of its 16 lines
+# to a food row and still produced grams for only two, because every spice said "teaspoon".
+UNIT_SYNONYM = {"tablespoon": "tbsp", "tablespoons": "tbsp", "tbsps": "tbsp",
+                "teaspoon": "tsp", "teaspoons": "tsp", "tsps": "tsp",
+                "fluid ounce": "floz", "fl oz": "floz",
+                "medium": "each", "large": "each", "small": "each", "whole": "each",
+                "piece": "each", "pieces": "each", "count": "each"}
 
 MASS_G = {"g": 1.0, "gram": 1.0, "kg": 1000.0, "oz": 28.349523125, "lb": 453.59237}
 
@@ -131,7 +153,8 @@ def line_grams(line, row, dens=None, defaults=None):
     val, unit = amt
     if not val or val <= 0:
         return None
-    u = (unit or "").lower().rstrip("s")
+    u = (unit or "").lower()
+    u = UNIT_SYNONYM.get(u, UNIT_SYNONYM.get(u.rstrip("s"), u.rstrip("s")))
     if u in MASS_G:
         return val * MASS_G[u]
     item = (row.get("item") or "")
@@ -190,6 +213,14 @@ def compute(ingredients, servings, index=None, dens=None, defaults=None):
     # an estimate defensible is that the calories are actually in it: the dominant contributor must
     # be present, and the rest is detail.
     per_serving_cal = tot["cal"] / float(servings)
+    # THE FLOOR IS PUBLISHED AT ANY COVERAGE, AND THE ESTIMATE IS NOT. An unresolved line contributes
+    # zero here and something positive in reality, so this total is a lower bound on the real dinner
+    # no matter how many lines we read. That makes it sound in exactly one direction - see
+    # exceeds_ceiling - while the ESTIMATE below still needs the coverage gate to be worth quoting.
+    # Gating the floor on coverage threw away the case this was built for:
+    # dill-pickle-chicken-wings reads only half its lines and still floors at 854 against an 800
+    # ceiling, which is a refusal we can defend while its publisher advertised 620.
+    out["cal_floor"] = round(per_serving_cal, 1)
     if prot_share < MIN_PROTEIN_SHARE or cov < MIN_COVERAGE or per_serving_cal < MIN_PLAUSIBLE_CAL:
         out["verdict"] = None
         return out
@@ -268,3 +299,29 @@ def selftest():
 if __name__ == "__main__":
     import sys as _s
     _s.exit(selftest() if "--selftest" in _s.argv else 0)
+
+
+def exceeds_ceiling(computed, ceiling):
+    """Is this dinner ALREADY over the calorie ceiling on the lines we could read? True / False / None.
+
+    THE ONE-SIDED READING IS THE ONLY SOUND ONE, and the measurement says so. At the 0.75 coverage
+    gate the computed figure ran -14% to -41% against the publishers on the 15 stored candidates -
+    every single error NEGATIVE. That is not noise, it is arithmetic: a line we could not resolve
+    contributes zero here and something positive in reality, so what this computes is a FLOOR and
+    never a ceiling.
+
+    A floor is worth acting on in exactly one direction. If the floor already clears the ceiling, the
+    real dinner clears it by more and the recipe is out - certain, without the food DB knowing every
+    line. If the floor sits under the band, that is not evidence of anything: the missing lines could
+    put it anywhere above.
+
+    Measured on the case this was built for: dill-pickle-chicken-wings computes a floor of 854 against
+    an 800 ceiling, so it is refusable on our own arithmetic while its publisher advertised 620.
+    """
+    if not computed:
+        return None
+    cal = computed.get("cal_floor")
+    if not isinstance(cal, (int, float)) or not isinstance(ceiling, (int, float)) or ceiling <= 0:
+        return None
+    return cal > ceiling
+

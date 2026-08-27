@@ -575,7 +575,7 @@ _MASS_G = {'g': 1.0, 'gram': 1.0, 'grams': 1.0, 'kg': 1000.0, 'kilogram': 1000.0
            'ounces': 28.349523125, 'lb': 453.59237, 'lbs': 453.59237,
            'pound': 453.59237, 'pounds': 453.59237}
 _RX_MASS = re.compile(
-    r'(?P<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)\s*'
+    r'(?P<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)[\s-]*'
     r'(?P<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kgs?|kilograms?|grams?|g)\b', re.I)
 
 

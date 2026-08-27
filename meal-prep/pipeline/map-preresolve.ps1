@@ -401,7 +401,10 @@ function Get-StatedMassGrams {
   #>
   param([string]$Raw)
   if (-not $Raw) { return $null }
-  if ($Raw -notmatch '(?<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)\s*(?<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kg|kilograms?|grams?|g)\b') { return $null }
+  # [\s-]* NOT \s* : a page writes "1 (14.5-ounce) can diced tomatoes", and the hyphen between the
+  # number and the unit made this refuse a mass that is plainly stated. Its Python twin,
+  # coverage_check.stated_mass_grams, carries the identical change - see the note in the self-test.
+  if ($Raw -notmatch '(?<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)[\s-]*(?<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kg|kilograms?|grams?|g)\b') { return $null }
   $n = $Matches['n']; $u = ($Matches['u'] -replace '\.', '').ToLower()
   $val = $null
   if ($n -match '^\s*(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)\s*$') {
