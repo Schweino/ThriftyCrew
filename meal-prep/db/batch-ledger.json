@@ -820,5 +820,43 @@
                          "detail":  "6 row(s) via hunt-2026-08-27-highprotein-w4"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w5",
+      "opened":  "2026-08-27T16:27:52",
+      "last_activity":  "2026-08-27T16:27:53",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "butter-chicken-pasta",
+                    "healthy-hamburger-helper",
+                    "ground-beef-cottage-cheese-bowl",
+                    "chicken-rice-and-broccoli",
+                    "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                    "pioneer-woman-chili"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T16:27:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T16:27:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T16:27:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T16:27:53",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

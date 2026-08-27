@@ -3,10 +3,10 @@
     "title":  "Healthy Hamburger Helper",
     "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
     "protein":  "beef",
-    "state":  "waved",
-    "wave":  4,
+    "state":  "rejected-audit",
+    "wave":  5,
     "created":  "2026-08-27T11:40:22",
-    "updated":  "2026-08-27T16:11:53",
+    "updated":  "2026-08-27T16:44:21",
     "terms":  [
                   {
                       "term":  "93/7 lean ground beef",
@@ -25,7 +25,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT",
     "parked_on":  [
 
                   ],
@@ -107,6 +107,24 @@
                         "at":  "2026-08-27T16:11:53",
                         "by":  "wave-close",
                         "detail":  "wave 4"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T16:25:19",
+                        "by":  "daemon",
+                        "detail":  "returned to the wave pool: wave 4 never published (its batch is unclosed), so the recipe was stranded at waved"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T16:27:52",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-27T16:44:21",
+                        "by":  "auditor",
+                        "detail":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT"
                     }
                 ]
 }

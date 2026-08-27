@@ -6837,23 +6837,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T16:10:13"
+                                                     "checked":  "2026-08-27T16:26:20"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "not-carried",
+                                                     "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 returned 72 priced Apollo nodes - a full seasoning-aisle grid (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/paprika/pumpkin pie spice, Misty\u0027s All Purpose) plus off-category tiles like Alpine spiced cider mix; none is a Moroccan blend or ras el hanout. Disk check price-ingredient.ps1 -Name \u0027ras el hanout\u0027 and -Name \u0027Moroccan\u0027 surfaced no Fareway spice-blend row either",
-                                                     "checked":  "2026-08-27T16:10:13"
+                                                     "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 reported 72 hits but the evidence file retains only 8 rows (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Paprika, Badia Pumpkin Pie Spice, Kikkoman Mongolian Beef, Grill Mates Mesquite) - none is a Moroccan blend or ras el hanout, but 64 of 72 rows are unseen and I have no browser to re-search, so absence is not established; PENDING for an attended run",
+                                                     "checked":  "2026-08-27T16:26:20"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "pre-pass probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0; disk check price-ingredient.ps1 -Name \u0027Moroccan\u0027 returned only Suave Moroccan Oil shampoo and Nair Moroccan Argan hair remover at Family Fare - neither is food",
-                                                         "checked":  "2026-08-27T16:10:13"
+                                                         "evidence":  "pre-pass server tier, FULL ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0 -\u003e \u0027MoroccanSpiceMix\u0027=0, no candidates on any rung",
+                                                         "checked":  "2026-08-27T16:26:20"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6861,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T16:10:13"
+                                                    "checked":  "2026-08-27T16:26:20"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 returned 8 priced rows, all mainstream club-size seasonings (McCormick taco seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, Salad Supreme, Montreal Steak, Hidden Valley ranch, Old Bay 7.5lb, Kinder\u0027s whiskey peppercorn and burger rub); none is a Moroccan blend or ras el hanout. Disk check price-ingredient.ps1 \u0027ras el hanout\u0027 / \u0027Moroccan\u0027 returned no Sam\u0027s row",
-                                                             "checked":  "2026-08-27T16:10:13"
+                                                             "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 = 8 hits, complete pile, adjudicated: McCormick Taco Seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, Perfect Pinch Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5lb, Kinder\u0027s Whiskey Peppercorn, Kinder\u0027s Caramelized Onion - all generic/other-cuisine seasonings, none is a Moroccan blend or ras el hanout. Ladder exhausted at rung 1: no strippable qualifier, no spacing variant, and a THREE-word term does not fall back to a head noun. price-ingredient.ps1 -Name \u0027Moroccan Spice Mix\u0027 = ABSENT, no capture row anywhere",
+                                                             "checked":  "2026-08-27T16:26:20"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,15 +6877,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T16:10:13"
+                                                  "checked":  "2026-08-27T16:26:20"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "pre-pass probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 candidates, no no-results-suggestion artifacts; disk check price-ingredient.ps1 -Name \u0027Moroccan\u0027 returned only RiceSelect Moroccan-Style Couscous 26.5oz at Baker\u0027s, which is a pasta not a spice blend",
-                                                          "checked":  "2026-08-27T16:10:13"
+                                                          "evidence":  "pre-pass server tier, FULL ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0 -\u003e \u0027MoroccanSpiceMix\u0027=0, no candidates on any rung; no Moroccan/ras el hanout blend surfaced",
+                                                          "checked":  "2026-08-27T16:26:20"
                                                       }
                                  },
                       "verdict":  "PENDING",

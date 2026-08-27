@@ -56,6 +56,7 @@ def load_daemon():
 
 HD = load_daemon()
 HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
+RESOLUTIONS_PS = os.path.join(HERE, "ingredient-resolutions.ps1")
 
 
 # =====================================================================================================
@@ -1376,6 +1377,9 @@ def run():
     for name, ok, got in _price_evidence_is_never_overwritten():
         T(name, ok, got)
     for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
+        T(name, ok, got)
+    H("The wave audit is learned from - events, and invalidation of what it refutes")
+    for name, ok, got in _the_audit_is_learned_from():
         T(name, ok, got)
     H("A wave that did not publish is resumable")
     for name, ok, got in _the_rewave_moves_the_STATE_not_just_the_pool():
@@ -9076,6 +9080,102 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return out
+
+
+def _the_audit_is_learned_from():
+    r"""THE BACK HALF HAD NO MEMORY (2026-08-27).
+
+    The map lane writes an event per residual ruling and projects clean ones straight into
+    db\ingredient-resolutions.json, which map-preresolve consults as step 1 of its ladder on every
+    later recipe - so a mapper decision becomes an authoritative PRIOR RULING within seconds. The
+    wave auditor, whose whole job is to overturn those decisions with evidence, wrote nothing: four
+    waves of hunt-2026-08-27-highprotein produced 96 mapper events and ZERO audit events.
+
+    The founding case is exact. The mapper ruled `Ground Turkey` onto the generic ground-turkey
+    family and it projected immediately. Three lanes later the auditor proved it wrong - the board
+    prices 85/15 while the macros came off a 93/7 row, ~860 cal as actually shopped against a 450-800
+    band - and the cache kept the disproved identity, because nothing carried the refusal back.
+
+    The clean twins are the load-bearing half: a note must NOT invalidate anything. Most findings are
+    prices that moved, stale numbers and prose defects, and an invalidation on those would throw away
+    good cached identities every wave.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-auditlearn-")
+    try:
+        ev = os.path.join(tmp, "events.jsonl")
+        store = os.path.join(tmp, "resolutions.json")
+        # a cache holding the very identity the audit is about to refute, plus one it must not touch
+        rc, o, _e = hunt_lib.ps_invoke(RESOLUTIONS_PS, [
+            "-Record", "-Term", "ground turkey", "-ItemId", "ground-turkey",
+            "-Evidence", "fixture", "-By", "mapper", "-Store", store])
+        if rc != 0:
+            return [("the audit-learn drill can seed a cached resolution", False, o.strip()[:200])]
+        hunt_lib.ps_invoke(RESOLUTIONS_PS, ["-Record", "-Term", "jasmine rice", "-ItemId",
+                                            "jasmine-rice", "-Evidence", "fixture", "-By", "mapper",
+                                            "-Store", store])
+
+        def cached():
+            with io.open(store, encoding="utf-8-sig") as fh:
+                return sorted(str(r.get("item_id")) for r in (json.load(fh) or {}).get("resolutions") or [])
+
+        res.append(("the drill really cached both identities before the audit ran",
+                    cached() == ["ground-turkey", "jasmine-rice"], json.dumps(cached())))
+
+        # HD.Daemon DIRECTLY, not the daemon() helper: that helper injects FakePS, which returns
+        # rc 0 without running anything - so the invalidation "succeeded" and the cached row sat
+        # there untouched. The fixture caught it, which is the point of asserting the CACHE rather
+        # than the return value.
+        d = HD.Daemon(tmp, "learn-drill", quiet=True, events_path=ev, resolutions_path=store)
+        audit = {"verdict": "NO-GO", "findings": [
+            {"slug": "sloppy-joe", "kind": "price-class", "owner": "mapper", "blocking": True,
+             "term": "Ground Turkey", "bid": "ground-turkey", "rejects_mapping": True,
+             "why": "priced 85/15, macro'd 93/7 - 860 cal as shopped, outside the band"},
+            {"slug": "sloppy-joe", "kind": "prose-drift", "owner": "writer", "blocking": False,
+             "term": "", "bid": "", "rejects_mapping": False,
+             "why": "the closing line quotes a figure that moved"},
+            # a finding that NAMES a bid but does not reject the identity - the common case
+            {"slug": "chili", "kind": "cost-drift", "owner": "pipeline", "blocking": False,
+             "term": "Jasmine Rice", "bid": "jasmine-rice", "rejects_mapping": False,
+             "why": "the board moved under it; the identity is fine"}]}
+        wrote, killed = arun(d.learn_from_audit(4, audit))
+
+        res.append(("MUST FIRE  every audit finding becomes an EVENT, notes included - a passing "
+                    "check is calibration data the same way the band gate's passes are",
+                    wrote == 3, "wrote=%s" % wrote))
+        res.append(("MUST FIRE  a finding that REJECTS an identity invalidates its cached "
+                    "resolution - the mapper's ruling projected in seconds and the refusal never "
+                    "came back",
+                    killed == ["ground-turkey"] and "ground-turkey" not in cached(),
+                    "killed=%s cache=%s" % (json.dumps(killed), json.dumps(cached()))))
+        res.append(("CLEAN TWIN a finding that merely NAMES a bid leaves it cached - most findings "
+                    "are prices that moved, and invalidating on those throws away good identities",
+                    "jasmine-rice" in cached(), json.dumps(cached())))
+
+        # TOLERATE THE ABSENCE, or the neuter that writes no events CRASHES this fixture instead of
+        # failing it - measured: 0 red and exit 1, which reads as "nothing to see" unless someone
+        # checks the exit code separately.
+        rows = []
+        if os.path.exists(ev):
+            rows = [json.loads(l) for l in io.open(ev, encoding="utf-8") if l.strip()]
+        kinds = sorted(set(r.get("kind") for r in rows))
+        decisions = sorted(r.get("decision") for r in rows)
+        res.append(("  the events are `audit_finding`, and the REJECT is distinguishable from the "
+                    "notes - 'the auditor disagreed' and 'the auditor remarked' are different facts",
+                    kinds == ["audit_finding"] and decisions == ["note", "note", "reject"],
+                    "kinds=%s decisions=%s" % (json.dumps(kinds), json.dumps(decisions))))
+        byline = sorted(set(r.get("by") for r in rows))
+        res.append(("  ...and they are stamped `auditor`, so the nightly can tell which stage "
+                    "learned what", byline == ["auditor"], json.dumps(byline)))
+
+        # AN AUDIT THAT RETURNS NO FINDINGS IS NOT A CLEAN AUDIT, it is an unreadable one.
+        wrote2, killed2 = arun(d.learn_from_audit(5, {"verdict": "GO"}))
+        res.append(("CLEAN TWIN an audit with no structured findings writes nothing and SAYS so - "
+                    "'found nothing' and 'dropped them' look identical from here",
+                    wrote2 == 0 and killed2 == [], "wrote=%s killed=%s" % (wrote2, killed2)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
 
 
 def _a_wave_that_did_not_publish_is_resumable():

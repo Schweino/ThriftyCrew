@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T16:09:29",
+ "generated": "2026-08-27T16:25:41",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,18 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
     },
     {
-     "item": "Alpine Sugar Free Spiced Apple Cider Instant Drink Mix",
-     "price": 2.99,
-     "size": "10 ct",
+     "item": "Kikkoman Seasoning Mix, Mongolian Beef",
+     "price": 0.99,
+     "size": "1 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69496-alpine-sugar-free-spiced-apple-cider-instant-drink-mix-10-ct"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/82683-kikkoman-seasoning-mix-mongolian-beef-1-oz"
     },
     {
-     "item": "Misty's Natural All Purpose Seasoning",
-     "price": 6.99,
-     "size": "4 oz",
+     "item": "McCormick® GRILL MATES Mesquite Seasoning",
+     "price": 2.49,
+     "size": "2.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18784304-misty-s-natural-all-purpose-seasoning-4-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41190-mccormick-grill-mates-mesquite-seasoning-2-5-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

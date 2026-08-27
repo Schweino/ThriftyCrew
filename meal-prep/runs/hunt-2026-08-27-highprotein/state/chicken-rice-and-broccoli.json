@@ -3,10 +3,10 @@
     "title":  "Healthy Chicken, Rice and Broccoli Skillet",
     "source_url":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
     "protein":  "chicken",
-    "state":  "waved",
-    "wave":  4,
+    "state":  "qa-passed",
+    "wave":  5,
     "created":  "2026-08-27T11:48:57",
-    "updated":  "2026-08-27T16:11:53",
+    "updated":  "2026-08-27T16:44:22",
     "terms":  [
 
               ],
@@ -86,6 +86,24 @@
                         "at":  "2026-08-27T16:11:53",
                         "by":  "wave-close",
                         "detail":  "wave 4"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T16:25:19",
+                        "by":  "daemon",
+                        "detail":  "returned to the wave pool: wave 4 never published (its batch is unclosed), so the recipe was stranded at waved"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T16:27:52",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T16:44:22",
+                        "by":  "auditor",
+                        "detail":  "audit-clean, trimmed out of blocked wave 5"
                     }
                 ]
 }

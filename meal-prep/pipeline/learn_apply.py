@@ -718,6 +718,41 @@ def qa_fail_event(slug, findings_text, run="", residual_keys=None, why_keys="", 
                         evidence=(str(findings_text or "").strip() + tail).strip())
 
 
+def audit_finding_event(finding, run="", wave=0, events=""):
+    r"""One `audit_finding` event, from a wave auditor's structured finding. Returns (how, event).
+
+    WHY THE BACK HALF NEEDED ITS OWN DOOR. The map lane writes an event per residual ruling and the
+    QA lane writes one per mapper-fail, so the estate learns from every identity it PROPOSES. The
+    wave auditor - the stage that overturns those identities with evidence - wrote nothing at all:
+    four waves of hunt-2026-08-27-highprotein produced 96 mapper events and zero audit events.
+
+    `decision` is the honest verb rather than a fixed string: `reject` when the finding says the
+    identity is wrong, `note` otherwise. That distinction is what a later reader needs to tell "the
+    auditor disagreed with this mapping" from "the auditor remarked on the prose".
+    """
+    f = finding if isinstance(finding, dict) else {}
+    slug = str(f.get("slug") or "").strip()
+    if not slug:
+        return "failed", None
+    term = str(f.get("term") or "").strip()
+    bid = str(f.get("bid") or "").strip()
+    rejects = bool(f.get("rejects_mapping")) and bool(bid)
+    ev_bits = [str(f.get("why") or "").strip()]
+    if f.get("kind"):
+        ev_bits.append("kind: %s" % f.get("kind"))
+    if f.get("owner"):
+        ev_bits.append("owner: %s" % f.get("owner"))
+    if wave:
+        ev_bits.append("wave %s" % wave)
+    return append_event("audit_finding", slug, events=events, run=run,
+                        key=term_key(term) if term else "", term=term, raw="",
+                        decision=("reject" if rejects else "note"), bid=bid,
+                        predicted={"source": "none", "bid": ""},
+                        surprise=bool(f.get("blocking")), projected=False,
+                        held_reason=("" if rejects else "a note is not an identity ruling"),
+                        by="auditor", evidence="; ".join([b for b in ev_bits if b]))
+
+
 def residual_keys_for(run_dir, slug):
     r"""The slug's residual keys, from <RunDir>\mapped-pre\<slug>.rulings.json. (keys, why_not).
 

@@ -1334,10 +1334,49 @@ WAVECLOSE = {"type": "object", "properties": {
     "batch": {"type": "string"}},
     "required": ["wave", "slugs"]}
 
+# THE AUDITOR'S FINDINGS ARE STRUCTURED NOW (2026-08-27), and that is what lets the back half of the
+# pipeline LEARN. Until this change a wave audit returned a verdict, a list of blocking slugs and a
+# prose summary; the findings themselves lived only in waves\wave-<k>.audit.md, were read once by a
+# repair cycle, and were never seen again. Four waves of hunt-2026-08-27-highprotein produced 96
+# mapper events and ZERO audit events, so the estate learned from the lane that proposes identities
+# and heard nothing from the one that overturns them.
+#
+# The case that named the gap: the mapper ruled `Ground Turkey` -> the GENERIC ground-turkey family
+# and that projected into the resolutions cache immediately, as designed. Three lanes later the wave
+# auditor proved it wrong - priced as 85/15, macro'd as 93/7, 860 cal as actually shopped - and the
+# cache kept the disproved identity because nothing carried the refusal back.
+#
+# `term` + `bid` + `rejects_mapping` are the three fields that make a finding actionable rather than
+# narrative: they are what an invalidation needs to know WHICH cached identity this refutes.
+AUDIT_FINDING = {"type": "object", "properties": {
+    "slug": {"type": "string"},
+    "kind": {"type": "string", "description":
+             "short slug for the defect class, e.g. price-class, macro-basis, template-token, "
+             "prose-drift, cost-drift, dish-identity"},
+    "owner": {"type": "string", "description":
+              "which stage must repair it: mapper | writer | pricer | pipeline | shared-data"},
+    "blocking": {"type": "boolean", "description": "true if this alone stops the wave publishing"},
+    "term": {"type": "string", "description":
+             "the ingredient NAME this finding is about, verbatim as the recipe line spells it, when "
+             "the finding is about an ingredient at all. Empty otherwise - never guess one."},
+    "bid": {"type": "string", "description":
+            "the commodity id the finding says is WRONG for that term. Empty unless the finding "
+            "really is about an identity."},
+    "rejects_mapping": {"type": "boolean", "description":
+                        "true ONLY when this finding means the term->bid identity itself is wrong, so "
+                        "the cached resolution pointing at `bid` must be thrown away. A price that "
+                        "merely moved, a prose defect, or a stale number is NOT a rejected mapping."},
+    "why": {"type": "string", "description": "one sentence, the reason, in your own words"}},
+    "required": ["slug", "kind", "why"]}
+
 AUDIT = {"type": "object", "properties": {
     "verdict": {"type": "string"},
     "blocking_slugs": {"type": "array", "items": {"type": "string"}},
-    "blocker_kind": {"type": "string"}, "owner": {"type": "string"}, "summary": {"type": "string"}},
+    "blocker_kind": {"type": "string"}, "owner": {"type": "string"}, "summary": {"type": "string"},
+    "findings": {"type": "array", "items": AUDIT_FINDING, "description":
+                 "EVERY finding you made, blocking or not, including the ones you re-derived clean "
+                 "and the non-blocking notes. A passing check is calibration data too - the same "
+                 "reason the band gate logs its passes."}},
     "required": ["verdict"]}
 
 # CHANGE A (2026-08-25): THE RECIPE-LOCAL REPAIR RETURNS THE WRITER'S OWN PAYLOAD SHAPE, so it goes

@@ -80,6 +80,7 @@ BUILD_SKELETON_PS = os.path.join(HERE, "build-intake-skeleton.ps1")
 WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
 WAVE_PUBLISH_PS = os.path.join(HERE, "wave-publish.ps1")
 BATCH_LEDGER_PS = os.path.join(HERE, "batch-ledger.ps1")
+RESOLUTIONS_PS = os.path.join(HERE, "ingredient-resolutions.ps1")
 BUILD_V2_SPEC_PS = os.path.join(HERE, "build-v2-spec.ps1")
 FIND_SIMILAR_PS = os.path.join(HERE, "find-similar.ps1")
 SPECS_DIR = os.path.join(MP, "db", "recipes")
@@ -4245,6 +4246,101 @@ class Daemon(object):
         return True, ("the intake already carries writer prose and the mapper decision file is "
                       "byte-identical to the one it was built from (%s)" % live[:12])
 
+    async def sync_wave_manifest(self, wk):
+        """Reconcile wave `wk`'s manifest against the state files. Returns True when it ran.
+
+        ONE COPY, TWO ROADS. A recipe leaves a wave by two doors - the audit TRIM, and the resume
+        re-wave in seed() - and both move the state while the manifest goes on listing the slug.
+        Get-ClaimedSlugs reads the manifest, so either road alone produces "already claimed by an
+        open wave" and the next close refuses. This was fixed on the resume road first and the trim
+        road kept the bug, which is exactly what a second copy of a rule buys you.
+        """
+        if not wk:
+            return False
+        rc, out, err = await self.ps(HUNT_RUN_PS, ["-WaveSync", "-Wave", str(int(wk)),
+                                                   "-RunDir", self.run_dir], timeout=180)
+        if rc != 0:
+            self.findings.append("wave %d: the manifest could not be reconciled, so its recipes stay "
+                                 "claimed and no wave can close (%s)"
+                                 % (wk, ((out or "") + (err or "")).strip()[:200]))
+            return False
+        return True
+
+    async def learn_from_audit(self, wk, audit):
+        """Every audit finding becomes an EVENT, and a finding that refutes an identity INVALIDATES
+        the cached resolution that carries it. Returns (events_written, invalidated_bids).
+
+        THE HALF OF THE PIPELINE THAT HAD NO MEMORY. The map lane writes an event per residual ruling
+        and projects clean ones straight into db\\ingredient-resolutions.json, which map-preresolve
+        then consults as step 1 of its ladder on EVERY later recipe - so a mapper decision becomes an
+        authoritative PRIOR RULING within seconds. The wave auditor, the one stage whose whole job is
+        to overturn those decisions with evidence, wrote nothing: four waves of this run produced 96
+        mapper events and zero audit events.
+
+        The founding case is exact. The mapper ruled `Ground Turkey` onto the generic ground-turkey
+        family; that projected immediately. Three lanes later the auditor proved it wrong - the board
+        prices 85/15 while the macros came off a 93/7 row, so a reader who bought the priced product
+        ate ~860 cal against a 450-800 band - and the cache went on holding the disproved identity,
+        because nothing carried the refusal back. A human had to notice.
+
+        INVALIDATION IS DELIBERATELY NARROW. It fires only when the auditor sets rejects_mapping AND
+        names a bid, i.e. only when it says the identity itself is wrong - never for a price that
+        moved, a prose defect or a stale number, which are the common case. The primitive is the same
+        one rebid-ingredient.ps1 has used since 2026-08-25 (ingredient-resolutions.ps1 -Invalidate),
+        and it drops every cached row pointing at that bid: broad on purpose, because a bid the audit
+        just refuted is not an identity any OTHER term should be resolving to either.
+
+        Best effort, and loud about it. An audit finding that cannot be recorded is a finding, not an
+        exception: the wave has already been ruled on and refusing here would strand a GO.
+        """
+        findings = [f for f in ((audit or {}).get("findings") or []) if isinstance(f, dict)]
+        if not findings:
+            # SILENCE IS A FINDING. An auditor that returned a verdict and no findings has either
+            # found nothing at all - possible on a clean wave - or dropped them, and the two look
+            # identical from here. Say so rather than record an empty success.
+            self.log("WAVE %d: the audit returned NO structured findings, so nothing was learned "
+                     "from it" % wk)
+            return 0, []
+        wrote, bad = 0, 0
+        for f in findings:
+            how, _ev = await self.loop_run(learn_apply.audit_finding_event,
+                                           f, self.run_id, wk, self.events_path)
+            if how == "failed":
+                bad += 1
+            else:
+                wrote += 1
+        if bad:
+            self.findings.append("learn/wave %d: %d audit finding(s) could not be recorded as "
+                                 "events" % (wk, bad))
+        # ...and the identities the audit refuted
+        refuted, killed = [], []
+        for f in findings:
+            bid = str(f.get("bid") or "").strip()
+            if bid and bool(f.get("rejects_mapping")) and bid not in refuted:
+                refuted.append(bid)
+        for bid in refuted:
+            args = ["-Invalidate", "-ItemId", bid]
+            if self.resolutions_path:
+                args += ["-Store", self.resolutions_path]
+            rc, out, err = await self.ps(RESOLUTIONS_PS, args, timeout=180)
+            if rc != 0:
+                self.findings.append(
+                    "learn/wave %d: the audit refuted the identity %r but the cached resolution "
+                    "could NOT be invalidated, so the next recipe is still handed it as a prior "
+                    "ruling (%s)" % (wk, bid, ((out or "") + (err or "")).strip()[:200]))
+                continue
+            killed.append(bid)
+            self.log("WAVE %d: the audit refuted %r - cached resolutions pointing at it are "
+                     "invalidated" % (wk, bid))
+        self.log("WAVE %d: learned %d audit finding(s), invalidated %d identity(ies)"
+                 % (wk, wrote, len(killed)))
+        return wrote, killed
+
+    async def loop_run(self, fn, *a):
+        """Run a sync learn_apply writer off the event loop, the way the QA lane already does."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, lambda: fn(*a))
+
     def state_wave(self, slug):
         """The wave number off the recipe's own state file. status_json's in_flight rows carry slug
         and state but not the wave, and the wave is what names the batch."""
@@ -5253,6 +5349,10 @@ class Daemon(object):
                                                                              "whole-wave", None),
                                     "audit", "wave-%d:audit" % wk, slugs,
                                     schema=hunt_lib.AUDIT, stage="auditor")
+        # LEARN FROM IT BEFORE ANYTHING ELSE HAPPENS TO IT. The first audit's findings are the ones a
+        # repair cycle is about to act on, and if the re-audit below replaces `audit` they are gone
+        # from memory entirely - so they are recorded here, not once at the end.
+        await self.learn_from_audit(wk, audit)
         repair_spent = False
 
         if audit and not hunt_lib.is_go(audit.get("verdict")):
@@ -5303,6 +5403,10 @@ class Daemon(object):
                                                           scope["why"], delta=repair_delta),
                                         "audit", "wave-%d:reaudit" % wk, slugs,
                                         schema=hunt_lib.AUDIT, stage="auditor")
+            # the re-audit's findings are their own evidence: what the repair actually fixed, and
+            # what it did not. A run that recorded only the first audit would learn the defect and
+            # never learn whether the correction took.
+            await self.learn_from_audit(wk, audit)
 
         if not audit or not hunt_lib.is_go(audit.get("verdict")):
             self.log("WAVE %d: still NO-GO after one repair cycle" % wk)
@@ -5466,6 +5570,15 @@ class Daemon(object):
                 self.qa_passed.append(s)
         self.log("WAVE %d: %d clean recipe(s) returned to the pool for the next wave"
                  % (wk, len(plan["clean"])))
+        # ...AND THIS WAVE'S MANIFEST MUST LET GO OF THEM, for the same reason the resume road must
+        # (2026-08-27). Get-ClaimedSlugs reads the manifest, not the state file, so a recipe trimmed
+        # back to qa-passed while wave <k>.json still lists it is "already claimed by an open wave"
+        # and the next close refuses outright. Measured on wave 5 of hunt-2026-08-27-highprotein: it
+        # trimmed 2 blocked and 4 clean, returned the 4, and the very next close answered
+        #   "N qa-passed recipe(s) are waiting but ALL are already claimed by an open wave"
+        # - the trim had freed the recipes and the manifest had not. Fixed once in seed() for the
+        # resume road and missed here, which is the same defect through the other door.
+        await self.sync_wave_manifest(wk)
 
     async def ledger(self, args, timeout=300):
         """Every batch-ledger call, one road, so the scratch override cannot be forgotten on one of
@@ -5668,6 +5781,15 @@ class Daemon(object):
             "Report to %s\\waves\\wave-%d.audit.md. FIRST line exactly GO or NO-GO. SECOND line\n"
             "exactly \"scope: %s\". Return the verdict, the blocking slugs, whether each blocker is\n"
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
+            "\n"
+            "ALSO RETURN `findings`: EVERY finding, blocking or not, one entry each, including the\n"
+            "non-blocking notes and the checks you re-derived clean. Your markdown is read once by a\n"
+            "repair cycle and never again; `findings` is the only part of your work the estate keeps.\n"
+            "For a finding about an INGREDIENT, fill `term` with the recipe's own spelling of it and\n"
+            "`bid` with the commodity id you say is wrong for it. Set `rejects_mapping` true ONLY\n"
+            "when you mean the identity itself is wrong - that the term must not resolve to that id -\n"
+            "because the cached resolution for that id is thrown away when you do. A price that\n"
+            "moved, a stale number or a prose defect is a finding, not a rejected mapping.\n"
             "%s%s"
             % (wk, self.run_id, self.run_dir, self.run_dir, wk, ", ".join(slugs), scope,
                ("\nReason: " + why) if why else "  (first audit of this wave)",
@@ -5967,12 +6089,7 @@ class Daemon(object):
         # on from where they were unresumable. hunt-run names the remedy in that very message, and
         # -WaveSync drops exactly the slugs whose state no longer matches the manifest.
         for wk_open in sorted(rewaved_waves):
-            rc, out, err = await self.ps(HUNT_RUN_PS, ["-WaveSync", "-Wave", str(wk_open),
-                                                       "-RunDir", self.run_dir], timeout=180)
-            if rc != 0:
-                self.findings.append("wave %d: the manifest could not be reconciled after a re-wave, "
-                                     "so its recipes stay claimed and no wave can close (%s)"
-                                     % (wk_open, ((out or "") + (err or "")).strip()[:200]))
+            await self.sync_wave_manifest(wk_open)
         # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
         if mapped_holds:
             n = await self.unhold_mapped(mapped_holds)
