@@ -45,6 +45,7 @@ import food_provenance as fp                                       # noqa: E402
 MP = fp.MP
 REVIEW_PATH = os.path.join(MP, "db", "food-source-review.md")
 APPROVALS_PATH = os.path.join(MP, "db", "food-source-approvals.json")
+CAPTURES_PATH = os.path.join(MP, "db", "food-label-captures.json")
 CHECKED = "2026-08-26"
 
 # TOLERANCE, STATED. Both rows are put on per-100-g before anything is compared - the H2 lesson from
@@ -240,6 +241,106 @@ def adjudicate(row, cache=None, approved=None, rejected=None):
     return rec
 
 
+# ---- rung 4: labels photographed in Brad's Chrome ------------------------------------------------
+
+def label_captures(path=None):
+    """The panels read off the product photographs, keyed by food-DB row name.
+
+    THE PANEL IS A PHOTOGRAPH AND THAT IS THE WHOLE DIFFICULTY. Walmart's page text does not carry
+    it, __NEXT_DATA__ carries only a collapsed NutritionValuePlaceholder, and the image URLs are
+    hashed with empty alt text - so no regex finds the label and no automated client even reaches the
+    page (WebFetch gets the bot wall; Brad's Chrome gets the product). These were transcribed by eye,
+    household measure AND grams, per the meal-macro standard."""
+    with open(path or CAPTURES_PATH, "r", encoding="utf-8-sig") as f:
+        doc = json.load(f)
+    return dict((str(c["item"]), c) for c in (doc.get("captures") or []) if c.get("item"))
+
+
+def label_per_100g(cap):
+    """A captured panel on the per-100-g basis, or None when the panel states no gram weight.
+
+    A LABEL IN MILLILITRES IS NOT A LABEL IN GRAMS, and pretending otherwise is how a broth row gets
+    scaled by a density nobody measured. Where the panel states only mL - broth, soy sauce, coconut
+    milk - the serving_g field carries the gram weight the STORED row already uses for that same
+    household measure, which is what makes the two comparable at all; where they disagree about the
+    measure itself, the capture is a CONFLICT and never a corroboration."""
+    lab = cap.get("label") or {}
+    g = lab.get("serving_g")
+    if not isinstance(g, (int, float)) or g <= 0:
+        return None
+    f = 100.0 / float(g)
+    out = {}
+    for k in ("calories", "protein_g", "carbs_g", "fat_g"):
+        v = lab.get(k)
+        if not isinstance(v, (int, float)):
+            return None
+        out[k] = float(v) * f
+    return out
+
+
+def adjudicate_label(row, cap):
+    """Same contract as the FDC path: CORROBORATED writes a `source` and nothing else; anything that
+    does not agree is REPORTED. status LABEL and PROXY are the only ones that can ever write."""
+    st = str(cap.get("status") or "")
+    if st in ("UNFOUND", "CONFLICT"):
+        return {"verdict": st, "why": cap.get("note", ""), "product": cap.get("product"),
+                "url": cap.get("url")}
+    stored = per_100g(row)
+    lab100 = label_per_100g(cap)
+    if stored is None or lab100 is None:
+        return {"verdict": "CONFLICT", "off": ["basis"],
+                "why": "the panel or the stored row states no usable gram weight",
+                "product": cap.get("product"), "url": cap.get("url")}
+    off, text = compare(stored, lab100)
+    rec = {"off": off, "text": text, "product": cap.get("product"), "url": cap.get("url"),
+           "why": cap.get("note", ""), "proxy": st == "PROXY"}
+    if off:
+        rec["verdict"] = "CONFLICT"
+        return rec
+    lab = cap["label"]
+    lead = ("PROXY - %s" % cap.get("product")) if st == "PROXY" else str(cap.get("product"))
+    rec["verdict"] = "CORROBORATED"
+    rec["source"] = ("%s label, read off the product photograph in Brad's Chrome %s (%s): %s, "
+                     "%s cal / %s g fat / %s g carb / %s g protein%s. %s"
+                     % (lead, CHECKED, cap.get("url"), lab.get("serving"), lab.get("calories"),
+                        lab.get("fat_g"), lab.get("carbs_g"), lab.get("protein_g"),
+                        (", %s servings per container" % lab["servings_per_container"])
+                        if lab.get("servings_per_container") is not None else "",
+                        cap.get("note", "")))
+    return rec
+
+
+def run_labels(write=False, db_path=None, captures=None, log=print):
+    db = fp.load_db(db_path)
+    caps = captures if captures is not None else label_captures()
+    by_name = {}
+    results = []
+    for row in db.get("items", []):
+        cap = caps.get(str(row.get("item") or ""))
+        if not cap:
+            continue
+        v = adjudicate_label(row, cap)
+        v["item"] = str(row["item"])
+        results.append(v)
+        if v["verdict"] == "CORROBORATED" and not fp.has_source(row):
+            by_name[v["item"]] = v["source"]
+    # A capture naming a row the DB does not hold is a FINDING, not a silent no-op.
+    for name in caps:
+        if not any(r["item"] == name for r in results):
+            results.append({"item": name, "verdict": "CONFLICT",
+                            "why": "no food-DB row is named %r" % name, "off": ["no such row"]})
+    if write:
+        n = 0
+        for row in db["items"]:
+            src = by_name.get(str(row.get("item") or ""))
+            if src and not fp.has_source(row):
+                row["source"] = src
+                n += 1
+        _write_db(db, db_path)
+        log("wrote `source` on %d row(s) from photographed labels; NOTHING ELSE was touched" % n)
+    return results
+
+
 def run(write=False, only_class=("A",), db_path=None, cache=None, log=print):
     db = fp.load_db(db_path)
     doc = fp.classify_all(db)
@@ -342,6 +443,54 @@ def render_review(results, classes):
         for r in sorted(unr, key=lambda x: -g(x["item"])):
             w("- **%s** (%s g live)" % (r["item"], gt(r["item"])))
         w("")
+    return "\n".join(out) + "\n"
+
+
+def render_label_review(results, classes):
+    def pick(v):
+        return [r for r in results if r["verdict"] == v]
+
+    ok, con, unf = pick("CORROBORATED"), pick("CONFLICT"), pick("UNFOUND")
+
+    def g(item):
+        return classes.get(item, {}).get("grams_live", 0)
+
+    out = []
+    w = out.append
+    w("# Class B labels, photographed in Brad's Chrome")
+    w("")
+    w("Rung 4 of `design\\PLAN-food-db-provenance-2026-08-26.md`, %s. %d row(s) attempted: "
+      "**%d corroborated and cited**, **%d disagreed with the stored row**, **%d unfound**."
+      % (CHECKED, len(results), len(ok), len(con), len(unf)))
+    w("")
+    w("The panel is a PHOTOGRAPH in the product image carousel. It is not in the page text, not in "
+      "`__NEXT_DATA__` (which holds only a collapsed `NutritionValuePlaceholder`), and no filename "
+      "or alt-text regex finds it. An automated fetch of the same URL returns a bot wall.")
+    w("")
+    w("## Cited from the photograph")
+    w("")
+    for r in sorted(ok, key=lambda x: -g(x["item"])):
+        w("- **%s** (%s g live)%s - %s" % (r["item"], "{:,.0f}".format(g(r["item"])),
+                                           " *(proxy)*" if r.get("proxy") else "", r.get("product")))
+    if not ok:
+        w("None.")
+    w("")
+    w("## The panel disagrees with the stored row - nothing was written")
+    w("")
+    for r in sorted(con, key=lambda x: -g(x["item"])):
+        w("- **%s** (%s g live) - %s. %s %s"
+          % (r["item"], "{:,.0f}".format(g(r["item"])), r.get("product") or "-",
+             r.get("text", ""), r.get("why", "")))
+    if not con:
+        w("None.")
+    w("")
+    w("## Unfound - recorded, not retried forever")
+    w("")
+    for r in sorted(unf, key=lambda x: -g(x["item"])):
+        w("- **%s** (%s g live) - %s" % (r["item"], "{:,.0f}".format(g(r["item"])), r.get("why", "")))
+    if not unf:
+        w("None.")
+    w("")
     return "\n".join(out) + "\n"
 
 
@@ -508,6 +657,75 @@ def selftest():
         import shutil                                              # noqa: PLC0415
         shutil.rmtree(tmpd, ignore_errors=True)
 
+    # ---- rung 4: labels photographed in Brad's Chrome ------------------------------------------
+
+    def cap(item, status="LABEL", cal=100, p_=5, c_=10, f_=2, g=100, **kw):
+        d = {"item": item, "status": status, "product": "Great Value Fixture, 12 oz",
+             "url": "https://www.walmart.com/ip/1", "note": "fixture",
+             "label": {"serving": "1 cup (%sg)" % g, "servings_per_container": 4, "calories": cal,
+                       "fat_g": f_, "carbs_g": c_, "protein_g": p_, "serving_g": g}}
+        d.update(kw)
+        return d
+
+    v = adjudicate_label(_row("Fixture Broth", sg=240.0, cal=10, p=1, c=0, f=0),
+                         cap("Fixture Broth", cal=10, p_=1, c_=0, f_=0, g=240))
+    T("MUST FIRE  a photographed panel that reproduces the stored row is cited, and the citation "
+      "names the photograph and the URL - not the page, which does not carry the label at all",
+      v["verdict"] == "CORROBORATED" and "read off the product photograph" in v["source"]
+      and "walmart.com" in v["source"], json.dumps(v)[:240])
+
+    v = adjudicate_label(_row("Fixture Coconut", sg=80.0, cal=140, p=1, c=2, f=14),
+                         cap("Fixture Coconut", cal=120, p_=1, c_=2, f_=12, g=80))
+    T("MUST FIRE  a panel that DISAGREES with the stored row writes nothing, even when the capture "
+      "was filed as a clean LABEL - the transcription is a claim, not a licence",
+      v["verdict"] == "CONFLICT" and "calories" in v["off"], json.dumps(v)[:200])
+
+    v = adjudicate_label(_row("Fixture Sausage"), cap("Fixture Sausage", status="UNFOUND"))
+    T("MUST FIRE  a label that could not be found is RECORDED as unfound and writes nothing - never "
+      "retried forever, never silently skipped", v["verdict"] == "UNFOUND", json.dumps(v)[:160])
+
+    v = adjudicate_label(_row("Fixture Broth", sg=240.0, cal=10, p=1, c=0, f=0),
+                         cap("Fixture Broth", status="PROXY", cal=10, p_=1, c_=0, f_=0, g=240))
+    T("MUST FIRE  a capture of a DIFFERENT brand's package says PROXY in the field itself - the row "
+      "states Swanson and the shelf carries Great Value, and a citation that hides that is worse "
+      "than none", v["verdict"] == "CORROBORATED" and v["source"].startswith("PROXY - "),
+      repr(v.get("source"))[:200])
+
+    nog = cap("Fixture Broth", g=240)
+    nog["label"].pop("serving_g")
+    v = adjudicate_label(_row("Fixture Broth", sg=240.0), nog)
+    T("MUST FIRE  a panel stating only millilitres cannot corroborate a row stated in grams - "
+      "inventing the density is how a broth row gets scaled by a number nobody measured",
+      v["verdict"] == "CONFLICT" and v["off"] == ["basis"], json.dumps(v)[:200])
+
+    import tempfile                                                # noqa: PLC0415
+    tmp3 = tempfile.mkdtemp(prefix="fsb-lab-")
+    try:
+        dbp = os.path.join(tmp3, "db.json")
+        before = {"readme": "x", "items": [_row("Fixture Broth", sg=240.0, cal=10, p=1, c=0, f=2,
+                                                notes="keep me")]}
+        with open(dbp, "w", encoding="utf-8") as f:
+            json.dump(before, f)
+        caps = {"Fixture Broth": cap("Fixture Broth", cal=10, p_=1, c_=0, f_=2, g=240),
+                "Ghost Row": cap("Ghost Row")}
+        res = run_labels(write=True, db_path=dbp, captures=caps, log=lambda *_a: None)
+        with open(dbp, "r", encoding="utf-8-sig") as f:
+            after = json.load(f)["items"][0]
+        moved = [k for k in ("calories", "protein_g", "carbs_g", "fat_g", "serving_grams",
+                             "serving_qty", "serving_unit", "notes")
+                 if after.get(k) != before["items"][0].get(k)]
+        T("MUST FIRE  the label pass writes `source` and NOTHING else - the tortellini lesson holds "
+          "for a photograph exactly as it holds for an FDC row",
+          not moved and "read off the product photograph" in str(after.get("source", "")),
+          "moved=%s source=%r" % (json.dumps(moved), str(after.get("source"))[:90]))
+        ghost = [r for r in res if r["item"] == "Ghost Row"]
+        T("MUST FIRE  a capture naming a row the DB does not hold is a FINDING, not a silent no-op - "
+          "a transcription with nowhere to land must not vanish",
+          len(ghost) == 1 and ghost[0]["verdict"] == "CONFLICT", json.dumps(ghost)[:200])
+    finally:
+        import shutil                                              # noqa: PLC0415
+        shutil.rmtree(tmp3, ignore_errors=True)
+
     print("%d assertion(s) failed" % len(bad) if bad else "all assertions passed")
     return 1 if bad else 0
 
@@ -527,6 +745,15 @@ if __name__ == "__main__":
         print("FDC cache: added %(added)d, already had %(skipped)d, could not run %(failed)d, "
               "now holds %(size)d term(s)" % st)
         raise SystemExit(2 if st["failed"] and not st["added"] else 0)
+    if "--labels" in sys.argv:
+        res = run_labels(write="--write" in sys.argv)
+        tally = {}
+        for r in res:
+            tally[r["verdict"]] = tally.get(r["verdict"], 0) + 1
+        with open(os.path.join(MP, "db", "food-label-review.md"), "w", encoding="utf-8") as f:
+            f.write(render_label_review(res, classes))
+        print("photographed labels: %d row(s) -> %s" % (len(res), json.dumps(tally, sort_keys=True)))
+        raise SystemExit(0)
     res = run(write="--write" in sys.argv, only_class=only)
     tally = {}
     for r in res:

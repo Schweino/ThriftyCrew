@@ -1,0 +1,215 @@
+{
+ "readme": "Nutrition labels READ OFF THE PRODUCT PHOTOGRAPH in Brad's own Chrome, 2026-08-26, rung 4 of design\\PLAN-food-db-provenance-2026-08-26.md. The label is a photograph in the Walmart image carousel - it is not in the page text, not in __NEXT_DATA__ (which carries only a collapsed NutritionValuePlaceholder), and no filename or alt-text regex finds it. An automated fetch of the same URL returns a bot wall; Brad's Chrome returns the product. Every panel here was transcribed from the image, household measure AND grams. status: LABEL = the product matches the row's own brand; PROXY = a different brand, recorded as standing in; CONFLICT = the panel disagrees with the stored row and NOTHING was written; UNFOUND = no panel could be reached, recorded rather than retried forever.",
+ "captured": "2026-08-26",
+ "captures": [
+  {
+   "item": "Chicken Broth",
+   "status": "PROXY",
+   "product": "Great Value Family Size Gluten-Free Chicken Broth, 48 oz Carton",
+   "url": "https://www.walmart.com/ip/Great-Value-Family-Size-Chicken-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/46330157",
+   "label": {
+    "servings_per_container": "about 6",
+    "serving": "1 cup (240mL)",
+    "calories": 10,
+    "fat_g": 0,
+    "carbs_g": 0,
+    "protein_g": 1,
+    "sodium_mg": 830,
+    "serving_g": 240,
+    "serving_g_note": "panel states mL only; 240 g is the gram weight the stored row already uses for the same 1 cup measure"
+   },
+   "stored_brand": "Swanson",
+   "note": "row states Swanson; this is the Great Value carton the board actually prices. Agrees but for 1 g of carbohydrate."
+  },
+  {
+   "item": "Beef Broth",
+   "status": "LABEL",
+   "product": "Great Value Family Size Beef Broth, 48 oz Carton",
+   "url": "https://www.walmart.com/ip/4-pack-Great-Value-Family-Size-Beef-Broth-48-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/1528146699",
+   "label": {
+    "servings_per_container": "about 6",
+    "serving": "1 cup (240mL)",
+    "calories": 10,
+    "fat_g": 0,
+    "carbs_g": 0,
+    "protein_g": 2,
+    "sodium_mg": 810,
+    "serving_g": 240,
+    "serving_g_note": "panel states mL only; 240 g is the stored row's own gram weight for 1 cup"
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches the row; every stored number matches the panel exactly."
+  },
+  {
+   "item": "Smoked Turkey Sausage",
+   "status": "UNFOUND",
+   "note": "the row states Butterball; a Walmart search for Butterball natural hardwood smoked turkey sausage returns ONE result and it is a sponsored Oscar Mayer. The row's own brand is not carried at the store the board prices. Drops to FDC Branded or an explicit proxy."
+  },
+  {
+   "item": "Marinara Sauce",
+   "status": "LABEL",
+   "product": "Great Value Marinara Pasta Sauce, 23 oz",
+   "url": "https://www.walmart.com/ip/952045923",
+   "label": {
+    "servings_per_container": "about 6",
+    "serving": "1/2 cup (123g)",
+    "calories": 70,
+    "fat_g": 2.5,
+    "carbs_g": 9,
+    "fiber_g": 3,
+    "protein_g": 2,
+    "sodium_mg": 510,
+    "serving_g": 123
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches; every stored number matches the panel exactly."
+  },
+  {
+   "item": "Soy Sauce",
+   "status": "CONFLICT",
+   "product": "Great Value Naturally Brewed Soy Sauce, 15 fl oz",
+   "url": "https://www.walmart.com/ip/2-pack-Great-Value-Naturally-Brewed-Soy-Sauce-15-fl-oz/1753791497",
+   "label": {
+    "servings_per_container": "about 30",
+    "serving": "1 Tbsp (15mL)",
+    "calories": 5,
+    "fat_g": 0,
+    "carbs_g": 1,
+    "protein_g": 1,
+    "sodium_mg": 900,
+    "serving_g": 15,
+    "serving_g_note": "panel states mL only; 15 g for 1 Tbsp"
+   },
+   "stored_brand": "generic (USDA low-sodium)",
+   "note": "the label is ~33 cal and 6.7 g protein per 100 g against the stored 53 and 8.1. The stored row is a USDA generic and the Great Value bottle is a different, lighter formulation - and label rounding at 5 cal per tbsp is coarse. Reported, not overwritten."
+  },
+  {
+   "item": "Fries",
+   "status": "LABEL",
+   "product": "Great Value Crinkle Cut French Fried Potatoes, 32 oz",
+   "url": "https://www.walmart.com/ip/10534212",
+   "label": {
+    "servings_per_container": "about 11",
+    "serving": "3 oz (85g / about 13 pieces)",
+    "calories": 110,
+    "fat_g": 5,
+    "carbs_g": 17,
+    "fiber_g": 1,
+    "protein_g": 1,
+    "sodium_mg": 350,
+    "serving_g": 85
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches; exact."
+  },
+  {
+   "item": "Hickory Smoked Bacon",
+   "status": "LABEL",
+   "product": "Great Value Hickory Smoked Bacon, Mega Pack, 24 oz",
+   "url": "https://www.walmart.com/ip/346866251",
+   "label": {
+    "servings_per_container": "about 14",
+    "serving": "2 cooked slices (15g)",
+    "calories": 90,
+    "fat_g": 7,
+    "carbs_g": 0,
+    "protein_g": 5,
+    "serving_g": 15
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches; exact."
+  },
+  {
+   "item": "Potato Gnocchi",
+   "status": "LABEL",
+   "product": "Great Value Potato Gnocchi, 17.6 oz",
+   "url": "https://www.walmart.com/ip/6-pack-Great-Value-Gv-Gnocchi-17-6oz/1834968118",
+   "label": {
+    "servings_per_container": "about 4",
+    "serving": "3/4 cup (124g) dry",
+    "calories": 200,
+    "fat_g": 0.5,
+    "carbs_g": 46,
+    "fiber_g": 1,
+    "protein_g": 4,
+    "sodium_mg": 690,
+    "serving_g": 124
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches; exact, container count included."
+  },
+  {
+   "item": "Seasoned Black Beans",
+   "status": "LABEL",
+   "product": "Great Value Seasoned Black Beans, 15 oz Can",
+   "url": "https://www.walmart.com/ip/Great-Value-Seasoned-Black-Beans-15-oz-Can/39778877",
+   "label": {
+    "servings_per_container": "about 3.5",
+    "serving": "1/2 cup (130g)",
+    "calories": 130,
+    "fat_g": 0.5,
+    "carbs_g": 23,
+    "fiber_g": 6,
+    "protein_g": 8,
+    "sodium_mg": 430,
+    "serving_g": 130
+   },
+   "stored_brand": "Great Value",
+   "note": "brand matches; exact."
+  },
+  {
+   "item": "Penne Pasta",
+   "status": "UNFOUND",
+   "note": "the row is Barilla PROTEIN PLUS (10 g protein per 56 g). The Walmart URL on file is Great Value penne, a different food (7 g per 1/2 cup), and a Walmart search for Barilla Protein Plus Penne returns only sponsored competitors. Drops to FDC Branded."
+  },
+  {
+   "item": "Ketchup",
+   "status": "UNFOUND",
+   "note": "the Great Value 64 oz page carries five images and none is a nutrition panel. No label to read on this page."
+  },
+  {
+   "item": "Mexican Cheese Blend",
+   "status": "LABEL",
+   "product": "Great Value Fiesta Blend Finely Shredded Cheese, 16 oz Bag",
+   "url": "https://www.walmart.com/ip/Great-Value-Finely-Shredded-Fiesta-Blend-Cheese-16-oz/15544059",
+   "label": {
+    "servings_per_container": 16,
+    "serving": "1/4 cup (28g)",
+    "calories": 110,
+    "fat_g": 8,
+    "carbs_g": 1,
+    "protein_g": 6,
+    "sodium_mg": 170,
+    "serving_g": 28
+   },
+   "stored_brand": "Great Value",
+   "note": "macros exact. The stored serving_unit says about 8 servings per container, which is the 8 oz bag; this 16 oz bag states 16. Container note only - no macro moves."
+  },
+  {
+   "item": "High Fiber Tortilla",
+   "status": "UNFOUND",
+   "product": "La Banderita Carb Counter Large Soft Flour Tortillas, 13.7 oz, 6 Count",
+   "url": "https://www.walmart.com/ip/La-Banderita-Carb-Counter-Large-Soft-Flour-Tortillas-13-7-oz-6-Count/767352316",
+   "note": "the right product is on the shelf (13.7 oz / 6 ct = 65 g per tortilla, which is the stored basis) but the listing is a marketplace seller with THREE images and no back-of-pack panel. The front of pack prints 90 CALORIES PER SERVING and 4g NET CARBS, which corroborates the stored 90 cal - it is not a panel and is not recorded as one."
+  },
+  {
+   "item": "Coconut Milk",
+   "status": "CONFLICT",
+   "product": "Thai Kitchen Gluten Free UNSWEETENED Coconut Milk, 13.66 fl oz Can",
+   "url": "https://www.walmart.com/ip/Thai-Kitchen-No-Artificial-Flavors-Gluten-Free-Unsweetened-Coconut-Milk-13-66-fl-oz-Can/10309672",
+   "label": {
+    "servings_per_container": "about 5",
+    "serving": "1/3 cup (80mL)",
+    "calories": 120,
+    "fat_g": 12,
+    "carbs_g": 2,
+    "protein_g": 1,
+    "sodium_mg": 30,
+    "serving_g": 80,
+    "serving_g_note": "panel states mL only; 80 g is the stored row's own gram weight for 1/3 cup"
+   },
+   "stored_brand": "Thai Kitchen",
+   "note": "the row states 140 cal / 14 g fat on the same 1/3 cup (80 g) basis and says full-fat, not lite. The can on the shelf is the UNSWEETENED SKU at 120/12. Two different Thai Kitchen full-fat cans, or a stale row - a person decides. Nothing overwritten."
+  }
+ ]
+}
