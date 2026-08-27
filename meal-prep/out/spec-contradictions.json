@@ -1,17 +1,23 @@
 ﻿{
-    "specs":  579,
+    "specs":  580,
     "findings":  [
+                     {
+                         "run":  "live",
+                         "slug":  "beef-birria-burrito",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "beef-burrito-tex-mex",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
+                     },
                      {
                          "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270 tbsp\u0027, which no kitchen measure shows: Milk (Fairlife): 0 tbsp (1 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-rice-and-broccoli",
-                         "cls":  "STAT-PROSE",
-                         "why":  "head.description says 3g protein, stat says 47"
                      },
                      {
                          "run":  "live",
@@ -99,6 +105,12 @@
                      },
                      {
                          "run":  "live",
+                         "slug":  "salsa-verde-chicken-burrito",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
+                     },
+                     {
+                         "run":  "live",
                          "slug":  "sopa-de-fideo-con-carne-molida",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.05 cups (12 g)"
@@ -120,6 +132,12 @@
                          "slug":  "turkey-cordon-bleu-casserole",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Dijon Mustard (generic): 0.07 tbsp (1 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "turkey-florentine-rice-bake",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027shredded cheese\u0027 but Shredded Cheese is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -162,6 +180,6 @@
     "by_class":  {
                      "UNMEASURABLE-QTY":  21,
                      "UNUSED":  4,
-                     "STAT-PROSE":  1
+                     "PHANTOM":  4
                  }
 }

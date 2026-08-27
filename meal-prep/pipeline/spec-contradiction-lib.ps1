@@ -11,7 +11,20 @@
 # bowl", and a pattern that only knew cal\b|calories\b matched neither - so the founding STAT-PROSE case was
 # invisible in one of the two fields it lived in.
 $script:RX_CAL     = '(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b'
-$script:RX_PROTEIN = '(?i)\b(\d{1,3})\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein'
+# DECIMAL-BLIND, AND IT REPORTED THE FRAGMENT AS THE CLAIM (2026-08-27). The leading \b sat happily
+# between the '.' and the '3' of "47.3g protein", so the matcher captured "3g protein" and the gate
+# reported 'says 3g protein, stat says 47' - against a spec whose 47.3 was CORRECT and had already
+# been allowed by a prior ruling. It went red on chicken-rice-and-broccoli and, because a wave cannot
+# publish over a red shared gate, it blocked a wave containing neither that recipe nor that number.
+# Measured: "packs 8.5 g protein" was read as 5 the same way.
+#
+# The guard is (?<![\d.]) - a digit run preceded by a digit or a decimal point is a FRAGMENT, never a
+# claim. The capture then takes the whole decimal rather than exempting it, which keeps the check
+# alive: "99.9g protein" on a 47 g stat still fires. Blinding the matcher to decimals would have
+# cleared the false positive by giving up the true ones, and every high-protein card writes decimals.
+# The consumer casts with [int], which ROUNDS in PowerShell ([int]'47.3' -> 47), so 47.3 agrees with a
+# stat of 47 and no finding is raised - which is the behaviour the prior ruling described.
+$script:RX_PROTEIN = '(?i)(?<![\d.])(\d{1,3}(?:\.\d+)?)\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein'
 
 # BOUNDED CALORIE CLAIMS (2026-08-07, Brad's ruling). RX_CAL exists to catch a STALE number: a card that
 # says "499 calories" when its stat says 373 is quoting a figure that moved. It cannot distinguish that

@@ -3,10 +3,10 @@
     "title":  "One-Pan Sloppy Joe Casserole",
     "source_url":  "https://lemonsandzest.com/sloppy-joe-casserole/",
     "protein":  "turkey",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "rejected-audit",
+    "wave":  2,
     "created":  "2026-08-27T11:42:30",
-    "updated":  "2026-08-27T11:54:20",
+    "updated":  "2026-08-27T14:35:22",
     "terms":  [
                   {
                       "term":  "Salt",
@@ -17,7 +17,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "NO-GO on two blockers; report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-2.audit.md. BLOCKER 1 (recipe-local, the class no battery covers): the spec bids its turkey to the generic `groun",
     "parked_on":  [
 
                   ],
@@ -57,6 +57,36 @@
                         "at":  "2026-08-27T11:54:20",
                         "by":  "mapper",
                         "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T14:17:49",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T14:17:50",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T14:20:59",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T14:20:59",
+                        "by":  "wave-close",
+                        "detail":  "wave 2"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-27T14:35:22",
+                        "by":  "auditor",
+                        "detail":  "NO-GO on two blockers; report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-2.audit.md. BLOCKER 1 (recipe-local, the class no battery covers): the spec bids its turkey to the generic `groun"
                     }
                 ]
 }

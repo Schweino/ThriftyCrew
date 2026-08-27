@@ -6837,23 +6837,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T13:35:02"
+                                                     "checked":  "2026-08-27T14:17:36"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "Driver rung 1 only, term as given, reported 72 hits but the evidence file stores only the top 8 priced Apollo nodes. All 8 adjudicated and rejected: McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek x2, Badia Italian/Mediterranean, Badia Paprika, McCormick Italian, Simply Organic Pumpkin Spice - none is a Moroccan blend or ras el hanout. 64 rows were never shown to me and I have no browser this session to view them or to walk rung 2 (\u0027moroccan\u0027), so absence is unproven. NOT an empty shelf - an incomplete look.",
-                                                     "checked":  "2026-08-27T13:35:02"
+                                                     "evidence":  "driver rung 1 reported 72 hits but the evidence file carries only 8 rows (McCormick chili seasoning mix, Beau Monde, Cavender\u0027s Greek x2, Badia Italian, Badia paprika, Grill Mates garlic\u0026herb, Kinder\u0027s The Blend) - none is a Moroccan blend, but 64 of 72 rows are unseen and I have no browser this session to view the remainder. Not an empty shelf; unchecked.",
+                                                     "checked":  "2026-08-27T14:17:36"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Full ladder EMPTY at Freshop store_id 6401 Omaha: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. Extra rungs run by me: \u0027ras el hanout\u0027=0 on both rungs; \u0027moroccan seasoning\u0027 laddered to \u0027seasoning\u0027 and returned MATCHES - Dan O\u0027s, Celestial Seasonings Spice Blend, Andys Fish Breading, Kernel Season\u0027s popcorn, Chipotle - no Moroccan blend. price-ingredient.ps1 -Name \u0027moroccan\u0027 returns only Suave Moroccan Oil shampoo and Nair Moroccan Argan hair remover at this store, neither a food.",
-                                                         "checked":  "2026-08-27T13:35:02"
+                                                         "evidence":  "probe-ingredient full ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (Freshop store_id 6401 Omaha, pickup). Synonym rung run by me: \u0027ras el hanout\u0027 = 0 hits on both rungs. Disk check price-ingredient \u0027moroccan\u0027 returned only Suave shampoo and Nair hair remover at this store - not food.",
+                                                         "checked":  "2026-08-27T14:17:36"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6861,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T13:35:02"
+                                                    "checked":  "2026-08-27T14:17:36"
                                                 },
                                      "Sam\u0027s Club":  {
-                                                             "state":  "blocked",
+                                                             "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Driver rung 1 only, term as given, 8 hits which is exactly the driver\u0027s stored-row cap so I cannot tell if the grid was truncated. All 8 adjudicated and rejected: McCormick Taco Seasoning 12pk, Lawry\u0027s Seasoned Salt, McCormick Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5 lb, Kinder\u0027s Whiskey Peppercorn, Kinder\u0027s Caramelized Onion. No Moroccan blend among them, but rung 2 (\u0027moroccan\u0027) was never walked and I have no browser this session to walk it, so this does not support not-carried.",
-                                                             "checked":  "2026-08-27T13:35:02"
+                                                             "evidence":  "driver rung 1 \u0027Moroccan Spice Mix\u0027 = 8 hits, ALL 8 present in evidence and adjudicated: McCormick taco seasoning, Lawry\u0027s seasoned salt, Salad Supreme, Montreal Steak, Hidden Valley garlic ranch, Old Bay, Kinder\u0027s whiskey peppercorn, Kinder\u0027s burger rub. None is a Moroccan/ras el hanout blend. Ladder rungs 2-4 do not apply to this term (no strippable qualifier, no spacing variant, head-noun fallback is two-word terms only), so rung 1 is the complete ladder here.",
+                                                             "checked":  "2026-08-27T14:17:36"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,15 +6877,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T13:35:02"
+                                                  "checked":  "2026-08-27T14:17:36"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "Full ladder EMPTY at kroger-public-api locationId 61500319: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. I then walked two extra rungs myself with probe-ingredient.ps1: \u0027ras el hanout\u0027=0 hits (EMPTY, 2 rungs), and \u0027moroccan seasoning\u0027 which laddered to head noun \u0027seasoning\u0027 and returned MATCHES - 8 tiles, all Cajun/Lawry\u0027s Total/Kroger Fajita/Smart Way Italian/McCormick Taco/Goya Adobo/Weber Kick\u0027n Chicken/Old Bay, no Moroccan or ras-el-hanout blend. price-ingredient.ps1 -Name \u0027moroccan\u0027 shows Baker\u0027s only RiceSelect Moroccan-Style Couscous, which is a couscous, not a spice blend.",
-                                                          "checked":  "2026-08-27T13:35:02"
+                                                          "evidence":  "probe-ingredient full ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (kroger-public-api locationId 61500319). I also ran the synonym rung myself: probe-ingredient.ps1 \u0027ras el hanout\u0027 -Json = 0 hits on both rungs. No Moroccan/North African spice blend in the catalog.",
+                                                          "checked":  "2026-08-27T14:17:36"
                                                       }
                                  },
                       "verdict":  "PENDING",

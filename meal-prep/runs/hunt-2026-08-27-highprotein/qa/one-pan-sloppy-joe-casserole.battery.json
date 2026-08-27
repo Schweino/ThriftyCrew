@@ -1,0 +1,218 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "one-pan-sloppy-joe-casserole",
+  "generated": "2026-08-27T14:17:50",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\one-pan-sloppy-joe-casserole.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\one-pan-sloppy-joe-casserole.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 15,
+        "source_ingredients": 15,
+        "matched": 14,
+        "invented": [
+          "Garlic"
+        ],
+        "dropped": [
+          "garlic cloves"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Garlic' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'garlic cloves' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 7,
+        "unrated": 8,
+        "exempt": 0,
+        "recipe_ratio": 4.6667,
+        "lines": [
+          {
+            "item": "Ketchup",
+            "source": "0.333333 cup",
+            "spec": "1.5 cup",
+            "ratio": 4.5,
+            "deviation": 0.0357,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Apple Cider Vinegar",
+            "source": "2 tbsp",
+            "spec": "0.5 cup",
+            "ratio": 4.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Worcestershire Sauce",
+            "source": "1.5 tbsp",
+            "spec": "7 tbsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Onion Powder",
+            "source": "0.5 tsp",
+            "spec": "2.33333 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.5 tsp",
+            "spec": "2.33333 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 tsp",
+            "spec": "2.33333 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Paste",
+            "source": "1 tbsp",
+            "spec": "0.25 cup",
+            "ratio": 4.0,
+            "deviation": 0.1429,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Tomato Sauce",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Brown Sugar",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Yellow Onion",
+            "why": "the two measures are not the same kind (count:yellow vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Bell Peppers",
+            "why": "the two measures are not the same kind (count:bell vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Ground Turkey",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Shredded Cheese",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Refrigerated Biscuits",
+            "why": "the two measures are not the same kind (count:refrigerated vs count:), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "every rated line scaled at the recipes own 4.67x (median of 7 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 5,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 4g protein, the stat says 45; portion_html says 4g protein, the stat says 45",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 4g protein, the stat says 45"
+        },
+        {
+          "severity": "fail",
+          "detail": "portion_html says 4g protein, the stat says 45"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "One-Pan Sloppy Joe Casserole",
+        "spec_source_url": "https://lemonsandzest.com/sloppy-joe-casserole/",
+        "transcription_source_url": "https://lemonsandzest.com/sloppy-joe-casserole/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 3,
+        "claimed_ratio": 4.6667,
+        "measured_ratio": 4.6667
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

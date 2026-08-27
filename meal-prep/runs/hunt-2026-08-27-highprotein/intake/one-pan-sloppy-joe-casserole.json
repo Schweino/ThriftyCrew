@@ -89,49 +89,48 @@
   "fat_g": 34.4
  },
  "writer_notes": [
-  "Band check: locked calories 766 within 450-800; locked protein 45.4 g clears the 40 g floor; carbs unrestricted. All numbers taken from the dispatch locked view; none computed.",
-  "All 15 bought lines are used by a step; no step uses an unbought ingredient.",
-  "OFF-LIST SOURCE ITEMS: source uses olive oil (saute), melted butter (biscuit brush), and parsley (garnish); none are in the locked buy list. I made the saute fat optional and dropped butter and parsley so the card is cookable exactly as shopped. Confirm whether cooking oil should be a costed staple before publish.",
-  "'One-Pan' name is aspirational at 14 servings; method directs cooking in a large pot/roasting pan and finishing in a large baking dish because the batch will not fit a single skillet. Name is locked and left unchanged.",
-  "Portioning uses the weigh-the-pot method and notes 21 biscuits halved into 42 rounds = 3 pieces per container, traced to the locked biscuit buy string.",
-  "Money in prose limited to the ${{cost_ps}} token and the $1-a-month membership line; macro mentions use {{cal}} and {{protein}} tokens; no per-unit price claims made (no cost_lines supplied)."
+  "All 15 locked buy lines are used by a step; no orphaned ingredients and no step uses an unbought item.",
+  "Source method calls for olive oil, melted butter (brushed on biscuits), and parsley garnish; none are in the buy list, so they were deliberately left out of the steps and added to forbidden_prose_terms.",
+  "Turkey is seared in the dry hot pan since no cooking oil is bought; the turkey's own fat carries the aromatics.",
+  "Biscuits: three 8-count cans yield 24, recipe uses 21 (halved then peeled into thinner rounds).",
+  "cost_ps rendered as the {{cost_ps}} token; no per-line costs used and no package arithmetic claims made (no cost_lines in dispatch).",
+  "766 cal sits near the top of the 450-800 band; flag if the engine retightens."
  ],
  "forbidden_prose_terms": [
-  "—",
-  "–",
-  "per ounce",
-  "per pound",
-  "cents per",
-  "cheaper per"
+  "olive oil",
+  "butter",
+  "parsley",
+  "seafood",
+  "shrimp",
+  "bun",
+  "em dash"
  ],
  "prose": {
-  "intro_html": "<p>The sloppy joe was the hero of every school cafeteria I ever ate in, and this is that same messy sandwich all grown up and moved into a casserole dish. You get the sweet and tangy tomato sauce, the browned meat, the soft peppers and onion, and then instead of a bun that dissolves in your hands halfway through, you get golden biscuits baked right on top. It is comfort food, plain and simple.</p><p>Here is the part that makes it fit the plan. We build it on ground turkey, so a single serving lands at {{protein}} grams of protein and {{cal}} calories. That is a real dinner, not a sad little diet plate, and it feeds fourteen containers out of one batch. Comfort food that still does the math in your favor is my kind of recipe.</p>",
-  "shop_smart": "<p>Nothing on this list is exotic, which is exactly the point. Buy for the whole batch and you save yourself a second trip.</p><ul><li><strong>Biscuits:</strong> the build wants 21, and refrigerated biscuits come in 8-count cans, so grab about three cans. That leaves you a couple of biscuits to spare, which is not a tragedy.</li><li><strong>Tomato sauce:</strong> you need 5 1/2 cups. Three standard 15-ounce cans cover it. Buy the no salt added kind if the shelf has it, since you are already salting to taste.</li><li><strong>Ketchup:</strong> 1 1/2 cups comes out of a single regular bottle with plenty left for the fries later.</li><li><strong>Shredded cheddar:</strong> the build uses about a pound and change, so one two-pound bag covers it with some to spare. Buy a block and shred it yourself if you like the meltier texture, but the bag works fine.</li><li><strong>Ground turkey:</strong> 4 2/3 pounds. Watch for the bigger family packs or the value rolls, which is where the sensible pricing lives.</li><li><strong>Bell peppers:</strong> nine total, about half red and half green. Whatever colors are cheapest that day will taste the same once they are cooked down.</li></ul>",
-  "make_it": "<p>This is a big batch, so ignore the fantasy of doing it all in one little skillet. Reach for your largest oven-safe pot or a roasting pan, and have a big baking dish ready for the finish.</p><ol><li><strong>Make the sauce first.</strong> Preheat the oven to 375 degrees. In a bowl, whisk together the tomato sauce, ketchup, brown sugar, apple cider vinegar, Worcestershire sauce, onion powder, black pepper, and salt. Set it aside so the flavors get acquainted.</li><li><strong>Build the base.</strong> Heat your large pan over medium-high. If the pan looks dry, add a little cooking oil, though the turkey will bring plenty of its own fat in a minute. Add the minced garlic and cook about a minute until fragrant, then add the diced onion and the tomato paste. Cook one to two minutes so the paste browns a little and loses that raw edge. Add the diced bell peppers and cook three to five minutes to soften.</li><li><strong>Brown the turkey.</strong> Push the vegetables to the side and add the ground turkey. Let it sear undisturbed for two to three minutes, then break it into chunks and cook until it is browned through and reads 165 degrees inside.</li><li><strong>Bring it together.</strong> Drop the heat to medium-low, pour in the sauce, and stir everything to combine. Let it simmer five to six minutes so it thickens up slightly.</li><li><strong>Cap it and bake.</strong> Spread the mixture into your baking dish if you moved it out of the pan, then sprinkle the shredded cheddar over the top. Peel each biscuit at the center to make two thinner rounds and arrange them across the surface. Bake 15 to 20 minutes, until the biscuits are golden and cooked all the way through.</li></ol>",
-  "portion_html": "<p>Fourteen containers, and we portion by weight so nobody gets shorted. Weigh your empty pan before you cook if you can, then weigh it full at the end and subtract, or just tip the whole finished casserole onto a scale. Take that total, divide by fourteen, and that number is what goes in each container. A scale settles every argument at the dinner table.</p><p>The biscuits make it easy to eyeball too. You halved 21 biscuits into 42 thinner rounds, so that is three pieces per container with a little topping left to sort out. Spoon the sloppy joe base in first, set the biscuit pieces on top, and every box comes out to the same {{protein}} grams of protein and {{cal}} calories.</p>",
-  "cost_closing_html": "<p>Here is the whole reason we cook like this. Ground turkey, canned tomato sauce, a bag of cheese, and a few cans of biscuits are not premium groceries, and when you split one batch across fourteen containers, dinner lands at about ${{cost_ps}} a serving. That is a plate of real comfort food, {{protein}} grams of protein and all, for less than most people spend on a coffee.</p>",
-  "upsell_html": "<p>Want the full set of numbers behind every recipe we run, the shopping math, the macros, and the containers, all in one place? Membership is a dollar a month. One dollar. That is cheaper than a single biscuit, and it keeps your whole week of dinners planned and priced.</p>"
+  "intro_html": "<p>Sloppy joes are one of the great cheap dinners of all time, but the sandwich version has a flaw: the bun goes to mush and you are eating over the sink by bite three. This casserole fixes that. Same sweet and tangy turkey filling, except the biscuits go on top and bake up golden, so the bread holds its ground instead of surrendering to the sauce.</p><p>We build the whole thing in one oven-safe pan and scale it to 14 servings, which is the part that matters when you are cooking for the week. Ground turkey keeps it lean, the sauce does the heavy lifting on flavor, and a lid of cheese and biscuit makes every container feel like a real dinner instead of a punishment. At 766 calories and {{protein}} g of protein per serving, this eats like comfort food and budgets like a spreadsheet.</p>",
+  "shop_smart": "<p>The biscuits are the one place people overthink this. You want three 8-count cans of refrigerated biscuits, the big flaky kind, and you halve each one through the middle so it bakes thin and crisp instead of doughy. Three cans give you 24, you use 21, and the spares are a fine breakfast the next morning.</p><p>For the turkey, buy it in the largest pack you can find rather than the little trays. You need 4 2/3 pounds and the family pack always comes out ahead of the one-pound units. Ground beef swaps in one for one if it is on sale that week and the macros still land in range.</p><p>Shredded cheddar is your call between a bag and a block you grate yourself. Either way you need about 4 2/3 cups, which is roughly a pound and change. The sauce is all pantry staples you likely already own: tomato sauce, ketchup, brown sugar, apple cider vinegar, Worcestershire, tomato paste, and the dry seasonings. Buy the no salt added tomato sauce if you can find it so you stay in control of the salt.</p>",
+  "make_it": "<p>Heat your oven to 375 degrees. In a bowl, whisk together the tomato sauce, ketchup, brown sugar, apple cider vinegar, Worcestershire, onion powder, black pepper, and salt. That is your sloppy joe sauce. Set it aside.</p><p>Get a large oven-safe skillet hot over medium-high. Add the minced garlic and stir it for about a minute until it smells good. Add the diced yellow onion and the tomato paste and cook a minute or two, letting the paste darken a shade. Toss in the diced bell peppers and cook another 3 to 5 minutes until everything softens.</p><p>Push the vegetables to one side and add the ground turkey. Let it sear undisturbed for 2 to 3 minutes before you start breaking it into pieces. Cook it all the way through, until it hits 165 degrees inside and there is no pink left.</p><p>Drop the heat to medium-low and pour in the sauce. Stir to bring it together and let it simmer 5 to 6 minutes so it thickens up. Sprinkle the shredded cheddar over the top.</p><p>Peel each halved biscuit apart at the center to make two thinner rounds and lay them across the top of the filling. Slide the pan into the oven and bake 15 to 20 minutes, until the biscuits are golden brown and cooked through.</p>",
+  "portion_html": "<p>This one bakes as a single big pan, so portioning is a weigh-and-divide job. Once it comes out and settles for a few minutes, set your empty container on the scale, zero it out, and split the whole batch across 14 containers as evenly as the numbers let you. Aim to give each container a fair share of filling and a biscuit or two on top so nobody opens a sad lid of plain meat.</p><p>The biscuits crisp up in the oven and hold better than a bun ever would, which means these reheat honestly. Fourteen servings at {{protein}} grams of protein each is a full week of lunches or dinners that actually keep you full.</p>",
+  "cost_closing_html": "<p>This is meal prep doing exactly what it is supposed to do: a comfort-food dinner, built lean, split 14 ways so the cost per serving stays down at {{cost_ps}}. That is the whole pitch. You are not choosing between eating well and spending little, you are getting both in the same container.</p>",
+  "upsell_html": "<p>If this is the kind of math you like on your dinner, the whole Thrifty Crew library runs on it, and membership is a dollar a month. Cook once, eat all week, and let the numbers work for you instead of against you.</p>"
  },
  "head": {
-  "description": "One-Pan Sloppy Joe Casserole for meal prep: sweet-tangy ground turkey with peppers under golden biscuits, 45 g protein a serving, 14 budget containers.",
-  "keywords": "sloppy joe casserole, ground turkey meal prep, high protein meal prep, budget dinner, biscuit casserole, meal prep casserole, sloppy joe bake, 14 servings",
+  "description": "One-pan sloppy joe casserole for meal prep: lean ground turkey in a sweet-tangy sauce under cheddar and golden biscuits, scaled to 14 high-protein servings.",
+  "keywords": "sloppy joe casserole, meal prep, ground turkey, high protein dinner, budget meal prep, one pan dinner, biscuit casserole, batch cooking",
   "image": "",
   "prepTime": "PT15M",
   "cookTime": "PT34M",
   "totalTime": "PT49M",
   "steps": [
-   "Preheat the oven to 375 degrees. Whisk together the tomato sauce, ketchup, brown sugar, apple cider vinegar, Worcestershire sauce, onion powder, black pepper, and salt in a bowl and set aside.",
-   "Heat a large oven-safe pan over medium-high, adding a little oil only if the pan looks dry. Add the minced garlic and cook about 1 minute until fragrant, then add the diced onion and tomato paste and cook 1 to 2 minutes to brown the paste.",
-   "Add the diced bell peppers and cook 3 to 5 minutes until softened.",
-   "Push the vegetables aside and add the ground turkey. Sear 2 to 3 minutes, then break it into pieces and cook until browned and 165 degrees throughout.",
-   "Reduce heat to medium-low, pour in the sauce, and stir to combine. Simmer 5 to 6 minutes until slightly thickened.",
-   "Sprinkle the shredded cheddar over the top. Halve each biscuit into two thinner rounds and arrange them over the mixture.",
-   "Bake 15 to 20 minutes until the biscuits are golden and cooked through, then portion across 14 containers."
+   "Heat the oven to 375 degrees. Whisk together the tomato sauce, ketchup, brown sugar, apple cider vinegar, Worcestershire, onion powder, black pepper, and salt to make the sauce, and set it aside.",
+   "In a large oven-safe skillet over medium-high heat, cook the minced garlic about a minute, then add the diced onion and tomato paste and cook another minute or two until the paste darkens. Add the diced bell peppers and cook 3 to 5 minutes until softened.",
+   "Push the vegetables aside and add the ground turkey. Sear 2 to 3 minutes, then break it up and cook until browned and 165 degrees inside.",
+   "Lower the heat to medium-low, pour in the sauce, stir to combine, and simmer 5 to 6 minutes until it thickens.",
+   "Sprinkle the shredded cheddar over the top. Peel each halved biscuit into two thinner rounds and arrange them over the filling.",
+   "Bake 15 to 20 minutes until the biscuits are golden brown and cooked through, then portion across 14 containers."
   ],
   "step_names": [
-   "Make the sauce",
-   "Cook the aromatics",
-   "Soften the peppers",
+   "Mix the sauce",
+   "Cook the aromatics and peppers",
    "Brown the turkey",
    "Simmer the sauce",
    "Top with cheese and biscuits",

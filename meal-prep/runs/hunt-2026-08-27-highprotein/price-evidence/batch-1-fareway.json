@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T13:33:28",
+ "generated": "2026-08-27T14:16:37",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,18 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
     },
     {
-     "item": "McCormick Italian Seasoning",
-     "price": 2.99,
-     "size": "0.75 oz",
+     "item": "McCormick® GRILL MATES Roasted Garlic & Herb Seasoning",
+     "price": 2.49,
+     "size": "2.75 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/110108545-mccormick-italian-seasoning"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35267-mccormick-grill-mates-roasted-garlic-herb-seasoning-2-75-oz"
     },
     {
-     "item": "Simply Organic Pumpkin Spice",
-     "price": 6.99,
-     "size": "1.94 oz",
+     "item": "Kinder's The Blend Salt, Pepper & Garlic Seasoning",
+     "price": 7.98,
+     "size": "14.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16401147-simply-organic-pumpkin-spice-1-94-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/33778175-kinder-s-the-blend-seasoning-6-ct"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

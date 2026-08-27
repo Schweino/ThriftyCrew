@@ -127,6 +127,35 @@ if ($SelfTest) {
   $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
   Chk 'MUST FIRE  STAT-PROSE  499 cal in a paragraph that also says 541' (($cls -contains 'STAT-PROSE') -and (@($r | Where-Object { $_.why -match '499' }).Count -eq 1)) (($r | ForEach-Object { $_.why }) -join ' | ')
+  # ---- RX_PROTEIN AND THE DECIMAL (2026-08-27) -------------------------------------------------------
+  # The leading \b sat between the '.' and the '3' of "47.3g protein", so the matcher captured the
+  # FRAGMENT "3g protein" and the gate reported 'says 3g protein, stat says 47' against a correct spec.
+  # It went red on chicken-rice-and-broccoli and blocked a wave that contained neither that recipe nor
+  # that number, because a wave cannot publish over a red shared gate. These run against the real shared
+  # lib through Get-SpecContradictions, not against a copy of the pattern - test-guards.ps1 keeps its own
+  # $RX_CAL_T/$RX_BOUND_T copies, and a fixture over a copy proves nothing about the file that ships.
+  function ProteinFx([string]$prose, [int]$stat) {
+    $fx = [pscustomobject]@{
+      stat = [pscustomobject]@{ cal = 541; protein = $stat; cost_ps = '3.52' }
+      intro_html = ('<p>' + $prose + '</p>')
+      head = [pscustomobject]@{ description = 'A 541 calorie bowl.'; recipeIngredient = @('2 lb ground beef') }
+      make_it = @('Cook it.')
+    }
+    return @(Get-SpecContradictions $fx $vocabFx | Where-Object { $_.why -match 'protein' })
+  }
+  $pDec = ProteinFx '47.3g protein a serving.' 47
+  Chk 'CLEAN TWIN a DECIMAL protein claim that agrees with the stat is silent - the fragment "3g" was the whole bug' `
+    ($pDec.Count -eq 0) (($pDec | ForEach-Object { $_.why }) -join ' | ')
+  $pFrag = ProteinFx 'packs 8.5 g protein a serving.' 8
+  Chk 'CLEAN TWIN "8.5 g protein" reads as 8.5, never as the 5 the old pattern captured' `
+    ($pFrag.Count -eq 0) (($pFrag | ForEach-Object { $_.why }) -join ' | ')
+  $pStale = ProteinFx '99g protein a serving.' 47
+  Chk 'MUST FIRE  a WHOLE-NUMBER protein claim that contradicts the stat still fires' `
+    ($pStale.Count -ge 1) (($pStale | ForEach-Object { $_.why }) -join ' | ')
+  $pStaleDec = ProteinFx '99.9g protein a serving.' 47
+  Chk 'MUST FIRE  a DECIMAL protein claim that contradicts the stat fires too - the guard must not blind the check' `
+    ($pStaleDec.Count -ge 1) (($pStaleDec | ForEach-Object { $_.why }) -join ' | ')
+
   Chk 'MUST FIRE  UNMEASURABLE-QTY a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  STALE-MONEY a "28 cents" claim in cost_closing' (@($r | Where-Object { $_.cls -eq 'STALE-MONEY' -and $_.why -match '28 cents' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'STALE-MONEY' } | ForEach-Object { $_.why }) -join ' | ')
   # THE PORTION-MONEY CASE. Live for the whole life of 15 specs because this class read two fields and the
