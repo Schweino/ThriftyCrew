@@ -1,0 +1,243 @@
+﻿{
+    "slug":  "baked-stuffed-pork-chops",
+    "title":  "Baked Stuffed Pork Chops",
+    "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+                            "item":  "Boneless Pork Chops",
+                            "bid":  "boneless-pork-chops",
+                            "board":  null,
+                            "grams":  3174,
+                            "buy":  "7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Genuine form flip, not an alias: boneless loin chops carry a different price class than the board\u0027s generic pork-chops ($2.52/lb, 7/7) and a different gram basis, since 2 lb bone-in yields far less meat. The recipe also needs a 1 1/4-inch chop thick enough to pocket.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 Tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp Ranch Seasoning Mix",
+                            "item":  "Ranch Seasoning Mix",
+                            "bid":  "ranch-seasoning-mix",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "7 Tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ranch-seasoning-mix, 6 of 7 stores, cheapest 0.53 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 Tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 Tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup small white onion (diced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  201,
+                            "buy":  "1 3/4 cups diced (about 2 small onions)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027small white onion\u0027 -\u003e onions (by mapper on 2026-08-26T05:07:23); nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup celery stalk (diced)",
+                            "item":  "Celery",
+                            "bid":  "celery",
+                            "board":  "recipe",
+                            "grams":  177,
+                            "buy":  "1 3/4 cups diced (about 4 stalks)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027celery stalk\u0027 -\u003e celery (by mapper on 2026-08-26T05:07:23); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup cranberries",
+                            "item":  "Fresh Cranberries",
+                            "bid":  "fresh-cranberries",
+                            "board":  null,
+                            "grams":  175,
+                            "buy":  "1 3/4 cups fresh cranberries",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of a live board id (1 of 7 stores), not a new proposal - only the vocabulary row is missing. Fresh, not dried: the source\u0027s own 17 g carbs per serving cannot hold 50 g of dried cranberries (+9.8 g/serving alone), while fresh at 6 g total carbs lands the recipe at 13.3 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 cup carrot (shredded)",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  96,
+                            "buy":  "7/8 cup shredded (about 2 medium carrots)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027carrot\u0027 -\u003e carrots (by mapper on 2026-08-26T05:07:23); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup bread cubes",
+                            "item":  "Sandwich Bread",
+                            "bid":  "bread",
+                            "board":  null,
+                            "grams":  158,
+                            "buy":  "3 1/2 cups bread cubes (about 5 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolve computed no weight; 1 cup dry bread cubes weighed at 45 g source basis.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2/3 cup chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  560,
+                            "buy":  "2 1/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tbsp Ranch Seasoning Mix",
+                            "item":  "Ranch Seasoning Mix",
+                            "bid":  "ranch-seasoning-mix",
+                            "board":  "recipe",
+                            "grams":  24,
+                            "buy":  "3 1/2 Tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ranch-seasoning-mix, 6 of 7 stores, cheapest 0.53 at Walmart",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "boneless pork chops"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Boneless Pork Chops",
+                               "Fresh Cranberries"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "boneless pork chops",
+                                        "proposed_bid":  "boneless-pork-chops",
+                                        "evidence":  "Searched by food, not by string, across all four namespaces as reported by the pre-resolve table: the only pork-chop concept priced is the generic `pork-chops` (7/7 stores, cheapest 2.52 at Sam\u0027s Club), and no boneless variant appears under any spelling or word-order flip. Boneless loin chops are a distinct retail cut at a distinct price class (typically $3.50-4.50/lb vs ~$2.50 bone-in) AND a distinct gram basis, since the bone-in id\u0027s per-lb price buys ~30% bone. Bridging them would publish both a wrong price and a wrong portion for the main protein of the dish. Same distinction the estate already holds between leg quarters and thighs. If the registrar judges `pork-chops` to be a boneless-inclusive generic rather than a bone-in id, alias is the correct verdict and I have no objection.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "boneless-pork-chops",
+                                  "verdict":  "approve",
+                                  "bid":  "boneless-pork-chops",
+                                  "reason":  "Verified against all three namespaces, the feed, and the raw Sam\u0027s capture: the only priced chop id is pork-chops, and its live crown (Sam\u0027s item 17799324269, $2.52/lb) is literally \u0027Member\u0027s Mark Bone-In Pork Chops\u0027 - so the existing id is the bone-in purchase, not a boneless-inclusive generic. Boneless loin chops are the same food in a different form (different price class and ~30% different edible yield per lb), the exact split the estate already holds for boneless-skinless-chicken-thigh vs chicken-thighs and boneless-beef-short-ribs vs beef-short-ribs. SAME FOOD, DIFFERENT FORM -\u003e new id in the recipe namespace (recipe-board-everyday + recipe-commodities). REQUIRED FOLLOW-UP EDITS via add-commodity-rule.ps1: (1) allowlist pair boneless-pork-chops|pork-chops in commodity-dupe-allowlist.json, reason \u0027bone-in vs boneless: different per-lb basis\u0027; (2) new id\u0027s include must REQUIRE boneless AND pork AND chop (e.g. ^(?=.*\\bboneless\\b)(?=.*\\bpork\\b)(?=.*\\bchops?\\b)) and inherit pork-chops\u0027 full exclude list (breaded/stuffed/seasoned/marinated/cooked plus the beverage/baby/pet block) - \u0027stuffed\u0027 stays excluded even though the recipe is baked-STUFFED-pork-chops, because the recipe buys raw chops; (3) add \\bboneless\\b to pork-chops\u0027 excludes so the form-blind include can no longer crown a boneless product on the bone-in id. Separate vocabulary answer: \u0027boneless pork chops\u0027 needs its own ingredients.json row (DIFFERENT FORM of Pork Chops, per pre-resolve) - this ruling mints the id only, not the name."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "PASSES, and the agreement is tight enough to confirm both of my rulings. Computed over all 16 lines at source basis (4 servings): 533 cal / 50.7 P / 13.3 C / 28.7 F per serving against the source\u0027s published 495 cal / 51 P / 17 C. Protein gap 0.6% - essentially exact, which independently confirms the 907 g raw boneless-loin basis for the main protein. Calories 7.7% high and carbs 3.7 g low, both inside what bread-cube weight and package rounding explain. Meets this run\u0027s conditions on its own with no tuning: 533 cal is mid-band and 13.3 g carbs is well under the 35 g ceiling. This is the strongest recipe in the batch."
+}

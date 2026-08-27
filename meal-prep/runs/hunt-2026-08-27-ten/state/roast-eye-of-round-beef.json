@@ -1,0 +1,37 @@
+{
+    "slug":  "roast-eye-of-round-beef",
+    "title":  "Roast Eye of Round Beef",
+    "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
+    "protein":  "any",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Composed roast-beef dinner with red-wine/cremini mushroom gravy and vegetables; verified low-carb band, sliceable/reheatable batch prep, distinct from the catalog\u0027s braised pot-roast bowls."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

@@ -1,0 +1,195 @@
+﻿{
+    "slug":  "honey-balsamic-chicken-tenders",
+    "title":  "Honey Balsamic Chicken Tenders",
+    "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
+    "servings":  "4",
+    "built_at":  "2026-08-27T04:13:30",
+    "line_count":  9,
+    "resolved_count":  9,
+    "residual_count":  0,
+    "hold_count":  0,
+    "residual_terms":  [
+
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "2 medium 1.5 lbs. chicken breasts ($2.99)",
+                     "term":  "chicken breasts",
+                     "canon_item":  "Boneless Skinless Chicken Breast",
+                     "bid":  "chicken-breast",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T04:52:01); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/boneless/skinless | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  400
+                 },
+                 {
+                     "raw":  "1/4 cup balsamic vinegar ($0.80)",
+                     "term":  "balsamic vinegar",
+                     "canon_item":  "Balsamic Vinegar",
+                     "bid":  "balsamic-vinegar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: balsamic-vinegar, 6 of 7 stores, cheapest 0.1704 at Fareway",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  63.8
+                 },
+                 {
+                     "raw":  "1 clove garlic ($0.08)",
+                     "term":  "garlic",
+                     "canon_item":  "Garlic",
+                     "bid":  "garlic",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  3
+                 },
+                 {
+                     "raw":  "2 Tbsp olive oil (divided, $0.24)",
+                     "term":  "olive oil",
+                     "canon_item":  "Olive Oil",
+                     "bid":  "olive-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  27
+                 },
+                 {
+                     "raw":  "salt and pepper (to taste , $0.05) [split: salt]",
+                     "term":  "salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "vocab",
+                     "optional":  true,
+                     "item_split_from":  "salt and pepper",
+                     "grams_source_basis":  20,
+                     "grams_basis_fallback":  "no-qty-\u003ehouse staple"
+                 },
+                 {
+                     "raw":  "salt and pepper (to taste , $0.05) [split: pepper]",
+                     "term":  "pepper",
+                     "canon_item":  "Black Pepper",
+                     "bid":  "black-pepper",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-26T13:26:51); nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                     "source":  "cache",
+                     "optional":  true,
+                     "item_split_from":  "salt and pepper",
+                     "grams_source_basis":  4,
+                     "grams_basis_fallback":  "no-qty-\u003ehouse staple"
+                 },
+                 {
+                     "raw":  "1 Tbsp butter ($0.10)",
+                     "term":  "butter",
+                     "canon_item":  "Butter",
+                     "bid":  "butter",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  14
+                 },
+                 {
+                     "raw":  "2 Tbsp balsamic vinegar ($0.40)",
+                     "term":  "balsamic vinegar",
+                     "canon_item":  "Balsamic Vinegar",
+                     "bid":  "balsamic-vinegar",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: balsamic-vinegar, 6 of 7 stores, cheapest 0.1704 at Fareway",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  32
+                 },
+                 {
+                     "raw":  "3 Tbsp honey ($0.33)",
+                     "term":  "honey",
+                     "canon_item":  "Honey",
+                     "bid":  "honey",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  63
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "computed",
+                           "reason":  "",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  452.48,
+                                          "carbs":  16.18,
+                                          "protein_g":  67.45,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  9,
+                           "lines_total":  9,
+                           "uncovered_lines":  [
+
+                                               ],
+                           "computed_per_serving":  {
+                                                        "cal":  560,
+                                                        "carbs":  82.7,
+                                                        "protein_g":  28,
+                                                        "fat_g":  12.3
+                                                    },
+                           "portion_factor":  1,
+                           "tuning":  [
+                                          "added Rice base 200g (src scale)",
+                                          "base +50% (Rice)"
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

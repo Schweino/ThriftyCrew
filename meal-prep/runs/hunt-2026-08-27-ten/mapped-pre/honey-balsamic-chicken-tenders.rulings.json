@@ -1,0 +1,51 @@
+{
+ "slug": "honey-balsamic-chicken-tenders",
+ "lines": [
+  {
+   "raw": "2 medium 1.5 lbs. chicken breasts ($2.99)",
+   "buy": "5 1/4 lb boneless skinless chicken breast, sliced lengthwise into tenders",
+   "grams_source": 680,
+   "notes": "Corrected from the pre-resolve's 400 g: the line states its own weight, 1.5 lbs = 680 g. See macro_cross_check."
+  },
+  {
+   "raw": "1/4 cup balsamic vinegar ($0.80)",
+   "buy": "7/8 cup, for the marinade"
+  },
+  {
+   "raw": "1 clove garlic ($0.08)",
+   "buy": "3 1/2 cloves, minced"
+  },
+  {
+   "raw": "2 Tbsp olive oil (divided, $0.24)",
+   "buy": "7 Tbsp, divided"
+  },
+  {
+   "raw": "salt and pepper (to taste , $0.05)",
+   "buy": "3 1/2 tsp salt and 2 Tbsp black pepper, to taste",
+   "grams_source": 6,
+   "notes": "Salt reduced from the pre-resolve's 20 g default to 6 g source basis; 20 g over 4 servings is 5 g of added salt per serving, which no cook would use."
+  },
+  {
+   "raw": "1 Tbsp butter ($0.10)",
+   "buy": "3 1/2 Tbsp"
+  },
+  {
+   "raw": "2 Tbsp balsamic vinegar ($0.40)",
+   "buy": "7 Tbsp, for the glaze"
+  },
+  {
+   "raw": "3 Tbsp honey ($0.33)",
+   "buy": "10 1/2 Tbsp (about 2/3 cup)"
+  }
+ ],
+ "rulings": [],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "VERIFIED AND FOUND WRONG - there is a real each-weight defect on the main protein, exactly the failure rule 6 exists to catch, and I have corrected the gram basis. The precheck reports ours at 28 g protein against the source's 67.45 g, a 58% shortfall. Cause: the settled line 'Boneless Skinless Chicken Breast' carries 400 g source basis, derived from '2 medium' at 200 g each - but the line's own text states 1.5 lbs, which is 680 g. I reproduced the precheck exactly at 400 g (540 cal, 28.1 P) to confirm that is the driver, so this is not a guess. Corrected to 680 g the dish computes 351 cal / 38.1 P / 17.5 C per serving before tuning, and 170 g of raw breast per serving sits right on the catalog's own 167 g average across 80 live chicken-breast recipes. I have set grams_source 680 on that line. Note the source's published 67.45 g protein still looks like an outlier even after the fix - 680 g of raw breast cannot yield 270 g of protein - and most likely reflects a 2-serving nutrition basis in the source's markup; I would not chase our figures toward it. SEPARATE CONDITION BREACH, same cause as apple-spice-pork-chops: the precheck's tuning added a rice base of 200 g plus a further 50%, i.e. 75 g dry rice per serving, which alone contributes 60 g of carbohydrate. At 82.7 g carbs per serving (77.5 g on my corrected numbers) this fails the run's 35 g ceiling by more than double, while the dish itself is 17.5 g and passes easily. The rice base must be dropped or replaced before this ships."
+}

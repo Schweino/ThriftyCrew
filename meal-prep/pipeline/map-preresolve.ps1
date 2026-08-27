@@ -634,8 +634,19 @@ function New-PreResolveTable {
       source        = $(if ($src) { $src } else { $null })
       optional      = [bool]$ing.optional
       # Set when this row came out of a COMPOSITE line ("Salt and Pepper" -> Salt, Pepper). It is the
-      # only place a reader of the table can see that one source line became two, and the mapper is
-      # told the same thing in the residual block so it rules on the part, never on the pair.
+      # only place a reader of the table can see that one source line became two.
+      #
+      # THIS COMMENT USED TO CLAIM "and the mapper is told the same thing in the residual block so it
+      # rules on the part, never on the pair." THAT WAS NOT TRUE OF ANY BLOCK, and was not true on the
+      # day it was written: `grep -n item_split_from hunt-daemon.py` returned nothing, so the only
+      # trace a mapper ever saw of a split was the `[split: <food>]` suffix inside the raw string,
+      # which no prompt defined. On 2026-08-27 the mapper duly answered the PAIR once, keyed on the
+      # source's unsplit raw with a combined buy string, and both parts lost their buy strings and
+      # stuck the recipe at the map lane. A comment asserting a contract on another file's behalf is
+      # how that hid: it reads as a guarantee and nothing checks it.
+      # It is true NOW, and here is where to check it: hunt-daemon.py's map_prompt renders this field
+      # on both the settled and the residual road and states the contract in its job description, and
+      # hunt_daemon_selftest.py's `_split_lines_are_explained_to_the_mapper` fails if either stops.
       item_split_from = $(if ($ing.PSObject.Properties.Name -contains 'item_split_from') { [string]$ing.item_split_from } else { $null })
       # SOURCE-BASIS GRAMS (ADDED 2026-08-24, A-package / pin P3). Null here and filled in by the live
       # path from parse-compute's own per-line snapshot, because the arithmetic runs once per BATCH and

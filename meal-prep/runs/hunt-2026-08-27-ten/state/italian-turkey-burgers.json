@@ -1,0 +1,37 @@
+{
+    "slug":  "italian-turkey-burgers",
+    "title":  "Italian Turkey Burgers",
+    "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+    "protein":  "turkey",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/italian-turkey-burgers-recipe/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Distinct burger format absent from the catalog: Italian-seasoned turkey+turkey-sausage patties with peppers/onions; verified band, no dupe, widens format spread despite a busy turkey region."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

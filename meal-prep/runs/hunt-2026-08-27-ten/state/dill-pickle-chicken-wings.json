@@ -1,0 +1,52 @@
+{
+    "slug":  "dill-pickle-chicken-wings",
+    "title":  "Dill Pickle Chicken Wings",
+    "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+    "protein":  "chicken",
+    "state":  "pricing",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:22:56",
+    "terms":  [
+                  {
+                      "term":  "white pepper",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Dill-pickle-brined baked chicken wings with dried dill — a novel flavor with no catalog wing dish, distinct from the batch\u0027s garlic-parmesan wings (different flavor family and method), band verified 620/20/45."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T04:22:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T04:22:56",
+                        "by":  "mapper",
+                        "detail":  ""
+                    }
+                ]
+}

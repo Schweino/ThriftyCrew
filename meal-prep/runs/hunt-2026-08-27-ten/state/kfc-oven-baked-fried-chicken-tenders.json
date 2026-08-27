@@ -1,0 +1,37 @@
+{
+    "slug":  "kfc-oven-baked-fried-chicken-tenders",
+    "title":  "KFC Oven Baked \"Fried\" Chicken Tenders",
+    "source_url":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Oven-\u0027fried\u0027 buttermilk-breaded chicken tenders (panko/cornmeal, KFC spice blend) - a distinct crispy breaded-tender format not in the catalog and different from the glazed honey-balsamic tenders accepted this run; band verified 465/25/53."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

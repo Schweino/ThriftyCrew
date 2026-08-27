@@ -1,0 +1,43 @@
+{
+    "slug":  "apple-spice-pork-chops",
+    "title":  "Apple Spice Pork Chops",
+    "source_url":  "https://www.budgetbytes.com/apple-spice-pork-chops/",
+    "protein":  "pork",
+    "state":  "mapped",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:21:51",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/apple-spice-pork-chops/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Skillet pork chops in a sweet apple-cinnamon-nutmeg pan sauce; no apple pork chop exists in the live catalog (live pork-chop neighbours are all smothered/cajun/creamy-mushroom/country-style), verified band 499cal/24carb, cleanly costed."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T04:21:51",
+                        "by":  "mapper",
+                        "detail":  ""
+                    }
+                ]
+}

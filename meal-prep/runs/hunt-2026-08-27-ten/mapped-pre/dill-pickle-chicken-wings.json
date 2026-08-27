@@ -1,0 +1,176 @@
+﻿{
+    "slug":  "dill-pickle-chicken-wings",
+    "title":  "Dill Pickle Chicken Wings",
+    "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+    "servings":  4,
+    "built_at":  "2026-08-27T04:13:30",
+    "line_count":  8,
+    "resolved_count":  5,
+    "residual_count":  3,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "chicken wings",
+                           "white pepper",
+                           "cooking spray"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "4 lbs chicken wings (See Note 1)",
+                     "term":  "chicken wings",
+                     "canon_item":  null,
+                     "bid":  "chicken-wings",
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027chicken wings\u0027 -\u003e chicken-wings (by mapper on 2026-08-26T04:51:57); no vocabulary row shares a core word with this name; commodity id \u0027chicken-wings\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; board MAPPED: chicken-wings, 7 of 7 stores, cheapest 1.6909 at Aldi",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "4 cups dill pickle juice/brine (from empty pickle jar)",
+                     "term":  "dill pickle juice/brine",
+                     "canon_item":  "Dill Pickles",
+                     "bid":  "pickles",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027dill pickle juice brine\u0027 -\u003e pickles (by mapper on 2026-08-26T04:36:36); no vocabulary row shares a core word with this name",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  572
+                 },
+                 {
+                     "raw":  "5 tsp baking powder (NOT BAKING SODA and make sure it\u0027s aluminum free baking powder)",
+                     "term":  "baking powder",
+                     "canon_item":  "Baking Powder",
+                     "bid":  "baking-powder",
+                     "board":  null,
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: baking-powder, 7 of 7 stores, cheapest 0.1768 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  26.5,
+                     "grams_basis_fallback":  "default tsp"
+                 },
+                 {
+                     "raw":  "2 tsp dried dill",
+                     "term":  "dried dill",
+                     "canon_item":  "Dried Dill",
+                     "bid":  "dried-dill",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: dried-dill, 5 of 7 stores, cheapest 1.505 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  2
+                 },
+                 {
+                     "raw":  "1 tsp garlic powder",
+                     "term":  "garlic powder",
+                     "canon_item":  "Garlic Powder",
+                     "bid":  "garlic-powder",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  3.1
+                 },
+                 {
+                     "raw":  "3/4 tsp salt",
+                     "term":  "salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  4.5
+                 },
+                 {
+                     "raw":  "1/8 tsp white pepper (optional)",
+                     "term":  "white pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "source":  null,
+                     "optional":  true,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "PAM/Oil spray",
+                     "term":  "cooking spray",
+                     "canon_item":  null,
+                     "bid":  "cooking-spray",
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027cooking spray\u0027 -\u003e cooking-spray (by mapper on 2026-08-26T04:36:36); no vocabulary row shares a core word with this name; commodity id \u0027cooking-spray\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; board MAPPED: cooking-spray, 7 of 7 stores, cheapest 0.3113 at Aldi",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 5 of 8 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  620.0,
+                                          "carbs":  20.0,
+                                          "protein_g":  45.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  5,
+                           "lines_total":  8,
+                           "uncovered_lines":  [
+                                                   "chicken wings",
+                                                   "white pepper",
+                                                   "cooking spray"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

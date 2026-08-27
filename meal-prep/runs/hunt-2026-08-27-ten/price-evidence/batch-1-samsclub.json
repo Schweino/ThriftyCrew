@@ -1,0 +1,167 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-27T04:23:20",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "boneless pork chops",
+   "state": "MATCHES",
+   "term_used": "boneless pork chops",
+   "attempts": [
+    {
+     "term": "boneless pork chops",
+     "state": "MATCHES",
+     "hits": 16
+    }
+   ],
+   "hits": [
+    {
+     "item": "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
+     "price": 10.37,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7G7MYR79DF60"
+    },
+    {
+     "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+     "price": 9.6,
+     "size": "",
+     "unit_price": "$2.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+    },
+    {
+     "item": "Member’s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound",
+     "price": 17.31,
+     "size": "",
+     "unit_price": "$1.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2F125NWDOJLS"
+    },
+    {
+     "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+     "price": 24.73,
+     "size": "",
+     "unit_price": "$3.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
+    },
+    {
+     "item": "Pork Belly, Tray, priced per pound",
+     "price": 14.89,
+     "size": "",
+     "unit_price": "$4.47/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
+    },
+    {
+     "item": "Member’s Mark Bone-In Pork Shoulder Blade Steaks, Tray, priced per pound",
+     "price": 20.28,
+     "size": "",
+     "unit_price": "$3.87/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XRN59WFW66B"
+    },
+    {
+     "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+     "price": 20.58,
+     "size": "",
+     "unit_price": "$2.94/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
+    },
+    {
+     "item": "Member's Mark Bone-In Pork Chops, priced per pound",
+     "price": 20.16,
+     "size": "",
+     "unit_price": "$2.52/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6KZDL95HTCPW"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "white pepper",
+   "state": "MATCHES",
+   "term_used": "white pepper",
+   "attempts": [
+    {
+     "term": "white pepper",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Ground White Pepper, 18 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.83/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+    },
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Member's Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
+     "price": 24.76,
+     "size": "",
+     "unit_price": "$0.02/sft",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3RX7W4Y9K1ZQ"
+    },
+    {
+     "item": "Member's Mark Fire Roasted Red Bell Pepper, Spinach, and Cheese Trio Egg White Bites, 5 pk.",
+     "price": 9.76,
+     "size": "",
+     "unit_price": "$1.95/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/63Y1QJEFZB79"
+    },
+    {
+     "item": "Member’s Mark Taco Seasoning, 23 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+    },
+    {
+     "item": "Member's Mark Granulated Garlic, 26 oz.",
+     "price": 9.28,
+     "size": "",
+     "unit_price": "$0.36/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+    },
+    {
+     "item": "Member's Mark Sea Salt, 36 oz.",
+     "price": 3.98,
+     "size": "",
+     "unit_price": "$0.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IU9483LXRHT"
+    },
+    {
+     "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
+     "price": 33.48,
+     "size": "",
+     "unit_price": "$6.70/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

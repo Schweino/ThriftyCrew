@@ -1,0 +1,603 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-ten",
+ "batch": 1,
+ "generated": "2026-08-27T04:23:29",
+ "batch_terms": [
+  "boneless pork chops",
+  "white pepper"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "boneless pork chops",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "boneless pork chops",
+     "attempts": [
+      {
+       "term": "boneless pork chops",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Natural Country Pork Ribs and Boneless Pork Chops Combo Pack",
+       "price": 5.49,
+       "size": "1 lb",
+       "relevance": 123,
+       "url": "https://www.bakersplus.com/p/0020324850000"
+      },
+      {
+       "item": "Boneless Pork Loin Center-Cut Thin Chops",
+       "price": 6.49,
+       "size": "1 lb",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0029319000000"
+      },
+      {
+       "item": "Private Selection® Loin Pork Chops Boneless",
+       "price": 5.49,
+       "size": "1 lb",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0021334550000"
+      },
+      {
+       "item": "Kroger® Boneless Center Cut Pork Loin Chops",
+       "price": 10,
+       "size": "10 ct / 2 lb",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0001111063445"
+      },
+      {
+       "item": "Kroger® Fresh Naturalˆ Pork Loin Chops Boneless",
+       "price": 5,
+       "size": "1 ct",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0001111064148"
+      },
+      {
+       "item": "Private Selection® Natural Duroc Pork Loin Chops Boneless",
+       "price": 6,
+       "size": "10 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111061219"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "boneless pork chops",
+     "attempts": [
+      {
+       "term": "boneless pork chops",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "New York Pork Chops Boneless",
+       "price": 6.49,
+       "size": "lb",
+       "relevance": 93,
+       "url": "https://www.shopfamilyfare.com/shop/meat/butchers_counter_meats/new_york_pork_chops_boneless/p/1564405684713032404"
+      },
+      {
+       "item": "Fresh Pork Sirloin Chops, Boneless",
+       "price": 5.49,
+       "size": "lb",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_pork_sirloin_chops_boneless/p/1564405684713031314"
+      },
+      {
+       "item": "Fresh Ribeye Pork Chops, Boneless",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_ribeye_pork_chops_boneless/p/1564405684713031305"
+      },
+      {
+       "item": "Boneless Tenderized Pork Chops",
+       "price": 6.99,
+       "size": "lb",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/boneless_tenderized_pork_chops/p/1564405684713031298"
+      },
+      {
+       "item": "Fresh New York Pork Chops, Boneless",
+       "price": 6.49,
+       "size": "lb",
+       "relevance": 91,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_new_york_pork_chops_boneless/p/1564405684713031292"
+      },
+      {
+       "item": "Fresh Ny Pork Chops, Boneless Value Pack",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_ny_pork_chops_boneless_value_pack/p/1564405684713031294"
+      },
+      {
+       "item": "Fresh New York Pork Chops, Boneless Thin",
+       "price": 6.99,
+       "size": "lb",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_new_york_pork_chops_boneless_thin/p/1564405684713031295"
+      },
+      {
+       "item": "New York Pork Chops, Boneless Marinated",
+       "price": 7.49,
+       "size": "lb",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/meat/butchers_counter_meats/new_york_pork_chops_boneless_marinated/p/1564405684713032421"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "boneless pork chops",
+     "attempts": [
+      {
+       "term": "boneless pork chops",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Boneless Pork Chop",
+       "price": 2.5,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop"
+      },
+      {
+       "item": "Boneless Pork Ribeye Chops",
+       "price": 1.67,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387017-boneless-pork-ribeye-chops-5-oz"
+      },
+      {
+       "item": "Iowa Pork Chops",
+       "price": 3.49,
+       "size": "$3.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386428-iowa-pork-chops-1-each"
+      },
+      {
+       "item": "Center Cut Pork Chops",
+       "price": 2.49,
+       "size": "$3.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388353-center-cut-pork-chops-1-each"
+      },
+      {
+       "item": "Bone-In Smoked Pork Chops",
+       "price": 4.37,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388729-bonein-smoked-pork-chops-1-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "boneless pork chops",
+     "attempts": [
+      {
+       "term": "boneless pork chops",
+       "state": "MATCHES",
+       "hits": 16
+      }
+     ],
+     "hits": [
+      {
+       "item": "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
+       "price": 10.37,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7G7MYR79DF60"
+      },
+      {
+       "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+       "price": 9.6,
+       "size": "",
+       "unit_price": "$2.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+      },
+      {
+       "item": "Member’s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound",
+       "price": 17.31,
+       "size": "",
+       "unit_price": "$1.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2F125NWDOJLS"
+      },
+      {
+       "item": "Member's Mark Pork Belly, Cryovac, priced per pound",
+       "price": 24.73,
+       "size": "",
+       "unit_price": "$3.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U6MBNWPS942"
+      },
+      {
+       "item": "Pork Belly, Tray, priced per pound",
+       "price": 14.89,
+       "size": "",
+       "unit_price": "$4.47/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6X1S1N6E861S"
+      },
+      {
+       "item": "Member’s Mark Bone-In Pork Shoulder Blade Steaks, Tray, priced per pound",
+       "price": 20.28,
+       "size": "",
+       "unit_price": "$3.87/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XRN59WFW66B"
+      },
+      {
+       "item": "Member's Mark Thick-Cut Bone-In Pork Chops, priced per pound",
+       "price": 20.58,
+       "size": "",
+       "unit_price": "$2.94/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4TMNKJPPJ854"
+      },
+      {
+       "item": "Member's Mark Bone-In Pork Chops, priced per pound",
+       "price": 20.16,
+       "size": "",
+       "unit_price": "$2.52/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6KZDL95HTCPW"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "white pepper",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "white pepper",
+     "attempts": [
+      {
+       "term": "white pepper",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Ground White Pepper Shaker",
+       "price": 4.49,
+       "size": "1.87 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111068370"
+      },
+      {
+       "item": "Spice Islands Ground White Pepper, Kosher",
+       "price": 13.99,
+       "size": "2.4 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001732400277"
+      },
+      {
+       "item": "Trident White Peppermint Sugar Free Gum 16 CT",
+       "price": 1.5,
+       "size": "16 pc",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0007339005504"
+      },
+      {
+       "item": "WoodWick® Nature's Wick® Sage & White Pepper Jar Candle",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0019283313217"
+      },
+      {
+       "item": "Pepperidge Farm White Hot Dog Buns",
+       "price": 4.19,
+       "size": "14 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0001410007093"
+      },
+      {
+       "item": "Pepperidge Farm White Hamburger Buns",
+       "price": 4.29,
+       "size": "14.5 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001410007187"
+      },
+      {
+       "item": "Pepperidge Farm Farmhouse Hearty White Bread",
+       "price": 3.79,
+       "size": "24 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0001410007083"
+      },
+      {
+       "item": "Pepperidge Farm Farmhouse Honey White Bread",
+       "price": 3.79,
+       "size": "22 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0001410005166"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "white pepper",
+     "attempts": [
+      {
+       "term": "white pepper",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Mc Cormick Ground White Pepper 1 Oz",
+       "price": 4.29,
+       "size": "1 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_ground_white_pepper_1_oz/p/34662"
+      },
+      {
+       "item": "Mc Cormick Premium Black & White Peppercorn Grinder 1.26 Oz",
+       "price": 3.99,
+       "size": "1.26 oz",
+       "relevance": 125,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_premium_black_white_peppercorn_grinder_1_26_oz/p/7584915"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "white pepper",
+     "attempts": [
+      {
+       "term": "white pepper",
+       "state": "OK",
+       "hits": 49
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Ground White Pepper",
+       "price": 3.99,
+       "size": "1 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72835-mccormick-ground-white-pepper-1-oz"
+      },
+      {
+       "item": "Red Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3259137-red-bell-pepper-each"
+      },
+      {
+       "item": "McCormick Coarse Ground Black Pepper",
+       "price": 6.99,
+       "size": "3.12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16718701-mccormick-coarse-ground-black-pepper-3-12-oz"
+      },
+      {
+       "item": "Green, Red & Yellow Peppers",
+       "price": 4.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89326993-green-red-yellow-peppers"
+      },
+      {
+       "item": "Yellow Bell Pepper",
+       "price": 1.5,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3297927-yellow-bell-pepper-each"
+      },
+      {
+       "item": "Badia Spices Whole Black Pepper",
+       "price": 7.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458588-badia-spices-black-pepper-whole-16-oz"
+      },
+      {
+       "item": "LAWRY'S Colorful Coarse Ground Blend Seasoned Pepper",
+       "price": 5.99,
+       "size": "2.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41354-lawry-s-colorful-coarse-ground-blend-seasoned-pepper-2-25-oz"
+      },
+      {
+       "item": "Crazy Fresh Stop Light Peppers Diced",
+       "price": 3.99,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19268935-crazy-fresh-produce-stoplight-diced-peppers-6-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "white pepper",
+     "attempts": [
+      {
+       "term": "white pepper",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Ground White Pepper, 18 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.83/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Member's Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
+       "price": 24.76,
+       "size": "",
+       "unit_price": "$0.02/sft",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3RX7W4Y9K1ZQ"
+      },
+      {
+       "item": "Member's Mark Fire Roasted Red Bell Pepper, Spinach, and Cheese Trio Egg White Bites, 5 pk.",
+       "price": 9.76,
+       "size": "",
+       "unit_price": "$1.95/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/63Y1QJEFZB79"
+      },
+      {
+       "item": "Member’s Mark Taco Seasoning, 23 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+      },
+      {
+       "item": "Member's Mark Granulated Garlic, 26 oz.",
+       "price": 9.28,
+       "size": "",
+       "unit_price": "$0.36/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+      },
+      {
+       "item": "Member's Mark Sea Salt, 36 oz.",
+       "price": 3.98,
+       "size": "",
+       "unit_price": "$0.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2IU9483LXRHT"
+      },
+      {
+       "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
+       "price": 33.48,
+       "size": "",
+       "unit_price": "$6.70/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

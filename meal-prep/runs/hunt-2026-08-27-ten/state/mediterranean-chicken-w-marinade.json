@@ -1,0 +1,37 @@
+{
+    "slug":  "mediterranean-chicken-w-marinade",
+    "title":  "Mediterranean Chicken w/ Marinade",
+    "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breasts with feta, kalamata olives, artichoke, grape tomato, lemon and oregano - a Greek/Mediterranean bake distinct from the slow-cooker Mediterranean bowls (differs on method + starch) and from the creamy spinach-artichoke bakes (feta/olive/lemon vs cream cheese); widens cuisine, band verified 673/18/49."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

@@ -1,0 +1,52 @@
+{
+    "slug":  "baked-stuffed-pork-chops",
+    "title":  "Baked Stuffed Pork Chops",
+    "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+    "protein":  "pork",
+    "state":  "pricing",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:22:53",
+    "terms":  [
+                  {
+                      "term":  "boneless pork chops",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Boneless loin chops with a bread/cranberry/celery/onion stuffing baked as a main; distinct from the Italian prosciutto-mozzarella stuffed chop and from all live pork chops (which are sauced or starched), pork region unsaturated, band verified 495/17/51 and the not-a-main flag is spurious."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T04:21:52",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T04:22:53",
+                        "by":  "mapper",
+                        "detail":  ""
+                    }
+                ]
+}

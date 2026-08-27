@@ -1,0 +1,80 @@
+{
+ "slug": "dill-pickle-chicken-wings",
+ "lines": [
+  {
+   "raw": "4 lbs chicken wings (See Note 1)",
+   "buy": "14 lb chicken wings, split into drumettes and flats, tips discarded",
+   "grams_source": 1814
+  },
+  {
+   "raw": "4 cups dill pickle juice/brine (from empty pickle jar)",
+   "buy": "14 cups dill pickle juice, drained from the jars"
+  },
+  {
+   "raw": "5 tsp baking powder (NOT BAKING SODA and make sure it's aluminum free baking powder)",
+   "buy": "5 Tbsp plus 2 1/2 tsp aluminum-free baking powder"
+  },
+  {
+   "raw": "2 tsp dried dill",
+   "buy": "2 Tbsp plus 1 tsp"
+  },
+  {
+   "raw": "1 tsp garlic powder",
+   "buy": "3 1/2 tsp"
+  },
+  {
+   "raw": "3/4 tsp salt",
+   "buy": "2 2/3 tsp"
+  },
+  {
+   "raw": "1/8 tsp white pepper (optional)",
+   "buy": "1/2 tsp (optional)",
+   "grams_source": 0.3
+  },
+  {
+   "raw": "PAM/Oil spray",
+   "buy": "cooking spray, for the baking racks",
+   "grams_source": 2
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "4 lbs chicken wings (See Note 1)",
+   "term": "chicken wings",
+   "canon_item": "Chicken Wings",
+   "bid": "chicken-wings",
+   "decision": "mapped",
+   "grams_source": 1814,
+   "evidence": "REUSE of a live board id, 7 of 7 stores, cheapest 1.6909 at Aldi; the food DB already carries the row. Only the vocabulary row is missing, which is a naming question and not a registrar one."
+  },
+  {
+   "raw": "1/8 tsp white pepper (optional)",
+   "term": "white pepper",
+   "canon_item": "White Pepper",
+   "bid": null,
+   "decision": "mapped-optional",
+   "grams_source": 0.3,
+   "evidence": "No commodity claims it, and I will not bridge it onto black-pepper: different spice, different price class. Optional at 1/8 tsp, so pantry-static pricing is safe; enqueued in absent_terms since captures carry matching products."
+  },
+  {
+   "raw": "PAM/Oil spray",
+   "term": "cooking spray",
+   "canon_item": "Cooking Spray",
+   "bid": "cooking-spray",
+   "decision": "mapped",
+   "grams_source": 2,
+   "evidence": "REUSE of a live board id, 7 of 7 stores, cheapest 0.3113 at Aldi; DB row already present. Weighed at 2 g source basis as a pan coating."
+  }
+ ],
+ "absent_terms": [
+  "white pepper"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "FAILS by 80% on protein, and I am confident the cause is a BONE-BASIS defect in the engine rather than a wrong portion - flagging loudly rather than correcting a gram. Computed at source basis: 1814 g wings / 4 servings = 453 g per serving, which at the DB row (112 g = 210 cal, 20 P) gives 862 cal / 81.1 P / 2.4 C per serving against the source's published 620 cal / 45 P / 20 C. The 4 lb figure is the PURCHASE weight and includes bone; whole wings are roughly 45% bone. At a ~55% edible yield the recipe gives ~250 g edible per serving = 468 cal / 44.6 P, which lands on the source's 45 g protein almost exactly. So the recipe is real and in-band; the DB row for chicken wings is an edible-portion label being multiplied by a bone-in purchase weight. I have NOT reduced grams_source - 1814 g is the correct cost basis and reducing it would understate the shop. ACTION NEEDED: the wings row needs a bone-in basis or a yield factor, or this dish will compute at 862 cal and be retired against the 650 ceiling for a reason that is not true of the food. Carbs are safe either way at 2.4 g per serving. Second, smaller note: the 4 cups of pickle brine are a marinade that is discarded, so the 572 g of Dill Pickles macros (102 cal, 20 C) should not be counted as eaten even though the purchase is real."
+}

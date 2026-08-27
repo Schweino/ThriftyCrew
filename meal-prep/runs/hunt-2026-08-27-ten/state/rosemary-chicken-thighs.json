@@ -1,0 +1,37 @@
+{
+    "slug":  "rosemary-chicken-thighs",
+    "title":  "Rosemary Chicken Thighs",
+    "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Bone-in rosemary chicken thighs roasted with Brussels sprouts, apple and Dijon-honey — a distinct autumn herb-roast plate (different veg, fruit and sauce than the accepted balsamic sweet-potato/kale/cranberry harvest chicken), saturation 0, band verified 672/20/43."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

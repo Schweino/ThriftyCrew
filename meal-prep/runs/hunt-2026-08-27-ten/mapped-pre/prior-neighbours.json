@@ -1,0 +1,181 @@
+{
+ "generated": "2026-08-27T04:23:09",
+ "model": "BAAI/bge-m3",
+ "device": "cpu",
+ "corpus": 154,
+ "cache_dir": "C:\\Codex\\ThriftyCrew\\sidecar\\out\\resolution-embed-cache",
+ "cache_misses": 0,
+ "elapsed_sec": 0.01,
+ "state": "ok",
+ "why": "",
+ "terms": [
+  {
+   "key": "bone in skin on chicken thighs",
+   "term": "bone-in skin-on chicken thighs",
+   "neighbours": [
+    {
+     "term": "boneless skinless chicken thighs",
+     "key": "boneless skinless chicken thighs",
+     "bid": "boneless-skinless-chicken-thigh",
+     "decision": "mapped",
+     "evidence": "REFUSED the board's chicken-thighs bridge: bone-in skin-on thighs are roughly half the price per lb and about 70% edible, so both price and gram weight differ. Used the vocabulary's own row for this e",
+     "cos": 0.7629,
+     "at": "2026-08-26T04:52:58",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "boneless, skinless chicken breasts",
+     "key": "boneless skinless chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Exact vocabulary row Boneless Skinless Chicken Breast [chicken-breast], board 7 of 7; the source states 1.3 lb total, so no each-weight assumption is needed.",
+     "cos": 0.7045,
+     "at": "2026-08-26T05:09:07",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "skinless/boneless chicken breasts",
+     "key": "skinless boneless chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Word-for-word the vocabulary row's own name reordered, board 7 of 7. No stated weight, so 170 g (6 oz) raw per breast - the standard tray breast and close to the estate's 167 g/serving average; the so",
+     "cos": 0.6955,
+     "at": "2026-08-26T13:26:50",
+     "slug": "copycat-longhorn-parmesan-crusted-chicken"
+    },
+    {
+     "term": "cooked chicken",
+     "key": "cooked chicken",
+     "bid": "rotisserie-chicken",
+     "decision": "mapped",
+     "evidence": "The pre-resolver flagged rotisserie-chicken as DIFFERENT FORM 'cooked', but rotisserie chicken is SOLD cooked and this line calls for cooked shredded meat with skin discarded: same form, same price cl",
+     "cos": 0.6803,
+     "at": "2026-08-26T04:21:59",
+     "slug": "quinoa-casserole-with-chicken"
+    },
+    {
+     "term": "chicken breasts",
+     "key": "chicken breasts",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "The source slices these into tenders, i.e. plain boneless skinless breast; the vocabulary's own name carries the boneless/skinless words, so the form flag is a wording artefact. Board 7 of 7.",
+     "cos": 0.6775,
+     "at": "2026-08-26T04:52:01",
+     "slug": "honey-balsamic-chicken-tenders"
+    }
+   ]
+  },
+  {
+   "key": "fresh rosemary",
+   "term": "fresh rosemary",
+   "neighbours": [
+    {
+     "term": "fresh thyme",
+     "key": "fresh thyme",
+     "bid": "fresh-thyme",
+     "decision": "mapped",
+     "evidence": "fresh-thyme is a live board id (4/7); no bridge to dried-thyme, which is a different price and weight. One sprig is about 1 g.",
+     "cos": 0.7991,
+     "at": "2026-08-26T04:46:59",
+     "slug": "chicken-fried-steak"
+    },
+    {
+     "term": "fresh ginger",
+     "key": "fresh ginger",
+     "bid": "fresh-ginger",
+     "decision": "mapped",
+     "evidence": "Vocabulary row Ginger [fresh-ginger] is exactly this food; deliberately NOT ground-ginger, which is a different price class and gram weight. Board 6 of 7.",
+     "cos": 0.7693,
+     "at": "2026-08-26T04:52:59",
+     "slug": "sticky-bourbon-chicken"
+    },
+    {
+     "term": "fresh spinach",
+     "key": "fresh spinach",
+     "bid": "spinach",
+     "decision": "mapped",
+     "evidence": "The `spinach` id is the fresh bagged leaf (frozen has its own id, frozen-chopped-spinach), so 'fresh' is not a flip here; board 7 of 7.",
+     "cos": 0.7276,
+     "at": "2026-08-26T05:08:07",
+     "slug": "mediterranean-chicken-w-marinade"
+    },
+    {
+     "term": "fresh mozzarella",
+     "key": "fresh mozzarella",
+     "bid": "fresh-mozzarella",
+     "decision": "mapped",
+     "evidence": "Water-packed fresh ball is a different SKU and price class from low-moisture shredded, and reduced-fat or fat-free mozzarella are different products; no commodity claims it, captures do.",
+     "cos": 0.7102,
+     "at": "2026-08-26T05:09:07",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "fresh sage leaves",
+     "key": "fresh sage leaves",
+     "bid": "fresh-sage",
+     "decision": "mapped",
+     "evidence": "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure.",
+     "cos": 0.6761,
+     "at": "2026-08-26T05:07:06",
+     "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish"
+    }
+   ]
+  },
+  {
+   "key": "spaghetti squash",
+   "term": "spaghetti squash",
+   "neighbours": [
+    {
+     "term": "cubed butternut squash",
+     "key": "cubed butternut squash",
+     "bid": "butternut-squash",
+     "decision": "mapped",
+     "evidence": "butternut-squash is a live board id at 5 of 7, so a reuse and not a proposal; only a vocabulary name row is missing, exactly like the spaghetti-squash ruling on the shelf. Cubed is a cut, not a form.",
+     "cos": 0.6544,
+     "at": "2026-08-26T12:06:19",
+     "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut"
+    },
+    {
+     "term": "shredded mozzarella cheese",
+     "key": "shredded mozzarella cheese",
+     "bid": "shredded-cheese",
+     "decision": "mapped",
+     "evidence": "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board's own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class f",
+     "cos": 0.6224,
+     "at": "2026-08-26T13:26:55",
+     "slug": "italian-chicken-tortellini-skillet-recipe-video"
+    },
+    {
+     "term": "baby potatoes",
+     "key": "baby potatoes",
+     "bid": "baby-potatoes",
+     "decision": "mapped",
+     "evidence": "Small creamer potatoes are their own bagged SKU priced well above bulk russets, and no commodity claims them though today's captures carry them; sweet-potatoes is a different food.",
+     "cos": 0.6182,
+     "at": "2026-08-26T05:09:06",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "fresh mozzarella",
+     "key": "fresh mozzarella",
+     "bid": "fresh-mozzarella",
+     "decision": "mapped",
+     "evidence": "Water-packed fresh ball is a different SKU and price class from low-moisture shredded, and reduced-fat or fat-free mozzarella are different products; no commodity claims it, captures do.",
+     "cos": 0.5951,
+     "at": "2026-08-26T05:09:07",
+     "slug": "sheet-pan-pesto-chicken-dinner"
+    },
+    {
+     "term": "chicken breast",
+     "key": "chicken breast",
+     "bid": "chicken-breast",
+     "decision": "mapped",
+     "evidence": "Diced breast for a skillet is plain boneless skinless breast; the vocabulary row simply carries those words in its name, so the form flag is a wording artefact. Board 7 of 7, and the source states 1.5",
+     "cos": 0.591,
+     "at": "2026-08-26T13:26:47",
+     "slug": "chicken-and-rice-one-pot"
+    }
+   ]
+  }
+ ]
+}

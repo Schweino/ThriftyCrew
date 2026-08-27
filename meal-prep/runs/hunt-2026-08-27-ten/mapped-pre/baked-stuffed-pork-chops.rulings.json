@@ -1,0 +1,121 @@
+{
+ "slug": "baked-stuffed-pork-chops",
+ "lines": [
+  {
+   "raw": "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+   "buy": "7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each",
+   "grams_source": 907
+  },
+  {
+   "raw": "2 tbsp olive oil",
+   "buy": "7 Tbsp"
+  },
+  {
+   "raw": "2 tbsp Ranch Seasoning Mix",
+   "buy": "7 Tbsp"
+  },
+  {
+   "raw": "1 tsp paprika",
+   "buy": "3 1/2 tsp"
+  },
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1/2 tsp black pepper",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1 tbsp olive oil",
+   "buy": "3 1/2 Tbsp"
+  },
+  {
+   "raw": "1 tbsp butter",
+   "buy": "3 1/2 Tbsp"
+  },
+  {
+   "raw": "1/2 cup small white onion (diced)",
+   "buy": "1 3/4 cups diced (about 2 small onions)"
+  },
+  {
+   "raw": "1/2 cup celery stalk (diced)",
+   "buy": "1 3/4 cups diced (about 4 stalks)"
+  },
+  {
+   "raw": "1/2 cup cranberries",
+   "buy": "1 3/4 cups fresh cranberries",
+   "grams_source": 50
+  },
+  {
+   "raw": "1/4 cup carrot (shredded)",
+   "buy": "7/8 cup shredded (about 2 medium carrots)"
+  },
+  {
+   "raw": "1/2 tsp salt",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1 cup bread cubes",
+   "buy": "3 1/2 cups bread cubes (about 5 oz)",
+   "grams_source": 45,
+   "notes": "Pre-resolve computed no weight; 1 cup dry bread cubes weighed at 45 g source basis."
+  },
+  {
+   "raw": "2/3 cup chicken broth",
+   "buy": "2 1/3 cups"
+  },
+  {
+   "raw": "1 tbsp Ranch Seasoning Mix",
+   "buy": "3 1/2 Tbsp"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 lbs boneless pork chops ((1 1/4 inch thick, loin chops))",
+   "term": "boneless pork chops",
+   "canon_item": "Boneless Pork Chops",
+   "bid": "boneless-pork-chops",
+   "decision": "mapped",
+   "grams_source": 907,
+   "evidence": "Genuine form flip, not an alias: boneless loin chops carry a different price class than the board's generic pork-chops ($2.52/lb, 7/7) and a different gram basis, since 2 lb bone-in yields far less meat. The recipe also needs a 1 1/4-inch chop thick enough to pocket."
+  },
+  {
+   "raw": "1/2 cup cranberries",
+   "term": "cranberries",
+   "canon_item": "Fresh Cranberries",
+   "bid": "fresh-cranberries",
+   "decision": "mapped",
+   "grams_source": 50,
+   "evidence": "REUSE of a live board id (1 of 7 stores), not a new proposal - only the vocabulary row is missing. Fresh, not dried: the source's own 17 g carbs per serving cannot hold 50 g of dried cranberries (+9.8 g/serving alone), while fresh at 6 g total carbs lands the recipe at 13.3 g."
+  }
+ ],
+ "absent_terms": [
+  "boneless pork chops"
+ ],
+ "db_entries_written": [
+  "Boneless Pork Chops",
+  "Fresh Cranberries"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "boneless pork chops",
+   "proposed_bid": "boneless-pork-chops",
+   "evidence": "Searched by food, not by string, across all four namespaces as reported by the pre-resolve table: the only pork-chop concept priced is the generic `pork-chops` (7/7 stores, cheapest 2.52 at Sam's Club), and no boneless variant appears under any spelling or word-order flip. Boneless loin chops are a distinct retail cut at a distinct price class (typically $3.50-4.50/lb vs ~$2.50 bone-in) AND a distinct gram basis, since the bone-in id's per-lb price buys ~30% bone. Bridging them would publish both a wrong price and a wrong portion for the main protein of the dish. Same distinction the estate already holds between leg quarters and thighs. If the registrar judges `pork-chops` to be a boneless-inclusive generic rather than a bone-in id, alias is the correct verdict and I have no objection.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "boneless-pork-chops",
+   "verdict": "approve",
+   "bid": "boneless-pork-chops",
+   "reason": "Verified against all three namespaces, the feed, and the raw Sam's capture: the only priced chop id is pork-chops, and its live crown (Sam's item 17799324269, $2.52/lb) is literally 'Member's Mark Bone-In Pork Chops' - so the existing id is the bone-in purchase, not a boneless-inclusive generic. Boneless loin chops are the same food in a different form (different price class and ~30% different edible yield per lb), the exact split the estate already holds for boneless-skinless-chicken-thigh vs chicken-thighs and boneless-beef-short-ribs vs beef-short-ribs. SAME FOOD, DIFFERENT FORM -> new id in the recipe namespace (recipe-board-everyday + recipe-commodities). REQUIRED FOLLOW-UP EDITS via add-commodity-rule.ps1: (1) allowlist pair boneless-pork-chops|pork-chops in commodity-dupe-allowlist.json, reason 'bone-in vs boneless: different per-lb basis'; (2) new id's include must REQUIRE boneless AND pork AND chop (e.g. ^(?=.*\\bboneless\\b)(?=.*\\bpork\\b)(?=.*\\bchops?\\b)) and inherit pork-chops' full exclude list (breaded/stuffed/seasoned/marinated/cooked plus the beverage/baby/pet block) - 'stuffed' stays excluded even though the recipe is baked-STUFFED-pork-chops, because the recipe buys raw chops; (3) add \\bboneless\\b to pork-chops' excludes so the form-blind include can no longer crown a boneless product on the bone-in id. Separate vocabulary answer: 'boneless pork chops' needs its own ingredients.json row (DIFFERENT FORM of Pork Chops, per pre-resolve) - this ruling mints the id only, not the name."
+  }
+ ],
+ "macro_cross_check": "PASSES, and the agreement is tight enough to confirm both of my rulings. Computed over all 16 lines at source basis (4 servings): 533 cal / 50.7 P / 13.3 C / 28.7 F per serving against the source's published 495 cal / 51 P / 17 C. Protein gap 0.6% - essentially exact, which independently confirms the 907 g raw boneless-loin basis for the main protein. Calories 7.7% high and carbs 3.7 g low, both inside what bread-cube weight and package rounding explain. Meets this run's conditions on its own with no tuning: 533 cal is mid-band and 13.3 g carbs is well under the 35 g ceiling. This is the strongest recipe in the batch."
+}

@@ -329,7 +329,7 @@ def cap_accepts_to_target(payload, already_accepted, target):
 
 class Daemon(object):
 
-    def __init__(self, run_dir, run_id, conditions=DEFAULT_COND, band=None, wave_size=None,
+    def __init__(self, run_dir, run_id, conditions=None, band=None, wave_size=None,
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
                  costed_path="", pyrun=None, food_db_path="", queue_path="",
@@ -340,7 +340,17 @@ class Daemon(object):
         # and never writes one - the same guard self.log already uses, so no suite grows a side effect.
         if not quiet:
             set_log_file(os.path.join(run_dir, "daemon.log"))
-        self.conditions = conditions
+        # THE DAEMON OWNS THIS RESOLUTION, and that is why it lives here rather than in main().
+        # `conditions` was a plain parameter defaulting to DEFAULT_COND, and main() passed argparse's
+        # own DEFAULT_COND-defaulted flag straight into it - so the run dir's stated conditions were
+        # never consulted by anything, while the BAND beside them was read from run.json. Moving the
+        # resolution behind the constructor means there is no wiring left to get wrong: a caller
+        # cannot reinstate the defect by passing the flag through, because passing nothing is what
+        # asks the run dir. Measured 2026-08-27: with the resolution in main(), reverting that one
+        # line left the whole suite green, which is a fixture testing a function nobody has to call.
+        self.conditions, self.conditions_why = (
+            resolve_conditions(run_dir, "") if conditions is None
+            else (str(conditions), "passed to the constructor"))
         self.band = dict(band or DEFAULT_BAND)
         self.wave_size = wave_size or hunt_lib.WAVE_SIZE
         self.target = target
@@ -3057,8 +3067,31 @@ class Daemon(object):
                         # A rejection that arrives without one is a payload we cannot read, and the
                         # honest outcome is a STUCK carrying the mapper's own sentence - which is
                         # what `settle` does with an empty state.
-                        await self.settle(b["slug"], as_text(res.get("state")).strip(), "mapper",
-                                          as_text(res.get("detail")) or "mapper rejected", "map")
+                        # ...AND A REJECTION WITH NO BASIS IS AS UNREADABLE AS ONE WITH NO STATE.
+                        # The reasoning directly above refuses to invent a `state` on the mapper's
+                        # behalf, then accepted an EMPTY `detail` and filed the literal string
+                        # "mapper rejected" as the reason - a terminal verdict, in the run record,
+                        # citing nothing. Measured 2026-08-27: enchiladas-suizas was retired
+                        # `rejected-macros` with reject_reason "mapper rejected", and no artifact
+                        # anywhere said which macro, computed how, against which number. The recipe
+                        # cannot be re-examined, defended or learned from, and a rejection nobody can
+                        # read is indistinguishable from one that never should have happened - which
+                        # mattered here, because that run's prompts carried the WRONG BAND.
+                        # This is the same lesson rung 3 recorded four commits ago in another file:
+                        # "the refusal was right and unreadable - one basis in the finding". A
+                        # terminal state needs both halves, so an unexplained rejection is STUCK,
+                        # which is resumable and costs a re-ask, not a recipe.
+                        rej_state = as_text(res.get("state")).strip()
+                        rej_why = as_text(res.get("detail")).strip()
+                        if rej_state and not rej_why:
+                            await self.settle(
+                                b["slug"], "", "mapper",
+                                "the mapper returned %s and NO basis for it. A terminal rejection "
+                                "citing nothing cannot be re-examined or defended, so it is not "
+                                "recorded as one - re-ask it." % rej_state, "map")
+                            continue
+                        await self.settle(b["slug"], rej_state, "mapper",
+                                          rej_why or "mapper rejected", "map")
                         continue
                     absent = [t for t in (res.get("absent_terms") or []) if t]
                     optional = [t for t in (res.get("optional_absent") or []) if t]
@@ -3549,6 +3582,13 @@ class Daemon(object):
                 # after the prior-ruling and board notes. Truncating it sent the mapper back to the
                 # estate to re-derive what the table had already computed. Phase 1 measured inlining
                 # beating tool-call reads by a wide margin; this is that finding applied here.
+                if r.get("item_split_from"):
+                    lines.append("        ONE FOOD OF A SPLIT LINE - the source wrote \"%s\" on a "
+                                 "single line naming more than one food, so it was split before you "
+                                 "saw it. Rule THIS food only, key your answer on the raw string "
+                                 "above exactly as printed (the `[split: ...]` suffix included), and "
+                                 "give it a buy string covering this food alone."
+                                 % r.get("item_split_from"))
                 lines.append("        evidence: %s" % (r.get("evidence") or "(none gathered)"))
                 if r.get("fooddb_known") is False:
                     lines.append("        NO food-macros-db row - this is the one thing a label "
@@ -3562,10 +3602,13 @@ class Daemon(object):
                              "one a `buy` string and nothing else:")
                 for r in settled:
                     g = r.get("grams_source_basis")
-                    lines.append("    %s  [%s]  raw: %s%s"
+                    lines.append("    %s  [%s]  raw: %s%s%s"
                                  % (r.get("canon_item") or r.get("term"), r.get("bid") or "no bid",
                                     r.get("raw") or "",
-                                    ("   source-basis %sg" % g) if g else "   (no weight computed)"))
+                                    ("   source-basis %sg" % g) if g else "   (no weight computed)",
+                                    ("   <- ONE FOOD of the split line \"%s\": key on the raw above "
+                                     "verbatim and give it a buy string for THIS food alone"
+                                     % r.get("item_split_from")) if r.get("item_split_from") else ""))
             mp = t.get("macro_precheck") or {}
             src = mp.get("source") or {}
             if mp.get("state") == "computed":
@@ -3615,6 +3658,26 @@ class Daemon(object):
             "     goes IN THE POT at the %d-serving batch scale, not what a package is called: \"3 lb,\n"
             "     sliced into thin rounds\", \"an 8 oz brick minus 2 tbsp\", \"5 1/4 cups grated, divided\".\n"
             "  3. The macro cross-check, per recipe, as described in each block above.\n\n"
+            # THE SPLIT-LINE CONTRACT, STATED (2026-08-27). map-preresolve rewrites a source line that
+            # names two foods into two rows, each keyed by the source's own raw with a `[split: <food>]`
+            # suffix - the raw line is the join key everywhere downstream, so the parts cannot share
+            # one. That suffix was rendered INSIDE the raw string and never explained anywhere in this
+            # prompt, and map-preresolve's own comment claimed "the mapper is told the same thing in
+            # the residual block", which was not true of any block this file builds. So the mapper
+            # answered "Pinch salt and pepper ($0.05)" ONCE, with the pair's combined buy string
+            # "1/4 tsp salt and 1/2 tsp black pepper". Neither split row matched it, both lost their
+            # buy string, and apple-spice-pork-chops stuck at the map lane with a finding that named
+            # the split raw without ever saying what a split raw was. Two of the five recipes in that
+            # micro-batch carried a salt-and-pepper line, so it is systematic, not a slip.
+            "A LINE WHOSE RAW ENDS IN `[split: <food>]` IS ONE FOOD OF A COMPOSITE SOURCE LINE. The\n"
+            "source wrote two or more foods on one line - \"Pinch salt and pepper\" - and it was split\n"
+            "before you saw it, because a composite can never have one food-DB row or one commodity\n"
+            "id. ANSWER EACH PART SEPARATELY. Key every answer on the raw string EXACTLY as printed,\n"
+            "suffix included, and give each part a `buy` string covering THAT FOOD ALONE - \"1/4 tsp\"\n"
+            "for the salt and \"1/2 tsp\" for the pepper, never \"1/4 tsp salt and 1/2 tsp black\n"
+            "pepper\" on both or on either. A single answer keyed on the unsplit line matches NOTHING:\n"
+            "the assembler joins on the raw string, so both parts silently lose their buy strings and\n"
+            "the recipe stops one lane later.\n\n"
             # D3: NAME THE FIELD. The lesson three paragraphs down is that a prompt saying
             # \"unchanged contract\" without naming one new field broke a clean batch, and a shelf
             # the judge does not know is a shelf reads as an unexplained block of quotes.
@@ -3729,10 +3792,12 @@ class Daemon(object):
             "array cannot be comma-joined by accident.\n\n"
             "Transcriptions, if you need a line's full context: %s\\extracted\\<slug>.json\n"
             "This run's conditions: %s\n"
+            "%s\n"
             "%s%s"
             % (len(slugs), hunt_lib.MAP_BATCH, "\n\n".join(blocks), hunt_lib.TARGET_SERVINGS,
                self.run_dir, " | ".join(hunt_lib.MAPPED_RULING_DECISIONS),
-               self.run_dir, self.conditions, self.food_db_seam_note(),
+               self.run_dir, self.conditions, band_sentence(self.band),
+               self.food_db_seam_note(),
                self.GREP_HARNESS_NOTE))
 
     # ---------------------------------------------------------------------------------------------
@@ -4490,7 +4555,8 @@ class Daemon(object):
             "orchestrator runs the spec build and reads the band off the built spec itself. Do not run\n"
             "hunt-run.ps1 and do not move any state.\n\n"
             "This run's conditions: %s\n"
-            % (slug, self.writer_dossier(slug), self.conditions))
+            "%s\n"
+            % (slug, self.writer_dossier(slug), self.conditions, band_sentence(self.band)))
 
     # redrift_prompt DELETED 2026-08-25 (CHANGE W). It re-asked the writer to put back locked fields
     # it had edited. The writer has no file access now, so that payload class cannot exist: a
@@ -5315,8 +5381,9 @@ class Daemon(object):
             "turns where a chain is absent, suspicious, or where external reality (a price that smells\n"
             "wrong, a claim no gate covers) needs eyes. That discretionary look is the half of your job\n"
             "no battery can do.\n\n"
-            "This run's conditions: %s\nVerify each recipe's per-serving macros against that in\n"
-            "addition to your normal battery.\n\n"
+            "This run's conditions: %s\n%s\nVerify each recipe's per-serving macros against the BAND\n"
+            "numbers in addition to your normal battery - the conditions sentence is prose a person\n"
+            "typed and the band is what this run's gates enforce.\n\n"
             "Report to %s\\waves\\wave-%d.audit.md. FIRST line exactly GO or NO-GO. SECOND line\n"
             "exactly \"scope: %s\". Return the verdict, the blocking slugs, whether each blocker is\n"
             "recipe-local or shared-data, and the repair owner. The orchestrator stamps the ledger.\n"
@@ -5328,7 +5395,8 @@ class Daemon(object):
                # audit has no repair behind it, so a block there would be describing nothing.
                (self.repair_delta_block(delta) if why else ""),
                self.render_audit_dossier(wk),
-               self.conditions, self.run_dir, wk, scope, self.specs_seam_note(),
+               self.conditions, band_sentence(self.band),
+               self.run_dir, wk, scope, self.specs_seam_note(),
                self.GREP_HARNESS_NOTE))
 
     def repair_prompt(self, wk, blockers, audit):
@@ -5825,6 +5893,59 @@ def read_run_band(run_dir):
         return None
 
 
+def read_run_conditions(run_dir):
+    """The conditions string the run dir was MINTED with, or "" if it carries none."""
+    try:
+        with open(os.path.join(run_dir, "run.json"), "r", encoding="utf-8-sig") as f:
+            return str((json.load(f) or {}).get("conditions") or "").strip()
+    except Exception:                                             # noqa: BLE001
+        return ""
+
+
+def resolve_conditions(run_dir, flag):
+    """Returns (conditions, why). THE RUN DIR STATES THE CONDITIONS, exactly as it states the band.
+
+    WHY THIS IS NOT ARGPARSE'S `default=`. `--conditions` used to default to DEFAULT_COND, a hardcoded
+    string naming a band of its own - "between 400 and 650 calories per serving AND 35 g carbohydrate
+    or less". That string is rendered verbatim into the MAPPER, WRITER and AUDITOR prompts, and the
+    auditor's own line is "verify each recipe's per-serving macros against that". So a run minted at
+    450-700 cal / <= 40 carbs told its machine gate one band (resolve_band, from run.json) and told
+    every agent a DIFFERENT one, in prose, silently.
+
+    It is not theoretical. On run hunt-2026-08-27-ten the mapper returned "CONDITION BREACH ... 58.9 g
+    carbs per serving fails this run's 35 g ceiling" and recommended dropping a rice base, against a
+    run whose stated ceiling was 40. The band gate would have passed the recipe; the prose asked for
+    it to be changed. In the other direction - a run stricter than DEFAULT_COND - the auditor verifies
+    against a LOOSER band than the one the run agreed to, at the publish gate.
+
+    resolve_band's docstring already states the doctrine this restores: nothing supplies a default,
+    because a constraint nobody typed is enforced silently for a whole run. The band obeyed it and the
+    prose beside it did not.
+    """
+    flag = str(flag or "").strip()
+    if flag:
+        return flag, "stated on the command line"
+    stated = read_run_conditions(run_dir)
+    if stated:
+        return stated, "read from the run dir"
+    return DEFAULT_COND, ("NEITHER the run dir NOR --conditions states any - falling back to the "
+                          "built-in default, whose prose names a 400-650 cal / 35 g carb band that "
+                          "may not be this run's")
+
+
+def band_sentence(band):
+    """The run's band as NUMBERS, for the agent prompts.
+
+    The conditions string is prose a human typed, so it can drift from the band the gates enforce -
+    and when it does, the prose is what an agent acts on. This renders the machine band beside it so
+    the two cannot silently disagree, and so an agent asked to "verify against this run's conditions"
+    has the real numbers in front of it.
+    """
+    return ("THE BAND THIS RUN'S GATES ACTUALLY ENFORCE, which is the authority if the prose above "
+            "disagrees with it: %s. These come from the run dir, not from the sentence."
+            % describe_band(band))
+
+
 def resolve_band(run_dir, cal_min, cal_max, carb_max, protein_min):
     """Returns (band, why). The run dir states the band; a flag overrides one field for a drill.
     NOTHING supplies a default - a band nobody typed is a band nobody agreed to, and two gates would
@@ -5954,7 +6075,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="the Recipe Hunter daemon (PLAN v3 section 4.1)")
     ap.add_argument("--run-dir", dest="run_dir", default="")
     ap.add_argument("--run", default="")
-    ap.add_argument("--conditions", default=DEFAULT_COND)
+    ap.add_argument("--conditions", default="",
+                    help="override the run dir's own conditions string. Empty means the "
+                         "run dir states them - see resolve_conditions.")
     # THE BAND IS A RUN PARAMETER AND IS NEVER DEFAULTED HERE (Brad's ruling 2026-08-24). It is stated
     # once, at `hunt-run.ps1 -Init`, written into run.json, and read back below. A flag overrides it for
     # a drill; a run dir whose run.json states no band CANNOT RUN, because the alternative is two gates
@@ -6037,13 +6160,19 @@ def main(argv=None):
         say("HUNT-DAEMON-COMPLETE")
         return hunt_lib.EXIT_CANNOT_RUN
     say("hunt-daemon: band %s" % describe_band(band))
+    # The flag, or None to let the Daemon ask the run dir. NOT DEFAULT_COND: "unset" and "set to the
+    # built-in default" have to stay different, or the run dir is never consulted.
+    cond_flag = (a.conditions or "").strip() or None
 
-    d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), a.conditions, band,
+    d = Daemon(a.run_dir, a.run or os.path.basename(a.run_dir), cond_flag, band,
                a.wave_size, target=a.target, dry_run_publish=not a.publish, ledger_path=a.ledger,
                specs_dir=a.specs, costed_path=a.costed, pool_path=(a.pool or None),
                food_db_path=a.food_db, queue_path=a.queue, carriage_path=a.carriage,
                considered_path=a.considered, events_path=a.events,
                resolutions_path=a.resolutions)
+    # SAID OUT LOUD, beside the band, for the same reason the band is: these two are rendered side by
+    # side into every agent prompt, and they disagreed silently for a whole run.
+    say("hunt-daemon: conditions (%s) %s" % (d.conditions_why, d.conditions))
 
     async def go():
         ok, err = await d.seed()

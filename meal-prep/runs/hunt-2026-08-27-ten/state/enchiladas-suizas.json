@@ -1,0 +1,37 @@
+{
+    "slug":  "enchiladas-suizas",
+    "title":  "Enchiladas Suizas",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:50:09",
+    "updated":  "2026-08-27T04:50:09",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:50:09",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/enchiladas-suizas/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:50:09",
+                        "by":  "decider",
+                        "detail":  "Chicken enchiladas in salsa verde with Mexican crema and Chihuahua cheese, corn tortillas; no catalog/backlog/in-flight match at all (searched, 0), an authentic creamy-green Mexican dish distinct from Tex-Mex, verified band 519/29/41."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:50:09",
+                        "by":  "local",
+                        "detail":  "VOIDED rejection re-entered: the map dispatch that retired it carried DEFAULT_COND (400-650/35) instead of this run band (450-700/40) and cited no basis - see DEVIATION.md"
+                    }
+                ]
+}

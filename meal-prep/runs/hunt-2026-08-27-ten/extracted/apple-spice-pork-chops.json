@@ -1,0 +1,120 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Apple Spice Pork Chops",
+  "source_url": "https://www.budgetbytes.com/apple-spice-pork-chops/",
+  "servings": 4,
+  "time_total": "45 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "4 pork chops ($6.44)",
+      "item": "pork chops",
+      "qty": "4",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp vegetable oil ($0.08)",
+      "item": "vegetable oil",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Pinch salt and pepper ($0.05)",
+      "item": "salt and pepper",
+      "qty": "Pinch",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 med onion ($0.38)",
+      "item": "med onion",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 fuji apples ($1.99)",
+      "item": "fuji apples",
+      "qty": "2",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp butter ($0.26)",
+      "item": "butter",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp brown sugar ($0.03)",
+      "item": "brown sugar",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 tsp cinnamon ($0.02)",
+      "item": "cinnamon",
+      "qty": "1/4",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/8 tsp nutmeg ($0.02)",
+      "item": "nutmeg",
+      "qty": "1/8",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup chicken broth ($0.13)",
+      "item": "chicken broth",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the vegetable oil in a heavy skillet over medium heat. While the skillet is heating, open the pork chops and season each side with a pinch of salt and freshly ground pepper.",
+    "Once the oil is hot and shimmering, place the chops in the pan. Cook the chops undisturbed for 5-7 minutes or until the bottoms form a nice brown crust. If your chops are sticking to the pan, that means they have not formed a crust yet. They will “let go” once the crust forms. Flip the chops and cook the second side in the same manner. It should take 5-7 minutes for each side.",
+    "While the chops are searing, thinly slice the onion and slice the apples into wedges. Once the chops have browned on both sides, remove them to a clean plate (they do not need to be cooked through at this point). Add the apples, onions, and butter to the skillet and sauté until the onions are softened. Allow the moisture from the apples and onions to dissolve the browned bits from the skillet as they cook.",
+    "Add the broth, brown sugar, cinnamon and nutmeg to the skillet with the apples and onions. Stir until everything is combined, then return the chops to the pan, along with any juices that may have collected on the plate. Nestle the chops down in the mixture, making sure some onions and apples are on top of the chops.",
+    "Simmer the chops in the apple and onion mixture for about 10 minutes, or until the liquid has reduced by half, the apples are soft, and the pork chops are cooked through. Stir occasionally, moving the apples and onions around so they all have a chance to simmer and soften. Serve each chop with apples, onions and sauce spooned over top."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

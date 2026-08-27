@@ -1,0 +1,192 @@
+﻿{
+    "slug":  "jamie-oliver-s-chicken-in-milk-seriously-delish",
+    "title":  "Jamie Oliver\u0027s Chicken in Milk {Seriously Delish}",
+    "source_url":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+    "servings":  4,
+    "built_at":  "2026-08-27T04:13:31",
+    "line_count":  9,
+    "resolved_count":  6,
+    "residual_count":  3,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "whole chicken",
+                           "fresh sage leaves",
+                           "lemons"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+                     "term":  "whole chicken",
+                     "canon_item":  null,
+                     "bid":  "whole-chicken",
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027whole chicken\u0027 -\u003e whole-chicken (by mapper on 2026-08-26T05:07:06); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: whole | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: whole/boneless/skinless | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: whole/boneless/skinless; commodity id \u0027whole-chicken\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; board MAPPED: whole-chicken, 7 of 7 stores, cheapest 1.32 at Walmart",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 tsp salt ((plus more to taste))",
+                     "term":  "salt",
+                     "canon_item":  "Salt",
+                     "bid":  "salt",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  "vocab",
+                     "optional":  true,
+                     "item_split_from":  null,
+                     "grams_source_basis":  12
+                 },
+                 {
+                     "raw":  "Black pepper",
+                     "term":  "Black pepper",
+                     "canon_item":  "Black Pepper",
+                     "bid":  "black-pepper",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  4,
+                     "grams_basis_fallback":  "no-qty-\u003ehouse staple"
+                 },
+                 {
+                     "raw":  "2 tbsp olive oil",
+                     "term":  "olive oil",
+                     "canon_item":  "Olive Oil",
+                     "bid":  "olive-oil",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  27
+                 },
+                 {
+                     "raw":  "1/2 stick cinnamon",
+                     "term":  "cinnamon",
+                     "canon_item":  "Ground Cinnamon",
+                     "bid":  "ground-cinnamon",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027cinnamon\u0027 -\u003e ground-cinnamon (by mapper on 2026-08-26T04:33:59); nearest vocabulary rows: Ground Cinnamon [ground-cinnamon] DIFFERENT FORM: ground",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  1.3
+                 },
+                 {
+                     "raw":  "1/4 cup loosely packed fresh sage leaves",
+                     "term":  "fresh sage leaves",
+                     "canon_item":  null,
+                     "bid":  "fresh-sage",
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "prior ruling: \u0027fresh sage leaves\u0027 -\u003e fresh-sage (by mapper on 2026-08-26T05:07:06); nearest vocabulary rows: Bay Leaves [bay-leaves] DIFFERENT FORM: fresh; commodity id \u0027fresh-sage\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170935 Spices, sage, ground [SR Legacy] per 100 g: 315.0 cal, 10.6 P, 60.7 C, 12.8 F, 40.3 fiber | fdc:168416 Drumstick leaves, raw [SR Legacy] per 100 g: 64.0 cal, 9.4 P, 8.28 C, 1.4 F, 2.0 fiber | fdc:168385 Amaranth leaves, raw [SR Legacy] per 100 g: 23.0 cal, 2.46 P, 4.02 C, 0.33 F, ? fiber | fdc:169329 Broccoli, leaves, raw [SR Legacy] per 100 g: 28.0 cal, 2.98 P, 5.06 C, 0.35 F, 2.3 fiber; board MAPPED: fresh-sage, 2 of 7 stores, cheapest 4.98 at Baker\u0027s",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 lemons (, zest only (avoid grating the pith which is bitter))",
+                     "term":  "lemons",
+                     "canon_item":  null,
+                     "bid":  "lemons",
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027lemons\u0027 -\u003e lemons (by mapper on 2026-08-26T05:08:08); no vocabulary row shares a core word with this name; commodity id \u0027lemons\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; board MAPPED: lemons, 5 of 7 stores, cheapest 0.4533 at Walmart",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "10 cloves of garlic (, whole, skin on)",
+                     "term":  "garlic",
+                     "canon_item":  "Garlic",
+                     "bid":  "garlic",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  30
+                 },
+                 {
+                     "raw":  "2 1/4 cups milk ((I used low fat))",
+                     "term":  "milk",
+                     "canon_item":  "Milk",
+                     "bid":  "milk",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: milk, 7 of 7 stores, cheapest 2.816 at Walmart",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  551.2
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 6 of 9 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  466.0,
+                                          "carbs":  6.2,
+                                          "protein_g":  61.3,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  6,
+                           "lines_total":  9,
+                           "uncovered_lines":  [
+                                                   "whole chicken",
+                                                   "fresh sage leaves",
+                                                   "lemons"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

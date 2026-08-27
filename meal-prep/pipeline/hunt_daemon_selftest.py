@@ -1371,6 +1371,15 @@ def run():
     for name, ok, got in _mechanical_lane_events():
         T(name, ok, got)
 
+    # =================================================================================================
+    H("H - the run dir states the conditions, and a split line is explained (2026-08-27)")
+    for name, ok, got in _a_rejection_needs_a_basis():
+        T(name, ok, got)
+    for name, ok, got in _conditions_come_from_the_run_dir():
+        T(name, ok, got)
+    for name, ok, got in _split_lines_are_explained_to_the_mapper():
+        T(name, ok, got)
+
     print("")
     if bad:
         print("hunt-daemon SELF-TEST FAIL (%d)" % len(bad))
@@ -8756,6 +8765,199 @@ def _qa_mapper_repair_keeps_its_road():
                 "mapper=%d writer=%d" % (len(mp), len(fd.prompts("recipe-writer"))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _a_rejection_needs_a_basis():
+    r"""A TERMINAL REJECTION CITING NOTHING (2026-08-27).
+
+    The map lane already refused to invent a `state` on the mapper's behalf - the comment there runs
+    twenty lines on why picking one would file a false finding. Then it accepted an EMPTY `detail` and
+    wrote the literal string "mapper rejected" into the run record as the reason.
+
+    enchiladas-suizas was retired `rejected-macros` that way, and no artifact in the run says which
+    macro, computed how, against which number - there is not even a rulings file. It mattered: that
+    run's prompts carried the wrong band, so the one rejection nobody could read is exactly the one
+    that most needed reading. A rejection nobody can re-examine is indistinguishable from one that
+    should never have happened.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-rej-")
+    try:
+        preresolved(tmp, ["s1", "s2"], residual={"s1": ["harissa"], "s2": ["harissa"]})
+        payloads = {"recipe-ingredient-mapper": [{"results": [
+            {"slug": "s1", "status": "rejected", "state": "rejected-macros", "detail": ""},
+            {"slug": "s2", "status": "rejected", "state": "rejected-macros",
+             "detail": "computed 812 cal per serving against this run's 700 ceiling"},
+        ]}]}
+        d = daemon(run_dir=tmp, dispatcher=FakeDispatch(payloads))
+        for slug in ("s1", "s2"):
+            d.ch["map"].push({"slug": slug})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+        by = dict((o.get("slug"), o) for o in d.outcomes)
+
+        res.append(("MUST FIRE  a rejection carrying NO basis is STUCK, not terminal - it costs a "
+                    "re-ask instead of a recipe",
+                    by.get("s1", {}).get("status") == "stuck", json.dumps(by.get("s1"))))
+        res.append(("  and the STUCK says what was missing, so the next reader knows it was the "
+                    "BASIS and not the verdict that was absent",
+                    "NO basis" in str(by.get("s1", {}).get("detail", "")),
+                    str(by.get("s1", {}).get("detail"))[:120]))
+        res.append(("CLEAN TWIN a rejection that STATES its basis is still terminal, and keeps its "
+                    "own sentence - this must not become a licence to ignore the mapper",
+                    by.get("s2", {}).get("state") == "rejected-macros"
+                    and "812 cal" in str(by.get("s2", {}).get("detail", "")),
+                    json.dumps(by.get("s2"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _conditions_come_from_the_run_dir():
+    r"""THE PROSE BAND AND THE MACHINE BAND WERE ALLOWED TO DISAGREE (2026-08-27).
+
+    resolve_band's own docstring states the doctrine: "NOTHING supplies a default - a band nobody
+    typed is a band nobody agreed to, and two gates would enforce it silently for the whole run."
+    The band obeyed it. The sentence rendered beside the band in every agent prompt did not:
+    `--conditions` defaulted to DEFAULT_COND, a hardcoded string naming a 400-650 cal / 35 g carb
+    band of its own, and that string is interpolated into the MAPPER, WRITER and AUDITOR prompts -
+    the auditor's line being "verify each recipe's per-serving macros against that".
+
+    Measured, not theorised. Run hunt-2026-08-27-ten was minted at 450-700 cal / <= 40 carbs and the
+    mapper returned "CONDITION BREACH ... 58.9 g carbs per serving fails this run's 35 g ceiling",
+    recommending a rice base be dropped from a recipe the run's real gate passes. The dangerous
+    direction is the mirror image: a run STRICTER than DEFAULT_COND has its auditor verify against a
+    LOOSER band than the one agreed to, at the publish gate.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-cond-")
+    try:
+        band = {"calMin": 450, "calMax": 700, "carbMax": 40, "proteinMin": 40}
+        with open(os.path.join(tmp, "run.json"), "w", encoding="utf-8") as f:
+            json.dump({"run": "drill", "conditions": "STATED-IN-THE-RUN-DIR; no seafood",
+                       "band": band}, f)
+
+        got, why = HD.resolve_conditions(tmp, "")
+        res.append(("MUST FIRE  the run dir's OWN conditions are used, not the built-in default - a "
+                    "run minted at one band told every agent a different one in prose",
+                    got == "STATED-IN-THE-RUN-DIR; no seafood" and "run dir" in why,
+                    "%r (%s)" % (got, why)))
+        res.append(("  and the built-in default really would have contradicted it, so this is not a "
+                    "distinction without a difference",
+                    "400 and 650" in HD.DEFAULT_COND and "35 g" in HD.DEFAULT_COND,
+                    HD.DEFAULT_COND[:60]))
+
+        got2, why2 = HD.resolve_conditions(tmp, "  FROM-THE-FLAG  ")
+        res.append(("CLEAN TWIN an explicit --conditions still overrides the run dir, for a drill",
+                    got2 == "FROM-THE-FLAG" and "command line" in why2, "%r (%s)" % (got2, why2)))
+
+        empty = scratch_dir(prefix="daemon-cond-none-")
+        got3, why3 = HD.resolve_conditions(empty, "")
+        res.append(("MUST FIRE  a run dir stating NOTHING falls back to the default and SAYS so - "
+                    "silence is what let this hide for a whole run",
+                    got3 == HD.DEFAULT_COND and "NEITHER" in why3, "%r (%s)" % (got3[:30], why3[:60])))
+
+        # ---- THE END-TO-END HALF: the prompts themselves. A resolver that returns the right string
+        # into a prompt that never renders it would pass every case above.
+        # CONSTRUCTED THE WAY main() CONSTRUCTS IT - conditions NOT passed - so this covers the
+        # wiring and not just the resolver. It did not, at first: with the resolution living in
+        # main(), reverting that line left all 326 assertions green, because every case here handed
+        # the Daemon a string it had resolved itself. A fixture that supplies the very thing under
+        # test proves nothing, and the neuter is what said so.
+        rband, _ = HD.resolve_band(tmp, None, None, None, None)
+        d = HD.Daemon(tmp, "drill", None, rband, 10, dispatcher=FakeDispatch(), ps=FakePS(),
+                      quiet=True, events_path=SCRATCH_EVENTS, resolutions_path=SCRATCH_RESOLUTIONS)
+        res.append(("MUST FIRE  a Daemon built the way main() builds it - conditions unpassed - "
+                    "carries the RUN DIR's conditions, so there is no wiring left to revert",
+                    d.conditions == "STATED-IN-THE-RUN-DIR; no seafood",
+                    "%r (%s)" % (d.conditions, d.conditions_why)))
+        res.append(("CLEAN TWIN an explicit string to the constructor still wins, for a fixture",
+                    HD.Daemon(tmp, "drill", "EXPLICIT", rband, 10, dispatcher=FakeDispatch(),
+                              ps=FakePS(), quiet=True, events_path=SCRATCH_EVENTS,
+                              resolutions_path=SCRATCH_RESOLUTIONS).conditions == "EXPLICIT",
+                    "constructor argument ignored"))
+        preresolved(tmp, ["s1"], residual={"s1": ["harissa"]})
+        skeletoned(tmp, ["s1"])
+        tables = {"s1": json.load(open(os.path.join(tmp, "mapped-pre", "s1.json"), encoding="utf-8"))}
+        prompts = {"map": d.map_prompt(["s1"], tables),
+                   "write": d.write_prompt("s1"),
+                   "audit": d.audit_prompt(1, ["s1"], "b", "whole-wave", "")}
+        for lane, p in sorted(prompts.items()):
+            res.append(("MUST FIRE  the %s prompt states the band as NUMBERS from the run dir, so "
+                        "prose can never be the only statement of them" % lane,
+                        "cal 450-700" in p and "carbs <= 40" in p, p[-160:]))
+            res.append(("  and the %s prompt carries NO trace of the built-in default's band" % lane,
+                        "400 and 650" not in p and "35 g carbohydrate" not in p,
+                        "leaked DEFAULT_COND into the %s prompt" % lane))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _split_lines_are_explained_to_the_mapper():
+    r"""A `[split: x]` SUFFIX THE MAPPER WAS NEVER TOLD ABOUT (2026-08-27).
+
+    map-preresolve rewrites a source line naming two foods into two rows, each keyed by the source's
+    raw with a `[split: <food>]` suffix, because the raw line is the join key everywhere downstream
+    and the parts cannot share one. map-preresolve's own comment claimed "the mapper is told the same
+    thing in the residual block so it rules on the part, never on the pair" - and no block this
+    daemon builds mentioned `item_split_from` anywhere. `grep -n item_split_from hunt-daemon.py`
+    returned nothing at all.
+
+    So the mapper saw two rows differing only by a suffix nobody defined, and answered the pair once
+    on the source's unsplit raw with a combined buy string ("1/4 tsp salt and 1/2 tsp black pepper").
+    Neither split row joined, both lost their buy strings, and apple-spice-pork-chops stuck at the map
+    lane. Two of five recipes in that micro-batch carried a salt-and-pepper line.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-split-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["celery salt"]})
+        path = os.path.join(tmp, "mapped-pre", "s1.json")
+        t = json.load(open(path, encoding="utf-8"))
+        # one SETTLED split part and one RESIDUAL split part - the two roads a split row can take
+        t["rows"].append({"raw": "Pinch salt and pepper ($0.05) [split: salt]", "term": "salt",
+                          "canon_item": "Salt", "bid": "salt", "board": "weekly",
+                          "resolution": "resolved", "gpu_known": True, "density_known": True,
+                          "fooddb_known": True, "evidence": "exact vocabulary row", "source": "vocab",
+                          "item_split_from": "salt and pepper", "grams_source_basis": 0.4})
+        t["rows"].append({"raw": "Pinch salt and pepper ($0.05) [split: pepper]", "term": "pepper",
+                          "canon_item": None, "bid": None, "board": None,
+                          "resolution": "unresolved", "gpu_known": False, "density_known": False,
+                          "fooddb_known": True, "evidence": "no vocabulary row", "source": None,
+                          "item_split_from": "salt and pepper"})
+        d = daemon(run_dir=tmp)
+        p = d.map_prompt(["s1"], {"s1": t})
+
+        res.append(("MUST FIRE  the map prompt DEFINES what a `[split: <food>]` raw is - it used to "
+                    "render the suffix and explain it nowhere",
+                    "ONE FOOD OF A COMPOSITE SOURCE LINE" in p, p[:80]))
+        res.append(("MUST FIRE  and it says the answer is keyed on the raw EXACTLY as printed, which "
+                    "is the join the mapper actually broke",
+                    "EXACTLY as printed" in p, "no keying instruction"))
+        res.append(("MUST FIRE  and that each part's buy string covers THAT FOOD ALONE - the combined "
+                    "string is the exact thing that came back",
+                    "THAT FOOD ALONE" in p, "no per-part buy instruction"))
+        res.append(("MUST FIRE  the SETTLED split part is marked at its own line, not only in the "
+                    "paragraph - a settled row is where the buy string is owed",
+                    "ONE FOOD of the split line" in p, "settled split row unmarked"))
+        res.append(("MUST FIRE  the RESIDUAL split part is marked at its own line too",
+                    "ONE FOOD OF A SPLIT LINE" in p, "residual split row unmarked"))
+        res.append(("  and both parts name the line they were split FROM, so the mapper can see the "
+                    "pair it must not answer once",
+                    p.count("salt and pepper") >= 2, "split_from named %d time(s)"
+                    % p.count("salt and pepper")))
+
+        # ---- CLEAN TWIN. The marker must be conditional, or every ordinary line grows a paragraph
+        # about a split that did not happen - which is how a prompt gets long enough to stop being read.
+        t2 = json.load(open(path, encoding="utf-8"))
+        p2 = d.map_prompt(["s1"], {"s1": t2})
+        res.append(("CLEAN TWIN a table with NO split rows carries no split marker on any line",
+                    "ONE FOOD OF A SPLIT LINE" not in p2 and "ONE FOOD of the split line" not in p2,
+                    "unsplit table grew a split marker"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
 
 
 def _mechanical_lane_events():

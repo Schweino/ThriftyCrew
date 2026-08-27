@@ -1,0 +1,43 @@
+{
+    "slug":  "enchiladas-suizas",
+    "title":  "Enchiladas Suizas",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:22:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  "mapper rejected",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.isabeleats.com/enchiladas-suizas/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Chicken enchiladas in salsa verde with Mexican crema and Chihuahua cheese, corn tortillas; no catalog/backlog/in-flight match at all (searched, 0), an authentic creamy-green Mexican dish distinct from Tex-Mex, verified band 519/29/41."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T04:22:56",
+                        "by":  "mapper",
+                        "detail":  "mapper rejected"
+                    }
+                ]
+}

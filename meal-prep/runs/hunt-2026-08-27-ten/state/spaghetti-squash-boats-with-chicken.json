@@ -1,0 +1,37 @@
+{
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "title":  "Spaghetti Squash Boats with Chicken",
+    "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T04:12:24",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "decider",
+                        "detail":  "Stuffed spaghetti-squash boats with chicken, bacon, spinach, yogurt and mozzarella - a distinct vegetable-forward baked format with no live or backlog match; band verified 538/37/42, saturation 2."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T04:12:24",
+                        "by":  "local",
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    }
+                ]
+}

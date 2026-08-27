@@ -1,0 +1,24 @@
+{
+    "run":  "hunt-2026-08-27-ten",
+    "created":  "2026-08-27T04:12:12",
+    "conditions":  "450-700 calories per serving AND 40 g carbohydrate or less per serving AND 40 g protein or more per serving; budget meal-prep dinner; scalable to 14 servings; no seafood",
+    "stop":  "10 published",
+    "wave_size":  10,
+    "auto_publish":  true,
+    "band":  {
+                 "calMin":  450,
+                 "calMax":  700,
+                 "carbMax":  40,
+                 "proteinMin":  40
+             },
+    "band_stated":  [
+                        "CalMin",
+                        "CalMax",
+                        "CarbMax",
+                        "ProteinMin"
+                    ],
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-27T04:08:06",
+    "board_file":  "comparison-2026-08-26.json",
+    "board_written":  "2026-08-26T08:11:17"
+}
