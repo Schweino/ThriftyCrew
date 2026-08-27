@@ -1,85 +1,85 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T04:54:55",
+ "generated": "2026-08-27T05:39:14",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "white pepper",
+   "term": "italian turkey sausage",
    "state": "MATCHES",
-   "term_used": "white pepper",
+   "term_used": "italian turkey sausage",
    "attempts": [
     {
-     "term": "white pepper",
+     "term": "italian turkey sausage",
      "state": "MATCHES",
-     "hits": 23
+     "hits": 15
     }
    ],
    "hits": [
     {
-     "item": "Member's Mark Ground White Pepper, 18 oz.",
-     "price": 14.98,
+     "item": "Johnsonville Original Pork Breakfast Sausage Links, 30 ct.",
+     "price": 6.48,
      "size": "",
-     "unit_price": "$0.83/oz",
+     "unit_price": "$0.22/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+     "url": "https://www.samsclub.com/p/-/3WZ8TYL5PLTS"
     },
     {
-     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
-     "price": 4.98,
+     "item": "Kiolbassa Beef Hickory Smoked Sausage Links, 12 ct.",
+     "price": 19.87,
      "size": "",
-     "unit_price": "$0.17/oz",
+     "unit_price": "$6.92/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+     "url": "https://www.samsclub.com/p/-/3TQGSAJ56VN5"
     },
     {
-     "item": "Member's Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
-     "price": 24.76,
+     "item": "Jimmy Dean Fully Cooked Original Pork Sausage Links, 48 ct.",
+     "price": 9.87,
      "size": "",
-     "unit_price": "$0.02/sft",
+     "unit_price": "$0.21/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3RX7W4Y9K1ZQ"
+     "url": "https://www.samsclub.com/p/-/372WKMJX4E21"
     },
     {
-     "item": "Member's Mark Fire Roasted Red Bell Pepper, Spinach, and Cheese Trio Egg White Bites, 5 pk.",
-     "price": 9.76,
+     "item": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+     "price": 7.34,
      "size": "",
-     "unit_price": "$1.95/ea",
+     "unit_price": "$3.67/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/63Y1QJEFZB79"
+     "url": "https://www.samsclub.com/p/-/2YLITB5066PS"
     },
     {
-     "item": "Member’s Mark Taco Seasoning, 23 oz.",
-     "price": 5.98,
+     "item": "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
+     "price": 7.34,
      "size": "",
-     "unit_price": "$0.26/oz",
+     "unit_price": "$0.23/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+     "url": "https://www.samsclub.com/p/-/0YNLWATNORJF"
     },
     {
-     "item": "Member's Mark Granulated Garlic, 26 oz.",
-     "price": 9.28,
+     "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+     "price": 13.87,
      "size": "",
-     "unit_price": "$0.36/oz",
+     "unit_price": "$4.62/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+     "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
     },
     {
-     "item": "Member's Mark Sea Salt, 36 oz.",
-     "price": 3.98,
+     "item": "Aidells Chicken and Apple Smoked Chicken Sausage Breakfast Links, 24 oz.",
+     "price": 9.84,
      "size": "",
-     "unit_price": "$0.11/oz",
+     "unit_price": "$0.41/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2IU9483LXRHT"
+     "url": "https://www.samsclub.com/p/-/47O4EPVQTICK"
     },
     {
-     "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
-     "price": 33.48,
+     "item": "Jimmy Dean Fully Cooked Breakfast Pork Sausage Patties, 24 ct.",
+     "price": 8.86,
      "size": "",
-     "unit_price": "$6.70/lb",
+     "unit_price": "$0.37/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+     "url": "https://www.samsclub.com/p/-/104WXM1QGMTA"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

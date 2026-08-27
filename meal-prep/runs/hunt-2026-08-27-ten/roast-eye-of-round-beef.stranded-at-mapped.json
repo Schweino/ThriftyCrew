@@ -3,10 +3,10 @@
     "title":  "Roast Eye of Round Beef",
     "source_url":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/",
     "protein":  "any",
-    "state":  "extracted",
+    "state":  "mapped",
     "wave":  null,
-    "created":  "2026-08-27T05:59:38",
-    "updated":  "2026-08-27T05:59:38",
+    "created":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:02:05",
     "terms":  [
 
               ],
@@ -17,21 +17,27 @@
     "history":  [
                     {
                         "state":  "sourced",
-                        "at":  "2026-08-27T05:59:38",
+                        "at":  "2026-08-27T04:12:24",
                         "by":  "harvest",
                         "detail":  "https://www.nospoonnecessary.com/eye-of-round-roast-beef/"
                     },
                     {
                         "state":  "selected",
-                        "at":  "2026-08-27T05:59:38",
+                        "at":  "2026-08-27T04:12:24",
                         "by":  "decider",
                         "detail":  "Composed roast-beef dinner with red-wine/cremini mushroom gravy and vegetables; verified low-carb band, sliceable/reheatable batch prep, distinct from the catalog\u0027s braised pot-roast bowls."
                     },
                     {
                         "state":  "extracted",
-                        "at":  "2026-08-27T05:59:38",
+                        "at":  "2026-08-27T04:12:24",
                         "by":  "local",
-                        "detail":  "recovered from the advance-before-assemble stranding (pre-fix casualty): state said mapped with no decision file"
+                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:02:05",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled, 0 rejected, 2 new food-DB rows returned (Boneless Eye of Round Roast, Dry Red Wine), 1 new commodity proposal (eye-of-round-roast). Two form flips refused on their merits: fresh rosemary and fresh thyme are NOT their dried vocabulary neighbours - different price class and roughly 3x apart per teaspoon - and both wine vinegars are refused against dry red wine. fresh-rosemary"
                     }
                 ]
 }

@@ -2,9 +2,9 @@
  "schema": "price-evidence/1",
  "run": "hunt-2026-08-27-ten",
  "batch": 1,
- "generated": "2026-08-27T04:55:00",
+ "generated": "2026-08-27T05:39:17",
  "batch_terms": [
-  "white pepper"
+  "italian turkey sausage"
  ],
  "roster": [
   "Baker's",
@@ -18,109 +18,47 @@
  "findings": [],
  "terms": [
   {
-   "term": "white pepper",
+   "term": "italian turkey sausage",
    "unit": "",
    "stores": [
     {
      "store": "Baker's",
-     "state": "MATCHES",
-     "term_used": "white pepper",
+     "state": "EMPTY",
+     "term_used": "italianturkeysausage",
      "attempts": [
       {
-       "term": "white pepper",
+       "term": "italian turkey sausage",
        "state": "OK",
-       "hits": 25
+       "hits": 0
+      },
+      {
+       "term": "italianturkeysausage",
+       "state": "OK",
+       "hits": 0
       }
      ],
-     "hits": [
-      {
-       "item": "Kroger® Ground White Pepper Shaker",
-       "price": 4.49,
-       "size": "1.87 oz",
-       "relevance": 132,
-       "url": "https://www.bakersplus.com/p/0001111068370"
-      },
-      {
-       "item": "Spice Islands Ground White Pepper, Kosher",
-       "price": 13.99,
-       "size": "2.4 oz",
-       "relevance": 130,
-       "url": "https://www.bakersplus.com/p/0001732400277"
-      },
-      {
-       "item": "Trident White Peppermint Sugar Free Gum 16 CT",
-       "price": 1.5,
-       "size": "16 pc",
-       "relevance": 129,
-       "url": "https://www.bakersplus.com/p/0007339005504"
-      },
-      {
-       "item": "WoodWick® Nature's Wick® Sage & White Pepper Jar Candle",
-       "price": null,
-       "size": "1 ct",
-       "relevance": 126,
-       "url": "https://www.bakersplus.com/p/0019283313217"
-      },
-      {
-       "item": "Pepperidge Farm White Hot Dog Buns",
-       "price": 4.19,
-       "size": "14 oz",
-       "relevance": 92,
-       "url": "https://www.bakersplus.com/p/0001410007093"
-      },
-      {
-       "item": "Pepperidge Farm White Hamburger Buns",
-       "price": 4.29,
-       "size": "14.5 oz",
-       "relevance": 91,
-       "url": "https://www.bakersplus.com/p/0001410007187"
-      },
-      {
-       "item": "Pepperidge Farm Farmhouse Hearty White Bread",
-       "price": 3.79,
-       "size": "24 oz",
-       "relevance": 89,
-       "url": "https://www.bakersplus.com/p/0001410007083"
-      },
-      {
-       "item": "Pepperidge Farm Farmhouse Honey White Bread",
-       "price": 3.79,
-       "size": "22 oz",
-       "relevance": 89,
-       "url": "https://www.bakersplus.com/p/0001410005166"
-      }
-     ],
-     "reason": "",
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
      "tier": "server"
     },
     {
      "store": "Family Fare",
-     "state": "MATCHES",
-     "term_used": "white pepper",
+     "state": "EMPTY",
+     "term_used": "italianturkeysausage",
      "attempts": [
       {
-       "term": "white pepper",
+       "term": "italian turkey sausage",
        "state": "OK",
-       "hits": 2
-      }
-     ],
-     "hits": [
-      {
-       "item": "Mc Cormick Ground White Pepper 1 Oz",
-       "price": 4.29,
-       "size": "1 oz",
-       "relevance": 131,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_ground_white_pepper_1_oz/p/34662"
+       "hits": 0
       },
       {
-       "item": "Mc Cormick Premium Black & White Peppercorn Grinder 1.26 Oz",
-       "price": 3.99,
-       "size": "1.26 oz",
-       "relevance": 125,
-       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/mc_cormick_premium_black_white_peppercorn_grinder_1_26_oz/p/7584915"
+       "term": "italianturkeysausage",
+       "state": "OK",
+       "hits": 0
       }
      ],
-     "reason": "",
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
      "tier": "server"
     },
     {
@@ -144,70 +82,70 @@
     {
      "store": "Fareway",
      "state": "MATCHES",
-     "term_used": "white pepper",
+     "term_used": "italian turkey sausage",
      "attempts": [
       {
-       "term": "white pepper",
+       "term": "italian turkey sausage",
        "state": "OK",
-       "hits": 49
+       "hits": 66
       }
      ],
      "hits": [
       {
-       "item": "McCormick Ground White Pepper",
-       "price": 3.99,
-       "size": "1 oz",
+       "item": "Amylu Caramelized Onion & White Cheddar Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72835-mccormick-ground-white-pepper-1-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69855181-amylu-caramel-onion-and-white-cheddar-sausage-12-oz-12-oz"
       },
       {
-       "item": "McCormick Pure Ground Black Pepper",
+       "item": "Amylu Roasted Garlic & Asiago Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68987717-amylu-roasted-garlic-asiago-chicken-sausage"
+      },
+      {
+       "item": "Hillshire Farm Polska Kielbasa Smoked Sausage, 14 oz.",
+       "price": 5.49,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410886-hillshire-farm-polska-kielbasa-smoked-sausage-14-oz"
+      },
+      {
+       "item": "Amylu Apple & Gouda Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68982698-amylu-apple-gouda-chicken-sausages"
+      },
+      {
+       "item": "Amylu Italian-Style Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69859331-amylu-italian-chicken-sausage"
+      },
+      {
+       "item": "Amylu Andouille Chicken Sausages",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68974512-amylu-andouille-chicken-sausage"
+      },
+      {
+       "item": "Johnsonville Smoked Brats",
        "price": 4.49,
-       "size": "3 oz",
+       "size": "14 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24812677-mccormick-pure-ground-black-pepper-3-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89265-johnsonville-smoked-brats-14-oz"
       },
       {
-       "item": "Birds Eye Pepper Stir Fry Vegetables, Frozen Vegetables",
-       "price": 1.99,
-       "size": "14.4 oz",
+       "item": "Johnsonville Original Brats",
+       "price": 5.99,
+       "size": "19 oz",
        "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102166-birds-eye-pepper-stir-fry-14-4-oz"
-      },
-      {
-       "item": "Badia Spices Paprika",
-       "price": 7.99,
-       "size": "16 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2720763-badia-spices-paprika-16-oz"
-      },
-      {
-       "item": "Green Bell Pepper",
-       "price": 1.17,
-       "size": "1 each",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each"
-      },
-      {
-       "item": "McCormick Whole Black Pepper",
-       "price": 4.99,
-       "size": "1.87 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1914423-mccormick-whole-black-pepper-1-87-oz"
-      },
-      {
-       "item": "Morton Iodized Salt",
-       "price": 1.88,
-       "size": "26 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028-morton-iodized-salt-26-ounce-26-oz"
-      },
-      {
-       "item": "Crazy Fresh Stop Light Peppers Diced",
-       "price": 3.99,
-       "size": "6 oz",
-       "relevance": null,
-       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19268935-crazy-fresh-produce-stoplight-diced-peppers-6-oz"
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16427623-johnsonville-sausage-original-holiday-promo-brats-82-grm"
       }
      ],
      "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
@@ -216,78 +154,78 @@
     {
      "store": "Sam's Club",
      "state": "MATCHES",
-     "term_used": "white pepper",
+     "term_used": "italian turkey sausage",
      "attempts": [
       {
-       "term": "white pepper",
+       "term": "italian turkey sausage",
        "state": "MATCHES",
-       "hits": 23
+       "hits": 15
       }
      ],
      "hits": [
       {
-       "item": "Member's Mark Ground White Pepper, 18 oz.",
-       "price": 14.98,
+       "item": "Johnsonville Original Pork Breakfast Sausage Links, 30 ct.",
+       "price": 6.48,
        "size": "",
-       "unit_price": "$0.83/oz",
+       "unit_price": "$0.22/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+       "url": "https://www.samsclub.com/p/-/3WZ8TYL5PLTS"
       },
       {
-       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
-       "price": 4.98,
+       "item": "Kiolbassa Beef Hickory Smoked Sausage Links, 12 ct.",
+       "price": 19.87,
        "size": "",
-       "unit_price": "$0.17/oz",
+       "unit_price": "$6.92/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+       "url": "https://www.samsclub.com/p/-/3TQGSAJ56VN5"
       },
       {
-       "item": "Member's Mark Ultra Premium 2-Ply Toilet Paper 45 rolls, 235 sheets/roll",
-       "price": 24.76,
+       "item": "Jimmy Dean Fully Cooked Original Pork Sausage Links, 48 ct.",
+       "price": 9.87,
        "size": "",
-       "unit_price": "$0.02/sft",
+       "unit_price": "$0.21/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3RX7W4Y9K1ZQ"
+       "url": "https://www.samsclub.com/p/-/372WKMJX4E21"
       },
       {
-       "item": "Member's Mark Fire Roasted Red Bell Pepper, Spinach, and Cheese Trio Egg White Bites, 5 pk.",
-       "price": 9.76,
+       "item": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+       "price": 7.34,
        "size": "",
-       "unit_price": "$1.95/ea",
+       "unit_price": "$3.67/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/63Y1QJEFZB79"
+       "url": "https://www.samsclub.com/p/-/2YLITB5066PS"
       },
       {
-       "item": "Member’s Mark Taco Seasoning, 23 oz.",
-       "price": 5.98,
+       "item": "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
+       "price": 7.34,
        "size": "",
-       "unit_price": "$0.26/oz",
+       "unit_price": "$0.23/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+       "url": "https://www.samsclub.com/p/-/0YNLWATNORJF"
       },
       {
-       "item": "Member's Mark Granulated Garlic, 26 oz.",
-       "price": 9.28,
+       "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+       "price": 13.87,
        "size": "",
-       "unit_price": "$0.36/oz",
+       "unit_price": "$4.62/lb",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+       "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
       },
       {
-       "item": "Member's Mark Sea Salt, 36 oz.",
-       "price": 3.98,
+       "item": "Aidells Chicken and Apple Smoked Chicken Sausage Breakfast Links, 24 oz.",
+       "price": 9.84,
        "size": "",
-       "unit_price": "$0.11/oz",
+       "unit_price": "$0.41/oz",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/2IU9483LXRHT"
+       "url": "https://www.samsclub.com/p/-/47O4EPVQTICK"
       },
       {
-       "item": "Member's Mark Coarse Black Pepper, 5 lbs.",
-       "price": 33.48,
+       "item": "Jimmy Dean Fully Cooked Breakfast Pork Sausage Patties, 24 ct.",
+       "price": 8.86,
        "size": "",
-       "unit_price": "$6.70/lb",
+       "unit_price": "$0.37/ea",
        "relevance": null,
-       "url": "https://www.samsclub.com/p/-/3S9OIV24GC20"
+       "url": "https://www.samsclub.com/p/-/104WXM1QGMTA"
       }
      ],
      "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",

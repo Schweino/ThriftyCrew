@@ -3713,13 +3713,22 @@ class Daemon(object):
             # than inventing one.
             "A LINE THE SOURCE NEVER QUANTIFIED - \"to taste\", \"a pinch\", \"as needed\", \"for\n"
             "garnish\", \"optional ... to taste\" - IS STILL A LINE THE READER BUYS, and every line you\n"
-            "include must carry a weight. Give it a nominal `grams_source` you can defend for the\n"
-            "batch and write the buy string the way the catalog already does: \"to taste (15 g)\". The\n"
-            "live estate is the precedent, not a guess - 53 such lines across 574 published recipes,\n"
-            "every one weighed, none at zero, salt running about 15 g and black pepper about 4 g for a\n"
-            "14-serving batch. INCLUDING A LINE WITH NO WEIGHT IS REFUSED AT ASSEMBLY and stops the\n"
-            "recipe. If the shopper genuinely does not buy it - charcoal, wood chips, a garnish you\n"
-            "are dropping - that is `not-purchased`, which is a real answer. A zero weight is not.\n\n"
+            "include must carry a weight. Give it a nominal weight you can defend rather than no\n"
+            "weight, and write the buy string the way the catalog already does: \"to taste (15 g)\".\n"
+            "The live estate is the precedent, not a guess - 53 such lines across 574 published\n"
+            "recipes, every one weighed, none at zero.\n"
+            "  MIND THE SCALE ON THIS ONE, because the precedent and the field are in different\n"
+            "  units. Those published figures - salt about 15 g, black pepper about 4 g - are the\n"
+            "  FINISHED 14-SERVING BATCH. `grams_source` is the SOURCE recipe's own scale, so divide:\n"
+            "  a 4-serving source scaling 3.5x wants about 4 g of salt in `grams_source`, NOT 15. The\n"
+            "  orchestrator multiplies by the scale factor exactly once, for every line, and the\n"
+            "  assembler cross-checks your number against the quantity engine - so a batch-scale\n"
+            "  figure in this field comes back as a 10x disagreement and stops the recipe. That is\n"
+            "  measured: it is what \"the ruling weighs it 15 g at target scale and the qty engine\n"
+            "  makes it 1 g - a 10.75x\" was, on the first run that carried this paragraph.\n"
+            "INCLUDING A LINE WITH NO WEIGHT IS REFUSED AT ASSEMBLY and stops the recipe. If the\n"
+            "shopper genuinely does not buy it - charcoal, wood chips, a garnish you are dropping -\n"
+            "that is `not-purchased`, which is a real answer. A zero weight is not.\n\n"
             # D3: NAME THE FIELD. The lesson three paragraphs down is that a prompt saying
             # \"unchanged contract\" without naming one new field broke a clean batch, and a shelf
             # the judge does not know is a shelf reads as an unexplained block of quotes.
@@ -4128,6 +4137,66 @@ class Daemon(object):
     # D8: THE MACHINE HALF OF THE INTAKE, and the band gate that now runs BEFORE the prose is paid for.
     # ---------------------------------------------------------------------------------------------
 
+    def intake_is_current(self, slug):
+        """Is this recipe's existing intake built from the mapper decision file that is on disk NOW?
+
+        THE WRITE LANE COULD BLOCK ITSELF FOREVER ON ITS OWN EARLIER WORK (2026-08-27).
+        build-intake-skeleton REFUSES to overwrite an intake carrying writer prose - correctly, since
+        rebuilding erases it - and build_skeleton never passed -Force. So any recipe that got a
+        skeleton, got prose, and THEN failed downstream could never re-enter the write lane: every
+        later run re-ran the skeleton, hit "already carries writer prose", and STUCK on it. Five
+        recipes of this run sat there after build-v2-spec refused them for vocabulary names, and no
+        number of re-runs could move them, because the thing blocking the rebuild was the previous
+        attempt's own output.
+
+        THE FIX IS NOT -Force, AND THAT MATTERS. Forcing would erase good prose and re-buy the most
+        expensive per-recipe stage on every resume - and in the case that actually happened it would
+        have bought nothing, because the mapper's decision file had not moved at all. What had moved
+        was the ingredient VOCABULARY, two lanes downstream. The intake was already correct; only the
+        spec build had been failing. So the question is whether the intake's INPUTS changed:
+
+          mapper file NEWER than the intake -> the ingredients moved under it. Rebuild, -Force, and
+                                               the prose is genuinely stale.
+          otherwise                          -> the intake still describes the mapper's own rulings.
+                                               Keep it, skip the skeleton, and carry on to the gate.
+
+        Returns (current, why) where `current` True means "keep the intake you have".
+        """
+        intake = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        mapped = os.path.join(self.run_dir, "mapped", "%s.json" % slug)
+        if not os.path.exists(intake):
+            return False, "no intake yet"
+        try:
+            with open(intake, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception as e:                                    # noqa: BLE001
+            return False, "the intake will not read (%s)" % e
+        # Only an intake the WRITER has been at is at risk here - a bare skeleton rebuilds happily.
+        prose = doc.get("prose") or {}
+        if not (isinstance(prose, dict) and any(str(v).strip() for v in prose.values())):
+            return False, "the intake carries no writer prose, so a rebuild erases nothing"
+        if not os.path.exists(mapped):
+            return False, "no mapper decision file to compare against"
+        if os.path.getmtime(mapped) > os.path.getmtime(intake):
+            return False, ("the mapper decision file is NEWER than the intake, so the ingredients "
+                           "moved under it and the prose is stale")
+        return True, ("the intake already carries writer prose and the mapper decision file has not "
+                      "moved since it was built")
+
+    def read_intake_macros(self, slug):
+        """The macros off an intake we are keeping, in build_skeleton's own (ok, macros, detail)
+        shape so the band gate below cannot tell the two roads apart."""
+        path = os.path.join(self.run_dir, "intake", "%s.json" % slug)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                mac = (json.load(f) or {}).get("macros_per_serving") or {}
+        except Exception as e:                                    # noqa: BLE001
+            return False, None, "the kept intake will not read (%s)" % e
+        if not mac:
+            return False, None, ("the kept intake carries no macros_per_serving, so the band cannot "
+                                 "be ruled on it")
+        return True, mac, "macros read from the intake already on disk"
+
     async def build_skeleton(self, slug):
         """build-intake-skeleton.ps1, before the writer. Returns (ok, macros, detail).
 
@@ -4304,7 +4373,15 @@ class Daemon(object):
                 # D8: THE SKELETON FIRST. Every gram, buy string and macro in the intake comes from the
                 # mapper's decision file and the food DB, so the writer receives a file it can only add
                 # prose to - it structurally cannot introduce a number.
-                ok, macros, why = await self.build_skeleton(slug)
+                # ...UNLESS THE INTAKE IS ALREADY BUILT FROM THE MAPPER FILE ON DISK. See
+                # intake_is_current: re-running the skeleton over an intake that carries prose is
+                # refused by design, which used to strand the recipe on its own previous attempt.
+                current, why_cur = self.intake_is_current(slug)
+                if current:
+                    ok, macros, why = self.read_intake_macros(slug)
+                    self.log("  write: %s keeping the intake it already has - %s" % (slug, why_cur))
+                else:
+                    ok, macros, why = await self.build_skeleton(slug)
                 if not ok:
                     self.stuck(slug, "write",
                                "the intake skeleton is not complete, so the band cannot be ruled on "

@@ -1,0 +1,44 @@
+[
+ {
+  "term": "italian turkey sausage",
+  "store": "Baker's",
+  "state": "not-carried",
+  "evidence": "probe-ingredient server lane, FULL ladder: rung 1 'italian turkey sausage'=0 hits (state OK, no transport error), rung 2 spacing variant 'italianturkeysausage'=0 hits. Three-word term so no head-noun fallback. Baker's captures do contain turkey sausage (Jimmy Dean breakfast turkey sausage crumbles/patties/links $4.99 9.6 oz), so the search box works for 'turkey sausage' - it is the ITALIAN turkey sausage that is absent. Commodity italian-sausage is not on audit-search-terms.ps1's suspect list (2 suspect, 4 drift, none italian)."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Family Fare",
+  "state": "not-carried",
+  "evidence": "probe-ingredient server lane, FULL ladder: rung 1 'italian turkey sausage'=0 hits (state OK, not a 400/transport refusal), rung 2 'italianturkeysausage'=0 hits. Three-word term so no head-noun fallback. Term not on audit-search-terms suspect list."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Fareway",
+  "state": "blocked",
+  "evidence": "Driver rung 1 only: 'italian turkey sausage'=66 hits but the evidence file records only the top 8 Apollo rows, so 58 rows were never shown to me and I have no browser this session to page past them. Adjudicated the 8 that were: all pork/chicken, none is turkey - Amylu Italian-Style CHICKEN Sausage $6.99/12 oz is the near-miss and is chicken, not turkey; Hillshire Polska Kielbasa, Johnsonville Brats, and four other Amylu chicken flavours are not the ingredient. A truncated 8-of-66 sample cannot support not-carried; needs an attended pass."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Sam's Club",
+  "state": "blocked",
+  "evidence": "Driver rung 1 only: 'italian turkey sausage'=15 hits, evidence file records only 8, so 7 rows unseen and no browser this session to walk the ladder or page the rest. Adjudicated the 8 shown: Johnsonville/Jimmy Dean pork breakfast sausage, Kiolbassa beef, Aidells chicken-apple, Just Bare breaded chicken strips - all pork/beef/chicken, none is Italian turkey sausage. Truncated sample plus un-walked ladder cannot support not-carried."
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Hy-Vee",
+  "state": "blocked",
+  "evidence": "blocked - no browser in this session"
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Aldi",
+  "state": "blocked",
+  "evidence": "blocked - no browser in this session"
+ },
+ {
+  "term": "italian turkey sausage",
+  "store": "Walmart",
+  "state": "blocked",
+  "evidence": "blocked - no browser in this session"
+ }
+]

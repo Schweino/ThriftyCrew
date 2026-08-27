@@ -1373,6 +1373,8 @@ def run():
 
     # =================================================================================================
     H("H - the run dir states the conditions, and a split line is explained (2026-08-27)")
+    for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
+        T(name, ok, got)
     for name, ok, got in _a_failed_assembly_is_resumable():
         T(name, ok, got)
     for name, ok, got in _a_rejection_needs_a_basis():
@@ -8769,6 +8771,73 @@ def _qa_mapper_repair_keeps_its_road():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _the_write_lane_does_not_block_on_its_own_intake():
+    r"""THE WRITE LANE COULD BLOCK ITSELF FOREVER ON ITS OWN EARLIER OUTPUT (2026-08-27).
+
+    build-intake-skeleton refuses to overwrite an intake carrying writer prose - correctly, since a
+    rebuild erases it - and build_skeleton never passed -Force. Any recipe that got a skeleton, got
+    prose, and then failed DOWNSTREAM could therefore never re-enter the write lane: every later run
+    re-ran the skeleton, hit "already carries writer prose", and STUCK on it.
+
+    Five recipes of hunt-2026-08-27-ten sat there after build-v2-spec refused them over ingredient
+    VOCABULARY names - a thing two lanes further on. The mapper's decision file had not moved at all.
+    The intakes were already correct, so forcing a rebuild would have erased good prose and re-bought
+    the most expensive per-recipe stage to produce the same file. The question is whether the
+    intake's INPUTS moved, not whether it is inconvenient.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-intake-")
+    try:
+        os.makedirs(os.path.join(tmp, "intake"), exist_ok=True)
+        os.makedirs(os.path.join(tmp, "mapped"), exist_ok=True)
+
+        def put(slug, prose, mapped_newer):
+            ip = os.path.join(tmp, "intake", "%s.json" % slug)
+            mp = os.path.join(tmp, "mapped", "%s.json" % slug)
+            with open(ip, "w", encoding="utf-8") as f:
+                json.dump({"slug": slug, "prose": prose,
+                           "macros_per_serving": {"calories": 520, "carbs_g": 20,
+                                                  "protein_g": 45}}, f)
+            with open(mp, "w", encoding="utf-8") as f:
+                json.dump({"slug": slug}, f)
+            # mtimes are the whole mechanism, so they are set explicitly rather than raced for
+            base = os.path.getmtime(ip)
+            os.utime(mp, (base + 60, base + 60) if mapped_newer else (base - 60, base - 60))
+
+        d = daemon(run_dir=tmp)
+
+        put("keep", {"why_it_works": "real prose a writer was paid for"}, mapped_newer=False)
+        cur, why = d.intake_is_current("keep")
+        res.append(("MUST FIRE  an intake carrying prose whose mapper file has NOT moved is KEPT - "
+                    "the lane used to stick on it forever and no re-run could clear it",
+                    cur, why))
+        ok, mac, _ = d.read_intake_macros("keep")
+        res.append(("  and its macros are read straight off it, so the band gate cannot tell the "
+                    "two roads apart",
+                    ok and mac.get("calories") == 520, "ok=%s macros=%s" % (ok, mac)))
+
+        put("stale", {"why_it_works": "prose about ingredients that have since changed"},
+            mapped_newer=True)
+        cur2, why2 = d.intake_is_current("stale")
+        res.append(("CLEAN TWIN a NEWER mapper decision file means the ingredients moved under the "
+                    "prose, so the intake is NOT kept - this must not become a licence to ship a "
+                    "recipe whose numbers have changed",
+                    not cur2 and "NEWER" in why2, why2))
+
+        put("bare", {}, mapped_newer=False)
+        cur3, why3 = d.intake_is_current("bare")
+        res.append(("CLEAN TWIN an intake with no writer prose is NOT kept - nothing is at risk from "
+                    "rebuilding it, and the skeleton is the cheaper truth",
+                    not cur3, why3))
+
+        cur4, why4 = d.intake_is_current("never-seen")
+        res.append(("CLEAN TWIN a recipe with no intake at all still builds one",
+                    not cur4 and "no intake" in why4, why4))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
 def _a_failed_assembly_is_resumable():
     r"""A STUCK THAT WAS A DEAD END (2026-08-27).
 
@@ -9029,9 +9098,18 @@ def _split_lines_are_explained_to_the_mapper():
         res.append(("MUST FIRE  the map prompt tells the mapper what a `to taste` line is worth - "
                     "every included line needs grams and nothing said so",
                     "NEVER QUANTIFIED" in p, "no unquantified-line rule"))
+        # MATCHED ON THE PROMPT WITH ITS LINE BREAKS COLLAPSED. The first version looked for the
+        # literal "574 published recipes" and went red the moment a reword pushed a newline between
+        # "published" and "recipes" - a fixture failing over where a sentence happens to wrap tells
+        # you nothing about whether the precedent is cited.
+        flat = " ".join(p.split())
         res.append(("  and it cites the LIVE catalog's own convention rather than inventing one - "
                     "53 weighed to-taste lines across 574 specs, none at zero",
-                    "574 published recipes" in p and "none at zero" in p, "no precedent cited"))
+                    "574 published recipes" in flat and "none at zero" in flat, "no precedent cited"))
+        res.append(("  and it says which SCALE that precedent is in - those figures are the finished "
+                    "batch and `grams_source` is the source recipe, which is a 10x error unstated",
+                    "grams_source` is the SOURCE" in flat and "NOT 15" in flat,
+                    "the batch-vs-source scale is not spelled out"))
         res.append(("  and it names the one legal way out for a food the shopper really does not "
                     "buy, so `not-purchased` is not mistaken for a zero weight",
                     "not-purchased" in p and "A zero weight is not" in p, "no not-purchased road"))
