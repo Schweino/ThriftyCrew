@@ -2100,12 +2100,13 @@
    "brand": "Great Value",
    "serving_grams": 120,
    "serving_qty": 1,
-   "serving_unit": "1 cup (120g) frozen, 4.5 servings per container",
+   "serving_unit": "1 cup (120g) frozen, 8.5 servings per container",
    "calories": 210,
    "protein_g": 7,
    "carbs_g": 38,
    "fat_g": 2.5,
-   "notes": "label: Great Value Cheese Tortellini Pasta (ricotta, mozzarella, Romano) - FROZEN [R100 labels-P1.json]"
+   "notes": "label: Great Value Cheese Tortellini Pasta (ricotta, mozzarella, Romano) - FROZEN [R100 labels-P1.json]",
+   "source": "https://www.walmart.com/ip/Great-Value-Family-Size-Cheese-Tortellini-Pasta-36-oz-Bag-Frozen/172959406 - the back-of-pack label photographed on the product page, read in Brad's Chrome 2026-08-26: 8.5 servings per container, serving size 1 cup (120 g), 210 cal / 2.5 g fat / 38 g carb / 7 g protein. The stored macros match it field for field and were NOT changed."
   },
   {
    "item": "Potato Gnocchi",
