@@ -114,6 +114,17 @@ def line_grams(line, row, dens=None, defaults=None):
     Anything else is None, which costs the line its coverage rather than inventing a weight. A
     guessed gram figure is the fabricated-band defect one lane earlier.
     """
+    # AN EXPLICIT MASS ON THE LINE BEATS A COUNT ON THE SAME LINE, and it is checked FIRST.
+    # "2 medium 1.5 lbs. chicken breasts" leads with a count, so parse_amount returns (2, "medium")
+    # per its own contract - correct for what it answers, and useless here, because the 1.5 lbs is
+    # the fact and the count is packaging. Missing it cost this pre-check the MAIN PROTEIN of
+    # honey-balsamic-chicken-tenders: 152 cal computed against a true 349. The same ambiguity vetoed
+    # the mapper's correct 680 g one lane over and stuck that recipe three times in a single run.
+    # cc.stated_mass_grams is the shared answer; its PowerShell twin is Get-StatedMassGrams in
+    # map-preresolve.ps1 and the two are pinned to agree.
+    stated = cc.stated_mass_grams(line or "")
+    if stated:
+        return stated
     amt = cc.parse_amount(line or "")
     if not amt:
         return None

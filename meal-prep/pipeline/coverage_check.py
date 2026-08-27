@@ -548,6 +548,72 @@ def parse_amount(text):
     return (val, unit)
 
 
+# THE MASS A LINE STATES ABOUT ITSELF, ANYWHERE IN IT (2026-08-27).
+#
+# THIS IS NOT parse_amount AND MUST NOT BECOME IT. parse_amount answers "what is the LEADING amount",
+# deliberately - its own fixture pins "1 3/4 cups chopped (about 2 medium)" to 1.75 cup, and the
+# scale-ratio check depends on that reading. This answers a different question, which some lines need
+# because they state BOTH a count and a weight:
+#
+#     "2 medium 1.5 lbs. chicken breasts"
+#      parse_amount        -> (2.0, "medium")   the count, per its contract
+#      stated_mass_grams   -> 680.4 g           the 1.5 lbs, which is the fact
+#
+# WHY IT MATTERS, TWICE. The quantity engine read that line as 2 x 200 g = 400 g and vetoed the
+# mapper's correct 680 g, sticking honey-balsamic-chicken-tenders three times in one run (fixed
+# 2026-08-27 in map-preresolve.ps1). The SAME line then defeated band_precheck.py, which read
+# "2 medium", missed the protein entirely and computed 152 cal against a true 349. One ambiguity,
+# two lanes, two languages.
+#
+# ITS POWERSHELL TWIN IS Get-StatedMassGrams IN map-preresolve.ps1 and the two must agree: same
+# units, same conservative refusals, first mass token only. Each file's self-test names the other so
+# a change to one is a visible question about the other - this estate has been bitten by the same
+# rule implemented twice and left to drift (notes-vs-bid, two diverged copies firing on disjoint
+# words), and naming the twin is the cheapest defence there is.
+_MASS_G = {'g': 1.0, 'gram': 1.0, 'grams': 1.0, 'kg': 1000.0, 'kilogram': 1000.0,
+           'kilograms': 1000.0, 'oz': 28.349523125, 'ounce': 28.349523125,
+           'ounces': 28.349523125, 'lb': 453.59237, 'lbs': 453.59237,
+           'pound': 453.59237, 'pounds': 453.59237}
+_RX_MASS = re.compile(
+    r'(?P<n>\d+(?:\.\d+)?(?:\s*/\s*\d+)?)\s*'
+    r'(?P<u>lbs?\.?|pounds?|ozs?\.?|ounces?|kgs?|kilograms?|grams?|g)\b', re.I)
+
+
+def stated_mass_grams(text):
+    """The first explicit MASS this line states, in grams, or None when it states none.
+
+    DELIBERATELY CONSERVATIVE, exactly like its PowerShell twin: first token only, no ranges, no
+    addition, no "plus more for serving". Anything it cannot read confidently is None - it exists to
+    correct a number, and a wrong correction is worse than the count it replaces.
+    """
+    t = str(text or '')
+    if not t.strip():
+        return None
+    m = _RX_MASS.search(t)
+    if not m:
+        return None
+    n = m.group('n')
+    u = m.group('u').replace('.', '').lower()
+    if '/' in n:
+        a, _, b = n.partition('/')
+        try:
+            a, b = float(a.strip()), float(b.strip())
+        except ValueError:
+            return None
+        if b == 0:
+            return None
+        val = a / b
+    else:
+        try:
+            val = float(n)
+        except ValueError:
+            return None
+    if val <= 0:
+        return None
+    g = _MASS_G.get(u)
+    return val * g if g else None
+
+
 def to_base(value, unit):
     """(value, unit) -> (base value, family). Volume in tsp, weight in grams, anything else counted in
     its own noun so 'slice' can only ever be compared with 'slice'."""
@@ -1020,6 +1086,29 @@ def _selftest() -> int:
                                 {'item': 'garlic powder'}]})['verdict'] == 'fail', '')
 
     # ---- the quantity reader -------------------------------------------------------------------
+    # ---- stated_mass_grams, AND ITS POWERSHELL TWIN --------------------------------------------
+    # Get-StatedMassGrams in map-preresolve.ps1 answers this same question for the mapper. The two
+    # must agree: same units, same conservative refusals, first mass token only. If you change one,
+    # change both - this estate has shipped the same rule twice and watched the copies drift apart
+    # until they fired on disjoint inputs.
+    T("MUST FIRE  a line stating BOTH a count and a weight yields the WEIGHT - the count is packaging",
+      abs(stated_mass_grams('2 medium 1.5 lbs. chicken breasts') - 680.388) < 0.2,
+      stated_mass_grams('2 medium 1.5 lbs. chicken breasts'))
+    T("  ...and parse_amount still answers its OWN question on that line, unchanged",
+      parse_amount('2 medium 1.5 lbs. chicken breasts') == (2.0, 'medium'),
+      parse_amount('2 medium 1.5 lbs. chicken breasts'))
+    T("MUST FIRE  ounces, grams, kilograms and a fraction all read",
+      abs(stated_mass_grams('14.5 oz black olives') - 411.07) < 0.1
+      and stated_mass_grams('600 g chicken tenderloin') == 600
+      and stated_mass_grams('1.8 kg whole chicken') == 1800
+      and abs(stated_mass_grams('1/2 lb ground beef') - 226.796) < 0.1, 'unit table')
+    T("CLEAN TWIN a VOLUME is not a mass", stated_mass_grams('1 cup buttermilk') is None
+      and stated_mass_grams('3 tablespoons honey') is None, 'volume read as mass')
+    T("CLEAN TWIN a bare count states no mass", stated_mass_grams('2 medium yellow onions') is None,
+      stated_mass_grams('2 medium yellow onions'))
+    T("CLEAN TWIN zero is not a mass", stated_mass_grams('0 lb nothing') is None,
+      stated_mass_grams('0 lb nothing'))
+
     T("'3 1/2 lb (80/20)' reads as 3.5 lb, not 3", parse_amount('3 1/2 lb (80/20)') == (3.5, 'lb'),
       parse_amount('3 1/2 lb (80/20)'))
     T("'1 3/4 cups chopped (about 2 medium)' reads as 1.75 cup", parse_amount('1 3/4 cups chopped (about 2 medium)') == (1.75, 'cup'),

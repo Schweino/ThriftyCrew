@@ -3114,6 +3114,10 @@ $r = @([pscustomobject]@{ term='a'; tier='MAPPED'; commodity='rice'; resolved_by
   # breasts": the engine read the count and the each-noun, made 2 x 200 g = 400 g, set NO fallback
   # flag, and the cross-check then fired at full force against the mapper's correct 680 g. Same 1.7x
   # every time - deterministic, and the recipe could not clear it by being re-asked.
+  # ITS PYTHON TWIN IS coverage_check.stated_mass_grams, used by band_precheck at ingest. Same units,
+  # same conservative refusals, first mass token only. Change one, change both: the same ambiguity
+  # defeated BOTH lanes on 2026-08-27 - the qty engine vetoed a correct 680 g here, and the ingest
+  # pre-check missed the same protein entirely and computed 152 cal against a true 349.
   T 'MUST FIRE  a line stating pounds is read as that weight, so a count/each guess beside it can be demoted' `
     ([Math]::Abs((Get-StatedMassGrams '2 medium 1.5 lbs. chicken breasts') - 680.388) -lt 0.01) `
     ([string](Get-StatedMassGrams '2 medium 1.5 lbs. chicken breasts'))
