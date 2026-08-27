@@ -3,12 +3,15 @@
     "title":  "Spaghetti Squash Boats with Chicken",
     "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:02:54",
     "terms":  [
-
+                  {
+                      "term":  "Fresh Basil",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
@@ -32,6 +35,24 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:02:52",
+                        "by":  "mapper",
+                        "detail":  "1 residual line ruled, 0 rejected, 1 new food-DB row (Spaghetti Squash, from the shelf). No commodity proposal: spaghetti-squash already prices this food at 4 of 7 stores, so the missing piece is a vocabulary row, not a registrar question. I supplied grams_source for three SETTLED lines the pre-resolve left unweighed (spinach 60 g, Greek yogurt 122 g, mozzarella 113 g) - without them the arithmeti"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:02:54",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:02:54",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
                     }
                 ]
 }

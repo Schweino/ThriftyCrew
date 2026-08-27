@@ -3,14 +3,25 @@
     "title":  "KFC Oven Baked \"Fried\" Chicken Tenders",
     "source_url":  "https://www.recipetineats.com/kfc-oven-baked-fried-chicken-tenders/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:21:00",
     "terms":  [
-
+                  {
+                      "term":  "chicken tenderloins",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cornmeal",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Cayenne Pepper",
+                      "optional":  true
+                  }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 49.1g carbs above the 40 limit",
     "parked_on":  [
 
                   ],
@@ -32,6 +43,30 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:13:17",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled (1 mapped-null, 4 mapped), 0 rejected, 3 DB rows returned (Chicken Tenderloins, Cornmeal, Cooking Spray). Two new ids proposed; buttermilk and cooking-spray are board reuses. LOUD FLAG on carbs: my arithmetic counts the whole 1 cup flour, 1 cup panko and 1/4 cup cornmeal dredge, which computes to about 48 g carbs per serving against the source\u0027s 25.4 - most of the seasoned c"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:14:06",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:20:59",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T05:21:00",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 49.1g carbs above the 40 limit"
                     }
                 ]
 }

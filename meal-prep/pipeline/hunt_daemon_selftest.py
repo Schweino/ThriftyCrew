@@ -1373,6 +1373,8 @@ def run():
 
     # =================================================================================================
     H("H - the run dir states the conditions, and a split line is explained (2026-08-27)")
+    for name, ok, got in _a_failed_assembly_is_resumable():
+        T(name, ok, got)
     for name, ok, got in _a_rejection_needs_a_basis():
         T(name, ok, got)
     for name, ok, got in _conditions_come_from_the_run_dir():
@@ -8767,6 +8769,79 @@ def _qa_mapper_repair_keeps_its_road():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _a_failed_assembly_is_resumable():
+    r"""A STUCK THAT WAS A DEAD END (2026-08-27).
+
+    `mapped` asserts a mapper decision file exists. The lane advanced to it BEFORE assembling that
+    file, so an assembly failure left the recipe claiming the state with no file behind it - and
+    seed()'s resume table routes `mapped` to the unhold path, never to the map lane. The recipe
+    therefore could not re-enter the only lane that would produce the missing file, and every later
+    run reported it HELD: "there is no mapper decision file ... the ruling this would advance on does
+    not exist."
+
+    apple-spice-pork-chops and honey-balsamic-chicken-tenders both died that way on this run's first
+    pass. The lane called it STUCK and STUCK means resumable; this one could not be resumed by any
+    number of re-runs, which is the gap between what the run record SAID and what was true.
+
+    So the assertion here is not "it is stuck" - it was always stuck. It is that the state it is stuck
+    IN is one seed() will hand back to the map lane.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-asm-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["harissa"]})
+        payloads = {"recipe-ingredient-mapper": [{"results": [
+            {"slug": "s1", "status": "mapped", "state": "mapped", "detail": "ruled",
+             "lines": [], "rulings": [{"raw": "harissa", "decision": "mapped",
+                                      "canon_item": "Harissa"}]},
+        ]}]}
+
+        # THE ASSEMBLER IS A POWERSHELL CALL, so a plain FakePS answers 0 to it and the failure this
+        # case is about cannot happen. The first draft of this fixture did exactly that: it passed by
+        # never reaching the branch under test. So the refusal is injected on the -Assemble call
+        # specifically, and the pre-resolve calls to the same script still answer 0.
+        def ps_reply(args):
+            if "-Assemble" in args:
+                return 1, "FINDING  'harissa' has no buy string", ""
+            return 0, "", ""
+
+        d = daemon(run_dir=tmp, dispatcher=FakeDispatch(payloads),
+                   ps=FakePS({"map-preresolve": ps_reply}))
+        d.ch["map"].push({"slug": "s1"})
+        d.ch["map"].close()
+        arun(d.run(("map",)))
+
+        # WHAT THE DAEMON ASKED hunt-run TO DO, which is the thing under test. The state FILE is
+        # hunt-run's to write and FakePS never writes one, so reading state off disk here would
+        # report None whatever the daemon did - a fixture that cannot fail for the right reason.
+        advances = [c for c in d._ps.calls
+                    if "hunt-run" in c["script"] and "-Advance" in c["args"]]
+        to_mapped = [c for c in advances
+                     if "mapped" in c["args"] and c["args"][c["args"].index("-To") + 1] == "mapped"]
+        res.append(("MUST FIRE  a failed assembly never advances the recipe to `mapped` - it is left "
+                    "at `extracted`, the one state seed() hands BACK to the map lane",
+                    not to_mapped, "advanced to mapped anyway: %s" % json.dumps(to_mapped)[:200]))
+        res.append(("  and it really did fail to assemble, so this is not a case that quietly "
+                    "stopped testing its own subject",
+                    not os.path.exists(os.path.join(tmp, "mapped", "s1.json")),
+                    "a decision file exists after a refused assembly"))
+        # AND THE ROUTING ITSELF, read off seed()'s own source rather than assumed. This is the fact
+        # that made the old ordering fatal, and if it ever flips - `mapped` routed back to the map
+        # lane - the ordering above stops being load-bearing and this case should be revisited rather
+        # than silently kept passing.
+        import inspect                                             # noqa: PLC0415
+        src = inspect.getsource(HD.Daemon.seed)
+        ex_to_map = 'state == "extracted"' in src and 'self.ch["map"].push' in src
+        mapped_not_map = 'state == "mapped"' in src and "mapped_holds.append" in src
+        res.append(("  and seed() really does route `extracted` to the map lane while `mapped` goes "
+                    "to the unhold list - the routing that made the old ordering fatal",
+                    ex_to_map and mapped_not_map,
+                    "extracted->map=%s mapped->holds=%s" % (ex_to_map, mapped_not_map)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
 def _a_rejection_needs_a_basis():
     r"""A TERMINAL REJECTION CITING NOTHING (2026-08-27).
 
@@ -8947,6 +9022,19 @@ def _split_lines_are_explained_to_the_mapper():
                     "pair it must not answer once",
                     p.count("salt and pepper") >= 2, "split_from named %d time(s)"
                     % p.count("salt and pepper")))
+
+        # ---- THE UNQUANTIFIED LINE. Same defect shape as the split marker: an invariant the
+        # assembler enforces and the prompt never stated. 7 of 12 recipes in hunt-2026-08-27-ten
+        # carried one, so a mapper left to guess stalls the run over and over.
+        res.append(("MUST FIRE  the map prompt tells the mapper what a `to taste` line is worth - "
+                    "every included line needs grams and nothing said so",
+                    "NEVER QUANTIFIED" in p, "no unquantified-line rule"))
+        res.append(("  and it cites the LIVE catalog's own convention rather than inventing one - "
+                    "53 weighed to-taste lines across 574 specs, none at zero",
+                    "574 published recipes" in p and "none at zero" in p, "no precedent cited"))
+        res.append(("  and it names the one legal way out for a food the shopper really does not "
+                    "buy, so `not-purchased` is not mistaken for a zero weight",
+                    "not-purchased" in p and "A zero weight is not" in p, "no not-purchased road"))
 
         # ---- CLEAN TWIN. The marker must be conditional, or every ordinary line grows a paragraph
         # about a split that did not happen - which is how a prompt gets long enough to stop being read.

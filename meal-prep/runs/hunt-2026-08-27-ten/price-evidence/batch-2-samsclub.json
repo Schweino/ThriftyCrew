@@ -1,0 +1,483 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-27T05:15:04",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "mexican crema",
+   "state": "MATCHES",
+   "term_used": "mexican crema",
+   "attempts": [
+    {
+     "term": "mexican crema",
+     "state": "MATCHES",
+     "hits": 13
+    }
+   ],
+   "hits": [
+    {
+     "item": "Silk Unsweetened Original Almond, 64 fl. oz., 3 pk.",
+     "price": 8.83,
+     "size": "",
+     "unit_price": "$0.05/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3O1JFXZ3MU4P"
+    },
+    {
+     "item": "Horizon Organic Whole Milk, 8 fl. oz, 18 pk.",
+     "price": 19.48,
+     "size": "",
+     "unit_price": "$0.14/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/55FTOSASXZ1C"
+    },
+    {
+     "item": "Member's Mark Pumpkin Cream Cheese Blondies, 9 ct.",
+     "price": 8.62,
+     "size": "",
+     "unit_price": "$0.96/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6DSPBYR92QX3"
+    },
+    {
+     "item": "Fruit Medley Cheese",
+     "price": 9.18,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2XFQBWWLRFBQ"
+    },
+    {
+     "item": "Daisy Brand Pure and Natural Sour Cream, 48 oz.",
+     "price": 5.54,
+     "size": "",
+     "unit_price": "$1.85/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2T23IZNT45SZ"
+    },
+    {
+     "item": "Horizon Organic Lowfat Chocolate Milk with DHA Omega-3, 8 fl. oz., 18 pk.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$0.14/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5CVG8218FN6F"
+    },
+    {
+     "item": "Daisy Brand Pure and Natural Sour Cream, 14 oz., 2 pk.",
+     "price": 4.97,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2NKEBY6UTJ9V"
+    },
+    {
+     "item": "President Brie Soft-Ripened Cheese (19.6 oz.)",
+     "price": 7.84,
+     "size": "",
+     "unit_price": "$0.40/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2G0RCCECTEOE"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "chihuahua cheese",
+   "state": "MATCHES",
+   "term_used": "chihuahua cheese",
+   "attempts": [
+    {
+     "term": "chihuahua cheese",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Tillamook Sharp Cheddar Cheese, 2.5 lbs.",
+     "price": 11.47,
+     "size": "",
+     "unit_price": "$4.59/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XIFPMGT84DW"
+    },
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/78YWMH7WS9UT"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+     "price": 5.92,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+    },
+    {
+     "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+    },
+    {
+     "item": "Member's Mark Sharp Cheddar Cheese Block 2 lbs.",
+     "price": 5.64,
+     "size": "",
+     "unit_price": "$2.82/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3L931IBCNUSN"
+    },
+    {
+     "item": "Tillamook Pepper Jack Cheese 2.5 lbs.",
+     "price": 10.14,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5A9EJ999LR1D"
+    },
+    {
+     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+     "price": 12.17,
+     "size": "",
+     "unit_price": "$2.43/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+    },
+    {
+     "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+     "price": 5.87,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "italian turkey sausage",
+   "state": "MATCHES",
+   "term_used": "italian turkey sausage",
+   "attempts": [
+    {
+     "term": "italian turkey sausage",
+     "state": "MATCHES",
+     "hits": 15
+    }
+   ],
+   "hits": [
+    {
+     "item": "Johnsonville Original Pork Breakfast Sausage Links, 30 ct.",
+     "price": 6.48,
+     "size": "",
+     "unit_price": "$0.22/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3WZ8TYL5PLTS"
+    },
+    {
+     "item": "Kiolbassa Beef Hickory Smoked Sausage Links, 12 ct.",
+     "price": 19.87,
+     "size": "",
+     "unit_price": "$6.92/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3TQGSAJ56VN5"
+    },
+    {
+     "item": "Jimmy Dean Fully Cooked Original Pork Sausage Links, 48 ct.",
+     "price": 9.87,
+     "size": "",
+     "unit_price": "$0.21/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/372WKMJX4E21"
+    },
+    {
+     "item": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+     "price": 7.34,
+     "size": "",
+     "unit_price": "$3.67/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2YLITB5066PS"
+    },
+    {
+     "item": "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
+     "price": 7.34,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0YNLWATNORJF"
+    },
+    {
+     "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+     "price": 13.87,
+     "size": "",
+     "unit_price": "$4.62/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
+    },
+    {
+     "item": "Aidells Chicken and Apple Smoked Chicken Sausage Breakfast Links, 24 oz.",
+     "price": 9.84,
+     "size": "",
+     "unit_price": "$0.41/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/47O4EPVQTICK"
+    },
+    {
+     "item": "Jimmy Dean Fully Cooked Breakfast Pork Sausage Patties, 24 ct.",
+     "price": 8.86,
+     "size": "",
+     "unit_price": "$0.37/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/104WXM1QGMTA"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "asiago cheese",
+   "state": "MATCHES",
+   "term_used": "asiago cheese",
+   "attempts": [
+    {
+     "term": "asiago cheese",
+     "state": "MATCHES",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.30/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+    },
+    {
+     "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
+     "price": 10.14,
+     "size": "",
+     "unit_price": "$4.06/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/44JS0VY9WVS9"
+    },
+    {
+     "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+     "price": 9.86,
+     "size": "",
+     "unit_price": "$5.63/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+    },
+    {
+     "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+     "price": 10.46,
+     "size": "",
+     "unit_price": "$4.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/78YWMH7WS9UT"
+    },
+    {
+     "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
+     "price": 11.47,
+     "size": "",
+     "unit_price": "$1.43/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+    },
+    {
+     "item": "Cello Domestic Romano Cheese Wheel approx. 18 lbs.",
+     "price": 174.26,
+     "size": "",
+     "unit_price": "$9.68/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2TU6KN96JHZ9"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+     "price": 7.44,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+    },
+    {
+     "item": "Alpenhaus French Gruyere Semi-Hard Cheese Wedge, 1 lb.",
+     "price": 11.87,
+     "size": "",
+     "unit_price": "$0.74/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6TE7K3A52JXC"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "chicken tenderloins",
+   "state": "MATCHES",
+   "term_used": "chicken tenderloins",
+   "attempts": [
+    {
+     "term": "chicken tenderloins",
+     "state": "MATCHES",
+     "hits": 25
+    }
+   ],
+   "hits": [
+    {
+     "item": "Country Pride Breaded Chicken Breast Tenders, Frozen, 5 lbs.",
+     "price": 16.74,
+     "size": "",
+     "unit_price": "$3.35/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3W9TS2X9XIZ8"
+    },
+    {
+     "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+     "price": 13.87,
+     "size": "",
+     "unit_price": "$4.62/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
+    },
+    {
+     "item": "Member's Mark Boneless and Skinless Chicken Breast Tenderloins, Frozen, 6 lbs.",
+     "price": 21.97,
+     "size": "",
+     "unit_price": "$3.66/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1B2J0AJOCKVM"
+    },
+    {
+     "item": "Member's Mark Chicken Tenders, priced per pound",
+     "price": 20.41,
+     "size": "",
+     "unit_price": "$3.88/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4VQ0YFB4M0YS"
+    },
+    {
+     "item": "Member's Mark Chicken Tenders, Case, priced per pound",
+     "price": 180.96,
+     "size": "",
+     "unit_price": "$3.48/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7KUHNO3USBYF"
+    },
+    {
+     "item": "Just Bare Lightly Breaded Chicken Breast Original Bites, Frozen, 3 lbs.",
+     "price": 13.47,
+     "size": "",
+     "unit_price": "$4.49/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3UL58XUHGS40"
+    },
+    {
+     "item": "Tyson Crispy Chicken Breast Strips, Frozen, 3.5 lbs.",
+     "price": 12.97,
+     "size": "",
+     "unit_price": "$3.71/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7G17H7ZZ68XT"
+    },
+    {
+     "item": "Member's Mark Organic Chicken Tenders, Case, priced per pound",
+     "price": 294.0,
+     "size": "",
+     "unit_price": "$5.88/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4J2QOJ5GTD9B"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "cornmeal",
+   "state": "MATCHES",
+   "term_used": "cornmeal",
+   "attempts": [
+    {
+     "term": "cornmeal",
+     "state": "MATCHES",
+     "hits": 15
+    }
+   ],
+   "hits": [
+    {
+     "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+    },
+    {
+     "item": "PAN Precooked White Corn Meal, 5 lbs.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JX7ZAISRS0J"
+    },
+    {
+     "item": "Maseca Masa Corn Flour, 22 lbs.",
+     "price": 21.78,
+     "size": "",
+     "unit_price": "$0.99/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+    },
+    {
+     "item": "Maseca Special Regular 0, 50 lbs.",
+     "price": 31.68,
+     "size": "",
+     "unit_price": "$0.63/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FJ0WUX9IAMF"
+    },
+    {
+     "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "$0.42/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+    },
+    {
+     "item": "4C Seasoned Bread Crumbs, 46 oz., 2 pk.",
+     "price": 8.12,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7JR8DL16WBSX"
+    },
+    {
+     "item": "King Arthur Baking Company, 00 Pizza Flour, 5 lbs.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.60/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1SD16V0KDJXT"
+    },
+    {
+     "item": "Zatarain's Fish-Fri Seasoned Seafood Breading Mix, 92 oz.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7DUP6RR0II6H"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

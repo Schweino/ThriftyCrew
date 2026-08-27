@@ -1,0 +1,114 @@
+{
+ "name": "Rosemary Chicken Thighs",
+ "slug": "rosemary-chicken-thighs",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Brussels Sprouts",
+   "grams": 1191,
+   "buy": "2 lb 10 oz Brussels sprouts, ends trimmed and halved"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 385,
+   "buy": "3 1/2 medium yellow onions, thinly sliced (about 5 1/4 cups)"
+  },
+  {
+   "item": "Apple",
+   "grams": 630,
+   "buy": "3 1/2 medium tart apples such as Granny Smith, halved, cored, and cut into 8 wedges each"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 94,
+   "buy": "7 tbsp extra virgin olive oil, divided"
+  },
+  {
+   "item": "Dijon Mustard",
+   "grams": 52,
+   "buy": "3 1/2 tbsp Dijon mustard"
+  },
+  {
+   "item": "Honey",
+   "grams": 37,
+   "buy": "1 3/4 tbsp honey"
+  },
+  {
+   "item": "Salt",
+   "grams": 21,
+   "buy": "3 1/2 tsp kosher salt, divided"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 tsp ground black pepper, divided"
+  },
+  {
+   "item": "Bone-In Skin-On Chicken Thighs",
+   "grams": 3969,
+   "buy": "8 3/4 lb bone-in, skin-on chicken thighs (about 17 large thighs)"
+  },
+  {
+   "item": "Fresh Rosemary",
+   "grams": 52,
+   "buy": "18 sprigs fresh rosemary, plus chopped fresh rosemary for serving"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 677,
+  "protein_g": 44.1,
+  "carbs_g": 19.7,
+  "fat_g": 47.9
+ },
+ "writer_notes": [
+  "All 10 locked ingredients are used by at least one step; no step introduces an unbought item. Orphan and reverse-orphan checks pass.",
+  "Band check passes: calories 677 (450-700), carbs 19.7 (<=40), protein 44.1 (>=40).",
+  "No cost_ps or cost_lines were supplied in the dispatch, so cost_closing_html uses the ${{cost_ps}} token and shop_smart makes no per-line or per-ounce dollar claims, only package-size references.",
+  "Portion prose uses the weigh-the-pan method rather than any invented gram-per-container figure, since bone-in skin-on thighs lose weight to bone and rendered fat during cooking.",
+  "Rosemary sprigs are discarded in step 5 per the source; the chopped rosemary garnish at the end is the same bought line ('plus chopped fresh rosemary for serving'), not a second ingredient."
+ ],
+ "forbidden_prose_terms": [
+  "boneless",
+  "skinless",
+  "seafood",
+  "per ounce price",
+  "per pound price",
+  "em dash",
+  "en dash"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is a sheet pan dinner that does not read like a budget move, and that is exactly why I like it. Bone-in, skin-on chicken thighs are one of the best deals in the meat case, they forgive a busy cook, and they crisp up like they cost three times what they do. Roast them over onions, tart apple, and Brussels sprouts, lay a sprig of rosemary on each one, and you get a Sunday-dinner plate out of a Tuesday budget.</p><p>The numbers back it up. Each of the 14 servings lands at 677 calories with 44.1 grams of protein, 19.7 grams of carbs, and 47.9 grams of fat. That is a real meal, not a sad little portion you are hungry an hour after. High protein, low carb, and the honey and mustard do the caramelizing so you do not have to babysit a pan.</p>",
+  "shop_smart": "<p>Chicken thighs are the whole game here, so buy them right. Bone-in, skin-on is the cheapest cut per pound and it is the one this recipe wants, so do not let anyone talk you into boneless. A family pack of about 8 3/4 pounds, roughly 17 large thighs, feeds all 14 containers, and the family-size tray almost always beats the small trays on price.</p><p>Brussels sprouts are cheaper by the pound loose than in the little steamer bags, so scoop the 2 pounds 10 ounces you need from the bulk bin if your store has one. Grab any tart apple that is firm, Granny Smith is the classic, and a plain yellow onion. The Dijon, honey, and olive oil are pantry staples you likely already own, and a single package of fresh rosemary covers the 18 sprigs with leaves to spare for the chopped garnish at the end.</p>",
+  "make_it": "<p>Set two racks, one in the center and one in the upper third, and heat the oven to 425 degrees. Spread the sliced onion, apple wedges, and halved Brussels sprouts across a large rimmed sheet pan. Top the vegetables with 1 tablespoon of the oil, the honey, the Dijon, and half of both the salt and pepper. Toss to coat and spread them into an even layer.</p><p>Nestle the chicken onto the pan skin side up, pushing the vegetables aside so the thighs sit right on the metal. Pat the skin dry, season with the remaining salt and pepper, drizzle the last tablespoon of oil over the top, and lay a sprig of rosemary on each piece. If you run short on sprigs, snap them into pieces and share them out.</p><p>Bake on the center rack for 15 minutes, pull the pan, and stir the vegetables with a spatula. Return it and bake another 5 to 10 minutes until the chicken reads 165 degrees at the thickest part. If some thighs finish early, move them to a plate and let the rest catch up. The apples go soft and jammy, the onions and sprouts darken and crisp as the honey caramelizes.</p><p>Pull the pan, discard the rosemary sprigs, and return any chicken you set aside. Switch the oven to broil, move the pan to the upper rack, and broil 2 to 3 minutes until the skin is golden and crackling. Finish with a pinch of salt and a scatter of chopped fresh rosemary, then serve the chicken hot with the apples and vegetables.</p>",
+  "portion_html": "<p>This batch makes 14 servings, so divide by the pan, not by eye. Once the chicken is broiled and the vegetables are jammy, weigh the whole cooked sheet pan of meat and vegetables, subtract the pan, and split that number into 14 even portions across your containers. That is how you land on 677 calories and 44.1 grams of protein a serving instead of guessing and shorting yourself.</p><p>Put a thigh or a share of chicken in each container with a scoop of the onion, apple, and Brussels sprouts. The apples break down into a sauce that keeps everything from drying out through the week, and a fresh pinch of chopped rosemary right before you eat wakes the whole box back up.</p>",
+  "cost_closing_html": "<p>Here is where thighs earn their keep. A full sheet-pan dinner with real protein, a vegetable, and fruit, portioned into 14 servings, comes out to ${{cost_ps}} a serving. Try buying a roasted-chicken plate like this out in the world and see what it runs you.</p><p>That is the whole Thrifty Crew idea in one pan. Buy the cut nobody fights over, let the oven do the work, and eat like the budget is not even in the room.</p>",
+  "upsell_html": "<p>If this is the kind of math you want on every dinner, the whole Thrifty Crew library runs on it, and membership is a dollar a month. One sheet-pan recipe pays for the year. Come cook the rest with us.</p>"
+ },
+ "head": {
+  "description": "Budget sheet-pan rosemary chicken thighs roasted over apples, onion, and Brussels sprouts. Meal-prep batch of 14 servings at 677 calories and 44.1g protein each.",
+  "keywords": "rosemary chicken thighs, sheet pan chicken, meal prep chicken thighs, bone-in chicken thighs, high protein dinner, budget meal prep, Brussels sprouts apple chicken, low carb dinner",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT25M",
+  "totalTime": "PT40M",
+  "steps": [
+   "Position racks in the center and upper thirds of the oven and preheat to 425 degrees.",
+   "Spread the sliced onion, apple wedges, and halved Brussels sprouts on a large rimmed sheet pan. Top with 1 tablespoon oil, the honey, Dijon, half the salt, and half the pepper. Toss to coat and spread in an even layer.",
+   "Nestle the chicken skin side up directly on the pan, pushing vegetables aside. Pat dry, season with the remaining salt and pepper, drizzle with the last tablespoon of oil, and lay a rosemary sprig on each piece.",
+   "Bake on the center rack for 15 minutes, then stir the vegetables and bake 5 to 10 minutes more until the chicken reaches 165 degrees at the thickest part, removing any pieces that finish early.",
+   "Discard the rosemary sprigs and return any chicken you set aside. Switch to broil and broil on the upper rack 2 to 3 minutes until the skin is golden and crisp.",
+   "Season the chicken with a pinch of salt and chopped fresh rosemary and serve hot with the apples and vegetables."
+  ],
+  "step_names": [
+   "Heat the oven",
+   "Dress the vegetables",
+   "Add the chicken",
+   "Roast",
+   "Broil the skin",
+   "Finish and serve"
+  ]
+ }
+}

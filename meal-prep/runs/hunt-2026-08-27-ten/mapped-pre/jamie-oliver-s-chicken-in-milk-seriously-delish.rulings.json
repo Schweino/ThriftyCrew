@@ -1,0 +1,93 @@
+{
+ "slug": "jamie-oliver-s-chicken-in-milk-seriously-delish",
+ "lines": [
+  {
+   "raw": "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+   "buy": "3 whole chickens, about 3 3/4 lb each (11 1/2 lb total)",
+   "grams_source": 1500,
+   "notes": "Mid of the source's 3 - 3.5 lb range, raw bone-in weight."
+  },
+  {
+   "raw": "1/4 cup loosely packed fresh sage leaves",
+   "buy": "scant 1 cup loosely packed fresh sage leaves",
+   "grams_source": 5,
+   "notes": "1/4 cup loosely packed sage leaves = 5 g."
+  },
+  {
+   "raw": "2 lemons (, zest only (avoid grating the pith which is bitter))",
+   "buy": "7 lemons, zest only",
+   "grams_source": 116,
+   "notes": "2 medium lemons at 58 g, per the 2026-08-26 lemons precedent; only the zest goes in the pot but the whole fruit is bought."
+  },
+  {
+   "raw": "2 tsp salt ((plus more to taste))",
+   "buy": "2 tablespoons plus 1 teaspoon salt, plus more to taste",
+   "notes": ""
+  },
+  {
+   "raw": "Black pepper",
+   "buy": "2 tablespoons black pepper",
+   "notes": "Matches the settled 4 g source basis."
+  },
+  {
+   "raw": "2 tbsp olive oil",
+   "buy": "7 tablespoons olive oil",
+   "notes": ""
+  },
+  {
+   "raw": "1/2 stick cinnamon",
+   "buy": "1 3/4 teaspoons ground cinnamon",
+   "notes": "Settled as ground cinnamon at 1.3 g source basis."
+  },
+  {
+   "raw": "10 cloves of garlic (, whole, skin on)",
+   "buy": "35 garlic cloves, whole, skin on",
+   "notes": ""
+  },
+  {
+   "raw": "2 1/4 cups milk ((I used low fat))",
+   "buy": "8 cups low fat milk",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3 - 3.5 lb / 1.5 - 1.8 kg whole chicken",
+   "term": "whole chicken",
+   "canon_item": "Whole Chicken",
+   "bid": "whole-chicken",
+   "decision": "mapped",
+   "grams_source": 1500,
+   "evidence": "REUSE of a live board id, 7 of 7 stores, cheapest 1.32 at Walmart, and the food DB already carries the row. Rotisserie is cooked and the breast/thigh ids are boneless, so neither prices a raw bird; only the vocabulary row is missing."
+  },
+  {
+   "raw": "1/4 cup loosely packed fresh sage leaves",
+   "term": "fresh sage leaves",
+   "canon_item": "Fresh Sage",
+   "bid": "fresh-sage",
+   "decision": "mapped",
+   "grams_source": 5,
+   "evidence": "REUSE of the live fresh-sage id (2 of 7, cheapest 4.98 at Baker's). No bridge to ground sage: dried leaf is a different price class and a different gram weight, exactly as the fresh-thyme and fresh-rosemary rulings held."
+  },
+  {
+   "raw": "2 lemons (, zest only (avoid grating the pith which is bitter))",
+   "term": "lemons",
+   "canon_item": "Lemons",
+   "bid": "lemons",
+   "decision": "mapped",
+   "grams_source": 116,
+   "evidence": "REUSE of the live lemons id (5 of 7, cheapest 0.4533 at Walmart); zest is the peel of the fruit you buy, per the 2026-08-26 'lemon zest' ruling. 2 medium lemons at 58 g."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Fresh Sage"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Computed per serving over all 9 lines at 4 servings: 694 cal, 57 g protein, 8.7 g carbs. Source published 466 cal / 61.3 P / 6.2 C. Protein is 7 percent under the source, inside tolerance, so the 1500 g bird is the right portion. Calories run high because the whole-chicken row is raw bone-in with skin, and skin, bones and most of the milk sauce are not eaten - a known basis difference, not a weighing error."
+}

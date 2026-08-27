@@ -1,0 +1,92 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T05:13:17",
+    "slug":  "jamie-oliver-s-chicken-in-milk-seriously-delish",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Jamie Oliver\u0027s Chicken in Milk {Seriously Delish}",
+                   "slug":  "jamie-oliver-s-chicken-in-milk-seriously-delish",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Whole Chicken",
+                                           "grams":  5250,
+                                           "buy":  "3 whole chickens, about 3 3/4 lb each (11 1/2 lb total)"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  42,
+                                           "buy":  "2 tablespoons plus 1 teaspoon salt, plus more to taste"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  14,
+                                           "buy":  "2 tablespoons black pepper"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  94,
+                                           "buy":  "7 tablespoons olive oil"
+                                       },
+                                       {
+                                           "item":  "Ground Cinnamon",
+                                           "grams":  5,
+                                           "buy":  "1 3/4 teaspoons ground cinnamon"
+                                       },
+                                       {
+                                           "item":  "Fresh Sage",
+                                           "grams":  18,
+                                           "buy":  "scant 1 cup loosely packed fresh sage leaves"
+                                       },
+                                       {
+                                           "item":  "Lemons",
+                                           "grams":  406,
+                                           "buy":  "7 lemons, zest only"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  105,
+                                           "buy":  "35 garlic cloves, whole, skin on"
+                                       },
+                                       {
+                                           "item":  "Milk",
+                                           "grams":  1929,
+                                           "buy":  "8 cups low fat milk"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  693,
+                                              "protein_g":  57,
+                                              "carbs_g":  10,
+                                              "fat_g":  46.2
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT5M",
+                                "cookTime":  "PT1H40M",
+                                "totalTime":  "PT1H45M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

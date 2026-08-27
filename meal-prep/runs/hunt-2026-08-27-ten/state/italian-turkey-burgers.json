@@ -3,16 +3,27 @@
     "title":  "Italian Turkey Burgers",
     "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
     "protein":  "turkey",
-    "state":  "extracted",
+    "state":  "parked",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:20:59",
     "terms":  [
-
+                  {
+                      "term":  "italian turkey sausage",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "asiago cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Hamburger Buns",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
-
+                      "italian turkey sausage"
                   ],
     "history":  [
                     {
@@ -32,6 +43,24 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:12:31",
+                        "by":  "mapper",
+                        "detail":  "3 residual lines ruled, 0 rejected, 0 DB rows needed (the table already carries turkey sausage, Asiago cheese and whole wheat hamburger buns). Two new ids proposed; hamburger-buns is a board reuse. The only soft number here is the bun weight: I used 60 g per whole wheat bun, which is the middle of the 43-60 g range on the shelf, and it carries 161 g of the recipe\u0027s carbs at source scale."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:13:13",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-27T05:20:59",
+                        "by":  "derive",
+                        "detail":  "waiting on: italian turkey sausage"
                     }
                 ]
 }

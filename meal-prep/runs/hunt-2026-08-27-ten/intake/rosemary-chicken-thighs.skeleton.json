@@ -1,0 +1,97 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T05:02:52",
+    "slug":  "rosemary-chicken-thighs",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Fresh Rosemary\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Rosemary Chicken Thighs",
+                   "slug":  "rosemary-chicken-thighs",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Brussels Sprouts",
+                                           "grams":  1191,
+                                           "buy":  "2 lb 10 oz Brussels sprouts, ends trimmed and halved"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  385,
+                                           "buy":  "3 1/2 medium yellow onions, thinly sliced (about 5 1/4 cups)"
+                                       },
+                                       {
+                                           "item":  "Apple",
+                                           "grams":  630,
+                                           "buy":  "3 1/2 medium tart apples such as Granny Smith, halved, cored, and cut into 8 wedges each"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  94,
+                                           "buy":  "7 tbsp extra virgin olive oil, divided"
+                                       },
+                                       {
+                                           "item":  "Dijon Mustard",
+                                           "grams":  52,
+                                           "buy":  "3 1/2 tbsp Dijon mustard"
+                                       },
+                                       {
+                                           "item":  "Honey",
+                                           "grams":  37,
+                                           "buy":  "1 3/4 tbsp honey"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  21,
+                                           "buy":  "3 1/2 tsp kosher salt, divided"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 tsp ground black pepper, divided"
+                                       },
+                                       {
+                                           "item":  "Bone-In Skin-On Chicken Thighs",
+                                           "grams":  3969,
+                                           "buy":  "8 3/4 lb bone-in, skin-on chicken thighs (about 17 large thighs)"
+                                       },
+                                       {
+                                           "item":  "Fresh Rosemary",
+                                           "grams":  52,
+                                           "buy":  "18 sprigs fresh rosemary, plus chopped fresh rosemary for serving"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  677,
+                                              "protein_g":  44.1,
+                                              "carbs_g":  19.7,
+                                              "fat_g":  47.9
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT25M",
+                                "totalTime":  "PT40M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,104 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T05:02:55",
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Fresh Basil\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "merged a second \u0027Salt\u0027 line into the first - 15 g total",
+                  "merged a second \u0027Black Pepper\u0027 line into the first - 4 g total"
+              ],
+    "intake":  {
+                   "name":  "Spaghetti Squash Boats with Chicken",
+                   "slug":  "spaghetti-squash-boats-with-chicken",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Spaghetti Squash",
+                                           "grams":  6350,
+                                           "buy":  "7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  32,
+                                           "buy":  "2 1/3 tbsp extra-virgin olive oil"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  15,
+                                           "buy":  "1 3/4 tsp kosher salt; scant 1 tsp kosher salt"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "scant 1 tsp ground black pepper"
+                                       },
+                                       {
+                                           "item":  "Hickory Smoked Bacon",
+                                           "grams":  168,
+                                           "buy":  "14 strips thick-sliced center-cut bacon, roughly chopped"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1588,
+                                           "buy":  "3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  6,
+                                           "buy":  "1 3/4 tsp garlic powder"
+                                       },
+                                       {
+                                           "item":  "Spinach",
+                                           "grams":  210,
+                                           "buy":  "7 cups baby spinach, torn into pieces"
+                                       },
+                                       {
+                                           "item":  "Plain Yogurt",
+                                           "grams":  427,
+                                           "buy":  "1 3/4 cups nonfat plain Greek yogurt"
+                                       },
+                                       {
+                                           "item":  "Mozzarella Cheese",
+                                           "grams":  396,
+                                           "buy":  "3 1/2 cups shredded part-skim mozzarella cheese, divided"
+                                       },
+                                       {
+                                           "item":  "Fresh Basil",
+                                           "grams":  10,
+                                           "buy":  "7 tbsp chopped fresh basil, plus more for serving"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  475,
+                                              "protein_g":  40.5,
+                                              "carbs_g":  36,
+                                              "fat_g":  20.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT1H5M",
+                                "totalTime":  "PT1H15M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

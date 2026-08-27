@@ -3,14 +3,33 @@
     "title":  "Enchiladas Suizas",
     "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T04:50:09",
-    "updated":  "2026-08-27T04:50:09",
+    "updated":  "2026-08-27T05:21:00",
     "terms":  [
-
+                  {
+                      "term":  "mexican crema",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "chihuahua cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Fresh Cilantro",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Yellow Onion",
+                      "optional":  true
+                  }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 754 cal above the 700 ceiling",
     "parked_on":  [
 
                   ],
@@ -32,6 +51,30 @@
                         "at":  "2026-08-27T04:50:09",
                         "by":  "local",
                         "detail":  "VOIDED rejection re-entered: the map dispatch that retired it carried DEFAULT_COND (400-650/35) instead of this run band (450-700/40) and cited no basis - see DEVIATION.md"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:10:56",
+                        "by":  "mapper",
+                        "detail":  "3 residual lines ruled, 0 rejected, 3 DB rows returned (Mexican Crema, Cooked Shredded Chicken, Chihuahua Cheese). Two new ids proposed (mexican-crema, chihuahua-cheese); cooked-shredded-chicken is a board reuse. LOUD FLAG: the settled Salt line carries 20 g source basis (70 g at batch scale) for a \u0027to taste\u0027 line - that is roughly 4 tbsp of kosher salt across 14 servings and looks like a pre-reso"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:12:30",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:20:59",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T05:21:00",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 754 cal above the 700 ceiling"
                     }
                 ]
 }

@@ -1,0 +1,103 @@
+{
+ "slug": "mediterranean-chicken-w-marinade",
+ "lines": [
+  {
+   "raw": "14.5 oz black olives (drained)",
+   "buy": "about 1 1/2 lb drained black olives (three 14.5 oz cans)",
+   "grams_source": 260,
+   "notes": "Drained-can basis: a 14.5 oz can drains to about 9 oz."
+  },
+  {
+   "raw": "2 lemons (juiced)",
+   "buy": "6 lemons, juiced",
+   "grams_source": 116,
+   "notes": "2 medium lemons at 58 g, per the 2026-08-26 lemons precedent."
+  },
+  {
+   "raw": "2 lbs boneless skinless chicken breasts ((See Note 1))",
+   "buy": "5 1/2 lb boneless skinless chicken breasts",
+   "notes": ""
+  },
+  {
+   "raw": "1/8 tsp red pepper flakes",
+   "buy": "1/3 teaspoon red pepper flakes",
+   "notes": ""
+  },
+  {
+   "raw": "5 oz fresh spinach",
+   "buy": "14 oz fresh spinach",
+   "notes": ""
+  },
+  {
+   "raw": "15.5 oz artichoke hearts (drained)",
+   "buy": "2 3/4 lb artichoke hearts, drained (about three 15 oz cans)",
+   "notes": ""
+  },
+  {
+   "raw": "2 cups grape tomatoes",
+   "buy": "5 1/2 cups grape tomatoes",
+   "notes": ""
+  },
+  {
+   "raw": "8 oz feta cheese (crumbled)",
+   "buy": "1 lb 6 oz feta cheese, crumbled",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 cup olive oil",
+   "buy": "11 tablespoons olive oil",
+   "notes": ""
+  },
+  {
+   "raw": "3 garlic cloves (minced)",
+   "buy": "8 garlic cloves, minced",
+   "notes": ""
+  },
+  {
+   "raw": "1 tsp dried oregano",
+   "buy": "2 3/4 teaspoons dried oregano",
+   "notes": ""
+  },
+  {
+   "raw": "1 tsp salt",
+   "buy": "2 3/4 teaspoons salt",
+   "notes": ""
+  },
+  {
+   "raw": "1 tsp black pepper",
+   "buy": "2 3/4 teaspoons black pepper",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "14.5 oz black olives (drained)",
+   "term": "black olives",
+   "canon_item": "Black Olives",
+   "bid": "black-olives",
+   "decision": "mapped",
+   "grams_source": 260,
+   "evidence": "REUSE of a live board id (6 of 7, cheapest 0.265 at Aldi). Deliberately not the green-olive rows: ripe black olives are a different can and price class. Weighed on the drained basis the line states."
+  },
+  {
+   "raw": "2 lemons (juiced)",
+   "term": "lemons",
+   "canon_item": "Lemons",
+   "bid": "lemons",
+   "decision": "mapped",
+   "grams_source": 116,
+   "evidence": "REUSE of the live lemons id (5 of 7, cheapest 0.4533 at Walmart); the food DB already carries the row and only the vocabulary name is missing."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Black Olives"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Computed per serving over all 13 lines at 5 servings: 561 cal, 51.7 g protein, 15.7 g carbs. Source published 673 cal / 49 P / 18 C. Protein agrees within 6 percent and carbs within 3 g, so no portion was re-weighed; calories run under the source, which is consistent with our leaner drained-can and label-basis rows rather than a missing line."
+}

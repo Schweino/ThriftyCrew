@@ -1,0 +1,255 @@
+﻿{
+    "slug":  "italian-turkey-burgers",
+    "title":  "Italian Turkey Burgers",
+    "source_url":  "https://www.wellplated.com/italian-turkey-burgers-recipe/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "turkey",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 pound 99% lean ground turkey",
+                            "item":  "93/7 Ground Turkey",
+                            "bid":  "93-7-ground-turkey",
+                            "board":  "recipe",
+                            "grams":  1058,
+                            "buy":  "2 1/3 lb 99% lean ground turkey",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground turkey\u0027 -\u003e 93-7-ground-turkey (by mapper on 2026-08-16T11:53:02); nearest vocabulary rows: 99/1 Ground Turkey [] same form | 93/7 Ground Turkey [93-7-ground-turkey] same form | Turkey Breast [turkey-breast] DIFFERENT FORM: ground/breast",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 pound turkey sausage (sweet or spicy with casings removed (I used spicy))",
+                            "item":  "Italian Turkey Sausage",
+                            "bid":  "fresh-sweet-italian-turkey-sausage",
+                            "board":  null,
+                            "grams":  1058,
+                            "buy":  "2 1/3 lb Italian turkey sausage, casings removed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling\u0027s id rather than mint a near-duplicate; sweet and hot are flavour variants of one tray SKU.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/3 cup panko bread crumbs",
+                            "item":  "Panko Breadcrumbs",
+                            "bid":  "bread-crumbs",
+                            "board":  "weekly",
+                            "grams":  47,
+                            "buy":  "3/4 cup panko bread crumbs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1/3 cup panko = 20 g (the DB row is 30 g per 1/2 cup).",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons ground basil",
+                            "item":  "Dried Basil",
+                            "bid":  "dried-basil",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 tablespoon plus 2 teaspoons dried basil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground basil\u0027 -\u003e dried-basil (by mapper on 2026-08-26T04:46:10); nearest vocabulary rows: Fresh Basil [fresh-basil] DIFFERENT FORM: ground/fresh | Dried Basil [dried-basil] DIFFERENT FORM: ground/dried; board MAPPED: dried-basil, 6 of 7 stores, cheapest 0.7312 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons ground oregano",
+                            "item":  "Dried Oregano",
+                            "bid":  "dried-oregano",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 tablespoon plus 2 teaspoons dried oregano",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground oregano\u0027 -\u003e dried-oregano (by mapper on 2026-08-26T04:46:10); nearest vocabulary rows: Fresh Oregano [fresh-oregano] DIFFERENT FORM: ground/fresh | Dried Oregano [dried-oregano] DIFFERENT FORM: ground/dried; board MAPPED: dried-oregano, 7 of 7 stores, cheapest 0.9307 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon fennel seeds",
+                            "item":  "Ground Fennel",
+                            "bid":  "ground-fennel",
+                            "board":  null,
+                            "grams":  12,
+                            "buy":  "2 1/3 teaspoons ground fennel",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027fennel seeds\u0027 -\u003e ground-fennel (by mapper on 2026-08-26T04:46:10); nearest vocabulary rows: Poppy Seeds [poppy-seeds] same form | Caraway Seeds [caraway-seeds] same form | Toasted Sesame Seeds [toasted-sesame-seeds] DIFFERENT FORM: toasted; no densities.json row and no each-noun",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "2 1/3 teaspoons garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "generous 1/2 teaspoon kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "generous 1/2 teaspoon ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground black pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-16T11:53:04); nearest vocabulary rows: Black Pepper [black-pepper] DIFFERENT FORM: ground | Yellow Bell Pepper [yellow-bell-pepper] DIFFERENT FORM: ground | Red Bell Pepper [red-bell-pepper] DIFFERENT FORM: ground; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon crushed red pepper flakes",
+                            "item":  "Red Pepper Flakes",
+                            "bid":  "red-pepper-flakes",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "generous 1/2 teaspoon crushed red pepper flakes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027crushed red pepper flakes\u0027 -\u003e red-pepper-flakes (by mapper on 2026-08-26T04:46:11); nearest vocabulary rows: Red Pepper Flakes [red-pepper-flakes] DIFFERENT FORM: crushed; board MAPPED: red-pepper-flakes, 7 of 7 stores, cheapest 0.433 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "8 ounces Asiago cheese",
+                            "item":  "Asiago Cheese",
+                            "bid":  "asiago-cheese",
+                            "board":  null,
+                            "grams":  529,
+                            "buy":  "1 lb 3 oz Asiago cheese, thinly sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "No commodity claims it, captures carry it. Asiago is an aged specialty wedge priced well above mozzarella or provolone, so no bridge to those ids; new id proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "8 ounces Mozzarella cheese",
+                            "item":  "Mozzarella Cheese",
+                            "bid":  "mozzarella-cheese",
+                            "board":  "recipe",
+                            "grams":  529,
+                            "buy":  "1 lb 3 oz mozzarella cheese, sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: shredded-cheese, 7 of 7 stores, cheapest 0.1521 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "6 whole wheat hamburger buns (for serving)",
+                            "item":  "Hamburger Buns",
+                            "bid":  "hamburger-buns",
+                            "board":  null,
+                            "grams":  840,
+                            "buy":  "14 whole wheat hamburger buns, for serving",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "6 buns at 60 g each. REUSE of the live hamburger-buns id (6 of 7, cheapest 0.1658 at Fareway); whole wheat is a variety of the same 8-pack bun SKU on the same shelf, not a form flip in weight or price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 large red onion (halved and thinly sliced)",
+                            "item":  "Red Onion",
+                            "bid":  "red-onion",
+                            "board":  null,
+                            "grams":  257,
+                            "buy":  "2 large red onions, halved and thinly sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027large red onion\u0027 -\u003e red-onion (by mapper on 2026-08-26T04:46:11); nearest vocabulary rows: Red Onion [red-onion] same form | Yellow Onion [onions] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 green bell pepper (thinly sliced)",
+                            "item":  "Green Bell Peppers",
+                            "bid":  "green-bell-pepper",
+                            "board":  "recipe",
+                            "grams":  280,
+                            "buy":  "2 large green bell peppers, thinly sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027green bell pepper\u0027 -\u003e green-bell-pepper (by mapper on 2026-08-26T04:46:12); nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 red bell pepper (thinly sliced)",
+                            "item":  "Red Bell Pepper",
+                            "bid":  "red-bell-pepper",
+                            "board":  "recipe",
+                            "grams":  280,
+                            "buy":  "2 large red bell peppers, thinly sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: red-bell-pepper, 6 of 7 stores, cheapest 0.83 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons extra virgin olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  63,
+                            "buy":  "1/4 cup plus 1 tablespoon extra virgin olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027extra virgin olive oil\u0027 -\u003e olive-oil (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "italian turkey sausage",
+                                 "asiago cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Asiago cheese",
+                                        "proposed_bid":  "asiago-cheese",
+                                        "evidence":  "Not priced under another name: parmesan is a different aged cheese and price, mozzarella-cheese and provolone-cheese are fresh/semi-soft at half the per-oz price, and the bagged shredded-cheese id is cheddar/blend. Captures carry Asiago wedges today, so a null would pantry-price half a pound of specialty cheese.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "asiago-cheese",
+                                  "verdict":  "approve",
+                                  "bid":  "asiago-cheese",
+                                  "reason":  "No id in commodities.json, recipe-commodities.json, or recipe-board-everyday.json carries asiago, and a -o context grep of the minified smp-feed.json finds zero asiago product strings, so it is neither existing nor priced under any name; the estate\u0027s only \u0027asiago\u0027 occurrence is pecorino-romano\u0027s own EXCLUDE (commodities.json:67101), which is positive evidence the near hard-cheese ids deliberately refuse it, and parmesan/pecorino/gruyere are different aged cheeses (different food, not a spelling). Mint asiago-cheese (kebab-case, generic, \u0027asiago\u0027 survives contiguously in real product names) in the weekly commodities.json + capture worklist since today\u0027s captures carry Asiago wedges. FOLLOW-UP EDITS: (1) include ~ \u0027\\basiago(?:\\s+cheese)?\\b\u0027; (2) build a full-rigor exclude list (~150 patterns, copy pecorino-romano\u0027s block as the base) and specifically exclude asiago bagels/bread/crackers, dressings/dips/sauces, snack blends, and parmesan-asiago / romano-asiago BLEND shreds so a blend never crowns the wedge; (3) add commodity-dupe-allowlist.json pairs asiago-cheese\u003c-\u003eparmesan, asiago-cheese\u003c-\u003epecorino-romano, asiago-cheese\u003c-\u003egruyere (same food family, different aged cheese = different purchase) so the daily audit never re-flags them; (4) note block-cheese\u0027s \u0027cheese\\s+block\u0027 include could claim an \u0027Asiago Cheese Block\u0027 product name - add \u0027\\basiago\\b\u0027 to block-cheese\u0027s excludes; (5) separately, add the vocabulary row \u0027Asiago Cheese\u0027 in meal-prep\\db\\ingredients.json resolving to this id - the name mint and the id mint are two acts and both are needed, neither exists today."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u00271 teaspoon fennel seeds\u0027: the qty engine could not ground this weight (default tsp), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Computed per serving over all 17 lines at 6 servings: 719 cal, 55.4 g protein, 37.7 g carbs. Source published 690 cal / 53 P / 33 C. Protein agrees within 5 percent and calories within 4 percent - no line re-weighed. Carbs sit just under the run\u0027s 40 g ceiling and are sensitive to the bun weight assumption above."
+}

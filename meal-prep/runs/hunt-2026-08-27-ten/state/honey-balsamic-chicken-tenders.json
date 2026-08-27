@@ -3,10 +3,10 @@
     "title":  "Honey Balsamic Chicken Tenders",
     "source_url":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/",
     "protein":  "chicken",
-    "state":  "mapped",
+    "state":  "extracted",
     "wave":  null,
-    "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:22:57",
+    "created":  "2026-08-27T05:27:36",
+    "updated":  "2026-08-27T05:27:36",
     "terms":  [
 
               ],
@@ -17,27 +17,21 @@
     "history":  [
                     {
                         "state":  "sourced",
-                        "at":  "2026-08-27T04:12:24",
+                        "at":  "2026-08-27T05:27:36",
                         "by":  "harvest",
                         "detail":  "https://www.budgetbytes.com/honey-balsamic-chicken-tenders/"
                     },
                     {
                         "state":  "selected",
-                        "at":  "2026-08-27T04:12:24",
+                        "at":  "2026-08-27T05:27:36",
                         "by":  "decider",
                         "detail":  "Honey-balsamic glazed chicken skillet — a distinct balsamic sauce family with no live match (existing honey chicken is hot-honey, chipotle or sesame; honey-mustard is in-flight), well-costed budgetbytes source, band verified 452/16/67."
                     },
                     {
                         "state":  "extracted",
-                        "at":  "2026-08-27T04:12:24",
+                        "at":  "2026-08-27T05:27:36",
                         "by":  "local",
-                        "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
-                    },
-                    {
-                        "state":  "mapped",
-                        "at":  "2026-08-27T04:22:57",
-                        "by":  "mapper",
-                        "detail":  ""
+                        "detail":  "recovered from the advance-before-assemble stranding: state said mapped with no decision file, which seed() routes to held, so it could never re-enter the map lane"
                     }
                 ]
 }

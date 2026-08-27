@@ -1,0 +1,147 @@
+{
+ "slug": "italian-turkey-burgers",
+ "lines": [
+  {
+   "raw": "1 pound turkey sausage (sweet or spicy with casings removed (I used spicy))",
+   "buy": "2 1/3 lb Italian turkey sausage, casings removed",
+   "notes": ""
+  },
+  {
+   "raw": "8 ounces Asiago cheese",
+   "buy": "1 lb 3 oz Asiago cheese, thinly sliced",
+   "notes": ""
+  },
+  {
+   "raw": "6 whole wheat hamburger buns (for serving)",
+   "buy": "14 whole wheat hamburger buns, for serving",
+   "grams_source": 360,
+   "notes": "6 buns at 60 g each."
+  },
+  {
+   "raw": "1 pound 99% lean ground turkey",
+   "buy": "2 1/3 lb 99% lean ground turkey",
+   "notes": ""
+  },
+  {
+   "raw": "1/3 cup panko bread crumbs",
+   "buy": "3/4 cup panko bread crumbs",
+   "grams_source": 20,
+   "notes": "1/3 cup panko = 20 g (the DB row is 30 g per 1/2 cup)."
+  },
+  {
+   "raw": "2 teaspoons ground basil",
+   "buy": "1 tablespoon plus 2 teaspoons dried basil",
+   "notes": ""
+  },
+  {
+   "raw": "2 teaspoons ground oregano",
+   "buy": "1 tablespoon plus 2 teaspoons dried oregano",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon fennel seeds",
+   "buy": "2 1/3 teaspoons ground fennel",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon garlic powder",
+   "buy": "2 1/3 teaspoons garlic powder",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 teaspoon kosher salt",
+   "buy": "generous 1/2 teaspoon kosher salt",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "generous 1/2 teaspoon ground black pepper",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 teaspoon crushed red pepper flakes",
+   "buy": "generous 1/2 teaspoon crushed red pepper flakes",
+   "notes": ""
+  },
+  {
+   "raw": "8 ounces Mozzarella cheese",
+   "buy": "1 lb 3 oz mozzarella cheese, sliced",
+   "notes": ""
+  },
+  {
+   "raw": "1 large red onion (halved and thinly sliced)",
+   "buy": "2 large red onions, halved and thinly sliced",
+   "notes": ""
+  },
+  {
+   "raw": "1 green bell pepper (thinly sliced)",
+   "buy": "2 large green bell peppers, thinly sliced",
+   "notes": ""
+  },
+  {
+   "raw": "1 red bell pepper (thinly sliced)",
+   "buy": "2 large red bell peppers, thinly sliced",
+   "notes": ""
+  },
+  {
+   "raw": "2 tablespoons extra virgin olive oil",
+   "buy": "1/4 cup plus 1 tablespoon extra virgin olive oil",
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 pound turkey sausage (sweet or spicy with casings removed (I used spicy))",
+   "term": "turkey sausage",
+   "canon_item": "Italian Turkey Sausage",
+   "bid": "fresh-sweet-italian-turkey-sausage",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling's id rather than mint a near-duplicate; sweet and hot are flavour variants of one tray SKU."
+  },
+  {
+   "raw": "8 ounces Asiago cheese",
+   "term": "Asiago cheese",
+   "canon_item": "Asiago Cheese",
+   "bid": "asiago-cheese",
+   "decision": "mapped",
+   "grams_source": 226.8,
+   "evidence": "No commodity claims it, captures carry it. Asiago is an aged specialty wedge priced well above mozzarella or provolone, so no bridge to those ids; new id proposed."
+  },
+  {
+   "raw": "6 whole wheat hamburger buns (for serving)",
+   "term": "whole wheat hamburger buns",
+   "canon_item": "Hamburger Buns",
+   "bid": "hamburger-buns",
+   "decision": "mapped",
+   "grams_source": 360,
+   "evidence": "REUSE of the live hamburger-buns id (6 of 7, cheapest 0.1658 at Fareway); whole wheat is a variety of the same 8-pack bun SKU on the same shelf, not a form flip in weight or price class."
+  }
+ ],
+ "absent_terms": [
+  "italian turkey sausage",
+  "asiago cheese"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "Asiago cheese",
+   "proposed_bid": "asiago-cheese",
+   "evidence": "Not priced under another name: parmesan is a different aged cheese and price, mozzarella-cheese and provolone-cheese are fresh/semi-soft at half the per-oz price, and the bagged shredded-cheese id is cheddar/blend. Captures carry Asiago wedges today, so a null would pantry-price half a pound of specialty cheese.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "asiago-cheese",
+   "verdict": "approve",
+   "bid": "asiago-cheese",
+   "reason": "No id in commodities.json, recipe-commodities.json, or recipe-board-everyday.json carries asiago, and a -o context grep of the minified smp-feed.json finds zero asiago product strings, so it is neither existing nor priced under any name; the estate's only 'asiago' occurrence is pecorino-romano's own EXCLUDE (commodities.json:67101), which is positive evidence the near hard-cheese ids deliberately refuse it, and parmesan/pecorino/gruyere are different aged cheeses (different food, not a spelling). Mint asiago-cheese (kebab-case, generic, 'asiago' survives contiguously in real product names) in the weekly commodities.json + capture worklist since today's captures carry Asiago wedges. FOLLOW-UP EDITS: (1) include ~ '\\basiago(?:\\s+cheese)?\\b'; (2) build a full-rigor exclude list (~150 patterns, copy pecorino-romano's block as the base) and specifically exclude asiago bagels/bread/crackers, dressings/dips/sauces, snack blends, and parmesan-asiago / romano-asiago BLEND shreds so a blend never crowns the wedge; (3) add commodity-dupe-allowlist.json pairs asiago-cheese<->parmesan, asiago-cheese<->pecorino-romano, asiago-cheese<->gruyere (same food family, different aged cheese = different purchase) so the daily audit never re-flags them; (4) note block-cheese's 'cheese\\s+block' include could claim an 'Asiago Cheese Block' product name - add '\\basiago\\b' to block-cheese's excludes; (5) separately, add the vocabulary row 'Asiago Cheese' in meal-prep\\db\\ingredients.json resolving to this id - the name mint and the id mint are two acts and both are needed, neither exists today."
+  }
+ ],
+ "macro_cross_check": "Computed per serving over all 17 lines at 6 servings: 719 cal, 55.4 g protein, 37.7 g carbs. Source published 690 cal / 53 P / 33 C. Protein agrees within 5 percent and calories within 4 percent - no line re-weighed. Carbs sit just under the run's 40 g ceiling and are sensitive to the bun weight assumption above."
+}

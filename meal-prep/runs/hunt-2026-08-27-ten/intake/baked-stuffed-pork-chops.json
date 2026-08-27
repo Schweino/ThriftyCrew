@@ -1,0 +1,136 @@
+{
+ "name": "Baked Stuffed Pork Chops",
+ "slug": "baked-stuffed-pork-chops",
+ "protein": "pork",
+ "cuisine": "American",
+ "source_url": "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Pork Chops",
+   "grams": 3174,
+   "buy": "7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 141,
+   "buy": "7 Tbsp; 3 1/2 Tbsp"
+  },
+  {
+   "item": "Ranch Seasoning Mix",
+   "grams": 73,
+   "buy": "7 Tbsp; 3 1/2 Tbsp"
+  },
+  {
+   "item": "Paprika",
+   "grams": 8,
+   "buy": "3 1/2 tsp"
+  },
+  {
+   "item": "Salt",
+   "grams": 20,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Butter",
+   "grams": 49,
+   "buy": "3 1/2 Tbsp"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 201,
+   "buy": "1 3/4 cups diced (about 2 small onions)"
+  },
+  {
+   "item": "Celery",
+   "grams": 177,
+   "buy": "1 3/4 cups diced (about 4 stalks)"
+  },
+  {
+   "item": "Fresh Cranberries",
+   "grams": 175,
+   "buy": "1 3/4 cups fresh cranberries"
+  },
+  {
+   "item": "Carrots",
+   "grams": 96,
+   "buy": "7/8 cup shredded (about 2 medium carrots)"
+  },
+  {
+   "item": "Sandwich Bread",
+   "grams": 158,
+   "buy": "3 1/2 cups bread cubes (about 5 oz)"
+  },
+  {
+   "item": "Chicken Broth",
+   "grams": 560,
+   "buy": "2 1/3 cups"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 533,
+  "protein_g": 50.6,
+  "carbs_g": 13.5,
+  "fat_g": 29.1
+ },
+ "writer_notes": [
+  "Macros used in prose are the locked figures only: 533 cal, 50.6 g protein, 13.5 g carbs, 29.1 g fat. All inside the enforced band (cal 450-700, carbs <=40, protein >=40).",
+  "Ingredient/step reconciliation done: every one of the 13 locked buy lines is used by a step (pork, olive oil x2 uses, ranch x2 uses, paprika, salt x2 spots, black pepper, butter, onion, celery, cranberries, carrot, bread cubes, chicken broth) and no step introduces anything not bought.",
+  "Olive oil and Ranch Seasoning each carry a split buy '7 Tbsp; 3 1/2 Tbsp'. I assigned paste = 7 Tbsp of each (source paste uses 2 Tbsp oil + 2 Tbsp ranch) and saute-oil / stuffing-ranch = 3 1/2 Tbsp each (source uses 1 Tbsp each), matching the 2:1 ratio. If the engine split them the reverse way, steps 2, 4 and 5 amounts must be swapped.",
+  "The single locked Salt line (1 3/4 tsp) covers the source's two salt uses (season the vegetables, season the chops). Prose reflects both spots without inventing a split figure.",
+  "Chicken broth 2 1/3 cups against 3 1/2 cups bread cubes is a wet ratio; the source itself flags the mix may be too loose, so make_it keeps the 'add more bread cubes if loose' guidance. Not treated as an error.",
+  "No cost_lines were supplied in this dispatch, so no package-economics arithmetic (per-ounce, lasts-N-batches, nothing-left) was made. shop_smart references package sizes only, and cost prose uses the ${cost_ps} token with no literal dollar figure.",
+  "Portioning is one chop = one serving = one container (14 total), so the count-not-weigh method applies rather than weigh-the-pot."
+ ],
+ "forbidden_prose_terms": [
+  "—",
+  "–",
+  "em dash",
+  "en dash",
+  "sausage",
+  "sage",
+  "apple",
+  "egg",
+  "seafood",
+  "shrimp"
+ ],
+ "prose": {
+  "intro_html": "<p>Stuffed pork chops sound like a restaurant move, the kind of thing you figure takes a culinary degree and a sink full of pans. It does not. You cut a pocket into a loin chop, cook down a little onion, celery, carrot and cranberry, bind it with bread cubes and broth, and let the oven carry the rest. What comes out is 14 chops that eat like Sunday dinner on a Tuesday budget.</p><p>The numbers hold up too. Every chop lands at 533 calories with 50.6 grams of protein, 13.5 grams of carbs and 29.1 grams of fat. That is a real dinner, not a sad diet plate, and it clears our high protein line without breaking a sweat.</p>",
+  "shop_smart": "<p>Start at the meat counter. You want 7 pounds of boneless loin chops cut about 1 1/4 inches thick, because a thin chop has no room for a pocket. A family pack covers the 14 chops this batch needs, and cutting the pockets yourself costs nothing but a sharp knife and two minutes.</p><p>The Ranch Seasoning Mix does double duty, once in the paste on top and once in the stuffing, so one supply handles both jobs. Grab day-old sandwich bread for the 3 1/2 cups of cubes; the heels and the last slices in the bag are perfect, and you are using up bread you already paid for. Fresh cranberries can be seasonal, so if the produce case is empty, buy a bag in the fall and stash it in the freezer, since they cook down the same either way. Onion, celery and carrots are cheap year round, and this batch only asks for a couple of each.</p>",
+  "make_it": "<p>Heat the oven to 400 F and line a baking sheet or spray a baking dish. In a small bowl, whisk 7 tablespoons olive oil, 7 tablespoons Ranch Seasoning Mix and the paprika into a loose paste and set it aside. Cut a pocket into the side of each chop, keeping the fat side intact so the stuffing stays put.</p><p>Melt the butter with 3 1/2 tablespoons olive oil in a skillet over medium heat, then saute the onion, celery, cranberries and carrot until the vegetables soften, about 4 to 5 minutes. Season with salt, pull the pan off the heat and let it cool. Transfer the vegetables to a bowl and toss with the bread cubes, chicken broth and the remaining 3 1/2 tablespoons Ranch Seasoning Mix. It should hold together; if it feels too loose, work in a few more bread cubes.</p><p>Salt and pepper both sides of every chop, then spoon the stuffing evenly into each pocket, going gently so you do not poke through the meat. Lay the chops on your pan and brush the tops with that ranch paprika paste. Bake uncovered for 28 to 35 minutes, until the thickest part of the meat reads 145 F. Let them rest 3 minutes before serving so the juices settle.</p>",
+  "portion_html": "<p>This one portions itself, which is the beauty of it. One stuffed chop is one serving, so you build 14 chops and you end up with 14 containers, no scale required. Weigh nothing, just count.</p><p>Pack a chop per container and add a starch or a green on the side if you want to round out the plate. They reheat clean in the oven or the microwave, and the stuffing keeps the meat from drying out the way a plain chop would.</p>",
+  "cost_closing_html": "<p>Here is where it lands. This batch comes out to ${cost_ps} per serving, and for that you get a stuffed pork chop carrying 50.6 grams of protein. Go try to find that at a restaurant for anywhere near the price.</p><p>Cook once, eat for two weeks of dinners, and the math works in your favor every single time. That is the whole game: real food, real protein, priced like you actually have a budget to keep.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, the whole Thrifty Crew library runs on the same idea, high protein and low cost, for a dollar a month. That is less than this batch of chops, and it pays for itself the first week.</p>"
+ },
+ "head": {
+  "description": "Baked stuffed pork chops built for meal prep: 14 boneless loin chops with a ranch, cranberry and vegetable bread stuffing, each serving 533 calories and 50.6 grams of protein.",
+  "keywords": "stuffed pork chops, baked pork chops, meal prep pork chops, high protein meal prep, boneless pork loin chops, ranch pork chops, budget meal prep dinner",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT35M",
+  "totalTime": "PT50M",
+  "steps": [
+   "Heat the oven to 400 F and line a baking sheet or spray a baking dish with cooking spray.",
+   "Whisk 7 tablespoons olive oil, 7 tablespoons Ranch Seasoning Mix and the paprika into a loose paste and set it aside.",
+   "Cut a pocket into the side of each of the 14 pork chops, leaving the fat side intact.",
+   "Melt the butter with 3 1/2 tablespoons olive oil in a skillet over medium heat, then saute the onion, celery, cranberries and carrot until soft, 4 to 5 minutes. Season with salt, remove from heat and let cool.",
+   "Toss the cooled vegetables with the bread cubes, chicken broth and the remaining 3 1/2 tablespoons Ranch Seasoning Mix until the stuffing holds together, adding a few more bread cubes if it is too loose.",
+   "Salt and pepper both sides of each chop, spoon the stuffing evenly into all 14 pockets without poking through the meat, set the chops on the pan and brush the tops with the ranch paprika paste.",
+   "Bake uncovered 28 to 35 minutes, until the thickest part reads 145 F, then rest 3 minutes before serving."
+  ],
+  "step_names": [
+   "Heat the oven",
+   "Mix the paste",
+   "Cut the pockets",
+   "Cook the stuffing base",
+   "Build the stuffing",
+   "Stuff and season",
+   "Bake and rest"
+  ]
+ }
+}

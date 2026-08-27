@@ -1,0 +1,132 @@
+{
+ "name": "Mediterranean Chicken w/ Marinade",
+ "slug": "mediterranean-chicken-w-marinade",
+ "protein": "chicken",
+ "cuisine": "Mediterranean",
+ "source_url": "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2540,
+   "buy": "5 1/2 lb boneless skinless chicken breasts"
+  },
+  {
+   "item": "Red Pepper Flakes",
+   "grams": 1,
+   "buy": "1/3 teaspoon red pepper flakes"
+  },
+  {
+   "item": "Spinach",
+   "grams": 397,
+   "buy": "14 oz fresh spinach"
+  },
+  {
+   "item": "Artichoke Hearts",
+   "grams": 1230,
+   "buy": "2 3/4 lb artichoke hearts, drained (about three 15 oz cans)"
+  },
+  {
+   "item": "Cherry Tomatoes",
+   "grams": 834,
+   "buy": "5 1/2 cups grape tomatoes"
+  },
+  {
+   "item": "Black Olives",
+   "grams": 728,
+   "buy": "about 1 1/2 lb drained black olives (three 14.5 oz cans)"
+  },
+  {
+   "item": "Feta Cheese",
+   "grams": 635,
+   "buy": "1 lb 6 oz feta cheese, crumbled"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 151,
+   "buy": "11 tablespoons olive oil"
+  },
+  {
+   "item": "Lemons",
+   "grams": 325,
+   "buy": "6 lemons, juiced"
+  },
+  {
+   "item": "Garlic",
+   "grams": 25,
+   "buy": "8 garlic cloves, minced"
+  },
+  {
+   "item": "Dried Oregano",
+   "grams": 3,
+   "buy": "2 3/4 teaspoons dried oregano"
+  },
+  {
+   "item": "Salt",
+   "grams": 17,
+   "buy": "2 3/4 teaspoons salt"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 6,
+   "buy": "2 3/4 teaspoons black pepper"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 561,
+  "protein_g": 51.8,
+  "carbs_g": 16.1,
+  "fat_g": 34.2
+ },
+ "writer_notes": [
+  "Band verified against locked view: cal 561 (450-700), carbs 16.1 (<=40), protein 51.8 (>=40). All three gates pass.",
+  "Orphan check passed both directions: all 13 bought ingredients are used by a step; no step calls for an unbought ingredient.",
+  "Source instruction 1 says 'kosher salt' but the buy line is plain 'salt'; prose uses salt to match the shopper's basket.",
+  "Method scaling: the source uses one 9x12 dish for a ~5-serving batch; at 14 servings the prose directs splitting across two or three dishes or a large roasting pan so the chicken stays in a single layer. This is a method note only and changes no locked number.",
+  "No cost_lines were provided in this dispatch, so shop_smart makes no per-ounce or per-package cost comparison; the only dollar figure in prose is the ${{cost_ps}} token.",
+  "Red pepper flakes and feta are intentionally excluded from the marinade in the prose, matching the transcription (flakes go on the spinach, feta goes on at the end)."
+ ],
+ "forbidden_prose_terms": [
+  "kosher salt",
+  "chicken thighs",
+  "sun-dried tomatoes",
+  "seafood",
+  "shrimp",
+  "per ounce",
+  "per-ounce"
+ ],
+ "prose": {
+  "intro_html": "<p>Some dinners try to be five things at once and end up being nothing. This one keeps it simple and still eats like a restaurant plate. Chicken breast gets a bright lemon and garlic marinade, then bakes right on a bed of spinach with artichoke hearts, grape tomatoes, and black olives, and it finishes under a snow of crumbled feta. That is the whole trick.</p><p>Here is why it earns a spot in the rotation. At 561 calories a serving with 51.8 grams of protein and only 16.1 grams of carbs, it does the heavy lifting a meal-prep dinner is supposed to do without a pile of rice or pasta to pad the plate. It is high protein, it is low carb, and it tastes like you fussed over it when really you let the oven do the work.</p><p>The marinade wants time, not effort. Mix it in the morning, come back to it after work, and you are twenty minutes from a tray of dinner. That is a good deal in anybody's book.</p>",
+  "shop_smart": "<p>The chicken is the biggest line on the list, so buy it the way it is cheapest that week. Boneless skinless breasts in the family pack almost always beat the small tray, and this batch wants five and a half pounds, so a big pack is the move.</p><p>Canned goods carry this recipe. You need roughly three 15 ounce cans of artichoke hearts and three 14.5 ounce cans of black olives, both drained. Buy them by the can and check the store brand first, because on plain canned vegetables the label rarely earns its markup. Grab the cans whenever they are stocked and this dish is always a night away.</p><p>Feta comes two ways: a block in brine or a pre-crumbled tub. Either works here since it all gets crumbled over the top anyway. Buy whichever fits the pound and six ounces this batch needs without leaving a sad half-container to die in the door of your fridge. Fresh spinach wilts down to almost nothing in the oven, so the fourteen ounces the list calls for is not as much as it looks in the bag. Lemons and a head of garlic round it out, and both keep for weeks, so no rush there.</p>",
+  "make_it": "<p>Start with the marinade because the chicken needs a soak. In a bowl whisk together the olive oil, the lemon juice, the minced garlic, the oregano, the salt, and the black pepper. That is it. Hold back the red pepper flakes and the feta for later, they are not part of the marinade.</p><p>Put the chicken breasts and the marinade in a large bowl or a sealable bag. Toss to coat, or squeeze the air out and seal, then massage it so every piece is covered. Refrigerate at least 4 hours, and overnight is better. This is the step that makes the difference, so do not skip the wait.</p><p>When you are ready to bake, heat the oven to 400 degrees. Spray your casserole dishes with cooking spray or a little olive oil. A quick word on scale: the original lays this out in one 9 by 12 dish, but a fourteen serving batch will not fit in one, so spread it across two or three dishes or a large roasting pan and give the chicken room in a single layer. Lay the spinach across the bottom and sprinkle it with the red pepper flakes.</p><p>Set the chicken breasts on top of the spinach. Scatter the artichoke hearts, the grape tomatoes, and the black olives on top of and around the chicken, and pour any marinade left in the bag over everything. Cover and bake for about 25 minutes, a little longer if your breasts are thick.</p><p>Pull it out, crumble the feta over each piece of chicken, and slide it back in uncovered for 5 more minutes. Let it rest 5 minutes before you slice. That rest keeps the juice in the meat instead of on your cutting board.</p>",
+  "portion_html": "<p>Portioning this one is easy because it is already built in pieces. Slice the chicken, then divide it and the spinach, artichokes, tomatoes, olives, and feta evenly across 14 containers. If you want them truly even, weigh it: set the whole cooked batch on the scale, divide that number by 14, and portion to that weight per container. A slotted spoon lets the pan juices drain so your containers do not turn into soup.</p><p>Each container lands at 561 calories with 51.8 grams of protein, which is a genuine dinner, not a snack pretending to be one. Spoon a little of the cooking juices over the top before you seal the lid and it reheats bright and moist all week.</p>",
+  "cost_closing_html": "<p>Here is the part that matters when the receipt prints. This whole tray of Mediterranean chicken comes out to ${{cost_ps}} a serving. That is a lemon and garlic chicken dinner with feta and olives, the kind of plate you pay real money for out, landing under the cost of the drink you would order with it.</p><p>Fourteen dinners done at once means fourteen nights you are not deciding what to eat and not handing a delivery app your card. Cook once, and the math works for you every night that week instead of against you.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want on repeat, that is exactly what Thrifty Crew is built for. Membership runs a dollar a month, and it opens up every recipe, every macro, and every cost breakdown we have. One skipped takeout order pays for the whole year. Come cook with the crew.</p>"
+ },
+ "head": {
+  "description": "Baked Mediterranean chicken with a lemon garlic marinade, spinach, artichokes, tomatoes, olives, and feta. A high-protein, low-carb meal-prep dinner scaled to 14 servings at 561 calories and 51.8g protein each.",
+  "keywords": "mediterranean chicken, baked chicken meal prep, high protein dinner, low carb chicken, feta chicken, lemon garlic chicken, marinated chicken breast, meal prep recipe, budget dinner",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT30M",
+  "totalTime": "PT45M",
+  "steps": [
+   "In a bowl, whisk together the marinade: olive oil, lemon juice, minced garlic, dried oregano, salt, and black pepper.",
+   "Add the chicken breasts and marinade to a large bowl or sealable bag, coat well, and refrigerate at least 4 hours or overnight.",
+   "Preheat the oven to 400 degrees F and lightly grease your casserole dishes.",
+   "Spread the spinach across the bottom of the dishes and sprinkle with the red pepper flakes.",
+   "Lay the chicken on the spinach, then scatter the artichoke hearts, grape tomatoes, and black olives over and around the chicken and pour on any remaining marinade.",
+   "Cover and bake about 25 minutes, depending on the thickness of the breasts.",
+   "Crumble feta over each piece, return uncovered for 5 minutes, then rest 5 minutes before slicing and portioning into 14 containers."
+  ],
+  "step_names": [
+   "Mix the marinade",
+   "Marinate the chicken",
+   "Preheat the oven",
+   "Layer the spinach",
+   "Add chicken and vegetables",
+   "Bake covered",
+   "Add feta and finish"
+  ]
+ }
+}

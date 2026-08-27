@@ -1,0 +1,1738 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-ten",
+ "batch": 2,
+ "generated": "2026-08-27T05:15:14",
+ "batch_terms": [
+  "mexican crema",
+  "chihuahua cheese",
+  "italian turkey sausage",
+  "asiago cheese",
+  "chicken tenderloins",
+  "cornmeal"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "mexican crema",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "mexican crema",
+     "attempts": [
+      {
+       "term": "mexican crema",
+       "state": "OK",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Queso Campesino® Crema Mexicana",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 92,
+       "url": "https://www.bakersplus.com/p/0064440413799"
+      },
+      {
+       "item": "Cacique® Crema Mexicana Table Cream",
+       "price": 3.99,
+       "size": "15 fl oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0007456200202"
+      },
+      {
+       "item": "Ole Crema Mexican Style Cream Squeeze Bottle",
+       "price": 4.79,
+       "size": "15 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0002733100217"
+      },
+      {
+       "item": "VV Supremo® Crema Supremo®",
+       "price": 3.59,
+       "size": "15 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0002172410102"
+      },
+      {
+       "item": "Queso Campesino® Crema Menonita",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0064440413785"
+      },
+      {
+       "item": "Gamesa® Cremax® Strawberry Wafer Cookies",
+       "price": 1,
+       "size": "5.7 oz",
+       "relevance": 40,
+       "url": "https://www.bakersplus.com/p/0068670000005"
+      },
+      {
+       "item": "LALA® Pourable Mexican-Style Sour Cream",
+       "price": 4.49,
+       "size": "15 oz",
+       "relevance": 40,
+       "url": "https://www.bakersplus.com/p/0081939302169"
+      },
+      {
+       "item": "Herdez ® Queso Blanco Cheese Dip with Jalapenos , 15 oz.",
+       "price": 4.29,
+       "size": "net wt 15 oz (425g)",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0007287807151"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "mexican",
+     "attempts": [
+      {
+       "term": "mexican crema",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "mexicancrema",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "mexican",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Knorr Mexican Rice 5.4 Oz",
+       "price": 1.39,
+       "size": "5.4 oz",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/knorr_mexican_rice_5_4_oz/p/27467"
+      },
+      {
+       "item": "Kraft Mexican Cheddar Jack",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/kraft_mexican_cheddar_jack/p/1764405684715840500"
+      },
+      {
+       "item": "Juanita's Mexican Style Hominy 25 Oz",
+       "price": 2.99,
+       "size": "25 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/juanita_s_mexican_style_hominy_25_oz/p/2375486"
+      },
+      {
+       "item": "Juanita's Mexican Style Hominy 110 Oz",
+       "price": 5.79,
+       "size": "110 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/juanita_s_mexican_style_hominy_110_oz/p/2514566"
+      },
+      {
+       "item": "Valentina Hot Sauce, Mexican 12.5 Fl Oz",
+       "price": 1.99,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/valentina_hot_sauce_mexican_12_5_fl_oz/p/48998"
+      },
+      {
+       "item": "Del Monte Summer Crisp, Mexican Style 11 Oz",
+       "price": 3.39,
+       "size": "11 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/del_monte_summer_crisp_mexican_style_11_oz/p/1564405684712883621"
+      },
+      {
+       "item": "Somos Mexican Street Corn White Rice 8.8 Oz",
+       "price": 4.19,
+       "size": "8.8 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/somos_mexican_street_corn_white_rice_8_8_oz/p/1564405684714106635"
+      },
+      {
+       "item": "Rice A Roni Rice Pasta Mix, Mexican Style 6.4 Oz",
+       "price": 1.69,
+       "size": "6.4 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/rice_a_roni_rice_pasta_mix_mexican_style_6_4_oz/p/78459"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "mexican crema",
+     "attempts": [
+      {
+       "term": "mexican crema",
+       "state": "OK",
+       "hits": 58
+      }
+     ],
+     "hits": [
+      {
+       "item": "Chobani Plain Whole Milk Greek Yogurt",
+       "price": 5.0,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72081-chobani-whole-milk-plain-greek-yogurt-32-oz"
+      },
+      {
+       "item": "Chobani Plain Nonfat Greek Yogurt",
+       "price": 5.0,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29327-chobani-yogurt-greek-non-fat-plain-32-oz"
+      },
+      {
+       "item": "FAGE 0%, Plain Greek Yogurt",
+       "price": 6.98,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32502-fage-total-0-milkfat-all-natural-nonfat-greek-strained-yogurt-35-3-oz"
+      },
+      {
+       "item": "Chobani Plain Nonfat Greek Yogurt",
+       "price": 1.38,
+       "size": "5.3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/7260-chobani-non-fat-greek-yogurt-plain-5-3-oz"
+      },
+      {
+       "item": "Greek Gods Greek Style Plain Traditional Yogurt",
+       "price": 5.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17314100-greek-gods-plain-traditional-greek-style-yogurt-24-oz"
+      },
+      {
+       "item": "Oikos Triple Zero Vanilla Greek Yogurt",
+       "price": 5.0,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3224581-oikos-triple-zero-vanilla-greek-yogurt-32-oz"
+      },
+      {
+       "item": "FAGE Total Milkfat Greek Strained Yogurt",
+       "price": 6.98,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2714404-fage-total-milkfat-greek-strained-yogurt-35-3-oz"
+      },
+      {
+       "item": "Oikos Triple Zero Vanilla Greek Yogurt",
+       "price": 4.98,
+       "size": "4 x 5.3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2754125-oikos-triple-zero-vanilla-greek-yogurt-5-3-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "mexican crema",
+     "attempts": [
+      {
+       "term": "mexican crema",
+       "state": "MATCHES",
+       "hits": 13
+      }
+     ],
+     "hits": [
+      {
+       "item": "Silk Unsweetened Original Almond, 64 fl. oz., 3 pk.",
+       "price": 8.83,
+       "size": "",
+       "unit_price": "$0.05/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3O1JFXZ3MU4P"
+      },
+      {
+       "item": "Horizon Organic Whole Milk, 8 fl. oz, 18 pk.",
+       "price": 19.48,
+       "size": "",
+       "unit_price": "$0.14/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/55FTOSASXZ1C"
+      },
+      {
+       "item": "Member's Mark Pumpkin Cream Cheese Blondies, 9 ct.",
+       "price": 8.62,
+       "size": "",
+       "unit_price": "$0.96/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6DSPBYR92QX3"
+      },
+      {
+       "item": "Fruit Medley Cheese",
+       "price": 9.18,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2XFQBWWLRFBQ"
+      },
+      {
+       "item": "Daisy Brand Pure and Natural Sour Cream, 48 oz.",
+       "price": 5.54,
+       "size": "",
+       "unit_price": "$1.85/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2T23IZNT45SZ"
+      },
+      {
+       "item": "Horizon Organic Lowfat Chocolate Milk with DHA Omega-3, 8 fl. oz., 18 pk.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$0.14/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5CVG8218FN6F"
+      },
+      {
+       "item": "Daisy Brand Pure and Natural Sour Cream, 14 oz., 2 pk.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2NKEBY6UTJ9V"
+      },
+      {
+       "item": "President Brie Soft-Ripened Cheese (19.6 oz.)",
+       "price": 7.84,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2G0RCCECTEOE"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "chihuahua cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "chihuahua cheese",
+     "attempts": [
+      {
+       "term": "chihuahua cheese",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "V&V Supremo® Chihuahua® Queso Quesadilla Mexican Shredded Cheese",
+       "price": 6.99,
+       "size": "16 oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0002172460289"
+      },
+      {
+       "item": "V&V Supremo® Chihuahua® Queso Quesadilla Mexican Shredded Cheese",
+       "price": 11.99,
+       "size": "32 oz",
+       "relevance": 84,
+       "url": "https://www.bakersplus.com/p/0002172460150"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "chihuahua",
+     "attempts": [
+      {
+       "term": "chihuahua cheese",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "chihuahuacheese",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "chihuahua",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 3 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "chihuahua cheese",
+     "attempts": [
+      {
+       "term": "chihuahua cheese",
+       "state": "OK",
+       "hits": 64
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kraft Mexican Style Four Cheese Finely Shredded Cheese",
+       "price": 3.18,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74508760-kraft-mexican-style-four-cheese-8-00-oz"
+      },
+      {
+       "item": "The Mad Butcher's Habanero Queso Blanco Cheese",
+       "price": 3.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/95292159-the-mad-butchers-habanero-queso-blanco-cheese-1-each"
+      },
+      {
+       "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24495714-fareway-cheese-mexican-style-blend-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Jisa Farmer's Cheese",
+       "price": 4.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90056188-jisas-farmstead-cheese-farmers-cheese-1-each"
+      },
+      {
+       "item": "El Terrifico Tamale Co. White Cheese Dip, Mexican Restaurant Style, Mild",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3141309-el-terrifico-tamale-white-cheese-dip-mexican-restaurant-style-mild-16-oz"
+      },
+      {
+       "item": "Jisa's Farmstand Smokin' Joes' Cheese Nuggets",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18783702-jisa-s-farmstand-smokin-joes-cheese-nuggets-8-oz"
+      },
+      {
+       "item": "Sargento Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2691924-sargento-sliced-provolone-natural-cheese-with-natural-smoke-flavor-8-oz"
+      },
+      {
+       "item": "Tillamook Farmstyle Provolone Cheese Slices, 7oz, 8ct",
+       "price": 3.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16742439-tillamook-farmstyle-thick-cut-smoked-provolone-cheese-slices-7-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "chihuahua cheese",
+     "attempts": [
+      {
+       "term": "chihuahua cheese",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tillamook Sharp Cheddar Cheese, 2.5 lbs.",
+       "price": 11.47,
+       "size": "",
+       "unit_price": "$4.59/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XIFPMGT84DW"
+      },
+      {
+       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$4.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/78YWMH7WS9UT"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+       "price": 5.97,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+      },
+      {
+       "item": "Member's Mark Sharp Cheddar Cheese Block 2 lbs.",
+       "price": 5.64,
+       "size": "",
+       "unit_price": "$2.82/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3L931IBCNUSN"
+      },
+      {
+       "item": "Tillamook Pepper Jack Cheese 2.5 lbs.",
+       "price": 10.14,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5A9EJ999LR1D"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      },
+      {
+       "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+       "price": 5.87,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "italian turkey sausage",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "italianturkeysausage",
+     "attempts": [
+      {
+       "term": "italian turkey sausage",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "italianturkeysausage",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "italianturkeysausage",
+     "attempts": [
+      {
+       "term": "italian turkey sausage",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "italianturkeysausage",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "italian turkey sausage",
+     "attempts": [
+      {
+       "term": "italian turkey sausage",
+       "state": "OK",
+       "hits": 66
+      }
+     ],
+     "hits": [
+      {
+       "item": "Italian Pork Sausage",
+       "price": 3.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387940-italian-pork-sausage-1-each"
+      },
+      {
+       "item": "Johnsonville Italian Sausage Sweet - 5 CT",
+       "price": 5.99,
+       "size": "19 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90855-johnsonville-italian-sausage-sweet-5-ct-82-grm"
+      },
+      {
+       "item": "Johnsonville Fully Cooked Turkey Breakfast Sausage Patties",
+       "price": 5.99,
+       "size": "8 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/18263434-johnsonville-turkey-sausage-patties-8-ea"
+      },
+      {
+       "item": "JENNIE-O TURKEY STORE 90% Lean 10% Fat Ground Turkey",
+       "price": 4.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2690041-jennie-o-fresh-all-natural-90-lean-10-fat-ground-turkey-16-oz"
+      },
+      {
+       "item": "Farmland Original Pork Sausage",
+       "price": 2.5,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2663295-farmland-sausage-roll-12-oz"
+      },
+      {
+       "item": "Wimmer’s Meats Las Vegas Hot Dogs",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16968166-wimmer-s-las-vegas-brand-skinless-hot-dog-16-oz"
+      },
+      {
+       "item": "Amylu Caramelized Onion & White Cheddar Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69855181-amylu-caramel-onion-and-white-cheddar-sausage-12-oz-12-oz"
+      },
+      {
+       "item": "Amylu Roasted Garlic & Asiago Chicken Sausage",
+       "price": 6.99,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/68987717-amylu-roasted-garlic-asiago-chicken-sausage"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "italian turkey sausage",
+     "attempts": [
+      {
+       "term": "italian turkey sausage",
+       "state": "MATCHES",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Johnsonville Original Pork Breakfast Sausage Links, 30 ct.",
+       "price": 6.48,
+       "size": "",
+       "unit_price": "$0.22/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3WZ8TYL5PLTS"
+      },
+      {
+       "item": "Kiolbassa Beef Hickory Smoked Sausage Links, 12 ct.",
+       "price": 19.87,
+       "size": "",
+       "unit_price": "$6.92/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3TQGSAJ56VN5"
+      },
+      {
+       "item": "Jimmy Dean Fully Cooked Original Pork Sausage Links, 48 ct.",
+       "price": 9.87,
+       "size": "",
+       "unit_price": "$0.21/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/372WKMJX4E21"
+      },
+      {
+       "item": "Jimmy Dean Premium Pork Sausage Roll, 2 lbs.",
+       "price": 7.34,
+       "size": "",
+       "unit_price": "$3.67/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2YLITB5066PS"
+      },
+      {
+       "item": "Jimmy Dean® Hot Pork Regular Breakfast Sausage Roll, 32 oz",
+       "price": 7.34,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0YNLWATNORJF"
+      },
+      {
+       "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+       "price": 13.87,
+       "size": "",
+       "unit_price": "$4.62/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
+      },
+      {
+       "item": "Aidells Chicken and Apple Smoked Chicken Sausage Breakfast Links, 24 oz.",
+       "price": 9.84,
+       "size": "",
+       "unit_price": "$0.41/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/47O4EPVQTICK"
+      },
+      {
+       "item": "Jimmy Dean Fully Cooked Breakfast Pork Sausage Patties, 24 ct.",
+       "price": 8.86,
+       "size": "",
+       "unit_price": "$0.37/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/104WXM1QGMTA"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "asiago cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Shredded Asiago Cheese",
+       "price": 5.49,
+       "size": "5 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111063673"
+      },
+      {
+       "item": "Cello Asiago Cheese Wedge",
+       "price": 10.49,
+       "size": "1 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0028962700000"
+      },
+      {
+       "item": "Brazi Bites® Gluten Free Frozen Garlic Asiago Cheese Bread",
+       "price": 6.99,
+       "size": "18 ct / 11.5 oz",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0085355200303"
+      },
+      {
+       "item": "Private Selection® Asiago Wedge Cheese",
+       "price": 5.99,
+       "size": "8 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111063680"
+      },
+      {
+       "item": "Sartori® Rosemary and Olive Oil Asiago Wedge Cheese",
+       "price": 20.99,
+       "size": "1 lb",
+       "relevance": 87,
+       "url": "https://www.bakersplus.com/p/0028647980000"
+      },
+      {
+       "item": "Private Selection® Italian Style Parmesan Asiago and Cheddar Macaroni and Cheese",
+       "price": 2.99,
+       "size": "12 oz",
+       "relevance": 80,
+       "url": "https://www.bakersplus.com/p/0001111010682"
+      },
+      {
+       "item": "Private Selection® Chef's Blend Sharp Cheddar Gouda Asiago Thick Cut Shredded Cheese",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": 79,
+       "url": "https://www.bakersplus.com/p/0001111008389"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Culinary Tours Cheese, Asiago 8 Oz",
+       "price": 5.49,
+       "size": "8 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/culinary_tours_cheese_asiago_8_oz/p/1564405684711368502"
+      },
+      {
+       "item": "Bel Gioioso Shredded Cheese, Asiago 5 Oz",
+       "price": 6.49,
+       "size": "5 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_shredded_cheese_asiago_5_oz/p/22617"
+      },
+      {
+       "item": "Bel Gioioso Fresh Asiago With Calabrian Chili Peppers Cheese 8 Oz",
+       "price": 6.49,
+       "size": "8 oz",
+       "relevance": 84,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/italian/bel_gioioso_fresh_asiago_with_calabrian_chili_peppers_cheese_8_oz/p/4792682"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "OK",
+       "hits": 68
+      }
+     ],
+     "hits": [
+      {
+       "item": "BelGioioso Asiago Wedge",
+       "price": 4.49,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1354318-belgioioso-asiago-cheese-wedge-5-oz"
+      },
+      {
+       "item": "Tillamook Sharp Cheddar Cheese Block, 8oz",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/39602-tillamook-sharp-cheddar-cheese-block-8-oz"
+      },
+      {
+       "item": "Fareway Swiss Cheese Slices",
+       "price": 2.48,
+       "size": "16 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24721928-fareway-cheese-slices-swiss-16-ea"
+      },
+      {
+       "item": "Fareway Grated Parmesan Cheese",
+       "price": 5.88,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25577817-fareway-grated-cheese-parmesan-16-oz"
+      },
+      {
+       "item": "Fareway Mexican Style Blend Fancy Shredded Cheese",
+       "price": 7.48,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/28263148-fareway-mexican-style-blend-monterey-jack-cheddar-queso-quesadilla-and-asadero-cheese-fancy-shredded-32-oz"
+      },
+      {
+       "item": "Fareway Parmesan Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24713413-fareway-cheese-parmesan-fancy-shredded-6-oz"
+      },
+      {
+       "item": "Fareway Colby Jack Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24450064-fareway-cheese-colby-jack-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Colby & Monterey Jack Cheese Cubes",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24552406-fareway-cheese-cubes-colby-monterey-jack-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "asiago cheese",
+     "attempts": [
+      {
+       "term": "asiago cheese",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.30/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+      },
+      {
+       "item": "Tillamook Colby Jack Cheese 2.5 lbs.",
+       "price": 10.14,
+       "size": "",
+       "unit_price": "$4.06/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/44JS0VY9WVS9"
+      },
+      {
+       "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
+       "price": 9.86,
+       "size": "",
+       "unit_price": "$5.63/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
+      },
+      {
+       "item": "Tillamook Medium Cheddar Cheese 2.5 lbs.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$4.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/78YWMH7WS9UT"
+      },
+      {
+       "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
+       "price": 11.47,
+       "size": "",
+       "unit_price": "$1.43/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+      },
+      {
+       "item": "Cello Domestic Romano Cheese Wheel approx. 18 lbs.",
+       "price": 174.26,
+       "size": "",
+       "unit_price": "$9.68/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2TU6KN96JHZ9"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+       "price": 7.44,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+      },
+      {
+       "item": "Alpenhaus French Gruyere Semi-Hard Cheese Wedge, 1 lb.",
+       "price": 11.87,
+       "size": "",
+       "unit_price": "$0.74/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6TE7K3A52JXC"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "chicken tenderloins",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "chicken tenderloins",
+     "attempts": [
+      {
+       "term": "chicken tenderloins",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Smart Chicken® Air-Chilled Chicken Tenderloins",
+       "price": 7.99,
+       "size": "1 lb",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0027066450000"
+      },
+      {
+       "item": "Heritage Farm® Boneless Skinless Chicken Tenderloins",
+       "price": 4.49,
+       "size": "1 lb",
+       "relevance": 127,
+       "url": "https://www.bakersplus.com/p/0025313400000"
+      },
+      {
+       "item": "Kroger® Frozen Boneless Skinless Raw Chicken Tenderloins",
+       "price": 9.99,
+       "size": "2.5 lb",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001111000906"
+      },
+      {
+       "item": "Tyson All Natural Fresh Chicken Breast Tenderloins",
+       "price": 5.99,
+       "size": "1 lb",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0026066400000"
+      },
+      {
+       "item": "Tyson® Boneless Skinless Chicken Breast Tenderloins",
+       "price": 10,
+       "size": "40 oz",
+       "relevance": 87,
+       "url": "https://www.bakersplus.com/p/0002370016222"
+      },
+      {
+       "item": "Tyson Frozen Chicken Nuggets",
+       "price": 7.49,
+       "size": "29 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0002370006026"
+      },
+      {
+       "item": "Tyson Frozen Chicken Nuggets Family Pack",
+       "price": 12.99,
+       "size": "4 lb",
+       "relevance": 40,
+       "url": "https://www.bakersplus.com/p/0002370006025"
+      },
+      {
+       "item": "Applegate All Natural Frozen Chicken Nuggets",
+       "price": 12.49,
+       "size": "16 oz",
+       "relevance": 39,
+       "url": "https://www.bakersplus.com/p/0002531705518"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "chicken tenderloins",
+     "attempts": [
+      {
+       "term": "chicken tenderloins",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tyson Chicken Breast Tenderloins 40 Oz",
+       "price": 13.99,
+       "size": "40 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/frozen_chicken/tyson_chicken_breast_tenderloins_40_oz/p/544468"
+      },
+      {
+       "item": "Tyson Southern Style Chicken Breast Tenderloins 25 Oz",
+       "price": 6.99,
+       "size": "25 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/meat/chicken/prepared_chicken/tyson_southern_style_chicken_breast_tenderloins_25_oz/p/567916"
+      },
+      {
+       "item": "Pedigree Food For Dogs, With Chicken & Beef/Beef & Pork Tenderloin/With Chicken & Turkey, Cuts In Gravy, High Protein, Variety Pack 18 Ea",
+       "price": 26.99,
+       "size": "18 ea",
+       "relevance": 16,
+       "url": "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/canned_fresh_dog_food/pedigree_food_for_dogs_with_chicken_beef_beef_pork_tenderloin_with_chicken_turkey_cuts_in_gravy_high_protein_variety_pack_18_ea/p/1564405684712727297"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "chicken tenderloins",
+     "attempts": [
+      {
+       "term": "chicken tenderloins",
+       "state": "OK",
+       "hits": 38
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tyson Boneless Skinless Chicken Breast Tenderloins, 2.5 lb. (Frozen)",
+       "price": 12.99,
+       "size": "1.13 kg",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1523112-tyson-chicken-breast-tenderloins-2-5-lb"
+      },
+      {
+       "item": "Tyson Fully Cooked Southern Style Chicken Breast Tenderloins, Frozen",
+       "price": 7.76,
+       "size": "25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/129892-tyson-fully-cooked-southern-style-chicken-breast-tenderloins-frozen-25-onz"
+      },
+      {
+       "item": "Boneless Trimmed Chicken Breast",
+       "price": 5.68,
+       "size": "$6.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388188-boneless-trimmed-chicken-breast"
+      },
+      {
+       "item": "Perdue Chicken Breast Tenders",
+       "price": 6.99,
+       "size": "29 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/76971-perdue-breaded-chicken-breast-tenders-1-81-lb"
+      },
+      {
+       "item": "Perdue Gluten Free Organic Chicken Tenders",
+       "price": 10.59,
+       "size": "22 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/171979-perdue-s-breaded-chicken-breast-tenders-gluten-free-1-38-lb"
+      },
+      {
+       "item": "Boneless Skinless Chicken Breast",
+       "price": 7.8,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387737-boneless-skinless-chicken-breast-1-each"
+      },
+      {
+       "item": "Diced Chicken Breast",
+       "price": 6.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89322287-diced-chicken-breast"
+      },
+      {
+       "item": "Tyson Frozen Crispy Chicken Breast Strips, 25 oz",
+       "price": 7.76,
+       "size": "25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41987-tyson-fully-cooked-crispy-chicken-strips-frozen-25-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "chicken tenderloins",
+     "attempts": [
+      {
+       "term": "chicken tenderloins",
+       "state": "MATCHES",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Country Pride Breaded Chicken Breast Tenders, Frozen, 5 lbs.",
+       "price": 16.74,
+       "size": "",
+       "unit_price": "$3.35/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3W9TS2X9XIZ8"
+      },
+      {
+       "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
+       "price": 13.87,
+       "size": "",
+       "unit_price": "$4.62/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
+      },
+      {
+       "item": "Member's Mark Boneless and Skinless Chicken Breast Tenderloins, Frozen, 6 lbs.",
+       "price": 21.97,
+       "size": "",
+       "unit_price": "$3.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1B2J0AJOCKVM"
+      },
+      {
+       "item": "Member's Mark Chicken Tenders, priced per pound",
+       "price": 20.41,
+       "size": "",
+       "unit_price": "$3.88/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4VQ0YFB4M0YS"
+      },
+      {
+       "item": "Member's Mark Chicken Tenders, Case, priced per pound",
+       "price": 180.96,
+       "size": "",
+       "unit_price": "$3.48/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7KUHNO3USBYF"
+      },
+      {
+       "item": "Just Bare Lightly Breaded Chicken Breast Original Bites, Frozen, 3 lbs.",
+       "price": 13.47,
+       "size": "",
+       "unit_price": "$4.49/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UL58XUHGS40"
+      },
+      {
+       "item": "Tyson Crispy Chicken Breast Strips, Frozen, 3.5 lbs.",
+       "price": 12.97,
+       "size": "",
+       "unit_price": "$3.71/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7G17H7ZZ68XT"
+      },
+      {
+       "item": "Member's Mark Organic Chicken Tenders, Case, priced per pound",
+       "price": 294.0,
+       "size": "",
+       "unit_price": "$5.88/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4J2QOJ5GTD9B"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "cornmeal",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "cornmeal",
+     "attempts": [
+      {
+       "term": "cornmeal",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "P.A.N. Precooked White Cornmeal",
+       "price": 3.19,
+       "size": "35.27 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0073990700001"
+      },
+      {
+       "item": "Dave's Killer Bread Organic Oats & Blues Bread, Organic Oats & Blue Cornmeal Topped, 25 oz Loaf",
+       "price": 6.99,
+       "size": "25 oz",
+       "relevance": 116,
+       "url": "https://www.bakersplus.com/p/0001376402701"
+      },
+      {
+       "item": "Andy's Seasoning™ Yellow Corn Meal Fish Breading",
+       "price": 2,
+       "size": "10 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0003520440094"
+      },
+      {
+       "item": "Kroger® Yellow Corn Meal",
+       "price": 2.29,
+       "size": "24 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0001111071419"
+      },
+      {
+       "item": "Goya® White Corn Meal Masarepa",
+       "price": 2.99,
+       "size": "35.2 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004133105074"
+      },
+      {
+       "item": "Quaker® Yellow Corn Meal For Baking",
+       "price": 3.59,
+       "size": "24 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0003000003050"
+      },
+      {
+       "item": "McCormick GOLDEN DIPT Hush Puppy Corn Meal Fry Mix",
+       "price": 3.79,
+       "size": "10 oz",
+       "relevance": 0,
+       "url": "https://www.bakersplus.com/p/0004123480711"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "corn meal",
+     "attempts": [
+      {
+       "term": "cornmeal",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "corn meal",
+       "state": "OK",
+       "hits": 10
+      }
+     ],
+     "hits": [
+      {
+       "item": "Quaker Corn Meal, Yellow 24 Oz",
+       "price": 4.29,
+       "size": "24 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/grain_meals/quaker_corn_meal_yellow_24_oz/p/22152"
+      },
+      {
+       "item": "Our Family Yellow Enriched Pre Sifted Corn Meal 32 Oz",
+       "price": 2.29,
+       "size": "32 oz",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/grain_meals/our_family_yellow_enriched_pre_sifted_corn_meal_32_oz/p/1564405684716632521"
+      },
+      {
+       "item": "8 Pc Fried Chicken Meal With Corn (Call For Availability No Pick Up Delivery Before 11am",
+       "price": 10.99,
+       "size": "1 ea",
+       "relevance": 78,
+       "url": "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/8_pc_fried_chicken_meal_with_corn_call_for_availability_no_pick_up_delivery_before_11am/p/1564405684714636832"
+      },
+      {
+       "item": "Hormel Corned Beef, Hash, Homestyle 25 Oz",
+       "price": 8.29,
+       "size": "25 oz",
+       "relevance": 40,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/heat_serve_meals/hormel_corned_beef_hash_homestyle_25_oz/p/592884"
+      },
+      {
+       "item": "Gerber Sitter 2nd Foods Pear Zucchini Corn 2 Ea",
+       "price": 2.19,
+       "size": "2 ea",
+       "relevance": 38,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_sitter_2nd_foods_pear_zucchini_corn_2_ea/p/2321535"
+      },
+      {
+       "item": "Maseca Corn Masa Flour, Gluten Free, Instant 4 Lb",
+       "price": 4.99,
+       "size": "4 lb",
+       "relevance": 38,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/grain_meals/maseca_corn_masa_flour_gluten_free_instant_4_lb/p/26055"
+      },
+      {
+       "item": "Beech Nut Stage 2 (6+ Months) Sweet Corn & Green Beans 4 Oz",
+       "price": 1.59,
+       "size": "4 oz",
+       "relevance": 35,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/beech_nut_stage_2_6_months_sweet_corn_green_beans_4_oz/p/2372003"
+      },
+      {
+       "item": "Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz",
+       "price": 2.39,
+       "size": "4.4 oz",
+       "relevance": 30,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/pumpkin_tree_fruit_vegetable_puree_apple_sweet_potato_corn_organic_4_4_oz/p/2458365"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cornmeal",
+     "attempts": [
+      {
+       "term": "cornmeal",
+       "state": "OK",
+       "hits": 62
+      }
+     ],
+     "hits": [
+      {
+       "item": "Quaker Corn Meal, Yellow",
+       "price": 2.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69219-quaker-yellow-cornmeal-24-oz"
+      },
+      {
+       "item": "Early Morning Harvest Organic Corn Meal",
+       "price": 3.99,
+       "size": "1.75 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19061466-early-morning-harvest-organic-corn-meal-1-75-lb"
+      },
+      {
+       "item": "Fareway Corn Chips",
+       "price": 2.98,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387445-corn-chips"
+      },
+      {
+       "item": "Fareway Candy Corn",
+       "price": 2.99,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50528381-fareway-candy-corn-9-oz"
+      },
+      {
+       "item": "Betty Crocker Cornbread and Muffin Baking Mix",
+       "price": 1.19,
+       "size": "6.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38637-betty-crocker-cornbread-and-muffin-mix-makes-6-muffins-6-500-oz"
+      },
+      {
+       "item": "Quaker Instant Oatmeal, Peaches & Cream - Pack",
+       "price": 2.99,
+       "size": "8 x 1.05 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24998349-quaker-peaches-cream-instant-oats-hot-cereal-8-4-oz"
+      },
+      {
+       "item": "Fareway Flour, All Purpose",
+       "price": 2.64,
+       "size": "5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24491362-fareway-flour-all-purpose-5-lb"
+      },
+      {
+       "item": "Pillsbury Cornbread Swirls Refrigerated Dough",
+       "price": 3.49,
+       "size": "6 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21458206-pillsbury-cornbread-swirls-11-000-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cornmeal",
+     "attempts": [
+      {
+       "term": "cornmeal",
+       "state": "MATCHES",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+      },
+      {
+       "item": "PAN Precooked White Corn Meal, 5 lbs.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JX7ZAISRS0J"
+      },
+      {
+       "item": "Maseca Masa Corn Flour, 22 lbs.",
+       "price": 21.78,
+       "size": "",
+       "unit_price": "$0.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+      },
+      {
+       "item": "Maseca Special Regular 0, 50 lbs.",
+       "price": 31.68,
+       "size": "",
+       "unit_price": "$0.63/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FJ0WUX9IAMF"
+      },
+      {
+       "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$0.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+      },
+      {
+       "item": "4C Seasoned Bread Crumbs, 46 oz., 2 pk.",
+       "price": 8.12,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7JR8DL16WBSX"
+      },
+      {
+       "item": "King Arthur Baking Company, 00 Pizza Flour, 5 lbs.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.60/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1SD16V0KDJXT"
+      },
+      {
+       "item": "Zatarain's Fish-Fri Seasoned Seafood Breading Mix, 92 oz.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7DUP6RR0II6H"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

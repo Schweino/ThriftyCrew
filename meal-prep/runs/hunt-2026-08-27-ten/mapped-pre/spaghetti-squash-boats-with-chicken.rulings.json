@@ -1,0 +1,112 @@
+{
+ "slug": "spaghetti-squash-boats-with-chicken",
+ "lines": [
+  {
+   "raw": "2 medium spaghetti squash (about 2 pounds each)",
+   "buy": "7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded",
+   "grams_source": 1814.4,
+   "notes": "Whole squash as purchased, 2 lb each; the shells are the serving vessels, so the whole weight is what is bought."
+  },
+  {
+   "raw": "2 teaspoons extra-virgin olive oil",
+   "buy": "2 1/3 tbsp extra-virgin olive oil",
+   "notes": null
+  },
+  {
+   "raw": "1/2 teaspoon kosher salt",
+   "buy": "1 3/4 tsp kosher salt",
+   "notes": null
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "scant 1 tsp ground black pepper",
+   "notes": "First of two identical pepper lines; this one seasons the squash."
+  },
+  {
+   "raw": "4 strips thick-sliced center-cut bacon (roughly chopped)",
+   "buy": "14 strips thick-sliced center-cut bacon, roughly chopped",
+   "notes": null
+  },
+  {
+   "raw": "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+   "buy": "3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces",
+   "notes": null
+  },
+  {
+   "raw": "1/4 teaspoon kosher salt",
+   "buy": "scant 1 tsp kosher salt",
+   "notes": "Second salt line; this one seasons the chicken."
+  },
+  {
+   "raw": "1/4 teaspoon ground black pepper",
+   "buy": "scant 1 tsp ground black pepper",
+   "notes": "Second of two identical pepper lines; this one seasons the chicken."
+  },
+  {
+   "raw": "1/2 teaspoon garlic powder",
+   "buy": "1 3/4 tsp garlic powder",
+   "notes": null
+  },
+  {
+   "raw": "2 cups baby spinach (torn into pieces)",
+   "buy": "7 cups baby spinach, torn into pieces",
+   "grams_source": 60,
+   "notes": "Pre-resolve computed no weight; baby spinach is about 30 g per loose cup."
+  },
+  {
+   "raw": "1/2 cup nonfat plain Greek yogurt",
+   "buy": "1 3/4 cups nonfat plain Greek yogurt",
+   "grams_source": 122,
+   "notes": "Pre-resolve computed no weight; 1 cup Greek yogurt is about 245 g."
+  },
+  {
+   "raw": "1 cup part-skim mozzarella cheese (divided)",
+   "buy": "3 1/2 cups shredded part-skim mozzarella cheese, divided",
+   "grams_source": 113,
+   "notes": "Pre-resolve computed no weight; 1 cup shredded mozzarella is about 113 g (4 oz)."
+  },
+  {
+   "raw": "2 tablespoons chopped fresh basil (plus additional for serving)",
+   "buy": "7 tbsp chopped fresh basil, plus more for serving",
+   "notes": null
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 medium spaghetti squash (about 2 pounds each)",
+   "term": "spaghetti squash",
+   "canon_item": "Spaghetti Squash",
+   "bid": "spaghetti-squash",
+   "decision": "mapped",
+   "grams_source": 1814.4,
+   "evidence": "spaghetti-squash is already a live board commodity at 4 of 7 stores, cheapest 1.49 at Baker's, so this is a REUSE and not a proposal - only the vocabulary row is missing. Whole-squash weight taken (2 x 2 lb as the source states) because the halved shells are the serving vessel and the whole gourd is what is purchased; that weight also lands the carbs within 1 g of the source's published figure."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Spaghetti Squash"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 538,
+   "carbs_g": 37,
+   "protein_g": 42
+  },
+  "our_computed_per_serving": {
+   "calories": 474,
+   "carbs_g": 36.0,
+   "protein_g": 40.4
+  },
+  "servings": 4,
+  "protein_delta_pct": -3.8,
+  "calorie_delta_pct": -11.9,
+  "verdict": "pass",
+  "note": "Recipe totals 1897 cal / 161.6 g protein at source scale. Protein within 4% and carbs within 1 g, so the whole-squash weight is right; the calorie gap is the loosest of the three and sits inside the 15% bar. Band check on our numbers: 474 cal (24 over the 450 floor), 36.0 carbs (4 under the 40 ceiling), 40.4 protein (0.4 over the 40 floor). This recipe passes on every axis by a thin margin."
+ }
+}

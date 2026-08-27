@@ -1,0 +1,173 @@
+﻿{
+    "slug":  "enchiladas-suizas",
+    "title":  "Enchiladas Suizas",
+    "source_url":  "https://www.isabeleats.com/enchiladas-suizas/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 cups salsa verde",
+                            "item":  "Salsa Verde",
+                            "bid":  "salsa-verde",
+                            "board":  "recipe",
+                            "grams":  1680,
+                            "buy":  "7 cups salsa verde",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salsa-verde, 5 of 7 stores, cheapest 0.165 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ cup packed cilantro ((optional))",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "scant 1 cup packed cilantro leaves, chopped (optional)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027cilantro\u0027 -\u003e cilantro (by mapper on 2026-08-26T04:51:58); nearest vocabulary rows: Fresh Cilantro [cilantro] DIFFERENT FORM: fresh",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon vegetable oil, (plus more if frying)",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons vegetable oil, plus more for frying the tortillas",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: vegetable-oil, 7 of 7 stores, cheapest 0.0666 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¾ cup Mexican crema, (plus more if you want it extra creamy)",
+                            "item":  "Mexican Crema",
+                            "bid":  "mexican-crema",
+                            "board":  null,
+                            "grams":  602,
+                            "buy":  "2 2/3 cups Mexican crema, plus more for drizzling",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "3/4 cup at cultured-cream density (about 230 g/cup). Board absent, no commodity: a refrigerated cultured table cream sold in 15 oz squeeze bottles, thinner and saltier than sour cream and priced above it, so I will not bridge it to a sour-cream id. New id proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 ½ cups cooked shredded chicken",
+                            "item":  "Cooked Shredded Chicken",
+                            "bid":  "cooked-shredded-chicken",
+                            "board":  null,
+                            "grams":  1225,
+                            "buy":  "8 3/4 cups cooked shredded chicken (about 2 3/4 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup packed cooked shredded chicken = 140 g. REUSE of a live board id (3 of 7, cheapest 0.3744 at Aldi) that names exactly this food; only the vocabulary name row is missing, which is a naming question and not a registrar one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Kosher salt, (to taste)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "1/4 cup kosher salt, or to taste",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Written to agree with the settled 20 g source basis (70 g at batch scale); that weight reads heavy for a to-taste line and is flagged in detail.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "12 corn tortillas",
+                            "item":  "Corn Tortillas",
+                            "bid":  "corn-tortillas",
+                            "board":  "recipe",
+                            "grams":  1050,
+                            "buy":  "42 corn tortillas",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "12 six-inch corn tortillas at 25 g each.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "3 cups shredded Chihuahua cheese",
+                            "item":  "Chihuahua Cheese",
+                            "bid":  "chihuahua-cheese",
+                            "board":  null,
+                            "grams":  1186,
+                            "buy":  "10 1/2 cups shredded Chihuahua cheese (about 2 1/2 lb)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup shredded cheese = 113 g (4 oz). REFUSED the board\u0027s shredded-cheese bridge - that id prices bagged cheddar/blend, and the estate refused the same bridge for parmesan and mozzarella on 2026-08-26. Queso Chihuahua is a specialty Hispanic-case cheese at a different price class; new id proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Sliced onions, (for topping)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  192,
+                            "buy":  "2 medium onions, thinly sliced, for topping",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Half a medium onion at source scale, per the 2026-08-26 \u0027Sliced onions\u0027 precedent.",
+                            "grams_from":  "line"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "mexican crema",
+                                 "chihuahua cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Mexican Crema",
+                               "Cooked Shredded Chicken",
+                               "Chihuahua Cheese"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Mexican crema",
+                                        "proposed_bid":  "mexican-crema",
+                                        "evidence":  "Not priced under any other spelling: it is not sour cream (different fat, salt and price class, sold in a squeeze bottle), not heavy-cream, and not creme fraiche. Board reports no commodity and no capture match, so a null would pantry-price 600 g of dairy in the sauce.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "shredded Chihuahua cheese",
+                                        "proposed_bid":  "chihuahua-cheese",
+                                        "evidence":  "Also sold as queso quesadilla/asadero; it is not the bagged shredded-cheese blend the board fuzzy-matched, nor mozzarella-cheese (different make and price class). Check the Hispanic cheese case labels for \u0027Chihuahua\u0027 and \u0027quesadilla\u0027 before minting, in case an asadero id already exists.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "mexican-crema",
+                                  "verdict":  "approve",
+                                  "bid":  "mexican-crema",
+                                  "reason":  "No price cell in smp-feed and no id/label/include across the three namespaces carries crema; the only \u0027crema\u0027 strings in the estate are creme-fraiche\u0027s OWN excludes (\u0027crema mexicana/salvadoreña\u0027, commodities.json:67647/67735), i.e. a prior human ruling already carved crema OUT of creme-fraiche, and sour-cream/light-sour-cream (both priced) neither match nor exclude it. Crema mexicana is a distinct purchase class from sour-cream (pourable, saltier, higher fat, different shelf price) - a legitimate variant, not a spelling of an existing row. FOLLOW-UPS: mint in the recipe-only namespace (recipe-board baseline + recipe-commodities.json); include patterns must cover \u0027crema mexicana\u0027, \u0027mexican(?:-style)? crema\u0027, \u0027table cream\u0027; build ~150-pattern excludes off a dairy neighbor (must reject sour cream, creme fraiche, media crema/evaporated, coffee creamer); add commodity-dupe-allowlist pairs mexican-crema\u003c-\u003esour-cream and mexican-crema\u003c-\u003ecreme-fraiche with reason \u0027different make/fat/salt/price class, deliberately excluded from creme-fraiche\u0027 so the daily audit never re-flags them."
+                              },
+                              {
+                                  "proposed_bid":  "chihuahua-cheese",
+                                  "verdict":  "approve",
+                                  "bid":  "chihuahua-cheese",
+                                  "reason":  "No chihuahua/asadero/oaxaca/quesadilla string exists anywhere in the three namespaces or the floor map (verified per file), and the id is unpriced in the feed; the existing \u0027queso\u0027 id is the cheese DIP, not this cheese. It is a distinct cheese type, not a brand - the estate already mints specific cheeses (gruyere, feta, parmesan) alongside the generic shredded-cheese board id, and extending Brad\u0027s mozzarella-cheese-\u003eshredded-cheese floor-map alias to a new cheese is a human pricing verification I cannot make for him (near names never auto-match, ruled 2026-08-26). HAZARD FOUND: shredded-cheese\u0027s include \u0027shredded\\s+\\w+(?:\\s+\\w+)?\\s+cheese\u0027 WILL claim \u0027Shredded Chihuahua Cheese\u0027 products and its 115 excludes contain no Mexican-cheese pattern, so this approval is conditional on the follow-ups shipping together: (1) add excludes for chihuahua|quesadilla|asadero|oaxaca to shredded-cheese via add-commodity-rule.ps1; (2) mint in the recipe-only namespace with includes covering \u0027chihuahua\u0027, \u0027queso quesadilla\u0027, \u0027asadero\u0027 (contiguous phrases that survive in real product names) and excludes rejecting dips (\u0027con queso\u0027, \u0027dip\u0027) and tortillas/quesadilla kits; (3) add allowlist pairs chihuahua-cheese\u003c-\u003eshredded-cheese and chihuahua-cheese\u003c-\u003equeso with reasons (\u0027specialty melting cheese vs generic blend, different price class\u0027 / \u0027cheese vs dip\u0027)."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u0027Kosher salt, (to taste)\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Computed per serving over all 9 lines at 4 servings: 754 cal, 42.3 g protein, 50.4 g carbs. Source published 519 cal / 41 P / 29 C. PROTEIN agrees within 3 percent, so the portions on the main foods are right. Calories and carbs run high (cheese 339 g and 12 tortillas), and the source\u0027s carb figure is not self-consistent with its own tortilla count; no line re-weighed on the strength of it."
+}

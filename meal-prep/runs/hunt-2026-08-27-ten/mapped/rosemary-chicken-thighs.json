@@ -1,0 +1,176 @@
+﻿{
+    "slug":  "rosemary-chicken-thighs",
+    "title":  "Rosemary Chicken Thighs",
+    "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3/4 pound Brussels sprouts* (ends trimmed and halved (see note))",
+                            "item":  "Brussels Sprouts",
+                            "bid":  "brussels-sprouts",
+                            "board":  null,
+                            "grams":  1191,
+                            "buy":  "2 lb 10 oz Brussels sprouts, ends trimmed and halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: brussels-sprouts, 7 of 7 stores, cheapest 1.8533 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 medium yellow onion* (thinly sliced (about 1 1/2 cups))",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium yellow onions, thinly sliced (about 5 1/4 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027medium yellow onion\u0027 -\u003e onions (by mapper on 2026-08-26T04:53:02); nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder; board MAPPED: onions, 7 of 7 stores, cheapest 0.7967 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 medium tart apple* (such as Granny Smith, halved, cored, and cut into 8 wedges*)",
+                            "item":  "Apple",
+                            "bid":  "apples",
+                            "board":  "weekly",
+                            "grams":  630,
+                            "buy":  "3 1/2 medium tart apples such as Granny Smith, halved, cored, and cut into 8 wedges each",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027medium tart apple\u0027 -\u003e apples (by mapper on 2026-08-26T04:53:02); nearest vocabulary rows: Apple [apples] same form | Apple Juice [apple-juice] DIFFERENT FORM: juice",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons extra virgin olive oil (divided)",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  94,
+                            "buy":  "7 tbsp extra virgin olive oil, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027extra virgin olive oil\u0027 -\u003e olive-oil (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon Dijon mustard",
+                            "item":  "Dijon Mustard",
+                            "bid":  "dijon-mustard",
+                            "board":  "recipe",
+                            "grams":  52,
+                            "buy":  "3 1/2 tbsp Dijon mustard",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: dijon-mustard, 6 of 7 stores, cheapest 0.1242 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 tablespoon honey",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  37,
+                            "buy":  "1 3/4 tbsp honey",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: honey, 7 of 7 stores, cheapest 0.1662 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon kosher salt (divided)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "3 1/2 tsp kosher salt, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon ground black pepper (divided)",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp ground black pepper, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground black pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-16T11:53:04); nearest vocabulary rows: Black Pepper [black-pepper] DIFFERENT FORM: ground | Yellow Bell Pepper [yellow-bell-pepper] DIFFERENT FORM: ground | Red Bell Pepper [red-bell-pepper] DIFFERENT FORM: ground",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 1/2 to 3 pounds bone-in skin-on chicken thighs (about 5 thighs)",
+                            "item":  "Bone-In Skin-On Chicken Thighs",
+                            "bid":  "chicken-thighs",
+                            "board":  null,
+                            "grams":  3969,
+                            "buy":  "8 3/4 lb bone-in, skin-on chicken thighs (about 17 large thighs)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Range line: 2 1/2 lb taken as source basis, about 227 g per thigh across 5 thighs. This is the as-purchased bone-in weight, which is also what the cost lane needs. Bone-in skin-on is its own cut and its own price - refused the bridge to Boneless Skinless Chicken Thigh (a different per-lb price and a different gram weight for the same piece) and to Rotisserie Chicken. chicken-thighs is live at 7 of 7 stores, so the id is a REUSE; only the vocabulary row is new, named with the bone/skin basis in it per the naming rulings.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "5 sprigs fresh rosemary (plus additional chopped fresh rosemary for serving)",
+                            "item":  "Fresh Rosemary",
+                            "bid":  "fresh-rosemary",
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "18 sprigs fresh rosemary, plus chopped fresh rosemary for serving",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "About 3 g per sprig. Not optional despite the extraction flag - step 3 lays a sprig on every thigh. Fresh sprigs, not dried-rosemary: a sprig has no dried equivalent and the price class differs. fresh-rosemary is live at 5 of 7 stores and the DB already carries the row.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Bone-In Skin-On Chicken Thighs"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  672,
+                                                                   "carbs_g":  20,
+                                                                   "protein_g":  43
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  678,
+                                                               "carbs_g":  19.7,
+                                                               "protein_g":  44.1
+                                                           },
+                              "servings":  4,
+                              "protein_delta_pct":  2.5,
+                              "calorie_delta_pct":  0.8,
+                              "verdict":  "pass",
+                              "note":  "Recipe totals 2711 cal / 176 g protein at source scale. Band check on our numbers: 678 cal (under the 700 ceiling by 22), 19.7 carbs, 44.1 protein - all in. The lower bound of the stated 2 1/2 to 3 lb range is what produces this agreement; 3 lb would read 781 cal/serving and push the dish out of band on calories."
+                          }
+}

@@ -1,0 +1,112 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T05:14:11",
+    "slug":  "mediterranean-chicken-w-marinade",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Mediterranean Chicken w/ Marinade",
+                   "slug":  "mediterranean-chicken-w-marinade",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  2540,
+                                           "buy":  "5 1/2 lb boneless skinless chicken breasts"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  1,
+                                           "buy":  "1/3 teaspoon red pepper flakes"
+                                       },
+                                       {
+                                           "item":  "Spinach",
+                                           "grams":  397,
+                                           "buy":  "14 oz fresh spinach"
+                                       },
+                                       {
+                                           "item":  "Artichoke Hearts",
+                                           "grams":  1230,
+                                           "buy":  "2 3/4 lb artichoke hearts, drained (about three 15 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Cherry Tomatoes",
+                                           "grams":  834,
+                                           "buy":  "5 1/2 cups grape tomatoes"
+                                       },
+                                       {
+                                           "item":  "Black Olives",
+                                           "grams":  728,
+                                           "buy":  "about 1 1/2 lb drained black olives (three 14.5 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Feta Cheese",
+                                           "grams":  635,
+                                           "buy":  "1 lb 6 oz feta cheese, crumbled"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  151,
+                                           "buy":  "11 tablespoons olive oil"
+                                       },
+                                       {
+                                           "item":  "Lemons",
+                                           "grams":  325,
+                                           "buy":  "6 lemons, juiced"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  25,
+                                           "buy":  "8 garlic cloves, minced"
+                                       },
+                                       {
+                                           "item":  "Dried Oregano",
+                                           "grams":  3,
+                                           "buy":  "2 3/4 teaspoons dried oregano"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  17,
+                                           "buy":  "2 3/4 teaspoons salt"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  6,
+                                           "buy":  "2 3/4 teaspoons black pepper"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  561,
+                                              "protein_g":  51.8,
+                                              "carbs_g":  16.1,
+                                              "fat_g":  34.2
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT30M",
+                                "totalTime":  "PT45M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -3,12 +3,15 @@
     "title":  "Rosemary Chicken Thighs",
     "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:02:52",
     "terms":  [
-
+                  {
+                      "term":  "Fresh Rosemary",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
@@ -32,6 +35,24 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:02:49",
+                        "by":  "mapper",
+                        "detail":  "2 residual lines ruled, 0 rejected, 1 new food-DB row (Bone-In Skin-On Chicken Thighs), 0 commodity proposals - both bids are live board ids being reused. LOW CONFIDENCE / CALLED OUT LOUDLY: the chicken label is printed on an EDIBLE PORTION basis while the 1134 g I state is the as-purchased BONE-IN weight, so strictly the macro engine will apply meat-and-skin values to about 30% bone. I took that "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:02:51",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:02:52",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
                     }
                 ]
 }

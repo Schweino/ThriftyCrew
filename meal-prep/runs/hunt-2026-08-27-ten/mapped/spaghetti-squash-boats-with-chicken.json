@@ -1,0 +1,212 @@
+﻿{
+    "slug":  "spaghetti-squash-boats-with-chicken",
+    "title":  "Spaghetti Squash Boats with Chicken",
+    "source_url":  "https://www.wellplated.com/spaghetti-squash-boats-chicken/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 medium spaghetti squash (about 2 pounds each)",
+                            "item":  "Spaghetti Squash",
+                            "bid":  "spaghetti-squash",
+                            "board":  null,
+                            "grams":  6350,
+                            "buy":  "7 medium spaghetti squash, about 2 lb each, halved lengthwise and seeded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Whole squash as purchased, 2 lb each; the shells are the serving vessels, so the whole weight is what is bought. spaghetti-squash is already a live board commodity at 4 of 7 stores, cheapest 1.49 at Baker\u0027s, so this is a REUSE and not a proposal - only the vocabulary row is missing. Whole-squash weight taken (2 x 2 lb as the source states) because the halved shells are the serving vessel and the whole gourd is what is purchased; that weight also lands the carbs within 1 g of the source\u0027s published figure.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons extra-virgin olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  32,
+                            "buy":  "2 1/3 tbsp extra-virgin olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027extra virgin olive oil\u0027 -\u003e olive-oil (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Salt [salt] same form | Celery Salt [celery-salt] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 tsp ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second of two identical pepper lines; this one seasons the chicken.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 strips thick-sliced center-cut bacon (roughly chopped)",
+                            "item":  "Hickory Smoked Bacon",
+                            "bid":  "bacon",
+                            "board":  "recipe",
+                            "grams":  168,
+                            "buy":  "14 strips thick-sliced center-cut bacon, roughly chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027thick sliced center cut bacon\u0027 -\u003e bacon (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Turkey Bacon [turkey-bacon] DIFFERENT FORM: sliced/cut | Hickory Smoked Bacon [bacon] DIFFERENT FORM: sliced/cut/smoked",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 pound boneless skinless chicken breasts (cut into bite-sized pieces)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb boneless skinless chicken breasts, cut into bite-sized pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027boneless skinless chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T05:09:07); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: boneless/skinless/breasts | Boneless Skinless Chicken Thigh [boneless-skinless-chicken-thigh] DIFFERENT FORM: breasts/thigh | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/breast",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon kosher salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "scant 1 tsp kosher salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second salt line; this one seasons the chicken.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "scant 1 tsp ground black pepper",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Second of two identical pepper lines; this one seasons the chicken.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "1 3/4 tsp garlic powder",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups baby spinach (torn into pieces)",
+                            "item":  "Spinach",
+                            "bid":  "spinach",
+                            "board":  "weekly",
+                            "grams":  210,
+                            "buy":  "7 cups baby spinach, torn into pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolve computed no weight; baby spinach is about 30 g per loose cup.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/2 cup nonfat plain Greek yogurt",
+                            "item":  "Plain Yogurt",
+                            "bid":  "greek-yogurt",
+                            "board":  "recipe",
+                            "grams":  427,
+                            "buy":  "1 3/4 cups nonfat plain Greek yogurt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolve computed no weight; 1 cup Greek yogurt is about 245 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 cup part-skim mozzarella cheese (divided)",
+                            "item":  "Mozzarella Cheese",
+                            "bid":  "mozzarella-cheese",
+                            "board":  "recipe",
+                            "grams":  396,
+                            "buy":  "3 1/2 cups shredded part-skim mozzarella cheese, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Pre-resolve computed no weight; 1 cup shredded mozzarella is about 113 g (4 oz).",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons chopped fresh basil (plus additional for serving)",
+                            "item":  "Fresh Basil",
+                            "bid":  "fresh-basil",
+                            "board":  "weekly",
+                            "grams":  10,
+                            "buy":  "7 tbsp chopped fresh basil, plus more for serving",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027basil\u0027 -\u003e fresh-basil (by mapper on 2026-08-26T04:53:07); nearest vocabulary rows: Fresh Basil [fresh-basil] DIFFERENT FORM: fresh | Dried Basil [dried-basil] DIFFERENT FORM: dried",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Spaghetti Squash"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  538,
+                                                                   "carbs_g":  37,
+                                                                   "protein_g":  42
+                                                               },
+                              "our_computed_per_serving":  {
+                                                               "calories":  474,
+                                                               "carbs_g":  36.0,
+                                                               "protein_g":  40.4
+                                                           },
+                              "servings":  4,
+                              "protein_delta_pct":  -3.8,
+                              "calorie_delta_pct":  -11.9,
+                              "verdict":  "pass",
+                              "note":  "Recipe totals 1897 cal / 161.6 g protein at source scale. Protein within 4% and carbs within 1 g, so the whole-squash weight is right; the calorie gap is the loosest of the three and sits inside the 15% bar. Band check on our numbers: 474 cal (24 over the 450 floor), 36.0 carbs (4 under the 40 ceiling), 40.4 protein (0.4 over the 40 floor). This recipe passes on every axis by a thin margin."
+                          }
+}

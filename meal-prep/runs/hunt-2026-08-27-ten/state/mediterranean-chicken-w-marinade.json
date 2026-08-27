@@ -3,10 +3,10 @@
     "title":  "Mediterranean Chicken w/ Marinade",
     "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:14:10",
     "terms":  [
 
               ],
@@ -32,6 +32,24 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:14:07",
+                        "by":  "mapper",
+                        "detail":  "2 residual lines ruled, 0 rejected, 1 DB row returned (Black Olives). No new ids - both are board reuses (black-olives 6/7, lemons 5/7), so absent_terms is empty. One soft number: the drained weight of a 14.5 oz olive can, which I took as about 9 oz (260 g) from the usual 60-65 percent drain ratio; the line\u0027s cost is per can either way."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:14:10",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:14:10",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
                     }
                 ]
 }

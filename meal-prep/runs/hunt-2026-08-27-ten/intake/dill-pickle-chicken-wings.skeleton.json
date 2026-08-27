@@ -1,0 +1,87 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T04:55:37",
+    "slug":  "dill-pickle-chicken-wings",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027White Pepper\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Dill Pickle Chicken Wings",
+                   "slug":  "dill-pickle-chicken-wings",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Chicken Wings",
+                                           "grams":  6349,
+                                           "buy":  "14 lb chicken wings, split into drumettes and flats, tips discarded"
+                                       },
+                                       {
+                                           "item":  "Dill Pickles",
+                                           "grams":  2002,
+                                           "buy":  "14 cups dill pickle juice, drained from the jars"
+                                       },
+                                       {
+                                           "item":  "Baking Powder",
+                                           "grams":  93,
+                                           "buy":  "5 Tbsp plus 2 1/2 tsp aluminum-free baking powder"
+                                       },
+                                       {
+                                           "item":  "Dried Dill",
+                                           "grams":  7,
+                                           "buy":  "2 Tbsp plus 1 tsp"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  11,
+                                           "buy":  "3 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  16,
+                                           "buy":  "2 2/3 tsp"
+                                       },
+                                       {
+                                           "item":  "White Pepper",
+                                           "grams":  1,
+                                           "buy":  "1/2 tsp (optional)"
+                                       },
+                                       {
+                                           "item":  "Cooking Spray",
+                                           "grams":  7,
+                                           "buy":  "cooking spray, for the baking racks"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  888,
+                                              "protein_g":  81.1,
+                                              "carbs_g":  8.2,
+                                              "fat_g":  57.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

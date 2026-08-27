@@ -1,0 +1,104 @@
+{
+ "slug": "rosemary-chicken-thighs",
+ "lines": [
+  {
+   "raw": "3/4 pound Brussels sprouts* (ends trimmed and halved (see note))",
+   "buy": "2 lb 10 oz Brussels sprouts, ends trimmed and halved",
+   "notes": null
+  },
+  {
+   "raw": "1 medium yellow onion* (thinly sliced (about 1 1/2 cups))",
+   "buy": "3 1/2 medium yellow onions, thinly sliced (about 5 1/4 cups)",
+   "notes": null
+  },
+  {
+   "raw": "1 medium tart apple* (such as Granny Smith, halved, cored, and cut into 8 wedges*)",
+   "buy": "3 1/2 medium tart apples such as Granny Smith, halved, cored, and cut into 8 wedges each",
+   "notes": null
+  },
+  {
+   "raw": "2 tablespoons extra virgin olive oil (divided)",
+   "buy": "7 tbsp extra virgin olive oil, divided",
+   "notes": null
+  },
+  {
+   "raw": "1 tablespoon Dijon mustard",
+   "buy": "3 1/2 tbsp Dijon mustard",
+   "notes": null
+  },
+  {
+   "raw": "1/2 tablespoon honey",
+   "buy": "1 3/4 tbsp honey",
+   "notes": null
+  },
+  {
+   "raw": "1 teaspoon kosher salt (divided)",
+   "buy": "3 1/2 tsp kosher salt, divided",
+   "notes": null
+  },
+  {
+   "raw": "1/2 teaspoon ground black pepper (divided)",
+   "buy": "1 3/4 tsp ground black pepper, divided",
+   "notes": null
+  },
+  {
+   "raw": "2 1/2 to 3 pounds bone-in skin-on chicken thighs (about 5 thighs)",
+   "buy": "8 3/4 lb bone-in, skin-on chicken thighs (about 17 large thighs)",
+   "grams_source": 1134,
+   "notes": "Range line: 2 1/2 lb taken as source basis, about 227 g per thigh across 5 thighs. This is the as-purchased bone-in weight, which is also what the cost lane needs."
+  },
+  {
+   "raw": "5 sprigs fresh rosemary (plus additional chopped fresh rosemary for serving)",
+   "buy": "18 sprigs fresh rosemary, plus chopped fresh rosemary for serving",
+   "grams_source": 15,
+   "notes": "About 3 g per sprig. Not optional despite the extraction flag - step 3 lays a sprig on every thigh."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "2 1/2 to 3 pounds bone-in skin-on chicken thighs (about 5 thighs)",
+   "term": "bone-in skin-on chicken thighs",
+   "canon_item": "Bone-In Skin-On Chicken Thighs",
+   "bid": "chicken-thighs",
+   "decision": "mapped",
+   "grams_source": 1134,
+   "evidence": "Bone-in skin-on is its own cut and its own price - refused the bridge to Boneless Skinless Chicken Thigh (a different per-lb price and a different gram weight for the same piece) and to Rotisserie Chicken. chicken-thighs is live at 7 of 7 stores, so the id is a REUSE; only the vocabulary row is new, named with the bone/skin basis in it per the naming rulings."
+  },
+  {
+   "raw": "5 sprigs fresh rosemary (plus additional chopped fresh rosemary for serving)",
+   "term": "fresh rosemary",
+   "canon_item": "Fresh Rosemary",
+   "bid": "fresh-rosemary",
+   "decision": "mapped",
+   "grams_source": 15,
+   "evidence": "Fresh sprigs, not dried-rosemary: a sprig has no dried equivalent and the price class differs. fresh-rosemary is live at 5 of 7 stores and the DB already carries the row."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Bone-In Skin-On Chicken Thighs"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 672,
+   "carbs_g": 20,
+   "protein_g": 43
+  },
+  "our_computed_per_serving": {
+   "calories": 678,
+   "carbs_g": 19.7,
+   "protein_g": 44.1
+  },
+  "servings": 4,
+  "protein_delta_pct": 2.5,
+  "calorie_delta_pct": 0.8,
+  "verdict": "pass",
+  "note": "Recipe totals 2711 cal / 176 g protein at source scale. Band check on our numbers: 678 cal (under the 700 ceiling by 22), 19.7 carbs, 44.1 protein - all in. The lower bound of the stated 2 1/2 to 3 lb range is what produces this agreement; 3 lb would read 781 cal/serving and push the dish out of band on calories."
+ }
+}

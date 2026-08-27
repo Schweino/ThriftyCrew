@@ -3,12 +3,15 @@
     "title":  "Jamie Oliver\u0027s Chicken in Milk {Seriously Delish}",
     "source_url":  "https://www.recipetineats.com/jamie-olivers-chicken-milk-seriously-delish/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:12:24",
+    "updated":  "2026-08-27T05:13:16",
     "terms":  [
-
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
@@ -32,6 +35,24 @@
                         "at":  "2026-08-27T04:12:24",
                         "by":  "local",
                         "detail":  "carried forward from hunt-2026-08-26-ten: same transcription, re-mapped under current code"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T05:13:14",
+                        "by":  "mapper",
+                        "detail":  "3 residual lines ruled, 0 rejected, 1 DB row returned (Fresh Sage). No new ids - all three are board reuses (whole-chicken 7/7, fresh-sage 2/7, lemons 5/7) and absent_terms is therefore empty. Called out loudly: the Fresh Sage row above is the least certain number in this batch (see its notes), and fresh-sage prices at only 2 of 7 stores, so the line is cheap but thinly covered."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T05:13:16",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T05:13:16",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
                     }
                 ]
 }

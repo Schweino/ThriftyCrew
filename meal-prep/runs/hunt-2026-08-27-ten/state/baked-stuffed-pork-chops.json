@@ -3,10 +3,10 @@
     "title":  "Baked Stuffed Pork Chops",
     "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
     "protein":  "pork",
-    "state":  "pricing",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:22:53",
+    "updated":  "2026-08-27T04:54:33",
     "terms":  [
                   {
                       "term":  "boneless pork chops",
@@ -47,6 +47,12 @@
                         "at":  "2026-08-27T04:22:53",
                         "by":  "mapper",
                         "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T04:54:33",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
                     }
                 ]
 }

@@ -1,0 +1,114 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T04:54:39",
+    "slug":  "baked-stuffed-pork-chops",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "merged a second \u0027Olive Oil\u0027 line into the first - 141 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 20 g total",
+                  "merged a second \u0027Ranch Seasoning Mix\u0027 line into the first - 73 g total"
+              ],
+    "intake":  {
+                   "name":  "Baked Stuffed Pork Chops",
+                   "slug":  "baked-stuffed-pork-chops",
+                   "protein":  "pork",
+                   "cuisine":  "",
+                   "source_url":  "https://keviniscooking.com/stuffed-baked-boneless-pork-chops/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Pork Chops",
+                                           "grams":  3174,
+                                           "buy":  "7 lb boneless pork loin chops, 1 1/4 inch thick (14 chops), a pocket cut into each"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  141,
+                                           "buy":  "7 Tbsp; 3 1/2 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Ranch Seasoning Mix",
+                                           "grams":  73,
+                                           "buy":  "7 Tbsp; 3 1/2 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Paprika",
+                                           "grams":  8,
+                                           "buy":  "3 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  20,
+                                           "buy":  "1 3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  49,
+                                           "buy":  "3 1/2 Tbsp"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  201,
+                                           "buy":  "1 3/4 cups diced (about 2 small onions)"
+                                       },
+                                       {
+                                           "item":  "Celery",
+                                           "grams":  177,
+                                           "buy":  "1 3/4 cups diced (about 4 stalks)"
+                                       },
+                                       {
+                                           "item":  "Fresh Cranberries",
+                                           "grams":  175,
+                                           "buy":  "1 3/4 cups fresh cranberries"
+                                       },
+                                       {
+                                           "item":  "Carrots",
+                                           "grams":  96,
+                                           "buy":  "7/8 cup shredded (about 2 medium carrots)"
+                                       },
+                                       {
+                                           "item":  "Sandwich Bread",
+                                           "grams":  158,
+                                           "buy":  "3 1/2 cups bread cubes (about 5 oz)"
+                                       },
+                                       {
+                                           "item":  "Chicken Broth",
+                                           "grams":  560,
+                                           "buy":  "2 1/3 cups"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  533,
+                                              "protein_g":  50.6,
+                                              "carbs_g":  13.5,
+                                              "fat_g":  29.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT35M",
+                                "totalTime":  "PT50M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

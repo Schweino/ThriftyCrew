@@ -3,17 +3,17 @@
     "title":  "Dill Pickle Chicken Wings",
     "source_url":  "https://keviniscooking.com/dill-pickle-baked-crispy-chicken-wings/",
     "protein":  "chicken",
-    "state":  "pricing",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T04:22:56",
+    "updated":  "2026-08-27T04:55:38",
     "terms":  [
                   {
                       "term":  "white pepper",
                       "optional":  false
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "macro gate (pre-write): 888 cal above the 700 ceiling",
     "parked_on":  [
 
                   ],
@@ -47,6 +47,24 @@
                         "at":  "2026-08-27T04:22:56",
                         "by":  "mapper",
                         "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-27T04:54:33",
+                        "by":  "derive",
+                        "detail":  "waiting on: white pepper"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T04:55:37",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T04:55:38",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 888 cal above the 700 ceiling"
                     }
                 ]
 }

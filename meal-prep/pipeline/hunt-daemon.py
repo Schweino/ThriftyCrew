@@ -3095,7 +3095,22 @@ class Daemon(object):
                         continue
                     absent = [t for t in (res.get("absent_terms") or []) if t]
                     optional = [t for t in (res.get("optional_absent") or []) if t]
-                    await self.advance(b["slug"], "mapped", "mapper", as_text(res.get("detail"), 400))
+                    # THE ADVANCE TO `mapped` USED TO HAPPEN HERE, BEFORE THE ASSEMBLY BELOW, AND IT
+                    # STRANDED RECIPES PERMANENTLY (2026-08-27). `mapped` asserts a mapper decision
+                    # file exists. When assemble_mapped then FAILED, the recipe was left claiming that
+                    # state with no such file - and seed()'s resume table routes `mapped` to the
+                    # unhold path, never to the map lane. So the recipe could not re-enter the lane
+                    # that would produce the missing file, and every later run reported it HELD with
+                    # "there is no mapper decision file ... the ruling this would advance on does not
+                    # exist". A STUCK is resumable by definition; this turned one into a dead end.
+                    # apple-spice-pork-chops and honey-balsamic-chicken-tenders both died that way on
+                    # this run's first pass, and no amount of re-running could revive them.
+                    #
+                    # THE HOLD ROAD IS DIFFERENT AND KEEPS ITS ADVANCE. A recipe HELD at `mapped` for
+                    # an unbid line legitimately has no decision file - it is waiting on a bid, and
+                    # unhold_mapped is exactly the road that re-checks it. So that branch advances
+                    # itself, below, and the assembly road advances only once its file is on disk.
+                    detail_txt = as_text(res.get("detail"), 400)
                     # THE UNBID HOLD IS THE DAEMON'S AND IT IS MECHANICAL, and phase 3 measured exactly
                     # why. The adapter drill asked the mapper its own standing rule - resolved
                     # ingredient, no bid wired, advance or hold? - twice, same prompt and same model,
@@ -3104,6 +3119,7 @@ class Daemon(object):
                     # lives here, over map-preresolve's `holds` rows, and the mapper is never asked.
                     holds = (tables.get(b["slug"]) or {}).get("holds") or []
                     if holds:
+                        await self.advance(b["slug"], "mapped", "mapper", detail_txt)
                         self.write_hold_record(b["slug"], res, holds)
                         self.held.append((b["slug"], holds[0].get("why")
                                           or "an unbid ingredient has no bid wired"))
@@ -3118,9 +3134,14 @@ class Daemon(object):
                     # a person can act on, where the old failure was an exit 1 a whole stage later.
                     ok_asm, why_asm = await self.assemble_mapped(b["slug"], res, tables)
                     if not ok_asm:
+                        # STUCK AT `extracted`, WHICH IS WHAT MAKES IT RESUMABLE: seed() pushes
+                        # `extracted` back onto the map lane, so the next run re-asks the very stage
+                        # that failed. See the note above the advance that used to sit before this.
                         self.stuck(b["slug"], "map", why_asm)
                         self.log("  map: %s STUCK - %s" % (b["slug"], why_asm[:200]))
                         continue
+                    # THE FILE IS ON DISK NOW, so the state may assert it.
+                    await self.advance(b["slug"], "mapped", "mapper", detail_txt)
                     # M3 (2026-08-25): THE TERMS DECIDE THE ROUTE, NOT THE MAPPER'S OWN STATE FIELD.
                     # This read `not absent and norm_state(res["state"]) == "priced"`, so a recipe
                     # whose absent_terms was EMPTY still routed to pricing unless the mapper also
@@ -3678,6 +3699,27 @@ class Daemon(object):
             "pepper\" on both or on either. A single answer keyed on the unsplit line matches NOTHING:\n"
             "the assembler joins on the raw string, so both parts silently lose their buy strings and\n"
             "the recipe stops one lane later.\n\n"
+            # THE UNQUANTIFIED LINE (2026-08-27). Every INCLUDED line must carry grams -
+            # build-intake-skeleton refuses one that does not, because a line the reader buys and the
+            # card ignores is the fabricated-band defect - and nothing told the mapper what to do with
+            # a line the SOURCE never quantified. So `OPTIONAL Heavy Cream (- to taste)` came back
+            # included and weightless and stuck roast-eye-of-round-beef. It is not a slip: 7 of the 12
+            # recipes in this run carry a "to taste" / "a pinch" / "optional" line, and the run before
+            # it stuck on `Pinch salt and pepper` for the same reason one lane later.
+            # THE ESTATE ALREADY HAD THE ANSWER AND NOBODY HAD WRITTEN IT DOWN. Measured over the 574
+            # live specs: 53 to-taste lines, every one of them INCLUDED, PRICED and carrying a nominal
+            # weight, NONE ever weighed zero - salt median 15 g, black pepper median 4 g at the
+            # 14-serving batch - and rendered "to taste (15 g)". This states that convention rather
+            # than inventing one.
+            "A LINE THE SOURCE NEVER QUANTIFIED - \"to taste\", \"a pinch\", \"as needed\", \"for\n"
+            "garnish\", \"optional ... to taste\" - IS STILL A LINE THE READER BUYS, and every line you\n"
+            "include must carry a weight. Give it a nominal `grams_source` you can defend for the\n"
+            "batch and write the buy string the way the catalog already does: \"to taste (15 g)\". The\n"
+            "live estate is the precedent, not a guess - 53 such lines across 574 published recipes,\n"
+            "every one weighed, none at zero, salt running about 15 g and black pepper about 4 g for a\n"
+            "14-serving batch. INCLUDING A LINE WITH NO WEIGHT IS REFUSED AT ASSEMBLY and stops the\n"
+            "recipe. If the shopper genuinely does not buy it - charcoal, wood chips, a garnish you\n"
+            "are dropping - that is `not-purchased`, which is a real answer. A zero weight is not.\n\n"
             # D3: NAME THE FIELD. The lesson three paragraphs down is that a prompt saying
             # \"unchanged contract\" without naming one new field broke a clean batch, and a shelf
             # the judge does not know is a shelf reads as an unexplained block of quotes.
