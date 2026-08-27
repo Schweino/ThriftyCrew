@@ -1,7 +1,7 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-26T13:26:55",
+    "updated":  "2026-08-27T06:06:25",
     "count":  148,
     "resolutions":  [
                         {
@@ -410,38 +410,11 @@
                             "at":  "2026-08-26T04:36:36"
                         },
                         {
-                            "key":  "cooking spray",
-                            "term":  "cooking spray",
-                            "item_id":  "cooking-spray",
-                            "bid_exists":  false,
-                            "evidence":  "cooking-spray is a live board id at 7 of 7, so a REUSE, not a proposal; the source names PAM, which is exactly that product. 3 g is a light coating for the racks. [slug dill-pickle-chicken-wings, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:36:36"
-                        },
-                        {
-                            "key":  "boneless eye of round roast",
-                            "term":  "Boneless Eye of Round Roast",
-                            "item_id":  "eye-of-round-roast",
-                            "bid_exists":  false,
-                            "evidence":  "Whole-muscle beef round roast; board carries no commodity and no capture, so a new id is proposed. 1474 g (range midpoint) yields 43 g protein per serving against the source\u0027s published 40 g. [slug roast-eye-of-round-beef, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:45:12"
-                        },
-                        {
                             "key":  "kosher salt freshly cracked black pepper",
                             "term":  "Kosher Salt \u0026 Freshly Cracked Black Pepper",
                             "item_id":  "salt",
                             "bid_exists":  true,
                             "evidence":  "One line carrying two pantry seasonings; costed as salt (priced 7/7) with the black pepper noted as pantry-static rather than split into a phantom line. [slug roast-eye-of-round-beef, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:45:13"
-                        },
-                        {
-                            "key":  "chopped fresh thyme",
-                            "term":  "Chopped Fresh Thyme",
-                            "item_id":  "fresh-thyme",
-                            "bid_exists":  false,
-                            "evidence":  "fresh-thyme is a live board id (4/7); refusing the bridge to dried-thyme because 2 tsp fresh is 1.6 g of herb against about 2 g of dried leaf at a different price. [slug roast-eye-of-round-beef, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:45:13"
                         },
@@ -455,15 +428,6 @@
                             "at":  "2026-08-26T04:45:14"
                         },
                         {
-                            "key":  "dry red wine",
-                            "term":  "Dry Red Wine",
-                            "item_id":  "red-wine",
-                            "bid_exists":  false,
-                            "evidence":  "red-wine is a live board id (4/7 stores) - a reuse, not a proposal; the vocabulary only lacks the name row. Red wine vinegar is a different food and is refused. [slug roast-eye-of-round-beef, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:45:14"
-                        },
-                        {
                             "key":  "no sodium beef stock",
                             "term":  "No Sodium Beef Stock",
                             "item_id":  "beef-broth",
@@ -471,15 +435,6 @@
                             "evidence":  "The source itself offers no-sodium beef broth as the substitute; beef-broth is the same carton class and is priced 7/7. Sodium level is not a price class. [slug roast-eye-of-round-beef, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:45:15"
-                        },
-                        {
-                            "key":  "turkey sausage",
-                            "term":  "turkey sausage",
-                            "item_id":  "fresh-sweet-italian-turkey-sausage",
-                            "bid_exists":  false,
-                            "evidence":  "Fresh raw sausage sold by the pound with casings to remove; smoked-turkey-sausage is a fully cooked rope at a different price class and italian-sausage is pork. No commodity claims it today, so a new id is proposed. [slug italian-turkey-burgers, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:46:10"
                         },
                         {
                             "key":  "ground basil",
@@ -514,24 +469,6 @@
                             "item_id":  "red-pepper-flakes",
                             "bid_exists":  true,
                             "evidence":  "\"Crushed\" is part of the product\u0027s own shelf name, not a form flip - crushed red pepper and red pepper flakes are one jar. [slug italian-turkey-burgers, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:46:11"
-                        },
-                        {
-                            "key":  "asiago cheese",
-                            "term":  "Asiago cheese",
-                            "item_id":  "asiago-cheese",
-                            "bid_exists":  false,
-                            "evidence":  "Aged Italian hard cheese sold as its own wedge/shred SKU; parmesan, provolone and ricotta are different cheeses at different prices, and no commodity claims asiago today. [slug italian-turkey-burgers, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:46:11"
-                        },
-                        {
-                            "key":  "whole wheat hamburger buns",
-                            "term":  "whole wheat hamburger buns",
-                            "item_id":  "hamburger-buns",
-                            "bid_exists":  false,
-                            "evidence":  "Same 8-count bun pack and same price class as the priced `hamburger-buns` id; whole wheat is a within-SKU variety here, not a form flip, and no separate bun premium exists to price. 43 g per bun. [slug italian-turkey-burgers, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:46:11"
                         },
@@ -590,15 +527,6 @@
                             "at":  "2026-08-26T04:46:59"
                         },
                         {
-                            "key":  "fresh thyme",
-                            "term":  "fresh thyme",
-                            "item_id":  "fresh-thyme",
-                            "bid_exists":  false,
-                            "evidence":  "fresh-thyme is a live board id (4/7); no bridge to dried-thyme, which is a different price and weight. One sprig is about 1 g. [slug chicken-fried-steak, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:46:59"
-                        },
-                        {
                             "key":  "seasoned salt",
                             "term":  "seasoned salt",
                             "item_id":  "seasoned-salt",
@@ -615,15 +543,6 @@
                             "evidence":  "Vocabulary row Sugar [sugar] is same form (\u0027granulated\u0027 is what plain sugar is); board carries sugar 7 of 7. [slug grilled-garlic-parmesan-wings-with-cilantro, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T04:51:56"
-                        },
-                        {
-                            "key":  "chicken wings",
-                            "term":  "chicken wings",
-                            "item_id":  "chicken-wings",
-                            "bid_exists":  false,
-                            "evidence":  "Exact prior ruling for this phrase on 2026-08-26; chicken-wings is a live board id at 7 of 7, so a reuse. Raw bone-in wings. [slug grilled-garlic-parmesan-wings-with-cilantro, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:51:57"
                         },
                         {
                             "key":  "unsalted butter",
@@ -752,24 +671,6 @@
                             "at":  "2026-08-26T04:53:02"
                         },
                         {
-                            "key":  "fresh rosemary",
-                            "term":  "fresh rosemary",
-                            "item_id":  "fresh-rosemary",
-                            "bid_exists":  false,
-                            "evidence":  "Sprigs can only be the fresh herb; dried-rosemary is a different price class and gram weight, so no bridge. Board 5 of 7. [slug rosemary-chicken-thighs, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:53:03"
-                        },
-                        {
-                            "key":  "spaghetti squash",
-                            "term":  "spaghetti squash",
-                            "item_id":  "spaghetti-squash",
-                            "bid_exists":  false,
-                            "evidence":  "spaghetti-squash is a live board id at 4 of 7 stores, so this is a reuse and not a new id; only a vocabulary row for the name is missing. [slug spaghetti-squash-boats-with-chicken, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T04:53:05"
-                        },
-                        {
                             "key":  "extra virgin olive oil",
                             "term":  "extra-virgin olive oil",
                             "item_id":  "olive-oil",
@@ -824,33 +725,6 @@
                             "at":  "2026-08-26T04:53:07"
                         },
                         {
-                            "key":  "mexican crema",
-                            "term":  "Mexican crema",
-                            "item_id":  "mexican-crema",
-                            "bid_exists":  false,
-                            "evidence":  "Board reports no commodity and no capture. Cultured table cream is its own 15 oz Hispanic-dairy SKU, not sour cream, so a new id is proposed rather than a bridge; 630 g at batch scale is far too much to leave pantry-static. [slug enchiladas-suizas, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:05:59"
-                        },
-                        {
-                            "key":  "cooked shredded chicken",
-                            "term":  "cooked shredded chicken",
-                            "item_id":  "cooked-shredded-chicken",
-                            "bid_exists":  false,
-                            "evidence":  "cooked-shredded-chicken is a live board id (3 of 7, cheapest 0.3744 Aldi) that names exactly this food, so a reuse and not a proposal; only the vocabulary name row is missing. Preferred over the \u0027cooked chicken\u0027 -\u003e rotisserie-chicken precedent because a purpose-built id exists. [slug enchiladas-suizas, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:05:59"
-                        },
-                        {
-                            "key":  "shredded chihuahua cheese",
-                            "term":  "shredded Chihuahua cheese",
-                            "item_id":  "chihuahua-cheese",
-                            "bid_exists":  false,
-                            "evidence":  "REFUSED the board\u0027s shredded-cheese bridge - that id prices bagged cheddar/blend and the estate refused the same bridge twice on 2026-08-26 (parmesan, mozzarella). Queso Chihuahua is a specialty 10-12 oz melting cheese at a higher price class. [slug enchiladas-suizas, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:05:59"
-                        },
-                        {
                             "key":  "sliced onions",
                             "term":  "Sliced onions",
                             "item_id":  "onions",
@@ -858,33 +732,6 @@
                             "evidence":  "Garnish line with no stated quantity, so optional; onions is live 7 of 7 and the \u0027med onion\u0027 -\u003e onions precedent binds. Weighed as half a medium onion. [slug enchiladas-suizas, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T05:06:00"
-                        },
-                        {
-                            "key":  "whole chicken",
-                            "term":  "whole chicken",
-                            "item_id":  "whole-chicken",
-                            "bid_exists":  false,
-                            "evidence":  "whole-chicken is a live board id at 7 of 7 stores, so a REUSE and not a proposal. Rotisserie chicken is sold cooked at a different price class, so that bridge is refused. [slug jamie-oliver-s-chicken-in-milk-seriously-delish, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:06"
-                        },
-                        {
-                            "key":  "fresh sage leaves",
-                            "term":  "fresh sage leaves",
-                            "item_id":  "fresh-sage",
-                            "bid_exists":  false,
-                            "evidence":  "fresh-sage is a live board id (2 of 7); no bridge to ground or dried sage, which is a different price and a completely different gram weight per measure. [slug jamie-oliver-s-chicken-in-milk-seriously-delish, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:06"
-                        },
-                        {
-                            "key":  "boneless pork chops",
-                            "term":  "boneless pork chops",
-                            "item_id":  "boneless-pork-chops",
-                            "bid_exists":  false,
-                            "evidence":  "Bone-in loin chops carry 15-25% bone and price roughly 30-50% lower per lb, so the generic pork-chops id is a different price class - the same reasoning the estate used on 2026-08-26 to refuse the bone-in/boneless chicken thigh bridge. Registrar should ALIAS to pork-chops if that commodity\u0027s captured products are in fact boneless loin chops. [slug baked-stuffed-pork-chops, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:22"
                         },
                         {
                             "key":  "small white onion",
@@ -901,15 +748,6 @@
                             "item_id":  "celery",
                             "bid_exists":  true,
                             "evidence":  "celery is a live board id (6 of 7, cheapest 1.88 Hy-Vee) - a reuse; \u0027stalk\u0027 is the cut, not a different food. Only a vocabulary name row is missing. [slug baked-stuffed-pork-chops, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:23"
-                        },
-                        {
-                            "key":  "cranberries",
-                            "term":  "cranberries",
-                            "item_id":  "fresh-cranberries",
-                            "bid_exists":  false,
-                            "evidence":  "The line says cranberries with no \u0027dried\u0027, and the method sautes them with the vegetables until soft, which is the fresh berry; fresh-cranberries is a live id (1 of 7 is carriage, not identity). Dried would be a different food at 60 g and 190 cal. [slug baked-stuffed-pork-chops, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T05:07:23"
                         },
@@ -950,33 +788,6 @@
                             "at":  "2026-08-26T05:07:59"
                         },
                         {
-                            "key":  "chicken tenderloin",
-                            "term":  "chicken tenderloin",
-                            "item_id":  "chicken-tenderloins",
-                            "bid_exists":  false,
-                            "evidence":  "The main protein: no commodity claims it but today\u0027s captures carry matching products, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no chicken-breast bridge. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:07:59"
-                        },
-                        {
-                            "key":  "buttermilk",
-                            "term":  "buttermilk",
-                            "item_id":  "buttermilk",
-                            "bid_exists":  false,
-                            "evidence":  "Exact prior ruling from 2026-08-26 and a live board id at 5 of 7 stores - a reuse. The line states 1 cup, so 245 g. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:00"
-                        },
-                        {
-                            "key":  "cornmeal",
-                            "term":  "cornmeal",
-                            "item_id":  "cornmeal",
-                            "bid_exists":  false,
-                            "evidence":  "No commodity claims it and today\u0027s captures carry it; a distinct food from cornstarch and from corn flour, so neither existing id can carry it. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:00"
-                        },
-                        {
                             "key":  "vegetable or canola oil",
                             "term":  "vegetable or canola oil",
                             "item_id":  "vegetable-oil",
@@ -984,24 +795,6 @@
                             "evidence":  "vegetable-oil is a live board id at 7 of 7 - a reuse; the line names either oil and both sit in the same bottle price class. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T05:08:00"
-                        },
-                        {
-                            "key":  "oil spray",
-                            "term":  "Oil spray",
-                            "item_id":  "cooking-spray",
-                            "bid_exists":  false,
-                            "evidence":  "cooking-spray is a live board id at 7 of 7, so a reuse; 3 g is a light coating, following the 2026-08-26 cooking-spray ruling. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:00"
-                        },
-                        {
-                            "key":  "bone in skin on chicken thighs",
-                            "term":  "bone-in skin-on chicken thighs",
-                            "item_id":  "chicken-thighs",
-                            "bid_exists":  false,
-                            "evidence":  "chicken-thighs is a live board id at 7 of 7 and its price (0.98/lb at Sam\u0027s Club) is the bone-in tray SKU, the same product concept as this line; boneless-skinless-chicken-thigh is a different cut at 2 to 3 times the price and a different yield. [slug smoked-chicken-thighs, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:04"
                         },
                         {
                             "key":  "large boneless skinless chicken breast",
@@ -1083,24 +876,6 @@
                             "evidence":  "The `spinach` id is the fresh bagged leaf (frozen has its own id, frozen-chopped-spinach), so \u0027fresh\u0027 is not a flip here; board 7 of 7. [slug mediterranean-chicken-w-marinade, run hunt-2026-08-26-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-26T05:08:07"
-                        },
-                        {
-                            "key":  "black olives",
-                            "term":  "black olives",
-                            "item_id":  "black-olives",
-                            "bid_exists":  false,
-                            "evidence":  "black-olives is a live board id (6 of 7) - a reuse; green olives are a different brine product at a different price. Weight is the line\u0027s own stated drained basis. [slug mediterranean-chicken-w-marinade, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:08"
-                        },
-                        {
-                            "key":  "lemons",
-                            "term":  "lemons",
-                            "item_id":  "lemons",
-                            "bid_exists":  false,
-                            "evidence":  "Live board id at 5 of 7, the same reuse as the Jamie Oliver line; 2 medium lemons at 58 g. [slug mediterranean-chicken-w-marinade, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:08:08"
                         },
                         {
                             "key":  "garlic cloves",
@@ -1335,6 +1110,231 @@
                             "evidence":  "A bag of shredded cheese is the purchased product here, and shredded-cheese is the board\u0027s own 7 of 7 match for it; I did not use mozzarella-cheese because a block or ball is a different price class from a shred bag. [slug italian-chicken-tortellini-skillet-recipe-video, run hunt-2026-08-26-smoke5]",
                             "by":  "mapper",
                             "at":  "2026-08-26T13:26:55"
+                        },
+                        {
+                            "key":  "boneless pork chops",
+                            "term":  "boneless pork chops",
+                            "item_id":  "boneless-pork-chops",
+                            "bid_exists":  false,
+                            "evidence":  "Genuine form flip, not an alias: boneless loin chops carry a different price class than the board\u0027s generic pork-chops ($2.52/lb, 7/7) and a different gram basis, since 2 lb bone-in yields far less meat. The recipe also needs a 1 1/4-inch chop thick enough to pocket. [slug baked-stuffed-pork-chops, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T04:22:52"
+                        },
+                        {
+                            "key":  "cranberries",
+                            "term":  "cranberries",
+                            "item_id":  "fresh-cranberries",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id (1 of 7 stores), not a new proposal - only the vocabulary row is missing. Fresh, not dried: the source\u0027s own 17 g carbs per serving cannot hold 50 g of dried cranberries (+9.8 g/serving alone), while fresh at 6 g total carbs lands the recipe at 13.3 g. [slug baked-stuffed-pork-chops, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T04:22:52"
+                        },
+                        {
+                            "key":  "chicken wings",
+                            "term":  "chicken wings",
+                            "item_id":  "chicken-wings",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id, 7 of 7 stores, cheapest 1.6909 at Aldi; the food DB already carries the row. Only the vocabulary row is missing, which is a naming question and not a registrar one. [slug dill-pickle-chicken-wings, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T04:22:55"
+                        },
+                        {
+                            "key":  "cooking spray",
+                            "term":  "cooking spray",
+                            "item_id":  "cooking-spray",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id, 7 of 7 stores, cheapest 0.3113 at Aldi; DB row already present. Weighed at 2 g source basis as a pan coating. [slug dill-pickle-chicken-wings, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T04:22:55"
+                        },
+                        {
+                            "key":  "bone in skin on chicken thighs",
+                            "term":  "bone-in skin-on chicken thighs",
+                            "item_id":  "chicken-thighs",
+                            "bid_exists":  false,
+                            "evidence":  "Bone-in skin-on is its own cut and its own price - refused the bridge to Boneless Skinless Chicken Thigh (a different per-lb price and a different gram weight for the same piece) and to Rotisserie Chicken. chicken-thighs is live at 7 of 7 stores, so the id is a REUSE; only the vocabulary row is new, named with the bone/skin basis in it per the naming rulings. [slug rosemary-chicken-thighs, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:02:51"
+                        },
+                        {
+                            "key":  "fresh rosemary",
+                            "term":  "fresh rosemary",
+                            "item_id":  "fresh-rosemary",
+                            "bid_exists":  false,
+                            "evidence":  "Fresh sprigs, not dried-rosemary: a sprig has no dried equivalent and the price class differs. fresh-rosemary is live at 5 of 7 stores and the DB already carries the row. [slug rosemary-chicken-thighs, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:02:51"
+                        },
+                        {
+                            "key":  "spaghetti squash",
+                            "term":  "spaghetti squash",
+                            "item_id":  "spaghetti-squash",
+                            "bid_exists":  false,
+                            "evidence":  "spaghetti-squash is already a live board commodity at 4 of 7 stores, cheapest 1.49 at Baker\u0027s, so this is a REUSE and not a proposal - only the vocabulary row is missing. Whole-squash weight taken (2 x 2 lb as the source states) because the halved shells are the serving vessel and the whole gourd is what is purchased; that weight also lands the carbs within 1 g of the source\u0027s published figure. [slug spaghetti-squash-boats-with-chicken, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:02:54"
+                        },
+                        {
+                            "key":  "mexican crema",
+                            "term":  "Mexican crema",
+                            "item_id":  "mexican-crema",
+                            "bid_exists":  false,
+                            "evidence":  "Board absent, no commodity: a refrigerated cultured table cream sold in 15 oz squeeze bottles, thinner and saltier than sour cream and priced above it, so I will not bridge it to a sour-cream id. New id proposed. [slug enchiladas-suizas, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:12:29"
+                        },
+                        {
+                            "key":  "cooked shredded chicken",
+                            "term":  "cooked shredded chicken",
+                            "item_id":  "cooked-shredded-chicken",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id (3 of 7, cheapest 0.3744 at Aldi) that names exactly this food; only the vocabulary name row is missing, which is a naming question and not a registrar one. [slug enchiladas-suizas, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:12:29"
+                        },
+                        {
+                            "key":  "shredded chihuahua cheese",
+                            "term":  "shredded Chihuahua cheese",
+                            "item_id":  "chihuahua-cheese",
+                            "bid_exists":  false,
+                            "evidence":  "REFUSED the board\u0027s shredded-cheese bridge - that id prices bagged cheddar/blend, and the estate refused the same bridge for parmesan and mozzarella on 2026-08-26. Queso Chihuahua is a specialty Hispanic-case cheese at a different price class; new id proposed. [slug enchiladas-suizas, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:12:29"
+                        },
+                        {
+                            "key":  "turkey sausage",
+                            "term":  "turkey sausage",
+                            "item_id":  "fresh-sweet-italian-turkey-sausage",
+                            "bid_exists":  false,
+                            "evidence":  "Fresh raw turkey sausage in casings: not smoked-turkey-sausage or kielbasa (smoked is a different product and price) and not italian-sausage, which is pork. I kept the 2026-08-26 ruling\u0027s id rather than mint a near-duplicate; sweet and hot are flavour variants of one tray SKU. [slug italian-turkey-burgers, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:13:12"
+                        },
+                        {
+                            "key":  "asiago cheese",
+                            "term":  "Asiago cheese",
+                            "item_id":  "asiago-cheese",
+                            "bid_exists":  false,
+                            "evidence":  "No commodity claims it, captures carry it. Asiago is an aged specialty wedge priced well above mozzarella or provolone, so no bridge to those ids; new id proposed. [slug italian-turkey-burgers, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:13:12"
+                        },
+                        {
+                            "key":  "whole wheat hamburger buns",
+                            "term":  "whole wheat hamburger buns",
+                            "item_id":  "hamburger-buns",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of the live hamburger-buns id (6 of 7, cheapest 0.1658 at Fareway); whole wheat is a variety of the same 8-pack bun SKU on the same shelf, not a form flip in weight or price class. [slug italian-turkey-burgers, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:13:12"
+                        },
+                        {
+                            "key":  "whole chicken",
+                            "term":  "whole chicken",
+                            "item_id":  "whole-chicken",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id, 7 of 7 stores, cheapest 1.32 at Walmart, and the food DB already carries the row. Rotisserie is cooked and the breast/thigh ids are boneless, so neither prices a raw bird; only the vocabulary row is missing. [slug jamie-oliver-s-chicken-in-milk-seriously-delish, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:13:15"
+                        },
+                        {
+                            "key":  "fresh sage leaves",
+                            "term":  "fresh sage leaves",
+                            "item_id":  "fresh-sage",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of the live fresh-sage id (2 of 7, cheapest 4.98 at Baker\u0027s). No bridge to ground sage: dried leaf is a different price class and a different gram weight, exactly as the fresh-thyme and fresh-rosemary rulings held. [slug jamie-oliver-s-chicken-in-milk-seriously-delish, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:13:15"
+                        },
+                        {
+                            "key":  "chicken tenderloin",
+                            "term":  "chicken tenderloin",
+                            "item_id":  "chicken-tenderloins",
+                            "bid_exists":  false,
+                            "evidence":  "The main protein: no commodity claims it but today\u0027s captures carry it, so a null would pantry-price 1.4 lb of chicken. Tenderloins are their own tray SKU priced above breast, so no bridge to chicken-breast; new id proposed. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:05"
+                        },
+                        {
+                            "key":  "buttermilk",
+                            "term":  "buttermilk",
+                            "item_id":  "buttermilk",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id (5 of 7, cheapest 0.055 at Walmart) and the food DB already carries the row; the yoghurt-plus-milk alternative is the substitute, not the purchase. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:05"
+                        },
+                        {
+                            "key":  "cornmeal",
+                            "term":  "cornmeal",
+                            "item_id":  "cornmeal",
+                            "bid_exists":  false,
+                            "evidence":  "No commodity claims it and captures carry it. Cornmeal is not flour and not corn-starch - a different aisle bag and a different price - so no bridge; new id proposed. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:06"
+                        },
+                        {
+                            "key":  "oil spray",
+                            "term":  "Oil spray",
+                            "item_id":  "cooking-spray",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id (7 of 7, cheapest 0.3113 at Aldi); an aerosol can is the purchased product, not bottled oil, which is already a separate line here. [slug kfc-oven-baked-fried-chicken-tenders, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:06"
+                        },
+                        {
+                            "key":  "black olives",
+                            "term":  "black olives",
+                            "item_id":  "black-olives",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id (6 of 7, cheapest 0.265 at Aldi). Deliberately not the green-olive rows: ripe black olives are a different can and price class. Weighed on the drained basis the line states. [slug mediterranean-chicken-w-marinade, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:09"
+                        },
+                        {
+                            "key":  "lemons",
+                            "term":  "lemons",
+                            "item_id":  "lemons",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of the live lemons id (5 of 7, cheapest 0.4533 at Walmart); the food DB already carries the row and only the vocabulary name is missing. [slug mediterranean-chicken-w-marinade, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T05:14:09"
+                        },
+                        {
+                            "key":  "boneless eye of round roast",
+                            "term":  "Boneless Eye of Round Roast",
+                            "item_id":  "eye-of-round-roast",
+                            "bid_exists":  false,
+                            "evidence":  "Agrees with the estate\u0027s own prior ruling of this exact phrase (2026-08-26). The board carries no commodity for it, so the id is new and goes to the registrar; 1474 g (3.25 lb midpoint) over 8 servings reproduces the source\u0027s published 40 g protein almost exactly (39.5 g), which is the check that matters on the main protein. [slug roast-eye-of-round-beef, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T06:06:24"
+                        },
+                        {
+                            "key":  "chopped fresh thyme",
+                            "term":  "Chopped Fresh Thyme",
+                            "item_id":  "fresh-thyme",
+                            "bid_exists":  false,
+                            "evidence":  "\u0027Chopped\u0027 is a prep word, so this is a RENAME onto the same food as the recipe\u0027s other thyme line, not a new item. REFUSED the dried-thyme bridge the near-miss row offers: dried is a different price class and about a third of the gram weight. fresh-thyme is already a live board id (4 of 7), so this is a reuse, not a proposal. [slug roast-eye-of-round-beef, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T06:06:24"
+                        },
+                        {
+                            "key":  "fresh thyme",
+                            "term":  "Fresh Thyme",
+                            "item_id":  "fresh-thyme",
+                            "bid_exists":  false,
+                            "evidence":  "Board-live fresh-thyme (4 of 7, cheapest 3.18 at Aldi) and the shelf\u0027s own \u0027fresh thyme -\u003e fresh-thyme\u0027 ruling of 2026-08-26, whose 1 g per sprig I adopt for 4 sprigs. No bridge to dried-thyme. [slug roast-eye-of-round-beef, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T06:06:24"
+                        },
+                        {
+                            "key":  "dry red wine",
+                            "term":  "Dry Red Wine",
+                            "item_id":  "red-wine",
+                            "bid_exists":  false,
+                            "evidence":  "Exactly parallel to the vocabulary\u0027s existing \u0027Dry White Wine -\u003e white-wine\u0027 row: \u0027dry\u0027 is a style word on the same food, and red-wine is board-live (4 of 7, cheapest 0.2358 at Baker\u0027s), so this is a reuse. Explicitly NOT red-wine-vinegar, a standing form-flip rejection. 1 cup of wine = 236 g. [slug roast-eye-of-round-beef, run hunt-2026-08-27-ten]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T06:06:25"
                         }
                     ]
 }

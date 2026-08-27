@@ -744,6 +744,18 @@
     "target_id": "commodity:staple:dinner-rolls"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-08-26T21:32:17",
+    "id": "lp:485eb7ee2d2a06a5ca69",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"shredded\\\\s+mozzarella\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches multiple listings like 'Great Value Shredded Mozzarella', 'Kraft Natural Mozzarella Shredded Cheese', etc. This is the core descriptor for the commodity.",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:495a7933179e04c261db",
@@ -1966,6 +1978,18 @@
     "rationale": "Matches Contadina Diced Roma Tomatoes. Roma is a type of tomato, and 'diced' matches the commodity form.",
     "status": "rejected",
     "target_id": "canned-diced-tomatoes"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-26T21:32:17",
+    "id": "lp:bee3845b24ad138577b0",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"thjasmine\"}",
+    "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
+    "rationale": "Matches 'Great Value Gv Thjasmine'. This appears to be a typo for 'Th Jasmine' or similar, but 'thjasmine' is unique enough to this specific listing pattern.",
+    "status": "proposed",
+    "target_id": "jasmine-rice-dry"
   },
   {
     "confidence": 0.9,

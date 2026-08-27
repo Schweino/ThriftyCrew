@@ -1,30 +1,30 @@
 ﻿{
     "_doc":  "What the pipeline has learned about recipe publishers. Written automatically on every fetch outcome; read by sourcers before searching and before fetching. Replaces the prose blocked-domain lists that used to live, duplicated, in two agent prompts.",
     "_rule":  "One failure is `unreliable`, not `blocked` - a 404 is a fact about one URL. Only a repeated pattern with no successes earns `blocked`. Counts stay visible so the judgment is auditable.",
-    "updated":  "2026-08-25T18:03:41",
+    "updated":  "2026-08-26T18:03:29",
     "count":  15,
     "domains":  [
                     {
                         "domain":  "budgetbytes.com",
-                        "ok":  115,
+                        "ok":  163,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:35"
+                        "updated":  "2026-08-26T18:03:24"
                     },
                     {
                         "domain":  "spendwithpennies.com",
-                        "ok":  115,
+                        "ok":  158,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:34"
+                        "updated":  "2026-08-26T18:03:25"
                     },
                     {
                         "domain":  "isabeleats.com",
@@ -39,47 +39,47 @@
                     },
                     {
                         "domain":  "wellplated.com",
-                        "ok":  74,
+                        "ok":  98,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:35"
+                        "updated":  "2026-08-26T18:03:23"
                     },
                     {
                         "domain":  "thecozycook.com",
-                        "ok":  32,
+                        "ok":  40,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:35"
+                        "updated":  "2026-08-26T18:03:24"
                     },
                     {
                         "domain":  "recipetineats.com",
-                        "ok":  114,
+                        "ok":  165,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:39"
+                        "updated":  "2026-08-26T18:03:24"
                     },
                     {
                         "domain":  "skinnytaste.com",
-                        "ok":  122,
+                        "ok":  182,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:41"
+                        "updated":  "2026-08-26T18:03:25"
                     },
                     {
                         "domain":  "japan.recipetineats.com",
@@ -105,25 +105,25 @@
                     },
                     {
                         "domain":  "keviniscooking.com",
-                        "ok":  116,
+                        "ok":  161,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:38"
+                        "updated":  "2026-08-26T18:03:25"
                     },
                     {
                         "domain":  "thereciperebel.com",
-                        "ok":  116,
+                        "ok":  163,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:36"
+                        "updated":  "2026-08-26T18:03:26"
                     },
                     {
                         "domain":  "orgasmicchef.com",
@@ -138,14 +138,14 @@
                     },
                     {
                         "domain":  "nospoonnecessary.com",
-                        "ok":  117,
+                        "ok":  172,
                         "fail":  0,
                         "last_404":  null,
                         "has_jsonld":  true,
                         "forced_block":  false,
                         "status":  "reliable",
                         "note":  "",
-                        "updated":  "2026-08-25T18:03:39"
+                        "updated":  "2026-08-26T18:03:29"
                     },
                     {
                         "domain":  "hapanom.com",

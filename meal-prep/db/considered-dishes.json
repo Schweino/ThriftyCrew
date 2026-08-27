@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-26T13:17:02",
-    "count":  219,
+    "updated":  "2026-08-27T06:00:43",
+    "count":  224,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -3298,6 +3298,81 @@
                        "run":  "hunt-2026-08-26-smoke5",
                        "by":  "decider",
                        "at":  "2026-08-26T13:17:02"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "air-fryer-steak-with-garlic-butter",
+                       "name":  "Air Fryer Steak with Garlic Butter",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Plain steak topped with garlic compound butter, 2 servings, no starch or composed sides; a single-protein cooking-method page rather than a batch-scalable dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-ten",
+                       "by":  "decider",
+                       "at":  "2026-08-27T06:00:39"
+                   },
+                   {
+                       "key":  "any|bake|plain",
+                       "slug":  "baked-rockfish-almondine",
+                       "name":  "Baked Rockfish Almondine",
+                       "protein":  "any",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Fish/seafood dish (rockfish almondine); excluded protein — the run covers chicken, beef, pork, turkey and sausage only.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-ten",
+                       "by":  "decider",
+                       "at":  "2026-08-27T06:00:40"
+                   },
+                   {
+                       "key":  "beef|braised|wine",
+                       "slug":  "braised-beef-tips-in-red-wine-video",
+                       "name":  "Braised Beef Tips in Red Wine",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Red-wine beef braise (beef tips, shallot, bacon fat, butter, thyme, red wine + beef broth) is the same dinner as live beef-bourguignon-bowls; the French red-wine-braise niche is filled and this identity was already rejected twice (Slow Cooker Red Wine Beef Cheeks, Beef Bourguignon).",
+                       "dupe_of":  [
+                                       "beef-bourguignon-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-ten",
+                       "by":  "decider",
+                       "at":  "2026-08-27T06:00:41"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-brine-recipe",
+                       "name":  "Chicken Brine recipe",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "A brine recipe (salt, sugar, peppercorns, bay, lemon in water) for a whole bird, not a composed dinner; no publishable plate identity, consistent with prior marinade/technique-page rejections.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-ten",
+                       "by":  "decider",
+                       "at":  "2026-08-27T06:00:42"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "grilled-spatchcock-chicken",
+                       "name":  "Grilled Spatchcock Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Whole spice-rubbed grilled chicken as a single centerpiece with no starch, sauce or composed sides; a method page rather than a batch-prep dinner (consistent with air-fryer-whole-chicken).",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-ten",
+                       "by":  "decider",
+                       "at":  "2026-08-27T06:00:43"
                    }
                ]
 }

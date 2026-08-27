@@ -543,5 +543,111 @@
                          "detail":  "streamed per-recipe before wave close"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-ten-w1",
+      "opened":  "2026-08-27T06:09:46",
+      "last_activity":  "2026-08-27T06:21:10",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "mediterranean-chicken-w-marinade"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T06:09:46",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T06:09:46",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T06:09:46",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T06:09:47",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-27T06:21:10",
+                         "detail":  "1/1 GO"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-ten-w2",
+      "opened":  "2026-08-27T06:39:25",
+      "last_activity":  "2026-08-27T06:39:26",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "jamie-oliver-s-chicken-in-milk-seriously-delish",
+                    "spaghetti-squash-boats-with-chicken",
+                    "baked-stuffed-pork-chops"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T06:39:25",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T06:39:26",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T06:39:26",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T06:39:26",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-ten-w3",
+      "opened":  "2026-08-27T07:08:42",
+      "last_activity":  "2026-08-27T07:08:43",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "baked-stuffed-pork-chops"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T07:08:42",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T07:08:42",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T07:08:43",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T07:08:43",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

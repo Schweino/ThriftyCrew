@@ -1100,7 +1100,7 @@
                     {
                         "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                         "slug":  "slow-cooker-salsa-chicken-bowl",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Mexican",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -5110,7 +5110,7 @@
                     {
                         "name":  "Slow Cooker BBQ Pulled Chicken Bowls",
                         "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -27632,7 +27632,7 @@
                     {
                         "name":  "Chicken Fried Rice",
                         "slug":  "chicken-fried-rice-skillet",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Chinese",
                         "servings":  14,
                         "ingredients":  [
@@ -28546,7 +28546,7 @@
                     {
                         "name":  "Chicken Pot Pie Casserole with Biscuits",
                         "slug":  "chicken-pot-pie-biscuit-casserole",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
