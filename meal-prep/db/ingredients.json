@@ -2885,16 +2885,6 @@
         "note":  "Dry red wine for braising (bid red-wine, Baker's $0.2358/floz on the 2026-08-26 board). \"Dry\" is in the name because a sweet/cooking wine is a different sugar load and a different price; the food-DB already carries a Dry Red Wine row."
     },
     {
-        "item":  "Ground Turkey",
-        "bid":  "ground-turkey",
-        "gpu":  453.592,
-        "unit":  "lb",
-        "board":  "weekly",
-        "buy_pkg_g":  453.592,
-        "buy_pkg_label":  "lb",
-        "note":  "Generic line, generic id (ruled 2026-08-27, hunt-2026-08-27-highprotein). The vocabulary carries 93/7 and 99/1 Ground Turkey but no bare row, so a recipe line reading only \"Ground Turkey\" had no name. Ruled onto the generic weekly id rather than 93/7: choosing a lean ratio the source never stated would invent specificity the recipe did not ask for. Board receipt read before ruling - cheapest cell is Kirkwood USDA Fresh Ground Turkey 85/15 at $2.6633/lb (Aldi), which is what a bare ground-turkey line buys. Highest cost exposure of this batch at 2117 g / $12.43."
-    },
-    {
         "item":  "Bell Peppers",
         "bid":  "bell-peppers",
         "gpu":  120,

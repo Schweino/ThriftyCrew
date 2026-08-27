@@ -295,6 +295,44 @@ if ($SelfTest) {
   $ph6 = @(Get-SpecContradictions $phantomNoTomato $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'omato' })
   Chk 'MUST FIRE  PHANTOM     tomato over an ALFREDO recipe is still a real phantom' ($ph6.Count -ge 1) 'constituent rule over-forgave'
 
+  # THE SAME-COMMODITY RULE (2026-08-27). Four LIVE specs - beef-birria-burrito, beef-burrito-tex-mex,
+  # salsa-verde-chicken-burrito, turkey-florentine-rice-bake - say "shredded cheese" in a step while their
+  # ingredient line reads "Mexican Cheese Blend". Both names carry the bid `shredded-cheese`, so the reader
+  # bought exactly what the step asks for and the dish is makeable as shopped. The findings appeared the
+  # day a vocabulary row named "Shredded Cheese" was added, because this class is vocabulary-driven: the
+  # phrase only then became a food the matcher could see. Token coverage cannot close it - "Mexican Cheese
+  # Blend" and "Shredded Cheese" share no word - and a red shared gate blocks every wave, including waves
+  # containing none of these four recipes.
+  $bidFx = @{ 'Shredded Cheese' = 'shredded-cheese'; 'Mexican Cheese Blend' = 'shredded-cheese'
+              'Olives' = 'olives'; 'Rice' = 'rice' }
+  $vocabBid = New-FoodVocabulary @('Shredded Cheese', 'Mexican Cheese Blend', 'Olives', 'Rice')
+  $sameCommodity = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 590; protein = 45; cost_ps = '2.61' }
+    ingredients_display = @('<strong>Mexican Cheese Blend:</strong> 9 oz (252 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Mexican Cheese Blend'; canon = 'Mexican Cheese Blend'; grams = 252; bid = 'shredded-cheese' }) }
+    make_it = @('Scatter the shredded cheese over the top and bake until it melts.')
+  }
+  $sc1 = @(Get-SpecContradictions $sameCommodity $vocabBid $null $bidFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'MUST FIRE  PHANTOM     a step saying "shredded cheese" over a bought Mexican Cheese Blend is NOT a phantom - same commodity, one purchase' `
+    ($sc1.Count -eq 0) (($sc1 | ForEach-Object { $_.why }) -join ' | ')
+  # ...and the rule must not become a way to forgive a food nobody bought.
+  $sc2 = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 590; protein = 45; cost_ps = '2.61' }
+    ingredients_display = @('<strong>Rice:</strong> 2 lb (908 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Rice'; canon = 'Rice'; grams = 908; bid = 'rice' }) }
+    make_it = @('Scatter the shredded cheese over the top and bake until it melts.')
+  }
+  $scB = @(Get-SpecContradictions $sc2 $vocabBid $null $bidFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN a step naming a cheese the recipe does NOT buy is still a phantom - no line carries that bid' `
+    ($scB.Count -ge 1) (($scB | ForEach-Object { $_.why }) -join ' | ')
+  # ...and with no bid map at all the class behaves exactly as it did before (repair-spec-contradictions
+  # reads one spec in isolation and passes none).
+  $scC = @(Get-SpecContradictions $sameCommodity $vocabBid | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN with NO bid map the rule is inert, not accidentally on - a 2-arg caller is unchanged' `
+    ($scC.Count -ge 1) (($scC | ForEach-Object { $_.why }) -join ' | ')
+
   # THE FOUR NOISE RULES. Each line is a false positive this matcher produced against the live catalogue
   # before the rule above it existed; without them the class gives 555 hits and gets switched off.
   $noise = [pscustomobject]@{
@@ -433,6 +471,7 @@ $names = New-Object System.Collections.Generic.List[string]
 # the vocabulary so the file is read once. Only bulk rows with a real pantry package can be judged: a row
 # with no package definition has no ratio to state, and the class stays quiet on it.
 $pkgMap = @{}
+$bidMap = @{}   # food name -> priced commodity id, for the PHANTOM same-commodity rule
 $ingDb = Join-Path $mp 'db\ingredients.json'
 if (Test-Path $ingDb) {
   foreach ($r in (Get-Content $ingDb -Raw | ConvertFrom-Json)) {
@@ -442,6 +481,7 @@ if (Test-Path $ingDb) {
     if ($r.PSObject.Properties.Name -contains 'pantry_pkg_g' -and [double]$r.pantry_pkg_g -gt 0) {
       $pkgMap[$n] = @{ g = [double]$r.pantry_pkg_g; label = [string]$r.pantry_pkg_label }
     }
+    if ($r.PSObject.Properties.Name -contains 'bid' -and $r.bid) { $bidMap[$n] = [string]$r.bid }
   }
 }
 foreach ($p in $parsed) {
@@ -454,7 +494,7 @@ $vocab = New-FoodVocabulary $names.ToArray()
 $byClass = @{}
 $rows = New-Object System.Collections.Generic.List[object]
 foreach ($p in $parsed) {
-  foreach ($f in (Get-SpecContradictions $p.spec $vocab $pkgMap)) {
+  foreach ($f in (Get-SpecContradictions $p.spec $vocab $pkgMap $bidMap)) {
     $byClass[$f.cls] = 1 + [int]$byClass[$f.cls]
     $rows.Add([pscustomobject]@{ run = $p.run; slug = $p.slug; cls = $f.cls; why = $f.why })
   }

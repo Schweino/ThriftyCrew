@@ -342,7 +342,7 @@ function Test-FoodCovered($ownTok, $namTok) {
   return ($a -eq 0 -or $b -eq 0)
 }
 
-function Get-PhantomIngredients($spec, $vocab) {
+function Get-PhantomIngredients($spec, $vocab, $bidMap) {
   <# Known food names the make_it steps use that no line of this recipe's ingredient list accounts for. #>
   $hits = New-Object System.Collections.Generic.List[object]
   if (-not $vocab) { return $hits }
@@ -403,6 +403,28 @@ function Get-PhantomIngredients($spec, $vocab) {
     $cov = $false
     foreach ($o in $own) { if ((Test-FoodCovered $o $v.stem) -or (Test-FoodConstituent $o $v.stem)) { $cov = $true; break } }
     if ($cov) { continue }
+    # SAME COMMODITY IS NOT A PHANTOM (2026-08-27). PHANTOM asks whether the dish can be made AS SHOPPED,
+    # and the honest test of that is what the reader put in the basket, not which synonym the step used.
+    # Four live specs say "shredded cheese" in a step while their ingredient line reads "Mexican Cheese
+    # Blend" - and both names carry the bid `shredded-cheese`, so the reader demonstrably bought the very
+    # thing the step asks for. The dishes were always makeable; the finding appeared the day a vocabulary
+    # row named "Shredded Cheese" was added, because the class is vocabulary-driven and the phrase only
+    # then became a food this matcher could see. Token coverage cannot close that: "Mexican Cheese Blend"
+    # and "Shredded Cheese" share no word.
+    #
+    # Deliberately narrower than an alias table: it fires only when BOTH sides resolve to the SAME priced
+    # commodity id, which is the estate's own definition of one purchase. A step naming a food the recipe
+    # does NOT buy still fires, because no line will carry its bid.
+    if ($bidMap) {
+      $vb = [string]$bidMap[[string]$v.name]
+      if ($vb) {
+        $boughtSame = $false
+        foreach ($sc in @($spec.scaler.ing)) {
+          if (($sc.PSObject.Properties.Name -contains 'bid') -and ([string]$sc.bid -eq $vb)) { $boughtSame = $true; break }
+        }
+        if ($boughtSame) { continue }
+      }
+    }
     $hits.Add(@{ name = $v.name; said = $said })
   }
   return $hits
@@ -467,7 +489,7 @@ function Get-BuyCoverageFindings($spec, $pkgMap) {
   return $out
 }
 
-function Get-SpecContradictions($spec, $vocab, $pkgMap) {
+function Get-SpecContradictions($spec, $vocab, $pkgMap, $bidMap) {
   <# Every finding for one spec: @{ cls, why }. Shared by the audit and the repair. #>
   $f = New-Object System.Collections.Generic.List[object]
   $cal = 0; $pro = 0
@@ -548,7 +570,7 @@ function Get-SpecContradictions($spec, $vocab, $pkgMap) {
 
   # PHANTOM needs the catalogue's food lexicon, so it only runs when a caller supplies one. Callers that
   # read one spec in isolation (repair-spec-contradictions) pass nothing and skip the class.
-  foreach ($p in (Get-PhantomIngredients $spec $vocab)) {
+  foreach ($p in (Get-PhantomIngredients $spec $vocab $bidMap)) {
     $f.Add(@{ cls = 'PHANTOM'; why = ("a step says '" + $p.said + "' but " + $p.name + " is in no ingredient line - it cannot be made as shopped") })
   }
 
