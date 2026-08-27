@@ -3,17 +3,17 @@
     "title":  "Rosemary Chicken Thighs",
     "source_url":  "https://www.wellplated.com/rosemary-chicken-thighs-apples-brussels-sprouts/",
     "protein":  "chicken",
-    "state":  "priced",
+    "state":  "rejected-macros",
     "wave":  null,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T05:02:52",
+    "updated":  "2026-08-27T08:02:26",
     "terms":  [
                   {
                       "term":  "Fresh Rosemary",
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "Brad ruled 2026-08-27: do not add a Bone-In Skin-On Chicken Thighs vocabulary row for one recipe. The name has no vocabulary row and the only candidate bid (chicken-thighs) is the generic Chicken Thighs / Drumsticks, which would put a ~70% edible yield on the recipe grams rather than the id. Recipe retired rather than bridge a form split for a single dish.",
     "parked_on":  [
 
                   ],
@@ -53,6 +53,12 @@
                         "at":  "2026-08-27T05:02:52",
                         "by":  "mapper",
                         "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T08:02:26",
+                        "by":  "brad",
+                        "detail":  "Brad ruled 2026-08-27: do not add a Bone-In Skin-On Chicken Thighs vocabulary row for one recipe. The name has no vocabulary row and the only candidate bid (chicken-thighs) is the generic Chicken Thighs / Drumsticks, which would put a ~70% edible yield on the recipe grams rather than the id. Recipe retired rather than bridge a form split for a single dish."
                     }
                 ]
 }

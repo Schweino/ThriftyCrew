@@ -2863,5 +2863,25 @@
         "buy_pkg_g":  58,
         "buy_pkg_label":  "each",
         "note":  "gpu = whole medium lemon, USDA basis (~58 g). Priced per each (Walmart $0.4533 each, 2026-08-26 board). Distinct from the existing Lemon Juice row, which is a bottled floz commodity."
+    },
+    {
+        "item":  "Fresh Thyme",
+        "bid":  "fresh-thyme",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  20,
+        "buy_pkg_label":  "0.7oz clamshell",
+        "note":  "Fresh thyme sprigs (Aldi $3.18/oz, 2026-08-26 board). FRESH basis stated in the name - a form flip from the existing Dried Thyme row and never an alias of it: different price class and different gram weight per sprig."
+    },
+    {
+        "item":  "Dry Red Wine",
+        "bid":  "red-wine",
+        "gpu":  29.57,
+        "unit":  "floz",
+        "board":  "recipe",
+        "buy_pkg_g":  750,
+        "buy_pkg_label":  "750ml bottle",
+        "note":  "Dry red wine for braising (bid red-wine, Baker's $0.2358/floz on the 2026-08-26 board). \"Dry\" is in the name because a sweet/cooking wine is a different sugar load and a different price; the food-DB already carries a Dry Red Wine row."
     }
 ]

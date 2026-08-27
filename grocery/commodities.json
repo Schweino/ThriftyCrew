@@ -1098,7 +1098,8 @@
                         "\\bschnapps\\b",
                         "\\brum\\b",
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
-                        "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w"
+                        "\\b(?:gnocchi|pasta|rice|noodles?|ravioli|tortellini)\\s*\\+\\s*\\w",
+                        "\\bboneless\\b"
                     ]
     },
     {
