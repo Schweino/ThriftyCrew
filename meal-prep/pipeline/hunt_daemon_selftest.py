@@ -1377,6 +1377,9 @@ def run():
         T(name, ok, got)
     for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
         T(name, ok, got)
+    H("A wave that did not publish is resumable")
+    for name, ok, got in _a_wave_that_did_not_publish_is_resumable():
+        T(name, ok, got)
     for name, ok, got in _a_failed_assembly_is_resumable():
         T(name, ok, got)
     for name, ok, got in _a_rejection_needs_a_basis():
@@ -8973,6 +8976,64 @@ def _the_write_lane_does_not_block_on_its_own_intake():
                         "no prose yet, so not kept: %s" % dw.intake_is_current("wired")[1][:70]))
         finally:
             shutil.rmtree(wt, ignore_errors=True)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return res
+
+
+def _a_wave_that_did_not_publish_is_resumable():
+    r"""THE LAST DEAD-END STATE (2026-08-27).
+
+    `waved` was the one in-flight state seed() routed NOWHERE: it incremented a counter and stopped.
+    That is correct when the wave published and a dead end when it did not. Wave 3 of
+    hunt-2026-08-27-highprotein audited GO on butter-chicken-pasta and pioneer-woman-chili, refused at
+    publish, and both recipes then sat at `waved` through every later run - no lane to re-enter, no
+    wave to re-form, and the run still reporting them as in flight. Same shape as the assembly dead
+    end above: the record says resumable and nothing resumes it.
+
+    THE LEDGER DECIDES, NOT THE STATE, and that is the whole point of these fixtures. A successful
+    publish is the only path that closes the batch, and the state stays `waved` either way - so the
+    state cannot tell a landed wave from a refused one. The clean twin below is the half that matters:
+    a CLOSED batch must not re-wave, or every resume would re-publish recipes that are already live.
+    """
+    res = []
+    tmp = scratch_dir(prefix="daemon-waved-")
+    try:
+        led = os.path.join(tmp, "ledger.json")
+        with io.open(led, "w", encoding="utf-8") as fh:
+            json.dump({"batches": [
+                {"batch": "r-w1", "closed": True},
+                {"batch": "r-w2", "closed": False},
+            ]}, fh)
+        os.makedirs(os.path.join(tmp, "state"), exist_ok=True)
+        for slug, wk in (("landed", 1), ("refused", 2), ("nowave", 0)):
+            with io.open(os.path.join(tmp, "state", "%s.json" % slug), "w", encoding="utf-8") as fh:
+                json.dump({"slug": slug, "state": "waved", "wave": wk}, fh)
+
+        d = daemon(run_dir=tmp, run_id="r", ledger_path=led)
+
+        res.append(("MUST FIRE  a waved recipe whose batch never CLOSED goes back to the wave pool - "
+                    "publish refused, and nothing else in the estate would ever pick it up again",
+                    d.wave_batch_closed(d.state_wave("refused")) is False,
+                    "wave=%s closed=%s" % (d.state_wave("refused"),
+                                           d.wave_batch_closed(d.state_wave("refused")))))
+        res.append(("CLEAN TWIN a waved recipe whose batch DID close stays put - re-waving a live "
+                    "recipe would re-publish it and re-dispatch its post-publish review",
+                    d.wave_batch_closed(d.state_wave("landed")) is True,
+                    "wave=%s closed=%s" % (d.state_wave("landed"),
+                                           d.wave_batch_closed(d.state_wave("landed")))))
+        res.append(("  the wave number is read from the STATE FILE, because status_json's in_flight "
+                    "rows carry slug and state but not the wave that names the batch",
+                    d.state_wave("landed") == 1 and d.state_wave("refused") == 2,
+                    "landed=%s refused=%s" % (d.state_wave("landed"), d.state_wave("refused"))))
+        res.append(("CLEAN TWIN a record with no wave at all reads as unclosed rather than throwing - "
+                    "the safe error is to re-wave, never to strand",
+                    d.state_wave("nowave") == 0 and d.wave_batch_closed(0) is False,
+                    "wave=%s" % d.state_wave("nowave")))
+        res.append(("CLEAN TWIN an unreadable ledger reads as unclosed for the same reason",
+                    daemon(run_dir=tmp, run_id="r",
+                           ledger_path=os.path.join(tmp, "no-such.json")).wave_batch_closed(1) is False,
+                    "missing ledger did not read as unclosed"))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res

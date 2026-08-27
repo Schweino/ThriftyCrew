@@ -4245,6 +4245,39 @@ class Daemon(object):
         return True, ("the intake already carries writer prose and the mapper decision file is "
                       "byte-identical to the one it was built from (%s)" % live[:12])
 
+    def state_wave(self, slug):
+        """The wave number off the recipe's own state file. status_json's in_flight rows carry slug
+        and state but not the wave, and the wave is what names the batch."""
+        try:
+            with open(os.path.join(self.run_dir, "state", "%s.json" % slug),
+                      "r", encoding="utf-8-sig") as f:
+                return int((json.load(f) or {}).get("wave") or 0)
+        except Exception:                                         # noqa: BLE001
+            return 0
+
+    def wave_batch_closed(self, wk):
+        """Did wave `wk`'s batch actually close? Only a successful publish closes one, so this is the
+        durable answer to "did this wave land" that the recipe's own state cannot give. Unreadable
+        ledger or unknown wave -> False, because the safe error is to re-wave a recipe (publish treats
+        an existing post as an update, and the create-authority gate still guards births) rather than
+        to strand it forever."""
+        if not wk:
+            return False
+        batch = "%s-w%d" % (self.run_id, int(wk))
+        path = self.ledger_path or os.path.join(MP, "db", "batch-ledger.json")
+        try:
+            with open(path, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return False
+        rows = doc.get("batches") if isinstance(doc, dict) else doc
+        if isinstance(rows, dict):
+            rows = list(rows.values())
+        for r in (rows or []):
+            if isinstance(r, dict) and r.get("batch") == batch:
+                return bool(r.get("closed"))
+        return False
+
     def mapper_stamp_path(self, slug):
         return os.path.join(self.run_dir, "intake", "%s.mapper-stamp.json" % slug)
 
@@ -5896,6 +5929,21 @@ class Daemon(object):
                 self.qa_passed.append(slug); counts["wave"] = counts.get("wave", 0) + 1
             elif state == "waved":
                 counts["waved"] = counts.get("waved", 0) + 1
+                # A WAVE THAT DID NOT PUBLISH MUST NOT STRAND ITS RECIPES (2026-08-27). `waved` was
+                # the one in-flight state seed() routed NOWHERE - it incremented a counter and stopped.
+                # That is fine when the wave published, and a dead end when it did not: wave 3 of
+                # hunt-2026-08-27-highprotein audited GO on two recipes, refused at publish, and both
+                # sat at `waved` through every later run with no lane to re-enter and no wave to
+                # re-form. Same shape as the `mapped`-with-no-decision-file dead end this file already
+                # records: the run says "resumable" and nothing resumes it.
+                #
+                # THE LEDGER DECIDES, NOT THE STATE. A successful publish is the only path that closes
+                # the batch (the -Close call sits after the post-publish reviewer), and the state stays
+                # `waved` either way, so the state cannot tell the two apart. An unclosed batch means
+                # the wave never landed, and its recipes go back to the pool the next wave forms from.
+                if not self.wave_batch_closed(self.state_wave(slug)):
+                    self.qa_passed.append(slug)
+                    counts["rewave"] = counts.get("rewave", 0) + 1
         # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
         if mapped_holds:
             n = await self.unhold_mapped(mapped_holds)

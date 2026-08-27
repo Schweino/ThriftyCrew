@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T14:54:52",
+ "generated": "2026-08-27T15:27:47",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -46,6 +46,20 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
     },
     {
+     "item": "Fareway Seasoning Mix",
+     "price": 1.98,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
+    },
+    {
+     "item": "Badia Spices Pumpkin Pie Spice",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
+    },
+    {
      "item": "Badia Spices Paprika",
      "price": 1.68,
      "size": "2 oz",
@@ -58,20 +72,6 @@
      "size": "7 oz",
      "relevance": null,
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
-    },
-    {
-     "item": "McCormick Less Sodium Chili Seasoning Mix",
-     "price": 1.68,
-     "size": "1.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16409937-mccormick-less-sodium-chili-seasoning-mix-1-25-oz"
-    },
-    {
-     "item": "Ortega Original Taco Seasoning Mix",
-     "price": 1.0,
-     "size": "1 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27326325-ortega-original-taco-seasoning-mix-1-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
