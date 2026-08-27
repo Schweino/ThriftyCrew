@@ -3,10 +3,10 @@
     "title":  "Ground Beef Cottage Cheese Bowl",
     "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
     "protein":  "beef",
-    "state":  "waved",
+    "state":  "qa-passed",
     "wave":  1,
     "created":  "2026-08-27T11:46:55",
-    "updated":  "2026-08-27T12:19:19",
+    "updated":  "2026-08-27T15:59:42",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-27T12:19:19",
                         "by":  "wave-close",
                         "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T15:59:42",
+                        "by":  "daemon",
+                        "detail":  "returned to the wave pool: wave 1 never published (its batch is unclosed), so the recipe was stranded at waved"
                     }
                 ]
 }

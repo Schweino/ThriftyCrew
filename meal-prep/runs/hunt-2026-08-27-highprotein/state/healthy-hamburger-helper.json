@@ -3,10 +3,10 @@
     "title":  "Healthy Hamburger Helper",
     "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
     "protein":  "beef",
-    "state":  "waved",
+    "state":  "qa-passed",
     "wave":  1,
     "created":  "2026-08-27T11:40:22",
-    "updated":  "2026-08-27T12:19:19",
+    "updated":  "2026-08-27T15:59:42",
     "terms":  [
                   {
                       "term":  "93/7 lean ground beef",
@@ -95,6 +95,12 @@
                         "at":  "2026-08-27T12:19:19",
                         "by":  "wave-close",
                         "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T15:59:42",
+                        "by":  "daemon",
+                        "detail":  "returned to the wave pool: wave 1 never published (its batch is unclosed), so the recipe was stranded at waved"
                     }
                 ]
 }

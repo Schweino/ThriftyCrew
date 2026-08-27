@@ -3,10 +3,10 @@
     "title":  "The Pioneer Woman Chili",
     "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
     "protein":  "beef",
-    "state":  "waved",
+    "state":  "qa-passed",
     "wave":  3,
     "created":  "2026-08-27T11:40:25",
-    "updated":  "2026-08-27T14:59:20",
+    "updated":  "2026-08-27T15:59:42",
     "terms":  [
                   {
                       "term":  "masa harina",
@@ -99,6 +99,12 @@
                         "at":  "2026-08-27T14:59:20",
                         "by":  "wave-close",
                         "detail":  "wave 3"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T15:59:42",
+                        "by":  "daemon",
+                        "detail":  "returned to the wave pool: wave 3 never published (its batch is unclosed), so the recipe was stranded at waved"
                     }
                 ]
 }

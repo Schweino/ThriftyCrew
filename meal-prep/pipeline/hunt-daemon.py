@@ -5887,6 +5887,7 @@ class Daemon(object):
         parked = [p["slug"] for p in (st.get("parked") or [])]
         counts = {}
         mapped_holds = []
+        rewaved_waves = set()   # waves whose manifest must be reconciled after a return
 
         # `pricing` / `parked`: run -Derive FIRST, then read the state again. Derived counts are the
         # only thing that moves a recipe out of pricing, and seeding off a stale state file would put
@@ -5948,12 +5949,30 @@ class Daemon(object):
                     # daemon believed it was holding. `waved` -> `qa-passed` is already a legal edge in
                     # hunt-run's transition table, which is the state machine having anticipated this
                     # exact return; the durable move is what makes the pool real.
+                    wk_open = self.state_wave(slug)
                     if await self.advance(slug, "qa-passed", "daemon",
                                           "returned to the wave pool: wave %d never published (its "
                                           "batch is unclosed), so the recipe was stranded at waved"
-                                          % self.state_wave(slug)):
+                                          % wk_open):
                         self.qa_passed.append(slug)
+                        # wave 0 means the state file never recorded one, so there is no manifest to
+                        # reconcile and -WaveSync would refuse the call outright.
+                        if wk_open:
+                            rewaved_waves.add(wk_open)
                         counts["rewave"] = counts.get("rewave", 0) + 1
+        # ...AND THE OLD MANIFEST MUST LET GO OF THEM. Moving the state back is two thirds of the
+        # return: the wave's manifest still LISTS the slug, and Get-ClaimedSlugs reads that manifest,
+        # so the closer answered "N qa-passed recipe(s) are waiting but ALL are already claimed by an
+        # open wave" and refused - the recovered recipes were unclaimable forever, one layer further
+        # on from where they were unresumable. hunt-run names the remedy in that very message, and
+        # -WaveSync drops exactly the slugs whose state no longer matches the manifest.
+        for wk_open in sorted(rewaved_waves):
+            rc, out, err = await self.ps(HUNT_RUN_PS, ["-WaveSync", "-Wave", str(wk_open),
+                                                       "-RunDir", self.run_dir], timeout=180)
+            if rc != 0:
+                self.findings.append("wave %d: the manifest could not be reconciled after a re-wave, "
+                                     "so its recipes stay claimed and no wave can close (%s)"
+                                     % (wk_open, ((out or "") + (err or "")).strip()[:200]))
         # THE UNHOLD, before anything is reported as held. One mechanical pass, zero agents.
         if mapped_holds:
             n = await self.unhold_mapped(mapped_holds)

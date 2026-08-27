@@ -6837,23 +6837,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T15:43:49"
+                                                     "checked":  "2026-08-27T16:00:39"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 returned 72 hits but only 8 priced Apollo rows were captured (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Fareway Seasoning Mix 10 oz, Badia Pumpkin Pie Spice, Papa Rico\u0027s Italian, Tasty Tacos Taco Seasoning) - the search clearly fuzz-matched \u0027seasoning mix\u0027 and ignored \u0027Moroccan\u0027; none of the 8 is a Moroccan blend or ras el hanout. I cannot see the other 64 rows and cannot walk the \u0027moroccan\u0027 / \u0027ras el hanout\u0027 rungs headless (no browser), so this is unchecked, not absent. price-ingredient.ps1 -Name \u0027Moroccan Spice Mix\u0027 and \u0027ras el hanout\u0027 are both ABSENT from today\u0027s captures - a capture miss is never not-carried.",
-                                                     "checked":  "2026-08-27T15:43:49"
+                                                     "evidence":  "driver rung 1 only, 6 tiles, adjudicated NONE is the ingredient: McCormick Chili Seasoning Mix 1.25oz, Spice Islands Beau Monde 3.5oz, Cavender\u0027s Greek All Purpose 8oz, Badia Italian/Mediterranean Blend 5oz, Fareway Seasoning Mix 10oz, Badia Pumpkin Pie Spice 2oz - all other-cuisine blends, no Moroccan blend or ras el hanout. Rungs beyond 1 (\u0027Moroccan seasoning\u0027, \u0027ras el hanout\u0027) not walked - no browser this session, so absence is unproven.",
+                                                     "checked":  "2026-08-27T16:00:39"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "full-ladder server probe: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (pre-pass); my extra rungs: \u0027moroccan\u0027 = 3 hits, all Suave Moroccan Oil shampoo/conditioner and Nair Moroccan Argan hair remover (non-food); \u0027ras el hanout\u0027 = 0 on both rungs. No Moroccan seasoning blend at Family Fare.",
-                                                         "checked":  "2026-08-27T15:43:49"
+                                                         "evidence":  "pre-pass probe-ingredient full ladder EMPTY: rung1 \u0027Moroccan Spice Mix\u0027=0, rung3 \u0027MoroccanSpiceMix\u0027=0. Ladder complete for a three-word blend term; zero candidates on every rung.",
+                                                         "checked":  "2026-08-27T16:00:39"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6861,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T15:43:49"
+                                                    "checked":  "2026-08-27T16:00:39"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver rung 1 only: \u0027Moroccan Spice Mix\u0027 returned 8 hits, all generic seasonings (McCormick Taco Seasoning 12pk \\.78, Lawry\u0027s Seasoned Salt, McCormick Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5 lb, two Kinder\u0027s rubs) - none is a Moroccan blend or ras el hanout. The \u0027moroccan\u0027 and \u0027ras el hanout\u0027 rungs were never run and I have no browser this session to run them, so this store is unchecked rather than empty. price-ingredient.ps1 finds no Sam\u0027s capture row for either term (a capture miss is never not-carried).",
-                                                             "checked":  "2026-08-27T15:43:49"
+                                                             "evidence":  "driver rung 1 only, 8 tiles, adjudicated NONE is the ingredient: McCormick taco seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, Salad Supreme, Montreal Steak 29oz, Hidden Valley garlic ranch, Old Bay 7.5lb, Kinder\u0027s whiskey peppercorn, Kinder\u0027s caramelized onion burger rub - no Moroccan blend or ras el hanout. Rungs beyond 1 not walked - no browser this session, so absence is unproven.",
+                                                             "checked":  "2026-08-27T16:00:39"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,15 +6877,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T15:43:49"
+                                                  "checked":  "2026-08-27T16:00:39"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "full-ladder server probe: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (pre-pass); I then walked two more rungs myself - probe-ingredient.ps1 \u0027moroccan\u0027 = 22 hits, all Tree Hut Moroccan Rose bath products, Stash Moroccan Mint tea and RiceSelect Moroccan-Style Couscous, no spice blend; probe-ingredient.ps1 \u0027ras el hanout\u0027 = 0 hits on both rungs. No Moroccan seasoning blend at Baker\u0027s.",
-                                                          "checked":  "2026-08-27T15:43:49"
+                                                          "evidence":  "pre-pass probe-ingredient full ladder EMPTY: rung1 \u0027Moroccan Spice Mix\u0027=0 candidates, rung3 spacing variant \u0027MoroccanSpiceMix\u0027=0. Three-word term so no head-noun rung and no strippable qualifier (mix is the blend itself); ladder complete, zero candidates on every rung.",
+                                                          "checked":  "2026-08-27T16:00:39"
                                                       }
                                  },
                       "verdict":  "PENDING",

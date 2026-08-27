@@ -9005,9 +9005,11 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
     try:
         run_dir = os.path.join(tmp, "run")
         os.makedirs(run_dir, exist_ok=True)
+        # WaveSize 1 so one recipe closes a REAL wave: the manifest has to exist and has to list the
+        # slug, or the claim half of this fixture is vacuous.
         rc, o, _e = hunt_lib.ps_invoke(HUNT_RUN_PS, [
             "-Init", "-RunDir", run_dir, "-Conditions", "drill", "-Stop", "2 accepted",
-            "-WaveSize", "2", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35",
+            "-WaveSize", "1", "-CalMin", "400", "-CalMax", "650", "-CarbMax", "35",
             "-ProteinMin", "0"])
         if rc != 0:
             return [("the rewave drill can init a scratch run dir", False, o.strip()[:200])]
@@ -9017,8 +9019,10 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
             json.dump({"batches": [{"batch": "rewave-drill-w1", "closed": False}]}, fh)
 
         # the real route, off hunt-run's own table: mapped goes through `pricing` to reach `priced`.
+        # It stops at qa-passed - the WAVE CLOSE is what advances it to `waved`, stamps wave=1 and
+        # writes the manifest, and doing that by hand would fake the very state under test.
         chain = ["sourced", "selected", "extracted", "mapped", "pricing", "priced", "spec-built",
-                 "written", "qa-passed", "waved"]
+                 "written", "qa-passed"]
         for i, st in enumerate(chain):
             args = ["-Advance", "-RunDir", run_dir, "-Slug", "r-waved", "-To", st, "-By", "drill",
                     "-Detail", "drill"]
@@ -9027,6 +9031,9 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
             r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, args)
             if r != 0:
                 return [("the rewave drill can stage a recipe at %s" % st, False, (oo + ee).strip()[:200])]
+        r, oo, ee = hunt_lib.ps_invoke(HUNT_RUN_PS, ["-WaveClose", "-RunDir", run_dir, "-NoLedger"])
+        if r != 0:
+            return [("the rewave drill can close a real wave", False, (oo + ee).strip()[:250])]
 
         def state_of():
             with io.open(os.path.join(run_dir, "state", "r-waved.json"), encoding="utf-8-sig") as fh:
@@ -9034,6 +9041,17 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
 
         out.append(("the drill really parked the recipe at waved before seeding", state_of() == "waved",
                     "state=%s" % state_of()))
+
+        def manifest_slugs():
+            man = os.path.join(run_dir, "waves", "wave-1.json")
+            if not os.path.exists(man):
+                return None
+            with io.open(man, encoding="utf-8-sig") as fh:
+                return (json.load(fh) or {}).get("slugs") or []
+
+        out.append(("...and the wave manifest really CLAIMS it before seeding, or the claim half of "
+                    "this fixture proves nothing",
+                    manifest_slugs() == ["r-waved"], "manifest=%s" % json.dumps(manifest_slugs())))
 
         d = HD.Daemon(run_dir, "rewave-drill", quiet=True, ledger_path=led)
         ok, err = arun(d.seed())
@@ -9047,6 +9065,14 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
                     "r-waved" in d.qa_passed, json.dumps(d.qa_passed)))
         out.append(("  ...and the seed SAYS how many it returned, so a silent recovery is visible",
                     d.seed_counts.get("rewave") == 1, json.dumps(d.seed_counts)))
+        # ...AND THE MANIFEST LETS GO. Moving the state was two thirds of the return: Get-ClaimedSlugs
+        # reads the wave manifest, so a slug still listed there is "already claimed by an open wave"
+        # and the closer refuses - unclaimable forever, one layer past unresumable. Measured on the
+        # live run: six recovered recipes, and every close refused until the manifests were synced.
+        out.append(("MUST FIRE  the old wave manifest no longer CLAIMS the returned slug - the state "
+                    "move alone left it claimed, and the closer refuses a claimed pool",
+                    manifest_slugs() == [],
+                    "wave-1 manifest still lists %s" % json.dumps(manifest_slugs())))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return out
