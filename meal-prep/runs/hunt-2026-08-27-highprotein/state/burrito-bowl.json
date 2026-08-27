@@ -1,0 +1,31 @@
+{
+    "slug":  "burrito-bowl",
+    "title":  "Burrito Bowls",
+    "source_url":  "https://thecozycook.com/burrito-bowl-recipe/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:51:36",
+    "updated":  "2026-08-27T11:51:37",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground-beef taco-seasoned burrito bowl with cilantro-lime rice, black beans, corn and sour cream is the same dinner as live beef-burrito-bowls (High-Protein Beef Burrito Bowls) on all four axes.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:51:36",
+                        "by":  "harvest",
+                        "detail":  "https://thecozycook.com/burrito-bowl-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:51:37",
+                        "by":  "decider",
+                        "detail":  "Ground-beef taco-seasoned burrito bowl with cilantro-lime rice, black beans, corn and sour cream is the same dinner as live beef-burrito-bowls (High-Protein Beef Burrito Bowls) on all four axes."
+                    }
+                ]
+}

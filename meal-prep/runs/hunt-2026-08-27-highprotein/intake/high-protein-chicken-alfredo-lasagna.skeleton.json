@@ -1,0 +1,87 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T12:14:32",
+    "slug":  "high-protein-chicken-alfredo-lasagna",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Chicken Alfredo Lasagna",
+                   "slug":  "high-protein-chicken-alfredo-lasagna",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Frozen Lightly Breaded Chicken Breast Bites",
+                                           "grams":  1058,
+                                           "buy":  "2 lb 5 oz, baked from frozen and roughly chopped"
+                                       },
+                                       {
+                                           "item":  "Cottage Cheese",
+                                           "grams":  1058,
+                                           "buy":  "4 2/3 cups (2 lb 5 oz)"
+                                       },
+                                       {
+                                           "item":  "Alfredo Sauce",
+                                           "grams":  420,
+                                           "buy":  "1 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  9,
+                                           "buy":  "a generous pinch of each (about 1 1/2 tsp salt and 3/4 tsp black pepper)"
+                                       },
+                                       {
+                                           "item":  "Fresh Mozzarella",
+                                           "grams":  529,
+                                           "buy":  "1 lb 2 1/2 oz, roughly shredded"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  265,
+                                           "buy":  "2 1/3 cups freshly grated (9 1/3 oz)"
+                                       },
+                                       {
+                                           "item":  "No-Boil Lasagna Noodles",
+                                           "grams":  364,
+                                           "buy":  "21 sheets (about 12 3/4 oz)"
+                                       },
+                                       {
+                                           "item":  "Fresh Parsley",
+                                           "grams":  23,
+                                           "buy":  "6 tbsp chopped"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  496,
+                                              "protein_g":  40.7,
+                                              "carbs_g":  34.4,
+                                              "fat_g":  21.4
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT1H",
+                                "totalTime":  "PT1H15M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

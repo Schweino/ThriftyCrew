@@ -1,0 +1,31 @@
+{
+    "slug":  "taco-spaghetti",
+    "title":  "Taco Spaghetti",
+    "source_url":  "https://ohsnapmacros.com/high-protein-taco-spaghetti/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:48:50",
+    "updated":  "2026-08-27T11:48:50",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground-beef Tex-Mex taco pasta with Rotel, taco seasoning, corn and cottage cheese is the same dinner as live cheesy-taco-spaghetti (shares beef, taco spice, pasta, tomatoes-green-chilies); the estate already folded taco-pasta-one-pot into this same slug.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:50",
+                        "by":  "harvest",
+                        "detail":  "https://ohsnapmacros.com/high-protein-taco-spaghetti/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:48:50",
+                        "by":  "decider",
+                        "detail":  "Ground-beef Tex-Mex taco pasta with Rotel, taco seasoning, corn and cottage cheese is the same dinner as live cheesy-taco-spaghetti (shares beef, taco spice, pasta, tomatoes-green-chilies); the estate already folded taco-pasta-one-pot into this same slug."
+                    }
+                ]
+}

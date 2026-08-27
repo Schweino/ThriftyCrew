@@ -1,0 +1,182 @@
+{
+ "slug": "butter-chicken-pasta",
+ "lines": [
+  {
+   "raw": "10.5 oz (300 g) short pasta",
+   "buy": "2 lb 5 oz dry short pasta (penne, rigatoni or rotini)",
+   "grams_source": 300,
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon (20 g) butter",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 lb (450 g) chicken breast, cut into bite-sized pieces",
+   "buy": "3 1/2 lb, cut into bite-sized pieces",
+   "notes": ""
+  },
+  {
+   "raw": "1 medium onion, diced",
+   "buy": "3 1/2 medium onions, diced (about 4 cups)",
+   "grams_source": 110,
+   "notes": ""
+  },
+  {
+   "raw": "2 garlic cloves, finely chopped",
+   "buy": "7 cloves, finely chopped",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon fresh ginger, finely chopped",
+   "buy": "3 1/2 tablespoons, finely chopped",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon garam masala",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon ground cumin",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon ground coriander",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon chili powder",
+   "buy": "3 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1/2 teaspoon turmeric",
+   "buy": "1 3/4 teaspoons",
+   "grams_source": 1.5,
+   "notes": ""
+  },
+  {
+   "raw": "1/4 teaspoon red chili flakes",
+   "buy": "3/4 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1 tablespoon tomato paste",
+   "buy": "3 1/2 tablespoons",
+   "notes": ""
+  },
+  {
+   "raw": "2 cups (400 ml) tomato sauce (passata)",
+   "buy": "7 cups",
+   "notes": ""
+  },
+  {
+   "raw": "1 cup (200 ml) half and half (single cream)",
+   "buy": "3 1/2 cups",
+   "grams_source": 202,
+   "notes": "The table computed no weight for this line; 200 ml at 1.01 g/ml = 202 g."
+  },
+  {
+   "raw": "2 tablespoons almond butter",
+   "buy": "7 tablespoons (a scant 1/2 cup)",
+   "grams_source": 32,
+   "notes": ""
+  },
+  {
+   "raw": "A handful fresh cilantro (coriander)",
+   "buy": "1 1/2 cups leaves, roughly chopped",
+   "notes": ""
+  },
+  {
+   "raw": "Salt and freshly ground black pepper to taste [split: Salt]",
+   "buy": "to taste (about 2 1/2 teaspoons)",
+   "grams_source": 4.3,
+   "notes": "Re-weighed: the table's 20 g source basis becomes 70 g at 3.5x, five times the estate's published to-taste salt."
+  },
+  {
+   "raw": "Salt and freshly ground black pepper to taste [split: freshly ground black pepper]",
+   "buy": "to taste (about 1 3/4 teaspoons)",
+   "grams_source": 1.1,
+   "notes": "Re-weighed for the same reason: 4 g source would be 14 g at batch against a 4 g precedent."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "10.5 oz (300 g) short pasta",
+   "term": "short pasta",
+   "canon_item": "Ziti Pasta",
+   "bid": "pasta",
+   "decision": "mapped",
+   "grams_source": 300,
+   "evidence": "The source names no shape, so the generic dry short-cut pasta id is the honest match rather than rotini specifically; board carries `pasta` 7 of 7 at 0.0571. Source states its own 300 g."
+  },
+  {
+   "raw": "1 medium onion, diced",
+   "term": "medium onion",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped",
+   "grams_source": 110,
+   "evidence": "'Medium' is a size word: the 'medium yellow onion' -> onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate's 70 g small and a large."
+  },
+  {
+   "raw": "1/2 teaspoon turmeric",
+   "term": "turmeric",
+   "canon_item": "Ground Turmeric",
+   "bid": "ground-turmeric",
+   "decision": "mapped",
+   "grams_source": 1.5,
+   "evidence": "Turmeric measured by the teaspoon is the ground spice jar, not fresh root: not a form flip but a rename, the same call as 'ground oregano' -> dried-oregano. Board 7 of 7; 1/2 tsp ground = 1.5 g."
+  },
+  {
+   "raw": "2 tablespoons almond butter",
+   "term": "almond butter",
+   "canon_item": "Almond Butter",
+   "bid": "almond-butter",
+   "decision": "mapped",
+   "grams_source": 32,
+   "evidence": "REFUSED both near rows: the board's `butter` match is dairy butter (a wrong-food match) and peanut-butter is a different nut at roughly a third of the price. No estate id names an almond spread, so it goes to the registrar. 2 tbsp = 32 g."
+  }
+ ],
+ "absent_terms": [
+  "almond butter"
+ ],
+ "db_entries_written": [
+  "Almond Butter"
+ ],
+ "db_row_findings": [
+  "butter-chicken-pasta: the food DB already carries 'Ziti Pasta' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 357.1 cal / 12.5 P / 75.0 C / 1.8 F  vs  mapper 371.0 / 13.0 / 74.7 / 1.5. On one basis (the mapper's row scaled onto the DB's 1 2/3 cup (56g) dry = 56 g) they still disagree: calories 207.8 vs 200. existing={\"serving_grams\": 56, \"serving_qty\": 1, \"serving_unit\": \"2/3 cup (56g) dry\", \"calories\": 200, \"protein_g\": 7, \"carbs_g\": 42, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 371, \"protein_g\": 13.0, \"carbs_g\": 74.7, \"fat_g\": 1.51}"
+ ],
+ "db_row_notes": [
+  "butter-chicken-pasta: 'Yellow Onion' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 0.5 cup chopped = 80 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "butter-chicken-pasta: 'Ground Turmeric' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tsp = 3 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "almond butter",
+   "proposed_bid": "almond-butter",
+   "evidence": "A nut spread sold in the nut-butter aisle at roughly three times peanut butter per jar, and nutritionally distinct (614 cal, 21 g protein, 55.5 g fat per 100 g). The only near ids are `butter` (dairy, an outright wrong food that the board's matcher offered) and `peanut-butter` (a different nut and a different price class), so no existing id prices this food under another spelling. Not a form flip of anything: there is no other almond spread on the board.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "almond-butter",
+   "verdict": "approve",
+   "bid": "almond-butter",
+   "reason": "Not priced anywhere: the live feed contains zero 'almond butter' strings under any id, and no row in commodities.json, recipe-commodities.json, the recipe-board baseline, or recipe-floor-id-map.json carries an almond spread. The estate already treats it as a distinct food — dairy 'butter' has an explicit almond\\s+butter exclude (commodities.json line 1373) and 'almonds' excludes 'butter', so both neighbors deliberately refuse these products; 'peanut-butter' is a different nut and price class (variant boundary, not a respelling). Mint almond-butter as recipe-only (recipe-board baseline + recipe-commodities.json) unless Brad promotes it to the weekly worklist. Prescription: include ['almond\\s+butter']; build the exclude list to neighbor rigor — at minimum cookie/cookie butter, body butter, powdered, baby-food brands (beech nut, gerber, stage 1-3), candy/chocolate/bar, granola, protein bar, spread blends, flavored coffee/creamer — model on peanut-butter's list. Add commodity-dupe-allowlist.json pairs (almond-butter, butter: 'nut spread vs dairy, different foods') and (almond-butter, peanut-butter: 'different nut, deliberate variant') so audit-commodity-dupes.ps1 never re-flags the shared 'butter' token. Separately on the NAME namespace: the vocabulary has no Almond Butter row (nearest are Peanut Butter and Butter, neither of which this resolves to), so a new vocabulary row 'Almond Butter' is needed too — FDC 168603 (almond butter, plain, with salt) is the plausible macros source but that row must be minted through the vocabulary path, not as a side effect of this id ruling."
+  }
+ ],
+ "macro_cross_check": "Source published 542 cal / 46 protein for 4 servings. Recomputed over all 20 lines at source basis: 2561 cal and 162 g protein total, i.e. 640 cal and 40.6 g protein per serving. Protein is -11.7% against the source, inside the 15% band but the tightest of this batch, and it sits barely above this run's 40 g floor - flagging that loudly, because any downward revision of the 450 g chicken breast or the DB's 25 g protein per 4 oz row would drop it under. Calories run +18%, driven by US half-and-half (202 g) standing in for the source's single cream and by dry-pasta basis. Both numbers land inside the run band of 450-800 cal and >=40 g protein."
+}

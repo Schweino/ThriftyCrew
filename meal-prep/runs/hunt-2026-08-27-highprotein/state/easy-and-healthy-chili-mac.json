@@ -1,0 +1,31 @@
+{
+    "slug":  "easy-and-healthy-chili-mac",
+    "title":  "Easy and Healthy Chili Mac",
+    "source_url":  "https://easyeatsdietitian.com/easy-and-healthy-chili-mac/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:33",
+    "updated":  "2026-08-27T11:42:34",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground turkey/chicken chili macaroni with beans and cheddar is the same dinner as live turkey-chili-mac; chili-mac region fully saturated this batch.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:33",
+                        "by":  "harvest",
+                        "detail":  "https://easyeatsdietitian.com/easy-and-healthy-chili-mac/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:34",
+                        "by":  "decider",
+                        "detail":  "Ground turkey/chicken chili macaroni with beans and cheddar is the same dinner as live turkey-chili-mac; chili-mac region fully saturated this batch."
+                    }
+                ]
+}

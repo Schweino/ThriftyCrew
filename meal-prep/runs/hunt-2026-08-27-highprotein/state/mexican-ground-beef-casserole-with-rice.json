@@ -1,0 +1,31 @@
+{
+    "slug":  "mexican-ground-beef-casserole-with-rice",
+    "title":  "Mexican Ground Beef Casserole with Rice (Beef mince!)",
+    "source_url":  "https://www.recipetineats.com/mexican-ground-beef-casserole-with-rice/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:36",
+    "updated":  "2026-08-27T11:42:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Mexican-spiced ground beef + rice (with beans, corn, cheese) is the same dinner as live arroz-con-carne-molida and beef-burrito-bowls; 3/4 axes and the loaded burrito-bake sits inside an already-covered Tex-Mex region.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:36",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/mexican-ground-beef-casserole-with-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:36",
+                        "by":  "decider",
+                        "detail":  "Mexican-spiced ground beef + rice (with beans, corn, cheese) is the same dinner as live arroz-con-carne-molida and beef-burrito-bowls; 3/4 axes and the loaded burrito-bake sits inside an already-covered Tex-Mex region."
+                    }
+                ]
+}

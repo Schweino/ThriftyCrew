@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-one-pot-ground-turkey-pasta",
+    "title":  "One-Pot Ground Turkey Pasta",
+    "source_url":  "https://lemonsandzest.com/ground-turkey-pasta/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:29",
+    "updated":  "2026-08-27T11:42:30",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy tomato ground-turkey shells with parmesan and heavy cream is the same dinner as live creamy-ground-turkey-shell-pasta (shares turkey, cream, parmesan, onion, pasta).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:29",
+                        "by":  "harvest",
+                        "detail":  "https://lemonsandzest.com/ground-turkey-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:30",
+                        "by":  "decider",
+                        "detail":  "Creamy tomato ground-turkey shells with parmesan and heavy cream is the same dinner as live creamy-ground-turkey-shell-pasta (shares turkey, cream, parmesan, onion, pasta)."
+                    }
+                ]
+}

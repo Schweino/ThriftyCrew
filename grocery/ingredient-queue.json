@@ -3606,7 +3606,8 @@
                   {
                       "term":  "cotija cheese",
                       "recipes":  [
-                                      "tex-mex-baked-chicken"
+                                      "tex-mex-baked-chicken",
+                                      "street-corn-chicken-rice-bowls"
                                   ],
                       "added":  "2026-08-24T19:22:24",
                       "why":  "tex-mex-baked-chicken needs it",
@@ -3617,56 +3618,56 @@
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027cotija cheese\u0027 = ABSENT across all captures, which is a capture miss and never not-carried.",
-                                                     "checked":  "2026-08-24T19:25:46"
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:08:10"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "driver RUNG 1 ONLY, MATCHES=72 and not one row is cotija - crumbled feta, Mexican-style shredded blends, grated parmesan, queso dip, tortillas. That pile is Instacart relevance drift off \u0027cheese\u0027, so rung 1 did not really test the term; no browser here to walk rungs 2-4 (\u0027cotija\u0027, \u0027queso cotija\u0027, brand Cacique). Blocked, not not-carried.",
-                                                     "checked":  "2026-08-24T19:25:46"
+                                                     "evidence":  "driver rung 1 only, and evidence file stores just the top 8 of 22 hits. Visible 8 are fuzzy cheese/taco filler (Fareway Taco Blend, Neufchatel, crumbled blue, cottage cheese, Mission tortillas) with no cotija, but I cannot see rows 9-22 and have no browser to walk rung 2 (\u0027cotija\u0027). Not searched to conclusion - not an empty shelf.",
+                                                     "checked":  "2026-08-27T12:08:10"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  5.99,
                                                          "size":  "10 oz",
                                                          "item":  "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz",
-                                                         "evidence":  "full-ladder MATCHES=2, both cotija; adjudicated in: El Mexicano Cotija grating cheese 10 oz $5.99 (and Granulado Cotija 16 oz $8.89).",
-                                                         "checked":  "2026-08-24T19:25:46"
+                                                         "evidence":  "probe rung 1 \u0027cotija cheese\u0027, 2 hits, both real cotija; took the 10 oz grating wedge. Second hit El Mexicano Cotija Granulado 16 oz .89.",
+                                                         "checked":  "2026-08-27T12:08:10"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
                                                     "price":  null,
                                                     "size":  "",
                                                     "item":  "",
-                                                    "evidence":  "blocked - no browser in this session. Disk checked: price-ingredient.ps1 -Name \u0027cotija cheese\u0027 returns ABSENT - no commodity claims the term and nothing in any capture matches. ABSENT is explicitly not a verdict of zero; stays PENDING.",
-                                                    "checked":  "2026-08-24T19:25:46"
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T12:08:10"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "blocked",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "driver RUNG 1 ONLY, MATCHES=17 with no cotija row (panela, feta, mozzarella, parmesan, Dubliner) - the same generic-cheese drift. Rung 1 alone cannot support not-carried and no browser to ladder; blocked.",
-                                                             "checked":  "2026-08-24T19:25:46"
+                                                             "evidence":  "driver rung 1 only, top 8 of 19 hits stored. Visible 8 are Alpine blend, mozzarella, feta, panela, Laughing Cow - no cotija - but rows 9-19 are not in the evidence file and I have no browser to walk rung 2. Not searched to conclusion.",
+                                                             "checked":  "2026-08-27T12:08:10"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
                                                   "price":  null,
                                                   "size":  "",
                                                   "item":  "",
-                                                  "evidence":  "blocked - no browser in this session. price-ingredient.ps1 -Name \u0027cotija cheese\u0027 = ABSENT across all captures, which is a capture miss and never not-carried.",
-                                                  "checked":  "2026-08-24T19:25:46"
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T12:08:10"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  5.49,
                                                           "size":  "10 oz",
                                                           "item":  "Cacique Cotija Part Skim Milk Cheese",
-                                                          "evidence":  "full-ladder MATCHES=3, all three genuinely cotija; adjudicated in: Cacique Cotija 10 oz $5.49, plus Queso Campesino Cotija 12 oz $8.49 and Kroger Mercado Queso Cotija Grated 8 oz $3.79.",
-                                                          "checked":  "2026-08-24T19:25:46"
+                                                          "evidence":  "probe rung 1 \u0027cotija cheese\u0027, 3 hits; this is genuine cotija in the standard 10 oz wedge a cook buys for crumbling. Also present: Queso Campesino Cotija 12 oz .49 and Kroger Mercado Queso Cotija Grated 8 oz .79.",
+                                                          "checked":  "2026-08-27T12:08:10"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -4641,7 +4642,8 @@
                   {
                       "term":  "red onion",
                       "recipes":  [
-                                      "italian-turkey-burgers"
+                                      "italian-turkey-burgers",
+                                      "street-corn-chicken-rice-bowls"
                                   ],
                       "added":  "2026-08-26T04:46:13",
                       "why":  "italian-turkey-burgers needs it",
@@ -4650,58 +4652,58 @@
                                      "Walmart":  {
                                                      "state":  "carried",
                                                      "price":  1.34,
-                                                     "size":  "lb (3 lb bag)",
+                                                     "size":  "$/lb (3 lb bag)",
                                                      "item":  "Fresh Red Onions, 3 lb, Bag",
-                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 resolves commodity red-onion and returns Walmart \u0027Fresh Red Onions, 3 lb, Bag\u0027 at $1.34/lb. Price recorded on the board\u0027s per-lb basis.",
-                                                     "checked":  "2026-08-26T04:53:44"
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 returns a Walmart capture row \u0027Fresh Red Onions, 3 lb, Bag\u0027 at $1.34/lb from comparison-2026-08-26.json. Fresh red onion, correct form.",
+                                                     "checked":  "2026-08-27T12:08:10"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  1.11,
-                                                     "size":  "each ($1.48/lb)",
+                                                     "size":  "$1.48 / lb",
                                                      "item":  "Red Onion",
-                                                     "evidence":  "driver rung 1 \u0027red onion\u0027, 18 rows: \u0027Red Onion\u0027 $1.11 at $1.48/lb, the loose fresh onion. Diced Crazy Fresh, Mezzetta pickled and Litehouse freeze-dried rows were rejected as processed forms.",
-                                                     "checked":  "2026-08-26T04:53:44"
+                                                     "evidence":  "driver rung 1 \u0027red onion\u0027, top hit is the loose fresh \u0027Red Onion\u0027 at .11 ea / .48 per lb. Rest of the visible grid degrades to cilantro/cucumber/avocado, but rung 1 already answered.",
+                                                     "checked":  "2026-08-27T12:08:10"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
-                                                         "price":  1.99,
+                                                         "price":  1.79,
                                                          "size":  "lb",
-                                                         "item":  "Organic Red Onions",
-                                                         "evidence":  "server probe rung 1 \u0027red onion\u0027, 8 hits: Organic Red Onions $1.99/lb, and Sweet Red Italian Onions $1.79/lb. Fresh whole red onions; the Mt. Olive pickled onions, freeze-dried onion and onion rings were rejected.",
-                                                         "checked":  "2026-08-26T04:53:44"
+                                                         "item":  "Sweet Red Italian Onions",
+                                                         "evidence":  "probe rung 1 \u0027red onion\u0027, 7 hits; ruled out pickled (Mt. Olive), freeze-dried (Litehouse) and onion rings. Sweet Red Italian Onions .79/lb is the fresh red onion.",
+                                                         "checked":  "2026-08-27T12:08:10"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "carried",
                                                     "price":  1.28,
-                                                    "size":  "lb",
+                                                    "size":  "$/lb (sold ~0.85 lb each)",
                                                     "item":  "Sweet Red Onions",
-                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 resolves commodity red-onion and returns Hy-Vee \u0027Sweet Red Onions\u0027 at $1.28/lb (0.85 lb each). A sweet red onion is a red onion, sold loose and fresh.",
-                                                    "checked":  "2026-08-26T04:53:44"
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 resolves commodity red-onion and returns a Hy-Vee capture row \u0027Sweet Red Onions\u0027 at $1.28/lb from comparison-2026-08-26.json (week 2026-08-26). Fresh red onion, correct form.",
+                                                    "checked":  "2026-08-27T12:08:10"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
-                                                             "price":  6.42,
-                                                             "size":  "6 lbs",
-                                                             "item":  "Tanimura and Antle Sweet Italian Red Onions",
-                                                             "evidence":  "driver rung 1 \u0027red onion\u0027, 20 hits: Tanimura and Antle Sweet Italian Red Onions, 6 lbs, $6.42. Fresh whole red onions in a club bag; the tomato and sweet/yellow onion rows were rejected.",
-                                                             "checked":  "2026-08-26T04:53:44"
+                                                             "price":  6.15,
+                                                             "size":  "6 lb",
+                                                             "item":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+                                                             "evidence":  "driver rung 1 \u0027red onion\u0027; the only red onion in the grid, a 6 lb club bag of fresh sweet Italian red onions at .15 (~.03/lb). Other rows are yellow/sweet onions and tomatoes, correctly excluded.",
+                                                             "checked":  "2026-08-27T12:08:10"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  1.095,
-                                                  "size":  "lb (2 lb bag)",
+                                                  "size":  "$/lb (2 lb bag)",
                                                   "item":  "Red Onion Bag 2 Lbs",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 resolves commodity red-onion and returns Aldi \u0027Red Onion Bag 2 Lbs\u0027 at $1.095/lb, the cheapest of 5 stores on the board cell. Price recorded on the board\u0027s per-lb basis.",
-                                                  "checked":  "2026-08-26T04:53:44"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red onion\u0027 returns an Aldi capture row \u0027Red Onion Bag 2 Lbs\u0027 at $1.095/lb (cheapest of 5 stores) from comparison-2026-08-26.json. Fresh red onion bag.",
+                                                  "checked":  "2026-08-27T12:08:10"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  1.69,
                                                           "size":  "1 lb",
                                                           "item":  "Jumbo Red Onions",
-                                                          "evidence":  "server probe rung 1 \u0027red onion\u0027, 17 hits: Jumbo Red Onions $1.69/lb, top relevance. Loose fresh red onions. Board also carries Kroger Red Onion 3 lb Bag at $1.33/lb. The pickled-onion jars were rejected.",
-                                                          "checked":  "2026-08-26T04:53:44"
+                                                          "evidence":  "probe rung 1 \u0027red onion\u0027, 17 hits; Jumbo Red Onions .69/lb is the loose fresh bulb. Board also carries Kroger Red Onion 3 lb Bag at .33/lb.",
+                                                          "checked":  "2026-08-27T12:08:10"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -5608,7 +5610,8 @@
                   {
                       "term":  "fresh mozzarella",
                       "recipes":  [
-                                      "sheet-pan-pesto-chicken-dinner"
+                                      "sheet-pan-pesto-chicken-dinner",
+                                      "high-protein-chicken-alfredo-lasagna"
                                   ],
                       "added":  "2026-08-26T05:09:09",
                       "why":  "sheet-pan-pesto-chicken-dinner needs it",
@@ -5620,23 +5623,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:17:31"
+                                                     "checked":  "2026-08-27T12:13:40"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  4.99,
                                                      "size":  "8 oz",
                                                      "item":  "BelGioioso Fresh Mozzarella Cheese, Ball",
-                                                     "evidence":  "driver lookup rung 1 at Fareway: 33 priced nodes; three BelGioioso FRESH mozzarella forms (ball, sliced, pearls) at \\.99/8 oz. Fareway low-moisture part-skim, Crystal Farms shreds, Tillamook snacks and string cheese all ruled out - low-moisture is not fresh mozzarella.",
-                                                     "checked":  "2026-08-26T05:17:31"
+                                                     "evidence":  "driver rung-1 lookup, 5 nodes; BelGioioso Fresh Mozzarella Ball 8 oz $4.99 is the ingredient. Fareway low-moisture part-skim $2.48 and Tillamook snack sticks ruled out - wrong cheese form.",
+                                                     "checked":  "2026-08-27T12:13:40"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  5.89,
                                                          "size":  "8 oz",
-                                                         "item":  "Bel Gioioso Fresh Mozzarella Cheese 226 G",
-                                                         "evidence":  "probe rung 1 at Family Fare: 3 hits, all Bel Gioioso FRESH mozzarella (ball 226 g, pearls 8 oz, sliced 8 oz) at \\.89. 226 g = 8 oz.",
-                                                         "checked":  "2026-08-26T05:17:31"
+                                                         "item":  "Bel Gioioso Fresh Mozzarella Cheese",
+                                                         "evidence":  "server-tier probe, 3 candidates, all genuine fresh mozzarella; base ball 8 oz $5.89.",
+                                                         "checked":  "2026-08-27T12:13:40"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -5644,31 +5647,31 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:17:31"
+                                                    "checked":  "2026-08-27T12:13:40"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  8.28,
                                                              "size":  "32 oz",
-                                                             "item":  "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
-                                                             "evidence":  "driver lookup rung 1 at Sam\u0027s Club: 29 hits; \u0027BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.\u0027 \\.28, unit \\.26/oz - genuine fresh mozzarella in club size. All Member\u0027s Mark part-skim/shredded, Frigo string cheese and Formaggio wraps ruled out.",
-                                                             "checked":  "2026-08-26T05:17:31"
+                                                             "item":  "BelGioioso Pre-Sliced Fresh Mozzarella",
+                                                             "evidence":  "driver rung-1 lookup, 28 nodes; BelGioioso Pre-Sliced Fresh Mozzarella 32 oz linePrice $8.28 / $0.26 per oz, and BelGioioso Fresh Mozzarella Pearls 8 oz 3 pk $7.44. Members Mark part-skim and shredded rows ruled out.",
+                                                             "checked":  "2026-08-27T12:13:40"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  3.29,
                                                   "size":  "8 oz",
                                                   "item":  "Emporium Selection Fresh Mozzarella Ball 8 OZ",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027fresh mozzarella\u0027 names two Aldi capture rows, Emporium Selection Fresh Mozzarella Ball 8 oz \\.29 and Pre Sliced Fresh Mozzarella Log 8 oz \\.29. Aldi\u0027s Happy Farms shred/block rows are low-moisture and were not used.",
-                                                  "checked":  "2026-08-26T05:17:31"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \"fresh mozzarella\" returns Aldi Emporium Selection Fresh Mozzarella Ball 8 oz $3.29 (plus pre-sliced log $3.29 and in-marinade $3.49) from aldi-regular-2026-08-27.json, in-store mode verified 2026-08-27.",
+                                                  "checked":  "2026-08-27T12:13:40"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  3.99,
                                                           "size":  "8 oz",
                                                           "item":  "BelGioioso Fresh Mozzarella Cheese",
-                                                          "evidence":  "probe rung 1 at Baker\u0027s: 12 hits; rel 132 BelGioioso Fresh Mozzarella 8 oz \\.99 is the soft fresh ball, not low-moisture shred. Pearls/ciliegine/Private Selection forms corroborate at \\.99-\\.99.",
-                                                          "checked":  "2026-08-26T05:17:31"
+                                                          "evidence":  "server-tier probe, 12 candidates; BelGioioso Fresh Mozzarella Cheese 8 oz $3.99 is the ingredient (soft fresh mozzarella ball), not low-moisture shred. Skipped the Kroger sliced row - no honest price.",
+                                                          "checked":  "2026-08-27T12:13:40"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -6057,6 +6060,835 @@
                                                       }
                                  },
                       "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "protein pasta",
+                      "recipes":  [
+                                      "high-protein-pesto-pasta-with-chicken"
+                                  ],
+                      "added":  "2026-08-27T11:55:50",
+                      "why":  "high-protein-pesto-pasta-with-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "14.5 oz",
+                                                     "item":  "Barilla Protein+ (Plus) Rotini Pasta",
+                                                     "evidence":  "driver rung 1 \u0027protein pasta\u0027 = 6 priced Apollo nodes, all six Barilla Protein+ shapes at $2.99/14.5 oz; adjudicated: this is the ingredient in buyable dry form",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.69,
+                                                         "size":  "8.8 oz",
+                                                         "item":  "Barilla Chickpea Pasta, Spaghetti",
+                                                         "evidence":  "pre-pass ladder rung 3 \u0027protein\u0027 returned only shakes/bars - none is the ingredient; I walked further rungs myself on Freshop store_id 6401: \u0027chickpea pasta\u0027 = 1 hit Barilla Chickpea Pasta Spaghetti 8.8 oz $3.69 and \u0027lentil\u0027 = Barilla Red Lentil Rotini 8.8 oz $3.99, both legume high-protein dry pasta. \u0027barilla protein\u0027 and \u0027banza\u0027 returned 0 / a canned soup only",
+                                                         "checked":  "2026-08-27T11:58:35"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T11:58:35"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.48,
+                                                             "size":  "14.5 oz, 4 pk.",
+                                                             "item":  "Barilla Protein+ Penne \u0026 Rotini",
+                                                             "evidence":  "driver rung 1 \u0027protein pasta\u0027 = 23 hits; adjudicated: Barilla Protein+ Penne \u0026 Rotini 4-pack $8.48 is the ingredient. Ruled out GOODLES/Kraft mac kits, Tangle mushroom pasta bowl and plain Barilla spaghetti as not high-protein pasta",
+                                                             "checked":  "2026-08-27T11:58:35"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T11:58:35"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.99,
+                                                          "size":  "14.5 oz",
+                                                          "item":  "Barilla Protein+ (Plus) Rotini Pasta",
+                                                          "evidence":  "pre-pass rung 1 \u0027protein pasta\u0027 = 25 hits, kroger-public-api locationId 61500319; adjudicated: Barilla Protein+ Rotini 14.5 oz .99 is a dry legume-protein pasta a cook buys for this recipe (also GOODLES protein pasta .99/8 oz, Kroger Protein Penne .19/14.5 oz)",
+                                                          "checked":  "2026-08-27T11:58:35"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "bone broth",
+                      "recipes":  [
+                                      "high-protein-pesto-pasta-with-chicken"
+                                  ],
+                      "added":  "2026-08-27T11:55:50",
+                      "why":  "high-protein-pesto-pasta-with-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.99,
+                                                     "size":  "32 oz",
+                                                     "item":  "Pacific Foods Organic Unsalted Chicken Bone Broth",
+                                                     "evidence":  "driver rung 1 \u0027bone broth\u0027 = 6 priced Apollo nodes; adjudicated: Pacific Foods Organic Unsalted Chicken Bone Broth 32 oz $7.99 is the ingredient (Kitchen Basics 8.25 oz $2.39 also qualifies); Swanson sipping cups are drink-format",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.69,
+                                                         "size":  "32 fl oz",
+                                                         "item":  "Our Family Chicken Bone Broth 32 Fl Oz",
+                                                         "evidence":  "pre-pass rung 1 \u0027bone broth\u0027 = 15 hits; adjudicated: Our Family Chicken Bone Broth 32 fl oz $2.69 (base private label) is the ingredient; sipping cups and Zoup! premium cartons also present",
+                                                         "checked":  "2026-08-27T11:58:35"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T11:58:35"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.48,
+                                                             "size":  "32 oz, 3 pk.",
+                                                             "item":  "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+                                                             "evidence":  "driver rung 1 \u0027bone broth\u0027 = 27 hits; adjudicated: Swanson Chicken Bone Broth 32 oz 3-pack $8.48 ($0.09/oz) is the ingredient. Ruled out Bare Bones instant sticks, Kinder\u0027s gravy mix and Solid Gold DOG FOOD topper",
+                                                             "checked":  "2026-08-27T11:58:35"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.39,
+                                                  "size":  "32 oz",
+                                                  "item":  "Simply Nature Organic Chicken Bone Broth 32 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027bone broth\u0027 returned 25 capture candidates across 3 stores incl. Aldi Simply Nature Organic Chicken Bone Broth 32 oz $3.39 and Simply Nature Organic Beef Bone Broth 32 oz $3.39; adjudicated: these are the ingredient in cooking cartons",
+                                                  "checked":  "2026-08-27T11:58:35"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.49,
+                                                          "size":  "32 oz",
+                                                          "item":  "Swanson Chicken Bone Broth 32 oz Carton",
+                                                          "evidence":  "pre-pass rung 1 \u0027bone broth\u0027 = 24 hits; adjudicated: Swanson Chicken Bone Broth 32 oz $4.49 is the ingredient in cooking form (Simple Truth Organic Beef Bone Broth 32 oz $3.99 also qualifies). Ruled out Bare Bones instant sticks/ramen cups",
+                                                          "checked":  "2026-08-27T11:58:35"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "High Protein Pasta",
+                      "recipes":  [
+                                      "high-protein-pesto-pasta-with-chicken"
+                                  ],
+                      "added":  "2026-08-27T11:55:51",
+                      "why":  "high-protein-pesto-pasta-with-chicken needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "14.5 oz",
+                                                     "item":  "Barilla Protein+ (Plus) Penne Pasta",
+                                                     "evidence":  "driver rung 1 \u0027High Protein Pasta\u0027 = 70 priced nodes; adjudicated: Barilla Protein+ Penne 14.5 oz $2.99 and Goodles protein pasta 8 oz $3.49 are the ingredient; plain Barilla Whole Grain spaghetti and the Goodles mac \u0026 cheese kit are not",
+                                                     "checked":  "2026-08-27T11:58:35"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.69,
+                                                         "size":  "8.8 oz",
+                                                         "item":  "Barilla Chickpea Pasta, Spaghetti",
+                                                         "evidence":  "pre-pass EMPTY on \u0027High Protein Pasta\u0027/\u0027HighProteinPasta\u0027 is a search-box artifact, not a shelf: my own rungs on Freshop store_id 6401 found Barilla Chickpea Pasta Spaghetti 8.8 oz $3.69 and Barilla Red Lentil Rotini 8.8 oz $3.99, both legume high-protein dry pasta",
+                                                         "checked":  "2026-08-27T11:58:35"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T11:58:35"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.48,
+                                                             "size":  "14.5 oz, 4 pk.",
+                                                             "item":  "Barilla Protein+ Penne \u0026 Rotini",
+                                                             "evidence":  "driver rung 1 \u0027High Protein Pasta\u0027 = 19 hits; adjudicated: Barilla Protein+ Penne \u0026 Rotini 4-pack $8.48. Ruled out Member\u0027s Mark High Protein Penne WITH Italian Sausage (a prepared deli dish, not dry pasta) and the gluten-free/plain Barilla packs",
+                                                             "checked":  "2026-08-27T11:58:35"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T11:58:35"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.29,
+                                                          "size":  "8 oz",
+                                                          "item":  "Banza Rotini Pasta from Chickpeas",
+                                                          "evidence":  "pre-pass rung 1 \u0027High Protein Pasta\u0027 = 25 hits; adjudicated: Banza chickpea Rotini 8 oz $4.29 (and Barilla Protein+ 14.5 oz $2.99 from the sibling term) are the ingredient. Ruled out Chad \u0026 Barney\u0027s high-protein pasta SAUCE and the Healthy Choice frozen bowl",
+                                                          "checked":  "2026-08-27T11:58:35"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "93/7 lean ground beef",
+                      "recipes":  [
+                                      "healthy-hamburger-helper"
+                                  ],
+                      "added":  "2026-08-27T11:56:11",
+                      "why":  "healthy-hamburger-helper needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.99,
+                                                     "size":  "tray - size not stated in the Apollo row",
+                                                     "item":  "93% Lean 7% Fat Ground Beef",
+                                                     "evidence":  "Driver rung 1 \u002793/7 lean ground beef\u0027 = 6 priced Apollo nodes; row 1 is \u002793% Lean 7% Fat Ground Beef\u0027 $7.99 and row 2 the same product in bulk at $7.49/lb. Exactly the ingredient, ruled in over the 85/15 and 80/20 rows in the same grid.",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  9.79,
+                                                         "size":  "lb",
+                                                         "item":  "Fresh 93% Lean Ground Beef",
+                                                         "evidence":  "probe-ingredient.ps1 \u002793% lean ground beef\u0027 (Freshop store_id 6401 Omaha, pickup = the store\u0027s own shelf price): \u0027Fresh 93% Lean Ground Beef\u0027 $9.79/lb at rel 134, corroborated by \u0027Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb\u0027 $9.29. Exactly the ingredient.",
+                                                         "checked":  "2026-08-27T12:05:20"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T12:05:20"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "Driver rung 1 only, and only 8 of the reported 19 rows are stored in the evidence file. The 8 visible rows are briskets, strip/short loin, fajita beef, 80/20 sliders and a 90/10 chub case - no 93/7. Rungs 2-4 need the driver or browser lane, which this headless session does not have, so absence is not established.",
+                                                             "checked":  "2026-08-27T12:05:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  7.39,
+                                                  "size":  "lb",
+                                                  "item":  "93 Lean Ground Beef Per LB",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027ground beef\u0027 lists today\u0027s Aldi capture rows including \u002793 Lean Ground Beef Per LB\u0027 $7.39/lb (also \u002796 Lean\u0027 $7.79/lb and \u002785 Lean\u0027 $6.49/lb). The 93% lean row is exactly this ingredient.",
+                                                  "checked":  "2026-08-27T12:05:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "Server tier, full ladder. Pre-pass ladder (\u002793/7 lean ground beef\u0027, \u002793/7 lean beef\u0027, spacing variants) = 0 candidates. I walked two more rungs myself: probe-ingredient \u002793% lean ground beef\u0027 returned exactly 2 hits and BOTH are ground TURKEY (Jennie-O 93% Lean/7% Fat Ground Turkey Patties $6.99, Kroger 93/7 Lean Fresh Ground Turkey $5.49); probe-ingredient \u0027lean ground beef\u0027 returned 17 hits whose top rows are 96/4 Extra Lean $10.99, 73/27 $5.99, 91% frozen burger, 80% Angus, 80/20 blends, 90% sirloin, 92% Pre grass-fed - no 93/7 beef. Kroger catalog carries 96/4 and 92% but not 93/7.",
+                                                          "checked":  "2026-08-27T12:05:20"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "rotini pasta",
+                      "recipes":  [
+                                      "healthy-hamburger-helper"
+                                  ],
+                      "added":  "2026-08-27T11:56:11",
+                      "why":  "healthy-hamburger-helper needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.24,
+                                                     "size":  "16 oz",
+                                                     "item":  "Fareway Rotini",
+                                                     "evidence":  "Driver rung 1 \u0027rotini pasta\u0027 = 6 priced Apollo nodes; \u0027Fareway Rotini\u0027 16 oz $1.24 is store-brand plain rotini, with Barilla Rotini 1 lb $1.84 corroborating.",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.89,
+                                                         "size":  "1 lb",
+                                                         "item":  "Creamette Rotini 1 Lb",
+                                                         "evidence":  "Server tier rung 1 \u0027rotini pasta\u0027 = 5 hits; \u0027Creamette Rotini 1 Lb\u0027 $1.89 is plain rotini. Ruled out \u0027Dried Rotelle Pasta Creamette\u0027 - rotelle is a different shape.",
+                                                         "checked":  "2026-08-27T12:05:21"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.19,
+                                                    "size":  "16 oz",
+                                                    "item":  "Hy-Vee Rotini Pasta",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027rotini\u0027 maps to commodity pasta and shows Hy-Vee at $0.0744/oz; the underlying capture row in grocery\\out\\comparison-2026-08-26.json (comparison/390/stores/5) is \u0027Hy-Vee Rotini Pasta\u0027, 16 oz, $1.19, source \u0027Aisles Online current shelf price (storeId 1466, Omaha #02)\u0027. Store-brand rotini, exactly the ingredient.",
+                                                    "checked":  "2026-08-27T12:05:21"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.48,
+                                                             "size":  "14.5 oz x 4 pk",
+                                                             "item":  "Barilla Protein+ Penne \u0026 Rotini, 14.5 oz., 4 pk.",
+                                                             "evidence":  "Driver rung 1 \u0027rotini pasta\u0027 = 45 rows, 8 stored. The only genuine dry-pasta-shape row is \u0027Barilla Protein+ Penne \u0026 Rotini, 14.5 oz., 4 pk.\u0027 $8.48 - a mixed carton of penne AND rotini boxes, so it does deliver buyable rotini, but it is a variety pack rather than a straight rotini SKU and I am flagging that caveat rather than hiding it. Everything else visible is spaghetti, sauce or canned Chef Boyardee.",
+                                                             "checked":  "2026-08-27T12:05:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027rotini\u0027 returns an Aldi row only for \u0027Reggano Spaghetti\u0027 (the commodity-level cheapest pasta), which is not rotini. A capture miss is not absence from the shelf.",
+                                                  "checked":  "2026-08-27T12:05:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.89,
+                                                          "size":  "16 oz",
+                                                          "item":  "Barilla Rotini Pasta",
+                                                          "evidence":  "Server tier rung 1 \u0027rotini pasta\u0027 = 19 hits; \u0027Barilla Rotini Pasta, Quality Non-GMO and Kosher Certified Pasta\u0027 16 oz $1.89 is plain durum rotini, the form a cook buys. Ruled out Knorr Cheesy Cheddar Rotini Side (a boxed side dish) and the gluten-free/chickpea specialty rotini.",
+                                                          "checked":  "2026-08-27T12:05:21"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "shredded cheddar cheese",
+                      "recipes":  [
+                                      "healthy-hamburger-helper",
+                                      "pioneer-woman-chili"
+                                  ],
+                      "added":  "2026-08-27T11:56:12",
+                      "why":  "healthy-hamburger-helper needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.48,
+                                                     "size":  "8 oz",
+                                                     "item":  "Fareway Mild Cheddar Shredded Cheese",
+                                                     "evidence":  "Driver rung 1 \u0027shredded cheddar cheese\u0027 = 12 priced Apollo nodes; \u0027Fareway Mild Cheddar Shredded Cheese\u0027 8 oz $2.48, sharp at the same price and 32 oz at $7.48. Ruled out the Tillamook colby-jack and mozzarella rows, which are not cheddar.",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.59,
+                                                         "size":  "8 oz",
+                                                         "item":  "Our Family Mild Cheddar Shredded Cheese 8 Oz",
+                                                         "evidence":  "Server tier rung 1 \u0027shredded cheddar cheese\u0027 = 21 hits; \u0027Our Family Mild Cheddar Shredded Cheese 8 Oz\u0027 $2.59, 16 oz $3.99. Plain store-brand shredded cheddar; ruled out the habanero white cheddar flavored row.",
+                                                         "checked":  "2026-08-27T12:05:21"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027shredded cheddar\u0027 returns ABSENT (no commodity claims the term and no capture row matches); a capture miss is not absence from the shelf.",
+                                                    "checked":  "2026-08-27T12:05:21"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.87,
+                                                             "size":  "16 oz, 2 pk",
+                                                             "item":  "Member\u0027s Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+                                                             "evidence":  "Driver rung 1 \u0027shredded cheddar cheese\u0027 = 26 rows; Member\u0027s Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk. at $5.87 ($0.18/oz) is plain shredded cheddar. Ruled out the Mexican-style blend, the alpine blend and the feta.",
+                                                             "checked":  "2026-08-27T12:05:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027shredded cheddar\u0027 returns ABSENT; a capture miss is not absence from the shelf.",
+                                                  "checked":  "2026-08-27T12:05:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2,
+                                                          "size":  "8 oz",
+                                                          "item":  "Kroger Mild Cheddar Shredded Cheese",
+                                                          "evidence":  "Server tier rung 1 \u0027shredded cheddar cheese\u0027 = 25 hits; \u0027Kroger Mild Cheddar Shredded Cheese\u0027 8 oz $2.00, with sharp and medium at the same price and 16 oz at $3.69. Plain shredded cheddar, exactly the ingredient.",
+                                                          "checked":  "2026-08-27T12:05:21"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "almond butter",
+                      "recipes":  [
+                                      "butter-chicken-pasta"
+                                  ],
+                      "added":  "2026-08-27T11:56:57",
+                      "why":  "butter-chicken-pasta needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  12.59,
+                                                     "size":  "16 oz",
+                                                     "item":  "Barney Butter Smooth Almond Butter",
+                                                     "evidence":  "Driver rung 1 \u0027almond butter\u0027 = 50 rows; \u0027Barney Butter Smooth Almond Butter\u0027 16 oz $12.59 is a jar of almond butter, with Justin\u0027s Classic Almond Butter 1.15 oz squeeze pack $1.29 also present. Ruled out the peanut butter, apple butter, dairy butter and ice cream rows the loose match dragged in.",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  6.99,
+                                                         "size":  "16 oz",
+                                                         "item":  "Our Family Creamy Almond Butter",
+                                                         "evidence":  "Server tier rung 1 \u0027almond butter\u0027 = 11 hits; \u0027Our Family Creamy Almond Butter\u0027 16 oz $6.99 at rel 132 is the jarred spread. Ruled out the KIND granola and bars, the Nature Valley biscuits and the Happy Baby pouch, all foods merely flavoured with almond butter.",
+                                                         "checked":  "2026-08-27T12:05:21"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027almond butter\u0027 maps the term to the DAIRY butter commodity (include pattern for the word butter), so every row it returns is sweet-cream butter and there is no capture row for almond butter. A capture miss is not absence from the shelf. TOOLING FINDING: \u0027almond butter\u0027 matching commodity butter is a mapping defect worth fixing.",
+                                                    "checked":  "2026-08-27T12:05:21"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.78,
+                                                             "size":  "24 oz",
+                                                             "item":  "Member\u0027s Mark Almond Butter, 24 oz.",
+                                                             "evidence":  "Driver rung 1 \u0027almond butter\u0027 = 18 rows; Member\u0027s Mark Almond Butter, 24 oz. at $8.78 ($0.37/oz) is the jarred spread. Ruled out the Nature Valley almond-butter biscuits, the peanut butters and the Nutella rows.",
+                                                             "checked":  "2026-08-27T12:05:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027almond butter\u0027 returns only the dairy-butter commodity row (Countryside Creamery Butter Quarters), which is not this ingredient. A capture miss is not absence from the shelf.",
+                                                  "checked":  "2026-08-27T12:05:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  7.49,
+                                                          "size":  "16 oz",
+                                                          "item":  "Simple Truth No Stir Creamy Almond Butter",
+                                                          "evidence":  "Server tier rung 1 \u0027almond butter\u0027 = 25 hits; \u0027Simple Truth No Stir Creamy Almond Butter\u0027 16 oz $7.49 is a jar of almond butter, with MaraNatha 12 oz $8.99 and Justin\u0027s Classic 16 oz $11.49 corroborating. Ruled out the KIND almond-butter protein bars.",
+                                                          "checked":  "2026-08-27T12:05:21"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "masa harina",
+                      "recipes":  [
+                                      "pioneer-woman-chili"
+                                  ],
+                      "added":  "2026-08-27T11:57:39",
+                      "why":  "pioneer-woman-chili needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "Driver rung 1 only: \u0027masa harina\u0027 reported 72 hits but the evidence file stores just 8, and all 8 are near-misses (Quaker yellow cornmeal, organic cornmeal, corn starch, all-purpose flour, corn and flour tortillas) with no masa harina among them. The brand rung \u0027maseca\u0027 that flipped both server stores cannot be walked here without the driver or a browser, so absence is not established.",
+                                                     "checked":  "2026-08-27T12:05:21"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.99,
+                                                         "size":  "4 lb",
+                                                         "item":  "Maseca Corn Masa Flour, Gluten Free, Instant 4 Lb",
+                                                         "evidence":  "Pre-pass ladder (\u0027masa harina\u0027=0, \u0027masaharina\u0027=0, \u0027harina\u0027=1 -\u003e \u0027Pasta De Harina\u0027, not masa harina) looked like an absence, so I walked the brand rung per the Hy-Vee Better Than Bouillon lesson: probe-ingredient \u0027maseca\u0027 = 2 hits, \u0027Maseca Corn Masa Flour, Gluten Free, Instant 4 Lb\u0027 $4.99 and the Tamal version at the same price. Carried - the store\u0027s search box, not the shelf, was the problem.",
+                                                         "checked":  "2026-08-27T12:05:21"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027masa harina\u0027 returns ABSENT (no commodity, no capture row); a capture miss is not absence from the shelf.",
+                                                    "checked":  "2026-08-27T12:05:21"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  21.78,
+                                                             "size":  "22 lb",
+                                                             "item":  "Maseca Masa Corn Flour, 22 lbs.",
+                                                             "evidence":  "Driver rung 1 \u0027masa harina\u0027 = 15 rows; \u0027Maseca Masa Corn Flour, 22 lbs.\u0027 $21.78 ($0.99/lb) is masa harina in warehouse size. Ruled out the almond flour, the PAN precooked cornmeal and the all-purpose/bread flours.",
+                                                             "checked":  "2026-08-27T12:05:21"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Checked disk first: price-ingredient.ps1 -Name \u0027masa harina\u0027 returns ABSENT; a capture miss is not absence from the shelf.",
+                                                  "checked":  "2026-08-27T12:05:21"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.69,
+                                                          "size":  "2 lb",
+                                                          "item":  "MASECA Yellow Instant Corn Masa Flour 2 Lb Bag",
+                                                          "evidence":  "Pre-pass ladder surfaced one row, \u0027Quaker Masa Harina de Maiz Corn Tortilla Mix\u0027 70.4 oz $6.49, which is itself masa harina. I walked a brand rung to confirm: probe-ingredient \u0027maseca\u0027 = 4 hits, all instant corn masa flour - MASECA Yellow 2 lb $2.69, MASECA Gluten Free White Corn 4 lb $3.99, MASECA Tamal 4 lb $3.99. Instant corn masa flour IS masa harina; pricing the 2 lb bag as the ordinary cook\u0027s size.",
+                                                          "checked":  "2026-08-27T12:05:21"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "frozen lightly breaded chicken breast bites",
+                      "recipes":  [
+                                      "high-protein-chicken-alfredo-lasagna"
+                                  ],
+                      "added":  "2026-08-27T12:08:39",
+                      "why":  "high-protein-chicken-alfredo-lasagna needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  10.98,
+                                                     "size":  "24 oz",
+                                                     "item":  "Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites",
+                                                     "evidence":  "driver rung-1 lookup, 67 priced Apollo nodes; adjudicated - Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites 24 oz $10.98 is the ingredient. Rest of the pile (Tyson dino nuggets, Oscar Mayer carving board, canned chunk chicken) ruled out.",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server-tier FULL ladder empty: rung 1 \"frozen lightly breaded chicken breast bites\"=1 candidate discarded, rung 2 \"frozenlightlybreadedchickenbreastbites\"=0. No candidates on any rung; Freshop returned a usable grid, not a transport error.",
+                                                         "checked":  "2026-08-27T12:13:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T12:13:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  11.87,
+                                                             "size":  "3 lb",
+                                                             "item":  "Member\u0027s Mark Fully Cooked Lightly Breaded Chicken Breast Bites, Frozen",
+                                                             "evidence":  "driver rung-1 lookup, 19 nodes; Members Mark Fully Cooked Lightly Breaded Chicken Breast Bites, Frozen, 3 lbs, linePrice $11.87, unitPrice $3.96/lb - exact ingredient. Just Bare 3 lb bites $13.47 is a second qualifying row.",
+                                                             "checked":  "2026-08-27T12:13:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.49,
+                                                  "size":  "5.2 oz",
+                                                  "item":  "Tyson Lightly Breaded Boneless Chicken Bites",
+                                                  "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\regular\\aldi-regular-2026-08-27.json (Aldi OLA 42 Omaha, in-store mode, mode_verified 2026-08-27) carries \"Tyson Lightly Breaded Boneless Chicken Bites 5 2 OZ\" $3.49 and \"Kirkwood Gluten Free Chicken Bites\" 18 oz $6.35. The Tyson row names the ingredient exactly.",
+                                                  "checked":  "2026-08-27T12:13:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  10.79,
+                                                          "size":  "24 oz",
+                                                          "item":  "Simple Truth Frozen Fully Cooked Lightly Breaded Chicken Breast Bites",
+                                                          "evidence":  "server-tier probe, term as given, 9 candidates; top row is the exact ingredient - frozen, fully cooked, lightly breaded chicken BREAST bites, 24 oz $10.79. Ruled out the Real Good Foods strips/nuggets and the animal-shaped nuggets as wrong cut/form.",
+                                                          "checked":  "2026-08-27T12:13:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Boursin cheese",
+                      "recipes":  [
+                                      "no-boil-chicken-pasta-casserole-with-artichokes-and-peas"
+                                  ],
+                      "added":  "2026-08-27T12:09:46",
+                      "why":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  5.49,
+                                                     "size":  "5.3 oz",
+                                                     "item":  "Boursin Garlic \u0026 Fine Herbs Gournay Cheese",
+                                                     "evidence":  "driver rung-1 lookup, 2 nodes, both genuine Boursin gournay; Garlic \u0026 Fine Herbs 5.3 oz $5.49.",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server-tier FULL ladder empty: \"Boursin cheese\"=0, \"Boursincheese\"=0, bare head noun \"Boursin\"=0. Three rungs including the brand name alone, zero candidates; grid usable, not a transport error.",
+                                                         "checked":  "2026-08-27T12:13:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T12:13:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.96,
+                                                             "size":  "3 pk 5.3 oz",
+                                                             "item":  "Boursin Gourmet Cheese Spread, Variety Pack",
+                                                             "evidence":  "driver rung-1 lookup, 21 nodes; exactly one is Boursin - Boursin Gourmet Cheese Spread Variety Pack 5.3 oz 3 pk, linePrice $6.96, unitPrice $0.44/oz. Every other row (feta, brie, Dubliner, romano wheel) is a different cheese and was ruled out.",
+                                                             "checked":  "2026-08-27T12:13:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T12:13:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  6.99,
+                                                          "size":  "5.3 oz",
+                                                          "item":  "Boursin Garlic \u0026 Fine Herbs Gourmet Cheese",
+                                                          "evidence":  "server-tier probe, 4 candidates, all real Boursin; base Garlic \u0026 Fine Herbs 5.3 oz $6.99. Dairy-free alternative $8.99 not used.",
+                                                          "checked":  "2026-08-27T12:13:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "penne pasta",
+                      "recipes":  [
+                                      "no-boil-chicken-pasta-casserole-with-artichokes-and-peas"
+                                  ],
+                      "added":  "2026-08-27T12:09:46",
+                      "why":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.94,
+                                                     "size":  "32 oz",
+                                                     "item":  "Great Value Penne, 32 oz (Shelf Stable)",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \"penne pasta\" maps to commodity pasta (include /\\bpenne\\b/) and the Walmart board cell in out\\comparison-2026-08-26.json is Great Value Penne 32 oz, ad $1.94, $0.0606/oz, everyday shelf price, Omaha L St.",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.24,
+                                                     "size":  "16 oz",
+                                                     "item":  "Fareway Penne Rigate",
+                                                     "evidence":  "driver rung-1 lookup, 6 nodes, all genuine dry penne; store-brand Penne Rigate 16 oz $1.24 is the cheapest qualifying row.",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  1.99,
+                                                         "size":  "1 lb",
+                                                         "item":  "Barilla Penne Pasta 1 Lb",
+                                                         "evidence":  "server-tier probe, 6 candidates; Barilla Penne 1 lb $1.99 is the ingredient. Ruled out the $7.99 prepared grilled-chicken-with-penne deli item and the Creamette Mostaccioli row.",
+                                                         "checked":  "2026-08-27T12:13:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.19,
+                                                    "size":  "16 oz",
+                                                    "item":  "Hy-Vee Penne Rigate",
+                                                    "evidence":  "no browser this session; ruled from disk instead - grocery\\out\\regular\\hyvee-regular-2026-08-27.json (Aisles Online storeId 1466 Omaha #02, in-store price) carries Hy-Vee Penne Rigate 16 oz $1.19 (and a second Hy Vee Penne Rigate row at $1.44).",
+                                                    "checked":  "2026-08-27T12:13:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.52,
+                                                             "size":  "6 pk 16 oz",
+                                                             "item":  "Barilla Penne Pasta 16 oz., 6 pk.",
+                                                             "evidence":  "driver rung-1 lookup, 19 nodes; Barilla Penne Pasta 16 oz 6 pk linePrice $8.52, unitPrice $1.42/ea. Variety packs and the prepared Members Mark penne-with-sausage entree ruled out.",
+                                                             "checked":  "2026-08-27T12:13:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  1.09,
+                                                  "size":  "16 oz",
+                                                  "item":  "Reggano Penne Rigate 16 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - aldi-regular-2026-08-27.json (OLA 42 Omaha, in-store, mode_verified 2026-08-27) carries Reggano Penne Rigate 16 oz $1.09, plus Priano Bronze Cut Penne $1.99 and Reggano Penne 14.5 oz $2.19.",
+                                                  "checked":  "2026-08-27T12:13:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.89,
+                                                          "size":  "16 oz",
+                                                          "item":  "Barilla Penne Pasta",
+                                                          "evidence":  "server-tier probe, 25 candidates; base dry semolina Barilla Penne 16 oz $1.89 preferred over the gluten-free/chickpea/lentil variants and the 60-second pouch.",
+                                                          "checked":  "2026-08-27T12:13:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "Moroccan Spice Mix",
+                      "recipes":  [
+                                      "moroccan-chicken-couscous-bowl"
+                                  ],
+                      "added":  "2026-08-27T12:09:53",
+                      "why":  "moroccan-chicken-couscous-bowl needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung-1 ONLY, 6 nodes, and none is a Moroccan blend - McCormick chili seasoning, Beau Monde, Cavenders Greek x2, Badia Italian/Mediterranean, Badia paprika. Rung 1 alone cannot support not-carried and I have no browser to walk rungs 2-4 (ras el hanout / Moroccan seasoning / harissa blend). PENDING for an attended run.",
+                                                     "checked":  "2026-08-27T12:13:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "server-tier FULL ladder empty: \"Moroccan Spice Mix\"=0, \"MoroccanSpiceMix\"=0, no candidates on any rung.",
+                                                         "checked":  "2026-08-27T12:13:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T12:13:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung-1 ONLY, 8 nodes, none Moroccan - taco seasoning, Lawrys, Salad Supreme, Montreal steak, ranch, Old Bay, Kinders rubs. Rung 1 alone cannot support not-carried and I have no browser to walk the ladder. Disk cross-check: price-ingredient.ps1 -Name \"Moroccan seasoning\" and -Name \"ras el hanout\" both ABSENT across all captures, which is a capture miss and not an absence verdict.",
+                                                             "checked":  "2026-08-27T12:13:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T12:13:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "server-tier FULL ladder empty: \"Moroccan Spice Mix\"=0, \"MoroccanSpiceMix\"=0, no candidates on any rung.",
+                                                          "checked":  "2026-08-27T12:13:40"
+                                                      }
+                                 },
+                      "verdict":  "PENDING",
                       "notes":  null
                   }
               ]

@@ -1,0 +1,31 @@
+{
+    "slug":  "creamy-chicken-alfredo-pasta-bake",
+    "title":  "Creamy Chicken Alfredo Pasta Bake",
+    "source_url":  "https://www.lecremedelacrumb.com/chicken-alfredo-baked-penne/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:56",
+    "updated":  "2026-08-27T11:44:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Same chicken-alfredo baked-pasta identity as batch-mate high-protein-chicken-alfredo-lasagna (chicken + cream/parmesan alfredo + baked pasta); kept the lasagna for its stronger high-protein band, this generic penne bake is the weaker plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:56",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/chicken-alfredo-baked-penne/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:44:56",
+                        "by":  "decider",
+                        "detail":  "Same chicken-alfredo baked-pasta identity as batch-mate high-protein-chicken-alfredo-lasagna (chicken + cream/parmesan alfredo + baked pasta); kept the lasagna for its stronger high-protein band, this generic penne bake is the weaker plate."
+                    }
+                ]
+}

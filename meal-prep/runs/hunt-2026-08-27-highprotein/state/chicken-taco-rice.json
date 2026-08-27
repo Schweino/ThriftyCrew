@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-taco-rice",
+    "title":  "Chicken Taco Rice",
+    "source_url":  "https://thecleaneatingcouple.com/chicken-taco-rice/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:46:52",
+    "updated":  "2026-08-27T11:46:52",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + taco/tomato spice + rice one-skillet is the same dinner as live slow-cooker-chicken-taco-rice-bowls (shares chicken, taco flavour, rice, black beans, cheddar); skillet vs slow-cooker is not a distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:52",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/chicken-taco-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:46:52",
+                        "by":  "decider",
+                        "detail":  "Chicken + taco/tomato spice + rice one-skillet is the same dinner as live slow-cooker-chicken-taco-rice-bowls (shares chicken, taco flavour, rice, black beans, cheddar); skillet vs slow-cooker is not a distinguishing plate."
+                    }
+                ]
+}

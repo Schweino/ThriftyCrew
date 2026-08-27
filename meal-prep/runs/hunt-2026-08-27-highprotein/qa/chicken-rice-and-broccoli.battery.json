@@ -1,0 +1,278 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "chicken-rice-and-broccoli",
+  "generated": "2026-08-27T12:11:40",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\chicken-rice-and-broccoli.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\chicken-rice-and-broccoli.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 14,
+        "source_ingredients": 14,
+        "matched": 13,
+        "invented": [
+          "Chicken Broth"
+        ],
+        "dropped": [
+          "chicken stock"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Chicken Broth' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'chicken stock' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Chicken Broth' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'chicken stock' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 13,
+        "unrated": 1,
+        "exempt": 0,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "1 tablespoon",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1.5 lb",
+            "spec": "5.25 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Yellow Onion",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic",
+            "source": "2 tablespoon",
+            "spec": "7 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Rice",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Broccoli Florets",
+            "source": "3 cup",
+            "spec": "10.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Dried Basil",
+            "source": "2 teaspoon",
+            "spec": "2 tbsp",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Dried Parsley",
+            "source": "2 teaspoon",
+            "spec": "2 tbsp",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "2 teaspoon",
+            "spec": "2 tbsp",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Onion Powder",
+            "source": "2 teaspoon",
+            "spec": "2 tbsp",
+            "ratio": 3.0,
+            "deviation": 0.1429,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 tsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "source": "0.25 cup",
+            "spec": "0.875 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Chicken Broth",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Dried Basil scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it.; Dried Parsley scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it.; Garlic Powder scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it.; Onion Powder scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Dried Basil scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "fail",
+          "detail": "Dried Parsley scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "fail",
+          "detail": "Garlic Powder scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "fail",
+          "detail": "Onion Powder scaled 3x while the recipe scaled 3.5x (14.3% off): the source says 2 teaspoon and the spec buys 2 tbsp, where the exact scale is 2.33 tbsp. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 8,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 3g protein, the stat says 47; portion_html says 3g protein, the stat says 47; cost_closing_html says 3g protein, the stat says 47; head.description says 3g protein, the stat says 47",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 3g protein, the stat says 47"
+        },
+        {
+          "severity": "fail",
+          "detail": "portion_html says 3g protein, the stat says 47"
+        },
+        {
+          "severity": "fail",
+          "detail": "cost_closing_html says 3g protein, the stat says 47"
+        },
+        {
+          "severity": "fail",
+          "detail": "head.description says 3g protein, the stat says 47"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Healthy Chicken, Rice and Broccoli Skillet",
+        "spec_source_url": "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+        "transcription_source_url": "https://thecleaneatingcouple.com/chicken-broccoli-rice/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "fail",
+      "numbers": {
+        "hits": 2
+      },
+      "detail": "EN DASH: –; EM DASH: —",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "EN DASH: –"
+        },
+        {
+          "severity": "fail",
+          "detail": "EM DASH: —"
+        }
+      ]
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 4
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

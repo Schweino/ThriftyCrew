@@ -1,0 +1,134 @@
+{
+ "name": "Healthy Chicken, Rice and Broccoli Skillet",
+ "slug": "chicken-rice-and-broccoli",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Olive Oil",
+   "grams": 47,
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb, cut into small cubes"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 201,
+   "buy": "1 3/4 cups diced (about 2 medium)"
+  },
+  {
+   "item": "Garlic",
+   "grams": 60,
+   "buy": "7 tbsp minced (about 20 cloves)"
+  },
+  {
+   "item": "Rice",
+   "grams": 648,
+   "buy": "3 1/2 cups dry (about 1 lb 7 oz)"
+  },
+  {
+   "item": "Broccoli Florets",
+   "grams": 892,
+   "buy": "10 1/2 cups florets (about 2 lb 3 oz)"
+  },
+  {
+   "item": "Chicken Broth",
+   "grams": 2520,
+   "buy": "10 1/2 cups"
+  },
+  {
+   "item": "Dried Basil",
+   "grams": 7,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Dried Parsley",
+   "grams": 4,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 22,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Onion Powder",
+   "grams": 17,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Salt",
+   "grams": 10,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Parmesan Cheese",
+   "grams": 98,
+   "buy": "7/8 cup grated"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 472,
+  "protein_g": 47.3,
+  "carbs_g": 47,
+  "fat_g": 9.7
+ },
+ "writer_notes": [
+  "Ingredient/step reconciliation clean both directions: all 14 locked ingredients used by a step, no step uses anything not bought.",
+  "REPAIR (BLOCKING 1, prose-numbers): protein and calorie figures in intro_html, portion_html and cost_closing_html now use the {{protein}} and {{cal}} tokens instead of literals, so prose cannot disagree with the stat. head.description feeds the meta description and must carry the stat's own DISPLAY numbers as literals: stat.protein is 47 (rounded), so the description now reads '47g protein and 472 calories per serving' - the earlier '47.3g' was the recomputed value, not the stat's display number, and it tripped the spec-contradictions STAT-PROSE gate (parser read '3g' off the decimal). 'under 500 calories' stays a literal bound (472<500).",
+  "REPAIR (dash-sweep): shop_smart and make_it were rebuilt in full and are now free of en and em dashes; intro, portion, cost_closing and upsell carried none. Content and method were preserved; only the dash removal and the number tokens changed.",
+  "No per-line dollar amounts in shop_smart; no per-ounce or 'lasts N batches' package claim was made because no cost_lines were provided in this dispatch to trace one to. cost_ps shown as the ${{cost_ps}} token, no literal cost supplied.",
+  "OUT OF WRITER REACH (flagged for mapper): BLOCKING 2 scaling of dried basil, parsley, garlic powder and onion powder at 3.0x vs the batch's 3.5x lives in the locked ingredient lines, not prose; my steps name the spices without quantities, so nothing in prose changes. The stock->broth coverage NOTE is likewise a mapper confirm. Both are unreachable from the fillable fields.",
+  "FLAG (faithful to source at 3.5x, not a defect): combined garlic is heavy for the batch, ~7 tbsp fresh minced (~20 cloves) plus garlic powder; watch if a taster calls it garlic-forward. Band fit confirmed against locked view: 472 cal within 450-800, 47.3 g protein >= 40, carbs unrestricted. Warm-the-broth pro tip retained in make_it and credited to the source recipe."
+ ],
+ "forbidden_prose_terms": [
+  "—",
+  "–",
+  "guilt-free",
+  "superfood",
+  "clean eating",
+  "cheap"
+ ],
+ "prose": {
+  "intro_html": "<p>Chicken, rice and broccoli is the meal-prep starter kit for a reason. It is the plate the gym crowd, the budget cook, and the tired parent all circle back to, because it puts protein, a carb and a green vegetable in one pot and does not ask much of your wallet. This version cooks the whole thing in a single Dutch oven, so the rice drinks up the chicken broth and every grain tastes like the meal instead of a plain side.</p><p>Here is the headline that matters. You get {{protein}} of protein a serving for {{cal}} calories. That is a lean, honest number. A full dinner under 500 calories that still puts a serious hit of protein on the fork, and you are cooking fourteen of them in one go.</p>",
+  "shop_smart": "<p>The chicken breast is the whole ballgame here, so buy it the way that saves the most. Reach for the family packs, not the little foam trays, and when boneless skinless breast goes on sale that is your green light to run this recipe.</p><p>Long grain white rice is one of the cheapest sources of calories in the entire store. Buy the big bag rather than the small box; you will put plenty of it to work across fourteen servings.</p><p>Fresh broccoli crowns are fine, but frozen broccoli florets are the smart-money play for meal prep. They come already trimmed, they cook down the same, and there is no stalk waste headed for the trash. Buy whichever is cheaper the week you cook.</p><p>The dried basil, parsley, garlic powder and onion powder are pantry staples, so check your shelf before you buy anything. If you need them, reach for the basic jars in the spice aisle rather than anything fancy. The parmesan is the one spot worth a small splurge for real flavor at the finish.</p>",
+  "make_it": "<p>Get a large Dutch oven or heavy pot over medium-high heat and add the olive oil. Let it get hot before anything else goes in.</p><p>Add the cubed chicken and saute for 7 to 10 minutes, until the edges start to brown. Do not fuss over cooking it all the way through here. It goes back to work in the broth later, so browned edges are all you are after.</p><p>Add the diced onion and the minced garlic right into the pan with the chicken and cook another 5 minutes, until they soften and start to smell like dinner.</p><p>Now stir in the rice, all of the dried spices, the salt and pepper, and the chicken broth. Leave the parmesan out for now, that is the finish. Cover and cook over medium heat for 10 minutes, stirring every few minutes so the rice does not catch on the bottom.</p><p>Add the broccoli, stir it in, cover again, and cook 5 more minutes, until the rice is tender and the broccoli is bright green and just soft.</p><p>Cut the heat and sprinkle the grated parmesan over the top before you portion. That is the whole meal, done in one pot.</p><p>One tip from the source recipe: warm the broth before it goes into the pot. Cold broth drops the temperature and stalls the simmer, and a warm pour keeps everything moving.</p>",
+  "portion_html": "<p>This batch makes fourteen servings, so pull out your containers and a kitchen scale. The honest way to portion is to weigh the full pot, subtract the weight of the empty pot, and divide the food weight by fourteen. Scoop to that number and every container lands at the same {{cal}} calories and {{protein}} of protein, instead of one lucky lunch and one sad one.</p><p>A one-pot rice dish like this packs and reheats beautifully. It keeps several days in the fridge, and each container is already a complete dinner with the protein, the carb and the vegetable together, no assembly at the microwave.</p>",
+  "cost_closing_html": "<p>Fourteen complete dinners out of one pot, and the math is the part I love. This whole batch comes in at ${{cost_ps}} a serving, and for that you get {{protein}} of protein and a real vegetable in every container. Go try to find a drive-through dinner that does that.</p><p>Chicken, rice, broccoli and a handful of pantry spices is about as lean as a grocery list gets, and it still feeds you like a champion. This is what eating well on a budget actually looks like.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, that is exactly what Thrifty Crew is built for. For a dollar a month you get every recipe, every macro, and the whole system for eating like this without wrecking your budget. Come cook with the crew.</p>"
+ },
+ "head": {
+  "description": "One-pot healthy chicken, rice and broccoli skillet built for meal prep. 47g protein and 472 calories per serving across fourteen budget-friendly dinners.",
+  "keywords": "chicken rice and broccoli, one pot chicken and rice, meal prep chicken, high protein meal prep, budget dinner, chicken broccoli rice skillet, healthy chicken recipe",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT30M",
+  "totalTime": "PT40M",
+  "steps": [
+   "Heat a large Dutch oven or heavy pot over medium-high heat and add the olive oil, letting it get hot.",
+   "Add the cubed chicken and saute for 7 to 10 minutes, until the edges start to brown. It does not need to be cooked through yet.",
+   "Add the diced onion and minced garlic to the pan with the chicken and cook another 5 minutes, until softened.",
+   "Stir in the rice, dried basil, dried parsley, garlic powder, onion powder, salt, black pepper and chicken broth, holding back the parmesan. Cover and cook over medium heat for 10 minutes, stirring every few minutes.",
+   "Add the broccoli, stir it in, cover, and cook 5 more minutes, until the rice is tender and the broccoli is bright and just soft.",
+   "Cut the heat and sprinkle the grated parmesan over the top before serving."
+  ],
+  "step_names": [
+   "Heat the oil",
+   "Brown the chicken",
+   "Add onion and garlic",
+   "Add rice, spices and broth",
+   "Stir in broccoli",
+   "Finish with parmesan"
+  ]
+ }
+}

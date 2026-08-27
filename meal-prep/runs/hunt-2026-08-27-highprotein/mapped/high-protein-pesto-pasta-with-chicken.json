@@ -1,0 +1,184 @@
+﻿{
+    "slug":  "high-protein-pesto-pasta-with-chicken",
+    "title":  "high protein pesto pasta with chicken",
+    "source_url":  "https://joytothefood.com/high-protein-pesto-pasta-with-chicken/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 8oz box of frilly protein pasta (like Loppdy Loops or Campanelle, use gluten free as needed)",
+                            "item":  "High Protein Pasta",
+                            "bid":  "protein-pasta",
+                            "board":  null,
+                            "grams":  529,
+                            "buy":  "1 lb 2 oz dry high-protein pasta (campanelle or another frilly shape)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "8 oz box = 226.8 g at source scale. Legume-fortified pasta (Barilla Protein+, Banza and the like) is its own SKU at roughly 0.19-0.25 per oz against the board\u0027s commodity semolina pasta at 0.057 per oz - a real price class, and the recipe\u0027s whole protein claim rests on it, so I will not bridge it onto [pasta]. Shape (frilly/campanelle) is not a pricing question.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup bone broth",
+                            "item":  "Bone Broth",
+                            "bid":  "bone-broth",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "1 1/4 cups bone broth",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1/2 cup water-like at 240 g per cup. No commodity claims it and captures carry matching products. Refused the chicken-broth bridge: bone broth is a 6-8 dollar quart against a 1.50-2.50 broth carton and carries 10 g protein per cup against about 1 - different product, different price class, different macros.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 egg",
+                            "item":  "Egg Yolk",
+                            "bid":  "eggs",
+                            "board":  "weekly",
+                            "grams":  117,
+                            "buy":  "2 large eggs",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "One large egg is 50 g; 2 1/3 at batch scale, rounded to 2 whole eggs.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/2 cup parmesan cheese (shredded, use plant based as needed)",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  "recipe",
+                            "grams":  131,
+                            "buy":  "1 1/8 cups grated parmesan",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: parmesan, 7 of 7 stores, cheapest 0.3092 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 8oz high protein pesto* (or store bought)",
+                            "item":  "Basil Pesto",
+                            "bid":  "pesto",
+                            "board":  null,
+                            "grams":  529,
+                            "buy":  "2 1/4 cups basil pesto (about 1 lb 2 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "8 oz = 226.8 g; the line itself allows store-bought. The line itself allows store-bought, and pesto is a live board id at 6 of 7 - the same call as the 2026-08-26 \u0027Homemade Barbecue Sauce\u0027 -\u003e bbq-sauce ruling. Macros taken from a jarred basil pesto label, which is what a shopper buying to this line actually gets.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1.5 pounds chicken breasts (or 3 chicken breasts)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb boneless skinless chicken breasts",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T04:52:01); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Whole Chicken [whole-chicken] DIFFERENT FORM: breasts/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp lemon juice",
+                            "item":  "Lemon Juice",
+                            "bid":  "lemon-juice",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "1/4 cup plus 1 Tbsp lemon juice",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: lemon-juice, 7 of 7 stores, cheapest 0.0675 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  63,
+                            "buy":  "4 2/3 Tbsp olive oil",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "2 1/3 tsp salt",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 garlic cloves",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "5 garlic cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "protein pasta",
+                                 "bone broth"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "High Protein Pasta",
+                               "Bone Broth"
+                           ],
+    "db_row_findings":  [
+                            "high-protein-pesto-pasta-with-chicken: the food DB already carries \u0027Basil Pesto\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 372.0 cal / 4.2 P / 6.9 C / 36.4 F  vs  mapper 371.0 / 4.8 / 6.5 / 35.5. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: protein_g 4.839 vs 4.16; fat_g 35.48 vs 36.4. existing={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 372, \"protein_g\": 4.16, \"carbs_g\": 6.93, \"fat_g\": 36.4} new={\"serving_grams\": 62, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 230, \"protein_g\": 3, \"carbs_g\": 4, \"fat_g\": 22}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "frilly protein pasta",
+                                        "proposed_bid":  "protein-pasta",
+                                        "evidence":  "Searched by food, not string: the board\u0027s only pasta ids are the generic [pasta] (7/7, 0.057/oz at Sam\u0027s, semolina) and [rotini-pasta], both commodity dry pasta; nothing in commodities, recipe-commodities, the everyday board or the feed prices a legume-fortified protein pasta under any spelling (checked chickpea/lentil/banza/protein wordings). Barilla Protein+ and Banza run 3-4x the per-ounce price of commodity pasta and carry 10-14 g protein per 2 oz against 7, so pricing this line at [pasta] would publish a materially wrong cost on the line the recipe is named for.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "bone broth",
+                                        "proposed_bid":  "bone-broth",
+                                        "evidence":  "No commodity claims it in any namespace; the near ids are chicken-broth and beef-broth, both boxed stock at roughly 1.50-2.50 per 32 oz, while bone broth (Kettle \u0026 Fire, Swanson Sipping Bone Broth) is 5-8 dollars for the same carton and is a different food on the label - 10 g protein per cup against about 1. The 2026-08-26 \u0027reduced sodium beef broth\u0027 -\u003e beef-broth precedent does not reach this: that was the same carton with a label variant, this is a different SKU at a different price class.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "protein-pasta",
+                                  "verdict":  "approve",
+                                  "bid":  "protein-pasta",
+                                  "reason":  "Verified: no protein/chickpea/lentil/Banza pasta string exists in the feed, and no id in commodities.json, recipe-commodities.json, or recipe-board-everyday.json prices legume/protein-fortified pasta - the only pasta ids (pasta, rotini-pasta, penne-pasta, egg-noodles, jumbo-pasta-shells, lasagna-noodles, canned-pasta) are all commodity semolina at $0.057-0.163/oz. This is a deliberate variant, not a duplicate: the recipe is named for the protein line, and Protein+/Banza run 3-4x per-ounce with double the protein per serving - pricing it at [pasta] ($0.0571/oz, Sam\u0027s) is exactly the panko-class silent disagreement. BUT the parent id\u0027s include list (\u0027\\bpasta\\b\u0027, \u0027\\bpenne\\b\u0027, \u0027spaghetti\u0027, \u0027\\brotini\\b\u0027 at commodities.json:10392-10400) has NO protein/chickpea/lentil exclude, so \u0027Barilla Protein+ Penne\u0027 would be claimed by BOTH ids the day it is captured. Required follow-up edits via add-commodity-rule.ps1: (1) mint protein-pasta in the RECIPE-ONLY namespace (recipe-board-everyday baseline + recipe-commodities.json), unit oz, include patterns that survive contiguously in real product names (\u0027protein\\+?\\s*(?:pasta|penne|rotini|spaghetti|elbows?)\u0027, \u0027chickpea\\s+(?:pasta|penne|rotini)\u0027, \u0027lentil\\s+pasta\u0027, \u0027banza\u0027), excludes at neighboring-commodity rigor (~150: sauce, canned, ravioli, frozen, protein bars, protein powder/shake, mac \u0026 cheese cups, baby/pet boilerplate); (2) add excludes \u0027protein\\+?\u0027, \u0027chickpea\u0027, \u0027lentil\u0027, \u0027banza\u0027 to the existing [pasta] id; (3) add allowlist pair protein-pasta\u003c-\u003epasta to commodity-dupe-allowlist.json, reason \u0027deliberate high-protein variant, 3-4x price class, distinct macros\u0027. Do NOT alias frilly shapes to [pasta] on this recipe."
+                              },
+                              {
+                                  "proposed_bid":  "bone-broth",
+                                  "verdict":  "approve",
+                                  "bid":  "bone-broth",
+                                  "reason":  "The mapper\u0027s claim \u0027no commodity claims it in any namespace\u0027 is FALSE and I corrected it before ruling: chicken-broth\u0027s include list explicitly carries \u0027chicken\\s+bone\\s+broth\u0027 and \u0027bone\\s+broth,\\s*chicken\u0027 (commodities.json:12436-12438) and beef-broth carries \u0027beef\\s+bone\\s+broth\u0027 (30248-30250) - the estate\u0027s rules currently fold bone-broth SKUs into the commodity broth pools. However, the feed today contains NO product string matching \u0027bone broth\u0027 (verified with -o context grep against the minified smp-feed.json), so the food is NOT actually priced: both broth crowns ($0.0391/floz, Aldi 7/7) are ordinary boxed broth, and aliasing would price a $0.16-0.25/floz product (Kettle \u0026 Fire, Swanson Sipping at $5-8/32oz) at commodity-broth\u0027s crown - a 4-6x understatement on a high-protein recipe that needs the variant\u0027s 10g-vs-1g protein. That is a legitimate deliberate variant (greek-yogurt-vs-yogurt class), sibling-consistent with the protein-pasta ruling in this batch. Required follow-up edits, WITHOUT which this approval double-prices the same carton under two ids: (1) REMOVE the three bone-broth include patterns from chicken-broth and beef-broth via add-commodity-rule.ps1 and add \u0027bone\\s+broth\u0027 to their excludes; (2) mint bone-broth species-generic in the RECIPE-ONLY namespace, unit floz, include \u0027bone\\s+broth\u0027, excludes at full rigor (bouillon, \\bbase\\b, \\bcubes?\\b, concentrate, \u0027bone\\s+broth\\s+protein\u0027 powders/collagen, ramen, \\bsoup\\b, dog\\s+(food|treats?) - Milk-Bone and dog-treats sit one word away, plus the standard baby/pet/cleaning boilerplate); (3) add allowlist pairs bone-broth\u003c-\u003echicken-broth and bone-broth\u003c-\u003ebeef-broth to commodity-dupe-allowlist.json, reason \u0027deliberate variant: simmered bone broth, distinct macro and price class\u0027. The 2026-08-26 reduced-sodium precedent does not reach this: that was a label variant of the same carton."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Computed over all 10 lines at source scale, 6 servings: 494 cal, 39.2 g protein, 29.6 g carbs per serving. Source published 569 / 30 / 50. Carbs match almost exactly (29.6 vs 30). Calories are -13%, acceptable. PROTEIN IS -21.6% AND THAT BREACHES THE 15% RULE, so I am flagging it rather than smoothing it: the gap is entirely the two substituted lines. The source\u0027s asterisked homemade \u0027high protein pesto\u0027 is a fortified sauce, while a jarred basil pesto carries 3 g protein per 62 g, and the source\u0027s pasta appears to be a very-high-protein brand (25 g per 2 oz class) rather than the 10 g per 2 oz Barilla Protein+ I priced and transcribed. The main protein is not the problem - 1.5 lb of breast for 6 servings is the source\u0027s own stated weight, giving 113 g raw per serving, below the catalog\u0027s 167 g average. NET EFFECT: at 39.2 g this recipe sits just UNDER this run\u0027s 40 g protein floor. It clears on calories (450-800). The band gate should rule on the assembled numbers; if it fails, the honest fix is a higher-protein pasta row or more chicken, not a re-weigh."
+}

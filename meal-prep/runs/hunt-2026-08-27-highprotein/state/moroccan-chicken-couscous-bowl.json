@@ -1,0 +1,62 @@
+{
+    "slug":  "moroccan-chicken-couscous-bowl",
+    "title":  "Moroccan Chicken Couscous Bowl",
+    "source_url":  "https://healthyfitnessmeals.com/moroccan-chicken-couscous-bowl/",
+    "protein":  "chicken",
+    "state":  "parked",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:35",
+    "updated":  "2026-08-27T12:14:32",
+    "terms":  [
+                  {
+                      "term":  "Moroccan Spice Mix",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+                      "Moroccan Spice Mix"
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:35",
+                        "by":  "harvest",
+                        "detail":  "https://healthyfitnessmeals.com/moroccan-chicken-couscous-bowl/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:50:35",
+                        "by":  "decider",
+                        "detail":  "Moroccan-spiced (cinnamon/paprika/ginger/nutmeg/cayenne) tomato-paste chicken over couscous with cucumber, tomato and yogurt; no live or backlog North-African chicken-couscous dish (in-flight pesto couscous bowl is a different flavor), widens the catalog beyond its American/Tex-Mex skew, band verified 497cal/47c/47p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:51:07",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:09:52",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled (5 mapped, 1 mapped-null), 0 rejected, 3 DB rows returned (Couscous, Moroccan Spice Mix, Sea Salt - Sea Salt is returned identically under the artichoke casserole slug too). No new ids and no absent terms: the Moroccan spice mix is mapped-null on precedent, so there is nothing for pricing to hunt, and every other bid is already priced. Foods the table marked as having no row"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:09:52",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-27T12:14:32",
+                        "by":  "derive",
+                        "detail":  "waiting on: Moroccan Spice Mix"
+                    }
+                ]
+}

@@ -1,0 +1,1459 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 2,
+ "generated": "2026-08-27T12:00:01",
+ "batch_terms": [
+  "93/7 lean ground beef",
+  "rotini pasta",
+  "shredded cheddar cheese",
+  "almond butter",
+  "masa harina"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "93/7 lean ground beef",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "93/7leanbeef",
+     "attempts": [
+      {
+       "term": "93/7 lean ground beef",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "93/7 lean beef",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "93/7leangroundbeef",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "93/7leanbeef",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 4 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "93/7leanbeef",
+     "attempts": [
+      {
+       "term": "93/7 lean ground beef",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "93/7 lean beef",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "93/7leangroundbeef",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "93/7leanbeef",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 4 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "93/7 lean ground beef",
+     "attempts": [
+      {
+       "term": "93/7 lean ground beef",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "93% Lean 7% Fat Ground Beef",
+       "price": 7.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387862-93-lean-7-fat-ground-beef-1-each"
+      },
+      {
+       "item": "93% Lean 7% Fat Ground Beef Bulk",
+       "price": 74.9,
+       "size": "$7.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386242-93-lean-7-fat-ground-beef-10-lb"
+      },
+      {
+       "item": "85% Lean 15% Fat Ground Beef",
+       "price": 6.99,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387270-85-lean-15-fat-ground-beef-1-each"
+      },
+      {
+       "item": "80% Lean 20% Fat Ground Beef",
+       "price": 6.49,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386578-80-lean-20-fat-ground-beef-1-each"
+      },
+      {
+       "item": "Our Own Ground Beef",
+       "price": 7.49,
+       "size": "",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388446-our-own-ground-beef-1-each"
+      },
+      {
+       "item": "85% Lean 15% Fat Ground Beef Bulk",
+       "price": 64.9,
+       "size": "$6.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386974-85-lean-15-fat-ground-beef-tube-10-lb"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "93/7 lean ground beef",
+     "attempts": [
+      {
+       "term": "93/7 lean ground beef",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+       "price": 31.47,
+       "size": "",
+       "unit_price": "$15.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+      },
+      {
+       "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
+       "price": 28.64,
+       "size": "",
+       "unit_price": "$7.16/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Beef Boneless Whole Brisket, Vacuum Pack, priced per pound",
+       "price": 90.2,
+       "size": "",
+       "unit_price": "$5.88/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7CROYMJFO6MH"
+      },
+      {
+       "item": "Member's Mark USDA Prime Angus Beef Boneless Whole Brisket, Vacuum Pack, priced per pound",
+       "price": 93.65,
+       "size": "",
+       "unit_price": "$5.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4WSHLSBIEDQ8"
+      },
+      {
+       "item": "Member's Mark 80/20 Ground Beef Chuck Sliders, 18 ct., priced per pound",
+       "price": 16.99,
+       "size": "",
+       "unit_price": "$5.86/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6PJQR4FGAND0"
+      },
+      {
+       "item": "Member's Mark USDA Choice Angus Whole Beef Short Loin, Bone-in, Cryovac, priced per pound",
+       "price": 209.68,
+       "size": "",
+       "unit_price": "$14.12/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0TO9HVXFNR9T"
+      },
+      {
+       "item": "Member’s Mark USDA Choice Angus Whole Beef Strip Loin, Cryovac, priced per pound",
+       "price": 169.02,
+       "size": "",
+       "unit_price": "$11.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/663UPWKNB8KN"
+      },
+      {
+       "item": "90%/10% Ground Beef Chub, Case, priced per pound",
+       "price": 442.71,
+       "size": "",
+       "unit_price": "$5.22/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/740SBJFV7YFB"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "rotini pasta",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "rotini pasta",
+     "attempts": [
+      {
+       "term": "rotini pasta",
+       "state": "OK",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Gluten Free Rotini Pasta",
+       "price": 2.19,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111013340"
+      },
+      {
+       "item": "Carbe Diem!™ Rotini Pasta, 12 OZ",
+       "price": 4.29,
+       "size": "12 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001600020931"
+      },
+      {
+       "item": "Knorr Cheesy Cheddar Rotini Pasta Side",
+       "price": 1.33,
+       "size": "4.3 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0004100002289"
+      },
+      {
+       "item": "Banza® Gluten Free Brown Rice Rotini Pasta",
+       "price": 4.29,
+       "size": "10 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085001144399"
+      },
+      {
+       "item": "Simple Truth Organic® 100% Whole Wheat Rotini Pasta",
+       "price": 1.59,
+       "size": "16 oz",
+       "relevance": 127,
+       "url": "https://www.bakersplus.com/p/0004126033484"
+      },
+      {
+       "item": "Barilla Rotini Pasta, Quality Non-GMO and Kosher Certified Pasta",
+       "price": 1.89,
+       "size": "16 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0007680828098"
+      },
+      {
+       "item": "Barilla Tri-Color Rotini pasta, Quality Non-GMO and Kosher Certified Pasta",
+       "price": 1.89,
+       "size": "12 oz",
+       "relevance": 122,
+       "url": "https://www.bakersplus.com/p/0007680851829"
+      },
+      {
+       "item": "Banza Wheat Protein Rotini Pasta - No-Compromises Pasta Powered by Chickpeas, 12oz",
+       "price": 4.99,
+       "size": "12 oz",
+       "relevance": 120,
+       "url": "https://www.bakersplus.com/p/0085007323610"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "rotini pasta",
+     "attempts": [
+      {
+       "term": "rotini pasta",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Creamette Protein Rotini Pasta 14.5 Oz",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/creamette_protein_rotini_pasta_14_5_oz/p/6394783"
+      },
+      {
+       "item": "Creamette Rotini 1 Lb",
+       "price": 1.89,
+       "size": "1 lb",
+       "relevance": 45,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/rotini_fusilli/creamette_rotini_1_lb/p/541038"
+      },
+      {
+       "item": "Barilla Rotini 7 Oz",
+       "price": 2.99,
+       "size": "7 oz",
+       "relevance": 45,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/barilla_rotini_7_oz/p/1564405684713605839"
+      },
+      {
+       "item": "Dried Rotelle Pasta Creamette",
+       "price": 1.89,
+       "size": "1 lb",
+       "relevance": 43,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/rotini_fusilli/dried_rotelle_pasta_creamette/p/580566"
+      },
+      {
+       "item": "Creamette Rotini, Rainbow 12 Oz",
+       "price": 1.89,
+       "size": "12 oz",
+       "relevance": 42,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/rotini_fusilli/creamette_rotini_rainbow_12_oz/p/576709"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "rotini pasta",
+     "attempts": [
+      {
+       "term": "rotini pasta",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Rotini",
+       "price": 1.24,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24860256-fareway-rotini-16-oz"
+      },
+      {
+       "item": "Fareway Garden Rotini",
+       "price": 1.24,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24490420-fareway-rotini-garden-12-oz"
+      },
+      {
+       "item": "Barilla Rotini - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
+       "price": 1.84,
+       "size": "1 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144054-barilla-classic-blue-box-pasta-rotini-1-lb"
+      },
+      {
+       "item": "Barilla Tri-Color Rotini - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
+       "price": 1.84,
+       "size": "12 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/39128-barilla-classic-blue-box-pasta-tri-color-rotini-12-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
+      },
+      {
+       "item": "Fareway Whole Wheat Rotini",
+       "price": 0.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24907253-fareway-whole-wheat-macaroni-product-rotini-16-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "rotini pasta",
+     "attempts": [
+      {
+       "term": "rotini pasta",
+       "state": "MATCHES",
+       "hits": 45
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+      },
+      {
+       "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+      },
+      {
+       "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$1.58/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
+      },
+      {
+       "item": "Rao's Homemade Marinara Sauce, 22 oz., 2 pk.",
+       "price": 7.76,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4P0AL8KH8MXL"
+      },
+      {
+       "item": "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
+       "price": 11.74,
+       "size": "",
+       "unit_price": "$0.98/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3EU6L4YHVBHK"
+      },
+      {
+       "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$2.25/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
+      },
+      {
+       "item": "Chef Boyardee Spaghetti and Meatballs, 14.5 oz., 8 pk.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/37XZDMNMJ03R"
+      },
+      {
+       "item": "Chef Boyardee Bowls, Variety Pack, 8 pk.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7BNH2BF10EO6"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "shredded cheddar cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "shredded cheddar cheese",
+     "attempts": [
+      {
+       "term": "shredded cheddar cheese",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Cheddar Jack Shredded Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111050183"
+      },
+      {
+       "item": "Kroger® Mild Cheddar Shredded Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111050170"
+      },
+      {
+       "item": "Kroger® Sharp Cheddar Shredded Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111050158"
+      },
+      {
+       "item": "Kraft Sharp Cheddar Shredded Cheese",
+       "price": 3.29,
+       "size": "8 oz (226g)",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0084037090158"
+      },
+      {
+       "item": "Kroger® Mild Cheddar Shredded Cheese",
+       "price": 3.69,
+       "size": "16 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111015130"
+      },
+      {
+       "item": "Kroger® Sharp Cheddar Shredded Cheese",
+       "price": 3.69,
+       "size": "16 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111058881"
+      },
+      {
+       "item": "Kroger® Sharp Cheddar Shredded Cheese",
+       "price": 3.69,
+       "size": "16 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0001111015132"
+      },
+      {
+       "item": "Kroger® Medium Cheddar Shredded Cheese",
+       "price": 2,
+       "size": "8 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111050339"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "shredded cheddar cheese",
+     "attempts": [
+      {
+       "term": "shredded cheddar cheese",
+       "state": "OK",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Sharp Cheddar Shredded Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_sharp_cheddar_shredded_cheese_8_oz/p/6787446"
+      },
+      {
+       "item": "Our Family Mild Cheddar Shredded Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_mild_cheddar_shredded_cheese_8_oz/p/6787447"
+      },
+      {
+       "item": "Our Family Mild Cheddar Shredded Cheese 16 Oz",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_mild_cheddar_shredded_cheese_16_oz/p/7081844"
+      },
+      {
+       "item": "Our Family Sharp Cheddar Shredded Cheese 16 Oz",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_sharp_cheddar_shredded_cheese_16_oz/p/7081806"
+      },
+      {
+       "item": "Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_extra_sharp_cheddar_shredded_cheese_8_oz/p/7081855"
+      },
+      {
+       "item": "Sargento Shredded Cheese, Natural, Sharp Cheddar 8 Oz",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/sargento_shredded_cheese_natural_sharp_cheddar_8_oz/p/569749"
+      },
+      {
+       "item": "Our Family Natural Mild Cheddar Shredded Cheese 32 Oz",
+       "price": 7.89,
+       "size": "32 oz",
+       "relevance": 87,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_mild_cheddar_shredded_cheese_32_oz/p/7081845"
+      },
+      {
+       "item": "Our Family Habanero White Cheddar Shredded Cheese 8 Oz",
+       "price": 2.59,
+       "size": "8 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/our_family_habanero_white_cheddar_shredded_cheese_8_oz/p/1564405684711204259"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "shredded cheddar cheese",
+     "attempts": [
+      {
+       "term": "shredded cheddar cheese",
+       "state": "OK",
+       "hits": 12
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Mild Cheddar Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712009-fareway-cheese-mild-cheddar-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Sharp Cheddar Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712976-fareway-cheese-sharp-cheddar-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Mild Cheddar Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22142720-fareway-cheese-cheddar-mild-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Mild Cheddar Shredded Cheese",
+       "price": 7.48,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21662917-fastco-shredded-cheedar-cheese-2-lb"
+      },
+      {
+       "item": "Fareway Sharp Cheddar Shredded Cheese",
+       "price": 7.48,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712013-fareway-cheese-sharp-cheddar-shredded-32-oz"
+      },
+      {
+       "item": "Crystal Farms Shredded Cheddar Cheese",
+       "price": 2.67,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/346946-crystal-farms-shredded-cheddar-cheese-8-0-oz"
+      },
+      {
+       "item": "Tillamook Farmstyle Colby Jack Shredded Cheese, 8oz",
+       "price": 3.99,
+       "size": "227 g",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85410-tillamook-farmstyle-thick-cut-colby-jack-shredded-cheese-8-oz"
+      },
+      {
+       "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
+       "price": 3.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "shredded cheddar cheese",
+     "attempts": [
+      {
+       "term": "shredded cheddar cheese",
+       "state": "MATCHES",
+       "hits": 26
+      }
+     ],
+     "hits": [
+      {
+       "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
+       "price": 9.64,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
+      },
+      {
+       "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.30/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+      },
+      {
+       "item": "Member's Mark Sharp Cheddar Finely Shredded Cheese 2 pk.",
+       "price": 7.32,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7L728MJ07W4N"
+      },
+      {
+       "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+       "price": 5.97,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+      },
+      {
+       "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+       "price": 5.87,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+      },
+      {
+       "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
+       "price": 11.47,
+       "size": "",
+       "unit_price": "$1.43/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+      },
+      {
+       "item": "Member's Mark Standard Shredded Mild Yellow Cheddar Cheese 5 lbs.",
+       "price": 12.28,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/689E5H9361GH"
+      },
+      {
+       "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+       "price": 12.42,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "almond butter",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "almond butter",
+     "attempts": [
+      {
+       "term": "almond butter",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "JUSTIN'S Maple Almond Butter, 16 oz.",
+       "price": 11.49,
+       "size": "net wt 16oz (1 lb) 454g",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0089445500032"
+      },
+      {
+       "item": "KIND Almond Butter Breakfast Protein Bars",
+       "price": 5.99,
+       "size": "12 bars",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0060265241929"
+      },
+      {
+       "item": "Simple Truth® No Stir Creamy Almond Butter",
+       "price": 7.49,
+       "size": "16 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111011948"
+      },
+      {
+       "item": "MaraNatha® No Stir Crunchy Almond Butter",
+       "price": 8.99,
+       "size": "12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0005165109369"
+      },
+      {
+       "item": "Justin's ® Vanilla Almond Butter, 16 oz.",
+       "price": 11.49,
+       "size": "net wt 16 oz (1 lb) 454g",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0089445500037"
+      },
+      {
+       "item": "JUSTIN'S Classic Almond Butter, 16 oz.",
+       "price": 11.49,
+       "size": "net wt. 16 oz (1 lb) 454g",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0089445500031"
+      },
+      {
+       "item": "Simple Truth® Creamy No Sugar Added Almond Butter",
+       "price": 7.49,
+       "size": "16 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111011943"
+      },
+      {
+       "item": "Simple Truth® Crunchy No Sugar Added Almond Butter",
+       "price": 7.49,
+       "size": "16 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111011944"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "almond butter",
+     "attempts": [
+      {
+       "term": "almond butter",
+       "state": "OK",
+       "hits": 11
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Creamy Almond Butter",
+       "price": 6.99,
+       "size": "16 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/our_family_creamy_almond_butter/p/1764405684716080398"
+      },
+      {
+       "item": "Kind Almond Butter Clusters Granola 11 Oz",
+       "price": 7.99,
+       "size": "11 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/breakfast/granola_cereals/kind_almond_butter_clusters_granola_11_oz/p/1564405684689867763"
+      },
+      {
+       "item": "Nature Valley Cinnamon Almond Butter Biscuits 5 Ea",
+       "price": 5.59,
+       "size": "5 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/granola_snack_bars/nature_valley_cinnamon_almond_butter_biscuits_5_ea/p/4815631"
+      },
+      {
+       "item": "Kind Protein Bars, Breakfast, Almond Butter 6 Ea",
+       "price": 6.99,
+       "size": "6 ea",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/granola_snack_bars/kind_protein_bars_breakfast_almond_butter_6_ea/p/1564405684713580856"
+      },
+      {
+       "item": "Full Circle Market Almond Butter, Creamy 16 Oz",
+       "price": 12.99,
+       "size": "16 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/full_circle_market_almond_butter_creamy_16_oz/p/575011"
+      },
+      {
+       "item": "Justin's Hazelnut & Almond Butter, Chocolate 1.15 Oz",
+       "price": 1.59,
+       "size": "1.15 oz",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/justin_s_hazelnut_almond_butter_chocolate_1_15_oz/p/60243"
+      },
+      {
+       "item": "Nature Valley Cinnamon Almond Butter Crispy Bars 5 Ea",
+       "price": 5.99,
+       "size": "5 ea",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/snacks/granola_snack_bars/nature_valley_cinnamon_almond_butter_crispy_bars_5_ea/p/1764405684715026382"
+      },
+      {
+       "item": "Happy Baby Nutty Blends Stage 2 Organic Bananas & Almond Butter Baby Food Pouch 3 Oz",
+       "price": 2.49,
+       "size": "3 oz",
+       "relevance": 119,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/happy_baby_nutty_blends_stage_2_organic_bananas_almond_butter_baby_food_pouch_3_oz/p/1564405684709821858"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "almond butter",
+     "attempts": [
+      {
+       "term": "almond butter",
+       "state": "OK",
+       "hits": 50
+      }
+     ],
+     "hits": [
+      {
+       "item": "Justin's Classic Almond Butter, 1.15 OZ",
+       "price": 1.29,
+       "size": "1.15 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16294119-justin-s-almond-butter-classic-1-15-oz"
+      },
+      {
+       "item": "Barney Butter Smooth Almond Butter",
+       "price": 12.59,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/53789-barney-butter-almond-butter-smooth-16-oz"
+      },
+      {
+       "item": "Fareway Sweet Cream Unsalted Butter",
+       "price": 3.48,
+       "size": "4 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20578072-fareway-butter-unsalted-4-each"
+      },
+      {
+       "item": "Justin's Classic Peanut Butter Spread, 28 OZ",
+       "price": 7.99,
+       "size": "28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17837298-justin-s-classic-peanut-butter-spread-794-0-g"
+      },
+      {
+       "item": "Chester's Puffcorn, Butter",
+       "price": 2.99,
+       "size": "3.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27452922-chester-s-butter-flavored-puffcorn-snacks-3-25-oz"
+      },
+      {
+       "item": "Smucker's Natural Creamy Peanut Butter",
+       "price": 6.99,
+       "size": "26 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90679-smucker-s-peanut-butter-creamy-natural-26-oz"
+      },
+      {
+       "item": "Tillamook Campfire Peanut Butter Cup Ice Cream, 48fl-oz",
+       "price": 6.96,
+       "size": "48 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/61015187-tillamook-ice-cream-campfire-peanut-butter-cup-1-5-qt"
+      },
+      {
+       "item": "Musselman's Apple Butter",
+       "price": 4.28,
+       "size": "28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73010-musselman-s-apple-butter-28-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "almond butter",
+     "attempts": [
+      {
+       "term": "almond butter",
+       "state": "MATCHES",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Welch's Concord Grape Jelly, 30 oz., 2 pk.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.08/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4LPJ2SH96WW3"
+      },
+      {
+       "item": "Smucker's Strawberry Jam, 64 oz., 2 pk.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6TI9POP47WRP"
+      },
+      {
+       "item": "Member's Mark Almond Butter, 24 oz.",
+       "price": 8.78,
+       "size": "",
+       "unit_price": "$0.37/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0UOSTOIO1HGR"
+      },
+      {
+       "item": "Nature Valley Biscuit Sandwich with Almond Butter, 30 ct.",
+       "price": 15.48,
+       "size": "",
+       "unit_price": "$0.52/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5RF6URN1C3MU"
+      },
+      {
+       "item": "Snickers Milk Chocolate Candy Bars, Full Size, 1.86 oz., 48 pk.",
+       "price": 52.48,
+       "size": "",
+       "unit_price": "$1.09/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2K3CU2S516Q7"
+      },
+      {
+       "item": "Nutella Peanut Spread, 26.5 oz., 2 pk.",
+       "price": 12.78,
+       "size": "",
+       "unit_price": "$6.39/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2SFBF9172F4M"
+      },
+      {
+       "item": "Member's Mark Natural Creamy Peanut Butter, 40 oz., 2 pk.",
+       "price": 7.78,
+       "size": "",
+       "unit_price": "$0.10/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4J8UA77KAVJO"
+      },
+      {
+       "item": "Nutella Hazelnut Spread with Cocoa, 26.5 oz., 2 pk.",
+       "price": 12.78,
+       "size": "",
+       "unit_price": "$0.24/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Z8GS3KJ8WHW"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "masa harina",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "harina",
+     "attempts": [
+      {
+       "term": "masa harina",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "masaharina",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "harina",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "Quaker® Masa Harina de Maiz Corn Tortilla Mix",
+       "price": 6.49,
+       "size": "70.4 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0003000002970"
+      }
+     ],
+     "reason": "only one candidate survived the full ladder - weigh it, do not assume",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "harina",
+     "attempts": [
+      {
+       "term": "masa harina",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "masaharina",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "harina",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "Pasta De Harina",
+       "price": 1.99,
+       "size": "1 ea",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/pasta_de_harina/p/1564405684708918231"
+      }
+     ],
+     "reason": "only one candidate survived the full ladder - weigh it, do not assume",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "masa harina",
+     "attempts": [
+      {
+       "term": "masa harina",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "Quaker Corn Meal, Yellow",
+       "price": 2.99,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69219-quaker-yellow-cornmeal-24-oz"
+      },
+      {
+       "item": "Early Morning Harvest Organic Corn Meal",
+       "price": 3.99,
+       "size": "1.75 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19061466-early-morning-harvest-organic-corn-meal-1-75-lb"
+      },
+      {
+       "item": "Yellow Sweet Corn",
+       "price": 0.75,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345812-yellow-sweet-corn-crate-each"
+      },
+      {
+       "item": "Fareway 100% Pure Corn Starch",
+       "price": 1.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20642488-fareway-corn-starch-100-pure-16-oz"
+      },
+      {
+       "item": "Gold Medal All Purpose Flour",
+       "price": 2.99,
+       "size": "2 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37909-gold-medal-all-purpose-flour-bleached-enriched-presifted-32-oz"
+      },
+      {
+       "item": "Guerrero White Corn/De Maiz Blanco Tortillas",
+       "price": 4.99,
+       "size": "4.16 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43318-guerrero-white-corn-de-maiz-blanco-tortillas-80-ct"
+      },
+      {
+       "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+       "price": 1.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+      },
+      {
+       "item": "Frescados Burrito Style Flour Tortillas",
+       "price": 2.49,
+       "size": "10 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/77564-frescados-burrito-style-flour-tortillas-10-ea"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "masa harina",
+     "attempts": [
+      {
+       "term": "masa harina",
+       "state": "MATCHES",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+      },
+      {
+       "item": "Maseca Masa Corn Flour, 22 lbs.",
+       "price": 21.78,
+       "size": "",
+       "unit_price": "$0.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+      },
+      {
+       "item": "Maseca Special Regular 0, 50 lbs.",
+       "price": 31.68,
+       "size": "",
+       "unit_price": "$0.63/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FJ0WUX9IAMF"
+      },
+      {
+       "item": "PAN Precooked White Corn Meal, 5 lbs.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4JX7ZAISRS0J"
+      },
+      {
+       "item": "Gold Medal All Purpose Flour, 12 lbs.",
+       "price": 6.72,
+       "size": "",
+       "unit_price": "$0.56/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2V4R3MQP7LKY"
+      },
+      {
+       "item": "Member's Mark All Purpose Flour, 25 lbs.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.34/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5DODYSIB475T"
+      },
+      {
+       "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$0.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+      },
+      {
+       "item": "King Arthur Bread Flour, 10 lbs.",
+       "price": 8.38,
+       "size": "",
+       "unit_price": "$0.84/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3EJBF2VJT0IQ"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

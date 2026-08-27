@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fried-rice",
+    "title":  "Chicken Fried Rice",
+    "source_url":  "https://www.eatingbirdfood.com/chicken-fried-rice/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:38",
+    "updated":  "2026-08-27T11:50:39",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken, egg, mixed veg and soy-sauced fried jasmine rice is a direct duplicate of live chicken-fried-rice-skillet (same name \u0027Chicken Fried Rice\u0027, shares chicken/eggs/onions/rice/soy, word-overlap 35).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:38",
+                        "by":  "harvest",
+                        "detail":  "https://www.eatingbirdfood.com/chicken-fried-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:50:39",
+                        "by":  "decider",
+                        "detail":  "Chicken, egg, mixed veg and soy-sauced fried jasmine rice is a direct duplicate of live chicken-fried-rice-skillet (same name \u0027Chicken Fried Rice\u0027, shares chicken/eggs/onions/rice/soy, word-overlap 35)."
+                    }
+                ]
+}

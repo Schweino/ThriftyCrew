@@ -1,0 +1,123 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T11:54:21",
+    "slug":  "one-pan-sloppy-joe-casserole",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Shredded Cheese\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "One-Pan Sloppy Joe Casserole",
+                   "slug":  "one-pan-sloppy-joe-casserole",
+                   "protein":  "turkey",
+                   "cuisine":  "",
+                   "source_url":  "https://lemonsandzest.com/sloppy-joe-casserole/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Tomato Sauce",
+                                           "grams":  1334,
+                                           "buy":  "5 1/2 cups tomato sauce"
+                                       },
+                                       {
+                                           "item":  "Ketchup",
+                                           "grams":  426,
+                                           "buy":  "1 1/2 cups ketchup"
+                                       },
+                                       {
+                                           "item":  "Brown Sugar",
+                                           "grams":  94,
+                                           "buy":  "7 Tbsp packed brown sugar"
+                                       },
+                                       {
+                                           "item":  "Apple Cider Vinegar",
+                                           "grams":  140,
+                                           "buy":  "1/2 cup plus 1 Tbsp apple cider vinegar"
+                                       },
+                                       {
+                                           "item":  "Worcestershire Sauce",
+                                           "grams":  119,
+                                           "buy":  "7 Tbsp Worcestershire sauce"
+                                       },
+                                       {
+                                           "item":  "Onion Powder",
+                                           "grams":  6,
+                                           "buy":  "2 1/3 tsp onion powder"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  6,
+                                           "buy":  "2 1/3 tsp ground black pepper"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  14,
+                                           "buy":  "2 1/3 tsp salt"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  35,
+                                           "buy":  "12 garlic cloves, minced"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  257,
+                                           "buy":  "2 1/3 yellow onions, diced"
+                                       },
+                                       {
+                                           "item":  "Tomato Paste",
+                                           "grams":  75,
+                                           "buy":  "1/4 cup plus 1 Tbsp tomato paste"
+                                       },
+                                       {
+                                           "item":  "Bell Peppers",
+                                           "grams":  1120,
+                                           "buy":  "9 bell peppers, diced (about half red, half green)"
+                                       },
+                                       {
+                                           "item":  "Ground Turkey",
+                                           "grams":  2117,
+                                           "buy":  "4 2/3 lb ground turkey"
+                                       },
+                                       {
+                                           "item":  "Shredded Cheese",
+                                           "grams":  527,
+                                           "buy":  "4 2/3 cups shredded cheddar (about 1 lb 2 oz)"
+                                       },
+                                       {
+                                           "item":  "Refrigerated Biscuits",
+                                           "grams":  1218,
+                                           "buy":  "21 refrigerated biscuits (about three 8-count cans), halved"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  766,
+                                              "protein_g":  45.4,
+                                              "carbs_g":  70.8,
+                                              "fat_g":  34.4
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT34M",
+                                "totalTime":  "PT49M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

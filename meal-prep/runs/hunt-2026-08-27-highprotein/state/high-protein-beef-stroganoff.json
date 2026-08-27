@@ -1,0 +1,31 @@
+{
+    "slug":  "high-protein-beef-stroganoff",
+    "title":  "High Protein Beef Stroganoff",
+    "source_url":  "https://everydaydishes.com/simple-food-recipes/dinner-recipes/high-protein-beef-stroganoff/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:48:51",
+    "updated":  "2026-08-27T11:48:51",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef + mushroom + onion + broth + flour stroganoff over egg noodles is the same dinner as live ground-beef-stroganoff-pasta (word-overlap 25, shares beef/broth/flour/mushrooms/onions); cottage-cheese-for-sour-cream is a macro tweak.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:51",
+                        "by":  "harvest",
+                        "detail":  "https://everydaydishes.com/simple-food-recipes/dinner-recipes/high-protein-beef-stroganoff/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:48:51",
+                        "by":  "decider",
+                        "detail":  "Ground beef + mushroom + onion + broth + flour stroganoff over egg noodles is the same dinner as live ground-beef-stroganoff-pasta (word-overlap 25, shares beef/broth/flour/mushrooms/onions); cottage-cheese-for-sour-cream is a macro tweak."
+                    }
+                ]
+}

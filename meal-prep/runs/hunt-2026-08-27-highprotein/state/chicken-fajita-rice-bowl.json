@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fajita-rice-bowl",
+    "title":  "Chicken Fajita Rice Bowls (One Pan)",
+    "source_url":  "https://www.cookingclassy.com/chicken-fajita-rice-bowl/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:43",
+    "updated":  "2026-08-27T11:50:43",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chili-cumin fajita chicken with peppers, black beans, rice, cheese, lime and cilantro is a direct duplicate of live fajita-chicken-rice-bowl (same name and dish, word-overlap 34); the Tex-Mex fajita-chicken lane is already saturated per prior fajita rulings.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:43",
+                        "by":  "harvest",
+                        "detail":  "https://www.cookingclassy.com/chicken-fajita-rice-bowl/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:50:43",
+                        "by":  "decider",
+                        "detail":  "Chili-cumin fajita chicken with peppers, black beans, rice, cheese, lime and cilantro is a direct duplicate of live fajita-chicken-rice-bowl (same name and dish, word-overlap 34); the Tex-Mex fajita-chicken lane is already saturated per prior fajita rulings."
+                    }
+                ]
+}

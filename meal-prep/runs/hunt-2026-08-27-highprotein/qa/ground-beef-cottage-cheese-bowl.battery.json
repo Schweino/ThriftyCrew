@@ -1,0 +1,234 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "ground-beef-cottage-cheese-bowl",
+  "generated": "2026-08-27T12:10:44",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\ground-beef-cottage-cheese-bowl.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\ground-beef-cottage-cheese-bowl.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "pass",
+      "numbers": {
+        "spec_ingredients": 14,
+        "source_ingredients": 17,
+        "matched": 14,
+        "invented": [],
+        "dropped": [],
+        "consolidated": [
+          "olive oil",
+          "kosher salt",
+          "ground black pepper"
+        ]
+      },
+      "detail": "14 of 17 source ingredients pair with the spec, nothing invented, nothing dropped",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'olive oil' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'kosher salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'ground black pepper' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 9,
+        "unrated": 2,
+        "exempt": 3,
+        "recipe_ratio": 4.6667,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "1.5 tablespoon",
+            "spec": "7 tbsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Salt",
+            "source": "0.5 teaspoon",
+            "spec": "2.33333 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Black Pepper",
+            "source": "0.25 teaspoon",
+            "spec": "1.25 tsp",
+            "ratio": 5.0,
+            "deviation": 0.0714,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "93/7 Ground Beef",
+            "source": "1 pound",
+            "spec": "4.66667 lb",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Tomato Paste",
+            "source": "1 tablespoon",
+            "spec": "5 tbsp",
+            "ratio": 5.0,
+            "deviation": 0.0714,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Chili Powder",
+            "source": "1 tablespoon",
+            "spec": "4.66667 tbsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Cumin",
+            "source": "1 teaspoon",
+            "spec": "4.66667 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Garlic Powder",
+            "source": "0.5 teaspoon",
+            "spec": "2.33333 tsp",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cottage Cheese",
+            "source": "0.75 cup",
+            "spec": "3.5 cup",
+            "ratio": 4.6667,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Sweet Potatoes",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Red Onion",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Hot Honey",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Avocado",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Red Pepper Flakes",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "Tomato Paste scaled 5x while the recipe scaled 4.67x (7.1% off): the source says 1 tablespoon and the spec buys 5 tbsp, where the exact scale is 4.67 tbsp. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "Tomato Paste scaled 5x while the recipe scaled 4.67x (7.1% off): the source says 1 tablespoon and the spec buys 5 tbsp, where the exact scale is 4.67 tbsp. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 2,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (2 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Ground Beef Cottage Cheese Bowl",
+        "spec_source_url": "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+        "transcription_source_url": "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "fail",
+      "numbers": {
+        "hits": 2
+      },
+      "detail": "EN DASH: –; EM DASH: —",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "EN DASH: –"
+        },
+        {
+          "severity": "fail",
+          "detail": "EM DASH: —"
+        }
+      ]
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 3,
+        "claimed_ratio": 4.6667,
+        "measured_ratio": 4.6667
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

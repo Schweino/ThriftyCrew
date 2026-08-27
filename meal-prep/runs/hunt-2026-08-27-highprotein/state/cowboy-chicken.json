@@ -1,0 +1,31 @@
+{
+    "slug":  "cowboy-chicken",
+    "title":  "Cowboy Chicken Recipe",
+    "source_url":  "https://www.wellplated.com/cowboy-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:51:39",
+    "updated":  "2026-08-27T11:51:40",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Baked chicken breast with black beans, corn, fire-roasted tomatoes, green chiles and pepper jack is the same Tex-Mex chicken-bean bake as accepted tex-mex-baked-chicken (chicken + bake + Tex-Mex tomato + beans + cheese); corn/green-chile swap for enchilada sauce does not make a new dinner in an already Tex-Mex-skewed catalog.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:51:39",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/cowboy-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:51:40",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breast with black beans, corn, fire-roasted tomatoes, green chiles and pepper jack is the same Tex-Mex chicken-bean bake as accepted tex-mex-baked-chicken (chicken + bake + Tex-Mex tomato + beans + cheese); corn/green-chile swap for enchilada sauce does not make a new dinner in an already Tex-Mex-skewed catalog."
+                    }
+                ]
+}

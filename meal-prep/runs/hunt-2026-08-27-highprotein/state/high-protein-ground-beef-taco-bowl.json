@@ -1,0 +1,31 @@
+{
+    "slug":  "high-protein-ground-beef-taco-bowl",
+    "title":  "High Protein Ground Beef Taco Bowl",
+    "source_url":  "https://nomastehungry.com/healthy-high-protein-ground-beef-taco-bowl-recipe/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:46:58",
+    "updated":  "2026-08-27T11:46:58",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef + black beans + salsa + Mexican cheese over rice is the same dinner as live high-protein-beef-burrito-bowls (score 32); Tex-Mex ground-beef rice bowl lane already dense.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:58",
+                        "by":  "harvest",
+                        "detail":  "https://nomastehungry.com/healthy-high-protein-ground-beef-taco-bowl-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:46:58",
+                        "by":  "decider",
+                        "detail":  "Ground beef + black beans + salsa + Mexican cheese over rice is the same dinner as live high-protein-beef-burrito-bowls (score 32); Tex-Mex ground-beef rice bowl lane already dense."
+                    }
+                ]
+}

@@ -1,0 +1,166 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "One-Pan Sloppy Joe Casserole",
+  "source_url": "https://lemonsandzest.com/sloppy-joe-casserole/",
+  "servings": 3,
+  "time_total": "49 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 - 1⅓ cup tomato sauce (we use no salt added)",
+      "item": "tomato sauce",
+      "qty": "1 - 1⅓",
+      "unit": "cup",
+      "prep": "(we use no salt added)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "⅓ cup ketchup",
+      "item": "ketchup",
+      "qty": "⅓",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1-2 Tbsp brown sugar",
+      "item": "brown sugar",
+      "qty": "1-2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp apple cider vinegar",
+      "item": "apple cider vinegar",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 ½ tbsp Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "1 ½",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ tsp onion powder",
+      "item": "onion powder",
+      "qty": "½",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ tsp pepper",
+      "item": "pepper",
+      "qty": "½",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ tsp salt (more or less to taste)",
+      "item": "salt",
+      "qty": "½ tsp",
+      "unit": null,
+      "prep": "more or less to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2-3 garlic cloves (minced)",
+      "item": "garlic cloves",
+      "qty": "2-3",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ yellow onion (diced)",
+      "item": "yellow onion",
+      "qty": "½",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp tomato paste",
+      "item": "tomato paste",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 bell peppers ((we use 1 red and 1 green))",
+      "item": "bell peppers",
+      "qty": "2",
+      "unit": null,
+      "prep": "(we use 1 red and 1 green)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 lb ground turkey or beef",
+      "item": "ground turkey or beef",
+      "qty": "1",
+      "unit": "lb",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 - 1½ cup shredded cheese (about 4 oz. (technically optional))",
+      "item": "shredded cheese",
+      "qty": "1 - 1½",
+      "unit": "cup",
+      "prep": "(about 4 oz. (technically optional))",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "4-5 halved refrigerated biscuits (I use the grands Buttermilk)",
+      "item": "halved refrigerated biscuits",
+      "qty": "4-5",
+      "unit": null,
+      "prep": "(I use the grands Buttermilk)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 375°F. Whisk the sauce ingredients together in a small bowl and set aside. Use just the one cup for a thicker sauce, and the full amount for a thinner sauce.)",
+    "Heat an oven-safe skillet or pan to medium-high heat. Add about a tablespoon of olive oil or your preferred cooking oil. Add the minced garlic and sauté for about 1 minute until fragrant. Add the onions and tomato paste and cook for about a minute or two, allowing the tomato paste to brown slightly. Add the bell peppers and cook it all for about 3-5 minutes to soften.",
+    "Push the onions and peppers to the side and add the ground turkey to the pan. Allow it to sear for 2-3 minutes before breaking down into smaller chunks/pieces. Cook until meat is browned and internal temperature is 165°F.",
+    "Shift the heat to medium-low and pour the sauce into the pan. Stir to combine.",
+    "Allow the mixture to simmer for about 5-6 minutes. It will thicken slightly. Sprinkle the shredded cheese over top and then peel each of the biscuits at the center to make two thinner biscuits and arrange them over top of the sloppy joe mixture.",
+    "Bake for about 15-20 minutes or until the biscuits are golden brown and cooked through. We like to brush the tops of biscuits with melted butter before serving. Sprinkle with chopped parsley and enjoy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 15,
+    "verified": 15,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

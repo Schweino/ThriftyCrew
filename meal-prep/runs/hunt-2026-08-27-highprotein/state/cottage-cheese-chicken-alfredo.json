@@ -1,0 +1,31 @@
+{
+    "slug":  "cottage-cheese-chicken-alfredo",
+    "title":  "Cottage Cheese Chicken Alfredo Pasta",
+    "source_url":  "https://www.laurafuentes.com/cottage-cheese-chicken-alfredo/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:47:00",
+    "updated":  "2026-08-27T11:47:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Creamy chicken alfredo pasta shares the alfredo-cream + chicken + pasta identity of high-protein-chicken-alfredo-lasagna accepted this run (skillet vs baked layers is a format difference); also sits in an already-saturated creamy chicken pasta lane, and 74g carbs is high for the run.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:47:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.laurafuentes.com/cottage-cheese-chicken-alfredo/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:47:00",
+                        "by":  "decider",
+                        "detail":  "Creamy chicken alfredo pasta shares the alfredo-cream + chicken + pasta identity of high-protein-chicken-alfredo-lasagna accepted this run (skillet vs baked layers is a format difference); also sits in an already-saturated creamy chicken pasta lane, and 74g carbs is high for the run."
+                    }
+                ]
+}

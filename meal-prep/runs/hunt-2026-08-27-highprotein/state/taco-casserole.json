@@ -1,0 +1,31 @@
+{
+    "slug":  "taco-casserole",
+    "title":  "Taco Casserole",
+    "source_url":  "https://amandascookin.com/taco-casserole/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:55",
+    "updated":  "2026-08-27T11:44:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-protein twin of live Turkey Taco Casserole: same ground-protein + salsa/taco-seasoning + tortilla + cheese + black-olive/pepper casserole (bge-m3 0.92), beef vs turkey is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:55",
+                        "by":  "harvest",
+                        "detail":  "https://amandascookin.com/taco-casserole/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:44:55",
+                        "by":  "decider",
+                        "detail":  "Cross-protein twin of live Turkey Taco Casserole: same ground-protein + salsa/taco-seasoning + tortilla + cheese + black-olive/pepper casserole (bge-m3 0.92), beef vs turkey is not a distinct plate."
+                    }
+                ]
+}

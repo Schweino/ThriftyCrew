@@ -1,0 +1,225 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+  "generated": "2026-08-27T11:58:14",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\teriyaki-grilled-chicken-and-veggie-rice-bowls.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\teriyaki-grilled-chicken-and-veggie-rice-bowls.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 15,
+        "source_ingredients": 16,
+        "matched": 14,
+        "invented": [
+          "Broccoli"
+        ],
+        "dropped": [
+          "water",
+          "small broccoli florets"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Broccoli' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'water' and the built recipe has nothing that denotes it; DROPPED: the source lists 'small broccoli florets' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Broccoli' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'water' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'small broccoli florets' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 9,
+        "unrated": 4,
+        "exempt": 2,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Soy Sauce",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Brown Sugar",
+            "source": "3 tbsp",
+            "spec": "0.666667 cup",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Honey",
+            "source": "3 tbsp",
+            "spec": "0.666667 cup",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ginger",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Rice Vinegar",
+            "source": "1 tbsp",
+            "spec": "3.5 tbsp",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cornstarch",
+            "source": "1.5 tbsp",
+            "spec": "0.333333 cup",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Olive Oil",
+            "source": "3.5 tbsp",
+            "spec": "0.75 cup",
+            "ratio": 3.4286,
+            "deviation": 0.0204,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1.5 lb",
+            "spec": "5.25 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Carrots",
+            "source": "1.5 cup",
+            "spec": "5.25 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Garlic",
+            "why": "the two measures are not the same kind (count:garlic vs count:clove), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Zucchini",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Broccoli",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Rice",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Black Pepper",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Toasted Sesame Seeds",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 9 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 2,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (2 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+        "spec_source_url": "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+        "transcription_source_url": "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

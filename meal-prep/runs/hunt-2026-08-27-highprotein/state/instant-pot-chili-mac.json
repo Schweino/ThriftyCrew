@@ -1,0 +1,31 @@
+{
+    "slug":  "instant-pot-chili-mac",
+    "title":  "Instant Pot Chili Mac",
+    "source_url":  "https://www.thereciperebel.com/instant-pot-chili-mac/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:29",
+    "updated":  "2026-08-27T11:42:29",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Beef + chili + macaroni + kidney beans + cheddar is the same dinner as live beef-chili-mac (4/4 axes, six shared core items).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:29",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/instant-pot-chili-mac/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:29",
+                        "by":  "decider",
+                        "detail":  "Beef + chili + macaroni + kidney beans + cheddar is the same dinner as live beef-chili-mac (4/4 axes, six shared core items)."
+                    }
+                ]
+}

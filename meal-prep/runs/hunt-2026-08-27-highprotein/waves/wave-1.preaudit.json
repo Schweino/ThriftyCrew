@@ -1,0 +1,485 @@
+{
+    "battery":  "wave-preaudit",
+    "version":  1,
+    "run":  "hunt-2026-08-27-highprotein",
+    "wave":  1,
+    "batch":  "hunt-2026-08-27-highprotein-w1",
+    "scope":  "whole-wave",
+    "generated":  "2026-08-27T12:19:50",
+    "elapsed_sec":  28.8,
+    "wave_slugs":  [
+                       "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                       "healthy-hamburger-helper",
+                       "ground-beef-cottage-cheese-bowl",
+                       "chicken-rice-and-broccoli"
+                   ],
+    "slugs":  [
+                  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                  "healthy-hamburger-helper",
+                  "ground-beef-cottage-cheese-bowl",
+                  "chicken-rice-and-broccoli"
+              ],
+    "inputs":  {
+                   "costed_mtime":  "2026-08-27T12:11:39",
+                   "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
+                   "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
+               },
+    "slug_checks":  {
+                        "teriyaki-grilled-chicken-and-veggie-rice-bowls":  [
+                                                                               {
+                                                                                   "check":  "spec-present",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "mtime":  "2026-08-27T12:03:36"
+                                                                                               },
+                                                                                   "detail":  "spec present and parses"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "macro-recompute",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "servings":  14,
+                                                                                                   "recompute":  {
+                                                                                                                     "cal":  764,
+                                                                                                                     "protein":  48.9,
+                                                                                                                     "carbs":  102.8,
+                                                                                                                     "fat":  18.1
+                                                                                                                 },
+                                                                                                   "stat":  {
+                                                                                                                "cal":  764,
+                                                                                                                "protein":  49,
+                                                                                                                "carbs":  103,
+                                                                                                                "fat":  18
+                                                                                                            },
+                                                                                                   "missing_fooddb_rows":  [
+
+                                                                                                                           ]
+                                                                                               },
+                                                                                   "detail":  "all four macros recompute from food-macros-db within tolerance (5 cal, 2 g)"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "cost-engine-consistency",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "cost_batch":  28.07,
+                                                                                                   "cost_batch_true":  32.5,
+                                                                                                   "cost_per_serving":  2,
+                                                                                                   "cost_first_run":  49.47,
+                                                                                                   "lines":  15,
+                                                                                                   "lines_unpriced":  0
+                                                                                               },
+                                                                                   "detail":  "the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "cost-reconcile",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "spec_mtime":  "2026-08-27T12:03:36",
+                                                                                                   "costed_mtime":  "2026-08-27T12:11:39",
+                                                                                                   "costed_is_newer_than_spec":  true
+                                                                                               },
+                                                                                   "detail":  "every spec cost field matches its engine row to the cent"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "protein-derivation",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "claimed":  "chicken",
+                                                                                                   "derived":  "chicken",
+                                                                                                   "derived_grams":  2381,
+                                                                                                   "tally":  {
+                                                                                                                 "chicken":  2381,
+                                                                                                                 "turkey":  0,
+                                                                                                                 "beef":  0,
+                                                                                                                 "pork":  0
+                                                                                                             }
+                                                                                               },
+                                                                                   "detail":  "the spec\u0027s protein field matches its heaviest protein ingredient by grams (chicken, 2381 g)"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "voice-sweep",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "hits":  0
+                                                                                               },
+                                                                                   "detail":  "no em or en dash anywhere in the spec"
+                                                                               },
+                                                                               {
+                                                                                   "check":  "card-rebuild",
+                                                                                   "verdict":  "pass",
+                                                                                   "numbers":  {
+                                                                                                   "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-1.preaudit-cards\\teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                                                                                                   "body_bytes":  69862,
+                                                                                                   "make_it_steps":  1,
+                                                                                                   "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
+                                                                                               },
+                                                                                   "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 1 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                                               }
+                                                                           ],
+                        "healthy-hamburger-helper":  [
+                                                         {
+                                                             "check":  "spec-present",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "mtime":  "2026-08-27T12:09:49"
+                                                                         },
+                                                             "detail":  "spec present and parses"
+                                                         },
+                                                         {
+                                                             "check":  "macro-recompute",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "servings":  14,
+                                                                             "recompute":  {
+                                                                                               "cal":  550.5,
+                                                                                               "protein":  44.5,
+                                                                                               "carbs":  54.1,
+                                                                                               "fat":  18.6
+                                                                                           },
+                                                                             "stat":  {
+                                                                                          "cal":  550,
+                                                                                          "protein":  44,
+                                                                                          "carbs":  54,
+                                                                                          "fat":  19
+                                                                                      },
+                                                                             "missing_fooddb_rows":  [
+
+                                                                                                     ]
+                                                                         },
+                                                             "detail":  "all four macros recompute from food-macros-db within tolerance (5 cal, 2 g)"
+                                                         },
+                                                         {
+                                                             "check":  "cost-engine-consistency",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "cost_batch":  29.5,
+                                                                             "cost_batch_true":  34.54,
+                                                                             "cost_per_serving":  2.11,
+                                                                             "cost_first_run":  42.01,
+                                                                             "lines":  13,
+                                                                             "lines_unpriced":  0
+                                                                         },
+                                                             "detail":  "the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced"
+                                                         },
+                                                         {
+                                                             "check":  "cost-reconcile",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "spec_mtime":  "2026-08-27T12:09:49",
+                                                                             "costed_mtime":  "2026-08-27T12:11:39",
+                                                                             "costed_is_newer_than_spec":  true
+                                                                         },
+                                                             "detail":  "every spec cost field matches its engine row to the cent"
+                                                         },
+                                                         {
+                                                             "check":  "protein-derivation",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "claimed":  "beef",
+                                                                             "derived":  "beef",
+                                                                             "derived_grams":  3268,
+                                                                             "tally":  {
+                                                                                           "chicken":  0,
+                                                                                           "turkey":  0,
+                                                                                           "beef":  3268,
+                                                                                           "pork":  0
+                                                                                       }
+                                                                         },
+                                                             "detail":  "the spec\u0027s protein field matches its heaviest protein ingredient by grams (beef, 3268 g)"
+                                                         },
+                                                         {
+                                                             "check":  "voice-sweep",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "hits":  0
+                                                                         },
+                                                             "detail":  "no em or en dash anywhere in the spec"
+                                                         },
+                                                         {
+                                                             "check":  "card-rebuild",
+                                                             "verdict":  "pass",
+                                                             "numbers":  {
+                                                                             "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-1.preaudit-cards\\healthy-hamburger-helper",
+                                                                             "body_bytes":  68384,
+                                                                             "make_it_steps":  1,
+                                                                             "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
+                                                                         },
+                                                             "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 1 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                         }
+                                                     ],
+                        "ground-beef-cottage-cheese-bowl":  [
+                                                                {
+                                                                    "check":  "spec-present",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "mtime":  "2026-08-27T12:17:24"
+                                                                                },
+                                                                    "detail":  "spec present and parses"
+                                                                },
+                                                                {
+                                                                    "check":  "macro-recompute",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "servings":  14,
+                                                                                    "recompute":  {
+                                                                                                      "cal":  550.4,
+                                                                                                      "protein":  41.7,
+                                                                                                      "carbs":  33.6,
+                                                                                                      "fat":  28.9
+                                                                                                  },
+                                                                                    "stat":  {
+                                                                                                 "cal":  550,
+                                                                                                 "protein":  42,
+                                                                                                 "carbs":  34,
+                                                                                                 "fat":  29
+                                                                                             },
+                                                                                    "missing_fooddb_rows":  [
+
+                                                                                                            ]
+                                                                                },
+                                                                    "detail":  "all four macros recompute from food-macros-db within tolerance (5 cal, 2 g)"
+                                                                },
+                                                                {
+                                                                    "check":  "cost-engine-consistency",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "cost_batch":  43.19,
+                                                                                    "cost_batch_true":  49.98,
+                                                                                    "cost_per_serving":  3.08,
+                                                                                    "cost_first_run":  65.32,
+                                                                                    "lines":  14,
+                                                                                    "lines_unpriced":  0
+                                                                                },
+                                                                    "detail":  "the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced"
+                                                                },
+                                                                {
+                                                                    "check":  "cost-reconcile",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "spec_mtime":  "2026-08-27T12:17:24",
+                                                                                    "costed_mtime":  "2026-08-27T12:11:39",
+                                                                                    "costed_is_newer_than_spec":  false
+                                                                                },
+                                                                    "detail":  "every spec cost field matches its engine row to the cent"
+                                                                },
+                                                                {
+                                                                    "check":  "protein-derivation",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "claimed":  "beef",
+                                                                                    "derived":  "beef",
+                                                                                    "derived_grams":  2117,
+                                                                                    "tally":  {
+                                                                                                  "chicken":  0,
+                                                                                                  "turkey":  0,
+                                                                                                  "beef":  2117,
+                                                                                                  "pork":  0
+                                                                                              }
+                                                                                },
+                                                                    "detail":  "the spec\u0027s protein field matches its heaviest protein ingredient by grams (beef, 2117 g)"
+                                                                },
+                                                                {
+                                                                    "check":  "voice-sweep",
+                                                                    "verdict":  "fail",
+                                                                    "numbers":  {
+                                                                                    "hits":  2
+                                                                                },
+                                                                    "detail":  "EM DASH: — | EN DASH: –"
+                                                                },
+                                                                {
+                                                                    "check":  "card-rebuild",
+                                                                    "verdict":  "pass",
+                                                                    "numbers":  {
+                                                                                    "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-1.preaudit-cards\\ground-beef-cottage-cheese-bowl",
+                                                                                    "body_bytes":  69074,
+                                                                                    "make_it_steps":  1,
+                                                                                    "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
+                                                                                },
+                                                                    "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 1 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                                }
+                                                            ],
+                        "chicken-rice-and-broccoli":  [
+                                                          {
+                                                              "check":  "spec-present",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "mtime":  "2026-08-27T12:17:42"
+                                                                          },
+                                                              "detail":  "spec present and parses"
+                                                          },
+                                                          {
+                                                              "check":  "macro-recompute",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "servings":  14,
+                                                                              "recompute":  {
+                                                                                                "cal":  471.9,
+                                                                                                "protein":  47.3,
+                                                                                                "carbs":  47,
+                                                                                                "fat":  9.7
+                                                                                            },
+                                                                              "stat":  {
+                                                                                           "cal":  472,
+                                                                                           "protein":  47,
+                                                                                           "carbs":  47,
+                                                                                           "fat":  10
+                                                                                       },
+                                                                              "missing_fooddb_rows":  [
+
+                                                                                                      ]
+                                                                          },
+                                                              "detail":  "all four macros recompute from food-macros-db within tolerance (5 cal, 2 g)"
+                                                          },
+                                                          {
+                                                              "check":  "cost-engine-consistency",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "cost_batch":  23.31,
+                                                                              "cost_batch_true":  27.95,
+                                                                              "cost_per_serving":  1.66,
+                                                                              "cost_first_run":  40.87,
+                                                                              "lines":  14,
+                                                                              "lines_unpriced":  0
+                                                                          },
+                                                              "detail":  "the engine row is internally coherent: utils sum to the batch, both per-serving tiers derive, first run is true + pantry, nothing unpriced"
+                                                          },
+                                                          {
+                                                              "check":  "cost-reconcile",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "spec_mtime":  "2026-08-27T12:17:42",
+                                                                              "costed_mtime":  "2026-08-27T12:11:39",
+                                                                              "costed_is_newer_than_spec":  false
+                                                                          },
+                                                              "detail":  "every spec cost field matches its engine row to the cent"
+                                                          },
+                                                          {
+                                                              "check":  "protein-derivation",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "claimed":  "chicken",
+                                                                              "derived":  "chicken",
+                                                                              "derived_grams":  4901,
+                                                                              "tally":  {
+                                                                                            "chicken":  4901,
+                                                                                            "turkey":  0,
+                                                                                            "beef":  0,
+                                                                                            "pork":  0
+                                                                                        }
+                                                                          },
+                                                              "detail":  "the spec\u0027s protein field matches its heaviest protein ingredient by grams (chicken, 4901 g)"
+                                                          },
+                                                          {
+                                                              "check":  "voice-sweep",
+                                                              "verdict":  "fail",
+                                                              "numbers":  {
+                                                                              "hits":  2
+                                                                          },
+                                                              "detail":  "EM DASH: — | EN DASH: –"
+                                                          },
+                                                          {
+                                                              "check":  "card-rebuild",
+                                                              "verdict":  "pass",
+                                                              "numbers":  {
+                                                                              "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\waves\\wave-1.preaudit-cards\\chicken-rice-and-broccoli",
+                                                                              "body_bytes":  68902,
+                                                                              "make_it_steps":  1,
+                                                                              "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
+                                                                          },
+                                                              "detail":  "rebuilt to a scratch dir and structurally identical to al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html: every smp-* class and anchor id present, 1 step anchors, no dash bytes, JSON-LD parses as a Recipe"
+                                                          }
+                                                      ]
+                    },
+    "shared_checks":  [
+                          {
+                              "check":  "audit-spec-contradictions",
+                              "verdict":  "fail",
+                              "numbers":  {
+                                              "rc":  1
+                                          },
+                              "detail":  "audit-spec-contradictions is not clean (exited 1). Fix it through the owning stage - never weaken a gate to pass a wave. Tail: spec-contradictions FAIL - a class got WORSE than out\\spec-contradictions-baseline.json: STAT-PROSE: 1 now, baseline 0 //   A spec that states the same fact twice and disagrees with itself is wrong no matter what the source recipe says - one of the two numbers is on a live card. // SPEC-CONTRADICTIONS-COMPLETE"
+                          },
+                          {
+                              "check":  "audit-store-integrity",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: STORE-INTEGRITY-COMPLETE hard=0 warn=13"
+                          },
+                          {
+                              "check":  "audit-vocab-integrity",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-VOCAB-INTEGRITY-COMPLETE clean n=4"
+                          },
+                          {
+                              "check":  "audit-unbid-ingredients",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-UNBID-INGREDIENTS-COMPLETE clean n=4"
+                          },
+                          {
+                              "check":  "audit-cost-plausibility",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-COST-PLAUSIBILITY-COMPLETE clean n=4"
+                          },
+                          {
+                              "check":  "audit-cost-line-coverage",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0
+                                          },
+                              "detail":  "clean: AUDIT-COST-LINE-COVERAGE-COMPLETE clean n=4"
+                          },
+                          {
+                              "check":  "recipes-db-dryrun",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "rc":  0,
+                                              "null_item_ids":  0
+                                          },
+                              "detail":  "update-recipes-db -DryRun builds every row with an item_id on all of them"
+                          },
+                          {
+                              "check":  "p8-endpoint-provenance",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "card_feed":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "guard_feed":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "producible":  true
+                                          },
+                              "detail":  "the cards fetch a feed this estate produces, and feed-covers-published validates the same one"
+                          },
+                          {
+                              "check":  "p8-feed-liveness",
+                              "verdict":  "pass",
+                              "numbers":  {
+                                              "url":  "https://feed.thriftycrew.com/smp-feed.json",
+                                              "feed_recipes":  562,
+                                              "generated":  "2026-08-27T08:13:24"
+                                          },
+                              "detail":  "200 + parseable (562 recipes, generated 2026-08-27T08:13:24)"
+                          }
+                      ],
+    "summary":  {
+                    "slugs":  4,
+                    "checks":  37,
+                    "failed":  3
+                },
+    "not_checked":  [
+                        "mapping soundness and the precedents behind a substitution",
+                        "price-class plausibility (is this the right FORM of the ingredient)",
+                        "cross-recipe checks and dish identity",
+                        "condition questions the run has not ruled on",
+                        "stat.cost_ps basis - wave-publish E2 re-anchors and hard-verifies it per slug at publish time",
+                        "whether the wave manifest, the ledger and the recipe states tell one story - wave-publish P2/P3"
+                    ]
+}

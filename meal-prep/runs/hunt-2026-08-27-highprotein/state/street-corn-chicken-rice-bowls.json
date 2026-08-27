@@ -1,0 +1,74 @@
+{
+    "slug":  "street-corn-chicken-rice-bowls",
+    "title":  "Street Corn Chicken Rice Bowl",
+    "source_url":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T11:51:38",
+    "updated":  "2026-08-27T12:06:09",
+    "terms":  [
+                  {
+                      "term":  "cotija cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "red onion",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Jalapeno",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Lime Zest",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:51:38",
+                        "by":  "harvest",
+                        "detail":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:51:39",
+                        "by":  "decider",
+                        "detail":  "Elote/Mexican-street-corn chicken rice bowl (chili-lime chicken, cotija-Greek-yogurt street-corn topping, cilantro-lime rice); distinct street-corn flavor identity absent from catalog and different from live fajita/buffalo/teriyaki/harissa chicken bowls, verified 553cal/57c/45p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:52:11",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:04:30",
+                        "by":  "mapper",
+                        "detail":  "COUNTS: 15 residual lines ruled - 10 mapped, 2 mapped-optional (jalapeno, lime zest, both flagged optional by the source), 3 mapped-null (cotija x2, red onion) and 1 not-purchased (water). 0 rejected. 9 new food-DB rows returned: Sea Salt, Sweet Whole Kernel Corn, Greek Yogurt, Mayonnaise, Lime Juice, Jalapeno, Rice, Lime Zest, Red Onion. Buy strings written for all 26 lines at the 14-serving scal"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:04:30",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:06:09",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

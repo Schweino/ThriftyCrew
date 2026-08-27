@@ -1,0 +1,38 @@
+{
+    "wave":  1,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w1",
+    "created":  "2026-08-27T12:19:19",
+    "slugs":  [
+                  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                  "healthy-hamburger-helper",
+                  "ground-beef-cottage-cheese-bowl",
+                  "chicken-rice-and-broccoli"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                        "title":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+                        "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "healthy-hamburger-helper",
+                        "title":  "Healthy Hamburger Helper",
+                        "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "ground-beef-cottage-cheese-bowl",
+                        "title":  "Ground Beef Cottage Cheese Bowl",
+                        "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "chicken-rice-and-broccoli",
+                        "title":  "Healthy Chicken, Rice and Broccoli Skillet",
+                        "source_url":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+                        "protein":  "chicken"
+                    }
+                ]
+}

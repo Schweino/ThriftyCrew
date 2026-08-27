@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-27T06:06:25",
-    "count":  148,
+    "updated":  "2026-08-27T12:09:52",
+    "count":  202,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -932,15 +932,6 @@
                             "at":  "2026-08-26T05:09:07"
                         },
                         {
-                            "key":  "fresh mozzarella",
-                            "term":  "fresh mozzarella",
-                            "item_id":  "fresh-mozzarella",
-                            "bid_exists":  false,
-                            "evidence":  "Water-packed fresh ball is a different SKU and price class from low-moisture shredded, and reduced-fat or fat-free mozzarella are different products; no commodity claims it, captures do. [slug sheet-pan-pesto-chicken-dinner, run hunt-2026-08-26-ten]",
-                            "by":  "mapper",
-                            "at":  "2026-08-26T05:09:07"
-                        },
-                        {
                             "key":  "spring mix",
                             "term":  "spring mix",
                             "item_id":  "spring-mix",
@@ -1335,6 +1326,501 @@
                             "evidence":  "Exactly parallel to the vocabulary\u0027s existing \u0027Dry White Wine -\u003e white-wine\u0027 row: \u0027dry\u0027 is a style word on the same food, and red-wine is board-live (4 of 7, cheapest 0.2358 at Baker\u0027s), so this is a reuse. Explicitly NOT red-wine-vinegar, a standing form-flip rejection. 1 cup of wine = 236 g. [slug roast-eye-of-round-beef, run hunt-2026-08-27-ten]",
                             "by":  "mapper",
                             "at":  "2026-08-27T06:06:25"
+                        },
+                        {
+                            "key":  "bell peppers",
+                            "term":  "bell peppers",
+                            "item_id":  "bell-peppers",
+                            "bid_exists":  false,
+                            "evidence":  "bell-peppers is a live board id at 5 of 7 stores, so this is a REUSE and only the vocabulary row is missing. Refused green-bell-pepper: the line is deliberately one red and one green, and green-only pricing is the standing rejection. [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:54:18"
+                        },
+                        {
+                            "key":  "ground turkey or beef",
+                            "term":  "ground turkey or beef",
+                            "item_id":  "ground-turkey",
+                            "bid_exists":  false,
+                            "evidence":  "Either-or line; took the first-named turkey, and ground-turkey is a live board id at 7 of 7 (cheapest 2.66 at Aldi) so this is a reuse, not a proposal. Not bridged to ground-beef-8020: different meat, different price class. [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:54:19"
+                        },
+                        {
+                            "key":  "shredded cheese",
+                            "term":  "shredded cheese",
+                            "item_id":  "shredded-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "A bag of shredded cheese is the purchased product, and shredded-cheese is the board\u0027s own 7 of 7 match - the same call as the 2026-08-26 \u0027shredded mozzarella cheese\u0027 ruling. Kept as mapped rather than mapped-optional because the source\u0027s own published macros include it. [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:54:19"
+                        },
+                        {
+                            "key":  "halved refrigerated biscuits",
+                            "term":  "halved refrigerated biscuits",
+                            "item_id":  "refrigerated-biscuits",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Refrigerated Biscuits [refrigerated-biscuits], board 7 of 7; halved is a knife cut, not a form flip. Weighed at 58 g per biscuit (16.3 oz / 8 ct Grands can). [slug one-pan-sloppy-joe-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:54:19"
+                        },
+                        {
+                            "key":  "frilly protein pasta",
+                            "term":  "frilly protein pasta",
+                            "item_id":  "protein-pasta",
+                            "bid_exists":  false,
+                            "evidence":  "Legume-fortified pasta (Barilla Protein+, Banza and the like) is its own SKU at roughly 0.19-0.25 per oz against the board\u0027s commodity semolina pasta at 0.057 per oz - a real price class, and the recipe\u0027s whole protein claim rests on it, so I will not bridge it onto [pasta]. Shape (frilly/campanelle) is not a pricing question. [slug high-protein-pesto-pasta-with-chicken, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:48"
+                        },
+                        {
+                            "key":  "bone broth",
+                            "term":  "bone broth",
+                            "item_id":  "bone-broth",
+                            "bid_exists":  false,
+                            "evidence":  "No commodity claims it and captures carry matching products. Refused the chicken-broth bridge: bone broth is a 6-8 dollar quart against a 1.50-2.50 broth carton and carries 10 g protein per cup against about 1 - different product, different price class, different macros. [slug high-protein-pesto-pasta-with-chicken, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:49"
+                        },
+                        {
+                            "key":  "high protein pesto",
+                            "term":  "high protein pesto",
+                            "item_id":  "pesto",
+                            "bid_exists":  true,
+                            "evidence":  "The line itself allows store-bought, and pesto is a live board id at 6 of 7 - the same call as the 2026-08-26 \u0027Homemade Barbecue Sauce\u0027 -\u003e bbq-sauce ruling. Macros taken from a jarred basil pesto label, which is what a shopper buying to this line actually gets. [slug high-protein-pesto-pasta-with-chicken, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:49"
+                        },
+                        {
+                            "key":  "low sodium soy sauce",
+                            "term":  "low-sodium soy sauce",
+                            "item_id":  "soy-sauce",
+                            "bid_exists":  true,
+                            "evidence":  "Reduced sodium is a label variant of the same bottle at the same shelf price - the 2026-08-26 \u0027less sodium soy sauce\u0027 -\u003e soy-sauce precedent, cos 0.89. Board 7 of 7; no gram or price change, so not a real form flip. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:52"
+                        },
+                        {
+                            "key":  "light brown sugar",
+                            "term":  "light-brown sugar",
+                            "item_id":  "brown-sugar",
+                            "bid_exists":  true,
+                            "evidence":  "Light vs dark is the same bagged product at the same price - the 2026-08-26 \u0027dark brown sugar\u0027 ruling. Refused the board\u0027s plain sugar match: different food, different gram weight per Tbsp. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:53"
+                        },
+                        {
+                            "key":  "bonless skinless chicken breasts",
+                            "term":  "bonless skinless chicken breasts",
+                            "item_id":  "chicken-breast",
+                            "bid_exists":  true,
+                            "evidence":  "The form flag is a wording artefact - the vocabulary row\u0027s own name carries the boneless/skinless words (source\u0027s typo \u0027bonless\u0027 aside). Board 7 of 7, and the source states the weight, so no each-weight assumption is involved. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:53"
+                        },
+                        {
+                            "key":  "medium zucchini",
+                            "term":  "medium zucchini",
+                            "item_id":  "zucchini",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row, board 6 of 7. One medium zucchini is 196 g, which cross-checks against the source\u0027s own 1 1/2 cups diced. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:53"
+                        },
+                        {
+                            "key":  "matchstick carrots",
+                            "term":  "matchstick carrots",
+                            "item_id":  "carrots",
+                            "bid_exists":  true,
+                            "evidence":  "Matchstick is a knife cut of a whole carrot, same food and same gram weight, and carrots is 7 of 7. Refused shredded-carrots: shredded is a different bagged cut and the vocabulary itself flags it as a different form. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:53"
+                        },
+                        {
+                            "key":  "small broccoli florets",
+                            "term":  "small broccoli florets",
+                            "item_id":  "broccoli",
+                            "bid_exists":  true,
+                            "evidence":  "Florets cut from a fresh crown are the same food as broccoli (7 of 7); refused frozen-broccoli-florets, since fresh-to-frozen is the standing form-flip rejection. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:54"
+                        },
+                        {
+                            "key":  "white or brown rice",
+                            "term":  "white or brown rice",
+                            "item_id":  "rice",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Rice [rice], board 7 of 7; either-or line and both are the same bagged dry rice price class. Weighed as 1 3/4 cups DRY (185 g/cup), the mid-range of the source\u0027s own 1 1/2 to 2 cups. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:54"
+                        },
+                        {
+                            "key":  "sesame seeds",
+                            "term":  "Sesame seeds",
+                            "item_id":  "toasted-sesame-seeds",
+                            "bid_exists":  true,
+                            "evidence":  "Explicitly optional garnish. Toasted vs plain is a roast within one spice-jar SKU at the same price class (the \u0027ground oregano\u0027 -\u003e dried-oregano reasoning), and toasted-sesame-seeds is the board\u0027s live 6 of 7 id; a null here would leave a priced jar unpriced for no gain. [slug teriyaki-grilled-chicken-and-veggie-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:55:54"
+                        },
+                        {
+                            "key":  "lean ground beef",
+                            "term":  "lean ground beef",
+                            "item_id":  "93-7-ground-beef",
+                            "bid_exists":  true,
+                            "evidence":  "The source states \u0027lean\u0027, a real price class apart from 80/20, so the \u0027ground beef\u0027 -\u003e ground-beef-8020 precedent for an UNQUALIFIED line does not transfer; the vocabulary\u0027s own 93/7 Ground Beef row is the lean grind. Protein confirms it: 41.8 g/serving against the source\u0027s published 40, where 80/20 gives 37.0 and fails the floor. [slug healthy-hamburger-helper, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:09"
+                        },
+                        {
+                            "key":  "finely chopped onion",
+                            "term":  "finely chopped onion",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Finely chopped\u0027 is a prep word, not a food; unqualified cooking onion is the yellow onion per the \u0027med onion\u0027 and \u0027small yellow onion\u0027 precedents, and red is refused on variety pricing. Board 7 of 7; half a cup chopped weighs 80 g. [slug healthy-hamburger-helper, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:09"
+                        },
+                        {
+                            "key":  "dry rotini pasta",
+                            "term":  "dry rotini pasta",
+                            "item_id":  "rotini-pasta",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Rotini Pasta [rotini-pasta], and the source states its own weight (10 oz = 283.5 g), so no density guess is needed. Existing id, so a reuse; listed as an absent term in case that id is not yet priced. [slug healthy-hamburger-helper, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:10"
+                        },
+                        {
+                            "key":  "shredded cheddar cheese",
+                            "term":  "shredded cheddar cheese",
+                            "item_id":  "cheddar-cheese-shredded",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Cheddar Cheese, Shredded [cheddar-cheese-shredded], an existing id and therefore a reuse. Preferred over the board\u0027s generic `shredded-cheese`, which covers blends that are a different product. 1 cup shredded = 113 g. [slug healthy-hamburger-helper, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:10"
+                        },
+                        {
+                            "key":  "short pasta",
+                            "term":  "short pasta",
+                            "item_id":  "pasta",
+                            "bid_exists":  true,
+                            "evidence":  "The source names no shape, so the generic dry short-cut pasta id is the honest match rather than rotini specifically; board carries `pasta` 7 of 7 at 0.0571. Source states its own 300 g. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:55"
+                        },
+                        {
+                            "key":  "medium onion",
+                            "term":  "medium onion",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Medium\u0027 is a size word: the \u0027medium yellow onion\u0027 -\u003e onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate\u0027s 70 g small and a large. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:55"
+                        },
+                        {
+                            "key":  "turmeric",
+                            "term":  "turmeric",
+                            "item_id":  "ground-turmeric",
+                            "bid_exists":  true,
+                            "evidence":  "Turmeric measured by the teaspoon is the ground spice jar, not fresh root: not a form flip but a rename, the same call as \u0027ground oregano\u0027 -\u003e dried-oregano. Board 7 of 7; 1/2 tsp ground = 1.5 g. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:55"
+                        },
+                        {
+                            "key":  "almond butter",
+                            "term":  "almond butter",
+                            "item_id":  "almond-butter",
+                            "bid_exists":  false,
+                            "evidence":  "REFUSED both near rows: the board\u0027s `butter` match is dairy butter (a wrong-food match) and peanut-butter is a different nut at roughly a third of the price. No estate id names an almond spread, so it goes to the registrar. 2 tbsp = 32 g. [slug butter-chicken-pasta, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:56:56"
+                        },
+                        {
+                            "key":  "masa harina",
+                            "term":  "masa harina",
+                            "item_id":  "masa-harina",
+                            "bid_exists":  false,
+                            "evidence":  "Nixtamalized corn flour used as the chili\u0027s thickener - not cornmeal, not corn starch, not wheat flour. Board reports no commodity and no capture match and no vocabulary row shares a core word, so it goes to the registrar. 1/4 cup = 30 g. [slug pioneer-woman-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:57:37"
+                        },
+                        {
+                            "key":  "pinto beans",
+                            "term":  "pinto beans",
+                            "item_id":  "canned-pinto-beans",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Drained and rinsed\u0027 from a 15 oz. tin is canned usage, so the canned row is the SAME form and not a flip - the identical call as \u0027black beans\u0027 -\u003e canned-black-beans on 2026-08-26. Board 7 of 7; weighed at the same 15 oz basis the settled kidney-bean line uses. [slug pioneer-woman-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:57:37"
+                        },
+                        {
+                            "key":  "shredded cheddar",
+                            "term":  "Shredded Cheddar",
+                            "item_id":  "cheddar-cheese-shredded",
+                            "bid_exists":  true,
+                            "evidence":  "A topping the source never quantified, so optional, per the \u0027Sliced onions\u0027 -\u003e onions precedent. Reuses the same vocabulary row this batch used for healthy-hamburger-helper; REFUSED fat-free-cheddar, which is a different product and price class. Weighed at a nominal 14 g per serving. [slug pioneer-woman-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:57:37"
+                        },
+                        {
+                            "key":  "lime wedges",
+                            "term":  "Lime Wedges",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Wedges are a cut, not a food, and the board carries limes at 5 of 7, cheapest 0.25 at Walmart - a reuse. Unquantified garnish, so optional; weighed at 1 1/2 limes for the source\u0027s 6 servings. [slug pioneer-woman-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T11:57:38"
+                        },
+                        {
+                            "key":  "cooked corn",
+                            "term":  "cooked corn",
+                            "item_id":  "canned-corn",
+                            "bid_exists":  true,
+                            "evidence":  "The source line itself says \u0027I used canned and drained\u0027, so the vocabulary\u0027s Sweet Whole Kernel Corn [canned-corn] is the same food and the \u0027cooked\u0027 form flag is spurious - canned corn is sold cooked. Existing vocabulary id, a reuse. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:27"
+                        },
+                        {
+                            "key":  "plain greek yogurt",
+                            "term":  "plain Greek yogurt",
+                            "item_id":  "greek-yogurt",
+                            "bid_exists":  true,
+                            "evidence":  "Exact vocabulary match (Plain Yogurt and Greek Yogurt both carry [greek-yogurt]), same form. The board\u0027s `yogurt` match is regular yogurt, a different price class, so I used the vocabulary\u0027s id. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:27"
+                        },
+                        {
+                            "key":  "avocado oil mayonnaise",
+                            "term":  "avocado oil mayonnaise",
+                            "item_id":  "mayonnaise",
+                            "bid_exists":  true,
+                            "evidence":  "Same food and same gram weight; the oil is a brand variant of mayonnaise, not a different product concept, on the sun-dried-tomatoes-oil-packed precedent. Not a new id. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:28"
+                        },
+                        {
+                            "key":  "juice zest of 1 lime",
+                            "term":  "Juice + zest of 1 lime",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Vocabulary row Lime Juice [limes], board MAPPED limes 5 of 7. One whole lime yields about 30 g juice plus 1 g zest, both from the one purchased lime. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:28"
+                        },
+                        {
+                            "key":  "jalape o",
+                            "term":  "jalapeño",
+                            "item_id":  "jalapenos",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of the live board id `jalapenos` (6 of 7, cheapest 1.4277 at Walmart); only the vocabulary name row is missing. Source marks the line optional. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:28"
+                        },
+                        {
+                            "key":  "chopped cilantro",
+                            "term":  "chopped cilantro",
+                            "item_id":  "cilantro",
+                            "bid_exists":  true,
+                            "evidence":  "Same food as the settled \u0027chopped fresh cilantro\u0027 line in this recipe; the DIFFERENT FORM flag only reflects the vocabulary name carrying the word \u0027Fresh\u0027, which this line omits. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:28"
+                        },
+                        {
+                            "key":  "fresh lime juice",
+                            "term":  "fresh lime juice",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Vocabulary row Lime Juice [limes]; \u0027fresh\u0027 is how the vocabulary row is already priced (whole limes squeezed), not a form flip onto a bottled product. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:29"
+                        },
+                        {
+                            "key":  "lime zest",
+                            "term":  "lime zest",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Zest comes off the same purchased limes, exactly the Orange Zest -\u003e citrus-fruit precedent the vocabulary already uses. Source marks the line \u0027or to taste\u0027. [slug street-corn-chicken-rice-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:04:29"
+                        },
+                        {
+                            "key":  "frozen lightly breaded chicken breast bites",
+                            "term":  "Frozen Lightly Breaded Chicken Breast Bites",
+                            "item_id":  "breaded-chicken-breast-bites",
+                            "bid_exists":  false,
+                            "evidence":  "REFUSED the board\u0027s chicken-breast bridge: a frozen fully-cooked breaded product runs roughly 3-4x raw breast per lb and carries breading weight, so both price class and gram basis differ. New id proposed. [slug high-protein-chicken-alfredo-lasagna, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:08:36"
+                        },
+                        {
+                            "key":  "low fat cottage cheese",
+                            "term":  "Low Fat Cottage Cheese",
+                            "item_id":  "cottage-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "Low fat (2%) is the default tub the cottage-cheese id prices, and the estate\u0027s own Cottage Cheese row (100 cal/113 g) is already the lowfat label - the form flag is a wording artefact. Board 7 of 7. [slug high-protein-chicken-alfredo-lasagna, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:08:36"
+                        },
+                        {
+                            "key":  "fresh mozzarella",
+                            "term":  "Fresh Mozzarella",
+                            "item_id":  "fresh-mozzarella",
+                            "bid_exists":  false,
+                            "evidence":  "Matches the 2026-08-26 prior ruling for this exact food. Fresh mozzarella packed in water is a different product and price class from low-moisture block/shredded mozzarella; no commodity claims it, so it goes to pricing. [slug high-protein-chicken-alfredo-lasagna, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:08:37"
+                        },
+                        {
+                            "key":  "freshly grated parmesan",
+                            "term":  "Freshly Grated Parmesan",
+                            "item_id":  "parmesan",
+                            "bid_exists":  true,
+                            "evidence":  "Same food as the vocabulary\u0027s Parmesan Cheese [parmesan] row (seen live elsewhere in this batch); \u0027freshly grated\u0027 describes prep, not a price class. Board 7 of 7. [slug high-protein-chicken-alfredo-lasagna, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:08:37"
+                        },
+                        {
+                            "key":  "no boil lasagna",
+                            "term":  "No Boil Lasagna",
+                            "item_id":  "lasagna-noodles",
+                            "bid_exists":  false,
+                            "evidence":  "lasagna-noodles is a live board id (3 of 7), so this is a REUSE and only a vocabulary name row is missing; oven-ready sheets are dry boxed lasagna pasta at the same shelf class. [slug high-protein-chicken-alfredo-lasagna, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:08:38"
+                        },
+                        {
+                            "key":  "uncooked penne pasta",
+                            "term":  "uncooked penne pasta",
+                            "item_id":  "penne-pasta",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Penne Pasta [penne-pasta], an existing id and therefore a reuse, per the 2026-08-27 \u0027dry rotini pasta\u0027 precedent; source states 12 oz so no density guess. Listed as an absent term because the board priced only generic `pasta`. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:42"
+                        },
+                        {
+                            "key":  "raw chicken breast",
+                            "term":  "raw chicken breast",
+                            "item_id":  "chicken-breast",
+                            "bid_exists":  true,
+                            "evidence":  "The form flag is a wording artefact - the vocabulary row\u0027s own name carries the boneless/skinless words and \u0027raw\u0027 is the default state the id prices. Board 7 of 7, source states 1.5 lb so no each-weight assumption. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:42"
+                        },
+                        {
+                            "key":  "boursin cheese",
+                            "term":  "Boursin cheese",
+                            "item_id":  "boursin-cheese",
+                            "bid_exists":  false,
+                            "evidence":  "Board absent and no vocabulary row; a branded garlic-herb Gournay puck at roughly 4x cream cheese per oz, so I will not bridge it to a cream-cheese or spread id. Whole 5.2 oz package used, which is the label\u0027s own 5 servings x 29 g. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:43"
+                        },
+                        {
+                            "key":  "fresh or frozen peas",
+                            "term":  "fresh or frozen peas",
+                            "item_id":  "frozen-peas",
+                            "bid_exists":  true,
+                            "evidence":  "Either-or line taken to the frozen option the board actually prices (6 of 7); fresh shelled peas are a seasonal specialty item at several times the price. 1 cup frozen = 134 g off the label\u0027s 2/3 cup = 89 g. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:43"
+                        },
+                        {
+                            "key":  "canned artichoke hearts",
+                            "term":  "canned artichoke hearts",
+                            "item_id":  "artichoke-hearts",
+                            "bid_exists":  true,
+                            "evidence":  "Canned is the form the artichoke-hearts id prices (7 of 7 at 0.1615/oz, i.e. can pricing), so \u0027canned\u0027 is a wording artefact not a form flip. Weighed drained at 240 g per 14 oz can, the label\u0027s own drained serving. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:43"
+                        },
+                        {
+                            "key":  "fresh lemon juice",
+                            "term":  "fresh lemon juice",
+                            "item_id":  "lemons",
+                            "bid_exists":  true,
+                            "evidence":  "REFUSED the lemon-juice bridge: bottled juice is a different product and price class, and the same recipe needs zest, which only the whole fruit gives. Board prices lemons 5 of 7 - an existing id, so a reuse. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:43"
+                        },
+                        {
+                            "key":  "lemon zest",
+                            "term":  "lemon zest",
+                            "item_id":  "lemons",
+                            "bid_exists":  true,
+                            "evidence":  "Zest comes off the same lemons already bought for the juice line; lemons is a live board id (5 of 7) and the DB already carries a lemon zest row. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:44"
+                        },
+                        {
+                            "key":  "freshly grated parmesan cheese",
+                            "term":  "freshly grated parmesan cheese",
+                            "item_id":  "parmesan",
+                            "bid_exists":  true,
+                            "evidence":  "Same-food vocabulary row Parmesan Cheese [parmesan], board 7 of 7; \u0027freshly grated\u0027 is prep, not a price class. Weighed on the estate\u0027s own 1/4 cup = 28 g row. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:44"
+                        },
+                        {
+                            "key":  "fresh parsley or basil",
+                            "term":  "fresh parsley or basil",
+                            "item_id":  "fresh-parsley",
+                            "bid_exists":  true,
+                            "evidence":  "Either-or garnish taken to parsley, which the board prices (3 of 7) and the DB already has a row for; 3 tbsp chopped = 11 g. [slug no-boil-chicken-pasta-casserole-with-artichokes-and-peas, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:44"
+                        },
+                        {
+                            "key":  "long grain white rice",
+                            "term":  "long grain white rice",
+                            "item_id":  "rice",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row Rice [rice], board 7 of 7, matching the 2026-08-26 \u0027white long grain rice\u0027 -\u003e rice ruling at cos 0.98: long grain white is the default bagged rice the id prices, not a variety premium. Weighed at the estate\u0027s 185 g per dry cup, which the macro check confirms. [slug chicken-rice-and-broccoli, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:48"
+                        },
+                        {
+                            "key":  "salt and pepper",
+                            "term":  "Salt and pepper",
+                            "item_id":  "salt",
+                            "bid_exists":  true,
+                            "evidence":  "One line carrying two pantry seasonings; costed as salt (7 of 7) with black pepper pantry-static, per the \u0027Salt/Pepper\u0027 -\u003e salt precedent. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:51"
+                        },
+                        {
+                            "key":  "dry couscous",
+                            "term":  "Dry couscous",
+                            "item_id":  "couscous",
+                            "bid_exists":  false,
+                            "evidence":  "couscous is a live board id (2 of 7), so this is a REUSE and only a vocabulary name row is missing; dry is the only form the box is sold in. 1 cup dry = 173 g. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:51"
+                        },
+                        {
+                            "key":  "water or broth",
+                            "term":  "Water or broth",
+                            "item_id":  "chicken-broth",
+                            "bid_exists":  true,
+                            "evidence":  "Either-or line taken to broth, which this recipe already buys on another line (board 7 of 7) and which the DB already has a row for; that avoids a water row with no label behind it. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:51"
+                        },
+                        {
+                            "key":  "fresh chopped parsley",
+                            "term":  "Fresh Chopped parsley",
+                            "item_id":  "fresh-parsley",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row Fresh Parsley [fresh-parsley], a live id priced elsewhere in this batch (3 of 7); \u0027chopped\u0027 is prep. Deliberately NOT dried parsley - different price and a very different gram weight. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:51"
+                        },
+                        {
+                            "key":  "sea salt",
+                            "term":  "Sea Salt",
+                            "item_id":  "sea-salt",
+                            "bid_exists":  false,
+                            "evidence":  "sea-salt is a live board id (5 of 7), so a reuse; no bridge to the cheaper `salt` id needed. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T12:09:52"
                         }
                     ]
 }

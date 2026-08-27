@@ -1,0 +1,100 @@
+{
+    "slug":  "healthy-hamburger-helper",
+    "title":  "Healthy Hamburger Helper",
+    "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+    "protein":  "beef",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-27T11:40:22",
+    "updated":  "2026-08-27T12:19:19",
+    "terms":  [
+                  {
+                      "term":  "93/7 lean ground beef",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "rotini pasta",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "shredded cheddar cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Water",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:40:22",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:40:23",
+                        "by":  "decider",
+                        "detail":  "Iconic stovetop cheeseburger macaroni with the leanest band of the batch beef-pastas (507cal/36c/40p); distinct skillet format vs the catalog\u0027s cheesy-beef-and-shells casserole."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:40:47",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T11:56:10",
+                        "by":  "mapper",
+                        "detail":  "Residual lines ruled 5, rejected 0, not-purchased 1 (water). New food-DB rows returned 5 (93/7 Ground Beef from a read package label; Yellow Onion, Rotini Pasta, Water, Cheddar Cheese Shredded from the FDC shelf). One new commodity proposal (93-7-ground-beef). Absent terms are the three whose exact ids the board does not confirm; the onion is live 7 of 7. Nothing here I am unsure of."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T11:56:11",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-27T11:59:04",
+                        "by":  "derive",
+                        "detail":  "waiting on: 93/7 lean ground beef, rotini pasta, shredded cheddar cheese"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:06:09",
+                        "by":  "derive",
+                        "detail":  "all 3 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T12:08:26",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T12:08:26",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T12:11:05",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T12:19:19",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

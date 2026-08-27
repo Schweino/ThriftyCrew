@@ -1,0 +1,302 @@
+{
+    "name":  "Ground Beef Cottage Cheese Bowl",
+    "slug":  "ground-beef-cottage-cheese-bowl",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+    "source_site":  "wellplated.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Band verified from locked view: 550 cal (within 450-800) and 41.7 g protein (\u003e= 40). Carb source is roasted sweet potato at 33.6 g. Protein is 93/7 ground beef. All run conditions satisfied.",
+                         "Ingredient-vs-step reconciliation done: all 14 bought lines are used by a step; no orphaned ingredients and none invented. The 17 transcribed lines collapse to 14 via merged olive oil, salt, and pepper entries.",
+                         "REPAIRED 2026-08-27 (source-QA finding, display-text only): the source lists salt and black pepper TWICE (1/2 tsp + 1/2 tsp salt, 1/4 tsp + 1/4 tsp pepper), once for the potatoes and once for the beef. The consolidated lines summed the GRAMS correctly but displayed the scaled quantity of only ONE occurrence, so a reader measuring by the label seasoned at half the source rate. Both lines now show BOTH occurrences in the same form the Olive Oil line already used and QA passed: salt \u00272 1/3 tsp for the potatoes; 2 1/3 tsp for the beef\u0027 (4 2/3 tsp total = 1 tsp source x 4.6667 = 28 g at 6 g/tsp, matching the stated grams exactly), pepper \u00271 1/4 tsp for the potatoes; 1 1/4 tsp for the beef\u0027 (2 1/2 tsp total = 6 g at 2.3 g/tsp). Stating the sum as one number instead was tried and rejected: the QA battery\u0027s scale-ratio check reads a line\u0027s head quantity against ONE source occurrence, so a summed \u00274 2/3 tsp\u0027 scores 9.33x and fails. No gram figure, macro or cost moved.",
+                         "Minor note: \u00279 medium (about 2 3/4 lb)\u0027 sweet potatoes is slightly light per potato (~4.9 oz each) but within normal medium range.",
+                         "No cost_lines were provided in this dispatch, so shop_smart deliberately makes no per-package price claim. Only money in prose is the ${{cost_ps}} token and the standard $1/month membership line.",
+                         "Cost, calorie, and protein figures written as tokens (${{cost_ps}}, {{cal}}, {{protein}}) per templating rule; buy quantities cited in prose (9 sweet potatoes, 4 2/3 lb beef, 3 1/2 cups cottage cheese, 3 avocados) are drawn from the locked view."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "wellplated",
+                                  "—",
+                                  "–",
+                                  "rice",
+                                  "quinoa",
+                                  "beans",
+                                  "tortilla",
+                                  "sour cream",
+                                  "salsa",
+                                  "cheddar",
+                                  "lettuce",
+                                  "cheap",
+                                  "per ounce",
+                                  "per pound price"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  550,
+                 "protein":  42,
+                 "carbs":  34,
+                 "fat":  29,
+                 "cost_ps":  "3.08"
+             },
+    "intro_html":  "\u003cp\u003eHere is a bowl that does not ask you to choose between eating well and eating cheap. Chili-spiced ground beef, roasted sweet potatoes, a cool scoop of cottage cheese, sliced avocado, and a drizzle of hot honey to tie the room together. It reads like a fussy cafe order and cooks like a Tuesday.\u003c/p\u003e\u003cp\u003eThe math is the reason it earns a spot in the rotation. Every container lands at {{cal}} calories with {{protein}} grams of protein, and the carbs come from real roasted sweet potato, not an empty side you forgot about. That is the whole point of meal prep done right: you build the container once, the numbers hold all week, and you stop paying restaurant prices to hit your protein.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 9 medium (about 2 3/4 lb), cut into 1/2-inch cubes (1213 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp; 4 2/3 tbsp (157 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 1/3 tsp kosher salt for the potatoes; 2 1/3 tsp for the beef (28 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 1/4 tsp ground for the potatoes; 1 1/4 tsp for the beef (6 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 4 2/3 lb (93/7) (2117 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 2/3 medium, diced (513 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5 tbsp (75 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 4 2/3 tbsp (37 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 4 2/3 tsp (10 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2 1/3 tsp (7 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 3 1/2 cups (791 g)",
+                                "\u003cstrong\u003eHot Honey (Better Goods):\u003c/strong\u003e 5 tbsp, for drizzling (98 g)",
+                                "\u003cstrong\u003eAvocado:\u003c/strong\u003e 3 medium, sliced (467 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 2 1/2 tsp, to taste (5 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Sweet Potatoes, 9 medium (about 2 3/4 lb), cut into 1/2-inch cubes: ~$3.96. \u003cstrong\u003eBuy 3 lbs: $4.44.\u003c/strong\u003e",
+                       "Olive Oil, 7 tbsp; 4 2/3 tbsp: ~$1.71. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Beef, 4 2/3 lb (93/7): ~$28.33. \u003cstrong\u003eBuy 5 lbs: $30.35.\u003c/strong\u003e",
+                       "Red Onion, 4 2/3 medium, diced: ~$1.52. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
+                       "Tomato Paste, 5 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Cottage Cheese, 3 1/2 cups: ~$3.18. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "Hot Honey, 5 tbsp, for drizzling: ~$1.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Avocado, 3 medium, sliced: ~$1.81. \u003cstrong\u003eBuy 4 each: $2.32.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, red pepper flakes): ~$0.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.19 across 14 servings, so roughly $3.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.98 across 14 servings, roughly $3.57 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.32. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eHere is where it gets good. All that beef, all that sweet potato, the cottage cheese and the avocado, and this bowl still comes in at ${{cost_ps}} per serving. Try ordering the same plate at a lunch spot and see what the number looks like, then look at the protein you actually got for it.\u003c/p\u003e\u003cp\u003eThat is the quiet win of cooking the batch yourself. You are not paying for a room, a server, or a markup on a scoop of cottage cheese. You are paying for groceries, and groceries are the cheapest they will ever be when you buy them by the pack and cook them once.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eBuy the ground beef as your anchor. This batch runs on 4 2/3 pounds of 93/7, so grab the biggest value pack you can and portion the rest into the freezer if you have extra. Leaner ground beef keeps the fat honest and lets the cottage cheese and avocado do the richness for you.\u003c/p\u003e\u003cp\u003eSweet potatoes are cheapest by the bag, and you want about 2 3/4 pounds, which is roughly 9 medium. Pick ones close in size so they roast at the same rate; a wildly big one next to a small one means half your cubes finish early. A large tub of cottage cheese covers the 3 1/2 cups this needs with room to spare for breakfast.\u003c/p\u003e\u003cp\u003eThe finishers stretch a long way. Three avocados, a bottle of hot honey, and a jar of red pepper flakes season all 14 bowls, so do not overbuy. One red onion times five, tomato paste, chili powder, cumin, and garlic powder round it out, and most of those are already in your pantry earning their keep.\u003c/p\u003e",
+    "make_it":  [
+                    "\u003cp\u003eStart the sweet potatoes, because they take the longest and everything else waits on nothing. If you are roasting, heat the oven to 400 degrees. Toss your cubed sweet potatoes with olive oil, salt, and pepper, then spread them in an even layer on a rimmed sheet pan. Roast 15 to 20 minutes, flipping halfway, until they are tender and browning at the edges. Air fryer folks skip the preheat, load the basket, and go 12 minutes at 400, shaking a few times.\u003c/p\u003e\u003cp\u003eWhile they cook, brown the beef. Heat a large skillet over medium-high, add the olive oil, and once it shimmers add the ground beef and diced red onion along with the tomato paste, chili powder, cumin, garlic powder, salt, and pepper all at once. Break the beef up with a sturdy wooden spoon or a heatproof spatula and keep it moving. About 7 minutes and it is cooked through, the onion is soft, and the spices have bloomed into the meat.\u003c/p\u003e\u003cp\u003eThat is the cooking done. Two pans, half an hour, no babysitting.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eLine up your 14 containers and build in the same order every time so the portions stay even. Make a bed of roasted sweet potatoes on the bottom, then a scoop of the spiced beef on top. The easiest way to keep it fair is to weigh the beef skillet and the potatoes before you start scooping, divide by 14 in your head, and aim for that per container. Eyeballing is how one bowl gets robbed to feed another.\u003c/p\u003e\u003cp\u003eCottage cheese, avocado, and hot honey are finishers, not fillers. Portion the 3 1/2 cups of cottage cheese across the bowls now if you are eating them within a couple days, or add it fresh at serving. The 3 avocados and the hot honey are best added the day you eat, sliced avocado browns and a drizzle of honey is a five second job. A pinch of red pepper flakes on top and the container is done.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/ground-beef-cottage-cheese-bowl/\" target=\"_blank\" rel=\"noopener\"\u003ewellplated.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eFourteen bowls, done in thirty minutes of active work, each one built to hit {{protein}} grams of protein without wrecking the budget. That is a full stretch of dinners you do not have to think about, and a fridge that quietly keeps you on plan while everyone else is deciding what to order.\u003c/p\u003e\u003cp\u003eIf you want more like it, the Thrifty Crew membership runs a dollar a month and hands you the whole playbook of high-protein meal prep priced to the penny. Cook it once, eat it all week, keep the money.\u003c/p\u003e",
+    "cost_batch":  43.19,
+    "cost_batch_true":  49.98,
+    "cost_per_serving":  3.08,
+    "cost_per_serving_true":  3.57,
+    "cost_pantry_add":  15.34,
+    "cost_first_run":  65.32,
+    "scaler":  {
+                   "cost":  "49.98",
+                   "ing":  [
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  1213,
+                                   "buy":  "9 medium (about 2 3/4 lb), cut into 1/2-inch cubes",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  157,
+                                   "buy":  "7 tbsp; 4 2/3 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  28,
+                                   "buy":  "2 1/3 tsp kosher salt for the potatoes; 2 1/3 tsp for the beef",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "1 1/4 tsp ground for the potatoes; 1 1/4 tsp for the beef",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  2117,
+                                   "buy":  "4 2/3 lb (93/7)",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  513,
+                                   "buy":  "4 2/3 medium, diced",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  75,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  37,
+                                   "buy":  "4 2/3 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  10,
+                                   "buy":  "4 2/3 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2 1/3 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  791,
+                                   "buy":  "3 1/2 cups",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hot Honey",
+                                   "canon":  "Hot Honey",
+                                   "grams":  98,
+                                   "buy":  "5 tbsp, for drizzling",
+                                   "bid":  "hot-honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Avocado",
+                                   "canon":  "Avocado",
+                                   "grams":  467,
+                                   "buy":  "3 medium, sliced",
+                                   "bid":  "avocados",
+                                   "gpu":  "150.000"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "canon":  "Red Pepper Flakes",
+                                   "grams":  5,
+                                   "buy":  "2 1/2 tsp, to taste",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A budget high-protein meal prep bowl with chili-spiced ground beef, roasted sweet potatoes, cottage cheese, avocado, and hot honey. Scales to 14 servings at 40-plus grams of protein each.",
+                 "keywords":  "ground beef cottage cheese bowl, high protein meal prep, budget meal prep dinner, ground beef sweet potato bowl, cottage cheese high protein, meal prep bowls, 14 serving meal prep, chili beef bowl",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  3.08,
+                 "recipeIngredient":  [
+                                          "Sweet Potatoes, 9 medium (about 2 3/4 lb), cut into 1/2-inch cubes (1213 g)",
+                                          "Olive Oil, 7 tbsp; 4 2/3 tbsp (157 g)",
+                                          "Salt, 2 1/3 tsp kosher salt for the potatoes; 2 1/3 tsp for the beef (28 g)",
+                                          "Black Pepper, 1 1/4 tsp ground for the potatoes; 1 1/4 tsp for the beef (6 g)",
+                                          "93/7 Ground Beef, 4 2/3 lb (93/7) (2117 g)",
+                                          "Red Onion, 4 2/3 medium, diced (513 g)",
+                                          "Tomato Paste, 5 tbsp (75 g)",
+                                          "Chili Powder, 4 2/3 tbsp (37 g)",
+                                          "Ground Cumin, 4 2/3 tsp (10 g)",
+                                          "Garlic Powder, 2 1/3 tsp (7 g)",
+                                          "Cottage Cheese, 3 1/2 cups (791 g)",
+                                          "Hot Honey, 5 tbsp, for drizzling (98 g)",
+                                          "Avocado, 3 medium, sliced (467 g)",
+                                          "Red Pepper Flakes, 2 1/2 tsp, to taste (5 g)"
+                                      ],
+                 "steps":  [
+                               "Roast the sweet potatoes: heat the oven to 400 degrees. Toss the cubed sweet potatoes with olive oil, salt, and pepper, spread in an even layer on a rimmed baking sheet, and roast 15 to 20 minutes, flipping halfway, until tender and browning at the edges. To air fry, skip the preheat, load the basket, and cook 12 minutes at 400 degrees, shaking a few times.",
+                               "Brown the beef: heat a large skillet over medium-high and add the olive oil. Once hot, add the ground beef and diced red onion with the tomato paste, chili powder, cumin, garlic powder, salt, and pepper. Break up the beef with a sturdy wooden spoon or heatproof spatula and cook about 7 minutes, until cooked through.",
+                               "Assemble the bowls: make a bed of roasted sweet potatoes in each container, top with a scoop of the beef and a scoop of cottage cheese, then finish with sliced avocado, a drizzle of hot honey, and a sprinkle of red pepper flakes."
+                           ],
+                 "step_names":  [
+                                    "Roast the sweet potatoes",
+                                    "Brown the seasoned beef",
+                                    "Build the bowls"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  1213
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  157
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  2117
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  513
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  75
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  37
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  791
+                              },
+                              {
+                                  "item":  "Hot Honey",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Avocado",
+                                  "grams":  467
+                              },
+                              {
+                                  "item":  "Red Pepper Flakes",
+                                  "grams":  5
+                              }
+                          ]
+}

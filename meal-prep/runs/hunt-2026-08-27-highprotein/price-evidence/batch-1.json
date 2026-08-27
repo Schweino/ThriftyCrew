@@ -1,0 +1,940 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 1,
+ "generated": "2026-08-27T11:56:35",
+ "batch_terms": [
+  "protein pasta",
+  "bone broth",
+  "High Protein Pasta"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "protein pasta",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "protein pasta",
+     "attempts": [
+      {
+       "term": "protein pasta",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "GOODLES Spirali Coiled Again Dry Protein Pasta",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0085003199081"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Rotini Pasta Non-GMO and Kosher Certified Plant Based Protein Pasta",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 117,
+       "url": "https://www.bakersplus.com/p/0007680853358"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Angel Hair Pasta Non-GMO and Kosher Certified Plant Based Protein Pasta",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 116,
+       "url": "https://www.bakersplus.com/p/0007680853355"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Spaghetti Pasta Non-GMO and Kosher Certified Plant Based Protein Pasta",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 116,
+       "url": "https://www.bakersplus.com/p/0007680853357"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Cellentani Pasta Non-GMO and Kosher Certified Plant Based Protein Pasta",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": 116,
+       "url": "https://www.bakersplus.com/p/0007680801201"
+      },
+      {
+       "item": "Kroger® Protein Penne Pasta",
+       "price": 2.19,
+       "size": "14.5 oz",
+       "relevance": 93,
+       "url": "https://www.bakersplus.com/p/0001111014947"
+      },
+      {
+       "item": "Brami Italian Protein Curly Mac Pasta",
+       "price": 3.99,
+       "size": "12 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0085347900676"
+      },
+      {
+       "item": "Brami Italian Protein Fusilli Pasta",
+       "price": 3.99,
+       "size": "12 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0085347900675"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "protein",
+     "attempts": [
+      {
+       "term": "protein pasta",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "proteinpasta",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "protein",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Oikos Vanilla Protein Shake 12 Fl Oz",
+       "price": 3.79,
+       "size": "12 fl oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_powder/oikos_vanilla_protein_shake_12_fl_oz/p/1564405684716639389"
+      },
+      {
+       "item": "Barebells Salty Peanut Protein Bar 1.94 Oz",
+       "price": 3.49,
+       "size": "1.94 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/barebells_salty_peanut_protein_bar_1_94_oz/p/1564405684709157961"
+      },
+      {
+       "item": "Oikos Chocolate Protein Shake 12 Fl Oz",
+       "price": 3.79,
+       "size": "12 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_powder/oikos_chocolate_protein_shake_12_fl_oz/p/1564405684716639391"
+      },
+      {
+       "item": "Barebells Peanut Butter Protein Bar 1.94 Oz",
+       "price": 2.99,
+       "size": "1.94 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/barebells_peanut_butter_protein_bar_1_94_oz/p/1764405684715217658"
+      },
+      {
+       "item": "Rxbar Chocolate Sea Salt Protein Bar 1.8 Oz",
+       "price": 3.19,
+       "size": "1.8 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/rxbar_chocolate_sea_salt_protein_bar_1_8_oz/p/3257493"
+      },
+      {
+       "item": "Oikos Salted Caramel Protein Shake 12 Fl Oz",
+       "price": 3.79,
+       "size": "12 fl oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_powder/oikos_salted_caramel_protein_shake_12_fl_oz/p/1764405684715200090"
+      },
+      {
+       "item": "Built Puff Cookie Dough Chunk Protein Bar 1.55 Oz",
+       "price": 2.49,
+       "size": "1.55 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/built_puff_cookie_dough_chunk_protein_bar_1_55_oz/p/1564405684715500851"
+      },
+      {
+       "item": "Barebells Cookies & Caramel Protein Bar 1.94 Oz",
+       "price": 3.49,
+       "size": "1.94 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/health_beauty/adult_nutrition/protein_energy_meal_bars/barebells_cookies_caramel_protein_bar_1_94_oz/p/1564405684716148087"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "protein pasta",
+     "attempts": [
+      {
+       "term": "protein pasta",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Spaghetti Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88739-barilla-protein-grain-legume-pasta-spaghetti-14-5-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Farfalle Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73693-barilla-protein-grain-legume-pasta-farfalle-14-5-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Cellentani Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40815135-barilla-protein-cellentani-grain-legume-pasta-14-5-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Angel Hair Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24734-barilla-protein-grain-legume-pasta-angel-hair-14-5-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "protein pasta",
+     "attempts": [
+      {
+       "term": "protein pasta",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+      },
+      {
+       "item": "Brami Italian Protein Fusilli Pasta, 12 oz., 4pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$2.37/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6QFDG45BXBSY"
+      },
+      {
+       "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$1.58/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
+      },
+      {
+       "item": "GOODLES Mac and Cheese, Variety Pack, 6 pk.",
+       "price": 12.98,
+       "size": "",
+       "unit_price": "$0.36/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1G2T5BPVX0JX"
+      },
+      {
+       "item": "Kraft Easy Mac Original Flavor Single-Serve Pouches 18 pk.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.39/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/66P38Z7VPN04"
+      },
+      {
+       "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+      },
+      {
+       "item": "Kraft Power Mac Macaroni and Cheese Dinner, 7.25 oz., 8 pk.",
+       "price": 14.62,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5JJRJM8QC945"
+      },
+      {
+       "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "bone broth",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "bone broth",
+     "attempts": [
+      {
+       "term": "bone broth",
+       "state": "OK",
+       "hits": 24
+      }
+     ],
+     "hits": [
+      {
+       "item": "Butchers Bone Broth Beef",
+       "price": 7.99,
+       "size": "24 fl oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0086066600031"
+      },
+      {
+       "item": "Butchers Bone Broth Chicken",
+       "price": 7.99,
+       "size": "24 fl oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0086066600030"
+      },
+      {
+       "item": "Simple Truth Organic® Beef Bone Broth",
+       "price": 3.99,
+       "size": "32 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111015292"
+      },
+      {
+       "item": "Kettle & Fire Classic Beef Bone Broth",
+       "price": 7.99,
+       "size": "16.9 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0085170200700"
+      },
+      {
+       "item": "Bare Bones® Instant Beef Bone Broth",
+       "price": 7.99,
+       "size": "2.12 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0085000532410"
+      },
+      {
+       "item": "Bare Bones® Instant Ramen Bone Broth",
+       "price": 7.99,
+       "size": "4 ct",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0085000532425"
+      },
+      {
+       "item": "Swanson Chicken Bone Broth 32 oz Carton",
+       "price": 4.49,
+       "size": "32 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0005100024891"
+      },
+      {
+       "item": "Kettle & Fire Mushroom Chicken Bone Broth",
+       "price": 7.99,
+       "size": "16.9 fl oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085170200704"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "bone broth",
+     "attempts": [
+      {
+       "term": "bone broth",
+       "state": "OK",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Zoup! Beef Bone Broth 32 Oz",
+       "price": 8.99,
+       "size": "32 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/zoup_beef_bone_broth_32_oz/p/7083502"
+      },
+      {
+       "item": "Swanson Chicken Bone Broth 32 Oz",
+       "price": 4.79,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_chicken_bone_broth_32_oz/p/1564405684703487672"
+      },
+      {
+       "item": "Zoup! Chicken Bone Broth 32 Oz",
+       "price": 8.99,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/zoup_chicken_bone_broth_32_oz/p/5145802"
+      },
+      {
+       "item": "Our Family Beef Bone Broth 32 Fl Oz",
+       "price": 2.69,
+       "size": "32 fl oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/our_family_beef_bone_broth_32_fl_oz/p/1564405684716837189"
+      },
+      {
+       "item": "Our Family Chicken Bone Broth 32 Fl Oz",
+       "price": 2.69,
+       "size": "32 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/our_family_chicken_bone_broth_32_fl_oz/p/1564405684716837187"
+      },
+      {
+       "item": "Swanson® Sipping Beef Bone Broth 10.750 Oz",
+       "price": 3.59,
+       "size": "10.750 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_sipping_beef_bone_broth_10_750_oz/p/1564405684711822197"
+      },
+      {
+       "item": "Swanson® Sipping Chicken Bone Broth 10.750 Oz",
+       "price": 3.59,
+       "size": "10.750 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_sipping_chicken_bone_broth_10_750_oz/p/1564405684704695596"
+      },
+      {
+       "item": "Full Circle Market Bone Broth, Chicken 32 Oz",
+       "price": 4.69,
+       "size": "32 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/full_circle_market_bone_broth_chicken_32_oz/p/8189392"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "bone broth",
+     "attempts": [
+      {
+       "term": "bone broth",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kitchen Basics Original Chicken Bone Broth",
+       "price": 2.39,
+       "size": "8.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45565783-kitchen-basics-original-chicken-bone-broth-8-25-oz"
+      },
+      {
+       "item": "Pacific Foods Organic Unsalted Chicken Bone Broth",
+       "price": 7.99,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/395436-pacific-organic-unsalted-chicken-bone-broth-32-oz"
+      },
+      {
+       "item": "Kitchen Basics Original Beef Bone Broth",
+       "price": 2.39,
+       "size": "8.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/46246580-kitchen-basics-original-beef-bone-broth-8-25-oz"
+      },
+      {
+       "item": "Swanson's Sipping Chicken Bone Broth",
+       "price": 2.99,
+       "size": "10.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984850-swanson-sipping-chicken-bone-broth-10-75-oz"
+      },
+      {
+       "item": "Swanson's Sipping Chicken Bone Broth With Ginger and Turmeric",
+       "price": 2.99,
+       "size": "10.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984868-swanson-chicken-bone-broth-with-ginger-turmeric-10-75-oz"
+      },
+      {
+       "item": "EPIC Homestyle Savory Chicken Bone Broth",
+       "price": 7.99,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17421647-epic-homestyle-savory-chicken-bone-broth-whole30-14-000-fl-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "bone broth",
+     "attempts": [
+      {
+       "term": "bone broth",
+       "state": "MATCHES",
+       "hits": 27
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kettle & Fire Chicken Bone Broth, 16.9 oz., 6 ct.",
+       "price": 21.98,
+       "size": "",
+       "unit_price": "$3.66/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2X5O8541TVVH"
+      },
+      {
+       "item": "Bare Bones Instant Beef Bone Broth, 12 ct.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.83/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/68Y5QHYGQN2A"
+      },
+      {
+       "item": "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DBU8L0TGZ3D"
+      },
+      {
+       "item": "Bare Bones Instant Chicken Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Y1DHFRZJBTV"
+      },
+      {
+       "item": "Bare Bones Instant Beef Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/46LJZ0HIWKPW"
+      },
+      {
+       "item": "Bare Bones Chicken Instant Bone Broth Stick, 12 ct.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.83/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AU9M6ZGMX0K"
+      },
+      {
+       "item": "Kinder's Roasted Turkey Bone Broth Gravy Mix, 4 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$1.50/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7FQQ4Z9L8A69"
+      },
+      {
+       "item": "Solid Gold Bone Broth with Turmeric Dog Food Topper,16 oz., 2 pk.",
+       "price": 12.47,
+       "size": "",
+       "unit_price": "$0.39/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3MNS3H6MT0RR"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "High Protein Pasta",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "High Protein Pasta",
+     "attempts": [
+      {
+       "term": "High Protein Pasta",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Chad & Barney's Sturdy Sauce® Garlic Herb High Protein Pasta Sauce",
+       "price": 13.49,
+       "size": "17 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0086001017113"
+      },
+      {
+       "item": "Banza® Chickpea Cavatappi Pasta - Gluten Free, High Protein, Lower Carb",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 82,
+       "url": "https://www.bakersplus.com/p/0085718300534"
+      },
+      {
+       "item": "Healthy Choice Protein Bowls Vodka Chicken Pasta, High Protein Frozen Meal",
+       "price": 4.49,
+       "size": "9.5 oz",
+       "relevance": 82,
+       "url": "https://www.bakersplus.com/p/0007265500888"
+      },
+      {
+       "item": "Banza Cascatelli Pasta from Chickpeas - Gluten Free, High Protein, and Lower Carb Protein Noodles",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 76,
+       "url": "https://www.bakersplus.com/p/0085001144370"
+      },
+      {
+       "item": "Banza® Rotini Pasta from Chickpeas - Gluten Free, High Protein, and Lower Carb Protein Noodles",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 76,
+       "url": "https://www.bakersplus.com/p/0085718300501"
+      },
+      {
+       "item": "Banza® Rigatoni Pasta from Chickpeas - Gluten Free, High Protein, and Lower Carb Protein Noodles",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 76,
+       "url": "https://www.bakersplus.com/p/0085718300538"
+      },
+      {
+       "item": "Banza® Penne Pasta From Chickpeas - Gluten Free, High Protein, and Lower Car Protein Noodles, 8oz",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 76,
+       "url": "https://www.bakersplus.com/p/0085718300500"
+      },
+      {
+       "item": "Banza® Elbows Pasta from Chickpeas - Gluten Free, High Protein, and Lower Carb Protein Noodles",
+       "price": 4.29,
+       "size": "8 oz",
+       "relevance": 76,
+       "url": "https://www.bakersplus.com/p/0085718300502"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "HighProteinPasta",
+     "attempts": [
+      {
+       "term": "High Protein Pasta",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "HighProteinPasta",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "High Protein Pasta",
+     "attempts": [
+      {
+       "term": "High Protein Pasta",
+       "state": "OK",
+       "hits": 70
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
+      },
+      {
+       "item": "Goodles Loopdy Loos Cavatappi Protein Pasta",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32001025-goodles-pasta-loopdy-loos-cavatappi-8-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Spaghetti Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88739-barilla-protein-grain-legume-pasta-spaghetti-14-5-oz"
+      },
+      {
+       "item": "Goodles Lucky Penne Protein Pasta",
+       "price": 3.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/32000811-goodles-lucky-penne-pasta-8-oz"
+      },
+      {
+       "item": "Barilla Protein+ (Plus) Cellentani Pasta - Plant Based - Made from Lentils, Chickpeas & Peas",
+       "price": 2.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40815135-barilla-protein-cellentani-grain-legume-pasta-14-5-oz"
+      },
+      {
+       "item": "Goodles Shella Good Aged White Cheddar Protein Mac & Cheese",
+       "price": 2.79,
+       "size": "6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26548571-goodles-shella-good-mac-cheese-6-oz"
+      },
+      {
+       "item": "Barilla Whole Grain Spaghetti Pasta",
+       "price": 1.84,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2601739-barilla-whole-grain-pasta-spaghetti-16-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "High Protein Pasta",
+     "attempts": [
+      {
+       "term": "High Protein Pasta",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+      },
+      {
+       "item": "Brami Italian Protein Fusilli Pasta, 12 oz., 4pk.",
+       "price": 9.48,
+       "size": "",
+       "unit_price": "$2.37/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6QFDG45BXBSY"
+      },
+      {
+       "item": "Member's Mark High Protein Penne Pasta with Italian Sausage, priced per pound",
+       "price": 17.15,
+       "size": "",
+       "unit_price": "$5.12/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4Y6URBC6J0MS"
+      },
+      {
+       "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+      },
+      {
+       "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$2.25/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
+      },
+      {
+       "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
+       "price": 8.52,
+       "size": "",
+       "unit_price": "$1.42/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
+      },
+      {
+       "item": "Jovial Organic Brown Rice Gluten Free Pasta, Fusilli, 24 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0U6J91MT721R"
+      },
+      {
+       "item": "Country Pasta Homemade Style Egg Pasta 56 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/514NOG2M2YRQ"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

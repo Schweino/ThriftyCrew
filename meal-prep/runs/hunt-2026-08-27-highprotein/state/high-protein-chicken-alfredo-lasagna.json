@@ -1,0 +1,62 @@
+{
+    "slug":  "high-protein-chicken-alfredo-lasagna",
+    "title":  "Chicken Alfredo Lasagna",
+    "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:57",
+    "updated":  "2026-08-27T12:14:32",
+    "terms":  [
+                  {
+                      "term":  "frozen lightly breaded chicken breast bites",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "fresh mozzarella",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:57",
+                        "by":  "harvest",
+                        "detail":  "https://masonfit.com/chicken-alfredo-lasagna/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:44:58",
+                        "by":  "decider",
+                        "detail":  "Chicken alfredo lasagna (breaded chicken bites, cottage cheese, mozzarella, no-boil sheets) with no direct catalog alfredo dupe; genuinely high-protein band (500cal/31c/43p) and a distinctive baked format for the run."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:45:14",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:08:38",
+                        "by":  "mapper",
+                        "detail":  "6 residual lines ruled, 0 rejected, 3 new DB rows returned (chicken bites, fresh mozzarella, no-boil lasagna). Two new-id proposals (breaded-chicken-breast-bites, fresh-mozzarella) and both terms are in absent_terms. Three foods the table marked as having no row resolve to canon items that ALREADY carry rows, so no new row is owed for them: \u0027Low Fat Cottage Cheese\u0027 -\u003e Cottage Cheese, \u0027Freshly Grat"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:08:38",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:14:32",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

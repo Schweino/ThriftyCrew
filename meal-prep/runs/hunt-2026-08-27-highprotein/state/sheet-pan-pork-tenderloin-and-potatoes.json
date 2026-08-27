@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-pork-tenderloin-and-potatoes",
+    "title":  "Sheet Pan Pork Tenderloin and Potatoes",
+    "source_url":  "https://www.lecremedelacrumb.com/sheet-pan-pork-tenderloin-and-potatoes/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:48:54",
+    "updated":  "2026-08-27T11:48:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Sheet-pan pork tenderloin roasted with baby potatoes is the same dinner as live sheet-pan-pork-tenderloin-potatoes-green-beans (word-overlap 31, same protein/method/starch); brown-sugar-soy glaze vs the green-bean version is not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:54",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/sheet-pan-pork-tenderloin-and-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:48:55",
+                        "by":  "decider",
+                        "detail":  "Sheet-pan pork tenderloin roasted with baby potatoes is the same dinner as live sheet-pan-pork-tenderloin-potatoes-green-beans (word-overlap 31, same protein/method/starch); brown-sugar-soy glaze vs the green-bean version is not a distinct plate."
+                    }
+                ]
+}

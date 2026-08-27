@@ -1,0 +1,31 @@
+{
+    "slug":  "pesto-chicken-orzo",
+    "title":  "Pesto Chicken Orzo",
+    "source_url":  "https://thecleaneatingcouple.com/pesto-chicken-orzo/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:42",
+    "updated":  "2026-08-27T11:50:42",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Pesto chicken with orzo is the same pesto-chicken-pasta dinner as high-protein-pesto-pasta-with-chicken already accepted this run; orzo is pasta and the pesto-chicken lane is further crowded by two in-flight pesto-chicken dishes.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:42",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/pesto-chicken-orzo/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:50:42",
+                        "by":  "decider",
+                        "detail":  "Pesto chicken with orzo is the same pesto-chicken-pasta dinner as high-protein-pesto-pasta-with-chicken already accepted this run; orzo is pasta and the pesto-chicken lane is further crowded by two in-flight pesto-chicken dishes."
+                    }
+                ]
+}

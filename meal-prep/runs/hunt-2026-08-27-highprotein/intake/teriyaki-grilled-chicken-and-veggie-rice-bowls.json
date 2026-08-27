@@ -1,0 +1,143 @@
+{
+ "name": "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+ "slug": "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+ "protein": "chicken",
+ "cuisine": "Japanese-inspired",
+ "source_url": "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Soy Sauce",
+   "grams": 420,
+   "buy": "1 3/4 cups low-sodium soy sauce"
+  },
+  {
+   "item": "Brown Sugar",
+   "grams": 142,
+   "buy": "2/3 cup packed light brown sugar"
+  },
+  {
+   "item": "Honey",
+   "grams": 220,
+   "buy": "2/3 cup honey"
+  },
+  {
+   "item": "Garlic",
+   "grams": 32,
+   "buy": "10 garlic cloves, minced (about 3 1/2 Tbsp)"
+  },
+  {
+   "item": "Ginger",
+   "grams": 21,
+   "buy": "3 1/2 Tbsp minced fresh ginger"
+  },
+  {
+   "item": "Rice Vinegar",
+   "grams": 52,
+   "buy": "3 1/2 Tbsp rice vinegar"
+  },
+  {
+   "item": "Cornstarch",
+   "grams": 42,
+   "buy": "1/3 cup cornstarch"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 165,
+   "buy": "3/4 cup olive oil, divided"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb boneless skinless chicken breasts"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 14,
+   "buy": "2 Tbsp ground black pepper, to taste"
+  },
+  {
+   "item": "Zucchini",
+   "grams": 686,
+   "buy": "3 1/2 medium zucchini, diced into half moons (about 5 1/4 cups)"
+  },
+  {
+   "item": "Carrots",
+   "grams": 578,
+   "buy": "5 1/4 cups matchstick carrots (about 1 1/4 lb)"
+  },
+  {
+   "item": "Broccoli",
+   "grams": 788,
+   "buy": "8 3/4 cups small diced broccoli florets (about 1 3/4 lb)"
+  },
+  {
+   "item": "Rice",
+   "grams": 1134,
+   "buy": "6 1/8 cups uncooked white or brown rice (about 2 1/2 lb), cooked per package directions"
+  },
+  {
+   "item": "Toasted Sesame Seeds",
+   "grams": 32,
+   "buy": "3 1/2 Tbsp toasted sesame seeds, for sprinkling (optional)"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 764,
+  "protein_g": 48.9,
+  "carbs_g": 102.8,
+  "fat_g": 18.1
+ },
+ "writer_notes": [
+  "All 15 locked ingredient lines are used by a step; no step uses an unbought item (water is tap, not a costed line).",
+  "REPAIR 2026-08-27 (source-QA blocking, ingredient-coverage): the source's '1/2 cup water' for the teriyaki sauce is a not-purchased line, so by house convention it carries no ingredient row (0 water lines across 562 live recipes; build-intake-skeleton classes 'mapped-free (water)' as not-purchased and excludes it by design). The quantity is now carried INLINE in the steps and in make_it instead: 1 3/4 cups total at batch scale (1/2 cup x 3.5), split the way the source splits it - 1 1/4 cups plus 1 Tbsp into the sauce (source 1/4 cup + 2 Tbsp = 6 Tbsp, x 3.5 = 21 Tbsp) and the remaining 7 Tbsp for the cornstarch slurry (source 2 Tbsp x 3.5). Sums to 28 Tbsp = 1 3/4 cups exactly. No ingredient line, gram weight, cost or macro figure changed.",
+  "REPAIR 2026-08-27 (second, separate defect found while rebuilding, not in the QA findings): make_it said 'Skip the salt, the teriyaki brings plenty on its own', which audit-spec-contradictions read as PHANTOM - a step naming a food no ingredient line buys - and that class ratchets against a baseline of 0, so it was a hard gate failure independent of the water finding. Reworded to carry the source's own point ('you won't need salt since the teriyaki sauce is plenty salty') without naming an unbought ingredient. Nothing else touched.",
+  "No-seafood run: source step 6 suggested leftover sauce on 'chicken or salmon the next day'; salmon reference dropped from all prose.",
+  "Macros used in prose come only from the locked view (764 cal, 48.9 g protein) via {{cal}}/{{protein}} tokens; per-serving cost via ${{cost_ps}}. No literal dollar figures used.",
+  "shop_smart deliberately makes no per-unit or per-line cost comparison claims because no cost_lines were provided in dispatch to trace them to; package-size guidance only.",
+  "Cooking temps and times (425-450F, 160-165F, 4 min/side) are transcribed from the source instructions, not computed.",
+  "FLAG for repair pass: black pepper is locked at '2 Tbsp ground black pepper, to taste' for 14 servings, an engine-set literal derived from an unmeasured source line ('Ground black pepper'); defensible as to-taste but worth a look."
+ ],
+ "forbidden_prose_terms": [
+  "salmon",
+  "seafood",
+  "shrimp",
+  "authentic",
+  "restaurant-quality",
+  "em dash",
+  "cheap eats",
+  "$"
+ ],
+ "prose": {
+  "intro_html": "<p>Teriyaki chicken bowls are the meal that make people forget they are eating on a budget. Grilled chicken breast, a glossy homemade teriyaki, a pile of crisp-tender veggies, and a bed of rice. That is a real dinner, and it travels.</p><p>Here is the honest pitch. Every bowl lands at {{cal}} calories with {{protein}} grams of protein, so you get the takeout flavor without the takeout price. The sauce is the whole game, and you are building it yourself from pantry staples. No bottled teriyaki tax, no mystery ingredients, just soy, honey, garlic, and ginger doing the work.</p>",
+  "shop_smart": "<p>The sauce ingredients are pantry regulars. Buy the big bottle of low-sodium soy sauce and the honey once, and you are set for batch after batch. Cornstarch, rice vinegar, and brown sugar are cheap and keep for a long time in the cupboard, so they are not costs you carry every time you make this.</p><ul><li>Buy your boneless skinless chicken breast in the family pack. This batch needs 5 1/4 pounds, so size up to one large pack rather than grabbing a handful of small trays.</li><li>Matchstick carrots and pre-cut broccoli florets save you real knife time. If you would rather trade the time for the chopping, a whole head of broccoli and whole carrots do the exact same job.</li><li>Fresh ginger and garlic carry this sauce. One knob of ginger and one head of garlic cover the whole batch, so you are not buying much.</li><li>Rice is the cheapest thing in the cart. A single bag of white or brown, about 2 1/2 pounds, covers all 14 bowls with room to spare.</li></ul>",
+  "make_it": "<p>Start with the sauce, because everything else waits on it. Measure out 1 3/4 cups of water and keep it beside the pan, because it goes in twice. In a small saucepan, whisk together the low-sodium soy sauce, 1 1/4 cups plus 1 tablespoon of that water, the brown sugar, honey, minced garlic, minced ginger, and rice vinegar. Bring it to a light boil over medium-high heat.</p><p>Whisk the cornstarch into the remaining 7 tablespoons of water, then stir that slurry into the sauce. Drop the heat a touch and let it boil for one minute, stirring constantly, until it turns glossy and coats the back of a spoon. Pull it off the heat and set it aside.</p><p>Brush both sides of the chicken with some of the olive oil and season with black pepper. Nothing else goes on the chicken, because the teriyaki brings plenty of sodium of its own. Preheat the grill to medium-high, about 425 to 450 degrees, and brush the grates lightly with oil. Grill the chicken about 4 minutes per side, until the center reads 160 to 165 degrees on an instant-read thermometer. Let it rest 5 minutes, then dice into cubes.</p><p>Heat the rest of the olive oil in a saute pan over medium-high. Add the zucchini, broccoli, and carrots and saute 4 to 5 minutes, just until crisp-tender. Cook your rice according to the package while all of this is going.</p><p>To build, layer rice into each container, top with the chicken and veggies, then drizzle teriyaki over the top and sprinkle with sesame seeds. You will have extra sauce left over, and that is a feature, not a bug. It is dinner insurance for the next day.</p>",
+  "portion_html": "<p>This batch fills 14 containers. The clean way to split it dead even is to weigh the pot. Set an empty container on the kitchen scale, zero it out, then weigh the full cooked batch of rice, chicken, and veggies and divide that number by 14. That target weight per container beats eyeballing every single time.</p><p>Layer the rice first, then the chicken and veggies on top, and keep the teriyaki either on the side or drizzled light so the rice does not go soggy by day three. Each bowl comes in at {{cal}} calories and {{protein}} grams of protein, which is a serious lunch for the money.</p>",
+  "cost_closing_html": "<p>Here is where it pays off. This whole thing breaks down to ${{cost_ps}} per serving. That is fourteen restaurant-style teriyaki bowls for a fraction of what one takeout order runs, and you built the sauce with your own two hands.</p><p>Run the numbers against a single teriyaki bowl from the food court and it is not close. Same flavor, more protein, and this one is already waiting in your fridge.</p>",
+  "upsell_html": "<p>If you want the full playbook, every recipe, every board price, and the tools that keep our grocery run honest, the Thrifty Crew membership is a dollar a month. One skipped takeout bowl covers the whole year.</p>"
+ },
+ "head": {
+  "description": "Budget teriyaki grilled chicken and veggie rice bowls for meal prep. Homemade teriyaki over grilled chicken breast, crisp veggies, and rice, scaled to 14 servings.",
+  "keywords": "teriyaki chicken bowls, meal prep, grilled chicken rice bowls, homemade teriyaki sauce, high protein meal prep, budget dinner, chicken and veggie bowls, teriyaki rice bowls",
+  "image": "",
+  "prepTime": "PT20M",
+  "cookTime": "PT25M",
+  "totalTime": "PT45M",
+  "steps": [
+   "Measure 1 3/4 cups water for the sauce. In a small saucepan, whisk together the low-sodium soy sauce, 1 1/4 cups plus 1 Tbsp of that water, the brown sugar, honey, minced garlic, minced ginger, and rice vinegar. Bring to a light boil over medium-high heat.",
+   "Whisk the cornstarch into the remaining 7 Tbsp water, stir the slurry into the sauce, reduce the heat slightly, and boil 1 minute while stirring until glossy. Remove from heat and set aside.",
+   "Brush both sides of the chicken with olive oil and season with black pepper. Preheat the grill to medium-high, about 425 to 450 degrees, and brush the grates lightly with oil.",
+   "Grill the chicken about 4 minutes per side until the center reads 160 to 165 degrees on an instant-read thermometer. Rest 5 minutes, then dice into cubes.",
+   "Heat the remaining olive oil in a saute pan over medium-high. Add the zucchini, broccoli, and carrots and saute 4 to 5 minutes until crisp-tender. Cook the rice per the package directions.",
+   "Layer rice into each container, top with the chicken and veggies, drizzle with teriyaki sauce, and sprinkle with sesame seeds."
+  ],
+  "step_names": [
+   "Build the teriyaki sauce",
+   "Thicken the sauce",
+   "Season and prep the grill",
+   "Grill and cube the chicken",
+   "Saute veggies and cook rice",
+   "Assemble the bowls"
+  ]
+ }
+}

@@ -1,0 +1,72 @@
+{
+    "slug":  "butter-chicken-pasta",
+    "title":  "Butter Chicken Pasta",
+    "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T11:40:24",
+    "updated":  "2026-08-27T12:06:09",
+    "terms":  [
+                  {
+                      "term":  "almond butter",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Black Pepper",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:40:24",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/butter-chicken-pasta/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:40:24",
+                        "by":  "decider",
+                        "detail":  "Indian butter-chicken flavor in a pasta format widens the American-skewed catalog; distinct starch/format from the live butter-chicken rice bowls, band 542/40/46 verified."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:41:11",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T11:56:56",
+                        "by":  "mapper",
+                        "detail":  "Residual lines ruled 4, rejected 0. New food-DB rows returned 4, all from the FDC shelf. One new commodity proposal (almond-butter), which is also the only absent term; pasta, onions and ground-turmeric are all live 7 of 7. TWO DEVIATIONS TO REVIEW, both called out rather than buried: (1) the split salt and pepper line arrived from the pre-resolve at 20 g and 4 g source basis, which at 3.5x is 70 "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T11:56:56",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "parked",
+                        "at":  "2026-08-27T11:59:04",
+                        "by":  "derive",
+                        "detail":  "waiting on: almond butter"
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:06:09",
+                        "by":  "derive",
+                        "detail":  "all 1 blocking ingredient(s) carried"
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "cheesy-ground-turkey-pasta",
+    "title":  "Ground Turkey Pasta",
+    "source_url":  "https://thecleaneatingcouple.com/ground-turkey-pasta/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:31",
+    "updated":  "2026-08-27T11:42:32",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground turkey + marinara + penne + mozzarella/parmesan is the same dinner as live turkey-ragu-pasta / turkey-meatball-marinara-pasta.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:31",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/ground-turkey-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:32",
+                        "by":  "decider",
+                        "detail":  "Ground turkey + marinara + penne + mozzarella/parmesan is the same dinner as live turkey-ragu-pasta / turkey-meatball-marinara-pasta."
+                    }
+                ]
+}

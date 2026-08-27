@@ -1,0 +1,107 @@
+{
+ "name": "Chicken Alfredo Lasagna",
+ "slug": "high-protein-chicken-alfredo-lasagna",
+ "protein": "chicken",
+ "cuisine": "Italian-American",
+ "source_url": "https://masonfit.com/chicken-alfredo-lasagna/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Frozen Lightly Breaded Chicken Breast Bites",
+   "grams": 1058,
+   "buy": "2 lb 5 oz, baked from frozen and roughly chopped"
+  },
+  {
+   "item": "Cottage Cheese",
+   "grams": 1058,
+   "buy": "4 2/3 cups (2 lb 5 oz)"
+  },
+  {
+   "item": "Alfredo Sauce",
+   "grams": 420,
+   "buy": "1 3/4 cups"
+  },
+  {
+   "item": "Salt",
+   "grams": 9,
+   "buy": "a generous pinch of each (about 1 1/2 tsp salt and 3/4 tsp black pepper)"
+  },
+  {
+   "item": "Fresh Mozzarella",
+   "grams": 529,
+   "buy": "1 lb 2 1/2 oz, roughly shredded"
+  },
+  {
+   "item": "Parmesan Cheese",
+   "grams": 265,
+   "buy": "2 1/3 cups freshly grated (9 1/3 oz)"
+  },
+  {
+   "item": "No-Boil Lasagna Noodles",
+   "grams": 364,
+   "buy": "21 sheets (about 12 3/4 oz)"
+  },
+  {
+   "item": "Fresh Parsley",
+   "grams": 23,
+   "buy": "6 tbsp chopped"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 496,
+  "protein_g": 40.7,
+  "carbs_g": 34.4,
+  "fat_g": 21.4
+ },
+ "writer_notes": [
+  "All 8 locked ingredients are used by a step: chicken bites (step 2); cottage cheese, alfredo, salt and pepper (step 3, blended sauce); no-boil noodles, mozzarella, parmesan, parsley (step 4, layers); parsley and parmesan reused as garnish (step 6). No orphaned buys and no invented ingredients.",
+  "Band satisfied against the run's enforced values (cal 450-800, carbs any, protein >=40): 496 cal inside range, 40.7 g protein clears 40, no-boil noodles are the real carbohydrate source, protein is breaded chicken breast.",
+  "Only figures used in prose are the locked view's own: 496 cal, 40.7 g protein, 14 servings, plus the buy quantities. No number was computed. Cost is written as the ${{cost_ps}} token; the orchestrator must populate it from the built spec.",
+  "No cost_lines were provided, so shop_smart deliberately makes no per-package or per-ounce cost claim. Every buy reference (chicken 2 lb 5 oz, cottage cheese 4 2/3 cups / 2 lb 5 oz, alfredo 1 3/4 cups, mozzarella 1 lb 2 1/2 oz, parmesan 2 1/3 cups, noodles 21 sheets, parsley 6 tbsp) traces to a locked buy line only.",
+  "Dish size '13 by 9 inch' comes from the source's own note; source used a 10.5x7.5 dish for the single batch and stated a 13x9 also works. 21 sheets equals seven layers of three, consistent with the ~2.33x scale-up.",
+  "No em dashes or en dashes anywhere; number ranges written as words (10 to 15 minutes)."
+ ],
+ "forbidden_prose_terms": [
+  "ricotta",
+  "béchamel",
+  "boil the noodles",
+  "homemade alfredo",
+  "from scratch",
+  "seafood",
+  "ground beef",
+  "spinach",
+  "ground turkey"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is a truth about weeknight dinners. The word lasagna usually means a Sunday project, a sink full of pots, and a noodle you had to boil and then fight with while it curled up on you. This one does not ask for any of that. Chicken Alfredo Lasagna leans on frozen breaded chicken bites, a sauce blended from cottage cheese and jarred alfredo, and no-boil noodles, and it still lands at 496 calories with 40.7 grams of protein in every serving.</p><p>That protein number is the whole point. A creamy, cheesy pan of comfort food that quietly clears 40 grams of protein a serving is not something the freezer aisle usually hands you. We are going to build fourteen containers of it, and your future self is going to thank you at every single lunch.</p>",
+  "shop_smart": "<p>Read the plan before you fill the cart, because this pan is mostly protein and cheese and you do not want to guess. Here is what the batch actually asks for.</p><ul><li>Grab 2 pounds 5 ounces of frozen lightly breaded chicken breast bites. Pick the bag weight that lands closest to that so you are not opening a second bag to strand half of it back in the freezer.</li><li>The sauce is half cottage cheese and half alfredo, blended smooth. You need 4 2/3 cups of low fat cottage cheese, which is 2 pounds 5 ounces, so match the tub sizes on the shelf to that weight. For the alfredo you need 1 3/4 cups, and this is the one to buy the jar you actually like, because it carries the whole pan.</li><li>Cheese runs the show. Plan on 1 pound 2 1/2 ounces of fresh mozzarella and 2 1/3 cups of freshly grated parmesan. Grate the parmesan off a wedge yourself if you can, since it melts cleaner than the shaker kind.</li><li>You need 21 no-boil lasagna sheets, about 12 3/4 ounces, so check the sheet count printed on the box and buy enough to cover seven layers of three. One bunch of fresh parsley covers the 6 tablespoons you chop plus a little for garnish.</li></ul>",
+  "make_it": "<p>Start the oven at 425 degrees and get the chicken going first. Bake or air fry the frozen bites according to their package, and once they are cooked through, roughly chop them into bite-size pieces.</p><p>While they cook, make the sauce. Blend the cottage cheese, the alfredo, and a pinch of salt and pepper together until it is completely smooth. That blend is the trick of the whole recipe. It turns a tub of cottage cheese into something that eats like a rich alfredo while carrying a load of protein most sauces never do.</p><p>Now build it. Coat the bottom of a 13 by 9 inch baking dish with a thin layer of the blended sauce, then lay down 3 lasagna sheets. Add another layer of sauce, then chopped chicken, parsley, mozzarella, and parmesan. Repeat until the dish is full, and only use parsley on the first two layers so the top does not scorch. Finish the top with mozzarella and parmesan and nothing else.</p><p>Cover the dish and bake for 30 minutes. Uncover it and bake another 10 to 15 minutes, until the cheese is bubbly and browning around the edges. Garnish with a little fresh parsley and grated parmesan, then let it rest at least 5 minutes before you cut it. That rest is not optional if you want clean squares instead of a landslide on the plate.</p>",
+  "portion_html": "<p>Here is how you get fourteen honest servings instead of eyeballing it and hoping. Weigh the whole finished lasagna, then subtract the weight of the empty dish you noted before you built it. Take that cooked weight, divide it by fourteen, and that number is your target grams per container.</p><p>Cut the pan into fourteen pieces and set each one on the scale as you portion. Some will run a little heavy and some a little light, and you just even them out until every container hits the number. That is how all fourteen actually land at 496 calories and 40.7 grams of protein, instead of the corner piece quietly robbing the middle of the pan.</p>",
+  "cost_closing_html": "<p>Here is what matters when the pan comes out of the oven. This whole tray of chicken alfredo lasagna breaks down to ${{cost_ps}} per serving, and for that you get 496 calories and over 40 grams of protein in a meal that tastes like you ordered it out.</p><p>Run that against a drive-thru plate or a frozen high-protein dinner and it is not close. Cook once, portion fourteen, and you have bought yourself two weeks of lunches for less than the price of one night eating out.</p>",
+  "upsell_html": "<p>If this is the kind of math you want run on every dinner you make, that is exactly what Thrifty Crew does. Every recipe on the site is built to hit real protein numbers on a real budget, portioned and priced right down to the serving so you are never guessing.</p><p>Membership is a dollar a month. One coffee you skip covers a full year of recipes that pay you back at every meal. Come cook with us.</p>"
+ },
+ "head": {
+  "description": "Chicken Alfredo Lasagna meal prep that makes 14 servings at 496 calories and 40.7 grams of protein each. Breaded chicken, a blended cottage cheese alfredo sauce, and no-boil noodles for a budget high-protein dinner.",
+  "keywords": "chicken alfredo lasagna, high protein lasagna, meal prep lasagna, cottage cheese alfredo, high protein meal prep, budget dinner, no boil lasagna, chicken lasagna",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT1H",
+  "totalTime": "PT1H15M",
+  "steps": [
+   "Preheat the oven to 425 degrees Fahrenheit.",
+   "Bake or air fry the frozen breaded chicken bites according to the package instructions, then roughly chop them into bite-size pieces once cooked through.",
+   "Blend the cottage cheese, alfredo sauce, and a pinch of salt and pepper together until smooth.",
+   "Coat the bottom of a 13 by 9 inch baking dish with a thin layer of the blended sauce, then add 3 lasagna sheets, more sauce, chopped chicken, parsley, mozzarella, and parmesan. Repeat until assembled, using parsley only on the first two layers and finishing the top with mozzarella and parmesan.",
+   "Cover and bake for 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges.",
+   "Garnish with fresh parsley and grated parmesan, rest at least 5 minutes, then slice and portion into 14 containers."
+  ],
+  "step_names": [
+   "Heat the oven",
+   "Cook the chicken",
+   "Blend the sauce",
+   "Assemble the layers",
+   "Bake covered then uncovered",
+   "Garnish, rest, and portion"
+  ]
+ }
+}

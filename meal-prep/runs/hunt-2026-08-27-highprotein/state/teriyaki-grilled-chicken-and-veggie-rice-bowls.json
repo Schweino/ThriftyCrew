@@ -1,0 +1,86 @@
+{
+    "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+    "title":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+    "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+    "protein":  "chicken",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-27T11:42:37",
+    "updated":  "2026-08-27T12:19:19",
+    "terms":  [
+                  {
+                      "term":  "Water",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Toasted Sesame Seeds",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:37",
+                        "by":  "harvest",
+                        "detail":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:42:37",
+                        "by":  "decider",
+                        "detail":  "Teriyaki glaze is a distinct sauce identity from the catalog\u0027s orange/sweet-sour/adobo chicken rice bowls; grilled whole-muscle chicken with broccoli/zucchini/carrot widens the Japanese-leaning offering, strong 40g-protein/465-cal band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:43:30",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T11:55:54",
+                        "by":  "mapper",
+                        "detail":  "9 residual lines ruled: 7 mapped, 1 mapped-optional (sesame seed garnish), 1 not-purchased (tap water). No rejections and no new ids - every bid is a live board commodity, so nothing here is a registrar question. 7 new food-DB rows returned. TWO ROWS I DELIBERATELY DID NOT RETURN, because the canon items they resolve to already carry rows quoted in this very batch and a near-duplicate would only t"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T11:55:55",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T11:55:55",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T11:58:14",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T11:58:14",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T12:05:41",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T12:19:19",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

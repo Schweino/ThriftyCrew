@@ -1,0 +1,131 @@
+{
+ "name": "Healthy Hamburger Helper",
+ "slug": "healthy-hamburger-helper",
+ "protein": "beef",
+ "cuisine": "American",
+ "source_url": "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "93/7 Ground Beef",
+   "grams": 1588,
+   "buy": "3 1/2 lb"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 280,
+   "buy": "1 3/4 cups finely chopped (about 2 medium onions)"
+  },
+  {
+   "item": "Rotini Pasta",
+   "grams": 992,
+   "buy": "10 1/2 cups (2 lb 3 oz) dry rotini"
+  },
+  {
+   "item": "Beef Broth",
+   "grams": 1680,
+   "buy": "7 cups"
+  },
+  {
+   "item": "Worcestershire Sauce",
+   "grams": 60,
+   "buy": "3 1/2 tablespoons"
+  },
+  {
+   "item": "Tomato Paste",
+   "grams": 28,
+   "buy": "1 3/4 tablespoons"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 16,
+   "buy": "1 3/4 tablespoons"
+  },
+  {
+   "item": "Chili Powder",
+   "grams": 9,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Onion Powder",
+   "grams": 8,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Paprika",
+   "grams": 8,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 teaspoons"
+  },
+  {
+   "item": "Salt",
+   "grams": 5,
+   "buy": "3/4 teaspoon"
+  },
+  {
+   "item": "Cheddar Cheese, Shredded",
+   "grams": 396,
+   "buy": "3 1/2 cups shredded"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 550,
+  "protein_g": 44.5,
+  "carbs_g": 54.1,
+  "fat_g": 18.6
+ },
+ "writer_notes": [
+  "Scales cleanly at 3.5x from the source (1 lb beef, 3 cups pasta) to the 14-serving build (3.5 lb beef, 10.5 cups pasta); every spice quantity checks out at that ratio.",
+  "WATER FLAG: source uses 2 cups beef broth PLUS 2 cups water (equal parts), scaling to 7 cups broth and about 7 cups water. Water is not a costed line so it is correctly off the shopping card, but the method needs it to cook 10.5 cups of pasta. I wrote it as 'an equal amount of water' rather than a costed quantity.",
+  "COOKING SPRAY FLAG: source step 1 sprays the pan with olive oil cooking spray, which is not among the 13 costed lines. I described it as an optional light coat of nonstick, not a bought ingredient. Confirm it should stay uncosted or be added.",
+  "All 13 locked ingredient lines are used by a step, and no step uses anything not on the list (water and cooking spray excepted, both flagged above).",
+  "cost_closing uses the ${{cost_ps}} token because no literal per-serving cost was supplied in my dispatch.",
+  "No per-ounce or 'lasts several batches' package claims in shop_smart, since no cost_lines were provided to trace them to; buying guidance is grounded only in the locked buy quantities.",
+  "REPAIR: prose previously read '44.5 grams of protein' in four fields; corrected to 44 to match locked stat.protein=44 (prose transcribes, does not compute). Per-serving macros (550 cal, 44 g protein) satisfy this run's enforced band: cal 450-800, protein >= 40, carb source present (rotini)."
+ ],
+ "forbidden_prose_terms": [
+  "milk",
+  "butter",
+  "flour",
+  "elbow macaroni",
+  "Velveeta",
+  "cornstarch",
+  "cream cheese",
+  "sour cream",
+  "seafood"
+ ],
+ "prose": {
+  "intro_html": "<p>Hamburger Helper built a whole aisle on one promise: dinner from a box in one pan. The catch was the box, packed with powder you could not pronounce and a sodium count that made your ankles swell. This version keeps the promise and ditches the box. Lean 93/7 beef, real rotini, beef broth, and a handful of pantry spices you already own. One pot, thirty minutes, and 14 containers at the end of it.</p><p>The numbers do the arguing for me. Each serving lands at 550 calories with 44 grams of protein. That is a real dinner that keeps you full, not a sad diet plate. Comfort food that happens to be honest about what is in it.</p>",
+  "shop_smart": "<p>The beef is the anchor here. You need 3 1/2 pounds of 93/7 ground beef, so skip the little tray packs and reach for the family pack. Ground beef freezes clean, so buying the bigger pack and splitting what you do not use never goes to waste.</p><p>Rotini is the carb, and you need 10 1/2 cups dry, which is a hair over two pounds. That is more than one standard one pound box, so grab two boxes or one big bag. Penne or medium shells sub in fine if the rotini shelf is picked over. Any short pasta with ridges holds the sauce.</p><p>The cheddar is 3 1/2 cups shredded. A bag of pre-shredded is the easy road, but a block you shred yourself melts smoother because it skips the anti-caking dust. Buy whichever fits how much elbow grease you have that night. Everything else is pantry: Worcestershire, tomato paste, garlic powder, chili powder, onion powder, paprika, black pepper, and salt. If your spice rack is already stocked, this trip is really just beef, pasta, broth, and cheese.</p>",
+  "make_it": "<p>Warm a large pot or deep saucepan over medium-high heat and give it a light coat of nonstick so the beef does not grab. You do not need heavy oil here since 93/7 brings its own.</p><p>Add the 3 1/2 pounds of ground beef and the chopped onion. Brown them together for about 10 minutes, breaking the beef up as you go, until the meat is cooked through and the onion has gone soft and translucent. If a big pool of fat renders out you can spoon a little off, but 93/7 stays pretty lean.</p><p>Now build the pot. Add the dry rotini, the beef broth, an equal amount of water, the Worcestershire sauce, tomato paste, garlic powder, chili powder, onion powder, paprika, black pepper, and salt. Stir it all together, cover the pot, and bring it up to a boil.</p><p>Once it is boiling, pull the lid off and drop it to a simmer. Stir occasionally for 12 to 14 minutes, until the pasta is tender and most of the liquid has cooked down into a sauce that clings to the noodles.</p><p>Move the pot off the heat and stir in the 3 1/2 cups of shredded cheddar. Keep stirring until it melts into the sauce and every noodle is coated. That is dinner.</p>",
+  "portion_html": "<p>This batch makes 14 servings, and the way to hit that evenly is to weigh, not eyeball. Set your empty container on the scale and zero it out. Weigh the full pot, subtract the pot, and divide what is left by 14. That number is your target per container.</p><p>Scoop to that weight and you get honest, even portions every time, which is the whole point of meal prep. Each one comes in at 550 calories and 44 grams of protein, so you know exactly what you are eating Wednesday at noon.</p>",
+  "cost_closing_html": "<p>Here is where the homemade version earns its keep. The whole batch of 14 servings comes out to ${{cost_ps}} per serving. That is a full dinner with 44 grams of protein, and it does not ask you to swallow a mystery seasoning packet to get there.</p><p>Fourteen dinners cooked at once means you are not staring at a takeout menu on a Tuesday when you are tired and hungry. That is where the real money leaks out of a budget, and this pot plugs the leak.</p>",
+  "upsell_html": "<p>Every recipe on Thrifty Crew runs through this same system: real macros, real prices off the actual store board, no guessing. Membership is a dollar a month, which is less than one drive-thru side, and it opens the whole library of high-protein meal-prep dinners built exactly like this one.</p><p>Cook once, eat all week, and let the math work for you instead of against you.</p>"
+ },
+ "head": {
+  "description": "Healthy Hamburger Helper made from scratch in one pot. Lean ground beef, rotini, and real cheddar for 14 meal-prep servings at 550 calories and 44 grams of protein each.",
+  "keywords": "healthy hamburger helper, homemade hamburger helper, high protein meal prep, one pot ground beef pasta, budget meal prep dinner, ground beef rotini, meal prep beef pasta",
+  "image": "",
+  "prepTime": "PT5M",
+  "cookTime": "PT25M",
+  "totalTime": "PT30M",
+  "steps": [
+   "Warm a large pot or deep saucepan over medium-high heat and give it a light coat of nonstick so the beef does not stick.",
+   "Add the ground beef and chopped onion. Brown together for about 10 minutes, breaking up the beef, until it is cooked through and the onion is translucent.",
+   "Stir in the dry rotini, beef broth, an equal amount of water, Worcestershire sauce, tomato paste, garlic powder, chili powder, onion powder, paprika, black pepper, and salt. Cover and bring to a boil.",
+   "Uncover, reduce to a simmer, and cook 12 to 14 minutes, stirring occasionally, until the pasta is tender and the liquid has reduced into a sauce.",
+   "Move the pot off the heat and stir in the shredded cheddar until it melts and every noodle is coated."
+  ],
+  "step_names": [
+   "Heat the pot",
+   "Brown the beef",
+   "Build the pot",
+   "Simmer the pasta",
+   "Melt in the cheese"
+  ]
+ }
+}

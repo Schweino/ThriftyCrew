@@ -1,0 +1,62 @@
+{
+    "slug":  "one-pan-sloppy-joe-casserole",
+    "title":  "One-Pan Sloppy Joe Casserole",
+    "source_url":  "https://lemonsandzest.com/sloppy-joe-casserole/",
+    "protein":  "turkey",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:30",
+    "updated":  "2026-08-27T11:54:20",
+    "terms":  [
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Shredded Cheese",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:30",
+                        "by":  "harvest",
+                        "detail":  "https://lemonsandzest.com/sloppy-joe-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:42:31",
+                        "by":  "decider",
+                        "detail":  "Biscuit-topped sloppy-joe casserole is a distinct batch format from the live sloppy-joe rice/bowl versions (bread starch, casserole method), verified high-protein band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:42:57",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T11:54:20",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled, 4 mapped, 0 rejected, 0 null. All four bids are REUSES of live board ids (bell-peppers 5/7, ground-turkey 7/7, shredded-cheese 7/7, refrigerated-biscuits 7/7) - only vocabulary rows are missing for Bell Peppers, Ground Turkey and Shredded Cheese, which is a naming question and not a registrar one. 4 new food-DB rows returned. Ranges resolved to mid-points and stated in note"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T11:54:20",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T11:54:20",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    }
+                ]
+}

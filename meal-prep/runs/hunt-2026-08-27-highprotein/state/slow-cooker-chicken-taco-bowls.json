@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-chicken-taco-bowls",
+    "title":  "Chicken Taco Bowls",
+    "source_url":  "https://www.budgetbytes.com/taco-chicken-bowls/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:45:03",
+    "updated":  "2026-08-27T11:45:03",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Salsa-braised chicken with beans, corn, rice and cheddar is the same dinner as live Slow Cooker Chicken Taco Rice Bowls (word-overlap 34, shared chicken/onions/rice/salsa); a direct chicken-taco-bowl duplicate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:45:03",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/taco-chicken-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:45:03",
+                        "by":  "decider",
+                        "detail":  "Salsa-braised chicken with beans, corn, rice and cheddar is the same dinner as live Slow Cooker Chicken Taco Rice Bowls (word-overlap 34, shared chicken/onions/rice/salsa); a direct chicken-taco-bowl duplicate."
+                    }
+                ]
+}

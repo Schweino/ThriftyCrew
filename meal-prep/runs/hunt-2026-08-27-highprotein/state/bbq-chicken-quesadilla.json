@@ -1,0 +1,31 @@
+{
+    "slug":  "bbq-chicken-quesadilla",
+    "title":  "BBQ Chicken Quesadilla",
+    "source_url":  "https://www.theproteinplayground.com/bbq-chicken-quesadilla/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:40",
+    "updated":  "2026-08-27T11:50:40",
+    "terms":  [
+
+              ],
+    "reject_reason":  "BBQ-sauced chicken with cheddar in a tortilla is the same dinner as live bbq-chicken-burrito (chicken + BBQ + cheese + tortilla); quesadilla-vs-burrito is not a distinguishing plate, matching the prior buffalo-chicken-quesadilla ruling, and the single-serve format doesn\u0027t batch.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:40",
+                        "by":  "harvest",
+                        "detail":  "https://www.theproteinplayground.com/bbq-chicken-quesadilla/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:50:40",
+                        "by":  "decider",
+                        "detail":  "BBQ-sauced chicken with cheddar in a tortilla is the same dinner as live bbq-chicken-burrito (chicken + BBQ + cheese + tortilla); quesadilla-vs-burrito is not a distinguishing plate, matching the prior buffalo-chicken-quesadilla ruling, and the single-serve format doesn\u0027t batch."
+                    }
+                ]
+}

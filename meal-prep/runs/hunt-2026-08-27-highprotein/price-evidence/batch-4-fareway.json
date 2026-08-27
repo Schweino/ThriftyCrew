@@ -1,0 +1,273 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-27T12:10:48",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "frozen lightly breaded chicken breast bites",
+   "state": "MATCHES",
+   "term_used": "frozen lightly breaded chicken breast bites",
+   "attempts": [
+    {
+     "term": "frozen lightly breaded chicken breast bites",
+     "state": "OK",
+     "hits": 67
+    }
+   ],
+   "hits": [
+    {
+     "item": "Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites",
+     "price": 10.98,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712959-just-bare-chicken-breast-bites-lightly-breaded-24-oz"
+    },
+    {
+     "item": "Oscar Mayer Carving Board Southwestern Seasoned Grilled Chicken Breast Strips",
+     "price": 3.99,
+     "size": "6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73416-oscar-mayer-southwestern-seasoned-grilled-chicken-breast-strips-6-oz"
+    },
+    {
+     "item": "Tyson Frozen Dino Nuggets, 4 lb",
+     "price": 13.94,
+     "size": "1.81 kg",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30198303-tyson-fun-nuggets-all-natural-chicken-family-pack-4-lb"
+    },
+    {
+     "item": "Fareway Premium Chunk White & Dark Chicken",
+     "price": 3.34,
+     "size": "12.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22160792-fareway-chicken-white-dark-125-oz"
+    },
+    {
+     "item": "Tyson Frozen Spicy Chicken Patties, 23 oz",
+     "price": 7.49,
+     "size": "23 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56875662-tyson-spicy-chicken-patties-23-00-oz"
+    },
+    {
+     "item": "Perdue Gluten Free Organic Chicken Tenders",
+     "price": 10.59,
+     "size": "22 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/171979-perdue-s-breaded-chicken-breast-tenders-gluten-free-1-38-lb"
+    },
+    {
+     "item": "Tyson Frozen Chicken Nuggets Family Pack, 4 lb",
+     "price": 13.94,
+     "size": "4 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56813142-tyson-chicken-nuggets-family-pack-64-oz"
+    },
+    {
+     "item": "Frick's Oven Roasted Sliced Chicken Breast",
+     "price": 10.99,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/108439152-fricks-oven-roasted-sliced-chicken-breast-24-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "fresh mozzarella",
+   "state": "MATCHES",
+   "term_used": "fresh mozzarella",
+   "attempts": [
+    {
+     "term": "fresh mozzarella",
+     "state": "OK",
+     "hits": 5
+    }
+   ],
+   "hits": [
+    {
+     "item": "BelGioioso Fresh Mozzarella Sliced",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Pearls",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
+    },
+    {
+     "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
+    },
+    {
+     "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
+    },
+    {
+     "item": "Tillamook Whole Milk Mozzarella Cheese Snacks 10 Count",
+     "price": 3.99,
+     "size": "10 x 0.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38311478-tilla-whl-mlk-mozz-snack-bar"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "Boursin cheese",
+   "state": "MATCHES",
+   "term_used": "Boursin cheese",
+   "attempts": [
+    {
+     "term": "Boursin cheese",
+     "state": "OK",
+     "hits": 2
+    }
+   ],
+   "hits": [
+    {
+     "item": "Boursin Garlic & Fine Herbs Gournay Cheese",
+     "price": 5.49,
+     "size": "5.3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102173-boursin-garlic-fine-herbs-gournay-cheese-5-2-oz"
+    },
+    {
+     "item": "Boursin Shallot & Chive Gournay Cheese",
+     "price": 5.49,
+     "size": "5.2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72164-boursin-shallot-chive-gournay-cheese-150-0-g"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "penne pasta",
+   "state": "MATCHES",
+   "term_used": "penne pasta",
+   "attempts": [
+    {
+     "term": "penne pasta",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Penne Rigate",
+     "price": 1.24,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24859003-fareway-penne-rigate-16-oz"
+    },
+    {
+     "item": "Barilla Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
+     "price": 1.84,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144046-barilla-classic-blue-box-pasta-penne-16-oz"
+    },
+    {
+     "item": "Barilla Mini Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
+     "price": 1.84,
+     "size": "1 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/153018-barilla-classic-blue-box-pasta-mini-penne-1-lb"
+    },
+    {
+     "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
+     "price": 2.99,
+     "size": "14.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
+    },
+    {
+     "item": "Fareway Whole Wheat Penne Rigate",
+     "price": 0.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24881952-fareway-whole-wheat-macaroni-product-penne-rigate-16-oz"
+    },
+    {
+     "item": "Rao's Penne Rigate Macaroni Product",
+     "price": 3.99,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19373047-rao-s-homemade-penne-rigate-macaroni-product-1-0-lb"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "Moroccan Spice Mix",
+   "state": "MATCHES",
+   "term_used": "Moroccan Spice Mix",
+   "attempts": [
+    {
+     "term": "Moroccan Spice Mix",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Chili Seasoning Mix",
+     "price": 1.68,
+     "size": "1.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38758-mccormick-chili-seasoning-mix-1-25-oz"
+    },
+    {
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+    },
+    {
+     "item": "Cavender's Seasoning, Greek, All Purpose",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
+    },
+    {
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+     "price": 7.99,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
+     "price": 5.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

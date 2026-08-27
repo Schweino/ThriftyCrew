@@ -1,0 +1,158 @@
+{
+ "slug": "moroccan-chicken-couscous-bowl",
+ "lines": [
+  {
+   "raw": "1 tablespoon Moroccan spice mix (store bought or make your own (see below))",
+   "buy": "3 1/2 tbsp",
+   "grams_source": 7.5
+  },
+  {
+   "raw": "Salt and pepper, to taste",
+   "buy": "to taste (about 1 3/4 tsp salt and 1 3/4 tsp black pepper)",
+   "grams_source": 3,
+   "notes": "Unquantified line weighed on the salt basis; the recipe already carries a measured sea salt line, so this one is kept modest. Pepper pantry-static."
+  },
+  {
+   "raw": "1 Cup Dry couscous",
+   "buy": "3 1/2 cups dry (about 1 lb 5 oz)",
+   "grams_source": 173
+  },
+  {
+   "raw": "1 1/2 Cup Water or broth (to cook the couscous)",
+   "buy": "5 1/4 cups",
+   "grams_source": 360
+  },
+  {
+   "raw": "2 tablespoons Fresh Chopped parsley",
+   "buy": "7 tbsp chopped",
+   "grams_source": 8
+  },
+  {
+   "raw": "1/2 teaspoon Sea Salt",
+   "buy": "1 3/4 tsp",
+   "grams_source": 3
+  },
+  {
+   "raw": "1 1/2 pounds Boneless skinless chicken breast (chopped to bite sizes)",
+   "buy": "5 1/4 lb, chopped to bite size"
+  },
+  {
+   "raw": "1/4 Cup Tomato paste",
+   "buy": "7/8 cup"
+  },
+  {
+   "raw": "2 tablespoons Olive Oil (or avocado oil)",
+   "buy": "7 tbsp"
+  },
+  {
+   "raw": "3/4 Cup Chicken Broth (or vegetable broth)",
+   "buy": "2 5/8 cups"
+  },
+  {
+   "raw": "1 Cucumber (diced)",
+   "buy": "3 1/2 cucumbers, diced"
+  },
+  {
+   "raw": "1 Cup Cherry Tomatoes (Cut into quarters)",
+   "buy": "3 1/2 cups, quartered"
+  },
+  {
+   "raw": "1 Red Onion (Sliced or diced)",
+   "buy": "3 1/2 medium, sliced or diced"
+  },
+  {
+   "raw": "1/3 Cup Greek yogurt",
+   "buy": "1 1/6 cups"
+  },
+  {
+   "raw": "1 1/2 tablespoons Ground cinnamon",
+   "buy": "5 1/4 tbsp"
+  },
+  {
+   "raw": "1 teaspoon Smoked paprika",
+   "buy": "3 1/2 tsp"
+  },
+  {
+   "raw": "1/2 teaspoon Ground ginger",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1/2 teaspoon Ground nutmeg",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1/2 teaspoon Cayenne pepper",
+   "buy": "1 3/4 tsp"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 tablespoon Moroccan spice mix (store bought or make your own (see below))",
+   "term": "Moroccan spice mix",
+   "canon_item": "Moroccan Spice Mix",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 7.5,
+   "evidence": "Board absent and no vocabulary row; a multi-spice blend has no single commodity I can prove, exactly as the 2026-08-26 'Moroccan Seven Spice Blend' -> no id ruling found. Pantry-static pricing on 7.5 g is safe, and the source offers a make-your-own blend from spices already in the pantry."
+  },
+  {
+   "raw": "Salt and pepper, to taste",
+   "term": "Salt and pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "One line carrying two pantry seasonings; costed as salt (7 of 7) with black pepper pantry-static, per the 'Salt/Pepper' -> salt precedent."
+  },
+  {
+   "raw": "1 Cup Dry couscous",
+   "term": "Dry couscous",
+   "canon_item": "Couscous",
+   "bid": "couscous",
+   "decision": "mapped",
+   "grams_source": 173,
+   "evidence": "couscous is a live board id (2 of 7), so this is a REUSE and only a vocabulary name row is missing; dry is the only form the box is sold in. 1 cup dry = 173 g."
+  },
+  {
+   "raw": "1 1/2 Cup Water or broth (to cook the couscous)",
+   "term": "Water or broth",
+   "canon_item": "Chicken Broth",
+   "bid": "chicken-broth",
+   "decision": "mapped",
+   "grams_source": 360,
+   "evidence": "Either-or line taken to broth, which this recipe already buys on another line (board 7 of 7) and which the DB already has a row for; that avoids a water row with no label behind it."
+  },
+  {
+   "raw": "2 tablespoons Fresh Chopped parsley",
+   "term": "Fresh Chopped parsley",
+   "canon_item": "Fresh Parsley",
+   "bid": "fresh-parsley",
+   "decision": "mapped",
+   "grams_source": 8,
+   "evidence": "Exact same-form vocabulary row Fresh Parsley [fresh-parsley], a live id priced elsewhere in this batch (3 of 7); 'chopped' is prep. Deliberately NOT dried parsley - different price and a very different gram weight."
+  },
+  {
+   "raw": "1/2 teaspoon Sea Salt",
+   "term": "Sea Salt",
+   "canon_item": "Sea Salt",
+   "bid": "sea-salt",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "sea-salt is a live board id (5 of 7), so a reuse; no bridge to the cheaper `salt` id needed."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "Couscous",
+  "Moroccan Spice Mix"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [
+  "moroccan-chicken-couscous-bowl: 'Sea Salt' arrived on a different serving basis (0.25 tsp = 1.5 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tsp = 6 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Done by hand over all 19 lines at source scale, 4 servings. Ours 494 cal / 48.1 protein / 48.0 carbs per serving vs source 497 / 47 / 47. Calories within 0.6%, protein within 2.3%, carbs within 2.1% - nothing to re-examine. Band: 494 cal in 450-800 OK, protein 48.1 clears 40."
+}

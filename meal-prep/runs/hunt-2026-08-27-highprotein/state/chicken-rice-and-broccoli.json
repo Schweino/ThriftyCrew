@@ -1,0 +1,79 @@
+{
+    "slug":  "chicken-rice-and-broccoli",
+    "title":  "Healthy Chicken, Rice and Broccoli Skillet",
+    "source_url":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+    "protein":  "chicken",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-27T11:48:57",
+    "updated":  "2026-08-27T12:19:19",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:57",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:48:58",
+                        "by":  "decider",
+                        "detail":  "One-pan herbed chicken-breast, white rice and broccoli simmered in stock with parmesan; a clean high-protein staple (480cal/46c/47p) with no live equivalent - distinct from the turkey-cheddar broccoli-rice skillet and the sauced chicken-rice bowls, saturation 0."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:49:32",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:09:48",
+                        "by":  "mapper",
+                        "detail":  "1 residual line ruled, 0 rejected, 1 DB row returned (Rice, from the FDC shelf). No new ids, nothing absent - every bid on this recipe is already priced. One caveat stated plainly: I could not check whether a \u0027Rice\u0027 row already exists (no DB access), so if it does, the existing row stands and mine should be discarded; the numbers I returned are the shelf\u0027s, not a reconstruction."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:09:48",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:09:49",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T12:11:40",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T12:11:40",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T12:19:18",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T12:19:19",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

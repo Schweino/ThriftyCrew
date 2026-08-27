@@ -1,0 +1,31 @@
+{
+    "slug":  "grilled-teriyaki-chicken-kebabs",
+    "title":  "Grilled Teriyaki Chicken Kebabs",
+    "source_url":  "https://www.budgetbytes.com/grilled-teriyaki-chicken-kebabs/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:57",
+    "updated":  "2026-08-27T11:44:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Grilled soy/brown-sugar/ginger teriyaki chicken over rice duplicates both live teriyaki-chicken-bowl and this run\u0027s already-accepted teriyaki-grilled-chicken-and-veggie-rice-bowls; skewering the same chicken is not a new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:57",
+                        "by":  "harvest",
+                        "detail":  "https://www.budgetbytes.com/grilled-teriyaki-chicken-kebabs/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:44:57",
+                        "by":  "decider",
+                        "detail":  "Grilled soy/brown-sugar/ginger teriyaki chicken over rice duplicates both live teriyaki-chicken-bowl and this run\u0027s already-accepted teriyaki-grilled-chicken-and-veggie-rice-bowls; skewering the same chicken is not a new dinner."
+                    }
+                ]
+}

@@ -1,0 +1,79 @@
+{
+    "slug":  "ground-beef-cottage-cheese-bowl",
+    "title":  "Ground Beef Cottage Cheese Bowl",
+    "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+    "protein":  "beef",
+    "state":  "waved",
+    "wave":  1,
+    "created":  "2026-08-27T11:46:55",
+    "updated":  "2026-08-27T12:19:19",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:55",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:46:55",
+                        "by":  "decider",
+                        "detail":  "Taco-seasoned ground beef over roasted sweet potato with cottage cheese, avocado and hot honey; verified 559cal/47c/46p, distinct sweet-potato-base high-protein bowl with no close neighbour (best word-overlap 23) and a different starch/assembly from the rice-based taco-beef lane."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:47:22",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:08:41",
+                        "by":  "mapper",
+                        "detail":  "0 residual lines (all 17 pre-resolved), 0 rejected, 0 DB rows added. Only work owed was buy strings and the cross-check. The two duplicated raw strings (\u0027½ teaspoon kosher salt\u0027, \u0027¼ teaspoon ground black pepper\u0027) each appear twice in the source and are answered once per occurrence with identical buy strings. Nothing here looked wrong in the pre-resolve table."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:08:41",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:08:41",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-27T12:10:44",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-27T12:10:44",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-27T12:19:13",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T12:19:19",
+                        "by":  "wave-close",
+                        "detail":  "wave 1"
+                    }
+                ]
+}

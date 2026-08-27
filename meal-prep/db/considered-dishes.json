@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-27T06:00:43",
-    "count":  224,
+    "updated":  "2026-08-27T11:51:40",
+    "count":  288,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -3373,6 +3373,972 @@
                        "run":  "hunt-2026-08-27-ten",
                        "by":  "decider",
                        "at":  "2026-08-27T06:00:43"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "healthy-hamburger-helper",
+                       "name":  "Healthy Hamburger Helper",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Lean cheeseburger-macaroni skillet, 507cal/36c/40p verified; kept as the stronger of the batch\u0027s American cheesy beef-pastas and distinct from the existing beef-and-shells casserole by method.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:23"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "ground-beef-pasta",
+                       "name":  "Ground Beef Pasta",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Creamy tomato-cheddar ground-beef rotini is the same cheesy-beef-pasta dinner as accepted healthy-hamburger-helper, with a heavier band (668cal/60c).",
+                       "dupe_of":  [
+                                       "healthy-hamburger-helper"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:24"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "butter-chicken-pasta",
+                       "name":  "Butter Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Butter-chicken-spiced creamy tomato chicken over pasta; fusion dish widening cuisine spread, distinct from live slow-cooker butter chicken RICE bowls by starch and format.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:25"
+                   },
+                   {
+                       "key":  "beef|stew|tomato",
+                       "slug":  "pioneer-woman-chili",
+                       "name":  "The Pioneer Woman Chili",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Classic beef-and-bean chili; no direct beef-chili in catalog (neighbours are chili-mac, cornbread casserole, turkey/pork chilis), a staple worth the busy chili neighbourhood.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:26"
+                   },
+                   {
+                       "key":  "chicken|braised|soy",
+                       "slug":  "crock-pot-teriyaki-chicken",
+                       "name":  "Crock Pot Teriyaki Chicken",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Teriyaki chicken with rice duplicates the live teriyaki-chicken-bowl on protein, teriyaki/soy sauce and rice starch; added stir-fry veg does not make it a distinct dinner.",
+                       "dupe_of":  [
+                                       "teriyaki-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:27"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "chicken-burrito-bowl-cilantro-lime-rice",
+                       "name":  "Chicken Burrito Protein Bowl",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken burrito bowl over rice with beans/corn duplicates the catalog\u0027s existing salsa chicken burrito bowls; chipotle-vs-salsa is a sauce variation in a saturated Tex-Mex neighbourhood.",
+                       "dupe_of":  [
+                                       "slow-cooker-salsa-chicken-bowl",
+                                       "slow-cooker-salsa-verde-chicken-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:28"
+                   },
+                   {
+                       "key":  "beef|skillet|tomato",
+                       "slug":  "cheesy-enchilada-pasta",
+                       "name":  "Enchilada Pasta",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Ground beef + enchilada sauce + cheddar overlaps live beef-enchilada-skillet-bowls and piles onto the oversaturated American/Tex-Mex beef-pasta cluster; does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:28"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "cheesy-chicken-pasta",
+                       "name":  "Cheesy Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Plain creamy cheddar-parmesan chicken penne overlaps existing creamy chicken pastas (chicken-parmesan-pasta, tuscan chicken pasta) and adds nothing to a saturated American region.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:29"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "chicken-brown-rice-bowl",
+                       "name":  "Chicken Brown Rice Bowl (Zinque\u0027s Le Bowl)",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Single-serving assembled arugula/avocado/gruyere bowl over pre-cooked chicken; fresh salad-style format doesn\u0027t batch-scale or reheat as a meal-prep dinner despite strong 455cal/48p macros.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:29"
+                   },
+                   {
+                       "key":  "chicken|any|plain",
+                       "slug":  "copycat-panera-frontega-chicken-panini",
+                       "name":  "Copycat Panera Frontega Chicken Panini",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Chipotle-mayo chicken panini on focaccia is a toasted sandwich that doesn\u0027t hold up as a batch-cooked, reheatable meal-prep dinner.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:40:30"
+                   },
+                   {
+                       "key":  "beef|stew|tomato",
+                       "slug":  "instant-pot-chili-mac",
+                       "name":  "Instant Pot Chili Mac",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live beef-chili-mac: ground beef, chili spice, macaroni, kidney beans, cheddar, tomato — no distinguishing plate.",
+                       "dupe_of":  [
+                                       "beef-chili-mac"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:29"
+                   },
+                   {
+                       "key":  "turkey|skillet|plain",
+                       "slug":  "creamy-one-pot-ground-turkey-pasta",
+                       "name":  "One-Pot Ground Turkey Pasta",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live creamy-ground-turkey-shell-pasta; creamy tomato turkey shells with parmesan/heavy cream, saturated region.",
+                       "dupe_of":  [
+                                       "creamy-ground-turkey-shell-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:30"
+                   },
+                   {
+                       "key":  "turkey|casserole|plain",
+                       "slug":  "one-pan-sloppy-joe-casserole",
+                       "name":  "One-Pan Sloppy Joe Casserole",
+                       "protein":  "turkey",
+                       "method":  "casserole",
+                       "verdict":  "accepted",
+                       "reason":  "Biscuit-topped sloppy-joe bake; distinct starch (bread) and casserole format vs live sloppy-joe bowls, verified 46g protein band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:31"
+                   },
+                   {
+                       "key":  "turkey|any|plain",
+                       "slug":  "cheesy-ground-turkey-pasta",
+                       "name":  "Ground Turkey Pasta",
+                       "protein":  "turkey",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live turkey-ragu-pasta: ground turkey, marinara, penne, mozzarella/parmesan — heavily saturated turkey-marinara-pasta region.",
+                       "dupe_of":  [
+                                       "turkey-ragu-pasta",
+                                       "turkey-meatball-marinara-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:32"
+                   },
+                   {
+                       "key":  "turkey|stew|tomato",
+                       "slug":  "turkey-chili-mac-and-cheese",
+                       "name":  "Turkey Chili Mac and Cheese",
+                       "protein":  "turkey",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live turkey-chili-mac; ground turkey chili macaroni with kidney beans and cheddar.",
+                       "dupe_of":  [
+                                       "turkey-chili-mac"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:33"
+                   },
+                   {
+                       "key":  "turkey|stew|tomato",
+                       "slug":  "easy-and-healthy-chili-mac",
+                       "name":  "Easy and Healthy Chili Mac",
+                       "protein":  "turkey",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same dinner as live turkey-chili-mac; ground turkey chili elbow pasta with pinto beans and cheddar.",
+                       "dupe_of":  [
+                                       "turkey-chili-mac"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:34"
+                   },
+                   {
+                       "key":  "beef|skillet|cream",
+                       "slug":  "high-protein-creamy-beef-pasta",
+                       "name":  "High Protein Creamy Beef Pasta",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Creamy tomato ground-beef pasta = same plate as live cheesy-beef-and-shells-casserole; matches prior beef|skillet|cream dupe ruling, saturated creamy-beef-pasta region.",
+                       "dupe_of":  [
+                                       "cheesy-beef-and-shells-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:35"
+                   },
+                   {
+                       "key":  "chicken|skillet|herb",
+                       "slug":  "high-protein-pesto-pasta-with-chicken",
+                       "name":  "High Protein Pesto Pasta with Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Pesto chicken pasta; distinct sauce family absent from catalog and from in-flight pesto couscous/sheet-pan dishes, verified 50g protein 30g carb band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:36"
+                   },
+                   {
+                       "key":  "beef|casserole|plain",
+                       "slug":  "mexican-ground-beef-casserole-with-rice",
+                       "name":  "Mexican Ground Beef Casserole with Rice",
+                       "protein":  "beef",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Mexican beef-and-rice bake with beans/corn/cheese duplicates live arroz-con-carne-molida (Mexican beef rice) and beef-burrito-bowls; saturated Tex-Mex beef-rice region.",
+                       "dupe_of":  [
+                                       "arroz-con-carne-molida",
+                                       "beef-burrito-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:37"
+                   },
+                   {
+                       "key":  "chicken|skillet|soy",
+                       "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                       "name":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Teriyaki grilled chicken veggie rice bowl; distinct teriyaki sauce vs live orange/sweet-sour/adobo chicken bowls, verified 40g protein 465 cal band.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:42:38"
+                   },
+                   {
+                       "key":  "beef|casserole|spice",
+                       "slug":  "taco-casserole",
+                       "name":  "Taco Casserole",
+                       "protein":  "beef",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef taco casserole (salsa, taco seasoning, tortilla chips, black beans, cheddar/jack, olives, peppers) is the beef twin of live turkey-taco-casserole; identical dinner, only the ground protein differs.",
+                       "dupe_of":  [
+                                       "turkey-taco-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:44:55"
+                   },
+                   {
+                       "key":  "chicken|bake|cream",
+                       "slug":  "creamy-chicken-alfredo-pasta-bake",
+                       "name":  "Creamy Chicken Alfredo Pasta Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken breast in a butter/flour/heavy-cream parmesan alfredo over baked penne; same chicken-alfredo baked-pasta dinner as the accepted chicken-alfredo-lasagna, and a plainer, heavier (588cal/58c) version of it.",
+                       "dupe_of":  [
+                                       "high-protein-chicken-alfredo-lasagna"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:44:56"
+                   },
+                   {
+                       "key":  "chicken|any|soy",
+                       "slug":  "grilled-teriyaki-chicken-kebabs",
+                       "name":  "Grilled Teriyaki Chicken Kebabs",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Soy/brown-sugar/ginger teriyaki chicken breast grilled and served over rice; identical dinner to live Teriyaki Chicken and Rice Bowl and to the accepted teriyaki grilled chicken rice bowls, the kebab format is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "teriyaki-chicken-bowl",
+                                       "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:44:57"
+                   },
+                   {
+                       "key":  "chicken|bake|cream",
+                       "slug":  "high-protein-chicken-alfredo-lasagna",
+                       "name":  "Chicken Alfredo Lasagna",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "High-protein chicken alfredo lasagna with cottage cheese, mozzarella and no-boil sheets; no live alfredo dupe (nearest catalog dishes are tuscan/gnocchi/parmesan, distinct), verified 500cal/31c/43p, chosen over the plainer alfredo penne bake in this batch.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:44:58"
+                   },
+                   {
+                       "key":  "beef|skillet|cheese",
+                       "slug":  "one-pan-cheeseburger-pasta",
+                       "name":  "One Pot Cheeseburger Pasta",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "One-pan ground-beef cheeseburger pasta (shells, cheddar, ketchup/relish/mustard, beef broth) is the same dinner as live cheeseburger-pasta (High-Protein Cheeseburger Pasta).",
+                       "dupe_of":  [
+                                       "cheeseburger-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:44:59"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "chicken-fajita-quinoa-bowls",
+                       "name":  "Chicken Fajita Quinoa Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chili/cumin fajita chicken with peppers and onion over quinoa; same fajita-chicken bowl identity as live fajita-chicken-rice-bowl, quinoa-for-rice is not a distinguishing plate in an already-saturated fajita region.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl",
+                                       "creamy-chicken-fajita-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:45:00"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "chicken-taco-poblano-rice-bowls",
+                       "name":  "Chicken Taco Poblano Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Taco-seasoned chicken with tomato/salsa, corn, poblano over rice with cheddar-jack; same dinner as live slow-cooker-chicken-tacos-rice-bowls, the poblano is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "slow-cooker-chicken-tacos-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:45:01"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "chicken-fajita-skillet-quinoa-bake",
+                       "name":  "Chicken Fajita Skillet Quinoa Bake",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Fajita chicken with poblano/bell peppers and chipotle salsa baked into quinoa with cheese; same fajita-chicken bowl identity as live fajita-chicken-rice-bowl (and the other fajita-quinoa candidate this batch), quinoa bake is not a distinct plate.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl",
+                                       "chicken-fajita-quinoa-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:45:02"
+                   },
+                   {
+                       "key":  "chicken|bake|tomato",
+                       "slug":  "easy-chicken-enchiladas",
+                       "name":  "Easy Chicken Enchiladas",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Red crushed-tomato/chipotle chicken enchiladas in flour tortillas with jack cheese; heavy 681cal band with only 42g protein, no cuisine-spread gain in a saturated Tex-Mex chicken lane already holding a chicken-enchilada (suizas). Distinct sauce from suizas so not a strict dupe, but wrong fit for this high-protein run.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:45:02"
+                   },
+                   {
+                       "key":  "chicken|braised|spice",
+                       "slug":  "slow-cooker-chicken-taco-bowls",
+                       "name":  "Chicken Taco Bowls",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Salsa/chili-cumin chicken breast with black beans and corn over rice with cheddar; same dinner as live slow-cooker-chicken-tacos-rice-bowls, indistinguishable chicken-taco rice bowl.",
+                       "dupe_of":  [
+                                       "slow-cooker-chicken-tacos-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:45:03"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "chicken-taco-rice",
+                       "name":  "Chicken Taco Rice",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken taco rice skillet duplicates live slow-cooker-chicken-taco-rice-bowls (chicken + taco spice + rice + beans + cheddar); cooking-method swap does not make a new dinner.",
+                       "dupe_of":  [
+                                       "slow-cooker-chicken-tacos-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:53"
+                   },
+                   {
+                       "key":  "chicken|skillet|cheese",
+                       "slug":  "broccoli-cheddar-chicken-and-rice",
+                       "name":  "Broccoli Cheddar Chicken Rice",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same broccoli + cheddar cheese-sauce + rice one-pot as live ground-turkey-broccoli-cheddar-rice-skillet, only protein differs; a cross-protein re-plating, not a distinct dinner.",
+                       "dupe_of":  [
+                                       "ground-turkey-broccoli-cheddar-rice-skillet"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:54"
+                   },
+                   {
+                       "key":  "beef|casserole|cheese",
+                       "slug":  "cheeseburger-casserole",
+                       "name":  "Cheeseburger Casserole (Homemade Hamburger Helper)",
+                       "protein":  "beef",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cheeseburger/hamburger-helper beef-pasta-tomato-cheddar dinner duplicates the accepted healthy-hamburger-helper; casserole vs skillet is a format re-plating.",
+                       "dupe_of":  [
+                                       "healthy-hamburger-helper"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:55"
+                   },
+                   {
+                       "key":  "beef|skillet|cheese",
+                       "slug":  "ground-beef-cottage-cheese-bowl",
+                       "name":  "Ground Beef Cottage Cheese Bowl",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Distinct high-protein bowl: taco-spiced ground beef on roasted sweet potato with cottage cheese; sweet-potato base and cottage-cheese assembly separate it from the rice/tortilla Tex-Mex beef dishes, verified 559/47/46.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:56"
+                   },
+                   {
+                       "key":  "turkey|bake|plain",
+                       "slug":  "baked-ziti-with-ricotta-and-ground-turkey",
+                       "name":  "Baked Ziti with Ricotta and Ground Turkey",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Same ground-turkey + marinara + ricotta baked ziti as live baked-ziti-with-ground-turkey-and-ricotta; a direct duplicate, saturated region.",
+                       "dupe_of":  [
+                                       "baked-ziti-with-ground-turkey-and-ricotta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:56"
+                   },
+                   {
+                       "key":  "beef|stew|plain",
+                       "slug":  "lasagna-soup",
+                       "name":  "Lasagna Soup",
+                       "protein":  "beef",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Beef lasagna soup duplicates live turkey-lasagna-soup (same lasagna-noodle marinara soup with ricotta/mozzarella); protein swap does not make a new dinner.",
+                       "dupe_of":  [
+                                       "turkey-lasagna-soup"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:57"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "high-protein-ground-beef-taco-bowl",
+                       "name":  "High Protein Ground Beef Taco Bowl",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground beef + beans + salsa + cheese + rice taco bowl duplicates live high-protein-beef-burrito-bowls; deepens an already-dense Tex-Mex beef rice-bowl lane.",
+                       "dupe_of":  [
+                                       "beef-burrito-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:58"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "lightened-up-marry-me-chicken-pasta-with-cottage-cheese",
+                       "name":  "Lightened Up Marry Me Chicken Pasta with Cottage Cheese",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Marry Me / creamy sun-dried-tomato chicken pasta duplicates live slow-cooker-tuscan-chicken-pasta; cottage-cheese lightening of the same Tuscan-cream chicken sauce is not a distinct plate.",
+                       "dupe_of":  [
+                                       "slow-cooker-tuscan-chicken-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:46:59"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "cottage-cheese-chicken-alfredo",
+                       "name":  "Cottage Cheese Chicken Alfredo Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken + cottage-cheese alfredo cream + pasta duplicates the alfredo-chicken identity of the accepted high-protein-chicken-alfredo-lasagna; skillet vs baked is a format re-plating in a saturated creamy-chicken-pasta lane.",
+                       "dupe_of":  [
+                                       "high-protein-chicken-alfredo-lasagna"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:47:00"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "ground-beef-fajitas",
+                       "name":  "Ground Beef Fajitas",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef fajita filling (Tex-Mex spice + peppers/onions in tortillas) is the same flavour family as live loaded-beef-taco-skillet-bowls; tortilla vehicle re-plates the saturated ground-beef Tex-Mex skillet lane.",
+                       "dupe_of":  [
+                                       "loaded-beef-taco-skillet-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:47:01"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "taco-spaghetti",
+                       "name":  "Taco Spaghetti",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef taco-seasoned tomato pasta duplicates live cheesy-taco-spaghetti on all four axes (beef + taco/tomato + pasta + skillet); high-protein cottage-cheese swap is formulation, not a distinct plate.",
+                       "dupe_of":  [
+                                       "cheesy-taco-spaghetti"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:51"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "high-protein-beef-stroganoff",
+                       "name":  "High Protein Beef Stroganoff",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef mushroom stroganoff over egg noodles duplicates live ground-beef-stroganoff-pasta; cottage-cheese substitution for sour cream does not change the dinner.",
+                       "dupe_of":  [
+                                       "ground-beef-stroganoff-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:52"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "high-protein-marry-me-chicken-pasta",
+                       "name":  "Marry Me Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Sun-dried-tomato parmesan-cream chicken pasta with spinach is the Tuscan-chicken identity already live as slow-cooker-tuscan-chicken-pasta; cottage-cheese/chickpea-pasta swaps are macro re-plating.",
+                       "dupe_of":  [
+                                       "slow-cooker-tuscan-chicken-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:53"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "creamy-garlic-chicken-pasta",
+                       "name":  "Creamy Garlic Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Garlic-parmesan cream chicken pasta (essentially chicken alfredo); saturated creamy-chicken lane, adds no cuisine spread or distinct plate.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:53"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                       "name":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "accepted",
+                       "reason":  "Lemon-forward penne + chicken + artichoke + pea + Boursin dump-and-bake; distinct from the creamy spinach-artichoke chicken casserole, verified 503cal/52c/49p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:54"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "sheet-pan-pork-tenderloin-and-potatoes",
+                       "name":  "Sheet Pan Pork Tenderloin and Potatoes",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Sheet-pan pork tenderloin with roasted potatoes duplicates live sheet-pan-pork-tenderloin-potatoes-green-beans; glaze and side vegetable differences do not make a new dinner.",
+                       "dupe_of":  [
+                                       "sheet-pan-pork-tenderloin-potatoes-green-beans"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:55"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "homemade-hamburger-helper",
+                       "name":  "Homemade Hamburger Helper",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef cheddar elbow-pasta hamburger-helper skillet duplicates healthy-hamburger-helper accepted the same run; carrots and Greek-yogurt tweak do not distinguish the plate.",
+                       "dupe_of":  [
+                                       "healthy-hamburger-helper"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:56"
+                   },
+                   {
+                       "key":  "beef|braised|plain",
+                       "slug":  "instant-pot-meatloaf-mashed-potatoes",
+                       "name":  "Instant Pot Meatloaf \u0026 Mashed Potatoes",
+                       "protein":  "beef",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "BBQ-glazed meatloaf over mashed potatoes duplicates live turkey-meatloaf-with-mashed-potatoes; ground beef vs turkey is a protein swap of the same glazed-meatloaf dinner.",
+                       "dupe_of":  [
+                                       "turkey-meatloaf-with-mashed-potatoes"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:57"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-rice-and-broccoli",
+                       "name":  "Healthy Chicken, Rice and Broccoli Skillet",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Plain one-pan chicken + white rice + broccoli in stock with parmesan/herbs; no live dupe (distinct from turkey-cheddar broccoli-rice skillet and sauced chicken-rice bowls), verified 480cal/46c/47p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:58"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "buffalo-chicken-rice-bowls",
+                       "name":  "Buffalo Chicken Rice Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Buffalo chicken + black bean + brown rice + cheddar bowl; buffalo-chicken lane already dense (burrito, pasta-bake, slow-cooker bowl), non-widening rice-bowl re-plating.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:48:58"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "moroccan-chicken-couscous-bowl",
+                       "name":  "Moroccan Chicken Couscous Bowl",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Moroccan-spiced tomato-paste chicken over couscous with cucumber/tomato/yogurt; distinct North-African plate with no live or backlog couscous-chicken dupe, widens cuisine spread, verified 497cal/47c/47p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:35"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "high-protein-pasta",
+                       "name":  "High Protein Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cottage-cheese/parmesan creamy sun-dried-tomato chicken pasta with spinach and basil; same Tuscan/Marry-Me creamy-sun-dried-tomato chicken pasta dinner as live slow-cooker-tuscan-chicken-pasta, high-protein sauce swap is not a distinguishing plate in a saturated chicken-cream-pasta lane.",
+                       "dupe_of":  [
+                                       "slow-cooker-tuscan-chicken-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:36"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "high-protein-peanut-chicken-noodle-bowl",
+                       "name":  "High-Protein Peanut Chicken Noodle Bowl",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Peanut-butter/soy/lime chicken with peppers, slaw and noodles; same peanut-chicken dinner as live slow-cooker-thai-peanut-chicken-bowls (noodle-vs-rice not distinguishing), saturated peanut-chicken region.",
+                       "dupe_of":  [
+                                       "slow-cooker-thai-peanut-chicken-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:37"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-cordon-bleu-pasta",
+                       "name":  "Chicken Cordon Bleu Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken with ham, Swiss, Dijon-cream and panko over egg noodles; same cordon-bleu dinner as live chicken-cordon-bleu-casserole, skillet-pasta vs casserole is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "chicken-cordon-bleu-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:38"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-fried-rice",
+                       "name":  "Chicken Fried Rice",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken, egg, mixed-veg, soy fried rice; identical dish to live chicken-fried-rice-skillet on all four axes.",
+                       "dupe_of":  [
+                                       "chicken-fried-rice-skillet"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:39"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "one-pot-chicken-pasta",
+                       "name":  "One Pot Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Generic creamy-tomato chicken penne with parmesan/mozzarella; non-distinct in a saturated live chicken-tomato/cream pasta lane (chicken-parmesan-pasta, tuscan, cacciatore), adds no novelty and does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:39"
+                   },
+                   {
+                       "key":  "chicken|skillet|bbq",
+                       "slug":  "bbq-chicken-quesadilla",
+                       "name":  "BBQ Chicken Quesadilla",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "BBQ chicken with cheddar in a tortilla; same dinner as live bbq-chicken-burrito, folded-vs-rolled tortilla is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "bbq-chicken-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:40"
+                   },
+                   {
+                       "key":  "chicken|bake|bbq",
+                       "slug":  "bbq-chicken-bowls",
+                       "name":  "BBQ Chicken Bowls",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "BBQ chicken over rice with sweet potato and black-bean-corn salad; same BBQ-chicken-rice-bowl dinner as live bbq-chicken-rice-bowls, region already doubled with slow-cooker-bbq-pulled-chicken-bowls.",
+                       "dupe_of":  [
+                                       "bbq-chicken-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:41"
+                   },
+                   {
+                       "key":  "chicken|skillet|herb",
+                       "slug":  "pesto-chicken-orzo",
+                       "name":  "Pesto Chicken Orzo",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Pesto chicken with orzo; same pesto-chicken-pasta dinner as high-protein-pesto-pasta-with-chicken accepted this run, orzo-vs-pasta is not a distinguishing plate.",
+                       "dupe_of":  [
+                                       "high-protein-pesto-pasta-with-chicken"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:42"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "chicken-fajita-rice-bowl",
+                       "name":  "Chicken Fajita Rice Bowls (One Pan)",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chili-cumin fajita chicken with peppers, black beans, rice and cheese; same dish as live fajita-chicken-rice-bowl in an already-saturated Tex-Mex fajita-chicken lane.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:50:43"
+                   },
+                   {
+                       "key":  "beef|skillet|plain",
+                       "slug":  "burrito-bowl",
+                       "name":  "Burrito Bowls",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-beef taco burrito bowl (taco seasoning, cilantro-lime rice, black beans, corn, sour cream, avocado); duplicates live beef-burrito-bowls on protein+Tex-Mex flavor+rice+skillet.",
+                       "dupe_of":  [
+                                       "beef-burrito-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:51:37"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "stovetop-chicken-broccoli-and-rice-casserole",
+                       "name":  "Stovetop Chicken Broccoli and Rice Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken breast, white rice, broccoli, chicken broth and parmesan/asiago/mozzarella; same chicken-rice-broccoli dinner as accepted chicken-rice-and-broccoli, cheese-and-stovetop framing does not distinguish the plate.",
+                       "dupe_of":  [
+                                       "chicken-rice-and-broccoli"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:51:38"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "street-corn-chicken-rice-bowls",
+                       "name":  "Street Corn Chicken Rice Bowl",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Chili-lime chicken over cilantro-lime rice with an elote/street-corn topping (cotija, Greek yogurt, lime); distinct street-corn flavor not in catalog, separate from fajita/buffalo/harissa chicken bowls, verified 553cal/57c/45p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:51:39"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "cowboy-chicken",
+                       "name":  "Cowboy Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Baked chicken breast over black beans with Mexican corn, fire-roasted tomatoes, green chiles and pepper jack; same Tex-Mex baked-chicken-and-bean bake as accepted tex-mex-baked-chicken, differing only in corn/chile vs enchilada sauce.",
+                       "dupe_of":  [
+                                       "tex-mex-baked-chicken"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T11:51:40"
                    }
                ]
 }

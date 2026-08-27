@@ -1,0 +1,136 @@
+{
+ "name": "Ground Beef Cottage Cheese Bowl",
+ "slug": "ground-beef-cottage-cheese-bowl",
+ "protein": "beef",
+ "cuisine": "Tex-Mex",
+ "source_url": "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Sweet Potatoes",
+   "grams": 1213,
+   "buy": "9 medium (about 2 3/4 lb), cut into 1/2-inch cubes"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 157,
+   "buy": "7 tbsp; 4 2/3 tbsp"
+  },
+  {
+   "item": "Salt",
+   "grams": 28,
+   "buy": "2 1/3 tsp kosher salt for the potatoes; 2 1/3 tsp for the beef"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 6,
+   "buy": "1 1/4 tsp ground for the potatoes; 1 1/4 tsp for the beef"
+  },
+  {
+   "item": "93/7 Ground Beef",
+   "grams": 2117,
+   "buy": "4 2/3 lb (93/7)"
+  },
+  {
+   "item": "Red Onion",
+   "grams": 513,
+   "buy": "4 2/3 medium, diced"
+  },
+  {
+   "item": "Tomato Paste",
+   "grams": 75,
+   "buy": "5 tbsp"
+  },
+  {
+   "item": "Chili Powder",
+   "grams": 37,
+   "buy": "4 2/3 tbsp"
+  },
+  {
+   "item": "Ground Cumin",
+   "grams": 10,
+   "buy": "4 2/3 tsp"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 7,
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "item": "Cottage Cheese",
+   "grams": 791,
+   "buy": "3 1/2 cups"
+  },
+  {
+   "item": "Hot Honey",
+   "grams": 98,
+   "buy": "5 tbsp, for drizzling"
+  },
+  {
+   "item": "Avocado",
+   "grams": 467,
+   "buy": "3 medium, sliced"
+  },
+  {
+   "item": "Red Pepper Flakes",
+   "grams": 5,
+   "buy": "2 1/2 tsp, to taste"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 550,
+  "protein_g": 41.7,
+  "carbs_g": 33.6,
+  "fat_g": 28.9
+ },
+ "writer_notes": [
+  "Band verified from locked view: 550 cal (within 450-800) and 41.7 g protein (>= 40). Carb source is roasted sweet potato at 33.6 g. Protein is 93/7 ground beef. All run conditions satisfied.",
+  "Ingredient-vs-step reconciliation done: all 14 bought lines are used by a step; no orphaned ingredients and none invented. The 17 transcribed lines collapse to 14 via merged olive oil, salt, and pepper entries.",
+  "REPAIRED 2026-08-27 (source-QA finding, display-text only): the source lists salt and black pepper TWICE (1/2 tsp + 1/2 tsp salt, 1/4 tsp + 1/4 tsp pepper), once for the potatoes and once for the beef. The consolidated lines summed the GRAMS correctly but displayed the scaled quantity of only ONE occurrence, so a reader measuring by the label seasoned at half the source rate. Both lines now show BOTH occurrences in the same form the Olive Oil line already used and QA passed: salt '2 1/3 tsp for the potatoes; 2 1/3 tsp for the beef' (4 2/3 tsp total = 1 tsp source x 4.6667 = 28 g at 6 g/tsp, matching the stated grams exactly), pepper '1 1/4 tsp for the potatoes; 1 1/4 tsp for the beef' (2 1/2 tsp total = 6 g at 2.3 g/tsp). Stating the sum as one number instead was tried and rejected: the QA battery's scale-ratio check reads a line's head quantity against ONE source occurrence, so a summed '4 2/3 tsp' scores 9.33x and fails. No gram figure, macro or cost moved.",
+  "Minor note: '9 medium (about 2 3/4 lb)' sweet potatoes is slightly light per potato (~4.9 oz each) but within normal medium range.",
+  "No cost_lines were provided in this dispatch, so shop_smart deliberately makes no per-package price claim. Only money in prose is the ${{cost_ps}} token and the standard $1/month membership line.",
+  "Cost, calorie, and protein figures written as tokens (${{cost_ps}}, {{cal}}, {{protein}}) per templating rule; buy quantities cited in prose (9 sweet potatoes, 4 2/3 lb beef, 3 1/2 cups cottage cheese, 3 avocados) are drawn from the locked view."
+ ],
+ "forbidden_prose_terms": [
+  "wellplated",
+  "—",
+  "–",
+  "rice",
+  "quinoa",
+  "beans",
+  "tortilla",
+  "sour cream",
+  "salsa",
+  "cheddar",
+  "lettuce",
+  "cheap",
+  "per ounce",
+  "per pound price"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is a bowl that does not ask you to choose between eating well and eating cheap. Chili-spiced ground beef, roasted sweet potatoes, a cool scoop of cottage cheese, sliced avocado, and a drizzle of hot honey to tie the room together. It reads like a fussy cafe order and cooks like a Tuesday.</p><p>The math is the reason it earns a spot in the rotation. Every container lands at {{cal}} calories with {{protein}} grams of protein, and the carbs come from real roasted sweet potato, not an empty side you forgot about. That is the whole point of meal prep done right: you build the container once, the numbers hold all week, and you stop paying restaurant prices to hit your protein.</p>",
+  "shop_smart": "<p>Buy the ground beef as your anchor. This batch runs on 4 2/3 pounds of 93/7, so grab the biggest value pack you can and portion the rest into the freezer if you have extra. Leaner ground beef keeps the fat honest and lets the cottage cheese and avocado do the richness for you.</p><p>Sweet potatoes are cheapest by the bag, and you want about 2 3/4 pounds, which is roughly 9 medium. Pick ones close in size so they roast at the same rate; a wildly big one next to a small one means half your cubes finish early. A large tub of cottage cheese covers the 3 1/2 cups this needs with room to spare for breakfast.</p><p>The finishers stretch a long way. Three avocados, a bottle of hot honey, and a jar of red pepper flakes season all 14 bowls, so do not overbuy. One red onion times five, tomato paste, chili powder, cumin, and garlic powder round it out, and most of those are already in your pantry earning their keep.</p>",
+  "make_it": "<p>Start the sweet potatoes, because they take the longest and everything else waits on nothing. If you are roasting, heat the oven to 400 degrees. Toss your cubed sweet potatoes with olive oil, salt, and pepper, then spread them in an even layer on a rimmed sheet pan. Roast 15 to 20 minutes, flipping halfway, until they are tender and browning at the edges. Air fryer folks skip the preheat, load the basket, and go 12 minutes at 400, shaking a few times.</p><p>While they cook, brown the beef. Heat a large skillet over medium-high, add the olive oil, and once it shimmers add the ground beef and diced red onion along with the tomato paste, chili powder, cumin, garlic powder, salt, and pepper all at once. Break the beef up with a sturdy wooden spoon or a heatproof spatula and keep it moving. About 7 minutes and it is cooked through, the onion is soft, and the spices have bloomed into the meat.</p><p>That is the cooking done. Two pans, half an hour, no babysitting.</p>",
+  "portion_html": "<p>Line up your 14 containers and build in the same order every time so the portions stay even. Make a bed of roasted sweet potatoes on the bottom, then a scoop of the spiced beef on top. The easiest way to keep it fair is to weigh the beef skillet and the potatoes before you start scooping, divide by 14 in your head, and aim for that per container. Eyeballing is how one bowl gets robbed to feed another.</p><p>Cottage cheese, avocado, and hot honey are finishers, not fillers. Portion the 3 1/2 cups of cottage cheese across the bowls now if you are eating them within a couple days, or add it fresh at serving. The 3 avocados and the hot honey are best added the day you eat, sliced avocado browns and a drizzle of honey is a five second job. A pinch of red pepper flakes on top and the container is done.</p>",
+  "cost_closing_html": "<p>Here is where it gets good. All that beef, all that sweet potato, the cottage cheese and the avocado, and this bowl still comes in at ${{cost_ps}} per serving. Try ordering the same plate at a lunch spot and see what the number looks like, then look at the protein you actually got for it.</p><p>That is the quiet win of cooking the batch yourself. You are not paying for a room, a server, or a markup on a scoop of cottage cheese. You are paying for groceries, and groceries are the cheapest they will ever be when you buy them by the pack and cook them once.</p>",
+  "upsell_html": "<p>Fourteen bowls, done in thirty minutes of active work, each one built to hit {{protein}} grams of protein without wrecking the budget. That is a full stretch of dinners you do not have to think about, and a fridge that quietly keeps you on plan while everyone else is deciding what to order.</p><p>If you want more like it, the Thrifty Crew membership runs a dollar a month and hands you the whole playbook of high-protein meal prep priced to the penny. Cook it once, eat it all week, keep the money.</p>"
+ },
+ "head": {
+  "description": "A budget high-protein meal prep bowl with chili-spiced ground beef, roasted sweet potatoes, cottage cheese, avocado, and hot honey. Scales to 14 servings at 40-plus grams of protein each.",
+  "keywords": "ground beef cottage cheese bowl, high protein meal prep, budget meal prep dinner, ground beef sweet potato bowl, cottage cheese high protein, meal prep bowls, 14 serving meal prep, chili beef bowl",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT20M",
+  "totalTime": "PT30M",
+  "steps": [
+   "Roast the sweet potatoes: heat the oven to 400 degrees. Toss the cubed sweet potatoes with olive oil, salt, and pepper, spread in an even layer on a rimmed baking sheet, and roast 15 to 20 minutes, flipping halfway, until tender and browning at the edges. To air fry, skip the preheat, load the basket, and cook 12 minutes at 400 degrees, shaking a few times.",
+   "Brown the beef: heat a large skillet over medium-high and add the olive oil. Once hot, add the ground beef and diced red onion with the tomato paste, chili powder, cumin, garlic powder, salt, and pepper. Break up the beef with a sturdy wooden spoon or heatproof spatula and cook about 7 minutes, until cooked through.",
+   "Assemble the bowls: make a bed of roasted sweet potatoes in each container, top with a scoop of the beef and a scoop of cottage cheese, then finish with sliced avocado, a drizzle of hot honey, and a sprinkle of red pepper flakes."
+  ],
+  "step_names": [
+   "Roast the sweet potatoes",
+   "Brown the seasoned beef",
+   "Build the bowls"
+  ]
+ }
+}

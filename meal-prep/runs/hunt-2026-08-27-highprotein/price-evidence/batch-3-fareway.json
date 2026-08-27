@@ -1,0 +1,151 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-27T12:06:38",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "cotija cheese",
+   "state": "MATCHES",
+   "term_used": "cotija cheese",
+   "attempts": [
+    {
+     "term": "cotija cheese",
+     "state": "OK",
+     "hits": 22
+    }
+   ],
+   "hits": [
+    {
+     "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+     "price": 1.99,
+     "size": "12 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+    },
+    {
+     "item": "Fareway Taco Blend Fancy Shredded Cheese",
+     "price": 2.48,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712408-fareway-cheese-taco-blend-fancy-shredded-8-oz"
+    },
+    {
+     "item": "Fareway Neufchatel Cheese",
+     "price": 1.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20565842-fareway-cheese-neufchatel-8-oz"
+    },
+    {
+     "item": "Crystal Farms Blue Cheese, Crumbled",
+     "price": 2.98,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1516384-crystal-farms-cheese-wisconsin-blue-crumbled-4-oz"
+    },
+    {
+     "item": "Guerrero Tostadas Caseras Amarillas",
+     "price": 2.99,
+     "size": "22 ct",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/203419-guerrero-tostadas-22-ct"
+    },
+    {
+     "item": "Fareway 4% Min Small Curd Cottage Cheese",
+     "price": 7.88,
+     "size": "48 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26544540-fareway-small-curd-4-milkfat-min-cottage-cheese-48-oz"
+    },
+    {
+     "item": "Sargento Gouda Sliced Cheese, 10 slices",
+     "price": 3.99,
+     "size": "7 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/77159-sargento-sliced-gouda-natural-cheese-7-oz"
+    },
+    {
+     "item": "Crystal Farms Cheese, Parmesan, Finely Shredded",
+     "price": 2.67,
+     "size": "5.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27152419-crystal-farms-cf-shredded-parmesan-cheese-5-5-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "red onion",
+   "state": "MATCHES",
+   "term_used": "red onion",
+   "attempts": [
+    {
+     "term": "red onion",
+     "state": "OK",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Red Onion",
+     "price": 1.11,
+     "size": "$1.48 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+    },
+    {
+     "item": "Crazy Fresh Red Onion Diced",
+     "price": 2.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19269233-crazy-fresh-diced-red-onion-each"
+    },
+    {
+     "item": "Mezzetta Pickled Red Onions",
+     "price": 5.97,
+     "size": "16 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27276229-mezzetta-pickled-red-onions-16-fl-oz"
+    },
+    {
+     "item": "Litehouse Herb, Freeze Dried Red Onion",
+     "price": 4.99,
+     "size": "0.6 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151495-litehouse-freeze-dried-red-onion-0-35-oz"
+    },
+    {
+     "item": "Cilantro",
+     "price": 1.49,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+    },
+    {
+     "item": "Green Onions (Scallions)",
+     "price": 0.99,
+     "size": "1 bunch",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+    },
+    {
+     "item": "Cucumber",
+     "price": 0.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345-cucumber-each"
+    },
+    {
+     "item": "Hass Avocado",
+     "price": 0.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

@@ -1,0 +1,292 @@
+﻿{
+    "slug":  "butter-chicken-pasta",
+    "title":  "Butter Chicken Pasta",
+    "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "10.5 oz (300 g) short pasta",
+                            "item":  "Ziti Pasta",
+                            "bid":  "pasta",
+                            "board":  null,
+                            "grams":  1050,
+                            "buy":  "2 lb 5 oz dry short pasta (penne, rigatoni or rotini)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The source names no shape, so the generic dry short-cut pasta id is the honest match rather than rotini specifically; board carries `pasta` 7 of 7 at 0.0571. Source states its own 300 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon (20 g) butter",
+                            "item":  "Butter",
+                            "bid":  "butter",
+                            "board":  "recipe",
+                            "grams":  49,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: butter, 7 of 7 stores, cheapest 2.555 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 lb (450 g) chicken breast, cut into bite-sized pieces",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1575,
+                            "buy":  "3 1/2 lb, cut into bite-sized pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breast\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T13:26:47); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breast | Whole Chicken [whole-chicken] DIFFERENT FORM: breast/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 medium onion, diced",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  385,
+                            "buy":  "3 1/2 medium onions, diced (about 4 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "\u0027Medium\u0027 is a size word: the \u0027medium yellow onion\u0027 -\u003e onions ruling of 2026-08-26 transfers directly, board 7 of 7. Medium onion weighed at 110 g, between the estate\u0027s 70 g small and a large.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 garlic cloves, finely chopped",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "7 cloves, finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027garlic cloves\u0027 -\u003e garlic (by mapper on 2026-08-26T05:08:09); nearest vocabulary rows: Ground Cloves [ground-cloves] DIFFERENT FORM: ground; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon fresh ginger, finely chopped",
+                            "item":  "Ginger",
+                            "bid":  "fresh-ginger",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "3 1/2 tablespoons, finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027fresh ginger\u0027 -\u003e fresh-ginger (by mapper on 2026-08-26T04:52:59); nearest vocabulary rows: Ground Ginger [ground-ginger] DIFFERENT FORM: fresh/ground | Ginger [fresh-ginger] DIFFERENT FORM: fresh",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garam masala",
+                            "item":  "Garam Masala",
+                            "bid":  "garam-masala",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garam-masala, 5 of 7 stores, cheapest 0.9943 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-cumin, 7 of 7 stores, cheapest 0.4321 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground coriander",
+                            "item":  "Ground Coriander",
+                            "bid":  "ground-coriander",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-coriander, 4 of 7 stores, cheapest 0.7331 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon chili powder",
+                            "item":  "Chili Powder",
+                            "bid":  "chili-powder",
+                            "board":  "recipe",
+                            "grams":  9,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chili-powder, 7 of 7 stores, cheapest 0.3462 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon turmeric",
+                            "item":  "Ground Turmeric",
+                            "bid":  "ground-turmeric",
+                            "board":  null,
+                            "grams":  5,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Turmeric measured by the teaspoon is the ground spice jar, not fresh root: not a form flip but a rename, the same call as \u0027ground oregano\u0027 -\u003e dried-oregano. Board 7 of 7; 1/2 tsp ground = 1.5 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon red chili flakes",
+                            "item":  "Red Pepper Flakes",
+                            "bid":  "red-pepper-flakes",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "3/4 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027red chili flakes\u0027 -\u003e red-pepper-flakes (by mapper on 2026-08-26T13:26:55); nearest vocabulary rows: Red Pepper Flakes [red-pepper-flakes] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon tomato paste",
+                            "item":  "Tomato Paste",
+                            "bid":  "tomato-paste",
+                            "board":  "recipe",
+                            "grams":  56,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: tomato-paste, 7 of 7 stores, cheapest 0.1017 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups (400 ml) tomato sauce (passata)",
+                            "item":  "Tomato Sauce",
+                            "bid":  "tomato-sauce",
+                            "board":  "recipe",
+                            "grams":  1715,
+                            "buy":  "7 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: tomato-sauce, 7 of 7 stores, cheapest 0.0489 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons almond butter",
+                            "item":  "Almond Butter",
+                            "bid":  "almond-butter",
+                            "board":  null,
+                            "grams":  112,
+                            "buy":  "7 tablespoons (a scant 1/2 cup)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REFUSED both near rows: the board\u0027s `butter` match is dairy butter (a wrong-food match) and peanut-butter is a different nut at roughly a third of the price. No estate id names an almond spread, so it goes to the registrar. 2 tbsp = 32 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup (200 ml) half and half (single cream)",
+                            "item":  "Half and Half",
+                            "bid":  "half-and-half",
+                            "board":  "recipe",
+                            "grams":  707,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The table computed no weight for this line; 200 ml at 1.01 g/ml = 202 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "A handful fresh cilantro (coriander)",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  "recipe",
+                            "grams":  25,
+                            "buy":  "1 1/2 cups leaves, roughly chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cilantro, 6 of 7 stores, cheapest 0.89 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Salt and freshly ground black pepper to taste [split: Salt]",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  15,
+                            "buy":  "to taste (about 2 1/2 teaspoons)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Re-weighed: the table\u0027s 20 g source basis becomes 70 g at 3.5x, five times the estate\u0027s published to-taste salt.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "Salt and freshly ground black pepper to taste [split: freshly ground black pepper]",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "to taste (about 1 3/4 teaspoons)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Re-weighed for the same reason: 4 g source would be 14 g at batch against a 4 g precedent.",
+                            "grams_from":  "line"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "almond butter"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Almond Butter"
+                           ],
+    "db_row_findings":  [
+                            "butter-chicken-pasta: the food DB already carries \u0027Ziti Pasta\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 357.1 cal / 12.5 P / 75.0 C / 1.8 F  vs  mapper 371.0 / 13.0 / 74.7 / 1.5. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 2/3 cup (56g) dry = 56 g) they still disagree: calories 207.8 vs 200. existing={\"serving_grams\": 56, \"serving_qty\": 1, \"serving_unit\": \"2/3 cup (56g) dry\", \"calories\": 200, \"protein_g\": 7, \"carbs_g\": 42, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 371, \"protein_g\": 13.0, \"carbs_g\": 74.7, \"fat_g\": 1.51}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "almond butter",
+                                        "proposed_bid":  "almond-butter",
+                                        "evidence":  "A nut spread sold in the nut-butter aisle at roughly three times peanut butter per jar, and nutritionally distinct (614 cal, 21 g protein, 55.5 g fat per 100 g). The only near ids are `butter` (dairy, an outright wrong food that the board\u0027s matcher offered) and `peanut-butter` (a different nut and a different price class), so no existing id prices this food under another spelling. Not a form flip of anything: there is no other almond spread on the board.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "almond-butter",
+                                  "verdict":  "approve",
+                                  "bid":  "almond-butter",
+                                  "reason":  "Not priced anywhere: the live feed contains zero \u0027almond butter\u0027 strings under any id, and no row in commodities.json, recipe-commodities.json, the recipe-board baseline, or recipe-floor-id-map.json carries an almond spread. The estate already treats it as a distinct food — dairy \u0027butter\u0027 has an explicit almond\\s+butter exclude (commodities.json line 1373) and \u0027almonds\u0027 excludes \u0027butter\u0027, so both neighbors deliberately refuse these products; \u0027peanut-butter\u0027 is a different nut and price class (variant boundary, not a respelling). Mint almond-butter as recipe-only (recipe-board baseline + recipe-commodities.json) unless Brad promotes it to the weekly worklist. Prescription: include [\u0027almond\\s+butter\u0027]; build the exclude list to neighbor rigor — at minimum cookie/cookie butter, body butter, powdered, baby-food brands (beech nut, gerber, stage 1-3), candy/chocolate/bar, granola, protein bar, spread blends, flavored coffee/creamer — model on peanut-butter\u0027s list. Add commodity-dupe-allowlist.json pairs (almond-butter, butter: \u0027nut spread vs dairy, different foods\u0027) and (almond-butter, peanut-butter: \u0027different nut, deliberate variant\u0027) so audit-commodity-dupes.ps1 never re-flags the shared \u0027butter\u0027 token. Separately on the NAME namespace: the vocabulary has no Almond Butter row (nearest are Peanut Butter and Butter, neither of which this resolves to), so a new vocabulary row \u0027Almond Butter\u0027 is needed too — FDC 168603 (almond butter, plain, with salt) is the plausible macros source but that row must be minted through the vocabulary path, not as a side effect of this id ruling."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u0027A handful fresh cilantro (coriander)\u0027: the qty engine could not ground this weight (no-qty-\u003eserve-default), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027Salt and freshly ground black pepper to taste [split: Salt]\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027Salt and freshly ground black pepper to taste [split: freshly ground black pepper]\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Source published 542 cal / 46 protein for 4 servings. Recomputed over all 20 lines at source basis: 2561 cal and 162 g protein total, i.e. 640 cal and 40.6 g protein per serving. Protein is -11.7% against the source, inside the 15% band but the tightest of this batch, and it sits barely above this run\u0027s 40 g floor - flagging that loudly, because any downward revision of the 450 g chicken breast or the DB\u0027s 25 g protein per 4 oz row would drop it under. Calories run +18%, driven by US half-and-half (202 g) standing in for the source\u0027s single cream and by dry-pasta basis. Both numbers land inside the run band of 450-800 cal and \u003e=40 g protein."
+}

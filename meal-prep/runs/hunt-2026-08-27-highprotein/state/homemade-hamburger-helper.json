@@ -1,0 +1,31 @@
+{
+    "slug":  "homemade-hamburger-helper",
+    "title":  "Homemade Hamburger Helper",
+    "source_url":  "https://www.wellplated.com/homemade-hamburger-helper/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:48:55",
+    "updated":  "2026-08-27T11:48:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cheesy ground-beef-and-elbow-pasta one-pot with cheddar and Greek yogurt is the same dinner as healthy-hamburger-helper already accepted earlier in this run; word-overlap missed it but it is the exact hamburger-helper collision.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:55",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/homemade-hamburger-helper/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:48:56",
+                        "by":  "decider",
+                        "detail":  "Cheesy ground-beef-and-elbow-pasta one-pot with cheddar and Greek yogurt is the same dinner as healthy-hamburger-helper already accepted earlier in this run; word-overlap missed it but it is the exact hamburger-helper collision."
+                    }
+                ]
+}

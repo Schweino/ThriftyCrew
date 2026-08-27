@@ -1,0 +1,311 @@
+{
+ "slug": "street-corn-chicken-rice-bowls",
+ "lines": [
+  {
+   "raw": "1.25-1.5 lbs boneless (skinless chicken breasts, cut into 1-inch chunks)",
+   "buy": "4 3/4 lb, cut into 1-inch chunks",
+   "notes": "Settled line. 156 g raw per serving, in line with the catalog's chicken-breast average."
+  },
+  {
+   "raw": "1 Tablespoon olive oil",
+   "buy": "3 1/2 tablespoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "1 teaspoon chili powder",
+   "buy": "3 1/2 teaspoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "½ teaspoon sea salt",
+   "buy": "1 3/4 teaspoons",
+   "grams_source": 3,
+   "notes": "Corn-salad salt. 6 g/tsp, matching the settled Salt row (1/4 tsp = 1.5 g)."
+  },
+  {
+   "raw": "½ teaspoon ground cumin",
+   "buy": "1 3/4 teaspoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "½ teaspoon smoked paprika",
+   "buy": "1 3/4 teaspoons",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "¼ teaspoon garlic powder",
+   "buy": "1 scant teaspoon",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "¼ teaspoon onion powder",
+   "buy": "1 scant teaspoon",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "2 cups cooked corn (I used canned and drained )",
+   "buy": "7 cups, drained",
+   "grams_source": 328,
+   "notes": "Drained canned corn at 164 g/cup, the basis the Del Monte can's 3.5 servings against its drained weight gives."
+  },
+  {
+   "raw": "½ cup plain Greek yogurt (I used 2%)",
+   "buy": "1 3/4 cups",
+   "grams_source": 122,
+   "notes": "245 g/cup Greek yogurt."
+  },
+  {
+   "raw": "3 Tablespoons cotija cheese",
+   "buy": "2/3 cup crumbled",
+   "grams_source": 21,
+   "notes": "Crumbled cotija at 7 g/tbsp (1/4 cup = 28 g, the existing DB row's basis)."
+  },
+  {
+   "raw": "2 Tablespoons avocado oil mayonnaise",
+   "buy": "7 tablespoons",
+   "grams_source": 28,
+   "notes": "13.8 g/tbsp. Built with ordinary mayonnaise; the avocado-oil brand is a variant of the same food."
+  },
+  {
+   "raw": "Juice + zest of 1 lime",
+   "buy": "juice and zest of 3 1/2 limes",
+   "grams_source": 31,
+   "notes": "About 30 g juice plus 1 g zest from one lime."
+  },
+  {
+   "raw": "1 jalapeño (finely diced, optional )",
+   "buy": "3 1/2 jalapenos, finely diced (optional)",
+   "grams_source": 14,
+   "notes": "14 g per pepper, the USDA per-pepper portion."
+  },
+  {
+   "raw": "2–3 Tablespoons chopped cilantro",
+   "buy": "1/2 cup chopped",
+   "grams_source": 2.5,
+   "notes": "Midpoint of 2-3 tbsp at 1 g/tbsp, the settled cilantro line's own basis."
+  },
+  {
+   "raw": "¼ teaspoon salt",
+   "buy": "1 scant teaspoon",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "2 cups water",
+   "buy": "7 cups",
+   "grams_source": 473,
+   "notes": "Tap water for the rice: printed because it goes in the pot, but nothing is bought."
+  },
+  {
+   "raw": "1 cup long-grain white rice",
+   "buy": "3 1/2 cups uncooked",
+   "grams_source": 185,
+   "notes": "185 g per cup dry long-grain white rice."
+  },
+  {
+   "raw": "1 teaspoon sea salt",
+   "buy": "3 1/2 teaspoons",
+   "grams_source": 6,
+   "notes": "Rice-cooking salt, 6 g/tsp."
+  },
+  {
+   "raw": "3 Tablespoons chopped fresh cilantro",
+   "buy": "2/3 cup chopped",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "2 Tablespoons fresh lime juice",
+   "buy": "7 tablespoons",
+   "grams_source": 30,
+   "notes": "15 g/tbsp lime juice."
+  },
+  {
+   "raw": "1 teaspoon lime zest (or to taste)",
+   "buy": "3 1/2 teaspoons",
+   "grams_source": 2,
+   "notes": "2 g/tsp finely grated zest."
+  },
+  {
+   "raw": "1 avocado (cubed)",
+   "buy": "3 1/2 avocados, cubed",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "Pickled red onions or fresh red onions (chopped)",
+   "buy": "1 cup sliced, for topping",
+   "grams_source": 30,
+   "notes": "Source never quantified this topping; 30 g at source scale is about a quarter of a small red onion per 4 servings."
+  },
+  {
+   "raw": "Cilantro",
+   "buy": "1 1/2 cups leaves, for topping",
+   "notes": "Settled line."
+  },
+  {
+   "raw": "Cotija cheese",
+   "buy": "1/2 cup crumbled, for topping",
+   "grams_source": 15,
+   "notes": "Unquantified garnish sprinkle, weighed at about 1 tbsp per serving at source scale."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "½ teaspoon sea salt",
+   "term": "sea salt",
+   "canon_item": "Sea Salt",
+   "bid": "sea-salt",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "REUSE of the live board id `sea-salt` (5 of 7 stores, cheapest 0.1106 at Sam's Club) which names exactly this food; only a vocabulary name row is missing, which is a naming question and not a registrar one. Not bridged onto `salt`, whose price class and grind differ."
+  },
+  {
+   "raw": "2 cups cooked corn (I used canned and drained )",
+   "term": "cooked corn",
+   "canon_item": "Sweet Whole Kernel Corn",
+   "bid": "canned-corn",
+   "decision": "mapped",
+   "grams_source": 328,
+   "evidence": "The source line itself says 'I used canned and drained', so the vocabulary's Sweet Whole Kernel Corn [canned-corn] is the same food and the 'cooked' form flag is spurious - canned corn is sold cooked. Existing vocabulary id, a reuse."
+  },
+  {
+   "raw": "½ cup plain Greek yogurt (I used 2%)",
+   "term": "plain Greek yogurt",
+   "canon_item": "Greek Yogurt",
+   "bid": "greek-yogurt",
+   "decision": "mapped",
+   "grams_source": 122,
+   "evidence": "Exact vocabulary match (Plain Yogurt and Greek Yogurt both carry [greek-yogurt]), same form. The board's `yogurt` match is regular yogurt, a different price class, so I used the vocabulary's id."
+  },
+  {
+   "raw": "3 Tablespoons cotija cheese",
+   "term": "cotija cheese",
+   "canon_item": "Cotija Cheese",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 21,
+   "evidence": "Board ABSENT: no commodity and no capture match. Ricotta, provolone and parmesan are different cheeses at different price classes, so no bridge is available; pantry-static pricing on 21 g is safe and the term is reported for pricing."
+  },
+  {
+   "raw": "2 Tablespoons avocado oil mayonnaise",
+   "term": "avocado oil mayonnaise",
+   "canon_item": "Mayonnaise",
+   "bid": "mayonnaise",
+   "decision": "mapped",
+   "grams_source": 28,
+   "evidence": "Same food and same gram weight; the oil is a brand variant of mayonnaise, not a different product concept, on the sun-dried-tomatoes-oil-packed precedent. Not a new id."
+  },
+  {
+   "raw": "Juice + zest of 1 lime",
+   "term": "Juice + zest of 1 lime",
+   "canon_item": "Lime Juice",
+   "bid": "limes",
+   "decision": "mapped",
+   "grams_source": 31,
+   "evidence": "Vocabulary row Lime Juice [limes], board MAPPED limes 5 of 7. One whole lime yields about 30 g juice plus 1 g zest, both from the one purchased lime."
+  },
+  {
+   "raw": "1 jalapeño (finely diced, optional )",
+   "term": "jalapeño",
+   "canon_item": "Jalapeno",
+   "bid": "jalapenos",
+   "decision": "mapped-optional",
+   "grams_source": 14,
+   "evidence": "REUSE of the live board id `jalapenos` (6 of 7, cheapest 1.4277 at Walmart); only the vocabulary name row is missing. Source marks the line optional."
+  },
+  {
+   "raw": "2–3 Tablespoons chopped cilantro",
+   "term": "chopped cilantro",
+   "canon_item": "Fresh Cilantro",
+   "bid": "cilantro",
+   "decision": "mapped",
+   "grams_source": 2.5,
+   "evidence": "Same food as the settled 'chopped fresh cilantro' line in this recipe; the DIFFERENT FORM flag only reflects the vocabulary name carrying the word 'Fresh', which this line omits."
+  },
+  {
+   "raw": "2 cups water",
+   "term": "water",
+   "canon_item": "Water",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 473,
+   "evidence": "Tap water for cooking the rice: no commodity and no cost, following the 2026-08-27 'water' ruling. Still weighed at 236.6 g/cup and still printed, because it goes in the pot."
+  },
+  {
+   "raw": "1 cup long-grain white rice",
+   "term": "long-grain white rice",
+   "canon_item": "Rice",
+   "bid": "rice",
+   "decision": "mapped",
+   "grams_source": 185,
+   "evidence": "Exact vocabulary row Rice [rice], same form, board MAPPED 7 of 7. Long-grain is the default white rice, not a form flip."
+  },
+  {
+   "raw": "1 teaspoon sea salt",
+   "term": "sea salt",
+   "canon_item": "Sea Salt",
+   "bid": "sea-salt",
+   "decision": "mapped",
+   "grams_source": 6,
+   "evidence": "Same ruling as the corn-salad sea salt line: reuse of the live `sea-salt` board id, 6 g/tsp."
+  },
+  {
+   "raw": "2 Tablespoons fresh lime juice",
+   "term": "fresh lime juice",
+   "canon_item": "Lime Juice",
+   "bid": "limes",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Vocabulary row Lime Juice [limes]; 'fresh' is how the vocabulary row is already priced (whole limes squeezed), not a form flip onto a bottled product."
+  },
+  {
+   "raw": "1 teaspoon lime zest (or to taste)",
+   "term": "lime zest",
+   "canon_item": "Lime Zest",
+   "bid": "limes",
+   "decision": "mapped-optional",
+   "grams_source": 2,
+   "evidence": "Zest comes off the same purchased limes, exactly the Orange Zest -> citrus-fruit precedent the vocabulary already uses. Source marks the line 'or to taste'."
+  },
+  {
+   "raw": "Pickled red onions or fresh red onions (chopped)",
+   "term": "Pickled red onions or fresh red onions",
+   "canon_item": "Red Onion",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 30,
+   "evidence": "Standing rejection: red onion is not `onions` (variety pricing), so the board's 7 of 7 onions match cannot carry it. Unquantified topping weighed at 30 g source scale; term reported for pricing."
+  },
+  {
+   "raw": "Cotija cheese",
+   "term": "Cotija cheese",
+   "canon_item": "Cotija Cheese",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 15,
+   "evidence": "Same ruling as the corn-salad cotija line: board ABSENT, no same-concept id exists, pantry-static pricing on a 15 g garnish is safe."
+  }
+ ],
+ "absent_terms": [
+  "cotija cheese",
+  "red onion"
+ ],
+ "db_entries_written": [
+  "Sea Salt",
+  "Lime Zest"
+ ],
+ "db_row_findings": [
+  "street-corn-chicken-rice-bowls: the food DB already carries 'Sweet Whole Kernel Corn' and the mapper's row DIFFERS on serving_grams, calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 64.0 cal / 0.8 P / 11.2 C / 0.8 F  vs  mapper 73.2 / 1.2 / 15.9 / 1.2. On one basis (the mapper's row scaled onto the DB's 0.5 cup = 125 g) they still disagree: calories 91.46 vs 80; protein_g 1.524 vs 1; carbs_g 19.82 vs 14; fat_g 1.524 vs 1. existing={\"serving_grams\": 125, \"calories\": 80, \"carbs_g\": 14} new={\"serving_grams\": 82, \"calories\": 60, \"carbs_g\": 13}",
+  "street-corn-chicken-rice-bowls: the food DB already carries 'Greek Yogurt' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 58.8 cal / 10.0 P / 4.1 C / 0.0 F  vs  mapper 73.0 / 9.9 / 3.9 / 1.9. On one basis (the mapper's row scaled onto the DB's 0.667 cup = 170 g) they still disagree: calories 124.1 vs 100; fat_g 3.264 vs 0. existing={\"serving_grams\": 170, \"serving_qty\": 0.667, \"serving_unit\": \"cup\", \"calories\": 100, \"protein_g\": 17, \"carbs_g\": 7, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 73, \"protein_g\": 9.95, \"carbs_g\": 3.94, \"fat_g\": 1.92}",
+  "street-corn-chicken-rice-bowls: the food DB already carries 'Rice' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 355.6 cal / 6.7 P / 80.0 C / 0.0 F  vs  mapper 374.0 / 7.5 / 80.9 / 1.0. On one basis (the mapper's row scaled onto the DB's 0.25 cup = 45 g) they still disagree: calories 168.3 vs 160. existing={\"serving_grams\": 45, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 160, \"protein_g\": 3, \"carbs_g\": 36, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 374, \"protein_g\": 7.51, \"carbs_g\": 80.9, \"fat_g\": 1.03}",
+  "street-corn-chicken-rice-bowls: the food DB already carries 'Red Onion' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 40.0 cal / 0.9 P / 9.1 C / 0.0 F  vs  mapper 44.0 / 0.9 / 9.9 / 0.1. On one basis (the mapper's row scaled onto the DB's 1 medium onion = 110 g) they still disagree: carbs_g 10.92 vs 10. existing={\"serving_grams\": 110, \"serving_qty\": 1, \"serving_unit\": \"medium onion\", \"protein_g\": 1, \"carbs_g\": 10, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"protein_g\": 0.94, \"carbs_g\": 9.93, \"fat_g\": 0.1}"
+ ],
+ "db_row_notes": [
+  "street-corn-chicken-rice-bowls: 'Mayonnaise' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tbsp = 13 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "street-corn-chicken-rice-bowls: 'Lime Juice' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 tbsp = 15 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule.",
+  "street-corn-chicken-rice-bowls: 'Jalapeno' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 pepper = 14 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Source publishes 553 cal / 57 carbs / 45 protein per serving over 4 servings. Recomputed at source scale from the DB rows above plus the settled rows: 2476 cal, 181.3 g protein, 232.6 g carbs, 92 g fat total, i.e. 619 cal / 45.3 P / 58.2 C per serving. PROTEIN AGREES TO +0.7% (45.3 vs 45) and carbs to +2%, both far inside the 15% bar, which confirms the 623.7 g chicken basis (156 g raw per serving, against the catalog's 167 g average) and the 185 g dry rice basis. Calories run +12% high, and the reason is legible: the source's panel almost certainly excludes the three assembly toppings it never quantified (avocado 240 cal, garnish cotija 48, red onion 13). Drop those and the recipe recomputes to 544 cal per serving against the published 553, a -1.6% gap. Against this run's enforced band, the full dish is 619 cal (450-800 ok) and 45.3 g protein (>= 40 ok), with boneless skinless chicken breast as the main protein and rice as the real carbohydrate."
+}

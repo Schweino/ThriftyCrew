@@ -1,0 +1,31 @@
+{
+    "slug":  "lasagna-soup",
+    "title":  "Lasagna Soup recipe",
+    "source_url":  "https://www.thereciperebel.com/lasagna-soup-recipe/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:46:57",
+    "updated":  "2026-08-27T11:46:57",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-protein twin of live turkey-lasagna-soup: same broken-lasagna-noodle tomato/marinara soup with ricotta and mozzarella, only ground beef vs ground turkey; not a distinct dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:57",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/lasagna-soup-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:46:57",
+                        "by":  "decider",
+                        "detail":  "Cross-protein twin of live turkey-lasagna-soup: same broken-lasagna-noodle tomato/marinara soup with ricotta and mozzarella, only ground beef vs ground turkey; not a distinct dinner."
+                    }
+                ]
+}

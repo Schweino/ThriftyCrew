@@ -66,6 +66,12 @@ $repo = Split-Path -Parent $mp
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $here 'feed-endpoint-lib.ps1')
 . (Join-Path $here 'macro-recompute-lib.ps1')   # Get-MacroRecompute - the ONE per-serving arithmetic
+# CODE, so it hangs off THIS FILE's location - NOT off $mp. -Root repoints the DATA root, and the
+# -SelfTest drill deliberately runs one case against a root that does not exist to prove the tool
+# fails cleanly on missing inputs. Routed through $mp, that case died at this dot-source instead,
+# so a missing-DATA fixture reported a missing-CODE error (measured 2026-08-27). guard-contract is
+# root-relative for the older reason that the drill stages a copy of it; nothing new should be.
+. (Join-Path (Split-Path -Parent $here) 'lib\dash-sweep.ps1')   # DASH_SWEEP_SKIP - ONE skip list, shared with build-v2-spec
 
 $UTF8 = New-Object Text.UTF8Encoding($false)
 
@@ -226,10 +232,22 @@ function Get-ProteinByGrams {
 
 function Get-DashHits {
   <#
-    The em/en dash sweep, over EVERY string in the object - the same walk build-v2-spec.ps1's Test-Dashes
-    performs at write time, collecting instead of throwing so one report can name them all. Brad's rule
-    is absolute and it is checked at three layers on purpose; this is the layer that can tell the auditor
-    which field.
+    The em/en dash sweep, over every string in the object - collecting instead of throwing so one
+    report can name them all. Brad's rule is absolute and it is checked at three layers on purpose;
+    this is the layer that can tell the auditor which field.
+
+    IT SKIPS THE BAN LIST, AND THE SKIP LIST IS SHARED (2026-08-27). `forbidden_prose_terms` is the
+    intake's list of characters the writer may NOT use, and an em dash is its first entry in every
+    recipe that carries one. Sweeping it reports a spec for containing the very character it bans.
+    build-v2-spec had exactly this defect and it REFUSED three recipes outright; the fix there moved
+    the walk into lib/dash-sweep.ps1 - and THIS second copy was missed, so the same false positive
+    returned one layer up, on wave 1 of hunt-2026-08-27-highprotein, against two specs with zero
+    dashes in any reader-facing string. The wave auditor caught it and wrote: "or every spec that
+    correctly bans dashes will fail forever".
+
+    So both layers now read ONE skip list, $script:DASH_SWEEP_SKIP, dot-sourced from that lib. A
+    guard duplicated across two files is a guard that will disagree with itself - and fixing one copy
+    while leaving the other is precisely how this one got here.
   #>
   param($Obj, [int]$Cap = 12)
   $hits = New-Object System.Collections.Generic.List[string]
@@ -243,9 +261,14 @@ function Get-DashHits {
       elseif ($v -match [char]0x2013) { $hits.Add('EN DASH: ' + $v.Substring(0, [Math]::Min(70, $v.Length))) }
       continue
     }
-    if ($v -is [System.Collections.IDictionary]) { foreach ($vv in $v.Values) { $q.Enqueue($vv) }; continue }
+    if ($v -is [System.Collections.IDictionary]) {
+      foreach ($k in @($v.Keys)) { if ($script:DASH_SWEEP_SKIP -notcontains [string]$k) { $q.Enqueue($v[$k]) } }
+      continue
+    }
     if ($v -is [System.Collections.IEnumerable]) { foreach ($vv in $v) { $q.Enqueue($vv) }; continue }
-    if ($v -is [psobject] -and $v.PSObject.Properties.Count -gt 0) { foreach ($p in $v.PSObject.Properties) { $q.Enqueue($p.Value) } }
+    if ($v -is [psobject] -and $v.PSObject.Properties.Count -gt 0) {
+      foreach ($p in $v.PSObject.Properties) { if ($script:DASH_SWEEP_SKIP -notcontains [string]$p.Name) { $q.Enqueue($p.Value) } }
+    }
   }
   return , @($hits)
 }
@@ -440,6 +463,28 @@ if ($runSelfTest) {
   T 'MUST FIRE  two dashes count as TWO, not as one joined blob' ($dTwo.Count -eq 2) ('count=' + $dTwo.Count)
   $dNone = Get-DashHits ([pscustomobject]@{ prose = 'a low-carb, high-protein dinner' })
   T 'CLEAN TWIN ordinary prose with hyphens is silent, and counts ZERO' ($dNone.Count -eq 0) ('count=' + $dNone.Count)
+
+  # THE BAN LIST IS NOT SPEC TEXT (wave 1 of hunt-2026-08-27-highprotein). `forbidden_prose_terms` is
+  # the intake's list of characters the writer may NOT use, and an em dash is its first entry; sweeping
+  # it reported the spec for carrying the very character it bans. build-v2-spec had the same defect and
+  # REFUSED three recipes outright; that fix moved the walk to lib\dash-sweep.ps1 and MISSED this second
+  # copy, so the false positive came back one layer up against two specs with no reader-facing dash.
+  # The skip list is now dot-sourced, so these two fixtures and build-v2-spec's guard ONE list.
+  # [string], not [char]. `$v -is [string]` is FALSE for a bare [char], so a char em dash falls through
+  # every branch of the walk and is dropped in SILENCE - which made the first cut of these two fixtures
+  # pass with the skip torn out. The intake's terms are strings; the fixture has to be one too.
+  $emc = [string][char]0x2014
+  $dBan = Get-DashHits ([pscustomobject]@{ forbidden_prose_terms = @($emc, 'delicious'); prose = 'clean prose' })
+  T 'CLEAN TWIN the ban list naming the em dash is NOT swept as spec text' ($dBan.Count -eq 0) ('count=' + $dBan.Count + ' ' + ($dBan -join ' | '))
+  $dBanHash = Get-DashHits (@{ forbidden_prose_terms = @($emc); prose = 'clean prose' })
+  T 'CLEAN TWIN the skip holds on a hashtable spec too, not just a psobject' ($dBanHash.Count -eq 0) ('count=' + $dBanHash.Count)
+  # and the half that proves the skip is a SKIP and not an off switch:
+  $dBanReal = Get-DashHits ([pscustomobject]@{ forbidden_prose_terms = @($emc); prose = ('a real' + $emc + 'dash a reader would see') })
+  T 'MUST FIRE  a real dash in prose still fires in a spec that ALSO carries the ban list' `
+    ($dBanReal.Count -eq 1 -and ($dBanReal -join ' ') -match 'a reader would see') ('count=' + $dBanReal.Count + ' ' + ($dBanReal -join ' | '))
+  T 'the skip list is the SHARED one, dot-sourced - not a second copy that can drift' `
+    ($script:DASH_SWEEP_SKIP -contains 'forbidden_prose_terms' -and @($script:DASH_SWEEP_SKIP).Count -eq 1) `
+    ('skip=' + (@($script:DASH_SWEEP_SKIP) -join ','))
 
   # ---- card structural compare --------------------------------------------------------------------
   $refCard = '<div class="smp-ing" id="smp-ing"></div><div class="smp-cost" id="smp-cost"></div>' +

@@ -1,0 +1,31 @@
+{
+    "slug":  "turkey-chili-mac-and-cheese",
+    "title":  "Turkey Chili Mac and Cheese",
+    "source_url":  "https://www.thereciperebel.com/turkey-chili-mac-and-cheese/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:32",
+    "updated":  "2026-08-27T11:42:33",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Turkey + chili + macaroni + kidney beans + cheddar is the same dinner as live turkey-chili-mac (High-Protein Turkey Chili Mac).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:32",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/turkey-chili-mac-and-cheese/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:33",
+                        "by":  "decider",
+                        "detail":  "Turkey + chili + macaroni + kidney beans + cheddar is the same dinner as live turkey-chili-mac (High-Protein Turkey Chili Mac)."
+                    }
+                ]
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "broccoli-cheddar-chicken-and-rice",
+    "title":  "Broccoli Cheddar Chicken Rice",
+    "source_url":  "https://thecleaneatingcouple.com/broccoli-cheddar-chicken-rice/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:46:53",
+    "updated":  "2026-08-27T11:46:53",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Cross-protein twin of live ground-turkey-broccoli-cheddar-rice-skillet (same broccoli + cheddar cheese-sauce + rice one-pot, only chicken vs turkey); the broccoli-cheddar-chicken identity is also already folded into live chicken-divan-broccoli-bake.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:53",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/broccoli-cheddar-chicken-rice/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:46:53",
+                        "by":  "decider",
+                        "detail":  "Cross-protein twin of live ground-turkey-broccoli-cheddar-rice-skillet (same broccoli + cheddar cheese-sauce + rice one-pot, only chicken vs turkey); the broccoli-cheddar-chicken identity is also already folded into live chicken-divan-broccoli-bake."
+                    }
+                ]
+}

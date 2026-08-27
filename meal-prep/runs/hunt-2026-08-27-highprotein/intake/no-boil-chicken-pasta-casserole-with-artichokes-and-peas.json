@@ -1,0 +1,130 @@
+{
+ "name": "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+ "slug": "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Penne Pasta",
+   "grams": 794,
+   "buy": "1 lb 12 oz dry"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 1588,
+   "buy": "3 1/2 lb, cut into 1-inch cubes"
+  },
+  {
+   "item": "Chicken Broth",
+   "grams": 1400,
+   "buy": "5 3/4 cups"
+  },
+  {
+   "item": "Cottage Cheese",
+   "grams": 1058,
+   "buy": "4 2/3 cups (2 lb 5 oz)"
+  },
+  {
+   "item": "Boursin Cheese",
+   "grams": 343,
+   "buy": "12 oz (2 1/3 of the 5.2 oz packages), crumbled"
+  },
+  {
+   "item": "Frozen Green Peas",
+   "grams": 313,
+   "buy": "2 1/3 cups frozen"
+  },
+  {
+   "item": "Artichoke Hearts",
+   "grams": 560,
+   "buy": "1 lb 4 oz drained (about 2 1/3 cans), roughly chopped"
+  },
+  {
+   "item": "Garlic",
+   "grams": 7,
+   "buy": "2 large cloves, minced"
+  },
+  {
+   "item": "Fresh Lemon Juice",
+   "grams": 70,
+   "buy": "4 2/3 tbsp fresh (juice of about 2 lemons)"
+  },
+  {
+   "item": "Lemon Zest",
+   "grams": 5,
+   "buy": "2 1/3 tsp finely grated (zest of the same lemons)"
+  },
+  {
+   "item": "Sea Salt",
+   "grams": 14,
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "item": "Parmesan Cheese",
+   "grams": 261,
+   "buy": "2 1/3 cups freshly grated"
+  },
+  {
+   "item": "Fresh Parsley",
+   "grams": 26,
+   "buy": "7 tbsp chopped, for garnish"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 603,
+  "protein_g": 54.8,
+  "carbs_g": 50.5,
+  "fat_g": 20.1
+ },
+ "writer_notes": [
+  "All 13 locked ingredients are used: penne, chicken, peas, artichoke (step 3 dump); cottage cheese, Boursin, garlic, lemon juice, lemon zest, salt, broth (step 2 sauce); parmesan (step 4 finish); parsley (step 5 garnish). No orphans and no unbought ingredients invented.",
+  "Macros used only as tokens ({{cal}}, {{protein}}) and the ${{cost_ps}} token; no numbers computed in prose. Band satisfied: 603 cal, 54.8 g protein.",
+  "Boursin buy is a fractional package (2 1/3 of 5.2 oz); shop_smart tells the shopper to buy three packages and expect leftover, with no cost claim since no cost_lines were provided.",
+  "Portion section uses the weigh-the-containers method rather than a knife grid, consistent with the meal-prep template.",
+  "No em dashes or en dashes used anywhere. Hyphens in compounds (no-boil, 1-inch) are standard hyphens."
+ ],
+ "forbidden_prose_terms": [
+  "seafood",
+  "shrimp",
+  "rice",
+  "beans",
+  "cream cheese",
+  "heavy cream",
+  "mozzarella",
+  "marinara",
+  "boil the pasta",
+  "boil the penne"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is the trick this one pulls off: you never boil the pasta. The penne goes into the dish bone dry, gets buried under a thin cottage cheese and Boursin sauce, and cooks right there in the oven while the chicken poaches and the artichokes soften. One dish, no pot of water to babysit, no colander to wash. That is the whole pitch, and it happens to land at {{protein}} grams of protein a serving.</p><p>Dump and bake casseroles usually mean beige, salty, and forgettable. This one earns its keep because the sauce does real work. Cottage cheese blended smooth gives you a creamy base without a jar of anything, Boursin carries the garlic and herb flavor, and lemon juice and zest keep the whole thing from tasting heavy. Chicken breast handles the protein, penne handles the carbs, and the peas and artichokes make it feel like a meal instead of a bowl of noodles. Fourteen servings out of a single 9x13 dish is exactly the kind of math I like.</p>",
+  "shop_smart": "<p>This is a short shopping list with a couple of spots worth a heads up. Buy for the batch, not for the recipe card in your head.</p><ul><li><strong>Penne:</strong> you need 1 lb 12 oz of dry penne, so grab a full one-pound box plus most of a second. Any ridged short pasta will cook the same way in the sauce, so buy whatever shape is on the shelf you already trust.</li><li><strong>Chicken breast:</strong> 3 1/2 pounds of boneless skinless breast. Buy the family pack; it cuts into 1-inch cubes fast and any extra freezes clean for the next batch.</li><li><strong>Boursin:</strong> the recipe uses 12 oz, which is 2 1/3 of the 5.2 oz packages. That means you physically buy three packages and have about two thirds of one left. Garlic and Fine Herbs is the flavor here, so do not swap the plain.</li><li><strong>Artichoke hearts:</strong> you want 1 lb 4 oz drained, which works out to about three cans. Buy them packed in water, not marinated in oil, since the sauce is bringing its own flavor.</li><li><strong>Cottage cheese and parmesan:</strong> a 2 lb 5 oz tub of cottage cheese and a block of parmesan you grate yourself. Freshly grated parmesan melts into a real golden top; the shaker stuff just sits there.</li><li><strong>Peas:</strong> frozen peas go in frozen, straight from the bag. No thawing, no draining.</li></ul>",
+  "make_it": "<p>Heat the oven to 400 degrees F and lightly grease a 9x13 casserole dish. Set it aside while you build the sauce.</p><p>Make the sauce in a blender or food processor. Combine the cottage cheese, crumbled Boursin, minced garlic, fresh lemon juice, lemon zest, and sea salt, and blend until completely smooth. Then pour in the chicken broth and blend again until it is silky and fully combined. It is going to look alarmingly thin. That is correct. All that liquid is what cooks the dry pasta, so do not try to thicken it.</p><p>Now dump and assemble. Spread the dry penne across the bottom of the dish. Scatter the cubed chicken, the frozen peas, and the chopped artichoke hearts evenly over the pasta. Pour the blended sauce over the whole thing and press the pasta down so every noodle is submerged. Anything sticking up out of the liquid will dry out, so take the extra ten seconds here.</p><p>Cover the dish tightly with foil and bake for 40 minutes. Pull it out, take off the foil, and give it a good stir. The pasta should be just shy of done at this point. Top with the freshly grated parmesan and slide it back in, uncovered, for another 5 to 10 minutes until the top is golden. You can bump the heat up to push the color if you want. If the pasta already feels al dente when you stir it, just add the parmesan and skip straight to the rest.</p><p>Let it rest at least 10 minutes before you touch it. This is not optional. The sauce sets up as it cools and the pasta finishes drinking it in. Finish with chopped fresh parsley or basil and serve.</p>",
+  "portion_html": "<p>This makes 14 servings out of one 9x13 dish, and the honest way to split it evenly is to weigh it, not eyeball it. Set your empty containers on the scale one at a time and zero it out, then divide the total casserole across all 14 so each one lands at the same weight. Casserole slumps and shifts, so a knife-grid in the pan will lie to you; the scale will not.</p><p>Let it finish that 10 minute rest before you portion, or the sauce will still be loose and every container will read differently. Once it is set, it scoops clean. These reheat well covered in the microwave with a splash of water or broth to loosen the sauce back up, and they hold in the fridge for the work week.</p>",
+  "cost_closing_html": "<p>Here is where the dump and bake approach pays you back. No boiling, no browning, no extra pans, just blend, layer, and let the oven do the labor while you do something else. That single dish breaks down to ${{cost_ps}} a serving for {{cal}} calories and {{protein}} grams of protein. Chicken breast, pasta, and a tub of cottage cheese carry most of the weight, and none of those are expensive proteins pretending to be cheap.</p>",
+  "upsell_html": "<p>Fourteen dinners from one casserole dish, priced like this, is exactly the kind of quiet win that adds up over a month of not ordering out. If you want the full library of these builds, the shopping breakdowns, and the numbers behind every serving, the Thrifty Crew membership runs a dollar a month. One recipe like this pays for the whole year.</p>"
+ },
+ "head": {
+  "description": "A no-boil dump and bake chicken pasta casserole with artichokes and peas, built for meal prep at 14 servings, 603 calories and 54.8 grams of protein each. Dry penne cooks right in a creamy cottage cheese and Boursin sauce.",
+  "keywords": "no boil chicken pasta casserole, dump and bake casserole, high protein meal prep, chicken artichoke pasta, cottage cheese pasta bake, budget meal prep dinner, 14 servings casserole",
+  "image": "",
+  "prepTime": "PT5M",
+  "cookTime": "",
+  "totalTime": "",
+  "steps": [
+   "Heat the oven to 400 degrees F and lightly grease a 9x13 casserole dish, then set it aside.",
+   "In a blender or food processor, blend the cottage cheese, crumbled Boursin, minced garlic, fresh lemon juice, lemon zest, and sea salt until smooth, then add the chicken broth and blend again until silky and fully combined. The sauce will look very thin.",
+   "Spread the dry penne over the bottom of the dish, scatter the cubed chicken, frozen peas, and chopped artichoke hearts on top, then pour the blended sauce over everything and press the pasta down so it is fully submerged.",
+   "Cover tightly with foil and bake 40 minutes. Remove the foil, stir, top with the grated parmesan, and bake uncovered another 5 to 10 minutes until golden.",
+   "Rest at least 10 minutes to let the sauce set, then top with chopped fresh parsley or basil and serve."
+  ],
+  "step_names": [
+   "Heat the oven",
+   "Blend the sauce",
+   "Layer and submerge",
+   "Bake and top",
+   "Rest and garnish"
+  ]
+ }
+}

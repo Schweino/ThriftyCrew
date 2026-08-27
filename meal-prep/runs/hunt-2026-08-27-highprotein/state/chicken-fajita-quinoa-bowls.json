@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fajita-quinoa-bowls",
+    "title":  "Chicken Fajita Bowls",
+    "source_url":  "https://www.eatingbirdfood.com/chicken-fajita-quinoa-bowls/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:59",
+    "updated":  "2026-08-27T11:45:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Fajita chicken (bell peppers, onion, chili/cumin) over a grain bowl duplicates live fajita-chicken-rice-bowl / creamy-chicken-fajita-burrito; quinoa vs rice is not a distinct plate, and fajita chicken is a saturated identity per prior rulings.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:59",
+                        "by":  "harvest",
+                        "detail":  "https://www.eatingbirdfood.com/chicken-fajita-quinoa-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:45:00",
+                        "by":  "decider",
+                        "detail":  "Fajita chicken (bell peppers, onion, chili/cumin) over a grain bowl duplicates live fajita-chicken-rice-bowl / creamy-chicken-fajita-burrito; quinoa vs rice is not a distinct plate, and fajita chicken is a saturated identity per prior rulings."
+                    }
+                ]
+}

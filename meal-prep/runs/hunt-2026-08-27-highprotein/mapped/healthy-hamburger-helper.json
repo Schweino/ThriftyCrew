@@ -1,0 +1,210 @@
+﻿{
+    "slug":  "healthy-hamburger-helper",
+    "title":  "Healthy Hamburger Helper",
+    "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "beef",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 pound lean ground beef",
+                            "item":  "93/7 Ground Beef",
+                            "bid":  "93-7-ground-beef",
+                            "board":  null,
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "93/7 lean grind, not 80/20. The source states \u0027lean\u0027, a real price class apart from 80/20, so the \u0027ground beef\u0027 -\u003e ground-beef-8020 precedent for an UNQUALIFIED line does not transfer; the vocabulary\u0027s own 93/7 Ground Beef row is the lean grind. Protein confirms it: 41.8 g/serving against the source\u0027s published 40, where 80/20 gives 37.0 and fails the floor.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ cup finely chopped onion",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "1 3/4 cups finely chopped (about 2 medium onions)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "\u0027Finely chopped\u0027 is a prep word, not a food; unqualified cooking onion is the yellow onion per the \u0027med onion\u0027 and \u0027small yellow onion\u0027 precedents, and red is refused on variety pricing. Board 7 of 7; half a cup chopped weighs 80 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 cups dry rotini pasta (sub penne or medium shells (10 oz))",
+                            "item":  "Rotini Pasta",
+                            "bid":  "rotini-pasta",
+                            "board":  null,
+                            "grams":  992,
+                            "buy":  "10 1/2 cups (2 lb 3 oz) dry rotini",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source\u0027s own 10 oz per 3 cups is the basis. Exact same-form vocabulary row Rotini Pasta [rotini-pasta], and the source states its own weight (10 oz = 283.5 g), so no density guess is needed. Existing id, so a reuse; listed as an absent term in case that id is not yet priced.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 cups beef broth",
+                            "item":  "Beef Broth",
+                            "bid":  "beef-broth",
+                            "board":  "recipe",
+                            "grams":  1680,
+                            "buy":  "7 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: beef-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups water",
+                            "item":  "Water",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Tap water: no commodity, no cost, following the 2026-08-26 \u0027water\u0027 -\u003e no id ruling. Still weighed (2 cups x 236.6 g) and still printed, because it goes in the pot."
+                        },
+                        {
+                            "source_raw":  "1 tablespoon Worcestershire sauce",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  "worcestershire",
+                            "board":  "recipe",
+                            "grams":  60,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: worcestershire, 6 of 7 stores, cheapest 0.1 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ tablespoon tomato paste",
+                            "item":  "Tomato Paste",
+                            "bid":  "tomato-paste",
+                            "board":  "recipe",
+                            "grams":  28,
+                            "buy":  "1 3/4 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: tomato-paste, 7 of 7 stores, cheapest 0.1017 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 ½ teaspoons garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  16,
+                            "buy":  "1 3/4 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon chili powder",
+                            "item":  "Chili Powder",
+                            "bid":  "chili-powder",
+                            "board":  "recipe",
+                            "grams":  9,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chili-powder, 7 of 7 stores, cheapest 0.3462 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  8,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "¼ teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "3/4 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup shredded cheddar cheese",
+                            "item":  "Cheddar Cheese, Shredded",
+                            "bid":  "cheddar-cheese-shredded",
+                            "board":  null,
+                            "grams":  396,
+                            "buy":  "3 1/2 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Exact same-form vocabulary row Cheddar Cheese, Shredded [cheddar-cheese-shredded], an existing id and therefore a reuse. Preferred over the board\u0027s generic `shredded-cheese`, which covers blends that are a different product. 1 cup shredded = 113 g.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "93/7 lean ground beef",
+                                 "rotini pasta",
+                                 "shredded cheddar cheese"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "healthy-hamburger-helper: the food DB already carries \u0027Rotini Pasta\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 339.3 cal / 17.9 P / 67.9 C / 1.8 F  vs  mapper 371.0 / 13.0 / 74.7 / 1.5. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 2 oz = 56 g) they still disagree: calories 207.8 vs 190; protein_g 7.28 vs 10; carbs_g 41.83 vs 38. existing={\"serving_grams\": 56, \"serving_qty\": 2, \"serving_unit\": \"oz\", \"calories\": 190, \"protein_g\": 10, \"carbs_g\": 38, \"fat_g\": 1} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 371, \"protein_g\": 13.0, \"carbs_g\": 74.7, \"fat_g\": 1.51}",
+                            "healthy-hamburger-helper: the food DB already carries \u0027Cheddar Cheese, Shredded\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 392.9 cal / 21.4 P / 3.6 C / 32.1 F  vs  mapper 408.0 / 23.3 / 2.4 / 34.0. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 0.25 cup = 28 g) they still disagree: protein_g 6.524 vs 6; fat_g 9.52 vs 9. existing={\"serving_grams\": 28, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 110, \"protein_g\": 6, \"carbs_g\": 1, \"fat_g\": 9} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 408, \"protein_g\": 23.3, \"carbs_g\": 2.44, \"fat_g\": 34.0}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Source published 507 cal / 40 protein for 4 servings. Recomputed over all 14 lines at source basis: 2315 cal and 167 g protein total, i.e. 579 cal and 41.8 g protein per serving. Protein is +4.5% against the source, well inside 15%, which is the check that matters and it lands on the main protein. Calories run +14%, mostly the dry-pasta basis and full-fat cheddar. Same arithmetic with 80/20 beef gives 37.0 g protein per serving, below this run\u0027s 40 g floor, which is the concrete reason the lean grind was ruled and not bridged."
+}

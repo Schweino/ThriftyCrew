@@ -1,0 +1,31 @@
+{
+    "slug":  "cheeseburger-casserole",
+    "title":  "Cheeseburger Casserole (Homemade Hamburger Helper)",
+    "source_url":  "https://www.recipetineats.com/cheeseburger-casserole-homemade-hamburger-helper/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:46:54",
+    "updated":  "2026-08-27T11:46:54",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Homemade Hamburger Helper (ground beef + macaroni + tomato + cheddar) is the same dinner as healthy-hamburger-helper already accepted this run; also duplicates live keto-cheeseburger-skillet flavour identity.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:46:54",
+                        "by":  "harvest",
+                        "detail":  "https://www.recipetineats.com/cheeseburger-casserole-homemade-hamburger-helper/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:46:54",
+                        "by":  "decider",
+                        "detail":  "Homemade Hamburger Helper (ground beef + macaroni + tomato + cheddar) is the same dinner as healthy-hamburger-helper already accepted this run; also duplicates live keto-cheeseburger-skillet flavour identity."
+                    }
+                ]
+}

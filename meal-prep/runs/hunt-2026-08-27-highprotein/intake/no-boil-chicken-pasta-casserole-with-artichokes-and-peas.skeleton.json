@@ -1,0 +1,112 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T12:14:32",
+    "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Fresh Parsley\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+                   "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Penne Pasta",
+                                           "grams":  794,
+                                           "buy":  "1 lb 12 oz dry"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1588,
+                                           "buy":  "3 1/2 lb, cut into 1-inch cubes"
+                                       },
+                                       {
+                                           "item":  "Chicken Broth",
+                                           "grams":  1400,
+                                           "buy":  "5 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Cottage Cheese",
+                                           "grams":  1058,
+                                           "buy":  "4 2/3 cups (2 lb 5 oz)"
+                                       },
+                                       {
+                                           "item":  "Boursin Cheese",
+                                           "grams":  343,
+                                           "buy":  "12 oz (2 1/3 of the 5.2 oz packages), crumbled"
+                                       },
+                                       {
+                                           "item":  "Frozen Green Peas",
+                                           "grams":  313,
+                                           "buy":  "2 1/3 cups frozen"
+                                       },
+                                       {
+                                           "item":  "Artichoke Hearts",
+                                           "grams":  560,
+                                           "buy":  "1 lb 4 oz drained (about 2 1/3 cans), roughly chopped"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  7,
+                                           "buy":  "2 large cloves, minced"
+                                       },
+                                       {
+                                           "item":  "Fresh Lemon Juice",
+                                           "grams":  70,
+                                           "buy":  "4 2/3 tbsp fresh (juice of about 2 lemons)"
+                                       },
+                                       {
+                                           "item":  "Lemon Zest",
+                                           "grams":  5,
+                                           "buy":  "2 1/3 tsp finely grated (zest of the same lemons)"
+                                       },
+                                       {
+                                           "item":  "Sea Salt",
+                                           "grams":  14,
+                                           "buy":  "2 1/3 tsp"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  261,
+                                           "buy":  "2 1/3 cups freshly grated"
+                                       },
+                                       {
+                                           "item":  "Fresh Parsley",
+                                           "grams":  26,
+                                           "buy":  "7 tbsp chopped, for garnish"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  603,
+                                              "protein_g":  54.8,
+                                              "carbs_g":  50.5,
+                                              "fat_g":  20.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT5M",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

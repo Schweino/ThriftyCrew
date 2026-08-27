@@ -1,0 +1,129 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T12:06:09",
+    "slug":  "pioneer-woman-chili",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Cheddar Cheese, Shredded\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Limes\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "excluded \u0027Tortilla Chips\u0027 (optional-note) - not something the shopper buys"
+              ],
+    "intake":  {
+                   "name":  "The Pioneer Woman Chili",
+                   "slug":  "pioneer-woman-chili",
+                   "protein":  "beef",
+                   "cuisine":  "",
+                   "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "80/20 Ground Beef",
+                                           "grams":  2117,
+                                           "buy":  "4 2/3 lb"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  14,
+                                           "buy":  "5 cloves, diced"
+                                       },
+                                       {
+                                           "item":  "Tomato Sauce",
+                                           "grams":  529,
+                                           "buy":  "2 1/3 cups (about 19 oz)"
+                                       },
+                                       {
+                                           "item":  "Chili Powder",
+                                           "grams":  37,
+                                           "buy":  "1/4 cup plus 2 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Ground Cumin",
+                                           "grams":  5,
+                                           "buy":  "2 1/3 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Dried Oregano",
+                                           "grams":  2,
+                                           "buy":  "2 1/3 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  14,
+                                           "buy":  "2 1/3 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Cayenne Pepper",
+                                           "grams":  1,
+                                           "buy":  "1/2 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Masa Harina",
+                                           "grams":  70,
+                                           "buy":  "1/2 cup plus 1 tablespoon"
+                                       },
+                                       {
+                                           "item":  "Kidney Beans",
+                                           "grams":  992,
+                                           "buy":  "35 oz drained and rinsed (about 4 1/4 cups)"
+                                       },
+                                       {
+                                           "item":  "Canned Pinto Beans",
+                                           "grams":  992,
+                                           "buy":  "35 oz drained and rinsed (about 4 1/4 cups)"
+                                       },
+                                       {
+                                           "item":  "Diced Tomatoes",
+                                           "grams":  959,
+                                           "buy":  "34 oz with juice (about 4 cups)"
+                                       },
+                                       {
+                                           "item":  "Cheddar Cheese, Shredded",
+                                           "grams":  196,
+                                           "buy":  "1 3/4 cups shredded, for serving"
+                                       },
+                                       {
+                                           "item":  "Lime",
+                                           "grams":  233,
+                                           "buy":  "3 limes, cut into wedges"
+                                       },
+                                       {
+                                           "item":  "Light Sour Cream",
+                                           "grams":  300,
+                                           "buy":  "1 1/4 cups, for serving"
+                                       },
+                                       {
+                                           "item":  "Green Onions",
+                                           "grams":  60,
+                                           "buy":  "4 stalks, diced, for serving"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  680,
+                                              "protein_g":  41.8,
+                                              "carbs_g":  42.2,
+                                              "fat_g":  38
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

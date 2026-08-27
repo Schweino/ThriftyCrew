@@ -1,0 +1,84 @@
+{
+ "slug": "chicken-rice-and-broccoli",
+ "lines": [
+  {
+   "raw": "1 cup long grain white rice (dry)",
+   "buy": "3 1/2 cups dry (about 1 lb 7 oz)",
+   "grams_source": 185
+  },
+  {
+   "raw": "1 tablespoon olive oil",
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "raw": "1.5 lbs boneless, skinless chicken breasts (cut into small cubes)",
+   "buy": "5 1/4 lb, cut into small cubes"
+  },
+  {
+   "raw": "½ cup onion (diced)",
+   "buy": "1 3/4 cups diced (about 2 medium)"
+  },
+  {
+   "raw": "2 tablespoons garlic (minced)",
+   "buy": "7 tbsp minced (about 20 cloves)"
+  },
+  {
+   "raw": "3 cups broccoli florets (about 10 oz)",
+   "buy": "10 1/2 cups florets (about 2 lb 3 oz)"
+  },
+  {
+   "raw": "3 cups chicken stock (low or no salt)",
+   "buy": "10 1/2 cups"
+  },
+  {
+   "raw": "2 teaspoons dried basil",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "2 teaspoons dried parsley",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "2 teaspoons garlic powder",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "2 teaspoons onion powder",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "½ teaspoon salt",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "½ teaspoon black pepper",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "¼ cup grated parmesan cheese",
+   "buy": "7/8 cup grated"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 cup long grain white rice (dry)",
+   "term": "long grain white rice",
+   "canon_item": "Rice",
+   "bid": "rice",
+   "decision": "mapped",
+   "grams_source": 185,
+   "evidence": "Same-form vocabulary row Rice [rice], board 7 of 7, matching the 2026-08-26 'white long grain rice' -> rice ruling at cos 0.98: long grain white is the default bagged rice the id prices, not a variety premium. Weighed at the estate's 185 g per dry cup, which the macro check confirms."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "chicken-rice-and-broccoli: the food DB already carries 'Rice' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 355.6 cal / 6.7 P / 80.0 C / 0.0 F  vs  mapper 374.0 / 7.5 / 80.9 / 1.0. On one basis (the mapper's row scaled onto the DB's 0.25 cup = 45 g) they still disagree: calories 168.3 vs 160. existing={\"serving_grams\": 45, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 160, \"protein_g\": 3, \"carbs_g\": 36, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 374, \"protein_g\": 7.51, \"carbs_g\": 80.9, \"fat_g\": 1.03}"
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Done by hand over all 14 lines at source scale, 4 servings. Ours 480 cal / 47.7 protein / 47.5 carbs per serving vs source 480 / 47 / 46. Calories match to the calorie, protein within 1.5%, carbs within 3%. That agreement is also the evidence for the 185 g dry cup of rice - at 200 g/cup the recipe overshoots the source by 6%. Band: 480 cal in 450-800 OK, protein 47.7 clears 40."
+}

@@ -315,9 +315,9 @@
                                    "verdict":  "CARRIED",
                                    "store":  "Aldi",
                                    "item":  "Red Onion Bag 2 Lbs",
-                                   "size":  "lb (2 lb bag)",
+                                   "size":  "$/lb (2 lb bag)",
                                    "price":  1.095,
-                                   "as_of":  "2026-08-26",
+                                   "as_of":  "2026-08-27",
                                    "source":  "promoted from ingredient-queue term \u0027red onion\u0027",
                                    "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
                                },
@@ -497,7 +497,7 @@
                                                "item":  "Emporium Selection Fresh Mozzarella Ball 8 OZ",
                                                "size":  "8 oz",
                                                "price":  3.29,
-                                               "as_of":  "2026-08-26",
+                                               "as_of":  "2026-08-27",
                                                "source":  "promoted from ingredient-queue term \u0027fresh mozzarella\u0027",
                                                "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
                                            },
@@ -610,7 +610,117 @@
                                                       "as_of":  "2026-08-27",
                                                       "source":  "promoted from ingredient-queue term \u0027Boneless Eye of Round Roast\u0027",
                                                       "why":  "carried by Sam\u0027s Club"
-                                                  }
+                                                  },
+                 "item:Protein Pasta":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Baker\u0027s",
+                                            "item":  "Barilla Protein+ (Plus) Rotini Pasta",
+                                            "size":  "14.5 oz",
+                                            "price":  2.99,
+                                            "as_of":  "2026-08-27",
+                                            "source":  "promoted from ingredient-queue term \u0027protein pasta\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                        },
+                 "item:High Protein Pasta":  {
+                                                 "verdict":  "CARRIED",
+                                                 "store":  "Fareway",
+                                                 "item":  "Barilla Protein+ (Plus) Penne Pasta",
+                                                 "size":  "14.5 oz",
+                                                 "price":  2.99,
+                                                 "as_of":  "2026-08-27",
+                                                 "source":  "promoted from ingredient-queue term \u0027High Protein Pasta\u0027",
+                                                 "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                             },
+                 "item:Bone Broth":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Family Fare",
+                                         "item":  "Our Family Chicken Bone Broth 32 Fl Oz",
+                                         "size":  "32 fl oz",
+                                         "price":  2.69,
+                                         "as_of":  "2026-08-27",
+                                         "source":  "promoted from ingredient-queue term \u0027bone broth\u0027",
+                                         "why":  "carried by Baker\u0027s, Family Fare, Aldi, Fareway, Sam\u0027s Club"
+                                     },
+                 "ground-beef-93-7":  {
+                                          "verdict":  "CARRIED",
+                                          "store":  "Aldi",
+                                          "item":  "93 Lean Ground Beef Per LB",
+                                          "size":  "lb",
+                                          "price":  7.39,
+                                          "as_of":  "2026-08-27",
+                                          "source":  "promoted from ingredient-queue term \u002793/7 lean ground beef\u0027",
+                                          "why":  "carried by Family Fare, Aldi, Fareway"
+                                      },
+                 "pasta":  {
+                               "verdict":  "CARRIED",
+                               "store":  "Aldi",
+                               "item":  "Reggano Penne Rigate 16 OZ",
+                               "size":  "16 oz",
+                               "price":  1.09,
+                               "as_of":  "2026-08-27",
+                               "source":  "promoted from ingredient-queue term \u0027penne pasta\u0027",
+                               "why":  "carried by Baker\u0027s, Family Fare, Hy-Vee, Aldi, Fareway, Sam\u0027s Club, Walmart"
+                           },
+                 "shredded-cheese":  {
+                                         "verdict":  "CARRIED",
+                                         "store":  "Baker\u0027s",
+                                         "item":  "Kroger Mild Cheddar Shredded Cheese",
+                                         "size":  "8 oz",
+                                         "price":  2,
+                                         "as_of":  "2026-08-27",
+                                         "source":  "promoted from ingredient-queue term \u0027shredded cheddar cheese\u0027",
+                                         "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                     },
+                 "item:Almond Butter":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Family Fare",
+                                            "item":  "Our Family Creamy Almond Butter",
+                                            "size":  "16 oz",
+                                            "price":  6.99,
+                                            "as_of":  "2026-08-27",
+                                            "source":  "promoted from ingredient-queue term \u0027almond butter\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare, Fareway, Sam\u0027s Club"
+                                        },
+                 "item:Masa Harina":  {
+                                          "verdict":  "CARRIED",
+                                          "store":  "Baker\u0027s",
+                                          "item":  "MASECA Yellow Instant Corn Masa Flour 2 Lb Bag",
+                                          "size":  "2 lb",
+                                          "price":  2.69,
+                                          "as_of":  "2026-08-27",
+                                          "source":  "promoted from ingredient-queue term \u0027masa harina\u0027",
+                                          "why":  "carried by Baker\u0027s, Family Fare, Sam\u0027s Club"
+                                      },
+                 "item:Cotija Cheese":  {
+                                            "verdict":  "CARRIED",
+                                            "store":  "Baker\u0027s",
+                                            "item":  "Cacique Cotija Part Skim Milk Cheese",
+                                            "size":  "10 oz",
+                                            "price":  5.49,
+                                            "as_of":  "2026-08-27",
+                                            "source":  "promoted from ingredient-queue term \u0027cotija cheese\u0027",
+                                            "why":  "carried by Baker\u0027s, Family Fare"
+                                        },
+                 "item:Boursin Cheese":  {
+                                             "verdict":  "CARRIED",
+                                             "store":  "Fareway",
+                                             "item":  "Boursin Garlic \u0026 Fine Herbs Gournay Cheese",
+                                             "size":  "5.3 oz",
+                                             "price":  5.49,
+                                             "as_of":  "2026-08-27",
+                                             "source":  "promoted from ingredient-queue term \u0027Boursin cheese\u0027",
+                                             "why":  "carried by Baker\u0027s, Fareway, Sam\u0027s Club"
+                                         },
+                 "item:Frozen Lightly Breaded Chicken Breast Bites":  {
+                                                                          "verdict":  "CARRIED",
+                                                                          "store":  "Aldi",
+                                                                          "item":  "Tyson Lightly Breaded Boneless Chicken Bites",
+                                                                          "size":  "5.2 oz",
+                                                                          "price":  3.49,
+                                                                          "as_of":  "2026-08-27",
+                                                                          "source":  "promoted from ingredient-queue term \u0027frozen lightly breaded chicken breast bites\u0027",
+                                                                          "why":  "carried by Baker\u0027s, Aldi, Fareway, Sam\u0027s Club"
+                                                                      }
              },
     "_parked_doc":  "parked_recipes lists slugs held out of the catalogue by this ingredient. They were unpublished to DRAFT on Ghost, not deleted, precisely so a CARRIED verdict can bring them back. audit-carriage.ps1 -Revivable reads this field; without it, reviving a recipe means reconstructing from commit messages."
 }

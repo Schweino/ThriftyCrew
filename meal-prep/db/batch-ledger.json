@@ -649,5 +649,41 @@
                          "detail":  "streamed per-recipe before wave close"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w1",
+      "opened":  "2026-08-27T12:19:19",
+      "last_activity":  "2026-08-27T12:19:20",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+                    "healthy-hamburger-helper",
+                    "ground-beef-cottage-cheese-bowl",
+                    "chicken-rice-and-broccoli"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T12:19:19",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T12:19:20",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T12:19:20",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T12:19:20",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

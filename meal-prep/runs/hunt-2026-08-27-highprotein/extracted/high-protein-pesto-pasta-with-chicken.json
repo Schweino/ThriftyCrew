@@ -1,0 +1,119 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "high protein pesto pasta with chicken",
+  "source_url": "https://joytothefood.com/high-protein-pesto-pasta-with-chicken/",
+  "servings": 6,
+  "time_total": "30 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 8oz box of frilly protein pasta (like Loppdy Loops or Campanelle, use gluten free as needed)",
+      "item": "frilly protein pasta",
+      "qty": "1",
+      "unit": "8oz box",
+      "prep": "(like Loppdy Loops or Campanelle, use gluten free as needed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup bone broth",
+      "item": "bone broth",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 egg",
+      "item": "egg",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup parmesan cheese (shredded, use plant based as needed)",
+      "item": "parmesan cheese",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "shredded, use plant based as needed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 8oz high protein pesto* (or store bought)",
+      "item": "high protein pesto",
+      "qty": "1",
+      "unit": "8oz",
+      "prep": "(or store bought)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5 pounds chicken breasts (or 3 chicken breasts)",
+      "item": "chicken breasts",
+      "qty": "1.5",
+      "unit": "pounds",
+      "prep": "(or 3 chicken breasts)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp lemon juice",
+      "item": "lemon juice",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp olive oil",
+      "item": "olive oil",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 garlic cloves",
+      "item": "garlic",
+      "qty": "2",
+      "unit": "cloves",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Prep the chicken and pasta: Marinate the 1.5 pounds chicken breasts with the 2 tbsp lemon juice, 2 tbsp olive oil, 1 tsp salt, and 2 garlic cloves in a bag or bowl while you cook the pasta. Cook the 1 8oz box of frilly protein pasta in heavily salted water according to package directions. Strain it and rinse well with hot water. Turn the stove off, return the pasta to the pot with a splash of bone broth, and cover it to keep it hot.",
+    "Cook the chicken: Grill for 5-10 minutes per side. If your chicken is thick, you can slice it into thin pieces to cook faster. Alternatively, you can cook the chicken in a skillet on the stovetop. Just make sure it reaches an internal temperature of 165 degrees F. Pull it off the heat when it's 160 degrees then let it rest 5 minutes to finish cooking.",
+    "Combine pasta with protein: In a small bowl, mix 1/2 cup parmesan cheese and 1 egg. Give the pasta a stir with another splash of bone broth over low heat. Once it's easy to stir and smooth, stir in the cheese-egg mixture. Stir quickly to emulsify the egg!! If the pasta isn't hot enough or you don't stir fast enough, the egg will scramble slightly, which is fine and still tasty, but it can happen. Add the 1 8oz high protein pesto* and remaining 1/2 cup bone broth, stirring until smooth.",
+    "Serve: Top with chicken and enjoy!"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

@@ -1,0 +1,150 @@
+{
+ "name": "The Pioneer Woman Chili",
+ "slug": "pioneer-woman-chili",
+ "protein": "beef",
+ "cuisine": "Tex-Mex",
+ "source_url": "https://thecozycook.com/pioneer-woman-chili/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "80/20 Ground Beef",
+   "grams": 2117,
+   "buy": "4 2/3 lb"
+  },
+  {
+   "item": "Garlic",
+   "grams": 14,
+   "buy": "5 cloves, diced"
+  },
+  {
+   "item": "Tomato Sauce",
+   "grams": 529,
+   "buy": "2 1/3 cups (about 19 oz)"
+  },
+  {
+   "item": "Chili Powder",
+   "grams": 37,
+   "buy": "1/4 cup plus 2 1/2 teaspoons"
+  },
+  {
+   "item": "Ground Cumin",
+   "grams": 5,
+   "buy": "2 1/3 teaspoons"
+  },
+  {
+   "item": "Dried Oregano",
+   "grams": 2,
+   "buy": "2 1/3 teaspoons"
+  },
+  {
+   "item": "Salt",
+   "grams": 14,
+   "buy": "2 1/3 teaspoons"
+  },
+  {
+   "item": "Cayenne Pepper",
+   "grams": 1,
+   "buy": "1/2 teaspoon"
+  },
+  {
+   "item": "Masa Harina",
+   "grams": 70,
+   "buy": "1/2 cup plus 1 tablespoon"
+  },
+  {
+   "item": "Kidney Beans",
+   "grams": 992,
+   "buy": "35 oz drained and rinsed (about 4 1/4 cups)"
+  },
+  {
+   "item": "Canned Pinto Beans",
+   "grams": 992,
+   "buy": "35 oz drained and rinsed (about 4 1/4 cups)"
+  },
+  {
+   "item": "Diced Tomatoes",
+   "grams": 959,
+   "buy": "34 oz with juice (about 4 cups)"
+  },
+  {
+   "item": "Cheddar Cheese, Shredded",
+   "grams": 196,
+   "buy": "1 3/4 cups shredded, for serving"
+  },
+  {
+   "item": "Lime",
+   "grams": 233,
+   "buy": "3 limes, cut into wedges"
+  },
+  {
+   "item": "Light Sour Cream",
+   "grams": 300,
+   "buy": "1 1/4 cups, for serving"
+  },
+  {
+   "item": "Green Onions",
+   "grams": 60,
+   "buy": "4 stalks, diced, for serving"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 680,
+  "protein_g": 41.8,
+  "carbs_g": 42.2,
+  "fat_g": 38
+ },
+ "writer_notes": [
+  "Ingredient-step closure verified: all 16 locked buy lines are used by a step; no step uses anything not bought.",
+  "Source page gives three methods (stovetop, crockpot, Instant Pot); collapsed to one stovetop method so the costed diced tomatoes are not orphaned.",
+  "Diced tomatoes are marked 'Instant Pot version only' in the source transcription but are bought for the full batch, so they are folded into the stovetop simmer. If a tomato-free chili was intended, the Diced Tomatoes buy line should be removed rather than the step invented; flagged in report.",
+  "No cost_lines and no literal cost_ps were provided; used the ${{cost_ps}} token and made no per-ounce, 'nothing left,' or 'lasts N batches' package claims.",
+  "Macro/cost figures use tokens {{cal}}, {{protein}}, ${{cost_ps}}; no numbers computed in prose.",
+  "Tortilla chips, Fritos, and cornbread from the source are not in the buy list and are excluded from all steps and prose."
+ ],
+ "forbidden_prose_terms": [
+  "Fritos",
+  "tortilla chips",
+  "cornbread",
+  "Instant Pot",
+  "crockpot",
+  "seafood",
+  "shrimp",
+  "chicken",
+  "pork",
+  "turkey"
+ ],
+ "prose": {
+  "intro_html": "<p>Chili is where a tight grocery budget goes to look generous. This is the Pioneer Woman version, built for a crew: browned 80/20 beef, a double hit of beans, and masa harina doing the quiet work of thickening it into something that clings to a spoon instead of sloshing around like soup. Scaled out to 14 containers, it lands at {{cal}} calories and {{protein}} grams of protein a serving, which is the whole reason we are here. Cheap does not have to mean flimsy.</p><p>It is also forgiving, which I appreciate on a Sunday. You brown, you season, you let it sit and mind its own business for an hour, and it gets better the longer it goes. Nothing about it is fussy, and nothing about it is expensive.</p>",
+  "shop_smart": "<p>Buy the beef in the biggest 80/20 pack your store sells and portion it down at home. This batch wants 4 2/3 pounds, so a warehouse tray earns its keep here instead of the little grocery-case packs.</p><p>The spices carry this dish, so get them from the bulk bin if your store has one. You need a real pour of chili powder, 1/4 cup plus a couple teaspoons, and just pinches of cumin, oregano, salt, and cayenne. Bulk bins let you buy exactly that instead of five jars you use once.</p><p>Canned kidney and pinto beans are the value engine of the whole pot, so grab the cans and drain and rinse them at home; you want 35 ounces of each drained. Masa harina lives by the flour, keeps forever in the pantry, and is what turns a thin chili thick, so pick up a bag and keep it. Leave the tortilla chips and Fritos on the shelf; the cheddar, sour cream, lime, and green onion garnishes do plenty.</p>",
+  "make_it": "<p>Brown 4 2/3 pounds of 80/20 ground beef in a large pot over medium heat, crumbling it as it cooks. When there is no pink left, drain off the grease.</p><p>Add the 5 diced garlic cloves and the tomato sauce and cook for 1 minute, just to wake the garlic up. Now the seasoning: stir in the chili powder, cumin, oregano, salt, and cayenne until the whole pot is one color.</p><p>Pour in the diced tomatoes with their juice, drop the heat to low, cover, and let it simmer for about an hour, stirring now and then. If it looks dry along the way, add water a half cup at a time.</p><p>Whisk the masa harina with a little water in a bowl until it is a smooth slurry, then stir it into the chili. That is your thickener; add a bit more masa or water until it is the consistency you like. Fold in the drained and rinsed kidney and pinto beans and simmer 10 more minutes so they warm through and take on the seasoning.</p><p>Portion it out and finish each one with shredded cheddar, a spoon of sour cream, a scatter of diced green onion, and a lime wedge on the side.</p>",
+  "portion_html": "<p>Do not eyeball it. Set your empty container on a kitchen scale and zero it out, then weigh the full pot the same way and subtract the pot. Divide that number by 14 and you have your target weight per container. Fill each one to that weight and you get 14 honest, equal servings that all hit the same {{cal}} calories and {{protein}} grams of protein.</p><p>Keep the cheddar, sour cream, lime, and green onions on the side and add them when you reheat. Garnishes that ride along in the fridge for four days get sad; added fresh, they make day-four chili taste like day-one.</p>",
+  "cost_closing_html": "<p>All in, this pot comes out to ${{cost_ps}} a serving. That is a bowl of chili with real beef, two kinds of beans, and toppings, for less than the drink you would order to go with it at a restaurant.</p><p>Fourteen of these means two full weeks of dinners handled off one afternoon of cooking, and the per-serving number does not budge whether you eat it Monday or the following Thursday. That is the entire pitch of cooking in batches: you pay the low number once and eat like it fourteen times.</p><p>Everything you need to run this playbook every week, the boards and the tools, runs you a dollar a month. The chili pays for the membership on the first serving.</p>",
+  "upsell_html": "<p>Make this once and you will stop wondering what is for dinner for two weeks. Brown, season, simmer, portion, done. If you want the rest of the high-protein, low-cost meal-prep lineup and the price boards that keep a serving this cheap, the whole thing is a dollar a month. Come cook with the crew.</p>"
+ },
+ "head": {
+  "description": "Pioneer Woman Chili scaled for meal prep: 14 budget dinners with beef, kidney and pinto beans, and masa harina, at {{cal}} calories and {{protein}} grams of protein each.",
+  "keywords": "pioneer woman chili, meal prep chili, high protein chili, beef and bean chili, budget meal prep dinner, masa harina chili, batch chili recipe, 14 serving chili",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "",
+  "totalTime": "",
+  "steps": [
+   "Brown 4 2/3 pounds of 80/20 ground beef in a large pot over medium heat, crumbling it as it cooks, then drain off the grease.",
+   "Add the 5 diced garlic cloves and the tomato sauce and cook for 1 minute.",
+   "Stir in the chili powder, ground cumin, dried oregano, salt, and cayenne pepper until evenly combined.",
+   "Add the diced tomatoes with their juice, reduce heat to low, cover, and simmer about 1 hour, stirring occasionally and adding water a half cup at a time if it gets dry.",
+   "Whisk the masa harina with a little water into a smooth slurry, stir it into the chili, and adjust with more masa or water to reach the consistency you want.",
+   "Fold in the drained and rinsed kidney and pinto beans and simmer 10 minutes more.",
+   "Portion into 14 containers and top each with shredded cheddar, sour cream, diced green onion, and a lime wedge."
+  ],
+  "step_names": [
+   "Brown the beef",
+   "Garlic and tomato sauce",
+   "Season the pot",
+   "Simmer with tomatoes",
+   "Thicken with masa",
+   "Add the beans",
+   "Portion and garnish"
+  ]
+ }
+}

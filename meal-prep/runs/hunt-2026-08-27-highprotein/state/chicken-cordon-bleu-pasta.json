@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-cordon-bleu-pasta",
+    "title":  "Chicken Cordon Bleu Pasta",
+    "source_url":  "https://www.spendwithpennies.com/chicken-cordon-bleu-pasta/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:50:37",
+    "updated":  "2026-08-27T11:50:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken with ham, Swiss, Dijon cream and panko is the cordon-bleu flavor identity already live as chicken-cordon-bleu-casserole (and turkey-cordon-bleu-casserole); egg-noodle skillet vs casserole is the same dinner reformatted, not a new plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:50:37",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/chicken-cordon-bleu-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:50:38",
+                        "by":  "decider",
+                        "detail":  "Chicken with ham, Swiss, Dijon cream and panko is the cordon-bleu flavor identity already live as chicken-cordon-bleu-casserole (and turkey-cordon-bleu-casserole); egg-noodle skillet vs casserole is the same dinner reformatted, not a new plate."
+                    }
+                ]
+}

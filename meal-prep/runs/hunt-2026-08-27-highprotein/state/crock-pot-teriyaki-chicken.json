@@ -1,0 +1,31 @@
+{
+    "slug":  "crock-pot-teriyaki-chicken",
+    "title":  "Crock Pot Teriyaki Chicken",
+    "source_url":  "https://fitfoodiefinds.com/crock-pot-teriyaki-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:40:26",
+    "updated":  "2026-08-27T11:40:27",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Teriyaki chicken over rice is the same dinner as the live Teriyaki Chicken and Rice Bowl (protein+soy sauce+rice all match); slow-cooker method doesn\u0027t change the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:40:26",
+                        "by":  "harvest",
+                        "detail":  "https://fitfoodiefinds.com/crock-pot-teriyaki-chicken/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:40:27",
+                        "by":  "decider",
+                        "detail":  "Teriyaki chicken over rice is the same dinner as the live Teriyaki Chicken and Rice Bowl (protein+soy sauce+rice all match); slow-cooker method doesn\u0027t change the plate."
+                    }
+                ]
+}

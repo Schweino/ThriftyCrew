@@ -1,0 +1,147 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+  "source_url": "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+  "servings": 6,
+  "time_total": null,
+  "time_active": "5 minutes",
+  "ingredients": [
+    {
+      "raw": "12 oz uncooked penne pasta",
+      "item": "uncooked penne pasta",
+      "qty": "12",
+      "unit": "oz",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5 lbs raw chicken breast, (cut into 1 inch cubes)",
+      "item": "raw chicken breast",
+      "qty": "1.5",
+      "unit": "lbs",
+      "prep": "cut into 1 inch cubes",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2.5 cups chicken broth",
+      "item": "chicken broth",
+      "qty": "2.5",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "16 oz cottage cheese*",
+      "item": "cottage cheese",
+      "qty": "16",
+      "unit": "oz",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 5.2 oz package of Boursin cheese ((Garlic and Fine Herbs))",
+      "item": "Boursin cheese",
+      "qty": "1 5.2 oz",
+      "unit": "package",
+      "prep": "(Garlic and Fine Herbs)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup fresh or frozen peas",
+      "item": "fresh or frozen peas",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "14 oz canned artichoke hearts, (drained and roughly chopped)",
+      "item": "canned artichoke hearts",
+      "qty": "14",
+      "unit": "oz",
+      "prep": "drained and roughly chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 clove garlic, (minced)",
+      "item": "garlic",
+      "qty": "1",
+      "unit": "clove",
+      "prep": "(minced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tbsp fresh lemon juice",
+      "item": "fresh lemon juice",
+      "qty": "2",
+      "unit": "tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp lemon zest",
+      "item": "lemon zest",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp sea salt",
+      "item": "sea salt",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup freshly grated parmesan cheese",
+      "item": "freshly grated parmesan cheese",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 tbsp fresh parsley or basil, (for garnish)",
+      "item": "fresh parsley or basil",
+      "qty": "3",
+      "unit": "tbsp",
+      "prep": "for garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400 degrees F. Lightly grease a 9x13 casserole dish and set aside.",
+    "Make the creamy sauce in a blender or food processor. Combine cottage cheese, Boursin cheese, garlic clove, fresh lemon juice, lemon zest, and salt. Mix until smooth, then add the chicken broth. Continue to blend until sauce is completely incorporated and smooth. It will be very thin!",
+    "Dump and assemble the casserole. Place the penne pasta on the bottom, then scatter with the chicken breast pieces, peas, and artichoke hearts. Pour the blended cottage cheese over the entire dish, making sure the pasta is completely submerged.",
+    "Cover the dish tightly with foil and transfer to the oven. Bake for 40 minutes and remove from oven. Take off the foil and give the dish a good stir. You want the pasta to be slightly undercooked at this point. Top with parmesan cheese and place back in the oven for another 5-10 minutes (you can bump up the temperature to get it nice and golden). If it's al-dente or feels done, top with parmesan and let rest for at least 10 minutes before serving.",
+    "After removing from the oven, rest for 10 minutes before topping with optional parsley or basil, and then serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 13,
+    "verified": 13,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

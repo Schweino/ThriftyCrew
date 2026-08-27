@@ -1,11 +1,35 @@
 ﻿{
-    "specs":  578,
+    "specs":  579,
     "findings":  [
                      {
                          "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270 tbsp\u0027, which no kitchen measure shows: Milk (Fairlife): 0 tbsp (1 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "chicken-rice-and-broccoli",
+                         "cls":  "STAT-PROSE",
+                         "why":  "head.description says 3g protein, stat says 47"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "chicken-rice-and-broccoli",
+                         "cls":  "UNUSED",
+                         "why":  "\u0027dried basil\u0027 is bought and costed but never named in a step"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "chicken-rice-and-broccoli",
+                         "cls":  "UNUSED",
+                         "why":  "\u0027dried parsley\u0027 is bought and costed but never named in a step"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "chicken-rice-and-broccoli",
+                         "cls":  "UNUSED",
+                         "why":  "\u0027garlic powder\u0027 is bought and costed but never named in a step"
                      },
                      {
                          "run":  "live",
@@ -24,6 +48,12 @@
                          "slug":  "cornbread-topped-turkey-casserole",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.11 oz\u0027, which no kitchen measure shows: Poultry Seasoning (generic (USDA)): 0.11 oz (3 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "ground-beef-cottage-cheese-bowl",
+                         "cls":  "UNUSED",
+                         "why":  "\u0027hot honey\u0027 is bought and costed but never named in a step"
                      },
                      {
                          "run":  "live",
@@ -130,6 +160,8 @@
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "UNMEASURABLE-QTY":  21
+                     "UNMEASURABLE-QTY":  21,
+                     "UNUSED":  4,
+                     "STAT-PROSE":  1
                  }
 }

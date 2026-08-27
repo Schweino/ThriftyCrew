@@ -1,0 +1,404 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-27T11:59:47",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "93/7 lean ground beef",
+   "state": "MATCHES",
+   "term_used": "93/7 lean ground beef",
+   "attempts": [
+    {
+     "term": "93/7 lean ground beef",
+     "state": "MATCHES",
+     "hits": 19
+    }
+   ],
+   "hits": [
+    {
+     "item": "Sadler's Smokehouse Mesquite Beef Brisket 2 lbs.",
+     "price": 31.47,
+     "size": "",
+     "unit_price": "$15.73/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6YBF7MJ1OXNL"
+    },
+    {
+     "item": "Buena Mesa Authentically Seasoned Fajita Beef, priced per pound",
+     "price": 28.64,
+     "size": "",
+     "unit_price": "$7.16/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/58CAUR1V6T9C"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Beef Boneless Whole Brisket, Vacuum Pack, priced per pound",
+     "price": 90.2,
+     "size": "",
+     "unit_price": "$5.88/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7CROYMJFO6MH"
+    },
+    {
+     "item": "Member's Mark USDA Prime Angus Beef Boneless Whole Brisket, Vacuum Pack, priced per pound",
+     "price": 93.65,
+     "size": "",
+     "unit_price": "$5.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4WSHLSBIEDQ8"
+    },
+    {
+     "item": "Member's Mark 80/20 Ground Beef Chuck Sliders, 18 ct., priced per pound",
+     "price": 16.99,
+     "size": "",
+     "unit_price": "$5.86/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6PJQR4FGAND0"
+    },
+    {
+     "item": "Member's Mark USDA Choice Angus Whole Beef Short Loin, Bone-in, Cryovac, priced per pound",
+     "price": 209.68,
+     "size": "",
+     "unit_price": "$14.12/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0TO9HVXFNR9T"
+    },
+    {
+     "item": "Member’s Mark USDA Choice Angus Whole Beef Strip Loin, Cryovac, priced per pound",
+     "price": 169.02,
+     "size": "",
+     "unit_price": "$11.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/663UPWKNB8KN"
+    },
+    {
+     "item": "90%/10% Ground Beef Chub, Case, priced per pound",
+     "price": 442.71,
+     "size": "",
+     "unit_price": "$5.22/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/740SBJFV7YFB"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "rotini pasta",
+   "state": "MATCHES",
+   "term_used": "rotini pasta",
+   "attempts": [
+    {
+     "term": "rotini pasta",
+     "state": "MATCHES",
+     "hits": 45
+    }
+   ],
+   "hits": [
+    {
+     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
+    },
+    {
+     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
+     "price": 8.52,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
+    },
+    {
+     "item": "Tangle Creamy Mushroom Pasta Bowl, 6 pk.",
+     "price": 9.48,
+     "size": "",
+     "unit_price": "$1.58/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6J3CU2ZX9YJW"
+    },
+    {
+     "item": "Rao's Homemade Marinara Sauce, 22 oz., 2 pk.",
+     "price": 7.76,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4P0AL8KH8MXL"
+    },
+    {
+     "item": "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
+     "price": 11.74,
+     "size": "",
+     "unit_price": "$0.98/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3EU6L4YHVBHK"
+    },
+    {
+     "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$2.25/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
+    },
+    {
+     "item": "Chef Boyardee Spaghetti and Meatballs, 14.5 oz., 8 pk.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/37XZDMNMJ03R"
+    },
+    {
+     "item": "Chef Boyardee Bowls, Variety Pack, 8 pk.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7BNH2BF10EO6"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "shredded cheddar cheese",
+   "state": "MATCHES",
+   "term_used": "shredded cheddar cheese",
+   "attempts": [
+    {
+     "term": "shredded cheddar cheese",
+     "state": "MATCHES",
+     "hits": 26
+    }
+   ],
+   "hits": [
+    {
+     "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
+     "price": 9.64,
+     "size": "",
+     "unit_price": "$0.40/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
+    },
+    {
+     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+     "price": 7.28,
+     "size": "",
+     "unit_price": "$0.30/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+    },
+    {
+     "item": "Member's Mark Sharp Cheddar Finely Shredded Cheese 2 pk.",
+     "price": 7.32,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7L728MJ07W4N"
+    },
+    {
+     "item": "Member's Mark Mexican Style Finely Shredded Cheese 2 pk.",
+     "price": 5.97,
+     "size": "",
+     "unit_price": "$0.19/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1K3GXOV3GHYK"
+    },
+    {
+     "item": "Member's Mark Mild Cheddar Shredded Cheese 16 oz., 2 pk.",
+     "price": 5.87,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5WQ0CF5K41K3"
+    },
+    {
+     "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
+     "price": 11.47,
+     "size": "",
+     "unit_price": "$1.43/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+    },
+    {
+     "item": "Member's Mark Standard Shredded Mild Yellow Cheddar Cheese 5 lbs.",
+     "price": 12.28,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/689E5H9361GH"
+    },
+    {
+     "item": "Member's Mark Standard Shredded 3 Cheese Blend, 5 lbs.",
+     "price": 12.42,
+     "size": "",
+     "unit_price": "$0.16/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4111AN1KZDDU"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "almond butter",
+   "state": "MATCHES",
+   "term_used": "almond butter",
+   "attempts": [
+    {
+     "term": "almond butter",
+     "state": "MATCHES",
+     "hits": 18
+    }
+   ],
+   "hits": [
+    {
+     "item": "Welch's Concord Grape Jelly, 30 oz., 2 pk.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.08/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4LPJ2SH96WW3"
+    },
+    {
+     "item": "Smucker's Strawberry Jam, 64 oz., 2 pk.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6TI9POP47WRP"
+    },
+    {
+     "item": "Member's Mark Almond Butter, 24 oz.",
+     "price": 8.78,
+     "size": "",
+     "unit_price": "$0.37/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0UOSTOIO1HGR"
+    },
+    {
+     "item": "Nature Valley Biscuit Sandwich with Almond Butter, 30 ct.",
+     "price": 15.48,
+     "size": "",
+     "unit_price": "$0.52/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5RF6URN1C3MU"
+    },
+    {
+     "item": "Snickers Milk Chocolate Candy Bars, Full Size, 1.86 oz., 48 pk.",
+     "price": 52.48,
+     "size": "",
+     "unit_price": "$1.09/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2K3CU2S516Q7"
+    },
+    {
+     "item": "Nutella Peanut Spread, 26.5 oz., 2 pk.",
+     "price": 12.78,
+     "size": "",
+     "unit_price": "$6.39/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2SFBF9172F4M"
+    },
+    {
+     "item": "Member's Mark Natural Creamy Peanut Butter, 40 oz., 2 pk.",
+     "price": 7.78,
+     "size": "",
+     "unit_price": "$0.10/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4J8UA77KAVJO"
+    },
+    {
+     "item": "Nutella Hazelnut Spread with Cocoa, 26.5 oz., 2 pk.",
+     "price": 12.78,
+     "size": "",
+     "unit_price": "$0.24/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Z8GS3KJ8WHW"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "masa harina",
+   "state": "MATCHES",
+   "term_used": "masa harina",
+   "attempts": [
+    {
+     "term": "masa harina",
+     "state": "MATCHES",
+     "hits": 15
+    }
+   ],
+   "hits": [
+    {
+     "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+    },
+    {
+     "item": "Maseca Masa Corn Flour, 22 lbs.",
+     "price": 21.78,
+     "size": "",
+     "unit_price": "$0.99/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+    },
+    {
+     "item": "Maseca Special Regular 0, 50 lbs.",
+     "price": 31.68,
+     "size": "",
+     "unit_price": "$0.63/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4FJ0WUX9IAMF"
+    },
+    {
+     "item": "PAN Precooked White Corn Meal, 5 lbs.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4JX7ZAISRS0J"
+    },
+    {
+     "item": "Gold Medal All Purpose Flour, 12 lbs.",
+     "price": 6.72,
+     "size": "",
+     "unit_price": "$0.56/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2V4R3MQP7LKY"
+    },
+    {
+     "item": "Member's Mark All Purpose Flour, 25 lbs.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "$0.34/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5DODYSIB475T"
+    },
+    {
+     "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "$0.42/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+    },
+    {
+     "item": "King Arthur Bread Flour, 10 lbs.",
+     "price": 8.38,
+     "size": "",
+     "unit_price": "$0.84/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3EJBF2VJT0IQ"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

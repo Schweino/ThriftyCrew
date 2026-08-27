@@ -1,0 +1,596 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 3,
+ "generated": "2026-08-27T12:06:39",
+ "batch_terms": [
+  "cotija cheese",
+  "red onion"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "cotija cheese",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Cacique® Cotija Part Skim Milk Cheese",
+       "price": 5.49,
+       "size": "10 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0007456200110"
+      },
+      {
+       "item": "Queso Campesino® Cotija Whole Milk Cheese",
+       "price": 8.49,
+       "size": "12 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0064440413716"
+      },
+      {
+       "item": "Kroger® Mercado Mexican Style Queso Cotija Grated Cheese",
+       "price": 3.79,
+       "size": "8 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111012735"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "El Mexicano Grating Cheese, Part Skim, Cotija Queso 10 Oz",
+       "price": 5.99,
+       "size": "10 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/el_mexicano_grating_cheese_part_skim_cotija_queso_10_oz/p/3081598"
+      },
+      {
+       "item": "El Mexicano Cheese, Aged Part Skim Milk Cheese, Granulado, Cotija 16 Oz",
+       "price": 8.89,
+       "size": "16 oz",
+       "relevance": 82,
+       "url": "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/el_mexicano_cheese_aged_part_skim_milk_cheese_granulado_cotija_16_oz/p/6091880"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "OK",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
+       "price": 1.99,
+       "size": "12 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
+      },
+      {
+       "item": "Fareway Taco Blend Fancy Shredded Cheese",
+       "price": 2.48,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712408-fareway-cheese-taco-blend-fancy-shredded-8-oz"
+      },
+      {
+       "item": "Fareway Neufchatel Cheese",
+       "price": 1.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20565842-fareway-cheese-neufchatel-8-oz"
+      },
+      {
+       "item": "Crystal Farms Blue Cheese, Crumbled",
+       "price": 2.98,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1516384-crystal-farms-cheese-wisconsin-blue-crumbled-4-oz"
+      },
+      {
+       "item": "Guerrero Tostadas Caseras Amarillas",
+       "price": 2.99,
+       "size": "22 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/203419-guerrero-tostadas-22-ct"
+      },
+      {
+       "item": "Fareway 4% Min Small Curd Cottage Cheese",
+       "price": 7.88,
+       "size": "48 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26544540-fareway-small-curd-4-milkfat-min-cottage-cheese-48-oz"
+      },
+      {
+       "item": "Sargento Gouda Sliced Cheese, 10 slices",
+       "price": 3.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/77159-sargento-sliced-gouda-natural-cheese-7-oz"
+      },
+      {
+       "item": "Crystal Farms Cheese, Parmesan, Finely Shredded",
+       "price": 2.67,
+       "size": "5.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27152419-crystal-farms-cf-shredded-parmesan-cheese-5-5-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "cotija cheese",
+     "attempts": [
+      {
+       "term": "cotija cheese",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
+       "price": 9.64,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
+      },
+      {
+       "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
+       "price": 11.47,
+       "size": "",
+       "unit_price": "$1.43/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+      },
+      {
+       "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
+       "price": 7.44,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+      },
+      {
+       "item": "El Viajero Panela Basket Cheese 3 lbs.",
+       "price": 11.67,
+       "size": "",
+       "unit_price": "$3.89/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0RQKQXZG40PD"
+      },
+      {
+       "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
+       "price": 7.28,
+       "size": "",
+       "unit_price": "$0.30/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+      },
+      {
+       "item": "The Laughing Cow Creamy Swiss Cheese Wedge, Original, 3 pk.",
+       "price": 4.58,
+       "size": "",
+       "unit_price": "$1.53/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/37OQ8A2NMXGG"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
+       "price": 5.92,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+      },
+      {
+       "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
+       "price": 12.17,
+       "size": "",
+       "unit_price": "$2.43/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "red onion",
+   "unit": "lb",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Jumbo Red Onions",
+       "price": 1.69,
+       "size": "1 lb",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000004082"
+      },
+      {
+       "item": "Peeled Jumbo Red Onions",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000004669"
+      },
+      {
+       "item": "Organic Jumbo Red Onions",
+       "price": 1.99,
+       "size": "1 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000094082"
+      },
+      {
+       "item": "Kroger® Red Onion 3 lb Bag",
+       "price": 3.99,
+       "size": "3 lb",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111062959"
+      },
+      {
+       "item": "Mezzetta™ Pickled Red Onions",
+       "price": 6.79,
+       "size": "16 fl oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0007321400868"
+      },
+      {
+       "item": "Diced Red Onions Fresh Cut In Store Daily",
+       "price": 2.99,
+       "size": "8 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0063912388001"
+      },
+      {
+       "item": "Simple Truth Organic® Red Onion 2 lb Bag",
+       "price": 3.89,
+       "size": "2 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111060161"
+      },
+      {
+       "item": "Cleveland Kitchen Pickled Red Onions 16 fl oz",
+       "price": 5.99,
+       "size": "16 fl oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0085977400784"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Mt. Olive Pickled Red Onions 12 Fl Oz",
+       "price": 3.19,
+       "size": "12 fl oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_pickled_red_onions_12_fl_oz/p/1764405684714921934"
+      },
+      {
+       "item": "Fresh Red Onions, Sliced Fresh Divide",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_red_onions_sliced_fresh_divide/p/1564405684713033936"
+      },
+      {
+       "item": "Litehouse Herb, Freeze  Dried Red Onion 0.6 Oz",
+       "price": 5.99,
+       "size": "200 ml",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/litehouse_herb_freeze_dried_red_onion_0_6_oz/p/3745"
+      },
+      {
+       "item": "Our Family Onion Red",
+       "price": 3.49,
+       "size": "32 oz",
+       "relevance": 95,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_red/p/2341162"
+      },
+      {
+       "item": "Sweet Red Italian Onions",
+       "price": 1.79,
+       "size": "lb",
+       "relevance": 94,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/sweet_red_italian_onions/p/606958"
+      },
+      {
+       "item": "Red Robin Crispy Onion Rings 14 Oz",
+       "price": 6.89,
+       "size": "14 oz",
+       "relevance": 92,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/appetizers_snacks_side_dishes/red_robin_crispy_onion_rings_14_oz/p/2139196"
+      },
+      {
+       "item": "Fresh Fajita Mix: Onions, Red, Yellow, & Green Peppers Fresh Divide",
+       "price": 5.99,
+       "size": "lb",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_fajita_mix_onions_red_yellow_green_peppers_fresh_divide/p/1564405684713033958"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "OK",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Onion",
+       "price": 1.11,
+       "size": "$1.48 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+      },
+      {
+       "item": "Crazy Fresh Red Onion Diced",
+       "price": 2.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19269233-crazy-fresh-diced-red-onion-each"
+      },
+      {
+       "item": "Mezzetta Pickled Red Onions",
+       "price": 5.97,
+       "size": "16 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27276229-mezzetta-pickled-red-onions-16-fl-oz"
+      },
+      {
+       "item": "Litehouse Herb, Freeze Dried Red Onion",
+       "price": 4.99,
+       "size": "0.6 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151495-litehouse-freeze-dried-red-onion-0-35-oz"
+      },
+      {
+       "item": "Cilantro",
+       "price": 1.49,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+      },
+      {
+       "item": "Green Onions (Scallions)",
+       "price": 0.99,
+       "size": "1 bunch",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+      },
+      {
+       "item": "Cucumber",
+       "price": 0.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345-cucumber-each"
+      },
+      {
+       "item": "Hass Avocado",
+       "price": 0.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "red onion",
+     "attempts": [
+      {
+       "term": "red onion",
+       "state": "MATCHES",
+       "hits": 18
+      }
+     ],
+     "hits": [
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+       "price": 6.15,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/25CSPSJ2282X"
+      },
+      {
+       "item": "Sweet Onions, 5 lbs.",
+       "price": 4.96,
+       "size": "",
+       "unit_price": "$0.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61EDSZBFT3MZ"
+      },
+      {
+       "item": "Organic Yellow Onions, 5 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$1.04/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+      },
+      {
+       "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
+       "price": 5.47,
+       "size": "",
+       "unit_price": "$2.73/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+      },
+      {
+       "item": "Tomatoes on the Vine, 3 lbs.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$1.66/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
+      },
+      {
+       "item": "Spice World Organic Peeled Garlic, 3 lbs.",
+       "price": 11.42,
+       "size": "",
+       "unit_price": "$3.81/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2AEH85NR8DI6"
+      },
+      {
+       "item": "Pure Pacific Organic Celery Sticks, 2.5 lbs.",
+       "price": 4.24,
+       "size": "",
+       "unit_price": "$1.70/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1UAS63GSPBL2"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

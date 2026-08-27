@@ -1,0 +1,182 @@
+﻿{
+    "slug":  "high-protein-chicken-alfredo-lasagna",
+    "title":  "Chicken Alfredo Lasagna",
+    "source_url":  "https://masonfit.com/chicken-alfredo-lasagna/",
+    "servings":  6,
+    "built_at":  "2026-08-27T11:56:28",
+    "line_count":  8,
+    "resolved_count":  2,
+    "residual_count":  6,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "Frozen Lightly Breaded Chicken Breast Bites",
+                           "Low Fat Cottage Cheese",
+                           "Salt and Pepper",
+                           "Fresh Mozzarella",
+                           "Freshly Grated Parmesan",
+                           "No Boil Lasagna"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "1 pound Frozen Lightly Breaded Chicken Breast Bites*",
+                     "term":  "Frozen Lightly Breaded Chicken Breast Bites",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171515 Chicken breast tenders, breaded, uncooked [SR Legacy] per 100 g: 263.0 cal, 14.7 P, 15.0 C, 15.8 F, 1.1 fiber | fdc:173346 Chicken tenders, breaded, frozen, prepared [SR Legacy] per 100 g: 240.0 cal, 14.6 P, 14.9 C, 13.6 F, 1.7 fiber | fdc:168961 Chicken, thighs, frozen, breaded, reheated [SR Legacy] per 100 g: 334.0 cal, 18.7 P, 14.2 C, 22.4 F, 0.1 fiber | fdc:171514 Chicken breast tenders, breaded, cooked, microwaved [SR Legacy] per 100 g: 252.0 cal, 16.4 P, 17.6 C, 12.9 F, 0.0 fiber; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 cups 16 oz Low Fat Cottage Cheese",
+                     "term":  "Low Fat Cottage Cheese",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Fat Free Cottage Cheese [cottage-cheese] DIFFERENT FORM: low/free | Cottage Cheese [cottage-cheese] DIFFERENT FORM: low/fat | Ricotta Cheese [ricotta] DIFFERENT FORM: low/fat; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:169079 Cheese, cream, low fat [SR Legacy] per 100 g: 208.0 cal, 7.85 P, 6.73 C, 16.7 F, 0.0 fiber | fdc:168098 Cheese, monterey, low fat [SR Legacy] per 100 g: 313.0 cal, 28.2 P, 0.7 C, 21.6 F, 0.0 fiber | fdc:169050 Cheese, muenster, low fat [SR Legacy] per 100 g: 271.0 cal, 24.7 P, 3.5 C, 17.6 F, 0.0 fiber | fdc:168141 Cheese, swiss, low fat [SR Legacy] per 100 g: 179.0 cal, 28.4 P, 3.4 C, 5.1 F, 0.0 fiber; board MAPPED: cottage-cheese, 7 of 7 stores, cheapest 0.1138 at Walmart",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "3/4 cup 180g Alfredo Sauce (I used Rao\u0027s Roasted Garlic Alfredo)",
+                     "term":  "Alfredo Sauce",
+                     "canon_item":  "Alfredo Sauce",
+                     "bid":  "alfredo-sauce",
+                     "board":  null,
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; board MAPPED: alfredo-sauce, 7 of 7 stores, cheapest 0.1106 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  180
+                 },
+                 {
+                     "raw":  "Pinch of Salt and Pepper",
+                     "term":  "Salt and Pepper",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "unresolved",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:170109 Peppers, sweet, green, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170515 Peppers, sweet, red, cooked, boiled, drained, with salt [SR Legacy] per 100 g: 26.0 cal, 0.92 P, 6.11 C, 0.2 F, 1.2 fiber | fdc:170428 Peppers, sweet, green, cooked, boiled, drained, without salt [SR Legacy] per 100 g: 28.0 cal, 0.92 P, 6.7 C, 0.2 F, 1.2 fiber; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "8 oz Fresh Mozzarella (roughly shredded)",
+                     "term":  "Fresh Mozzarella",
+                     "canon_item":  null,
+                     "bid":  "fresh-mozzarella",
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "prior ruling: \u0027fresh mozzarella\u0027 -\u003e fresh-mozzarella (by mapper on 2026-08-26T05:09:07); nearest vocabulary rows: Reduced Fat Mozzarella [reduced-fat-mozzarella] DIFFERENT FORM: fresh/reduced/fat | Fat Free Mozzarella [] DIFFERENT FORM: fresh/fat/free; commodity id \u0027fresh-mozzarella\u0027 has no row in db\\ingredients.json yet; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172232 Basil, fresh [SR Legacy] per 100 g: 23.0 cal, 3.15 P, 2.65 C, 0.64 F, 1.6 fiber | fdc:170416 Parsley, fresh [SR Legacy] per 100 g: 36.0 cal, 2.97 P, 6.33 C, 0.79 F, 3.3 fiber | fdc:173474 Peppermint, fresh [SR Legacy] per 100 g: 70.0 cal, 3.75 P, 14.9 C, 0.94 F, 8.0 fiber | fdc:173473 Rosemary, fresh [SR Legacy] per 100 g: 131.0 cal, 3.31 P, 20.7 C, 5.86 F, 14.1 fiber; board CAPTURE: no commodity claims it; today\u0027s captures carry matching products",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "4 oz Freshly Grated Parmesan",
+                     "term":  "Freshly Grated Parmesan",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171247 Cheese, parmesan, grated [SR Legacy] per 100 g: 420.0 cal, 28.4 P, 13.9 C, 27.8 F, 0.0 fiber | fdc:173452 Cheese, parmesan, dry grated, reduced fat [SR Legacy] per 100 g: 265.0 cal, 20.0 P, 1.37 C, 20.0 F, 0.0 fiber | fdc:325036 Cheese, parmesan, grated [Foundation] per 100 g: 421.0 cal, 29.6 P, 12.4 C, 28.0 F, ? fiber; board MAPPED: parmesan, 7 of 7 stores, cheapest 0.3092 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "9 sheets (about 5.5 oz No Boil Lasagna)",
+                     "term":  "No Boil Lasagna",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171119 Chicken, feet, boiled [SR Legacy] per 100 g: 215.0 cal, 19.4 P, 0.2 C, 14.6 F, 0.0 fiber | fdc:168216 Plantains, green, boiled [SR Legacy] per 100 g: 121.0 cal, 1.09 P, 29.2 C, 0.08 F, 2.6 fiber | fdc:173333 Lasagna, cheese, frozen, prepared [SR Legacy] per 100 g: 130.0 cal, 6.54 P, 13.8 C, 5.33 F, 1.7 fiber | fdc:168960 Lasagna, cheese, frozen, unprepared [SR Legacy] per 100 g: 145.0 cal, 5.06 P, 21.6 C, 4.22 F, 1.7 fiber; board MAPPED: lasagna-noodles, 3 of 7 stores, cheapest 0.115 at Walmart",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "3-4 handfuls Fresh Parsley (chopped)",
+                     "term":  "Fresh Parsley",
+                     "canon_item":  "Fresh Parsley",
+                     "bid":  "fresh-parsley",
+                     "board":  "recipe",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: fresh-parsley, 3 of 7 stores, cheapest 0.99 at Hy-Vee",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  10,
+                     "grams_basis_fallback":  "handful w/o density"
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 2 of 8 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  500.0,
+                                          "carbs":  31.0,
+                                          "protein_g":  43.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  2,
+                           "lines_total":  8,
+                           "uncovered_lines":  [
+                                                   "Frozen Lightly Breaded Chicken Breast Bites",
+                                                   "Low Fat Cottage Cheese",
+                                                   "Salt and Pepper",
+                                                   "Fresh Mozzarella",
+                                                   "Freshly Grated Parmesan",
+                                                   "No Boil Lasagna"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

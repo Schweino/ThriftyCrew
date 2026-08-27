@@ -1,0 +1,40 @@
+{
+  "generated": "2026-08-27 09:xx",
+  "by": "grocery-browser-stores-refresh (09:00 agent)",
+  "answers": "out/research-worklist.json generated 2026-08-27 08:16",
+  "note": "RESEARCH ONLY. Nothing here was written into out/regular - the 0800 chain had already built fareway-regular-2026-08-27.json this morning, and rebuilding that file from a ONE-TERM capture is the narrow-recapture trap the rescue worklist warns about at file scale (a thin re-read wins the commodity and retires the rest). Brad or the next full Fareway pass folds these in.",
+  "items": [
+    {
+      "commodity": "pork-chops",
+      "store": "Fareway",
+      "status": "ANSWERED",
+      "identity_verified": "shop.fareway.com In-Store, retailerLocation 531573, read from __APOLLO_CLIENT__ cache (52 priced rows for term 'pork chops', 6 of them chops)",
+      "the_sale_row_that_has_no_fallback": {
+        "name": "Bone-In Smoked Pork Chops",
+        "price": "$4.37 each",
+        "unit": "$4.99 / lb",
+        "was": "$5.24",
+        "sale_note": "Sale ends in 2 days",
+        "sale_ends": "2026-08-29"
+      },
+      "cheapest_everyday_fallback": {
+        "id": "84388353",
+        "name": "Center Cut Pork Chops",
+        "price": "$2.49 each",
+        "unit": "$3.99 / lb",
+        "sale_note": "",
+        "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388353-center-cut-pork-chops-1-each",
+        "why": "cheapest per-lb everyday chop on the shelf, and the cheapest package at that rate"
+      },
+      "runners_up": [
+        { "name": "Iowa Pork Chops", "price": "$3.49 each", "unit": "$3.99 / lb", "id": "84386428", "note": "same per-lb rate, dearer package" },
+        { "name": "Boneless Pork Chop", "price": "$2.50", "size": "8 oz", "id": "84389055", "note": "= $5.00/lb; this is the row currently in fareway-regular, as_of 2026-08-15" },
+        { "name": "Boneless Pork Ribeye Chops", "price": "$1.67", "size": "5 oz", "id": "84387017", "note": "= $5.34/lb" }
+      ]
+    },
+    { "commodity": "bacon-bits", "store": "Hy-Vee", "status": "NOT REACHED",
+      "why": "hyvee-regular-2026-08-27.json (1550 rows) carries no bacon-bits row at all, so there is nothing on disk to fall back to - it needs a live Hy-Vee search (discover-hyvee.ps1 server lane), not a browser pass. Out of this agent's lane and out of its time budget." },
+    { "commodity": "red-wine", "store": "Hy-Vee", "status": "NOT REACHED", "why": "same as bacon-bits: no wine row in the on-disk Hy-Vee feed." },
+    { "commodity": "white-wine", "store": "Hy-Vee", "status": "NOT REACHED", "why": "same as bacon-bits: no wine row in the on-disk Hy-Vee feed." }
+  ]
+}

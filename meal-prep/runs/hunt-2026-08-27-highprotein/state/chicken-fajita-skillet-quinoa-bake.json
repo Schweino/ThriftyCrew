@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fajita-skillet-quinoa-bake",
+    "title":  "Chicken Fajita Skillet Quinoa Bake",
+    "source_url":  "https://whatsgabycooking.com/chicken-fajita-skillet-quinoa-bake/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:45:01",
+    "updated":  "2026-08-27T11:45:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chipotle-salsa fajita chicken with peppers baked over quinoa is the same fajita-chicken identity as live fajita-chicken-rice-bowl and batch-mate chicken-fajita-quinoa-bowls; a saturated Tex-Mex fajita dinner, not distinct.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:45:01",
+                        "by":  "harvest",
+                        "detail":  "https://whatsgabycooking.com/chicken-fajita-skillet-quinoa-bake/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:45:02",
+                        "by":  "decider",
+                        "detail":  "Chipotle-salsa fajita chicken with peppers baked over quinoa is the same fajita-chicken identity as live fajita-chicken-rice-bowl and batch-mate chicken-fajita-quinoa-bowls; a saturated Tex-Mex fajita dinner, not distinct."
+                    }
+                ]
+}

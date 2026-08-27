@@ -1,0 +1,31 @@
+{
+    "slug":  "high-protein-creamy-beef-pasta",
+    "title":  "High Protein Creamy Beef Pasta",
+    "source_url":  "https://skinnyspatula.com/high-protein-creamy-beef-pasta/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:34",
+    "updated":  "2026-08-27T11:42:35",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground beef in a creamy tomato (cream-cheese + sour-cream) sauce over pasta is the same dinner as live cheesy-beef-and-shells-casserole; prior ruling already rejected the near-identical creamy-beef-and-shells on this identity.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:34",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/high-protein-creamy-beef-pasta/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:42:35",
+                        "by":  "decider",
+                        "detail":  "Ground beef in a creamy tomato (cream-cheese + sour-cream) sauce over pasta is the same dinner as live cheesy-beef-and-shells-casserole; prior ruling already rejected the near-identical creamy-beef-and-shells on this identity."
+                    }
+                ]
+}

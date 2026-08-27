@@ -1,0 +1,31 @@
+{
+    "slug":  "stovetop-chicken-broccoli-and-rice-casserole",
+    "title":  "Stovetop Chicken Broccoli and Rice Casserole",
+    "source_url":  "https://fitfoodiefinds.com/stovetop-chicken-broccoli-and-rice-casserole-recipe/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:51:37",
+    "updated":  "2026-08-27T11:51:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast + rice + broccoli in a cheese/broth base is the same dinner as chicken-rice-and-broccoli accepted earlier this run; cheesy chicken-rice-broccoli region also saturated (poppy-seed casserole live).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:51:37",
+                        "by":  "harvest",
+                        "detail":  "https://fitfoodiefinds.com/stovetop-chicken-broccoli-and-rice-casserole-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:51:38",
+                        "by":  "decider",
+                        "detail":  "Chicken breast + rice + broccoli in a cheese/broth base is the same dinner as chicken-rice-and-broccoli accepted earlier this run; cheesy chicken-rice-broccoli region also saturated (poppy-seed casserole live)."
+                    }
+                ]
+}

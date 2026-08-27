@@ -1,0 +1,148 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T12:06:09",
+    "slug":  "butter-chicken-pasta",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Black Pepper\u0027 is optional in the source (mapped-optional) and IS counted in the macros"
+              ],
+    "intake":  {
+                   "name":  "Butter Chicken Pasta",
+                   "slug":  "butter-chicken-pasta",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Ziti Pasta",
+                                           "grams":  1050,
+                                           "buy":  "2 lb 5 oz dry short pasta (penne, rigatoni or rotini)"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Butter",
+                                           "grams":  49,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1575,
+                                           "buy":  "3 1/2 lb, cut into bite-sized pieces"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  385,
+                                           "buy":  "3 1/2 medium onions, diced (about 4 cups)"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  21,
+                                           "buy":  "7 cloves, finely chopped"
+                                       },
+                                       {
+                                           "item":  "Ginger",
+                                           "grams":  21,
+                                           "buy":  "3 1/2 tablespoons, finely chopped"
+                                       },
+                                       {
+                                           "item":  "Garam Masala",
+                                           "grams":  7,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Ground Cumin",
+                                           "grams":  7,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Ground Coriander",
+                                           "grams":  6,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Chili Powder",
+                                           "grams":  9,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Ground Turmeric",
+                                           "grams":  5,
+                                           "buy":  "1 3/4 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  1,
+                                           "buy":  "3/4 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Tomato Paste",
+                                           "grams":  56,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Tomato Sauce",
+                                           "grams":  1715,
+                                           "buy":  "7 cups"
+                                       },
+                                       {
+                                           "item":  "Almond Butter",
+                                           "grams":  112,
+                                           "buy":  "7 tablespoons (a scant 1/2 cup)"
+                                       },
+                                       {
+                                           "item":  "Half and Half",
+                                           "grams":  707,
+                                           "buy":  "3 1/2 cups"
+                                       },
+                                       {
+                                           "item":  "Fresh Cilantro",
+                                           "grams":  25,
+                                           "buy":  "1 1/2 cups leaves, roughly chopped"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  15,
+                                           "buy":  "to taste (about 2 1/2 teaspoons)"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "to taste (about 1 3/4 teaspoons)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  630,
+                                              "protein_g":  40.2,
+                                              "carbs_g":  72.9,
+                                              "fat_g":  21.4
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT20M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

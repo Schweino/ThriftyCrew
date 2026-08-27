@@ -1,0 +1,169 @@
+{
+ "slug": "pioneer-woman-chili",
+ "lines": [
+  {
+   "raw": "2 lbs. ground beef (80% lean)",
+   "buy": "4 2/3 lb",
+   "notes": ""
+  },
+  {
+   "raw": "2 cloves garlic (diced)",
+   "buy": "5 cloves, diced",
+   "notes": ""
+  },
+  {
+   "raw": "8 oz. tomato sauce",
+   "buy": "2 1/3 cups (about 19 oz)",
+   "notes": ""
+  },
+  {
+   "raw": "2 tablespoons chili powder",
+   "buy": "1/4 cup plus 2 1/2 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon ground cumin",
+   "buy": "2 1/3 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon ground oregano",
+   "buy": "2 1/3 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1 teaspoon salt",
+   "buy": "2 1/3 teaspoons",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 teaspoon cayenne pepper",
+   "buy": "1/2 teaspoon",
+   "notes": ""
+  },
+  {
+   "raw": "1/4 cup masa harina (white or yellow)",
+   "buy": "1/2 cup plus 1 tablespoon",
+   "grams_source": 30,
+   "notes": ""
+  },
+  {
+   "raw": "15 oz. kidney beans (drained and rinsed)",
+   "buy": "35 oz drained and rinsed (about 4 1/4 cups)",
+   "notes": ""
+  },
+  {
+   "raw": "15 oz. pinto beans (drained and rinsed)",
+   "buy": "35 oz drained and rinsed (about 4 1/4 cups)",
+   "grams_source": 425.2,
+   "notes": ""
+  },
+  {
+   "raw": "14.5 oz. diced tomatoes (Instant Pot version only)",
+   "buy": "34 oz with juice (about 4 cups)",
+   "notes": "Source marks this line Instant Pot version only."
+  },
+  {
+   "raw": "Sour Cream",
+   "buy": "1 1/4 cups, for serving",
+   "notes": ""
+  },
+  {
+   "raw": "Diced Green Onions",
+   "buy": "4 stalks, diced, for serving",
+   "notes": ""
+  },
+  {
+   "raw": "Shredded Cheddar",
+   "buy": "1 3/4 cups shredded, for serving",
+   "grams_source": 84,
+   "notes": "About 2 tablespoons a bowl."
+  },
+  {
+   "raw": "Lime Wedges",
+   "buy": "3 limes, cut into wedges",
+   "grams_source": 100,
+   "notes": ""
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1/4 cup masa harina (white or yellow)",
+   "term": "masa harina",
+   "canon_item": "Masa Harina",
+   "bid": "masa-harina",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Nixtamalized corn flour used as the chili's thickener - not cornmeal, not corn starch, not wheat flour. Board reports no commodity and no capture match and no vocabulary row shares a core word, so it goes to the registrar. 1/4 cup = 30 g."
+  },
+  {
+   "raw": "15 oz. pinto beans (drained and rinsed)",
+   "term": "pinto beans",
+   "canon_item": "Canned Pinto Beans",
+   "bid": "canned-pinto-beans",
+   "decision": "mapped",
+   "grams_source": 425.2,
+   "evidence": "'Drained and rinsed' from a 15 oz. tin is canned usage, so the canned row is the SAME form and not a flip - the identical call as 'black beans' -> canned-black-beans on 2026-08-26. Board 7 of 7; weighed at the same 15 oz basis the settled kidney-bean line uses."
+  },
+  {
+   "raw": "Shredded Cheddar",
+   "term": "Shredded Cheddar",
+   "canon_item": "Cheddar Cheese, Shredded",
+   "bid": "cheddar-cheese-shredded",
+   "decision": "mapped-optional",
+   "grams_source": 84,
+   "evidence": "A topping the source never quantified, so optional, per the 'Sliced onions' -> onions precedent. Reuses the same vocabulary row this batch used for healthy-hamburger-helper; REFUSED fat-free-cheddar, which is a different product and price class. Weighed at a nominal 14 g per serving."
+  },
+  {
+   "raw": "Lime Wedges",
+   "term": "Lime Wedges",
+   "canon_item": "Limes",
+   "bid": "limes",
+   "decision": "mapped-optional",
+   "grams_source": 100,
+   "evidence": "Wedges are a cut, not a food, and the board carries limes at 5 of 7, cheapest 0.25 at Walmart - a reuse. Unquantified garnish, so optional; weighed at 1 1/2 limes for the source's 6 servings."
+  },
+  {
+   "raw": "Tortilla Chips or Fritos",
+   "term": "Tortilla Chips or Fritos",
+   "canon_item": "Tortilla Chips",
+   "bid": null,
+   "decision": "not-purchased",
+   "grams_source": 0,
+   "evidence": "An unquantified either/or serving suggestion naming TWO different foods, and the estate's standing rejection forbids collapsing corn chips into tortilla-chips, so there is no single food to cost. The board's `tortillas` match is soft flour tortillas, a wrong food. Dropped as a garnish rather than costed against a guess; the chili is complete without it."
+  }
+ ],
+ "absent_terms": [
+  "masa harina",
+  "shredded cheddar cheese"
+ ],
+ "db_entries_written": [
+  "Masa Harina",
+  "Limes"
+ ],
+ "db_row_findings": [
+  "pioneer-woman-chili: the food DB already carries 'Canned Pinto Beans' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 84.6 cal / 5.4 P / 15.4 C / 0.0 F  vs  mapper 114.0 / 7.0 / 20.2 / 0.9. On one basis (the mapper's row scaled onto the DB's 0.5 cup = 130 g) they still disagree: calories 148.2 vs 110; protein_g 9.087 vs 7; carbs_g 26.26 vs 20; fat_g 1.17 vs 0. existing={\"serving_grams\": 130, \"serving_qty\": 0.5, \"serving_unit\": \"cup\", \"calories\": 110, \"protein_g\": 7, \"carbs_g\": 20, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 114, \"protein_g\": 6.99, \"carbs_g\": 20.2, \"fat_g\": 0.9}",
+  "pioneer-woman-chili: the food DB already carries 'Cheddar Cheese, Shredded' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 392.9 cal / 21.4 P / 3.6 C / 32.1 F  vs  mapper 408.0 / 23.3 / 2.4 / 34.0. On one basis (the mapper's row scaled onto the DB's 0.25 cup = 28 g) they still disagree: protein_g 6.524 vs 6; fat_g 9.52 vs 9. existing={\"serving_grams\": 28, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 110, \"protein_g\": 6, \"carbs_g\": 1, \"fat_g\": 9} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 408, \"protein_g\": 23.3, \"carbs_g\": 2.44, \"fat_g\": 34.0}",
+  "pioneer-woman-chili: the food DB already carries 'Lime' and this row is landing as 'Limes' - the same name modulo punctuation and plural, so these are almost certainly ONE food with two rows. The row was WRITTEN (a naming question must not park a recipe) and the lookup is name-keyed, so until they are merged one of them silently shadows the other."
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "masa harina",
+   "proposed_bid": "masa-harina",
+   "evidence": "Nixtamalized corn flour (Maseca and store equivalents), its own SKU in the Hispanic-foods aisle. It is not corn flour proper, not cornmeal, not corn starch and not any flour id: the lime treatment changes the food, the price and the use, and the board reports no commodity and no capture match while no vocabulary row shares a core word with it. Nothing on the board prices a nixtamalized corn product under another spelling, so this is a genuinely new food rather than a rename.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "masa-harina",
+   "verdict": "approve",
+   "bid": "masa-harina",
+   "reason": "No id in any namespace prices nixtamalized corn flour: the estate's only 'masa'/'harina' strings are EXCLUDE patterns inside hominy (commodities.json:42783-84) and cornmeal (:67319), meaning both corn neighbors deliberately fence masa harina out rather than carry it; the recipe-board baseline and recipe-commodities have no masa/harina/nixtamal row, the live feed has no price cell for it, and the only word-overlap hit (garam-masala, $0.9943/oz) is an unrelated spice. Nixtamalization makes it a different purchase from cornmeal and cornstarch (same-food-different-form vs cornmeal, different food vs cornstarch). Mint as recipe-only: add to recipe-board-everyday baseline + recipe-commodities.json via add-commodity-rule.ps1 with include ['masa\\s*harina','\\bmaseca\\b','instant\\s+corn\\s+masa'] and cornmeal-grade excludes (~150 patterns; explicitly exclude '\\bcornmeal\\b','polenta','grits?','corn\\s*starch','tortillas?','tamales?','pupusa','arepa','masarepa','chips?','prepared','mix\\b' plus the standard non-food block), and add commodity-dupe-allowlist.json pairs masa-harina<->cornmeal ('nixtamalized vs plain corn grind, different product/aisle/price') and masa-harina<->hominy ('same nixtamal process, whole canned kernel vs dry flour') so the daily audit never re-flags them. Vocabulary is a separate act: 'masa harina' also needs its own ingredients.json row (none shares a core word) with a label transcription for macros - fdc:169694/169696 are plausible SR Legacy matches but identity, not just macro agreement, must be confirmed before either is adopted."
+  }
+ ],
+ "macro_cross_check": "Source published 613 cal / 40 protein for 6 servings. Recomputed over the 16 costed lines at source basis: 4218 cal and 258 g protein total, i.e. 703 cal and 43.1 g protein per serving. Protein is +7.7% against the source and calories +14.7%, both inside the band and both explained by the same two things: the beans are carried at the settled 425.2 g gross-can basis rather than drained solids, and the source's own figure almost certainly excludes the sour cream and cheddar toppings that I weighed. 703 cal sits inside the run band of 450-800 but nearer the ceiling than the other two, which is the reason the unquantified chips were dropped rather than given a nominal weight."
+}

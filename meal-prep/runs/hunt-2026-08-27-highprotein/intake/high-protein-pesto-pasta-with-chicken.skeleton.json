@@ -1,0 +1,97 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T11:59:04",
+    "slug":  "high-protein-pesto-pasta-with-chicken",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "high protein pesto pasta with chicken",
+                   "slug":  "high-protein-pesto-pasta-with-chicken",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://joytothefood.com/high-protein-pesto-pasta-with-chicken/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "High Protein Pasta",
+                                           "grams":  529,
+                                           "buy":  "1 lb 2 oz dry high-protein pasta (campanelle or another frilly shape)"
+                                       },
+                                       {
+                                           "item":  "Bone Broth",
+                                           "grams":  280,
+                                           "buy":  "1 1/4 cups bone broth"
+                                       },
+                                       {
+                                           "item":  "Egg Yolk",
+                                           "grams":  117,
+                                           "buy":  "2 large eggs"
+                                       },
+                                       {
+                                           "item":  "Parmesan Cheese",
+                                           "grams":  131,
+                                           "buy":  "1 1/8 cups grated parmesan"
+                                       },
+                                       {
+                                           "item":  "Basil Pesto",
+                                           "grams":  529,
+                                           "buy":  "2 1/4 cups basil pesto (about 1 lb 2 oz)"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1588,
+                                           "buy":  "3 1/2 lb boneless skinless chicken breasts"
+                                       },
+                                       {
+                                           "item":  "Lemon Juice",
+                                           "grams":  70,
+                                           "buy":  "1/4 cup plus 1 Tbsp lemon juice"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  63,
+                                           "buy":  "4 2/3 Tbsp olive oil"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  14,
+                                           "buy":  "2 1/3 tsp salt"
+                                       },
+                                       {
+                                           "item":  "Garlic",
+                                           "grams":  14,
+                                           "buy":  "5 garlic cloves, minced"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  510,
+                                              "protein_g":  39.2,
+                                              "carbs_g":  30,
+                                              "fat_g":  26.5
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT20M",
+                                "totalTime":  "PT30M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

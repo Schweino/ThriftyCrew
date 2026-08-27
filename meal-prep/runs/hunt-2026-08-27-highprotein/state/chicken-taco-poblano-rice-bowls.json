@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-taco-poblano-rice-bowls",
+    "title":  "Chicken Taco Poblano Rice Bowls",
+    "source_url":  "https://www.skinnytaste.com/chicken-taco-poblano-rice-bowls/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:45:00",
+    "updated":  "2026-08-27T11:45:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken taco rice bowl (taco-seasoned chicken, salsa/tomato, corn, beans, rice, jack cheese) duplicates live Slow Cooker Chicken Taco Rice Bowls, word-overlap 44 sharing chicken/taco/rice/bowls; adding a poblano does not make a new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:45:00",
+                        "by":  "harvest",
+                        "detail":  "https://www.skinnytaste.com/chicken-taco-poblano-rice-bowls/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:45:01",
+                        "by":  "decider",
+                        "detail":  "Chicken taco rice bowl (taco-seasoned chicken, salsa/tomato, corn, beans, rice, jack cheese) duplicates live Slow Cooker Chicken Taco Rice Bowls, word-overlap 44 sharing chicken/taco/rice/bowls; adding a poblano does not make a new dinner."
+                    }
+                ]
+}

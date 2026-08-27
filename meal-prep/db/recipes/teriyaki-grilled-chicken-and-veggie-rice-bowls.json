@@ -1,0 +1,324 @@
+{
+    "name":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
+    "slug":  "teriyaki-grilled-chicken-and-veggie-rice-bowls",
+    "cuisine":  "Japanese-inspired",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
+    "source_site":  "cookingclassy.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "All 15 locked ingredient lines are used by a step; no step uses an unbought item (water is tap, not a costed line).",
+                         "REPAIR 2026-08-27 (source-QA blocking, ingredient-coverage): the source\u0027s \u00271/2 cup water\u0027 for the teriyaki sauce is a not-purchased line, so by house convention it carries no ingredient row (0 water lines across 562 live recipes; build-intake-skeleton classes \u0027mapped-free (water)\u0027 as not-purchased and excludes it by design). The quantity is now carried INLINE in the steps and in make_it instead: 1 3/4 cups total at batch scale (1/2 cup x 3.5), split the way the source splits it - 1 1/4 cups plus 1 Tbsp into the sauce (source 1/4 cup + 2 Tbsp = 6 Tbsp, x 3.5 = 21 Tbsp) and the remaining 7 Tbsp for the cornstarch slurry (source 2 Tbsp x 3.5). Sums to 28 Tbsp = 1 3/4 cups exactly. No ingredient line, gram weight, cost or macro figure changed.",
+                         "REPAIR 2026-08-27 (second, separate defect found while rebuilding, not in the QA findings): make_it said \u0027Skip the salt, the teriyaki brings plenty on its own\u0027, which audit-spec-contradictions read as PHANTOM - a step naming a food no ingredient line buys - and that class ratchets against a baseline of 0, so it was a hard gate failure independent of the water finding. Reworded to carry the source\u0027s own point (\u0027you won\u0027t need salt since the teriyaki sauce is plenty salty\u0027) without naming an unbought ingredient. Nothing else touched.",
+                         "No-seafood run: source step 6 suggested leftover sauce on \u0027chicken or salmon the next day\u0027; salmon reference dropped from all prose.",
+                         "Macros used in prose come only from the locked view (764 cal, 48.9 g protein) via {{cal}}/{{protein}} tokens; per-serving cost via ${{cost_ps}}. No literal dollar figures used.",
+                         "shop_smart deliberately makes no per-unit or per-line cost comparison claims because no cost_lines were provided in dispatch to trace them to; package-size guidance only.",
+                         "Cooking temps and times (425-450F, 160-165F, 4 min/side) are transcribed from the source instructions, not computed.",
+                         "FLAG for repair pass: black pepper is locked at \u00272 Tbsp ground black pepper, to taste\u0027 for 14 servings, an engine-set literal derived from an unmeasured source line (\u0027Ground black pepper\u0027); defensible as to-taste but worth a look."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "salmon",
+                                  "seafood",
+                                  "shrimp",
+                                  "authentic",
+                                  "restaurant-quality",
+                                  "em dash",
+                                  "cheap eats",
+                                  "$"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  764,
+                 "protein":  49,
+                 "carbs":  103,
+                 "fat":  18,
+                 "cost_ps":  "2.00"
+             },
+    "intro_html":  "\u003cp\u003eTeriyaki chicken bowls are the meal that make people forget they are eating on a budget. Grilled chicken breast, a glossy homemade teriyaki, a pile of crisp-tender veggies, and a bed of rice. That is a real dinner, and it travels.\u003c/p\u003e\u003cp\u003eHere is the honest pitch. Every bowl lands at {{cal}} calories with {{protein}} grams of protein, so you get the takeout flavor without the takeout price. The sauce is the whole game, and you are building it yourself from pantry staples. No bottled teriyaki tax, no mystery ingredients, just soy, honey, garlic, and ginger doing the work.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 3/4 cups low-sodium soy sauce (420 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 2/3 cup packed light brown sugar (142 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2/3 cup honey (220 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10 garlic cloves, minced (about 3 1/2 Tbsp) (32 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 1/2 Tbsp minced fresh ginger (21 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 3 1/2 Tbsp rice vinegar (52 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1/3 cup cornstarch (42 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3/4 cup olive oil, divided (165 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 1/4 lb boneless skinless chicken breasts (2381 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 Tbsp ground black pepper, to taste (14 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 3 1/2 medium zucchini, diced into half moons (about 5 1/4 cups) (686 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5 1/4 cups matchstick carrots (about 1 1/4 lb) (578 g)",
+                                "\u003cstrong\u003eBroccoli (fresh (USDA)):\u003c/strong\u003e 8 3/4 cups small diced broccoli florets (about 1 3/4 lb) (788 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6 1/8 cups uncooked white or brown rice (about 2 1/2 lb), cooked per package directions (1134 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 3 1/2 Tbsp toasted sesame seeds, for sprinkling (optional) (32 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Soy Sauce, 1 3/4 cups low-sodium soy sauce: ~$1.59. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Brown Sugar, 2/3 cup packed light brown sugar: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 2/3 cup honey: ~$1.74. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Garlic, 10 garlic cloves, minced (about 3 1/2 Tbsp): ~$0.44. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3 1/2 Tbsp minced fresh ginger: ~$0.17. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "Rice Vinegar, 3 1/2 Tbsp rice vinegar: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 1/3 cup cornstarch: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 3/4 cup olive oil, divided: ~$1.80. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 5 1/4 lb boneless skinless chicken breasts: ~$11.71. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
+                       "Zucchini, 3 1/2 medium zucchini, diced into half moons (about 5 1/4 cups): ~$2.30. \u003cstrong\u003eBuy 2 lbs: $3.04.\u003c/strong\u003e",
+                       "Carrots, 5 1/4 cups matchstick carrots (about 1 1/4 lb): ~$1.22. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Broccoli, 8 3/4 cups small diced broccoli florets (about 1 3/4 lb): ~$3.68. \u003cstrong\u003eBuy 2 lbs: $4.24.\u003c/strong\u003e",
+                       "Rice, 6 1/8 cups uncooked white or brown rice (about 2 1/2 lb), cooked per package directions: ~$1.43. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Toasted Sesame Seeds, 3 1/2 Tbsp toasted sesame seeds, for sprinkling (optional): ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper): ~$0.42. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.07 across 14 servings, so roughly $2.00 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.50 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.97 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.47. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eHere is where it pays off. This whole thing breaks down to ${{cost_ps}} per serving. That is fourteen restaurant-style teriyaki bowls for a fraction of what one takeout order runs, and you built the sauce with your own two hands.\u003c/p\u003e\u003cp\u003eRun the numbers against a single teriyaki bowl from the food court and it is not close. Same flavor, more protein, and this one is already waiting in your fridge.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe sauce ingredients are pantry regulars. Buy the big bottle of low-sodium soy sauce and the honey once, and you are set for batch after batch. Cornstarch, rice vinegar, and brown sugar are cheap and keep for a long time in the cupboard, so they are not costs you carry every time you make this.\u003c/p\u003e\u003cul\u003e\u003cli\u003eBuy your boneless skinless chicken breast in the family pack. This batch needs 5 1/4 pounds, so size up to one large pack rather than grabbing a handful of small trays.\u003c/li\u003e\u003cli\u003eMatchstick carrots and pre-cut broccoli florets save you real knife time. If you would rather trade the time for the chopping, a whole head of broccoli and whole carrots do the exact same job.\u003c/li\u003e\u003cli\u003eFresh ginger and garlic carry this sauce. One knob of ginger and one head of garlic cover the whole batch, so you are not buying much.\u003c/li\u003e\u003cli\u003eRice is the cheapest thing in the cart. A single bag of white or brown, about 2 1/2 pounds, covers all 14 bowls with room to spare.\u003c/li\u003e\u003c/ul\u003e",
+    "make_it":  [
+                    "\u003cp\u003eStart with the sauce, because everything else waits on it. Measure out 1 3/4 cups of water and keep it beside the pan, because it goes in twice. In a small saucepan, whisk together the low-sodium soy sauce, 1 1/4 cups plus 1 tablespoon of that water, the brown sugar, honey, minced garlic, minced ginger, and rice vinegar. Bring it to a light boil over medium-high heat.\u003c/p\u003e\u003cp\u003eWhisk the cornstarch into the remaining 7 tablespoons of water, then stir that slurry into the sauce. Drop the heat a touch and let it boil for one minute, stirring constantly, until it turns glossy and coats the back of a spoon. Pull it off the heat and set it aside.\u003c/p\u003e\u003cp\u003eBrush both sides of the chicken with some of the olive oil and season with black pepper. Nothing else goes on the chicken, because the teriyaki brings plenty of sodium of its own. Preheat the grill to medium-high, about 425 to 450 degrees, and brush the grates lightly with oil. Grill the chicken about 4 minutes per side, until the center reads 160 to 165 degrees on an instant-read thermometer. Let it rest 5 minutes, then dice into cubes.\u003c/p\u003e\u003cp\u003eHeat the rest of the olive oil in a saute pan over medium-high. Add the zucchini, broccoli, and carrots and saute 4 to 5 minutes, just until crisp-tender. Cook your rice according to the package while all of this is going.\u003c/p\u003e\u003cp\u003eTo build, layer rice into each container, top with the chicken and veggies, then drizzle teriyaki over the top and sprinkle with sesame seeds. You will have extra sauce left over, and that is a feature, not a bug. It is dinner insurance for the next day.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eThis batch fills 14 containers. The clean way to split it dead even is to weigh the pot. Set an empty container on the kitchen scale, zero it out, then weigh the full cooked batch of rice, chicken, and veggies and divide that number by 14. That target weight per container beats eyeballing every single time.\u003c/p\u003e\u003cp\u003eLayer the rice first, then the chicken and veggies on top, and keep the teriyaki either on the side or drizzled light so the rice does not go soggy by day three. Each bowl comes in at {{cal}} calories and {{protein}} grams of protein, which is a serious lunch for the money.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003ecookingclassy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eIf you want the full playbook, every recipe, every board price, and the tools that keep our grocery run honest, the Thrifty Crew membership is a dollar a month. One skipped takeout bowl covers the whole year.\u003c/p\u003e",
+    "cost_batch":  28.07,
+    "cost_batch_true":  32.5,
+    "cost_per_serving":  2,
+    "cost_per_serving_true":  2.32,
+    "cost_pantry_add":  16.97,
+    "cost_first_run":  49.47,
+    "scaler":  {
+                   "cost":  "32.50",
+                   "ing":  [
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  420,
+                                   "buy":  "1 3/4 cups low-sodium soy sauce",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  142,
+                                   "buy":  "2/3 cup packed light brown sugar",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  220,
+                                   "buy":  "2/3 cup honey",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  32,
+                                   "buy":  "10 garlic cloves, minced (about 3 1/2 Tbsp)",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3 1/2 Tbsp minced fresh ginger",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "canon":  "Rice Vinegar",
+                                   "grams":  52,
+                                   "buy":  "3 1/2 Tbsp rice vinegar",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "canon":  "Cornstarch",
+                                   "grams":  42,
+                                   "buy":  "1/3 cup cornstarch",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  165,
+                                   "buy":  "3/4 cup olive oil, divided",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2381,
+                                   "buy":  "5 1/4 lb boneless skinless chicken breasts",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 Tbsp ground black pepper, to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  686,
+                                   "buy":  "3 1/2 medium zucchini, diced into half moons (about 5 1/4 cups)",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  578,
+                                   "buy":  "5 1/4 cups matchstick carrots (about 1 1/4 lb)",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli",
+                                   "canon":  "Broccoli",
+                                   "grams":  788,
+                                   "buy":  "8 3/4 cups small diced broccoli florets (about 1 3/4 lb)",
+                                   "bid":  "broccoli",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  1134,
+                                   "buy":  "6 1/8 cups uncooked white or brown rice (about 2 1/2 lb), cooked per package directions",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "canon":  "Toasted Sesame Seeds",
+                                   "grams":  32,
+                                   "buy":  "3 1/2 Tbsp toasted sesame seeds, for sprinkling (optional)",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Budget teriyaki grilled chicken and veggie rice bowls for meal prep. Homemade teriyaki over grilled chicken breast, crisp veggies, and rice, scaled to 14 servings.",
+                 "keywords":  "teriyaki chicken bowls, meal prep, grilled chicken rice bowls, homemade teriyaki sauce, high protein meal prep, budget dinner, chicken and veggie bowls, teriyaki rice bowls",
+                 "image":  "",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  2,
+                 "recipeIngredient":  [
+                                          "Soy Sauce, 1 3/4 cups low-sodium soy sauce (420 g)",
+                                          "Brown Sugar, 2/3 cup packed light brown sugar (142 g)",
+                                          "Honey, 2/3 cup honey (220 g)",
+                                          "Garlic, 10 garlic cloves, minced (about 3 1/2 Tbsp) (32 g)",
+                                          "Ginger, 3 1/2 Tbsp minced fresh ginger (21 g)",
+                                          "Rice Vinegar, 3 1/2 Tbsp rice vinegar (52 g)",
+                                          "Cornstarch, 1/3 cup cornstarch (42 g)",
+                                          "Olive Oil, 3/4 cup olive oil, divided (165 g)",
+                                          "Boneless Skinless Chicken Breast, 5 1/4 lb boneless skinless chicken breasts (2381 g)",
+                                          "Black Pepper, 2 Tbsp ground black pepper, to taste (14 g)",
+                                          "Zucchini, 3 1/2 medium zucchini, diced into half moons (about 5 1/4 cups) (686 g)",
+                                          "Carrots, 5 1/4 cups matchstick carrots (about 1 1/4 lb) (578 g)",
+                                          "Broccoli, 8 3/4 cups small diced broccoli florets (about 1 3/4 lb) (788 g)",
+                                          "Rice, 6 1/8 cups uncooked white or brown rice (about 2 1/2 lb), cooked per package directions (1134 g)",
+                                          "Toasted Sesame Seeds, 3 1/2 Tbsp toasted sesame seeds, for sprinkling (optional) (32 g)"
+                                      ],
+                 "steps":  [
+                               "Measure 1 3/4 cups water for the sauce. In a small saucepan, whisk together the low-sodium soy sauce, 1 1/4 cups plus 1 Tbsp of that water, the brown sugar, honey, minced garlic, minced ginger, and rice vinegar. Bring to a light boil over medium-high heat.",
+                               "Whisk the cornstarch into the remaining 7 Tbsp water, stir the slurry into the sauce, reduce the heat slightly, and boil 1 minute while stirring until glossy. Remove from heat and set aside.",
+                               "Brush both sides of the chicken with olive oil and season with black pepper. Preheat the grill to medium-high, about 425 to 450 degrees, and brush the grates lightly with oil.",
+                               "Grill the chicken about 4 minutes per side until the center reads 160 to 165 degrees on an instant-read thermometer. Rest 5 minutes, then dice into cubes.",
+                               "Heat the remaining olive oil in a saute pan over medium-high. Add the zucchini, broccoli, and carrots and saute 4 to 5 minutes until crisp-tender. Cook the rice per the package directions.",
+                               "Layer rice into each container, top with the chicken and veggies, drizzle with teriyaki sauce, and sprinkle with sesame seeds."
+                           ],
+                 "step_names":  [
+                                    "Build the teriyaki sauce",
+                                    "Thicken the sauce",
+                                    "Season and prep the grill",
+                                    "Grill and cube the chicken",
+                                    "Saute veggies and cook rice",
+                                    "Assemble the bowls"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  142
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  220
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  165
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  686
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  578
+                              },
+                              {
+                                  "item":  "Broccoli",
+                                  "grams":  788
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1134
+                              },
+                              {
+                                  "item":  "Toasted Sesame Seeds",
+                                  "grams":  32
+                              }
+                          ]
+}

@@ -1,0 +1,66 @@
+{
+    "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+    "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+    "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T11:48:53",
+    "updated":  "2026-08-27T12:14:32",
+    "terms":  [
+                  {
+                      "term":  "Boursin cheese",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "penne pasta",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Fresh Parsley",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:48:53",
+                        "by":  "harvest",
+                        "detail":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:48:54",
+                        "by":  "decider",
+                        "detail":  "Lemony dump-and-bake chicken penne casserole with artichokes, peas and Boursin garlic-herb cheese; distinct bright Mediterranean-leaning bake, not the creamy dip-style spinach-artichoke-chicken-casserole, verified 503cal/52c/49p, saturation 2."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:49:15",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T12:09:45",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected, 6 DB rows returned. One new-id proposal (boursin-cheese); absent_terms carries Boursin cheese and penne pasta. Foods the table marked as having no row that resolve to canon items which ALREADY carry rows, so no new row is owed: \u0027raw chicken breast\u0027 -\u003e Boneless Skinless Chicken Breast, \u0027freshly grated parmesan cheese\u0027 -\u003e Parmesan Cheese, \u0027fresh parsley or basil\u0027"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T12:09:45",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T12:14:32",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

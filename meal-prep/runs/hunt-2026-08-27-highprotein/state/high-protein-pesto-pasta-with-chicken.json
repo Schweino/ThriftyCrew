@@ -1,0 +1,72 @@
+{
+    "slug":  "high-protein-pesto-pasta-with-chicken",
+    "title":  "high protein pesto pasta with chicken",
+    "source_url":  "https://joytothefood.com/high-protein-pesto-pasta-with-chicken/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-27T11:42:35",
+    "updated":  "2026-08-27T11:59:05",
+    "terms":  [
+                  {
+                      "term":  "protein pasta",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "bone broth",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "High Protein Pasta",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 39.2g protein below the 40 floor",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:42:35",
+                        "by":  "harvest",
+                        "detail":  "https://joytothefood.com/high-protein-pesto-pasta-with-chicken/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T11:42:36",
+                        "by":  "decider",
+                        "detail":  "Pesto chicken pasta fills an unrepresented sauce family (no live pesto pasta); in-flight pesto neighbours are a couscous bowl and a sheet-pan dinner, distinct plates; excellent 50g-protein/30g-carb band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T11:43:09",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T11:55:49",
+                        "by":  "mapper",
+                        "detail":  "3 residual lines ruled, 3 mapped, 0 rejected. Two new commodity ids proposed (protein-pasta, bone-broth) and both terms returned in absent_terms; pesto is a reuse of the live 6/7 id. 3 new food-DB rows returned. TWO THINGS TO READ TWICE: (1) the settled line \u00271 egg\u0027 arrived with canon Egg Yolk [eggs] and no weight - I weighed it as one whole large egg, 50 g, because the source line is a whole egg,"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T11:55:50",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T11:59:04",
+                        "by":  "derive",
+                        "detail":  "all 3 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T11:59:05",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 39.2g protein below the 40 floor"
+                    }
+                ]
+}

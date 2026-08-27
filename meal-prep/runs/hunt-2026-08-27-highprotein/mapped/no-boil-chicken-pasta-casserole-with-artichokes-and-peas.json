@@ -1,0 +1,210 @@
+﻿{
+    "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+    "title":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+    "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "12 oz uncooked penne pasta",
+                            "item":  "Penne Pasta",
+                            "bid":  "penne-pasta",
+                            "board":  null,
+                            "grams":  794,
+                            "buy":  "1 lb 12 oz dry",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Exact same-form vocabulary row Penne Pasta [penne-pasta], an existing id and therefore a reuse, per the 2026-08-27 \u0027dry rotini pasta\u0027 precedent; source states 12 oz so no density guess. Listed as an absent term because the board priced only generic `pasta`.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1.5 lbs raw chicken breast, (cut into 1 inch cubes)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  null,
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb, cut into 1-inch cubes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The form flag is a wording artefact - the vocabulary row\u0027s own name carries the boneless/skinless words and \u0027raw\u0027 is the default state the id prices. Board 7 of 7, source states 1.5 lb so no each-weight assumption.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2.5 cups chicken broth",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  1400,
+                            "buy":  "5 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-broth, 7 of 7 stores, cheapest 0.0391 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "16 oz cottage cheese*",
+                            "item":  "Cottage Cheese",
+                            "bid":  "cottage-cheese",
+                            "board":  "weekly",
+                            "grams":  1058,
+                            "buy":  "4 2/3 cups (2 lb 5 oz)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cottage-cheese, 7 of 7 stores, cheapest 0.1138 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 5.2 oz package of Boursin cheese ((Garlic and Fine Herbs))",
+                            "item":  "Boursin Cheese",
+                            "bid":  "boursin-cheese",
+                            "board":  null,
+                            "grams":  343,
+                            "buy":  "12 oz (2 1/3 of the 5.2 oz packages), crumbled",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Board absent and no vocabulary row; a branded garlic-herb Gournay puck at roughly 4x cream cheese per oz, so I will not bridge it to a cream-cheese or spread id. Whole 5.2 oz package used, which is the label\u0027s own 5 servings x 29 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup fresh or frozen peas",
+                            "item":  "Frozen Green Peas",
+                            "bid":  "frozen-peas",
+                            "board":  null,
+                            "grams":  313,
+                            "buy":  "2 1/3 cups frozen",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Either-or line taken to the frozen option the board actually prices (6 of 7); fresh shelled peas are a seasonal specialty item at several times the price. 1 cup frozen = 134 g off the label\u0027s 2/3 cup = 89 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "14 oz canned artichoke hearts, (drained and roughly chopped)",
+                            "item":  "Artichoke Hearts",
+                            "bid":  "artichoke-hearts",
+                            "board":  null,
+                            "grams":  560,
+                            "buy":  "1 lb 4 oz drained (about 2 1/3 cans), roughly chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drained basis: the label\u0027s own serving is 1 can = 240 g drained, and the source says drained. Canned is the form the artichoke-hearts id prices (7 of 7 at 0.1615/oz, i.e. can pricing), so \u0027canned\u0027 is a wording artefact not a form flip. Weighed drained at 240 g per 14 oz can, the label\u0027s own drained serving.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 clove garlic, (minced)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  7,
+                            "buy":  "2 large cloves, minced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic, 6 of 7 stores, cheapest 0.498 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tbsp fresh lemon juice",
+                            "item":  "Fresh Lemon Juice",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  70,
+                            "buy":  "4 2/3 tbsp fresh (juice of about 2 lemons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REFUSED the lemon-juice bridge: bottled juice is a different product and price class, and the same recipe needs zest, which only the whole fruit gives. Board prices lemons 5 of 7 - an existing id, so a reuse.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp lemon zest",
+                            "item":  "Lemon Zest",
+                            "bid":  "lemons",
+                            "board":  null,
+                            "grams":  5,
+                            "buy":  "2 1/3 tsp finely grated (zest of the same lemons)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Zest comes off the same lemons already bought for the juice line; lemons is a live board id (5 of 7) and the DB already carries a lemon zest row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp sea salt",
+                            "item":  "Sea Salt",
+                            "bid":  "sea-salt",
+                            "board":  null,
+                            "grams":  14,
+                            "buy":  "2 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "sea-salt is a live board id (5 of 7), so this is a reuse; no need to bridge to `salt`, which is a cheaper price class per oz.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup freshly grated parmesan cheese",
+                            "item":  "Parmesan Cheese",
+                            "bid":  "parmesan",
+                            "board":  null,
+                            "grams":  261,
+                            "buy":  "2 1/3 cups freshly grated",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Estate basis 1/4 cup = 28 g. Same-food vocabulary row Parmesan Cheese [parmesan], board 7 of 7; \u0027freshly grated\u0027 is prep, not a price class. Weighed on the estate\u0027s own 1/4 cup = 28 g row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3 tbsp fresh parsley or basil, (for garnish)",
+                            "item":  "Fresh Parsley",
+                            "bid":  "fresh-parsley",
+                            "board":  null,
+                            "grams":  26,
+                            "buy":  "7 tbsp chopped, for garnish",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Either-or garnish taken to parsley, which the board prices (3 of 7) and the DB already has a row for; 3 tbsp chopped = 11 g.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "Boursin cheese",
+                                 "penne pasta"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Boursin Cheese",
+                               "Fresh Lemon Juice"
+                           ],
+    "db_row_findings":  [
+                            "no-boil-chicken-pasta-casserole-with-artichokes-and-peas: the food DB already carries \u0027Penne Pasta\u0027 and the mapper\u0027s row DIFFERS on serving_grams, calories, protein_g, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 339.3 cal / 17.9 P / 67.9 C / 1.8 F  vs  mapper 350.9 / 12.3 / 73.7 / 1.8. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 2 oz = 56 g) they still disagree: calories 196.5 vs 190; protein_g 6.877 vs 10; carbs_g 41.26 vs 38. existing={\"serving_grams\": 56, \"calories\": 190, \"protein_g\": 10, \"carbs_g\": 38} new={\"serving_grams\": 57, \"calories\": 200, \"protein_g\": 7, \"carbs_g\": 42}",
+                            "no-boil-chicken-pasta-casserole-with-artichokes-and-peas: the food DB already carries \u0027Frozen Green Peas\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 81.0 cal / 5.4 P / 14.5 C / 0.4 F  vs  mapper 78.7 / 4.5 / 13.5 / 0.0. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: protein_g 4.494 vs 5.4; carbs_g 13.48 vs 14.5. existing={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 81, \"protein_g\": 5.4, \"carbs_g\": 14.5, \"fat_g\": 0.4} new={\"serving_grams\": 89, \"serving_qty\": 0.67, \"serving_unit\": \"cup\", \"calories\": 70, \"protein_g\": 4, \"carbs_g\": 12, \"fat_g\": 0}",
+                            "no-boil-chicken-pasta-casserole-with-artichokes-and-peas: the food-DB row for \u0027Artichoke Hearts\u0027 FAILED the Atwater check (Atwater 117 vs stated 140 - a 16% gap, so these four numbers do not describe one food) and was NOT written"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Boursin cheese",
+                                        "proposed_bid":  "boursin-cheese",
+                                        "evidence":  "Boursin Garlic \u0026 Fine Herbs is a branded Gournay cheese sold in 5.2 oz foil pucks at roughly $4.50-6.00 each (about $15/lb), against cream cheese at roughly $4/lb - not the same price class, and it is a spreadable cultured-cream cheese, not ricotta, provolone or parmesan (the only near vocabulary rows). The pre-resolver reports board ABSENT with no commodity and no capture match, so nothing prices this food under another spelling. If an existing id covers herbed cream-cheese spread, alias to it; otherwise this line is a real recurring ingredient and needs its own id, because pantry-static pricing on 12 oz of a $5 cheese would materially misprice the recipe.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "boursin-cheese",
+                                  "verdict":  "approve",
+                                  "bid":  "garlic-herb-cheese-spread",
+                                  "reason":  "The food is genuinely unpriced: zero hits for boursin/gournay/spread in all three id namespaces, the alias map, the dupe allowlist, and the live feed\u0027s product names (per-file re-sweep, not the batch grep). Nearest priced row is cream-cheese at $0.13/oz vs ~$0.87-1.15/oz for gournay pucks - a 6-9x gap and a different cultured/herbed product, so alias would silently misprice; but \u0027boursin\u0027 is a BRAND and brands never become ids, so mint the generic class id garlic-herb-cheese-spread in the recipe-only namespace (recipe-board-everyday baseline + recipe-commodities.json), with includes covering boursin|gournay|garlic\\s*(?:\u0026|and)?\\s*(?:fine\\s+)?herbs?\\s+(?:cheese\\s+spread|spreadable\\s+cheese|gournay), excludes at neighboring-commodity rigor (crackers, dip, queso, cream cheese, pub cheese, veggie/chive cream cheese tubs, snack packs), an allowlist pair garlic-herb-cheese-spread\u003c-\u003ecream-cheese (\u0027same food family, different form/price class: cultured herbed gournay vs plain cream cheese\u0027), and a recipe-floor-id-map entry boursin-cheese -\u003e garlic-herb-cheese-spread so the recipe spelling resolves; separately the ingredient NAME needs its own vocabulary row (nearest rows ricotta/provolone/parmesan are different foods) with fdc:169081 \u0027Cheese spread, cream cheese base\u0027 as a plausible macro source pending label confirmation - the name ruling does not mint the id and vice versa."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Done by hand over all 13 lines at source scale, 6 servings. Ours 620 cal / 52.0 protein / 55.5 carbs / 20.2 fat per serving vs source 503 / 49 / 52. PROTEIN agrees within 6%, which is the instrument that points at portions, and carbs within 7% - so no portion is wrong. Calories are 23% high, and the source\u0027s own arithmetic explains it: 49 P + 52 C accounts for 404 of its 503 cal, leaving only 11 g of fat per serving, which is impossible for a dish carrying a whole Boursin puck (56 g fat), 112 g parmesan and 1 lb of cottage cheese. Our 20.2 g fat is the defensible figure. 620 cal sits inside the 450-800 band, so the recipe stands."
+}

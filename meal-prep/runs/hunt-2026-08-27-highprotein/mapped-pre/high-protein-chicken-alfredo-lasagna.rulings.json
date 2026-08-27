@@ -1,0 +1,145 @@
+{
+ "slug": "high-protein-chicken-alfredo-lasagna",
+ "lines": [
+  {
+   "raw": "1 pound Frozen Lightly Breaded Chicken Breast Bites*",
+   "buy": "2 lb 5 oz, baked from frozen and roughly chopped",
+   "grams_source": 453.6,
+   "notes": "Just Bare style lightly breaded breast chunks; the source's own protein figure only reconciles with this product, not with generic breaded tenders."
+  },
+  {
+   "raw": "2 cups 16 oz Low Fat Cottage Cheese",
+   "buy": "4 2/3 cups (2 lb 5 oz)",
+   "grams_source": 453.6,
+   "notes": "Source states 16 oz, so no density guess."
+  },
+  {
+   "raw": "Pinch of Salt and Pepper",
+   "buy": "a generous pinch of each (about 1 1/2 tsp salt and 3/4 tsp black pepper)",
+   "grams_source": 4,
+   "notes": "Unquantified line, weighed nominally on the salt basis; pepper is pantry-static."
+  },
+  {
+   "raw": "8 oz Fresh Mozzarella (roughly shredded)",
+   "buy": "1 lb 2 1/2 oz, roughly shredded",
+   "grams_source": 226.8
+  },
+  {
+   "raw": "4 oz Freshly Grated Parmesan",
+   "buy": "2 1/3 cups freshly grated (9 1/3 oz)",
+   "grams_source": 113.4
+  },
+  {
+   "raw": "9 sheets (about 5.5 oz No Boil Lasagna)",
+   "buy": "21 sheets (about 12 3/4 oz)",
+   "grams_source": 156,
+   "notes": "Label basis 3 sheets = 51 g agrees with the source's 9 sheets = 5.5 oz."
+  },
+  {
+   "raw": "3/4 cup 180g Alfredo Sauce (I used Rao's Roasted Garlic Alfredo)",
+   "buy": "1 3/4 cups"
+  },
+  {
+   "raw": "3-4 handfuls Fresh Parsley (chopped)",
+   "buy": "6 tbsp chopped"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 pound Frozen Lightly Breaded Chicken Breast Bites*",
+   "term": "Frozen Lightly Breaded Chicken Breast Bites",
+   "canon_item": "Frozen Lightly Breaded Chicken Breast Bites",
+   "bid": "breaded-chicken-breast-bites",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "REFUSED the board's chicken-breast bridge: a frozen fully-cooked breaded product runs roughly 3-4x raw breast per lb and carries breading weight, so both price class and gram basis differ. New id proposed."
+  },
+  {
+   "raw": "2 cups 16 oz Low Fat Cottage Cheese",
+   "term": "Low Fat Cottage Cheese",
+   "canon_item": "Cottage Cheese",
+   "bid": "cottage-cheese",
+   "decision": "mapped",
+   "grams_source": 453.6,
+   "evidence": "Low fat (2%) is the default tub the cottage-cheese id prices, and the estate's own Cottage Cheese row (100 cal/113 g) is already the lowfat label - the form flag is a wording artefact. Board 7 of 7."
+  },
+  {
+   "raw": "Pinch of Salt and Pepper",
+   "term": "Salt and Pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped",
+   "grams_source": 4,
+   "evidence": "One line carrying two pantry seasonings; costed as salt (7 of 7) with black pepper pantry-static, per the 2026-08-26 'Salt/Pepper' -> salt precedent."
+  },
+  {
+   "raw": "8 oz Fresh Mozzarella (roughly shredded)",
+   "term": "Fresh Mozzarella",
+   "canon_item": "Fresh Mozzarella",
+   "bid": "fresh-mozzarella",
+   "decision": "mapped",
+   "grams_source": 226.8,
+   "evidence": "Matches the 2026-08-26 prior ruling for this exact food. Fresh mozzarella packed in water is a different product and price class from low-moisture block/shredded mozzarella; no commodity claims it, so it goes to pricing."
+  },
+  {
+   "raw": "4 oz Freshly Grated Parmesan",
+   "term": "Freshly Grated Parmesan",
+   "canon_item": "Parmesan Cheese",
+   "bid": "parmesan",
+   "decision": "mapped",
+   "grams_source": 113.4,
+   "evidence": "Same food as the vocabulary's Parmesan Cheese [parmesan] row (seen live elsewhere in this batch); 'freshly grated' describes prep, not a price class. Board 7 of 7."
+  },
+  {
+   "raw": "9 sheets (about 5.5 oz No Boil Lasagna)",
+   "term": "No Boil Lasagna",
+   "canon_item": "No-Boil Lasagna Noodles",
+   "bid": "lasagna-noodles",
+   "decision": "mapped",
+   "grams_source": 156,
+   "evidence": "lasagna-noodles is a live board id (3 of 7), so this is a REUSE and only a vocabulary name row is missing; oven-ready sheets are dry boxed lasagna pasta at the same shelf class."
+  }
+ ],
+ "absent_terms": [
+  "frozen lightly breaded chicken breast bites",
+  "fresh mozzarella"
+ ],
+ "db_entries_written": [
+  "Frozen Lightly Breaded Chicken Breast Bites",
+  "Fresh Mozzarella",
+  "No-Boil Lasagna Noodles"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "Frozen Lightly Breaded Chicken Breast Bites",
+   "proposed_bid": "breaded-chicken-breast-bites",
+   "evidence": "Frozen, fully cooked, breaded white-meat chicken in 1.5-3 lb bags (Just Bare, Tyson, Kirkland) at roughly $6-9/lb - three to four times raw breast per lb, and part of the weight is breading. The pre-resolver found no vocabulary row sharing a core word and its board sweep for this term returned only chicken-breast, which is the standing fresh/frozen form-flip rejection. If an id already prices frozen breaded chicken (e.g. a nugget or tender id under another spelling), alias to it rather than minting.",
+   "declared": true
+  },
+  {
+   "term": "Fresh Mozzarella",
+   "proposed_bid": "fresh-mozzarella",
+   "evidence": "Soft mozzarella packed in water, sold in 8 oz tubs/logs at roughly twice low-moisture mozzarella per oz, with a different moisture basis; the existing mozzarella-cheese, reduced-fat-mozzarella and burrata rows are all different products. The pre-resolver reports no commodity claims it although today's captures carry matching products, and a 2026-08-26 ruling already used this id.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "breaded-chicken-breast-bites",
+   "verdict": "approve",
+   "bid": "breaded-chicken-breast-bites",
+   "reason": "No id prices whole-muscle breaded chicken anywhere in the estate: the nearest live row is chicken-nuggets, whose crown is Kirkwood Family Size Chicken Nuggets 48 oz at $0.1435/oz (Aldi) - a formed/ground product at roughly one-third the $6-9/lb (~$0.38-0.56/oz) whole-breast-bite class, so a nugget floor would misprice every recipe using this line by ~3x. chicken-nuggets' include is only 'chicken\\s+nuggets?' and will not claim 'breast bites' products; canned-chicken explicitly EXCLUDES 'strips|bites|nuggets|patties|tenders' (commodities.json line 66495), and the estate's only '\\btenders?\\b' and 'tender bites' strings sit inside other commodities' exclude lists - evidence the class was deliberately kept out of existing ids, not carried under another spelling. chicken-breast is the standing fresh-vs-frozen-breaded form-flip rejection. Verdict: SAME FOOD, DIFFERENT FORM vs chicken-nuggets (whole-muscle vs formed) and vs chicken-breast (raw vs cooked-breaded). Follow-up edits: mint in the RECIPE-ONLY namespace (recipe-board-everyday baseline + recipe-commodities.json, it does go on sale); include patterns around 'chicken\\s+breast\\s+(?:bites|chunks|pieces)' and 'lightly\\s+breaded\\s+chicken\\s+breast', with real excludes at neighboring rigor (~150) covering nugget, patty, tender(s), strips, popcorn, fritter, dino, raw, canned, plant-based/Daiya-style; add commodity-dupe-allowlist.json pairs breaded-chicken-breast-bites<->chicken-nuggets ('whole-muscle breaded breast vs formed nuggets, ~3x per-oz') and breaded-chicken-breast-bites<->chicken-breast ('cooked breaded frozen vs raw fresh') so the daily audit never re-flags them. No sibling collision: proposal 2 is cheese."
+  },
+  {
+   "proposed_bid": "fresh-mozzarella",
+   "verdict": "approve",
+   "bid": "fresh-mozzarella",
+   "reason": "The dossier's near-row list omitted the decisive rows, so I re-derived them: the live feed carries mozzarella-cheese at $0.1521/oz and reduced-fat-mozzarella at $0.18/oz, and every product name under both board rows is shredded LOW-MOISTURE part-skim (Member's Mark Part-Skim Shredded, Great Value Low-Moisture Part-Skim, Happy Farms Shredded) - the sun-dried-tomatoes check applied: the existing crowns are demonstrably NOT the water-packed product, so this is not the same purchase under another spelling. No burrata id exists anywhere in the three namespaces or the feed despite the mapper citing one. block-cheese's include ('block cheese/chunk') and the daiya row don't claim water-packed tubs/logs. fresh-mozzarella itself has no price cell today, and the 2026-08-26 mapper ruling already committed recipes to this exact id. Verdict: SAME FOOD, DIFFERENT FORM (water-packed high-moisture vs low-moisture shredded, ~2x per-oz and a different moisture/yield basis) - a legitimate new id. Follow-up edits: mint in the RECIPE-ONLY namespace (recipe-board-everyday baseline + recipe-commodities.json); include patterns around 'fresh\\s+mozzarella', 'mozzarella.{0,20}(?:in\\s+water|water[- ]packed)', 'ciliegine|bocconcini|ovoline', with excludes for shredded, low[- ]moisture, part[- ]skim, string/stick, smoked, burrata, breaded, daiya/plant-based at neighboring rigor; add commodity-dupe-allowlist.json pairs fresh-mozzarella<->mozzarella-cheese and fresh-mozzarella<->reduced-fat-mozzarella ('water-packed fresh vs low-moisture shredded, different moisture basis'). SEPARATE vocabulary answer per the two-namespace rule: 'Fresh Mozzarella' also needs its own db\\ingredients.json row (none exists; reduced-fat-mozzarella's row is a different form) - a distinct edit this id ruling does not perform."
+  }
+ ],
+ "macro_cross_check": "Done by hand over all 8 lines at source scale, 6 servings. Ours 496 cal / 40.7 protein / 34.4 carbs per serving vs source 500 / 43 / 31. Calories 0.8% low, protein 5.3% low, carbs 11% high - all inside tolerance, no portion looks wrong. Note this check is what identified the chicken: the FDC shelf's generic breaded tender (263 cal, 14.7 P per 100 g) gives 569 cal and 37 g protein, a worse fit on both axes, while the Just Bare label reconciles the source almost exactly. Band check: 496 cal in 450-800 OK, protein 40.7 clears the 40 floor but with LITTLE MARGIN - if the parmesan or mozzarella weight is later trimmed this recipe can fall under the floor."
+}

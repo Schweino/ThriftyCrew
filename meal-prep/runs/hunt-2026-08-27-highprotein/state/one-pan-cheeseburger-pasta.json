@@ -1,0 +1,31 @@
+{
+    "slug":  "one-pan-cheeseburger-pasta",
+    "title":  "One Pot Cheeseburger Pasta Recipe",
+    "source_url":  "https://www.thereciperebel.com/cheeseburger-pasta-recipe/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T11:44:58",
+    "updated":  "2026-08-27T11:44:59",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Direct dupe of live High-Protein Cheeseburger Pasta: ground beef, shells, cheddar and ketchup/relish cheeseburger flavor in one pan; same dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T11:44:58",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/cheeseburger-pasta-recipe/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T11:44:59",
+                        "by":  "decider",
+                        "detail":  "Direct dupe of live High-Protein Cheeseburger Pasta: ground beef, shells, cheddar and ketchup/relish cheeseburger flavor in one pan; same dinner."
+                    }
+                ]
+}

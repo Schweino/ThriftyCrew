@@ -1,0 +1,103 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Alfredo Lasagna",
+  "source_url": "https://masonfit.com/chicken-alfredo-lasagna/",
+  "servings": 6,
+  "time_total": "75 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 pound Frozen Lightly Breaded Chicken Breast Bites*",
+      "item": "Frozen Lightly Breaded Chicken Breast Bites",
+      "qty": "1",
+      "unit": "pound",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups 16 oz Low Fat Cottage Cheese",
+      "item": "Low Fat Cottage Cheese",
+      "qty": "2 cups 16 oz",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 cup 180g Alfredo Sauce (I used Rao's Roasted Garlic Alfredo)",
+      "item": "Alfredo Sauce",
+      "qty": "3/4 cup 180g",
+      "unit": null,
+      "prep": "I used Rao's Roasted Garlic Alfredo",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Pinch of Salt and Pepper",
+      "item": "Salt and Pepper",
+      "qty": "Pinch",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz Fresh Mozzarella (roughly shredded)",
+      "item": "Fresh Mozzarella",
+      "qty": "8",
+      "unit": "oz",
+      "prep": "roughly shredded",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 oz Freshly Grated Parmesan",
+      "item": "Freshly Grated Parmesan",
+      "qty": "4",
+      "unit": "oz",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "9 sheets (about 5.5 oz No Boil Lasagna)",
+      "item": "No Boil Lasagna",
+      "qty": "9 sheets",
+      "unit": null,
+      "prep": "about 5.5 oz",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3-4 handfuls Fresh Parsley (chopped)",
+      "item": "Fresh Parsley",
+      "qty": "3-4 handfuls",
+      "unit": null,
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat your oven to 425ºF.",
+    "Bake or air fry the frozen chicken according to the packaging instructions. Once cooked, roughly chop into bite-size pieces.",
+    "Blend the cottage cheese, alfredo, and a pinch of salt and pepper together until smooth.",
+    "To assemble, coat the bottom of a baking dish with a thin layer of the blended sauce. Add 3 sheets of lasagna, another layer of sauce, chopped chicken, parsley, mozzarella, and parmesan. Repeat until fully assembled, finishing the top layer with mozzarella and parmesan. Only use parsley on the first two layers. (I used a 10.5\"x7.5\" baking dish, but a 13\"x9\" dish also works. Consider doubling the recipe for larger pans.)",
+    "Cover the dish and bake for 30 minutes before uncovering and baking an additional 10-15 minutes until the cheese is bubbly and browning around the edges.",
+    "Garnish with fresh parsley and grated parmesan. I like to let the lasagna rest for at least 5 minutes before slicing and serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 8,
+    "verified": 8,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

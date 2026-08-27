@@ -1,0 +1,23 @@
+{
+    "run":  "hunt-2026-08-27-highprotein",
+    "created":  "2026-08-27T11:37:22",
+    "conditions":  "450-800 calories per serving AND 40 g protein or more per serving; carbohydrates unrestricted; main protein must be boneless skinless chicken breast, ground beef, pork loin or ground turkey; every meal must carry a real carbohydrate source; budget meal-prep dinner; scalable to 14 servings; no seafood",
+    "stop":  "10 published",
+    "wave_size":  10,
+    "auto_publish":  true,
+    "band":  {
+                 "calMin":  450,
+                 "calMax":  800,
+                 "carbMax":  null,
+                 "proteinMin":  40
+             },
+    "band_stated":  [
+                        "CalMin",
+                        "CalMax",
+                        "ProteinMin"
+                    ],
+    "catalog_digest":  "C:\\Codex\\ThriftyCrew\\meal-prep\\pipeline\\catalog-digest.json",
+    "catalog_digest_written":  "2026-08-27T11:35:13",
+    "board_file":  "comparison-2026-08-26.json",
+    "board_written":  "2026-08-27T08:11:57"
+}
