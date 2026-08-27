@@ -641,6 +641,56 @@ def detect_method(title, instructions, methods=None):
 NOT_STARCH = re.compile(r"\b(bread ?crumbs?|panko|breading|bread flour)\b")
 
 
+# ---- THE ROUND'S ALLOWED CUTS (Brad's ruling 2026-08-27) ---------------------------------------------
+# "They need to use either boneless chicken breast, ground beef, pork loin or ground turkey as the
+# 'main' protein. No steak cuts or any other cuts of meat for this round."
+#
+# WHY THIS IS A CUT FILTER AND NOT A FAMILY FILTER. detect_protein() answers "chicken" or "beef" -
+# the FAMILY - which cannot tell a chicken breast from a chicken thigh, or ground beef from a ribeye.
+# The signature has always carried the family, so a family filter would admit exactly the cuts this
+# ruling excludes. STRONG_CUTS already holds the cut vocabulary; this reads it at cut level.
+#
+# AND WHY IT IS SAFE TO HARD-FILTER HERE while the BAND is only tagged (see qualify): a cut is a fact
+# about the ingredient list, which we read ourselves. The band is the publisher's own nutrition claim,
+# measured wrong by -25% to +43% on the recipes this estate has actually computed, and Brad's
+# 2026-08-24 ruling removed the ingest band precisely so an unreliable number could not bury a
+# candidate permanently. A cut we misread is a bug; a band we believe is a lie we inherited.
+ROUND_CUTS = {
+    "chicken breast": ("boneless skinless chicken breast", "boneless chicken breast",
+                       "skinless chicken breast", "chicken breast"),
+    "ground beef":    ("lean ground beef", "ground beef", "ground chuck"),
+    "pork loin":      ("boneless pork loin", "pork loin", "pork tenderloin", "boneless pork chop"),
+    "ground turkey":  ("lean ground turkey", "ground turkey"),
+}
+# Cuts that DISQUALIFY even when an allowed cut is also present: a recipe built on steak plus a little
+# chicken breast is a steak dinner. Ordered so the disqualifier is checked before the allow.
+ROUND_EXCLUDED_CUTS = ("chicken thigh", "chicken drumstick", "chicken wing", "chicken quarter",
+                       "whole chicken", "rotisserie chicken", "bone-in", "bone in",
+                       "steak", "chuck roast", "short rib", "brisket", "ribeye", "rib eye",
+                       "stew meat", "beef roast", "flat iron", "top round",
+                       "pork shoulder", "pork butt", "pork rib", "country style rib",
+                       "ground pork", "turkey thigh", "sausage", "bacon-wrapped")
+
+
+def detect_round_cut(lines, title=""):
+    """Which of the round's four allowed cuts is this dinner's MAIN protein, or None.
+
+    Returns None when the recipe carries a disqualifying cut, when it carries none of the four, or
+    when it carries more than one of the four (an ambiguous main protein is not a main protein).
+    """
+    blob = " ; ".join(list(lines) + [title or ""]).lower()
+    for bad in ROUND_EXCLUDED_CUTS:
+        if bad in blob:
+            return None
+    found = []
+    for cut, needles in ROUND_CUTS.items():
+        if any(n in blob for n in needles):
+            found.append(cut)
+    if len(found) != 1:
+        return None
+    return found[0]
+
+
 def detect_starch(lines):
     blob = NOT_STARCH.sub(" ", " ; ".join(lines).lower())
     for st in STARCHES:
@@ -878,7 +928,39 @@ def qualify(entry, node, families, methods, cal_min=BAND_CAL_MIN, cal_max=BAND_C
         entry["exclusion"] = "; ".join(excl)
         return slim_ruled(entry), "excluded"
 
+    # ---- THE ROUND'S CUT AND COMPOSITION FILTERS (Brad's ruling 2026-08-27) ---------------------
+    # Two conditions that are FACTS ABOUT THE INGREDIENT LIST, which we read ourselves, so they are
+    # hard filters. Contrast the band, which stays a tag - see the 2026-08-24 note above.
+    #   1. the main protein must be one of four cuts;
+    #   2. the dinner must carry a carbohydrate source. "I don't want a recipe that just says how to
+    #      cook ground beef" - a cooked protein with no starch is not a meal, and 62% of the last
+    #      broad-crawl pool had starch "none".
+    # A filtered candidate stays in the pool AS MEMORY with the reason recorded, exactly like an
+    # exclusion, so the page is never re-fetched to re-earn the same answer.
+    round_cut = detect_round_cut(lines, entry.get("name") or "")
+    round_starch = detect_starch(lines)
+    if round_cut is None:
+        entry["status"] = "ruled:rejected-not-fit"
+        entry["exclusion"] = ("main protein is not one of this round's four cuts (boneless chicken "
+                              "breast, ground beef, pork loin, ground turkey), or more than one of "
+                              "them is present, or a disqualifying cut is")
+        return slim_ruled(entry), "not-fit-cut"
+    if round_starch == "none":
+        entry["status"] = "ruled:rejected-not-fit"
+        entry["exclusion"] = "no carbohydrate source - a cooked protein on its own is not a meal"
+        return slim_ruled(entry), "not-fit-nostarch"
+
     entry["batch_concerns"] = batch_concerns(entry.get("name") or "", instr)
+    entry["round_cut"] = round_cut
+    # THE BAND IS TAGGED, NEVER ENFORCED HERE. Brad 2026-08-27: enforce proteins/composition, tag the
+    # band. `meets_round_band` records whether the PUBLISHER's own figures clear 450-800 cal and the
+    # 40 g protein floor, so a run can demand it and a later re-score on our own arithmetic can
+    # overturn it. Nothing is buried on a number the site got wrong.
+    _b = entry.get("band") or {}
+    _cal, _pro = _b.get("cal"), _b.get("protein_g")
+    entry["meets_round_band"] = (
+        None if not isinstance(_cal, (int, float)) or not isinstance(_pro, (int, float))
+        else bool(450 <= _cal <= 800 and _pro >= 40))
     entry["signature"] = {
         "protein": detect_protein(lines, entry.get("name") or ""),
         "method": detect_method(entry.get("name") or "", instr, methods),
@@ -2456,8 +2538,13 @@ def cmd_selftest(_a):
         return {"@type": "Recipe", "name": name, "recipeYield": yld,
                 "nutrition": {"@type": "NutritionInformation", "calories": cal,
                               "carbohydrateContent": carbs, "proteinContent": "41 g"},
-                "recipeIngredient": ings or ["2 lb boneless skinless chicken thighs", "1 cup heavy cream",
-                                             "2 tbsp olive oil"],
+                # THE DEFAULT FIXTURE MUST CLEAR THE ROUND'S CUT AND CARB GATES, or every band case
+                # below stops testing the band and starts testing detect_round_cut instead. It used
+                # to be chicken THIGHS with no starch, which the 2026-08-27 filters reject - 13 band
+                # cases went red for a reason that had nothing to do with the band. Breast + rice is
+                # the minimum conforming dinner; the cut and carb gates get their own cases below.
+                "recipeIngredient": ings or ["2 lb boneless skinless chicken breast", "2 cups rice",
+                                             "1 cup heavy cream", "2 tbsp olive oil"],
                 "recipeInstructions": ["Sear the chicken in a skillet.", "Simmer in the cream."]}
 
     e, disp = qualify(new_entry("x", "X", "https://d/x", "d", "crawl"), node("512 kcal", "9 g"),
@@ -2467,7 +2554,7 @@ def cmd_selftest(_a):
       and e["band"]["verified"], "%s %s %s" % (disp, e["status"], e["band"]))
     T("its signature is protein x method x sauce-family x starch",
       e["signature"] == {"protein": "chicken", "method": "skillet", "sauce_family": "cream",
-                         "starch": "none"}, json.dumps(e["signature"]))
+                         "starch": "rice"}, json.dumps(e["signature"]))
 
     # CHANGED 2026-08-24 (Brad: drop the ingest band). harvest RECORDS what the page says; the RUN
     # decides what is acceptable. This was the last place a second, hidden band survived - it buried
@@ -2488,7 +2575,8 @@ def cmd_selftest(_a):
       and "neighbours" not in e2f and "ingredients_verbatim" not in e2f,
       "%s %s %s" % (disp2f, e2f["status"], ",".join(sorted(e2f))))
     T("CLEAN TWIN an AVAILABLE entry keeps all of it - it is about to become a dossier",
-      "neighbours" in e and "ingredients_verbatim" in e and len(e["ingredients_verbatim"]) == 3,
+      "neighbours" in e and "ingredients_verbatim" in e and len(e["ingredients_verbatim"]) == 4
+      and e.get("round_cut") == "chicken breast" and e.get("meets_round_band") is True,
       ",".join(sorted(e)))
     e2b, disp2b = qualify(new_entry("y2", "Y2", "https://d/y2", "d", "crawl"), node("512 kcal", "61 g"),
                           fams, meths)
@@ -2502,7 +2590,58 @@ def cmd_selftest(_a):
 
     e3, disp3 = qualify(new_entry("z", "Z", "https://d/z", "d", "crawl"),
                         {"@type": "Recipe", "name": "Z", "recipeYield": "8",
-                         "recipeIngredient": ["2 lb ground beef"]}, fams, meths)
+                         # conforming cut + carb source, so this case tests the missing NUTRITION
+                         # block rather than the round filters that run before it
+                         "recipeIngredient": ["2 lb ground beef", "3 cups rice"]}, fams, meths)
+    # ---- THE ROUND'S CUT AND CARB GATES (Brad's ruling 2026-08-27) -----------------------------
+    # Two HARD filters, because both are facts about the ingredient list that we read ourselves.
+    # The band beside them stays a TAG - that asymmetry is the whole design and each half is pinned.
+    def rc(ings, name="Dish"):
+        return detect_round_cut(ings, name)
+    T("MUST FIRE  each of the four allowed cuts is recognised as the main protein",
+      rc(["2 lb boneless skinless chicken breast", "rice"]) == "chicken breast"
+      and rc(["1 lb ground beef", "pasta"]) == "ground beef"
+      and rc(["2 lb pork tenderloin", "potatoes"]) == "pork loin"
+      and rc(["1 lb ground turkey", "tortillas"]) == "ground turkey",
+      "|".join(str(rc(x)) for x in (["2 lb boneless skinless chicken breast"], ["1 lb ground beef"],
+                                    ["2 lb pork tenderloin"], ["1 lb ground turkey"])))
+    T("MUST FIRE  a DISQUALIFYING cut is refused even though its family is allowed - thighs are not breast",
+      rc(["4 bone-in chicken thighs", "rice"]) is None and rc(["1 lb flank steak", "rice"]) is None
+      and rc(["2 lb pork shoulder", "rice"]) is None,
+      "thigh=%s steak=%s shoulder=%s" % (rc(["4 bone-in chicken thighs"]), rc(["1 lb flank steak"]),
+                                         rc(["2 lb pork shoulder"])))
+    T("MUST FIRE  TWO allowed cuts in one recipe is not a main protein, so it is refused",
+      rc(["1 lb ground beef", "2 chicken breasts", "rice"]) is None,
+      str(rc(["1 lb ground beef", "2 chicken breasts", "rice"])))
+    e_cut, disp_cut = qualify(new_entry("c1", "C1", "https://d/c1", "d", "crawl"),
+                              node("512 kcal", "9 g", ings=["4 bone-in chicken thighs", "2 cups rice"]),
+                              fams, meths)
+    T("MUST FIRE  a wrong-cut page is RULED, not available - and its band is still recorded as memory",
+      disp_cut == "not-fit-cut" and e_cut["status"] == "ruled:rejected-not-fit"
+      and e_cut["band"]["cal"] == 512,
+      "%s %s %s" % (disp_cut, e_cut["status"], e_cut.get("band")))
+    e_ns, disp_ns = qualify(new_entry("c2", "C2", "https://d/c2", "d", "crawl"),
+                            node("512 kcal", "9 g", ings=["2 lb boneless skinless chicken breast",
+                                                          "2 tbsp olive oil"]),
+                            fams, meths)
+    T("MUST FIRE  a conforming cut with NO carb source is refused - a cooked protein is not a meal",
+      disp_ns == "not-fit-nostarch" and e_ns["status"] == "ruled:rejected-not-fit",
+      "%s %s" % (disp_ns, e_ns["status"]))
+    # THE BAND IS TAGGED, NEVER ENFORCED. This is the half that honours the 2026-08-24 ruling.
+    e_hi, disp_hi = qualify(new_entry("c3", "C3", "https://d/c3", "d", "crawl"),
+                            node("980 kcal", "9 g"), fams, meths)
+    T("MUST FIRE  a conforming dinner OUTSIDE the round band stays AVAILABLE and is merely tagged - "
+      "an unreliable publisher figure must never bury a candidate",
+      e_hi["status"] == "available" and e_hi.get("meets_round_band") is False,
+      "%s meets=%s" % (e_hi["status"], e_hi.get("meets_round_band")))
+    T("CLEAN TWIN a conforming dinner INSIDE the round band is tagged True",
+      e.get("meets_round_band") is True, str(e.get("meets_round_band")))
+    e_nb, disp_nb = qualify(new_entry("c4", "C4", "https://d/c4", "d", "crawl"),
+                            {"@type": "Recipe", "name": "C4", "recipeYield": "8",
+                             "recipeIngredient": ["2 lb ground turkey", "3 cups rice"]}, fams, meths)
+    T("CLEAN TWIN no nutrition panel means the round-band tag is None, never a guess",
+      e_nb.get("meets_round_band") is None, str(e_nb.get("meets_round_band")))
+
     T("MUST FIRE  a page with no nutrition block is KEPT, flagged band-unverified",
       disp3 == "band-unverified" and e3["status"] == "available" and not e3["band"]["verified"],
       "%s %s" % (disp3, e3["status"]))
