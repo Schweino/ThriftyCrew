@@ -217,9 +217,15 @@ def adjudicate(row, cache=None, approved=None, rejected=None):
         return {"verdict": "DISAGREES", "off": ["missing"],
                 "why": "FDC %s is not in the cache - run --gather" % ruling.get("fdc_id"),
                 "text": "", "fdc_id": ruling.get("fdc_id")}
-    if cand.get("data_type") not in CURATED:
+    # BRANDED IS ALLOWED ONLY WHERE THE RULING SAYS SO, AND ONLY FOR CLASS B. For a generic whole
+    # food a retail label is a weak answer and letting one in is how a house brand becomes the
+    # citation for "onion"; for a manufactured product the retail label IS the food, and FDC Branded
+    # is rung 2 of the plan's ladder - the sanctioned fallback for a label that could not be
+    # photographed. So the tier is a per-row ruling, not a global switch.
+    allowed = CURATED + (("Branded",) if ruling.get("branded") else ())
+    if cand.get("data_type") not in allowed:
         return {"verdict": "DISAGREES", "off": ["data_type"],
-                "why": "FDC %s is a %s row, and Branded may not cite a generic"
+                "why": "FDC %s is a %s row and this ruling does not admit that tier"
                        % (ruling.get("fdc_id"), cand.get("data_type")),
                 "text": "", "fdc_id": ruling.get("fdc_id")}
     cm = cand_100g(cand)
@@ -391,11 +397,14 @@ def render_review(results, classes):
 
     out = []
     w = out.append
-    w("# Food-DB source backfill: what FDC would and would not confirm")
+    w("# Food-DB source backfill: the rows FDC could not settle")
     w("")
-    w("Rung 2 of `design\\PLAN-food-db-provenance-2026-08-26.md`, run %s. %d row(s) put to USDA's "
-      "curated tiers: **%d corroborated** (%d of them as a stated proxy), **%d disagreed**, "
-      "**%d ruled to have no curated entry**, **%d not yet ruled on**."
+    w("Rung 2 of `design\\PLAN-food-db-provenance-2026-08-26.md`, run %s. THIS PAGE IS WHAT IS "
+      "LEFT - it is regenerated from the rows that are STILL unsourced, so a row that got its "
+      "citation has already left it, which is why the corroborated count below reads low. "
+      "%d row(s) remain: **%d corroborated but unwritten** (%d as a stated proxy), **%d disagreed "
+      "with an approved entry**, **%d ruled to have no entry that is this food**, **%d not yet "
+      "ruled on**."
       % (CHECKED, len(results), len(ok), len(prox), len(dis), len(rej), len(unr)))
     w("")
     w("**Nothing on this page was overwritten, and nothing was written on a machine's guess.** Two "

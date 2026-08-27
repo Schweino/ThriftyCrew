@@ -13,46 +13,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Chicken Broth",
-   "brand": "Swanson",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 21 cal in a serving",
-   "grams_live": 228673.0,
-   "recipes_live": 194,
-   "max_cal_per_serving": 20.9,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Potato",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 278 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 212044.0,
-   "recipes_live": 83,
-   "max_cal_per_serving": 278.3,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Boneless Skinless Chicken Breast",
-   "brand": "Member's Mark",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 286 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 204738.0,
-   "recipes_live": 87,
-   "max_cal_per_serving": 286.03,
-   "note_states_origin": ""
-  },
-  {
-   "item": "93/7 Ground Turkey",
-   "brand": "Jennie-O",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 369 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 170557.0,
-   "recipes_live": 95,
-   "max_cal_per_serving": 368.62,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Boneless Skinless Chicken Thigh",
    "brand": "Member's Mark",
    "class": "A",
@@ -61,36 +21,6 @@
    "recipes_live": 65,
    "max_cal_per_serving": 340.18,
    "note_states_origin": "label"
-  },
-  {
-   "item": "93/7 Ground Beef",
-   "brand": "Member's Mark",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 341 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 137144.0,
-   "recipes_live": 78,
-   "max_cal_per_serving": 341.18,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Diced Tomatoes",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 127 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 135650.0,
-   "recipes_live": 103,
-   "max_cal_per_serving": 127.38,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Yellow Onion",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 120 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 130891.0,
-   "recipes_live": 369,
-   "max_cal_per_serving": 120.0,
-   "note_states_origin": "usda"
   },
   {
    "item": "Beef Chuck Roast",
@@ -103,46 +33,6 @@
    "note_states_origin": ""
   },
   {
-   "item": "Pork Loin",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 368 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 81084.0,
-   "recipes_live": 28,
-   "max_cal_per_serving": 367.63,
-   "note_states_origin": ""
-  },
-  {
-   "item": "Beef Broth",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 13 cal in a serving",
-   "grams_live": 77982.0,
-   "recipes_live": 74,
-   "max_cal_per_serving": 13.0,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Beef Flank/Sirloin Steak",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 352 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 55677.0,
-   "recipes_live": 29,
-   "max_cal_per_serving": 351.52,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Pork Tenderloin",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 295 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 45431.0,
-   "recipes_live": 18,
-   "max_cal_per_serving": 294.9,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Pork Chops",
    "brand": "boneless loin, store",
    "class": "A",
@@ -150,46 +40,6 @@
    "grams_live": 37750.0,
    "recipes_live": 15,
    "max_cal_per_serving": 344.23,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Eggs",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 210 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 32142.0,
-   "recipes_live": 75,
-   "max_cal_per_serving": 210.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Milk",
-   "brand": "Fairlife",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 42 cal in a serving",
-   "grams_live": 31919.0,
-   "recipes_live": 48,
-   "max_cal_per_serving": 41.67,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Broccoli Florets",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 40 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 30830.0,
-   "recipes_live": 37,
-   "max_cal_per_serving": 40.06,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Carrots",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 47 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 30322.0,
-   "recipes_live": 80,
-   "max_cal_per_serving": 46.51,
    "note_states_origin": "usda"
   },
   {
@@ -203,16 +53,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Seasoned Black Beans",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 219 cal in a serving",
-   "grams_live": 30037.0,
-   "recipes_live": 34,
-   "max_cal_per_serving": 219.0,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Green Bell Peppers",
    "brand": "",
    "class": "A",
@@ -221,16 +61,6 @@
    "recipes_live": 73,
    "max_cal_per_serving": 22.88,
    "note_states_origin": "label"
-  },
-  {
-   "item": "Tomato Sauce",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 56 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 27984.0,
-   "recipes_live": 31,
-   "max_cal_per_serving": 55.51,
-   "note_states_origin": "usda"
   },
   {
    "item": "Coconut Milk",
@@ -253,26 +83,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Marinara Sauce",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 97 cal in a serving",
-   "grams_live": 23655.0,
-   "recipes_live": 18,
-   "max_cal_per_serving": 96.79,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Crushed Tomatoes",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 127 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 23223.0,
-   "recipes_live": 15,
-   "max_cal_per_serving": 127.04,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Red Bell Pepper",
    "brand": "generic",
    "class": "A",
@@ -293,36 +103,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Ground Pork",
-   "brand": "Smithfield / store",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 425 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 21512.0,
-   "recipes_live": 14,
-   "max_cal_per_serving": 425.18,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Cucumber",
-   "brand": "fresh",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 36 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 21497.0,
-   "recipes_live": 17,
-   "max_cal_per_serving": 36.36,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "White Mushrooms",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 24 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 20953.0,
-   "recipes_live": 35,
-   "max_cal_per_serving": 24.31,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Sweet Whole Kernel Corn",
    "brand": "Great Value",
    "class": "A",
@@ -330,26 +110,6 @@
    "grams_live": 19339.0,
    "recipes_live": 32,
    "max_cal_per_serving": 60.48,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Zucchini",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 32 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 18762.0,
-   "recipes_live": 18,
-   "max_cal_per_serving": 31.61,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Cheddar Cheese, Shredded",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 223 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 18557.0,
-   "recipes_live": 55,
-   "max_cal_per_serving": 222.81,
    "note_states_origin": "label"
   },
   {
@@ -373,16 +133,6 @@
    "note_states_origin": "usda"
   },
   {
-   "item": "Green Cabbage",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 36 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 17219.0,
-   "recipes_live": 20,
-   "max_cal_per_serving": 36.0,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Soy Sauce",
    "brand": "generic",
    "class": "B",
@@ -390,66 +140,6 @@
    "grams_live": 15106.0,
    "recipes_live": 102,
    "max_cal_per_serving": 16.88,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Olive Oil",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 238 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 15088.0,
-   "recipes_live": 218,
-   "max_cal_per_serving": 238.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Greek Yogurt",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 43 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14827.0,
-   "recipes_live": 36,
-   "max_cal_per_serving": 42.65,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Vegetable Oil",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 156 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14801.0,
-   "recipes_live": 152,
-   "max_cal_per_serving": 155.51,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Frozen Chopped Spinach",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 31 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14321.0,
-   "recipes_live": 22,
-   "max_cal_per_serving": 30.67,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Frozen Green Peas",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 67 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14265.0,
-   "recipes_live": 27,
-   "max_cal_per_serving": 66.59,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Butter",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 203 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14221.0,
-   "recipes_live": 118,
-   "max_cal_per_serving": 203.32,
    "note_states_origin": "usda"
   },
   {
@@ -473,16 +163,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Green Beans",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 37 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 14077.0,
-   "recipes_live": 15,
-   "max_cal_per_serving": 36.56,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Sweet Potatoes",
    "brand": "fresh",
    "class": "A",
@@ -491,36 +171,6 @@
    "recipes_live": 10,
    "max_cal_per_serving": 215.49,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Red Onion",
-   "brand": "fresh",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 24 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 12818.0,
-   "recipes_live": 38,
-   "max_cal_per_serving": 24.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Salsa",
-   "brand": "Pace",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 43 cal in a serving",
-   "grams_live": 12251.0,
-   "recipes_live": 18,
-   "max_cal_per_serving": 43.33,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Mexican Cheese Blend",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 275 cal in a serving",
-   "grams_live": 11011.0,
-   "recipes_live": 31,
-   "max_cal_per_serving": 275.0,
-   "note_states_origin": "label"
   },
   {
    "item": "Salt",
@@ -543,66 +193,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Light Sour Cream",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 107 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 10284.0,
-   "recipes_live": 26,
-   "max_cal_per_serving": 107.3,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Pasta Shells",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 357 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 10185.0,
-   "recipes_live": 13,
-   "max_cal_per_serving": 357.14,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Hominy",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 185 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 10154.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 185.14,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Rice Noodles",
-   "brand": "Thai Kitchen",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 446 cal in a serving",
-   "grams_live": 10084.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 446.43,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Tomato Paste",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 39 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 9772.0,
-   "recipes_live": 72,
-   "max_cal_per_serving": 38.64,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Kidney Beans",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 180 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 9549.0,
-   "recipes_live": 11,
-   "max_cal_per_serving": 180.07,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Celery",
    "brand": "fresh",
    "class": "C",
@@ -611,26 +201,6 @@
    "recipes_live": 35,
    "max_cal_per_serving": 5.0,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "All-Purpose Flour",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 202 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 9091.0,
-   "recipes_live": 80,
-   "max_cal_per_serving": 201.67,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Spaghetti",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 364 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 8592.0,
-   "recipes_live": 10,
-   "max_cal_per_serving": 363.52,
-   "note_states_origin": "label"
   },
   {
    "item": "Cherry Tomatoes",
@@ -643,36 +213,6 @@
    "note_states_origin": "usda"
   },
   {
-   "item": "Fries",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 331 cal in a serving",
-   "grams_live": 8310.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 330.83,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Green Onions",
-   "brand": "fresh",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 10 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 8126.0,
-   "recipes_live": 73,
-   "max_cal_per_serving": 10.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Egg Noodles",
-   "brand": "Great Value wide",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 315 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 7745.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 315.0,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Tortilla",
    "brand": "Great Value",
    "class": "B",
@@ -680,46 +220,6 @@
    "grams_live": 7670.0,
    "recipes_live": 10,
    "max_cal_per_serving": 275.0,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Lo Mein Noodles",
-   "brand": "Simply Asia",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 436 cal in a serving",
-   "grams_live": 7207.0,
-   "recipes_live": 6,
-   "max_cal_per_serving": 436.47,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Hickory Smoked Bacon",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 340 cal in a serving",
-   "grams_live": 7160.0,
-   "recipes_live": 23,
-   "max_cal_per_serving": 340.29,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Enchilada Sauce",
-   "brand": "Old El Paso",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 26 cal in a serving",
-   "grams_live": 7103.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 25.73,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Potato Gnocchi",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 222 cal in a serving",
-   "grams_live": 6935.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 222.35,
    "note_states_origin": "label"
   },
   {
@@ -743,26 +243,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Ricotta Cheese",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 132 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 6183.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 132.26,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Chickpeas",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 148 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 5917.0,
-   "recipes_live": 6,
-   "max_cal_per_serving": 147.74,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "1/3 Fat Cream Cheese",
    "brand": "Great Value",
    "class": "A",
@@ -773,16 +253,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Ziti Pasta",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 270 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 5675.0,
-   "recipes_live": 6,
-   "max_cal_per_serving": 269.9,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Lime Juice",
    "brand": "",
    "class": "C",
@@ -790,26 +260,6 @@
    "grams_live": 5392.0,
    "recipes_live": 68,
    "max_cal_per_serving": 4.04,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Bread Crumbs",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 190 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 5119.0,
-   "recipes_live": 24,
-   "max_cal_per_serving": 190.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "BBQ Sauce",
-   "brand": "generic",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 123 cal in a serving",
-   "grams_live": 5115.0,
-   "recipes_live": 10,
-   "max_cal_per_serving": 122.61,
    "note_states_origin": "usda"
   },
   {
@@ -843,16 +293,6 @@
    "note_states_origin": "usda"
   },
   {
-   "item": "Diced Green Chiles",
-   "brand": "Old El Paso",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 32 cal in a serving",
-   "grams_live": 4530.0,
-   "recipes_live": 14,
-   "max_cal_per_serving": 31.9,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Apple",
    "brand": "generic",
    "class": "A",
@@ -861,26 +301,6 @@
    "recipes_live": 7,
    "max_cal_per_serving": 46.8,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Diced Tomatoes & Green Chilies",
-   "brand": "Great Value (Ro-Tel style)",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 12 cal in a serving",
-   "grams_live": 4451.0,
-   "recipes_live": 7,
-   "max_cal_per_serving": 11.71,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Cheese Tortellini",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 253 cal in a serving",
-   "grams_live": 4424.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 253.25,
-   "note_states_origin": "label"
   },
   {
    "item": "Jalapeno",
@@ -893,16 +313,6 @@
    "note_states_origin": "usda"
   },
   {
-   "item": "Rotini Pasta",
-   "brand": "Barilla",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 299 cal in a serving",
-   "grams_live": 4151.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 298.57,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Pineapple Chunks",
    "brand": "generic",
    "class": "A",
@@ -910,36 +320,6 @@
    "grams_live": 4139.0,
    "recipes_live": 4,
    "max_cal_per_serving": 70.86,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Honey",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 91 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 3953.0,
-   "recipes_live": 38,
-   "max_cal_per_serving": 90.82,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Brown Sugar",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 85 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 3936.0,
-   "recipes_live": 48,
-   "max_cal_per_serving": 84.69,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Sugar",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 94 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 3741.0,
-   "recipes_live": 59,
-   "max_cal_per_serving": 93.75,
    "note_states_origin": "usda"
   },
   {
@@ -961,36 +341,6 @@
    "recipes_live": 12,
    "max_cal_per_serving": 16.06,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Pork Chorizo",
-   "brand": "Cacique",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 404 cal in a serving",
-   "grams_live": 3413.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 404.04,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Shredded Carrots",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 25 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 3330.0,
-   "recipes_live": 7,
-   "max_cal_per_serving": 25.21,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Orzo Pasta",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 223 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 2929.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 223.21,
-   "note_states_origin": "label"
   },
   {
    "item": "Fat Free Cottage Cheese",
@@ -1043,26 +393,6 @@
    "note_states_origin": "usda"
   },
   {
-   "item": "Ginger",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 14 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 2653.0,
-   "recipes_live": 79,
-   "max_cal_per_serving": 14.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Tomatillos",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 21 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 2591.0,
-   "recipes_live": 5,
-   "max_cal_per_serving": 20.57,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Fat Free Cheddar",
    "brand": "Great Value",
    "class": "A",
@@ -1073,16 +403,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Fettuccine",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 342 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 2530.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 341.58,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Mirin",
    "brand": "Mizkan",
    "class": "B",
@@ -1090,16 +410,6 @@
    "grams_live": 2361.0,
    "recipes_live": 13,
    "max_cal_per_serving": 90.0,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Grits",
-   "brand": "Quaker",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 280 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 2242.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 279.83,
    "note_states_origin": "label"
   },
   {
@@ -1153,16 +463,6 @@
    "note_states_origin": ""
   },
   {
-   "item": "Mayonnaise",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 180 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1865.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 180.0,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Feta Cheese",
    "brand": "Great Value crumbled",
    "class": "A",
@@ -1203,26 +503,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Worcestershire Sauce",
-   "brand": "Lea & Perrins / Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 13 cal in a serving",
-   "grams_live": 1798.0,
-   "recipes_live": 41,
-   "max_cal_per_serving": 13.03,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Corn Muffin Mix",
-   "brand": "JIFFY",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 278 cal in a serving",
-   "grams_live": 1791.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 277.51,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Apple Cider Vinegar",
    "brand": "Great Value",
    "class": "C",
@@ -1241,26 +521,6 @@
    "recipes_live": 14,
    "max_cal_per_serving": 3.8,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Cornstarch",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 122 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1424.0,
-   "recipes_live": 31,
-   "max_cal_per_serving": 121.92,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Cottage Cheese",
-   "brand": "Darigold",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 50 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1386.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 50.44,
-   "note_states_origin": "label"
   },
   {
    "item": "Dijon Mustard",
@@ -1293,36 +553,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Golden Raisins",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 42 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1263.0,
-   "recipes_live": 12,
-   "max_cal_per_serving": 41.86,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Provolone Cheese",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 198 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1250.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 198.5,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Peanut Butter",
-   "brand": "generic",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 139 cal in a serving",
-   "grams_live": 1218.0,
-   "recipes_live": 8,
-   "max_cal_per_serving": 139.02,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Lemongrass Paste",
    "brand": "Gourmet Garden (McCormick)",
    "class": "B",
@@ -1333,16 +563,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Pasta Shells - jumbo",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 161 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1185.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 161.48,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Hummus",
    "brand": "Great Value classic",
    "class": "B",
@@ -1350,16 +570,6 @@
    "grams_live": 1184.0,
    "recipes_live": 2,
    "max_cal_per_serving": 60.0,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Ground Cumin",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 17 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1183.0,
-   "recipes_live": 128,
-   "max_cal_per_serving": 16.6,
    "note_states_origin": "usda"
   },
   {
@@ -1380,26 +590,6 @@
    "grams_live": 1175.0,
    "recipes_live": 11,
    "max_cal_per_serving": 111.02,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Sesame Oil",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 90 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1126.0,
-   "recipes_live": 35,
-   "max_cal_per_serving": 90.29,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Tahini",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 357 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 1121.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 357.0,
    "note_states_origin": "usda"
   },
   {
@@ -1453,26 +643,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Red Curry Paste",
-   "brand": "Thai Kitchen",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 30 cal in a serving",
-   "grams_live": 913.0,
-   "recipes_live": 5,
-   "max_cal_per_serving": 30.29,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Traditional Pasta Sauce",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 30 cal in a serving",
-   "grams_live": 900.0,
-   "recipes_live": 1,
-   "max_cal_per_serving": 30.13,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Buffalo Wing Sauce",
    "brand": "Frank's RedHot",
    "class": "C",
@@ -1493,46 +663,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Paprika",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 18 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 814.0,
-   "recipes_live": 64,
-   "max_cal_per_serving": 18.07,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Walnuts",
-   "brand": "Great Value",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 238 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 807.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 237.5,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Balsamic Vinegar",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 19 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 793.0,
-   "recipes_live": 6,
-   "max_cal_per_serving": 18.73,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Chili Powder",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 18 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 788.0,
-   "recipes_live": 53,
-   "max_cal_per_serving": 17.78,
-   "note_states_origin": "usda"
-  },
-  {
    "item": "Roasted Red Peppers",
    "brand": "generic",
    "class": "C",
@@ -1550,26 +680,6 @@
    "grams_live": 721.0,
    "recipes_live": 95,
    "max_cal_per_serving": 7.37,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Corn Chips",
-   "brand": "Fritos",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 250 cal in a serving",
-   "grams_live": 677.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 249.8,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Cashews",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 190 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 620.0,
-   "recipes_live": 3,
-   "max_cal_per_serving": 189.6,
    "note_states_origin": "usda"
   },
   {
@@ -1593,26 +703,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Harissa Paste",
-   "brand": "Mina",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 14 cal in a serving",
-   "grams_live": 534.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 14.24,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Pomegranate Molasses",
-   "brand": "Cortas",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 60 cal in a serving",
-   "grams_live": 482.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 60.43,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Italian Seasoning",
    "brand": "",
    "class": "B",
@@ -1621,16 +711,6 @@
    "recipes_live": 57,
    "max_cal_per_serving": 13.14,
    "note_states_origin": ""
-  },
-  {
-   "item": "Sun-Dried Tomatoes",
-   "brand": "",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 26 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 441.0,
-   "recipes_live": 5,
-   "max_cal_per_serving": 25.71,
-   "note_states_origin": "usda"
   },
   {
    "item": "Chili Crisp",
@@ -1651,16 +731,6 @@
    "recipes_live": 18,
    "max_cal_per_serving": 16.25,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Achiote Paste",
-   "brand": "El Yucateco",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 10 cal in a serving",
-   "grams_live": 381.0,
-   "recipes_live": 8,
-   "max_cal_per_serving": 10.44,
-   "note_states_origin": "label"
   },
   {
    "item": "Garam Masala",
@@ -1693,16 +763,6 @@
    "note_states_origin": "label"
   },
   {
-   "item": "Fajita Seasoning",
-   "brand": "Taco Bell",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 53 cal in a serving",
-   "grams_live": 352.0,
-   "recipes_live": 4,
-   "max_cal_per_serving": 53.12,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Ground Turmeric",
    "brand": "Great Value",
    "class": "A",
@@ -1731,16 +791,6 @@
    "recipes_live": 48,
    "max_cal_per_serving": 5.95,
    "note_states_origin": "usda"
-  },
-  {
-   "item": "Hot Honey",
-   "brand": "Better Goods",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 30 cal in a serving",
-   "grams_live": 294.0,
-   "recipes_live": 2,
-   "max_cal_per_serving": 30.0,
-   "note_states_origin": "label"
   },
   {
    "item": "Cajun Seasoning",
@@ -1781,16 +831,6 @@
    "recipes_live": 8,
    "max_cal_per_serving": 11.19,
    "note_states_origin": ""
-  },
-  {
-   "item": "Turkey Pepperoni",
-   "brand": "Great Value",
-   "class": "B",
-   "why": "branded manufactured: the formulation is the maker's, and it reaches 47 cal in a serving",
-   "grams_live": 261.0,
-   "recipes_live": 1,
-   "max_cal_per_serving": 46.61,
-   "note_states_origin": "label"
   },
   {
    "item": "Fresh Mint",
@@ -1850,16 +890,6 @@
    "grams_live": 207.0,
    "recipes_live": 39,
    "max_cal_per_serving": 12.38,
-   "note_states_origin": "usda"
-  },
-  {
-   "item": "Toasted Sesame Seeds",
-   "brand": "generic",
-   "class": "A",
-   "why": "generic whole food or commodity staple, 20 cal in a serving at most; USDA curated is the better reference",
-   "grams_live": 204.0,
-   "recipes_live": 9,
-   "max_cal_per_serving": 20.46,
    "note_states_origin": "usda"
   },
   {
@@ -1993,16 +1023,6 @@
    "note_states_origin": ""
   },
   {
-   "item": "99/1 Ground Turkey",
-   "brand": "Jennie-O",
-   "class": "A",
-   "why": "no live recipe names it; classified by the food",
-   "grams_live": 0.0,
-   "recipes_live": 0,
-   "max_cal_per_serving": 0.0,
-   "note_states_origin": "label"
-  },
-  {
    "item": "Chili Crisp / Chili Oil",
    "brand": "Lao Gan Ma (Laoganma)",
    "class": "B",
@@ -2021,26 +1041,6 @@
    "recipes_live": 0,
    "max_cal_per_serving": 0.0,
    "note_states_origin": "label"
-  },
-  {
-   "item": "Mole Paste",
-   "brand": "Dona Maria",
-   "class": "B",
-   "why": "no live recipe names it; classified by the food",
-   "grams_live": 0.0,
-   "recipes_live": 0,
-   "max_cal_per_serving": 0.0,
-   "note_states_origin": "label"
-  },
-  {
-   "item": "Red Wine",
-   "brand": "generic",
-   "class": "A",
-   "why": "no live recipe names it; classified by the food",
-   "grams_live": 0.0,
-   "recipes_live": 0,
-   "max_cal_per_serving": 0.0,
-   "note_states_origin": "usda"
   }
  ]
 }
