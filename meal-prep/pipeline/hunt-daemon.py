@@ -3549,7 +3549,10 @@ class Daemon(object):
             return []
         out = ["  PRIOR RULINGS NEAR THESE TERMS - a shelf, not an answer. Each was ruled for a "
                "DIFFERENT phrase; cosine ranks wording likeness, not food identity, so any of these "
-               "can be the wrong precedent. Weigh them; you still rule this line yourself:"]
+               "can be the wrong precedent. Weigh them; you still rule this line yourself.",
+               "  A row marked AUDIT-REFUSED is a wave auditor OVERTURNING that mapping with "
+               "evidence, not a precedent to follow: it is the strongest reason on this shelf NOT "
+               "to map a line that way again."]
         for t in rows:
             hits = t.get("neighbours") or []
             if not hits:
@@ -3558,8 +3561,12 @@ class Daemon(object):
             out.append("    %s:" % t["term"])
             for n in hits:
                 bid = n.get("bid") or "no id"
+                mark = ("AUDIT-REFUSED"
+                        if (str(n.get("by") or "") == "auditor"
+                            or str(n.get("decision") or "") == "reject")
+                        else (n.get("decision") or "?"))
                 out.append("      '%s' -> %s (%s, %s, cos %.2f): \"%s\""
-                           % (n.get("term"), bid, n.get("decision") or "?",
+                           % (n.get("term"), bid, mark,
                               str(n.get("at") or "")[:10], float(n.get("cos") or 0.0),
                               str(n.get("evidence") or "").replace("\n", " ")))
         return out
@@ -4300,6 +4307,19 @@ class Daemon(object):
             # identical from here. Say so rather than record an empty success.
             self.log("WAVE %d: the audit returned NO structured findings, so nothing was learned "
                      "from it" % wk)
+            # THE POSTCONDITION, mirroring the one the map lane already carries ("events written ==
+            # residual rulings ruled, or a FINDING fires"). A NO-GO is an audit that DEMONSTRABLY had
+            # findings - it named blocking slugs and a blocker kind - so returning none is the
+            # auditor dropping them, not a clean wave. Without this the back half rots silently the
+            # first time a prompt change loses the field, which is how the 44 decide-rejections
+            # vanished on 2026-08-15.
+            if not hunt_lib.is_go((audit or {}).get("verdict")) or \
+                    ((audit or {}).get("blocking_slugs") or []):
+                self.findings.append(
+                    "learn/wave %d: the audit BLOCKED (%s) but returned no structured findings, so "
+                    "the estate learned nothing from a wave it refused - the auditor's markdown is "
+                    "read once by the repair cycle and then lost"
+                    % (wk, (audit or {}).get("blocker_kind") or "no kind given"))
             return 0, []
         wrote, bad = 0, 0
         for f in findings:

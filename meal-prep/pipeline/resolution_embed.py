@@ -132,7 +132,23 @@ def load_corpus(events=EVENTS):
                     e = json.loads(line)
                 except ValueError:
                     continue
-                if e.get("kind") != "ruling":
+                # RULINGS, AND THE AUDIT'S REFUSALS OF THEM (2026-08-27). A shelf built only from
+                # `ruling` shows the mapper every past time a phrase was ACCEPTED onto an id and not
+                # one time it was overturned - so the strongest precedent there is, "the last recipe
+                # that mapped this way was refused by the wave audit, and here is why", was the one
+                # thing it could not see. hunt-2026-08-27-highprotein is the case: `Ground Turkey`
+                # was ruled onto the generic ground-turkey family, the audit rejected it three lanes
+                # later for a price-class/macro-basis mismatch, and the next mapper to meet the
+                # phrase would have been shown the acceptance alone.
+                #
+                # ONLY the refusals, not every audit note. An `audit_finding` with decision `note` is
+                # a price that moved or a prose defect - true, recorded, and no evidence at all about
+                # identity. Five slots on this shelf are scarce, and the header promises PRECEDENT.
+                kind = e.get("kind")
+                if kind == "audit_finding":
+                    if str(e.get("decision") or "") != "reject":
+                        continue
+                elif kind != "ruling":
                     continue
                 term = neighbour_text(e.get("term"))
                 if not term:
@@ -149,6 +165,11 @@ def load_corpus(events=EVENTS):
                      "bid": str(e.get("bid") or ""), "decision": str(e.get("decision") or ""),
                      "evidence": str(e.get("evidence") or "")[:EVIDENCE_CHARS],
                      "at": str(e.get("at") or ""), "slug": str(e.get("slug") or ""),
+                     # WHO ruled it, carried through so the shelf can say so. A mapper's acceptance
+                     # and a wave auditor's refusal are opposite kinds of evidence about the same
+                     # phrase, and a shelf that renders them identically invites the reader to take
+                     # the refusal for a precedent to follow.
+                     "by": str(e.get("by") or ""),
                      "text": neighbour_text(e.get("term"))})
     rows.sort(key=lambda r: (r["at"], r["key"]), reverse=True)
     return rows, ""
@@ -368,15 +389,45 @@ def cmd_selftest(a):
             {"kind": "registrar", "term": "Gochujang", "key": "gochujang", "bid": "gochujang",
              "decision": "approve", "evidence": "r", "at": "2026-08-14T02:00:00", "slug": "c"},
             {"kind": "qa_mapper_fail", "term": "", "key": "", "bid": "", "decision": "fail",
-             "evidence": "q", "at": "2026-08-14T03:00:00", "slug": "c"}]
+             "evidence": "q", "at": "2026-08-14T03:00:00", "slug": "c"},
+            # the wave auditor OVERTURNING a mapping - the strongest precedent there is, and the one
+            # the shelf could not see until 2026-08-27
+            {"kind": "audit_finding", "term": "Ground Turkey", "key": "ground turkey",
+             "bid": "ground-turkey", "decision": "reject", "by": "auditor",
+             "evidence": "priced 85/15, macro'd 93/7 - 860 cal as shopped",
+             "at": "2026-08-27T05:00:00", "slug": "d"},
+            # ...and an audit NOTE, which is a price that moved and no evidence about identity
+            {"kind": "audit_finding", "term": "Jasmine Rice", "key": "jasmine rice",
+             "bid": "jasmine-rice", "decision": "note", "by": "auditor",
+             "evidence": "the board moved under it", "at": "2026-08-27T05:01:00", "slug": "d"}]
         with io.open(ev, "w", encoding="utf-8", newline="\n") as f:
             for x in lines:
                 f.write(json.dumps(x, sort_keys=True) + "\n")
         rows, why = load_corpus(ev)
-        T("MUST FIRE  the corpus is RULINGS only - a registrar verdict and a QA fail are not "
-          "precedents about an ingredient's identity",
-          len(rows) == 3 and all(r["key"] != "gochujang" for r in rows),
+        T("MUST FIRE  the corpus is rulings AND the audit's refusals of them - a registrar verdict, "
+          "a QA fail and an audit NOTE are not precedents about an ingredient's identity",
+          len(rows) == 4 and all(r["key"] != "gochujang" for r in rows)
+          and all(r["key"] != "jasmine rice" for r in rows),
           json.dumps(sorted(r["key"] for r in rows)))
+        # THE CHANGE THAT MATTERS (2026-08-27). A shelf built only from `ruling` showed the mapper
+        # every past ACCEPTANCE of a phrase and not one overturning of it, so the strongest evidence
+        # against a mapping - a wave auditor refusing it, with the reason - was the one thing it
+        # could not see. hunt-2026-08-27-highprotein is the case: Ground Turkey was ruled onto the
+        # generic family, the audit rejected it three lanes later, and the next mapper to meet the
+        # phrase would have been shown the acceptance alone.
+        T("MUST FIRE  a wave audit's REFUSAL is retrievable as precedent - the mapper must be able "
+          "to see that this exact mapping was overturned, and why",
+          any(r["key"] == "ground turkey" and r["decision"] == "reject" for r in rows),
+          json.dumps(sorted((r["key"], r["decision"]) for r in rows)))
+        T("CLEAN TWIN an audit NOTE is not precedent - a price that moved is true, recorded, and no "
+          "evidence at all about identity; five shelf slots are scarce",
+          all(r["key"] != "jasmine rice" for r in rows),
+          json.dumps(sorted(r["key"] for r in rows)))
+        T("MUST FIRE  every row carries WHO ruled it, so a mapper's acceptance and an auditor's "
+          "refusal cannot render identically",
+          all("by" in r for r in rows)
+          and [r["by"] for r in rows if r["key"] == "ground turkey"] == ["auditor"],
+          json.dumps(sorted((r["key"], r.get("by")) for r in rows)))
         T("MUST FIRE  a term re-ruled the SAME way is one precedent, not five - five identical rows "
           "would crowd four real neighbours off a shelf of 5",
           len([r for r in rows if r["key"] == "kosher salt"]) == 1
@@ -451,7 +502,10 @@ def cmd_selftest(a):
                 res = json.load(f)
             byk = {t["key"]: t for t in res["terms"]}
             T("the query reports its state, its corpus size and its model",
-              res["state"] == "ok" and res["corpus"] == 3 and res["model"] == lib_match.EMBED_MODEL,
+              # 4, not 3, since 2026-08-27: the corpus gained the wave audit's REFUSALS alongside
+              # the mapper's rulings. The fixture corpus adds one reject (Ground Turkey) and one
+              # note, and only the reject is precedent.
+              res["state"] == "ok" and res["corpus"] == 4 and res["model"] == lib_match.EMBED_MODEL,
               json.dumps({k: res[k] for k in ("state", "corpus", "model")}))
             T("MUST FIRE  a term with a ruling on its OWN key does not get itself back",
               all(n["key"] != "kosher salt" for n in byk["kosher salt"]["neighbours"]),

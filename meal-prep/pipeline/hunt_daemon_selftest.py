@@ -9169,10 +9169,26 @@ def _the_audit_is_learned_from():
                     "learned what", byline == ["auditor"], json.dumps(byline)))
 
         # AN AUDIT THAT RETURNS NO FINDINGS IS NOT A CLEAN AUDIT, it is an unreadable one.
+        before = len(d.findings)
         wrote2, killed2 = arun(d.learn_from_audit(5, {"verdict": "GO"}))
         res.append(("CLEAN TWIN an audit with no structured findings writes nothing and SAYS so - "
                     "'found nothing' and 'dropped them' look identical from here",
                     wrote2 == 0 and killed2 == [], "wrote=%s killed=%s" % (wrote2, killed2)))
+        res.append(("CLEAN TWIN ...and a GO with no findings is NOT a run finding - a genuinely "
+                    "clean wave is allowed to have nothing to say",
+                    len(d.findings) == before, json.dumps(d.findings[before:])))
+        # THE POSTCONDITION, mirroring the map lane's "events written == rulings ruled, or a FINDING
+        # fires". A NO-GO demonstrably HAD findings - it named blocking slugs - so returning none is
+        # the auditor dropping them. Without this the back half rots silently the first time a prompt
+        # change loses the field.
+        before2 = len(d.findings)
+        arun(d.learn_from_audit(6, {"verdict": "NO-GO", "blocking_slugs": ["x"],
+                                    "blocker_kind": "recipe-local"}))
+        res.append(("MUST FIRE  an audit that BLOCKED but returned no structured findings raises a "
+                    "run finding - it refused a wave and taught the estate nothing",
+                    len(d.findings) == before2 + 1
+                    and "learned nothing" in " ".join(d.findings[before2:]),
+                    json.dumps(d.findings[before2:])))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return res
