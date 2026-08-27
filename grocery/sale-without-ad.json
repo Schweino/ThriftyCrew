@@ -1,13 +1,13 @@
 {
-    "updated":  "2026-08-26T08:17:45",
+    "updated":  "2026-08-27T08:15:51",
     "board":  "comparison-2026-08-26.json",
     "week_of":  "2026-08-26",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  445,
-    "dated_by_the_store":  218,
+    "sale_cells":  441,
+    "dated_by_the_store":  212,
     "traced_to_an_ad":  34,
-    "untraceable":  193,
-    "ad_rows_available":  "Aldi=86 Baker\u0027s=292 Family Fare=1400 Fareway=485 Hy-Vee=578",
+    "untraceable":  195,
+    "ad_rows_available":  "Aldi=86 Baker\u0027s=400 Family Fare=1400 Fareway=485 Hy-Vee=578",
     "items":  [
                   {
                       "key":  "Fareway|air-freshener",
@@ -2517,6 +2517,32 @@
                       "first_seen":  "2026-08-24",
                       "last_seen":  "2026-08-26",
                       "days_unexplained":  2
+                  },
+                  {
+                      "key":  "Fareway|black-olives",
+                      "id":  "black-olives",
+                      "store":  "Fareway",
+                      "item":  "Fareway Large Pitted Ripe Olives",
+                      "price":  "$2",
+                      "per_unit":  0.3333,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24314636-fareway-ripe-olives-pitted-large-6-oz",
+                      "first_seen":  "2026-08-26",
+                      "last_seen":  "2026-08-26",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|black-peppercorns",
+                      "id":  "black-peppercorns",
+                      "store":  "Fareway",
+                      "item":  "Badia Spices Whole Black Pepper",
+                      "price":  "$7.99",
+                      "per_unit":  0.4994,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458588-badia-spices-black-pepper-whole-16-oz",
+                      "first_seen":  "2026-08-26",
+                      "last_seen":  "2026-08-26",
+                      "days_unexplained":  0
                   }
               ]
 }

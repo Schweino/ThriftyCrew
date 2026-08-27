@@ -1,6 +1,17 @@
 ﻿{
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "ice-cream",
+                                    "commodity":  "Ice Cream",
+                                    "unit":  "floz",
+                                    "store":  "Baker\u0027s",
+                                    "per_unit":  0.0415,
+                                    "size":  "each",
+                                    "item":  "Kroger Ice Cream 48 fl oz or Private Selection Ice Cream 16 fl oz",
+                                    "kind":  "count",
+                                    "row_kind":  "volume",
+                                    "holds_crown":  true
+                                }
                             ],
     "findings":  [
                      {
@@ -13,7 +24,7 @@
                          "mult":  4.1,
                          "size":  "6 ea",
                          "item":  "Builders Chocolatey Mint Protein Bars 6 Ea",
-                         "peers_packed":  "4 of 6",
+                         "peers_packed":  "3 of 6",
                          "size_shape_mismatch":  true
                      },
                      {
@@ -135,7 +146,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-26T08:13:49",
+    "generated":  "2026-08-27T08:14:36",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -255,6 +266,18 @@
                               "size":  "6 pk 2 fl oz",
                               "item":  "Enfamil NeuroPro Triple Prebiotic Immune Blend Baby Formula",
                               "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "bacon",
+                              "commodity":  "Bacon",
+                              "unit":  "lb",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  4,
+                              "size":  "each",
+                              "item":  "Jimmy Dean Breakfast Sausage 16 oz Roll or Jimmy Dean Bacon 12 oz",
+                              "kind":  "count",
                               "row_kind":  "weight",
                               "holds_crown":  false
                           },
@@ -763,6 +786,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "ice-cream",
+                              "commodity":  "Ice Cream",
+                              "unit":  "floz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.0415,
+                              "size":  "each",
+                              "item":  "Kroger Ice Cream 48 fl oz or Private Selection Ice Cream 16 fl oz",
+                              "kind":  "count",
+                              "row_kind":  "volume",
+                              "holds_crown":  true
+                          },
+                          {
                               "id":  "italian-dressing",
                               "commodity":  "Italian Dressing",
                               "unit":  "floz",
@@ -772,6 +807,18 @@
                               "item":  "Fareway Italian Dressing",
                               "kind":  "weight",
                               "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "kielbasa",
+                              "commodity":  "Kielbasa / Smoked Sausage",
+                              "unit":  "lb",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  3.4171,
+                              "size":  "each",
+                              "item":  "Eckrich Smoked Sausage 12-14 oz or Prime Fresh Lunch Meat 7-8 oz",
+                              "kind":  "count",
+                              "row_kind":  "weight",
                               "holds_crown":  false
                           },
                           {
@@ -796,6 +843,18 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "bottled-marinade",
+                              "commodity":  "Meat Marinade (bottled)",
+                              "unit":  "floz",
+                              "store":  "Aldi",
+                              "per_unit":  0.4362,
+                              "size":  "8 oz",
+                              "item":  "Emporium Selection Fresh Mozzarella IN Marinade 8 OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -1023,6 +1082,18 @@
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
                               "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sports-drinks",
+                              "commodity":  "Sports Drinks",
+                              "unit":  "floz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.0357,
+                              "size":  "each",
+                              "item":  "Powerade 28 fl oz or BodyArmor 16 fl oz",
+                              "kind":  "count",
                               "row_kind":  "volume",
                               "holds_crown":  false
                           },

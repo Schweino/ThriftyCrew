@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-26T08:17:44",
+    "updated":  "2026-08-27T08:15:50",
     "price_table":  "price-table-2026-08-26.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -7,9 +7,9 @@
                        "file":  "ingredient-queue.json",
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
-                       "captured":  250,
+                       "captured":  274,
                        "reached":  16,
-                       "missing":  234,
+                       "missing":  258,
                        "missing_rows":  [
                                             {
                                                 "key":  "chili-garlic-sauce",
@@ -758,9 +758,9 @@
                                             {
                                                 "key":  "mustard powder",
                                                 "store":  "Family Fare",
-                                                "price":  1.99,
-                                                "size":  "0.45 oz",
-                                                "item":  "Tone\u0027s Mustard, Ground 0.45 Oz",
+                                                "price":  7.99,
+                                                "size":  "1.75 oz",
+                                                "item":  "Mc Cormick Ground Mustard 1.75 Oz",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1276,6 +1276,46 @@
                                                 "commodity_known":  false
                                             },
                                             {
+                                                "key":  "spiral ham",
+                                                "store":  "Family Fare",
+                                                "price":  3.49,
+                                                "size":  "lb",
+                                                "item":  "Fresh Ham, Half Spiral Sliced Our Family",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "white pepper",
+                                                "store":  "Fareway",
+                                                "price":  3.99,
+                                                "size":  "1 oz",
+                                                "item":  "McCormick Ground White Pepper",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "white pepper",
+                                                "store":  "Family Fare",
+                                                "price":  4.29,
+                                                "size":  "1 oz",
+                                                "item":  "McCormick Ground White Pepper 1 Oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "white pepper",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  14.98,
+                                                "size":  "18 oz",
+                                                "item":  "Member\u0027s Mark Ground White Pepper, 18 oz",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "white pepper",
+                                                "store":  "Baker\u0027s",
+                                                "price":  4.49,
+                                                "size":  "1.87 oz",
+                                                "item":  "Kroger Ground White Pepper Shaker",
+                                                "commodity_known":  false
+                                            },
+                                            {
                                                 "key":  "eye of round roast",
                                                 "store":  "Sam\u0027s Club",
                                                 "price":  30.01,
@@ -1352,15 +1392,15 @@
                                                 "store":  "Family Fare",
                                                 "price":  5.49,
                                                 "size":  "8 oz",
-                                                "item":  "Culinary Tours Cheese, Asiago",
+                                                "item":  "Culinary Tours Cheese, Asiago 8 Oz",
                                                 "commodity_known":  false
                                             },
                                             {
                                                 "key":  "asiago cheese",
                                                 "store":  "Baker\u0027s",
-                                                "price":  5.49,
-                                                "size":  "5 oz",
-                                                "item":  "Shredded Asiago Cheese",
+                                                "price":  5.99,
+                                                "size":  "8 oz",
+                                                "item":  "Private Selection Asiago Wedge Cheese",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1569,46 +1609,6 @@
                                                 "price":  2.48,
                                                 "size":  "8 oz",
                                                 "item":  "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Family Fare",
-                                                "price":  2.59,
-                                                "size":  "8 oz",
-                                                "item":  "Our Family Part Skim Low Moisture Natural Mozzarella Cheese 8 Oz",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Sam\u0027s Club",
-                                                "price":  12.17,
-                                                "size":  "5 lb",
-                                                "item":  "Member\u0027s Mark Part-Skim Mozzarella Cheese 5 lbs.",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Aldi",
-                                                "price":  1.75,
-                                                "size":  "8 oz",
-                                                "item":  "Happy Farms Mozzarella Cheese Block 8 OZ",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "mozzarella cheese",
-                                                "store":  "Baker\u0027s",
-                                                "price":  2,
-                                                "size":  "8 oz",
-                                                "item":  "Kroger Mozzarella Block Cheese",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "Mexican crema",
-                                                "store":  "Family Fare",
-                                                "price":  3.99,
-                                                "size":  "12 oz",
-                                                "item":  "Cacique Sour Cream, Original Crema, Mexican Style 12 Oz",
                                                 "commodity_known":  false
                                             }
                                         ]

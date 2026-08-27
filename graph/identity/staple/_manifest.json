@@ -1,48 +1,48 @@
 {
     "readme":  "Product identity table, one current row per (store, product key) in this namespace. Truth is the .jsonl files beside this manifest; graph.db is a rebuildable index of them (graph/schema.md commitment 3). History is git: the files are tracked and sorted, so an assignment change is a commit diff. Written by compare-deals.ps1 -IdentityNamespace; never hand-edit.",
     "namespace":  "staple",
-    "rules_hash":  "423c4bb130d4dab0b8f4f490ce75653c85dd4aea1a128f44735209a1cce619a0",
+    "rules_hash":  "f15db8f824fec0d2ffc41aaa7caeb43f76acdb0c2405828aff441a15372bd4a2",
     "board_date":  "2026-08-26",
-    "built_at":  "2026-08-26T08:11:30",
-    "rows_total":  38855,
-    "rows_reused_from_previous":  38254,
-    "rows_rematched":  601,
-    "rows_contested":  860,
-    "key_collisions_demoted_to_name":  585,
+    "built_at":  "2026-08-27T08:12:26",
+    "rows_total":  39262,
+    "rows_reused_from_previous":  0,
+    "rows_rematched":  39262,
+    "rows_contested":  890,
+    "key_collisions_demoted_to_name":  587,
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "rows":  2559,
+                       "rows":  2805,
                        "changed":  true
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7295,
+                       "rows":  7394,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
-                       "rows":  5349,
+                       "rows":  5350,
                        "changed":  true
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1003,
+                       "rows":  1004,
                        "changed":  true
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2125,
-                       "changed":  false
+                       "changed":  true
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  3581,
+                       "rows":  3584,
                        "changed":  true
                    },
                    {
                        "store":  "Walmart",
-                       "rows":  16943,
+                       "rows":  17000,
                        "changed":  true
                    }
                ]

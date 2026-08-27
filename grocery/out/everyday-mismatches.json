@@ -130,6 +130,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "fresh-basil",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  3.2,
+        "link":  3.032,
+        "ratio":  0.95,
+        "price":  3.79,
+        "size":  "1.25 oz",
+        "boardItem":  "Gotham Greens Fresh Basil",
+        "linkItem":  "Gotham Greens Fresh Basil",
+        "board_src":  "main"
+    },
+    {
         "id":  "beef-jerky",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -218,6 +231,19 @@
         "size":  "lb",
         "boardItem":  "Broccoli Crowns Per LB",
         "linkItem":  "Broccoli Crowns",
+        "board_src":  "main"
+    },
+    {
+        "id":  "broccoli",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  2.19,
+        "link":  1.99,
+        "ratio":  0.91,
+        "price":  1.99,
+        "size":  "lb",
+        "boardItem":  "Broccoli Crown",
+        "linkItem":  "Broccoli Crown",
         "board_src":  "main"
     },
     {
@@ -361,6 +387,19 @@
         "size":  "lb",
         "boardItem":  "Hy Vee Choice Reserve Boneless Chuck Roast",
         "linkItem":  "Hy-Vee Choice Reserve Boneless Chuck Roast",
+        "board_src":  "main"
+    },
+    {
+        "id":  "clam-chowder",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.159,
+        "link":  0.1324,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "18.8 oz",
+        "boardItem":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Can",
+        "linkItem":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Can",
         "board_src":  "main"
     },
     {
@@ -611,19 +650,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "feta",
-        "store":  "Aldi",
-        "unit":  "oz",
-        "board":  0.4488,
-        "link":  0.4725,
-        "ratio":  1.05,
-        "price":  1.89,
-        "size":  "4 oz",
-        "boardItem":  "Emporium Selection Traditional Feta Cheese Block",
-        "linkItem":  "Emporium Selection Original Feta Cheese Crumbles",
-        "board_src":  "main"
-    },
-    {
         "id":  "fish-sticks",
         "store":  "Sam\u0027s Club",
         "unit":  "oz",
@@ -819,6 +845,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "lemon-pepper-seasoning",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.251,
+        "link":  0.2832,
+        "ratio":  1.13,
+        "price":  8.78,
+        "size":  "31 oz",
+        "boardItem":  "Member’s Mark Lemon Pepper Seasoning, 31 oz.",
+        "linkItem":  "MemberÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s Mark Lemon Pepper Seasoning, 31 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "lemons",
         "store":  "Hy-Vee",
         "unit":  "each",
@@ -874,13 +913,26 @@
         "id":  "milk",
         "store":  "Aldi",
         "unit":  "gallon",
-        "board":  2.86,
+        "board":  2.81,
         "link":  3.01,
-        "ratio":  1.05,
+        "ratio":  1.07,
         "price":  3.01,
         "size":  "1 gal",
-        "boardItem":  "Friendly Farms 2 Milk 1 Gal",
+        "boardItem":  "Friendly Farms Vitamin D Milk 1 Gal",
         "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
+        "board_src":  "main"
+    },
+    {
+        "id":  "mushrooms",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.1862,
+        "link":  0.1612,
+        "ratio":  0.87,
+        "price":  1.29,
+        "size":  "8 oz",
+        "boardItem":  "White Mushroom 8 OZ",
+        "linkItem":  "Monterey White Mushrooms Sliced 8 OZ",
         "board_src":  "main"
     },
     {
@@ -894,6 +946,19 @@
         "size":  "8 oz",
         "boardItem":  "Highline Whole White Mushrooms",
         "linkItem":  "Highline Whole White Mushrooms",
+        "board_src":  "main"
+    },
+    {
+        "id":  "nectarines",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  1.49,
+        "link":  1.745,
+        "ratio":  1.17,
+        "price":  3.49,
+        "size":  "2 lb",
+        "boardItem":  "Nectarines Bagged 2 LB",
+        "linkItem":  "Nectarines Bagged 2 LB",
         "board_src":  "main"
     },
     {
@@ -1001,6 +1066,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "pita-bread",
+        "store":  "Baker\u0027s",
+        "unit":  "each",
+        "board":  0.4983,
+        "link":  0.415,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "6 ct",
+        "boardItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
+        "linkItem":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
+        "board_src":  "main"
+    },
+    {
         "id":  "popsicles",
         "store":  "Fareway",
         "unit":  "each",
@@ -1024,6 +1102,19 @@
         "size":  "per lb",
         "boardItem":  "Assorted Pork Chops",
         "linkItem":  "Premium Bone-In Assorted Pork Chops, per lb",
+        "board_src":  "main"
+    },
+    {
+        "id":  "potato-chips",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.148,
+        "link":  0.1674,
+        "ratio":  1.13,
+        "price":  1.59,
+        "size":  "9.5 oz",
+        "boardItem":  "Clancy S Hot Chili Lime Ridged Potato Chips 12.5 OZ",
+        "linkItem":  "Clancy S Spicy Dill Pickle Potato Chips 9.5 OZ",
         "board_src":  "main"
     },
     {
@@ -1082,9 +1173,9 @@
         "id":  "russet-potatoes",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  0.496,
+        "board":  0.517,
         "link":  0.456,
-        "ratio":  0.92,
+        "ratio":  0.88,
         "price":  4.56,
         "size":  "10 lb",
         "boardItem":  "Russet Potatoes, 10 lbs.",
@@ -1158,15 +1249,15 @@
     },
     {
         "id":  "strawberries",
-        "store":  "Sam\u0027s Club",
+        "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.1553,
-        "link":  0.1225,
-        "ratio":  0.79,
-        "price":  3.92,
-        "size":  "2 lb",
-        "boardItem":  "Strawberries, 2 lbs.",
-        "linkItem":  "Strawberries, 2 lbs.",
+        "board":  0.1431,
+        "link":  0.1181,
+        "ratio":  0.83,
+        "price":  1.89,
+        "size":  "1 lb",
+        "boardItem":  "Strawberries",
+        "linkItem":  "Whole Strawberries 1 LB",
         "board_src":  "main"
     },
     {
@@ -1365,6 +1456,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "yogurt",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.0809,
+        "link":  0.0867,
+        "ratio":  1.07,
+        "price":  0.52,
+        "size":  "6 oz",
+        "boardItem":  "Friendly Farms Nonfat Vanilla Yogurt 32 OZ",
+        "linkItem":  "Friendly Farms Peach Original Lowfat Yogurt 6 OZ",
+        "board_src":  "main"
+    },
+    {
         "id":  "93-7-ground-turkey",
         "store":  "Aldi",
         "unit":  "lb",
@@ -1401,6 +1505,19 @@
         "size":  "16 oz",
         "boardItem":  "Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz",
         "linkItem":  "Jennie O Fresh 93%/7% Ground Turkey 16 Oz",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "boneless-skinless-chicken-thigh",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  2.99,
+        "link":  3.99,
+        "ratio":  1.33,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Tyson All Natural Fresh Boneless Skinless Chicken Thighs",
+        "linkItem":  "Heritage Farm Boneless Skinless Chicken Thighs",
         "board_src":  "recipe"
     },
     {
