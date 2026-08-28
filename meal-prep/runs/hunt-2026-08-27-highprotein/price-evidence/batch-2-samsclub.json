@@ -1,30 +1,22 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-28T06:58:51",
+ "generated": "2026-08-28T07:35:57",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "romaine lettuce",
+   "term": "little potatoes",
    "state": "MATCHES",
-   "term_used": "romaine lettuce",
+   "term_used": "little potatoes",
    "attempts": [
     {
-     "term": "romaine lettuce",
+     "term": "little potatoes",
      "state": "MATCHES",
-     "hits": 17
+     "hits": 18
     }
    ],
    "hits": [
-    {
-     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
-     "price": 2.97,
-     "size": "",
-     "unit_price": "$0.25/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/51UHB4PTHYY8"
-    },
     {
      "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
      "price": 6.97,
@@ -34,44 +26,36 @@
      "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
     },
     {
-     "item": "Romaine Hearts, 6 ct.",
-     "price": 4.67,
+     "item": "Creamer Potatoes, 5 lbs.",
+     "price": 6.72,
      "size": "",
-     "unit_price": "$0.78/ea",
+     "unit_price": "$1.34/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2LV333GNDZWB"
+     "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
     },
     {
-     "item": "Iceberg Lettuce, 2 heads",
-     "price": 2.46,
+     "item": "Little Bellies Pick-Me Sticks Variety Pack, Strawberry & Sweet Potato, 0.56 oz., 10 ct.",
+     "price": 14.98,
      "size": "",
-     "unit_price": "$1.23/ea",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1YYGJI1X4AJ5"
+     "url": "https://www.samsclub.com/p/-/4QHW37S7FCJO"
     },
     {
-     "item": "Organic Baby Bella Mushroom 24 oz.",
-     "price": 4.97,
+     "item": "Red Potatoes, 8 lbs.",
+     "price": 6.92,
      "size": "",
-     "unit_price": "$0.21/oz",
+     "unit_price": "$0.86/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4OX5KB1U5MVC"
+     "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
     },
     {
-     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
-     "price": 4.92,
+     "item": "Yellow Potatoes, 8 lbs.",
+     "price": 7.64,
      "size": "",
-     "unit_price": "$2.46/lb",
+     "unit_price": "$0.95/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
-    },
-    {
-     "item": "Organic Tender Sweet Carrots, 5 lbs.",
-     "price": 4.56,
-     "size": "",
-     "unit_price": "$0.91/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1L0R87CJG8TJ"
+     "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
     },
     {
      "item": "Russet Potatoes, 10 lbs.",
@@ -80,85 +64,180 @@
      "unit_price": "$0.52/lb",
      "relevance": null,
      "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+    },
+    {
+     "item": "Sweet Potatoes, 5 lbs.",
+     "price": 4.87,
+     "size": "",
+     "unit_price": "$0.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3P97KL9367OH"
+    },
+    {
+     "item": "Organic Yellow Onions, 5 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$1.04/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
   },
   {
-   "term": "sriracha",
+   "term": "cider vinegar",
    "state": "MATCHES",
-   "term_used": "sriracha",
+   "term_used": "cider vinegar",
    "attempts": [
     {
-     "term": "sriracha",
+     "term": "cider vinegar",
      "state": "MATCHES",
-     "hits": 20
+     "hits": 23
     }
    ],
    "hits": [
     {
-     "item": "Member's Mark Italian Basil Pesto, 22 oz.",
-     "price": 8.58,
+     "item": "Chosen Foods Avocado Oil Cooking Spray 8 oz., 2 pk.",
+     "price": 9.98,
      "size": "",
-     "unit_price": "$0.39/oz",
+     "unit_price": "$0.62/foz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6FLADUR7OH6P"
+     "url": "https://www.samsclub.com/p/-/4C8M1YOHYB0C"
     },
     {
-     "item": "Chef-mate Country Sausage Gravy, 105 oz.",
-     "price": 9.58,
+     "item": "Crisco All-Vegetable Shortening, 96 oz.",
+     "price": 12.78,
      "size": "",
-     "unit_price": "$0.09/oz",
+     "unit_price": "$0.13/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/54GU3TPM4YPS"
+     "url": "https://www.samsclub.com/p/-/1EE265Y71POZ"
     },
     {
-     "item": "Huy Fong Sriracha Sauce, 28 oz., 2 pk.",
-     "price": 8.98,
+     "item": "Bragg Apple Cider Vinegar Supplement Capsules, 180 ct.",
+     "price": 19.98,
+     "size": "",
+     "unit_price": "$0.11/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/39ZELLWGCHZM"
+    },
+    {
+     "item": "Nature's Truth Apple Cider Vinegar 600 mg Extra Strength Capsules, 240 ct.",
+     "price": 14.97,
+     "size": "",
+     "unit_price": "$0.06/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/26Q7C01EHJS9"
+    },
+    {
+     "item": "Nature's Truth Apple Cider Vinegar Gummies, 400 mg 120 ct.",
+     "price": 12.88,
+     "size": "",
+     "unit_price": "$0.11/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7K0VJ1AQBKDD"
+    },
+    {
+     "item": "Member's Mark Extra Virgin Olive Oil, 101 fl. oz.",
+     "price": 22.98,
+     "size": "",
+     "unit_price": "$0.23/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7CGNB4OARP0L"
+    },
+    {
+     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar, 128 fl. oz.",
+     "price": 16.98,
+     "size": "",
+     "unit_price": "$0.13/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2E5K6II8HHV7"
+    },
+    {
+     "item": "Bragg Organic Apple Cider Vinegar, 32 oz., 2 pk.",
+     "price": 9.98,
      "size": "",
      "unit_price": "$0.16/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2HO9ZKI68FJC"
+     "url": "https://www.samsclub.com/p/-/4JT9BNL5H1TH"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "Baby Potatoes",
+   "state": "MATCHES",
+   "term_used": "Baby Potatoes",
+   "attempts": [
+    {
+     "term": "Baby Potatoes",
+     "state": "MATCHES",
+     "hits": 21
+    }
+   ],
+   "hits": [
+    {
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
+     "size": "",
+     "unit_price": "$4.65/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
     },
     {
-     "item": "Yellowbird Blue Agave Sriracha, 19.6 oz.",
-     "price": 8.98,
+     "item": "Reser's Main St. Bistro Oven Roasted Potatoes 2 pk.",
+     "price": 7.88,
      "size": "",
-     "unit_price": "$0.46/oz",
+     "unit_price": "$0.20/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5AVA01F864WZ"
+     "url": "https://www.samsclub.com/p/-/3O0MQ21D8UVL"
     },
     {
-     "item": "Sonny's BBQ Sweet BBQ Sauce, 84 oz.",
-     "price": 9.98,
+     "item": "Idahoan Baby Reds Flavored Mashed 4.1 oz., 9 pk.",
+     "price": 9.68,
      "size": "",
-     "unit_price": "$0.12/oz",
+     "unit_price": "$1.08/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/205WATYF73VJ"
+     "url": "https://www.samsclub.com/p/-/18276V3DKBE9"
     },
     {
-     "item": "Rao's Homemade Marinara Sauce, 22 oz., 2 pk.",
-     "price": 7.76,
+     "item": "Little Bellies Pick-Me Sticks Variety Pack, Strawberry & Sweet Potato, 0.56 oz., 10 ct.",
+     "price": 14.98,
      "size": "",
-     "unit_price": "$0.18/oz",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4P0AL8KH8MXL"
+     "url": "https://www.samsclub.com/p/-/4QHW37S7FCJO"
     },
     {
-     "item": "Prego Italian Flavored Meat Sauce, 45 oz., 3 pk.",
-     "price": 8.98,
+     "item": "Idahoan Baby Reds Value Pack Mashed Potatoes, 4 oz., 9 pk.",
+     "price": 9.68,
      "size": "",
-     "unit_price": "$0.07/oz",
+     "unit_price": "$0.26/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/37YRAI9ULYAX"
+     "url": "https://www.samsclub.com/p/-/3IE4ZA59MN9W"
     },
     {
-     "item": "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
-     "price": 6.54,
+     "item": "Creamer Potatoes, 5 lbs.",
+     "price": 6.72,
      "size": "",
-     "unit_price": "$0.15/oz",
+     "unit_price": "$1.34/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4NVYRII7HK4Z"
+     "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
+    },
+    {
+     "item": "Yellow Potatoes, 8 lbs.",
+     "price": 7.64,
+     "size": "",
+     "unit_price": "$0.95/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
+    },
+    {
+     "item": "Red Potatoes, 8 lbs.",
+     "price": 6.92,
+     "size": "",
+     "unit_price": "$0.86/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

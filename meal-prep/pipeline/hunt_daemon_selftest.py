@@ -929,7 +929,8 @@ def run():
       "Sauce do too",
       *_fooddb_near_name_key_is_precise_not_recall())
     T("CLEAN TWIN H3: both halves of a collision can be NEW in one payload - an index built only "
-      "from what was already on disk would miss it",
+      "from what was already on disk would miss it. Agreeing halves REUSE (one row, a rename, a "
+      "note); disagreeing halves both write and the finding fires",
       *_fooddb_near_name_catches_two_new_rows_in_one_payload())
     T("CLEAN TWIN H3: a real new variant says NOTHING - a check that questioned every ground-beef "
       "ratio would be trained out of existence inside a week",
@@ -1377,6 +1378,9 @@ def run():
     for name, ok, got in _price_evidence_is_never_overwritten():
         T(name, ok, got)
     for name, ok, got in _the_write_lane_does_not_block_on_its_own_intake():
+        T(name, ok, got)
+    H("An agreeing twin is reused, not minted a second time")
+    for name, ok, got in _an_agreeing_twin_is_reused_not_minted():
         T(name, ok, got)
     H("The wave audit is learned from - events, and invalidation of what it refutes")
     for name, ok, got in _the_audit_is_learned_from():
@@ -6946,7 +6950,7 @@ def _fooddb_writes():
     try:
         # 3+ elements, per the estate's collection rule
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         names = [r.get("item") for r in doc["items"]]
         ok = (sorted(written) == ["Fixture Beef", "Fixture Chicken", "Fixture Pork"]
@@ -6969,7 +6973,7 @@ def _fooddb_atwater_refuses():
         # numbers that do not describe one food, which is what a fabricated label looks like.
         bad = _good_row("Fixture Fabrication", calories=900)
         rows = [_good_row("Fixture Chicken"), bad, _good_row("Fixture Pork")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Fabrication" in f and "Atwater" in f]
         ok = ("Fixture Fabrication" not in names and "Fixture Fabrication" not in written
@@ -6989,7 +6993,7 @@ def _fooddb_conflict_never_overwrites():
         # same item, DIFFERENT macros, and its own arithmetic is fine (30*4 + 3*4 + 5*9 = 177)
         clash = _good_row("Fixture Chicken", protein_g=30, calories=177)
         rows = [clash, _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chicken = [r for r in doc["items"] if r.get("item") == "Fixture Chicken"]
         named = [f for f in findings if "Fixture Chicken" in f and "DIFFERS" in f]
@@ -7012,7 +7016,7 @@ def _fooddb_identical_is_silent():
     d, path, tmp = _food_db_run(None, existing=[prior])
     try:
         rows = [_good_row("Fixture Chicken"), _good_row("Fixture Pork"), _good_row("Fixture Beef")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         ok = (not findings and "Fixture Chicken" not in written
               and names.count("Fixture Chicken") == 1
@@ -7057,7 +7061,7 @@ def _fooddb_rounding_is_not_a_conflict():
                 _good_row("Fixture Parsley", calories=36, protein_g=3.0, carbs_g=6.3, fat_g=0.8,
                           fiber_g=3.3),                                    # hundredths, every field
                 _good_row("Fixture Chicken", calories=158)]                # 3 cal apart
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         spinach = [r for r in doc["items"] if r.get("item") == "Fixture Spinach"]
         ok = (not findings and not written and len(doc["items"]) == 3
@@ -7079,7 +7083,7 @@ def _fooddb_a_different_basis_is_always_a_conflict():
     try:
         clash = _good_row("Fixture Pork Chops", serving_grams=112, calories=155, protein_g=25.2)
         rows = [clash, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         chops = [r for r in doc["items"] if r.get("item") == "Fixture Pork Chops"]
         named = [f for f in findings if "Fixture Pork Chops" in f and "DIFFERS" in f]
@@ -7109,7 +7113,7 @@ def _fooddb_near_name_twin_is_named_but_still_written():
     try:
         twin = _good_row("Apples", serving_grams=100, calories=63, protein_g=0.2, carbs_g=15.2,
                          fat_g=0.18)
-        written, findings, notes = arun(d.write_food_db_rows(
+        written, findings, notes, _ren = arun(d.write_food_db_rows(
             "s1", [twin, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
         names = sorted(r.get("item") for r in _db_items(path)["items"])
         named = [f for f in findings if "'Apple'" in f and "'Apples'" in f]
@@ -7174,17 +7178,47 @@ def _fooddb_near_name_catches_two_new_rows_in_one_payload():
     """CLEAN TWIN: the two colliding rows can BOTH be new. 'Fresh Thyme' is in the live DB twice and
     neither copy carries added_by, so they arrived before the pen moved - but nothing stops one
     payload carrying both halves, and an index built only from what was ALREADY on disk would miss
-    it."""
+    it.
+
+    REWRITTEN 2026-08-28, because the OUTCOME changed and the property under test did not. The
+    in-payload index is still what catches this; what it does about it now depends on whether the two
+    rows agree. Two rows off _good_row are macro-identical, so the second is REUSED and renamed onto
+    the first - one row written, a note, no finding. The disagreeing half below is the one that still
+    writes both and still fires, and running them through the same payload is what proves the index
+    saw a row that was never on disk.
+    """
     d, path, tmp = _food_db_run(None)
     try:
-        written, findings, notes = arun(d.write_food_db_rows(
+        written, findings, notes, renames = arun(d.write_food_db_rows(
             "s1", [_good_row("Fresh Thyme"), _good_row("Fresh Thymes"),
                    _good_row("Fixture Beef")]))
-        named = [f for f in findings if "Fresh Thyme" in f]
-        ok = len(named) == 1 and sorted(written) == ["Fixture Beef", "Fresh Thyme", "Fresh Thymes"]
-        return ok, "written=%s finding=%s" % (json.dumps(written), json.dumps(named)[:260])
+        agree_ok = (sorted(written) == ["Fixture Beef", "Fresh Thyme"]
+                    and renames.get("Fresh Thymes") == "Fresh Thyme"
+                    and not [f for f in findings if "Fresh Thyme" in f]
+                    and [n for n in notes if "Fresh Thymes" in n])
+        if not agree_ok:
+            return False, ("agreeing halves: written=%s renames=%s findings=%s"
+                           % (json.dumps(written), json.dumps(renames), json.dumps(findings)[:200]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # ...and the half that must still be NAMED: same collision, different numbers.
+    d2, _p2, tmp2 = _food_db_run(None)
+    try:
+        w2, f2, _n2, r2 = arun(d2.write_food_db_rows(
+            # internally consistent by Atwater (50*4 + 6*4 + 10*9 = 314 against a stated 310), or the
+            # row is rejected before the collision check ever sees it - which is how the first cut of
+            # this twin "passed" for the wrong reason.
+            "s1", [_good_row("Fresh Thyme"),
+                   _good_row("Fresh Thymes", calories=310, protein_g=50, carbs_g=6, fat_g=10),
+                   _good_row("Fixture Beef")]))
+        named = [f for f in f2 if "Fresh Thyme" in f]
+        ok = (sorted(w2) == ["Fixture Beef", "Fresh Thyme", "Fresh Thymes"]
+              and len(named) == 1 and not r2)
+        return ok, ("disagreeing halves: written=%s renames=%s finding=%s"
+                    % (json.dumps(w2), json.dumps(r2), json.dumps(named)[:220]))
+    finally:
+        shutil.rmtree(tmp2, ignore_errors=True)
 
 
 def _fooddb_near_name_is_silent_on_a_real_variant():
@@ -7194,7 +7228,7 @@ def _fooddb_near_name_is_silent_on_a_real_variant():
     prior = _good_row("93/7 Ground Beef")
     d, path, tmp = _food_db_run(None, existing=[prior])
     try:
-        written, findings, notes = arun(d.write_food_db_rows(
+        written, findings, notes, _ren = arun(d.write_food_db_rows(
             "s1", [_good_row("90/10 Ground Beef"), _good_row("80/20 Ground Beef"),
                    _good_row("Fixture Lamb")]))
         ok = (not findings and len(written) == 3)
@@ -7218,8 +7252,17 @@ def _fooddb_near_name_matches_the_live_db():
         if isinstance(r, dict) and r.get("item"):
             groups.setdefault(k(r["item"]), []).append(r["item"])
     hits = sorted(v for v in groups.values() if len(v) > 1)
+    # FIVE SINCE 2026-08-28, and the fifth is exactly why this fixture exists. Today's mapping added
+    # a "Panko Bread Crumbs" row beside the estate's existing "Panko Breadcrumbs", and the two
+    # DISAGREE: the Kikkoman label row reads 0 g fat per 30 g while the FDC row reads 3.57 g per
+    # 100 g - about 1.07 g on the same serving. That is a real question about which basis is right,
+    # not a spelling, so the write path correctly wrote both and named it. Recorded here as
+    # KNOWN-PENDING rather than merged, because Brad rules row removals; see
+    # design/OPEN-ITEM-panko-two-rows-disagree-2026-08-28.md. Listing it keeps the alarm live for a
+    # SIXTH - deleting the fixture to get green would have thrown the alarm away.
     want = sorted([["Apple", "Apples"], ["Fresh Thyme", "Fresh Thyme"],
-                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
+                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"],
+                   ["Panko Breadcrumbs", "Panko Bread Crumbs"]],
                   key=lambda v: sorted(v))
     got = sorted(hits, key=lambda v: sorted(v))
     ok = [sorted(v) for v in got] == [sorted(v) for v in want]
@@ -7245,7 +7288,7 @@ def _fooddb_agreeing_bases_are_not_a_conflict():
                   "serving_unit": "g", "calories": 233, "protein_g": 23.0, "carbs_g": 47.8,
                   "fat_g": 4.07, "fiber_g": 37.7, "source": "fdc:170925"}
         rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
-        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, notes, _ren = arun(d.write_food_db_rows("s1", rows))
         doc = _db_items(path)
         basil = [r for r in doc["items"] if r.get("item") == "Dried Basil"]
         ok = (# NOT a finding - the two agree
@@ -7277,7 +7320,7 @@ def _fooddb_normalising_still_catches_a_real_disagreement():
                   "serving_unit": "g", "calories": 13, "protein_g": 1.97, "carbs_g": 1.2,
                   "fat_g": 0.09, "source": "fdc:174312"}
         rows = [per100, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]
-        written, findings, notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, notes, _ren = arun(d.write_food_db_rows("s1", rows))
         broth = [r for r in _db_items(path)["items"] if r.get("item") == "Beef Broth"]
         named = [f for f in findings if "Beef Broth" in f and "DIFFERS" in f]
         ok = (len(named) == 1
@@ -7302,7 +7345,7 @@ def _fooddb_unweighable_basis_is_still_a_conflict():
         noweight = {"item": "Mystery Spice", "serving_grams": 0, "serving_qty": 1,
                     "serving_unit": "pinch", "calories": 6, "protein_g": 0.2, "carbs_g": 1.0,
                     "fat_g": 0.1, "source": "fdc:1"}
-        written, findings, notes = arun(d.write_food_db_rows(
+        written, findings, notes, _ren = arun(d.write_food_db_rows(
             "s1", [noweight, _good_row("Fixture Beef"), _good_row("Fixture Lamb")]))
         named = [f for f in findings if "Mystery Spice" in f]
         ok = (len(named) == 1 and not [n for n in notes if "Mystery Spice" in n]
@@ -7685,7 +7728,7 @@ def _fooddb_tortellini_is_still_refused():
     one row this estate has actually verified against a photograph."""
     d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
     try:
-        written, findings, _notes = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
         row = [r for r in _db_items(path)["items"] if r["item"] == "Cheese Tortellini"][0]
         ok = (written == [] and len(findings) == 1
               and "Nothing was written and the existing row stands" in findings[0]
@@ -7722,7 +7765,7 @@ def _fooddb_finding_states_one_basis():
     should not have to do the arithmetic before they can see the question."""
     d, path, tmp = _food_db_run(None, existing=[_tortellini_db_row()])
     try:
-        _w, findings, _n = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
+        _w, findings, _n, _ren = arun(d.write_food_db_rows("s1", [_tortellini_mapper_row()]))
         f = findings[0] if findings else ""
         ok = ("On one basis, per 100 g: DB 175.0 cal" in f and "vs  mapper 307.0" in f)
         return ok, f[:320]
@@ -7742,7 +7785,7 @@ def _fooddb_agreement_does_not_reach_the_ledger():
               "calories": 233, "protein_g": 23, "carbs_g": 28, "fat_g": 3, "source": "fdc:171317"}
     d, path, tmp = _food_db_run(None, existing=[db_row])
     try:
-        _w, findings, notes = arun(d.write_food_db_rows("s1", [mapper]))
+        _w, findings, notes, _ren = arun(d.write_food_db_rows("s1", [mapper]))
         ok = (not findings and len(notes) == 1 and _ledger_lines(d) == []
               and not os.path.exists(d.food_db_conflicts_path))
         return ok, "findings=%s notes=%d ledger=%s" % (findings, len(notes),
@@ -7776,7 +7819,7 @@ def _fooddb_needs_a_source():
         rows = [_good_row("Fixture Chicken"),
                 _good_row("Fixture Hearsay", source=""),
                 _good_row("Fixture Pork")]
-        written, findings, _notes = arun(d.write_food_db_rows("s1", rows))
+        written, findings, _notes, _ren = arun(d.write_food_db_rows("s1", rows))
         names = [r.get("item") for r in _db_items(path)["items"]]
         named = [f for f in findings if "Fixture Hearsay" in f and "source" in f]
         ok = ("Fixture Hearsay" not in names and len(named) == 1
@@ -7811,7 +7854,7 @@ def _fooddb_concurrent_writers():
         names = sorted(r.get("item") for r in _db_items(path)["items"])
         want = sorted(["Worker One A", "Worker One B", "Worker One C",
                        "Worker Two A", "Worker Two B", "Worker Two C"])
-        written = sorted([n for w, _f, _n in res for n in w])
+        written = sorted([n for w, _f, _n, _r in res for n in w])
         ok = names == want and written == want
         return ok, "items(%d)=%s" % (len(names), json.dumps(names))
     finally:
@@ -9119,6 +9162,82 @@ def _the_rewave_moves_the_STATE_not_just_the_pool():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return out
+
+
+def _an_agreeing_twin_is_reused_not_minted():
+    r"""THE DUPLICATE THAT CAME BACK THE NEXT DAY (2026-08-28).
+
+    write_food_db_rows has always NOTICED a near-name collision - same name modulo punctuation and
+    plural - and its finding said the row was written anyway because "a naming question must not park
+    a recipe". That is right, and it was not the only way to keep the recipe moving.
+
+    Measured twice on the same pair: `Limes` landed beside `Lime` on hunt-2026-08-27-highprotein with
+    the same FDC record (168155) and the same 30 cal / 0.7 P / 10.5 C / 0.2 F per 100 g. It was merged
+    by hand on 08-27, and the very next day's mapping re-created it - because the loose key fed the
+    FINDING and never the LOOKUP. A duplicate a human must merge after every run is a treadmill, not
+    a naming question.
+
+    So when the colliding rows AGREE on every macro, the naming question has an answer: use the row
+    that already exists. When they DISAGREE, it is a real question about which is right, the row is
+    written and the finding fires exactly as before - answering that by silently dropping one is the
+    shadowing this guard exists to report.
+    """
+    res = []
+    A = daemon(run_dir=scratch_dir(prefix="daemon-twin-"))._food_rows_agree
+    lime100 = {"serving_grams": 100, "calories": 30, "protein_g": 0.7, "carbs_g": 10.5, "fat_g": 0.2}
+
+    res.append(("MUST FIRE  two rows with identical macros on the same basis AGREE - this is the "
+                "Lime/Limes pair that was merged by hand and came back the next day",
+                A(dict(lime100), dict(lime100)) is True, "did not agree"))
+
+    # THE BASIS IS NORMALISED, or the check would call the same food different for saying 28 g.
+    lime28 = {"serving_grams": 28, "calories": 8.4, "protein_g": 0.196, "carbs_g": 2.94, "fat_g": 0.056}
+    res.append(("MUST FIRE  the same food stated on a 28 g household serving still agrees with the "
+                "100 g row - a basis difference is not a macro difference",
+                A(lime28, dict(lime100)) is True, "a serving-basis difference read as disagreement"))
+
+    for field, bad in (("calories", 60), ("protein_g", 9.0), ("carbs_g", 30.0), ("fat_g", 12.0)):
+        row = dict(lime100); row[field] = bad
+        res.append(("CLEAN TWIN a twin that disagrees on %s is NOT reused - it still gets its row "
+                    "and still gets the finding" % field,
+                    A(row, dict(lime100)) is False, "%s=%s read as agreement" % (field, bad)))
+
+    # CONSERVATIVE BY CONSTRUCTION: anything it cannot read must fall to "write it and report it".
+    res.append(("CLEAN TWIN a zero serving basis is not agreement - it is unreadable, and the safe "
+                "answer to unreadable is to write the row",
+                A({"serving_grams": 0, "calories": 30}, dict(lime100)) is False, "agreed on a zero basis"))
+    res.append(("CLEAN TWIN a missing counterpart row is not agreement",
+                A(dict(lime100), None) is False, "agreed with nothing"))
+    res.append(("CLEAN TWIN a non-numeric macro is not agreement",
+                A({"serving_grams": 100, "calories": "thirty"}, dict(lime100)) is False,
+                "agreed on unparseable text"))
+    # ...and a hair's difference on a near-zero field must not be called disagreement
+    near = dict(lime100); near["fat_g"] = 0.2004
+    res.append(("CLEAN TWIN a rounding hair on a 0.2 g fat row still agrees - the tolerance has an "
+                "absolute floor so a tiny field is not judged on noise",
+                A(near, dict(lime100)) is True, "a rounding hair read as disagreement"))
+
+    # THE RENAME IS THE OTHER HALF. Declining to mint is only safe if the LINE points at the row that
+    # exists - the food-DB lookup is name-keyed, so a line still saying "Limes" would find nothing.
+    d = daemon(run_dir=scratch_dir(prefix="daemon-twin2-"))
+    src = {"lines": [{"raw": "2 limes, juiced", "term": "limes", "canon_item": "Limes"}],
+           "rulings": [{"canon_item": "Limes", "bid": "limes"}],
+           "ingredients": [{"item": "Limes", "grams": 134}]}
+    got = d.apply_food_renames(src, {"Limes": "Lime"})
+    res.append(("MUST FIRE  the rename points every food NAME at the row that will exist - "
+                "declining to mint without this kills the recipe at the skeleton instead",
+                got["rulings"][0]["canon_item"] == "Lime"
+                and got["ingredients"][0]["item"] == "Lime"
+                and got["lines"][0]["canon_item"] == "Lime",
+                json.dumps(got)[:160]))
+    res.append(("MUST FIRE  the SOURCE PAGE'S own words are never rewritten - raw and term are the "
+                "evidence that the line said what it said",
+                got["lines"][0]["raw"] == "2 limes, juiced" and got["lines"][0]["term"] == "limes",
+                json.dumps(got["lines"][0])))
+    res.append(("CLEAN TWIN a name nobody renamed is untouched",
+                d.apply_food_renames(src, {"Something Else": "X"})["ingredients"][0]["item"] == "Limes",
+                "an unrelated name was rewritten"))
+    return res
 
 
 def _the_audit_is_learned_from():

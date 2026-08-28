@@ -999,5 +999,77 @@
                          "detail":  "reviewed"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w9",
+      "opened":  "2026-08-28T07:31:01",
+      "last_activity":  "2026-08-28T07:31:02",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "blackened-chicken-with-mango-salsa",
+                    "high-protein-chicken-alfredo-lasagna",
+                    "crack-chicken-chili",
+                    "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+                    "chicken-and-potato-curry",
+                    "street-corn-chicken-rice-bowls"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-28T07:31:01",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-28T07:31:02",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-28T07:31:02",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-28T07:31:02",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w10",
+      "opened":  "2026-08-28T07:53:22",
+      "last_activity":  "2026-08-28T07:53:23",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "crack-chicken-chili",
+                    "blackened-chicken-with-mango-salsa"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-28T07:53:22",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-28T07:53:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-28T07:53:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-28T07:53:23",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
   }
 ]

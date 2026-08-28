@@ -1,0 +1,66 @@
+{
+    "slug":  "apricot-chicken-sheet-pan-dinner-recipe-video",
+    "title":  "Apricot Chicken Sheet Pan Dinner Recipe + VIDEO",
+    "source_url":  "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-28T07:21:31",
+    "updated":  "2026-08-28T07:39:30",
+    "terms":  [
+                  {
+                      "term":  "little potatoes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "cider vinegar",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Baby Potatoes",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:21:31",
+                        "by":  "harvest",
+                        "detail":  "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T07:21:31",
+                        "by":  "decider",
+                        "detail":  "Sheet-pan chicken breast with little potatoes and carrots in an apricot-jam/soy/Worcestershire glaze; distinct sweet apricot-glaze sauce family with no apricot chicken in catalog (existing chicken+potato bakes are parmesan-garlic or lemon-pepper), verified 469cal/42c/50p fits the high-protein run."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T07:21:53",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-28T07:34:35",
+                        "by":  "mapper",
+                        "detail":  "Residual lines ruled 4, rejected 0. New DB rows returned: Baby Potatoes (open-web label, The Little Potato Company), Apricot Jam (fdc:170645). No food declared absent for this recipe. Carrots and Apple Cider Vinegar already carry rows under their canon names, so nothing was returned for them. Two proposals go to the registrar (baby-potatoes, apple-cider-vinegar); both may be reuses if the ids alre"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-28T07:34:36",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-28T07:39:30",
+                        "by":  "derive",
+                        "detail":  "all 3 blocking ingredient(s) carried"
+                    }
+                ]
+}

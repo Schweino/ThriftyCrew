@@ -1,0 +1,287 @@
+﻿{
+    "slug":  "bang-bang-chicken-bowls",
+    "title":  "Bang Bang Chicken Bowls",
+    "source_url":  "https://ohsnapmacros.com/bang-bang-chicken-bowls/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-28",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 ½ lbs. boneless skinless chicken breast, cubed",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, cut into bite-sized cubes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "salt and pepper",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  14,
+                            "buy":  "to taste (about 2 1/2 tsp salt and 1 tsp ground black pepper)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Re-weighed. The table settled this at 20 g source basis, which is 70 g at the 14-serving batch - 4.7x the estate\u0027s own published precedent of about 15 g of salt per 14-serving recipe, and it would print an absurd measure to the reader. 4 g source = 14 g at batch.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 Tbsp. olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  47,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3/4 cup light mayonnaise (166g)",
+                            "item":  "Light Mayonnaise",
+                            "bid":  "mayonnaise",
+                            "board":  null,
+                            "grams":  581,
+                            "buy":  "2 2/3 cups light mayonnaise",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Light mayo is the same jar on the same shelf at the same price class, per the \u0027Light Cream Cheese\u0027 and \u0027avocado oil mayonnaise\u0027 precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup sweet chili sauce (140g)",
+                            "item":  "Sweet Chili Sauce",
+                            "bid":  "sweet-chili-sauce",
+                            "board":  "recipe",
+                            "grams":  490,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Table computed no weight; the source line prints 140 g.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/4 cup ketchup (70g)",
+                            "item":  "Ketchup",
+                            "bid":  "ketchup",
+                            "board":  "recipe",
+                            "grams":  240,
+                            "buy":  "3/4 cup plus 2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ketchup, 7 of 7 stores, cheapest 0.0506 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp. (or more) sriracha",
+                            "item":  "Sriracha",
+                            "bid":  "sriracha",
+                            "board":  "recipe",
+                            "grams":  18,
+                            "buy":  "1 tbsp plus 1/2 tsp, or more to taste",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: sriracha, 4 of 7 stores, cheapest 0.2139 at Baker\u0027s",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 tsp. garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "scant 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Tbsp. powdered peanut butter, PB2 (13g (see notes))",
+                            "item":  "Powdered Peanut Butter",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  46,
+                            "buy":  "3 1/2 tbsp powdered peanut butter",
+                            "optional":  false,
+                            "decision":  "mapped-null",
+                            "notes":  "REFUSED both near matches: the board\u0027s `butter` is dairy butter (wrong food) and `peanut-butter` is the jarred spread at roughly a fifth the price per ounce with 590 vs 400 cal/100 g. Pantry-static rather than a new specialty id for a 13 g flavour line; term reported absent so the pricing road can rule.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 cups cooked white rice",
+                            "item":  "Cooked White Rice",
+                            "bid":  "rice",
+                            "board":  null,
+                            "grams":  1106,
+                            "buy":  "7 cups cooked (from about 2 1/3 cups dry)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "158 g per cup cooked. Weighed on the cooked basis per the estate\u0027s \u0027cooked bacon\u0027 precedent; this over-prices the dry bag about 3x, which on rice is a few cents and errs high, never low. You buy the dry bag and cook it: `rice` is the same product and price class, and \u0027cooked\u0027 is a prep instruction as in the \u0027cooked bacon\u0027 ruling. Weighed cooked (158 g/cup) so grams and the cooked-rice DB row agree; vocabulary wants a Cooked White Rice name row, not a new id.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "12 oz. cooked frozen cauliflower rice",
+                            "item":  "Frozen Cauliflower Rice",
+                            "bid":  "frozen-cauliflower-rice",
+                            "board":  null,
+                            "grams":  1190,
+                            "buy":  "2 3/4 lb frozen riced cauliflower, cooked",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REFUSED the board\u0027s `rice` match outright - cauliflower is not rice, that is a wrong-food match at a wrong price. Also refused fresh `cauliflower`: fresh-is-not-frozen is a standing rejection and a bagged frozen riced product is a different price class. New id proposed.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "julienned carrots",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  "recipe",
+                            "grams":  420,
+                            "buy":  "3 cups julienned (about 5 medium carrots)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Table computed no weight; nominal topping portion, about 1/4 cup per bowl.",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "finely sliced cucumber",
+                            "item":  "Cucumber",
+                            "bid":  "cucumbers",
+                            "board":  "recipe",
+                            "grams":  300,
+                            "buy":  "1 large cucumber, finely sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cucumbers, 7 of 7 stores, cheapest 0.75 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "shredded green cabbage",
+                            "item":  "Green Cabbage",
+                            "bid":  "cabbage",
+                            "board":  null,
+                            "grams":  490,
+                            "buy":  "6 cups shredded (about half a medium head)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Shredding is a knife cut of the same head, per the \u0027carrot\u0027 -\u003e carrots precedent; not a bagged coleslaw mix at this quantity. Board 6 of 7. Unquantified topping weighed at about 1/2 cup shredded per bowl.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "pickled onions",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "2 medium onions, thinly sliced and quick-pickled",
+                            "optional":  false,
+                            "decision":  "mapped-optional",
+                            "notes":  "Quick-pickled at home from a whole onion plus pantry vinegar, so both the purchase and the macros are the onion; canon reuses the existing Yellow Onion row. Unquantified garnish with no stated quantity, hence optional, per the \u0027Sliced onions\u0027 precedent.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "sweet heat jalapeños",
+                            "item":  "Sweet Heat Jalapeños",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Brand-specific jarred candied jalapeno with no stated quantity, named in the ingredient list but in no instruction step; dropped on the \u0027avocado lime dipping sauce\u0027 precedent. REFUSED the board\u0027s `jalapenos` match: that is fresh peppers, a form flip and a different price class."
+                        },
+                        {
+                            "source_raw":  "green onions",
+                            "item":  "Green Onions",
+                            "bid":  "green-onions",
+                            "board":  "recipe",
+                            "grams":  60,
+                            "buy":  "6 green onions, chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: green-onions, 5 of 7 stores, cheapest 0.99 at Fareway",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "sesame seeds",
+                            "item":  "Toasted Sesame Seeds",
+                            "bid":  "toasted-sesame-seeds",
+                            "board":  "recipe",
+                            "grams":  25,
+                            "buy":  "2 1/2 tbsp, toasted",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027sesame seeds\u0027 -\u003e toasted-sesame-seeds (by mapper on 2026-08-27T11:55:54); nearest vocabulary rows: Toasted Sesame Seeds [toasted-sesame-seeds] DIFFERENT FORM: toasted | Caraway Seeds [caraway-seeds] same form | Poppy Seeds [poppy-seeds] same form",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "powdered peanut butter",
+                                 "frozen cauliflower rice"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Light Mayonnaise",
+                               "Powdered Peanut Butter",
+                               "Cooked White Rice",
+                               "Frozen Cauliflower Rice"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "cooked frozen cauliflower rice",
+                                        "proposed_bid":  "frozen-cauliflower-rice",
+                                        "evidence":  "A bagged frozen riced-cauliflower product, 1,190 g at batch scale, so a material purchase and not a garnish. Nothing on the pre-resolve table prices it: the board\u0027s only offer was `rice` (a different food) and the near vocabulary rows were all rice. It is NOT the live `cauliflower` id - that is a fresh head, and fresh-is-not-frozen is a standing estate rejection with a different price per pound and a different gram yield. The estate already mints frozen-vegetable ids separately from their fresh twins: `frozen-broccoli-florets` is used by another recipe in this very batch. If an id already prices bagged frozen riced cauliflower under another spelling (frozen-riced-cauliflower, cauliflower-rice), alias it and I withdraw.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "frozen-cauliflower-rice",
+                                  "verdict":  "approve",
+                                  "bid":  "frozen-cauliflower-rice",
+                                  "reason":  "No id prices frozen riced cauliflower under any spelling: \u0027cauliflower\u0027 (fresh head, each, $1.98 Fareway) explicitly excludes frozen/rice/riced, and \u0027frozen-cauliflower-florets\u0027 (itself unpriced today) explicitly excludes riced cauliflower and cauliflower rice, so the estate deliberately carved this product out of both existing ids rather than carrying it; no \u0027riced\u0027 string exists in the feed, the alias map, or recipe-board-everyday. Same food as \u0027cauliflower\u0027 but different form (frozen riced vs fresh head) - a different purchase, per the frozen-broccoli-florets precedent. FOLLOW-UP EDITS: mint in commodities.json (weekly staples, unit oz) with include \u0027^(?=.*\\bfrozen\\b)(?=.*\\b(?:cauliflower\\s+rice|riced\\s+cauliflower)\\b).*$\u0027; clone frozen-cauliflower-florets\u0027 full exclude block (~150 patterns incl. baby-food/pet/beverage) and add excludes for florets, pizza/crust, stir-fry/vegetable blends and seasoned/flavored medleys; add commodity-dupe-allowlist.json pairs frozen-cauliflower-rice\u003c-\u003ecauliflower (fresh vs frozen form), frozen-cauliflower-rice\u003c-\u003efrozen-cauliflower-florets (riced vs florets cut - shared \u0027frozen-cauliflower-\u0027 prefix will trip the audit\u0027s prefix rule), and frozen-cauliflower-rice\u003c-\u003erice (cauliflower is not a grain). Note to caller: id will EXIST but is NOT PRICED - it needs a capture-worklist entry before the recipe costs. Vocabulary is a separate ruling: \u0027cooked frozen cauliflower rice\u0027 needs its own ingredients.json row (no densities/macros row exists; FDC 168521 \u0027Cauliflower, frozen, cooked, boiled, drained, with salt\u0027 is the plausible macro source but transcribe/verify a bag label per the agreement-is-not-identity rule) - this approval mints the id only, not the name."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u0027salt and pepper\u0027: the qty engine could not ground this weight (no-qty-\u003ehouse staple), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027finely sliced cucumber\u0027: the qty engine could not ground this weight (no-qty-\u003eserve-default), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027green onions\u0027: the qty engine could not ground this weight (no-qty-\u003eserve-default), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list",
+                           "\u0027sesame seeds\u0027: the qty engine could not ground this weight (no-qty-\u003eserve-default), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  538,
+                                                                   "protein_g":  44,
+                                                                   "carbs_g":  47
+                                                               },
+                              "computed_per_serving":  {
+                                                           "calories":  588,
+                                                           "protein_g":  44.8,
+                                                           "carbs_g":  57
+                                                       },
+                              "protein_gap_pct":  1.8,
+                              "band":  "cal 450-800, protein \u003e= 40",
+                              "verdict":  "PASSES. Protein agrees with the source to within 2%, so no portion is wrong; calories run 9% high, which is package rounding plus counting the whole sauce batch (the source drizzles about 90% of it).",
+                              "arithmetic":  "4 servings. Chicken 680.4 g = 789 cal / 151.7 P; sauce (mayo 166 g, chili sauce 140 g, ketchup 68.5 g, sriracha 5 g, PB2 13 g) = 792 cal / 7.8 P; rice 316 g = 411 cal / 7.5 P; cauliflower rice 340 g = 65 cal / 5.5 P; vegetables and sesame = 172 cal / 6.6 P; oil 119 cal. Totals 2,352 cal / 179 g protein."
+                          }
+}

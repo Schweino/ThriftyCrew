@@ -1,0 +1,509 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 3,
+ "generated": "2026-08-28T07:51:59",
+ "batch_terms": [
+  "powdered peanut butter",
+  "frozen cauliflower rice"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "powdered peanut butter",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "powdered peanut butter",
+     "attempts": [
+      {
+       "term": "powdered peanut butter",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "PB2® Powdered Peanut Butter",
+       "price": 12.99,
+       "size": "24 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0085178400759"
+      },
+      {
+       "item": "PB2® Original Powdered Peanut Butter",
+       "price": 4.99,
+       "size": "6.5 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0085079100200"
+      },
+      {
+       "item": "Bell Plantation PB2® Powdered Peanut Butter",
+       "price": 9.99,
+       "size": "16 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0085079100235"
+      },
+      {
+       "item": "Simple Truth® Powdered Plant Based Peanut Butter",
+       "price": 4.59,
+       "size": "6.5 oz",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0001111011292"
+      },
+      {
+       "item": "Simple Truth® Powdered Plant Based Peanut Butter BIG DEAL!",
+       "price": 11.99,
+       "size": "24 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111011302"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "powdered peanut butter",
+     "attempts": [
+      {
+       "term": "powdered peanut butter",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Pb2 Powdered Original Peanut Butter 16 Oz",
+       "price": 10.99,
+       "size": "16 oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/pb2_powdered_original_peanut_butter_16_oz/p/7100797"
+      },
+      {
+       "item": "Pb2 Pure Peanut Powder 16 Oz",
+       "price": 11.99,
+       "size": "16 oz",
+       "relevance": 26,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/pb2_pure_peanut_powder_16_oz/p/1764405684714986656"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "powdered peanut butter",
+     "attempts": [
+      {
+       "term": "powdered peanut butter",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "PB2 Powdered Peanut Butter, Original",
+       "price": 8.99,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2728030-pb2-peanut-butter-powdered-original-16-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "powdered peanut butter",
+     "attempts": [
+      {
+       "term": "powdered peanut butter",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "KOS Organic Superfood Plant Chocolate Peanut Butter Protein Powder 2.4lbs.",
+       "price": 32.48,
+       "size": "",
+       "unit_price": "$0.85/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/45YJC7EES3MZ"
+      },
+      {
+       "item": "Orgain® Organic SIMPLE Plant Protein Powder Chocolate Peanut Butter Cup, 2.12 lbs.",
+       "price": 33.98,
+       "size": "",
+       "unit_price": "$1.00/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4J4G89H0E239"
+      },
+      {
+       "item": "PBfit Classic Peanut Butter 8g Powdered Peanut Butter Spread, 1.87 lbs.",
+       "price": null,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5XMHM4F2Q7GH"
+      },
+      {
+       "item": "Skippy Creamy Peanut Butter Spread, 48 oz., 2 pk.",
+       "price": 10.98,
+       "size": "",
+       "unit_price": "$5.49/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4ZALPVYGC8M0"
+      },
+      {
+       "item": "Welch's Concord Grape Jelly, 30 oz., 2 pk.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.08/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4LPJ2SH96WW3"
+      },
+      {
+       "item": "Jif Creamy Peanut Butter, 48 oz., 2 pk.",
+       "price": 10.98,
+       "size": "",
+       "unit_price": "$0.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CINV0O6GTII"
+      },
+      {
+       "item": "Orgain® Organic SIMPLE Plant Protein Powder Creamy Vanilla, 2.20 lbs.",
+       "price": 33.98,
+       "size": "",
+       "unit_price": "$0.97/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/79HWHSYRYV8M"
+      },
+      {
+       "item": "Orgain Organic Protein Powder Plant Based Strawberries & Cream, 2.74 lbs.",
+       "price": 25.98,
+       "size": "",
+       "unit_price": "$0.59/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/69C68WUICXLX"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "frozen cauliflower rice",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "frozen cauliflower rice",
+     "attempts": [
+      {
+       "term": "frozen cauliflower rice",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Recipe Beginnings® Frozen Cauliflower Rice",
+       "price": 2.39,
+       "size": "12 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001111080650"
+      },
+      {
+       "item": "Birds Eye Riced Cauliflower, Frozen Vegetables",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": 88,
+       "url": "https://www.bakersplus.com/p/0001450002690"
+      },
+      {
+       "item": "Green Giant Riced Cauliflower Medley, Frozen Vegetables",
+       "price": 3.69,
+       "size": "10 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0019056912312"
+      },
+      {
+       "item": "Green Giant Riced Veggies, Cauliflower, Frozen Vegetables",
+       "price": 3.69,
+       "size": "10 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0019056912310"
+      },
+      {
+       "item": "Green Giant Riced Veggies Cauliflower Risotto Medley, Frozen Side Dish",
+       "price": 3.69,
+       "size": "10 oz",
+       "relevance": 82,
+       "url": "https://www.bakersplus.com/p/0019056912328"
+      },
+      {
+       "item": "Simple Truth Organic® Steamable Riced Cauliflower",
+       "price": 2.59,
+       "size": "12 oz",
+       "relevance": 55,
+       "url": "https://www.bakersplus.com/p/0001111014480"
+      },
+      {
+       "item": "Private Selection® Chinese Inspired Riced Cauliflower Stir Fry",
+       "price": 3.99,
+       "size": "16 oz",
+       "relevance": 51,
+       "url": "https://www.bakersplus.com/p/0001111005009"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "frozencauliflowerrice",
+     "attempts": [
+      {
+       "term": "frozen cauliflower rice",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "frozencauliflowerrice",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "frozen cauliflower rice",
+     "attempts": [
+      {
+       "term": "frozen cauliflower rice",
+       "state": "OK",
+       "hits": 73
+      }
+     ],
+     "hits": [
+      {
+       "item": "Birds Eye Riced Cauliflower, Frozen Vegetables",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16352138-birds-eye-steamfresh-riced-cauliflower-original-10-oz"
+      },
+      {
+       "item": "Green Giant Cauliflower Riced Veggies",
+       "price": 3.68,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16352130-green-giant-cauliflower-riced-veggies-10-0-oz"
+      },
+      {
+       "item": "Birds Eye Savory Herb Riced Cauliflower, Frozen Vegetables",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16352139-birds-eye-steamfresh-riced-cauliflower-savory-herb-10-oz"
+      },
+      {
+       "item": "Green Giant Cauliflower Medley Riced Veggies",
+       "price": 3.68,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16352132-green-giant-cauliflower-medley-riced-veggies-10-0-oz"
+      },
+      {
+       "item": "Green Giant Asian Stir Fry Style Cauliflower Riced Veggies",
+       "price": 3.68,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25142229-green-giant-riced-veggie-asian-stir-fry-style-riced-cauliflower-red-bell-peppers-fire-roasted-corn-sweet-peas-seasoning-blends-10-oz"
+      },
+      {
+       "item": "Green Giant Cauliflower Risotto Medley Riced Veggies",
+       "price": 3.68,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17627776-green-giant-cauliflower-risotto-medley-riced-veggies-10-0-oz"
+      },
+      {
+       "item": "Birds Eye Asian Style Stir Fry Vegetables, Frozen Vegetables",
+       "price": 6.99,
+       "size": "52.2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3090111-birds-eye-sauced-asian-style-stir-fry-52-2-oz"
+      },
+      {
+       "item": "Green Giant Cheesy Rice & Broccoli, Lightly Sauced",
+       "price": 2.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72438-green-giant-lightly-sauced-cheesy-rice-broccoli-10-0-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "frozen cauliflower rice",
+     "attempts": [
+      {
+       "term": "frozen cauliflower rice",
+       "state": "MATCHES",
+       "hits": 14
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+       "price": 6.73,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6E5MZMROPG6C"
+      },
+      {
+       "item": "Member's Mark Stir Fry Mix, Frozen 16 oz, 5 pk.",
+       "price": 9.18,
+       "size": "",
+       "unit_price": "$1.84/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6BOL8CRTAHX1"
+      },
+      {
+       "item": "Member's Mark Triple Berry Blend, Frozen, 64 oz.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5LP5I0UW2S6C"
+      },
+      {
+       "item": "Member's Mark Mixed Fruit, Frozen, 1 lb., 5 pk.",
+       "price": 12.67,
+       "size": "",
+       "unit_price": "$2.53/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FVJW394IJZ4"
+      },
+      {
+       "item": "Member's Mark Natural Sliced Strawberries, Frozen, 4 lbs.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$2.00/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3J3RVYRB29Z8"
+      },
+      {
+       "item": "Member's Mark Natural Blueberries, Frozen 4 lbs.",
+       "price": 9.17,
+       "size": "",
+       "unit_price": "$0.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/74MFICPZKX8J"
+      },
+      {
+       "item": "Member's Mark Chicken Fried Rice, Frozen, 9 oz., 6 ct.",
+       "price": 12.68,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3I3E2AE2R3JQ"
+      },
+      {
+       "item": "Members Mark Orange Chicken Tempura, Frozen, 48 oz.",
+       "price": 12.97,
+       "size": "",
+       "unit_price": "$0.27/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5ZCAAQZCJ5DZ"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

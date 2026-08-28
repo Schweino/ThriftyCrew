@@ -1,0 +1,220 @@
+﻿{
+    "slug":  "apricot-chicken-sheet-pan-dinner-recipe-video",
+    "title":  "Apricot Chicken Sheet Pan Dinner Recipe + VIDEO",
+    "source_url":  "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-28",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 lb Little Potatoes (20-24 potatoes)",
+                            "item":  "Baby Potatoes",
+                            "bid":  "baby-potatoes",
+                            "board":  null,
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb small creamer potatoes (about 70-84), halved",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source states 1 lb outright. Little Potatoes are creamer potatoes, the food the 2026-08-26 \u0027baby potatoes\u0027 ruling minted baby-potatoes for: their own bagged SKU priced above bulk russets. Sweet-potatoes is a different food and the FDC shelf returned only Little Caesars pizza, a keyword miss.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3-4 large carrots (peeled and thinly sliced (see note above))",
+                            "item":  "Carrots",
+                            "bid":  "carrots",
+                            "board":  null,
+                            "grams":  882,
+                            "buy":  "2 lb (about 12 large carrots), peeled and thinly sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Midpoint 3.5 carrots at the USDA large-carrot weight of 72 g. REUSE of carrots, live 7 of 7 at 0.87. \u0027Large\u0027 is a size word and \u0027thinly sliced\u0027 a knife cut, neither a form flip; shredded-carrots is refused as a different bagged product, per the 2026-08-27 matchstick-carrots ruling.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 boneless (skinless chicken breasts)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2800,
+                            "buy":  "6 1/4 lb (about 14 breasts)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "800 g source basis is 200 g per breast, the estate\u0027s standard trimmed breast.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  11,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  2,
+                            "buy":  "3/4 teaspoon",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons oil",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  98,
+                            "buy":  "7 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027oil\u0027 -\u003e vegetable-oil (by mapper on 2026-08-26T13:26:54); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 cup apricot jam",
+                            "item":  "Apricot Jam",
+                            "bid":  "jelly",
+                            "board":  null,
+                            "grams":  280,
+                            "buy":  "3/4 cup plus 2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Jam at 320 g per cup. REUSE of jelly, 7 of 7 - the fruit-spread commodity covers jam at the same price class, so no new id is warranted. Only the vocabulary name row is missing, which is a naming question and not a registrar one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon low sodium soy sauce",
+                            "item":  "Soy Sauce",
+                            "bid":  "soy-sauce",
+                            "board":  "recipe",
+                            "grams":  56,
+                            "buy":  "3 1/2 tablespoons low sodium",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027low sodium soy sauce\u0027 -\u003e soy-sauce (by mapper on 2026-08-27T11:55:52); nearest vocabulary rows: Sweet Soy Sauce [sweet-soy-sauce] DIFFERENT FORM: low/sweet | Soy Sauce [soy-sauce] DIFFERENT FORM: low",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon Worcestershire sauce",
+                            "item":  "Worcestershire Sauce",
+                            "bid":  "worcestershire",
+                            "board":  "recipe",
+                            "grams":  60,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: worcestershire, 6 of 7 stores, cheapest 0.1 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon cider vinegar",
+                            "item":  "Apple Cider Vinegar",
+                            "bid":  "apple-cider-vinegar",
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "3 1/2 tablespoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Water-like at 15 g per tbsp. \u0027Cider vinegar\u0027 is apple cider vinegar universally, and the vocabulary carries that exact same-form row. Apple Cider is the form flip and is refused: a drink, not a vinegar.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon corn starch",
+                            "item":  "Cornstarch",
+                            "bid":  "cornstarch",
+                            "board":  "recipe",
+                            "grams":  9,
+                            "buy":  "3 1/2 teaspoons",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027corn starch\u0027 -\u003e cornstarch (by mapper on 2026-08-26T04:46:58); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "little potatoes",
+                                 "cider vinegar"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Baby Potatoes",
+                               "Apricot Jam"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "Little Potatoes",
+                                        "proposed_bid":  "baby-potatoes",
+                                        "evidence":  "Small creamer potatoes are their own bagged SKU (1.5-3 lb bags) priced well above bulk russets, so russet-potatoes would underprice them and sweet-potatoes is a different food. Checked by food across the commodity, recipe-commodity and board namespaces for potato spellings: nothing prices creamers. If the 2026-08-26 \u0027baby potatoes\u0027 ruling already minted this id, this is a REUSE, not a new mint.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "baby-potatoes",
+                                  "verdict":  "approve",
+                                  "bid":  "baby-potatoes",
+                                  "reason":  "Not priced anywhere: no baby-potatoes cell in smp-feed.json, no row in commodities.json, recipe-commodities.json, or the recipe-board baseline, and recipe-floor-id-map.json only maps \u0027potato\u0027-\u003erusset-potatoes. The estate has already ruled creamers a distinct purchase: yukon-gold-potatoes EXCLUDES \\bbaby\\b, petite, fingerling, creamer\\s+potato, medley (commodities.json ~57798-57805), deliberately carving this SKU out rather than pricing it, and russet/red/sweet/canned/instant potato ids are different foods or forms (bulk loose vs 1.5-3 lb bagged creamer at a different $/lb). This exact id was already APPROVED 2026-08-26 (gold:6aa33b938c606025c0ad, run hunt-2026-08-26-ten, staple namespace; also in ingredient-resolutions.json) but never landed in any namespace or the feed - so this ruling is a REUSE of that decision converging on the same spelling, not a second mint, and there is no sibling in this batch to collide with. Follow-ups the caller must make: (1) mint baby-potatoes in commodities.json (weekly staples + capture worklist), unit lb, include patterns like baby\\s+potato(?:es)?, little\\s+potato(?:es)?, creamer\\s+potato(?:es)?, petite\\s+(?:red|gold|medley)?\\s*potato, potato\\s+medley, honey\\s+gold, with a full ~150-pattern exclude list cloned from a potato neighbor plus sweet\\s+potato, fingerling-only-if-distinct, canned, frozen, instant, mashed, salad, seasoned, microwave-meal brands; (2) red-potatoes currently lacks the \\bbaby\\b/petite/creamer excludes yukon-gold has, so \u0027Baby Red Potatoes\u0027 bags would double-claim - add those three excludes to red-potatoes via add-commodity-rule.ps1; (3) add commodity-dupe-allowlist.json pairs baby-potatoes\u003c-\u003ered-potatoes and baby-potatoes\u003c-\u003eyukon-gold-potatoes, reason \u0027bagged creamer SKU vs bulk loose, different purchase per 2026-08-26 ruling\u0027, so audit-commodity-dupes.ps1 never pages Brad on them. Vocabulary is a separate question: \u0027Little Potatoes\u0027 resolves to the existing baby-potatoes row already in ingredient-resolutions.json - no new name row needed."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "PASS. Source publishes 469 cal / 42 C / 50 P per serving at 4 servings; my lines recompute to 471 cal (+0.5%), 41.7 g carbs and 48.9 g protein (-2.2%), well inside the 15% protein tolerance. Protein is 178.6 g from the 800 g of breast alone, and the each-weight (200 g per breast) matches the estate\u0027s 167 g/serving chicken-breast average once scaled. Target band: 471 cal, 48.9 P - inside 450-800 and above the 40 g floor."
+}

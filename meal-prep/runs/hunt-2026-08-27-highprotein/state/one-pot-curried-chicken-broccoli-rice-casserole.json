@@ -1,0 +1,43 @@
+{
+    "slug":  "one-pot-curried-chicken-broccoli-rice-casserole",
+    "title":  "One Pot Curried Chicken Broccoli Rice Casserole",
+    "source_url":  "https://skinnyspatula.com/chicken-broccoli-rice-casserole/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-28T07:19:33",
+    "updated":  "2026-08-28T07:50:02",
+    "terms":  [
+
+              ],
+    "reject_reason":  "REJECTED as rejected-macros, and I am confident: nothing here rests on an each-weight I estimated. The chicken weight is printed in the source line (650 g), and coconut milk, rice, broccoli and broth ",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:19:33",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chicken-broccoli-rice-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T07:19:33",
+                        "by":  "decider",
+                        "detail":  "Coconut-milk + curry-powder chicken with broccoli over basmati rice as a one-pot casserole; distinct coconut-curry plate and format with no live casserole match (poppy-seed/butter-chicken neighbours are American-creamy and rice-bowl), widens cuisine, verified 482cal/33c/42p; borderline against a curry-dense lane but a genuinely different dinner from this run\u0027s potato-curry."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T07:20:02",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-28T07:50:02",
+                        "by":  "mapper",
+                        "detail":  "REJECTED as rejected-macros, and I am confident: nothing here rests on an each-weight I estimated. The chicken weight is printed in the source line (650 g), and coconut milk, rice, broccoli and broth "
+                    }
+                ]
+}

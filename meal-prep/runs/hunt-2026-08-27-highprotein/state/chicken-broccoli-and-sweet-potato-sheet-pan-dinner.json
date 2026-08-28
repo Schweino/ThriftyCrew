@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-broccoli-and-sweet-potato-sheet-pan-dinner",
+    "title":  "Chicken Broccoli and Sweet Potato Sheet Pan Dinner",
+    "source_url":  "https://www.cookingclassy.com/chicken-broccoli-sweet-potato-sheet-pan-dinner/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-28T07:19:38",
+    "updated":  "2026-08-28T07:19:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Herb-roasted chicken with sweet potato, cranberries and pecans on a sheet pan duplicates the live harvest sheet-pan chicken and the in-flight sweet-potato/kale/cranberry chicken across protein, method, sweet-potato starch and the cranberry-harvest profile; broccoli/pecan swap does not distinguish the plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:19:38",
+                        "by":  "harvest",
+                        "detail":  "https://www.cookingclassy.com/chicken-broccoli-sweet-potato-sheet-pan-dinner/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-28T07:19:38",
+                        "by":  "decider",
+                        "detail":  "Herb-roasted chicken with sweet potato, cranberries and pecans on a sheet pan duplicates the live harvest sheet-pan chicken and the in-flight sweet-potato/kale/cranberry chicken across protein, method, sweet-potato starch and the cranberry-harvest profile; broccoli/pecan swap does not distinguish the plate."
+                    }
+                ]
+}

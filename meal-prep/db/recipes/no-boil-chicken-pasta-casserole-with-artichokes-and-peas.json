@@ -1,0 +1,292 @@
+{
+    "name":  "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+    "slug":  "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+    "cuisine":  "Mediterranean",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+    "source_site":  "wholesomelicious.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Batch scales the 6-serving source recipe by a clean 7/3 (2 1/3x) across nearly all lines.",
+                         "Chicken broth flagged: 2.5 cups source x 7/3 = 5.833 cups, but locked buy string reads 5 3/4 (5.75). Minor scale drift; left for the engine to resolve since broth is the cooking liquid for no-boil pasta.",
+                         "All 13 locked ingredients are used by a step; no orphans and no invented ingredients. Sauce = cottage cheese + Boursin + garlic + lemon juice + zest + salt + broth; assembly = penne + chicken + peas + artichokes; parmesan tops; parsley garnishes.",
+                         "Boursin real-world buy is 3 packages (15.6 oz) to cover the 12 oz / 2 1/3-package call; prose says buy three without promising a specific leftover, and makes no per-ounce or lasts-several-batches cost claim (no cost_lines available to name).",
+                         "Macros carried as tokens {{cal}}/{{protein}} and cost as ${{cost_ps}} so they bind to the built spec. No literal dollar figure in prose except the $1/month membership line.",
+                         "Band verified: 603 cal (450-800), 54.8 g protein (\u003e=40), carbs unrestricted; chicken breast protein and penne carb source both compliant."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "shrimp",
+                                  "seafood",
+                                  "fish",
+                                  "ground beef",
+                                  "boil the pasta",
+                                  "boil the noodles",
+                                  "boiled penne",
+                                  "rice",
+                                  "per ounce",
+                                  "cheaper than"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  603,
+                 "protein":  55,
+                 "carbs":  50,
+                 "fat":  20,
+                 "cost_ps":  "4.14"
+             },
+    "intro_html":  "\u003cp\u003eHere is the trick this casserole pulls off: the pasta never touches a pot of boiling water. You lay it in dry, pour a blended cottage cheese and Boursin sauce right over the top, and the oven does the rest while the noodles quietly drink up the chicken broth. One less pot to scrub is a small win, and this build stacks fourteen of them.\u003c/p\u003e\u003cp\u003eIt is also, without making a big deal about it, a protein workhorse. Between the chicken breast, the cottage cheese, and the parmesan, every container lands at {{protein}} grams of protein and {{cal}} calories. Artichoke hearts, peas, and a bright hit of lemon keep it from tasting like a gym supplement. This is comfort food that happens to do your macros a favor.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 1 lb 12 oz dry (794 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 1/2 lb, cut into 1-inch cubes (1588 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5 3/4 cups (1400 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 4 2/3 cups (2 lb 5 oz) (1058 g)",
+                                "\u003cstrong\u003eBoursin Cheese (Boursin Garlic \u0026 Fine Herbs):\u003c/strong\u003e 12 oz (2 1/3 of the 5.2 oz packages), crumbled (343 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 2 1/3 cups frozen (313 g)",
+                                "\u003cstrong\u003eArtichoke Hearts (Hannaford):\u003c/strong\u003e 1 lb 4 oz drained (about 2 1/3 cans), roughly chopped (560 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 large cloves, minced (7 g)",
+                                "\u003cstrong\u003eFresh Lemon Juice:\u003c/strong\u003e 4 2/3 tbsp fresh (juice of about 2 lemons) (70 g)",
+                                "\u003cstrong\u003eLemon Zest:\u003c/strong\u003e 2 1/3 tsp finely grated (zest of the same lemons) (5 g)",
+                                "\u003cstrong\u003eSea Salt:\u003c/strong\u003e 2 1/3 tsp (14 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 2 1/3 cups freshly grated (261 g)",
+                                "\u003cstrong\u003eFresh Parsley (fresh (USDA)):\u003c/strong\u003e 7 tbsp chopped, for garnish (26 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Penne Pasta, 1 lb 12 oz dry: ~$1.60. \u003cstrong\u003eBuy 2 16oz boxes: $1.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into 1-inch cubes: ~$7.81. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Chicken Broth, 5 3/4 cups: ~$2.13. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Cottage Cheese, 4 2/3 cups (2 lb 5 oz): ~$4.25. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "Boursin Cheese, 12 oz (2 1/3 of the 5.2 oz packages), crumbled: ~$12.53. \u003cstrong\u003eBuy 3 5.3oz pucks: $16.44.\u003c/strong\u003e",
+                       "Frozen Green Peas, 2 1/3 cups frozen: ~$0.60. \u003cstrong\u003eBuy 1 12oz bag: $0.66.\u003c/strong\u003e",
+                       "Artichoke Hearts, 1 lb 4 oz drained (about 2 1/3 cans), roughly chopped: ~$3.19. \u003cstrong\u003eBuy 2 13.8oz cans: $4.45.\u003c/strong\u003e",
+                       "Garlic, 2 large cloves, minced: ~$0.10. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Fresh Lemon Juice, 4 2/3 tbsp fresh (juice of about 2 lemons): ~$0.74. \u003cstrong\u003eBuy 2 each: $1.23.\u003c/strong\u003e",
+                       "Lemon Zest, 2 1/3 tsp finely grated (zest of the same lemons): ~$0.42. \u003cstrong\u003eBuy 1 each: $4.83.\u003c/strong\u003e",
+                       "Parmesan Cheese, 2 1/3 cups freshly grated: ~$3.15. \u003cstrong\u003eBuy 2 8oz tubs: $5.48.\u003c/strong\u003e",
+                       "Fresh Parsley, 7 tbsp chopped, for garnish: ~$0.84. \u003cstrong\u003eBuy 1 bunch: $1.93.\u003c/strong\u003e",
+                       "Pantry seasonings (sea salt): ~$0.06. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.42 across 14 servings, so roughly $2.67 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.00 across 14 servings, roughly $3.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.99. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eHere is the part your budget actually cares about. This whole casserole breaks down to ${{cost_ps}} per serving, and for that you get {{cal}} calories and {{protein}} grams of protein in a real dinner, not a sad desk salad. Cook the batch once, eat it across the week, and that is how the number stays that small.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eThe two cheeses do the heavy lifting, so start there. Boursin comes in 5.2 ounce packages, and the build calls for 2 1/3 of them, so pick up three and you are covered with a little to spare. Cottage cheese you want a full 2 pound 5 ounce amount; any brand blends smooth once it hits the blender, so grab whatever tub is friendliest to the wallet.\u003c/p\u003e\u003cp\u003ePenne is the workhorse at 1 pound 12 ounces dry, and since a standard box is a pound, two boxes cover it. For the artichoke hearts, canned and drained is what you want, about 2 1/3 cans worth once you pour off the liquid. Frozen peas are the easy call and you only need 2 1/3 cups, so a small bag handles it. Grate the parmesan fresh off a wedge if you can; it melts nicer over the top than the pre-shredded stuff.\u003c/p\u003e",
+    "make_it":  [
+                    "\u003cp\u003eGet the oven to 400 degrees and lightly grease a 9 by 13 casserole dish. This is a fourteen serving batch, so you may be running two dishes; grease both while you are at it.\u003c/p\u003e\u003cp\u003eThe sauce is a blender job. Drop in the cottage cheese, the crumbled Boursin, the minced garlic, the fresh lemon juice, the lemon zest, and the sea salt, and blend until smooth. Then pour in the chicken broth and blend again until it is silky and fully combined. Do not panic when it looks thin, because that thin sauce is exactly what cooks the dry pasta.\u003c/p\u003e\u003cp\u003eNow the dump. Lay the dry penne across the bottom, then scatter the cubed chicken breast, the peas, and the chopped artichoke hearts over it. Pour the blended sauce over everything and make sure every noodle is submerged. Cover the dish tightly with foil.\u003c/p\u003e\u003cp\u003eBake covered for 40 minutes. Pull it out, take off the foil, and give it a good stir; the pasta should still be a touch undercooked at this point. Scatter the parmesan over the top and return it to the oven uncovered for another 5 to 10 minutes, bumping the heat up if you want a golden top. Let it rest at least 10 minutes so it sets, then finish with the chopped parsley and serve.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eFourteen even containers is easier than it sounds, and the honest way is to weigh it. Weigh your empty casserole dish before you cook, or weigh the finished bake and subtract the dish, so you know the weight of the food alone. Divide that number by fourteen, and the result is your target grams per container. Scoop, weigh, adjust, and every lid closes on the same {{cal}} calories and {{protein}} grams of protein.\u003c/p\u003e\u003cp\u003eEyeballing it means the first few boxes come out heaping and the last person gets sauce and regret. The scale keeps everybody honest, and it costs you about ninety seconds.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/\" target=\"_blank\" rel=\"noopener\"\u003ewholesomelicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eIf this is the kind of cooking you want more of, that is the whole idea behind Thrifty Crew. Every recipe here is built to feed you well without wrecking the grocery bill, and the membership runs a dollar a month. One casserole like this earns its keep and then some. Come cook with the crew.\u003c/p\u003e",
+    "cost_batch":  37.42,
+    "cost_batch_true":  54,
+    "cost_per_serving":  2.67,
+    "cost_per_serving_true":  3.86,
+    "cost_pantry_add":  3.99,
+    "cost_first_run":  57.99,
+    "scaler":  {
+                   "cost":  "54.00",
+                   "ing":  [
+                               {
+                                   "item":  "Penne Pasta",
+                                   "canon":  "Penne Pasta",
+                                   "grams":  794,
+                                   "buy":  "1 lb 12 oz dry",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1588,
+                                   "buy":  "3 1/2 lb, cut into 1-inch cubes",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  1400,
+                                   "buy":  "5 3/4 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  1058,
+                                   "buy":  "4 2/3 cups (2 lb 5 oz)",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boursin Cheese",
+                                   "canon":  "Boursin Cheese",
+                                   "grams":  343,
+                                   "buy":  "12 oz (2 1/3 of the 5.2 oz packages), crumbled",
+                                   "bid":  "garlic-herb-cheese-spread",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "canon":  "Frozen Green Peas",
+                                   "grams":  313,
+                                   "buy":  "2 1/3 cups frozen",
+                                   "bid":  "frozen-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Artichoke Hearts",
+                                   "canon":  "Artichoke Hearts",
+                                   "grams":  560,
+                                   "buy":  "1 lb 4 oz drained (about 2 1/3 cans), roughly chopped",
+                                   "bid":  "artichoke-hearts",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  7,
+                                   "buy":  "2 large cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Fresh Lemon Juice",
+                                   "canon":  "Fresh Lemon Juice",
+                                   "grams":  70,
+                                   "buy":  "4 2/3 tbsp fresh (juice of about 2 lemons)",
+                                   "bid":  "lemons",
+                                   "gpu":  "47.000"
+                               },
+                               {
+                                   "item":  "Lemon Zest",
+                                   "canon":  "Lemon Zest",
+                                   "grams":  5,
+                                   "buy":  "2 1/3 tsp finely grated (zest of the same lemons)",
+                                   "bid":  "lemons",
+                                   "gpu":  "6.000"
+                               },
+                               {
+                                   "item":  "Sea Salt",
+                                   "canon":  "Sea Salt",
+                                   "grams":  14,
+                                   "buy":  "2 1/3 tsp",
+                                   "bid":  "sea-salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "canon":  "Parmesan Cheese",
+                                   "grams":  261,
+                                   "buy":  "2 1/3 cups freshly grated",
+                                   "bid":  "parmesan",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Parsley",
+                                   "canon":  "Fresh Parsley",
+                                   "grams":  26,
+                                   "buy":  "7 tbsp chopped, for garnish",
+                                   "bid":  "fresh-parsley",
+                                   "gpu":  "60.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A no-boil dump-and-bake chicken pasta casserole with artichokes, peas, and a creamy cottage cheese and Boursin sauce. High in protein, easy on the budget, and scaled to make 14 meal-prep servings.",
+                 "keywords":  "no boil chicken pasta casserole, dump and bake pasta, high protein meal prep, chicken artichoke casserole, cottage cheese pasta bake, budget meal prep dinner, penne casserole",
+                 "image":  "",
+                 "prepTime":  "PT5M",
+                 "cookTime":  "",
+                 "totalTime":  "",
+                 "costPerServing":  4.14,
+                 "recipeIngredient":  [
+                                          "Penne Pasta, 1 lb 12 oz dry (794 g)",
+                                          "Boneless Skinless Chicken Breast, 3 1/2 lb, cut into 1-inch cubes (1588 g)",
+                                          "Chicken Broth, 5 3/4 cups (1400 g)",
+                                          "Cottage Cheese, 4 2/3 cups (2 lb 5 oz) (1058 g)",
+                                          "Boursin Cheese, 12 oz (2 1/3 of the 5.2 oz packages), crumbled (343 g)",
+                                          "Frozen Green Peas, 2 1/3 cups frozen (313 g)",
+                                          "Artichoke Hearts, 1 lb 4 oz drained (about 2 1/3 cans), roughly chopped (560 g)",
+                                          "Garlic, 2 large cloves, minced (7 g)",
+                                          "Fresh Lemon Juice, 4 2/3 tbsp fresh (juice of about 2 lemons) (70 g)",
+                                          "Lemon Zest, 2 1/3 tsp finely grated (zest of the same lemons) (5 g)",
+                                          "Sea Salt, 2 1/3 tsp (14 g)",
+                                          "Parmesan Cheese, 2 1/3 cups freshly grated (261 g)",
+                                          "Fresh Parsley, 7 tbsp chopped, for garnish (26 g)"
+                                      ],
+                 "steps":  [
+                               "Preheat the oven to 400 degrees F and lightly grease a 9x13 casserole dish.",
+                               "In a blender or food processor, combine the cottage cheese, crumbled Boursin, minced garlic, fresh lemon juice, lemon zest, and sea salt, and blend until smooth. Add the chicken broth and blend again until the sauce is completely smooth and thin.",
+                               "Place the dry penne in the bottom of the dish, then scatter the cubed chicken breast, peas, and chopped artichoke hearts over the top. Pour the blended sauce over everything, making sure the pasta is fully submerged.",
+                               "Cover the dish tightly with foil and bake for 40 minutes. Remove the foil, stir well, top with the parmesan, and bake uncovered for another 5 to 10 minutes until golden.",
+                               "Let the casserole rest for 10 minutes, then top with chopped parsley or basil and serve."
+                           ],
+                 "step_names":  [
+                                    "Heat the oven",
+                                    "Blend the sauce",
+                                    "Assemble the casserole",
+                                    "Bake and top",
+                                    "Rest and garnish"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Penne Pasta",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Boursin Cheese",
+                                  "grams":  343
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  313
+                              },
+                              {
+                                  "item":  "Artichoke Hearts",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Fresh Lemon Juice",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Lemon Zest",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Sea Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Parmesan Cheese",
+                                  "grams":  261
+                              },
+                              {
+                                  "item":  "Fresh Parsley",
+                                  "grams":  26
+                              }
+                          ]
+}

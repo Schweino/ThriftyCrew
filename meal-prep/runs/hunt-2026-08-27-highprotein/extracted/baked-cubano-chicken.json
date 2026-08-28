@@ -1,0 +1,103 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Baked Cubano Chicken",
+  "source_url": "https://keviniscooking.com/baked-chicken-cubano/",
+  "servings": 4,
+  "time_total": "40 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2-15 oz cans black beans",
+      "item": "black beans",
+      "qty": "2-15",
+      "unit": "oz cans",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp Adobo Seasoning",
+      "item": "Adobo Seasoning",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 chicken breasts (2 lbs boneless and skinless)",
+      "item": "chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": "(2 lbs boneless and skinless)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup yellow mustard",
+      "item": "yellow mustard",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 ham slices",
+      "item": "ham slices",
+      "qty": "8",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups carnitas meat",
+      "item": "carnitas meat",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 long dill pickle slices",
+      "item": "long dill pickle slices",
+      "qty": "8",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "12 Swiss cheese slices",
+      "item": "Swiss cheese slices",
+      "qty": "12",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 400°F.",
+    "Place the black beans in a rectangle 9x12\" casserole dish that has been sprayed with cooking spray or vegetable oil and sprinkle with 1/2 teaspoon of the Adobo Seasoning.",
+    "Layer the chicken breasts on top of the black beans and season with remaining Adobo seasoning. Baste the chicken with the yellow mustard.",
+    "Add 2 slices of ham on top of each chicken breast, then half a cup of the carnitas.",
+    "Bake uncovered for 30 minutes, depending on the thickness of your chicken breasts. (See Note 1)",
+    "Remove from oven and add 2 dill pickles and then 2 Swiss cheese slices to each piece of chicken. Put it back in the oven, uncovered for 5 minutes. Allow to rest 5 minutes before slicing or serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 8,
+    "verified": 8,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

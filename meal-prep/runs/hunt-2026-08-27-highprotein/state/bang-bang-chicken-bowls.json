@@ -1,0 +1,74 @@
+{
+    "slug":  "bang-bang-chicken-bowls",
+    "title":  "Bang Bang Chicken Bowls",
+    "source_url":  "https://ohsnapmacros.com/bang-bang-chicken-bowls/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-28T07:19:35",
+    "updated":  "2026-08-28T07:53:19",
+    "terms":  [
+                  {
+                      "term":  "powdered peanut butter",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "frozen cauliflower rice",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Yellow Onion",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Sweet Heat Jalapeños",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:19:35",
+                        "by":  "harvest",
+                        "detail":  "https://ohsnapmacros.com/bang-bang-chicken-bowls/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T07:19:36",
+                        "by":  "decider",
+                        "detail":  "Bang-bang-sauce (mayo/sweet-chili/ketchup/sriracha/PB2) chicken over rice with fresh veg; distinct bang-bang flavor family with no live or in-flight match (neighbours are generic chicken bowls sharing only chicken/bowls), verified 538cal/47c/44p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T07:20:25",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-28T07:50:50",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled: 5 mapped, 1 mapped-null, 1 not-purchased. 0 rejected. 5 new DB rows returned, 2 foods declared absent with reasons, 1 new commodity proposed. 17 of 18 lines carry a buy string (the jalapeno line is not-purchased and is deliberately absent from `lines`).\n\nCALLED OUT: (1) the settled \u0027salt and pepper\u0027 line came back at 20 g source basis - 5 g of salt per serving, and 70 g at "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-28T07:50:50",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-28T07:53:19",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

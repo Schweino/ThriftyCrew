@@ -3,10 +3,10 @@
     "title":  "Street Corn Chicken Rice Bowl",
     "source_url":  "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
     "protein":  "chicken",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "rejected-audit",
+    "wave":  9,
     "created":  "2026-08-27T11:51:38",
-    "updated":  "2026-08-27T12:06:09",
+    "updated":  "2026-08-28T07:53:21",
     "terms":  [
                   {
                       "term":  "cotija cheese",
@@ -29,7 +29,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and ",
     "parked_on":  [
 
                   ],
@@ -69,6 +69,48 @@
                         "at":  "2026-08-27T12:06:09",
                         "by":  "derive",
                         "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-28T07:20:34",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-28T07:20:34",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-28T07:21:47",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-28T07:21:48",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-28T07:28:10",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-28T07:31:01",
+                        "by":  "wave-close",
+                        "detail":  "wave 9"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-28T07:53:21",
+                        "by":  "auditor",
+                        "detail":  "NO-GO on the scoped re-audit. The dispatch premise is false: three of the four \u0027repaired\u0027 specs (casserole 07:22:11, street-corn 07:27:24, curry 07:28:44) predate the prior battery run (07:31:20) and "
                     }
                 ]
 }

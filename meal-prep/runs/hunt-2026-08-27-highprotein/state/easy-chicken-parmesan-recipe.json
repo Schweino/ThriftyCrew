@@ -1,0 +1,31 @@
+{
+    "slug":  "easy-chicken-parmesan-recipe",
+    "title":  "Easy Chicken Parmesan Recipe",
+    "source_url":  "https://www.lecremedelacrumb.com/healthy-baked-chicken-parmesan/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-28T07:21:30",
+    "updated":  "2026-08-28T07:21:30",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Archetypal breaded baked chicken parmesan (marinara, mozzarella, parmesan) over spaghetti; same chicken-parmesan dinner identity as in-flight cheese-stuffed-chicken-parmesan and live chicken-parmesan-pasta, a saturated Italian-American lane that adds no novelty.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:21:30",
+                        "by":  "harvest",
+                        "detail":  "https://www.lecremedelacrumb.com/healthy-baked-chicken-parmesan/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-28T07:21:30",
+                        "by":  "decider",
+                        "detail":  "Archetypal breaded baked chicken parmesan (marinara, mozzarella, parmesan) over spaghetti; same chicken-parmesan dinner identity as in-flight cheese-stuffed-chicken-parmesan and live chicken-parmesan-pasta, a saturated Italian-American lane that adds no novelty."
+                    }
+                ]
+}

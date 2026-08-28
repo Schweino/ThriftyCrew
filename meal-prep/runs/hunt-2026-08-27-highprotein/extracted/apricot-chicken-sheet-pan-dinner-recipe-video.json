@@ -1,0 +1,158 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Apricot Chicken Sheet Pan Dinner Recipe + VIDEO",
+  "source_url": "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/",
+  "servings": 4,
+  "time_total": "45 minutes",
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 lb Little Potatoes (20-24 potatoes)",
+      "item": "Little Potatoes",
+      "qty": "1",
+      "unit": "lb",
+      "prep": "(20-24 potatoes)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3-4 large carrots (peeled and thinly sliced (see note above))",
+      "item": "large carrots",
+      "qty": "3-4",
+      "unit": null,
+      "prep": "peeled and thinly sliced (see note above)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 boneless (skinless chicken breasts)",
+      "item": "boneless skinless chicken breasts",
+      "qty": "4",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon salt",
+      "item": "salt",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon black pepper",
+      "item": "black pepper",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon paprika",
+      "item": "paprika",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon onion powder",
+      "item": "onion powder",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons oil",
+      "item": "oil",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup apricot jam",
+      "item": "apricot jam",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon low sodium soy sauce",
+      "item": "low sodium soy sauce",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon Worcestershire sauce",
+      "item": "Worcestershire sauce",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon cider vinegar",
+      "item": "cider vinegar",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon corn starch",
+      "item": "corn starch",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Preheat oven to 375 degrees F and line a large rimmed baking sheet with parchment paper. Place potatoes and carrots on baking sheet.",
+    "In a small bowl, stir together salt, garlic powder, pepper, paprika, and onion powder.",
+    "Drizzle vegetables with 1 tablespoon oil and sprinkle with half of the seasoning. Stir until coated and move to the edges of the pan to make room for the chicken.",
+    "Place chicken breasts in the center of the pan. Drizzle with remaining 1 tablespoon oil and sprinkle with remaining seasoning mix.",
+    "Bake for 25-30 minutes, until potatoes are vegetables are cooked through and chicken reaches 165 degrees F internally.",
+    "Meanwhile, in a medium bowl stir together apricot jam, soy sauce, Worcestershire, vinegar and corn starch with a whisk. Microwave on high in 30 second intervals, stirring in between, until slightly thickened (I did 1 minute total).",
+    "Once chicken and vegetables are finished baking, brush glaze over chicken and serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

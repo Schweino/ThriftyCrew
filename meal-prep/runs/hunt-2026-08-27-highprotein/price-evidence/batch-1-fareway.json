@@ -1,7 +1,7 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-28T06:53:32",
+ "generated": "2026-08-28T07:17:48",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
@@ -60,18 +60,18 @@
      "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
     },
     {
-     "item": "McCormick Classic Beef Stew Seasoning Mix",
-     "price": 2.99,
-     "size": "1.5 oz",
+     "item": "Ortega Original Taco Seasoning Mix",
+     "price": 1.0,
+     "size": "1 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/5001-mccormick-classic-beef-stew-seasoning-mix-1-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27326325-ortega-original-taco-seasoning-mix-1-oz"
     },
     {
-     "item": "McCormick Gluten Free Taco Seasoning Mix",
-     "price": 1.0,
-     "size": "1.25 oz",
+     "item": "Weber Gourmet Burger Seasoning, Kosher",
+     "price": 2.99,
+     "size": "2.75 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3366853-mccormick-gluten-free-taco-seasoning-mix-1-25-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41391-weber-gourmet-burger-seasoning-2-75-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

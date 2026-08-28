@@ -1,6 +1,18 @@
 ﻿{
-    "specs":  581,
+    "specs":  587,
     "findings":  [
+                     {
+                         "run":  "live",
+                         "slug":  "beef-rendang-rice-bowls",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027coconut oil\u0027 but Coconut Oil is in no ingredient line - it cannot be made as shopped"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "blackened-chicken-with-mango-salsa",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027salsa\u0027 but Salsa is in no ingredient line - it cannot be made as shopped"
+                     },
                      {
                          "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
@@ -48,6 +60,12 @@
                          "slug":  "ground-beef-cottage-cheese-bowl",
                          "cls":  "UNUSED",
                          "why":  "\u0027hot honey\u0027 is bought and costed but never named in a step"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "mediterranean-chicken-w-marinade",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027cooking spray\u0027 but Cooking Spray is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -155,6 +173,7 @@
     "generated":  "see git",
     "by_class":  {
                      "UNMEASURABLE-QTY":  21,
-                     "UNUSED":  4
+                     "UNUSED":  4,
+                     "PHANTOM":  3
                  }
 }

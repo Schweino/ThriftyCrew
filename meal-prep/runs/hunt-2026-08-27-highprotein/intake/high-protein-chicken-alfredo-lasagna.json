@@ -24,7 +24,12 @@
   {
    "item": "Salt",
    "grams": 9,
-   "buy": "a generous pinch of each (about 1 1/2 tsp salt and 3/4 tsp black pepper)"
+   "buy": "about 1 1/2 tsp"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 2,
+   "buy": "about 3/4 tsp"
   },
   {
    "item": "Fresh Mozzarella",
@@ -54,52 +59,55 @@
   "fat_g": 21.4
  },
  "writer_notes": [
-  "All 8 bought ingredients are used by a step: chicken (bake/chop), cottage cheese + alfredo + salt + pepper (blend), noodles + mozzarella + parmesan + parsley (assemble/garnish). No orphaned ingredients and no step uses anything the list does not buy.",
-  "Per-serving macros from locked view: 496 cal, 40.7 g protein, 34.4 g carbs, 21.4 g fat. Band cal 450-800 and protein >= 40 both met; noodles supply the required real carb source.",
-  "Scaling flag (consistent ~2.33x source, looks correct for 14 servings): chicken 1 lb -> 2 lb 5 oz; cottage cheese 2 cups -> 4 2/3 cups; alfredo 3/4 cup -> 1 3/4 cups; mozzarella 8 oz -> 18.5 oz; parmesan 4 oz -> 9 1/3 oz; noodles 9 sheets -> 21 sheets.",
-  "Protein-source flag: run condition names boneless skinless chicken breast; the build uses FROZEN LIGHTLY BREADED chicken breast bites (breast meat, but breaded). Macros still pass the band. Flagged for the gate in case plain unbreaded breast is required.",
-  "No cost figures were in the locked view and no cost_lines were provided, so cost_closing uses the ${{cost_ps}} token and per-serving macros use {{cal}}/{{protein}} tokens. No per-package or per-ounce savings claims were made because none could be traced.",
-  "Parsley is used only on the first two layers per the source; the top finishes with mozzarella and parmesan only. Reflected in make_it and steps.",
-  "No em dashes or en dashes used anywhere; only plain hyphens in compound words."
+  "Source is masonfit.com Chicken Alfredo Lasagna, a small-pan recipe scaled here to 14 servings; all quantities came from the locked skeleton view, none computed by the writer.",
+  "REPAIR 2026-08-28 (B2, phantom black pepper): step 2 seasons with salt and black pepper, but the intake had collapsed both into a single Salt line's buy string, so black pepper was used-but-not-bought (audit-spec-contradictions PHANTOM). Split into a Salt line (9 g, about 1 1/2 tsp) and a Black Pepper line (2 g, about 3/4 tsp, bid black-pepper), mirroring the blackened-chicken Salt/Black Pepper pattern. Gram split per the auditor's prescription (3/4 tsp pepper), not writer-computed. Every ingredient is now used by a step and every step ingredient is bought.",
+  "Signature swap for this dish: cottage cheese blended into alfredo replaces the traditional ricotta/bechamel layer. Do not describe the cheese layer as ricotta.",
+  "Method figures (425F, 30 min covered, 10-15 min uncovered, 5 min rest, 425 preheat) are from the transcription, not macro/cost data.",
+  "Prose uses tokens {{cal}}, {{protein}}, ${{cost_ps}} rather than literals per catalog templating rules; no per-line costs anywhere.",
+  "No cost_lines were provided in this dispatch, so shop_smart deliberately avoids per-ounce and per-batch package claims and only references the buy quantities shown in the locked view.",
+  "FLAG for repair pass: main protein is 'Frozen Lightly Breaded Chicken Breast Bites' - breaded/processed, not plain boneless skinless chicken breast; confirm this satisfies the run's protein gate."
  ],
  "forbidden_prose_terms": [
-  "homemade alfredo",
-  "from-scratch sauce",
-  "grilled chicken",
-  "hand-breaded",
-  "authentic Italian",
-  "seafood"
+  "—",
+  "–",
+  "ricotta",
+  "bechamel",
+  "seafood",
+  "per ounce",
+  "cheaper per ounce",
+  "lasts several batches",
+  "nothing left"
  ],
  "prose": {
-  "intro_html": "<p>Here is the thing about lasagna. It usually shows up loaded with cream, sausage, and a carb bill that quietly undoes a whole week of good choices. This one does not. We bake up frozen breaded chicken breast bites, blend low fat cottage cheese right into the alfredo so the whole tray turns creamy without a river of heavy cream, and layer it all with fresh mozzarella, parmesan, and no-boil noodles. What comes out of the oven is honest comfort food that lands at {{cal}} calories and {{protein}} grams of protein per serving. Fourteen containers of Sunday dinner, waiting to be reheated on a Tuesday when you have nothing left in the tank.</p>",
-  "shop_smart": "<p>Let me walk you through the cart so you buy it right the first time. The star is a bag of frozen lightly breaded chicken breast bites, and you want a little over two pounds of them; they go in the oven straight from frozen, so no thawing to plan around. Cottage cheese does the heavy lifting on the creamy layer, so grab a large tub of the low fat kind, right around two pounds five ounces worth. One jar of alfredo sauce covers the one and three quarter cups the recipe asks for, and a roasted garlic version earns its shelf space here. For the melt, pick up fresh mozzarella and a wedge of parmesan you grate yourself, since it melts cleaner than the pre-shredded stuff. No-boil noodles are the whole point, so you can skip dragging out a boiling pot; you will lay down twenty one sheets, so check the count on the box and buy enough to cover that before you leave the aisle. A bunch of fresh parsley finishes it, and the salt and pepper you already own.</p>",
-  "make_it": "<p>Start by heating your oven to 425 degrees. Bake or air fry the frozen chicken bites straight from frozen, right off the package instructions, then roughly chop them into bite size pieces once they are cooked through. While that is going, blend the cottage cheese, the alfredo sauce, and a pinch of salt and pepper together until it is smooth. That blended cottage cheese is your secret weapon; it carries the creamy alfredo flavor and stacks the protein without a drop of heavy cream.</p><p>Now build it. Coat the bottom of your baking dish with a thin layer of that sauce, lay down three noodle sheets, then add another layer of sauce, the chopped chicken, a scatter of parsley, mozzarella, and parmesan. Repeat the layers the same way, but only use parsley on the first two layers, and finish the very top with just mozzarella and parmesan. Cover the dish and bake for thirty minutes, then uncover it and give it another ten to fifteen minutes, until the cheese is bubbly and browning around the edges. Garnish with a little fresh parsley and grated parmesan, and let the whole thing rest at least five minutes before you slice. That rest is not optional if you want squares that hold together instead of a puddle.</p>",
-  "portion_html": "<p>Here is where your containers earn their keep, and where I need you to not eyeball it. Once the lasagna has rested, set your baking dish on a kitchen scale, subtract the weight of the empty dish if you know it, and divide what is left by fourteen. That number is your target weight per container. Portion by the scale, not by the knife, and every single one of your fourteen meals lands at the same {{cal}} calories and {{protein}} grams of protein. Cut squares that get you close, then nudge them on the scale until each box hits the mark. Even portions are the difference between a meal plan you can trust and a guessing game.</p>",
-  "cost_closing_html": "<p>Now the part that matters to your wallet. This whole tray breaks down to ${{cost_ps}} per serving. That is a creamy, cheesy, {{protein}} gram protein dinner for about what the drive-thru value menu costs, except this one is already cooked, already portioned, and waiting in your fridge for the days you would have caved and ordered out. Real food, real protein, and a number you can actually plan a week around.</p>",
-  "upsell_html": "<p>If this is the kind of cooking you want more of, the Thrifty Crew membership runs a dollar a month, and it pays for itself the first time you trade one takeout night for a container of this. Come on in and grab the rest of the recipes.</p>"
+  "intro_html": "<p>Lasagna usually shows up on the ledger as a splurge night, all that ricotta and heavy cream doing a number on both your macros and your wallet. This one flips the math. We blend cottage cheese straight into the alfredo so you get that same creamy, layered comfort without the ricotta bill, and we lean on breaded chicken breast bites for the muscle. The result lands at {{protein}} grams of protein and {{cal}} calories a serving, which is the kind of number that lets you eat lasagna on a Tuesday and still call it meal prep.</p><p>Here is the honest part. This is not a from-scratch, all-afternoon lasagna. It is a smart-shortcut lasagna built to feed you across a whole work week for pocket change. You lean on a jar of alfredo and no-boil noodles to skip the fussy steps, and you put the savings and the effort where they actually show up, which is the protein and the price per serving.</p>",
+  "shop_smart": "<p>The cottage cheese is the star buy here, and it is doing the job ricotta usually charges double for. You need 4 2/3 cups, so grab the big tub rather than the little cups and you will use it up. Full fat or low fat both work; low fat trims the fat number without hurting the creaminess once it is blended smooth.</p><p>For the alfredo you only need 1 3/4 cups, so a single standard jar covers the batch with room to spare. Buy a jar you would actually eat by the spoonful, because it carries a lot of the flavor. The fresh mozzarella runs 1 lb 2 1/2 oz and the parmesan 2 1/3 cups grated. If your store sells parmesan by the wedge and you own a grater, that is the move for freshness, but a tub of the pre-grated works fine and saves you the arm workout.</p>",
+  "make_it": "<p>Heat the oven to 425 degrees. Bake or air fry the frozen chicken bites according to their package, then roughly chop them into bite-size pieces once they are cooked through. Set the chicken aside.</p><p>Make the sauce in one pass: blend the cottage cheese, the alfredo, and a generous pinch of salt and black pepper together until it is completely smooth. That blend is what replaces the fussy ricotta layer, so do not skip the smooth part.</p><p>Now build it. Coat the bottom of your baking dish with a thin layer of the blended sauce so nothing sticks. Lay down noodles, then another layer of sauce, then chopped chicken, a scatter of parsley, mozzarella, and parmesan. Repeat the layers until everything is used, keeping parsley on the first couple of layers only and finishing the top with mozzarella and parmesan. Cover and bake 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges. Garnish with fresh parsley and a little grated parmesan, then let it rest at least 5 minutes before you slice.</p>",
+  "portion_html": "<p>Fourteen servings out of one bake, and the fair way to split lasagna is by weight, not by eyeballing squares. Weigh your empty baking dish before you build, then weigh it again full and hot out of the oven. Subtract the dish, divide what is left by 14, and that is your target grams per container. Scoop to the scale, not to the spoon.</p><p>Lasagna slices firm up as they cool, so if you let it rest and chill fully before portioning you will get cleaner blocks that stack neatly in your containers. Reheat covered so the noodles stay tender and the cheese comes back to life instead of drying out.</p>",
+  "cost_closing_html": "<p>Here is where it pays off. This whole tray of high-protein alfredo lasagna comes out to ${{cost_ps}} a serving. Fourteen dinners that each clear {{protein}} grams of protein for that price is the kind of deal the takeout menu cannot touch, and you already know exactly what went into it.</p>",
+  "upsell_html": "<p>If a week of protein-packed lasagna for pocket change sounds like your kind of math, that is the entire idea behind Thrifty Crew. Membership runs a dollar a month and gets you the full library of budget meal-prep dinners built the same honest way. Cook once, eat all week, and keep the money where it belongs, which is in your account.</p>"
  },
  "head": {
-  "description": "High-protein chicken alfredo lasagna meal prep that makes 14 servings at {{cal}} calories and {{protein}} grams of protein each. Blended cottage cheese and alfredo, breaded chicken, mozzarella, parmesan, and no-boil noodles for a budget dinner.",
-  "keywords": "chicken alfredo lasagna, high protein lasagna, meal prep lasagna, cottage cheese alfredo, high protein meal prep, budget meal prep dinner, chicken lasagna, no boil lasagna",
+  "description": "High-protein chicken alfredo lasagna meal prep with 41 grams of protein per serving. Cottage cheese blended into alfredo, breaded chicken, and no-boil noodles feed 14 for a budget price.",
+  "keywords": "chicken alfredo lasagna, high protein lasagna, cottage cheese lasagna, meal prep lasagna, budget meal prep dinner, high protein meal prep, no boil lasagna, chicken lasagna",
   "image": "",
   "prepTime": "PT15M",
   "cookTime": "PT1H",
   "totalTime": "PT1H15M",
   "steps": [
-   "Preheat your oven to 425 degrees Fahrenheit.",
-   "Bake or air fry the frozen breaded chicken breast bites straight from frozen per the package instructions, then roughly chop them into bite size pieces.",
-   "Blend the cottage cheese, alfredo sauce, and a pinch of salt and pepper together until smooth.",
-   "Assemble: coat the dish with a thin layer of sauce, add three noodle sheets, then more sauce, chicken, parsley, mozzarella, and parmesan. Repeat, using parsley only on the first two layers, and finish the top with mozzarella and parmesan.",
-   "Cover and bake for 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning around the edges.",
-   "Garnish with fresh parsley and grated parmesan, rest at least 5 minutes, then slice and portion into 14 containers."
+   "Heat the oven to 425 degrees. Bake or air fry the frozen breaded chicken bites according to the package, then roughly chop the cooked chicken into bite-size pieces.",
+   "Blend the cottage cheese, alfredo sauce, and a generous pinch of salt and black pepper together until completely smooth.",
+   "Coat the bottom of a baking dish with a thin layer of the blended sauce, then layer noodles, sauce, chopped chicken, parsley, mozzarella, and parmesan. Use parsley only on the first couple of layers, and finish the top with mozzarella and parmesan only.",
+   "Cover and bake 30 minutes, then uncover and bake another 10 to 15 minutes until the cheese is bubbly and browning at the edges.",
+   "Garnish with fresh parsley and grated parmesan, then rest at least 5 minutes before slicing.",
+   "Portion by weight across 14 containers, weighing the full dish and dividing by 14."
   ],
   "step_names": [
-   "Preheat the oven",
-   "Cook the chicken",
+   "Bake and chop the chicken",
    "Blend the sauce",
    "Layer the lasagna",
-   "Cover and bake",
-   "Rest and portion"
+   "Bake covered then uncovered",
+   "Garnish and rest",
+   "Portion into 14"
   ]
  }
 }

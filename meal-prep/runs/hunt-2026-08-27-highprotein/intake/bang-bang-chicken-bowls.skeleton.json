@@ -1,0 +1,134 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-28T07:53:20",
+    "slug":  "bang-bang-chicken-bowls",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Yellow Onion\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "excluded \u0027Sweet Heat Jalapeños\u0027 (optional-note) - not something the shopper buys"
+              ],
+    "intake":  {
+                   "name":  "Bang Bang Chicken Bowls",
+                   "slug":  "bang-bang-chicken-bowls",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://ohsnapmacros.com/bang-bang-chicken-bowls/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  2381,
+                                           "buy":  "5 1/4 lb, cut into bite-sized cubes"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  14,
+                                           "buy":  "to taste (about 2 1/2 tsp salt and 1 tsp ground black pepper)"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  47,
+                                           "buy":  "3 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Light Mayonnaise",
+                                           "grams":  581,
+                                           "buy":  "2 2/3 cups light mayonnaise"
+                                       },
+                                       {
+                                           "item":  "Sweet Chili Sauce",
+                                           "grams":  490,
+                                           "buy":  "1 3/4 cups"
+                                       },
+                                       {
+                                           "item":  "Ketchup",
+                                           "grams":  240,
+                                           "buy":  "3/4 cup plus 2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Sriracha",
+                                           "grams":  18,
+                                           "buy":  "1 tbsp plus 1/2 tsp, or more to taste"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  3,
+                                           "buy":  "scant 1 tsp"
+                                       },
+                                       {
+                                           "item":  "Powdered Peanut Butter",
+                                           "grams":  46,
+                                           "buy":  "3 1/2 tbsp powdered peanut butter"
+                                       },
+                                       {
+                                           "item":  "Cooked White Rice",
+                                           "grams":  1106,
+                                           "buy":  "7 cups cooked (from about 2 1/3 cups dry)"
+                                       },
+                                       {
+                                           "item":  "Frozen Cauliflower Rice",
+                                           "grams":  1190,
+                                           "buy":  "2 3/4 lb frozen riced cauliflower, cooked"
+                                       },
+                                       {
+                                           "item":  "Carrots",
+                                           "grams":  420,
+                                           "buy":  "3 cups julienned (about 5 medium carrots)"
+                                       },
+                                       {
+                                           "item":  "Cucumber",
+                                           "grams":  300,
+                                           "buy":  "1 large cucumber, finely sliced"
+                                       },
+                                       {
+                                           "item":  "Green Cabbage",
+                                           "grams":  490,
+                                           "buy":  "6 cups shredded (about half a medium head)"
+                                       },
+                                       {
+                                           "item":  "Yellow Onion",
+                                           "grams":  280,
+                                           "buy":  "2 medium onions, thinly sliced and quick-pickled"
+                                       },
+                                       {
+                                           "item":  "Green Onions",
+                                           "grams":  60,
+                                           "buy":  "6 green onions, chopped"
+                                       },
+                                       {
+                                           "item":  "Toasted Sesame Seeds",
+                                           "grams":  25,
+                                           "buy":  "2 1/2 tbsp, toasted"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  588,
+                                              "protein_g":  44.7,
+                                              "carbs_g":  59.8,
+                                              "fat_g":  18.9
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

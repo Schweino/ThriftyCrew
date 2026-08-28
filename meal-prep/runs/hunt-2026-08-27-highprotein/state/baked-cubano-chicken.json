@@ -1,0 +1,37 @@
+{
+    "slug":  "baked-cubano-chicken",
+    "title":  "Baked Cubano Chicken",
+    "source_url":  "https://keviniscooking.com/baked-chicken-cubano/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-28T07:19:40",
+    "updated":  "2026-08-28T07:20:35",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:19:40",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/baked-chicken-cubano/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T07:19:41",
+                        "by":  "decider",
+                        "detail":  "Baked chicken breast layered Cubano-style with ham, carnitas, Swiss, dill pickle, yellow mustard and black beans; distinct Cuban-sandwich flavor identity (not cordon bleu\u0027s dijon-cream) with no live Cubano dish, widens cuisine, verified 714cal/22c/100p fits the high-protein run."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T07:20:35",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

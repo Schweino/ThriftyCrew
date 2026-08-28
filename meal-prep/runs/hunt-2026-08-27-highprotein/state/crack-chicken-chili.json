@@ -3,10 +3,10 @@
     "title":  "Crack Chicken Chili",
     "source_url":  "https://wholesomelymorgan.com/crack-chicken-chili/",
     "protein":  "chicken",
-    "state":  "priced",
-    "wave":  null,
+    "state":  "rejected-audit",
+    "wave":  10,
     "created":  "2026-08-27T18:14:56",
-    "updated":  "2026-08-27T19:06:04",
+    "updated":  "2026-08-28T08:06:54",
     "terms":  [
                   {
                       "term":  "chicken bone broth",
@@ -21,7 +21,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "NO-GO on one shared blocker only: the audit-spec-contradictions gate is red (exit 1, PHANTOM 3 vs baseline 0) and no wave publishes against a red gate. Of the 3 phantoms, the wave-local one (blackened",
     "parked_on":  [
 
                   ],
@@ -61,6 +61,60 @@
                         "at":  "2026-08-27T19:06:04",
                         "by":  "derive",
                         "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-28T07:18:01",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-28T07:18:01",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "spec-built",
+                        "at":  "2026-08-28T07:19:52",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-28T07:19:52",
+                        "by":  "writer",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-28T07:22:47",
+                        "by":  "source-qa",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-28T07:31:01",
+                        "by":  "wave-close",
+                        "detail":  "wave 9"
+                    },
+                    {
+                        "state":  "qa-passed",
+                        "at":  "2026-08-28T07:53:21",
+                        "by":  "auditor",
+                        "detail":  "audit-clean, trimmed out of blocked wave 9"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-28T07:53:22",
+                        "by":  "wave-close",
+                        "detail":  "wave 10"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-28T08:06:54",
+                        "by":  "auditor",
+                        "detail":  "NO-GO on one shared blocker only: the audit-spec-contradictions gate is red (exit 1, PHANTOM 3 vs baseline 0) and no wave publishes against a red gate. Of the 3 phantoms, the wave-local one (blackened"
                     }
                 ]
 }

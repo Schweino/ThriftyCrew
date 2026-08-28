@@ -1,0 +1,191 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Bang Bang Chicken Bowls",
+  "source_url": "https://ohsnapmacros.com/bang-bang-chicken-bowls/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 ½ lbs. boneless skinless chicken breast, cubed",
+      "item": "boneless skinless chicken breast",
+      "qty": "1 ½ lbs.",
+      "unit": null,
+      "prep": "cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "salt and pepper",
+      "item": "salt and pepper",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp. olive oil",
+      "item": "olive oil",
+      "qty": "1",
+      "unit": "Tbsp.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 cup light mayonnaise (166g)",
+      "item": "light mayonnaise",
+      "qty": "3/4",
+      "unit": "cup",
+      "prep": "(166g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup sweet chili sauce (140g)",
+      "item": "sweet chili sauce",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "(140g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 cup ketchup (70g)",
+      "item": "ketchup",
+      "qty": "1/4",
+      "unit": "cup",
+      "prep": "(70g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp. (or more) sriracha",
+      "item": "sriracha",
+      "qty": "1 tsp.",
+      "unit": null,
+      "prep": "(or more)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 tsp. garlic powder",
+      "item": "garlic powder",
+      "qty": "1/4",
+      "unit": "tsp.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp. powdered peanut butter, PB2 (13g (see notes))",
+      "item": "powdered peanut butter",
+      "qty": "1",
+      "unit": "Tbsp.",
+      "prep": "PB2 (13g (see notes))",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups cooked white rice",
+      "item": "cooked white rice",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "12 oz. cooked frozen cauliflower rice",
+      "item": "cooked frozen cauliflower rice",
+      "qty": "12",
+      "unit": "oz.",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "julienned carrots",
+      "item": "carrots",
+      "qty": null,
+      "unit": null,
+      "prep": "julienned",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "finely sliced cucumber",
+      "item": "cucumber",
+      "qty": null,
+      "unit": null,
+      "prep": "finely sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "shredded green cabbage",
+      "item": "shredded green cabbage",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "pickled onions",
+      "item": "pickled onions",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "sweet heat jalapeños",
+      "item": "sweet heat jalapeños",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "green onions",
+      "item": "green onions",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "sesame seeds",
+      "item": "sesame seeds",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat a large skillet over medium heat with the olive oil. Add the cubed chicken and season with salt and pepper. Let the chicken cook untouched for 3 minutes, flip and repeat until cooked through and no longer pink.",
+    "While the chicken cooks mix the mayonnaise, sweet chili sauce, ketchup, sriracha (add more to your desired heat level), garlic powder and powdered PB2. Mix until fully combined.",
+    "When the chicken is fully cooked, turn off the heat and add ½ cup of the sauce (150 grams) to the chicken and stir to combine. Save the rest of the sauce to drizzle on your prepared bowls.",
+    "For the bowls, combine the cooked rice and cauli rice and split between 4 bowls. Add desired toppings like shredded cabbage, julienned carrots, sliced cucumber and pickled onions along with 171 grams of cooked and sauced chicken and 52 grams of remaining sauce drizzled on top. Top with chopped green onions and optional sesame seeds."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 18,
+    "verified": 18,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

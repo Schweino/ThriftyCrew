@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-28T06:58:26",
-    "count":  246,
+    "updated":  "2026-08-28T07:50:49",
+    "count":  263,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -2217,6 +2217,159 @@
                             "evidence":  "The source offers a choice and corn is listed first, so the line resolves to the same-form vocabulary row Corn Tortillas [corn-tortillas]; the board carries tortillas at 7 of 7. Corn and flour are different foods at different gram weights, so only one may be priced and weighed. [slug sriracha-chicken-tacos, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-28T06:58:26"
+                        },
+                        {
+                            "key":  "little potatoes",
+                            "term":  "Little Potatoes",
+                            "item_id":  "baby-potatoes",
+                            "bid_exists":  false,
+                            "evidence":  "Little Potatoes are creamer potatoes, the food the 2026-08-26 \u0027baby potatoes\u0027 ruling minted baby-potatoes for: their own bagged SKU priced above bulk russets. Sweet-potatoes is a different food and the FDC shelf returned only Little Caesars pizza, a keyword miss. [slug apricot-chicken-sheet-pan-dinner-recipe-video, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:34:34"
+                        },
+                        {
+                            "key":  "large carrots",
+                            "term":  "large carrots",
+                            "item_id":  "carrots",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of carrots, live 7 of 7 at 0.87. \u0027Large\u0027 is a size word and \u0027thinly sliced\u0027 a knife cut, neither a form flip; shredded-carrots is refused as a different bagged product, per the 2026-08-27 matchstick-carrots ruling. [slug apricot-chicken-sheet-pan-dinner-recipe-video, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:34:35"
+                        },
+                        {
+                            "key":  "apricot jam",
+                            "term":  "apricot jam",
+                            "item_id":  "jelly",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of jelly, 7 of 7 - the fruit-spread commodity covers jam at the same price class, so no new id is warranted. Only the vocabulary name row is missing, which is a naming question and not a registrar one. [slug apricot-chicken-sheet-pan-dinner-recipe-video, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:34:35"
+                        },
+                        {
+                            "key":  "cider vinegar",
+                            "term":  "cider vinegar",
+                            "item_id":  "apple-cider-vinegar",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Cider vinegar\u0027 is apple cider vinegar universally, and the vocabulary carries that exact same-form row. Apple Cider is the form flip and is refused: a drink, not a vinegar. [slug apricot-chicken-sheet-pan-dinner-recipe-video, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:34:35"
+                        },
+                        {
+                            "key":  "allspice berries",
+                            "term":  "allspice berries",
+                            "item_id":  "ground-allspice",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of ground-allspice, live 5 of 7 at 1.06. Whole versus ground is a grind of the identical spice sold in the identical jar at the same price class, not a fresh/dried or product-class flip. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:24"
+                        },
+                        {
+                            "key":  "cardamom pods",
+                            "term":  "cardamom pods",
+                            "item_id":  "cardamom",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of the live board id cardamom (2 of 7, cheapest 10.52 at Walmart); the food DB already carries a \u0027cardamom pods\u0027 row, so only the vocabulary name row is missing. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:24"
+                        },
+                        {
+                            "key":  "black peppercorns",
+                            "term":  "black peppercorns",
+                            "item_id":  "black-peppercorns",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of the live board id black-peppercorns, 5 of 7, cheapest 0.4994 at Fareway - an exact-food id already priced, so not a proposal. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:24"
+                        },
+                        {
+                            "key":  "broccoli rabe",
+                            "term":  "broccoli rabe",
+                            "item_id":  "broccoli-rabe",
+                            "bid_exists":  false,
+                            "evidence":  "Refused broccoli (7 of 7): rabe is rapini, a bitter turnip relative sold by the bunch at a higher price than broccoli crowns, and broccolini is a third plant again. A crown price on rabe is a silent cost defect. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:25"
+                        },
+                        {
+                            "key":  "crushed red pepper",
+                            "term":  "crushed red pepper",
+                            "item_id":  "red-pepper-flakes",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of red-pepper-flakes, 7 of 7 at 0.433. Crushed red pepper is the dried chile flake; the bell-pepper vocabulary rows are a different food entirely and are refused. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:25"
+                        },
+                        {
+                            "key":  "very thinly sliced prosciutto",
+                            "term":  "very thinly sliced prosciutto",
+                            "item_id":  "prosciutto",
+                            "bid_exists":  false,
+                            "evidence":  "Board absent, no capture match, and no existing id prices dry-cured Italian ham: bacon, ham and deli meats are all different cures at different price classes. \u0027Very thinly sliced\u0027 is the deli cut, not a form flip. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:25"
+                        },
+                        {
+                            "key":  "yellow onions",
+                            "term":  "yellow onions",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of onions, 7 of 7 at 0.7967, matching the 2026-08-26 \u0027small yellow onion\u0027 ruling. Green-onions is a different vegetable and is refused; medium weighed at 110 g each. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:26"
+                        },
+                        {
+                            "key":  "balsamic syrup",
+                            "term":  "balsamic syrup",
+                            "item_id":  "balsamic-glaze",
+                            "bid_exists":  false,
+                            "evidence":  "Refused balsamic-vinegar: the glaze is a reduced, sweetened syrup at roughly four times the carbs and a different bottle price, which is both a price flip and a gram-weight flip. Board absent. [slug roasted-stuffed-pork-loin, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:35:26"
+                        },
+                        {
+                            "key":  "light mayonnaise",
+                            "term":  "light mayonnaise",
+                            "item_id":  "mayonnaise",
+                            "bid_exists":  true,
+                            "evidence":  "Light mayo is the same jar on the same shelf at the same price class, per the \u0027Light Cream Cheese\u0027 and \u0027avocado oil mayonnaise\u0027 precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:50:48"
+                        },
+                        {
+                            "key":  "cooked white rice",
+                            "term":  "cooked white rice",
+                            "item_id":  "rice",
+                            "bid_exists":  true,
+                            "evidence":  "You buy the dry bag and cook it: `rice` is the same product and price class, and \u0027cooked\u0027 is a prep instruction as in the \u0027cooked bacon\u0027 ruling. Weighed cooked (158 g/cup) so grams and the cooked-rice DB row agree; vocabulary wants a Cooked White Rice name row, not a new id. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:50:48"
+                        },
+                        {
+                            "key":  "cooked frozen cauliflower rice",
+                            "term":  "cooked frozen cauliflower rice",
+                            "item_id":  "frozen-cauliflower-rice",
+                            "bid_exists":  false,
+                            "evidence":  "REFUSED the board\u0027s `rice` match outright - cauliflower is not rice, that is a wrong-food match at a wrong price. Also refused fresh `cauliflower`: fresh-is-not-frozen is a standing rejection and a bagged frozen riced product is a different price class. New id proposed. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:50:49"
+                        },
+                        {
+                            "key":  "shredded green cabbage",
+                            "term":  "shredded green cabbage",
+                            "item_id":  "cabbage",
+                            "bid_exists":  true,
+                            "evidence":  "Shredding is a knife cut of the same head, per the \u0027carrot\u0027 -\u003e carrots precedent; not a bagged coleslaw mix at this quantity. Board 6 of 7. Unquantified topping weighed at about 1/2 cup shredded per bowl. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:50:49"
+                        },
+                        {
+                            "key":  "pickled onions",
+                            "term":  "pickled onions",
+                            "item_id":  "onions",
+                            "bid_exists":  true,
+                            "evidence":  "Quick-pickled at home from a whole onion plus pantry vinegar, so both the purchase and the macros are the onion; canon reuses the existing Yellow Onion row. Unquantified garnish with no stated quantity, hence optional, per the \u0027Sliced onions\u0027 precedent. [slug bang-bang-chicken-bowls, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T07:50:49"
                         }
                     ]
 }

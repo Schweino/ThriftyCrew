@@ -99,50 +99,49 @@
   "fat_g": 18.1
  },
  "writer_notes": [
-  "All 17 locked ingredient lines are used by a step and no step uses an unbought item; reconciliation walked both directions.",
-  "Source page groups chili powder, cayenne and red-pepper flakes in the sauce; step 4's 'mix cranberry sauce with remaining ingredients' supports placing them in the sauce mix, so they are named in the Mix the cranberry sauce step.",
-  "Olive oil locked line shows '7 tbsp; 3 1/2 tbsp' (two pours); prose keeps oil as a searing ingredient only, matching the transcription.",
-  "No cost_ps or cost_lines were supplied, so prose uses the ${{cost_ps}} token and carries zero traceable package-cost claims in shop_smart.",
-  "Macros used in prose (646 cal, 55 g protein) are taken verbatim from the locked view; no number was computed.",
-  "Rosemary is optional garnish but is bought/costed (7 g); it is used in the final step so it is not an orphan."
+  "All 17 locked ingredient lines are used by a step and no step uses anything unbought; verified both directions before submit.",
+  "No cost_lines were provided in the dispatch, so shop_smart makes only package-count claims sourced from the buy strings and no per-ounce or per-batch cost comparisons.",
+  "Cost, calories, and protein are written as tokens (${{cost_ps}}, {{cal}}, {{protein}}) per the templating rule; the only literal figures used are the buy-string package counts.",
+  "Protein locked to boneless skinless chicken breast per run condition; source turkey alternative and gluten-free flour option deliberately omitted from prose.",
+  "Flagged in detail: Worcestershire scales to 1/2 cup vs an expected ~7 tbsp, black pepper 3/4 tsp vs ~0.875 tsp, and the high 68.7 g carb load driven by cranberry sauce plus honey. Not fixed, flagged for the repair pass."
  ],
  "forbidden_prose_terms": [
-  "—",
-  "–",
-  "game-changer",
-  "restaurant-quality",
-  "guilt-free",
-  "superfood",
-  "literally"
+  "turkey",
+  "gluten-free",
+  "fresh cranberries",
+  "seafood",
+  "shrimp",
+  "pre-ground chicken",
+  "store-bought meatballs"
  ],
  "prose": {
-  "intro_html": "<p>Every so often a recipe shows up that tastes like a holiday and costs like a Tuesday. This is that recipe. Tender chicken meatballs, seared golden, then simmered in a glossy cranberry sauce that walks the line between sweet and a little bit of heat. It eats like something you would pay real money for at a restaurant, and it comes out of one pan.</p><p>Here is what makes it work for meal prep. You are building 14 servings, and each one lands at 646 calories with 55 grams of protein. That is a serious amount of protein for a dinner that feels like comfort food. The cranberry and honey carry the flavor, the chicken carries the numbers, and the whole thing reheats without turning sad. Let me walk you through buying it right and cooking it once.</p>",
-  "shop_smart": "<p>A few smart moves before you fill the cart. This batch leans on a handful of pantry spices you probably already own, so read your shelf before you buy duplicates.</p><ul><li><strong>Chicken breast is the anchor.</strong> You need 7 pounds of boneless skinless chicken breast for the full 14 servings. Buy the largest value pack your store stocks rather than the small trays. You are cubing it and running it through a food processor anyway, so shape and size do not matter here. Grab it when it hits its lowest per pound shelf price and you win the whole recipe.</li><li><strong>Cranberry sauce does the heavy lifting on flavor.</strong> The batch calls for 5 cups, which works out to three and a half of the 14 ounce cans. Whole berry or jellied both work, so buy whichever is priced better that week.</li><li><strong>The spice rack covers most of the seasoning.</strong> Chili powder, cayenne, red pepper flakes, garlic powder, onion powder and paprika are all standard pantry jars. Check what you have before you buy anything new.</li><li><strong>Panko and whole wheat flour are small pours.</strong> You use 7/8 cup of each, so a single standard package of either covers this batch with room to spare for the next one.</li><li><strong>Honey and Worcestershire are pantry keepers.</strong> A 7/8 cup pour of honey and a half cup of Worcestershire come off bottles that live in the door of your fridge and the corner of your cupboard for months.</li></ul>",
-  "make_it": "<p>This is a food processor recipe, which is the trick that makes it cheap. You are grinding your own chicken instead of paying a premium for the pre ground stuff, and the seasoning goes in at the same time so every bite is flavored all the way through.</p><ol><li><strong>Grind and season.</strong> Cut the 7 pounds of chicken breast into cubes and add them to the food processor. Pulse a few times to break them down, then add the panko, the beaten eggs, the Worcestershire, the garlic powder, onion powder and paprika, the black pepper and the salt. Pulse again until the meat is medium fine and everything is evenly worked in. Work in batches if your processor is small, because 7 pounds is a lot to crowd into one bowl.</li><li><strong>Form and flour.</strong> With wet hands, roll the mixture into 1 inch balls. Wet hands are the whole secret here, because the mix will not stick to them. Roll each ball lightly through the whole wheat flour and shake off the excess so you get a thin coat, not a crust.</li><li><strong>Sear them off.</strong> Heat a large non stick pan over medium and drizzle in olive oil. Add the meatballs in a single layer without crowding, and cook about 2 minutes per side until they are golden brown and cooked through. Do this in batches and set the finished ones aside.</li><li><strong>Mix the cranberry sauce.</strong> While the meatballs cook, stir the 5 cups of cranberry sauce together in a bowl with the honey, chili powder, cayenne and red pepper flakes, plus a little salt and pepper. Taste it. This is your chance to dial the heat up or down before it hits the pan.</li><li><strong>Simmer it all together.</strong> Return the meatballs to the pan and pour the cranberry sauce over them. Stir gently to coat, reduce the heat to low, and simmer until the sauce is bubbly and glossy, about 5 minutes. Garnish with fresh rosemary if you are using it.</li></ol>",
-  "portion_html": "<p>Here is the honest way to split 14 even servings, and it is the same method I use on every batch. Do not eyeball it. Weigh the empty pan before you cook, then weigh the full pan of finished meatballs and sauce at the end and subtract. Take that cooked weight, divide by 14, and that is your target grams per container.</p><p>Scoop meatballs and sauce onto the scale and fill each container to that number. The person who packs the first box and the person who packs the last box should be eating the same dinner. That is how you actually hit 646 calories and 55 grams of protein per serving instead of guessing and getting 10 big portions and 4 sad ones.</p>",
-  "cost_closing_html": "<p>So what does it cost to eat like this? This batch comes in at ${{cost_ps}} per serving. Fourteen dinners, each one carrying 55 grams of protein, for the price of a couple of drive through combos. That is the entire pitch of cooking once and eating all week.</p><p>Run the math on your own week. A dinner out is easily ten to fifteen dollars before you even think about a drink. Cooking this batch buys you two weeks of lunches or dinners for one person, or a week of dinners for a small household, at a number that does not make you flinch.</p>",
-  "upsell_html": "<p>If this is the kind of cooking you want to do every week, that is the whole reason Thrifty Crew exists. Membership is a dollar a month, and it gets you every recipe built exactly like this one, with the buy list, the macros and the honest per serving cost already worked out. Cook once, eat all week, and let the numbers do the arguing.</p>"
+  "intro_html": "<p>Here is a dinner that tastes like a holiday and costs like a plain Tuesday. Ground chicken breast gets seasoned, rolled, browned in a pan, and then folded into a sweet cranberry sauce with just enough chili heat to keep it interesting. It is the kind of plate that makes people think you fussed, when really you ran a food processor and a skillet.</p><p>At {{cal}} calories and {{protein}} grams of protein per container, this is a real meal doing a real job. Cranberry and honey carry the sweetness, panko and whole wheat flour keep the meatballs tender, and the chicken does the heavy lifting on protein. You get comfort food that still answers to the numbers.</p>",
+  "shop_smart": "<ul><li>Canned cranberry sauce comes in 14 oz cans. This batch calls for three and a half cans, so put four in the cart and let the leftover half hang around for morning toast or a sandwich.</li><li>The chicken is the engine here at 7 pounds of boneless skinless breast. Buy the biggest family pack the store puts on sale and skip anything labeled pre-ground, because you are grinding it yourself in the food processor for a fraction of the price.</li><li>Panko and whole wheat flour are small players, under a cup each. These are pantry staples you likely already own, so check the shelf before you buy a fresh bag.</li><li>Honey runs about seven eighths of a cup. A standard squeeze bottle covers it with room to spare.</li><li>Garlic powder, onion powder, paprika, chili powder, cayenne, and red pepper flakes are all dry pantry spices. Reach for the store brand jars; the name on the label does nothing your tongue can taste.</li><li>Worcestershire sauce and one bunch of fresh rosemary round it out. The rosemary is just a garnish, so a single sprig-bunch is plenty.</li></ul>",
+  "make_it": "<ol><li>Drop the cubed chicken breast into a food processor and pulse until it is chopped. Add the panko, beaten egg, Worcestershire sauce, garlic powder, onion powder, paprika, kosher salt, and black pepper, then pulse again until the meat is medium-fine and everything is folded through.</li><li>With wet hands so nothing sticks, roll the mixture into balls about an inch across. Give each one a gentle roll in the whole wheat flour and shake off the extra.</li><li>Heat a large non-stick pan over medium and drizzle in the olive oil. Working in batches so the pan is not crowded, add the meatballs and cook about 2 minutes per side, until they are golden brown and cooked through. Move each finished batch to a plate.</li><li>Meanwhile, in a bowl, stir the cranberry sauce together with the honey, chili powder, cayenne, red pepper flakes, and a little salt and pepper until it is smooth and well combined.</li><li>Pour the cranberry sauce over the meatballs, stir to coat, then drop the heat to low and simmer until it is bubbly, about 5 minutes. Scatter the fresh rosemary over the top and you are done.</li></ol>",
+  "portion_html": "<p>Fourteen even containers, no guessing. Set an empty container on the scale and note its weight. Then weigh the whole pan of meatballs and sauce, subtract the pan, and divide what is left by fourteen. That number is your target per container.</p><p>Scoop, weigh, and nudge until each one hits the mark, sauce and all. Every container lands at {{cal}} calories and {{protein}} grams of protein. Spoon it over rice or a pile of roasted vegetables at reheat time if you want to stretch the plate further.</p>",
+  "cost_closing_html": "<p>At ${{cost_ps}} a serving, this is fourteen dinners that taste like a special occasion for less than what one takeout entree costs. The chicken you ground yourself is where the savings live, and the cranberry sauce does the fancy work for pennies.</p><p>Run the math on your week. Fourteen containers out of one afternoon means you are not deciding what to eat when you are tired and expensive decisions get made. The freezer takes the ones you will not reach in four days, and future you says thank you.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, the whole catalog runs the same way: real numbers, real grocery prices, no mystery. Membership is a dollar a month, which is roughly the change under your car seat, and it opens every recipe and every cost breakdown we have.</p><p>Cook once, eat all week, and let the plan do the worrying. That is the entire idea.</p>"
  },
  "head": {
-  "description": "Budget meal prep chicken meatballs simmered in a sweet and spicy cranberry sauce. Makes 14 servings at 646 calories and 55 grams of protein each, all from one pan.",
-  "keywords": "chicken meatballs, cranberry sauce meatballs, meal prep dinner, high protein meal prep, budget chicken recipe, ground chicken meatballs, cranberry chicken",
+  "description": "Budget high-protein chicken meatballs simmered in sweet and spicy cranberry sauce, batched into 14 meal-prep containers with full macros and grocery-priced costs.",
+  "keywords": "chicken meatballs, cranberry sauce, high protein meal prep, budget dinner, meal prep chicken, ground chicken meatballs, cranberry chicken",
   "image": "",
   "prepTime": "PT10M",
   "cookTime": "PT15M",
   "totalTime": "PT25M",
   "steps": [
-   "Cut 7 pounds of chicken breast into cubes and pulse in a food processor to break them down. Add the panko, beaten eggs, Worcestershire sauce, garlic powder, onion powder, paprika, black pepper and salt, then pulse again until the meat is medium fine and evenly seasoned. Work in batches if needed.",
-   "With wet hands, roll the mixture into 1 inch balls. Roll each ball lightly through the whole wheat flour and shake off the excess for a thin coat.",
-   "Heat a large non stick pan over medium and drizzle in olive oil. Add the meatballs in a single layer without crowding and cook about 2 minutes per side until golden brown and cooked through. Work in batches and set finished meatballs aside.",
-   "While the meatballs cook, stir the cranberry sauce together in a bowl with the honey, chili powder, cayenne, red pepper flakes and a little salt and pepper until well combined.",
-   "Return the meatballs to the pan and pour the cranberry sauce over them. Stir gently to coat, reduce the heat to low and simmer until bubbly and glossy, about 5 minutes. Garnish with fresh rosemary if using."
+   "In a food processor, pulse the cubed chicken breast until chopped. Add the panko, beaten egg, Worcestershire sauce, garlic powder, onion powder, paprika, kosher salt, and black pepper, then pulse until the meat is medium-fine.",
+   "With wet hands, form the mixture into 1-inch balls. Roll each gently in the whole wheat flour and shake off the excess.",
+   "Heat a large non-stick pan over medium and drizzle in the olive oil. Working in batches, add the meatballs and cook about 2 minutes per side until golden brown and cooked through.",
+   "In a bowl, stir the cranberry sauce together with the honey, chili powder, cayenne, red pepper flakes, and a little salt and pepper until well combined.",
+   "Pour the cranberry sauce over the meatballs and stir to coat. Reduce the heat to low and simmer until bubbly, about 5 minutes, then garnish with fresh rosemary. Portion across 14 containers using the weigh method."
   ],
   "step_names": [
-   "Grind and season",
-   "Form and flour",
-   "Sear the meatballs",
+   "Grind and season the chicken",
+   "Roll the meatballs",
+   "Brown the meatballs",
    "Mix the cranberry sauce",
-   "Simmer together"
+   "Simmer and portion"
   ]
  }
 }

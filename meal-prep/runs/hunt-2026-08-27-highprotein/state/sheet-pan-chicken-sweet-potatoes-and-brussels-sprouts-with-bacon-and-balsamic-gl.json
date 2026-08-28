@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-chicken-sweet-potatoes-and-brussels-sprouts-with-bacon-and-balsamic-gl",
+    "title":  "Sheet Pan Chicken Sweet Potatoes and Brussels Sprouts with Bacon and Balsamic Glaze",
+    "source_url":  "https://www.cookingclassy.com/sheet-pan-chicken-sweet-potatoes-brussels-sprouts-bacon-balsamic-glaze/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-28T07:19:39",
+    "updated":  "2026-08-28T07:19:39",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken + sweet potato + Brussels sprouts sheet pan (word-overlap 55, five shared veg items) is the same dinner as live sheet-pan-chicken-sweet-potato-brussels; the bacon and balsamic-glaze finish is a seasoning nuance, not a distinct plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:19:39",
+                        "by":  "harvest",
+                        "detail":  "https://www.cookingclassy.com/sheet-pan-chicken-sweet-potatoes-brussels-sprouts-bacon-balsamic-glaze/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-28T07:19:39",
+                        "by":  "decider",
+                        "detail":  "Chicken + sweet potato + Brussels sprouts sheet pan (word-overlap 55, five shared veg items) is the same dinner as live sheet-pan-chicken-sweet-potato-brussels; the bacon and balsamic-glaze finish is a seasoning nuance, not a distinct plate."
+                    }
+                ]
+}

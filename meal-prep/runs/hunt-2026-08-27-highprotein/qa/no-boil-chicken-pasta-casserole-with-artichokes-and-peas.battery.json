@@ -1,0 +1,207 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "no-boil-chicken-pasta-casserole-with-artichokes-and-peas",
+  "generated": "2026-08-28T07:23:56",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\no-boil-chicken-pasta-casserole-with-artichokes-and-peas.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\no-boil-chicken-pasta-casserole-with-artichokes-and-peas.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "pass",
+      "numbers": {
+        "spec_ingredients": 13,
+        "source_ingredients": 13,
+        "matched": 13,
+        "invented": [],
+        "dropped": [],
+        "consolidated": []
+      },
+      "detail": "13 of 13 source ingredients pair with the spec, nothing invented, nothing dropped",
+      "findings": []
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "fail",
+      "numbers": {
+        "rated": 9,
+        "unrated": 4,
+        "exempt": 0,
+        "recipe_ratio": 2.3333,
+        "lines": [
+          {
+            "item": "Penne Pasta",
+            "source": "12 oz",
+            "spec": "1 lb",
+            "ratio": 1.3333,
+            "deviation": 0.4286,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1.5 lb",
+            "spec": "3.5 lb",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chicken Broth",
+            "source": "2.5 cup",
+            "spec": "5.75 cup",
+            "ratio": 2.3,
+            "deviation": 0.0143,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Frozen Green Peas",
+            "source": "1 cup",
+            "spec": "2.33333 cup",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Artichoke Hearts",
+            "source": "14 oz",
+            "spec": "1 lb",
+            "ratio": 1.1429,
+            "deviation": 0.5102,
+            "quantization_explained": false,
+            "severity": "fail"
+          },
+          {
+            "item": "Fresh Lemon Juice",
+            "source": "2 tbsp",
+            "spec": "4.66667 tbsp",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Lemon Zest",
+            "source": "1 tsp",
+            "spec": "2.33333 tsp",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Sea Salt",
+            "source": "1 tsp",
+            "spec": "2.33333 tsp",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "source": "1 cup",
+            "spec": "2.33333 cup",
+            "ratio": 2.3333,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Cottage Cheese",
+            "why": "the two measures are not the same kind (volume vs weight), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Boursin Cheese",
+            "why": "the two measures are not the same kind (weight vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic",
+            "why": "the two measures are not the same kind (count:large vs count:clove), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Fresh Parsley",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Penne Pasta scaled 1.33x while the recipe scaled 2.33x (42.9% off): the source says 12 oz and the spec buys 1 lb, where the exact scale is 1.75 lb. House quarter-quantization does not explain it.; Artichoke Hearts scaled 1.14x while the recipe scaled 2.33x (51.0% off): the source says 14 oz and the spec buys 1 lb, where the exact scale is 2.04 lb. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "Penne Pasta scaled 1.33x while the recipe scaled 2.33x (42.9% off): the source says 12 oz and the spec buys 1 lb, where the exact scale is 1.75 lb. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "fail",
+          "detail": "Artichoke Hearts scaled 1.14x while the recipe scaled 2.33x (51.0% off): the source says 14 oz and the spec buys 1 lb, where the exact scale is 2.04 lb. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 1,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (1 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "No-Boil Chicken Pasta Casserole with Artichokes and Peas",
+        "spec_source_url": "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/",
+        "transcription_source_url": "https://www.wholesomelicious.com/no-boil-chicken-pasta-casserole-with-artichokes-and-peas-dump-and-bake/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 6,
+        "claimed_ratio": 2.3333,
+        "measured_ratio": 2.3333
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 1
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+    "slug":  "roasted-stuffed-pork-loin",
+    "title":  "Roasted Stuffed Pork Loin",
+    "source_url":  "https://keviniscooking.com/roasted-stuffed-pork-loin/",
+    "protein":  "pork",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-28T07:21:33",
+    "updated":  "2026-08-28T07:22:19",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-28T07:21:33",
+                        "by":  "harvest",
+                        "detail":  "https://keviniscooking.com/roasted-stuffed-pork-loin/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-28T07:21:33",
+                        "by":  "decider",
+                        "detail":  "Pork loin rolled and stuffed with prosciutto and broccoli rabe, roasted and served with a cranberry-orange sauce; a distinct Italian stuffed-loin format absent from the catalog (live pork loins are plain dutch-oven/slow-cooker/blackberry roasts; in-flight stuffed items are chops), verified 540cal/47c/43p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-28T07:22:19",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

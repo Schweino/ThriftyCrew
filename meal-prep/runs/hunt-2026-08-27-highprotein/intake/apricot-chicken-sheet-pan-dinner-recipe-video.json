@@ -1,0 +1,139 @@
+{
+ "name": "Apricot Chicken Sheet Pan Dinner Recipe + VIDEO",
+ "slug": "apricot-chicken-sheet-pan-dinner-recipe-video",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Baby Potatoes",
+   "grams": 1588,
+   "buy": "3 1/2 lb small creamer potatoes (about 70-84), halved"
+  },
+  {
+   "item": "Carrots",
+   "grams": 882,
+   "buy": "2 lb (about 12 large carrots), peeled and thinly sliced"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2800,
+   "buy": "6 1/4 lb (about 14 breasts)"
+  },
+  {
+   "item": "Salt",
+   "grams": 21,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 11,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 4,
+   "buy": "1 3/4 teaspoons"
+  },
+  {
+   "item": "Paprika",
+   "grams": 4,
+   "buy": "1 3/4 teaspoons"
+  },
+  {
+   "item": "Onion Powder",
+   "grams": 2,
+   "buy": "3/4 teaspoon"
+  },
+  {
+   "item": "Vegetable Oil",
+   "grams": 98,
+   "buy": "7 tablespoons"
+  },
+  {
+   "item": "Apricot Jam",
+   "grams": 280,
+   "buy": "3/4 cup plus 2 tablespoons"
+  },
+  {
+   "item": "Soy Sauce",
+   "grams": 56,
+   "buy": "3 1/2 tablespoons low sodium"
+  },
+  {
+   "item": "Worcestershire Sauce",
+   "grams": 60,
+   "buy": "3 1/2 tablespoons"
+  },
+  {
+   "item": "Apple Cider Vinegar",
+   "grams": 52,
+   "buy": "3 1/2 tablespoons"
+  },
+  {
+   "item": "Cornstarch",
+   "grams": 9,
+   "buy": "3 1/2 teaspoons"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 470,
+  "protein_g": 48.9,
+  "carbs_g": 41.7,
+  "fat_g": 12.6
+ },
+ "writer_notes": [
+  "Scale verified as a clean 3.5x off the source recipe (4 breasts -> 14 servings). Every locked buy line matches: potatoes 3.5lb, carrots ~12, chicken 6.25lb, oil 7Tbsp, apricot jam 3/4cup+2Tbsp, soy/Worcestershire/vinegar 3.5Tbsp each, cornstarch 3.5tsp, spice blend 3.5x. No quantity smells wrong.",
+  "No orphan ingredients: all 14 locked lines are used by a step. No step uses anything not on the buy list.",
+  "PRACTICAL FLAG (not a data error): 6.25lb chicken + 3.5lb potatoes + 2lb carrots will not fit one rimmed sheet pan. Method and steps instruct spreading across two or three pans so food roasts instead of steams. Flag left for orchestrator awareness; no locked value touched.",
+  "Source transcription step 5 contains a typo ('until potatoes are vegetables are cooked through'). Rendered as intended: 'until vegetables are tender and chicken reaches 165F'.",
+  "No dollar figure other than the ${{cost_ps}} token and the $1/month membership line appears in prose. Macros use {{cal}}/{{protein}} tokens or the locked bound. I had no cost_lines in this dispatch, so shop_smart avoids any per-ounce or per-package arithmetic claim.",
+  "Band confirmed satisfiable by locked view: 470 cal (450-800), 48.9g protein (>=40), chicken breast allowed protein, potatoes are the real carbohydrate source."
+ ],
+ "forbidden_prose_terms": [
+  "fresh apricots",
+  "dried apricots",
+  "chicken thighs",
+  "bone-in chicken",
+  "shrimp",
+  "seafood",
+  "em dash",
+  "one sheet pan",
+  "single pan"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is a dinner that does three jobs on one pan and asks for almost nothing in return. Chicken breast, little potatoes, and carrots go into the oven together, and while they roast you whisk up an apricot glaze that tastes like you fussed over it. You did not. You stirred five things in a bowl and hit the microwave.</p><p>The numbers are the reason this one earns a spot in the rotation. Each container comes in at {{cal}} calories with {{protein}} grams of protein, which is a serious plate of food for the money. Lean chicken carries the protein, the potatoes bring a real carbohydrate so you are not hungry an hour later, and the glaze does the heavy lifting on flavor. This is the kind of meal that keeps you out of the drive-through on a Tuesday, and your wallet notices.</p>",
+  "shop_smart": "<p>The shopping list here is short and honest, which is exactly how I like it. Chicken breast is the anchor, so buy it in the largest pack your store sells rather than the little foam trays up front. You need about 6 1/4 pounds for a full 14-serving batch, so a family pack or two does the job and the per-pound price is friendlier when you buy big.</p><p>Little creamer or baby potatoes come in bags, and one or two bags covers the 3 1/2 pounds this batch calls for. Carrots you buy loose or in a two-pound bag; either way you want about 12 large ones, peeled and sliced thin so they cook in the same window as the potatoes.</p><p>The glaze is where a pantry pays you back. Apricot jam, soy sauce, Worcestershire, cider vinegar, and cornstarch are all shelf-stable, and this recipe uses small amounts of each. One jar of jam and the bottles you already keep on the door will carry you through this batch and plenty more. Same story with the spice-rack players: salt, garlic powder, black pepper, paprika, and onion powder are teaspoons here, not cups, so you are spending pennies out of jars you own.</p>",
+  "make_it": "<p>Heat the oven to 375 degrees F and line your baking sheets with parchment. A quick word of truth: a 14-serving batch of chicken, potatoes, and carrots will not fit on one pan without steaming into a sad puddle, so spread it across two or three rimmed sheets and give everything room to breathe.</p><p>Scatter the halved baby potatoes and the thinly sliced carrots across the pans. In a small bowl, stir together the salt, garlic powder, black pepper, paprika, and onion powder. That is your one seasoning mix, and it works double duty.</p><p>Drizzle the vegetables with about half of the oil and sprinkle with half of the seasoning. Toss until coated, then push the vegetables to the edges to open a lane down the middle. Lay the chicken breasts in that center lane, drizzle with the rest of the oil, and dust with the rest of the seasoning.</p><p>Bake for 25 to 30 minutes, until the vegetables are tender and the chicken reads 165 degrees F on a thermometer at the thickest part. While it bakes, make the glaze: whisk the apricot jam, soy sauce, Worcestershire, cider vinegar, and cornstarch together in a bowl, then microwave on high in 30-second bursts, stirring between each, until it thickens slightly. About a minute total does it.</p><p>When the pans come out, brush that warm glaze over the chicken and you are done.</p>",
+  "portion_html": "<p>This batch is built for 14 containers, and the fair way to split it is to weigh, not eyeball. Put your container on the kitchen scale, zero it out, and here is the simple move: weigh everything you cooked, divide by 14, and portion to that number so every lid closes on the same amount.</p><p>Give each container one chicken breast, then divide the potatoes and carrots evenly across all 14. Spoon or brush a share of the glaze over each piece of chicken so nobody gets a dry one. Done this way, every box lands at the same {{cal}} calories and {{protein}} grams of protein, and nobody is quietly getting shorted on the good stuff.</p>",
+  "cost_closing_html": "<p>When the pan is portioned and the lids are on, this dinner comes out to about ${{cost_ps}} per serving. That is a full plate of lean protein, real potatoes, and a glaze that tastes like takeout, for less than you would tip on takeout.</p><p>Cook once, eat all week, and the math keeps working in your favor. And if you want the full system that turns meals like this into a plan, our membership runs a dollar a month. One dollar. That is the easiest yes in your budget.</p>",
+  "upsell_html": "<p>Sheet pan, one glaze, fourteen dinners handled. That is a good week bought cheap. Batch it on Sunday, stack it in the fridge, and let future-you thank present-you every time lunch and dinner are already waiting.</p>"
+ },
+ "head": {
+  "description": "Apricot chicken sheet pan dinner meal prep for 14: lean chicken breast, baby potatoes, and carrots roasted together under a sweet-tangy apricot glaze, at 470 calories and 48.9g protein per serving.",
+  "keywords": "apricot chicken sheet pan, sheet pan chicken dinner, meal prep chicken breast, high protein meal prep, budget chicken dinner, apricot glaze chicken, baby potatoes and carrots, batch cook dinner",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "PT30M",
+  "totalTime": "PT45M",
+  "steps": [
+   "Heat the oven to 375 degrees F and line two or three large rimmed baking sheets with parchment paper. Spread 3 1/2 pounds of halved baby potatoes and 2 pounds of thinly sliced carrots across the pans.",
+   "In a small bowl, stir together 3 1/2 teaspoons salt, 3 1/2 teaspoons garlic powder, 1 3/4 teaspoons black pepper, 1 3/4 teaspoons paprika, and 3/4 teaspoon onion powder.",
+   "Drizzle the vegetables with about half of the 7 tablespoons oil and sprinkle with half of the seasoning mix. Toss to coat, then push the vegetables to the edges to make room for the chicken.",
+   "Lay the chicken breasts (about 6 1/4 pounds, roughly 14 breasts) in the center of the pans. Drizzle with the remaining oil and sprinkle with the remaining seasoning mix.",
+   "Bake for 25 to 30 minutes, until the vegetables are tender and the chicken reaches 165 degrees F internally.",
+   "Meanwhile, whisk together 3/4 cup plus 2 tablespoons apricot jam, 3 1/2 tablespoons low sodium soy sauce, 3 1/2 tablespoons Worcestershire sauce, 3 1/2 tablespoons cider vinegar, and 3 1/2 teaspoons cornstarch. Microwave on high in 30-second intervals, stirring between each, until slightly thickened (about 1 minute total).",
+   "Brush the warm glaze over the chicken, then portion the chicken, potatoes, and carrots evenly across 14 containers."
+  ],
+  "step_names": [
+   "Heat oven and pans",
+   "Mix the seasoning",
+   "Season the vegetables",
+   "Add and season chicken",
+   "Bake",
+   "Make apricot glaze",
+   "Glaze and portion"
+  ]
+ }
+}

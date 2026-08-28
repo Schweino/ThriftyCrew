@@ -84,12 +84,12 @@
   {
    "item": "Coconut Milk",
    "grams": 1400,
-   "buy": "3 1/2 cups (three and a half 13.5 fl oz cans)"
+   "buy": "5 3/4 cups (three and a half 13.5 fl oz cans, used whole)"
   },
   {
    "item": "Fresh Cilantro",
    "grams": 35,
-   "buy": "1 1/4 cups chopped (35 g)"
+   "buy": "1 1/4 cups chopped"
   }
  ],
  "macros_per_serving": {
@@ -99,52 +99,55 @@
   "fat_g": 25.8
  },
  "writer_notes": [
-  "All 17 locked ingredients are used by a step; no orphans and nothing invented. Reverse-checked too: no step uses anything not on the buy list.",
-  "Macros used in prose (500 cal, 42.4 g protein) are taken verbatim from the locked view; no numbers computed.",
-  "No cost data was supplied in this dispatch, so no dollar figures and no per-package savings claims appear in shop_smart; nothing to trace, so nothing asserted.",
-  "Cuisine set to Indian; spice profile (coriander, cumin, turmeric, cayenne, ginger, chili, coconut) matches a standard Indian-style curry, so no cultural mismatch.",
-  "No em dashes or en dashes used anywhere.",
-  "FLAG for repair pass: source is ~4 servings (1.5 lb chicken, 0.5 lb potatoes); the 14-serving build is a consistent 3.5x across every line, which is faithful. Potato-to-chicken ratio is lean for a dish named on potatoes but traces to the source, so noted not fixed."
+  "Ingredient-to-step audit is clean in both directions: all 17 costed lines are used by a step (oil s1; onion s1; garlic/ginger/chili s2; coriander/cumin/turmeric/cayenne s3; tomato paste + chicken s4; potatoes/diced tomatoes/broth/salt s5; coconut milk + cilantro s6). No orphans, nothing invented, no step uses an unbought item.",
+  "Scale is a consistent 3.5x from a 4-serving source to 14 servings across every line (chicken 1.5->5.25 lb, onion 1->3.5, garlic 4->14, coriander/cumin 2 tsp->7 tsp, potatoes 0.5->1.75 lb, coconut milk/diced tomatoes/broth 1->3.5 units). No scaling anomaly.",
+  "RULED 2026-08-28 (QA repair, mapper): the source line is '1 can (13.5 fl oz / 400 ml) coconut milk, creamy top only'. We use the WHOLE can, 400 g source basis, 1400 g at 14 servings. This is a deliberate declared substitution and it is now stated in make_it prose and in method step 6. Evidence it is the right basis: the source's OWN published nutrition is computed whole-can, not cream-top. Published 505 cal / 42 protein / 21 carbs / 30 fat / 22 sat fat per serving over 4; sat fat alone settles it, since 22 g x 4 = 88 g total and the 1 tbsp coconut oil supplies only about 12 g, leaving about 76 g that needs a full 400 g of full-fat canned coconut milk to produce. Our whole-can build recomputes to 499.7 cal / 42.4 protein, within 1% of the source on both. A cream-top build would recompute to 412 cal / 17.1 g fat per serving, 18% under the source's own calorie figure and below this run's 450 calMin.",
+  "Three further reasons the cream-top basis was refused rather than restored: (1) no label exists for 'the cream layer of a can', so its grams and its fat concentration would both be invented, which the food-DB rule forbids; (2) the estate prices coconut-milk-canned only, and its commodity explicitly excludes cream-of-coconut, so there is no priced coconut cream to book against; (3) we buy 4 cans either way, so booking half their contents would charge the reader for 700 g of product the cost line never counted.",
+  "Display defect fixed in the same pass: the coconut milk buy read '3 1/2 cups (three and a half 13.5 fl oz cans)', which is self-contradictory because 3.5 cans is 5.9 cups. Corrected to '5 3/4 cups (three and a half 13.5 fl oz cans, used whole)', which agrees with the 1400 g at the estate's own density (Coconut Milk cup 240 g, can 400 g). Fresh Cilantro buy carried a hardcoded '(35 g)' that the builder doubled into '(35 g) (35 g)' on the card; the paren was removed from the buy string.",
+  "Macros sit inside the enforced band (cal 500 within 450-800; protein 42.4 >= 40; carbs unrestricted). Protein is boneless skinless chicken breast; real carbohydrate source is potatoes.",
+  "No dollar figures appear in prose except the ${{cost_ps}} token and the $1/month membership line. No per-ounce or leftover-quantity claims were made in shop_smart because no cost_lines were provided in this dispatch."
  ],
  "forbidden_prose_terms": [
-  "em dash",
-  "en dash",
-  "authentic",
-  "restaurant-quality",
-  "cheap",
-  "guilt-free",
-  "superfood"
+  "curry powder",
+  "garam masala",
+  "rice",
+  "naan",
+  "yogurt",
+  "heavy cream",
+  "seafood",
+  "shrimp",
+  "em dash"
  ],
  "prose": {
-  "intro_html": "<p>Here is the honest truth about curry night. Most people think a good one comes from a jar or a takeout window, and both of those quietly empty your wallet while telling you that you could never make it yourself. That is a story, and it is not true. This chicken and potato curry is warm, spiced, and built for a full week of dinners, and it lands at 500 calories a serving with 42.4 grams of protein. That is real food doing real work.</p><p>What I love about this one is that it is patient food. You soften an onion, you wake up the spices in the pan, you let chicken and potatoes get to know each other in tomato and coconut. Nothing fancy, nothing you have to babysit. You do the work once and you eat well for days. That is the whole idea around here.</p>",
-  "shop_smart": "<p>This is a pantry-spice curry, so most of the cost lives in the chicken and the two cans, and the rest is small aromatics you likely already own. A few notes to buy it clean:</p><ul><li>Buy the whole boneless skinless chicken breast and cut the 1-inch pieces yourself. Pre-cut anything always costs more for the convenience, and cubing chicken takes about four minutes.</li><li>Coriander, cumin, turmeric, and cayenne are the backbone here. Ground jars keep for months in a cool cupboard, so this recipe uses down a supply you buy once and lean on for a dozen dinners.</li><li>Fresh ginger and fresh red chili go a long way. You only need a few tablespoons chopped, so grab a small knob of ginger and a couple of chiles rather than a big bag that goes soft in the drawer.</li><li>Coconut milk and diced tomatoes are the sauce. Full-fat coconut milk is what gives you that creamy top, so do not reach for the light can if you want the texture the recipe is built on.</li><li>Cilantro is the finish. A single bunch covers the chopped cup and a quarter you need at the end, with tender stems fine to chop right in.</li></ul>",
-  "make_it": "<p>This cooks in one large pan and it rewards a little patience up front. Do not rush the onion, that is where the sweetness comes from.</p><ol><li>Heat the coconut oil in a large pan over medium heat and cook the onion for 8 to 10 minutes until softened. Slow and low here, you want it soft and sweet, not browned hard.</li><li>Add the garlic, ginger, and fresh red chili and cook another minute until fragrant. Your kitchen will tell you when it is ready.</li><li>Stir in the ground coriander, ground cumin, turmeric, and cayenne and cook one more minute, stirring so nothing scorches. Toasting the spices in the oil is what separates this from a bland pot.</li><li>Add the tomato paste and stir well to combine, then add the chicken. Toss to coat it in the spices and cook 3 to 4 minutes until the chicken is sealed on the outside.</li><li>Add the cubed potatoes, diced tomatoes, chicken broth, and salt. Stir, bring to a simmer, then cover and cook 10 minutes or until the potatoes are fork-tender.</li><li>Stir in the coconut milk and simmer one more minute until heated through. Taste and adjust the seasoning, stir in the fresh cilantro, and it is done.</li></ol>",
-  "portion_html": "<p>This batch fills 14 containers, and the trick to keeping them even is to weigh the pot. Cooking pulls water out of the sauce and adds it from the potatoes, so a scoop-by-eye method always shorts the last few boxes. Put your empty pan on a scale before you dish, then divide the finished weight by 14 and portion to that number. Every container lands the same, which is how each one holds its 500 calories and 42.4 grams of protein.</p><p>Give the sauce a stir between scoops so the coconut and tomato do not settle, and try to land a fair share of chicken and potato in each box. Cools and stacks in the fridge, and it reheats even better the next day once the spices have had a night to settle in.</p>",
-  "cost_closing_html": "<p>Here is where the math earns its keep. Fourteen dinners out of one pan, spices you already stock, and two humble cans doing the heavy lifting on the sauce. This is what eating well on a budget actually looks like, warm curry that costs a fraction of the jar-and-takeout version and feeds you for most of a week.</p>",
-  "upsell_html": "<p>If a week of real dinners like this for the price of a couple of takeout orders sounds like your kind of math, that is the whole point of Thrifty Crew. For a dollar a month you get every recipe, every cost breakdown, and a plan that treats your grocery budget with respect. Come cook with us.</p>"
+  "intro_html": "<p>Chicken and potato curry is what I make when I want the house to smell like a restaurant and my wallet to feel like nothing happened. Chicken breast, potato chunks, and a coconut milk gravy built on real spices you toast right in the pan. That is the whole trick, and it is not a hard one.</p><p>Here is the math that matters. Each of these 14 containers lands at 500 calories with 42.4 grams of protein, 22.9 grams of carbs, and 25.8 grams of fat. That is a full dinner that hits your protein number without you doing arithmetic at the counter. Forty minutes of work, ten of it prep, and you have fed yourself for two weeks.</p>",
+  "shop_smart": "<p>Chicken breast is the big line here at 5 1/4 pounds, so buy the largest family pack your store carries instead of a stack of small trays. Cut it into 1-inch pieces at home and you are set.</p><p>This curry is built on individual toasted spices, so pick up ground coriander, cumin, turmeric, and cayenne in the standard spice jars. Spice is the cheapest flavor in the store, and a well-stocked rack is what makes cooking like this pay off.</p><p>The recipe calls for three and a half cans of coconut milk and roughly three and a half cans of diced tomatoes, so grab four cans of each and let the pantry hold the rest. Fresh ginger and fresh red chili live in the produce section and keep for weeks in the fridge. Potatoes and onions are cheapest bought loose by the pound.</p>",
+  "make_it": "<p>This is a build-the-flavor-in-layers curry, and the order matters. Heat the coconut oil in your biggest pot over medium heat and cook the diced onion for 8 to 10 minutes until it goes soft and sweet. Do not rush this part, it is the foundation.</p><p>Add the garlic, ginger, and fresh red chili and stir for about a minute until the whole kitchen smells like it. Then stir in the coriander, cumin, turmeric, and cayenne and cook one more minute so the spices bloom in the oil instead of tasting raw later.</p><p>Stir in the tomato paste, then add the chicken pieces and toss them until they are coated. Cook 3 to 4 minutes just to seal the outside. Now add the potatoes, diced tomatoes, chicken broth, and salt. Bring it to a simmer, cover the pot, and let it go 10 minutes until the potatoes give to a fork.</p><p>Finish with the coconut milk. Shake each can before you open it and pour in the whole thing, thin liquid and all. One note on that: the original recipe skims off only the thick cream at the top of the can, but we use the full can on purpose. Nothing gets thrown away, the gravy stays loose enough to portion evenly across 14 containers, and the macros on this page are figured on the whole can. Simmer one more minute until everything is hot, taste it, adjust the salt, stir in the fresh cilantro, and it is done.</p>",
+  "portion_html": "<p>Do not eyeball this. Once the curry is done, weigh the whole pot, subtract the weight of the empty pot, and divide what is left by 14. That number is your target weight for each container. A kitchen scale turns 14 guesses into 14 identical dinners, and it is the difference between hitting 500 calories and just hoping you did.</p><p>Spoon it out by weight and make sure every container gets its fair share of chicken and potato chunks, not just gravy off the top. Top each one with the fresh cilantro right before the lids go on.</p>",
+  "cost_closing_html": "<p>Here is where it earns its place. This whole curry comes out to ${{cost_ps}} per serving, and that buys a real dinner with 42.4 grams of protein, not a sad little side. Takeout curry costs many times that before you even leave a tip. You are eating better for pocket change.</p><p>Fourteen containers is two weeks of dinners already handled. That is the kind of quiet win that adds up faster than most people think.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, that is exactly what we do here. Every recipe on Thrifty Crew is built the same way, with real macros, real board prices, and a plan you can actually shop. Membership runs a dollar a month, which is less than the cilantro you just chopped. Come cook with us.</p>"
  },
  "head": {
-  "description": "A budget meal-prep chicken and potato curry that makes 14 servings at 500 calories and 42.4 grams of protein each. Warm spices, coconut, and one pan.",
-  "keywords": "chicken and potato curry, meal prep curry, high protein curry, budget chicken curry, coconut chicken curry, chicken breast meal prep, batch curry recipe",
+  "description": "A budget high-protein chicken and potato curry meal prep that makes 14 dinners at 500 calories and 42.4 grams of protein each. Chicken breast simmered in coconut milk and tomatoes with real toasted spices.",
+  "keywords": "chicken and potato curry, chicken curry meal prep, high protein curry, budget meal prep dinner, coconut chicken curry, 14 serving curry, healthy chicken curry",
   "image": "",
   "prepTime": "PT10M",
   "cookTime": "PT30M",
   "totalTime": "PT40M",
   "steps": [
-   "Heat the coconut oil in a large pan over medium heat and cook the onion for 8 to 10 minutes until softened.",
-   "Add the garlic, ginger, and fresh red chili and cook another minute until fragrant.",
-   "Stir in the ground coriander, ground cumin, turmeric, and cayenne pepper and cook a further minute, stirring occasionally.",
-   "Add the tomato paste and stir to combine, then add the chicken cubes and toss to coat in the spices, cooking 3 to 4 minutes until the chicken is sealed.",
-   "Add the cubed potatoes, diced tomatoes, chicken broth, and salt. Stir, bring to a simmer, cover, and cook 10 minutes until the potatoes are fork-tender.",
-   "Stir in the coconut milk and simmer another minute until heated through. Adjust the seasoning, stir in the fresh cilantro, and serve."
+   "Heat the coconut oil in a large pot over medium heat and cook the diced onion for 8 to 10 minutes until softened.",
+   "Add the garlic, ginger, and fresh red chili and cook for another minute until fragrant.",
+   "Stir in the ground coriander, cumin, turmeric, and cayenne and cook one more minute, stirring often.",
+   "Stir in the tomato paste, then add the chicken pieces and toss to coat. Cook 3 to 4 minutes until the chicken is sealed on the outside.",
+   "Add the potato chunks, diced tomatoes, chicken broth, and salt. Bring to a simmer, cover, and cook 10 minutes until the potatoes are fork-tender.",
+   "Stir in the coconut milk, the whole cans including the thin liquid under the cream, and simmer another minute until heated through. Adjust the seasoning, stir in the fresh cilantro, and serve."
   ],
   "step_names": [
    "Soften the onion",
-   "Add the aromatics",
+   "Bloom the aromatics",
    "Toast the spices",
-   "Seal the chicken",
+   "Sear the chicken",
    "Simmer with potatoes",
-   "Finish with coconut and cilantro"
+   "Finish with coconut milk"
   ]
  }
 }

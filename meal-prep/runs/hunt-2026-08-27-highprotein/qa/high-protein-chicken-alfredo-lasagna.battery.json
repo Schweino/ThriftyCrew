@@ -1,0 +1,208 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "high-protein-chicken-alfredo-lasagna",
+  "generated": "2026-08-28T07:19:07",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\high-protein-chicken-alfredo-lasagna.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\high-protein-chicken-alfredo-lasagna.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 8,
+        "source_ingredients": 9,
+        "matched": 6,
+        "invented": [
+          "Parmesan Cheese",
+          "No-Boil Lasagna Noodles"
+        ],
+        "dropped": [
+          "Pepper (from 'Salt and Pepper')",
+          "Freshly Grated Parmesan",
+          "No Boil Lasagna"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Parmesan Cheese' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'No-Boil Lasagna Noodles' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists \"Pepper (from 'Salt and Pepper')\" and the built recipe has nothing that denotes it; DROPPED: the source lists 'Freshly Grated Parmesan' and the built recipe has nothing that denotes it; DROPPED: the source lists 'No Boil Lasagna' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Parmesan Cheese' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'No-Boil Lasagna Noodles' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists \"Pepper (from 'Salt and Pepper')\" and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Freshly Grated Parmesan' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'No Boil Lasagna' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 4,
+        "unrated": 4,
+        "exempt": 0,
+        "recipe_ratio": 2.1666,
+        "lines": [
+          {
+            "item": "Frozen Lightly Breaded Chicken Breast Bites",
+            "source": "1 pound",
+            "spec": "2 lb",
+            "ratio": 2.0,
+            "deviation": 0.0769,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Cottage Cheese",
+            "source": "2 cup",
+            "spec": "4.66667 cup",
+            "ratio": 2.3333,
+            "deviation": 0.0769,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Alfredo Sauce",
+            "source": "0.75 cup",
+            "spec": "1.75 cup",
+            "ratio": 2.3333,
+            "deviation": 0.0769,
+            "quantization_explained": false,
+            "severity": "note"
+          },
+          {
+            "item": "Fresh Mozzarella",
+            "source": "8 oz",
+            "spec": "1 lb",
+            "ratio": 2.0,
+            "deviation": 0.0769,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Salt",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Parmesan Cheese",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "No-Boil Lasagna Noodles",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Fresh Parsley",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": []
+      },
+      "detail": "Frozen Lightly Breaded Chicken Breast Bites scaled 2x while the recipe scaled 2.17x (7.7% off): the source says 1 pound and the spec buys 2 lb, where the exact scale is 2.17 lb. House quarter-quantization does not explain it.; Cottage Cheese scaled 2.33x while the recipe scaled 2.17x (7.7% off): the source says 2 cup and the spec buys 4.66667 cup, where the exact scale is 4.33 cup. House quarter-quantization does not explain it.; Alfredo Sauce scaled 2.33x while the recipe scaled 2.17x (7.7% off): the source says 0.75 cup and the spec buys 1.75 cup, where the exact scale is 1.62 cup. House quarter-quantization does not explain it.",
+      "findings": [
+        {
+          "severity": "note",
+          "detail": "Frozen Lightly Breaded Chicken Breast Bites scaled 2x while the recipe scaled 2.17x (7.7% off): the source says 1 pound and the spec buys 2 lb, where the exact scale is 2.17 lb. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "note",
+          "detail": "Cottage Cheese scaled 2.33x while the recipe scaled 2.17x (7.7% off): the source says 2 cup and the spec buys 4.66667 cup, where the exact scale is 4.33 cup. House quarter-quantization does not explain it."
+        },
+        {
+          "severity": "note",
+          "detail": "Alfredo Sauce scaled 2.33x while the recipe scaled 2.17x (7.7% off): the source says 0.75 cup and the spec buys 1.75 cup, where the exact scale is 1.62 cup. House quarter-quantization does not explain it."
+        }
+      ]
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 1,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "head.description says 40g protein, the stat says 41",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "head.description says 40g protein, the stat says 41"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Chicken Alfredo Lasagna",
+        "spec_source_url": "https://masonfit.com/chicken-alfredo-lasagna/",
+        "transcription_source_url": "https://masonfit.com/chicken-alfredo-lasagna/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "fail",
+      "numbers": {
+        "hits": 2
+      },
+      "detail": "EN DASH: –; EM DASH: —",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "EN DASH: –"
+        },
+        {
+          "severity": "fail",
+          "detail": "EM DASH: —"
+        }
+      ]
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 6,
+        "claimed_ratio": 2.3333,
+        "measured_ratio": 2.1666
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 3
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

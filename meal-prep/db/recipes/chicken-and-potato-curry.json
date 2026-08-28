@@ -1,0 +1,350 @@
+{
+    "name":  "Chicken and Potato Curry",
+    "slug":  "chicken-and-potato-curry",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
+    "source_site":  "skinnyspatula.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Ingredient-to-step audit is clean in both directions: all 17 costed lines are used by a step (oil s1; onion s1; garlic/ginger/chili s2; coriander/cumin/turmeric/cayenne s3; tomato paste + chicken s4; potatoes/diced tomatoes/broth/salt s5; coconut milk + cilantro s6). No orphans, nothing invented, no step uses an unbought item.",
+                         "Scale is a consistent 3.5x from a 4-serving source to 14 servings across every line (chicken 1.5-\u003e5.25 lb, onion 1-\u003e3.5, garlic 4-\u003e14, coriander/cumin 2 tsp-\u003e7 tsp, potatoes 0.5-\u003e1.75 lb, coconut milk/diced tomatoes/broth 1-\u003e3.5 units). No scaling anomaly.",
+                         "RULED 2026-08-28 (QA repair, mapper): the source line is \u00271 can (13.5 fl oz / 400 ml) coconut milk, creamy top only\u0027. We use the WHOLE can, 400 g source basis, 1400 g at 14 servings. This is a deliberate declared substitution and it is now stated in make_it prose and in method step 6. Evidence it is the right basis: the source\u0027s OWN published nutrition is computed whole-can, not cream-top. Published 505 cal / 42 protein / 21 carbs / 30 fat / 22 sat fat per serving over 4; sat fat alone settles it, since 22 g x 4 = 88 g total and the 1 tbsp coconut oil supplies only about 12 g, leaving about 76 g that needs a full 400 g of full-fat canned coconut milk to produce. Our whole-can build recomputes to 499.7 cal / 42.4 protein, within 1% of the source on both. A cream-top build would recompute to 412 cal / 17.1 g fat per serving, 18% under the source\u0027s own calorie figure and below this run\u0027s 450 calMin.",
+                         "Three further reasons the cream-top basis was refused rather than restored: (1) no label exists for \u0027the cream layer of a can\u0027, so its grams and its fat concentration would both be invented, which the food-DB rule forbids; (2) the estate prices coconut-milk-canned only, and its commodity explicitly excludes cream-of-coconut, so there is no priced coconut cream to book against; (3) we buy 4 cans either way, so booking half their contents would charge the reader for 700 g of product the cost line never counted.",
+                         "Display defect fixed in the same pass: the coconut milk buy read \u00273 1/2 cups (three and a half 13.5 fl oz cans)\u0027, which is self-contradictory because 3.5 cans is 5.9 cups. Corrected to \u00275 3/4 cups (three and a half 13.5 fl oz cans, used whole)\u0027, which agrees with the 1400 g at the estate\u0027s own density (Coconut Milk cup 240 g, can 400 g). Fresh Cilantro buy carried a hardcoded \u0027(35 g)\u0027 that the builder doubled into \u0027(35 g) (35 g)\u0027 on the card; the paren was removed from the buy string.",
+                         "Macros sit inside the enforced band (cal 500 within 450-800; protein 42.4 \u003e= 40; carbs unrestricted). Protein is boneless skinless chicken breast; real carbohydrate source is potatoes.",
+                         "No dollar figures appear in prose except the ${{cost_ps}} token and the $1/month membership line. No per-ounce or leftover-quantity claims were made in shop_smart because no cost_lines were provided in this dispatch."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "curry powder",
+                                  "garam masala",
+                                  "rice",
+                                  "naan",
+                                  "yogurt",
+                                  "heavy cream",
+                                  "seafood",
+                                  "shrimp",
+                                  "em dash"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  500,
+                 "protein":  42,
+                 "carbs":  23,
+                 "fat":  26,
+                 "cost_ps":  "3.37"
+             },
+    "intro_html":  "\u003cp\u003eChicken and potato curry is what I make when I want the house to smell like a restaurant and my wallet to feel like nothing happened. Chicken breast, potato chunks, and a coconut milk gravy built on real spices you toast right in the pan. That is the whole trick, and it is not a hard one.\u003c/p\u003e\u003cp\u003eHere is the math that matters. Each of these 14 containers lands at 500 calories with 42.4 grams of protein, 22.9 grams of carbs, and 25.8 grams of fat. That is a full dinner that hits your protein number without you doing arithmetic at the counter. Forty minutes of work, ten of it prep, and you have fed yourself for two weeks.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eCoconut Oil (generic (USDA)):\u003c/strong\u003e 3 1/2 tbsp (48 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 1/2 medium onions, finely diced (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 14 cloves, finely chopped (42 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 1/2 tbsp, finely chopped (21 g)",
+                                "\u003cstrong\u003eFresh Red Chili:\u003c/strong\u003e 3 1/2 tbsp, deseeded and finely chopped (about 3 chiles) (32 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 2 tbsp plus 1 tsp (13 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tbsp plus 1 tsp (15 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 3/4 tsp (5 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e scant 1 tsp (1 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 1/2 tbsp (56 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5 1/4 lb, cut into 1-inch pieces (2381 g)",
+                                "\u003cstrong\u003ePotatoes:\u003c/strong\u003e 1 3/4 lb, cut into chunks (794 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 6 cups, undrained (three and a half 14 oz cans) (1438 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3 1/2 cups (840 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 3/4 tsp (10 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 5 3/4 cups (three and a half 13.5 fl oz cans, used whole) (1400 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/4 cups chopped (35 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Coconut Oil, 3 1/2 tbsp: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3 1/2 medium onions, finely diced: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 14 cloves, finely chopped: ~$0.57. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Ginger, 3 1/2 tbsp, finely chopped: ~$0.17. \u003cstrong\u003eBuy 1 piece: $0.80.\u003c/strong\u003e",
+                       "Fresh Red Chili, 3 1/2 tbsp, deseeded and finely chopped (about 3 chiles): ~$0.45. \u003cstrong\u003eBuy 1 lb: $6.40.\u003c/strong\u003e",
+                       "Tomato Paste, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 5 1/4 lb, cut into 1-inch pieces: ~$11.71. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
+                       "Potatoes, 1 3/4 lb, cut into chunks: ~$0.99. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Diced Tomatoes, 6 cups, undrained (three and a half 14 oz cans): ~$2.68. \u003cstrong\u003eBuy 4 cans: $3.07.\u003c/strong\u003e",
+                       "Chicken Broth, 3 1/2 cups: ~$1.28. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Coconut Milk, 5 3/4 cups (three and a half 13.5 fl oz cans, used whole): ~$6.43. \u003cstrong\u003eBuy 4 13.5oz cans: $7.35.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 1/4 cups chopped: ~$1.09. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (ground coriander, ground cumin, ground turmeric, cayenne pepper, salt): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.68 across 14 servings, so roughly $1.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.67 across 14 servings, roughly $2.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.21. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eHere is where it earns its place. This whole curry comes out to ${{cost_ps}} per serving, and that buys a real dinner with 42.4 grams of protein, not a sad little side. Takeout curry costs many times that before you even leave a tip. You are eating better for pocket change.\u003c/p\u003e\u003cp\u003eFourteen containers is two weeks of dinners already handled. That is the kind of quiet win that adds up faster than most people think.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003eChicken breast is the big line here at 5 1/4 pounds, so buy the largest family pack your store carries instead of a stack of small trays. Cut it into 1-inch pieces at home and you are set.\u003c/p\u003e\u003cp\u003eThis curry is built on individual toasted spices, so pick up ground coriander, cumin, turmeric, and cayenne in the standard spice jars. Spice is the cheapest flavor in the store, and a well-stocked rack is what makes cooking like this pay off.\u003c/p\u003e\u003cp\u003eThe recipe calls for three and a half cans of coconut milk and roughly three and a half cans of diced tomatoes, so grab four cans of each and let the pantry hold the rest. Fresh ginger and fresh red chili live in the produce section and keep for weeks in the fridge. Potatoes and onions are cheapest bought loose by the pound.\u003c/p\u003e",
+    "make_it":  [
+                    "\u003cp\u003eThis is a build-the-flavor-in-layers curry, and the order matters. Heat the coconut oil in your biggest pot over medium heat and cook the diced onion for 8 to 10 minutes until it goes soft and sweet. Do not rush this part, it is the foundation.\u003c/p\u003e\u003cp\u003eAdd the garlic, ginger, and fresh red chili and stir for about a minute until the whole kitchen smells like it. Then stir in the coriander, cumin, turmeric, and cayenne and cook one more minute so the spices bloom in the oil instead of tasting raw later.\u003c/p\u003e\u003cp\u003eStir in the tomato paste, then add the chicken pieces and toss them until they are coated. Cook 3 to 4 minutes just to seal the outside. Now add the potatoes, diced tomatoes, chicken broth, and salt. Bring it to a simmer, cover the pot, and let it go 10 minutes until the potatoes give to a fork.\u003c/p\u003e\u003cp\u003eFinish with the coconut milk. Shake each can before you open it and pour in the whole thing, thin liquid and all. One note on that: the original recipe skims off only the thick cream at the top of the can, but we use the full can on purpose. Nothing gets thrown away, the gravy stays loose enough to portion evenly across 14 containers, and the macros on this page are figured on the whole can. Simmer one more minute until everything is hot, taste it, adjust the salt, stir in the fresh cilantro, and it is done.\u003c/p\u003e"
+                ],
+    "portion_html":  "\u003cp\u003eDo not eyeball this. Once the curry is done, weigh the whole pot, subtract the weight of the empty pot, and divide what is left by 14. That number is your target weight for each container. A kitchen scale turns 14 guesses into 14 identical dinners, and it is the difference between hitting 500 calories and just hoping you did.\u003c/p\u003e\u003cp\u003eSpoon it out by weight and make sure every container gets its fair share of chicken and potato chunks, not just gravy off the top. Top each one with the fresh cilantro right before the lids go on.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyspatula.com/chicken-potato-curry/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eIf this is the kind of cooking you want more of, that is exactly what we do here. Every recipe on Thrifty Crew is built the same way, with real macros, real board prices, and a plan you can actually shop. Membership runs a dollar a month, which is less than the cilantro you just chopped. Come cook with us.\u003c/p\u003e",
+    "cost_batch":  27.68,
+    "cost_batch_true":  38.67,
+    "cost_per_serving":  1.98,
+    "cost_per_serving_true":  2.76,
+    "cost_pantry_add":  8.54,
+    "cost_first_run":  47.21,
+    "scaler":  {
+                   "cost":  "38.67",
+                   "ing":  [
+                               {
+                                   "item":  "Coconut Oil",
+                                   "canon":  "Coconut Oil",
+                                   "grams":  48,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "coconut-oil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3 1/2 medium onions, finely diced",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "14 cloves, finely chopped",
+                                   "bid":  "garlic",
+                                   "gpu":  "42.600"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  21,
+                                   "buy":  "3 1/2 tbsp, finely chopped",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Red Chili",
+                                   "canon":  "Fresh Red Chili",
+                                   "grams":  32,
+                                   "buy":  "3 1/2 tbsp, deseeded and finely chopped (about 3 chiles)",
+                                   "bid":  "serrano-peppers",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  13,
+                                   "buy":  "2 tbsp plus 1 tsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  15,
+                                   "buy":  "2 tbsp plus 1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  5,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "scant 1 tsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3 1/2 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2381,
+                                   "buy":  "5 1/4 lb, cut into 1-inch pieces",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potatoes",
+                                   "canon":  "Potatoes",
+                                   "grams":  794,
+                                   "buy":  "1 3/4 lb, cut into chunks",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  1438,
+                                   "buy":  "6 cups, undrained (three and a half 14 oz cans)",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  840,
+                                   "buy":  "3 1/2 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 3/4 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "canon":  "Coconut Milk",
+                                   "grams":  1400,
+                                   "buy":  "5 3/4 cups (three and a half 13.5 fl oz cans, used whole)",
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  35,
+                                   "buy":  "1 1/4 cups chopped",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A budget high-protein chicken and potato curry meal prep that makes 14 dinners at 500 calories and 42.4 grams of protein each. Chicken breast simmered in coconut milk and tomatoes with real toasted spices.",
+                 "keywords":  "chicken and potato curry, chicken curry meal prep, high protein curry, budget meal prep dinner, coconut chicken curry, 14 serving curry, healthy chicken curry",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.37,
+                 "recipeIngredient":  [
+                                          "Coconut Oil, 3 1/2 tbsp (48 g)",
+                                          "Yellow Onion, 3 1/2 medium onions, finely diced (385 g)",
+                                          "Garlic, 14 cloves, finely chopped (42 g)",
+                                          "Ginger, 3 1/2 tbsp, finely chopped (21 g)",
+                                          "Fresh Red Chili, 3 1/2 tbsp, deseeded and finely chopped (about 3 chiles) (32 g)",
+                                          "Ground Coriander, 2 tbsp plus 1 tsp (13 g)",
+                                          "Ground Cumin, 2 tbsp plus 1 tsp (15 g)",
+                                          "Ground Turmeric, 1 3/4 tsp (5 g)",
+                                          "Cayenne Pepper, scant 1 tsp (1 g)",
+                                          "Tomato Paste, 3 1/2 tbsp (56 g)",
+                                          "Boneless Skinless Chicken Breast, 5 1/4 lb, cut into 1-inch pieces (2381 g)",
+                                          "Potatoes, 1 3/4 lb, cut into chunks (794 g)",
+                                          "Diced Tomatoes, 6 cups, undrained (three and a half 14 oz cans) (1438 g)",
+                                          "Chicken Broth, 3 1/2 cups (840 g)",
+                                          "Salt, 1 3/4 tsp (10 g)",
+                                          "Coconut Milk, 5 3/4 cups (three and a half 13.5 fl oz cans, used whole) (1400 g)",
+                                          "Fresh Cilantro, 1 1/4 cups chopped (35 g)"
+                                      ],
+                 "steps":  [
+                               "Heat the coconut oil in a large pot over medium heat and cook the diced onion for 8 to 10 minutes until softened.",
+                               "Add the garlic, ginger, and fresh red chili and cook for another minute until fragrant.",
+                               "Stir in the ground coriander, cumin, turmeric, and cayenne and cook one more minute, stirring often.",
+                               "Stir in the tomato paste, then add the chicken pieces and toss to coat. Cook 3 to 4 minutes until the chicken is sealed on the outside.",
+                               "Add the potato chunks, diced tomatoes, chicken broth, and salt. Bring to a simmer, cover, and cook 10 minutes until the potatoes are fork-tender.",
+                               "Stir in the coconut milk, the whole cans including the thin liquid under the cream, and simmer another minute until heated through. Adjust the seasoning, stir in the fresh cilantro, and serve."
+                           ],
+                 "step_names":  [
+                                    "Soften the onion",
+                                    "Bloom the aromatics",
+                                    "Toast the spices",
+                                    "Sear the chicken",
+                                    "Simmer with potatoes",
+                                    "Finish with coconut milk"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Coconut Oil",
+                                  "grams":  48
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Fresh Red Chili",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  13
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  2381
+                              },
+                              {
+                                  "item":  "Potatoes",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  1438
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Coconut Milk",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  35
+                              }
+                          ]
+}

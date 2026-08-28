@@ -1,0 +1,179 @@
+﻿{
+    "slug":  "baked-cubano-chicken",
+    "title":  "Baked Cubano Chicken",
+    "source_url":  "https://keviniscooking.com/baked-chicken-cubano/",
+    "servings":  4,
+    "built_at":  "2026-08-28T07:21:05",
+    "line_count":  8,
+    "resolved_count":  3,
+    "residual_count":  5,
+    "hold_count":  0,
+    "residual_terms":  [
+                           "Adobo Seasoning",
+                           "ham slices",
+                           "carnitas meat",
+                           "long dill pickle slices",
+                           "Swiss cheese slices"
+                       ],
+    "holds":  [
+
+              ],
+    "rows":  [
+                 {
+                     "raw":  "2-15 oz cans black beans",
+                     "term":  "black beans",
+                     "canon_item":  "Canned Black Beans",
+                     "bid":  "canned-black-beans",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027black beans\u0027 -\u003e canned-black-beans (by mapper on 2026-08-26T04:21:59); nearest vocabulary rows: Seasoned Black Beans [seasoned-black-beans] same form | Canned Black Beans [canned-black-beans] DIFFERENT FORM: canned | Kidney Beans [kidney-beans] same form",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  850.5
+                 },
+                 {
+                     "raw":  "1 tsp Adobo Seasoning",
+                     "term":  "Adobo Seasoning",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Chipotle in Adobo [chipotle-adobo] DIFFERENT FORM: seasoning/in; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:172752 Croutons, seasoned [SR Legacy] per 100 g: 465.0 cal, 10.8 P, 63.5 C, 18.3 F, 5.0 fiber | fdc:171331 Spices, poultry seasoning [SR Legacy] per 100 g: 307.0 cal, 9.59 P, 65.6 C, 7.53 F, 11.3 fiber | fdc:172745 Crackers, rye, wafers, seasoned [SR Legacy] per 100 g: 381.0 cal, 9.0 P, 73.8 C, 9.2 F, 20.9 fiber | fdc:172806 Bread, crumbs, dry, grated, seasoned [SR Legacy] per 100 g: 383.0 cal, 14.1 P, 68.5 C, 5.48 F, 4.9 fiber; board MAPPED: adobo-seasoning, 4 of 7 stores, cheapest 0.1332 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "4 chicken breasts (2 lbs boneless and skinless)",
+                     "term":  "chicken breasts",
+                     "canon_item":  "Boneless Skinless Chicken Breast",
+                     "bid":  "chicken-breast",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  true,
+                     "fooddb_known":  true,
+                     "evidence":  "prior ruling: \u0027chicken breasts\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T04:52:01); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breasts | Whole Chicken [whole-chicken] DIFFERENT FORM: breasts/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: breasts/boneless/skinless; board MAPPED: chicken-breast, 7 of 7 stores, cheapest 1.99 at Hy-Vee",
+                     "source":  "cache",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  800
+                 },
+                 {
+                     "raw":  "1/4 cup yellow mustard",
+                     "term":  "yellow mustard",
+                     "canon_item":  "Yellow Mustard",
+                     "bid":  "mustard",
+                     "board":  "weekly",
+                     "resolution":  "resolved",
+                     "gpu_known":  true,
+                     "density_known":  false,
+                     "fooddb_known":  true,
+                     "evidence":  "exact vocabulary row; no densities.json row and no each-noun; board MAPPED: mustard, 7 of 7 stores, cheapest 0.0495 at Aldi",
+                     "source":  "vocab",
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "8 ham slices",
+                     "term":  "ham slices",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Diced Ham [diced-ham] DIFFERENT FORM: slices; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:173864 Ham, sliced, regular (approximately 11% fat) [SR Legacy] per 100 g: 164.0 cal, 16.6 P, 3.63 C, 8.8 F, 1.3 fiber | fdc:168092 Ham, turkey, sliced, extra lean, prepackaged or deli [SR Legacy] per 100 g: 134.0 cal, 19.6 P, 0.93 C, 5.8 F, 0.0 fiber | fdc:746952 Ham, sliced, restaurant [Foundation] per 100 g: 121.0 cal, 19.6 P, 2.36 C, 3.68 F, ? fiber; board MAPPED: deli-ham, 7 of 7 stores, cheapest 0.1238 at Walmart",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "2 cups carnitas meat",
+                     "term":  "carnitas meat",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:173486 Babyfood, meat, meat sticks, junior [SR Legacy] per 100 g: 184.0 cal, 13.4 P, 1.1 C, 14.6 F, 0.2 fiber | fdc:172968 Frankfurter, meat [SR Legacy] per 100 g: 290.0 cal, 10.3 P, 4.17 C, 25.8 F, 0.0 fiber | fdc:174268 Meat extender [SR Legacy] per 100 g: 311.0 cal, 41.7 P, 34.7 C, 2.97 F, 17.5 fiber | fdc:171488 Turkey, dark meat, meat and skin, raw [SR Legacy] per 100 g: 166.0 cal, 19.8 P, 0.15 C, 8.97 F, 0.0 fiber; board ABSENT: no commodity and no capture match",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "8 long dill pickle slices",
+                     "term":  "long dill pickle slices",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "new-food-suspect",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "no vocabulary row shares a core word with this name; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:168558 Pickles, cucumber, dill or kosher dill [SR Legacy] per 100 g: 12.0 cal, 0.5 P, 2.41 C, 0.3 F, 1.0 fiber | fdc:168563 Pickles, cucumber, dill, reduced sodium [SR Legacy] per 100 g: 12.0 cal, 0.5 P, 2.41 C, 0.3 F, 1.0 fiber | fdc:169892 Eggplant, pickled [SR Legacy] per 100 g: 49.0 cal, 0.9 P, 9.77 C, 0.7 F, 2.5 fiber | fdc:324653 Pickles, cucumber, dill or kosher dill [Foundation] per 100 g: 12.0 cal, 0.48 P, 1.99 C, 0.43 F, 1.0 fiber; board MAPPED: pickles, 7 of 7 stores, cheapest 0.05 at Sam\u0027s Club",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 },
+                 {
+                     "raw":  "12 Swiss cheese slices",
+                     "term":  "Swiss cheese slices",
+                     "canon_item":  null,
+                     "bid":  null,
+                     "board":  null,
+                     "resolution":  "different-form",
+                     "gpu_known":  false,
+                     "density_known":  false,
+                     "fooddb_known":  false,
+                     "evidence":  "nearest vocabulary rows: Swiss Cheese [swiss-cheese] DIFFERENT FORM: slices | Pepper Jack Cheese [pepper-jack-cheese] DIFFERENT FORM: slices | Monterey Jack Cheese [monterey-jack-cheese] DIFFERENT FORM: slices; no densities.json row and no each-noun; no food-macros-db row - a label needs transcribing; USDA FDC rows that MENTION this term, per 100 g - a shelf, not an answer. FDC matches on keywords, so all of these can be the wrong food: pick the one that IS this ingredient, or none of them and transcribe a label instead. fdc:171251 Cheese, swiss [SR Legacy] per 100 g: 393.0 cal, 27.0 P, 1.44 C, 31.0 F, 0.0 fiber | fdc:170855 Cheese, pasteurized process, swiss [SR Legacy] per 100 g: 334.0 cal, 24.7 P, 2.1 C, 25.0 F, 0.0 fiber | fdc:168141 Cheese, swiss, low fat [SR Legacy] per 100 g: 179.0 cal, 28.4 P, 3.4 C, 5.1 F, 0.0 fiber | fdc:746767 Cheese, swiss [Foundation] per 100 g: 393.0 cal, 27.0 P, 1.44 C, 31.0 F, ? fiber; board MAPPED: sliced-cheese, 7 of 7 stores, cheapest 0.145 at Walmart",
+                     "source":  null,
+                     "optional":  false,
+                     "item_split_from":  null,
+                     "grams_source_basis":  null
+                 }
+             ],
+    "macro_precheck":  {
+                           "state":  "partial",
+                           "reason":  "the arithmetic reached 3 of 8 lines; the rest are residual and have no canon name yet",
+                           "source":  {
+                                          "from":  "candidate-pool.band",
+                                          "cal":  714.0,
+                                          "carbs":  22.0,
+                                          "protein_g":  100.0,
+                                          "fat_g":  null
+                                      },
+                           "lines_covered":  3,
+                           "lines_total":  8,
+                           "uncovered_lines":  [
+                                                   "Adobo Seasoning",
+                                                   "ham slices",
+                                                   "carnitas meat",
+                                                   "long dill pickle slices",
+                                                   "Swiss cheese slices"
+                                               ],
+                           "computed_per_serving":  null,
+                           "portion_factor":  null,
+                           "tuning":  [
+
+                                      ],
+                           "missing_db_items":  [
+
+                                                ]
+                       }
+}

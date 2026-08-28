@@ -1,134 +1,191 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-28T06:58:56",
+ "generated": "2026-08-28T07:36:05",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "romaine lettuce",
+   "term": "little potatoes",
    "state": "MATCHES",
-   "term_used": "romaine lettuce",
+   "term_used": "little potatoes",
    "attempts": [
     {
-     "term": "romaine lettuce",
+     "term": "little potatoes",
      "state": "OK",
      "hits": 6
     }
    ],
    "hits": [
     {
-     "item": "Dole Fresh Romaine Hearts - 3 CT",
-     "price": 3.88,
-     "size": "3 ct",
+     "item": "The Little Potato Co. Little Duos",
+     "price": 5.99,
+     "size": "3 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/145651-dole-fresh-romaine-hearts-3-ct-3-0-ct"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
     },
     {
-     "item": "Dole Hearts of Romaine",
-     "price": 3.99,
-     "size": "9 oz",
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 4.99,
+     "size": "1.5 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41760-dole-hearts-of-romaine-9-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
     },
     {
-     "item": "Revol Greens Romaine Crunch",
-     "price": 3.99,
-     "size": "4 oz",
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 5.99,
+     "size": "3 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22328673-revol-greens-romaine-crunch-4-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
     },
     {
-     "item": "Dole Classic Romaine",
-     "price": 3.49,
-     "size": "9 oz",
+     "item": "The Little Potato Co. Little Duos",
+     "price": 4.99,
+     "size": "1.5 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41740-dole-classic-romaine-9-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152458-the-little-potato-company-potatoes-fresh-creamer-dynamic-duo-1-5-lb"
     },
     {
-     "item": "Dole Premium Romaine",
-     "price": 3.99,
-     "size": "9.5 oz",
+     "item": "The Little Potato Co. A Little Savory Herb",
+     "price": 4.99,
+     "size": "1 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16325212-dole-romaine-premium-9-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152485-the-little-potato-company-potatoes-fresh-creamer-savory-herb-1-lb"
     },
     {
-     "item": "Iceberg Lettuce",
-     "price": 1.77,
-     "size": "1 each",
+     "item": "The Little Potato Company A Little Roasted Garlic, Rosemary & Thyme",
+     "price": 4.99,
+     "size": "1 lb",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17680402-dole-iceberg-lettuce-1-ea"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25913798-roasted-garlic-tray-1-lb"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
   },
   {
-   "term": "sriracha",
+   "term": "cider vinegar",
    "state": "MATCHES",
-   "term_used": "sriracha",
+   "term_used": "cider vinegar",
    "attempts": [
     {
-     "term": "sriracha",
+     "term": "cider vinegar",
      "state": "OK",
-     "hits": 53
+     "hits": 6
     }
    ],
    "hits": [
     {
-     "item": "Huy Fong Foods Hot Sriracha Chili Sauce",
-     "price": 6.98,
-     "size": "28 oz",
+     "item": "Fareway Apple Cider Vinegar",
+     "price": 1.99,
+     "size": "16 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410469-huy-fong-hot-sriracha-chili-sauce-28-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/53429820-fareway-apple-cider-vinegar-16-fl-oz"
     },
     {
-     "item": "Tabasco Sriracha Sauce",
-     "price": 4.99,
-     "size": "20 oz",
+     "item": "Fareway Apple Cider Vinegar",
+     "price": 2.79,
+     "size": "32 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676652-tabasco-sriracha-sauce-566-0-g"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/52552430-fareway-apple-cider-vinegar-32-fl-oz"
     },
     {
-     "item": "Yellowbird Classic Blue Agave Sriracha",
-     "price": 5.99,
-     "size": "9.8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17445098-yellowbird-sauce-blue-agave-sriracha-condiment-9-8-oz"
-    },
-    {
-     "item": "Lee Kum Kee Sriracha Mayo",
-     "price": 5.99,
-     "size": "15 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/254906-lee-kum-kee-spread-and-dressing-sriracha-mayo-15-oz"
-    },
-    {
-     "item": "Huy Fong Foods Hot Chili Sauce",
-     "price": 5.49,
-     "size": "17 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35512-huy-fong-chili-sauce-hot-sriracha-17-oz"
-    },
-    {
-     "item": "CHOLULA Original Hot Sauce",
+     "item": "Heinz All Natural Apple Cider Vinegar",
      "price": 3.99,
-     "size": "5 fl oz",
+     "size": "32 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25334-cholula-original-hot-sauce-5-fl-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/71065-heinz-all-natural-apple-cider-vinegar-32-oz"
     },
     {
-     "item": "Kewpie Mayonnaise",
-     "price": 5.79,
-     "size": "12 fl oz",
+     "item": "Bragg Organic Raw Unfiltered Apple Cider Vinegar",
+     "price": 4.69,
+     "size": "16 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16474600-kewpie-mayonnaise-12-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/218717-bragg-organic-raw-unfiltered-apple-cider-vinegar-16-oz"
     },
     {
-     "item": "Heinz Tomato Ketchup",
-     "price": 2.5,
-     "size": "20 oz",
+     "item": "Heinz Apple Cider Vinegar with 5% Acidity",
+     "price": 2.69,
+     "size": "16 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/103084-heinz-tomato-ketchup-20-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676633-heinz-all-natural-apple-cider-vinegar-16-oz"
+    },
+    {
+     "item": "Heinz Apple Cider Naturally Flavored Distilled Vinegar with 5% Acidity",
+     "price": 4.68,
+     "size": "64 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/265976-heinz-apple-cider-naturally-flavored-distilled-vinegar-with-5-acidity-64-fl-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "Baby Potatoes",
+   "state": "MATCHES",
+   "term_used": "Baby Potatoes",
+   "attempts": [
+    {
+     "term": "Baby Potatoes",
+     "state": "OK",
+     "hits": 48
+    }
+   ],
+   "hits": [
+    {
+     "item": "Summertime Farms Baby Gold Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+    },
+    {
+     "item": "The Little Potato Co. Little Duos",
+     "price": 5.99,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152456-the-little-potato-company-potatoes-dynamic-duo-variety-pack-3-lb"
+    },
+    {
+     "item": "Summertime Farms Baby Red Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+    },
+    {
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 4.99,
+     "size": "1.5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17603689-the-little-potato-company-potatoes-fresh-creamer-boomer-gold-1-5-lb"
+    },
+    {
+     "item": "The Little Potato Co. Little Yellows",
+     "price": 5.99,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20629256-the-little-potato-company-potatoes-yellow-creamer-little-charmers-3-lb"
+    },
+    {
+     "item": "The Little Potato Co. Little Duos",
+     "price": 4.99,
+     "size": "1.5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/152458-the-little-potato-company-potatoes-fresh-creamer-dynamic-duo-1-5-lb"
+    },
+    {
+     "item": "Fareway Sliced Potatoes",
+     "price": 1.44,
+     "size": "15 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24218202-fareway-potatoes-sliced-15-oz"
+    },
+    {
+     "item": "Fareway Barbecue Classics Loaded Baked Potato",
+     "price": 8.88,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50521881-fareway-barbecue-classics-loaded-baked-potato-32-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

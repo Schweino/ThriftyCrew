@@ -1,0 +1,279 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "street-corn-chicken-rice-bowls",
+  "generated": "2026-08-28T07:28:49",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\street-corn-chicken-rice-bowls.json",
+    "source": "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-highprotein\\extracted\\street-corn-chicken-rice-bowls.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 20,
+        "source_ingredients": 26,
+        "matched": 20,
+        "invented": [],
+        "dropped": [
+          "Juice + zest of 1 lime",
+          "water"
+        ],
+        "consolidated": [
+          "sea salt",
+          "fresh cilantro",
+          "Cilantro",
+          "Cotija cheese"
+        ]
+      },
+      "detail": "DROPPED: the source lists 'Juice + zest of 1 lime' and the built recipe has nothing that denotes it; DROPPED: the source lists 'water' and the built recipe has nothing that denotes it; CONSOLIDATED: the source states 'sea salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'fresh cilantro' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'Cilantro' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM; CONSOLIDATED: the source states 'Cotija cheese' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'Juice + zest of 1 lime' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'water' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'sea salt' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'fresh cilantro' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Cilantro' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        },
+        {
+          "severity": "note",
+          "detail": "CONSOLIDATED: the source states 'Cotija cheese' in more than one place and the spec carries a single line for it - the food is present, so the open question is whether that line's amount is the SUM"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 11,
+        "unrated": 8,
+        "exempt": 1,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Olive Oil",
+            "source": "1 tablespoon",
+            "spec": "3.5 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Chili Powder",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Sea Salt",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Ground Cumin",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Smoked Paprika",
+            "source": "0.5 teaspoon",
+            "spec": "1.75 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Sweet Whole Kernel Corn",
+            "source": "2 cup",
+            "spec": "7 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Greek Yogurt",
+            "source": "0.5 cup",
+            "spec": "1.75 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Cotija Cheese",
+            "source": "3 tablespoon",
+            "spec": "0.666667 cup",
+            "ratio": 3.5556,
+            "deviation": 0.0159,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Mayonnaise",
+            "source": "2 tablespoon",
+            "spec": "7 tablespoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Rice",
+            "source": "1 cup",
+            "spec": "3.5 cup",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          },
+          {
+            "item": "Lime Zest",
+            "source": "1 teaspoon",
+            "spec": "3.5 teaspoon",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "why": "the two measures are not the same kind (weight vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Garlic Powder",
+            "why": "the two measures are not the same kind (count:scant vs volume), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Onion Powder",
+            "why": "the two measures are not the same kind (count:scant vs volume), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Lime Juice",
+            "why": "could not read a leading amount from 'juice and zest of 3 1/2 limes; 7 tablespoons' / '2 Tablespoons'"
+          },
+          {
+            "item": "Jalapeno",
+            "why": "the two measures are not the same kind (count:jalapeno vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Fresh Cilantro",
+            "why": "the two measures are not the same kind (volume vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Salt",
+            "why": "the two measures are not the same kind (count:scant vs volume), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Avocado",
+            "why": "the two measures are not the same kind (count:avocado vs count:), so a ratio needs a density this check deliberately does not carry"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Red Onion",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 11 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "pass",
+      "numbers": {
+        "stat_claims_read": 5,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "every stat claim in the prose equals the stat it claims (5 read)",
+      "findings": []
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Street Corn Chicken Rice Bowl",
+        "spec_source_url": "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/",
+        "transcription_source_url": "https://www.eatingbirdfood.com/street-corn-chicken-rice-bowls/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "fail",
+      "numbers": {
+        "hits": 2
+      },
+      "detail": "EN DASH: –; EM DASH: —",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "EN DASH: –"
+        },
+        {
+          "severity": "fail",
+          "detail": "EM DASH: —"
+        }
+      ]
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

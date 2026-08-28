@@ -2309,6 +2309,68 @@ class Daemon(object):
         return True, "%s reproduces the DB's own numbers within %g kcal and %g g" % (
             onto, self.FOOD_DB_CAL_TOLERANCE, self.FOOD_DB_MACRO_TOLERANCE)
 
+    @staticmethod
+    def apply_food_renames(res, renames):
+        """Point every food NAME in the mapper's result at the row that will actually exist.
+
+        Only the two keys that name a food - `canon_item` on a ruling and `item` on an assembled
+        ingredient - and only for names write_food_db_rows declined to mint. `raw` and `term` are the
+        SOURCE PAGE'S own words and are never rewritten: they are the evidence that the line said
+        what it said, and an artifact that quietly restates the source is worse than one that
+        disagrees with it visibly.
+        """
+        if not renames:
+            return res
+
+        def walk(node):
+            if isinstance(node, dict):
+                out = {}
+                for k, v in node.items():
+                    if k in ("canon_item", "item") and isinstance(v, str) and v in renames:
+                        out[k] = renames[v]
+                    else:
+                        out[k] = walk(v)
+                return out
+            if isinstance(node, list):
+                return [walk(v) for v in node]
+            return node
+
+        return walk(res)
+
+    @staticmethod
+    def _food_rows_agree(new_row, existing):
+        """Do a landing row and the row it collides with state the SAME food? Macros only.
+
+        Serving basis is normalised first: two rows can be the same food on 100 g and on a 28 g
+        household serving, and calling those different would defeat the whole check. Provenance is
+        deliberately NOT consulted - Brad ruled on 2026-08-26 that provenance is never a merge
+        tiebreak - and neither is the name, which is the thing already known to differ.
+
+        Conservative by construction: anything unreadable, zero-serving or missing returns False, so
+        the row gets written and the finding fires. The cost of a wrong False is a duplicate somebody
+        merges; the cost of a wrong True is a silently dropped row.
+        """
+        if not isinstance(new_row, dict) or not isinstance(existing, dict):
+            return False
+        try:
+            ga = float(new_row.get("serving_grams") or 0)
+            gb = float(existing.get("serving_grams") or 0)
+        except (TypeError, ValueError):
+            return False
+        if ga <= 0 or gb <= 0:
+            return False
+        for field in ("calories", "protein_g", "carbs_g", "fat_g"):
+            try:
+                a = float(new_row.get(field) or 0) / ga
+                b = float(existing.get(field) or 0) / gb
+            except (TypeError, ValueError):
+                return False
+            # 2% of the larger per-gram figure, with an absolute floor so a 0.2 g fat row is not
+            # judged on a hair. Same shape as the estate's other macro tolerances.
+            if abs(a - b) > max(0.02 * max(abs(a), abs(b)), 0.0005):
+                return False
+        return True
+
     async def write_food_db_rows(self, slug, rows):
         r"""Returns (written_names, findings, notes). Never raises on a bad row - a bad row is a FINDING.
 
@@ -2321,9 +2383,10 @@ class Daemon(object):
         agree" and "nobody looked".
         """
         written, findings, notes = [], [], []
+        renames = {}          # new-name -> the existing row it should use instead
         rows = [r for r in (rows or []) if isinstance(r, dict)]
         if not rows:
-            return written, findings, notes
+            return written, findings, notes, renames
         # THE WHOLE READ-MODIFY-WRITE IS INSIDE THE LOCK, not just the write. Two map workers can
         # carry rows for this one file at the same time (the MAP cap is 2), and a read outside the
         # lock is exactly the last-writer-wins shape that cost ingredient-resolutions 97% of its
@@ -2501,12 +2564,42 @@ class Daemon(object):
                 # says nothing, and it should not.
                 twin = by_loose.get(self._loose_name_key(name))
                 if twin and twin.strip().lower() != name.lower():
+                    # AN AGREEING TWIN IS THE SAME FOOD, SO REUSE IT RATHER THAN MINT A SECOND ROW
+                    # (2026-08-28). The finding below was written on 2026-08-27 and its own words
+                    # said the row was written anyway because "a naming question must not park a
+                    # recipe". That is right, and it is not the only way to keep the recipe moving:
+                    # if the two rows agree on the numbers, the naming question has an answer and
+                    # the recipe can simply use the row that already exists.
+                    #
+                    # MEASURED, TWICE, ON THE SAME PAIR. `Limes` landed beside `Lime` on
+                    # hunt-2026-08-27-highprotein - same FDC record 168155, same 30 cal / 0.7 P /
+                    # 10.5 C / 0.2 F per 100 g. It was merged by hand on 08-27, and the very next
+                    # day's mapping re-created it, because the loose key fed the FINDING and never
+                    # the LOOKUP. A duplicate a human must merge after every run is not a naming
+                    # question, it is a treadmill.
+                    #
+                    # DISAGREEING TWINS STILL GET THEIR ROW AND STILL GET THE FINDING. Two rows that
+                    # differ on the numbers are a real question about which is right, and answering
+                    # it by silently dropping one is exactly the shadowing this guard exists to
+                    # report. Agreement is the whole licence here - and only on the macros, never on
+                    # provenance, per Brad's 2026-08-26 ruling that provenance is not a tiebreak.
+                    if self._food_rows_agree(row, by_name.get(twin.lower())):
+                        renames[name] = twin
+                        notes.append(
+                            "%s: %r was not written - the food DB already carries %r and the two "
+                            "agree on every macro, so the line now uses the existing row. Merged at "
+                            "the point it would have been created, rather than by hand after the "
+                            "run (this exact pair recurred the day after it was merged by hand)."
+                            % (slug, name, twin))
+                        continue
                     findings.append(
                         "%s: the food DB already carries %r and this row is landing as %r - the same "
                         "name modulo punctuation and plural, so these are almost certainly ONE food "
-                        "with two rows. The row was WRITTEN (a naming question must not park a "
-                        "recipe) and the lookup is name-keyed, so until they are merged one of them "
-                        "silently shadows the other." % (slug, twin, name))
+                        "with two rows, AND THEY DISAGREE ON THE NUMBERS, so this is a real question "
+                        "about which is right rather than a spelling. The row was WRITTEN (a naming "
+                        "question must not park a recipe) and the lookup is name-keyed, so until "
+                        "they are merged one of them silently shadows the other."
+                        % (slug, twin, name))
                 clean = dict((k, v) for k, v in row.items() if v not in (None, ""))
                 clean["item"] = name
                 clean["added_by"] = "recipe-hunter map lane (%s)" % self.run_id
@@ -2517,7 +2610,7 @@ class Daemon(object):
             if conflicts:
                 await loop.run_in_executor(None, self._append_food_db_conflicts, conflicts)
             if not added:
-                return written, findings, notes
+                return written, findings, notes, renames
             try:
                 items.extend(added)
                 await loop.run_in_executor(None, _write, doc)
@@ -2527,7 +2620,7 @@ class Daemon(object):
                 return [], findings + out, notes
             # the daemon's own cached index is now stale, and unverified_foods reads it
             self._food_db = None
-        return written, findings, notes
+        return written, findings, notes, renames
 
     def food_db_debt(self, slug, res, tables):
         r"""The NAMES this recipe still owes a food-macros-db row, from the table plus the mapper's
@@ -2777,7 +2870,7 @@ class Daemon(object):
         """
         proposals = await self.new_bid_proposals(slug, res)
         rulings = await self.registrar_rulings(slug, proposals, tables)
-        db_written, db_findings, db_notes = await self.write_food_db_rows(
+        db_written, db_findings, db_notes, db_renames = await self.write_food_db_rows(
             slug, res.get("food_db_rows"))
         shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
         if shortfall:
@@ -2785,6 +2878,13 @@ class Daemon(object):
         outstanding = self.food_db_outstanding(slug, res, tables, db_written)
         for f in db_findings:
             self.findings.append(f)
+        # A REUSED ROW IS ONLY REUSED IF THE LINE SAYS SO. write_food_db_rows declines to mint a
+        # duplicate when the colliding rows agree on every macro, and the food-DB lookup is
+        # NAME-KEYED - so a line still saying "Limes" against a DB that only carries "Lime" would
+        # find nothing and the recipe would die at the skeleton instead of at the duplicate. The
+        # rename is the other half of that decision, not a tidy-up.
+        if db_renames:
+            res = self.apply_food_renames(res, db_renames)
         payload = {
             "slug": slug,
             "lines": res.get("lines") or [],
@@ -5425,6 +5525,15 @@ class Daemon(object):
             else:
                 await self.dispatch(owner, self.repair_prompt(wk, blockers, audit), "audit",
                                     "wave-%d:repair" % wk, blockers or slugs, stage=owner)
+                # AND REBUILD WHAT IT TOUCHED, which the patch road has always done and this one
+                # never did (2026-08-28). An agent repair edits a spec directly; nothing downstream
+                # re-runs the cost engine over it, so db\costed.json keeps the row it had before.
+                # Wave 9 of hunt-2026-08-27-highprotein is the case: the writer recut
+                # high-protein-chicken-alfredo-lasagna's Salt and Black Pepper into separate lines at
+                # 07:45:32 while costed.json still read 07:20:33, and build-card2 then could not
+                # render the card at all - "no costed line for scaler item 'Black Pepper'". The
+                # re-audit was bought anyway and spent its verdict on a card that could not exist.
+                await self.rebuild_repaired_specs(wk, blockers or slugs, before)
             repair_spent = True
 
             # THE B11 POSTCONDITION, and the daemon computes it itself. On 2026-08-16 a repair agent
@@ -5433,6 +5542,28 @@ class Daemon(object):
             # In the workflow this cost an agent call to read mtimes; here it is a stat().
             after = self.mtimes(slugs, audit_path)
             changed = [f for f in after if after[f] > before.get(f, 0)]
+            # PER BLOCKED SLUG, NOT "did any file move" (2026-08-28). The any-file reading let ONE
+            # repaired spec buy a re-audit for FOUR blocked slugs. Wave 9 of
+            # hunt-2026-08-27-highprotein: only high-protein-chicken-alfredo-lasagna was edited, and
+            # the casserole, street-corn and curry specs still carried their ORIGINAL build stamps -
+            # all three older than the battery that was about to certify them. The re-audit found
+            # exactly that and said so: "the repairs themselves mostly did not happen", four of five
+            # blockers standing verbatim. An adversarial audit is the most expensive agent in the
+            # flow and it was spent proving work had not been done, which the daemon can see in a
+            # stat() call.
+            untouched = [s for s in blockers
+                         if not any(f == s or str(f).endswith(("\\%s.json" % s, "/%s.json" % s))
+                                    for f in changed)]
+            if blockers and untouched:
+                self.log("WAVE %d: the repair did not touch %d of %d blocked slug(s) (%s) - not "
+                         "paying for a re-audit that would re-find them"
+                         % (wk, len(untouched), len(blockers), ", ".join(untouched)))
+                self.wave_results.append({"wave": wk, "slugs": slugs, "published": [], "held": [],
+                                          "verdict": "NO-GO",
+                                          "note": ("repair claim did not hold for: %s"
+                                                   % ", ".join(untouched))})
+                await self.trim_wave(wk, slugs, audit, True)
+                return
             if not changed:
                 self.log("WAVE %d: the repair changed NOTHING - not paying for a re-audit" % wk)
                 self.wave_results.append({"wave": wk, "slugs": slugs, "published": [], "held": [],
@@ -5538,6 +5669,48 @@ class Daemon(object):
         await self.ledger(["-Close", "-Batch", batch])
         self.wave_results.append({"wave": wk, "slugs": slugs, "published": published, "held": held,
                                   "verdict": "GO", "collateral": collateral})
+
+    async def rebuild_repaired_specs(self, wk, slugs, before):
+        """Rebuild (and therefore RECOST) the specs an agent repair actually edited. Returns them.
+
+        The patch road rebuilds per slug because it knows which slugs it patched. The agent road
+        knows nothing - the agent edits files directly - so this asks the disk instead: whichever of
+        these specs is newer than the mtimes taken before the repair got edited, and every one of
+        those needs build-v2-spec -RunCost over it or db\\costed.json still describes the spec that
+        USED to be there.
+
+        Rebuilding a spec nobody touched would be waste and would churn its mtime for no reason, so
+        this is scoped by evidence rather than run over the wave.
+        """
+        # KEYED ON THE PATH, because that is what mtimes() returns - a first cut keyed on the slug
+        # and compared 0 to 0 for every recipe, so it rebuilt nothing and reported success.
+        def spec_path(s):
+            return os.path.join(self.specs_dir or SPECS_DIR, "%s.json" % s)
+
+        touched = []
+        for s in slugs:
+            p = spec_path(s)
+            try:
+                now = os.path.getmtime(p)
+            except OSError:
+                continue
+            if now > before.get(p, 0):
+                touched.append(s)
+        done = []
+        for slug in touched:
+            rc, out, err = await self.cost_engine(BUILD_V2_SPEC_PS, self.spec_args(slug),
+                                                  lane="audit", stage="repair-spec-build",
+                                                  items=[slug])
+            if rc != 0:
+                self.findings.append("wave %d: %s was repaired but its spec build REFUSED (rc %d), "
+                                     "so the cost row still describes the old spec: %s"
+                                     % (wk, slug, rc, hunt_lib.first_guard_line(out, err)))
+                continue
+            done.append(slug)
+        if touched:
+            self.log("WAVE %d: the repair edited %d spec(s); rebuilt and recosted %d"
+                     % (wk, len(touched), len(done)))
+        return done
 
     async def repair_by_patch(self, wk, blockers, audit):
         """One patch dispatch per blocked slug, then a spec rebuild for the slugs that changed.

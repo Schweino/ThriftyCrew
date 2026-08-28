@@ -1,0 +1,192 @@
+{
+  "battery": "qa-battery",
+  "version": 1,
+  "slug": "blackened-chicken-with-mango-salsa",
+  "generated": "2026-08-28T07:19:49",
+  "inputs": {
+    "spec": "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\recipes\\blackened-chicken-with-mango-salsa.json",
+    "source": "meal-prep/runs/hunt-2026-08-27-highprotein\\extracted\\blackened-chicken-with-mango-salsa.json"
+  },
+  "checks": [
+    {
+      "check": "ingredient-coverage",
+      "verdict": "fail",
+      "numbers": {
+        "spec_ingredients": 11,
+        "source_ingredients": 12,
+        "matched": 9,
+        "invented": [
+          "Lime Juice",
+          "Blackened Seasoning"
+        ],
+        "dropped": [
+          "fresh lime or orange",
+          "blackened seasoning mix",
+          "avocado lime dipping sauce"
+        ],
+        "consolidated": []
+      },
+      "detail": "INVENTED: 'Lime Juice' is in the built recipe but nothing in the source transcription denotes it; INVENTED: 'Blackened Seasoning' is in the built recipe but nothing in the source transcription denotes it; DROPPED: the source lists 'fresh lime or orange' and the built recipe has nothing that denotes it; DROPPED: the source lists 'blackened seasoning mix' and the built recipe has nothing that denotes it; DROPPED: the source lists 'avocado lime dipping sauce' and the built recipe has nothing that denotes it",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Lime Juice' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "INVENTED: 'Blackened Seasoning' is in the built recipe but nothing in the source transcription denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'fresh lime or orange' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'blackened seasoning mix' and the built recipe has nothing that denotes it"
+        },
+        {
+          "severity": "fail",
+          "detail": "DROPPED: the source lists 'avocado lime dipping sauce' and the built recipe has nothing that denotes it"
+        }
+      ]
+    },
+    {
+      "check": "scale-ratio",
+      "verdict": "pass",
+      "numbers": {
+        "rated": 1,
+        "unrated": 8,
+        "exempt": 2,
+        "recipe_ratio": 3.5,
+        "lines": [
+          {
+            "item": "Boneless Skinless Chicken Breast",
+            "source": "1.5 pound",
+            "spec": "5.25 lb",
+            "ratio": 3.5,
+            "deviation": 0.0,
+            "quantization_explained": true,
+            "severity": "pass"
+          }
+        ],
+        "unrated_lines": [
+          {
+            "item": "Mango",
+            "why": "the two measures are not the same kind (count:large vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Fresh Cilantro",
+            "why": "the two measures are not the same kind (count:bunche vs count:bunch), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Avocado",
+            "why": "the two measures are not the same kind (count:large vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Red Onion",
+            "why": "the two measures are not the same kind (count:medium vs count:), so a ratio needs a density this check deliberately does not carry"
+          },
+          {
+            "item": "Olive Oil",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Lime Juice",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Blackened Seasoning",
+            "why": "no source line pairs with it (coverage owns that finding)"
+          },
+          {
+            "item": "Frozen Cilantro Lime Rice",
+            "why": "could not read a leading amount from 'about 14 cups prepared (seven 10 oz bags)' / '2 package'"
+          }
+        ],
+        "exempt_lines": [
+          {
+            "item": "Salt",
+            "why": "the source states no quantity for it"
+          },
+          {
+            "item": "Black Pepper",
+            "why": "the source states no quantity for it"
+          }
+        ]
+      },
+      "detail": "every rated line scaled at the recipes own 3.5x (median of 1 lines)",
+      "findings": []
+    },
+    {
+      "check": "prose-numbers",
+      "verdict": "fail",
+      "numbers": {
+        "stat_claims_read": 9,
+        "fields": [
+          "intro_html",
+          "portion_html",
+          "cost_closing_html",
+          "upsell_html",
+          "head.description"
+        ]
+      },
+      "detail": "intro_html says 6g protein, the stat says 44; portion_html says 6g protein, the stat says 44; head.description says 6g protein, the stat says 44",
+      "findings": [
+        {
+          "severity": "fail",
+          "detail": "intro_html says 6g protein, the stat says 44"
+        },
+        {
+          "severity": "fail",
+          "detail": "portion_html says 6g protein, the stat says 44"
+        },
+        {
+          "severity": "fail",
+          "detail": "head.description says 6g protein, the stat says 44"
+        }
+      ]
+    },
+    {
+      "check": "title-credit-url",
+      "verdict": "pass",
+      "numbers": {
+        "name": "Blackened Chicken with Mango Salsa",
+        "spec_source_url": "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
+        "transcription_source_url": "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/"
+      },
+      "detail": "title present, source_url matches the transcription, and credit_html links it",
+      "findings": []
+    },
+    {
+      "check": "dash-sweep",
+      "verdict": "pass",
+      "numbers": {
+        "hits": 0
+      },
+      "detail": "no em or en dash anywhere in the spec",
+      "findings": []
+    },
+    {
+      "check": "servings-claim",
+      "verdict": "pass",
+      "numbers": {
+        "spec_servings": 14,
+        "source_servings": 4,
+        "claimed_ratio": 3.5,
+        "measured_ratio": 3.5
+      },
+      "detail": "the spec makes 14 servings and the ingredient lines scaled to match",
+      "findings": []
+    }
+  ],
+  "summary": {
+    "checks": 6,
+    "failed": 2
+  },
+  "not_checked": [
+    "whether a substitution was deliberate and defensible",
+    "whether the METHOD still cooks the source dish",
+    "dish identity - is this the recipe we said we found",
+    "anything the live source page says that the transcription did not capture"
+  ]
+}

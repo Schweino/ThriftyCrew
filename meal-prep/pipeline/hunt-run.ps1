@@ -155,7 +155,17 @@ $script:NEXT = @{
   # the QA repair routes. A source-QA failure is owner-routed, so a genuine transcription defect really
   # does send the recipe back to extraction; what stays refused is skipping FORWARD past qa-passed.
   'written'    = @('qa-passed', 'rejected-qa', 'written', 'spec-built', 'mapped', 'extracted')
-  'qa-passed'  = @('waved')
+  # `qa-passed` -> `rejected-qa` added 2026-08-28, and it is the THIRD time this same gap has been
+  # closed - `priced` got it on 2026-08-24 and `written` has carried it longer still. The exits from
+  # qa-passed were `waved` and nothing else, so a recipe that PASSED qa and was then found defective
+  # had nowhere to go: the daemon's qa lane tried the honest advance, hunt-run refused it, and
+  # blackened-chicken-with-mango-salsa sat at qa-passed with its own run record saying
+  #   "the state machine refused qa-passed -> rejected-qa, so this rejected is NOT on disk"
+  # A recipe stuck in a state it cannot leave is the failure mode; the alternative on offer was to
+  # walk it forward to `waved` just to reach a rejection, which claims a wave nobody formed. Same
+  # reasoning as the two additions above, in this file's own words: a verdict a state machine cannot
+  # express is a verdict that gets faked or lost.
+  'qa-passed'  = @('waved', 'rejected-qa')
   # an audit NO-GO trims a recipe back out of the wave, to repair or to rejection. It never publishes.
   'waved'      = @('published', 'rejected-audit', 'qa-passed', 'written')
   # `held` is a LIVE page deliberately taken down: a serveability rollback (wave-publish E7), or any manual
@@ -637,6 +647,17 @@ if ($runSelfTest) {
   T 'MUST FIRE  a written recipe cannot skip QA straight into a wave'  (-not (Test-LegalTransition 'written' 'waved')) 'allowed'
   T 'MUST FIRE  a rejected recipe is terminal'                         (-not (Test-LegalTransition 'rejected-not-carried' 'priced')) 'allowed'
   T 'CLEAN TWIN the normal path is legal'                              (Test-LegalTransition 'qa-passed' 'waved') 'refused'
+  # THE THIRD TIME THIS GAP HAS BEEN CLOSED (2026-08-28). qa-passed's only exit was `waved`, so a
+  # recipe that PASSED qa and was then found defective could not be rejected: the daemon's qa lane
+  # made the honest advance, this file refused it, and blackened-chicken-with-mango-salsa sat at
+  # qa-passed while its run record said "the state machine refused qa-passed -> rejected-qa, so this
+  # rejected is NOT on disk". `priced` got this exit on 2026-08-24 and `written` earlier still.
+  T 'MUST FIRE  a recipe that passed QA and then failed it can be REJECTED, not stranded' `
+    (Test-LegalTransition 'qa-passed' 'rejected-qa') 'refused'
+  T '   ...and the walk-forward it replaces stays refused: a rejection must not claim a wave' `
+    (-not (Test-LegalTransition 'qa-passed' 'published')) 'allowed'
+  T '   ...and rejected-qa is terminal from there, like every other rejection' `
+    (-not (Test-LegalTransition 'rejected-qa' 'qa-passed')) 'allowed'
   T 'CLEAN TWIN an audit NO-GO may trim a recipe back out of its wave' (Test-LegalTransition 'waved' 'qa-passed') 'refused'
   T 'CLEAN TWIN a QA failure may route back to extraction for repair'  (Test-LegalTransition 'written' 'extracted') 'refused'
 

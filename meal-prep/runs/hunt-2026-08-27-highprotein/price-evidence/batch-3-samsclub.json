@@ -1,116 +1,108 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T18:36:44",
+ "generated": "2026-08-28T07:51:53",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "blackened seasoning mix",
+   "term": "powdered peanut butter",
    "state": "MATCHES",
-   "term_used": "blackened seasoning mix",
+   "term_used": "powdered peanut butter",
    "attempts": [
     {
-     "term": "blackened seasoning mix",
+     "term": "powdered peanut butter",
      "state": "MATCHES",
-     "hits": 17
+     "hits": 22
     }
    ],
    "hits": [
     {
-     "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
-     "price": 7.78,
+     "item": "KOS Organic Superfood Plant Chocolate Peanut Butter Protein Powder 2.4lbs.",
+     "price": 32.48,
      "size": "",
-     "unit_price": "$0.65/ea",
+     "unit_price": "$0.85/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
+     "url": "https://www.samsclub.com/p/-/45YJC7EES3MZ"
     },
     {
-     "item": "Weber Kick'N Chicken Seasoning, 22 oz.",
-     "price": 9.98,
+     "item": "Orgain® Organic SIMPLE Plant Protein Powder Chocolate Peanut Butter Cup, 2.12 lbs.",
+     "price": 33.98,
      "size": "",
-     "unit_price": "$0.45/oz",
+     "unit_price": "$1.00/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1WRBVATZED29"
+     "url": "https://www.samsclub.com/p/-/4J4G89H0E239"
     },
     {
-     "item": "Member’s Mark Cajun Seasoning, 22 oz.",
-     "price": 9.98,
+     "item": "PBfit Classic Peanut Butter 8g Powdered Peanut Butter Spread, 1.87 lbs.",
+     "price": null,
      "size": "",
-     "unit_price": "$0.45/oz",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4YA42F1XS2EF"
+     "url": "https://www.samsclub.com/p/-/5XMHM4F2Q7GH"
     },
     {
-     "item": "Badia Complete Seasoning, 28 oz.",
-     "price": 6.38,
+     "item": "Skippy Creamy Peanut Butter Spread, 48 oz., 2 pk.",
+     "price": 10.98,
      "size": "",
-     "unit_price": "$0.23/oz",
+     "unit_price": "$5.49/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
+     "url": "https://www.samsclub.com/p/-/4ZALPVYGC8M0"
     },
     {
-     "item": "Kinder's Chicken Salt Seasoning, 8.5 oz.",
-     "price": 6.48,
+     "item": "Welch's Concord Grape Jelly, 30 oz., 2 pk.",
+     "price": 4.98,
      "size": "",
-     "unit_price": "$0.76/oz",
+     "unit_price": "$0.08/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6REQ194JYRNT"
+     "url": "https://www.samsclub.com/p/-/4LPJ2SH96WW3"
     },
     {
-     "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
-     "price": 6.98,
+     "item": "Jif Creamy Peanut Butter, 48 oz., 2 pk.",
+     "price": 10.98,
      "size": "",
-     "unit_price": "$0.69/oz",
+     "unit_price": "$0.11/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+     "url": "https://www.samsclub.com/p/-/2CINV0O6GTII"
     },
     {
-     "item": "McCormick Basil Balsamic Seasoning, 11.37 oz.",
-     "price": 2.91,
+     "item": "Orgain® Organic SIMPLE Plant Protein Powder Creamy Vanilla, 2.20 lbs.",
+     "price": 33.98,
      "size": "",
-     "unit_price": "$0.26/oz",
+     "unit_price": "$0.97/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2UXTA5JDE6CY"
+     "url": "https://www.samsclub.com/p/-/79HWHSYRYV8M"
     },
     {
-     "item": "McCormick Grill Mates Montreal Chicken Seasoning, 10.87 oz.",
-     "price": 7.42,
+     "item": "Orgain Organic Protein Powder Plant Based Strawberries & Cream, 2.74 lbs.",
+     "price": 25.98,
      "size": "",
-     "unit_price": "$0.68/oz",
+     "unit_price": "$0.59/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3H1DDZHFDLIP"
+     "url": "https://www.samsclub.com/p/-/69C68WUICXLX"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
   },
   {
-   "term": "frozen cilantro lime rice",
+   "term": "frozen cauliflower rice",
    "state": "MATCHES",
-   "term_used": "frozen cilantro lime rice",
+   "term_used": "frozen cauliflower rice",
    "attempts": [
     {
-     "term": "frozen cilantro lime rice",
+     "term": "frozen cauliflower rice",
      "state": "MATCHES",
-     "hits": 20
+     "hits": 14
     }
    ],
    "hits": [
     {
-     "item": "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
-     "price": 13.86,
+     "item": "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+     "price": 6.73,
      "size": "",
-     "unit_price": "$3.65/lb",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4UFAGU9IU135"
-    },
-    {
-     "item": "Gorton's Golden Crunchy Panko Fish Fillets, Frozen, 28 ct.",
-     "price": 13.86,
-     "size": "",
-     "unit_price": "$0.49/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3NBPUW3VG0XX"
+     "url": "https://www.samsclub.com/p/-/6E5MZMROPG6C"
     },
     {
      "item": "Member's Mark Stir Fry Mix, Frozen 16 oz, 5 pk.",
@@ -121,14 +113,6 @@
      "url": "https://www.samsclub.com/p/-/6BOL8CRTAHX1"
     },
     {
-     "item": "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
-     "price": 6.73,
-     "size": "",
-     "unit_price": "",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6E5MZMROPG6C"
-    },
-    {
      "item": "Member's Mark Triple Berry Blend, Frozen, 64 oz.",
      "price": 10.46,
      "size": "",
@@ -137,12 +121,20 @@
      "url": "https://www.samsclub.com/p/-/5LP5I0UW2S6C"
     },
     {
-     "item": "El Monterey Beef and Bean Burritos 4 oz., 24 pk.",
-     "price": 12.86,
+     "item": "Member's Mark Mixed Fruit, Frozen, 1 lb., 5 pk.",
+     "price": 12.67,
      "size": "",
-     "unit_price": "",
+     "unit_price": "$2.53/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/63DCKYQ2FBS2"
+     "url": "https://www.samsclub.com/p/-/6FVJW394IJZ4"
+    },
+    {
+     "item": "Member's Mark Natural Sliced Strawberries, Frozen, 4 lbs.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$2.00/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3J3RVYRB29Z8"
     },
     {
      "item": "Member's Mark Natural Blueberries, Frozen 4 lbs.",
@@ -153,12 +145,20 @@
      "url": "https://www.samsclub.com/p/-/74MFICPZKX8J"
     },
     {
-     "item": "Member's Mark Organic Mango Chunks, Frozen, 4 lbs.",
-     "price": 8.36,
+     "item": "Member's Mark Chicken Fried Rice, Frozen, 9 oz., 6 ct.",
+     "price": 12.68,
      "size": "",
-     "unit_price": "$2.09/lb",
+     "unit_price": "$0.23/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0UMEVRJF2VME"
+     "url": "https://www.samsclub.com/p/-/3I3E2AE2R3JQ"
+    },
+    {
+     "item": "Members Mark Orange Chicken Tempura, Frozen, 48 oz.",
+     "price": 12.97,
+     "size": "",
+     "unit_price": "$0.27/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5ZCAAQZCJ5DZ"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

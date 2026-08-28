@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-27T18:20:40",
-    "count":  317,
+    "updated":  "2026-08-28T07:21:35",
+    "count":  336,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -4778,6 +4778,293 @@
                        "run":  "hunt-2026-08-27-highprotein",
                        "by":  "decider",
                        "at":  "2026-08-27T18:20:40"
+                   },
+                   {
+                       "key":  "chicken|casserole|plain",
+                       "slug":  "one-pot-curried-chicken-broccoli-rice-casserole",
+                       "name":  "One Pot Curried Chicken Broccoli Rice Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "accepted",
+                       "reason":  "Coconut-milk/curry-powder chicken with broccoli and basmati rice, one-pot casserole; distinct coconut-curry casserole with no live dupe, widens cuisine, verified 482cal/33c/42p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:34"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "easy-honey-lime-chicken-bowls-with-rice-and-mango-salsa",
+                       "name":  "Easy Honey Lime Chicken Bowls with Rice and Mango Salsa",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Honey-lime chicken rice bowl with black beans and mango salsa; same lime-chicken rice-bowl dinner as live slow-cooker-cilantro-lime-chicken-bowls, mango-salsa angle already taken by accepted blackened-chicken-with-mango-salsa.",
+                       "dupe_of":  [
+                                       "slow-cooker-cilantro-lime-chicken-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:35"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "bang-bang-chicken-bowls",
+                       "name":  "Bang Bang Chicken Bowls",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Bang-bang-sauce chicken rice bowl with slaw/veg; distinct sauce family with no live dupe, verified 538cal/47c/44p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:36"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-and-spinach-pasta-bake-recipe",
+                       "name":  "Chicken and Spinach Pasta Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Creamy cream-cheese/parmesan chicken-spinach pasta bake; non-distinct in a saturated creamy-chicken-pasta lane, does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:36"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "parmesan-crusted-chicken-sheet-pan-dinner",
+                       "name":  "Parmesan Crusted Chicken Sheet Pan Dinner",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Parmesan-crusted chicken with potatoes and green beans sheet pan; same chicken+potato+parmesan sheet-pan dinner as live parmesan-garlic-sheet-pan-chicken-potatoes, crust nuance only.",
+                       "dupe_of":  [
+                                       "parmesan-garlic-sheet-pan-chicken-potatoes"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:38"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "chicken-broccoli-and-sweet-potato-sheet-pan-dinner",
+                       "name":  "Chicken Broccoli and Sweet Potato Sheet Pan Dinner",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Herb chicken + sweet potato + cranberries sheet pan; same harvest sheet-pan chicken dinner as live sheet-pan-chicken-sweet-potato-brussels and in-flight sweet-potato/kale/cranberry chicken.",
+                       "dupe_of":  [
+                                       "sheet-pan-chicken-sweet-potato-brussels",
+                                       "one-pan-chicken-with-sweet-potatoes-kale-and-cranberries"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:39"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-chicken-sweet-potatoes-and-brussels-sprouts-with-bacon-and-balsamic-gl",
+                       "name":  "Sheet Pan Chicken Sweet Potatoes and Brussels Sprouts with Bacon and Balsamic Glaze",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken + sweet potato + Brussels sprouts sheet pan; same dinner as live sheet-pan-chicken-sweet-potato-brussels, bacon/balsamic finish is a nuance.",
+                       "dupe_of":  [
+                                       "sheet-pan-chicken-sweet-potato-brussels"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:40"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "baked-cubano-chicken",
+                       "name":  "Baked Cubano Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Baked chicken with ham, carnitas, Swiss, pickle, mustard and black beans; distinct Cuban-sandwich flavor with no live dupe, widens cuisine, verified 714cal/22c/100p.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:41"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "crack-chicken-bowls-or-burritos",
+                       "name":  "Crack Chicken Bowls (or Burritos)",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Chili-chicken burrito bowl with pinto beans, queso and chipotle over rice; non-distinct in a saturated Tex-Mex/Mexican chicken-bowl lane, does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:41"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "sheet-pan-chicken-and-veggies",
+                       "name":  "Sheet Pan Chicken and Veggies",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Plain oregano-garlic chicken with potato and mixed veg sheet pan; generic and non-distinct in a covered sheet-pan chicken lane, does not widen the catalog.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:19:42"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "baked-santa-fe-chicken",
+                       "name":  "Baked Santa Fe Chicken",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Baked chicken breast over black beans with corn, green chiles and pepper jack in green enchilada sauce; same Tex-Mex baked-chicken-and-bean bake as tex-mex-baked-chicken, green-vs-red enchilada sauce not distinguishing.",
+                       "dupe_of":  [
+                                       "tex-mex-baked-chicken"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:29"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "easy-chicken-parmesan-recipe",
+                       "name":  "Easy Chicken Parmesan Recipe",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Classic breaded baked chicken parmesan with marinara/mozzarella over spaghetti; same chicken-parmesan identity as in-flight cheese-stuffed-chicken-parmesan and live chicken-parmesan-pasta, saturated region.",
+                       "dupe_of":  [
+                                       "cheese-stuffed-chicken-parmesan",
+                                       "chicken-parmesan-pasta"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:30"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "apricot-chicken-sheet-pan-dinner-recipe-video",
+                       "name":  "Apricot Chicken Sheet Pan Dinner",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Sheet-pan chicken with potatoes and carrots in an apricot-jam/soy glaze; distinct sweet apricot flavor with no live dupe (existing chicken-potato bakes are parmesan-garlic/lemon-pepper), verified 469/42/50.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:31"
+                   },
+                   {
+                       "key":  "chicken|bake|tomato",
+                       "slug":  "roasted-poblano-salsa-chicken-enchiladas-with-cucumber-pico-de-gallo",
+                       "name":  "Roasted Poblano Salsa Chicken Enchiladas",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Chicken enchiladas in roasted tomato-poblano salsa; saturated Mexican-chicken enchilada lane (live enchiladas-suizas) and only 44g protein, weak fit for high-protein run.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:32"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "5-ingredient-crockpot-chicken",
+                       "name":  "5 Ingredient Crockpot Chicken",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Generic onion-soup-packet crockpot chicken with potatoes and green beans; non-distinct chicken-and-potato dump dinner, no novelty or cuisine widening.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:32"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "roasted-stuffed-pork-loin",
+                       "name":  "Roasted Stuffed Pork Loin",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "accepted",
+                       "reason":  "Pork loin stuffed with prosciutto and broccoli rabe with cranberry-orange sauce; distinct Italian stuffed-loin format vs plain live pork-loin roasts and in-flight stuffed chops, verified 540/47/43.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:33"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "ginger-scallion-chicken-wraps",
+                       "name":  "Ginger Scallion Chicken Wraps",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold shredded-chicken and raw-veg wrap in ginger-scallion dressing; cold salad-wrap that doesn\u0027t batch or hold, per prior wrap not-fit rulings.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:34"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "asian-chicken-wraps",
+                       "name":  "Asian Chicken Wraps",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cold Thai-peanut chicken wrap with slaw and edamame; cold wrap that doesn\u0027t batch, and peanut-chicken flavor already saturated.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:35"
+                   },
+                   {
+                       "key":  "chicken|bake|plain",
+                       "slug":  "baked-spicy-chicken-sandwiches",
+                       "name":  "Baked Spicy Chicken Sandwiches",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Baked spicy breaded chicken sandwich with slaw on buns; assembled sandwich that doesn\u0027t batch, 779cal/80c heavy and carb-forward for a high-protein run.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-28T07:21:35"
                    }
                ]
 }

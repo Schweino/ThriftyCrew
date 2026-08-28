@@ -1,0 +1,196 @@
+{
+ "slug": "bang-bang-chicken-bowls",
+ "lines": [
+  {
+   "raw": "1 ½ lbs. boneless skinless chicken breast, cubed",
+   "buy": "5 1/4 lb, cut into bite-sized cubes"
+  },
+  {
+   "raw": "salt and pepper",
+   "buy": "to taste (about 2 1/2 tsp salt and 1 tsp ground black pepper)",
+   "grams_source": 4,
+   "notes": "Re-weighed. The table settled this at 20 g source basis, which is 70 g at the 14-serving batch - 4.7x the estate's own published precedent of about 15 g of salt per 14-serving recipe, and it would print an absurd measure to the reader. 4 g source = 14 g at batch."
+  },
+  {
+   "raw": "1 Tbsp. olive oil",
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "raw": "3/4 cup light mayonnaise (166g)",
+   "buy": "2 2/3 cups light mayonnaise",
+   "grams_source": 166
+  },
+  {
+   "raw": "1/2 cup sweet chili sauce (140g)",
+   "buy": "1 3/4 cups",
+   "grams_source": 140,
+   "notes": "Table computed no weight; the source line prints 140 g."
+  },
+  {
+   "raw": "1/4 cup ketchup (70g)",
+   "buy": "3/4 cup plus 2 tbsp"
+  },
+  {
+   "raw": "1 tsp. (or more) sriracha",
+   "buy": "1 tbsp plus 1/2 tsp, or more to taste"
+  },
+  {
+   "raw": "1/4 tsp. garlic powder",
+   "buy": "scant 1 tsp"
+  },
+  {
+   "raw": "1 Tbsp. powdered peanut butter, PB2 (13g (see notes))",
+   "buy": "3 1/2 tbsp powdered peanut butter",
+   "grams_source": 13
+  },
+  {
+   "raw": "2 cups cooked white rice",
+   "buy": "7 cups cooked (from about 2 1/3 cups dry)",
+   "grams_source": 316,
+   "notes": "158 g per cup cooked. Weighed on the cooked basis per the estate's 'cooked bacon' precedent; this over-prices the dry bag about 3x, which on rice is a few cents and errs high, never low."
+  },
+  {
+   "raw": "12 oz. cooked frozen cauliflower rice",
+   "buy": "2 3/4 lb frozen riced cauliflower, cooked",
+   "grams_source": 340
+  },
+  {
+   "raw": "julienned carrots",
+   "buy": "3 cups julienned (about 5 medium carrots)",
+   "grams_source": 120,
+   "notes": "Table computed no weight; nominal topping portion, about 1/4 cup per bowl."
+  },
+  {
+   "raw": "finely sliced cucumber",
+   "buy": "1 large cucumber, finely sliced"
+  },
+  {
+   "raw": "shredded green cabbage",
+   "buy": "6 cups shredded (about half a medium head)",
+   "grams_source": 140
+  },
+  {
+   "raw": "pickled onions",
+   "buy": "2 medium onions, thinly sliced and quick-pickled",
+   "grams_source": 80
+  },
+  {
+   "raw": "green onions",
+   "buy": "6 green onions, chopped"
+  },
+  {
+   "raw": "sesame seeds",
+   "buy": "2 1/2 tbsp, toasted"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3/4 cup light mayonnaise (166g)",
+   "term": "light mayonnaise",
+   "canon_item": "Light Mayonnaise",
+   "bid": "mayonnaise",
+   "decision": "mapped",
+   "grams_source": 166,
+   "evidence": "Light mayo is the same jar on the same shelf at the same price class, per the 'Light Cream Cheese' and 'avocado oil mayonnaise' precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity."
+  },
+  {
+   "raw": "1 Tbsp. powdered peanut butter, PB2 (13g (see notes))",
+   "term": "powdered peanut butter",
+   "canon_item": "Powdered Peanut Butter",
+   "bid": null,
+   "decision": "mapped-null",
+   "grams_source": 13,
+   "evidence": "REFUSED both near matches: the board's `butter` is dairy butter (wrong food) and `peanut-butter` is the jarred spread at roughly a fifth the price per ounce with 590 vs 400 cal/100 g. Pantry-static rather than a new specialty id for a 13 g flavour line; term reported absent so the pricing road can rule."
+  },
+  {
+   "raw": "2 cups cooked white rice",
+   "term": "cooked white rice",
+   "canon_item": "Cooked White Rice",
+   "bid": "rice",
+   "decision": "mapped",
+   "grams_source": 316,
+   "evidence": "You buy the dry bag and cook it: `rice` is the same product and price class, and 'cooked' is a prep instruction as in the 'cooked bacon' ruling. Weighed cooked (158 g/cup) so grams and the cooked-rice DB row agree; vocabulary wants a Cooked White Rice name row, not a new id."
+  },
+  {
+   "raw": "12 oz. cooked frozen cauliflower rice",
+   "term": "cooked frozen cauliflower rice",
+   "canon_item": "Frozen Cauliflower Rice",
+   "bid": "frozen-cauliflower-rice",
+   "decision": "mapped",
+   "grams_source": 340,
+   "evidence": "REFUSED the board's `rice` match outright - cauliflower is not rice, that is a wrong-food match at a wrong price. Also refused fresh `cauliflower`: fresh-is-not-frozen is a standing rejection and a bagged frozen riced product is a different price class. New id proposed."
+  },
+  {
+   "raw": "shredded green cabbage",
+   "term": "shredded green cabbage",
+   "canon_item": "Green Cabbage",
+   "bid": "cabbage",
+   "decision": "mapped",
+   "grams_source": 140,
+   "evidence": "Shredding is a knife cut of the same head, per the 'carrot' -> carrots precedent; not a bagged coleslaw mix at this quantity. Board 6 of 7. Unquantified topping weighed at about 1/2 cup shredded per bowl."
+  },
+  {
+   "raw": "pickled onions",
+   "term": "pickled onions",
+   "canon_item": "Yellow Onion",
+   "bid": "onions",
+   "decision": "mapped-optional",
+   "grams_source": 80,
+   "evidence": "Quick-pickled at home from a whole onion plus pantry vinegar, so both the purchase and the macros are the onion; canon reuses the existing Yellow Onion row. Unquantified garnish with no stated quantity, hence optional, per the 'Sliced onions' precedent."
+  },
+  {
+   "raw": "sweet heat jalapeños",
+   "term": "sweet heat jalapeños",
+   "canon_item": "Sweet Heat Jalapeños",
+   "bid": null,
+   "decision": "not-purchased",
+   "evidence": "Brand-specific jarred candied jalapeno with no stated quantity, named in the ingredient list but in no instruction step; dropped on the 'avocado lime dipping sauce' precedent. REFUSED the board's `jalapenos` match: that is fresh peppers, a form flip and a different price class."
+  }
+ ],
+ "absent_terms": [
+  "powdered peanut butter",
+  "frozen cauliflower rice"
+ ],
+ "db_entries_written": [
+  "Light Mayonnaise",
+  "Powdered Peanut Butter",
+  "Cooked White Rice",
+  "Frozen Cauliflower Rice"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "cooked frozen cauliflower rice",
+   "proposed_bid": "frozen-cauliflower-rice",
+   "evidence": "A bagged frozen riced-cauliflower product, 1,190 g at batch scale, so a material purchase and not a garnish. Nothing on the pre-resolve table prices it: the board's only offer was `rice` (a different food) and the near vocabulary rows were all rice. It is NOT the live `cauliflower` id - that is a fresh head, and fresh-is-not-frozen is a standing estate rejection with a different price per pound and a different gram yield. The estate already mints frozen-vegetable ids separately from their fresh twins: `frozen-broccoli-florets` is used by another recipe in this very batch. If an id already prices bagged frozen riced cauliflower under another spelling (frozen-riced-cauliflower, cauliflower-rice), alias it and I withdraw.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "frozen-cauliflower-rice",
+   "verdict": "approve",
+   "bid": "frozen-cauliflower-rice",
+   "reason": "No id prices frozen riced cauliflower under any spelling: 'cauliflower' (fresh head, each, $1.98 Fareway) explicitly excludes frozen/rice/riced, and 'frozen-cauliflower-florets' (itself unpriced today) explicitly excludes riced cauliflower and cauliflower rice, so the estate deliberately carved this product out of both existing ids rather than carrying it; no 'riced' string exists in the feed, the alias map, or recipe-board-everyday. Same food as 'cauliflower' but different form (frozen riced vs fresh head) - a different purchase, per the frozen-broccoli-florets precedent. FOLLOW-UP EDITS: mint in commodities.json (weekly staples, unit oz) with include '^(?=.*\\bfrozen\\b)(?=.*\\b(?:cauliflower\\s+rice|riced\\s+cauliflower)\\b).*$'; clone frozen-cauliflower-florets' full exclude block (~150 patterns incl. baby-food/pet/beverage) and add excludes for florets, pizza/crust, stir-fry/vegetable blends and seasoned/flavored medleys; add commodity-dupe-allowlist.json pairs frozen-cauliflower-rice<->cauliflower (fresh vs frozen form), frozen-cauliflower-rice<->frozen-cauliflower-florets (riced vs florets cut - shared 'frozen-cauliflower-' prefix will trip the audit's prefix rule), and frozen-cauliflower-rice<->rice (cauliflower is not a grain). Note to caller: id will EXIST but is NOT PRICED - it needs a capture-worklist entry before the recipe costs. Vocabulary is a separate ruling: 'cooked frozen cauliflower rice' needs its own ingredients.json row (no densities/macros row exists; FDC 168521 'Cauliflower, frozen, cooked, boiled, drained, with salt' is the plausible macro source but transcribe/verify a bag label per the agreement-is-not-identity rule) - this approval mints the id only, not the name."
+  }
+ ],
+ "macro_cross_check": {
+  "source_published_per_serving": {
+   "calories": 538,
+   "protein_g": 44,
+   "carbs_g": 47
+  },
+  "computed_per_serving": {
+   "calories": 588,
+   "protein_g": 44.8,
+   "carbs_g": 57
+  },
+  "protein_gap_pct": 1.8,
+  "band": "cal 450-800, protein >= 40",
+  "verdict": "PASSES. Protein agrees with the source to within 2%, so no portion is wrong; calories run 9% high, which is package rounding plus counting the whole sauce batch (the source drizzles about 90% of it).",
+  "arithmetic": "4 servings. Chicken 680.4 g = 789 cal / 151.7 P; sauce (mayo 166 g, chili sauce 140 g, ketchup 68.5 g, sriracha 5 g, PB2 13 g) = 792 cal / 7.8 P; rice 316 g = 411 cal / 7.5 P; cauliflower rice 340 g = 65 cal / 5.5 P; vegetables and sesame = 172 cal / 6.6 P; oil 119 cal. Totals 2,352 cal / 179 g protein."
+ }
+}

@@ -1,0 +1,117 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-28T07:39:30",
+    "slug":  "apricot-chicken-sheet-pan-dinner-recipe-video",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "Apricot Chicken Sheet Pan Dinner Recipe + VIDEO",
+                   "slug":  "apricot-chicken-sheet-pan-dinner-recipe-video",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.thereciperebel.com/apricot-chicken-sheet-pan-dinner-recipe-video/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Baby Potatoes",
+                                           "grams":  1588,
+                                           "buy":  "3 1/2 lb small creamer potatoes (about 70-84), halved"
+                                       },
+                                       {
+                                           "item":  "Carrots",
+                                           "grams":  882,
+                                           "buy":  "2 lb (about 12 large carrots), peeled and thinly sliced"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  2800,
+                                           "buy":  "6 1/4 lb (about 14 breasts)"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  21,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  11,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Paprika",
+                                           "grams":  4,
+                                           "buy":  "1 3/4 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Onion Powder",
+                                           "grams":  2,
+                                           "buy":  "3/4 teaspoon"
+                                       },
+                                       {
+                                           "item":  "Vegetable Oil",
+                                           "grams":  98,
+                                           "buy":  "7 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Apricot Jam",
+                                           "grams":  280,
+                                           "buy":  "3/4 cup plus 2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Soy Sauce",
+                                           "grams":  56,
+                                           "buy":  "3 1/2 tablespoons low sodium"
+                                       },
+                                       {
+                                           "item":  "Worcestershire Sauce",
+                                           "grams":  60,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Apple Cider Vinegar",
+                                           "grams":  52,
+                                           "buy":  "3 1/2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Cornstarch",
+                                           "grams":  9,
+                                           "buy":  "3 1/2 teaspoons"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  470,
+                                              "protein_g":  48.9,
+                                              "carbs_g":  41.7,
+                                              "fat_g":  12.6
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "PT30M",
+                                "totalTime":  "PT45M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

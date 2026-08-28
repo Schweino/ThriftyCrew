@@ -1,0 +1,148 @@
+{
+ "name": "Bang Bang Chicken Bowls",
+ "slug": "bang-bang-chicken-bowls",
+ "protein": "chicken",
+ "cuisine": "Asian-inspired",
+ "source_url": "https://ohsnapmacros.com/bang-bang-chicken-bowls/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb, cut into bite-sized cubes"
+  },
+  {
+   "item": "Salt",
+   "grams": 14,
+   "buy": "to taste (about 2 1/2 tsp salt and 1 tsp ground black pepper)"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 47,
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "item": "Light Mayonnaise",
+   "grams": 581,
+   "buy": "2 2/3 cups light mayonnaise"
+  },
+  {
+   "item": "Sweet Chili Sauce",
+   "grams": 490,
+   "buy": "1 3/4 cups"
+  },
+  {
+   "item": "Ketchup",
+   "grams": 240,
+   "buy": "3/4 cup plus 2 tbsp"
+  },
+  {
+   "item": "Sriracha",
+   "grams": 18,
+   "buy": "1 tbsp plus 1/2 tsp, or more to taste"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 3,
+   "buy": "scant 1 tsp"
+  },
+  {
+   "item": "Powdered Peanut Butter",
+   "grams": 46,
+   "buy": "3 1/2 tbsp powdered peanut butter"
+  },
+  {
+   "item": "Cooked White Rice",
+   "grams": 1106,
+   "buy": "7 cups cooked (from about 2 1/3 cups dry)"
+  },
+  {
+   "item": "Frozen Cauliflower Rice",
+   "grams": 1190,
+   "buy": "2 3/4 lb frozen riced cauliflower, cooked"
+  },
+  {
+   "item": "Carrots",
+   "grams": 420,
+   "buy": "3 cups julienned (about 5 medium carrots)"
+  },
+  {
+   "item": "Cucumber",
+   "grams": 300,
+   "buy": "1 large cucumber, finely sliced"
+  },
+  {
+   "item": "Green Cabbage",
+   "grams": 490,
+   "buy": "6 cups shredded (about half a medium head)"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 280,
+   "buy": "2 medium onions, thinly sliced and quick-pickled"
+  },
+  {
+   "item": "Green Onions",
+   "grams": 60,
+   "buy": "6 green onions, chopped"
+  },
+  {
+   "item": "Toasted Sesame Seeds",
+   "grams": 25,
+   "buy": "2 1/2 tbsp, toasted"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 588,
+  "protein_g": 44.7,
+  "carbs_g": 59.8,
+  "fat_g": 18.9
+ },
+ "writer_notes": [
+  "Servings written as 14 per the locked view; source page is a 4-serving recipe and the whole card is a clean 3.5x of it (verified: 3/4 cup mayo x3.5 = 2 2/3 cups, 2 cups cooked rice x3.5 = 7 cups, 12 oz cauli x3.5 = 2 3/4 lb, 1.5 lb chicken x3.5 = 5 1/4 lb).",
+  "The transcription lists 'sweet heat jalapenos' as a topping, but it is NOT in the 17-line locked buy list, so it was deliberately omitted from every step and all prose to avoid an orphaned/unbought ingredient. If jalapenos should ship, they must be added to the buy list upstream, not to the prose.",
+  "Source 'pickled onions' = the locked 'Yellow Onion' line, quick-pickled; written that way.",
+  "Pepper is folded into the locked Salt line ('about 2 1/2 tsp salt and 1 tsp ground black pepper'), so salt and pepper are both referenced from that single line.",
+  "Source per-serving gram figures (150 g / 171 g / 52 g) come from the 4-serving original and were intentionally not used, since they are not in the 14-serving locked view.",
+  "No shop_smart bullet makes a per-ounce or 'lasts N batches' package claim, because no cost_lines were provided to cite; bullets are buying strategy only."
+ ],
+ "forbidden_prose_terms": [
+  "jalapeno",
+  "jalapenos",
+  "jalapeño",
+  "jalapeños",
+  "sweet heat jalapeños",
+  "shrimp",
+  "seafood",
+  "—",
+  "–"
+ ],
+ "prose": {
+  "intro_html": "<p>Bang bang anything is usually a restaurant word for \"we deep fried it and drowned it in a sweet, creamy, faintly spicy sauce.\" Good news: you can keep the sauce and skip the deep fryer, and your wallet will thank you for it. These bowls take lean chicken breast, a stir-together bang bang sauce, a base of rice cut with cauliflower rice, and a pile of crunchy toppings, and turn the whole thing into a grab-and-go dinner.</p><p>Here is the part I care about. Each of these 14 containers lands at 588 calories with 44.7 grams of protein. That is a real dinner doing real work, not a sad little salad you will regret at 9 p.m. The sauce tastes like a splurge and the math says otherwise. That is the whole game.</p>",
+  "shop_smart": "<p>The chicken is the biggest line on the receipt, so buy the breast in the largest family pack your store sells and cube it down yourself. Pre-cut anything is a convenience tax you do not need to pay.</p><ul><li><strong>Stretch the base.</strong> Combining white rice with frozen riced cauliflower is the trick that keeps calories in the 588 range while still filling the bowl. The frozen cauliflower rice goes straight from bag to skillet, so grab a couple of bags and keep them in the freezer.</li><li><strong>The sauce is pantry stuff.</strong> Light mayonnaise, sweet chili sauce, ketchup, sriracha, garlic powder, and powdered peanut butter all keep for ages. Buy them once and you are stocked for the next few times you make this.</li><li><strong>Pickle your own onions.</strong> The recipe calls for quick-pickled yellow onion, not a fancy jar off the shelf. Two plain onions plus vinegar does the same job for pennies.</li><li><strong>Buy the vegetables whole.</strong> Whole carrots, a whole cucumber, and half a head of cabbage go a lot further than the pre-shredded bags for what the toppings actually need.</li></ul>",
+  "make_it": "<p><strong>Cook the chicken.</strong> Heat the olive oil in a large skillet over medium heat. Add the cubed chicken breast, season with the salt and pepper, and let it sit untouched for about 3 minutes before you flip it. Keep cooking and flipping until it is cooked through and no longer pink. With 5 1/4 pounds of chicken you will want to work in batches so the skillet stays hot instead of steaming the meat.</p><p><strong>Mix the bang bang sauce.</strong> While the chicken cooks, whisk together the light mayonnaise, sweet chili sauce, ketchup, sriracha, garlic powder, and powdered peanut butter until it is fully combined and smooth. Taste it and add more sriracha if you want more heat.</p><p><strong>Sauce the chicken.</strong> When the chicken is fully cooked, turn off the heat and stir a portion of the sauce into the skillet until every piece is coated. Hold the rest of the sauce back to drizzle over the finished bowls, because that final drizzle is what makes these taste like takeout.</p><p><strong>Build the bowls.</strong> Cook the white rice and the frozen cauliflower rice, combine them, and split the base across your containers. Top each one with the sauced chicken, then load on the julienned carrots, finely sliced cucumber, shredded green cabbage, and quick-pickled onions. Drizzle the reserved sauce over the top and finish with chopped green onions and a sprinkle of toasted sesame seeds.</p>",
+  "portion_html": "<p>This batch is built for 14 containers, so let the scale do the dividing instead of eyeballing it. Combine the cooked white rice and cauliflower rice in one bowl, weigh the total, and divide by 14 so every container gets the same base. Do the same with the sauced chicken so nobody opens their lid to a light day.</p><p>Lay the rice base down first, add the even share of chicken, then split the carrots, cucumber, cabbage, and pickled onions across the containers. Save the reserved sauce and the green onions and sesame seeds for the very top. When it is portioned honestly, each one comes in at 588 calories, 44.7 grams of protein, 59.8 grams of carbs, and 18.9 grams of fat. That is the number you are buying, so weigh it, do not guess it.</p>",
+  "cost_closing_html": "<p>Here is where the deep fryer version loses. Fourteen dinners, each one 588 calories and 44.7 grams of protein, for ${cost_ps} a serving. Order a bang bang bowl out and you will pay that many times over for a smaller container and a longer wait. Cook it once, portion it 14 ways, and the sauce that tastes like a splurge quietly becomes one of the cheapest high-protein dinners in your fridge.</p>",
+  "upsell_html": "<p>Want the rest of the board that makes weeks like this run themselves? Thrifty Crew is a dollar a month. That is the price of not thinking about what is for dinner, backed by the same honest macros and honest math you just cooked. Come join the crew.</p>"
+ },
+ "head": {
+  "description": "Bang Bang Chicken Bowls for meal prep: lean chicken breast in a creamy sweet-and-spicy sauce over rice and cauliflower rice, 14 servings at 588 calories and 44.7g protein each.",
+  "keywords": "bang bang chicken bowls, meal prep chicken, high protein meal prep, bang bang sauce, chicken rice bowls, budget meal prep dinner, cauliflower rice bowls",
+  "image": "",
+  "prepTime": "PT15M",
+  "cookTime": "",
+  "totalTime": "",
+  "steps": [
+   "Heat the olive oil in a large skillet over medium heat. Add the cubed chicken breast, season with salt and pepper, and let it cook untouched for about 3 minutes before flipping. Keep cooking and flipping, working in batches, until it is cooked through and no longer pink.",
+   "While the chicken cooks, whisk together the light mayonnaise, sweet chili sauce, ketchup, sriracha, garlic powder, and powdered peanut butter until fully combined. Taste and add more sriracha for heat.",
+   "Turn off the heat and stir part of the sauce into the cooked chicken until every piece is coated. Reserve the rest of the sauce to drizzle over the finished bowls.",
+   "Cook the white rice and the frozen cauliflower rice, combine them, and split the base across the containers. Top each with sauced chicken, julienned carrots, sliced cucumber, shredded green cabbage, and quick-pickled onions. Drizzle with the reserved sauce and finish with chopped green onions and toasted sesame seeds."
+  ],
+  "step_names": [
+   "Cook the chicken",
+   "Mix the bang bang sauce",
+   "Sauce the chicken",
+   "Build the bowls"
+  ]
+ }
+}
