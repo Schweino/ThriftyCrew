@@ -10218,7 +10218,7 @@
                           "starter_pkg_g":  71
                       },
                       {
-                          "item":  "Frozen Cilantro Lime Rice",
+                          "item":  "Cilantro Lime Rice",
                           "grams":  1984,
                           "util_cost":  16.22,
                           "basis":  "board:cilantro-lime-rice:recipeboard-cheapest:Fareway",
@@ -17758,7 +17758,7 @@
                           "starter_pkg_g":  null
                       },
                       {
-                          "item":  "Potatoes",
+                          "item":  "Potato",
                           "grams":  794,
                           "util_cost":  0.99,
                           "basis":  "board:russet-potatoes:walmart",
@@ -31614,7 +31614,7 @@
                           "starter_pkg_g":  null
                       },
                       {
-                          "item":  "Mexican Blend Shredded Cheese",
+                          "item":  "Mexican Cheese Blend",
                           "grams":  298,
                           "util_cost":  2.27,
                           "basis":  "board:shredded-cheese:walmart",
@@ -61346,12 +61346,12 @@
     {
         "proposed_name":  "Keto Crustless Pizza Casserole",
         "slug":  "keto-crustless-pizza-casserole",
-        "cost_batch":  14.19,
-        "cost_per_serving":  1.01,
-        "cost_batch_true":  20.67,
-        "cost_per_serving_true":  1.48,
+        "cost_batch":  13.36,
+        "cost_per_serving":  0.95,
+        "cost_batch_true":  17.46,
+        "cost_per_serving_true":  1.25,
         "cost_pantry_add":  10.61,
-        "cost_first_run":  31.28,
+        "cost_first_run":  28.07,
         "lines_priced":  9,
         "lines_unpriced":  0,
         "lines_uncarried":  0,
@@ -61378,14 +61378,14 @@
                       {
                           "item":  "Pepperoni",
                           "grams":  163,
-                          "util_cost":  3.36,
-                          "basis":  "board:turkey-pepperoni:recipeboard-walmart",
+                          "util_cost":  2.53,
+                          "basis":  "board:pepperoni:walmart",
                           "carriage":  "CARRIED",
                           "bulk":  false,
-                          "buy_n":  2,
-                          "buy_cost":  5.85,
-                          "pkg":  "5oz pack",
-                          "pkg_g":  142,
+                          "buy_n":  1,
+                          "buy_cost":  2.64,
+                          "pkg":  "6oz pack",
+                          "pkg_g":  170,
                           "starter_n":  null,
                           "starter_cost":  null,
                           "starter_pkg":  null,
@@ -66510,7 +66510,7 @@
                           "starter_pkg_g":  null
                       },
                       {
-                          "item":  "Baby Bella (Crimini) Mushrooms",
+                          "item":  "White Mushrooms",
                           "grams":  794,
                           "util_cost":  6.6,
                           "basis":  "board:mushrooms:walmart",

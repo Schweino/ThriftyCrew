@@ -74,6 +74,39 @@ function Get-SpecMacros($gramsRows, [int]$servings, $macroMap) {
   return @{ cal = $c / $servings; protein = $p / $servings; carbs = $cb / $servings; fat = $f / $servings }
 }
 
+# THE BRAND PAREN RULE IS BUILD-V2-SPEC'S, NOT THIS SCRIPT'S OWN (2026-08-28).
+#
+# This script used to build the display label as "<name> (<brand>):" unconditionally, which is only the
+# rule when a brand exists. Two live specs proved both halves wrong in one run:
+#   * 'Potatoes' -> 'Potato'. The Potatoes food-DB row has NO brand, so the display line reads
+#     "<strong>Potatoes:</strong>" with no paren at all - and a search for "Potatoes ():" matched
+#     nothing. The move renamed three structured fields, reported success, and left the reader-facing
+#     line naming the OLD food. That is exactly the "renames three of four" this file's header calls
+#     worse than renaming none, and nothing detected it.
+#   * 'Baby Bella (Crimini) Mushrooms' (brand "fresh (USDA)") -> 'White Mushrooms' (no brand). The
+#     paren was built from an empty string, so the card shipped "<strong>White Mushrooms ():</strong>".
+# So the label is derived HERE the way build-v2-spec.ps1:243-246 derives it - empty/"fresh"/"store"
+# brands take no paren, and a slashed brand keeps its first name - because two tools writing the same
+# reader-facing string by different rules is the diverged-check family, and build-v2-spec is the
+# authority: it is what wrote the line this script is editing.
+function Get-BrandParen { param([string]$Brand)
+  if (-not $Brand) { return '' }
+  if ($Brand -match '^fresh$|store') { return '' }
+  return ' (' + (($Brand -split '/')[0].Trim()) + ')'
+}
+# ANCHOR THE DISPLAY RENAME ON THE TAG, IN BOTH SPELLINGS. This script edits the spec as RAW TEXT to
+# protect the prose escapes, so it sees whichever spelling the file stores - a literal "<strong>" or the
+# JSON-escaped "<strong>" that every spec written by the v2 intake carries. Without the anchor
+# a brandless label is the bare string "Potato:", which would also fire inside a sentence; with it, the
+# only thing that can match is the head of an ingredients_display line.
+# The escaped spelling is BUILT, not typed: a literal backslash-u in a PowerShell string is one keystroke
+# away from being read as a .NET regex \uXXXX escape by the next person to touch this line.
+function Get-DisplayLabelPattern { param([string]$Label)
+  $bs  = [string][char]0x5C
+  $pre = '(' + [regex]::Escape('<strong>') + '|' + [regex]::Escape($bs + 'u003cstrong' + $bs + 'u003e') + ')'
+  return $pre + [regex]::Escape($Label)
+}
+
 if ($SelfTest) {
   $bad = 0
   function T([string]$n, [bool]$ok, [string]$got) {
@@ -95,6 +128,25 @@ if ($SelfTest) {
   T 'MUST FIRE  zero servings returns null'         ($null -eq (Get-SpecMacros $rows4 0 $mm))  'got a number'
   $mmBad = @{}; $mmBad['A'] = [pscustomobject]@{ serving_grams = 0; calories = 10; protein_g = 1; carbs_g = 1; fat_g = 1 }
   T 'MUST FIRE  a zero serving_grams returns null'  ($null -eq (Get-SpecMacros $rows4 2 $mmBad)) 'got a number'
+  # --- the display label, the surface that failed silently (2026-08-28) --------------------------------
+  # Both live defects are pinned here: a brandless FROM (the label has no paren, so the old
+  # "From ():" search matched nothing and the reader kept the old name) and a brandless TO (the old code
+  # emitted "White Mushrooms ():" onto a card). The rule is build-v2-spec.ps1:243-246's, so its two
+  # filters are pinned too.
+  T 'no brand takes NO paren, not an empty one'  ((Get-BrandParen '') -eq '')                    ("'" + (Get-BrandParen '') + "'")
+  T 'a brand takes a paren'                      ((Get-BrandParen 'Great Value') -eq ' (Great Value)') (Get-BrandParen 'Great Value')
+  T 'a slashed brand keeps its first name'       ((Get-BrandParen 'Eckrich/Armour') -eq ' (Eckrich)')  (Get-BrandParen 'Eckrich/Armour')
+  T 'bare "fresh" is not a brand'                ((Get-BrandParen 'fresh') -eq '')               ("'" + (Get-BrandParen 'fresh') + "'")
+  T '"fresh (USDA)" IS kept - it is not bare'    ((Get-BrandParen 'fresh (USDA)') -eq ' (fresh (USDA))') (Get-BrandParen 'fresh (USDA)')
+  T 'a store brand is not a brand'               ((Get-BrandParen 'store brand') -eq '')         ("'" + (Get-BrandParen 'store brand') + "'")
+  # The anchor: the label must move at the head of a display line in EITHER spelling, and must NOT fire
+  # on the same words inside prose - the reason a bare brandless label cannot be replaced blindly.
+  $escOpen = [string][char]0x5C + 'u003cstrong' + [string][char]0x5C + 'u003e'
+  $pat = Get-DisplayLabelPattern 'Potato:'
+  T 'MUST FIRE  matches the literal tag spelling'  ([regex]::IsMatch('<strong>Potato:</strong> 2 lb', $pat)) 'missed'
+  T 'MUST FIRE  matches the escaped tag spelling'  ([regex]::IsMatch($escOpen + 'Potato:' , $pat))           'missed'
+  T 'MUST FIRE  a brandless label is not replaced mid-sentence' (-not [regex]::IsMatch('and the Potato: see below', $pat)) 'fired on prose'
+  T 'a longer name is not a prefix match'         (-not [regex]::IsMatch('<strong>Potatoes:</strong> 2 lb', $pat)) 'matched Potatoes'
   if ($bad) { Say ("rebase-spec-ingredient SELF-TEST FAIL ({0})" -f $bad); exit 1 }
   Say 'rebase-spec-ingredient SELF-TEST PASS'; exit 0
 }
@@ -199,8 +251,13 @@ $new = $raw
 $n = 0
 # 1+2. ingredients_grams and scaler.ing item/canon: every bare "From" string value.
 $new = [regex]::Replace($new, '("(?:item|canon)":\s*")' + [regex]::Escape($From) + '(")', { param($m) $script:n++; $m.Groups[1].Value + $To + $m.Groups[2].Value })
-# 3. ingredients_display: "<strong>From (brand):</strong> ..."
-$new = $new.Replace(($From + ' (' + $fromB + '):'), ($To + ' (' + $toB + '):'))
+# 3. ingredients_display: "<strong>From (brand):</strong> ..." - or "<strong>From:</strong>" when the
+# food-DB row carries no brand. See Get-BrandParen: both ends of the label are derived, never assembled
+# here, and the count is asserted below because this surface failed silently before.
+$fromLbl = $From + (Get-BrandParen $fromB) + ':'
+$toLbl   = $To   + (Get-BrandParen $toB)   + ':'
+$dispBefore = @([regex]::Matches($new, (Get-DisplayLabelPattern $fromLbl))).Count
+$new = [regex]::Replace($new, (Get-DisplayLabelPattern $fromLbl), { param($m) $m.Groups[1].Value + $toLbl })
 # 4. cost_lines / head.recipeIngredient labels: "From, <buy>"
 $new = $new.Replace(('"' + $From + ', '), ('"' + $To + ', '))
 # On a RESTAT the text may legitimately be untouched - if only the numbers changed and the brand did
@@ -219,6 +276,15 @@ $still = @(@($after.ingredients_grams) | Where-Object { [string]$_.item -eq $Fro
 # a restat refuses every one of them.
 if (-not $Restat -and $still -gt 0) { Die ("'" + $From + "' still appears in " + $still + ' structured field(s) after the rename; refusing a half-done move') }
 if ($Restat -and $still -eq 0) { Die ("'" + $From + "' vanished from the structured fields during a RESTAT - the item was supposed to stay put; refusing") }
+# THE DISPLAY SURFACE GETS THE SAME PROOF THE STRUCTURED ONES GET. A move that renamed three fields and
+# left the reader-facing line naming the old food reported success for a whole run before this check
+# existed. Only meaningful when the label actually changes: on a restat whose brand did not move, and on
+# a spec whose display carries a reader-facing display_name instead of the canon name, the old label was
+# never in the text and zero matches is the correct answer.
+if ($fromLbl -ne $toLbl -and $dispBefore -gt 0) {
+  $dispAfter = @([regex]::Matches($new, (Get-DisplayLabelPattern $fromLbl))).Count
+  if ($dispAfter -gt 0) { Die ("the display label '" + $fromLbl + "' survives " + $dispAfter + ' time(s) after the rename; refusing a half-done move') }
+}
 for ($i = 0; $i -lt @($before.ingredients_grams).Count; $i++) {
   if ([double]@($after.ingredients_grams)[$i].grams -ne [double]@($before.ingredients_grams)[$i].grams) { Die 'a gram figure moved; refusing' }
 }
@@ -234,7 +300,7 @@ $rounded = @{}
 foreach ($k in @('cal', 'protein', 'carbs', 'fat')) { $rounded[$k] = [int][math]::Round($macros[$k], 0) }
 
 Say ('rebase-spec-ingredient: ' + $Slug)
-Say ("    '{0}' ({1})  ->  '{2}' ({3})   {4} structured field(s) renamed" -f $From, $fromB, $To, $toB, $n)
+Say ("    '{0}' ({1})  ->  '{2}' ({3})   {4} structured field(s) + {5} display line(s) renamed" -f $From, $fromB, $To, $toB, $n, $dispBefore)
 Say ("    macros/serving  {0}/{1}/{2}/{3}  ->  {4}/{5}/{6}/{7}   (cal {8:+#;-#;0})" -f `
   $before.stat.cal, $before.stat.protein, $before.stat.carbs, $before.stat.fat, `
   $rounded.cal, $rounded.protein, $rounded.carbs, $rounded.fat, ($rounded.cal - [int]$before.stat.cal))

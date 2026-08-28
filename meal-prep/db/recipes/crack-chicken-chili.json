@@ -29,9 +29,9 @@
                               ],
     "cal_floor":  null,
     "stat":  {
-                 "cal":  542,
+                 "cal":  544,
                  "protein":  47,
-                 "carbs":  30,
+                 "carbs":  31,
                  "fat":  24,
                  "cost_ps":  "3.06"
              },
@@ -52,7 +52,7 @@
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 3/4 cup (about two 4 oz cans) (198 g)",
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 18 slices, cooked crisp and chopped (175 g)",
                                 "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (one and three-quarter 8 oz bricks) (397 g)",
-                                "\u003cstrong\u003eMexican Blend Shredded Cheese:\u003c/strong\u003e 2 2/3 cups shredded (298 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 2 2/3 cups shredded (298 g)",
                                 "\u003cstrong\u003eSour Cream (generic (USDA)):\u003c/strong\u003e optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g) (140 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -67,7 +67,7 @@
                        "Diced Green Chiles, 3/4 cup (about two 4 oz cans): ~$1.75. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 18 slices, cooked crisp and chopped: ~$1.53. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
                        "1/3 Fat Cream Cheese, 14 oz (one and three-quarter 8 oz bricks): ~$3.22. \u003cstrong\u003eBuy 2 8oz bricks: $3.68.\u003c/strong\u003e",
-                       "Mexican Blend Shredded Cheese, 2 2/3 cups shredded: ~$2.27. \u003cstrong\u003eBuy 2 8oz bags: $3.46.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 2 2/3 cups shredded: ~$2.27. \u003cstrong\u003eBuy 2 8oz bags: $3.46.\u003c/strong\u003e",
                        "Sour Cream, optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g): ~$0.51. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, onion powder, cayenne pepper, paprika, chili powder): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $28.49 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -212,8 +212,8 @@
                                    "gpu":  "28.350"
                                },
                                {
-                                   "item":  "Mexican Blend Shredded Cheese",
-                                   "canon":  "Mexican Blend Shredded Cheese",
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
                                    "grams":  298,
                                    "buy":  "2 2/3 cups shredded",
                                    "bid":  "shredded-cheese",
@@ -253,7 +253,7 @@
                                           "Diced Green Chiles, 3/4 cup (about two 4 oz cans) (198 g)",
                                           "Hickory Smoked Bacon, 18 slices, cooked crisp and chopped (175 g)",
                                           "1/3 Fat Cream Cheese, 14 oz (one and three-quarter 8 oz bricks) (397 g)",
-                                          "Mexican Blend Shredded Cheese, 2 2/3 cups shredded (298 g)",
+                                          "Mexican Cheese Blend, 2 2/3 cups shredded (298 g)",
                                           "Sour Cream, optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g) (140 g)"
                                       ],
                  "steps":  [
@@ -331,7 +331,7 @@
                                   "grams":  397
                               },
                               {
-                                  "item":  "Mexican Blend Shredded Cheese",
+                                  "item":  "Mexican Cheese Blend",
                                   "grams":  298
                               },
                               {

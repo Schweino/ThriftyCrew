@@ -5525,6 +5525,20 @@
    "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
   },
   {
+   "item": "Cilantro Lime Rice",
+   "brand": "Ben's Original",
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "serving_grams": 100,
+   "calories": 168,
+   "protein_g": 2.8,
+   "carbs_g": 28.7,
+   "fat_g": 4.2,
+   "fiber_g": 0.7,
+   "source": "fdc:2597142 (Branded) BEN'S ORIGINAL READY RICE, CILANTRO LIME, 8.5 OZ. POUCH, Uncle Ben's Inc. - per 100 g. Atwater 4/4/9 gives 164 against the recorded 168.",
+   "notes": "The CARRIED product behind the cilantro-lime-rice commodity: Ben's Original shelf-stable 8.5 oz pouch, the only cell on the board (carriage.json:744, Fareway $1.97). Registrar 2026-08-28 ruled the id deliberately does NOT say frozen - pouch-vs-frozen is the same ready-cooked-seasoned-rice purchase - so the price row needed its own label rather than borrowing the Path of Life frozen row's numbers. Distinct from that row (240 cal / 140 g cup); the two agree closely per gram, 1.68 vs 1.71 cal/g, which is the sanity anchor the registrar asked for and not a reason to merge them."
+  },
+  {
    "item": "Frozen Cilantro Lime Rice",
    "brand": "Path of Life",
    "serving_qty": 1,

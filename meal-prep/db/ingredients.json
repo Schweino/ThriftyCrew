@@ -1044,10 +1044,8 @@
         "pantry_pkg_g":  57,
         "pantry_pkg_label":  "2oz jar",
         "bulk":  true,
-        "aliases":  [
-                        "Tandoori Masala"
-                    ],
-        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+        "aliases":  [],
+        "alias_ruling":  "registrar 2026-08-28: superseded by this row. The Garam Masala macro row is all zeroes on a 0.5 g spice basis - the settled label convention at a pinch - so booking a 56 g tandoori line against it erased about 175 cal from the batch. Price class left where Brad 2026-08-16 put it."
     },
     {
         "item":  "Garlic",
@@ -1522,10 +1520,8 @@
         "board":  "recipe",
         "buy_pkg_g":  454,
         "buy_pkg_label":  "16oz tub",
-        "aliases":  [
-                        "Sour Cream"
-                    ],
-        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+        "aliases":  [],
+        "alias_ruling":  "registrar 2026-08-28: superseded by this row. Brad 2026-08-16 aliased Sour Cream to Light Sour Cream when no full-fat price row existed; Light Sour Cream keeps its own 27 specs and is unchanged."
     },
     {
         "item":  "Lime Juice",
@@ -2480,10 +2476,8 @@
         "board":  "recipe",
         "buy_pkg_g":  142,
         "buy_pkg_label":  "5oz pack",
-        "aliases":  [
-                        "Pepperoni"
-                    ],
-        "alias_ruling":  "Brad, 2026-08-16; see design\\PLAN-ingredient-vocabulary-2026-08-16.md section 0c"
+        "aliases":  [],
+        "alias_ruling":  "registrar 2026-08-28: superseded by this row. Brad 2026-08-16 aliased Pepperoni to Turkey Pepperoni when no pepperoni price row existed; the pepperoni commodity is priced at 7 stores and the macro row, the buy text and the card all say pork."
     },
     {
         "item":  "Vegetable Oil",
@@ -2698,11 +2692,8 @@
         "buy_pkg_g":  382.7,
         "buy_pkg_label":  "13.5oz rope",
         "note":  "PORK, not turkey. Aliasing to Smoked Turkey Sausage would corrupt protein stamping and the free-dinner rotation.",
-        "aliases":  [
-                        "Smoked Sausage",
-                        "Andouille Smoked Sausage"
-                    ],
-        "alias_ruling":  "Brad, 2026-08-16 (ruling 9): Andouille and generic smoked sausage alias to the PORK row, never to Smoked Turkey Sausage - that would corrupt protein stamping."
+        "aliases":  [],
+        "alias_ruling":  "registrar 2026-08-28: superseded by this row, same reasoning as the Smoked Sausage row. Ruling 9 price class unchanged."
     },
     {
         "item":  "Portobello Mushrooms",
@@ -3211,5 +3202,56 @@
         "pantry_pkg_label":  "32oz jar",
         "bulk":  true,
         "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Dill Pickles', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Sliced and whole dill pickles are the same jarred product at the same price class - a cut, not a form flip - and pickles is live 7 of 7 at 0.05 cheapest, so this is a reuse. Only a vocabulary NAME row is missing, which is a naming question and not a registrar one."
+    },
+    {
+        "item":  "Pepperoni",
+        "bid":  "pepperoni",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  170,
+        "buy_pkg_label":  "6oz pack",
+        "note":  "PORK/BEEF sliced pepperoni (Hormel Original class), the food keto-crustless-pizza-casserole names on its card and books macros from. Priced on the pepperoni commodity (n=7, cheapest 0.295/oz), NOT turkey-pepperoni (0.584/oz) - the alias that used to carry this name priced a pork line at roughly double against a food the recipe does not name."
+    },
+    {
+        "item":  "Sour Cream",
+        "bid":  "sour-cream",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  454,
+        "buy_pkg_label":  "16oz tub",
+        "note":  "FULL-FAT cultured sour cream, the food four live specs name in their buy text (full-fat, verbatim) and book macros from at 198 cal/100 g. The sour-cream commodity carries full-fat products and its crown today is Great Value Original 48 oz, so the price class already matched; only the vocabulary name did not."
+    },
+    {
+        "item":  "Smoked Sausage",
+        "bid":  "kielbasa",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  382.7,
+        "buy_pkg_label":  "13.5oz rope",
+        "note":  "PORK/BEEF skinless smoked sausage rope (Eckrich class), 180 cal per 2 oz on its own verified label. Prices on kielbasa, never on smoked-turkey-sausage - Brad 2026-08-16 ruling 9, honored: this row moves the mechanism from an alias to a row and leaves the price class exactly where ruling 9 put it. Kept separate from Andouille Smoked Sausage (160 cal per 2 oz); the two labels are not merged or averaged."
+    },
+    {
+        "item":  "Andouille Smoked Sausage",
+        "bid":  "kielbasa",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  382.7,
+        "buy_pkg_label":  "13.5oz rope",
+        "note":  "Johnsonville New Orleans style andouille rope, 160 cal per 2 oz on the manufacturer panel. Prices on kielbasa, never on smoked-turkey-sausage - Brad 2026-08-16 ruling 9, honored. Kept separate from the Eckrich Smoked Sausage row (180 cal per 2 oz); different brand and label, do not merge or average."
+    },
+    {
+        "item":  "Tandoori Masala",
+        "bid":  "garam-masala",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  57,
+        "pantry_pkg_label":  "2oz jar",
+        "bulk":  true,
+        "note":  "Tandoori spice blend (Shan, USDA branded FDC 2666734), 25 cal per 8 g tbsp. BID IS PROVISIONAL AND UNCHANGED FROM THE ALIAS IT REPLACES: this row is born on garam-masala so the identity defect is fixed at exactly the price the alias already charged. The registrar recommends re-bidding to the tandoori-seasoning commodity (live, n=1, Hy-Vee 2.8295/oz) because the two blends are genuinely different foods, but that re-prices a 56 g line about 2.8x onto one-store carriage against a 2026-08-16 adjudication, so it is Brad decision, not this edit."
     }
 ]
