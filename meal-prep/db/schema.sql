@@ -38,6 +38,21 @@ CREATE TABLE item (
   note           TEXT
 );
 
+-- db\ingredients.json's `aliases`: the OTHER names one price row legitimately answers to. This is a
+-- namespace, not a second row - the estate's rule is that aliases live in the vocabulary and never become
+-- their own item (a "Smoked Sausage" item row would carry its own bid, its own gpu and its own macros, and
+-- the next reader would price it twice). Modelling it as a table is what lets a spec keep writing the name
+-- it actually calls for while every join still lands on the one row that holds the price.
+--
+-- IT ALSO MAKES A STANDING RULING CHECKABLE. Brad, 2026-08-16 (ruling 9): Andouille and generic smoked
+-- sausage alias to the PORK row, NEVER to Smoked Turkey Sausage - that would corrupt protein stamping.
+-- With this table the ruling is a row with a foreign key, so a future edit that re-points it at the turkey
+-- row is a visible diff in a keyed table instead of a string moved between two arrays.
+CREATE TABLE item_alias (
+  alias TEXT PRIMARY KEY,              -- one owner per alias; a contested alias must be adjudicated, not stored twice
+  item  TEXT NOT NULL REFERENCES item(name)
+);
+
 -- food-macros-db.json: PER SERVING macros. serving_qty/serving_unit describe what one serving IS, which is
 -- why a comparison against a per-one-unit density MUST divide by serving_qty (45 g per 0.25 cup is 180
 -- g/cup - the same number densities.json holds for Rice, not a 4x disagreement).
@@ -70,9 +85,15 @@ CREATE TABLE spec (
   protein INTEGER,
   cost_ps TEXT
 );
+-- `item` is the RESOLVED price row and `canon` is the name the spec document actually wrote. They differ
+-- exactly when the spec costs an ingredient by an adjudicated alias, which is legal: an alias IS an
+-- identity (rebid-ingredient.ps1 selects spec blocks by canon OR item), so flattening the spec's word into
+-- the row name would erase the identity the rebid tool selects on. Keeping both means the FK lands on the
+-- real row AND the document's own word survives the round trip.
 CREATE TABLE spec_ingredient (
   slug  TEXT NOT NULL REFERENCES spec(slug),
   item  TEXT NOT NULL REFERENCES item(name),
+  canon TEXT NOT NULL,                 -- what the spec wrote: the item name, or an alias of it
   grams REAL,
   bid   TEXT REFERENCES commodity(id),
   PRIMARY KEY (slug, item)
@@ -81,3 +102,4 @@ CREATE TABLE spec_ingredient (
 CREATE INDEX idx_item_bid        ON item(bid);
 CREATE INDEX idx_spec_ing_item   ON spec_ingredient(item);
 CREATE INDEX idx_spec_ing_bid    ON spec_ingredient(bid);
+CREATE INDEX idx_item_alias_item ON item_alias(item);

@@ -1,4 +1,4 @@
-<#
+﻿<#
   audit-schema-constraints.ps1 - what a REAL database would refuse to store.
 
   WHY THIS EXISTS (2026-08-08 architecture review, step 1 of the storage redesign). The estate keeps eight
@@ -20,17 +20,20 @@
     commodity(id PK, label, unit)                            <- grocery\commodities.json
     item(name PK, bid -> commodity.id, gpu, unit,            <- db\ingredients.json
          buy_pkg_g, buy_pkg_label)
+    item_alias(alias PK, item -> item.name)                  <- db\ingredients.json `aliases`
     item_macro(item -> item.name, serving_grams,             <- food-macros-db.json
                calories, protein_g, carbs_g, fat_g)          UNIQUE(item)
     item_density(item -> item.name, unit, grams)             <- db\densities.json
                                                              UNIQUE(item, unit)
     spec(slug PK, cal, protein, cost_ps)                     <- db\recipes\*.json
     spec_ingredient(slug -> spec.slug, item -> item.name,    <- spec.scaler.ing + ingredients_grams
-                    grams, bid -> commodity.id)              UNIQUE(slug, item)
+                    canon, grams, bid -> commodity.id)       UNIQUE(slug, item)
+                    (canon = the spec's own word; item = the row it resolves to)
 
   CONSTRAINT CLASSES CHECKED (each names the real defect that motivated it):
     FK-BID        an item's bid must name a real commodity          (Turkey Bacon -> PORK)
     FK-SPEC-ITEM  a spec ingredient must name a real item row       (the 6 macro-only items)
+                  -- "name" means item name OR adjudicated alias, see Resolve-ItemName
     FK-SPEC-BID   a spec ingredient's bid must name a real commodity
     ORPHAN-MACRO  a macro row must belong to a known item
     ORPHAN-DENS   a density row must belong to a known item
@@ -69,6 +72,30 @@ $script:DENSITY_BASIS_EXCEPTIONS = @(
   'Canned Black Beans', 'Seasoned Black Beans', 'Canned Pinto Beans', 'Cannellini Beans', 'Kidney Beans',
   'Chickpeas', 'Refried Beans', 'Sweet Whole Kernel Corn', 'Fresh Basil', 'Green Onions'
 )
+function Get-AliasMap { param($Items)
+  # alias -> row, from db\ingredients.json's `aliases` arrays. The comment rows ('_r300_note') own nothing,
+  # and a contested alias is left with its FIRST claimant - audit-vocab-integrity is the guard that reports
+  # that collision, and two guards must not disagree about which row won.
+  $m = @{}
+  foreach ($r in @($Items)) {
+    $n = [string]$r.item
+    if (-not $n -or $n -like '_*') { continue }
+    if ($r.PSObject.Properties.Name -notcontains 'aliases') { continue }
+    foreach ($a in @($r.aliases)) { $an = [string]$a; if ($an -and -not $m.ContainsKey($an)) { $m[$an] = $n } }
+  }
+  return $m
+}
+function Resolve-ItemName { param([string]$Name, $ItemNames, $AliasMap)
+  # A SPEC MAY COST BY AN ALIAS, AND THAT IS NOT A BROKEN REFERENCE. An alias is an adjudicated identity
+  # (Brad, 2026-08-16 ruling 9 puts Andouille and generic smoked sausage on the PORK row, never on Smoked
+  # Turkey Sausage), and every other reader resolves them - cost-recipes.ps1, build-v2-spec,
+  # audit-store-integrity, audit-vocab-integrity. This check was the last one that did not, so it called
+  # 12 correctly-costed spec lines across 9 names broken references. Row name wins over alias, so a future
+  # row named after an existing alias cannot hijack the specs already costing by that name.
+  if ($ItemNames.ContainsKey($Name)) { return $Name }
+  if ($AliasMap.ContainsKey($Name))  { return $AliasMap[$Name] }
+  return $null
+}
 function Test-PairedCost { param([int]$MacroOnly, [int]$CostOnly)
   # a legitimate display override renames one item: the two "only" sets stay balanced. An unbalanced split
   # means a line exists on one side and nowhere on the other.
@@ -93,6 +120,26 @@ if ($SelfTest) {
   # the founding dropped-cost-line, frozen: 1 macro-only name, 0 cost-only
   T 'MUST FIRE  a one-sided macro/cost split (Garlic Powder)'      (-not (Test-PairedCost 1 0)) 'tolerated'
   T 'CLEAN TWIN a paired rename stays legal'                       (Test-PairedCost 1 1) 'flagged a rename'
+  # THE ALIAS RESOLUTION, frozen against the row that motivated it. baked-cauliflower-mac-smoked-sausage
+  # costs "Smoked Sausage"; that string is an alias on the PORK row, not a row of its own, and it must
+  # resolve there - to kielbasa, never to Smoked Turkey Sausage (Brad, 2026-08-16 ruling 9).
+  $fx = @(
+    [pscustomobject]@{ item = 'Pork Smoked Sausage';   bid = 'kielbasa';              aliases = @('Smoked Sausage', 'Andouille Smoked Sausage') },
+    [pscustomobject]@{ item = 'Smoked Turkey Sausage'; bid = 'turkey-sausage' },
+    [pscustomobject]@{ item = 'Salt';                  bid = 'salt' },
+    [pscustomobject]@{ item = '_r300_note';            aliases = @('Smoked Sausage') }
+  )
+  $fxNames = @{}; foreach ($r in $fx) { if ([string]$r.item -notlike '_*') { $fxNames[[string]$r.item] = $r } }
+  $fxAlias = Get-AliasMap $fx
+  T 'CLEAN TWIN a spec costing by an ALIAS resolves to its price row' ((Resolve-ItemName 'Smoked Sausage' $fxNames $fxAlias) -eq 'Pork Smoked Sausage') ((Resolve-ItemName 'Smoked Sausage' $fxNames $fxAlias))
+  T 'RULING 9   the smoked-sausage aliases land on PORK, not turkey'  (((Resolve-ItemName 'Andouille Smoked Sausage' $fxNames $fxAlias) -eq 'Pork Smoked Sausage') -and ($fxAlias['Smoked Sausage'] -ne 'Smoked Turkey Sausage')) ((Resolve-ItemName 'Andouille Smoked Sausage' $fxNames $fxAlias))
+  T 'CLEAN TWIN a plain row name still resolves to itself'            ((Resolve-ItemName 'Salt' $fxNames $fxAlias) -eq 'Salt') ((Resolve-ItemName 'Salt' $fxNames $fxAlias))
+  T 'MUST FIRE  a name that is neither row nor alias is still broken' ($null -eq (Resolve-ItemName 'Unicorn Loin' $fxNames $fxAlias)) 'resolved a name that does not exist'
+  T 'a comment row owns no aliases'                                   ($fxAlias.Count -eq 2) ("alias count $($fxAlias.Count)")
+  # a row name must beat an alias, or a new row shadows the specs already costing by that name
+  $fx2 = @([pscustomobject]@{ item = 'Broccoli'; bid = 'broccoli' }, [pscustomobject]@{ item = 'Broccoli Florets'; bid = 'broccoli-florets'; aliases = @('Broccoli') })
+  $fx2Names = @{}; foreach ($r in $fx2) { $fx2Names[[string]$r.item] = $r }
+  T 'a ROW NAME wins over another row claiming it as an alias'        ((Resolve-ItemName 'Broccoli' $fx2Names (Get-AliasMap $fx2)) -eq 'Broccoli') ((Resolve-ItemName 'Broccoli' $fx2Names (Get-AliasMap $fx2)))
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -133,6 +180,8 @@ foreach ($r in $ing) {
   if (-not (Test-ForeignKey ([string]$r.bid) $comIds)) { V 'FK-BID' "item '$n' bid='$($r.bid)' names no commodity" }
   if ($r.PSObject.Properties['bid'] -and $r.bid -and -not $r.gpu) { V 'NOT-NULL-GPU' "priced item '$n' has no gpu" }
 }
+
+$aliasMap = Get-AliasMap $ing
 
 # ---- item_macro: every macro row must belong to a known item --------------------------------------------
 $macroOf = @{}
@@ -181,7 +230,7 @@ foreach ($sf in (Get-ChildItem (Join-Path $mpRoot 'db\recipes\*.json'))) {
     if (-not $n) { continue }
     if ($seen.ContainsKey($n)) { V 'UNIQUE-ITEM' "$slug lists '$n' twice in scaler.ing (breaks UNIQUE(slug,item))" }
     $seen[$n] = 1
-    if (-not $itemNames.ContainsKey($n)) { V 'FK-SPEC-ITEM' "$slug costs '$n', which has no db\ingredients.json row" }
+    if ($null -eq (Resolve-ItemName $n $itemNames $aliasMap)) { V 'FK-SPEC-ITEM' "$slug costs '$n', which is neither a db\ingredients.json row nor an adjudicated alias of one" }
     if (-not (Test-ForeignKey ([string]$si.bid) $comIds)) { V 'FK-SPEC-BID' "$slug '$n' bid='$($si.bid)' names no commodity" }
   }
   # PAIRED-COST: the macro basis and the cost basis must describe the same set (modulo paired renames)

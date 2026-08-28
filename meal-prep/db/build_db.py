@@ -21,6 +21,50 @@ def load_json(path):
         return json.load(fh)
 
 
+def build_alias_map(items):
+    r"""alias -> row name, from db\ingredients.json's `aliases` arrays. PURE: takes parsed rows, touches no
+    disk, so db-build.ps1 -SelfTest can freeze its behaviour against fixtures.
+
+    WHY THIS EXISTS AT ALL. An alias is not a spelling convenience, it is an ADJUDICATED IDENTITY: Brad
+    rules that a name the recipes use belongs to a particular price row, and the row records the ruling.
+    Every other reader in the estate already resolves them - cost-recipes.ps1 (f60ede7f), build-v2-spec,
+    audit-store-integrity, audit-vocab-integrity - and each one learned it the same way, by reporting real
+    recipes as broken. This build was the last reader that did not, which is why it refused
+    baked-cauliflower-mac-smoked-sausage for costing "Smoked Sausage": a name that resolves fine everywhere
+    else in the estate.
+
+    A comment row ('_r300_note') owns nothing, and a duplicate alias is a contested identity that has to be
+    adjudicated rather than silently won by whichever row is later in the file - audit-vocab-integrity
+    already reports that collision class, so here the FIRST claim stands and the loser is returned for the
+    caller to refuse.
+    """
+    amap, contested = {}, []
+    for r in items:
+        n = str(r.get('item') or '')
+        if not n or n.startswith('_'):
+            continue
+        for a in (r.get('aliases') or []):
+            a = str(a or '')
+            if not a:
+                continue
+            if a in amap and amap[a] != n:
+                contested.append((a, amap[a], n))
+                continue
+            amap[a] = n
+    return amap, contested
+
+
+def resolve_item(name, item_names, alias_map):
+    """The spec's word -> the price row that holds it, or None if it names nothing. PURE.
+
+    A row name always wins over an alias. That ordering is not cosmetic: it is what keeps a future row
+    named after an existing alias from hijacking the specs that already cost by that name.
+    """
+    if name in item_names:
+        return name
+    return alias_map.get(name)
+
+
 def _fk_msg(table, detail, err):
     """A refusal has to read like a finding, not a stack trace. The daily chain logs this line verbatim."""
     return ('CONSTRAINT REFUSED [%s]: %s -- %s\n'
@@ -32,6 +76,16 @@ def _fk_msg(table, detail, err):
             '  real commodities, so the key would have passed. That class needs semantic review\n'
             '  (audit-store-integrity, the mapper agent\'s evidence rules), not a constraint.'
             % (table, detail, err))
+
+
+def _collision_msg(table, detail):
+    """A COLLISION IS NOT A DANGLING REFERENCE, so it must not borrow _fk_msg's words. Both names here
+    resolve perfectly well - to the SAME row - and telling the reader at 6:31am that something "does not
+    exist" sends them looking for a missing row that is sitting right there."""
+    return ('CONSTRAINT REFUSED [%s]: %s\n'
+            '  Two names collapse onto one key. Nothing is missing: both names resolve, to the same row,\n'
+            '  so one of the two lines would silently disappear from the total. Decide which name the\n'
+            '  document should use (or split the row), then re-run.' % (table, detail))
 
 
 def main():
@@ -96,6 +150,20 @@ def main():
             raise SystemExit(_fk_msg('item', 'item "%s" has bid "%s", which names no commodity' % (r[0], r[1]), e))
     counts['item'] = len(rows)
 
+    # ---- item_alias: the OTHER names a price row answers to ---------------------------------------------
+    alias_map, contested = build_alias_map(items)
+    if contested:
+        al, first, second = contested[0]
+        raise SystemExit(_collision_msg('item_alias', 'alias "%s" is claimed by both "%s" and "%s" - one '
+                                        'alias, two owners; adjudicate it, do not store it twice'
+                                        % (al, first, second)))
+    for al, n in sorted(alias_map.items()):
+        try:
+            con.execute('INSERT INTO item_alias(alias,item) VALUES (?,?)', (al, n))
+        except sqlite3.IntegrityError as e:
+            raise SystemExit(_fk_msg('item_alias', 'alias "%s" points at "%s", which is no item row' % (al, n), e))
+    counts['item_alias'] = len(alias_map)
+
     # ---- item_macro ------------------------------------------------------------------------------------
     fdb = load_json(os.path.join(a.mp, 'food-macros-db.json'))
     mrows, skipped_macro = [], []
@@ -109,6 +177,15 @@ def main():
             if n not in item_names:
                 # ORPHAN-MACRO: a macro row with no price row. Recorded, not inserted - the FK would refuse
                 # it and abort the build, and one legacy reference row must not block the whole estate.
+                #
+                # AND NO ALIAS RESOLUTION HERE, DELIBERATELY - the spec side resolves, this side must not.
+                # Some of these orphans ARE aliases ('Smoked Sausage', 'Sour Cream', 'Cream Cheese'), so
+                # resolving them looks like the same fix. It is the opposite: item_macro is keyed by item,
+                # the insert is INSERT OR REPLACE, and Andouille's label would land on top of the Pork
+                # Smoked Sausage row's macros and be stamped into every recipe that uses it. That is
+                # exactly the corruption Brad's 2026-08-16 ruling 9 named. A spec costing by an alias wants
+                # the shared PRICE; a macro row named by an alias is claiming its own NUMBERS, which is a
+                # different question and needs a person.
                 skipped_macro.append(n)
                 continue
             mrows.append((n, m.get('brand'), m.get('serving_grams'), m.get('serving_qty'),
@@ -153,7 +230,20 @@ def main():
             # price row - which silently degrades the exact class this build exists to prevent (a recipe
             # costing something the price store has never heard of, i.e. a cost line dropped from the
             # total). It is zero today and it must ABORT if it ever stops being zero.
-            per_slug[n] = (slug, n, si.get('grams'), si.get('bid') or None)
+            #
+            # RESOLVE, DO NOT REWRITE. The row keeps BOTH names: `item` is the price row the FK lands on,
+            # `canon` is the word the spec document actually wrote. An unresolvable name still falls
+            # through to the insert and is refused by the key, with the spec's own word in the message.
+            row = resolve_item(n, item_names, alias_map) or n
+            if row in per_slug and per_slug[row][2] != n:
+                # Two DIFFERENT names in one spec resolving to one price row (e.g. "Smoked Sausage" and
+                # "Andouille Smoked Sausage" side by side). Keying on the resolved row would drop one of
+                # them from the total - the dropped-cost-line class this build exists to catch - so it
+                # aborts instead of quietly keeping the last one.
+                raise SystemExit(_collision_msg(
+                    'spec_ingredient', '%s costs both "%s" and "%s", which are the same price row "%s"'
+                    % (slug, per_slug[row][2], n, row)))
+            per_slug[row] = (slug, row, n, si.get('grams'), si.get('bid') or None)
         sirows.extend(per_slug.values())
     con.executemany('INSERT INTO spec(slug,name,cal,protein,cost_ps) VALUES (?,?,?,?,?)', srows)
     # inserted one at a time so a refusal can NAME the row. executemany reports only "FOREIGN KEY constraint
@@ -161,9 +251,10 @@ def main():
     # scavenger hunt at 6:31am.
     for r in sirows:
         try:
-            con.execute('INSERT INTO spec_ingredient(slug,item,grams,bid) VALUES (?,?,?,?)', r)
+            con.execute('INSERT INTO spec_ingredient(slug,item,canon,grams,bid) VALUES (?,?,?,?,?)', r)
         except sqlite3.IntegrityError as e:
-            raise SystemExit(_fk_msg('spec_ingredient', '%s costs "%s" (bid=%s)' % (r[0], r[1], r[3]), e))
+            named = r[2] if r[2] == r[1] else '%s (alias of "%s")' % (r[2], r[1])
+            raise SystemExit(_fk_msg('spec_ingredient', '%s costs "%s" (bid=%s)' % (r[0], named, r[4]), e))
     counts['spec'] = len(srows)
     counts['spec_ingredient'] = len(sirows)
 
@@ -187,7 +278,7 @@ def main():
             os.remove(db_path)
         os.rename(tmp_path, db_path)
 
-    for k in ('commodity', 'item', 'item_macro', 'item_density', 'spec', 'spec_ingredient'):
+    for k in ('commodity', 'item', 'item_alias', 'item_macro', 'item_density', 'spec', 'spec_ingredient'):
         print('  %-16s %6d' % (k, counts[k]))
     if skipped_macro:
         print('  SKIPPED macro rows with no item: %s' % ', '.join(sorted(set(skipped_macro))[:5]))
