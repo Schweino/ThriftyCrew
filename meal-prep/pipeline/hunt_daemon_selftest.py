@@ -1324,6 +1324,28 @@ def run():
       *_learn_a_clean_batch_trips_nothing())
     T("MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and "
       "the REJECTED id is held rather than cached", *_learn_registrar_rulings_get_events())
+    H("MINT: the registrar's approval now executes itself (2026-08-28)")
+    T("MUST FIRE  an APPROVED ruling with a prescription and carried evidence runs all three "
+      "sanctioned tools in dependency order - the hand between the registrar and a priced row is "
+      "gone", *_mint_happy_road_runs_all_three_tools())
+    T("MUST FIRE  only CARRIED rows that carry BOTH a price and a size become board cells - "
+      "'blocked' and 'not-carried' are verdicts about a store, not prices",
+      *_mint_carries_only_carried_priced_rows())
+    T("MUST FIRE  an approve with NO prescription mints nothing and says so - a silent skip is the "
+      "hand-typing era with nobody watching", *_mint_approve_without_prescription_refuses_loudly())
+    T("MUST FIRE  an approve with no CARRIED store row mints nothing and names the capture pass it "
+      "needs - the Reduced Fat Cheddar case, refusing to invent a cell",
+      *_mint_approve_without_evidence_refuses_loudly())
+    T("MUST FIRE  a prescription with no board category, or one naming a section that does not "
+      "exist, mints nothing - the field decides board placement and there is no sane default",
+      *_mint_refuses_a_category_it_cannot_place())
+    T("CLEAN TWIN a REJECTED or unruled id runs no tool at all - the automation moved the typing, "
+      "not the judgement", *_mint_a_refused_id_is_never_born())
+    T("MUST FIRE  a tool refusal stops the chain there - no board cell may name an id that "
+      "new-commodity declined to create", *_mint_a_tool_refusal_stops_the_chain())
+    T("MUST FIRE  ...and the CALL SITE executes it: assemble_mapped mints off the registrar's own "
+      "approval, the wiring every fixture above passes without",
+      *_mint_the_call_site_actually_executes())
     T("MUST FIRE  a recipe that rules ONE raw line twice, identically, still learns every ruling - "
       "smoke3's meatballs learned 13 events and projected NONE over a duplicated 'cumin' line",
       *_learn_a_duplicate_raw_line_holds_only_itself())
@@ -4090,14 +4112,226 @@ def _spawn_with_no_args_is_unchanged():
     return (seen.get("cmd", [])[-1:] == ["X.ps1"], "spawn built %s" % json.dumps(seen.get("cmd")))
 
 
+# =====================================================================================================
+# MINT: the loop from an APPROVED registrar ruling to a priced, nameable ingredient.
+#
+# Until 2026-08-28 this stretch was a HAND. The registrar ruled automatically and the price lane
+# dispatched a pricer automatically, but between them somebody read a paragraph and typed three
+# commands - and add-ingredient-row.ps1's own header says all 156 recipe-board rows "arrived by
+# hand". Two finished recipes sat blocked for a day waiting on rows nobody had written yet.
+#
+# What these fixtures pin is the SHAPE of the automation, not just that it runs: a commodity is still
+# born ONLY on an approve verdict, and only when that ruling carries a prescription AND the pricer
+# found real per-store evidence. Missing either, it must REFUSE AND SAY WHICH - a silent skip here
+# would look exactly like the hand-typing era, except with nobody watching for the paragraph.
+# =====================================================================================================
+def _mint_queue(tmp, term="cotija cheese", stores=None):
+    """Write a queue file in the shape ingredient-queue.ps1 -Record actually leaves on disk -
+    per-store dicts keyed by store name, each with state/price/size/item/evidence."""
+    if stores is None:
+        stores = {"Family Fare": {"state": "carried", "price": 4.29, "size": "8 oz",
+                                  "item": "Cacique Cotija Cheese, 8 oz", "evidence": "shelf page"},
+                  "Fareway": {"state": "not-carried", "price": None, "size": "", "item": "",
+                              "evidence": "searched, nothing"}}
+    path = os.path.join(tmp, "queue.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({"items": [{"term": term, "status": "resolved", "stores": stores}]}, f)
+    return path
+
+
+_MINT_SPEC = {"label": "Cotija Cheese", "unit": "oz", "include": ["cotija"],
+              "clone_exclude_from": "queso-fresco", "gpu": 28.3495,
+              "category": "Dairy & Eggs",
+              "reason": "a distinct aged cheese, not queso fresco"}
+
+
+def _mint_ruling(**kw):
+    r = {"proposed_bid": "cotija cheese", "verdict": "approve", "bid": "cotija-cheese",
+         "term": "cotija cheese", "mint": dict(_MINT_SPEC)}
+    r.update(kw)
+    return r
+
+
+def _mint_happy_road_runs_all_three_tools():
+    """MUST FIRE. An approve + a prescription + carried evidence must reach all three sanctioned
+    tools IN DEPENDENCY ORDER, because add-ingredient-row refuses a bid that is not priced on the
+    live feed and the board row names an id that has to exist before it."""
+    tmp = scratch_dir(prefix="daemon-mint-ok-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
+        order = [c["script"] for c in ps.calls]
+        want = ["new-commodity.ps1", "add-recipe-board-rows.ps1", "add-ingredient-row.ps1"]
+        return (made == ["cotija-cheese"] and order == want and not d.findings,
+                "made=%s order=%s findings=%s"
+                % (json.dumps(made), json.dumps(order), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_carries_only_carried_priced_rows():
+    """MUST FIRE. `not-carried` and `blocked` are verdicts about a STORE, not prices, and a carried
+    row missing a size cannot become a per-unit cell - add-recipe-board-rows computes per_unit itself
+    and refuses to invent one. Offering any of those three would push a refusal downstream, or worse
+    let a null through as a price."""
+    tmp = scratch_dir(prefix="daemon-mint-ev-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp, stores={
+            "Family Fare": {"state": "carried", "price": 4.29, "size": "8 oz", "item": "Cacique"},
+            "Hy-Vee": {"state": "carried", "price": 5.19, "size": "", "item": "no size printed"},
+            "Fareway": {"state": "blocked", "price": 3.99, "size": "8 oz", "item": "blocked row"},
+            "Aldi": {"state": "not-carried", "price": None, "size": "", "item": ""}}))
+        got = d.queue_store_evidence("cotija cheese")
+        return ([r["store"] for r in got] == ["Family Fare"] and got[0]["price"] == 4.29,
+                "evidence=%s" % json.dumps(got))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_approve_without_prescription_refuses_loudly():
+    """MUST FIRE. An approve with no `mint` block is a ruling the daemon cannot execute. It must not
+    quietly do nothing - that is indistinguishable from the hand-typing era, where a finished recipe
+    stayed blocked and the reason lived in a paragraph nobody re-read."""
+    tmp = scratch_dir(prefix="daemon-mint-nospec-")
+    try:
+        ps = FakePS()
+        r = _mint_ruling()
+        r.pop("mint")
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        made = arun(d.execute_registrar_mints("s1", [r]))
+        said = any("no prescription" in f and "cotija-cheese" in f for f in d.findings)
+        return (made == [] and said and not ps.calls,
+                "made=%s calls=%d findings=%s"
+                % (json.dumps(made), len(ps.calls), json.dumps(d.findings)[:240]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_approve_without_evidence_refuses_loudly():
+    """MUST FIRE. This is the `Reduced Fat Cheddar` / `Whole Wheat Flour` case: the registrar
+    approved, but no store row exists to build a price from. It needs a CAPTURE PASS, and the finding
+    has to say so - inventing a cell here would be the estate's worst failure mode."""
+    tmp = scratch_dir(prefix="daemon-mint-noev-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp, stores={
+            "Family Fare": {"state": "not-carried", "price": None, "size": "", "item": ""}}))
+        made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
+        said = any("capture pass" in f for f in d.findings)
+        return (made == [] and said and not ps.calls,
+                "made=%s calls=%d findings=%s"
+                % (json.dumps(made), len(ps.calls), json.dumps(d.findings)[:240]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_refuses_a_category_it_cannot_place():
+    """MUST FIRE, and it is a defect the first cut of this code shipped with. `category` decides
+    where build-deals-page puts the row; add-recipe-board-rows validates it, so a WRONG label dies
+    loudly - but the executor DEFAULTED it to "Pasta, Rice & Grains", and a default never dies. It
+    would have filed cotija cheese under Pasta and read green the whole way down. Both the missing
+    case and the invented-label case must refuse BEFORE any tool runs."""
+    tmp = scratch_dir(prefix="daemon-mint-cat-")
+    try:
+        out = []
+        for bad in (None, "Cheeses & Curds"):
+            ps = FakePS()
+            spec = dict(_MINT_SPEC)
+            if bad is None:
+                spec.pop("category")
+            else:
+                spec["category"] = bad
+            d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+            made = arun(d.execute_registrar_mints("s1", [_mint_ruling(mint=spec)]))
+            said = any("board category" in f for f in d.findings)
+            out.append((made == [] and said and not ps.calls, len(ps.calls), d.findings[:1]))
+        return (all(o[0] for o in out), json.dumps(out)[:300])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_a_refused_id_is_never_born():
+    """CLEAN TWIN, and the one that matters most. The registrar's JUDGEMENT is untouched by this
+    automation: only an approve mints. A reject or a null verdict must run no tool at all."""
+    tmp = scratch_dir(prefix="daemon-mint-rej-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        made = arun(d.execute_registrar_mints("s1", [
+            _mint_ruling(verdict="reject"), _mint_ruling(verdict=None)]))
+        return (made == [] and not ps.calls,
+                "made=%s calls=%s" % (json.dumps(made), json.dumps([c["script"] for c in ps.calls])))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_a_tool_refusal_stops_the_chain():
+    """MUST FIRE. new-commodity refusing (a self-blocking id, say) must abort BEFORE a board row is
+    written, or the estate ends up with a priced cell naming an id that does not exist."""
+    tmp = scratch_dir(prefix="daemon-mint-stop-")
+    try:
+        ps = FakePS({"new-commodity": (3, "", "REFUSED: the include pattern blocks itself")})
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
+        after = [c["script"] for c in ps.calls if "new-commodity" not in c["script"]]
+        said = any("new-commodity refused" in f for f in d.findings)
+        return (made == [] and after == [] and said,
+                "after=%s findings=%s" % (json.dumps(after), json.dumps(d.findings)[:240]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_the_call_site_actually_executes():
+    """MUST FIRE, and it pins the WIRING rather than the function - the gap that has bitten this
+    estate repeatedly. Every fixture above passes with `execute_registrar_mints` never called from
+    anywhere, which is precisely the state the code was in this morning. This drives assemble_mapped
+    and asserts new-commodity RAN off a registrar approval the dispatcher returned."""
+    tmp = scratch_dir(prefix="daemon-mint-wire-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["cotija cheese"]})
+        fd = FakeDispatch({"commodity-registrar": [{"rulings": [_mint_ruling()]}]})
+        ps = _t8_ps(sweep={"slug": "s1", "count": 1, "proposals": [
+            {"term": "cotija cheese", "proposed_bid": "cotija cheese",
+             "evidence": "nothing on the board is this cheese", "declared": True}]})
+        d = daemon(run_dir=tmp, ps=ps, dispatcher=fd, queue_path=_mint_queue(tmp))
+        res = _mapper_result("s1")
+        res["new_commodity_proposals"] = [{"proposed_bid": "cotija cheese", "term": "cotija cheese",
+                                           "evidence": "nothing on the board is this cheese"}]
+        arun(d.assemble_mapped("s1", res, None))
+        ran = [c["script"] for c in ps.calls if "new-commodity" in c["script"]]
+        return (len(ran) == 1, "new-commodity calls=%d all=%s"
+                % (len(ran), json.dumps(sorted(set(c["script"] for c in ps.calls)))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _one_marshalling_road():
-    """Grep the daemon's own source. Any second invocation style would have to be written here."""
+    """Grep the daemon's own source. Any second invocation style would have to be written here.
+
+    THE `-File` NEEDLE IS A PROXY, AND ON 2026-08-28 IT STARTED OVER-MATCHING. It was chosen because
+    `powershell -File x.ps1` is how a second marshalling road would be built, and until the mint
+    executor landed nothing in the daemon had any other reason to write the token. But
+    `new-commodity.ps1` takes a PARAMETER named `-File` - the commodity namespace to write into - so
+    `self.ps(NEW_COMMODITY_PS, [..., "-File", RECIPE_COMMODITIES])` names the token while going
+    through ps_invoke like everything else. That is the invariant HOLDING, not breaking.
+
+    So the exemption is spelled as narrowly as the true statement is: on ONE line, next to
+    RECIPE_COMMODITIES, which is only ever new-commodity's namespace argument. `-File` anywhere else
+    still fails, and the two executable literals are still banned outright - and they are the ones
+    that matter, because you cannot build a powershell command line without naming powershell.
+    """
     with open(os.path.join(HERE, "hunt-daemon.py"), "r", encoding="utf-8") as f:
         src = f.read()
     bad = []
-    for needle in ('"-File"', "'-File'", "powershell.exe", '"powershell"'):
-        if needle in src:
-            bad.append(needle)
+    for i, line in enumerate(src.splitlines(), 1):
+        for needle in ('"-File"', "'-File'", "powershell.exe", '"powershell"'):
+            if needle not in line:
+                continue
+            if needle in ('"-File"', "'-File'") and "RECIPE_COMMODITIES" in line:
+                continue                                  # new-commodity's own namespace argument
+            bad.append("%s (line %d)" % (needle, i))
     return (not bad, "the daemon builds its own powershell command line: %s" % ", ".join(bad))
 
 

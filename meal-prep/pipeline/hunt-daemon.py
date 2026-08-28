@@ -61,6 +61,8 @@ import price_evidence                                            # noqa: E402
 
 HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
 INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
+INGREDIENT_QUEUE_JSON = os.path.join(REPO, "grocery", "ingredient-queue.json")
+CATEGORIES_JSON = os.path.join(REPO, "grocery", "categories.json")
 PROBE_INGREDIENT_PS = os.path.join(REPO, "grocery", "probe-ingredient.ps1")
 PULL_BROWSER_STORES_PY = os.path.join(REPO, "grocery", "pull-browser-stores.py")
 # 25 s/request x ladder rungs x 2 stores x up to 10 terms. One call for the whole batch.
@@ -81,6 +83,10 @@ WAVE_PREAUDIT_PS = os.path.join(HERE, "wave-preaudit.ps1")
 WAVE_PUBLISH_PS = os.path.join(HERE, "wave-publish.ps1")
 BATCH_LEDGER_PS = os.path.join(HERE, "batch-ledger.ps1")
 RESOLUTIONS_PS = os.path.join(HERE, "ingredient-resolutions.ps1")
+NEW_COMMODITY_PS = os.path.join(REPO, "grocery", "new-commodity.ps1")
+ADD_BOARD_ROWS_PS = os.path.join(REPO, "grocery", "add-recipe-board-rows.ps1")
+ADD_INGREDIENT_ROW_PS = os.path.join(HERE, "add-ingredient-row.ps1")
+RECIPE_COMMODITIES = os.path.join(REPO, "grocery", "recipe-commodities.json")
 BUILD_V2_SPEC_PS = os.path.join(HERE, "build-v2-spec.ps1")
 FIND_SIMILAR_PS = os.path.join(HERE, "find-similar.ps1")
 SPECS_DIR = os.path.join(MP, "db", "recipes")
@@ -1835,7 +1841,16 @@ class Daemon(object):
                 out[pb] = {"proposed_bid": pb,
                            "verdict": str(item.get("verdict") or "").strip().lower(),
                            "bid": str(item.get("bid") or "").strip(),
-                           "reason": str(item.get("reason") or "")}
+                           "reason": str(item.get("reason") or ""),
+                           # THE PRESCRIPTION AND THE TERM RIDE ALONG (2026-08-28). This rebuild is
+                           # deliberate - it normalises a model's payload down to the four fields the
+                           # gate is about - but the mint executor downstream needs the `mint` block
+                           # and the raw term, and a rebuild that dropped them turned EVERY approve
+                           # into "the registrar approved but its ruling carries no prescription".
+                           # Six fixtures on the executor passed while that was true; only the one
+                           # driving assemble_mapped saw it.
+                           "term": str(item.get("term") or ""),
+                           "mint": item.get("mint") if isinstance(item.get("mint"), dict) else None}
             for pb in expected:
                 if pb not in out:
                     self.findings.append("map/%s: the commodity-registrar's batch verdict said "
@@ -2156,11 +2171,34 @@ class Daemon(object):
             "above (it is the key every ruling is joined on), `verdict`, `bid` and `reason`. A\n"
             "proposal you cannot rule on is a `reject` carrying what would settle it - never an\n"
             "omission, because an id nobody ruled on is refused and the recipe stops.\n\n"
+            "ON EVERY `approve`, ALSO RETURN `mint` - the prescription, which is now EXECUTED rather\n"
+            "than typed out by a person. Your verdict is still the gate; what follows it is no longer\n"
+            "hand work. Fill `unit`, `include` (patterns that survive CONTIGUOUSLY in real product\n"
+            "names), `clone_exclude_from` (an EXISTING id in the same namespace to inherit exclude\n"
+            "armour from), `namespace`, and the vocabulary basis - `gpu` plus either buy_pkg_* or,\n"
+            "for a package that outlives one recipe like a spice jar or a flour bag, pantry_pkg_*.\n"
+            "`category` is the BOARD SECTION and must be one of these exactly - there is no default,\n"
+            "because a guess files a cheese under Pasta and reads green: %s.\n"
+            "An approve WITHOUT `mint` cannot be carried out: the id stays unborn and the recipe\n"
+            "stays blocked, so a reject with a reason is more useful than an approve you cannot\n"
+            "prescribe.\n\n"
+            "`clone_exclude_from` MUST NOT be an id whose excludes fence out this food's own\n"
+            "include - new-commodity refuses that outright, and it is a real trap: cloning a chicken\n"
+            "id that excludes 'breast' onto breaded chicken BREAST bites self-blocks the new id.\n"
+            "Name any EXISTING id whose patterns would fight this one in `companion_edits`; those\n"
+            "stay a person's job, because two ids claiming one product is the defect this estate\n"
+            "keeps paying for - `lasagna-noodles` already claimed no-boil, and `queso` would have\n"
+            "swallowed products named 'Queso Cotija'.\n\n"
             "`reason` is the sentence a person reads when this blocks a recipe, so make it the\n"
             "evidence rather than the conclusion. A reject leaves the ingredient line UNSETTLED and\n"
             "the recipe STUCK carrying your sentence - which is the right outcome when the honest\n"
             "answer is no, and an expensive one when it is guesswork.\n"
-            % (len(work_items), slug, self.GREP_HARNESS_NOTE, "\n".join(blocks)))
+            % (len(work_items), slug, self.GREP_HARNESS_NOTE, "\n".join(blocks),
+               # QUOTED, NOT COMMA-JOINED. Three of the sixteen labels CONTAIN a comma - "Pasta,
+               # Rice & Grains" reads as two separate sections in a comma-separated list, and a
+               # model that answers "Pasta" gets refused by a check that is working correctly.
+               " | ".join('"%s"' % x for x in self.board_category_labels())
+               or "see grocery\\categories.json"))
 
     # ---- CHANGE M: THE DAEMON WRITES THE FOOD DB --------------------------------------------------
     #
@@ -2870,6 +2908,12 @@ class Daemon(object):
         """
         proposals = await self.new_bid_proposals(slug, res)
         rulings = await self.registrar_rulings(slug, proposals, tables)
+        # AND CARRY THE APPROVALS OUT, which nothing did until 2026-08-28. The registrar decides
+        # whether an id may be born and the price lane already gathered the store evidence; between
+        # the two sat a person typing three commands out of a paragraph. An approve with a
+        # prescription and real CARRIED evidence is now executed here; anything missing either stops
+        # and says which, and every write still goes through the tool that guards it.
+        await self.execute_registrar_mints(slug, rulings, tables)
         db_written, db_findings, db_notes, db_renames = await self.write_food_db_rows(
             slug, res.get("food_db_rows"))
         shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
@@ -4404,6 +4448,193 @@ class Daemon(object):
             if await self.sync_wave_manifest(wk):
                 done.append(wk)
         return done
+
+    def queue_store_evidence(self, term):
+        """The pricer's own per-store rows for `term`, in the shape add-recipe-board-rows wants.
+
+        The pricer already gathers exactly this - item, size, price, per store - and records it with
+        ingredient-queue.ps1 -Record. Its contract says it "never writes a board cell", and that stays
+        true: it reports, and this reads what it reported.
+
+        ONLY CARRIED ROWS WITH ALL THREE FIELDS. add-recipe-board-rows refuses to invent a price and
+        computes per_unit itself from price and size; a row missing either is refused there, so it is
+        dropped here rather than offered. `blocked` and `not-carried` are verdicts about a store, not
+        prices.
+        """
+        try:
+            with open(self.queue_path or INGREDIENT_QUEUE_JSON, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception:                                         # noqa: BLE001
+            return []
+        key = learn_apply.term_key(term)
+        out = []
+        for item in (doc.get("items") or []):
+            if not isinstance(item, dict):
+                continue
+            t = str(item.get("term") or "")
+            if t.strip().lower() != str(term).strip().lower() and \
+                    (not key or str(t).strip().lower() != key):
+                continue
+            for store, row in (item.get("stores") or {}).items():
+                if not isinstance(row, dict):
+                    continue
+                if str(row.get("state") or "").lower() != "carried":
+                    continue
+                price, size, name = row.get("price"), row.get("size"), row.get("item")
+                if price in (None, "") or not str(size or "").strip() or not str(name or "").strip():
+                    continue
+                try:
+                    price = float(price)
+                except (TypeError, ValueError):
+                    continue
+                out.append({"store": str(store), "price": price,
+                            "size": str(size).strip(), "item": str(name).strip()})
+        return out
+
+    async def execute_registrar_mints(self, slug, rulings, tables=None):
+        r"""Carry an APPROVED registrar ruling all the way to a priced, nameable ingredient.
+
+        THE LOOP THAT WAS NEVER CLOSED. The estate already automates both ends: the registrar rules
+        whether an id may be born, and the price lane dispatches a pricer that gathers per-store
+        evidence for terms nothing prices yet. Between them sat a hand: nothing in
+        meal-prep\pipeline calls new-commodity.ps1, add-recipe-board-rows.ps1 or
+        add-ingredient-row.ps1, and that last file's header says every one of the 156 recipe-board
+        rows "arrived by hand". Seven approved mints on 2026-08-27 and two more on 08-28 were typed
+        out of prose rulings, and `Reduced Fat Cheddar Cheese` and `Whole Wheat Flour` each blocked a
+        finished recipe for a day waiting for a row nobody had written yet.
+
+        THE GATE MOVES, IT DOES NOT DISAPPEAR. A commodity is still born only on an approve verdict
+        from the registrar - that judgement is untouched. What is automated is the typing that
+        follows it, and only when the ruling states a prescription AND the pricer found real
+        per-store evidence. No prescription, or no evidence, and it stops and says which.
+
+        Every write goes through the sanctioned tool, so each keeps its own proof: new-commodity
+        clones exclude armour and refuses a self-blocking id, add-recipe-board-rows refuses to invent
+        a price and computes per_unit itself, add-ingredient-row refuses a dangling bid. This adds no
+        new way to write - it just stops asking a person to run three commands from a paragraph.
+        """
+        made = []
+        for r in (rulings or []):
+            if not isinstance(r, dict):
+                continue
+            if str(r.get("verdict") or "").strip().lower() != "approve":
+                continue
+            bid = str(r.get("bid") or r.get("proposed_bid") or "").strip()
+            spec = r.get("mint") if isinstance(r.get("mint"), dict) else None
+            term = str(r.get("proposed_bid") or "").strip()
+            if not bid:
+                continue
+            if not spec:
+                self.findings.append(
+                    "mint/%s: the registrar APPROVED %r but its ruling carries no prescription, so "
+                    "nothing could be minted. The id stays unborn and the recipe stays blocked."
+                    % (slug, bid))
+                continue
+            ev = self.queue_store_evidence(r.get("term") or term)
+            if not ev:
+                self.findings.append(
+                    "mint/%s: the registrar APPROVED %r but the pricer recorded no CARRIED store row "
+                    "with a price AND a size for it, so there is nothing to build a board row from. "
+                    "This one needs a capture pass before it can be born." % (slug, bid))
+                continue
+            ok, why = await self.mint_one(bid, spec, ev, term or bid)
+            if ok:
+                made.append(bid)
+                self.log("  mint: %s born from the registrar's approval - %d store cell(s), "
+                         "vocabulary row written" % (bid, len(ev)))
+            else:
+                self.findings.append("mint/%s: %r could not be executed: %s" % (slug, bid, why))
+        return made
+
+    def board_category_labels(self):
+        """The board sections a row may be placed in, read from the same file add-recipe-board-rows
+        validates against. An unreadable file returns [] and the check falls back to "not empty",
+        because refusing every mint over a read failure is the wrong direction."""
+        try:
+            with open(CATEGORIES_JSON, "r", encoding="utf-8-sig") as f:
+                doc = json.load(f) or {}
+        except Exception:                                         # noqa: BLE001
+            return []
+        return [str(c.get("label") or "") for c in (doc.get("categories") or [])
+                if isinstance(c, dict) and str(c.get("label") or "").strip()]
+
+    async def mint_one(self, bid, spec, evidence, term):
+        """new-commodity -> add-recipe-board-rows -> add-ingredient-row, in that order, stopping at
+        the first refusal. Returns (ok, why_not).
+
+        The ORDER is the dependency: add-ingredient-row refuses a bid that is not priced on the live
+        feed, so the board row has to exist first, and the board row names an id that has to exist
+        before that.
+        """
+        # CATEGORY IS PRESCRIBED, NEVER DEFAULTED, AND CHECKED BEFORE ANY TOOL RUNS. It decides where
+        # build-deals-page puts the row, and add-recipe-board-rows validates it against
+        # categories.json - so a WRONG label dies loudly, but a DEFAULT never dies. The first cut of
+        # this defaulted to "Pasta, Rice & Grains" for everything, which would have filed cotija
+        # cheese under pasta and read green all the way down. There is no sane default, so there is
+        # no default - and it is checked HERE rather than at the board row, because a commodity born
+        # with nowhere to put its price is exactly the half-state this refusal exists to prevent.
+        cat = str(spec.get("category") or "").strip()
+        labels = self.board_category_labels()
+        if not cat or (labels and cat not in labels):
+            return False, ("the ruling prescribes no usable board category (%r). It must be one of: "
+                           "%s" % (cat, ", ".join(labels) if labels else "the labels in "
+                                   "grocery\\categories.json"))
+        ns_recipe = str(spec.get("namespace") or "recipe").strip().lower() != "weekly"
+        args = ["-Id", bid, "-Label", str(spec.get("label") or bid.replace("-", " ").title()),
+                "-Unit", str(spec.get("unit") or "oz"),
+                "-Include"] + [str(x) for x in (spec.get("include") or []) if str(x).strip()]
+        args += ["-CloneExcludeFrom", str(spec.get("clone_exclude_from") or "")]
+        extra = [str(x) for x in (spec.get("extra_exclude") or []) if str(x).strip()]
+        if extra:
+            args += ["-ExtraExclude"] + extra
+        for k, flag in (("band_min", "-BandMin"), ("band_max", "-BandMax")):
+            if spec.get(k) not in (None, ""):
+                args += [flag, str(spec.get(k))]
+        if ns_recipe:
+            args += ["-File", RECIPE_COMMODITIES]
+        rc, out, err = await self.ps(NEW_COMMODITY_PS, args, timeout=300)
+        if rc != 0:
+            return False, "new-commodity refused: %s" % ((out or "") + (err or "")).strip()[:220]
+
+        rows = [{"id": bid, "commodity": str(spec.get("label") or bid.replace("-", " ").title()),
+                 "category": cat,
+                 "unit": str(spec.get("unit") or "oz"), "stores": evidence}]
+        rows_path = os.path.join(self.run_dir, "price-evidence", "mint-%s.rows.json" % bid)
+        try:
+            os.makedirs(os.path.dirname(rows_path), exist_ok=True)
+            with open(rows_path, "w", encoding="utf-8") as f:
+                json.dump(rows, f, ensure_ascii=False, indent=2)
+        except Exception as e:                                    # noqa: BLE001
+            return False, "the board-row file could not be written (%s)" % e
+        rc, out, err = await self.ps(ADD_BOARD_ROWS_PS,
+                                     ["-RowsFile", rows_path, "-Apply"], timeout=300)
+        if rc != 0:
+            return False, "add-recipe-board-rows refused: %s" % ((out or "") + (err or "")).strip()[:220]
+
+        vargs = ["-Item", term, "-Bid", bid, "-Unit", str(spec.get("unit") or "oz"),
+                 "-Gpu", str(spec.get("gpu") or 28.3495),
+                 "-Board", ("recipe" if ns_recipe else "weekly"),
+                 "-Note", ("Minted from the commodity-registrar's APPROVE ruling and the pricer's own "
+                           "store evidence, executed by the map lane. Reason on record: %s"
+                           % str((spec.get("reason") or ""))[:400]),
+                 "-Apply"]
+        if spec.get("pantry_pkg_g"):
+            vargs += ["-PantryPkgG", str(spec.get("pantry_pkg_g")),
+                      "-PantryPkgLabel", str(spec.get("pantry_pkg_label") or ""), "-Bulk"]
+        elif spec.get("buy_pkg_g"):
+            vargs += ["-BuyPkgG", str(spec.get("buy_pkg_g")),
+                      "-BuyPkgLabel", str(spec.get("buy_pkg_label") or "")]
+        rc, out, err = await self.ps(ADD_INGREDIENT_ROW_PS, vargs, timeout=300)
+        if rc != 0:
+            return False, ("the id and its board row exist but add-ingredient-row refused, so the "
+                           "NAME still does not resolve: %s"
+                           % ((out or "") + (err or "")).strip()[:220])
+        for note in (spec.get("companion_edits") or []):
+            self.findings.append(
+                "mint/%s: the registrar named a COMPANION EDIT that is not automated - two ids "
+                "claiming one product is the defect this estate keeps paying for, so a person must "
+                "make this one: %s" % (bid, str(note)[:300]))
+        return True, ""
 
     async def learn_from_audit(self, wk, audit):
         """Every audit finding becomes an EVENT, and a finding that refutes an identity INVALIDATES

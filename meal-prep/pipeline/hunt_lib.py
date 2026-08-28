@@ -934,6 +934,45 @@ REGISTRAR = {"type": "object", "properties": {
 #
 # The single-item REGISTRAR above STAYS for now, per plan 4.2.3: it is retired only once the drill has
 # proven the batch road, and only if nothing else references it.
+# THE PRESCRIPTION, SO AN APPROVAL CAN BE EXECUTED (2026-08-28). A ruling used to carry a verdict, an
+# id and a sentence - everything a PERSON needs and nothing a script can run. So an approved id sat
+# inert until somebody minted it by hand: the daemon calls none of new-commodity.ps1,
+# add-recipe-board-rows.ps1 or add-ingredient-row.ps1, and every one of the 156 recipe-board rows
+# "arrived by hand" in that file's own words. Seven mints on 2026-08-27 and two more on 08-28 were
+# executed by hand off prose, and meanwhile `Reduced Fat Cheddar Cheese` and `Whole Wheat Flour` each
+# blocked a finished recipe for a whole day for want of a row nobody had typed.
+#
+# These are exactly the arguments the three sanctioned tools take. Nothing here decides anything - the
+# verdict already did that - it only states the decision in a form that can be carried out.
+MINT_SPEC = {"type": "object", "properties": {
+    "unit": {"type": "string", "description": "lb | oz | floz | each | dozen | gallon"},
+    "include": {"type": "array", "items": {"type": "string"}, "description":
+                "regex patterns that must survive CONTIGUOUSLY in real product names"},
+    "clone_exclude_from": {"type": "string", "description":
+                           "an EXISTING id in the same namespace whose exclude armour this inherits. "
+                           "It must not exclude this food's own include - a parent that fences this "
+                           "food out cannot be its armour, and new-commodity refuses that outright."},
+    "extra_exclude": {"type": "array", "items": {"type": "string"}, "description":
+                      "patterns specific to this food, on top of the inherited armour"},
+    "band_min": {"type": "number"}, "band_max": {"type": "number"},
+    "namespace": {"type": "string", "description": "recipe | weekly"},
+    "category": {"type": "string", "description":
+                 "the board section this food is sold in, EXACTLY one of the labels in "
+                 "grocery\\categories.json. It decides where build-deals-page places the row, and "
+                 "there is no sane default - a guess files a cheese under Pasta."},
+    "gpu": {"type": "number", "description": "grams in ONE unit of the priced basis"},
+    "buy_pkg_g": {"type": "number"}, "buy_pkg_label": {"type": "string"},
+    "pantry_pkg_g": {"type": "number", "description":
+                     "use INSTEAD of buy_pkg when the package outlives one recipe - a spice jar, a "
+                     "flour bag. buy_pkg charges the whole package to the recipe."},
+    "pantry_pkg_label": {"type": "string"},
+    "companion_edits": {"type": "array", "items": {"type": "string"}, "description":
+                        "any EXISTING id whose patterns would fight this one, and what to change - "
+                        "prose, for a person. Two ids claiming one product is the defect this "
+                        "estate keeps paying for (lasagna-noodles already claimed no-boil; queso "
+                        "would have swallowed 'Queso Cotija')."}},
+    "required": ["unit", "include", "clone_exclude_from", "namespace", "category"]}
+
 REGISTRAR_BATCH = {"type": "object", "properties": {
     "rulings": {"type": "array", "description":
                 "one entry per proposal in the dossier, in any order",
@@ -944,8 +983,8 @@ REGISTRAR_BATCH = {"type": "object", "properties": {
                     "bid": {"type": "string", "description":
                             "on approve, the id to mint; on alias, the EXISTING id it resolves to"},
                     "reason": {"type": "string", "description":
-                               "the evidence, in a sentence a person can act on"}},
-                    "required": ["proposed_bid", "verdict", "reason"]}}},
+                               "the evidence, in a sentence a person can act on"},
+                    "mint": MINT_SPEC}, "required": ["proposed_bid", "verdict", "reason"]}}},
     "required": ["rulings"]}
 
 REGISTRAR_VERDICTS = ("approve", "reject", "alias")
