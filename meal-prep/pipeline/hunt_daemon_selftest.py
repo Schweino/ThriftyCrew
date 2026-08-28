@@ -7486,17 +7486,16 @@ def _fooddb_near_name_matches_the_live_db():
         if isinstance(r, dict) and r.get("item"):
             groups.setdefault(k(r["item"]), []).append(r["item"])
     hits = sorted(v for v in groups.values() if len(v) > 1)
-    # FIVE SINCE 2026-08-28, and the fifth is exactly why this fixture exists. Today's mapping added
-    # a "Panko Bread Crumbs" row beside the estate's existing "Panko Breadcrumbs", and the two
-    # DISAGREE: the Kikkoman label row reads 0 g fat per 30 g while the FDC row reads 3.57 g per
-    # 100 g - about 1.07 g on the same serving. That is a real question about which basis is right,
-    # not a spelling, so the write path correctly wrote both and named it. Recorded here as
-    # KNOWN-PENDING rather than merged, because Brad rules row removals; see
-    # design/OPEN-ITEM-panko-two-rows-disagree-2026-08-28.md. Listing it keeps the alarm live for a
-    # SIXTH - deleting the fixture to get green would have thrown the alarm away.
+    # BACK TO FOUR ON 2026-08-28. The fifth - "Panko Bread Crumbs" beside "Panko Breadcrumbs" - was
+    # the alarm doing its job: the two agreed on calories, protein and carbs and disagreed on FAT,
+    # the Kikkoman label reading 0 g per 30 g against the FDC row's 3.57 g per 100 g, about 1.07 g
+    # on that same serving. Brad ruled it the same day: the FDC basis stands, because a US label
+    # rounds to 0 only under 0.5 g, so the label was the likelier error. The surviving row keeps the
+    # LABEL row's NAME - that is the vocabulary row and the canon on all four specs that cost panko -
+    # and carries the FDC numbers and source. The pair leaves this list because it was ANSWERED, not
+    # to get green; the remaining four are still open and a FIFTH here is still a real find.
     want = sorted([["Apple", "Apples"], ["Fresh Thyme", "Fresh Thyme"],
-                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"],
-                   ["Panko Breadcrumbs", "Panko Bread Crumbs"]],
+                   ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
                   key=lambda v: sorted(v))
     got = sorted(hits, key=lambda v: sorted(v))
     ok = [sorted(v) for v in got] == [sorted(v) for v in want]

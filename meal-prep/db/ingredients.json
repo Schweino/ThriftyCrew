@@ -1529,9 +1529,9 @@
     },
     {
         "item":  "Lime Juice",
-        "bid":  "limes",
-        "gpu":  30,
-        "unit":  "each",
+        "bid":  "lime-juice",
+        "gpu":  29.57,
+        "unit":  "floz",
         "board":  "recipe",
         "pantry_pkg_g":  237,
         "pantry_pkg_label":  "8floz bottle",
@@ -1683,10 +1683,10 @@
     },
     {
         "item":  "Orange Zest",
-        "bid":  "orange-juice",
-        "gpu":  31,
-        "unit":  "floz",
-        "board":  "recipe",
+        "bid":  "oranges",
+        "gpu":  20.78,
+        "unit":  "lb",
+        "board":  "weekly",
         "buy_pkg_g":  131,
         "buy_pkg_label":  "each"
     },
@@ -3134,5 +3134,15 @@
                         "Frozen Cilantro Lime Rice"
                     ],
         "alias_ruling":  "the recipe says frozen; the carried product is a shelf-stable pouch of the same ready-seasoned rice"
+    },
+    {
+        "item":  "Fresh Lime Juice",
+        "bid":  "limes",
+        "gpu":  30,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  67,
+        "buy_pkg_label":  "each",
+        "note":  "Brad ruled 2026-08-28: bottled lime juice is what stores sell, so the PLAIN name 'Lime Juice' now prices as the bottle (bid lime-juice, floz), mirroring Lemon Juice. This row is the explicit fresh-squeezed option, mirroring Fresh Lemon Juice, so the convention is a rule stated in the names rather than a difference nobody chose. gpu 30 = juice yield of one medium lime."
     }
 ]

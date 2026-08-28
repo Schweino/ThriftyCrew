@@ -18,7 +18,7 @@
                  "protein":  61,
                  "carbs":  55,
                  "fat":  9,
-                 "cost_ps":  "3.06"
+                 "cost_ps":  "2.96"
              },
     "intro_html":  "This Mediterranean bowl leans on roasted peppers and briny olives to make chicken taste like a vacation. It brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost), no fancy technique required. One batch makes 14 servings, so a few jars from the pantry aisle stretch a long way.",
     "ingredients_display":  [
@@ -139,8 +139,8 @@
                                    "item":  "Lime Juice",
                                    "grams":  30,
                                    "buy":  "2 tbsp",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Dried Oregano",
@@ -189,7 +189,7 @@
     "head":  {
                  "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker mediterranean chicken bowls, budget dinner",
-                 "costPerServing":  3.06,
+                 "costPerServing":  2.96,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 8 lb (3450 g)",
                                           "Rice, 5.25 cups dry (940 g)",

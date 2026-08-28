@@ -18,7 +18,7 @@
                  "protein":  57,
                  "carbs":  46,
                  "fat":  17,
-                 "cost_ps":  "3.38"
+                 "cost_ps":  "3.27"
              },
     "intro_html":  "Posole verde is a hearty green Mexican stew, and this version leans on tomatillos and poblanos for a bright, mildly spicy broth. Built on hominy with {{protein}} grams of protein a bowl, it runs about ${{cost_ps}} a serving (at everyday cost). Fourteen servings means a big pot of soul-warming stew ready whenever you are.",
     "ingredients_display":  [
@@ -167,8 +167,8 @@
                                    "item":  "Lime Juice",
                                    "grams":  60,
                                    "buy":  "2 limes, juiced",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -182,7 +182,7 @@
     "head":  {
                  "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker pork posole verde bowls, budget dinner",
-                 "costPerServing":  3.38,
+                 "costPerServing":  3.27,
                  "recipeIngredient":  [
                                           "Pork Loin, 8 lb (3500 g)",
                                           "Hominy, 22 cups (3600 g)",

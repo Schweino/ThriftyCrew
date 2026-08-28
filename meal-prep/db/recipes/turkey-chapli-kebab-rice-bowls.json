@@ -30,7 +30,7 @@
                  "protein":  34,
                  "carbs":  71,
                  "fat":  13,
-                 "cost_ps":  "3.54"
+                 "cost_ps":  "3.43"
              },
     "intro_html":  "Chapli kebab is the flat, spiced patty of northwest Pakistan, cumin and coriander forward with tomato and green chili worked right into the meat. Traditionally they hit a hot pan of oil. We put them on sheet pans and finish under the broiler, which means you can make fourteen servings without standing over a skillet all afternoon. Over rice they come to \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -169,8 +169,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  126,
                                    "buy":  "0.5 cups",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -245,7 +245,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  3.54,
+                 "costPerServing":  3.43,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 4.25 lb (1904 g)",
                                           "Ground Cumin, 2 tbsp (12 g)",

@@ -3472,16 +3472,16 @@
   },
   {
    "item": "Panko Breadcrumbs",
-   "brand": "Kikkoman",
-   "serving_grams": 30,
-   "serving_qty": 0.5,
-   "serving_unit": "cup",
-   "calories": 110,
-   "protein_g": 4,
-   "carbs_g": 24,
-   "fat_g": 0,
-   "notes": "Japanese-style panko, 8 oz box (matches the priced 8oz-box package row). Deliberately separate from the USDA 'Bread Crumbs' row (380 cal/100g plain crumbs); panko is a distinct product at 367 cal/100g.",
-   "source": "Kikkoman Panko Bread Crumbs 8 oz label (Hannaford/myfooddiary listings concur)"
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "serving_grams": 100,
+   "calories": 357,
+   "protein_g": 14.3,
+   "carbs_g": 71.4,
+   "fat_g": 3.57,
+   "fiber_g": 3.6,
+   "source": "fdc:1862715",
+   "notes": "PANKO [Branded]. Brad ruled 2026-08-28 on the two-row collision the LOCKSTEP fixture surfaced: the FDC basis stands and the Kikkoman label row was dropped. The rows agreed on calories, protein and carbs and disagreed only on FAT - the label printed 0 g per 30 g serving, but this basis puts 1.07 g on that same serving, and a US label rounds to 0 only under 0.5 g. So the two could not both be right and the label was the likelier error. The name is the LABEL row's because that is the vocabulary row and the canon on all four specs that cost panko; only the numbers and the source moved."
   },
   {
    "item": "Sweet Chili Sauce",
@@ -5493,7 +5493,6 @@
    "source": "https://kalynskitchen.com/moroccan-spice-mix/",
    "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
   },
-
   {
    "item": "Romaine Lettuce",
    "serving_qty": 100,
@@ -5564,20 +5563,6 @@
    "fiber_g": 1.1,
    "source": "fdc:173961",
    "notes": "Cranberry sauce, canned, sweetened [SR Legacy].",
-   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
-  },
-  {
-   "item": "Panko Bread Crumbs",
-   "serving_qty": 100,
-   "serving_unit": "g",
-   "serving_grams": 100,
-   "calories": 357,
-   "protein_g": 14.3,
-   "carbs_g": 71.4,
-   "fat_g": 3.57,
-   "fiber_g": 3.6,
-   "source": "fdc:1862715",
-   "notes": "PANKO [Branded].",
    "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
   },
   {
@@ -5864,6 +5849,21 @@
    "fiber_g": 0,
    "source": "https://www.nutritionvalue.org/Pork%2C_carnitas_22002050_nutritional_value.html",
    "notes": "USDA FNDDS 22002050, per 100 g: 270 cal, 24.6 P, 0 C, 18.3 F. Row stated at the page's own 1 cup = 135 g household measure. The FDC shelf for this term offered only frankfurters and babyfood, and the Del Real manufacturer spec sheet rendered its serving size and calories as placeholder zeros, so it was not transcribable.",
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+  },
+  {
+   "item": "Juniper Berries",
+   "brand": "Morton & Bassett",
+   "serving_qty": 0.25,
+   "serving_unit": "tsp",
+   "serving_grams": 0.5,
+   "calories": 0,
+   "protein_g": 0,
+   "carbs_g": 0,
+   "fat_g": 0,
+   "fiber_g": 0,
+   "source": "https://www.eatthismuch.com/food/nutrition/juniper-berries,482361/",
+   "notes": "Spice-jar label prints all zeroes at a 1/4 tsp serving. CALLED OUT: the page's own serving-gram field reads 7 g, which cannot be a quarter teaspoon of whole berries, so serving_grams is stated at the true 1/4 tsp weight of about 0.5 g; every macro is zero, so no gram basis changes a computed macro. The FDC shelf for this term offered only goji, mixed-berry and acai rows, none of which is juniper.",
    "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
   }
  ]

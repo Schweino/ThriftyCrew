@@ -18,7 +18,7 @@
                  "protein":  39,
                  "carbs":  61,
                  "fat":  15,
-                 "cost_ps":  "3.60"
+                 "cost_ps":  "3.49"
              },
     "intro_html":  "This is the kind of dinner that makes your whole week easier. One chuck roast, a lazy day in the slow cooker, and you walk away with fourteen loaded burrito bowls that taste like they came from your favorite taco spot. The beef does all the work while you do anything else.",
     "ingredients_display":  [
@@ -114,8 +114,8 @@
                                    "item":  "Lime Juice",
                                    "grams":  105,
                                    "buy":  "4 limes",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -192,7 +192,7 @@
     "head":  {
                  "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker barbacoa burrito bowl, budget dinner",
-                 "costPerServing":  3.60,
+                 "costPerServing":  3.49,
                  "recipeIngredient":  [
                                           "Beef Chuck Roast, 4 lb (1814 g)",
                                           "Chipotle in Adobo, 6 1/4 tbsp (105 g)",

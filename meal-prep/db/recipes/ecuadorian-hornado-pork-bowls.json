@@ -25,7 +25,7 @@
                  "protein":  46,
                  "carbs":  24,
                  "fat":  44,
-                 "cost_ps":  "2.61"
+                 "cost_ps":  "2.50"
              },
     "intro_html":  "Walk through a market in Ecuador and you will find whole roasted pigs sitting on counters with a cook carving pieces off to order. That is hornado. The marinade is unapologetic about garlic, an amount that looks like a mistake until you taste it, plus achiote for color and lime for brightness. Roasted low for hours, the meat goes soft and the outside turns crackling. Served with potatoes, it is a plate worth the wait.",
     "ingredients_display":  [
@@ -95,8 +95,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  126,
                                    "buy":  "0.5 cups",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Garlic",
@@ -171,7 +171,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT4H30M",
                  "totalTime":  "PT5H",
-                 "costPerServing":  2.61,
+                 "costPerServing":  2.50,
                  "recipeIngredient":  [
                                           "Pork Shoulder, 7.5 lb (3360 g)",
                                           "Lime Juice, 0.5 cups (126 g)",

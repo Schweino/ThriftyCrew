@@ -18,7 +18,7 @@
                  "protein":  50,
                  "carbs":  59,
                  "fat":  19,
-                 "cost_ps":  "4.54"
+                 "cost_ps":  "4.43"
              },
     "intro_html":  "Bright, zesty, and a little addictive, this Thai-style larb is proof that healthy prep never has to be boring. Each bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). One skillet makes 14 servings.",
     "ingredients_display":  [
@@ -102,8 +102,8 @@
                                    "item":  "Lime Juice",
                                    "grams":  90,
                                    "buy":  "1/3 cup",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Honey",
@@ -159,7 +159,7 @@
     "head":  {
                  "description":  "A high-protein Thai meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, thai turkey larb bowls, budget dinner",
-                 "costPerServing":  4.54,
+                 "costPerServing":  4.43,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 8 lb (3300 g)",
                                           "Rice, 5.25 cups dry (950 g)",

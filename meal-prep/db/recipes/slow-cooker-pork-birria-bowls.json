@@ -23,7 +23,7 @@
                  "protein":  44,
                  "carbs":  42,
                  "fat":  45,
-                 "cost_ps":  "3.28"
+                 "cost_ps":  "3.18"
              },
     "intro_html":  "Birria started in Jalisco as a goat stew and became famous everywhere else as the thing you dip a cheesy taco into. The braising liquid, the consomme, is the whole reason people lose their minds over it. This version uses pork shoulder and chipotles in adobo instead of a wall of dried chiles, which means no toasting, no soaking, no blending. Slow cooker in the morning, crisped cheesy tortillas at dinner, and a cup of consomme to dunk them in.",
     "ingredients_display":  [
@@ -225,8 +225,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  140,
                                    "buy":  "0.5 cups",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Black Pepper",
@@ -245,7 +245,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT8H",
                  "totalTime":  "PT8H30M",
-                 "costPerServing":  3.28,
+                 "costPerServing":  3.18,
                  "recipeIngredient":  [
                                           "Pork Shoulder, 4.75 lb (2117 g)",
                                           "Yellow Onion, 1 onion (134 g)",

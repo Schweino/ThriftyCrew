@@ -28,7 +28,7 @@
                  "protein":  35,
                  "carbs":  44,
                  "fat":  13,
-                 "cost_ps":  "4.74"
+                 "cost_ps":  "4.64"
              },
     "intro_html":  "Carne asada is the taco truck classic, charred steak marinated with lime, garlic, cumin, and chili, then wrapped with fresh pico and a spoon of guacamole, and this build keeps every bit of that while staying under 400 calories. There is no cheese here and the guac is measured, because that is exactly what buys the room for a real 4 ounces of steak. Each burrito lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Slow Cooker Carne Asada Rice Bowls take the low-and-slow road; this one sears the steak and wraps it with cold, bright pico.",
     "ingredients_display":  [
@@ -161,8 +161,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  28,
                                    "buy":  "1.75 tbsp",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Avocado",
@@ -213,7 +213,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  4.74,
+                 "costPerServing":  4.64,
                  "recipeIngredient":  [
                                           "High Fiber Tortilla, 14 tortillas (910 g)",
                                           "Sirloin Steak, 3.5 lb (1588 g)",

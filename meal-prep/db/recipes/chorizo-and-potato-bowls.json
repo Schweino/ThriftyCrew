@@ -16,7 +16,7 @@
                  "protein":  25,
                  "carbs":  56,
                  "fat":  38,
-                 "cost_ps":  "4.06"
+                 "cost_ps":  "3.95"
              },
     "intro_html":  "Crispy potatoes and spicy pork chorizo with charred bell pepper and a bright tomatillo-cilantro-lime finish. Each bowl comes in at {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Chorizo brings so much seasoning on its own that half the spice cabinet gets the day off.",
     "ingredients_display": ["\u003cstrong\u003ePork Chorizo (Cacique):\u003c/strong\u003e 4.5 lb (2084 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 15 potatoes (3175 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eChili Powder:\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.25 tbsp (3 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 14 peppers (1680 g)","\u003cstrong\u003eTomatillos (generic):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 cup (212 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
@@ -123,8 +123,8 @@
                                    "item":  "Lime Juice",
                                    "grams":  212,
                                    "buy":  "1 cup",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Black Pepper",
@@ -142,7 +142,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT60M",
-                 "costPerServing":  4.06,
+                 "costPerServing":  3.95,
                  "recipeIngredient":  [
                                           "Pork Chorizo, 4.5 lb (2084 g)",
                                           "Potato, 15 potatoes (3175 g)",

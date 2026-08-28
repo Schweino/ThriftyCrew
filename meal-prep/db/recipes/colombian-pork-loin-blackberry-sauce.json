@@ -27,7 +27,7 @@
                  "protein":  55,
                  "carbs":  74,
                  "fat":  13,
-                 "cost_ps":  "3.42"
+                 "cost_ps":  "3.31"
              },
     "intro_html":  "Lomo de cerdo con salsa de moras is a Colombian classic, and it is the rare fruit sauce that is genuinely tart instead of just sweet. Roasted garlic rubbed pork loin, sliced thin, under a blackberry sauce cooked down with lime and a little sugar, all over rice. Pork loin is one of the leanest cuts we track, so this plate carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
@@ -113,8 +113,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  52,
                                    "buy":  "3.5 tbsp",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Pork Loin",
@@ -165,7 +165,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT1H",
                  "totalTime":  "PT1H20M",
-                 "costPerServing":  3.42,
+                 "costPerServing":  3.31,
                  "recipeIngredient":  [
                                           "Blackberries, 7 cups (1008 g)",
                                           "Chicken Broth, 1 carton (840 g)",

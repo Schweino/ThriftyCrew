@@ -24,7 +24,7 @@
                  "protein":  36,
                  "carbs":  68,
                  "fat":  32,
-                 "cost_ps":  "3.45"
+                 "cost_ps":  "3.34"
              },
     "intro_html":  "Real Goan vindaloo is not a heat contest. The name comes from the Portuguese carne de vinha d\u0027alhos, meaning meat in wine and garlic, and the dish that grew out of it in Goa swapped the wine for vinegar and added chilies. Sour, garlicky, deeply spiced pork over rice. It carries {{protein}} grams of protein for about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
@@ -157,8 +157,8 @@
                                    "canon":  "Lime Juice",
                                    "grams":  87,
                                    "buy":  "5.75 tbsp",
-                                   "bid":  "limes",
-                                   "gpu":  "30.000"
+                                   "bid":  "lime-juice",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Dried Arbol Chiles",
@@ -265,7 +265,7 @@
                  "prepTime":  "PT30M",
                  "cookTime":  "PT1H30M",
                  "totalTime":  "PT2H",
-                 "costPerServing":  3.45,
+                 "costPerServing":  3.34,
                  "recipeIngredient":  [
                                           "Pork Shoulder, 5 lb (2240 g)",
                                           "Vegetable Oil, 0.75 cups (157 g)",
