@@ -3,10 +3,10 @@
     "title":  "Butter Chicken Pasta",
     "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  8,
     "created":  "2026-08-27T11:40:24",
-    "updated":  "2026-08-27T19:08:11",
+    "updated":  "2026-08-27T19:36:50",
     "terms":  [
                   {
                       "term":  "almond butter",
@@ -150,6 +150,12 @@
                         "state":  "waved",
                         "at":  "2026-08-27T19:08:11",
                         "by":  "wave-close",
+                        "detail":  "wave 8"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-27T19:36:50",
+                        "by":  "wave-publish",
                         "detail":  "wave 8"
                     }
                 ]

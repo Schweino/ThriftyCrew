@@ -5858,7 +5858,8 @@
                   {
                       "term":  "red pepper flakes",
                       "recipes":  [
-                                      "italian-chicken-tortellini-skillet-recipe-video"
+                                      "italian-chicken-tortellini-skillet-recipe-video",
+                                      "chicken-meatballs-in-cranberry-sauce"
                                   ],
                       "added":  "2026-08-26T13:26:56",
                       "why":  "italian-chicken-tortellini-skillet-recipe-video needs it",
@@ -5869,56 +5870,56 @@
                                                      "price":  7.78,
                                                      "size":  "12 oz",
                                                      "item":  "Great Value Crushed Red Pepper, 12 oz",
-                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json: Walmart row Great Value Crushed Red Pepper 12 oz at $0.6483/oz = $7.78 line.",
-                                                     "checked":  "2026-08-26T13:30:31"
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 names Great Value Crushed Red Pepper 12 oz at Walmart, 0.6483/oz = 7.78.",
+                                                     "checked":  "2026-08-27T19:05:34"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
                                                      "price":  3.99,
                                                      "size":  "1.5 oz",
                                                      "item":  "McCormick Crushed Red Pepper",
-                                                     "evidence":  "pre-pass driver rung 1 \u0027red pepper flakes\u0027 = 3 priced rows, all genuine crushed red pepper: McCormick 1.5 oz $3.99; Badia 4.5 oz $3.99; Simply Organic 1.59 oz $6.99.",
-                                                     "checked":  "2026-08-26T13:30:31"
+                                                     "evidence":  "driver rung 1 \u0027red pepper flakes\u0027=3 and all three rows are crushed red pepper shakers; McCormick 1.5 oz at 3.99.",
+                                                     "checked":  "2026-08-27T19:05:34"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  2.99,
                                                          "size":  "1.5 oz",
                                                          "item":  "Our Family Red Pepper, Crushed 1.5 Oz",
-                                                         "evidence":  "pre-pass server ladder \u0027red pepper flakes\u0027=0 -\u003e \u0027red pepper\u0027=23 hits. Our Family Red Pepper, Crushed 1.5 Oz $2.99 is the flakes. Fresh red peppers, roasted red peppers, hummus and ground cayenne in the same grid were excluded.",
-                                                         "checked":  "2026-08-26T13:30:31"
+                                                         "evidence":  "full ladder \u0027red pepper flakes\u0027=0 -\u003e \u0027red pepper\u0027=23; Our Family Red Pepper Crushed 1.5 oz at 2.99 is the ingredient. Roasted red peppers, red pepper hummus and ground cayenne rows ruled out.",
+                                                         "checked":  "2026-08-27T19:05:34"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "carried",
                                                     "price":  1.25,
                                                     "size":  "2 oz",
                                                     "item":  "That\u0027s Smart! Crushed Red Pepper",
-                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json, commodity red-pepper-flakes, 7 of 7 stores. Hy-Vee row: That\u0027s Smart! Crushed Red Pepper 2 oz at $0.625/oz = $1.25 line.",
-                                                    "checked":  "2026-08-26T13:30:31"
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 (comparison-2026-08-26.json, commodity red-pepper-flakes, 7 of 7 stores) names That\u0027s Smart! Crushed Red Pepper 2 oz at Hy-Vee, 0.625/oz = 1.25.",
+                                                    "checked":  "2026-08-27T19:05:34"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
                                                              "price":  5.98,
                                                              "size":  "13.5 oz",
                                                              "item":  "Member\u0027s Mark Crushed Red Pepper, 13.5 oz.",
-                                                             "evidence":  "pre-pass driver rung 1 \u0027red pepper flakes\u0027 = 21 hits. Member\u0027s Mark Crushed Red Pepper 13.5 oz $5.98 ($0.44/oz) is the ingredient; a 3.75 lb $20.98 pack is also stocked. Beef jerky and seasoning blends excluded.",
-                                                             "checked":  "2026-08-26T13:30:31"
+                                                             "evidence":  "driver rung 1 =21 rows; Member\u0027s Mark Crushed Red Pepper 13.5 oz at 5.98 (0.44/oz) is the ingredient. Beef jerky and steak-seasoning rows ruled out.",
+                                                             "checked":  "2026-08-27T19:05:34"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  0.99,
                                                   "size":  "1.5 oz",
                                                   "item":  "Stonemill Crushed Red Pepper",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 -Json: Aldi row Stonemill Crushed Red Pepper 1.5 OZ at $0.66/oz = $0.99 line. Aldi private-label spice, the ingredient exactly.",
-                                                  "checked":  "2026-08-26T13:30:31"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027red pepper flakes\u0027 names Stonemill Crushed Red Pepper 1.5 oz at Aldi, 0.66/oz = 0.99.",
+                                                  "checked":  "2026-08-27T19:05:34"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  1.25,
                                                           "size":  "1.5 oz",
                                                           "item":  "Smart Way Crushed Red Pepper",
-                                                          "evidence":  "pre-pass server ladder \u0027red pepper flakes\u0027 = 6 hits. Smart Way Crushed Red Pepper 1.5 oz $1.25 is the ingredient (crushed red pepper = red pepper flakes). The top-relevance row, Kroger Grated Parmesan and Red Pepper Flakes Shaker, is a cheese product and was excluded.",
-                                                          "checked":  "2026-08-26T13:30:31"
+                                                          "evidence":  "pre-pass full ladder rung 1 \u0027red pepper flakes\u0027=6; Smart Way Crushed Red Pepper 1.5 oz at 1.25 USD is the plain crushed-pepper shaker. Kroger Grated Parmesan and Red Pepper Flakes Shaker (rel 125) ruled out - that is a cheese product.",
+                                                          "checked":  "2026-08-27T19:05:34"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -6837,23 +6838,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T17:22:00"
+                                                     "checked":  "2026-08-27T18:15:08"
                                                  },
                                      "Fareway":  {
                                                      "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "Driver returned MATCHES=72 rows at rung 1, but the evidence file retains only the top 8 relevance-ranked rows and I have no browser this session to page the rest. The 8 I can see are all ruled OUT - McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean Blend, Badia Paprika, Badia Pumpkin Pie Spice, Old El Paso Taco Seasoning - the 72 is Instacart matching the words \u0027spice\u0027 and \u0027mix\u0027, not \u0027Moroccan\u0027. 64 rows UNSEEN, so this is unchecked, not empty; not-carried is not available to me here.",
-                                                     "checked":  "2026-08-27T17:22:00"
+                                                     "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027 reported 72 hits but the evidence file carries only the top 8 (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Pumpkin Pie Spice, Fareway Seasoning Mix, Kinder\u0027s The Blend, McCormick Tex-Mex Chili) - all generic non-Moroccan seasonings, none is a Moroccan blend or ras el hanout. But 64 rows I never saw remain unadjudicated and I have no browser this session to load the full grid or walk the ras-el-hanout rung. Unexamined is not absent, so this stays blocked, not not-carried.",
+                                                     "checked":  "2026-08-27T18:15:08"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Full ladder, all EMPTY of the ingredient. Pre-pass: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. Walked further myself: \u0027ras el hanout\u0027=0 on both rungs; \u0027moroccan spice\u0027 laddered to bare \u0027moroccan\u0027 = 3 hits, all read: Suave Moroccan Oil conditioner, Suave Moroccan Oil shampoo, Nair Moroccan Argan Oil hair remover. All health-and-beauty, none is food. Freshop answered 200 OK on every rung - this is a real empty shelf, not a transport refusal.",
-                                                         "checked":  "2026-08-27T17:22:00"
+                                                         "evidence":  "Freshop catalog store_id 6401 Omaha, pickup shelf price. Full ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. Plus my own synonym rung (probe-ingredient.ps1 \u0027ras el hanout\u0027 -Json): \u0027ras el hanout\u0027=0, \u0027raselhanout\u0027=0. Zero candidates on any rung; store answered OK so this is an empty shelf, not a transport refusal.",
+                                                         "checked":  "2026-08-27T18:15:08"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6861,15 +6862,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T17:22:00"
+                                                    "checked":  "2026-08-27T18:15:08"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Driver returned MATCHES=8 rows at rung 1 and the pile is complete (8 of 8 retained), so I adjudicated all of it: McCormick Taco Seasoning 12pk, Lawry\u0027s Seasoned Salt 40oz, McCormick Salad Supreme, Grill Mates Montreal Steak, Hidden Valley Garlic Ranch, Old Bay 7.5lb, Kinder\u0027s Whiskey Peppercorn, Kinder\u0027s Caramelized Onion Burger Rub. Not one is a Moroccan/North African blend or ras el hanout. Ladder terminates at rung 1 by contract (8 genuine hits \u003e= 2), and a 3-word term takes no head-noun fallback, so this is a completed search.",
-                                                             "checked":  "2026-08-27T17:22:00"
+                                                             "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027 returned 8 hits and the evidence file carries all 8, so the result grid is complete and fully adjudicated: McCormick Taco Seasoning 12pk $7.78, Lawry\u0027s Seasoned Salt 40oz $7.48, McCormick Salad Supreme 10.12oz $6.98, Grill Mates Montreal Steak 29oz $4.98, Hidden Valley Garlic Ranch $6.98, Old Bay 7.5lb $39.88, Kinder\u0027s Whiskey Peppercorn 9.7oz $6.98, Kinder\u0027s Caramelized Onion Burger Rub 9.1oz $5.48. Every row is an unrelated seasoning blend the fuzzy search fell back to; none is a Moroccan spice mix or ras el hanout. Warehouse club with a narrow SKU count and no specialty-blend row in the grid.",
+                                                             "checked":  "2026-08-27T18:15:08"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6877,18 +6878,708 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T17:22:00"
+                                                  "checked":  "2026-08-27T18:15:08"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "Full ladder, all EMPTY of the ingredient. Pre-pass: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. I then walked further myself via probe-ingredient.ps1: \u0027ras el hanout\u0027 (the trade name for a Moroccan blend) = 0 hits on both rungs; \u0027moroccan spice\u0027 laddered to bare \u0027moroccan\u0027 = 22 hits and I read them - Tree Hut Moroccan Rose sugar scrub/gel wash/shave butter/body butter/shave oil/fragrance mist, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. Zero are a spice blend; the couscous is a grain and the Tree Hut line is bath products. Also discarded a \u0027moroccan seasoning\u0027 rung because it fell back to the bare head noun \u0027seasoning\u0027 and returned the identical 8 generic rows as \u0027harissa seasoning\u0027 - a widened pool, not Moroccan presence.",
-                                                          "checked":  "2026-08-27T17:22:00"
+                                                          "evidence":  "kroger-public-api locationId 61500319. Full ladder EMPTY: rung1 \u0027Moroccan Spice Mix\u0027=0 hits, rung2 \u0027MoroccanSpiceMix\u0027=0 hits. I then walked a synonym rung myself (probe-ingredient.ps1 \u0027ras el hanout\u0027 -Json): \u0027ras el hanout\u0027=0, \u0027raselhanout\u0027=0. Zero candidates on any rung - no result grid to adjudicate, not a suggestion block.",
+                                                          "checked":  "2026-08-27T18:15:08"
                                                       }
                                  },
                       "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "dried parsley",
+                      "recipes":  [
+                                      "honey-bbq-chicken-mac-and-cheese"
+                                  ],
+                      "added":  "2026-08-27T18:29:42",
+                      "why":  "honey-bbq-chicken-mac-and-cheese needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  23.03,
+                                                     "size":  "16 oz",
+                                                     "item":  "Frontier Co-op Certified Organic Parsley Leaf Flakes, 16 oz. Bag",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e Walmart \\.4394/oz on \u0027Frontier Co-op Certified Organic Parsley Leaf Flakes, 16 oz. Bag\u0027 (week 2026-08-26 capture). Dried parsley leaf flakes = the ingredient; bulk organic bag, so the per-oz is the meaningful figure.",
+                                                     "checked":  "2026-08-27T18:30:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.99,
+                                                     "size":  "3 oz",
+                                                     "item":  "Badia Spices Parsley Flakes",
+                                                     "evidence":  "pre-pass rung-1 MATCHES=41; Badia Spices Parsley Flakes 3 oz \\.99 is dried parsley (basil/dill suggestion tiles ruled out). Confirmed on disk: price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e Fareway \\.6633/oz.",
+                                                     "checked":  "2026-08-27T18:30:39"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.79,
+                                                         "size":  "0.5 oz",
+                                                         "item":  "Mc Cormick Parsley Flakes 0.5 Oz",
+                                                         "evidence":  "pre-pass MATCHES via rung 2 \u0027parsley\u0027=15; McCormick Parsley Flakes 0.5 oz \\.79 is the dried flake product (fresh Italian/curly bunches and cilantro rows ruled out). Confirmed on disk: price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e Family Fare \\.58/oz.",
+                                                         "checked":  "2026-08-27T18:30:39"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "item":  "Hy-Vee Parsley Flakes",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e MAPPED commodity dried-parsley, Hy-Vee \\.9867/oz on \u0027Hy-Vee Parsley Flakes\u0027 0.75 oz (week 2026-08-26 capture, comparison-2026-08-26.json). Store-brand dried parsley flakes = the ingredient.",
+                                                    "checked":  "2026-08-27T18:30:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.44,
+                                                             "size":  "3.2 oz",
+                                                             "item":  "Member\u0027s Mark Parsley Flakes, 3.2 oz",
+                                                             "evidence":  "pre-pass rung-1 MATCHES=22; only true-ingredient row is Member\u0027s Mark Parsley Flakes 3.2 oz \\.44 (\\.01/oz) - the Montreal Steak / Mrs. Dash / garlic-salt-with-parsley rows are blends, not parsley. Confirmed on disk: price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e Sam\u0027s Club \\.0125/oz.",
+                                                             "checked":  "2026-08-27T18:30:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  0.99,
+                                                  "size":  "0.25 oz",
+                                                  "item":  "Stonemill Parsley Flakes 0.25 OZ",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e Aldi \\.96/oz on \u0027Stonemill Parsley Flakes 0.25 OZ\u0027 (\\.99, week 2026-08-26 capture). Stonemill is Aldi\u0027s base spice label; this is dried parsley flakes.",
+                                                  "checked":  "2026-08-27T18:30:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.25,
+                                                          "size":  "0.5 oz",
+                                                          "item":  "Smart Way Parsley Flakes",
+                                                          "evidence":  "pre-pass ladder \u0027dried parsley\u0027=15 MATCHES; Smart Way Parsley Flakes 0.5 oz \\.25 is dried parsley flakes in the spice aisle (fresh-bunch rows and Litehouse freeze-dried ruled secondary). Confirmed on disk: price-ingredient.ps1 -Name \u0027dried parsley\u0027 -\u003e commodity dried-parsley, Baker\u0027s \\.50/oz.",
+                                                          "checked":  "2026-08-27T18:30:39"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "blackened seasoning mix",
+                      "recipes":  [
+                                      "blackened-chicken-with-mango-salsa"
+                                  ],
+                      "added":  "2026-08-27T18:36:19",
+                      "why":  "blackened-chicken-with-mango-salsa needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T18:37:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.49,
+                                                     "size":  "2.5 oz",
+                                                     "item":  "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+                                                     "evidence":  "driver lookup rung 1 \u0027blackened seasoning mix\u0027 = 1 priced Apollo node: Louisiana Fish Fry Products Blackened Cajun Seasoning 2.5 oz $2.49. That is a blackening spice blend in shaker form - the ingredient, not a dish flavoured with it.",
+                                                     "checked":  "2026-08-27T18:37:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass probe walked the FULL ladder: \u0027blackened seasoning mix\u0027=0 then \u0027blackenedseasoningmix\u0027=0. Server-tier full-ladder EMPTY, no candidates on any rung, no suggestion-only grid.",
+                                                         "checked":  "2026-08-27T18:37:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T18:37:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver lookup RUNG 1 ONLY, 17 rows, adjudicated: all are other seasonings (McCormick Taco Seasoning, Weber Kick\u0027N Chicken, Member\u0027s Mark Cajun 22 oz, Badia Complete, Kinder\u0027s Chicken Salt, Salad Supreme, Basil Balsamic, Montreal Chicken) - none is a blackened/blackening blend. Cannot walk ladder rungs 2-4 headless (no browser), so this is not a full-ladder empty and cannot support not-carried.",
+                                                             "checked":  "2026-08-27T18:37:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T18:37:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.29,
+                                                          "size":  "2.5 oz",
+                                                          "item":  "Kroger Blackened Seasoning Shaker",
+                                                          "evidence":  "pre-pass probe rung 1 \u0027blackened seasoning mix\u0027 = 2 candidates; Kroger Blackened Seasoning Shaker 2.5 oz $3.29 is the jarred blackened spice blend itself, the form a cook buys for a blackening rub. Second row Cajun\u0027s Choice Blackened Seasoning \u0026 Rub 6.5 oz $8.79 also qualifies.",
+                                                          "checked":  "2026-08-27T18:37:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "frozen cilantro lime rice",
+                      "recipes":  [
+                                      "blackened-chicken-with-mango-salsa"
+                                  ],
+                      "added":  "2026-08-27T18:36:19",
+                      "why":  "blackened-chicken-with-mango-salsa needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T18:37:40"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  1.97,
+                                                     "size":  "8.5 oz",
+                                                     "item":  "Ben\u0027s Original Cilantro Lime Flavored Rice Easy Dinner Side",
+                                                     "evidence":  "driver lookup rung 1 = 72 priced nodes; adjudicated. Ben\u0027s Original Cilantro Lime Flavored Rice 8.5 oz $1.97 IS cilantro lime rice, fully cooked single-serve heat-and-serve - the ingredient a cook buys for this recipe. Also qualifying: Mahatma Cilantro Limon Jasmine Rice 8.8 oz $1.99, Vigo Rice Cilantro Lime 8 oz $2.49. FORM CAVEAT stated plainly: these are shelf-stable microwaveable pouches, not freezer-case product; the recipe\u0027s \u0027frozen\u0027 storage form is NOT confirmed at Fareway. Rejected: Birds Eye Steamfresh rice+veg, Green Giant veggie/quinoa, Minute sticky rice, Mahatma Mexican/Yellow - wrong flavour.",
+                                                     "checked":  "2026-08-27T18:37:40"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "pre-pass probe walked the FULL ladder: \u0027frozen cilantro lime rice\u0027=0 then \u0027frozencilantrolimerice\u0027=0. Server-tier full-ladder EMPTY, no candidates on any rung.",
+                                                         "checked":  "2026-08-27T18:37:40"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T18:37:40"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver lookup RUNG 1 ONLY, 20 rows, adjudicated: the term matched on the word \u0027frozen\u0027 only - Gorton\u0027s fish sticks, Member\u0027s Mark stir fry mix, riced cauliflower, frozen berries/mango, El Monterey burritos. No cilantro lime rice of any form. Cannot walk ladder rungs 2-4 headless (no browser), so not a full-ladder empty and cannot support not-carried.",
+                                                             "checked":  "2026-08-27T18:37:40"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T18:37:40"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "pre-pass probe walked the FULL ladder: \u0027frozen cilantro lime rice\u0027=1 then \u0027frozencilantrolimerice\u0027=0, and the single rung-1 hit did not qualify - one hit is never enough. Server-tier full-ladder EMPTY.",
+                                                          "checked":  "2026-08-27T18:37:40"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "whole wheat flour",
+                      "recipes":  [
+                                      "chicken-meatballs-in-cranberry-sauce"
+                                  ],
+                      "added":  "2026-08-27T18:57:26",
+                      "why":  "chicken-meatballs-in-cranberry-sauce needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 returns only Great Value All-Purpose Enriched Bleached Wheat Flour 25 lb for Walmart. Not whole wheat; capture miss, not absence.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  5.99,
+                                                     "size":  "5 lb",
+                                                     "item":  "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain",
+                                                     "evidence":  "driver rung 1 =1 and the single row is genuine 100% whole wheat flour, 5 lb at 5.99. One hit suffices for a carriage ruling - the two-hit rule guards ABSENCE, not presence.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.69,
+                                                         "size":  "5 lb",
+                                                         "item":  "Our Family Flour, Whole Wheat, Unbleached 5 Lb",
+                                                         "evidence":  "full ladder rung 1 =5, every row genuine whole wheat flour; cheapest plain bag is Our Family Whole Wheat Unbleached 5 lb at 3.69.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 mis-maps to commodity \u0027flour\u0027 (All-Purpose) and its Hy-Vee row is That\u0027s Smart! Bleached Enriched All-Purpose Flour, which is not whole wheat. Capture miss for this ingredient, not absence.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only, 13 rows; the only whole-wheat item shown is Mission Protein Whole Wheat Flour TORTILLAS, the rest are all-purpose, bread and pizza flour. The retry ladder cannot be walked without a browser this session, so this store is unchecked past rung 1, not empty.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027whole wheat flour\u0027 returns only Baker\u0027s Corner ALL PURPOSE Flour 5 lb for Aldi under commodity \u0027flour\u0027. Not whole wheat; capture miss, not absence.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.49,
+                                                          "size":  "5 lb",
+                                                          "item":  "Kroger Traditional Whole Wheat Flour",
+                                                          "evidence":  "full ladder rung 1 =11; Kroger Traditional Whole Wheat Flour 5 lb at 3.49 is the ingredient. Mission Carb Balance whole wheat TORTILLA rows ruled out.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "fresh red chili",
+                      "recipes":  [
+                                      "chicken-and-potato-curry"
+                                  ],
+                      "added":  "2026-08-27T18:58:25",
+                      "why":  "chicken-and-potato-curry needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "driver rung 1 only =6 fresh pepper rows (Green Serrano, Anaheim, Jalapeno, Poblano, Banana, bell peppers) - none is a red chili, but rung 1 alone cannot support not-carried and the ladder is not walkable without a browser this session.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "lb",
+                                                         "item":  "Serrano Peppers (Capsicums)",
+                                                         "evidence":  "probe-ingredient.ps1 \u0027serrano pepper\u0027 at Family Fare, ladder \u0027serrano pepper\u0027=1 -\u003e \u0027serranopepper\u0027=0 -\u003e \u0027serrano\u0027=3: Serrano Peppers (Capsicums) 2.99/lb, loose fresh chiles in produce - the form a cook buys a fresh red chili in (serranos are shelved both green and ripe red). The \u0027red chili\u0027 rung returned only enchilada sauce and Bush\u0027s chili beans, all ruled out.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only =8 rows, all ramen, soup, hot dog chili sauce and bone broth - the query never reached produce. Ladder not walkable headless; unchecked, not empty.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "not-carried",
+                                                          "price":  null,
+                                                          "size":  "",
+                                                          "item":  "",
+                                                          "evidence":  "full ladder \u0027fresh red chili\u0027=0 -\u003e \u0027red chili\u0027=13 (chili sauces, frozen burritos, Morton and Bassett red chili FLAKES - nothing fresh). I then walked six further rungs myself via probe-ingredient.ps1: \u0027red chili pepper\u0027 (1 row, smoked oysters), \u0027fresno pepper\u0027=25, \u0027red jalapeno\u0027=6 (pickled only), \u0027chile pepper\u0027=9, \u0027serrano pepper\u0027=25, \u0027hot pepper\u0027=25. The fresh chiles Baker\u0027s does stock are Habanero, Anaheim, Yellow Chile and Hatch - no fresh red chili, and habanero is not a swap a cook would make for one.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "potatoes",
+                      "recipes":  [
+                                      "chicken-and-potato-curry"
+                                  ],
+                      "added":  "2026-08-27T18:58:25",
+                      "why":  "chicken-and-potato-curry needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027potatoes\u0027 is CAPTURE tier with rows from Aldi and Baker\u0027s only, no Walmart row. A capture miss is not absence from the shelf.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "5 lb",
+                                                     "item":  "Russet Potato Bag",
+                                                     "evidence":  "driver rung 1 =6, several genuine fresh potato rows; Russet Potato Bag 5 lb at 2.99. Rung 1 was sufficient - it produced real matches, so no ladder is owed.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.29,
+                                                         "size":  "5 lb",
+                                                         "item":  "Fresh Idaho Russet Potatoes Our Family",
+                                                         "evidence":  "full ladder rung 1 =25; Fresh Idaho Russet Potatoes 5 lb at 3.29 is plain fresh potatoes. Simply Potatoes seasoned diced and Little Potato Co seasoning-kit rows ruled out as prepared.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027potatoes\u0027 is CAPTURE tier with rows from Aldi and Baker\u0027s only, no Hy-Vee row. A capture miss is not absence from the shelf.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.17,
+                                                             "size":  "10 lb",
+                                                             "item":  "Russet Potatoes, 10 lbs.",
+                                                             "evidence":  "driver rung 1 =41; Russet Potatoes 10 lbs at 5.17 (0.52/lb) is plain fresh potatoes. Seeds of Change rice and Ben\u0027s rice cups ruled out.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.19,
+                                                  "size":  "5 lb",
+                                                  "item":  "Cal Ore Produce Best Available Russet Potatoes 5lb Bag",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027potatoes\u0027 returns CAPTURE tier with 24 Aldi rows, including Cal Ore Produce Russet Potatoes 5 lb bag at 3.19 (as_of 2026-08-26). Frozen fries and instant mashed rows in the same list ruled out.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.79,
+                                                          "size":  "5 lb",
+                                                          "item":  "Russet Potatoes Bag",
+                                                          "evidence":  "full ladder rung 1 \u0027potatoes\u0027=25; Russet Potatoes Bag 5 lb at 2.79 is plain fresh potatoes. Sweet potatoes and the no-honest-price loose rows ruled out.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chicken bone broth",
+                      "recipes":  [
+                                      "crack-chicken-chili"
+                                  ],
+                      "added":  "2026-08-27T18:58:30",
+                      "why":  "crack-chicken-chili needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027chicken bone broth\u0027 returns Great Value Gluten-Free Chicken Broth 48 oz for Walmart, plain broth rather than bone broth. Capture miss, not absence.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  7.99,
+                                                     "size":  "32 oz",
+                                                     "item":  "Pacific Foods Organic Unsalted Chicken Bone Broth",
+                                                     "evidence":  "driver rung 1 =6, all genuine chicken bone broth; the only 32 oz cooking carton is Pacific Foods Organic Unsalted at 7.99 (the Kitchen Basics and Swanson Sipping rows are 8.25-10.75 oz sipping cups).",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.69,
+                                                         "size":  "32 fl oz",
+                                                         "item":  "Our Family Chicken Bone Broth 32 Fl Oz",
+                                                         "evidence":  "full ladder rung 1 =10; Our Family Chicken Bone Broth 32 fl oz at 2.69 is the plain store-brand bone broth. Swanson Sipping ginger-turmeric flavoured rows ruled out.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027chicken bone broth\u0027 maps to commodity chicken-broth and the Hy-Vee row is Hy-Vee Chicken Broth Fat Free, plain broth rather than bone broth. Capture miss for this ingredient, not absence.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.48,
+                                                             "size":  "32 oz x 3 pk",
+                                                             "item":  "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+                                                             "evidence":  "driver rung 1 =23; Swanson Chicken Bone Broth 32 oz 3 pk at 8.48 (0.09/oz) is the ingredient. Plain Swanson Chicken Broth, ramen and Marie Callender\u0027s soup rows ruled out - broth is not bone broth.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027chicken bone broth\u0027 returns Fit and Active Reduced Sodium Chicken Broth for Aldi, plain broth rather than bone broth. Capture miss, not absence.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.49,
+                                                          "size":  "32 oz",
+                                                          "item":  "Swanson Chicken Bone Broth 32 oz Carton",
+                                                          "evidence":  "full ladder rung 1 =16; Swanson Chicken Bone Broth 32 oz carton at 4.49 is the ingredient. Kinder\u0027s gravy MIX and the Jinx dog kibble sauce ruled out.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "canned corn",
+                      "recipes":  [
+                                      "crack-chicken-chili"
+                                  ],
+                      "added":  "2026-08-27T18:58:31",
+                      "why":  "crack-chicken-chili needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  0.82,
+                                                     "size":  "15.25 oz",
+                                                     "item":  "Great Value No Salt Added Golden Sweet Whole Kernel Corn, 15.25 oz",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027canned corn\u0027 names Great Value No Salt Added Golden Sweet Whole Kernel Corn 15.25 oz at Walmart, 0.0538/oz = 0.82.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  0.78,
+                                                     "size":  "15.25 oz",
+                                                     "item":  "Fareway Whole Kernel Corn",
+                                                     "evidence":  "driver rung 1 =49; Fareway Whole Kernel Corn 15.25 oz at 0.78 is plain canned corn. Cream style, Mexicorn and cut corn rows ruled out.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  0.99,
+                                                         "size":  "15.25 oz",
+                                                         "item":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+                                                         "evidence":  "the pre-pass search term failed here: \u0027canned corn\u0027=3 returned only CORNED beef and hash - a term collision, not an empty shelf. Ruled from disk instead - price-ingredient.ps1 -Name \u0027canned corn\u0027 (commodity canned-corn, 7 of 7 stores) names Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 oz at Family Fare, 0.0649/oz = 0.99.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  0.76,
+                                                    "size":  "15.25 oz",
+                                                    "item":  "That\u0027s Smart! Whole Kernel Golden Corn",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027canned corn\u0027 (commodity canned-corn, 7 of 7) names That\u0027s Smart! Whole Kernel Golden Corn 15.25 oz at Hy-Vee, 0.0498/oz = 0.76.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  5.76,
+                                                             "size":  "106 oz",
+                                                             "item":  "Del Monte Whole Kernel Corn, 106 oz.",
+                                                             "evidence":  "driver rung 1 =21; Del Monte Whole Kernel Corn 106 oz at 5.76 (0.05/oz) is plain canned corn, and Del Monte Golden Sweet Whole Kernel 15.25 oz 8 pk at 8.42 is the same food in recipe-sized cans. Corn husks and corned beef rows ruled out.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  0.78,
+                                                  "size":  "15.25 oz",
+                                                  "item":  "Happy Harvest Canned Whole Kernel Golden Sweet Corn",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027canned corn\u0027 names Happy Harvest Canned Whole Kernel Golden Sweet Corn 15.25 oz at Aldi, 0.0511/oz = 0.78.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1,
+                                                          "size":  "15.25 oz",
+                                                          "item":  "Kroger Whole Kernel Canned Golden Corn",
+                                                          "evidence":  "full ladder rung 1 =25; Kroger Whole Kernel Canned Golden Corn 15.25 oz at 1.00 is the ingredient. Cream style, Fiesta/Mexican street corn and 4 oz cups ruled out as not plain canned corn.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "pork loin",
+                      "recipes":  [
+                                      "slow-cooker-butternut-squash-pulled-pork-tacos"
+                                  ],
+                      "added":  "2026-08-27T18:58:34",
+                      "why":  "slow-cooker-butternut-squash-pulled-pork-tacos needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.14,
+                                                     "size":  "3.5-5.5 lb (2.14/lb)",
+                                                     "item":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027pork loin\u0027 names Prairie Fresh Natural Fresh Pork Half Loin Boneless 3.5-5.5 lb at Walmart, 2.14/lb - plain raw cut, not marinated.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "$2.99/lb whole loin (20.93 pack)",
+                                                     "item":  "Whole Boneless Pork Loin",
+                                                     "evidence":  "driver rung 1 =38; Whole Boneless Pork Loin at 2.99/lb (20.93 for the pack shown) is the plain raw cut. HORMEL Always Tender marinated loins and whole smoked loin ruled out.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "not-carried",
+                                                         "price":  null,
+                                                         "size":  "",
+                                                         "item":  "",
+                                                         "evidence":  "full ladder rung 1 \u0027pork loin\u0027=5 and every row is something else: Open Acres Pork Loin COUNTRY STYLE RIBS 5.29/lb, fresh country style pork loin ribs 4.79/lb, and three Smithfield marinated pork loin FILETS 23 oz at 9.99 (steakhouse mushroom, original recipe, applewood bacon). No plain boneless or bone-in pork loin roast. Disk agrees: price-ingredient.ps1 -Name \u0027pork loin\u0027 (commodity pork-loin) covers 5 of 7 stores and Family Fare is not one of them.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.89,
+                                                    "size":  "2.8 lb (3.89/lb)",
+                                                    "item":  "Fresh Pork Loin Top Loin Roast Boneless",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027pork loin\u0027 (commodity pork-loin) names Fresh Pork Loin Top Loin Roast Boneless at Hy-Vee, 3.89/lb, 2.8 lb roast.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  1.98,
+                                                             "size":  "priced per lb",
+                                                             "item":  "Member\u0027s Mark Whole Boneless Pork Loin, Vacuum Pack",
+                                                             "evidence":  "driver rung 1 =21; Member\u0027s Mark Whole Boneless Pork Loin, vacuum pack, 1.98/lb is the plain raw cut. Smithfield garlic-herb tenderloin, bacon-marinated filets and back ribs ruled out.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  2.09,
+                                                  "size":  "per lb",
+                                                  "item":  "USDA Premium Boneless Half Pork Loin",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027pork loin\u0027 names USDA Premium Boneless Half Pork Loin at Aldi, 2.09/lb - plain raw cut.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.19,
+                                                          "size":  "1 lb",
+                                                          "item":  "Kroger Fresh Natural Pork Loin Boneless",
+                                                          "evidence":  "full ladder rung 1 =20; Kroger Fresh Natural Pork Loin Boneless at 2.19/lb is the plain raw cut. Hormel marinated filets, Home Chef cold sliced loin and bone-in chops ruled out for a recipe calling for pork loin.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "chipotle in adobo",
+                      "recipes":  [
+                                      "slow-cooker-butternut-squash-pulled-pork-tacos"
+                                  ],
+                      "added":  "2026-08-27T18:58:35",
+                      "why":  "slow-cooker-butternut-squash-pulled-pork-tacos needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  1.48,
+                                                     "size":  "7 oz",
+                                                     "item":  "EMBASA Chipotle Peppers in Adobo Sauce, 7 oz Steel Can",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027chipotle in adobo\u0027 names EMBASA Chipotle Peppers in Adobo Sauce 7 oz steel can at Walmart, 0.2114/oz = 1.48.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "7 oz",
+                                                     "item":  "La Costena Chipotles, Peppers in Adobo Sauce",
+                                                     "evidence":  "driver rung 1 =41; the top two rows are genuine chipotles in adobo - La Costena 7 oz at 2.99. Chili-ready tomatoes, chipotle aioli and chili beans further down ruled out.",
+                                                     "checked":  "2026-08-27T19:05:34"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.19,
+                                                         "size":  "7 oz",
+                                                         "item":  "La Costena Chipotles, Peppers In Adobo Sauce 7 Oz",
+                                                         "evidence":  "full ladder rung 1 =2, both genuine chipotles in adobo; La Costena 7 oz at 2.19.",
+                                                         "checked":  "2026-08-27T19:05:34"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  3.29,
+                                                    "size":  "7 oz",
+                                                    "item":  "La Costena Chipotles in Adobo Sauce",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027chipotle in adobo\u0027 (commodity chipotle-adobo) names La Costena Chipotles in Adobo Sauce 7 oz at Hy-Vee, 0.47/oz = 3.29.",
+                                                    "checked":  "2026-08-27T19:05:34"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver rung 1 only =19 rows, all dips, salsa, seasoning mixes, turmeric and bouillon - not one chipotle-in-adobo can. Rung 1 alone cannot support not-carried and the ladder is not walkable without a browser this session.",
+                                                             "checked":  "2026-08-27T19:05:34"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "no browser this session; checked disk - price-ingredient.ps1 -Name \u0027chipotle in adobo\u0027 covers 5 of 7 stores and has no Aldi row. A capture miss is not absence from the shelf.",
+                                                  "checked":  "2026-08-27T19:05:34"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  1.49,
+                                                          "size":  "7 oz",
+                                                          "item":  "Kroger Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+                                                          "evidence":  "full ladder rung 1 =4 and all four are genuine chipotle peppers in adobo sauce; cheapest is the Kroger 7 oz can at 1.49.",
+                                                          "checked":  "2026-08-27T19:05:34"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
                       "notes":  null
                   }
               ]

@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-27T12:09:52",
-    "count":  202,
+    "updated":  "2026-08-27T18:58:38",
+    "count":  242,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -1821,6 +1821,366 @@
                             "evidence":  "sea-salt is a live board id (5 of 7), so a reuse; no bridge to the cheaper `salt` id needed. [slug moroccan-chicken-couscous-bowl, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T12:09:52"
+                        },
+                        {
+                            "key":  "light cream cheese",
+                            "term":  "Light Cream Cheese",
+                            "item_id":  "1-3-fat-cream-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "Light cream cheese IS the 1/3-less-fat tub, so the vocabulary row 1/3 Fat Cream Cheese [1-3-fat-cream-cheese] is the same product and the form flag is a wording artefact. Preferred over the board\u0027s generic cream-cheese, which prices the full-fat brick at different macros. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:39"
+                        },
+                        {
+                            "key":  "30 reduced fat cheddar cheese",
+                            "term":  "30% Reduced Fat Cheddar Cheese",
+                            "item_id":  "cheddar-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "Reduced-fat (2% milk) cheddar is the same product concept on the same shelf at the same per-ounce price class as block cheddar, so bid reuse is sound; the macro difference is carried by the label row returned here rather than by a bridged id. Not the shredded id - the source names cheese, not a bag, and the instructions grate it. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:39"
+                        },
+                        {
+                            "key":  "semi skimmed milk",
+                            "term":  "Semi Skimmed Milk",
+                            "item_id":  "milk",
+                            "bid_exists":  true,
+                            "evidence":  "The source itself glosses semi-skimmed as 2% milk, which is the same-form vocabulary row Milk [milk] and the board\u0027s 7 of 7 match; a reuse, not a form flip. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:40"
+                        },
+                        {
+                            "key":  "parsley",
+                            "term":  "Parsley",
+                            "item_id":  "dried-parsley",
+                            "bid_exists":  true,
+                            "evidence":  "Measured by the teaspoon inside a spice list and blended into a sauce, which is the dried spice-jar flake, not a fresh bunch - fresh parsley at 1 tsp is not a purchasable measure and is a different price and gram weight. Board carries no commodity for it, so the term goes to pricing. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:40"
+                        },
+                        {
+                            "key":  "mustard",
+                            "term":  "Mustard",
+                            "item_id":  "mustard",
+                            "bid_exists":  true,
+                            "evidence":  "1 tsp squeezed into a blended cheese sauce is the prepared condiment, not dry powder; exact same-form vocabulary row Yellow Mustard [mustard], board 7 of 7 at 0.0495. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:40"
+                        },
+                        {
+                            "key":  "reduced bbq sauce",
+                            "term":  "Reduced BBQ Sauce",
+                            "item_id":  "bbq-sauce",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Reduced\u0027 is an incomplete label word (the source is a UK macro site, so most likely reduced-sugar) and no such product concept exists as a separate id; the purchased bottle is BBQ sauce, vocabulary row BBQ Sauce [bbq-sauce], board 7 of 7. Macros use a standard sauce label, which is the conservative direction. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:41"
+                        },
+                        {
+                            "key":  "low calorie cooking spray",
+                            "term":  "Low Calorie Cooking Spray",
+                            "item_id":  "cooking-spray",
+                            "bid_exists":  false,
+                            "evidence":  "\u0027Low calorie\u0027 describes the spray delivery, not a different food - every aerosol cooking spray is oil per spray; board cooking-spray at 7 of 7, a reuse. Unquantified by the source, so weighed at about ten 1-second sprays (3 g at source scale) rather than left at zero. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:29:41"
+                        },
+                        {
+                            "key":  "olive oil or avocado oil",
+                            "term":  "olive oil or avocado oil",
+                            "item_id":  "olive-oil",
+                            "bid_exists":  true,
+                            "evidence":  "Either/or line taken as olive oil: olive-oil is a live board id at 7 of 7 (precedent \u0027extra-virgin olive oil\u0027 -\u003e olive-oil, 2026-08-26), so a REUSE and not a proposal. The board\u0027s `avocados` hit is a form flip - the fruit is not the oil, different price class and different gram weight. [slug blackened-chicken-with-mango-salsa, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:36:17"
+                        },
+                        {
+                            "key":  "fresh lime or orange",
+                            "term":  "fresh lime or orange",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Instructions use lime (\u0027the juice of half a lime\u0027), so the orange option is not taken; precedent \u0027fresh lime juice\u0027 -\u003e limes (2026-08-27) on vocabulary row Lime Juice [limes], fresh fruit squeezed rather than a bottled juice. Half a lime yields about 15 g. [slug blackened-chicken-with-mango-salsa, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:36:17"
+                        },
+                        {
+                            "key":  "blackened seasoning mix",
+                            "term":  "blackened seasoning mix",
+                            "item_id":  "cajun-seasoning",
+                            "bid_exists":  true,
+                            "evidence":  "Board ABSENT for the phrase; a Cajun-style paprika/cayenne blend, not the `seasoned-salt` of the 2026-08-26 precedent (different blend, different jar). New id proposed - registrar should check cajun-seasoning/creole-seasoning as possible existing spellings. [slug blackened-chicken-with-mango-salsa, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:36:18"
+                        },
+                        {
+                            "key":  "frozen cilantro lime rice",
+                            "term":  "frozen cilantro lime rice",
+                            "item_id":  "frozen-cilantro-lime-rice",
+                            "bid_exists":  false,
+                            "evidence":  "REFUSED the bridge onto `rice`: dry rice is a different price class and roughly a third of the cooked weight, the standing form-flip rejection. Prepared frozen pouch, weighed as two 10 oz bags since the source names no package size. [slug blackened-chicken-with-mango-salsa, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:36:18"
+                        },
+                        {
+                            "key":  "cranberry sauce",
+                            "term":  "Cranberry Sauce",
+                            "item_id":  "cranberry-sauce",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id at 6 of 7 stores, cheapest 0.1038 at Walmart; only the vocabulary row was missing. Deliberately NOT fresh-cranberries (the 2026-08-27 shelf ruling): a sweetened canned sauce carries 40 g carbs per 100 g against raw fruit\u0027s 12. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:23"
+                        },
+                        {
+                            "key":  "chili flakes",
+                            "term":  "Chili Flakes",
+                            "item_id":  "red-pepper-flakes",
+                            "bid_exists":  true,
+                            "evidence":  "Chili flakes and red pepper flakes are one jar under two shelf names; the same-form vocabulary row exists and the 2026-08-26 \u0027red chili flakes\u0027 ruling went here. Board found nothing, so the term is enqueued. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:23"
+                        },
+                        {
+                            "key":  "kosher salt and ground pepper",
+                            "term":  "Kosher salt and ground pepper",
+                            "item_id":  "salt",
+                            "bid_exists":  true,
+                            "evidence":  "One line carrying two pantry seasonings; costed as salt (7 of 7) with the black pepper pantry-static, per the \u0027Salt/Pepper\u0027 and \u0027Salt and pepper\u0027 precedents. The three DIFFERENT FORM bell-pepper rows are a wording artefact of the word \u0027pepper\u0027. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:24"
+                        },
+                        {
+                            "key":  "chicken breast or turkey",
+                            "term":  "Chicken breast or turkey",
+                            "item_id":  "chicken-breast",
+                            "bid_exists":  true,
+                            "evidence":  "The line names chicken first and turkey as the alternative; chicken-breast is live at 7 of 7, cheapest 1.99 at Hy-Vee. Refused the turkey-breast rows: a different bird at a different per-lb price. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:24"
+                        },
+                        {
+                            "key":  "panko",
+                            "term":  "Panko",
+                            "item_id":  "bread-crumbs",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of bread-crumbs, live at 7 of 7: panko is a breadcrumb style sold on the same shelf in the same price class, not a form flip. The gram-per-cup difference is handled by weighing the line at 60 g/cup rather than by the id. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:24"
+                        },
+                        {
+                            "key":  "whole wheat flour",
+                            "term":  "Whole Wheat Flour",
+                            "item_id":  "whole-wheat-flour",
+                            "bid_exists":  false,
+                            "evidence":  "Genuine form flip, refused the bridge to flour (All-Purpose): whole wheat is its own bag at a higher per-lb price and a different gram weight per cup. New id proposed. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:24"
+                        },
+                        {
+                            "key":  "large egg",
+                            "term":  "Large Egg",
+                            "item_id":  "eggs",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of eggs, live at 7 of 7, cheapest 0.99 at Fareway. One large egg is 50 g shelled; the estate\u0027s live \u00271 large egg (120 g)\u0027 defect is the error being avoided here. [slug chicken-meatballs-in-cranberry-sauce, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:57:25"
+                        },
+                        {
+                            "key":  "coconut oil",
+                            "term":  "coconut oil",
+                            "item_id":  "coconut-oil",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id at 7 of 7, cheapest 0.1952 at Sam\u0027s Club, and the DB already carries the row; only the vocabulary name was missing. Refused the shelf\u0027s \u0027oil\u0027 -\u003e vegetable-oil precedent: coconut oil is a solid jar at its own price class. [slug chicken-and-potato-curry, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:23"
+                        },
+                        {
+                            "key":  "fresh red chilli",
+                            "term":  "fresh red chilli",
+                            "item_id":  "jalapenos",
+                            "bid_exists":  true,
+                            "evidence":  "Refused the red-pepper-flakes bridge on the shelf: fresh chile is not the dried jar, a form flip in both price and gram weight. No estate id names a fresh chile, so a new one is proposed and the term enqueued. [slug chicken-and-potato-curry, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:23"
+                        },
+                        {
+                            "key":  "potatoes",
+                            "term":  "potatoes",
+                            "item_id":  "russet-potatoes",
+                            "bid_exists":  true,
+                            "evidence":  "Sweet potatoes are a different food at a different price, so that near row is refused. No commodity claims plain potatoes though today\u0027s captures carry them, exactly the 2026-08-26 \u0027baby potatoes\u0027 situation; new id proposed and the term enqueued. [slug chicken-and-potato-curry, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:24"
+                        },
+                        {
+                            "key":  "chicken bone broth",
+                            "term":  "chicken bone broth",
+                            "item_id":  "bone-broth",
+                            "bid_exists":  true,
+                            "evidence":  "Follows the 2026-08-27 \u0027bone broth\u0027 ruling and refuses the board\u0027s chicken-broth bridge for the same reason: bone broth is a 6-8 dollar quart against a 1.50-2.50 carton and carries 10 g protein per cup against 1. Same-form vocabulary row exists. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:27"
+                        },
+                        {
+                            "key":  "ranch seasoning",
+                            "term":  "ranch seasoning",
+                            "item_id":  "ranch-seasoning-mix",
+                            "bid_exists":  true,
+                            "evidence":  "The DIFFERENT FORM \u0027mix\u0027 flag is a wording artefact - the vocabulary\u0027s own name is Ranch Seasoning Mix and this line is a packet of exactly that. Board 6 of 7, cheapest 0.53 at Walmart. One packet is 28 g. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:27"
+                        },
+                        {
+                            "key":  "cayenne",
+                            "term":  "cayenne",
+                            "item_id":  "cayenne-pepper",
+                            "bid_exists":  true,
+                            "evidence":  "Bare \u0027cayenne\u0027 is ground cayenne pepper; the FDC shelf returns only \u0027Spices, pepper, red or cayenne\u0027. REUSE of a live board id at 6 of 7, and the DB already carries the row. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:27"
+                        },
+                        {
+                            "key":  "corn",
+                            "term":  "corn",
+                            "item_id":  "canned-corn",
+                            "bid_exists":  true,
+                            "evidence":  "The sweet/whole/canned form flags are spurious - the line IS a can, exactly the 2026-08-26 \u0027chopped green chiles\u0027 call. Board has no commodity but today\u0027s captures carry it, so the term is enqueued. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:28"
+                        },
+                        {
+                            "key":  "fire roasted tomatoes",
+                            "term":  "fire roasted tomatoes",
+                            "item_id":  "diced-tomatoes",
+                            "bid_exists":  true,
+                            "evidence":  "Fire-roasted is a label variant of the same diced can at the same shelf price, the \u0027reduced sodium beef broth\u0027 -\u003e beef-broth call. Deliberately REFUSED the board\u0027s `tomatoes` match, which is the fresh field tomato - a wrong-food match at a wrong price. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:28"
+                        },
+                        {
+                            "key":  "dark red kidney beans",
+                            "term":  "dark red kidney beans",
+                            "item_id":  "kidney-beans",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row and a live board id at 7 of 7, cheapest 0.0548 at Aldi; dark versus light red is a shade of the same canned bean at one price. Drained yield of a 15 oz can. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:28"
+                        },
+                        {
+                            "key":  "green chiles",
+                            "term":  "green chiles",
+                            "item_id":  "canned-green-chilies",
+                            "bid_exists":  true,
+                            "evidence":  "The \u0027canned\u0027 form flag is spurious - the line is a 4 oz can, and the 2026-08-26 ruling on this exact situation went here. Board 6 of 7. The dried guajillo and arbol rows are a different food. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:29"
+                        },
+                        {
+                            "key":  "cooked bacon",
+                            "term":  "cooked bacon",
+                            "item_id":  "bacon",
+                            "bid_exists":  true,
+                            "evidence":  "\u0027Cooked\u0027 is a prep instruction, not a form flip - you buy raw bacon and fry it. Board 7 of 7. Weighed on the cooked basis (10 crisp slices, about 100 g) because the rendered fat is discarded rather than added to the chili. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:29"
+                        },
+                        {
+                            "key":  "mexican style cheese",
+                            "term":  "Mexican style cheese",
+                            "item_id":  "shredded-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of shredded-cheese, live at 7 of 7 and cheapest 0.1521 at Sam\u0027s Club: a Mexican blend is the same bagged shred at the same price class. Refused ricotta/provolone/Boursin, which are different cheeses entirely. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:29"
+                        },
+                        {
+                            "key":  "avocado sour cream or additional cheese",
+                            "term":  "avocado, sour cream, or additional cheese",
+                            "item_id":  "sour-cream",
+                            "bid_exists":  true,
+                            "evidence":  "A three-way optional topping line; costed on sour cream, the middle option and a live id at 7 of 7 (cheapest 0.1025 at Walmart), with avocado and extra cheese left to the cook. Weighed at a nominal 10 g per serving. [slug crack-chicken-chili, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:29"
+                        },
+                        {
+                            "key":  "butternut squash",
+                            "term":  "butternut squash",
+                            "item_id":  "butternut-squash",
+                            "bid_exists":  false,
+                            "evidence":  "REUSE of a live board id at 5 of 7, cheapest 1.49 at Baker\u0027s, per the 2026-08-26 \u0027cubed butternut squash\u0027 ruling; only the vocabulary row is missing. Spaghetti squash is a different food. DB row already present. [slug slow-cooker-butternut-squash-pulled-pork-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:33"
+                        },
+                        {
+                            "key":  "boneless pork loin roast",
+                            "term":  "boneless pork loin roast",
+                            "item_id":  "pork-loin",
+                            "bid_exists":  true,
+                            "evidence":  "A boneless loin roast IS the whole pork loin - \u0027boneless\u0027 and \u0027roast\u0027 describe how the same cut is sold, not a different product, and pork-loin is the vocabulary\u0027s own id for it. Refused pork-shoulder (a cheaper, fattier cut) and ground-pork. Board finds nothing, so the term is enqueued. [slug slow-cooker-butternut-squash-pulled-pork-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:33"
+                        },
+                        {
+                            "key":  "chipotle peppers packed in adobo",
+                            "term":  "chipotle peppers packed in adobo",
+                            "item_id":  "chipotle-adobo",
+                            "bid_exists":  true,
+                            "evidence":  "Exact same-form vocabulary row. The line insists on individual peppers, not the whole can, so it is weighed at 2 1/2 peppers (about 10 g each) rather than a can. Board finds nothing; term enqueued. [slug slow-cooker-butternut-squash-pulled-pork-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:33"
+                        },
+                        {
+                            "key":  "adobo sauce",
+                            "term":  "adobo sauce",
+                            "item_id":  "chipotle-adobo",
+                            "bid_exists":  true,
+                            "evidence":  "The line says outright that the sauce comes from the same can already bought for the peppers, so this is the same product and the same id, weighed separately so its macros count. The \u0027sauce/in\u0027 form flag is a wording artefact. [slug slow-cooker-butternut-squash-pulled-pork-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:33"
+                        },
+                        {
+                            "key":  "white onion",
+                            "term":  "white onion",
+                            "item_id":  "white-onion",
+                            "bid_exists":  false,
+                            "evidence":  "I DISAGREE with the shelf\u0027s 2026-08-26 \u0027small white onion\u0027 -\u003e onions ruling: a live white-onion commodity exists at 4 of 7 stores (cheapest 1.095 at Aldi), so the exact food can be priced as itself and the variety-pricing question never has to be answered. Red onion stays refused. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:37"
+                        },
+                        {
+                            "key":  "bell pepper",
+                            "term":  "bell pepper",
+                            "item_id":  "bell-peppers",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of a live board id at 5 of 7, cheapest 0.77 at Fareway, matching the 2026-08-27 \u0027bell peppers\u0027 ruling at cosine 0.97; the line does not name a colour, so the mixed id is right and green-bell-pepper (a cheaper pepper) is refused. Black Pepper is a wrong-food near row. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:37"
+                        },
+                        {
+                            "key":  "red enchilada sauce",
+                            "term":  "red enchilada sauce",
+                            "item_id":  "enchilada-sauce",
+                            "bid_exists":  true,
+                            "evidence":  "Same-form vocabulary row and a live board id at 5 of 7, cheapest 0.0925 at Baker\u0027s. Red is the default enchilada sauce; no green id exists to confuse it with. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:37"
+                        },
+                        {
+                            "key":  "green chilies",
+                            "term":  "green chilies",
+                            "item_id":  "canned-green-chilies",
+                            "bid_exists":  true,
+                            "evidence":  "REFUSED the near row Diced Tomatoes \u0026 Green Chilies [tomatoes-green-chilies]: that is a Rotel-style tomato product, a different food at a different price. Plain canned green chiles are live at 6 of 7, cheapest 0.2125 at Aldi. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:37"
+                        },
+                        {
+                            "key":  "reduced fat shredded mexican cheese",
+                            "term":  "reduced fat shredded Mexican cheese",
+                            "item_id":  "shredded-cheese",
+                            "bid_exists":  true,
+                            "evidence":  "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the \u0027reduced sodium beef broth\u0027 call. The macros differ, so the DB row is the reduced-fat one. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-27T18:58:38"
                         }
                     ]
 }

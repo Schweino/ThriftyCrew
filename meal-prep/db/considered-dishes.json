@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Dishes this estate has already ruled on. Read by sourcers BEFORE fetching and by adjudicators as prior art. Written by the DECIDER only - it is already the single writer of selection state. Advisory: a sourcer may return a previously-rejected dish with a stated reason.",
     "_key":  "protein|method|sauce-family - identity, not slug, because slugs vary by publisher and the same dinner recurs under many names.",
-    "updated":  "2026-08-27T11:51:40",
-    "count":  288,
+    "updated":  "2026-08-27T18:20:40",
+    "count":  317,
     "dishes":  [
                    {
                        "key":  "any|casserole|cheese",
@@ -4339,6 +4339,445 @@
                        "run":  "hunt-2026-08-27-highprotein",
                        "by":  "decider",
                        "at":  "2026-08-27T11:51:40"
+                   },
+                   {
+                       "key":  "chicken|skillet|plain",
+                       "slug":  "chicken-meatballs-in-cranberry-sauce",
+                       "name":  "Chicken Meatballs in Cranberry Sauce",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Cranberry-honey glazed chicken meatballs, distinct sweet-savory American holiday plate with no cranberry-sauce meatball in the live catalog; band verified 641cal/52g protein.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:51"
+                   },
+                   {
+                       "key":  "chicken|braised|bbq",
+                       "slug":  "slow-cooker-honey-garlic-chicken-noodles",
+                       "name":  "Slow Cooker Honey Garlic Chicken Noodles",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Honey/hoisin/soy braised chicken over noodles duplicates live andong-jjimdak (soy-braised chicken with noodles); same sweet-soy braised-chicken-and-noodle dinner in a crowded honey-soy chicken region.",
+                       "dupe_of":  [
+                                       "andong-jjimdak-braised-chicken"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:52"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "one-pan-cajun-chicken-alfredo-recipe",
+                       "name":  "One Pan Cajun Chicken Alfredo",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cajun chicken + cream + pasta is a 4-of-4 match to live creamy-cajun-chicken-penne-skillet-bowls; fettuccine vs penne does not make a distinct plate.",
+                       "dupe_of":  [
+                                       "creamy-cajun-chicken-penne-skillet-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:53"
+                   },
+                   {
+                       "key":  "chicken|stew|tomato",
+                       "slug":  "crockpot-chicken-green-chili-high-protein",
+                       "name":  "Crockpot Chicken Green Chili (High Protein)",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Great-northern-bean, green-chile, corn and chicken stew duplicates live slow-cooker-white-chicken-chili-bowls; green chili vs white chili is the same plate.",
+                       "dupe_of":  [
+                                       "slow-cooker-white-chicken-chili-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:55"
+                   },
+                   {
+                       "key":  "chicken|stew|curry",
+                       "slug":  "chicken-and-potato-curry",
+                       "name":  "Chicken and Potato Curry",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Indian-style tomato-coconut chicken-and-potato curry, distinct from catalog\u0027s Thai/Vietnamese/Japanese curries by potato starch and stew format; low-carb (21g) high-protein band verified, widens cuisine spread.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:56"
+                   },
+                   {
+                       "key":  "chicken|stew|tomato",
+                       "slug":  "crack-chicken-chili",
+                       "name":  "Crack Chicken Chili",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "accepted",
+                       "reason":  "Crack-chicken (ranch/bacon/cream cheese) built into a red-bean, black-bean and fire-roasted-tomato chili; distinct plate from live crack-chicken-bowls and white-chicken-chili, band verified 531cal/47g.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:57"
+                   },
+                   {
+                       "key":  "pork|braised|spice",
+                       "slug":  "slow-cooker-butternut-squash-pulled-pork-tacos",
+                       "name":  "Slow Cooker Butternut Squash Pulled Pork Tacos",
+                       "protein":  "pork",
+                       "method":  "braised",
+                       "verdict":  "accepted",
+                       "reason":  "Chipotle-adobo pulled pork with butternut squash in corn tortillas; distinct from all live pulled-pork dishes (enchilada bake, dr pepper bowls, shepherds pie), scarcer protein widens spread, band verified 477cal/40g.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:58"
+                   },
+                   {
+                       "key":  "chicken|casserole|tomato",
+                       "slug":  "high-protein-chicken-enchilada-casserole",
+                       "name":  "High Protein Chicken Enchilada Casserole",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "accepted",
+                       "reason":  "Layered corn-tortilla enchilada bake with cottage cheese/greek yogurt; distinct baked-casserole format from live chicken-enchilada-rice-bowls, no enchilada casserole in catalog, band verified 454cal/43g.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:14:59"
+                   },
+                   {
+                       "key":  "turkey|bake|spice",
+                       "slug":  "crispy-oven-baked-ground-turkey-tacos",
+                       "name":  "Crispy Oven Baked Ground Turkey Tacos",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-turkey/black-bean/corn/cheese taco filling in baked tortillas duplicates the saturated live turkey-taco family (nacho bake, casserole); crispy shell does not make a distinct plate.",
+                       "dupe_of":  [
+                                       "loaded-ground-turkey-nacho-bake",
+                                       "turkey-taco-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:15:00"
+                   },
+                   {
+                       "key":  "chicken|casserole|spice",
+                       "slug":  "chicken-fajita-casserole-with-rice",
+                       "name":  "Chicken Fajita Casserole with Rice",
+                       "protein":  "chicken",
+                       "method":  "casserole",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Fajita chicken + rice + peppers duplicates live fajita-chicken-rice-bowl (shared fajita seasoning, chicken, rice, onions); one-pan casserole vs bowl is not a distinct dinner in a saturated Tex-Mex region.",
+                       "dupe_of":  [
+                                       "fajita-chicken-rice-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:15:01"
+                   },
+                   {
+                       "key":  "turkey|skillet|spice",
+                       "slug":  "turkey-taco-meal-prep-bowl",
+                       "name":  "Turkey Taco Meal Prep Bowl",
+                       "protein":  "turkey",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground-turkey taco filling over rice with salsa and yogurt crema; duplicates the live turkey taco/burrito bowl family at saturation 7, meal-prep-bowl format is not a distinguishing dinner.",
+                       "dupe_of":  [
+                                       "ground-turkey-burrito-bowl",
+                                       "turkey-taco-soup"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:48"
+                   },
+                   {
+                       "key":  "chicken|skillet|tomato",
+                       "slug":  "chicken-and-tomato-pasta",
+                       "name":  "Chicken and Tomato Pasta",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Creamy roma-tomato + half-and-half + ricotta chicken linguine; 778cal is heavy for a high-protein run and it widens no cuisine in an already pasta-saturated accept set. Not a strict dupe of tuscan/parmesan/cacciatore chicken pastas but wrong band/fit.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:48"
+                   },
+                   {
+                       "key":  "chicken|skillet|curry",
+                       "slug":  "coconut-curry-chicken-recipe",
+                       "name":  "Coconut Curry Chicken Recipe",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Diced chicken in coconut milk + curry powder + diced tomato over rice; the generic coconut-chicken-curry archetype already covered by live kuku-paka and madras. Clean 52p/14c band but no distinct regional take in a curry-saturated catalog.",
+                       "dupe_of":  [
+                                       "kuku-paka-swahili-coconut-chicken-curry",
+                                       "chicken-madras-curry"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:49"
+                   },
+                   {
+                       "key":  "chicken|braised|curry",
+                       "slug":  "instant-pot-curry-with-chicken-and-vegetables",
+                       "name":  "Instant Pot Curry with Chicken and Vegetables",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken + red potatoes in curry paste and coconut milk; duplicates the chicken-and-potato-curry accepted earlier this run, saturated curry lane.",
+                       "dupe_of":  [
+                                       "chicken-and-potato-curry"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:50"
+                   },
+                   {
+                       "key":  "chicken|skillet|curry",
+                       "slug":  "easy-coconut-curry-chicken",
+                       "name":  "Easy Coconut Curry Chicken",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Coconut milk + curry powder/paste chicken over rice; same dinner as batch-mate coconut-curry-chicken-recipe and live kuku-paka, saturation 15 curry region.",
+                       "dupe_of":  [
+                                       "coconut-curry-chicken-recipe",
+                                       "kuku-paka-swahili-coconut-chicken-curry"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:52"
+                   },
+                   {
+                       "key":  "chicken|skillet|soy",
+                       "slug":  "healthy-chicken-stir-fry-with-vegetables",
+                       "name":  "Healthy Chicken Stir Fry with Vegetables",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Coconut-aminos/honey soy-glazed chicken breast + veggies over rice; duplicates the accepted-this-run teriyaki grilled chicken veggie rice bowl, a generic stir-fry with no distinct sauce identity.",
+                       "dupe_of":  [
+                                       "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:53"
+                   },
+                   {
+                       "key":  "chicken|bake|cream",
+                       "slug":  "creamy-chicken-spaghetti-bake",
+                       "name":  "Creamy Chicken Spaghetti Bake",
+                       "protein":  "chicken",
+                       "method":  "bake",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Cheddar/milk-roux chicken spaghetti bake; a distinct casserole from alfredo lasagna but the fourth creamy chicken-pasta bake in this run\u0027s accepts, no cuisine-spread gain in a saturated lane.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:53"
+                   },
+                   {
+                       "key":  "chicken|skillet|soy",
+                       "slug":  "chicken-stir-fry-noodles",
+                       "name":  "Chicken Stir Fry Noodles",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Cooked chicken + stir-fry veg + teriyaki sauce over noodles; duplicates the accepted/in-flight stir-fry-noodles soy chicken noodle stir-fry.",
+                       "dupe_of":  [
+                                       "stir-fry-noodles"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:54"
+                   },
+                   {
+                       "key":  "turkey|bake|plain",
+                       "slug":  "ground-turkey-with-sweet-potatoes",
+                       "name":  "Ground Turkey with Sweet Potatoes",
+                       "protein":  "turkey",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Ground turkey + sweet potato (stuffed) duplicates live ground-turkey-sweet-potato-bowl; stuffed vs bowl format is not distinguishing, 74g carbs is heavy.",
+                       "dupe_of":  [
+                                       "ground-turkey-sweet-potato-bowl"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:55"
+                   },
+                   {
+                       "key":  "chicken|stew|tomato",
+                       "slug":  "white-chicken-or-turkey-enchilada-soup",
+                       "name":  "White Chicken (or Turkey) Enchilada Soup",
+                       "protein":  "chicken",
+                       "method":  "stew",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Creamy milk-roux white-bean + green-chile + corn chicken soup; overlaps the accepted crack-chicken-chili creamy chicken-bean lane and the run\u0027s saturated Tex-Mex chicken accepts (two enchilada dishes), heavy 633cal/61c band, no cuisine-spread gain.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:17:56"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "quick-buffalo-chicken-tacos",
+                       "name":  "Quick Buffalo Chicken Tacos",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Buffalo-sauce chicken breast in tortillas duplicates live buffalo-chicken-burrito (chicken + buffalo + tortilla); taco vehicle re-plates an already three-way buffalo-chicken lane.",
+                       "dupe_of":  [
+                                       "buffalo-chicken-burrito"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:32"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "sriracha-chicken-tacos",
+                       "name":  "Sriracha Chicken Tacos",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Sriracha-honey-lime chicken taco, sweet-spicy sauce absent from catalog and distinct from fajita/cilantro-lime/buffalo chicken tacos; verified 573/33/48 high-protein.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:33"
+                   },
+                   {
+                       "key":  "chicken|skillet|spice",
+                       "slug":  "blackened-chicken-with-mango-salsa",
+                       "name":  "Blackened Chicken with Mango Salsa",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "accepted",
+                       "reason":  "Cajun-blackened chicken + mango salsa over cilantro-lime rice; blackening prep new to catalog, distinct from Caribbean jerk-chicken-mango-burrito; verified 530/35/40.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:34"
+                   },
+                   {
+                       "key":  "chicken|any|cheese",
+                       "slug":  "honey-bbq-chicken-mac-and-cheese",
+                       "name":  "Honey BBQ Chicken Mac and Cheese",
+                       "protein":  "chicken",
+                       "method":  "any",
+                       "verdict":  "accepted",
+                       "reason":  "Honey-BBQ chicken on high-protein mac and cheese; no live chicken mac-and-cheese, distinct from sausage kielbasa mac and pasta-less hunters chicken; verified 642/75/58.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:35"
+                   },
+                   {
+                       "key":  "chicken|braised|plain",
+                       "slug":  "slow-cooker-keto-garlic-parmesan-chicken-pasta",
+                       "name":  "Slow Cooker Keto Garlic Parmesan Chicken Pasta",
+                       "protein":  "chicken",
+                       "method":  "braised",
+                       "verdict":  "rejected-not-fit",
+                       "reason":  "Garlic-parmesan cream chicken pasta = alfredo-family creamy-chicken pasta; saturated lane (creamy-garlic-chicken-pasta cut same run), no cuisine spread or distinct plate.",
+                       "dupe_of":  [
+
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:35"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "sheet-pan-maple-mustard-pork-tenderloin-dinner",
+                       "name":  "Sheet Pan Maple Mustard Pork Tenderloin Dinner",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Sheet-pan pork tenderloin + roasted potatoes duplicates live sheet-pan-pork-tenderloin-potatoes-green-beans; maple-mustard glaze/side-veg swap is not a distinct plate.",
+                       "dupe_of":  [
+                                       "sheet-pan-pork-tenderloin-potatoes-green-beans"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:36"
+                   },
+                   {
+                       "key":  "pork|bake|plain",
+                       "slug":  "perfect-pork-loin-and-potatoes",
+                       "name":  "Perfect Pork Loin and Potatoes",
+                       "protein":  "pork",
+                       "method":  "bake",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Apricot-glazed pork loin roast with potatoes/onion duplicates live dutch-oven-pork-loin-roast-gravy; glaze does not make a new dinner.",
+                       "dupe_of":  [
+                                       "dutch-oven-pork-loin-roast-gravy"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:37"
+                   },
+                   {
+                       "key":  "beef|skillet|spice",
+                       "slug":  "cheesy-taco-skillet",
+                       "name":  "Cheesy Taco Skillet",
+                       "protein":  "beef",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "One-pot cheesy taco ground-beef pasta duplicates live cheesy-taco-spaghetti (beef + taco + pasta + skillet).",
+                       "dupe_of":  [
+                                       "cheesy-taco-spaghetti"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:39"
+                   },
+                   {
+                       "key":  "chicken|skillet|cream",
+                       "slug":  "skillet-chicken-cordon-bleu-with-creamy-dijon-sauce",
+                       "name":  "Skillet Chicken Cordon Bleu with Creamy Dijon Sauce",
+                       "protein":  "chicken",
+                       "method":  "skillet",
+                       "verdict":  "rejected-dupe",
+                       "reason":  "Chicken + ham + swiss cordon bleu duplicates live chicken-cordon-bleu-casserole; skillet format and dijon pan sauce do not distinguish the dish.",
+                       "dupe_of":  [
+                                       "chicken-cordon-bleu-casserole"
+                                   ],
+                       "run":  "hunt-2026-08-27-highprotein",
+                       "by":  "decider",
+                       "at":  "2026-08-27T18:20:40"
                    }
                ]
 }

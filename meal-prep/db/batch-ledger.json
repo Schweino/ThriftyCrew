@@ -933,9 +933,9 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w8",
       "opened":  "2026-08-27T19:08:11",
-      "last_activity":  "2026-08-27T19:36:46",
-      "closed":  false,
-      "closed_at":  null,
+      "last_activity":  "2026-08-27T19:56:39",
+      "closed":  true,
+      "closed_at":  "2026-08-27T19:56:39",
       "close_detail":  null,
       "slugs":  [
                     "ground-beef-cottage-cheese-bowl",
@@ -987,6 +987,16 @@
                          "stage":  "publish",
                          "at":  "2026-08-27T19:36:46",
                          "detail":  "3/3 wave slug(s) published through engine\\publish (visibility preserved) + 16 collateral spec(s) carried by propagate (total dirty 19)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-27T19:36:53",
+                         "detail":  "3/3 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-27T19:56:39",
+                         "detail":  "reviewed"
                      }
                  ]
   }
