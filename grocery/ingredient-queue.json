@@ -6838,23 +6838,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-27T18:15:08"
+                                                     "checked":  "2026-08-28T06:56:28"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "blocked",
+                                                     "state":  "not-carried",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027 reported 72 hits but the evidence file carries only the top 8 (McCormick Chili Seasoning Mix, Spice Islands Beau Monde, Cavender\u0027s Greek, Badia Italian/Mediterranean, Badia Pumpkin Pie Spice, Fareway Seasoning Mix, Kinder\u0027s The Blend, McCormick Tex-Mex Chili) - all generic non-Moroccan seasonings, none is a Moroccan blend or ras el hanout. But 64 rows I never saw remain unadjudicated and I have no browser this session to load the full grid or walk the ras-el-hanout rung. Unexamined is not absent, so this stays blocked, not not-carried.",
-                                                     "checked":  "2026-08-27T18:15:08"
+                                                     "evidence":  "Pre-pass rung 1 \u0027Moroccan Spice Mix\u0027=72. I walked two further rungs myself with pull-browser-stores.py lookup mode (ladder-fareway.json): \u0027moroccan seasoning\u0027=72 and \u0027ras el hanout\u0027=72 - the identical 72 on three unrelated terms is the R1 suggestion-grid tell, and \u0027ras el hanout\u0027 returned Frontier Smoked Paprika, Fareway Seasoning Mix, Badia Paprika, Simply Organic Garam Masala, McCormick Paprika. Across all three rungs the sampled priced nodes are single spices and non-Moroccan blends (Italian/Mediterranean, Beau Monde, Greek, taco, chili); no Moroccan blend or ras el hanout appears.",
+                                                     "checked":  "2026-08-28T06:56:28"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Freshop catalog store_id 6401 Omaha, pickup shelf price. Full ladder EMPTY: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0. Plus my own synonym rung (probe-ingredient.ps1 \u0027ras el hanout\u0027 -Json): \u0027ras el hanout\u0027=0, \u0027raselhanout\u0027=0. Zero candidates on any rung; store answered OK so this is an empty shelf, not a transport refusal.",
-                                                         "checked":  "2026-08-27T18:15:08"
+                                                         "evidence":  "Full ladder plus synonyms via probe-ingredient.ps1: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0, \u0027ras el hanout\u0027=0, \u0027moroccan seasoning\u0027=0 (fell back to \u0027seasoning\u0027=25: Dan O\u0027s blends, Andys fish breading, popcorn seasoning - no Moroccan blend). Rung \u0027moroccan\u0027=3 hits, all health-and-beauty: Suave Moroccan Oil shampoo and conditioner, Nair Moroccan Argan shower cream. No ras el hanout or Moroccan spice blend.",
+                                                         "checked":  "2026-08-28T06:56:28"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6862,15 +6862,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-27T18:15:08"
+                                                    "checked":  "2026-08-28T06:56:28"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027 returned 8 hits and the evidence file carries all 8, so the result grid is complete and fully adjudicated: McCormick Taco Seasoning 12pk $7.78, Lawry\u0027s Seasoned Salt 40oz $7.48, McCormick Salad Supreme 10.12oz $6.98, Grill Mates Montreal Steak 29oz $4.98, Hidden Valley Garlic Ranch $6.98, Old Bay 7.5lb $39.88, Kinder\u0027s Whiskey Peppercorn 9.7oz $6.98, Kinder\u0027s Caramelized Onion Burger Rub 9.1oz $5.48. Every row is an unrelated seasoning blend the fuzzy search fell back to; none is a Moroccan spice mix or ras el hanout. Warehouse club with a narrow SKU count and no specialty-blend row in the grid.",
-                                                             "checked":  "2026-08-27T18:15:08"
+                                                             "evidence":  "Pre-pass rung 1 \u0027Moroccan Spice Mix\u0027=8, all generic (taco, Lawry\u0027s, Montreal steak, Old Bay). I walked two further rungs myself with pull-browser-stores.py lookup mode (ladder-samsclub.json): \u0027ras el hanout\u0027=6 hits and they are rotisserie chicken breast, Canadian bacon, Miracle Whip and mustard - a zero-relevance fallback, i.e. no result; \u0027moroccan seasoning\u0027=19 hits, all generic (Montreal steak, Member\u0027s Mark taco/Italian, Badia Complete, Tony Chachere\u0027s, Kinder\u0027s). No Moroccan blend or ras el hanout in the club.",
+                                                             "checked":  "2026-08-28T06:56:28"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6878,15 +6878,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-27T18:15:08"
+                                                  "checked":  "2026-08-28T06:56:28"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "kroger-public-api locationId 61500319. Full ladder EMPTY: rung1 \u0027Moroccan Spice Mix\u0027=0 hits, rung2 \u0027MoroccanSpiceMix\u0027=0 hits. I then walked a synonym rung myself (probe-ingredient.ps1 \u0027ras el hanout\u0027 -Json): \u0027ras el hanout\u0027=0, \u0027raselhanout\u0027=0. Zero candidates on any rung - no result grid to adjudicate, not a suggestion block.",
-                                                          "checked":  "2026-08-27T18:15:08"
+                                                          "evidence":  "Full ladder plus synonyms via probe-ingredient.ps1: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0, \u0027ras el hanout\u0027=0, \u0027moroccan seasoning\u0027=0 (fell back to bare \u0027seasoning\u0027=25: Cajun, Italian, taco, Adobo, Old Bay - no Moroccan blend). Rung \u0027moroccan\u0027=22 hits and every Moroccan-named item is non-food or a different food: Tree Hut Moroccan Rose scrub/body wash/shave oil, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. No ras el hanout or Moroccan spice blend on the shelf.",
+                                                          "checked":  "2026-08-28T06:56:28"
                                                       }
                                  },
                       "verdict":  "PENDING",
@@ -7580,6 +7580,46 @@
                                                       }
                                  },
                       "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "romaine lettuce",
+                      "recipes":  [
+                                      "sriracha-chicken-tacos"
+                                  ],
+                      "added":  "2026-08-28T06:58:27",
+                      "why":  "sriracha-chicken-tacos needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "sriracha",
+                      "recipes":  [
+                                      "sriracha-chicken-tacos"
+                                  ],
+                      "added":  "2026-08-28T06:58:27",
+                      "why":  "sriracha-chicken-tacos needs it",
+                      "status":  "pending",
+                      "stores":  {
+                                     "Walmart":  null,
+                                     "Fareway":  null,
+                                     "Family Fare":  null,
+                                     "Hy-Vee":  null,
+                                     "Sam\u0027s Club":  null,
+                                     "Aldi":  null,
+                                     "Baker\u0027s":  null
+                                 },
+                      "verdict":  "PENDING",
                       "notes":  null
                   }
               ]
