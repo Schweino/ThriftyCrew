@@ -1331,6 +1331,15 @@ def run():
     T("MUST FIRE  a bid NO existing row carries has no basis to inherit, so nothing is written and "
       "no gpu is invented - that case is a mint",
       *_reuse_with_no_kin_refuses_rather_than_inventing_a_basis())
+    T("MUST FIRE  ...and the REUSE ROAD actually calls that fallback - a live id no row names yet "
+      "gets its row, which tearing the fallback out came back 0 red without",
+      *_reuse_uses_the_commodity_basis_when_no_row_names_the_id())
+    T("MUST FIRE  ...unless the COMMODITY itself yields one: an id no vocabulary row names yet is a "
+      "live priced id, not a mint - and `cheddar-cheese` only resolves through the floor map",
+      *_basis_from_the_commodity_when_no_row_names_it_yet())
+    T("MUST FIRE  a commodity priced per EACH yields NO basis, because grams-per-item is a fact "
+      "about the food that no unit name supplies - and neither does an id that does not exist",
+      *_basis_refuses_what_a_unit_name_cannot_supply())
     T("CLEAN TWIN a name the vocabulary already resolves gets no second row - and ALIASES count, or "
       "the duplicate the registrar exists to prevent gets written here instead",
       *_reuse_does_not_duplicate_a_name_the_vocabulary_already_resolves())
@@ -4362,6 +4371,40 @@ def _reuse_res(name="Reduced Fat Cheddar Cheese", bid="cheddar-cheese", decision
     return res
 
 
+def _basis_from_the_commodity_when_no_row_names_it_yet():
+    """MUST FIRE. Reads the LIVE commodity namespaces on purpose, the way the LOCKSTEP fixture reads
+    the live food DB: the question is whether this estate's real ids yield a basis, and a hand-built
+    fixture would only prove the arithmetic.
+
+    THE CASE THIS EXISTS FOR. The reuse road first read the basis only from a sibling VOCABULARY row
+    and called everything else a mint - which would have sent a registrar and a capture pass after
+    `jelly`, `adobo-seasoning` and `deli-ham`, three live ids the board already prices, whose only
+    lack was a name pointing at them.
+
+    `cheddar-cheese` is the pointed one: it appears in NEITHER commodity file. It is a recipe-floor id
+    served by `shredded-cheese` through recipe-floor-id-map.json, and reading the id alone would call
+    it dangling - which is exactly the wrong call this session made out loud before checking."""
+    d = daemon(run_dir=scratch_dir(prefix="daemon-basis-"))
+    got = {k: d.commodity_basis(k) for k in ("deli-ham", "cheddar-cheese")}
+    ok = all(v and v.get("unit") == "oz" and abs(v.get("gpu") - 28.3495) < 1e-6
+             for v in got.values())
+    return (ok, "deli-ham=%s cheddar-cheese(via floor map)=%s" % (got["deli-ham"],
+                                                                 got["cheddar-cheese"]))
+
+
+def _basis_refuses_what_a_unit_name_cannot_supply():
+    """MUST FIRE, and this is the guard rather than the feature. `limes` is priced per EACH, and the
+    grams in one lime is a fact about the FOOD, not about the word "each" - the same lesson the
+    Orange Zest repoint paid for on 2026-08-28, where a gpu of 6 per each had to become 20.78 per lb
+    because the feed prices oranges by weight. An id that does not exist at all yields nothing either.
+    Both must return None so the caller refuses instead of writing a row with an invented basis."""
+    d = daemon(run_dir=scratch_dir(prefix="daemon-basis-no-"))
+    each = d.commodity_basis("limes")
+    absent = d.commodity_basis("no-such-commodity-anywhere-2026")
+    return (each is None and absent is None,
+            "each=%s absent=%s" % (each, absent))
+
+
 def _reuse_writes_the_row_and_inherits_the_basis():
     """MUST FIRE, and the assertion that matters is the BASIS, not the call. A row written with the
     right bid and a guessed gpu prices the recipe wrong while every guard reads green - that is the
@@ -4383,6 +4426,31 @@ def _reuse_writes_the_row_and_inherits_the_basis():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def _reuse_uses_the_commodity_basis_when_no_row_names_the_id():
+    """MUST FIRE, and it exists because the NEUTER caught its absence. Tearing the commodity fallback
+    out of write_reuse_vocabulary_rows came back 0 red: `commodity_basis` had a fixture of its own,
+    but nothing pinned the reuse road actually CALLING it - predicate covered, wiring not, which is
+    the gap that has bitten this estate all session.
+
+    `deli-ham` is a live priced commodity that no vocabulary row names, and it is the real case:
+    `baked-cubano-chicken` was stuck on it."""
+    tmp = scratch_dir(prefix="daemon-reuse-cbasis-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        made = arun(d.write_reuse_vocabulary_rows(
+            "s1", _reuse_res(name="Deli Ham", bid="deli-ham")))
+        call = (ps.find("add-ingredient-row") or [None])[0]
+        a = call["args"] if call else []
+        return (made == ["Deli Ham"] and FakePS.value_after(a, "-Bid") == "deli-ham"
+                and FakePS.value_after(a, "-Unit") == "oz"
+                and FakePS.value_after(a, "-Gpu") == "28.3495",
+                "made=%s args=%s findings=%s"
+                % (json.dumps(made), json.dumps(a[:10]), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _reuse_with_no_kin_refuses_rather_than_inventing_a_basis():
     """MUST FIRE. No existing row carries `baby-potatoes`, so there is no priced basis to copy. This
     is the case that must NOT fall back to a default gpu - it is a mint, and it says so."""
@@ -4392,8 +4460,7 @@ def _reuse_with_no_kin_refuses_rather_than_inventing_a_basis():
         d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
         made = arun(d.write_reuse_vocabulary_rows(
             "s1", _reuse_res(name="Baby Potatoes", bid="baby-potatoes")))
-        said = any("no priced basis to inherit" in f.replace("\n", " ") or
-                   "NO existing vocabulary row carries that id" in f for f in d.findings)
+        said = any("none will be invented" in f and "MINT" in f for f in d.findings)
         return (made == [] and said and not ps.calls,
                 "made=%s calls=%d findings=%s"
                 % (json.dumps(made), len(ps.calls), json.dumps(d.findings)[:260]))

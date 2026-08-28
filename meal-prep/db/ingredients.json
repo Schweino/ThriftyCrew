@@ -3144,5 +3144,72 @@
         "buy_pkg_g":  67,
         "buy_pkg_label":  "each",
         "note":  "Brad ruled 2026-08-28: bottled lime juice is what stores sell, so the PLAIN name 'Lime Juice' now prices as the bottle (bid lime-juice, floz), mirroring Lemon Juice. This row is the explicit fresh-squeezed option, mirroring Fresh Lemon Juice, so the convention is a rule stated in the names rather than a difference nobody chose. gpu 30 = juice yield of one medium lime."
+    },
+    {
+        "item":  "Apricot Jam",
+        "bid":  "jelly",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'jelly'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: REUSE of jelly, 7 of 7 - the fruit-spread commodity covers jam at the same price class, so no new id is warranted. Only the vocabulary name row is missing, which is a naming question and not a registrar one."
+    },
+    {
+        "item":  "Light Mayonnaise",
+        "bid":  "mayonnaise",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "pantry_pkg_g":  850,
+        "pantry_pkg_label":  "30oz jar",
+        "bulk":  true,
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Mayonnaise', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Light mayo is the same jar on the same shelf at the same price class, per the 'Light Cream Cheese' and 'avocado oil mayonnaise' precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity."
+    },
+    {
+        "item":  "Cooked White Rice",
+        "bid":  "rice",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "recipe",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "2lb bag",
+        "bulk":  true,
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Rice', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: You buy the dry bag and cook it: `rice` is the same product and price class, and 'cooked' is a prep instruction as in the 'cooked bacon' ruling. Weighed cooked (158 g/cup) so grams and the cooked-rice DB row agree; vocabulary wants a Cooked White Rice name row, not a new id."
+    },
+    {
+        "item":  "Reduced Fat Cheddar Cheese",
+        "bid":  "cheddar-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz block",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Cheddar Cheese', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Reduced-fat (2% milk) cheddar is the same product concept on the same shelf at the same per-ounce price class as block cheddar, so bid reuse is sound; the macro difference is carried by the label row returned here rather than by a bridged id. Not the shredded id - the source names cheese, not a bag, and the instructions grate it."
+    },
+    {
+        "item":  "Adobo Seasoning",
+        "bid":  "adobo-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'adobo-seasoning'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: The DIFFERENT FORM flag against Chipotle in Adobo is a wording artefact - two unrelated foods that share the word adobo. adobo-seasoning is a live board id (4 of 7, cheapest 0.1332 Sam's) and a dry blend, so this is a reuse; the 'ranch seasoning' -> ranch-seasoning-mix precedent is the same shape."
+    },
+    {
+        "item":  "Deli Ham",
+        "bid":  "deli-ham",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from \"the commodity row for 'deli-ham'\", which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: This line IS sliced deli lunch meat, which is exactly what deli-ham prices (7 of 7, cheapest 0.1238 Walmart) - a reuse. Refused the vocabulary's Diced Ham: cubed convenience packs are a different pack and price class. The 'spiral ham' precedent refused deli-ham for a bone-in whole ham, which is the opposite case and does not bind here."
+    },
+    {
+        "item":  "Dill Pickle Slices",
+        "bid":  "pickles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  907,
+        "pantry_pkg_label":  "32oz jar",
+        "bulk":  true,
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Dill Pickles', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Sliced and whole dill pickles are the same jarred product at the same price class - a cut, not a form flip - and pickles is live 7 of 7 at 0.05 cheapest, so this is a reuse. Only a vocabulary NAME row is missing, which is a naming question and not a registrar one."
     }
 ]

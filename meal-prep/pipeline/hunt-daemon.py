@@ -64,6 +64,8 @@ INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
 INGREDIENT_QUEUE_JSON = os.path.join(REPO, "grocery", "ingredient-queue.json")
 CATEGORIES_JSON = os.path.join(REPO, "grocery", "categories.json")
 INGREDIENTS_JSON = os.path.join(REPO, "meal-prep", "db", "ingredients.json")
+COMMODITIES_JSON = os.path.join(REPO, "grocery", "commodities.json")
+FLOOR_ID_MAP_JSON = os.path.join(REPO, "grocery", "recipe-floor-id-map.json")
 PROBE_INGREDIENT_PS = os.path.join(REPO, "grocery", "probe-ingredient.ps1")
 PULL_BROWSER_STORES_PY = os.path.join(REPO, "grocery", "pull-browser-stores.py")
 # 25 s/request x ladder rungs x 2 stores x up to 10 terms. One call for the whole batch.
@@ -4502,6 +4504,57 @@ class Daemon(object):
                             "size": str(size).strip(), "item": str(name).strip()})
         return out
 
+    # GRAMS IN ONE UNIT OF A STANDARD MEASURE. These are conversions, not estimates - an ounce is
+    # 28.3495 g wherever it appears. `each` and `dozen` are deliberately ABSENT: the grams in one of a
+    # thing is a fact about THE FOOD (a lemon is 58 g, an orange 131 g), not about the unit, and it
+    # cannot be derived from the unit name. A basis that cannot be derived is refused, never guessed.
+    UNIT_GRAMS = {"oz": 28.3495, "lb": 453.592, "floz": 29.5735, "gallon": 3785.41,
+                  "g": 1.0, "kg": 1000.0}
+
+    def commodity_basis(self, bid):
+        r"""The priced basis of a commodity id, for a bid NO vocabulary row carries yet.
+
+        WHY THIS EXISTS (2026-08-28). The reuse road first read the basis only from a sibling
+        VOCABULARY row, and called everything else a mint. That conflated two different situations,
+        and the dry run over the stuck slugs showed both: `baby-potatoes` has no commodity at all and
+        really is a mint, while `jelly`, `adobo-seasoning` and `deli-ham` are live, priced commodities
+        that simply had no vocabulary row pointing at them yet. Calling those three a mint would send
+        a registrar and a capture pass after food the board already prices.
+
+        Follows recipe-floor-id-map.json, because a recipe-board id is priced THROUGH its weekly twin -
+        `cheddar-cheese` is served by `shredded-cheese`, and reading only the id would have called
+        that dangling. Returns None when the commodity does not exist, or when its unit is one whose
+        grams cannot be derived.
+        """
+        want = str(bid or "").strip()
+        if not want:
+            return None
+        try:
+            floor = {}
+            with open(FLOOR_ID_MAP_JSON, "r", encoding="utf-8-sig") as f:
+                floor = (json.load(f) or {}).get("map") or {}
+        except Exception:                                         # noqa: BLE001
+            floor = {}
+        rows = []
+        for path in (COMMODITIES_JSON, RECIPE_COMMODITIES):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    doc = json.load(f)
+            except Exception:                                     # noqa: BLE001
+                continue
+            rows += (doc if isinstance(doc, list)
+                     else (doc.get("commodities") or doc.get("items") or []))
+        by_id = {str(r.get("id")): r for r in rows if isinstance(r, dict) and r.get("id")}
+        row = by_id.get(want) or by_id.get(str(floor.get(want) or ""))
+        if not row:
+            return None
+        unit = str(row.get("unit") or "").strip().lower()
+        gpu = self.UNIT_GRAMS.get(unit)
+        if not gpu:
+            return None
+        return {"unit": unit, "gpu": gpu, "board": "recipe",
+                "item": "the commodity row for '%s'" % want}
+
     def vocabulary_rows(self):
         r"""db\ingredients.json, as a list. An unreadable file returns [] and every caller degrades to
         "I cannot tell", which is the safe direction here - never "there is no row"."""
@@ -4575,14 +4628,19 @@ class Daemon(object):
                 continue
             seen.add(name.lower())
             kin = by_bid.get(bid) or []
-            if not kin:
+            # A SIBLING ROW FIRST, THE COMMODITY ITSELF SECOND. The sibling is the better source
+            # because it carries the package too; the commodity is the fallback for an id nothing has
+            # named yet, which is a live priced id, not a mint.
+            src = kin[0] if kin else self.commodity_basis(bid)
+            if not src:
                 self.findings.append(
-                    "vocab/%s: %r was ruled onto %r, but NO existing vocabulary row carries that id, "
-                    "so there is no priced basis to inherit and none will be invented. That makes "
-                    "this a MINT, not a reuse - it needs a registrar ruling and store evidence."
+                    "vocab/%s: %r was ruled onto %r, and NEITHER an existing vocabulary row NOR a "
+                    "commodity row yields a priced basis for it, so none will be invented. Either "
+                    "the id does not exist - which makes this a MINT needing a registrar ruling and "
+                    "store evidence - or it is priced per `each`, where the grams in one of the thing "
+                    "is a fact about the food that no unit name can supply."
                     % (slug, name, bid))
                 continue
-            src = kin[0]
             args = ["-Item", name, "-Bid", bid,
                     "-Unit", str(src.get("unit") or "oz"),
                     "-Gpu", str(src.get("gpu") or 28.3495),
