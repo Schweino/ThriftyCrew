@@ -1,3 +1,11 @@
+# CLOSED - the PHANTOM gate is green again, on one detector fix and four spec fixes
+
+**RESOLVED 2026-08-28** (commit below). The gate exits 0, every class is at or under the 2026-08-05
+baseline, nothing was re-baselined, and publishing is unblocked. The diagnosis below stands as written and
+is kept verbatim; **the resolution differs from its proposed fix on two of the three findings, and the
+reasons are at the bottom.** Read the resolution before building anything from the "The fix" section - one
+of the three rules it proposes would blind the class to the case it was founded on.
+
 # OPEN ITEM - the PHANTOM gate is blocking every publish on three FALSE positives
 
 Brad ruled 2026-08-28: "We should fix everything so we are 100% accurate." Diagnosis is complete and
@@ -91,3 +99,107 @@ appears in no ingredient list at all. The self-test's dr-pepper twin must keep f
   separate defect - two mapper lines sharing an identical `raw` collapse on the assembler's join key,
   which is why `honey-bbq` shows "3 1/2 teaspoons" against 22 g of garlic powder. Fix the pair
   together or neither is provable.
+---
+
+# THE RESOLUTION (2026-08-28)
+
+Brad's standing ruling for this work was **"we should fix everything so we are 100% accurate"**. Read
+against that, only ONE of the three findings is a detector bug. The other two are cards that are not
+accurate, and suppressing the detector would have left both of them on the site.
+
+## 1. beef-rendang - AGREED, detector bug. Fixed as a CONSTITUENT, not as a RENDERED regex.
+
+The diagnosis is right that the oil comes out of the bought coconut milk. It is fixed by the rule that
+already exists for exactly this - `PHANTOM_CONSTITUENT`, whose founding case is baked-ziti's turkey soaking
+up "the tomato flavor" of its bought marinara - with a third entry, `'coconut milk' = @('coconut oil')`.
+
+Preferred over the proposed **RENDERED** rule because RENDERED is keyed on the SENTENCE and the constituent
+rule is keyed on the PURCHASE. "the butter that separates out" would pass a RENDERED regex in a recipe that
+buys no butter; the constituent entry cannot fire unless the recipe's own ingredient line carries every word
+of "coconut milk".
+
+The entry also forced the rule's keys and values from single tokens to PHRASES, every word required. Keyed
+on the bare token `coconut` with the bare value `oil`, the new entry would have forgiven a step naming Olive
+Oil, Sesame Oil or Vegetable Oil in ANY recipe holding a can of coconut milk - `oil` is a token of all of
+them. The two original single-word entries read identically under the stricter rule. Both halves are frozen
+in the self-test, including the over-forgiveness twin.
+
+**One thing the diagnosis missed, and it is the whole reason this fired now.** The cause was not only
+`a858fbe6` meeting a stale baseline. `db\ingredients.json` gained a **Coconut Oil** row and a **Cooking
+Spray** row on 2026-08-28 in `f3911bff` ("eleven of thirteen names resolved"). This class is
+vocabulary-driven: it can only see a phrase the estate knows. Two of the three findings appeared that day
+because the vocabulary learned two words, not because anything about the recipes changed - the same
+mechanism written up for Shredded Cheese the day before. Salsa has been in the vocabulary since the engine's
+founding; that third finding arrived with the prose, in `b488154a`, the same day.
+
+## 2. mediterranean-chicken - NOT a false positive. The card was fixed.
+
+> "a casserole dish sprayed with cooking spray or brushed with olive oil"
+
+The proposed **SATISFIED ALTERNATIVE** rule would teach the gate that a card may tell a reader to use a food
+the shopping list never bought, as long as some other branch of the sentence is covered. That is the
+opposite of "100% accurate", and it is a strange thing for a check whose whole message is *it cannot be made
+as shopped* to start accepting.
+
+The honest fix is one word of prose: the unbought branch goes, and the dish is brushed with the olive oil the
+recipe already buys 11 tablespoons of. Nothing is lost to the reader, and the gate keeps its meaning.
+Catalogue-wide sweep first: `cooking spray` appears in the steps of exactly ONE recipe. This was not a
+pattern that needed a rule.
+
+## 3. blackened-chicken - the prose was fixed, and the proposed DISH NAME rule must NOT be built.
+
+The salsa is genuinely assembled in that step, so the finding IS false. But the proposed suppression -
+**a food named in `$spec.name` is a component the dish is named after** - is unsafe, and this document
+already contains the proof:
+
+> the `slow-cooker-dr-pepper-pulled-pork-bowls` case, whose step pours a soda that appears in no ingredient
+> list at all
+
+**That recipe is NAMED after the missing bottle.** The lib's own comment says so in as many words. A
+DISH NAME rule is precisely a rule that forgives the founding case, and the fact that the self-test's twin
+happens to survive it - the fixture's food is "Zero-Sugar Soda", which shares no word with the slug - is
+luck, not safety. A recipe called "Chicken with Mango Salsa" that genuinely forgot to book its salsa would
+be waved through forever.
+
+So the prose was fixed instead. "Start with the salsa" is indistinguishable, to any matcher, from "start
+with the rice" in a recipe that buys no rice. The step now says it MAKES the salsa - which is both true and
+what the existing `PHANTOM_MADE` exemption already reads. No new rule.
+
+## Also fixed: the two advisory UNUSED findings, which are this same defect pointed the other way
+
+UNUSED is not in the ratchet's class list, so it never gated - but 4 against a baseline of 0 is a reader
+paying for a food and never being told to use it.
+
+* `chicken-rice-and-broccoli` bought dried basil, dried parsley, garlic powder and onion powder, then folded
+  all four into "all of the dried spices". The step names them now. (Onion powder was never reported: the
+  matcher forgives it on the "onion" in "the diced onion", which is Yellow Onion's mention. A real miss,
+  left alone - it is the documented generous-containment trade, not a new bug.)
+* `ground-beef-cottage-cheese-bowl` stopped after browning the beef. The cottage cheese, the hot honey, the
+  avocado and the red pepper flakes ARE the bowl, and nothing told anyone to build it. It has an assembly
+  step now.
+
+## Do NOT re-baseline - confirmed, and it was never necessary
+
+Every class came back to the baseline as written on 2026-08-05: **PHANTOM 0, UNUSED 0, UNMEASURABLE-QTY 21,
+ABSURD-UNIT 0.** The ratchet was not out of date. It was right, and two live cards were wrong.
+
+## What run-gates could not tell anyone
+
+`run-gates` runs `-SelfTest`. `audit-spec-contradictions.ps1`'s self-test was GREEN on main the entire time
+its catalogue-wide run was red, and 139/139 gates passed on the broken tree. The full read only happens in
+the daily chain and in `wave-publish`. A green gate run is not evidence this class is clean.
+
+## Verification
+
+* audit + repair self-tests pass; the audit gains 2 assertions (the coconut clean twin and its
+  over-forgiveness twin).
+* the full audit over 587 specs exits 0.
+* `run-gates` from a worktree OUTSIDE `.claude\worktrees\` (with `catalog-digest.json`, `db\built` and the
+  board copied in): **139 passed / 0 failed before AND after, identical case-name set.**
+
+## Still open
+
+The four edited specs need their **cards rebuilt and republished** before a reader sees any of this. The
+spec layer is fixed; the built cards are gitignored and unchanged.
+
+The four unrelated items under "Also pending, same session" below are untouched by this work.
