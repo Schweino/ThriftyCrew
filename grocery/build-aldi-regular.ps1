@@ -61,14 +61,68 @@ function Repair-SlugDecimals([string]$name, [string]$cardSize) {
   # wrong - but the engine reads PACK COUNTS out of the item name, and "original bratwurst 45 6 oz" offers it
   # a "45" to read as a pack. So splice the decimal back in, using the card's own size as the proof. No card
   # size, no repair - a plausible-looking decimal is still a guess.
+  #
+  # TWO SHAPES, ONE PROOF (widened 2026-08-28). The slug drops the '.' in two different ways, and only one of
+  # them leaves a gap where the point used to be:
+  #     "15.25 oz" -> ".../-15-25-oz" -> de-hyphenated "15 25 oz"   the digits are SPACED
+  #     "3.5 oz"   -> ".../-35-oz"    -> de-hyphenated "35 oz"      the digits are GLUED
+  # The first version only knew the spaced shape, so the glued one walked straight past it - and the glued one
+  # is the worse of the two, because the name no longer merely offers the engine a stray pack count: it states
+  # a SIZE, ten times the tile's, so the 2026-08-22 name-vs-size contradiction check rejects the row outright.
+  # 10 of the 48 rejects on 2026-08-28 were exactly that, including a 3.5 oz salami whose name read 35 OZ.
+  # The proof is unchanged, and it is the digits themselves: repair only when the card's size with its decimal
+  # point DELETED is exactly the number the name states, in front of the same unit. Two sizes that genuinely
+  # disagree ("name says 5 oz, tile says 15 oz" - 6 of them today) cannot produce the same digits, so they are
+  # untouched here and still rejected below. Requiring the unit is what keeps this off a "155" that belongs to
+  # a product's name rather than to its size.
+  # Aldi's slug deletes a leading zero along with the point ("0.75 oz" -> ".../-75-oz", never "-075-"), so the
+  # glued digits are tried with leading zeros stripped as well. That is a second reading of the same proof,
+  # not a looser one - it still demands a digit-for-digit match against the card.
+  # WHY A WRONG REPAIR HERE CANNOT CROWN A PHANTOM CHEAPEST. Concatenating the digits always yields a LARGER
+  # number than the decimal does (155 > 15.5, 75 > 0.75), so every repair in this function makes the item more
+  # expensive per unit, never less. The direction this whole file is built to fear is the one it cannot go.
   if (-not $cardSize) { return $name }
   $cs = [regex]::Match($cardSize, '(?i)\b(\d+)\.(\d+)\s*(fl\s*oz|floz|oz|lb|lbs|gal|ct|count|qt|pt|liter|ml)\b')
   if (-not $cs.Success) { return $name }
   $whole = $cs.Groups[1].Value; $frac = $cs.Groups[2].Value
-  # only rewrite when the name really does carry those exact digits split by a space
+  $dec = $whole + '.' + $frac
+  # IgnoreCase - and deliberately EVERY occurrence, not just the first: Aldi's own slug sometimes prints the
+  # size twice ("...black beans 155oz 155 oz"), and repairing only the first leaves the trailing one, which is
+  # the one the contradiction check reads, still saying 155.
+  $ic = [Text.RegularExpressions.RegexOptions]::IgnoreCase
+
+  # 1) SPACED - the name really does carry those exact digits split by a space
   $pat = '\b' + [regex]::Escape($whole) + '\s+' + [regex]::Escape($frac) + '\b'
-  if ($name -notmatch $pat) { return $name }
-  return ([regex]::Replace($name, $pat, ($whole + '.' + $frac), 1))
+  if ($name -match $pat) { return ([regex]::Replace($name, $pat, $dec, $ic)) }
+
+  # 2) GLUED - the name carries them as one run of digits, immediately in front of the card's own unit
+  $uPat = switch (($cs.Groups[3].Value -replace '\s+', '').ToLower()) {
+    'floz'  { 'fl\s*oz|floz' }
+    'oz'    { 'oz|ounces?' }
+    'lb'    { 'lbs?|pounds?' }
+    'lbs'   { 'lbs?|pounds?' }
+    'gal'   { 'gal|gallons?' }
+    'ct'    { 'ct|count' }
+    'count' { 'ct|count' }
+    'qt'    { 'qt|quarts?' }
+    'pt'    { 'pt|pints?' }
+    'liter' { 'liters?|litres?' }
+    'ml'    { 'ml' }
+    default { [regex]::Escape(($cs.Groups[3].Value -replace '\s+', '')) }
+  }
+  $glued = $whole + $frac
+  $tries = @($glued)
+  $bare  = $glued.TrimStart('0')
+  if ($bare -and $bare -ne $glued) { $tries += $bare }   # "0.75 oz" arrives as "75 oz"
+  foreach ($g in $tries) {
+    $gp = '\b' + [regex]::Escape($g) + '\s*(' + $uPat + ')\b'
+    if ($name -notmatch $gp) { continue }
+    $fixed = [regex]::Replace($name, $gp, ($dec + ' $1'), $ic)
+    # a twice-printed size comes back as the phrase twice; collapse the pair this repair just created
+    $dupe = '\b' + [regex]::Escape($dec) + '\s*(?:' + $uPat + ')\s+(' + [regex]::Escape($dec) + '\s*(?:' + $uPat + '))\b'
+    return ([regex]::Replace($fixed, $dupe, '$1', $ic))
+  }
+  return $name
 }
 
 function Get-Size([string]$name, [string]$cardSize, [string]$unit) {
@@ -355,6 +409,27 @@ if ($SelfTest) {
     @{ n = 'original bratwurst 45 6 oz';               s = '45.6 oz';  want = 'original bratwurst 45.6 oz' }
     @{ n = 'some item 15 25 oz';                       s = '';         want = 'some item 15 25 oz' }        # no proof -> leave it
     @{ n = 'goldhen grade a large eggs 12 ct';         s = '12 ct';    want = 'goldhen grade a large eggs 12 ct' }
+    # GLUED SHAPE (2026-08-28): the slug deleted the point outright, so the name states a size 10x the tile's
+    # and the contradiction check was rejecting the row. Every one of these is a real 2026-08-28 reject.
+    @{ n = 'specially selected vodka olive cocktail salami 35 oz'; s = '3.5 oz';   want = 'specially selected vodka olive cocktail salami 3.5 oz' }
+    @{ n = 'aldi garbanzo beans 155 oz';                          s = '15.5 oz';  want = 'aldi garbanzo beans 15.5 oz' }
+    @{ n = 'mama cozzi bacon lovers 1465 oz';                     s = '14.65 oz'; want = 'mama cozzi bacon lovers 14.65 oz' }
+    @{ n = 'honey bbq baconwrapped chicken skewers 988 oz';       s = '9.88 oz';  want = 'honey bbq baconwrapped chicken skewers 9.88 oz' }
+    @{ n = 'loven fresh pretzel burger buns 128 oz';              s = '12.8 oz';  want = 'loven fresh pretzel burger buns 12.8 oz' }
+    # LEADING ZERO: the slug drops it with the point, so "0.75 oz" arrives as "75 oz"
+    @{ n = 'baker s corner fast rising yeast 75 oz';              s = '0.75 oz';  want = 'baker s corner fast rising yeast 0.75 oz' }
+    # Aldi prints the size twice in its own slug; both get repaired and the duplicate phrase collapses
+    @{ n = 'simply nature organic black beans 155oz 155 oz';      s = '15.5 oz';  want = 'simply nature organic black beans 15.5 oz' }
+    # GENUINE CONTRADICTIONS - the digits do not match, so these stay untouched and stay rejected downstream
+    @{ n = 'baker s corner active dry yeast 0 75 oz';             s = '3 x 0.25 oz'; want = 'baker s corner active dry yeast 0 75 oz' }
+    @{ n = 'pueblo lindo instant corn masa flour 4 lb';           s = '4.4 lb';   want = 'pueblo lindo instant corn masa flour 4 lb' }
+    @{ n = 'bake shop sliced lemon loaf cake 16 oz';              s = '12.1 oz';  want = 'bake shop sliced lemon loaf cake 16 oz' }
+    @{ n = 'breakfast best canadian bacon egg cheese muffin 18 oz'; s = '17.6 oz'; want = 'breakfast best canadian bacon egg cheese muffin 18 oz' }
+    @{ n = 'tuscan garden manzanilla olives stuffed with pimiento 10 oz'; s = '15.8 oz'; want = 'tuscan garden manzanilla olives stuffed with pimiento 10 oz' }
+    # the digits agree but the UNIT does not -> no proof, no repair
+    @{ n = 'mystery item 128 ct';                                 s = '12.8 oz';  want = 'mystery item 128 ct' }
+    # the digits agree but they are not the size - nothing follows them but a word
+    @{ n = 'route 155 tomato sauce 16 oz';                        s = '15.5 oz';  want = 'route 155 tomato sauce 16 oz' }
     @{ n = 'mystery 8 9 oz';                           s = '12.5 oz';  want = 'mystery 8 9 oz' }            # card proves other digits -> leave it
   )
   foreach ($d in $dcases) {
