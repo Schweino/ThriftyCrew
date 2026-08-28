@@ -1,4 +1,14 @@
-# CLOSED - the PHANTOM gate is green again, on one detector fix and four spec fixes
+# CLOSED - the PHANTOM gate is green, on two rules, one refusal, and four spec fixes
+
+**RESOLVED 2026-08-28, reconciled from TWO independent fixes.** Two sessions worked this open item at the
+same time and neither knew about the other: one fixed the cards and added a purchase-keyed constituent
+entry (`0f1a70ae`), one built the three suppression rules this document proposes (`a9c787eb`, never pushed).
+Both were right about something the other missed, and the merged result is tighter than either. The gate
+exits 0, nothing was re-baselined, and publishing is unblocked.
+
+Read **THE RECONCILIATION** at the bottom for what actually shipped. The two sections above it are the
+original diagnosis and the original single-session resolution, both kept verbatim as the record of how the
+decisions were reached.
 
 **RESOLVED 2026-08-28** (commit below). The gate exits 0, every class is at or under the 2026-08-05
 baseline, nothing was re-baselined, and publishing is unblocked. The diagnosis below stands as written and
@@ -203,3 +213,106 @@ The four edited specs need their **cards rebuilt and republished** before a read
 spec layer is fixed; the built cards are gitignored and unchanged.
 
 The four unrelated items under "Also pending, same session" below are untouched by this work.
+---
+
+# THE RECONCILIATION (2026-08-28) - what actually shipped
+
+Three findings, three different answers. The merge kept every floor either session wrote and added the two
+that neither had.
+
+## beef-rendang - ONE rule, built from BOTH sessions' halves
+
+The two fixes for this were `PHANTOM_RENDERED` (does the sentence say the substance came OUT of something?)
+and a `PHANTOM_CONSTITUENT` entry (does the recipe BUY something it could have come out of?). Each catches
+what the other lets through:
+
+| neutered | what escapes |
+|---|---|
+| sentence rule alone | `"the butter that separates out"` in a recipe that buys no butter and no cream - prose can assert an emergence the basket could never produce |
+| ownership alone | `"HEAT the coconut oil"` in any recipe holding a can of coconut milk - a step asking for a fat nobody bought |
+
+So the shipped rule requires **both**: `PHANTOM_RENDERED` for the phrasing and a new
+`PHANTOM_RENDERED_FROM` map for the source. Three floors pin it, and all three were measured red under
+neuter, not predicted.
+
+`PHANTOM_RENDERED_FROM` is deliberately kept SEPARATE from `PHANTOM_CONSTITUENT`. A constituent is simply
+present - the marinara IS the tomato however the sentence is worded - so that map stays unconditional. A
+rendered substance only exists when the cooking makes it, so its map may not be.
+
+Both maps now match on **phrases, every word required**. Keyed on the bare token `coconut` with the bare
+value `oil`, the coconut entry would have forgiven Olive Oil, Sesame Oil and Vegetable Oil in any recipe
+holding a can of coconut milk.
+
+## mediterranean-chicken - the rule AND the card
+
+`PHANTOM_ALT` ships as written in the diagnosis: it fires only when the other branch of the `or` names a
+food the recipe owns, which is what stops `"salt or pepper to taste"` excusing a missing salt.
+
+The card was **also** fixed, and that is not redundancy. A rule that lets a card offer the reader an
+unbought option is the right call for the CLASS - the shape is real recipe English and the next one should
+not re-open the gate - but this particular card was still telling a reader to reach for a can nobody
+booked. Brad's ruling for this work was *"we should fix everything so we are 100% accurate"*. The rule keeps
+the gate honest; the edit keeps the card honest. The rule now has no live case, which is why its floor
+matters more than usual.
+
+## blackened-chicken - the DISH NAME rule was REVERTED, and a floor now forbids it
+
+This is the one place the merge overrules a shipped rule. `a9c787eb` built it; it is not in the tree.
+
+The proposal - *a food named in `$spec.name` is a component the dish is named after* - is unsafe at any
+width, and **this very document contains the proof**:
+
+> the `slow-cooker-dr-pepper-pulled-pork-bowls` case, whose step pours a soda that appears in no ingredient
+> list at all
+
+**That recipe is NAMED after the missing bottle.** A title rule is precisely a rule that forgives the
+founding case. Its own self-test twin survives it only by luck: the fixture's food is `Zero-Sugar Soda`,
+which shares no word with the slug. A recipe called *"Chicken with Mango Salsa"* that genuinely forgot to
+book its salsa would be waved through forever, and nothing would ever report it again.
+
+The card was fixed instead: the step now says it MAKES the salsa, which is true, and which the existing
+`PHANTOM_MADE` exemption already reads. Two assertions replace the rule - one proving a title-named food
+still fires, one proving the sanctioned escape works - and reintroducing the suppression turns the first
+one red. Measured.
+
+## A fixture that was passing on ignorance
+
+`a9c787eb` flagged this and did not have room to fix it: the long-standing eight-false-positive-shapes case
+blends *"the tomatillos with the garlic and most of the cilantro into a rough green salsa"* while buying
+neither the garlic nor the cilantro. It passed for four weeks because those two words were not in the test
+vocabulary - it was proving the MADE rule on a sentence the matcher could not even read.
+
+Both foods are now in the fixture vocabulary AND on its ingredient list. Removing the cilantro purchase
+turns the case red, which it never used to do.
+
+## The five neuters
+
+Every decision above was neutered separately and measured, per the estate's standing rule that neuter
+numbers get predicted rather than measured. Two of the first-draft neuters came back **0 RED and were
+wrong themselves** - one removed a display line while the scaler still carried the purchase, one hit the
+key side of the phrase map when the over-forgiveness is on the value side. Corrected:
+
+| neuter | red |
+|---|---|
+| `PHANTOM_RENDERED_FROM` loses its coconut source | 1 |
+| `PHANTOM_RENDERED` stops requiring a bought source | 1 |
+| the DISH NAME suppression is reintroduced | 1 |
+| the phrase map's VALUE side goes back to single tokens | 1 |
+| the eight-shapes fixture stops buying its cilantro (both halves) | 1 |
+
+All files restored md5-identical.
+
+## Verification
+
+* audit self-test **46 assertions, all pass**; repair self-test passes; full audit over 587 specs exits 0.
+* `run-gates` from a worktree outside `.claude\worktrees\`, with `catalog-digest.json`, `db\built`, the
+  board and `costed.json` copied in: **139 passed / 0 failed before AND after, identical case-name set.**
+* The two live cards were rebuilt and republished (`chicken-rice-and-broccoli`,
+  `ground-beef-cottage-cheese-bowl`) and verified by the publisher's own public-page fetch.
+
+## One correction to the record
+
+`blackened-chicken-with-mango-salsa` and `mediterranean-chicken-w-marinade` **are not live posts** - both
+404 on the public site. The cooking-spray line was a spec defect, not something a reader could see. Their
+cards are built and correct and will carry the fix whenever they publish; neither was created here, because
+creating a live paid post is not a cleanup.

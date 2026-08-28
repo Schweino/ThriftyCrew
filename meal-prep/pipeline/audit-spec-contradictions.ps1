@@ -123,7 +123,16 @@ if ($SelfTest) {
     'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper',
     'Paprika', 'Dried Thyme', 'Garlic Powder', 'Onion Powder',   # the composite-rider pair below needs the riders to be known foods
     'Tomato', 'Marinara Sauce',   # the constituent-rule pair - without Tomato in this vocab both its fixtures are vacuous
-    'Coconut Milk', 'Coconut Oil'   # the coconut constituent pair, and the two names its over-forgiveness twin needs
+    # THE 2026-08-28 SET. Each MUST-FIRE floor below is vacuous unless the food is a name this
+    # vocabulary knows - a matcher cannot report a phantom it cannot match, so a missing name would make
+    # the fixture pass while proving nothing. Measured: the floors came back empty until these existed.
+    #
+    # ADDING A NAME HERE CAN UN-VACUUM SOME OTHER FIXTURE, and that is a feature, not a hazard to avoid.
+    # Adding 'Cilantro' turned the eight-false-positive-shapes case red, because that case had been
+    # staying silent on its cilantro mention only for want of the word - it was passing on ignorance, not
+    # on the rule it claims to test. That fixture is repaired below rather than kept comfortable.
+    'Coconut Milk', 'Coconut Oil', 'Avocado Oil', 'Cooking Spray',
+    'Garlic', 'Cilantro'   # the eight-shapes fixture blends both and must be seen to buy them
   )
   $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
@@ -252,28 +261,111 @@ if ($SelfTest) {
   Chk 'MUST FIRE  PHANTOM     step 2 pours a soda the recipe never buys' ((@($ph3 | Where-Object { $_.why -match 'Zero-Sugar Soda' }).Count -eq 1)) (($ph3 | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  PHANTOM     and it is the ONLY phantom in that spec' ($ph3.Count -eq 1) (($ph3 | ForEach-Object { $_.why }) -join ' | ')
 
-  # THE TWIN. Same braise, same sentences, one extra line in the list - and the class must go silent.
-  $phantomGood = [pscustomobject]@{
-    stat = [pscustomobject]@{ cal = 560; protein = 59; cost_ps = '3.93' }
-    ingredients_display = @(
-      '<strong>Pork Loin:</strong> 8 lb (3400 g)', '<strong>Potato (generic):</strong> 10 lb (4300 g)',
-      '<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray''s):</strong> 1 bottle (300 g)',
-      '<strong>Zero-Sugar Soda (generic):</strong> 1 1/2 cups (355 g)',
-      '<strong>Salt (Morton):</strong> 1 teaspoon (8 g)', '<strong>Black Pepper (Great Value):</strong> 1 teaspoon (4 g)')
-    scaler = [pscustomobject]@{ ing = @(
-      [pscustomobject]@{ item = 'Pork Loin'; grams = 3400 }, [pscustomobject]@{ item = 'Potato'; grams = 4300 },
-      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 300 },
-      [pscustomobject]@{ item = 'Zero-Sugar Soda'; grams = 355 },
-      [pscustomobject]@{ item = 'Salt'; grams = 8 }, [pscustomobject]@{ item = 'Black Pepper'; grams = 4 }) }
-    make_it = @(
-      'Rub the pork loin all over with the salt and black pepper, then set it in the slow cooker.',
-      'Pour the zero-sugar soda over the pork until it is about halfway up the sides.',
-      'Stir in the BBQ sauce and let it warm through for a few minutes.',
-      'Serve over cooked potatoes and divide into containers.')
-  }
-  $ph4 = @(Get-SpecContradictions $phantomGood $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
-  Chk 'CLEAN TWIN the same steps over a list that DOES buy the soda are silent' ($ph4.Count -eq 0) (($ph4 | ForEach-Object { $_.why }) -join ' | ')
+  # ---- PHANTOM: the three FALSE POSITIVES that blocked every publish on 2026-08-28 ----------------
+  # The gate went PHANTOM 0 -> 3 and wave-publish runs it estate-wide, so nothing could ship. Not one
+  # of the three was a real defect; each recipe is correct as written, and each needed a different
+  # rule. All three are FROZEN from the live specs.
 
+  # 1. RENDERED - beef-rendang-rice-bowls. The oil comes OUT of the coconut milk the recipe buys.
+  $phantomRendang = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 610; protein = 44; cost_ps = '3.10' }
+    name = 'Beef Rendang Rice Bowls'
+    ingredients_display = @(
+      '<strong>Beef Chuck Roast:</strong> 6 lb (2700 g)',
+      '<strong>Coconut Milk (Thai Kitchen):</strong> 2 cans (800 g)',
+      '<strong>Vegetable Oil (Great Value):</strong> 2 tbsp (28 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Beef Chuck Roast'; grams = 2700 },
+      [pscustomobject]@{ item = 'Coconut Milk'; grams = 800 },
+      [pscustomobject]@{ item = 'Vegetable Oil'; grams = 28 }) }
+    make_it = @(
+      'Keep going past the point where it looks done. The liquid will reduce, then break, then the beef starts frying in the coconut oil that separates out and everything turns deep brown.')
+  }
+  $rr = @(Get-SpecContradictions $phantomRendang $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN PHANTOM     oil that SEPARATES OUT of a bought coconut milk is not shopped for' `
+    ($rr.Count -eq 0) (($rr | ForEach-Object { $_.why }) -join ' | ')
+
+  # ...and the floor: the same recipe with the oil as a real instruction must still fire.
+  $phantomRendangReal = $phantomRendang.psobject.Copy()
+  $phantomRendangReal.make_it = @('Heat the coconut oil in a wide pan until it shimmers, then brown the beef in batches.')
+  $rrx = @(Get-SpecContradictions $phantomRendangReal $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'MUST FIRE  PHANTOM     ...but coconut oil the step HEATS, with none bought, still fires' `
+    ($rrx.Count -eq 1) (($rrx | ForEach-Object { $_.why }) -join ' | ')
+
+  # ...and the SECOND floor, which the sentence rule alone cannot hold: the phrasing must describe
+  # something emerging from a food this recipe actually BOUGHT. An olive oil that 'separates out' of a
+  # coconut-milk braise is a fat nobody put in the basket, however the prose words it - prose can assert
+  # an emergence the basket could never produce. This is what PHANTOM_RENDERED_FROM pins.
+  $phantomRendangOther = $phantomRendang.psobject.Copy()
+  $phantomRendangOther.make_it = @('The liquid reduces and the beef starts frying in the olive oil that separates out.')
+  $rro = @(Get-SpecContradictions $phantomRendangOther $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'Olive Oil' })
+  Chk 'MUST FIRE  PHANTOM     ...and an OLIVE oil that separates out of a coconut milk is still a phantom' `
+    ($rro.Count -ge 1) 'the rendered rule forgave a fat no line carries'
+
+  # 2. SATISFIED ALTERNATIVE - mediterranean-chicken-w-marinade. "or brushed with olive oil", and
+  #    Olive Oil is on the list, so the reader can already do it.
+  $phantomAlt = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 520; protein = 47; cost_ps = '2.90' }
+    name = 'Mediterranean Chicken with Marinade'
+    ingredients_display = @(
+      '<strong>Boneless Skinless Chicken Breast:</strong> 7 lb (3200 g)',
+      '<strong>Olive Oil (Great Value):</strong> 1/4 cup (54 g)',
+      '<strong>Spinach (generic):</strong> 10 oz (280 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Boneless Skinless Chicken Breast'; grams = 3200 },
+      [pscustomobject]@{ item = 'Olive Oil'; grams = 54 },
+      [pscustomobject]@{ item = 'Spinach'; grams = 280 }) }
+    make_it = @(
+      'Spread the spinach across a casserole dish sprayed with cooking spray or brushed with olive oil, and sprinkle the red pepper flakes over the top.')
+  }
+  $ra = @(Get-SpecContradictions $phantomAlt $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN PHANTOM     an alternative the reader CAN meet - "cooking spray or brushed with olive oil" - is not missing' `
+    ($ra.Count -eq 0) (($ra | ForEach-Object { $_.why }) -join ' | ')
+
+  # ...and the floor: an alternative naming a food that is ALSO not bought must still fire. This is
+  # the fixture that keeps the rule from degenerating into "any `or` forgives anything".
+  $phantomAltReal = $phantomAlt.psobject.Copy()
+  $phantomAltReal.make_it = @('Spread the spinach across a casserole dish sprayed with cooking spray or brushed with avocado oil.')
+  $rax = @(Get-SpecContradictions $phantomAltReal $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  # NAMED, NOT COUNTED. Asserting "some phantom fired" was VACUOUS: 'avocado oil' fires on its own
+  # (nothing follows it), so the count stayed >= 1 even with the rule degenerated to "any `or`
+  # forgives anything" - measured, the neuter came back 0 red. The floor has to name COOKING SPRAY,
+  # the one the alternative is about.
+  Chk 'MUST FIRE  PHANTOM     ...but an alternative whose OTHER branch is also unbought still fires - and it is the SPRAY that must be named' `
+    ((@($rax | Where-Object { $_.why -match 'Cooking Spray' }).Count -ge 1)) (($rax | ForEach-Object { $_.why }) -join ' | ')
+
+  # 3. THE DISH-TITLE REFUSAL - blackened-chicken-with-mango-salsa, and the rule that was NOT built.
+  #    A 'a food named in the dish title is assembled, not shopped' suppression was proposed and built
+  #    for this case, and it is unsafe at any width. This class was founded on
+  #    slow-cooker-dr-pepper-pulled-pork-bowls, whose step pours a soda that appears in no ingredient
+  #    list - AND THAT RECIPE IS NAMED AFTER THE MISSING BOTTLE. A title rule forgives the founding
+  #    case; the founding fixture survives it only because its food is 'Zero-Sugar Soda', which shares
+  #    no word with the slug. So the CARD was fixed instead (0f1a70ae): the step now says it MAKES the
+  #    salsa, which is true, and which PHANTOM_MADE already reads.
+  #
+  #    This pair is the floor UNDER THAT REFUSAL. The first half is the shape someone will be tempted
+  #    to suppress again; if it ever goes quiet, a title rule has been reintroduced and the dr-pepper
+  #    class is blind. The second half is the sanctioned escape, so the refusal is not a dead end.
+  $phantomDish = [pscustomobject]@{
+    name = 'Blackened Chicken with Mango Salsa'
+    stat = [pscustomobject]@{ cal = 610; protein = 52; cost_ps = '3.44' }
+    ingredients_display = @(
+      '<strong>Boneless Skinless Chicken Breast:</strong> 5 lb (2268 g)',
+      '<strong>Sweet Potatoes:</strong> 2 lb (908 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Boneless Skinless Chicken Breast'; grams = 2268 },
+      [pscustomobject]@{ item = 'Sweet Potatoes'; grams = 908 }) }
+    make_it = @('Start with the salsa so the flavors have time to get friendly, then sear the chicken.')
+  }
+  $rd = @(Get-SpecContradictions $phantomDish $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'Salsa' })
+  Chk 'MUST FIRE  PHANTOM     a food in the DISH TITLE is NOT exempt - that rule would blind the dr-pepper case' `
+    ($rd.Count -ge 1) 'a dish-title suppression has been reintroduced'
+  # ...and the sanctioned way out: say the step MAKES it. Same title, same buy list, one honest verb.
+  $phantomDishMade = $phantomDish.psobject.Copy()
+  $phantomDishMade.make_it = @('Make the salsa first so the flavors have time to get friendly, then sear the chicken.')
+  $rdm = @(Get-SpecContradictions $phantomDishMade $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'Salsa' })
+  Chk 'CLEAN TWIN ...and a step that says it MAKES the salsa is forgiven by PHANTOM_MADE, no title rule needed' `
+    ($rdm.Count -eq 0) (($rdm | ForEach-Object { $_.why }) -join ' | ')
   # FROZEN FIXTURE (2026-08-08): the CONSTITUENT rule's founding case - baked-ziti's make_it says the
   # turkey "soaks up the tomato flavor", and the marinara IS the tomato. This sat as the live board's one
   # PHANTOM for weeks because the matcher had no idea marinara contains tomatoes. Its MUST-FIRE twin buys
@@ -295,31 +387,6 @@ if ($SelfTest) {
   }
   $ph6 = @(Get-SpecContradictions $phantomNoTomato $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'omato' })
   Chk 'MUST FIRE  PHANTOM     tomato over an ALFREDO recipe is still a real phantom' ($ph6.Count -ge 1) 'constituent rule over-forgave'
-
-  # FROZEN FIXTURE (2026-08-28): the constituent rule's SECOND live case, and the reason its keys became
-  # phrases. beef-rendang-rice-bowls buys four cans of coconut milk and step 7 says the beef 'starts frying
-  # in the coconut oil that separates out' - the oil is what the milk breaks into, not a fifteenth thing to
-  # shop for. The finding appeared on 2026-08-28 with no change to the recipe: db\ingredients.json gained a
-  # Coconut Oil row that day (f3911bff), and this class can only see a phrase the vocabulary knows.
-  $phantomCoconut = [pscustomobject]@{
-    stat = [pscustomobject]@{ cal = 640; protein = 44; cost_ps = '3.11' }
-    ingredients_display = @('<strong>Beef Chuck Roast:</strong> 4.75 lb (2117 g)', '<strong>Coconut Milk (Thai Kitchen):</strong> 4 cans (1582 g)')
-    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Beef Chuck Roast'; grams = 2117 }, [pscustomobject]@{ item = 'Coconut Milk'; grams = 1582 }) }
-    make_it = @('The liquid reduces, then breaks, and the beef starts frying in the coconut oil that separates out.')
-  }
-  $ph7 = @(Get-SpecContradictions $phantomCoconut $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
-  Chk 'CLEAN TWIN coconut oil is covered by the bought COCONUT MILK (constituent rule)' ($ph7.Count -eq 0) (($ph7 | ForEach-Object { $_.why }) -join ' | ')
-  # THE OVER-FORGIVENESS TWIN. Keyed on the bare token 'coconut' with the bare value 'oil', the entry above
-  # would forgive ANY oil in a recipe holding a can of coconut milk, because 'oil' is a token of Olive Oil
-  # too. Same spec, same bought line, a different oil the recipe does not buy - it must still fire.
-  $phantomCoconutOlive = [pscustomobject]@{
-    stat = [pscustomobject]@{ cal = 640; protein = 44; cost_ps = '3.11' }
-    ingredients_display = @('<strong>Beef Chuck Roast:</strong> 4.75 lb (2117 g)', '<strong>Coconut Milk (Thai Kitchen):</strong> 4 cans (1582 g)')
-    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Beef Chuck Roast'; grams = 2117 }, [pscustomobject]@{ item = 'Coconut Milk'; grams = 1582 }) }
-    make_it = @('Finish the sauce with a spoonful of olive oil before serving.')
-  }
-  $ph8 = @(Get-SpecContradictions $phantomCoconutOlive $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'Olive Oil' })
-  Chk 'MUST FIRE  PHANTOM     olive oil over a coconut-milk recipe is still a real phantom' ($ph8.Count -ge 1) 'coconut constituent entry over-forgave every oil'
 
   # THE SAME-COMMODITY RULE (2026-08-27). Four LIVE specs - beef-birria-burrito, beef-burrito-tex-mex,
   # salsa-verde-chicken-burrito, turkey-florentine-rice-bake - say "shredded cheese" in a step while their
@@ -367,12 +434,19 @@ if ($SelfTest) {
       '<strong>Brown Sugar:</strong> 7 tbsp (94 g)', '<strong>Olive Oil:</strong> 2 tbsp (27 g)',
       '<strong>Sweet Potatoes:</strong> 3 lb (1360 g)', '<strong>Frozen Green Peas:</strong> 1 lb (454 g)',
       '<strong>Cheddar Cheese, Shredded:</strong> 8 oz (227 g)', '<strong>Rice:</strong> 3.75 cups (700 g)',
-      '<strong>BBQ Sauce (Sugar Free):</strong> 1 bottle (300 g)', '<strong>Tomatillos:</strong> 1 lb (454 g)')
+      '<strong>BBQ Sauce (Sugar Free):</strong> 1 bottle (300 g)', '<strong>Tomatillos:</strong> 1 lb (454 g)',
+      # THE SALSA LINE BLENDS THESE TWO, so the fixture has to BUY them (2026-08-28). It did not, and
+      # the case passed anyway for four weeks because 'Garlic' and 'Cilantro' were not names this test
+      # vocabulary knew - it was proving the MADE rule on a sentence the matcher could not even read.
+      # Adding the words to the vocabulary turned it red, which is the fixture reporting its own
+      # vacuity. Buying them makes the line test what its comment claims.
+      '<strong>Garlic:</strong> 1 cup (128 g)', '<strong>Cilantro:</strong> 2 bunches (60 g)')
     scaler = [pscustomobject]@{ ing = @(
       [pscustomobject]@{ item = 'Brown Sugar'; grams = 94 }, [pscustomobject]@{ item = 'Olive Oil'; grams = 27 },
       [pscustomobject]@{ item = 'Sweet Potatoes'; grams = 1360 }, [pscustomobject]@{ item = 'Frozen Green Peas'; grams = 454 },
       [pscustomobject]@{ item = 'Cheddar Cheese, Shredded'; grams = 227 }, [pscustomobject]@{ item = 'Rice'; grams = 700 },
-      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 300 }, [pscustomobject]@{ item = 'Tomatillos'; grams = 454 }) }
+      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 300 }, [pscustomobject]@{ item = 'Tomatillos'; grams = 454 },
+      [pscustomobject]@{ item = 'Garlic'; grams = 128 }, [pscustomobject]@{ item = 'Cilantro'; grams = 60 }) }
     make_it = @(
       'Stir the brown sugar into the olive oil.',                       # longest match wins: not Sugar, not Olives
       'Peel and cube the sweet potatoes, then scatter the frozen peas.', # plural stemming: not Potato, not a missing Peas

@@ -261,31 +261,74 @@ $script:PHANTOM_SUBJ = '(?:^|\s)(?:it|they|we|you|i|he|she|that|this|which|who)\
 # on a token of the OWNED ingredient; the values are foods a step may name that the product accounts for.
 # Deliberately tiny: each entry is a measured false positive, not a food-knowledge project.
 #
-# KEYS AND VALUES ARE PHRASES, EVERY WORD REQUIRED (2026-08-28). They were single tokens until beef-rendang
-# needed the third entry: its step 7 says the beef "starts frying in the coconut oil that separates out" of
-# the coconut milk it buys four cans of - the oil is what the milk BREAKS INTO, which is the marinara/tomato
-# shape exactly. Keyed on the single token 'coconut' that entry would have forgiven a step naming Olive Oil,
-# Sesame Oil or Vegetable Oil in any recipe holding a can of coconut milk, because the value 'oil' is a
-# token of all of them. So both sides now match on ALL of their words: the owned line must carry every word
-# of the key, the named food every word of the value. The two original entries are single-word and read
-# identically under this rule.
+# KEYS AND VALUES ARE PHRASES, EVERY WORD REQUIRED (2026-08-28). They were single tokens until the
+# coconut entry below needed a two-word key. Keyed on the single token 'coconut' with the single value
+# 'oil', that entry would have forgiven a step naming Olive Oil, Sesame Oil or Vegetable Oil in any
+# recipe holding a can of coconut milk, because 'oil' is a token of all three. So both sides now match
+# on ALL of their words: the owned line must carry every word of the key, the named food every word of
+# the value. The two entries here are single-word and read identically under the stricter rule.
 $script:PHANTOM_CONSTITUENT = @{
-  'marinara'     = @('tomato')
-  'ketchup'      = @('tomato')
+  'marinara' = @('tomato')
+  'ketchup'  = @('tomato')
+}
+
+# A SUBSTANCE THAT COMES OUT OF A BOUGHT INGREDIENT IS NOT SHOPPED FOR (2026-08-28).
+# beef-rendang-rice-bowls: "the beef starts frying in the coconut oil THAT SEPARATES OUT and everything
+# turns deep brown". The recipe buys four cans of Coconut Milk; the oil renders out of it during the
+# reduction, which is the entire technique the step is describing. Nobody puts coconut oil in the basket.
+#
+# TWO CONDITIONS, AND IT NEEDS BOTH - this is the merge of two sessions' fixes for the same finding, and
+# each caught something the other missed. Sentence shape alone forgives "the butter that separates out"
+# in a recipe that buys no butter and no cream: prose can ASSERT an emergence that nothing in the basket
+# could produce. Ownership alone forgives "HEAT the coconut oil" in any recipe holding a can of coconut
+# milk, which is a step asking for a fat the shopper never bought. Requiring the phrasing AND the source
+# is strictly tighter than either, and both floors are frozen in the self-test.
+#
+# Kept SEPARATE from PHANTOM_CONSTITUENT above on purpose. A constituent is simply PRESENT - the marinara
+# IS the tomato however the sentence is worded - so that map must stay unconditional. A rendered
+# substance only exists when the cooking makes it, so its map may not be.
+$script:PHANTOM_RENDERED = '^\s+(?:that\s+|which\s+)?(?:separates|renders|cooks|melts|comes|leaches|fries)\s+out\b'
+$script:PHANTOM_RENDERED_FROM = @{
   'coconut milk' = @('coconut oil')
 }
-function Test-FoodConstituent($ownTok, $namTok) {
+
+# AN ALTERNATIVE THE READER CAN ALREADY MEET IS NOT A MISSING INGREDIENT (2026-08-28).
+# mediterranean-chicken-w-marinade: "a casserole dish sprayed with cooking spray OR BRUSHED WITH OLIVE
+# OIL". Olive Oil is on the ingredient list, so the step offers two ways to do one thing and the reader
+# can already do it. Only fires when the OTHER branch names a food this recipe owns - a bare "or" is not
+# enough, or "salt or pepper to taste" would excuse a genuinely missing salt.
+#
+# The card was ALSO fixed (the unbought branch is gone from the prose, 0f1a70ae), so this rule has no
+# live case today. It stays because the shape is real recipe English and the next one should not re-open
+# the gate - and because the floor below is what proves it is a rule and not a switch.
+$script:PHANTOM_ALT = '^\s+or\s+'
+$script:PHANTOM_ALT_SPAN = 90
+
+# NOT A RULE, AND DELIBERATELY SO: "a food named in the DISH TITLE is assembled, not shopped".
+# It was proposed and built for blackened-chicken-with-mango-salsa's "Start with the salsa", and it is
+# unsafe at any width. This class was founded on slow-cooker-dr-pepper-pulled-pork-bowls, whose step
+# pours a soda that appears in no ingredient list - and THAT RECIPE IS NAMED AFTER THE MISSING BOTTLE.
+# A title rule is precisely a rule that forgives the founding case; the self-test twin only survives it
+# because the fixture's food is "Zero-Sugar Soda", which shares no word with the slug. A recipe called
+# "Chicken with Mango Salsa" that genuinely forgot to book its salsa would be waved through forever.
+# The blackened-chicken prose was fixed instead (0f1a70ae): the step now says it MAKES the salsa, which
+# is true, and which PHANTOM_MADE already reads. The floor below pins this refusal.
+function Test-FoodPhraseMap($map, $ownTok, $namTok) {
+  <# Does an owned line match a KEY phrase of $map, and the named food one of that key's VALUE phrases?
+     Every word of both sides must be present - see the phrase note above PHANTOM_CONSTITUENT. #>
   $ownTok = @($ownTok); $namTok = @($namTok)
-  foreach ($k in $script:PHANTOM_CONSTITUENT.Keys) {
+  foreach ($k in $map.Keys) {
     $kt = @($k -split ' ')
     if (@($kt | Where-Object { $ownTok -notcontains $_ }).Count -gt 0) { continue }
-    foreach ($v in @($script:PHANTOM_CONSTITUENT[$k])) {
+    foreach ($v in @($map[$k])) {
       $vt = @($v -split ' ')
       if (@($vt | Where-Object { $namTok -notcontains $_ }).Count -eq 0) { return $true }
     }
   }
   return $false
 }
+function Test-FoodConstituent($ownTok, $namTok) { return (Test-FoodPhraseMap $script:PHANTOM_CONSTITUENT $ownTok $namTok) }
+function Test-FoodRenderedFrom($ownTok, $namTok) { return (Test-FoodPhraseMap $script:PHANTOM_RENDERED_FROM $ownTok $namTok) }
 
 function Get-FoodStem([string]$w) {
   <# Plural -> singular, enough for ingredient nouns. The 'oes' arm is not decoration: without it
@@ -411,6 +454,30 @@ function Get-PhantomIngredients($spec, $vocab, $bidMap) {
       if ($rest -match $script:PHANTOM_FREE) { continue }
       if ($before -match $script:PHANTOM_SUBJ) { continue }
       if ($before -match $script:PHANTOM_CMP) { continue }
+      if ($rest -match $script:PHANTOM_RENDERED) {
+        # The prose says this came OUT of something. It must have come out of something BOUGHT -
+        # see the two-conditions note on PHANTOM_RENDERED_FROM.
+        $src = $false
+        foreach ($o in $own) { if (Test-FoodRenderedFrom $o $v.stem) { $src = $true; break } }
+        if ($src) { continue }
+      }
+      if ($rest -match $script:PHANTOM_ALT) {
+        # Read only the alternative's own span - far enough to carry "brushed with olive oil",
+        # not so far it reaches the next sentence and forgives an unrelated food.
+        $span = $rest.Substring(0, [Math]::Min($script:PHANTOM_ALT_SPAN, $rest.Length))
+        $spanTok = @(Get-FoodStemTokens $span)
+        $satisfied = $false
+        foreach ($o in $own) {
+          if (@($o).Count -eq 0) { continue }
+          $all = $true
+          foreach ($t in @($o)) { if ($spanTok -notcontains $t) { $all = $false; break } }
+          # EVERY token of an owned name must be in the span. That is what keeps this tight: a whole
+          # ingredient_display line (with its buy string) can never fit, so only a real food NAME
+          # like "olive oil" can satisfy an alternative.
+          if ($all) { $satisfied = $true; break }
+        }
+        if ($satisfied) { continue }
+      }
       $said = $m.Value
     }
     if ($made -or -not $said) { continue }
