@@ -1352,6 +1352,9 @@ def run():
     T("MUST FIRE  an APPROVED ruling with a prescription and carried evidence runs all three "
       "sanctioned tools in dependency order - the hand between the registrar and a priced row is "
       "gone", *_mint_happy_road_runs_all_three_tools())
+    T("MUST FIRE  the include and exclude patterns reach new-commodity as REAL LISTS, not flattened "
+      "into the arg list - flattened, the second pattern lands on BandMin and PowerShell refuses "
+      "the call while still exiting 0", *_mint_include_stays_a_list())
     T("MUST FIRE  only CARRIED rows that carry BOTH a price and a size become board cells - "
       "'blocked' and 'not-carried' are verdicts about a store, not prices",
       *_mint_carries_only_carried_priced_rows())
@@ -4190,6 +4193,35 @@ def _mint_happy_road_runs_all_three_tools():
         return (made == ["cotija-cheese"] and order == want and not d.findings,
                 "made=%s order=%s findings=%s"
                 % (json.dumps(made), json.dumps(order), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_include_stays_a_list():
+    """MUST FIRE, and it is the defect the FIRST PRODUCTION MINT hit (2026-08-28). The include
+    patterns were FLATTENED into the argument list, which bypasses the one thing ps_invoke exists to
+    guarantee - that a LIST value becomes a real PS array. Flattened, `-Include p1 p2` bound p1 and
+    shoved p2 onto the next positional parameter, so a regex arrived as `BandMin` and PowerShell
+    refused the call.
+
+    AND THE REFUSAL EXITED 0, so `rc != 0` read success while new-commodity had not run at all: it
+    wrote nothing and the board row written after it named an id that does not exist. FakePS records
+    the ARGUMENT LIST rather than a joined string precisely so a fixture can tell these apart."""
+    tmp = scratch_dir(prefix="daemon-mint-arr-")
+    try:
+        ps = FakePS()
+        spec = dict(_MINT_SPEC)
+        spec["include"] = ["reduced\s+fat.*cheddar", "cheddar.*reduced\s+fat"]
+        spec["extra_exclude"] = ["fat[\s-]*free", "\bspread\b"]
+        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        arun(d.execute_registrar_mints("s1", [_mint_ruling(mint=spec)]))
+        a = (ps.find("new-commodity") or [{}])[0].get("args", [])
+        inc = FakePS.value_after(a, "-Include")
+        exc = FakePS.value_after(a, "-ExtraExclude")
+        return (isinstance(inc, list) and len(inc) == 2 and isinstance(exc, list) and len(exc) == 2
+                and FakePS.value_after(a, "-CloneExcludeFrom") == "queso-fresco",
+                "include=%r extra=%r clone=%r" % (inc, exc,
+                                                  FakePS.value_after(a, "-CloneExcludeFrom")))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -7709,7 +7741,12 @@ def _fooddb_near_name_matches_the_live_db():
     # LABEL row's NAME - that is the vocabulary row and the canon on all four specs that cost panko -
     # and carries the FDC numbers and source. The pair leaves this list because it was ANSWERED, not
     # to get green; the remaining four are still open and a FIFTH here is still a real find.
-    want = sorted([["Apple", "Apples"], ["Fresh Thyme", "Fresh Thyme"],
+    # THREE SINCE 2026-08-28. `Fresh Thyme` appeared TWICE and now appears once - resolved in
+    # c9d4cd0b ("a duplicate key sat under it"), by another session the same day. Verified before
+    # trimming, rather than assumed: the DB still holds a Fresh Thyme row (100 g / 101 cal) beside
+    # Dried Thyme, so the pair was MERGED, not dropped. Leaving it listed would have taught this
+    # fixture to expect a duplicate the estate had already cleaned.
+    want = sorted([["Apple", "Apples"],
                    ["Green Bell Peppers", "Green Bell Pepper"], ["Lemon", "Lemons"]],
                   key=lambda v: sorted(v))
     got = sorted(hits, key=lambda v: sorted(v))

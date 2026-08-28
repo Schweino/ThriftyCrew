@@ -4759,13 +4759,24 @@ class Daemon(object):
                            "%s" % (cat, ", ".join(labels) if labels else "the labels in "
                                    "grocery\\categories.json"))
         ns_recipe = str(spec.get("namespace") or "recipe").strip().lower() != "weekly"
+        # A LIST STAYS A LIST (2026-08-28). ps_invoke's whole contract is "a LIST value becomes a real
+        # PS array... so no caller has to remember which invocation form carries an array and which
+        # quietly mangles it" - and the first cut of this FLATTENED the patterns into the arg list,
+        # which bypasses exactly that. Measured on the first production mint: `-Include p1 p2` bound
+        # p1 to Include and shoved p2 onto the next positional parameter, so the second regex arrived
+        # as `BandMin` and PowerShell refused the call with a transformation error.
+        #
+        # AND THE REFUSAL EXITED 0. A parameter-binding failure is not a script failure, so `rc != 0`
+        # read success while new-commodity had not run at all - it wrote nothing, reported nothing,
+        # and the board row that followed named an id that does not exist. Exit code first, tally
+        # second: here the exit code lied and only the untouched file mtime told the truth.
         args = ["-Id", bid, "-Label", str(spec.get("label") or bid.replace("-", " ").title()),
                 "-Unit", str(spec.get("unit") or "oz"),
-                "-Include"] + [str(x) for x in (spec.get("include") or []) if str(x).strip()]
+                "-Include", [str(x) for x in (spec.get("include") or []) if str(x).strip()]]
         args += ["-CloneExcludeFrom", str(spec.get("clone_exclude_from") or "")]
         extra = [str(x) for x in (spec.get("extra_exclude") or []) if str(x).strip()]
         if extra:
-            args += ["-ExtraExclude"] + extra
+            args += ["-ExtraExclude", extra]
         for k, flag in (("band_min", "-BandMin"), ("band_max", "-BandMax")):
             if spec.get(k) not in (None, ""):
                 args += [flag, str(spec.get(k))]
