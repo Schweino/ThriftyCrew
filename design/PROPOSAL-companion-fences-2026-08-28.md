@@ -1,19 +1,21 @@
-# Companion fences for the four ids minted 2026-08-28 — PROPOSAL, nothing applied
+# Companion fences for the four ids minted 2026-08-28 — APPLIED, with the ruling corrected
 
-Brad asked for the registrar's companion edits drafted and measured, not applied. This is that draft.
-Every number below is measured against the estate's OWN identity graph (75,351 rows across the
-`recipe` and `staple` namespaces, 32,433 of them carrying a commodity assignment) — not against a
-second matcher written for this document, which would prove nothing if it disagreed with the board's.
+**Status: applied in commit `4d234888`.** This file was written as a proposal and is kept as the
+record of what was measured and why the applied form differs from the registrar's prescription.
 
-**Status: NOTHING IN THIS FILE HAS BEEN APPLIED.** The four ids are live and priced; these fences
-protect them.
+Every number here is measured against the estate's OWN identity graph (75,351 rows across the
+`recipe` and `staple` namespaces, 32,433 carrying a commodity assignment) — the record of what
+`compare-deals.ps1` actually decided — not against a second matcher written for this document. A
+Python re-implementation was tried and **abandoned**: it agreed with the graph on only 96.36% of
+rows, always by claiming something the board leaves unclaimed, so it was missing constraints and was
+not fit to predict from.
 
 ---
 
-## The headline: the registrar's literal prescription would orphan seven products
+## 1. The registrar's literal fence would have orphaned seven products — NOT APPLIED as written
 
 The ruling says to add `reduced\s+fat` and `\b2%\s+milk\b` as excludes on `shredded-cheese`.
-Measured, that releases four products — and `reduced-fat-cheddar` claims **none** of them:
+Measured, that releases four products that `reduced-fat-cheddar` claims **none** of:
 
 | store | product | why it lands nowhere |
 |---|---|---|
@@ -23,20 +25,16 @@ Measured, that releases four products — and `reduced-fat-cheddar` claims **non
 | Walmart | Great Value Reduced Fat Shredded **Mozzarella** Cheese, 16 oz | not cheddar |
 
 An exclude releases a product; it does not rehome it. A fence that releases more than its new id can
-catch converts a *mispriced* row into *no row at all* — and a commodity nobody prices is invisible
-rather than wrong, which is the harder failure to notice.
+catch converts a *mispriced* row into *no row at all* — invisible rather than wrong.
 
 The `fat[\s-]*free` fence the ruling says to "consider" is worse: **`fat-free-cheddar` has no
-commodity rule row at all.** It is a vocabulary bid only. Excluding fat-free from `shredded-cheese`
-would orphan three more products with nowhere whatsoever to go.
+commodity rule row at all**, only a vocabulary bid. It would orphan three more products with nowhere
+to go. **Not applied.**
 
-> **Recommendation: do not apply the broad `reduced\s+fat` fence, and do not apply the fat-free fence
-> at all.** Use the narrow form below.
+### What was applied instead
 
-## The corrected fence: mirror the new id's own includes
-
-Build `shredded-cheese`'s exclude from `reduced-fat-cheddar`'s **include** list. Then, by
-construction, exactly what leaves the generic basket is what the new id takes.
+`shredded-cheese` and `cheddar-cheese-shredded` are fenced with `reduced-fat-cheddar`'s **own
+include list**, so by construction what leaves the generic basket is exactly what the new id takes:
 
 ```
 reduced\s+fat\s+(?:\w+\s+){0,2}cheddar
@@ -45,74 +43,72 @@ cheddar[^,]{0,30}reduced\s+fat
 cheddar[^,]{0,25}\b2%\s+milk
 ```
 
-Measured blast radius today: **releases 0, orphans 0.** The reason is worth stating plainly — only
-one reduced-fat cheddar product exists anywhere in the graph (a Kraft protein stick, correctly
-unclaimed because `stick` is excluded). The three products backing the new board row came from the
-attended 7-store capture, which feeds the board directly and not the ad graph.
+Blast radius today: **releases 0, orphans 0.** Only one reduced-fat cheddar product exists anywhere
+in the graph (a Kraft protein stick, correctly unclaimed — `stick` is excluded); the three backing
+the new board row came from the attended 7-store capture, which feeds the board directly and not the
+ad graph. So the swallow risk is **latent, not active**: `shredded-cheese`'s patterns *do* match all
+three, and it fires the day one appears in a weekly capture. Zero blast radius made today the
+cheapest moment to fence it.
 
-So the swallow risk is **real but latent**: `shredded-cheese`'s patterns *do* match all three
-(verified), and `cheddar-cheese-shredded` matches the Baker's one. It fires the day one of them
-appears in a weekly capture. That makes today — zero blast radius — the cheapest possible moment to
-put the fence in.
+## 2. The id minted this morning was itself wrong
 
-```bash
-grocery/add-commodity-rule.ps1 -Id shredded-cheese -DryRun -Why "reduced-fat-cheddar was minted 2026-08-28; these mirror its includes exactly so nothing else is released" -Exclude 'reduced\s+fat\s+(?:\w+\s+){0,2}cheddar','cheddar[^,]{0,30}reduced\s+fat','2%\s+(?:milk\s+)?(?:\w+\s+){0,2}cheddar','cheddar[^,]{0,25}\b2%\s+milk'
-```
+`baby-potatoes`, exactly as the registrar prescribed it, claimed **four Idahoan instant *mashed*
+potato pouches**. Its `instant` exclude never fires — those product names never say "instant" — and
+it had no `mashed` exclude. It also missed `Our Family Potatoes Red Baby Dutch` (baby *follows*
+potatoes) and `Petite Spudlings Gourmet Gold Potatoes` (three words where the pattern allowed two).
 
-```bash
-grocery/add-commodity-rule.ps1 -Id cheddar-cheese-shredded -File grocery/recipe-commodities.json -DryRun -Why "the full-fat id must not swallow the fat-tier variant" -Exclude 'reduced\s+fat\s+(?:\w+\s+){0,2}cheddar','cheddar[^,]{0,30}reduced\s+fat','2%\s+(?:milk\s+)?(?:\w+\s+){0,2}cheddar','cheddar[^,]{0,25}\b2%\s+milk'
-```
-
-## The potato fences — real, immediate, and worth doing
-
-Unlike the cheese, these move live rows today.
-
-| rule | claims now | releases | rehomed on `baby-potatoes` | orphaned |
-|---|---|---|---|---|
-| `red-potatoes` | 23 | 3 | 3 | 0 |
-| `potato` (recipe ns) | 119 | 18 | 17 | 1 |
-
-That is 21 real products — Walmart's *Fresh Red Petite Potatoes* (the very row that backs the new
-board cell), Family Fare's *Baby Dutch*, Fareway's *Baby Red*, and Baker's petite line — currently
-priced as generic russet-class potatoes at roughly a third of what they cost.
-
-**This needs one widening of `baby-potatoes`'s own includes.** With the registrar's includes as
-minted, 5 of those 18 orphan: `Our Family Potatoes Red Baby Dutch` puts *baby* after *potatoes*, and
-`Petite Spudlings Gourmet Gold Potatoes` has three words between *petite* and *potatoes* where the
-pattern allows two. Adding these two patterns takes the orphan count from 5 to 1:
+Applied: `+exclude \bmashed\b`, and two includes —
 
 ```
 potato(?:es)?[^,]{0,20}\b(?:baby|petite|creamer)\b
-(?:baby|petite|creamer)\s+(?:\w+\s+){0,4}potato(?:es)?
+(?:baby|petite|creamer)\s+(?:\w+\s+){0,5}potato(?:es)?
 ```
 
-The single remaining orphan is `Private Selection Petite Spudlings Gourmet Red and Gold Potatoes`
-(five words between *petite* and *potatoes*). `{0,5}` clears it; I have not proposed that because
-each widening step is a wider net, and one Baker's SKU is a poor reason to take it. Your call.
+It now claims 20 products, of which **0** are processed forms.
 
-## Two things in the ruling that are already true, and one with no tool
+## 3. A live mispricing found on the way
 
-- **`yukon-gold-potatoes` needs no edit.** The ruling says it "already excludes petite/creamer but
-  NOT `\bbaby\b`". It *does* exclude `\bbaby\b` today — measured release with that pattern: 0.
-- **`flour` needs no edit.** The ruling was right: its `whole\s+wheat` exclude is already the fence.
-  Measured release: 0 of 83.
-- **`frozen-cauliflower-rice` needs `relax_global ["\bfrozen\b"]`, and there is no sanctioned path.**
-  The ruling says this goes "through add-commodity-rule.ps1". It cannot: that script takes
-  `-Include`, `-Exclude`, `-RemoveInclude`, `-RemoveExclude` and has no `relax_global` support at
-  all. `frozen-broccoli` and `frozen-vegetables` both carry the field, so the shape is settled — what
-  is missing is the gated way to write it. Either `add-commodity-rule.ps1` grows a `-RelaxGlobal`
-  parameter (with the same surgical-write proof it already applies), or this is a hand edit. **Until
-  it is set, the global frozen exclude drops every ad for this id** — it keeps its everyday board
-  price and simply never sees a sale.
+`coffee-creamer` claims **`Creamer Potatoes, 5 lbs.`** and **`Red Creamer Potatoes`** today — the
+Sam's Club row behind the new `baby-potatoes` board cell was being priced as coffee creamer. It
+carries `relax_global ['\bcreamer\b']`, which is why. Fenced with `\bpotato(?:es)?\b`, though
+`baby-potatoes` at file index 22 already beats `coffee-creamer` at 165 under first-match-wins.
 
-## Dupe allowlist
+## 4. The potato fences
 
-Not yet drafted. The registrar named four pairs (`reduced-fat-cheddar` vs `cheddar-cheese-shredded`,
-`fat-free-cheddar`, `shredded-cheese`; plus the potato and cauliflower families). `audit-commodity-dupes.ps1`
-is the consumer; these should go in before it next runs or it will report the new ids as duplicates.
+| rule | claims before | releases | outcome |
+|---|---|---|---|
+| `red-potatoes` | 23 | 3 | rehomed on `baby-potatoes` |
+| `potato` (recipe ns) | 119 | 18 | see below |
 
-## If you approve
+The regenerated graph records **20 assignment changes, all `potato` → unclaimed in the RECIPE
+namespace.** That is expected, not a regression: `baby-potatoes` is a *weekly* id, so the recipe
+namespace has no rule that can claim what `potato` released. They are picked up on the staple side,
+whose graph the daily job rebuilds. **No recipe cost moved — measured, 0 of 588.**
 
-Each fence ships with a neuter-proved fixture pinning what it releases and what claims it instead —
-the measurement above is the fixture's content, so a later widening that starts orphaning products
-turns the gate red instead of quietly emptying a basket.
+## 5. `relax_global` now has a sanctioned path
+
+`add-commodity-rule.ps1` had `-Include`/`-Exclude` and no way to write `relax_global`, so the
+ruling's instruction to set it "through add-commodity-rule.ps1" was impossible. It now takes
+`-RelaxGlobal` / `-RemoveRelaxGlobal`, and — unlike the other two lists — may have to **create** its
+array, placed where `ConvertTo-Json` would have put it (immediately before `"include"`, matching
+`frozen-broccoli`). `frozen-cauliflower-rice` now carries `relax_global ["\bfrozen\b"]`.
+
+The script also had **no self-test at all**, so run-gates had never seen it. It has 9 cases now,
+driving the real script as a child process against a scratch file. Gates 140 → 141. Its first run
+caught a bug in the code it was written for: `@($null).Count` is **1** in PowerShell 5.1, so an
+entry with no `relax_global` scored 1 for its absent list and a correct creation was refused as
+"changed by 0, expected 1".
+
+## 6. Two ruling claims that were already true, and one that turned out unnecessary
+
+- **`yukon-gold-potatoes` needed no edit.** The ruling says it does not exclude `\bbaby\b`. It does.
+  Measured release: 0.
+- **`flour` needed no edit.** Its `whole\s+wheat` exclude is already the fence. Release: 0 of 83.
+- **The dupe allowlist was not needed.** `audit-commodity-dupes` flags none of the four new ids.
+
+## Still open — not mine to decide
+
+`audit-commodity-dupes` does flag one **pre-existing** pair: `gruyere` (commodities.json) vs
+`gruyere-cheese` (recipe-board-everyday.json), "labels identical once normalized". Same food priced
+under two ids, which lets the two prices disagree while every per-file check reads green. That is a
+registrar question and was left untouched.
