@@ -1,0 +1,126 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "High Protein Chicken Enchilada Casserole",
+  "source_url": "https://thymeandjoy.com/high-protein-chicken-enchilada-casserole/",
+  "servings": 6,
+  "time_total": null,
+  "time_active": "15 minutes",
+  "ingredients": [
+    {
+      "raw": "1 1/2 cups white onion (diced (1 large onion))",
+      "item": "white onion",
+      "qty": "1 1/2",
+      "unit": "cups",
+      "prep": "diced (1 large onion)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups bell pepper (diced (2 peppers))",
+      "item": "bell pepper",
+      "qty": "2",
+      "unit": "cups",
+      "prep": "diced (2 peppers)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10 oz red enchilada sauce (canned)",
+      "item": "red enchilada sauce",
+      "qty": "10",
+      "unit": "oz",
+      "prep": "(canned)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 oz green chilies (canned)",
+      "item": "green chilies",
+      "qty": "4",
+      "unit": "oz",
+      "prep": "(canned)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "15 oz black beans (canned (drained and rinsed))",
+      "item": "black beans",
+      "qty": "15",
+      "unit": "oz",
+      "prep": "canned (drained and rinsed)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 pound chicken breast (cooked)",
+      "item": "chicken breast",
+      "qty": "1",
+      "unit": "pound",
+      "prep": "cooked",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "14 corn tortillas",
+      "item": "corn tortillas",
+      "qty": "14",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 cups reduced fat shredded Mexican cheese",
+      "item": "reduced fat shredded Mexican cheese",
+      "qty": "1 1/2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup low fat cottage cheese",
+      "item": "low fat cottage cheese",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup greek yogurt (2%)",
+      "item": "greek yogurt",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": "(2%)",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Cook the chicken: Heat a large skillet over medium heat and spray with cooking spray or add a small amount of oil. Add the chicken breast and cook for 4-5 minutes per side until fully cooked (internal temperature of 165°F). Remove from the pan, let it rest for a few minutes, then shred or dice.",
+    "Sauté the vegetables: In the same skillet, add the diced onion and bell peppers. Cook for 4-5 minutes, stirring occasionally, until softened.",
+    "Combine with sauce and tortillas: Return the shredded chicken to the pan and add the green chilies, black beans, enchilada sauce, cottage cheese, and Greek yogurt. Stir to combine, then mix in the cut-up corn tortillas until evenly distributed.",
+    "Transfer to a baking dish: Lightly grease a 9x13-inch baking dish and pour in the mixture, spreading it out evenly.",
+    "Top with cheese and bake: Sprinkle shredded Mexican cheese over the top. Bake at 350°F for 15-20 minutes, or until the cheese is melted and bubbly. Remove from the oven and let the casserole sit for 5 minutes before serving.",
+    "Prepare the ingredients: Dice the onion and bell peppers, drain and rinse the black beans, and cut the corn tortillas into bite-sized pieces.",
+    "Add chicken and cook: Place the raw chicken breast in the slow cooker. Add the onion, bell peppers, green chilies, black beans, and enchilada sauce. Stir together.",
+    "Slow cook until tender: Cover and cook on low for 6-7 hours or high for 3-4 hours, until the chicken reaches an internal temperature of 165°F and easily shreds.",
+    "Shred the chicken & mix ingredients: Remove the chicken, shred it with two forks, then return it to the slow cooker. Add the cottage cheese, and Greek yogurt. Stir gently to coat the chicken. Add the cut-up corn tortillas, stirring until everything is evenly combined.",
+    "Transfer to a baking dish: Lightly grease a 9x13-inch baking dish and pour in the mixture, spreading it out evenly.",
+    "Top with cheese and bake: Sprinkle shredded Mexican cheese over the top. Bake at 350°F for 15-20 minutes, or until the cheese is melted and bubbly. Remove from the oven and let the casserole sit for 5 minutes before serving."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 10,
+    "verified": 10,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

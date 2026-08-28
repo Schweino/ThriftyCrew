@@ -1,0 +1,66 @@
+{
+    "slug":  "crack-chicken-chili",
+    "title":  "Crack Chicken Chili",
+    "source_url":  "https://wholesomelymorgan.com/crack-chicken-chili/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:56",
+    "updated":  "2026-08-27T19:06:04",
+    "terms":  [
+                  {
+                      "term":  "chicken bone broth",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "canned corn",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Sour Cream",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:56",
+                        "by":  "harvest",
+                        "detail":  "https://wholesomelymorgan.com/crack-chicken-chili/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:14:56",
+                        "by":  "decider",
+                        "detail":  "Ranch/bacon/cream-cheese crack chicken transformed into a full red-bean-and-fire-roasted-tomato chili is distinct from both live slow-cooker-crack-chicken-bowls (a bowl, no beans/tomato) and white-chicken-chili (no bacon/ranch/red beans); verified high-protein band."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:16:05",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:58:30",
+                        "by":  "mapper",
+                        "detail":  "10 residual lines ruled, 0 rejected, 8 new DB rows returned - the heaviest residual in the batch. Two things to look at. First, the pre-resolve table\u0027s board lookup pointed \u0027fire roasted tomatoes\u0027 at the commodity `tomatoes`, which is the fresh field tomato; I refused it and used diced-tomatoes, and I would flag that board match as a wrong-food trap for any future line containing the word tomato. "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:58:30",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T19:06:04",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

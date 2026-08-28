@@ -1,0 +1,184 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken and Potato Curry",
+  "source_url": "https://skinnyspatula.com/chicken-potato-curry/",
+  "servings": 4,
+  "time_total": "40 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 tablespoon coconut oil",
+      "item": "coconut oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 medium onion (finely diced)",
+      "item": "medium onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "finely diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 garlic cloves (finely chopped)",
+      "item": "garlic cloves",
+      "qty": "4",
+      "unit": null,
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon fresh ginger (finely chopped)",
+      "item": "fresh ginger",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon fresh red chilli (deseeded, finely chopped)",
+      "item": "fresh red chilli",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": "deseeded, finely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons ground coriander",
+      "item": "ground coriander",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons ground cumin",
+      "item": "ground cumin",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon turmeric",
+      "item": "turmeric",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon cayenne pepper",
+      "item": "cayenne pepper",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon tomato paste",
+      "item": "tomato paste",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 pounds chicken breast (cut into 1-inch pieces)",
+      "item": "chicken breast",
+      "qty": "1 1/2",
+      "unit": "pounds",
+      "prep": "cut into 1-inch pieces",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 pound potatoes (cut into chunks)",
+      "item": "potatoes",
+      "qty": "1/2",
+      "unit": "pound",
+      "prep": "cut into chunks",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 can (14 oz / 400 g) diced tomatoes",
+      "item": "diced tomatoes",
+      "qty": "1",
+      "unit": "can",
+      "prep": "(14 oz / 400 g)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup chicken stock",
+      "item": "chicken stock",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 teaspoon salt",
+      "item": "salt",
+      "qty": "1/2",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 can (13.5 fl. oz / 400 ml) coconut milk (creamy top only)",
+      "item": "coconut milk",
+      "qty": "1",
+      "unit": "can",
+      "prep": "(13.5 fl. oz / 400 ml) (creamy top only)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "A handful fresh cilantro",
+      "item": "fresh cilantro",
+      "qty": "A handful",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Heat the coconut oil in a large pan over medium heat and cook the onion for 8-10 minutes until softened.",
+    "Add the garlic, ginger and fresh red chili and continue to cook for another minute until fragrant.",
+    "Stir in the ground coriander, ground cumin, turmeric and cayenne pepper and cook for a further minute, stirring occasionally.",
+    "Add the tomato paste and stir well to combine, then add the chicken cubes. Toss well to combine with the spices and cook for 3-4 minutes until the chicken is sealed.",
+    "Next, add the cubed potatoes, diced tomatoes, chicken stock and salt. Stir well to combine, then bring to a simmer. Cover the pan and cook for 10 minutes or until the potatoes are fork-tender.",
+    "Stir in the coconut milk and continue to simmer for another minute until heated through. Adjust the seasoning to taste, add the fresh cilantro and serve."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

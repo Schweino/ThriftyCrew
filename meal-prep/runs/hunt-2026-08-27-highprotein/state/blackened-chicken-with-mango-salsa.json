@@ -1,0 +1,66 @@
+{
+    "slug":  "blackened-chicken-with-mango-salsa",
+    "title":  "Blackened Chicken with Mango Salsa",
+    "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:33",
+    "updated":  "2026-08-27T18:38:03",
+    "terms":  [
+                  {
+                      "term":  "blackened seasoning mix",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "frozen cilantro lime rice",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Avocado Lime Dipping Sauce",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:33",
+                        "by":  "harvest",
+                        "detail":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:20:34",
+                        "by":  "decider",
+                        "detail":  "Cajun-blackened chicken with fresh mango-avocado salsa over cilantro-lime rice; blackening prep and Cajun spice profile are absent from the catalog and distinct from the Caribbean jerk-chicken-mango-burrito, verified 530cal/35c/40p despite a crowded chicken-spice region."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:22:19",
+                        "by":  "extractor",
+                        "detail":  "rung 3 (Claude), verification recorded"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:36:18",
+                        "by":  "mapper",
+                        "detail":  "12 lines: 7 pre-resolved and carried through untouched, 5 residual ruled. Ruled mapped 4 (olive oil -\u003e olive-oil REUSE at 7 of 7; lime juice -\u003e limes REUSE on the 2026-08-27 precedent; blackened seasoning and frozen cilantro lime rice on proposed new ids), not-purchased 1 (the optional Primal Kitchen garnish). Rejected 0 outright; two bridges REFUSED on standing precedent and re-routed rather than"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:36:19",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T18:38:03",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

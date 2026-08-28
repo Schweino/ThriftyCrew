@@ -1,0 +1,31 @@
+{
+    "slug":  "cheesy-taco-skillet",
+    "title":  "Cheesy Taco Skillet",
+    "source_url":  "https://www.spendwithpennies.com/one-pot-taco-pasta-skillet/",
+    "protein":  "beef",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:38",
+    "updated":  "2026-08-27T18:20:38",
+    "terms":  [
+
+              ],
+    "reject_reason":  "One-pot ground beef + taco seasoning + salsa + pasta + Velveeta is the same cheesy taco beef pasta as live cheesy-taco-spaghetti (shares beef/pasta/taco-seasoning); already rejected twice this identity (taco-pasta-one-pot, taco-spaghetti).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:38",
+                        "by":  "harvest",
+                        "detail":  "https://www.spendwithpennies.com/one-pot-taco-pasta-skillet/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:20:38",
+                        "by":  "decider",
+                        "detail":  "One-pot ground beef + taco seasoning + salsa + pasta + Velveeta is the same cheesy taco beef pasta as live cheesy-taco-spaghetti (shares beef/pasta/taco-seasoning); already rejected twice this identity (taco-pasta-one-pot, taco-spaghetti)."
+                    }
+                ]
+}

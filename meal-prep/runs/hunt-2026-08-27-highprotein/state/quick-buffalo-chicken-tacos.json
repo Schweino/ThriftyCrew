@@ -1,0 +1,31 @@
+{
+    "slug":  "quick-buffalo-chicken-tacos",
+    "title":  "Quick Buffalo Chicken Tacos",
+    "source_url":  "https://www.laurafuentes.com/quick-skillet-buffalo-chicken-tacos/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:31",
+    "updated":  "2026-08-27T18:20:31",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast + buffalo sauce in tortillas with blue cheese is the same buffalo-chicken-in-tortilla dinner as live buffalo-chicken-burrito; taco vs burrito is not a distinguishing plate and the buffalo-chicken lane is already carried three ways.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:31",
+                        "by":  "harvest",
+                        "detail":  "https://www.laurafuentes.com/quick-skillet-buffalo-chicken-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:20:31",
+                        "by":  "decider",
+                        "detail":  "Chicken breast + buffalo sauce in tortillas with blue cheese is the same buffalo-chicken-in-tortilla dinner as live buffalo-chicken-burrito; taco vs burrito is not a distinguishing plate and the buffalo-chicken lane is already carried three ways."
+                    }
+                ]
+}

@@ -1,0 +1,182 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Crack Chicken Chili",
+  "source_url": "https://wholesomelymorgan.com/crack-chicken-chili/",
+  "servings": 8,
+  "time_total": "250 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "2 lbs chicken breast (boneless and skinless)",
+      "item": "chicken breast",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": "boneless and skinless",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3 cups chicken bone broth",
+      "item": "chicken bone broth",
+      "qty": "3",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 packet ranch seasoning",
+      "item": "ranch seasoning",
+      "qty": "1",
+      "unit": "packet",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp garlic powder",
+      "item": "garlic powder",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp onion powder",
+      "item": "onion powder",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tsp cayenne",
+      "item": "cayenne",
+      "qty": "2",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "3/4 tsp paprika",
+      "item": "paprika",
+      "qty": "3/4",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tsp chili powder",
+      "item": "chili powder",
+      "qty": "1",
+      "unit": "tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "14.5 oz can corn",
+      "item": "corn",
+      "qty": "14.5",
+      "unit": "oz can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "15 oz can fire roasted tomatoes (diced)",
+      "item": "fire roasted tomatoes",
+      "qty": "15",
+      "unit": "oz can",
+      "prep": "(diced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "15 oz can dark red kidney beans",
+      "item": "dark red kidney beans",
+      "qty": "15",
+      "unit": "oz can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "15 oz can black beans",
+      "item": "black beans",
+      "qty": "15",
+      "unit": "oz can",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 oz can green chiles (diced)",
+      "item": "green chiles",
+      "qty": "4",
+      "unit": "oz can",
+      "prep": "(diced)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "10 slices cooked bacon (chopped)",
+      "item": "cooked bacon",
+      "qty": "10",
+      "unit": "slices",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 oz cream cheese",
+      "item": "cream cheese",
+      "qty": "8",
+      "unit": "oz",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 cups Mexican style cheese",
+      "item": "Mexican style cheese",
+      "qty": "1 1/2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "optional: avocado, sour cream, or additional cheese",
+      "item": "avocado, sour cream, or additional cheese",
+      "qty": null,
+      "unit": null,
+      "prep": null,
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a slow cooker, combine all ingredients except cheese and cook on high for 4-5 hours or low for 6-8 hours",
+    "When there is 30 minutes left, take chicken out and shred; place back in to crock pot to finish cooking",
+    "Add in your shredded cheese and mix until melted",
+    "Plate and top with sour cream, additional cheese, avocado, or any other toppings"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 17,
+    "verified": 17,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

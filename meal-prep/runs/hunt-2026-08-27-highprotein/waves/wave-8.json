@@ -1,0 +1,31 @@
+{
+    "wave":  8,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w8",
+    "created":  "2026-08-27T19:08:11",
+    "slugs":  [
+                  "ground-beef-cottage-cheese-bowl",
+                  "butter-chicken-pasta",
+                  "chicken-rice-and-broccoli"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "ground-beef-cottage-cheese-bowl",
+                        "title":  "Ground Beef Cottage Cheese Bowl",
+                        "source_url":  "https://www.wellplated.com/ground-beef-cottage-cheese-bowl/",
+                        "protein":  "beef"
+                    },
+                    {
+                        "slug":  "butter-chicken-pasta",
+                        "title":  "Butter Chicken Pasta",
+                        "source_url":  "https://skinnyspatula.com/butter-chicken-pasta/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "chicken-rice-and-broccoli",
+                        "title":  "Healthy Chicken, Rice and Broccoli Skillet",
+                        "source_url":  "https://thecleaneatingcouple.com/chicken-broccoli-rice/",
+                        "protein":  "chicken"
+                    }
+                ]
+}

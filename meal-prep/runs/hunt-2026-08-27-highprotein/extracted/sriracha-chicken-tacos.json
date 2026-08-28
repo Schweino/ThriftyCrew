@@ -1,0 +1,139 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Sriracha Chicken Tacos",
+  "source_url": "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "1 1/2 pounds boneless skinless chicken breasts ()",
+      "item": "boneless skinless chicken breasts",
+      "qty": "1 1/2",
+      "unit": "pounds",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "4 tablespoons Sriracha sauce (divided)",
+      "item": "Sriracha sauce",
+      "qty": "4",
+      "unit": "tablespoons",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon + 2 teaspoons honey (divided)",
+      "item": "honey",
+      "qty": "1 tablespoon + 2 teaspoons",
+      "unit": null,
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 limes (juiced, divided)",
+      "item": "limes",
+      "qty": "2",
+      "unit": null,
+      "prep": "juiced, divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup sour cream",
+      "item": "sour cream",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tablespoons finely chopped fresh cilantro",
+      "item": "cilantro",
+      "qty": "1 1/2",
+      "unit": "tablespoons",
+      "prep": "finely chopped fresh",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/4 teaspoon salt",
+      "item": "salt",
+      "qty": "1/4",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 1/2 tablespoons vegetable oil (if not using a grill)",
+      "item": "vegetable oil",
+      "qty": "1 1/2",
+      "unit": "tablespoons",
+      "prep": "(if not using a grill)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 cups shredded romaine lettuce",
+      "item": "shredded romaine lettuce",
+      "qty": "2",
+      "unit": "cups",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 cup shredded Cheddar cheese",
+      "item": "shredded Cheddar cheese",
+      "qty": "1",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 avocado (pitted, peeled, and sliced)",
+      "item": "avocado",
+      "qty": "1",
+      "unit": null,
+      "prep": "pitted, peeled, and sliced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "8 Corn or flour tortillas (store-bought or homemade, warmed)",
+      "item": "Corn or flour tortillas",
+      "qty": "8",
+      "unit": null,
+      "prep": "store-bought or homemade, warmed",
+      "optional": false,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Put the chicken breasts in an airtight container or zip-top bag plastic bag. Add 3 tablespoons of the Sriracha, 1 tablespoon of honey, and the juice of 1 lime juice. Mix to combine, seal, and refrigerate for at least 4 hours or overnight.",
+    "In a small bowl, whisk together the sour cream, remaining juice of 1 lime, cilantro, and salt. Cover and refrigerate while you make the tacos.",
+    "In a small bowl, whisk together the remaining 1 tablespoon of Sriracha and the remaining 2 teaspoons of honey and set aside.",
+    "Preheat a grill or heat the oil in a large skillet over medium-high heat. Remove the chicken breasts from the marinade and cook for 5 to 7 minutes, flip, and cook on the other side for 5 minutes, or until the internal temperature reaches 165F. Discard the marinade.",
+    "Transfer the chicken to a plate or board and rest until cool enough to handle. With two forks, shred the chicken.",
+    "Assemble the tacos by layering the chicken, lettuce, cheese, and avocado on the tortillas. Drizzle the cilantro sour cream on top and finish with a single drizzle of spicy honey-Sriracha sauce."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 12,
+    "verified": 12,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

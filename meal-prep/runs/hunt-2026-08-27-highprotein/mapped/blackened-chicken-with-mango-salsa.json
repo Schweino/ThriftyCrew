@@ -1,0 +1,222 @@
+﻿{
+    "slug":  "blackened-chicken-with-mango-salsa",
+    "title":  "Blackened Chicken with Mango Salsa",
+    "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 Large Mango Diced",
+                            "item":  "Mango",
+                            "bid":  "mangoes",
+                            "board":  "weekly",
+                            "grams":  1176,
+                            "buy":  "3 1/2 large mangoes, diced (about 7 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: mangoes, 6 of 7 stores, cheapest 0.75 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Bunch Fresh Cilantro Chopped",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  "recipe",
+                            "grams":  200,
+                            "buy":  "3 1/2 bunches (about 7 oz), chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Reads high for the salsa but transcribed as printed by the source.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 Large Avocado Diced",
+                            "item":  "Avocado",
+                            "bid":  "avocados",
+                            "board":  "weekly",
+                            "grams":  525,
+                            "buy":  "3 1/2 large avocados, diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: avocados, 7 of 7 stores, cheapest 0.4817 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "½ Red Onion Minced",
+                            "item":  "Red Onion",
+                            "bid":  "red-onion",
+                            "board":  null,
+                            "grams":  192,
+                            "buy":  "1 3/4 medium red onions, minced (about 1 1/4 cups)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: red-onion, 5 of 7 stores, cheapest 1.095 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Pinch of Salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "to taste (1 1/2 g, about 1/4 tsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Salsa seasoning only; the settled table weighs it 0.4 g at source scale.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "Pinch of Pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "to taste (1 g, about 1/2 tsp)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-26T13:26:51); nearest vocabulary rows: Red Bell Pepper [red-bell-pepper] same form | Yellow Bell Pepper [yellow-bell-pepper] same form | Black Pepper [black-pepper] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 Tablespoons Olive Oil or Avocado Oil Divided",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  null,
+                            "grams":  94,
+                            "buy":  "7 tbsp (about 1/2 cup), divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tbsp into the salsa, 1 tbsp to sear at source scale; 2 tbsp x 13.5 g. Either/or line taken as olive oil: olive-oil is a live board id at 7 of 7 (precedent \u0027extra-virgin olive oil\u0027 -\u003e olive-oil, 2026-08-26), so a REUSE and not a proposal. The board\u0027s `avocados` hit is a form flip - the fruit is not the oil, different price class and different gram weight.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "½ Fresh Lime or Orange Juiced",
+                            "item":  "Lime Juice",
+                            "bid":  "limes",
+                            "board":  null,
+                            "grams":  52,
+                            "buy":  "3 1/2 tbsp fresh lime juice (about 2 limes)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Juice of half a lime, the option the instructions actually use. Instructions use lime (\u0027the juice of half a lime\u0027), so the orange option is not taken; precedent \u0027fresh lime juice\u0027 -\u003e limes (2026-08-27) on vocabulary row Lime Juice [limes], fresh fruit squeezed rather than a bottled juice. Half a lime yields about 15 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1.5 Pounds Chicken Breast Diced",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, diced into 1 inch cubes",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "170 g raw per serving, in line with the catalog average of 167 g.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1.5-2 Tablespoons Blackened Seasoning Mix",
+                            "item":  "Blackened Seasoning",
+                            "bid":  "cajun-seasoning",
+                            "board":  null,
+                            "grams":  74,
+                            "buy":  "6 tbsp (about 1/3 cup)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Midpoint 1.75 tbsp at the label\u0027s own basis of 1 tsp = 4 g. Board ABSENT for the phrase; a Cajun-style paprika/cayenne blend, not the `seasoned-salt` of the 2026-08-26 precedent (different blend, different jar). New id proposed - registrar should check cajun-seasoning/creole-seasoning as possible existing spellings.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 Packages Frozen Cilantro Lime Rice",
+                            "item":  "Frozen Cilantro Lime Rice",
+                            "bid":  "frozen-cilantro-lime-rice",
+                            "board":  null,
+                            "grams":  1984,
+                            "buy":  "about 14 cups prepared (seven 10 oz bags)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Source states no package size; costed at the standard 10 oz frozen rice pouch, 142 g prepared per serving. REFUSED the bridge onto `rice`: dry rice is a different price class and roughly a third of the cooked weight, the standing form-flip rejection. Prepared frozen pouch, weighed as two 10 oz bags since the source names no package size.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "Primal Kitchen Avocado Lime Dipping Sauce Drizzled to Garnish",
+                            "item":  "Avocado Lime Dipping Sauce",
+                            "bid":  null,
+                            "board":  null,
+                            "grams":  0,
+                            "buy":  "",
+                            "optional":  true,
+                            "decision":  "optional-note",
+                            "notes":  "Optional brand-specific garnish (\u0027if using\u0027 in the instructions); dropped rather than made a new niche commodity, so the shopper buys nothing for it. The board\u0027s `avocados` match is a different food."
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "blackened seasoning mix",
+                                 "frozen cilantro lime rice"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Blackened Seasoning",
+                               "Frozen Cilantro Lime Rice"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "blackened seasoning mix",
+                                        "proposed_bid":  "blackened-seasoning",
+                                        "evidence":  "Cajun-style blackening blend (paprika, cayenne, garlic, salt) sold as its own jar by McCormick, Zatarain\u0027s and store brands. The table reports board ABSENT: no commodity and no capture match. The only near precedent is `seasoned-salt` (2026-08-26), a different blend with no chile heat and a different jar, so not an alias. I cannot read the namespaces myself: if an id already prices this food it will be spelled cajun-seasoning or creole-seasoning, and either of those should ALIAS rather than mint.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "frozen cilantro lime rice",
+                                        "proposed_bid":  "frozen-cilantro-lime-rice",
+                                        "evidence":  "Prepared frozen rice pouch (Path of Life, Trader Joe\u0027s, store brands), the recipe\u0027s whole carbohydrate source at 567 g source scale. Not `rice`: dry rice is a different price class and about a third the weight per cup, the standing form-flip rejection, and `wild-rice`/`rice-vinegar` are different foods. If the estate already prices prepared frozen rice under frozen-rice or cooked-rice, alias onto it - the cilantro-lime flavour does not warrant a second id.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "blackened-seasoning",
+                                  "verdict":  "alias",
+                                  "bid":  "cajun-seasoning",
+                                  "reason":  "Same food, same form, already priced: cajun-seasoning is labeled \u0027Cajun / Creole Seasoning\u0027 and is live at $0.1666/oz (7 stores); the match baseline already assigns \u0027Louisiana Fish Fry Blackened Cajun Seasoning\u0027 to it, and the Zatarain\u0027s/Tone\u0027s \u0027Blackened Seasoning\u0027 jars sit \u003cunmatched\u003e only because the include patterns lack the spelling — a blackening blend is the same Cajun-class jar, not a variant. Follow-up: add blackened-seasoning -\u003e cajun-seasoning to recipe-floor-id-map.json and extend cajun-seasoning\u0027s includes with blackened\\s+seasoning (guarding against blackened salmon/chicken/turkey/alfredo product names) via add-commodity-rule.ps1."
+                              },
+                              {
+                                  "proposed_bid":  "frozen-cilantro-lime-rice",
+                                  "verdict":  "approve",
+                                  "bid":  "frozen-cilantro-lime-rice",
+                                  "reason":  "No existing id prices prepared frozen rice: the prepared-rice estate is per-variety (cooked-jasmine-rice requires \u0027jasmine\u0027; ready-to-serve-long-grain-wild-rice-pouch explicitly EXCLUDES both \u0027frozen\u0027 and \u0027cilantro\u0027 at commodities.json:68769-70, so the estate has already ruled these out of the existing rows), dry \u0027rice\u0027 is the standing form-flip rejection, and the id has no feed cell. Mint as recipe-only (recipe-board baseline + recipe-commodities.json), together with allowlist pairs vs rice, cooked-jasmine-rice, and ready-to-serve-long-grain-wild-rice-pouch, contiguous includes like cilantro\\s*lime\\s+rice with a frozen/prepared context, and ~150-pattern-grade excludes including cauliflower (frozen cilantro-lime cauliflower rice is a different food), dressing, salad, bowl, burrito, meal kit, dry/uncooked/rice mix."
+                              }
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  {
+                              "source_published_per_serving":  {
+                                                                   "calories":  530,
+                                                                   "protein_g":  40,
+                                                                   "carbs_g":  35
+                                                               },
+                              "computed_per_serving":  {
+                                                           "calories":  621,
+                                                           "protein_g":  43.6,
+                                                           "carbs_g":  62,
+                                                           "fat_g":  22.5
+                                                       },
+                              "protein_gap_pct":  9,
+                              "verdict":  "PASS on the sharp instrument. Protein 43.6 vs 40 is +9%, inside the 15% band, and it comes almost entirely from 680.4 g of chicken breast - 170 g raw per serving at the 14-serving scale, right on the catalog\u0027s 167 g average across 80 live chicken-breast recipes, so the main-protein each-weight is not the failure mode here.",
+                              "divergence":  "Calories +17% and carbs +77% against the published figures, and the whole gap is the one line the source never quantified: \u00272 Packages Frozen Cilantro Lime Rice\u0027 with no package size printed anywhere on the page. Their own numbers back-solve almost exactly to 2 CUPS of prepared rice (280 g), which recomputes to about 498 cal / 41.6 g protein / 39 g carbs - i.e. the source\u0027s recipe-card plugin appears to have read \u0027package\u0027 as one serving. I weighed the line the way it is printed instead, at two 10 oz pouches (567 g), because that is what a reader buying \u0027two packages\u0027 actually gets. Both readings clear this run\u0027s band (450-800 cal, protein \u003e= 40), so the recipe advances either way, but flag it: if the 10 oz pouch assumption is wrong the calorie figure moves and nothing downstream will catch it."
+                          }
+}

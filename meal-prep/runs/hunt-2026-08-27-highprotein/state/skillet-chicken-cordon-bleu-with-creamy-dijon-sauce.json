@@ -1,0 +1,31 @@
+{
+    "slug":  "skillet-chicken-cordon-bleu-with-creamy-dijon-sauce",
+    "title":  "Skillet Chicken Cordon Bleu with Creamy Dijon Sauce",
+    "source_url":  "https://www.cookingclassy.com/skillet-chicken-cordon-bleu-creamy-dijon-sauce/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:39",
+    "updated":  "2026-08-27T18:20:40",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast + deli ham + swiss with a creamy dijon sauce is the same chicken cordon bleu identity as live chicken-cordon-bleu-casserole (word-overlap 33, shares chicken/swiss/butter); skillet vs casserole and a dijon pan sauce are format re-plating, not a new dinner.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:39",
+                        "by":  "harvest",
+                        "detail":  "https://www.cookingclassy.com/skillet-chicken-cordon-bleu-creamy-dijon-sauce/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:20:40",
+                        "by":  "decider",
+                        "detail":  "Chicken breast + deli ham + swiss with a creamy dijon sauce is the same chicken cordon bleu identity as live chicken-cordon-bleu-casserole (word-overlap 33, shares chicken/swiss/butter); skillet vs casserole and a dijon pan sauce are format re-plating, not a new dinner."
+                    }
+                ]
+}

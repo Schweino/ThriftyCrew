@@ -1,0 +1,31 @@
+{
+    "slug":  "slow-cooker-honey-garlic-chicken-noodles",
+    "title":  "Slow Cooker Honey Garlic Chicken Noodles",
+    "source_url":  "https://www.theproteinplayground.com/slow-cooker-honey-garlic-chicken-noodles/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:52",
+    "updated":  "2026-08-27T18:14:52",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Sweet-soy braised chicken over noodles is a 4-of-4 structural match to live andong-jjimdak (soy-braised chicken with noodles) and sits in a saturated honey-soy chicken region alongside honey-sesame chicken bowls.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:52",
+                        "by":  "harvest",
+                        "detail":  "https://www.theproteinplayground.com/slow-cooker-honey-garlic-chicken-noodles/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:14:52",
+                        "by":  "decider",
+                        "detail":  "Sweet-soy braised chicken over noodles is a 4-of-4 structural match to live andong-jjimdak (soy-braised chicken with noodles) and sits in a saturated honey-soy chicken region alongside honey-sesame chicken bowls."
+                    }
+                ]
+}

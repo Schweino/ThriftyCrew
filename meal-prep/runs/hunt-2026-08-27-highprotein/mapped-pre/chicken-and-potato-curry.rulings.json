@@ -1,0 +1,146 @@
+{
+ "slug": "chicken-and-potato-curry",
+ "lines": [
+  {
+   "raw": "1 tablespoon coconut oil",
+   "buy": "3 1/2 tbsp",
+   "grams_source": 13.6
+  },
+  {
+   "raw": "1 medium onion (finely diced)",
+   "buy": "3 1/2 medium onions, finely diced"
+  },
+  {
+   "raw": "4 garlic cloves (finely chopped)",
+   "buy": "14 cloves, finely chopped"
+  },
+  {
+   "raw": "1 tablespoon fresh ginger (finely chopped)",
+   "buy": "3 1/2 tbsp, finely chopped"
+  },
+  {
+   "raw": "1 tablespoon fresh red chilli (deseeded, finely chopped)",
+   "buy": "3 1/2 tbsp, deseeded and finely chopped (about 3 chiles)",
+   "grams_source": 9
+  },
+  {
+   "raw": "2 teaspoons ground coriander",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "2 teaspoons ground cumin",
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "raw": "1/2 teaspoon turmeric",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1/4 teaspoon cayenne pepper",
+   "buy": "scant 1 tsp"
+  },
+  {
+   "raw": "1 tablespoon tomato paste",
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "raw": "1 1/2 pounds chicken breast (cut into 1-inch pieces)",
+   "buy": "5 1/4 lb, cut into 1-inch pieces"
+  },
+  {
+   "raw": "1/2 pound potatoes (cut into chunks)",
+   "buy": "1 3/4 lb, cut into chunks",
+   "grams_source": 226.8
+  },
+  {
+   "raw": "1 can (14 oz / 400 g) diced tomatoes",
+   "buy": "6 cups, undrained (three and a half 14 oz cans)"
+  },
+  {
+   "raw": "1 cup chicken stock",
+   "buy": "3 1/2 cups"
+  },
+  {
+   "raw": "1/2 teaspoon salt",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "1 can (13.5 fl. oz / 400 ml) coconut milk (creamy top only)",
+   "buy": "3 1/2 cups (three and a half 13.5 fl oz cans)"
+  },
+  {
+   "raw": "A handful fresh cilantro",
+   "buy": "1 1/4 cups chopped (35 g)"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 tablespoon coconut oil",
+   "term": "coconut oil",
+   "canon_item": "Coconut Oil",
+   "bid": "coconut-oil",
+   "decision": "mapped",
+   "grams_source": 13.6,
+   "evidence": "REUSE of a live board id at 7 of 7, cheapest 0.1952 at Sam's Club, and the DB already carries the row; only the vocabulary name was missing. Refused the shelf's 'oil' -> vegetable-oil precedent: coconut oil is a solid jar at its own price class."
+  },
+  {
+   "raw": "1 tablespoon fresh red chilli (deseeded, finely chopped)",
+   "term": "fresh red chilli",
+   "canon_item": "Fresh Red Chili",
+   "bid": "fresh-red-chili",
+   "decision": "mapped",
+   "grams_source": 9,
+   "evidence": "Refused the red-pepper-flakes bridge on the shelf: fresh chile is not the dried jar, a form flip in both price and gram weight. No estate id names a fresh chile, so a new one is proposed and the term enqueued."
+  },
+  {
+   "raw": "1/2 pound potatoes (cut into chunks)",
+   "term": "potatoes",
+   "canon_item": "Potatoes",
+   "bid": "potatoes",
+   "decision": "mapped",
+   "grams_source": 226.8,
+   "evidence": "Sweet potatoes are a different food at a different price, so that near row is refused. No commodity claims plain potatoes though today's captures carry them, exactly the 2026-08-26 'baby potatoes' situation; new id proposed and the term enqueued."
+  }
+ ],
+ "absent_terms": [
+  "fresh red chili",
+  "potatoes"
+ ],
+ "db_entries_written": [
+  "Fresh Red Chili",
+  "Potatoes"
+ ],
+ "db_row_findings": [],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "fresh red chilli",
+   "proposed_bid": "fresh-red-chili",
+   "evidence": "Searched by food, not by string, across the four namespaces: the only chile-family ids are red-pepper-flakes (dried jar), canned-green-chilies, dried-guajillo-chiles, dried-arbol-chiles, chipotle-adobo and the bell-pepper family. Every one is either dried, canned or a sweet pepper; none prices a fresh hot chile, which is sold loose in produce by the pound. Board reports no commodity and no capture match.",
+   "declared": true
+  },
+  {
+   "term": "potatoes",
+   "proposed_bid": "potatoes",
+   "evidence": "The estate prices sweet-potatoes and baby-potatoes but nothing for plain white/russet potatoes, which are a different food at a different price (bulk 5 lb bags against a bagged creamer SKU and against the sweet variety). Board says no commodity claims it while today's captures carry matching products, the same posture that minted baby-potatoes on 2026-08-26.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "fresh-red-chili",
+   "verdict": "alias",
+   "bid": "jalapenos",
+   "reason": "The mapper's case ('no id prices a fresh hot chile') is false: the live feed prices fresh jalapenos ($1.4277/lb Walmart, loose produce), serrano-peppers ($2.99/lb Family Fare, fresh produce page) and habanero-peppers ($12.64/lb Walmart, fresh tray), none of which the dossier's word-overlap sweep surfaced because they share no token with 'red chili'. A recipe's 'fresh red chilli' is a ripe red jalapeno/fresno-class chile - same species-family, same fresh-loose-by-the-pound purchase, same price class as the green jalapeno the stores actually stock, and the feed already carries a jalapeno->jalapenos alias for exactly this spelling seam. Add fresh-red-chili -> jalapenos to recipe-floor-id-map.json (units match: lb). If a recipe ever genuinely needs the hotter variant, serrano-peppers already exists priced - no new id in any case."
+  },
+  {
+   "proposed_bid": "potatoes",
+   "verdict": "alias",
+   "bid": "russet-potatoes",
+   "reason": "The mapper's claim that nothing prices plain potatoes is contradicted twice over: commodities.json carries russet-potatoes (include patterns for russet/bulk bags), the live feed prices it at $0.409/lb cheapest at Aldi across all 7 stores, and recipe-floor-id-map.json already holds the human-verified pair potato -> russet-potatoes - the exact generic-spelling seam this proposal re-opens. Minting a bare 'potatoes' id beside russet-potatoes, red-potatoes and yukon-gold-potatoes would let the same food price under two ids and its include pattern would inevitably claim the named varieties' products. Add potatoes -> russet-potatoes to recipe-floor-id-map.json (units match: lb) alongside the existing 'potato' pair."
+  }
+ ],
+ "macro_cross_check": "Computed 501 cal / 42.3 g protein / 21 g carbs per serving over 4 servings, against the source's published 505 / 42 / 21. Every figure lands within 1%. The 680.4 g chicken line and the 400 g coconut milk are the two dominant terms and both are the source's own stated amounts. Band: passes."
+}

@@ -1,270 +1,448 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T12:10:48",
+ "generated": "2026-08-27T19:00:00",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "frozen lightly breaded chicken breast bites",
+   "term": "red pepper flakes",
    "state": "MATCHES",
-   "term_used": "frozen lightly breaded chicken breast bites",
+   "term_used": "red pepper flakes",
    "attempts": [
     {
-     "term": "frozen lightly breaded chicken breast bites",
+     "term": "red pepper flakes",
      "state": "OK",
-     "hits": 67
+     "hits": 3
     }
    ],
    "hits": [
     {
-     "item": "Just Bare Fully Cooked Lightly Breaded Chicken Breast Bites",
-     "price": 10.98,
-     "size": "24 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712959-just-bare-chicken-breast-bites-lightly-breaded-24-oz"
-    },
-    {
-     "item": "Oscar Mayer Carving Board Southwestern Seasoned Grilled Chicken Breast Strips",
+     "item": "McCormick Crushed Red Pepper",
      "price": 3.99,
-     "size": "6 oz",
+     "size": "1.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73416-oscar-mayer-southwestern-seasoned-grilled-chicken-breast-strips-6-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
     },
     {
-     "item": "Tyson Frozen Dino Nuggets, 4 lb",
-     "price": 13.94,
-     "size": "1.81 kg",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30198303-tyson-fun-nuggets-all-natural-chicken-family-pack-4-lb"
-    },
-    {
-     "item": "Fareway Premium Chunk White & Dark Chicken",
-     "price": 3.34,
-     "size": "12.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22160792-fareway-chicken-white-dark-125-oz"
-    },
-    {
-     "item": "Tyson Frozen Spicy Chicken Patties, 23 oz",
-     "price": 7.49,
-     "size": "23 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56875662-tyson-spicy-chicken-patties-23-00-oz"
-    },
-    {
-     "item": "Perdue Gluten Free Organic Chicken Tenders",
-     "price": 10.59,
-     "size": "22 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/171979-perdue-s-breaded-chicken-breast-tenders-gluten-free-1-38-lb"
-    },
-    {
-     "item": "Tyson Frozen Chicken Nuggets Family Pack, 4 lb",
-     "price": 13.94,
-     "size": "4 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56813142-tyson-chicken-nuggets-family-pack-64-oz"
-    },
-    {
-     "item": "Frick's Oven Roasted Sliced Chicken Breast",
-     "price": 10.99,
-     "size": "24 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/108439152-fricks-oven-roasted-sliced-chicken-breast-24-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "fresh mozzarella",
-   "state": "MATCHES",
-   "term_used": "fresh mozzarella",
-   "attempts": [
-    {
-     "term": "fresh mozzarella",
-     "state": "OK",
-     "hits": 5
-    }
-   ],
-   "hits": [
-    {
-     "item": "BelGioioso Fresh Mozzarella Sliced",
-     "price": 4.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/96152-belgioioso-fresh-mozzarella-cheese-sliced-8-oz"
-    },
-    {
-     "item": "BelGioioso Fresh Mozzarella Pearls",
-     "price": 4.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3239009-belgioioso-cheese-fresh-mozzarella-cheese-pearls-cryo-8-oz"
-    },
-    {
-     "item": "BelGioioso Fresh Mozzarella Cheese, Ball",
-     "price": 4.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410986-belgioioso-fresh-mozzarella-cheese-ball-8-oz"
-    },
-    {
-     "item": "Fareway Low-Moisture Part-Skim Mozzarella Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24720307-fareway-cheese-part-skim-mozzarella-low-moisture-8-oz"
-    },
-    {
-     "item": "Tillamook Whole Milk Mozzarella Cheese Snacks 10 Count",
+     "item": "Badia Spices Crushed Red Pepper",
      "price": 3.99,
-     "size": "10 x 0.75 oz",
+     "size": "4.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38311478-tilla-whl-mlk-mozz-snack-bar"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+    },
+    {
+     "item": "Simply Organic Red Pepper, Crushed",
+     "price": 6.99,
+     "size": "1.59 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
   },
   {
-   "term": "Boursin cheese",
+   "term": "whole wheat flour",
    "state": "MATCHES",
-   "term_used": "Boursin cheese",
+   "term_used": "whole wheat flour",
    "attempts": [
     {
-     "term": "Boursin cheese",
+     "term": "whole wheat flour",
      "state": "OK",
-     "hits": 2
+     "hits": 1
     }
    ],
    "hits": [
     {
-     "item": "Boursin Garlic & Fine Herbs Gournay Cheese",
-     "price": 5.49,
-     "size": "5.3 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/102173-boursin-garlic-fine-herbs-gournay-cheese-5-2-oz"
-    },
-    {
-     "item": "Boursin Shallot & Chive Gournay Cheese",
-     "price": 5.49,
-     "size": "5.2 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/72164-boursin-shallot-chive-gournay-cheese-150-0-g"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "penne pasta",
-   "state": "MATCHES",
-   "term_used": "penne pasta",
-   "attempts": [
-    {
-     "term": "penne pasta",
-     "state": "OK",
-     "hits": 6
-    }
-   ],
-   "hits": [
-    {
-     "item": "Fareway Penne Rigate",
-     "price": 1.24,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24859003-fareway-penne-rigate-16-oz"
-    },
-    {
-     "item": "Barilla Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
-     "price": 1.84,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144046-barilla-classic-blue-box-pasta-penne-16-oz"
-    },
-    {
-     "item": "Barilla Mini Penne - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
-     "price": 1.84,
-     "size": "1 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/153018-barilla-classic-blue-box-pasta-mini-penne-1-lb"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Penne Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16292378-barilla-protein-grain-legume-pasta-penne-14-5-oz"
-    },
-    {
-     "item": "Fareway Whole Wheat Penne Rigate",
-     "price": 0.99,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24881952-fareway-whole-wheat-macaroni-product-penne-rigate-16-oz"
-    },
-    {
-     "item": "Rao's Penne Rigate Macaroni Product",
-     "price": 3.99,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19373047-rao-s-homemade-penne-rigate-macaroni-product-1-0-lb"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "Moroccan Spice Mix",
-   "state": "MATCHES",
-   "term_used": "Moroccan Spice Mix",
-   "attempts": [
-    {
-     "term": "Moroccan Spice Mix",
-     "state": "OK",
-     "hits": 6
-    }
-   ],
-   "hits": [
-    {
-     "item": "McCormick Chili Seasoning Mix",
-     "price": 1.68,
-     "size": "1.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38758-mccormick-chili-seasoning-mix-1-25-oz"
-    },
-    {
-     "item": "Spice Islands Beau Monde Seasoning",
-     "price": 4.99,
-     "size": "3.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
-    },
-    {
-     "item": "Cavender's Seasoning, Greek, All Purpose",
-     "price": 4.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
-    },
-    {
-     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
-     "price": 7.99,
-     "size": "5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
-    },
-    {
-     "item": "Badia Spices Paprika",
-     "price": 1.68,
-     "size": "2 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
-    },
-    {
-     "item": "Cavender's Greek Seasoning, All Purpose, Salt Free",
+     "item": "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain, Non-GMO Project Verified, Certified Kosher",
      "price": 5.99,
+     "size": "5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37934-king-arthur-baking-company-flour-whole-wheat-5-lb"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "fresh red chili",
+   "state": "MATCHES",
+   "term_used": "fresh red chili",
+   "attempts": [
+    {
+     "term": "fresh red chili",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Green Serrano Pepper",
+     "price": 0.21,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
+    },
+    {
+     "item": "Anaheim Pepper",
+     "price": 1.0,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19141625-anaheim-pepper-1-lb"
+    },
+    {
+     "item": "Jalapeno Pepper",
+     "price": 0.3,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/232739-jalapeno-pepper-1-lb"
+    },
+    {
+     "item": "Poblano Pepper",
+     "price": 1.0,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345708-poblano-pepper-1-lb"
+    },
+    {
+     "item": "Banana Pepper",
+     "price": 0.83,
+     "size": "$4.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21372221-banana-pepper-1-lb"
+    },
+    {
+     "item": "Green, Red & Yellow Peppers",
+     "price": 4.99,
+     "size": "1 each",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89326993-green-red-yellow-peppers"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "potatoes",
+   "state": "MATCHES",
+   "term_used": "potatoes",
+   "attempts": [
+    {
+     "term": "potatoes",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Green Giant Potatoes, Idaho",
+     "price": 2.99,
+     "size": "5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2707026-green-giant-potatoes-idaho-5-lb"
+    },
+    {
+     "item": "Russet Potato",
+     "price": 0.74,
+     "size": "$1.49 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb"
+    },
+    {
+     "item": "Russet Potato Bag",
+     "price": 2.99,
+     "size": "5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16417856-russet-potato-bag-5-lbs"
+    },
+    {
+     "item": "Green Giant Potatoes, Idaho, Yellow Skin Golden Flesh",
+     "price": 4.99,
+     "size": "80 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/323152-green-giant-potatoes-idaho-yellow-skin-golden-flesh-80-oz"
+    },
+    {
+     "item": "Summertime Farms Baby Gold Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+    },
+    {
+     "item": "Summertime Farms Baby Red Potatoes",
+     "price": 3.88,
+     "size": "3 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "chicken bone broth",
+   "state": "MATCHES",
+   "term_used": "chicken bone broth",
+   "attempts": [
+    {
+     "term": "chicken bone broth",
+     "state": "OK",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Kitchen Basics Original Chicken Bone Broth",
+     "price": 2.39,
+     "size": "8.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45565783-kitchen-basics-original-chicken-bone-broth-8-25-oz"
+    },
+    {
+     "item": "Pacific Foods Organic Unsalted Chicken Bone Broth",
+     "price": 7.99,
+     "size": "32 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/395436-pacific-organic-unsalted-chicken-bone-broth-32-oz"
+    },
+    {
+     "item": "Swanson's Sipping Chicken Bone Broth",
+     "price": 2.99,
+     "size": "10.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984850-swanson-sipping-chicken-bone-broth-10-75-oz"
+    },
+    {
+     "item": "Swanson's Sipping Chicken Bone Broth With Ginger and Turmeric",
+     "price": 2.99,
+     "size": "10.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984868-swanson-chicken-bone-broth-with-ginger-turmeric-10-75-oz"
+    },
+    {
+     "item": "Kitchen Basics Chicken Turmeric & Ginger Bone Broth",
+     "price": 2.39,
+     "size": "8.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/47066881-kitchen-basics-turmeric-ginger-bone-broth-8-25-oz"
+    },
+    {
+     "item": "EPIC Homestyle Savory Chicken Bone Broth",
+     "price": 7.99,
+     "size": "14 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17421647-epic-homestyle-savory-chicken-bone-broth-whole30-14-000-fl-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "canned corn",
+   "state": "MATCHES",
+   "term_used": "canned corn",
+   "attempts": [
+    {
+     "term": "canned corn",
+     "state": "OK",
+     "hits": 49
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fareway Whole Kernel Corn",
+     "price": 0.78,
+     "size": "15.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300907-fareway-corn-whole-kernel-1525-oz"
+    },
+    {
+     "item": "Del Monte FRESH CUT Whole Kernel Corn, Canned Vegetables",
+     "price": 1.67,
+     "size": "15.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/36798-del-monte-corn-golden-sweet-whole-kernel-15-25-oz"
+    },
+    {
+     "item": "Fareway Cream Style Corn",
+     "price": 0.78,
+     "size": "14.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300585-fareway-corn-cream-style-1475-oz"
+    },
+    {
+     "item": "Fareway Mexican Style Corn",
+     "price": 1.48,
+     "size": "11 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20561646-fareway-corn-mexican-style-11-oz"
+    },
+    {
+     "item": "Green Giant Sweet Corn, Whole Kernel",
+     "price": 1.48,
+     "size": "15.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50314758-green-giant-whole-kernel-sweet-corn-15-25-oz"
+    },
+    {
+     "item": "Fareway Gold & White Corn",
+     "price": 1.48,
+     "size": "15.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24220346-fareway-corn-gold-white-1525-oz"
+    },
+    {
+     "item": "Green Giant Vacuum Packed Whole Kernel Mexicorn",
+     "price": 2.49,
+     "size": "11 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50443563-green-giant-vacuum-packed-mexicorn-11-oz"
+    },
+    {
+     "item": "Fareway Cut Corn",
+     "price": 1.98,
+     "size": "16 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20584642-fareway-cut-corn-16-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "pork loin",
+   "state": "MATCHES",
+   "term_used": "pork loin",
+   "attempts": [
+    {
+     "term": "pork loin",
+     "state": "OK",
+     "hits": 38
+    }
+   ],
+   "hits": [
+    {
+     "item": "Whole Boneless Pork Loin",
+     "price": 20.93,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387667-whole-boneless-pork-loin-1-each"
+    },
+    {
+     "item": "HORMEL ALWAYS TENDER Original Pork Loin",
+     "price": 8.88,
+     "size": "1.5 lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2684731-hormel-original-pork-loin-filet-1-7-lb"
+    },
+    {
+     "item": "HORMEL ALWAYS TENDER Mesquite Barbecue Pork Loin",
+     "price": 8.88,
+     "size": "24 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90903-hormel-mesquite-barbecue-flavor-pork-loin-filet-680-g"
+    },
+    {
+     "item": "Tenderized Pork Loin Slices",
+     "price": 1.0,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387229-tenderized-pork-loin-slices"
+    },
+    {
+     "item": "HORMEL ALWAYS TENDER Lemon Garlic Pork Loin",
+     "price": 8.88,
+     "size": "1.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90908-hormel-lemon-garlic-pork-loin-filet-1-5-oz"
+    },
+    {
+     "item": "Whole Pork Tenderloin",
+     "price": 7.48,
+     "size": "$2.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389061-whole-pork-tenderloin"
+    },
+    {
+     "item": "Whole Smoked Pork Loin",
+     "price": 63.34,
+     "size": "$3.99 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314812-whole-smoked-pork-loin"
+    },
+    {
+     "item": "Boneless Pork Chop",
+     "price": 2.5,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "chipotle in adobo",
+   "state": "MATCHES",
+   "term_used": "chipotle in adobo",
+   "attempts": [
+    {
+     "term": "chipotle in adobo",
+     "state": "OK",
+     "hits": 41
+    }
+   ],
+   "hits": [
+    {
+     "item": "La Costeña Chipotles, Peppers in Adobo Sauce",
+     "price": 2.99,
      "size": "7 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/132117-cavender-s-greek-seasoning-all-purpose-salt-free-7-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40786-la-coste-a-chipotle-peppers-in-adobo-sauce-7-oz"
+    },
+    {
+     "item": "San Marcos Original Recipe Traditional Mexican Flavor Chipotle Peppers in Adobo Sauce",
+     "price": 2.99,
+     "size": "7.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40707-san-marcos-chipotle-peppers-in-adobo-sauce-7-5-oz"
+    },
+    {
+     "item": "Dei Fratelli Tomatoes, Chili Ready, Diced",
+     "price": 1.99,
+     "size": "14.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16310120-dei-fratelli-tomatoes-chili-ready-diced-14-5-oz"
+    },
+    {
+     "item": "Ortega Medium Chipotle Aioli Sauce",
+     "price": 4.99,
+     "size": "9 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29430482-ortega-sauce-chipotle-aioli-9-oz"
+    },
+    {
+     "item": "Mrs. Grimes Chili Beans, in Chili Sauce, Original",
+     "price": 1.18,
+     "size": "15 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16979332-mrs-grimes-chili-beans-in-chili-sauce-original-15-oz"
+    },
+    {
+     "item": "Tomatillo",
+     "price": 0.31,
+     "size": "$2.49 / lb",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16382470-tomatillo-1-lb"
+    },
+    {
+     "item": "Mrs. Grimes Pinto Beans",
+     "price": 1.18,
+     "size": "15.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19040200-mrs-grimes-pinto-beans-15-5-oz"
+    },
+    {
+     "item": "La Preferida Fajita Seasoning Mix, Mexican Spices",
+     "price": 1.0,
+     "size": "1.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/317368-la-preferida-fajita-seasoning-mix-mexican-spices-1-25-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

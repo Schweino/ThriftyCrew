@@ -858,5 +858,136 @@
                          "detail":  "streamed per-recipe before wave close"
                      }
                  ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w6",
+      "opened":  "2026-08-27T17:35:10",
+      "last_activity":  "2026-08-27T17:35:12",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "ground-beef-cottage-cheese-bowl",
+                    "chicken-rice-and-broccoli",
+                    "butter-chicken-pasta",
+                    "teriyaki-grilled-chicken-and-veggie-rice-bowls"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T17:35:11",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T17:35:11",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T17:35:11",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T17:35:12",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w7",
+      "opened":  "2026-08-27T17:52:52",
+      "last_activity":  "2026-08-27T17:52:53",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "ground-beef-cottage-cheese-bowl",
+                    "butter-chicken-pasta",
+                    "chicken-rice-and-broccoli"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T17:52:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T17:52:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T17:52:52",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T17:52:53",
+                         "detail":  "streamed per-recipe before wave close"
+                     }
+                 ]
+  },
+  {
+      "batch":  "hunt-2026-08-27-highprotein-w8",
+      "opened":  "2026-08-27T19:08:11",
+      "last_activity":  "2026-08-27T19:36:46",
+      "closed":  false,
+      "closed_at":  null,
+      "close_detail":  null,
+      "slugs":  [
+                    "ground-beef-cottage-cheese-bowl",
+                    "butter-chicken-pasta",
+                    "chicken-rice-and-broccoli"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-27T19:08:11",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-27T19:08:12",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-27T19:08:12",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-27T19:08:12",
+                         "detail":  "streamed per-recipe before wave close"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-27T19:35:58",
+                         "detail":  "3/3 GO"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-27T19:36:25",
+                         "detail":  "compute-v2-perserving + reanchor on 3 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-27T19:36:26",
+                         "detail":  "3 row(s) via hunt-2026-08-27-highprotein-w8"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-27T19:36:46",
+                         "detail":  "3 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-27T19:36:46",
+                         "detail":  "3/3 wave slug(s) published through engine\\publish (visibility preserved) + 16 collateral spec(s) carried by propagate (total dirty 19)"
+                     }
+                 ]
   }
 ]

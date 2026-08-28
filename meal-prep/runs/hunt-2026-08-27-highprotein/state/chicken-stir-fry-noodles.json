@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-stir-fry-noodles",
+    "title":  "Chicken Stir Fry Noodles",
+    "source_url":  "https://masonfit.com/chicken-stir-fry-noodles/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:17:54",
+    "updated":  "2026-08-27T18:17:54",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Chicken breast with stir-fry veg and teriyaki/soyaki sauce over knife-cut noodles is the same soy chicken noodle stir-fry as the accepted stir-fry-noodles (also in-flight), no distinguishing plate.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:17:54",
+                        "by":  "harvest",
+                        "detail":  "https://masonfit.com/chicken-stir-fry-noodles/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:17:54",
+                        "by":  "decider",
+                        "detail":  "Chicken breast with stir-fry veg and teriyaki/soyaki sauce over knife-cut noodles is the same soy chicken noodle stir-fry as the accepted stir-fry-noodles (also in-flight), no distinguishing plate."
+                    }
+                ]
+}

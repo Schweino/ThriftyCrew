@@ -1,0 +1,114 @@
+{
+ "slug": "high-protein-chicken-enchilada-casserole",
+ "lines": [
+  {
+   "raw": "1 1/2 cups white onion (diced (1 large onion))",
+   "buy": "3 1/2 cups diced (about 2 large onions)",
+   "grams_source": 240
+  },
+  {
+   "raw": "2 cups bell pepper (diced (2 peppers))",
+   "buy": "4 2/3 cups diced (about 5 peppers)",
+   "grams_source": 298
+  },
+  {
+   "raw": "10 oz red enchilada sauce (canned)",
+   "buy": "2 3/4 cups (about two and a half 10 oz cans)",
+   "grams_source": 283
+  },
+  {
+   "raw": "4 oz green chilies (canned)",
+   "buy": "1 cup (about two 4 oz cans)",
+   "grams_source": 113
+  },
+  {
+   "raw": "15 oz black beans (canned (drained and rinsed))",
+   "buy": "5 1/2 cups, drained and rinsed (about two and a half 15 oz cans)"
+  },
+  {
+   "raw": "1 pound chicken breast (cooked)",
+   "buy": "2 1/3 lb, cooked and shredded"
+  },
+  {
+   "raw": "14 corn tortillas",
+   "buy": "33 corn tortillas, cut into bite-sized pieces",
+   "grams_source": 350
+  },
+  {
+   "raw": "1 1/2 cups reduced fat shredded Mexican cheese",
+   "buy": "3 1/2 cups shredded",
+   "grams_source": 170
+  },
+  {
+   "raw": "1 cup low fat cottage cheese",
+   "buy": "2 1/3 cups",
+   "grams_source": 226
+  },
+  {
+   "raw": "1/2 cup greek yogurt (2%)",
+   "buy": "1 1/4 cups"
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "1 1/2 cups white onion (diced (1 large onion))",
+   "term": "white onion",
+   "canon_item": "White Onion",
+   "bid": "white-onion",
+   "decision": "mapped",
+   "grams_source": 240,
+   "evidence": "I DISAGREE with the shelf's 2026-08-26 'small white onion' -> onions ruling: a live white-onion commodity exists at 4 of 7 stores (cheapest 1.095 at Aldi), so the exact food can be priced as itself and the variety-pricing question never has to be answered. Red onion stays refused."
+  },
+  {
+   "raw": "2 cups bell pepper (diced (2 peppers))",
+   "term": "bell pepper",
+   "canon_item": "Bell Peppers",
+   "bid": "bell-peppers",
+   "decision": "mapped",
+   "grams_source": 298,
+   "evidence": "REUSE of a live board id at 5 of 7, cheapest 0.77 at Fareway, matching the 2026-08-27 'bell peppers' ruling at cosine 0.97; the line does not name a colour, so the mixed id is right and green-bell-pepper (a cheaper pepper) is refused. Black Pepper is a wrong-food near row."
+  },
+  {
+   "raw": "10 oz red enchilada sauce (canned)",
+   "term": "red enchilada sauce",
+   "canon_item": "Enchilada Sauce",
+   "bid": "enchilada-sauce",
+   "decision": "mapped",
+   "grams_source": 283,
+   "evidence": "Same-form vocabulary row and a live board id at 5 of 7, cheapest 0.0925 at Baker's. Red is the default enchilada sauce; no green id exists to confuse it with."
+  },
+  {
+   "raw": "4 oz green chilies (canned)",
+   "term": "green chilies",
+   "canon_item": "Diced Green Chiles",
+   "bid": "canned-green-chilies",
+   "decision": "mapped",
+   "grams_source": 113,
+   "evidence": "REFUSED the near row Diced Tomatoes & Green Chilies [tomatoes-green-chilies]: that is a Rotel-style tomato product, a different food at a different price. Plain canned green chiles are live at 6 of 7, cheapest 0.2125 at Aldi."
+  },
+  {
+   "raw": "1 1/2 cups reduced fat shredded Mexican cheese",
+   "term": "reduced fat shredded Mexican cheese",
+   "canon_item": "Reduced Fat Mexican Blend Shredded Cheese",
+   "bid": "shredded-cheese",
+   "decision": "mapped",
+   "grams_source": 170,
+   "evidence": "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the 'reduced sodium beef broth' call. The macros differ, so the DB row is the reduced-fat one."
+  }
+ ],
+ "absent_terms": [],
+ "db_entries_written": [
+  "White Onion",
+  "Reduced Fat Mexican Blend Shredded Cheese"
+ ],
+ "db_row_findings": [
+  "high-protein-chicken-enchilada-casserole: the food DB already carries 'Bell Peppers' and the mapper's row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 18.0 cal / 1.2 P / 4.7 C / 0.0 F  vs  mapper 26.0 / 1.0 / 6.0 / 0.3. On one basis (the mapper's row scaled onto the DB's 100 g = 100 g) they still disagree: calories 26 vs 18; carbs_g 6 vs 4.71. existing={\"calories\": 18, \"protein_g\": 1.18, \"carbs_g\": 4.71, \"fat_g\": 0.0} new={\"calories\": 26, \"protein_g\": 1.0, \"carbs_g\": 6.0, \"fat_g\": 0.3}",
+  "high-protein-chicken-enchilada-casserole: the food DB already carries 'Enchilada Sauce' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 25.0 cal / 0.0 P / 5.0 C / 0.0 F  vs  mapper 30.0 / 0.6 / 4.9 / 0.9. On one basis (the mapper's row scaled onto the DB's 0.25 cup = 60 g) they still disagree: fat_g 0.546 vs 0. existing={\"serving_grams\": 60, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 15, \"protein_g\": 0, \"carbs_g\": 3, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 30, \"protein_g\": 0.62, \"carbs_g\": 4.87, \"fat_g\": 0.91}"
+ ],
+ "db_row_notes": [],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Computed 432 cal / 40.2 g protein / 43 g carbs per serving over 6 servings, against the source's published 454 / 43 / 47. Protein is -6.5% and calories -4.8%, both inside the bar, so no portion is wrong. LOUD FLAG: 432 cal falls BELOW this run's 450 floor, by 4%. The gap is not a weighing error - it comes from two DB rows the pre-resolver settled: Fat Free Cottage Cheese standing in for the source's low-fat (2%) cottage cheese, which alone is worth roughly 40 cal per serving, and the reduced-fat cheese row. If a person swaps the cottage cheese row to the 2% product the recipe clears 450 comfortably. Protein at 40.2 also sits right on the floor. I am not calling this rejected-macros myself: my grams agree with the source, and the shortfall is a row-selection question upstream of me."
+}

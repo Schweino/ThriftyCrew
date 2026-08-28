@@ -1,0 +1,70 @@
+{
+    "slug":  "chicken-meatballs-in-cranberry-sauce",
+    "title":  "Chicken Meatballs in Cranberry Sauce",
+    "source_url":  "https://healthyfitnessmeals.com/chicken-meatball-recipe/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:50",
+    "updated":  "2026-08-27T19:06:04",
+    "terms":  [
+                  {
+                      "term":  "red pepper flakes",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "whole wheat flour",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Salt",
+                      "optional":  true
+                  },
+                  {
+                      "term":  "Fresh Rosemary",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:51",
+                        "by":  "harvest",
+                        "detail":  "https://healthyfitnessmeals.com/chicken-meatball-recipe/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:14:51",
+                        "by":  "decider",
+                        "detail":  "Cranberry-honey glazed chicken meatballs is a genuinely distinct sweet-savory plate; nearest neighbours are cream-sauce, lemon-avgolemono and chipotle meatballs, no cranberry twin in catalog or in-flight."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:15:23",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:57:25",
+                        "by":  "mapper",
+                        "detail":  "7 residual lines ruled, 0 rejected, 5 new DB rows returned. All 7 mapped. Two ids go to the registrar road: whole-wheat-flour is genuinely new; red-pepper-flakes exists in the vocabulary but the board carries no commodity or capture for it, so the term is enqueued. Called out: panko onto bread-crumbs is the one mapping here I would want a second opinion on - it is the same price class and the same"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:57:25",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T19:06:04",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

@@ -1,333 +1,77 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T12:00:01",
+ "generated": "2026-08-27T18:30:02",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "93/7 lean ground beef",
+   "term": "dried parsley",
    "state": "MATCHES",
-   "term_used": "93/7 lean ground beef",
+   "term_used": "dried parsley",
    "attempts": [
     {
-     "term": "93/7 lean ground beef",
+     "term": "dried parsley",
      "state": "OK",
-     "hits": 6
+     "hits": 41
     }
    ],
    "hits": [
     {
-     "item": "93% Lean 7% Fat Ground Beef",
+     "item": "McCormick Parsley Flakes",
+     "price": 1.99,
+     "size": "0.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16656192-mccormick-parsley-flakes-0-25-oz"
+    },
+    {
+     "item": "Badia Spices Parsley Flakes",
+     "price": 3.99,
+     "size": "1 g",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258008-badia-spices-parsley-flakes-1-0-oz"
+    },
+    {
+     "item": "Litehouse Parsley, Freeze Dried",
+     "price": 4.99,
+     "size": "0.3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/9222-litehouse-freeze-dried-parsley-0-35-oz"
+    },
+    {
+     "item": "Badia Spices Parsley Flakes",
      "price": 7.99,
-     "size": "",
+     "size": "3 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387862-93-lean-7-fat-ground-beef-1-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74379214-badia-parsley-flakes"
     },
     {
-     "item": "93% Lean 7% Fat Ground Beef Bulk",
-     "price": 74.9,
-     "size": "$7.49 / lb",
+     "item": "Litehouse Freeze Dried Basil",
+     "price": 4.99,
+     "size": "0.28 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386242-93-lean-7-fat-ground-beef-10-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151621-litehouse-freeze-dried-basil-0-35-oz"
     },
     {
-     "item": "85% Lean 15% Fat Ground Beef",
-     "price": 6.99,
-     "size": "",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387270-85-lean-15-fat-ground-beef-1-each"
-    },
-    {
-     "item": "80% Lean 20% Fat Ground Beef",
-     "price": 6.49,
-     "size": "",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386578-80-lean-20-fat-ground-beef-1-each"
-    },
-    {
-     "item": "Our Own Ground Beef",
-     "price": 7.49,
-     "size": "",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84388446-our-own-ground-beef-1-each"
-    },
-    {
-     "item": "85% Lean 15% Fat Ground Beef Bulk",
-     "price": 64.9,
-     "size": "$6.49 / lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386974-85-lean-15-fat-ground-beef-tube-10-lb"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "rotini pasta",
-   "state": "MATCHES",
-   "term_used": "rotini pasta",
-   "attempts": [
-    {
-     "term": "rotini pasta",
-     "state": "OK",
-     "hits": 6
-    }
-   ],
-   "hits": [
-    {
-     "item": "Fareway Rotini",
-     "price": 1.24,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24860256-fareway-rotini-16-oz"
-    },
-    {
-     "item": "Fareway Garden Rotini",
-     "price": 1.24,
-     "size": "12 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24490420-fareway-rotini-garden-12-oz"
-    },
-    {
-     "item": "Barilla Rotini - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher Certified",
-     "price": 1.84,
-     "size": "1 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/144054-barilla-classic-blue-box-pasta-rotini-1-lb"
-    },
-    {
-     "item": "Barilla Tri-Color Rotini - Non-GMO Pasta Made with Durum Wheat Semolina & Kosher",
-     "price": 1.84,
-     "size": "12 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/39128-barilla-classic-blue-box-pasta-tri-color-rotini-12-oz"
-    },
-    {
-     "item": "Barilla Protein+ (Plus) Rotini Pasta - Plant Based Pasta - Made from Lentils, Chickpeas & Peas",
-     "price": 2.99,
-     "size": "14.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/88742-barilla-protein-grain-legume-pasta-rotini-1-oz"
-    },
-    {
-     "item": "Fareway Whole Wheat Rotini",
-     "price": 0.99,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24907253-fareway-whole-wheat-macaroni-product-rotini-16-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "shredded cheddar cheese",
-   "state": "MATCHES",
-   "term_used": "shredded cheddar cheese",
-   "attempts": [
-    {
-     "term": "shredded cheddar cheese",
-     "state": "OK",
-     "hits": 12
-    }
-   ],
-   "hits": [
-    {
-     "item": "Fareway Mild Cheddar Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712009-fareway-cheese-mild-cheddar-fancy-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Sharp Cheddar Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712976-fareway-cheese-sharp-cheddar-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Mild Cheddar Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22142720-fareway-cheese-cheddar-mild-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Mild Cheddar Shredded Cheese",
-     "price": 7.48,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21662917-fastco-shredded-cheedar-cheese-2-lb"
-    },
-    {
-     "item": "Fareway Sharp Cheddar Shredded Cheese",
-     "price": 7.48,
-     "size": "32 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712013-fareway-cheese-sharp-cheddar-shredded-32-oz"
-    },
-    {
-     "item": "Crystal Farms Shredded Cheddar Cheese",
-     "price": 2.67,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/346946-crystal-farms-shredded-cheddar-cheese-8-0-oz"
-    },
-    {
-     "item": "Tillamook Farmstyle Colby Jack Shredded Cheese, 8oz",
-     "price": 3.99,
-     "size": "227 g",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85410-tillamook-farmstyle-thick-cut-colby-jack-shredded-cheese-8-oz"
-    },
-    {
-     "item": "Tillamook Farmstyle Mozzarella Shredded Cheese, 8oz",
-     "price": 3.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/85414-tillamook-farmstyle-thick-cut-mozzarella-shredded-cheese-8-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "almond butter",
-   "state": "MATCHES",
-   "term_used": "almond butter",
-   "attempts": [
-    {
-     "term": "almond butter",
-     "state": "OK",
-     "hits": 50
-    }
-   ],
-   "hits": [
-    {
-     "item": "Justin's Classic Almond Butter, 1.15 OZ",
-     "price": 1.29,
-     "size": "1.15 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16294119-justin-s-almond-butter-classic-1-15-oz"
-    },
-    {
-     "item": "Barney Butter Smooth Almond Butter",
-     "price": 12.59,
-     "size": "16 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/53789-barney-butter-almond-butter-smooth-16-oz"
-    },
-    {
-     "item": "Fareway Sweet Cream Unsalted Butter",
-     "price": 3.48,
-     "size": "4 each",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20578072-fareway-butter-unsalted-4-each"
-    },
-    {
-     "item": "Justin's Classic Peanut Butter Spread, 28 OZ",
-     "price": 7.99,
-     "size": "28 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17837298-justin-s-classic-peanut-butter-spread-794-0-g"
-    },
-    {
-     "item": "Chester's Puffcorn, Butter",
-     "price": 2.99,
-     "size": "3.25 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27452922-chester-s-butter-flavored-puffcorn-snacks-3-25-oz"
-    },
-    {
-     "item": "Smucker's Natural Creamy Peanut Butter",
-     "price": 6.99,
-     "size": "26 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90679-smucker-s-peanut-butter-creamy-natural-26-oz"
-    },
-    {
-     "item": "Tillamook Campfire Peanut Butter Cup Ice Cream, 48fl-oz",
-     "price": 6.96,
-     "size": "48 fl oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/61015187-tillamook-ice-cream-campfire-peanut-butter-cup-1-5-qt"
-    },
-    {
-     "item": "Musselman's Apple Butter",
-     "price": 4.28,
-     "size": "28 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/73010-musselman-s-apple-butter-28-oz"
-    }
-   ],
-   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
-  },
-  {
-   "term": "masa harina",
-   "state": "MATCHES",
-   "term_used": "masa harina",
-   "attempts": [
-    {
-     "term": "masa harina",
-     "state": "OK",
-     "hits": 72
-    }
-   ],
-   "hits": [
-    {
-     "item": "Quaker Corn Meal, Yellow",
-     "price": 2.99,
-     "size": "24 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/69219-quaker-yellow-cornmeal-24-oz"
-    },
-    {
-     "item": "Early Morning Harvest Organic Corn Meal",
-     "price": 3.99,
-     "size": "1.75 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19061466-early-morning-harvest-organic-corn-meal-1-75-lb"
-    },
-    {
-     "item": "Yellow Sweet Corn",
-     "price": 0.75,
+     "item": "Truefood Basil",
+     "price": 5.99,
      "size": "1 each",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345812-yellow-sweet-corn-crate-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27842551-truefood-basil-1-each"
     },
     {
-     "item": "Fareway 100% Pure Corn Starch",
-     "price": 1.99,
-     "size": "16 oz",
+     "item": "Baby Dill",
+     "price": 3.99,
+     "size": "1 bunch",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20642488-fareway-corn-starch-100-pure-16-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345991-baby-dill-each"
     },
     {
-     "item": "Gold Medal All Purpose Flour",
+     "item": "Crazy Fresh Baby Dill Herb",
      "price": 2.99,
-     "size": "2 lb",
+     "size": "0.75 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37909-gold-medal-all-purpose-flour-bleached-enriched-presifted-32-oz"
-    },
-    {
-     "item": "Guerrero White Corn/De Maiz Blanco Tortillas",
-     "price": 4.99,
-     "size": "4.16 lb",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43318-guerrero-white-corn-de-maiz-blanco-tortillas-80-ct"
-    },
-    {
-     "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
-     "price": 1.99,
-     "size": "12 ct",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
-    },
-    {
-     "item": "Frescados Burrito Style Flour Tortillas",
-     "price": 2.49,
-     "size": "10 ct",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/77564-frescados-burrito-style-flour-tortillas-10-ea"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1169680-crazy-fresh-baby-dill-herb-75-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

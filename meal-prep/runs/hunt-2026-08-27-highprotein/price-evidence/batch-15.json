@@ -1,0 +1,246 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 1,
+ "generated": "2026-08-27T17:33:36",
+ "batch_terms": [
+  "Moroccan Spice Mix"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "Moroccan Spice Mix",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "MoroccanSpiceMix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "MoroccanSpiceMix",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "MoroccanSpiceMix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "MoroccanSpiceMix",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "Moroccan Spice Mix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Chili Seasoning Mix",
+       "price": 1.68,
+       "size": "1.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/38758-mccormick-chili-seasoning-mix-1-25-oz"
+      },
+      {
+       "item": "Spice Islands Beau Monde Seasoning",
+       "price": 4.99,
+       "size": "3.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+      },
+      {
+       "item": "Cavender's Seasoning, Greek, All Purpose",
+       "price": 4.99,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
+      },
+      {
+       "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+       "price": 7.99,
+       "size": "5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+      },
+      {
+       "item": "Badia Spices Paprika",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+      },
+      {
+       "item": "Badia Spices Pumpkin Pie Spice",
+       "price": 1.68,
+       "size": "2 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1362577-badia-spices-pumpkin-pie-spice-2-0-oz"
+      },
+      {
+       "item": "McCormick Italian Seasoning",
+       "price": 2.99,
+       "size": "0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/110108545-mccormick-italian-seasoning"
+      },
+      {
+       "item": "Simply Organic Pumpkin Spice",
+       "price": 6.99,
+       "size": "1.94 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16401147-simply-organic-pumpkin-spice-1-94-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "Moroccan Spice Mix",
+     "attempts": [
+      {
+       "term": "Moroccan Spice Mix",
+       "state": "MATCHES",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+       "price": 7.78,
+       "size": "",
+       "unit_price": "$0.65/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
+      },
+      {
+       "item": "Lawry's Seasoned Salt, 40 oz.",
+       "price": 7.48,
+       "size": "",
+       "unit_price": "$0.19/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
+      },
+      {
+       "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$1.16/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+      },
+      {
+       "item": "Old Bay Seasoning, 7.5 lbs.",
+       "price": 39.88,
+       "size": "",
+       "unit_price": "$5.32/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6MGYI9AQ9VZA"
+      },
+      {
+       "item": "Kinder's Whiskey Peppercorn Seasoning, 9.7 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.72/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/538KLULEC35X"
+      },
+      {
+       "item": "Kinder's Caramelized Onion Burger Rub and Seasoning, 9.1 oz.",
+       "price": 5.48,
+       "size": "",
+       "unit_price": "$0.60/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/13T9F65CNQL1"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

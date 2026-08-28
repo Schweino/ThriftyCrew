@@ -1,0 +1,250 @@
+﻿{
+    "slug":  "crack-chicken-chili",
+    "title":  "Crack Chicken Chili",
+    "source_url":  "https://wholesomelymorgan.com/crack-chicken-chili/",
+    "source_servings":  8,
+    "target_servings":  14,
+    "scale_factor":  1.75,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "2 lbs chicken breast (boneless and skinless)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1588,
+                            "buy":  "3 1/2 lb, boneless and skinless",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breast\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T13:26:47); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breast | Whole Chicken [whole-chicken] DIFFERENT FORM: breast/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "3 cups chicken bone broth",
+                            "item":  "Bone Broth",
+                            "bid":  "bone-broth",
+                            "board":  null,
+                            "grams":  1260,
+                            "buy":  "5 1/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Follows the 2026-08-27 \u0027bone broth\u0027 ruling and refuses the board\u0027s chicken-broth bridge for the same reason: bone broth is a 6-8 dollar quart against a 1.50-2.50 carton and carries 10 g protein per cup against 1. Same-form vocabulary row exists.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 packet ranch seasoning",
+                            "item":  "Ranch Seasoning Mix",
+                            "bid":  "ranch-seasoning-mix",
+                            "board":  null,
+                            "grams":  49,
+                            "buy":  "3 tbsp (1 3/4 packets)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The DIFFERENT FORM \u0027mix\u0027 flag is a wording artefact - the vocabulary\u0027s own name is Ranch Seasoning Mix and this line is a packet of exactly that. Board 6 of 7, cheapest 0.53 at Walmart. One packet is 28 g.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tsp garlic powder",
+                            "item":  "Garlic Powder",
+                            "bid":  "garlic-powder",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: garlic-powder, 7 of 7 stores, cheapest 0.216 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp onion powder",
+                            "item":  "Onion Powder",
+                            "bid":  "onion-powder",
+                            "board":  "recipe",
+                            "grams":  4,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: onion-powder, 7 of 7 stores, cheapest 0.3323 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tsp cayenne",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  null,
+                            "grams":  6,
+                            "buy":  "1 tbsp plus 1/2 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Bare \u0027cayenne\u0027 is ground cayenne pepper; the FDC shelf returns only \u0027Spices, pepper, red or cayenne\u0027. REUSE of a live board id at 6 of 7, and the DB already carries the row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "3/4 tsp paprika",
+                            "item":  "Paprika",
+                            "bid":  "paprika",
+                            "board":  "recipe",
+                            "grams":  3,
+                            "buy":  "1 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: paprika, 7 of 7 stores, cheapest 0.432 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tsp chili powder",
+                            "item":  "Chili Powder",
+                            "bid":  "chili-powder",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: chili-powder, 7 of 7 stores, cheapest 0.3462 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "14.5 oz can corn",
+                            "item":  "Sweet Whole Kernel Corn",
+                            "bid":  "canned-corn",
+                            "board":  null,
+                            "grams":  525,
+                            "buy":  "3 1/2 cups, drained (about two 14.5 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drained basis: a 14.5 oz can yields about 300 g of kernels. The sweet/whole/canned form flags are spurious - the line IS a can, exactly the 2026-08-26 \u0027chopped green chiles\u0027 call. Board has no commodity but today\u0027s captures carry it, so the term is enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "15 oz can fire roasted tomatoes (diced)",
+                            "item":  "Diced Tomatoes",
+                            "bid":  "diced-tomatoes",
+                            "board":  null,
+                            "grams":  744,
+                            "buy":  "3 cups, undrained (about two 15 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Fire-roasted is a label variant of the same diced can at the same shelf price, the \u0027reduced sodium beef broth\u0027 -\u003e beef-broth call. Deliberately REFUSED the board\u0027s `tomatoes` match, which is the fresh field tomato - a wrong-food match at a wrong price.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "15 oz can dark red kidney beans",
+                            "item":  "Kidney Beans",
+                            "bid":  "kidney-beans",
+                            "board":  null,
+                            "grams":  446,
+                            "buy":  "2 1/2 cups, drained and rinsed (about two 15 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Drained basis. Same-form vocabulary row and a live board id at 7 of 7, cheapest 0.0548 at Aldi; dark versus light red is a shade of the same canned bean at one price. Drained yield of a 15 oz can.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "15 oz can black beans",
+                            "item":  "Canned Black Beans",
+                            "bid":  "canned-black-beans",
+                            "board":  "weekly",
+                            "grams":  744,
+                            "buy":  "4 cups, drained and rinsed (just under two 15 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027black beans\u0027 -\u003e canned-black-beans (by mapper on 2026-08-26T04:21:59); nearest vocabulary rows: Seasoned Black Beans [seasoned-black-beans] same form | Canned Black Beans [canned-black-beans] DIFFERENT FORM: canned | Kidney Beans [kidney-beans] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 oz can green chiles (diced)",
+                            "item":  "Diced Green Chiles",
+                            "bid":  "canned-green-chilies",
+                            "board":  null,
+                            "grams":  198,
+                            "buy":  "3/4 cup (about two 4 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The \u0027canned\u0027 form flag is spurious - the line is a 4 oz can, and the 2026-08-26 ruling on this exact situation went here. Board 6 of 7. The dried guajillo and arbol rows are a different food.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "10 slices cooked bacon (chopped)",
+                            "item":  "Hickory Smoked Bacon",
+                            "bid":  "bacon",
+                            "board":  null,
+                            "grams":  175,
+                            "buy":  "18 slices, cooked crisp and chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Cooked weight: 10 crisp slices are about 100 g, and the drippings are not added to the pot. \u0027Cooked\u0027 is a prep instruction, not a form flip - you buy raw bacon and fry it. Board 7 of 7. Weighed on the cooked basis (10 crisp slices, about 100 g) because the rendered fat is discarded rather than added to the chili.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "8 oz cream cheese",
+                            "item":  "1/3 Fat Cream Cheese",
+                            "bid":  "1-3-fat-cream-cheese",
+                            "board":  "recipe",
+                            "grams":  397,
+                            "buy":  "14 oz (one and three-quarter 8 oz bricks)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027cream cheese\u0027 -\u003e 1-3-fat-cream-cheese (by adjudication on 2026-08-16T08:21:02); board MAPPED: 1-3-fat-cream-cheese, 6 of 7 stores, cheapest 0.1862 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 1/2 cups Mexican style cheese",
+                            "item":  "Mexican Blend Shredded Cheese",
+                            "bid":  "shredded-cheese",
+                            "board":  null,
+                            "grams":  298,
+                            "buy":  "2 2/3 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of shredded-cheese, live at 7 of 7 and cheapest 0.1521 at Sam\u0027s Club: a Mexican blend is the same bagged shred at the same price class. Refused ricotta/provolone/Boursin, which are different cheeses entirely.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "optional: avocado, sour cream, or additional cheese",
+                            "item":  "Sour Cream",
+                            "bid":  "sour-cream",
+                            "board":  null,
+                            "grams":  140,
+                            "buy":  "optional: 2/3 cup sour cream, plus avocado or extra cheese, to serve (140 g)",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "A three-way optional topping line; costed on sour cream, the middle option and a live id at 7 of 7 (cheapest 0.1025 at Walmart), with avocado and extra cheese left to the cook. Weighed at a nominal 10 g per serving.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "chicken bone broth",
+                                 "canned corn"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Mexican Blend Shredded Cheese"
+                           ],
+    "db_row_findings":  [
+                            "crack-chicken-chili: the food DB already carries \u0027Bone Broth\u0027 and the mapper\u0027s row DIFFERS on serving_grams, calories, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 18.4 cal / 4.1 P / 0.4 C / 0.0 F  vs  mapper 20.8 / 4.2 / 0.0 / 0.4. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 cup = 245 g) they still disagree: calories 51.04 vs 45; carbs_g 0 vs 1; fat_g 1.021 vs 0. existing={\"serving_grams\": 245, \"calories\": 45, \"carbs_g\": 1, \"fat_g\": 0} new={\"serving_grams\": 240, \"calories\": 50, \"carbs_g\": 0, \"fat_g\": 1}",
+                            "crack-chicken-chili: the food DB already carries \u0027Ranch Seasoning Mix\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 333.3 cal / 0.0 P / 66.7 C / 0.0 F  vs  mapper 277.8 / 0.0 / 55.6 / 0.0. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 1 tbsp = 9 g) they still disagree: carbs_g 5 vs 6. existing={\"serving_grams\": 9, \"serving_qty\": 1, \"serving_unit\": \"tbsp\", \"calories\": 30, \"carbs_g\": 6} new={\"serving_grams\": 1.8, \"serving_qty\": 0.5, \"serving_unit\": \"tsp\", \"calories\": 5, \"carbs_g\": 1}",
+                            "crack-chicken-chili: the food DB already carries \u0027Sweet Whole Kernel Corn\u0027 and the mapper\u0027s row DIFFERS on calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 64.0 cal / 0.8 P / 11.2 C / 0.8 F  vs  mapper 48.0 / 0.8 / 10.4 / 0.8. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 0.5 cup = 125 g) they still disagree: calories 60 vs 80; carbs_g 13 vs 14. existing={\"calories\": 80, \"carbs_g\": 14} new={\"calories\": 60, \"carbs_g\": 13}",
+                            "crack-chicken-chili: the food DB already carries \u0027Kidney Beans\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 127.0 cal / 8.7 P / 22.8 C / 0.5 F  vs  mapper 92.3 / 5.4 / 16.9 / 0.0. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 92.31 vs 127; protein_g 5.385 vs 8.7; carbs_g 16.92 vs 22.8. existing={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 127, \"protein_g\": 8.7, \"carbs_g\": 22.8, \"fat_g\": 0.5} new={\"serving_grams\": 130, \"serving_qty\": 0.5, \"serving_unit\": \"cup\", \"calories\": 120, \"protein_g\": 7, \"carbs_g\": 22, \"fat_g\": 0}",
+                            "crack-chicken-chili: the food DB already carries \u0027Diced Green Chiles\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 33.3 cal / 0.0 P / 6.7 C / 0.0 F  vs  mapper 21.0 / 0.7 / 4.6 / 0.3. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 2 tbsp = 30 g) they still disagree: carbs_g 1.38 vs 2. existing={\"serving_grams\": 30, \"serving_qty\": 2, \"serving_unit\": \"tbsp\", \"calories\": 10, \"protein_g\": 0, \"carbs_g\": 2, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 21, \"protein_g\": 0.72, \"carbs_g\": 4.6, \"fat_g\": 0.27}",
+                            "crack-chicken-chili: the food DB already carries \u0027Hickory Smoked Bacon\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 600.0 cal / 33.3 P / 0.0 C / 46.7 F  vs  mapper 548.0 / 35.7 / 1.4 / 43.3. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 2 cooked slices = 15 g) they still disagree: calories 82.2 vs 90; fat_g 6.495 vs 7. existing={\"serving_grams\": 15, \"serving_qty\": 2, \"serving_unit\": \"cooked slices\", \"calories\": 90, \"protein_g\": 5, \"carbs_g\": 0, \"fat_g\": 7} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 548, \"protein_g\": 35.7, \"carbs_g\": 1.35, \"fat_g\": 43.3}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Computed 525 cal / 47.1 g protein / 26 g carbs per serving over 8 servings, against the source\u0027s published 531 / 47 / 36. Calories are within 1.2% and protein within 0.2%. Carbs read 10 g low because I weighed the corn and both beans on a DRAINED basis while the source almost certainly used whole-can weights; carbs are unrestricted this run, so I left the drained figures, which are the honest amount of food in the pot. Band: passes."
+}

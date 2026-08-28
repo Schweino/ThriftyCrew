@@ -1,0 +1,61 @@
+{
+    "slug":  "high-protein-chicken-enchilada-casserole",
+    "title":  "High Protein Chicken Enchilada Casserole",
+    "source_url":  "https://thymeandjoy.com/high-protein-chicken-enchilada-casserole/",
+    "protein":  "chicken",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:58",
+    "updated":  "2026-08-27T18:58:40",
+    "terms":  [
+
+              ],
+    "reject_reason":  "macro gate (pre-write): 426 cal below the 450 floor",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:58",
+                        "by":  "harvest",
+                        "detail":  "https://thymeandjoy.com/high-protein-chicken-enchilada-casserole/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:14:59",
+                        "by":  "decider",
+                        "detail":  "Layered baked tortilla enchilada casserole with cottage cheese and greek yogurt is a different format from the live chicken-enchilada-rice-bowls (only 2-of-4 shared: protein and sauce, method and starch differ); no live enchilada casserole exists."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:16:36",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:58:38",
+                        "by":  "mapper",
+                        "detail":  "5 residual lines ruled, 0 rejected, 4 new DB rows returned. No new ids and no absent terms - every line here maps to a commodity the board already prices, so this recipe goes straight to `priced`. One deliberate departure from precedent, stated in the ruling: I used the live white-onion commodity rather than following the 2026-08-26 \u0027small white onion\u0027 -\u003e onions ruling, because pricing the exact f"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:58:38",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T18:58:39",
+                        "by":  "mapper",
+                        "detail":  "every term answered from the board and the carriage union found nothing uncarried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T18:58:40",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 426 cal below the 450 floor"
+                    }
+                ]
+}

@@ -1,0 +1,151 @@
+{
+ "name": "Honey BBQ Chicken Mac and Cheese",
+ "slug": "honey-bbq-chicken-mac-and-cheese",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Fat Free Cottage Cheese",
+   "grams": 525,
+   "buy": "2 1/3 cups"
+  },
+  {
+   "item": "1/3 Fat Cream Cheese",
+   "grams": 700,
+   "buy": "1 1/2 pounds (about 3 cups)"
+  },
+  {
+   "item": "Reduced Fat Cheddar Cheese",
+   "grams": 525,
+   "buy": "4 3/4 cups shredded"
+  },
+  {
+   "item": "Milk",
+   "grams": 525,
+   "buy": "2 1/4 cups"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 22,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Dried Parsley",
+   "grams": 2,
+   "buy": "3 1/2 teaspoons dried"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 8,
+   "buy": "1 3/4 teaspoons"
+  },
+  {
+   "item": "Paprika",
+   "grams": 16,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Salt",
+   "grams": 63,
+   "buy": "3 1/2 teaspoons, for the pasta water"
+  },
+  {
+   "item": "Yellow Mustard",
+   "grams": 18,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 1400,
+   "buy": "3 pounds, diced"
+  },
+  {
+   "item": "Honey",
+   "grams": 147,
+   "buy": "7 tablespoons"
+  },
+  {
+   "item": "Onion Powder",
+   "grams": 8,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "BBQ Sauce",
+   "grams": 245,
+   "buy": "3/4 cup plus 2 tablespoons"
+  },
+  {
+   "item": "Ground Ginger",
+   "grams": 6,
+   "buy": "3 1/2 teaspoons"
+  },
+  {
+   "item": "Cooking Spray",
+   "grams": 10,
+   "buy": "as needed for the pan (10 g)"
+  },
+  {
+   "item": "Ziti Pasta",
+   "grams": 1050,
+   "buy": "2 1/3 pounds dry (about 10 cups elbow macaroni)"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 751,
+  "protein_g": 50.5,
+  "carbs_g": 84.7,
+  "fat_g": 24.4
+ },
+ "writer_notes": [
+  "Ground ginger (buy 3 1/2 tsp) is a source-instruction orphan: step 2 of the source seasons the chicken with only garlic powder, onion powder, paprika, salt and black pepper and never names ginger. I folded ginger into the chicken rub because the transcription ingredient list groups it with the chicken seasonings; this keeps the ingredient used (avoids the spec-guard orphan hard-fail) and is faithful to the source ingredient list. Human confirm recommended.",
+  "Likely under-bought duplicated seasonings. Source seasons in two places (chicken rub and cheese sauce), plus salt in the pasta water. Batch scale is ~3.5x (honey 2 tbsp -> 7 tbsp, pasta 300 g -> 2 1/3 lb, chicken 400 g -> 3 lb). Combined uses at 3.5x should be garlic powder ~7 tsp, paprika ~7 tsp, black pepper ~3.5 tsp, salt ~10.5 tsp, but locked buys are garlic powder 3 1/2 tsp, paprika 3 1/2 tsp, black pepper 1 3/4 tsp, salt 3 1/2 tsp, i.e. only one occurrence counted each. Negligible macro impact but the batch is likely under-seasoned.",
+  "Pasta line is named 'Ziti Pasta' but the buy string and the dish (mac and cheese) say 'about 10 cups elbow macaroni'. Prose written neutrally as pasta/macaroni; recommend reconciling the name to elbow macaroni.",
+  "Salt locked note says 'for the pasta water' but the source also salts the chicken rub and the cheese sauce. I used salt in all three places since salt is a bought ingredient, so this does not create an orphan.",
+  "No cost_lines or cost_ps were provided in this dispatch, so shop_smart makes no per-ounce or per-batch package claims and the cost close uses the ${{cost_ps}} token. Cheddar is written as bought pre-shredded (no block-is-cheaper claim), matching the locked buy line."
+ ],
+ "forbidden_prose_terms": [
+  "—",
+  "–",
+  "seafood",
+  "shrimp",
+  "fish"
+ ],
+ "prose": {
+  "intro_html": "<p>Mac and cheese usually shows up as the thing you regret, not the thing that hits your macros. This one flips the script. We blend fat free cottage cheese and light cream cheese into the sauce instead of leaning on a stick of butter, then pile honey BBQ chicken on top so every bowl eats like comfort food and still lands at {{protein}} grams of protein for {{cal}} calories.</p><p>Fourteen containers out of one afternoon, sweet and smoky on top, creamy underneath. That is the whole pitch.</p>",
+  "shop_smart": "<p>The sauce is the trick here, so shop it that way. Fat free cottage cheese and light cream cheese do the job that a butter and flour base normally does, and they carry protein while they are at it. Buy the store brand on both. They blend down smooth and nobody tastes the label.</p><p>Grab the reduced fat cheddar already shredded. The batch calls for 4 3/4 cups and it melts right into the blender. Chicken breast is the big line at 3 pounds, so buy it when your store runs the family pack rather than the small tray, and dice it at home.</p><p>Honey, BBQ sauce, mustard, and the spice rack seasonings are pantry stuff you probably already own. If you are buying BBQ sauce fresh, you need 3/4 cup plus 2 tablespoons, so one bottle handles it.</p>",
+  "make_it": "<p>Start with the chicken. Toss 3 pounds of diced chicken breast with the garlic powder, onion powder, paprika, ground ginger, salt, and black pepper until every piece is coated. From here you have two roads. Air fryer: preheat to 180C, which is 350F, give the chicken a light shot of cooking spray, and cook 10 to 12 minutes, shaking the basket halfway, until it is golden and cooked through. Pan: heat a non-stick pan over medium, spray it, and cook the chicken 6 to 8 minutes until browned and done.</p><p>Now the good part. Tip the cooked chicken into a bowl and toss it with the honey and BBQ sauce until it is glossy all over, then put it back on the heat for 1 to 2 minutes to let that sauce caramelize and grab onto the chicken. Set it aside.</p><p>Boil a big pot of salted water and cook the pasta to the package directions. Before you drain it, dip out about 1/4 cup of the pasta water and keep it. That starchy water is your sauce insurance. Drain and set the pasta aside.</p><p>For the sauce, load your blender with the cottage cheese, cream cheese, shredded cheddar, milk, garlic powder, parsley, black pepper, paprika, salt, and mustard, and blend until it is completely smooth. Pour it into a saucepan over medium-low and stir for 3 to 5 minutes until it thickens up. If it stiffens too much, loosen it with a splash of that reserved pasta water.</p><p>Fold the drained pasta into the sauce until every piece is coated, adding a little more pasta water if you want it looser. Let the whole thing rest 10 minutes so the sauce sets and the flavors settle. Then portion the mac and cheese, crown each one with the honey BBQ chicken, and finish with a pinch of parsley.</p>",
+  "portion_html": "<p>Here is how you keep 14 containers honest instead of eyeballing it. Weigh your empty pot before you cook, then weigh it again full of the finished mac and cheese and subtract. Divide that number by 14 and you have your target grams per container. Scoop to the number, not to the look.</p><p>Split the pasta first so every box gets the same base, then divide the honey BBQ chicken across all 14 on top so nobody opens a lid to a bare bowl. That evens out the protein and keeps every serving on its {{protein}} gram mark.</p>",
+  "cost_closing_html": "<p>This is what eating well on a budget actually looks like. Fourteen dinners of honey BBQ chicken mac and cheese come out to ${{cost_ps}} a serving, and each one carries {{protein}} grams of protein for {{cal}} calories. Go find a drive-thru number that competes with that.</p>",
+  "upsell_html": "<p>Cook it once, and dinner is handled for two weeks. If this is the kind of math you want on every meal, Thrifty Crew membership runs a dollar a month and puts every recipe, board price, and cost breakdown in your hands. One buck, a fridge full of real food, no guesswork.</p>"
+ },
+ "head": {
+  "description": "Honey BBQ chicken mac and cheese meal prep with over 40 grams of protein a serving. A blended cottage and cream cheese sauce, sweet smoky chicken on top, and 14 budget containers from one batch.",
+  "keywords": "honey bbq chicken mac and cheese, high protein mac and cheese, chicken meal prep, budget meal prep, high protein dinner, macaroni and cheese meal prep, meal prep recipes",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT30M",
+  "totalTime": "PT40M",
+  "steps": [
+   "Season 3 pounds of diced chicken breast with garlic powder, onion powder, paprika, ground ginger, salt, and black pepper until evenly coated.",
+   "Cook the chicken: air fryer at 180C (350F) for 10 to 12 minutes, shaking halfway, or a sprayed non-stick pan over medium for 6 to 8 minutes, until golden and cooked through.",
+   "Toss the cooked chicken with the honey and BBQ sauce until glossy, then return it to the heat for 1 to 2 minutes to caramelize the sauce. Set aside.",
+   "Boil salted water and cook the pasta to package directions. Reserve about 1/4 cup of pasta water, then drain and set aside.",
+   "Blend the cottage cheese, cream cheese, shredded cheddar, milk, garlic powder, parsley, black pepper, paprika, salt, and mustard until completely smooth.",
+   "Heat the sauce in a saucepan over medium-low for 3 to 5 minutes until thickened, loosening with reserved pasta water if it gets too thick.",
+   "Fold the drained pasta into the sauce until coated, adding more pasta water to reach your desired consistency.",
+   "Rest 10 minutes, then portion across 14 containers, top each with the honey BBQ chicken, and garnish with parsley."
+  ],
+  "step_names": [
+   "Season the chicken",
+   "Cook the chicken",
+   "Glaze with honey BBQ",
+   "Cook the pasta",
+   "Blend the cheese sauce",
+   "Thicken the sauce",
+   "Combine pasta and sauce",
+   "Rest and portion"
+  ]
+ }
+}

@@ -1,0 +1,31 @@
+{
+    "slug":  "chicken-fajita-casserole-with-rice",
+    "title":  "Chicken Fajita Casserole with Rice",
+    "source_url":  "https://easyeatsdietitian.com/chicken-fajita-casserole-with-rice-one-pan/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:15:00",
+    "updated":  "2026-08-27T18:15:01",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Fajita-seasoned chicken with rice, bell peppers and onions is the same dinner as live fajita-chicken-rice-bowl (shares fajita seasoning, chicken, rice, onions, score 34); one-pan casserole vs bowl is a format change in an already-crowded Tex-Mex chicken region.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:15:00",
+                        "by":  "harvest",
+                        "detail":  "https://easyeatsdietitian.com/chicken-fajita-casserole-with-rice-one-pan/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:15:01",
+                        "by":  "decider",
+                        "detail":  "Fajita-seasoned chicken with rice, bell peppers and onions is the same dinner as live fajita-chicken-rice-bowl (shares fajita seasoning, chicken, rice, onions, score 34); one-pan casserole vs bowl is a format change in an already-crowded Tex-Mex chicken region."
+                    }
+                ]
+}

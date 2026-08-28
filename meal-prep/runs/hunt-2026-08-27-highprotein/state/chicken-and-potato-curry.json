@@ -1,0 +1,62 @@
+{
+    "slug":  "chicken-and-potato-curry",
+    "title":  "Chicken and Potato Curry",
+    "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
+    "protein":  "chicken",
+    "state":  "priced",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:55",
+    "updated":  "2026-08-27T19:06:04",
+    "terms":  [
+                  {
+                      "term":  "fresh red chili",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "potatoes",
+                      "optional":  false
+                  }
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:55",
+                        "by":  "harvest",
+                        "detail":  "https://skinnyspatula.com/chicken-potato-curry/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:14:55",
+                        "by":  "decider",
+                        "detail":  "North-Indian tomato-coconut chicken-and-potato curry (aloo-style, cumin/coriander/turmeric) widens the catalog\u0027s mostly-Thai/Japanese curry set; potato starch and stew format distinguish it from the rice-bowl curries, and carbs 21g fit the high-protein band well."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:15:44",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:58:24",
+                        "by":  "mapper",
+                        "detail":  "3 residual lines ruled, 0 rejected, 2 new DB rows returned. Two new ids proposed (fresh-red-chili, potatoes); coconut-oil is a reuse of a live 7-of-7 commodity that simply had no vocabulary row. Nothing here I am uneasy about - the macro agreement with the source is the tightest of the five."
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:58:25",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T19:06:04",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    }
+                ]
+}

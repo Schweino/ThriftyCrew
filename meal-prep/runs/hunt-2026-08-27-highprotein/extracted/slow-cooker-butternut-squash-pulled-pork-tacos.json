@@ -1,0 +1,156 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Slow Cooker Butternut Squash Pulled Pork Tacos",
+  "source_url": "https://www.wellplated.com/slow-cooker-butternut-squash-pulled-pork-tacos/",
+  "servings": 6,
+  "time_total": "460 minutes",
+  "time_active": "40 minutes",
+  "ingredients": [
+    {
+      "raw": "3 pounds butternut squash (peeled and cut into bite-sized chunks)",
+      "item": "butternut squash",
+      "qty": "3",
+      "unit": "pounds",
+      "prep": "peeled and cut into bite-sized chunks",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 pounds boneless pork loin roast",
+      "item": "boneless pork loin roast",
+      "qty": "2",
+      "unit": "pounds",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons kosher salt (divided)",
+      "item": "kosher salt",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": "(divided)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground black pepper",
+      "item": "ground black pepper",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground cumin",
+      "item": "ground cumin",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 teaspoon ground cinnamon",
+      "item": "ground cinnamon",
+      "qty": "1",
+      "unit": "teaspoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 tablespoon extra-virgin olive oil",
+      "item": "extra-virgin olive oil",
+      "qty": "1",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2-3 chipotle peppers packed in adobo (coarsely chopped (individual peppers, not full cans!) )",
+      "item": "chipotle peppers packed in adobo",
+      "qty": "2-3",
+      "unit": null,
+      "prep": "coarsely chopped (individual peppers, not full cans!)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons adobo sauce from the canned chiles ((add more for extra heat))",
+      "item": "adobo sauce",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "from the canned chiles (add more for extra heat)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 onion (coarsely chopped)",
+      "item": "onion",
+      "qty": "1",
+      "unit": null,
+      "prep": "coarsely chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 teaspoons minced garlic (about 4 cloves)",
+      "item": "minced garlic",
+      "qty": "2",
+      "unit": "teaspoons",
+      "prep": "(about 4 cloves)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1/2 cup orange juice",
+      "item": "orange juice",
+      "qty": "1/2",
+      "unit": "cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 tablespoons red wine vinegar (or substitute additional orange juice)",
+      "item": "red wine vinegar",
+      "qty": "2",
+      "unit": "tablespoons",
+      "prep": "(or substitute additional orange juice)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "For Serving: corn tortillas, (fresh cilantro, lime wedges, and feta cheese or queso fresco)",
+      "item": "corn tortillas",
+      "qty": null,
+      "unit": null,
+      "prep": "For Serving: (fresh cilantro, lime wedges, and feta cheese or queso fresco)",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Arrange the squash around the edges of a 4-quart or similar slow cooker. Sprinkle with 1/2 teaspoon salt.",
+    "Season the pork with the remaining 1 1/2 teaspoons salt and black pepper. In a small bowl, combine the cumin, cinnamon, olive oil, chipotle chiles, and adobo sauce to form a paste. Rub all over the pork. Place the pork in the center of the slow cooker (it may overlap slightly with the squash).",
+    "Top with the onion and garlic, then pour the orange juice and red wine vinegar over the top. Cover and cook on low for 6 to 8 hours or high for 3 to 4 hours (the actual cook time may vary based on your slow cooker).",
+    "Once the meat is tender and cooked through, remove from the slow cooker and transfer to a plate to cool slightly. Shred the pork, then transfer to a large bowl, along with any of the rub that may have come off during shredding. With a slotted spoon, remove the squash and onions from the slow cooker and place in the bowl with the pork. Toss to combine.",
+    "To serve, warm the tortillas in the microwave (I like to cover mine with a lightly damp paper towel to prevent them from drying out), fill with pork and squash, and garnish with desired toppings."
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 14,
+    "verified": 14,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

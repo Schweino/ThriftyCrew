@@ -1,0 +1,152 @@
+{
+ "name": "Chicken and Potato Curry",
+ "slug": "chicken-and-potato-curry",
+ "protein": "chicken",
+ "cuisine": "Indian",
+ "source_url": "https://skinnyspatula.com/chicken-potato-curry/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Coconut Oil",
+   "grams": 48,
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "item": "Yellow Onion",
+   "grams": 385,
+   "buy": "3 1/2 medium onions, finely diced"
+  },
+  {
+   "item": "Garlic",
+   "grams": 42,
+   "buy": "14 cloves, finely chopped"
+  },
+  {
+   "item": "Ginger",
+   "grams": 21,
+   "buy": "3 1/2 tbsp, finely chopped"
+  },
+  {
+   "item": "Fresh Red Chili",
+   "grams": 32,
+   "buy": "3 1/2 tbsp, deseeded and finely chopped (about 3 chiles)"
+  },
+  {
+   "item": "Ground Coriander",
+   "grams": 13,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Ground Cumin",
+   "grams": 15,
+   "buy": "2 tbsp plus 1 tsp"
+  },
+  {
+   "item": "Ground Turmeric",
+   "grams": 5,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Cayenne Pepper",
+   "grams": 1,
+   "buy": "scant 1 tsp"
+  },
+  {
+   "item": "Tomato Paste",
+   "grams": 56,
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb, cut into 1-inch pieces"
+  },
+  {
+   "item": "Potatoes",
+   "grams": 794,
+   "buy": "1 3/4 lb, cut into chunks"
+  },
+  {
+   "item": "Diced Tomatoes",
+   "grams": 1438,
+   "buy": "6 cups, undrained (three and a half 14 oz cans)"
+  },
+  {
+   "item": "Chicken Broth",
+   "grams": 840,
+   "buy": "3 1/2 cups"
+  },
+  {
+   "item": "Salt",
+   "grams": 10,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Coconut Milk",
+   "grams": 1400,
+   "buy": "3 1/2 cups (three and a half 13.5 fl oz cans)"
+  },
+  {
+   "item": "Fresh Cilantro",
+   "grams": 35,
+   "buy": "1 1/4 cups chopped (35 g)"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 500,
+  "protein_g": 42.4,
+  "carbs_g": 22.9,
+  "fat_g": 25.8
+ },
+ "writer_notes": [
+  "All 17 locked ingredients are used by a step and no step calls for anything unbought; verified line by line.",
+  "Band: locked 500 cal within 450-800 and locked 42.4 g protein clears the 40 g floor; real carb source present (potatoes plus tomatoes).",
+  "SMELL (not fixed): potato-to-chicken ratio is 3:1 (1 3/4 lb potato vs 5 1/4 lb chicken), only ~2 oz raw potato per serving, which reads light for a dish named potato curry. Faithful to source (1/2 lb potato to 1 1/2 lb chicken, same 3:1), left alone.",
+  "SMELL (not fixed): source specifies coconut milk 'creamy top only'; locked buy is 3.5 cups from three and a half 13.5 fl oz cans (~1 cup/can), consistent with skimming the cream, but the can-count buy string loses that nuance and leaves the thin milk unused.",
+  "Package guidance in shop_smart ('buy the cans in fours') traces to the locked buy strings 'three and a half 14 oz cans' and 'three and a half 13.5 fl oz cans' rounding up to 4 packages; no cost_lines were provided, so no per-ounce or lasts-several-batches claims were made.",
+  "Prose carries no computed number; only tokens {{cal}}, {{protein}}, ${{cost_ps}} and the $1/month membership line appear."
+ ],
+ "forbidden_prose_terms": [
+  "authentic",
+  "exotic",
+  "restaurant-quality",
+  "guilt-free",
+  "superfood",
+  "seafood",
+  "shrimp",
+  "—",
+  "–"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is a curry that pulls its weight. Chicken and potatoes, a pan of warm spices, and a coconut finish that makes the whole thing taste like you fussed over it when you did not. This is comfort food that happens to be cheap, which is my favorite kind.</p><p>We build it for 14 containers in one cook, so you feed yourself for two weeks off one afternoon at the stove. Each serving lands at {{cal}} calories with {{protein}} grams of protein. That is a number that keeps you full and keeps you honest, and it is the whole reason a curry earns a spot on this list.</p>",
+  "shop_smart": "<p>The backbone here is chicken breast and potatoes, and both are cheap when you buy them right. Get the 5 1/4 pounds of boneless skinless chicken breast as a family pack instead of the little trays, then cut it into 1-inch pieces yourself at home. The 1 3/4 pounds of potatoes is a small bag, nothing fancy, just something that holds its shape through a simmer.</p><p>The sauce is mostly pantry work. Ground coriander, cumin, turmeric and cayenne come out of jars you probably already own, so you are spending spoonfuls, not buying new bottles. For the base you need three and a half 14 oz cans of diced tomatoes and three and a half 13.5 fl oz cans of coconut milk, so buy them in fours and you are covered with a little left in the cupboard. Fresh ginger and fresh red chili live over in produce. Grab a knob of ginger and a few chiles and pick up a bunch of cilantro for the finish.</p>",
+  "make_it": "<p>Start with the aromatics, because that is where the flavor is born. Heat the coconut oil in your biggest pan over medium and cook the onion for 8 to 10 minutes until it goes soft and a little sweet. Do not rush it.</p><p>Add the garlic, ginger and red chili and cook one more minute, just until the kitchen smells like dinner. Stir in the coriander, cumin, turmeric and cayenne and give them a minute to wake up.</p><p>Now the tomato paste goes in, stirred well, and then the chicken. Toss it so every piece gets coated in the spice, and cook 3 to 4 minutes until the outsides are sealed. Add the potatoes, diced tomatoes, chicken broth and salt, stir, and bring it up to a simmer. Cover the pan and cook about 10 minutes until the potatoes are fork-tender.</p><p>Finish with the coconut milk and simmer one more minute until everything is heated through. Taste it, adjust the salt, fold in the fresh cilantro, and that is the whole job.</p>",
+  "portion_html": "<p>This is where the weigh-the-pot method earns its keep. Weigh your empty pot before you cook and write the number down, then weigh the full pot when the curry is done and subtract the empty weight. Take that finished weight, divide by 14, and you have your target grams per container.</p><p>Portion by weight, not by eyeball. Do it this way and every one of the 14 containers carries the same {{cal}} calories and {{protein}} grams of protein. Scoop the chicken and potato in first so the protein is even across the board, then ladle sauce to hit your number.</p>",
+  "cost_closing_html": "<p>Here is the part that matters. Every serving of this curry comes out to ${{cost_ps}}. That is a full dinner, real chicken and real spice, for less than a drive-through combo, and you made 14 of them in one go. Cook once, eat all week, and let the math work for you instead of against you.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, the whole Thrifty Crew playbook runs you a dollar a month. One curry batch pays for a year of recipes. Come cook with us.</p>"
+ },
+ "head": {
+  "description": "Budget chicken and potato curry meal prep for 14 servings. Tender chicken breast and potatoes in a warm coconut tomato sauce, with {{cal}} calories and {{protein}} grams of protein per serving.",
+  "keywords": "chicken potato curry, chicken curry meal prep, high protein curry, budget chicken curry, coconut chicken curry, chicken breast meal prep",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT30M",
+  "totalTime": "PT40M",
+  "steps": [
+   "Heat the coconut oil in a large pan over medium heat and cook the diced onion for 8 to 10 minutes until softened.",
+   "Add the garlic, ginger and fresh red chili and cook for about 1 minute until fragrant.",
+   "Stir in the ground coriander, cumin, turmeric and cayenne and cook for 1 minute more, stirring.",
+   "Add the tomato paste and stir to combine, then add the chicken pieces and cook 3 to 4 minutes until sealed.",
+   "Add the potatoes, diced tomatoes, chicken broth and salt, bring to a simmer, cover and cook about 10 minutes until the potatoes are fork-tender.",
+   "Stir in the coconut milk and simmer 1 minute until heated through, adjust the seasoning, add the fresh cilantro and serve."
+  ],
+  "step_names": [
+   "Soften the Onion",
+   "Add the Aromatics",
+   "Bloom the Spices",
+   "Sear the Chicken",
+   "Simmer with Potatoes",
+   "Finish with Coconut"
+  ]
+ }
+}

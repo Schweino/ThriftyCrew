@@ -1,0 +1,121 @@
+{
+ "slug": "slow-cooker-butternut-squash-pulled-pork-tacos",
+ "lines": [
+  {
+   "raw": "3 pounds butternut squash (peeled and cut into bite-sized chunks)",
+   "buy": "7 lb, peeled and cut into bite-sized chunks",
+   "grams_source": 1360.8
+  },
+  {
+   "raw": "2 pounds boneless pork loin roast",
+   "buy": "4 2/3 lb boneless pork loin roast",
+   "grams_source": 907.2
+  },
+  {
+   "raw": "2 teaspoons kosher salt (divided)",
+   "buy": "4 2/3 tsp, divided"
+  },
+  {
+   "raw": "1 teaspoon ground black pepper",
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "raw": "1 teaspoon ground cumin",
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "raw": "1 teaspoon ground cinnamon",
+   "buy": "2 1/3 tsp"
+  },
+  {
+   "raw": "1 tablespoon extra-virgin olive oil",
+   "buy": "2 1/3 tbsp"
+  },
+  {
+   "raw": "2-3 chipotle peppers packed in adobo (coarsely chopped (individual peppers, not full cans!) )",
+   "buy": "6 peppers, coarsely chopped",
+   "grams_source": 25
+  },
+  {
+   "raw": "2 tablespoons adobo sauce from the canned chiles ((add more for extra heat))",
+   "buy": "4 2/3 tbsp of the adobo sauce from the same can",
+   "grams_source": 30
+  },
+  {
+   "raw": "1 onion (coarsely chopped)",
+   "buy": "2 1/3 onions, coarsely chopped"
+  },
+  {
+   "raw": "2 teaspoons minced garlic (about 4 cloves)",
+   "buy": "4 2/3 tsp minced (about 9 cloves)"
+  },
+  {
+   "raw": "1/2 cup orange juice",
+   "buy": "1 1/4 cups"
+  },
+  {
+   "raw": "2 tablespoons red wine vinegar (or substitute additional orange juice)",
+   "buy": "4 2/3 tbsp"
+  },
+  {
+   "raw": "For Serving: corn tortillas, (fresh cilantro, lime wedges, and feta cheese or queso fresco)",
+   "buy": "28 corn tortillas, for serving",
+   "grams_source": 300,
+   "notes": "Two tortillas per serving at the source's own 6-serving yield."
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "3 pounds butternut squash (peeled and cut into bite-sized chunks)",
+   "term": "butternut squash",
+   "canon_item": "Butternut Squash",
+   "bid": "butternut-squash",
+   "decision": "mapped",
+   "grams_source": 1360.8,
+   "evidence": "REUSE of a live board id at 5 of 7, cheapest 1.49 at Baker's, per the 2026-08-26 'cubed butternut squash' ruling; only the vocabulary row is missing. Spaghetti squash is a different food. DB row already present."
+  },
+  {
+   "raw": "2 pounds boneless pork loin roast",
+   "term": "boneless pork loin roast",
+   "canon_item": "Pork Loin",
+   "bid": "pork-loin",
+   "decision": "mapped",
+   "grams_source": 907.2,
+   "evidence": "A boneless loin roast IS the whole pork loin - 'boneless' and 'roast' describe how the same cut is sold, not a different product, and pork-loin is the vocabulary's own id for it. Refused pork-shoulder (a cheaper, fattier cut) and ground-pork. Board finds nothing, so the term is enqueued."
+  },
+  {
+   "raw": "2-3 chipotle peppers packed in adobo (coarsely chopped (individual peppers, not full cans!) )",
+   "term": "chipotle peppers packed in adobo",
+   "canon_item": "Chipotle in Adobo",
+   "bid": "chipotle-adobo",
+   "decision": "mapped",
+   "grams_source": 25,
+   "evidence": "Exact same-form vocabulary row. The line insists on individual peppers, not the whole can, so it is weighed at 2 1/2 peppers (about 10 g each) rather than a can. Board finds nothing; term enqueued."
+  },
+  {
+   "raw": "2 tablespoons adobo sauce from the canned chiles ((add more for extra heat))",
+   "term": "adobo sauce",
+   "canon_item": "Chipotle in Adobo",
+   "bid": "chipotle-adobo",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "The line says outright that the sauce comes from the same can already bought for the peppers, so this is the same product and the same id, weighed separately so its macros count. The 'sauce/in' form flag is a wording artefact."
+  }
+ ],
+ "absent_terms": [
+  "pork loin",
+  "chipotle in adobo"
+ ],
+ "db_entries_written": [],
+ "db_row_findings": [
+  "slow-cooker-butternut-squash-pulled-pork-tacos: the food DB already carries 'Pork Loin' and the mapper's row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 138.4 cal / 20.5 P / 0.0 C / 5.4 F  vs  mapper 166.0 / 21.3 / 0.0 / 8.3. On one basis (the mapper's row scaled onto the DB's 4 oz = 112 g) they still disagree: calories 185.9 vs 155; protein_g 23.86 vs 23; fat_g 9.33 vs 6. existing={\"serving_grams\": 112, \"serving_qty\": 4, \"serving_unit\": \"oz\", \"calories\": 155, \"protein_g\": 23, \"fat_g\": 6} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 166, \"protein_g\": 21.3, \"fat_g\": 8.33}"
+ ],
+ "db_row_notes": [
+  "slow-cooker-butternut-squash-pulled-pork-tacos: 'Chipotle in Adobo' arrived on a different serving basis (2 peppers with sauce = 30 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 2 pieces = 30 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [],
+ "registrar_rulings": [],
+ "macro_cross_check": "Computed 502 cal / 38.8 g protein / 51 g carbs per serving over 6 servings, against the source's published 477 / 40 / 57. Calories +5.2%, protein -3.0%, both well inside the bar, so the grams are sound - in particular the 3 lb squash reads as 3 lb of prepped flesh rather than whole squash, which is what makes the calories agree. LOUD FLAG: my computed protein of 38.8 g sits just UNDER this run's 40 g floor even though the source publishes exactly 40. The recipe is genuinely borderline rather than wrong, and it turns on the pork row - I used the lean-and-fat RAW cut (21.3 g protein per 100 g); the trimmed lean-only cut would carry it clear. I am not rejecting on this; the band gate should rule with the number in front of it."
+}

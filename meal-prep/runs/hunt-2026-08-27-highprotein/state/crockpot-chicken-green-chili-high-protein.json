@@ -1,0 +1,31 @@
+{
+    "slug":  "crockpot-chicken-green-chili-high-protein",
+    "title":  "Crockpot Chicken Green Chili (High Protein)",
+    "source_url":  "https://easyeatsdietitian.com/crockpot-chicken-green-chili/",
+    "protein":  "chicken",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:54",
+    "updated":  "2026-08-27T18:14:54",
+    "terms":  [
+
+              ],
+    "reject_reason":  "White beans + green chiles + corn + shredded chicken with a cream-cheese/yogurt finish is the same dinner as live slow-cooker-white-chicken-chili-bowls, which shares cannellini beans, chicken breast, broth, limes and onions.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:54",
+                        "by":  "harvest",
+                        "detail":  "https://easyeatsdietitian.com/crockpot-chicken-green-chili/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:14:54",
+                        "by":  "decider",
+                        "detail":  "White beans + green chiles + corn + shredded chicken with a cream-cheese/yogurt finish is the same dinner as live slow-cooker-white-chicken-chili-bowls, which shares cannellini beans, chicken breast, broth, limes and onions."
+                    }
+                ]
+}

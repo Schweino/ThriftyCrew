@@ -1,0 +1,97 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T18:58:39",
+    "slug":  "high-protein-chicken-enchilada-casserole",
+    "findings":  [
+
+                 ],
+    "notes":  [
+
+              ],
+    "intake":  {
+                   "name":  "High Protein Chicken Enchilada Casserole",
+                   "slug":  "high-protein-chicken-enchilada-casserole",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://thymeandjoy.com/high-protein-chicken-enchilada-casserole/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "White Onion",
+                                           "grams":  560,
+                                           "buy":  "3 1/2 cups diced (about 2 large onions)"
+                                       },
+                                       {
+                                           "item":  "Bell Peppers",
+                                           "grams":  695,
+                                           "buy":  "4 2/3 cups diced (about 5 peppers)"
+                                       },
+                                       {
+                                           "item":  "Enchilada Sauce",
+                                           "grams":  660,
+                                           "buy":  "2 3/4 cups (about two and a half 10 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Diced Green Chiles",
+                                           "grams":  264,
+                                           "buy":  "1 cup (about two 4 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Canned Black Beans",
+                                           "grams":  992,
+                                           "buy":  "5 1/2 cups, drained and rinsed (about two and a half 15 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1058,
+                                           "buy":  "2 1/3 lb, cooked and shredded"
+                                       },
+                                       {
+                                           "item":  "Corn Tortillas",
+                                           "grams":  817,
+                                           "buy":  "33 corn tortillas, cut into bite-sized pieces"
+                                       },
+                                       {
+                                           "item":  "Reduced Fat Mexican Blend Shredded Cheese",
+                                           "grams":  397,
+                                           "buy":  "3 1/2 cups shredded"
+                                       },
+                                       {
+                                           "item":  "Fat Free Cottage Cheese",
+                                           "grams":  527,
+                                           "buy":  "2 1/3 cups"
+                                       },
+                                       {
+                                           "item":  "Greek Yogurt",
+                                           "grams":  286,
+                                           "buy":  "1 1/4 cups"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  426,
+                                              "protein_g":  37.5,
+                                              "carbs_g":  49.3,
+                                              "fat_g":  8.7
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT15M",
+                                "cookTime":  "",
+                                "totalTime":  "",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

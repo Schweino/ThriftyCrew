@@ -1,0 +1,162 @@
+﻿{
+    "slug":  "high-protein-chicken-enchilada-casserole",
+    "title":  "High Protein Chicken Enchilada Casserole",
+    "source_url":  "https://thymeandjoy.com/high-protein-chicken-enchilada-casserole/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 1/2 cups white onion (diced (1 large onion))",
+                            "item":  "White Onion",
+                            "bid":  "white-onion",
+                            "board":  null,
+                            "grams":  560,
+                            "buy":  "3 1/2 cups diced (about 2 large onions)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "I DISAGREE with the shelf\u0027s 2026-08-26 \u0027small white onion\u0027 -\u003e onions ruling: a live white-onion commodity exists at 4 of 7 stores (cheapest 1.095 at Aldi), so the exact food can be priced as itself and the variety-pricing question never has to be answered. Red onion stays refused.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 cups bell pepper (diced (2 peppers))",
+                            "item":  "Bell Peppers",
+                            "bid":  "bell-peppers",
+                            "board":  null,
+                            "grams":  695,
+                            "buy":  "4 2/3 cups diced (about 5 peppers)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of a live board id at 5 of 7, cheapest 0.77 at Fareway, matching the 2026-08-27 \u0027bell peppers\u0027 ruling at cosine 0.97; the line does not name a colour, so the mixed id is right and green-bell-pepper (a cheaper pepper) is refused. Black Pepper is a wrong-food near row.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "10 oz red enchilada sauce (canned)",
+                            "item":  "Enchilada Sauce",
+                            "bid":  "enchilada-sauce",
+                            "board":  null,
+                            "grams":  660,
+                            "buy":  "2 3/4 cups (about two and a half 10 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Same-form vocabulary row and a live board id at 5 of 7, cheapest 0.0925 at Baker\u0027s. Red is the default enchilada sauce; no green id exists to confuse it with.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "4 oz green chilies (canned)",
+                            "item":  "Diced Green Chiles",
+                            "bid":  "canned-green-chilies",
+                            "board":  null,
+                            "grams":  264,
+                            "buy":  "1 cup (about two 4 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REFUSED the near row Diced Tomatoes \u0026 Green Chilies [tomatoes-green-chilies]: that is a Rotel-style tomato product, a different food at a different price. Plain canned green chiles are live at 6 of 7, cheapest 0.2125 at Aldi.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "15 oz black beans (canned (drained and rinsed))",
+                            "item":  "Canned Black Beans",
+                            "bid":  "canned-black-beans",
+                            "board":  "weekly",
+                            "grams":  992,
+                            "buy":  "5 1/2 cups, drained and rinsed (about two and a half 15 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027black beans\u0027 -\u003e canned-black-beans (by mapper on 2026-08-26T04:21:59); nearest vocabulary rows: Seasoned Black Beans [seasoned-black-beans] same form | Canned Black Beans [canned-black-beans] DIFFERENT FORM: canned | Kidney Beans [kidney-beans] same form",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 pound chicken breast (cooked)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  1058,
+                            "buy":  "2 1/3 lb, cooked and shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breast\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T13:26:47); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breast | Whole Chicken [whole-chicken] DIFFERENT FORM: breast/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "14 corn tortillas",
+                            "item":  "Corn Tortillas",
+                            "bid":  "corn-tortillas",
+                            "board":  "recipe",
+                            "grams":  817,
+                            "buy":  "33 corn tortillas, cut into bite-sized pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; no densities.json row and no each-noun; board MAPPED: corn-tortillas, 3 of 7 stores, cheapest 0.0561 at Baker\u0027s",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1 1/2 cups reduced fat shredded Mexican cheese",
+                            "item":  "Reduced Fat Mexican Blend Shredded Cheese",
+                            "bid":  "shredded-cheese",
+                            "board":  null,
+                            "grams":  397,
+                            "buy":  "3 1/2 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the \u0027reduced sodium beef broth\u0027 call. The macros differ, so the DB row is the reduced-fat one.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup low fat cottage cheese",
+                            "item":  "Fat Free Cottage Cheese",
+                            "bid":  "cottage-cheese",
+                            "board":  "weekly",
+                            "grams":  527,
+                            "buy":  "2 1/3 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027low fat cottage cheese\u0027 -\u003e cottage-cheese (by mapper on 2026-08-27T12:08:36); nearest vocabulary rows: Cottage Cheese [cottage-cheese] DIFFERENT FORM: low/fat | Fat Free Cottage Cheese [cottage-cheese] DIFFERENT FORM: low/free | Monterey Jack Cheese [monterey-jack-cheese] DIFFERENT FORM: low/fat; no densities.json row and no each-noun",
+                            "grams_from":  "line"
+                        },
+                        {
+                            "source_raw":  "1/2 cup greek yogurt (2%)",
+                            "item":  "Greek Yogurt",
+                            "bid":  "greek-yogurt",
+                            "board":  "recipe",
+                            "grams":  286,
+                            "buy":  "1 1/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: greek-yogurt, 6 of 7 stores, cheapest 0.0872 at Aldi",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "White Onion",
+                               "Reduced Fat Mexican Blend Shredded Cheese"
+                           ],
+    "db_row_findings":  [
+                            "high-protein-chicken-enchilada-casserole: the food DB already carries \u0027Bell Peppers\u0027 and the mapper\u0027s row DIFFERS on calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 18.0 cal / 1.2 P / 4.7 C / 0.0 F  vs  mapper 26.0 / 1.0 / 6.0 / 0.3. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 100 g = 100 g) they still disagree: calories 26 vs 18; carbs_g 6 vs 4.71. existing={\"calories\": 18, \"protein_g\": 1.18, \"carbs_g\": 4.71, \"fat_g\": 0.0} new={\"calories\": 26, \"protein_g\": 1.0, \"carbs_g\": 6.0, \"fat_g\": 0.3}",
+                            "high-protein-chicken-enchilada-casserole: the food DB already carries \u0027Enchilada Sauce\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, carbs_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 25.0 cal / 0.0 P / 5.0 C / 0.0 F  vs  mapper 30.0 / 0.6 / 4.9 / 0.9. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 0.25 cup = 60 g) they still disagree: fat_g 0.546 vs 0. existing={\"serving_grams\": 60, \"serving_qty\": 0.25, \"serving_unit\": \"cup\", \"calories\": 15, \"protein_g\": 0, \"carbs_g\": 3, \"fat_g\": 0} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 30, \"protein_g\": 0.62, \"carbs_g\": 4.87, \"fat_g\": 0.91}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Computed 432 cal / 40.2 g protein / 43 g carbs per serving over 6 servings, against the source\u0027s published 454 / 43 / 47. Protein is -6.5% and calories -4.8%, both inside the bar, so no portion is wrong. LOUD FLAG: 432 cal falls BELOW this run\u0027s 450 floor, by 4%. The gap is not a weighing error - it comes from two DB rows the pre-resolver settled: Fat Free Cottage Cheese standing in for the source\u0027s low-fat (2%) cottage cheese, which alone is worth roughly 40 cal per serving, and the reduced-fat cheese row. If a person swaps the cottage cheese row to the 2% product the recipe clears 450 comfortably. Protein at 40.2 also sits right on the floor. I am not calling this rejected-macros myself: my grams agree with the source, and the shortfall is a row-selection question upstream of me."
+}

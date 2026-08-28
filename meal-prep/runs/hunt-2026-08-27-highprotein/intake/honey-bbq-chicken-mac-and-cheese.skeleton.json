@@ -1,0 +1,136 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T18:30:58",
+    "slug":  "honey-bbq-chicken-mac-and-cheese",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "merged a second \u0027Garlic Powder\u0027 line into the first - 22 g total",
+                  "merged a second \u0027Paprika\u0027 line into the first - 16 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 42 g total",
+                  "merged a second \u0027Black Pepper\u0027 line into the first - 8 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 63 g total"
+              ],
+    "intake":  {
+                   "name":  "Honey BBQ Chicken Mac and Cheese",
+                   "slug":  "honey-bbq-chicken-mac-and-cheese",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Fat Free Cottage Cheese",
+                                           "grams":  525,
+                                           "buy":  "2 1/3 cups"
+                                       },
+                                       {
+                                           "item":  "1/3 Fat Cream Cheese",
+                                           "grams":  700,
+                                           "buy":  "1 1/2 pounds (about 3 cups)"
+                                       },
+                                       {
+                                           "item":  "Reduced Fat Cheddar Cheese",
+                                           "grams":  525,
+                                           "buy":  "4 3/4 cups shredded"
+                                       },
+                                       {
+                                           "item":  "Milk",
+                                           "grams":  525,
+                                           "buy":  "2 1/4 cups"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  22,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Dried Parsley",
+                                           "grams":  2,
+                                           "buy":  "3 1/2 teaspoons dried"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  8,
+                                           "buy":  "1 3/4 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Paprika",
+                                           "grams":  16,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  63,
+                                           "buy":  "3 1/2 teaspoons, for the pasta water"
+                                       },
+                                       {
+                                           "item":  "Yellow Mustard",
+                                           "grams":  18,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  1400,
+                                           "buy":  "3 pounds, diced"
+                                       },
+                                       {
+                                           "item":  "Honey",
+                                           "grams":  147,
+                                           "buy":  "7 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Onion Powder",
+                                           "grams":  8,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "BBQ Sauce",
+                                           "grams":  245,
+                                           "buy":  "3/4 cup plus 2 tablespoons"
+                                       },
+                                       {
+                                           "item":  "Ground Ginger",
+                                           "grams":  6,
+                                           "buy":  "3 1/2 teaspoons"
+                                       },
+                                       {
+                                           "item":  "Cooking Spray",
+                                           "grams":  10,
+                                           "buy":  "as needed for the pan (10 g)"
+                                       },
+                                       {
+                                           "item":  "Ziti Pasta",
+                                           "grams":  1050,
+                                           "buy":  "2 1/3 pounds dry (about 10 cups elbow macaroni)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  751,
+                                              "protein_g":  50.5,
+                                              "carbs_g":  84.7,
+                                              "fat_g":  24.4
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT30M",
+                                "totalTime":  "PT40M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

@@ -1,0 +1,37 @@
+{
+    "slug":  "sriracha-chicken-tacos",
+    "title":  "Sriracha Chicken Tacos",
+    "source_url":  "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/",
+    "protein":  "chicken",
+    "state":  "extracted",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:32",
+    "updated":  "2026-08-27T18:20:56",
+    "terms":  [
+
+              ],
+    "reject_reason":  null,
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:32",
+                        "by":  "harvest",
+                        "detail":  "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:20:32",
+                        "by":  "decider",
+                        "detail":  "Sriracha-honey-lime chicken tacos with a sweet-spicy Asian-fusion sauce; no live or in-flight sriracha chicken (562 live + 63 in-flight searched, 0 flavor match), a distinct sauce profile from the fajita/cilantro-lime/buffalo taco lanes, verified 573cal/33c/48p."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:20:56",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    }
+                ]
+}

@@ -1,0 +1,268 @@
+﻿{
+    "slug":  "chicken-and-potato-curry",
+    "title":  "Chicken and Potato Curry",
+    "source_url":  "https://skinnyspatula.com/chicken-potato-curry/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 tablespoon coconut oil",
+                            "item":  "Coconut Oil",
+                            "bid":  "coconut-oil",
+                            "board":  null,
+                            "grams":  48,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of a live board id at 7 of 7, cheapest 0.1952 at Sam\u0027s Club, and the DB already carries the row; only the vocabulary name was missing. Refused the shelf\u0027s \u0027oil\u0027 -\u003e vegetable-oil precedent: coconut oil is a solid jar at its own price class.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 medium onion (finely diced)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  385,
+                            "buy":  "3 1/2 medium onions, finely diced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027medium onion\u0027 -\u003e onions (by mapper on 2026-08-27T11:56:55); nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 garlic cloves (finely chopped)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  42,
+                            "buy":  "14 cloves, finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027garlic cloves\u0027 -\u003e garlic (by mapper on 2026-08-26T05:08:09); nearest vocabulary rows: Ground Cloves [ground-cloves] DIFFERENT FORM: ground",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon fresh ginger (finely chopped)",
+                            "item":  "Ginger",
+                            "bid":  "fresh-ginger",
+                            "board":  "recipe",
+                            "grams":  21,
+                            "buy":  "3 1/2 tbsp, finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027fresh ginger\u0027 -\u003e fresh-ginger (by mapper on 2026-08-26T04:52:59); nearest vocabulary rows: Ground Ginger [ground-ginger] DIFFERENT FORM: fresh/ground | Ginger [fresh-ginger] DIFFERENT FORM: fresh",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon fresh red chilli (deseeded, finely chopped)",
+                            "item":  "Fresh Red Chili",
+                            "bid":  "jalapenos",
+                            "board":  null,
+                            "grams":  32,
+                            "buy":  "3 1/2 tbsp, deseeded and finely chopped (about 3 chiles)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Refused the red-pepper-flakes bridge on the shelf: fresh chile is not the dried jar, a form flip in both price and gram weight. No estate id names a fresh chile, so a new one is proposed and the term enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons ground coriander",
+                            "item":  "Ground Coriander",
+                            "bid":  "ground-coriander",
+                            "board":  "recipe",
+                            "grams":  13,
+                            "buy":  "2 tbsp plus 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-coriander, 4 of 7 stores, cheapest 0.7331 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons ground cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  "recipe",
+                            "grams":  15,
+                            "buy":  "2 tbsp plus 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-cumin, 7 of 7 stores, cheapest 0.4321 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon turmeric",
+                            "item":  "Ground Turmeric",
+                            "bid":  "ground-turmeric",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027turmeric\u0027 -\u003e ground-turmeric (by mapper on 2026-08-27T11:56:55); nearest vocabulary rows: Ground Turmeric [ground-turmeric] DIFFERENT FORM: ground",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon cayenne pepper",
+                            "item":  "Cayenne Pepper",
+                            "bid":  "cayenne-pepper",
+                            "board":  "recipe",
+                            "grams":  1,
+                            "buy":  "scant 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cayenne-pepper, 6 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon tomato paste",
+                            "item":  "Tomato Paste",
+                            "bid":  "tomato-paste",
+                            "board":  "recipe",
+                            "grams":  56,
+                            "buy":  "3 1/2 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: tomato-paste, 7 of 7 stores, cheapest 0.1017 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 1/2 pounds chicken breast (cut into 1-inch pieces)",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, cut into 1-inch pieces",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken breast\u0027 -\u003e chicken-breast (by mapper on 2026-08-26T13:26:47); nearest vocabulary rows: Rotisserie Chicken [rotisserie-chicken] DIFFERENT FORM: breast | Whole Chicken [whole-chicken] DIFFERENT FORM: breast/whole | Boneless Skinless Chicken Breast [chicken-breast] DIFFERENT FORM: boneless/skinless",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 pound potatoes (cut into chunks)",
+                            "item":  "Potatoes",
+                            "bid":  "russet-potatoes",
+                            "board":  null,
+                            "grams":  794,
+                            "buy":  "1 3/4 lb, cut into chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Sweet potatoes are a different food at a different price, so that near row is refused. No commodity claims plain potatoes though today\u0027s captures carry them, exactly the 2026-08-26 \u0027baby potatoes\u0027 situation; new id proposed and the term enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 can (14 oz / 400 g) diced tomatoes",
+                            "item":  "Diced Tomatoes",
+                            "bid":  "diced-tomatoes",
+                            "board":  "recipe",
+                            "grams":  1438,
+                            "buy":  "6 cups, undrained (three and a half 14 oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: diced-tomatoes, 7 of 7 stores, cheapest 0.0529 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 cup chicken stock",
+                            "item":  "Chicken Broth",
+                            "bid":  "chicken-broth",
+                            "board":  "recipe",
+                            "grams":  840,
+                            "buy":  "3 1/2 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027chicken stock\u0027 -\u003e chicken-broth (by mapper on 2026-08-26T04:35:26); no vocabulary row shares a core word with this name",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  10,
+                            "buy":  "1 3/4 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 can (13.5 fl. oz / 400 ml) coconut milk (creamy top only)",
+                            "item":  "Coconut Milk",
+                            "bid":  "coconut-milk-canned",
+                            "board":  "recipe",
+                            "grams":  1400,
+                            "buy":  "3 1/2 cups (three and a half 13.5 fl oz cans)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: milk, 7 of 7 stores, cheapest 2.81 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "A handful fresh cilantro",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  "recipe",
+                            "grams":  35,
+                            "buy":  "1 1/4 cups chopped (35 g)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: cilantro, 6 of 7 stores, cheapest 0.89 at Aldi",
+                            "grams_from":  "engine"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "fresh red chili",
+                                 "potatoes"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+                               "Fresh Red Chili",
+                               "Potatoes"
+                           ],
+    "db_row_findings":  [
+
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "fresh red chilli",
+                                        "proposed_bid":  "fresh-red-chili",
+                                        "evidence":  "Searched by food, not by string, across the four namespaces: the only chile-family ids are red-pepper-flakes (dried jar), canned-green-chilies, dried-guajillo-chiles, dried-arbol-chiles, chipotle-adobo and the bell-pepper family. Every one is either dried, canned or a sweet pepper; none prices a fresh hot chile, which is sold loose in produce by the pound. Board reports no commodity and no capture match.",
+                                        "declared":  true
+                                    },
+                                    {
+                                        "term":  "potatoes",
+                                        "proposed_bid":  "potatoes",
+                                        "evidence":  "The estate prices sweet-potatoes and baby-potatoes but nothing for plain white/russet potatoes, which are a different food at a different price (bulk 5 lb bags against a bagged creamer SKU and against the sweet variety). Board says no commodity claims it while today\u0027s captures carry matching products, the same posture that minted baby-potatoes on 2026-08-26.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "fresh-red-chili",
+                                  "verdict":  "alias",
+                                  "bid":  "jalapenos",
+                                  "reason":  "The mapper\u0027s case (\u0027no id prices a fresh hot chile\u0027) is false: the live feed prices fresh jalapenos ($1.4277/lb Walmart, loose produce), serrano-peppers ($2.99/lb Family Fare, fresh produce page) and habanero-peppers ($12.64/lb Walmart, fresh tray), none of which the dossier\u0027s word-overlap sweep surfaced because they share no token with \u0027red chili\u0027. A recipe\u0027s \u0027fresh red chilli\u0027 is a ripe red jalapeno/fresno-class chile - same species-family, same fresh-loose-by-the-pound purchase, same price class as the green jalapeno the stores actually stock, and the feed already carries a jalapeno-\u003ejalapenos alias for exactly this spelling seam. Add fresh-red-chili -\u003e jalapenos to recipe-floor-id-map.json (units match: lb). If a recipe ever genuinely needs the hotter variant, serrano-peppers already exists priced - no new id in any case."
+                              },
+                              {
+                                  "proposed_bid":  "potatoes",
+                                  "verdict":  "alias",
+                                  "bid":  "russet-potatoes",
+                                  "reason":  "The mapper\u0027s claim that nothing prices plain potatoes is contradicted twice over: commodities.json carries russet-potatoes (include patterns for russet/bulk bags), the live feed prices it at $0.409/lb cheapest at Aldi across all 7 stores, and recipe-floor-id-map.json already holds the human-verified pair potato -\u003e russet-potatoes - the exact generic-spelling seam this proposal re-opens. Minting a bare \u0027potatoes\u0027 id beside russet-potatoes, red-potatoes and yukon-gold-potatoes would let the same food price under two ids and its include pattern would inevitably claim the named varieties\u0027 products. Add potatoes -\u003e russet-potatoes to recipe-floor-id-map.json (units match: lb) alongside the existing \u0027potato\u0027 pair."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u00271 1/2 pounds chicken breast (cut into 1-inch pieces)\u0027: the qty engine could not ground this weight (count/each guess of 680 g against a line stating 227 g - the engine did not read the stated weight), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Computed 501 cal / 42.3 g protein / 21 g carbs per serving over 4 servings, against the source\u0027s published 505 / 42 / 21. Every figure lands within 1%. The 680.4 g chicken line and the 400 g coconut milk are the two dominant terms and both are the source\u0027s own stated amounts. Band: passes."
+}

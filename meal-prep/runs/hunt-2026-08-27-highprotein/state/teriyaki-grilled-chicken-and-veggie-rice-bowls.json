@@ -3,10 +3,10 @@
     "title":  "Teriyaki Grilled Chicken and Veggie Rice Bowls",
     "source_url":  "https://www.cookingclassy.com/teriyaki-grilled-chicken-and-veggie-rice-bowls/",
     "protein":  "chicken",
-    "state":  "qa-passed",
-    "wave":  5,
+    "state":  "rejected-audit",
+    "wave":  6,
     "created":  "2026-08-27T11:42:37",
-    "updated":  "2026-08-27T16:44:23",
+    "updated":  "2026-08-27T17:52:50",
     "terms":  [
                   {
                       "term":  "Water",
@@ -17,7 +17,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  null,
+    "reject_reason":  "NO-GO on two blockers, neither arithmetic. (1) RECIPE-LOCAL: teriyaki-grilled-chicken-and-veggie-rice-bowls duplicates the live teriyaki-chicken-bowl (same boneless skinless breast + teriyaki sauce + ",
     "parked_on":  [
 
                   ],
@@ -111,6 +111,18 @@
                         "at":  "2026-08-27T16:44:23",
                         "by":  "auditor",
                         "detail":  "audit-clean, trimmed out of blocked wave 5"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-27T17:35:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 6"
+                    },
+                    {
+                        "state":  "rejected-audit",
+                        "at":  "2026-08-27T17:52:50",
+                        "by":  "auditor",
+                        "detail":  "NO-GO on two blockers, neither arithmetic. (1) RECIPE-LOCAL: teriyaki-grilled-chicken-and-veggie-rice-bowls duplicates the live teriyaki-chicken-bowl (same boneless skinless breast + teriyaki sauce + "
                     }
                 ]
 }

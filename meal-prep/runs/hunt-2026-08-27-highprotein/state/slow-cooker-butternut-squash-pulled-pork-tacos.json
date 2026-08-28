@@ -1,0 +1,72 @@
+{
+    "slug":  "slow-cooker-butternut-squash-pulled-pork-tacos",
+    "title":  "Slow Cooker Butternut Squash Pulled Pork Tacos",
+    "source_url":  "https://www.wellplated.com/slow-cooker-butternut-squash-pulled-pork-tacos/",
+    "protein":  "pork",
+    "state":  "rejected-macros",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:57",
+    "updated":  "2026-08-27T19:06:05",
+    "terms":  [
+                  {
+                      "term":  "pork loin",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "chipotle in adobo",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "Corn Tortillas",
+                      "optional":  true
+                  }
+              ],
+    "reject_reason":  "macro gate (pre-write): 35.8g protein below the 40 floor",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:57",
+                        "by":  "harvest",
+                        "detail":  "https://www.wellplated.com/slow-cooker-butternut-squash-pulled-pork-tacos/"
+                    },
+                    {
+                        "state":  "selected",
+                        "at":  "2026-08-27T18:14:58",
+                        "by":  "decider",
+                        "detail":  "Chipotle-adobo pulled pork with butternut squash in corn tortillas is a distinctive plate with no live pork-taco twin; pork widens a chicken-heavy batch and the prior rejected pork taco was an Asian sweet-soy dish, a different flavor entirely."
+                    },
+                    {
+                        "state":  "extracted",
+                        "at":  "2026-08-27T18:16:23",
+                        "by":  "local",
+                        "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-27T18:58:34",
+                        "by":  "mapper",
+                        "detail":  "4 residual lines ruled, 0 rejected, 2 new DB rows returned. Two terms enqueued (pork loin, chipotle in adobo), both existing vocabulary ids the board simply cannot price yet. The adobo sauce line is mapped to the same id as the peppers because it is literally the same can; that double-counts roughly 30 g of a can already in the cart, worth about 15 cents at batch scale, which I judged better than "
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-27T18:58:34",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-27T19:06:04",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
+                    },
+                    {
+                        "state":  "rejected-macros",
+                        "at":  "2026-08-27T19:06:05",
+                        "by":  "macro-gate",
+                        "detail":  "macro gate (pre-write): 35.8g protein below the 40 floor"
+                    }
+                ]
+}

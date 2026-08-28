@@ -1,0 +1,433 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 3,
+ "generated": "2026-08-27T18:36:49",
+ "batch_terms": [
+  "blackened seasoning mix",
+  "frozen cilantro lime rice"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "blackened seasoning mix",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "blackened seasoning mix",
+     "attempts": [
+      {
+       "term": "blackened seasoning mix",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Blackened Seasoning Shaker",
+       "price": 3.29,
+       "size": "2.5 oz",
+       "relevance": 59,
+       "url": "https://www.bakersplus.com/p/0001111071236"
+      },
+      {
+       "item": "Cajun's Choice® Blackened Seasoning & Rub",
+       "price": 8.79,
+       "size": "6.5 oz",
+       "relevance": 57,
+       "url": "https://www.bakersplus.com/p/0008449303186"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "blackenedseasoningmix",
+     "attempts": [
+      {
+       "term": "blackened seasoning mix",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "blackenedseasoningmix",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "blackened seasoning mix",
+     "attempts": [
+      {
+       "term": "blackened seasoning mix",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+       "price": 2.49,
+       "size": "2.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/260331-louisiana-fish-fry-products-blackened-seasoning-cajun-2-5-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "blackened seasoning mix",
+     "attempts": [
+      {
+       "term": "blackened seasoning mix",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+       "price": 7.78,
+       "size": "",
+       "unit_price": "$0.65/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
+      },
+      {
+       "item": "Weber Kick'N Chicken Seasoning, 22 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.45/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1WRBVATZED29"
+      },
+      {
+       "item": "Member’s Mark Cajun Seasoning, 22 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.45/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4YA42F1XS2EF"
+      },
+      {
+       "item": "Badia Complete Seasoning, 28 oz.",
+       "price": 6.38,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
+      },
+      {
+       "item": "Kinder's Chicken Salt Seasoning, 8.5 oz.",
+       "price": 6.48,
+       "size": "",
+       "unit_price": "$0.76/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6REQ194JYRNT"
+      },
+      {
+       "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+      },
+      {
+       "item": "McCormick Basil Balsamic Seasoning, 11.37 oz.",
+       "price": 2.91,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2UXTA5JDE6CY"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Chicken Seasoning, 10.87 oz.",
+       "price": 7.42,
+       "size": "",
+       "unit_price": "$0.68/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3H1DDZHFDLIP"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "frozen cilantro lime rice",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "EMPTY",
+     "term_used": "frozencilantrolimerice",
+     "attempts": [
+      {
+       "term": "frozen cilantro lime rice",
+       "state": "OK",
+       "hits": 1
+      },
+      {
+       "term": "frozencilantrolimerice",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "EMPTY",
+     "term_used": "frozencilantrolimerice",
+     "attempts": [
+      {
+       "term": "frozen cilantro lime rice",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "frozencilantrolimerice",
+       "state": "OK",
+       "hits": 0
+      }
+     ],
+     "hits": [],
+     "reason": "no candidates on any of 2 ladder rung(s)",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "frozen cilantro lime rice",
+     "attempts": [
+      {
+       "term": "frozen cilantro lime rice",
+       "state": "OK",
+       "hits": 72
+      }
+     ],
+     "hits": [
+      {
+       "item": "Mahatma Cilantro Limon Jasmine Rice, Microwaveable Rice",
+       "price": 1.99,
+       "size": "8.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19820289-mahatma-cilantro-lim-n-jasmine-rice-8-8-oz"
+      },
+      {
+       "item": "Vigo Rice, Cilantro Lime",
+       "price": 2.49,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17802850-vigo-rice-cilantro-lime-8-oz"
+      },
+      {
+       "item": "Ben's Original Cilantro Lime Flavored Rice Easy Dinner Side",
+       "price": 1.97,
+       "size": "8.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24553706-ben-s-original-cilantro-lime-flavored-8-5-oz"
+      },
+      {
+       "item": "Mahatma Mexican Style Jasmine Rice, Gluten Free, Microwaveable Rice",
+       "price": 1.99,
+       "size": "8.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30552309-mahatma-jasmine-rice-mexican-style-8-8-oz"
+      },
+      {
+       "item": "Birds Eye Steamfresh Long Grain White Rice with Mixed Vegetables, Frozen Side",
+       "price": 1.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41922-birds-eye-steamfresh-rice-mix-vegetable-10-oz"
+      },
+      {
+       "item": "Mahatma Yellow Rice, Gluten Free, Microwaveable Rice",
+       "price": 1.99,
+       "size": "8.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43042579-mahatma-yellow-rice-8-8-oz"
+      },
+      {
+       "item": "Green Giant Spring Veggies, Brown Rice & Quinoa with Garlic Basil Sauce (Frozen)",
+       "price": 3.99,
+       "size": "10 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29770249-green-giant-veggies-rice-restaurant-style-spring-veggies-brown-rice-quinoa-with-garlic-basil-sauce-10-00-oz"
+      },
+      {
+       "item": "Minute Rice Ready-To-Eat Restaurant-Style Sticky Rice, Microwaveable Rice Cups",
+       "price": 1.99,
+       "size": "2 x 8.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43042588-minute-rice-sticky-rice-restaurant-style-8-8-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "frozen cilantro lime rice",
+     "attempts": [
+      {
+       "term": "frozen cilantro lime rice",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+       "price": 13.86,
+       "size": "",
+       "unit_price": "$3.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4UFAGU9IU135"
+      },
+      {
+       "item": "Gorton's Golden Crunchy Panko Fish Fillets, Frozen, 28 ct.",
+       "price": 13.86,
+       "size": "",
+       "unit_price": "$0.49/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3NBPUW3VG0XX"
+      },
+      {
+       "item": "Member's Mark Stir Fry Mix, Frozen 16 oz, 5 pk.",
+       "price": 9.18,
+       "size": "",
+       "unit_price": "$1.84/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6BOL8CRTAHX1"
+      },
+      {
+       "item": "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+       "price": 6.73,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6E5MZMROPG6C"
+      },
+      {
+       "item": "Member's Mark Triple Berry Blend, Frozen, 64 oz.",
+       "price": 10.46,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5LP5I0UW2S6C"
+      },
+      {
+       "item": "El Monterey Beef and Bean Burritos 4 oz., 24 pk.",
+       "price": 12.86,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/63DCKYQ2FBS2"
+      },
+      {
+       "item": "Member's Mark Natural Blueberries, Frozen 4 lbs.",
+       "price": 9.17,
+       "size": "",
+       "unit_price": "$0.14/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/74MFICPZKX8J"
+      },
+      {
+       "item": "Member's Mark Organic Mango Chunks, Frozen, 4 lbs.",
+       "price": 8.36,
+       "size": "",
+       "unit_price": "$2.09/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0UMEVRJF2VME"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

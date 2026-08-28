@@ -1,0 +1,31 @@
+{
+    "slug":  "crispy-oven-baked-ground-turkey-tacos",
+    "title":  "Crispy Oven Baked Ground Turkey Tacos",
+    "source_url":  "https://nomastehungry.com/crispy-oven-baked-ground-turkey-tacos/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:14:59",
+    "updated":  "2026-08-27T18:15:00",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground-turkey taco filling with black beans, corn and Mexican cheese in tortillas duplicates the saturated live turkey-taco family, especially loaded-ground-turkey-nacho-bake; the crispy-baked shell is a vehicle, not a distinct dinner, echoing the prior turkey-taco-lettuce-wraps ruling.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:14:59",
+                        "by":  "harvest",
+                        "detail":  "https://nomastehungry.com/crispy-oven-baked-ground-turkey-tacos/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:15:00",
+                        "by":  "decider",
+                        "detail":  "Ground-turkey taco filling with black beans, corn and Mexican cheese in tortillas duplicates the saturated live turkey-taco family, especially loaded-ground-turkey-nacho-bake; the crispy-baked shell is a vehicle, not a distinct dinner, echoing the prior turkey-taco-lettuce-wraps ruling."
+                    }
+                ]
+}

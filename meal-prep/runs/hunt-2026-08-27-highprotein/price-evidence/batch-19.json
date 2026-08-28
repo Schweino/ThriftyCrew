@@ -1,0 +1,2381 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 4,
+ "generated": "2026-08-27T19:00:00",
+ "batch_terms": [
+  "red pepper flakes",
+  "whole wheat flour",
+  "fresh red chili",
+  "potatoes",
+  "chicken bone broth",
+  "canned corn",
+  "pork loin",
+  "chipotle in adobo"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "red pepper flakes",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Grated Parmesan Cheese and Red Pepper Flakes Shaker",
+       "price": 3,
+       "size": "8 oz",
+       "relevance": 125,
+       "url": "https://www.bakersplus.com/p/0001111016336"
+      },
+      {
+       "item": "Smart Way™ Crushed Red Pepper",
+       "price": 1.25,
+       "size": "1.5 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0001111011745"
+      },
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 6.99,
+       "size": "4.62 oz",
+       "relevance": 60,
+       "url": "https://www.bakersplus.com/p/0005210003835"
+      },
+      {
+       "item": "Kroger® Crushed Red Pepper Shaker",
+       "price": 5.49,
+       "size": "4.25 oz",
+       "relevance": 59,
+       "url": "https://www.bakersplus.com/p/0001111000320"
+      },
+      {
+       "item": "Spice Islands Crushed Red Pepper, Kosher",
+       "price": 7.99,
+       "size": "1.4 oz",
+       "relevance": 57,
+       "url": "https://www.bakersplus.com/p/0001732400303"
+      },
+      {
+       "item": "Simple Truth Organic® Crushed Red Pepper Shaker",
+       "price": 3.99,
+       "size": "1.19 oz",
+       "relevance": 55,
+       "url": "https://www.bakersplus.com/p/0001111002384"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red pepper",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "red pepper",
+       "state": "OK",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Peppers",
+       "price": 1.79,
+       "size": "1 ct",
+       "relevance": 137,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/red_peppers/p/78440"
+      },
+      {
+       "item": "Our Family Red Pepper, Crushed 1.5 Oz",
+       "price": 2.99,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_red_pepper_crushed_1_5_oz/p/7081493"
+      },
+      {
+       "item": "Mc Cormick Crushed Red Pepper 1.5 Oz",
+       "price": 3.79,
+       "size": "1.5 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_crushed_red_pepper_1_5_oz/p/34736"
+      },
+      {
+       "item": "Mt. Olive Roasted Red Peppers 12 Fl Oz",
+       "price": 3.29,
+       "size": "12 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_roasted_red_peppers_12_fl_oz/p/12781"
+      },
+      {
+       "item": "Mc Cormick Ground Cayenne Red Pepper 1 Oz",
+       "price": 3.69,
+       "size": "1 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_ground_cayenne_red_pepper_1_oz/p/34668"
+      },
+      {
+       "item": "Full Circle Market Crushed Red Pepper 1.2 Oz",
+       "price": 4.99,
+       "size": "1.2 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_crushed_red_pepper_1_2_oz/p/8028177"
+      },
+      {
+       "item": "Fresh & Finest By Our Family Roasted Red Pepper Hummus 10 Oz",
+       "price": 4.49,
+       "size": "10 oz",
+       "relevance": 125,
+       "url": "https://www.shopfamilyfare.com/shop/deli/party_trays_dips/fresh_finest_by_our_family_roasted_red_pepper_hummus_10_oz/p/1564405684713576563"
+      },
+      {
+       "item": "Mezzetta Roasted Red Peppers, California Fresh Pack, Mild 16 Oz",
+       "price": 5.99,
+       "size": "16 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mezzetta_roasted_red_peppers_california_fresh_pack_mild_16_oz/p/41756"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Crushed Red Pepper",
+       "price": 3.99,
+       "size": "1.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16848421-mccormick-crushed-red-pepper-1-5-oz"
+      },
+      {
+       "item": "Badia Spices Crushed Red Pepper",
+       "price": 3.99,
+       "size": "4.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+      },
+      {
+       "item": "Simply Organic Red Pepper, Crushed",
+       "price": 6.99,
+       "size": "1.59 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/56512-simply-organic-red-pepper-crushed-1-59-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "red pepper flakes",
+     "attempts": [
+      {
+       "term": "red pepper flakes",
+       "state": "MATCHES",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+       "price": 19.98,
+       "size": "",
+       "unit_price": "$1.11/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
+      },
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+      },
+      {
+       "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+       "price": 20.98,
+       "size": "",
+       "unit_price": "$5.59/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+      },
+      {
+       "item": "Mrs. Dash Original Seasoning, 10 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.70/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+      },
+      {
+       "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.70/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+      },
+      {
+       "item": "Member's Mark Ground White Pepper, 18 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.83/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+      },
+      {
+       "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "whole wheat flour",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "whole wheat flour",
+     "attempts": [
+      {
+       "term": "whole wheat flour",
+       "state": "OK",
+       "hits": 11
+      }
+     ],
+     "hits": [
+      {
+       "item": "Hudson Cream Whole Wheat Flour",
+       "price": 4.29,
+       "size": "5 lb",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0007692900105"
+      },
+      {
+       "item": "Kroger® Traditional Whole Wheat Flour",
+       "price": 3.49,
+       "size": "5 lb",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0001111084498"
+      },
+      {
+       "item": "King Arthur™ Flour White Whole Wheat Flour",
+       "price": 6.99,
+       "size": "5 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0007101205555"
+      },
+      {
+       "item": "Bob's Red Mill 100% Stone Ground Whole Wheat Flour",
+       "price": 5.49,
+       "size": "5 lb",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0003997853300"
+      },
+      {
+       "item": "Jovial® 100% Organic Einkorn Whole Wheat Flour",
+       "price": 11.79,
+       "size": "32 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0081542101420"
+      },
+      {
+       "item": "Gold Medal™ Premium Quality All Natural Whole Wheat Flour",
+       "price": 6.99,
+       "size": "5 lbs",
+       "relevance": 126,
+       "url": "https://www.bakersplus.com/p/0001600010810"
+      },
+      {
+       "item": "Mission Carb Balance Burrito Size Whole Wheat Flour Tortillas",
+       "price": 4.69,
+       "size": "6 count",
+       "relevance": 125,
+       "url": "https://www.bakersplus.com/p/0007373100124"
+      },
+      {
+       "item": "Mission Carb Balance Soft Taco Size Whole Wheat Flour Tortillas",
+       "price": 5.79,
+       "size": "8 count",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0007373100121"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "whole wheat flour",
+     "attempts": [
+      {
+       "term": "whole wheat flour",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Bob's Red Mill Whole Wheat Flour, Organic, 100% Stone Ground 5 Lb",
+       "price": 10.99,
+       "size": "5 lb",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/flour/bob_s_red_mill_whole_wheat_flour_organic_100_stone_ground_5_lb/p/27105"
+      },
+      {
+       "item": "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain 5 Lb",
+       "price": 7.89,
+       "size": "5 lb",
+       "relevance": 123,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/flour/king_arthur_baking_company_whole_wheat_flour_100_whole_grain_5_lb/p/38377"
+      },
+      {
+       "item": "Our Family Flour, Whole Wheat, Unbleached 5 Lb",
+       "price": 3.69,
+       "size": "5 lb",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/flour/our_family_flour_whole_wheat_unbleached_5_lb/p/1564405684704759140"
+      },
+      {
+       "item": "North Dakota Mill Flour, Whole Wheat, Stone Ground 5 Lb",
+       "price": 3.99,
+       "size": "5 lb",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/flour/north_dakota_mill_flour_whole_wheat_stone_ground_5_lb/p/2020353"
+      },
+      {
+       "item": "Bob's Red Mill Flour, Whole Wheat, 100% Stone Ground 80 Oz",
+       "price": 5.79,
+       "size": "80 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/baking/flour/bob_s_red_mill_flour_whole_wheat_100_stone_ground_80_oz/p/5434"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "whole wheat flour",
+     "attempts": [
+      {
+       "term": "whole wheat flour",
+       "state": "OK",
+       "hits": 1
+      }
+     ],
+     "hits": [
+      {
+       "item": "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain, Non-GMO Project Verified, Certified Kosher",
+       "price": 5.99,
+       "size": "5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/37934-king-arthur-baking-company-flour-whole-wheat-5-lb"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "whole wheat flour",
+     "attempts": [
+      {
+       "term": "whole wheat flour",
+       "state": "MATCHES",
+       "hits": 13
+      }
+     ],
+     "hits": [
+      {
+       "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+       "price": 14.98,
+       "size": "",
+       "unit_price": "$0.31/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+      },
+      {
+       "item": "Mission 8\" Protein Whole Wheat Flour Tortillas, 12 ct.",
+       "price": 7.78,
+       "size": "",
+       "unit_price": "$0.43/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1634R6MQVLZX"
+      },
+      {
+       "item": "Gold Medal All Purpose Flour, 12 lbs.",
+       "price": 6.72,
+       "size": "",
+       "unit_price": "$0.56/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2V4R3MQP7LKY"
+      },
+      {
+       "item": "King Arthur Bread Flour, 10 lbs.",
+       "price": 8.38,
+       "size": "",
+       "unit_price": "$0.84/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3EJBF2VJT0IQ"
+      },
+      {
+       "item": "Member's Mark All Purpose Flour, 25 lbs.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.34/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5DODYSIB475T"
+      },
+      {
+       "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "$0.42/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+      },
+      {
+       "item": "King Arthur Baking Company, 00 Pizza Flour, 5 lbs.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.60/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1SD16V0KDJXT"
+      },
+      {
+       "item": "Maseca Masa Corn Flour, 22 lbs.",
+       "price": 21.78,
+       "size": "",
+       "unit_price": "$0.99/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "fresh red chili",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "red chili",
+     "attempts": [
+      {
+       "term": "fresh red chili",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "red chili",
+       "state": "OK",
+       "hits": 13
+      }
+     ],
+     "hits": [
+      {
+       "item": "Ox Brand Oelek Ground Red Chili Sauce",
+       "price": 2.49,
+       "size": "7.05 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0885108130143"
+      },
+      {
+       "item": "Ox Brand Red Chili With Garlic Sauce",
+       "price": 2.49,
+       "size": "7.05 oz",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0885108130142"
+      },
+      {
+       "item": "Marie Callender's Red Chili Chicken Burrito Bowl",
+       "price": 2.49,
+       "size": "11.5 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0002113190557"
+      },
+      {
+       "item": "Ocean Prince Smoked Oysters With Red Chili Pepper",
+       "price": 2.69,
+       "size": "3 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0007323000156"
+      },
+      {
+       "item": "Morton & Bassett® All-Natural Red Chili Flakes",
+       "price": 10.49,
+       "size": "1.3 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0001629144185"
+      },
+      {
+       "item": "El Monterey® Family Size Beef and Bean Red Chili Frozen Burritos",
+       "price": 5.99,
+       "size": "8 ct / 32 oz",
+       "relevance": 124,
+       "url": "https://www.bakersplus.com/p/0007100703172"
+      },
+      {
+       "item": "Frank's RedHot Sweet Chili Hot Sauce",
+       "price": 4.99,
+       "size": "12 fl oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0004150082772"
+      },
+      {
+       "item": "Bush's Red Beans in a Mild Chili Sauce 16 oz",
+       "price": 2.29,
+       "size": "16 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0003940001692"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "red chili",
+     "attempts": [
+      {
+       "term": "fresh red chili",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "red chili",
+       "state": "OK",
+       "hits": 7
+      }
+     ],
+     "hits": [
+      {
+       "item": "La Preferida Enchilada Sauce, Mild, Red Chili 10 Oz",
+       "price": 2.69,
+       "size": "10 oz",
+       "relevance": 127,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/la_preferida_enchilada_sauce_mild_red_chili_10_oz/p/543814"
+      },
+      {
+       "item": "Bush's Best Southwest Zest Pinto Beans In A Medium Red Chili Sauce 15 Oz",
+       "price": 2.49,
+       "size": "15 oz",
+       "relevance": 122,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_southwest_zest_pinto_beans_in_a_medium_red_chili_sauce_15_oz/p/1564405684711329307"
+      },
+      {
+       "item": "Frank's Red Hot Sweet Chili Sauce 12 Fl Oz",
+       "price": 5.49,
+       "size": "12 fl oz",
+       "relevance": 90,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/frank_s_red_hot_sweet_chili_sauce_12_fl_oz/p/29592"
+      },
+      {
+       "item": "Bush's Best Red Beans Medium Chili Sauce Chili Beans 16 Oz",
+       "price": 2.29,
+       "size": "16 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_red_beans_medium_chili_sauce_chili_beans_16_oz/p/26830"
+      },
+      {
+       "item": "Bush's Best Chili Beans Mild Chili Sauce Red Beans 16 Oz",
+       "price": 2.29,
+       "size": "16 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_chili_beans_mild_chili_sauce_red_beans_16_oz/p/26829"
+      },
+      {
+       "item": "Bush's Best Red Beans Spicy Chili Sauce Chili Beans 16 Oz",
+       "price": 2.29,
+       "size": "16 oz",
+       "relevance": 86,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_red_beans_spicy_chili_sauce_chili_beans_16_oz/p/26831"
+      },
+      {
+       "item": "Bush's Best Low Sodium Red Beans Mild Chili Sauce Chili Beans 15 Oz",
+       "price": 2.29,
+       "size": "15 oz",
+       "relevance": 83,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_low_sodium_red_beans_mild_chili_sauce_chili_beans_15_oz/p/1564405684704083960"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "fresh red chili",
+     "attempts": [
+      {
+       "term": "fresh red chili",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Green Serrano Pepper",
+       "price": 0.21,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
+      },
+      {
+       "item": "Anaheim Pepper",
+       "price": 1.0,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19141625-anaheim-pepper-1-lb"
+      },
+      {
+       "item": "Jalapeno Pepper",
+       "price": 0.3,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/232739-jalapeno-pepper-1-lb"
+      },
+      {
+       "item": "Poblano Pepper",
+       "price": 1.0,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345708-poblano-pepper-1-lb"
+      },
+      {
+       "item": "Banana Pepper",
+       "price": 0.83,
+       "size": "$4.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/21372221-banana-pepper-1-lb"
+      },
+      {
+       "item": "Green, Red & Yellow Peppers",
+       "price": 4.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89326993-green-red-yellow-peppers"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "fresh red chili",
+     "attempts": [
+      {
+       "term": "fresh red chili",
+       "state": "MATCHES",
+       "hits": 8
+      }
+     ],
+     "hits": [
+      {
+       "item": "Panera Bread Ready-to-Heat Broccoli Cheddar Soup, 40 oz, 4 Single Serve Cups (Refrigerated)",
+       "price": 10.48,
+       "size": "",
+       "unit_price": "",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6HN67YMAV8P1"
+      },
+      {
+       "item": "Nissin Top Ramen, Beef, 24 pk.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.29/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6K8I2SA7SQEH"
+      },
+      {
+       "item": "Nissin Top Ramen, Chicken, 24 pk.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.29/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3F8RQZGYQ248"
+      },
+      {
+       "item": "PhoLicious Spicy Chicken Ramen, 4.1 oz., 4 pk.",
+       "price": 13.28,
+       "size": "",
+       "unit_price": "$3.32/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3QFZID9KANNR"
+      },
+      {
+       "item": "Member's Mark Chicken Broth, 32 oz., 6 pk.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.04/foz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7H04F2E4J097"
+      },
+      {
+       "item": "Chef-mate Hot Dog Chili Sauce With Beef 108 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4XT99DZVPBR8"
+      },
+      {
+       "item": "Stagg Silverado Beef Chili with Beans 15 oz., 6 pk.",
+       "price": 13.98,
+       "size": "",
+       "unit_price": "$2.33/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1YON6C4DDQF6"
+      },
+      {
+       "item": "Pacific Bone Broth, Unsalted, 32 oz., 3 pk.",
+       "price": 13.98,
+       "size": "",
+       "unit_price": "$4.66/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CYOKYA3KU0M"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "potatoes",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "potatoes",
+     "attempts": [
+      {
+       "term": "potatoes",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Red Potatoes",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 137,
+       "url": "https://www.bakersplus.com/p/0000000004073"
+      },
+      {
+       "item": "Red Potatoes",
+       "price": 1.69,
+       "size": "1 lb",
+       "relevance": 137,
+       "url": "https://www.bakersplus.com/p/0000000003221"
+      },
+      {
+       "item": "Yukon Gold Potatoes",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0000000004727"
+      },
+      {
+       "item": "Russet Potatoes Bag",
+       "price": 2.79,
+       "size": "5 lb",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0001111091760"
+      },
+      {
+       "item": "Kroger® Red Potatoes",
+       "price": 7.99,
+       "size": "5 lb",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0001111091846"
+      },
+      {
+       "item": "Kroger® Gold Potatoes",
+       "price": 7.99,
+       "size": "5 lb",
+       "relevance": 135,
+       "url": "https://www.bakersplus.com/p/0001111091871"
+      },
+      {
+       "item": "Kroger® Baker Sweet Potatoes",
+       "price": 3.99,
+       "size": "28 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111018219"
+      },
+      {
+       "item": "Kroger® Jumbo Russet Potatoes",
+       "price": 6.39,
+       "size": "8 lb",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0001111091845"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "potatoes",
+     "attempts": [
+      {
+       "term": "potatoes",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Our Family Yellow Potatoes",
+       "price": 6.99,
+       "size": "5 lb",
+       "relevance": 134,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_yellow_potatoes/p/5579641"
+      },
+      {
+       "item": "Fresh Potatoes, Microwaveable",
+       "price": null,
+       "size": "1 ct",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/fresh_potatoes_microwaveable/p/2212160"
+      },
+      {
+       "item": "Our Family Potatoes Yellow Baby Dutch",
+       "price": 4.99,
+       "size": "24 oz",
+       "relevance": 131,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_yellow_baby_dutch/p/1564405684714779191"
+      },
+      {
+       "item": "Fresh Idaho Russet Potatoes Our Family",
+       "price": 3.29,
+       "size": "5 lb",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/fresh_idaho_russet_potatoes_our_family/p/1564405684706717650"
+      },
+      {
+       "item": "Simply Potatoes Potatoes, Signature Seasoned, Diced 20 Oz",
+       "price": 3.99,
+       "size": "20 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/freezer/frozen_potatoes/other_frozen_potatoes/simply_potatoes_potatoes_signature_seasoned_diced_20_oz/p/17254"
+      },
+      {
+       "item": "The Little Potato Co. Potatoes, Garlic & Herb, Fresh 1 Lb",
+       "price": 5.69,
+       "size": "1 lb",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/the_little_potato_co_potatoes_garlic_herb_fresh_1_lb/p/5192065"
+      },
+      {
+       "item": "The Little Potato Co. Potatoes, With Seasoning Pack, Savory Herb, Fresh 1 Lb",
+       "price": 5.69,
+       "size": "1 lb",
+       "relevance": 121,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/the_little_potato_co_potatoes_with_seasoning_pack_savory_herb_fresh_1_lb/p/52833"
+      },
+      {
+       "item": "Russet Potato",
+       "price": 0.99,
+       "size": "lb",
+       "relevance": 0,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/russet_potato/p/6348"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "potatoes",
+     "attempts": [
+      {
+       "term": "potatoes",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Green Giant Potatoes, Idaho",
+       "price": 2.99,
+       "size": "5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2707026-green-giant-potatoes-idaho-5-lb"
+      },
+      {
+       "item": "Russet Potato",
+       "price": 0.74,
+       "size": "$1.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb"
+      },
+      {
+       "item": "Russet Potato Bag",
+       "price": 2.99,
+       "size": "5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16417856-russet-potato-bag-5-lbs"
+      },
+      {
+       "item": "Green Giant Potatoes, Idaho, Yellow Skin Golden Flesh",
+       "price": 4.99,
+       "size": "80 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/323152-green-giant-potatoes-idaho-yellow-skin-golden-flesh-80-oz"
+      },
+      {
+       "item": "Summertime Farms Baby Gold Potatoes",
+       "price": 3.88,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387290-baby-gold-potatoes"
+      },
+      {
+       "item": "Summertime Farms Baby Red Potatoes",
+       "price": 3.88,
+       "size": "3 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "potatoes",
+     "attempts": [
+      {
+       "term": "potatoes",
+       "state": "MATCHES",
+       "hits": 41
+      }
+     ],
+     "hits": [
+      {
+       "item": "Seeds of Change Organic Chipotle Style Brown Rice, 8.5 oz., 6 pk.",
+       "price": 11.98,
+       "size": "",
+       "unit_price": "$2.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1B6LXVADXQ1P"
+      },
+      {
+       "item": "Ben's Original Roasted Chicken Rice Cups, 8 ct.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$1.25/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7D3MI61E4Q2W"
+      },
+      {
+       "item": "Creamer Potatoes, 5 lbs.",
+       "price": 6.72,
+       "size": "",
+       "unit_price": "$1.34/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
+      },
+      {
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 5.17,
+       "size": "",
+       "unit_price": "$0.52/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+      },
+      {
+       "item": "Sweet Potatoes, 5 lbs.",
+       "price": 4.87,
+       "size": "",
+       "unit_price": "$0.97/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3P97KL9367OH"
+      },
+      {
+       "item": "RiceSelect Pearl Couscous, 40 oz.",
+       "price": 5.98,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2GKQNXTDHW40"
+      },
+      {
+       "item": "Yellow Potatoes, 8 lbs.",
+       "price": 7.64,
+       "size": "",
+       "unit_price": "$0.95/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
+      },
+      {
+       "item": "Red Potatoes, 8 lbs.",
+       "price": 6.92,
+       "size": "",
+       "unit_price": "$0.86/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "chicken bone broth",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "chicken bone broth",
+     "attempts": [
+      {
+       "term": "chicken bone broth",
+       "state": "OK",
+       "hits": 16
+      }
+     ],
+     "hits": [
+      {
+       "item": "Swanson Chicken Bone Broth 32 oz Carton",
+       "price": 4.49,
+       "size": "32 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0005100024891"
+      },
+      {
+       "item": "Kettle & Fire Mushroom Chicken Bone Broth",
+       "price": 7.99,
+       "size": "16.9 fl oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085170200704"
+      },
+      {
+       "item": "Bare Bones® Instant Chicken Bone Broth",
+       "price": 7.99,
+       "size": "2.12 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085000532409"
+      },
+      {
+       "item": "Kettle & Fire Classic Chicken Bone Broth",
+       "price": 13.49,
+       "size": "32 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0085001061314"
+      },
+      {
+       "item": "Kinder's® Golden Chicken Bone Broth Gravy Mix",
+       "price": 2.29,
+       "size": "1 oz",
+       "relevance": 129,
+       "url": "https://www.bakersplus.com/p/0075579525280"
+      },
+      {
+       "item": "Jinx Kibble Sauce with Chicken Bone Broth, 12oz",
+       "price": 5.49,
+       "size": "12oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0081011812060"
+      },
+      {
+       "item": "Pacific Foods® Organic Unsalted Chicken Bone Broth",
+       "price": 6.49,
+       "size": "32 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0005260305607"
+      },
+      {
+       "item": "Kettle & Fire Reduced Sodium Chicken Bone Broth",
+       "price": 7.99,
+       "size": "16.9 oz",
+       "relevance": 128,
+       "url": "https://www.bakersplus.com/p/0085170200779"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "chicken bone broth",
+     "attempts": [
+      {
+       "term": "chicken bone broth",
+       "state": "OK",
+       "hits": 10
+      }
+     ],
+     "hits": [
+      {
+       "item": "Swanson Chicken Bone Broth 32 Oz",
+       "price": 4.79,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_chicken_bone_broth_32_oz/p/1564405684703487672"
+      },
+      {
+       "item": "Zoup! Chicken Bone Broth 32 Oz",
+       "price": 8.99,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/zoup_chicken_bone_broth_32_oz/p/5145802"
+      },
+      {
+       "item": "Our Family Chicken Bone Broth 32 Fl Oz",
+       "price": 2.69,
+       "size": "32 fl oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/our_family_chicken_bone_broth_32_fl_oz/p/1564405684716837187"
+      },
+      {
+       "item": "Swanson® Sipping Chicken Bone Broth 10.750 Oz",
+       "price": 3.59,
+       "size": "10.750 oz",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_sipping_chicken_bone_broth_10_750_oz/p/1564405684704695596"
+      },
+      {
+       "item": "Pacific Foods Organic Unsalted Chicken Bone Broth 32.000 Oz",
+       "price": 7.69,
+       "size": "32.000 oz",
+       "relevance": 125,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/pacific_foods_organic_unsalted_chicken_bone_broth_32_000_oz/p/2372215"
+      },
+      {
+       "item": "Pacific Foods Organic Chicken Bone Broth With Sea Salt 32.000 Oz",
+       "price": 7.69,
+       "size": "32.000 oz",
+       "relevance": 124,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/pacific_foods_organic_chicken_bone_broth_with_sea_salt_32_000_oz/p/1564405684704687951"
+      },
+      {
+       "item": "Swanson® Sipping Chicken Bone Broth With Ginger And Turmeric 10.750 Oz",
+       "price": 3.59,
+       "size": "10.750 oz",
+       "relevance": 122,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/swanson_sipping_chicken_bone_broth_with_ginger_and_turmeric_10_750_oz/p/1564405684704695597"
+      },
+      {
+       "item": "Full Circle Market Bone Broth, Chicken 32 Oz",
+       "price": 4.69,
+       "size": "32 oz",
+       "relevance": 89,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/full_circle_market_bone_broth_chicken_32_oz/p/8189392"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "chicken bone broth",
+     "attempts": [
+      {
+       "term": "chicken bone broth",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kitchen Basics Original Chicken Bone Broth",
+       "price": 2.39,
+       "size": "8.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/45565783-kitchen-basics-original-chicken-bone-broth-8-25-oz"
+      },
+      {
+       "item": "Pacific Foods Organic Unsalted Chicken Bone Broth",
+       "price": 7.99,
+       "size": "32 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/395436-pacific-organic-unsalted-chicken-bone-broth-32-oz"
+      },
+      {
+       "item": "Swanson's Sipping Chicken Bone Broth",
+       "price": 2.99,
+       "size": "10.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984850-swanson-sipping-chicken-bone-broth-10-75-oz"
+      },
+      {
+       "item": "Swanson's Sipping Chicken Bone Broth With Ginger and Turmeric",
+       "price": 2.99,
+       "size": "10.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19984868-swanson-chicken-bone-broth-with-ginger-turmeric-10-75-oz"
+      },
+      {
+       "item": "Kitchen Basics Chicken Turmeric & Ginger Bone Broth",
+       "price": 2.39,
+       "size": "8.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/47066881-kitchen-basics-turmeric-ginger-bone-broth-8-25-oz"
+      },
+      {
+       "item": "EPIC Homestyle Savory Chicken Bone Broth",
+       "price": 7.99,
+       "size": "14 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17421647-epic-homestyle-savory-chicken-bone-broth-whole30-14-000-fl-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "chicken bone broth",
+     "attempts": [
+      {
+       "term": "chicken bone broth",
+       "state": "MATCHES",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kettle & Fire Chicken Bone Broth, 16.9 oz., 6 ct.",
+       "price": 21.98,
+       "size": "",
+       "unit_price": "$3.66/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2X5O8541TVVH"
+      },
+      {
+       "item": "Marie Callender's Chicken Variety Pack Soup 8 ct.",
+       "price": 13.78,
+       "size": "",
+       "unit_price": "$1.72/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3XO6HFL6A979"
+      },
+      {
+       "item": "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+       "price": 8.48,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DBU8L0TGZ3D"
+      },
+      {
+       "item": "Bare Bones Instant Chicken Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$1.00/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1Y1DHFRZJBTV"
+      },
+      {
+       "item": "Bare Bones Chicken Instant Bone Broth Stick, 12 ct.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.83/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AU9M6ZGMX0K"
+      },
+      {
+       "item": "Samyang MEP Ramen Bowl, Red Pepper and Chicken & Cilantro, 6 pk.",
+       "price": 9.78,
+       "size": "",
+       "unit_price": "$1.63/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/47OXDHXYHOQ9"
+      },
+      {
+       "item": "Swanson Chicken Broth 32 oz., 6 pk.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$1.66/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1X254XV86WHW"
+      },
+      {
+       "item": "Swanson Chicken Broth 14.5 oz., 12 pk.",
+       "price": 8.93,
+       "size": "",
+       "unit_price": "$0.74/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1H8EQP1KU777"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "canned corn",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "canned corn",
+     "attempts": [
+      {
+       "term": "canned corn",
+       "state": "OK",
+       "hits": 25
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Whole Kernel Canned Golden Corn",
+       "price": 1,
+       "size": "15.25 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111011385"
+      },
+      {
+       "item": "Kroger® Canned Cream Style Golden Corn",
+       "price": 1,
+       "size": "14.75 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0001111011433"
+      },
+      {
+       "item": "Del Monte Golden Sweet Canned Cream Corn",
+       "price": 1.79,
+       "size": "14.75 oz",
+       "relevance": 90,
+       "url": "https://www.bakersplus.com/p/0002400016301"
+      },
+      {
+       "item": "Del Monte Southwest Whole Kernel Corn Canned Vegetables with Poblano and Red Peppers",
+       "price": 2.99,
+       "size": "15.25 oz",
+       "relevance": 79,
+       "url": "https://www.bakersplus.com/p/0002400052541"
+      },
+      {
+       "item": "Kroger® Fiesta Style Corn",
+       "price": 1.09,
+       "size": "11 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0001111011435"
+      },
+      {
+       "item": "4 Ct Kroger Supersweet Wk Corn",
+       "price": 3.79,
+       "size": "15.25 ounces",
+       "relevance": 42,
+       "url": "https://www.bakersplus.com/p/0001111011366"
+      },
+      {
+       "item": "Libby's® Whole Kernel Sweet Corn Cups",
+       "price": 2.99,
+       "size": "4 ct / 4 oz",
+       "relevance": 41,
+       "url": "https://www.bakersplus.com/p/0003710018001"
+      },
+      {
+       "item": "Del Monte Mexican Style Street Corn",
+       "price": 2.99,
+       "size": "14.75 oz",
+       "relevance": 41,
+       "url": "https://www.bakersplus.com/p/0002400025888"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "canned corn",
+     "attempts": [
+      {
+       "term": "canned corn",
+       "state": "OK",
+       "hits": 3
+      }
+     ],
+     "hits": [
+      {
+       "item": "Hormel Corned Beef 12 Oz",
+       "price": 7.79,
+       "size": "12 oz",
+       "relevance": 44,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/canned/hormel_corned_beef_12_oz/p/2349312"
+      },
+      {
+       "item": "Our Family Corned Beef Hash",
+       "price": 3.29,
+       "size": "15 oz",
+       "relevance": 43,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/canned/our_family_corned_beef_hash/p/1564405684716836407"
+      },
+      {
+       "item": "Hormel Corned Beef Hash, Homestyle 14 Oz",
+       "price": 4.99,
+       "size": "14 oz",
+       "relevance": 40,
+       "url": "https://www.shopfamilyfare.com/shop/meat/beef/canned/hormel_corned_beef_hash_homestyle_14_oz/p/1564405684690409483"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "canned corn",
+     "attempts": [
+      {
+       "term": "canned corn",
+       "state": "OK",
+       "hits": 49
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fareway Whole Kernel Corn",
+       "price": 0.78,
+       "size": "15.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300907-fareway-corn-whole-kernel-1525-oz"
+      },
+      {
+       "item": "Del Monte FRESH CUT Whole Kernel Corn, Canned Vegetables",
+       "price": 1.67,
+       "size": "15.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/36798-del-monte-corn-golden-sweet-whole-kernel-15-25-oz"
+      },
+      {
+       "item": "Fareway Cream Style Corn",
+       "price": 0.78,
+       "size": "14.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24300585-fareway-corn-cream-style-1475-oz"
+      },
+      {
+       "item": "Fareway Mexican Style Corn",
+       "price": 1.48,
+       "size": "11 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20561646-fareway-corn-mexican-style-11-oz"
+      },
+      {
+       "item": "Green Giant Sweet Corn, Whole Kernel",
+       "price": 1.48,
+       "size": "15.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50314758-green-giant-whole-kernel-sweet-corn-15-25-oz"
+      },
+      {
+       "item": "Fareway Gold & White Corn",
+       "price": 1.48,
+       "size": "15.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24220346-fareway-corn-gold-white-1525-oz"
+      },
+      {
+       "item": "Green Giant Vacuum Packed Whole Kernel Mexicorn",
+       "price": 2.49,
+       "size": "11 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/50443563-green-giant-vacuum-packed-mexicorn-11-oz"
+      },
+      {
+       "item": "Fareway Cut Corn",
+       "price": 1.98,
+       "size": "16 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20584642-fareway-cut-corn-16-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "canned corn",
+     "attempts": [
+      {
+       "term": "canned corn",
+       "state": "MATCHES",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
+       "price": 8.42,
+       "size": "",
+       "unit_price": "$1.05/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2IS6C9JATZ5E"
+      },
+      {
+       "item": "Orale! Premium Corn Husks, 16 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.44/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3FDUXETS786U"
+      },
+      {
+       "item": "Del Monte Whole Kernel Corn, 106 oz.",
+       "price": 5.76,
+       "size": "",
+       "unit_price": "$0.05/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2CLHKQS2F6MO"
+      },
+      {
+       "item": "Del Monte Mexican Style Street Corn, 14.75 oz., 6 pk.",
+       "price": 10.78,
+       "size": "",
+       "unit_price": "$1.80/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6XQL19VX7A3O"
+      },
+      {
+       "item": "Hormel Mary Kitchen Corned Beef Hash, 14 oz., 6 pk.",
+       "price": 16.68,
+       "size": "",
+       "unit_price": "$0.20/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4D6KO860HAU1"
+      },
+      {
+       "item": "Libby's Corned Beef, 12 oz., 3 pk.",
+       "price": 12.48,
+       "size": "",
+       "unit_price": "$5.55/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5J634R20F1NR"
+      },
+      {
+       "item": "Del Monte Sweet Peas, 105 oz.",
+       "price": 7.12,
+       "size": "",
+       "unit_price": "$0.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3WTTXI3YJUV4"
+      },
+      {
+       "item": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
+       "price": 7.86,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/0V8BGXDOBK9P"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "pork loin",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "pork loin",
+     "attempts": [
+      {
+       "term": "pork loin",
+       "state": "OK",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Home Chef Cold Pork Loin",
+       "price": 5,
+       "size": "12 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0084013431203"
+      },
+      {
+       "item": "Kroger® Bone-In Pork Loin Chops",
+       "price": 10,
+       "size": "36 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111066226"
+      },
+      {
+       "item": "Hormel® Lemon Garlic Pork Loin Filet",
+       "price": 3.99,
+       "size": "1.5 lbs",
+       "relevance": 131,
+       "url": "https://www.bakersplus.com/p/0003760037858"
+      },
+      {
+       "item": "Kroger® Fresh Natural Pork Loin Boneless",
+       "price": 2.19,
+       "size": "1 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0020322450000"
+      },
+      {
+       "item": "Hormel Sweet Garlic Ginger Pork Loin Filet",
+       "price": 3.99,
+       "size": "1.5 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003760037859"
+      },
+      {
+       "item": "Hormel® Mesquite Barbecue Pork Loin Filet",
+       "price": 3.99,
+       "size": "1.5 lbs",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0003760037856"
+      },
+      {
+       "item": "Thin Cut Bone-In Pork Loin Center-Cut Chop",
+       "price": 5.49,
+       "size": "1 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0020324250000"
+      },
+      {
+       "item": "Bone-In Pork Loin Center-Cut Thick Chops",
+       "price": 5.49,
+       "size": "1 lb",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0029315750000"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "pork loin",
+     "attempts": [
+      {
+       "term": "pork loin",
+       "state": "OK",
+       "hits": 5
+      }
+     ],
+     "hits": [
+      {
+       "item": "Open Acres Pork Loin Country Style Ribs",
+       "price": 5.29,
+       "size": "lb",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/open_acres_pork_loin_country_style_ribs/p/1564405684713031283"
+      },
+      {
+       "item": "Fresh Country Style Pork Loin Ribs Value Pack",
+       "price": 4.79,
+       "size": "lb",
+       "relevance": 129,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_country_style_pork_loin_ribs_value_pack/p/1564405684713031284"
+      },
+      {
+       "item": "Smithfield Fresh Steakhouse Mushroom Pork Loin Filet 23 Oz",
+       "price": 9.99,
+       "size": "23 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/prepared_pork/smithfield_fresh_steakhouse_mushroom_pork_loin_filet_23_oz/p/2172115"
+      },
+      {
+       "item": "Smithfield Original Recipe Fresh Pork Loin Filet 23 Oz",
+       "price": 9.99,
+       "size": "23 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/fresh/smithfield_original_recipe_fresh_pork_loin_filet_23_oz/p/5768274"
+      },
+      {
+       "item": "Smithfield Applewood Smoked Bacon Pork Loin Filet 23 Oz",
+       "price": 9.99,
+       "size": "23 oz",
+       "relevance": 126,
+       "url": "https://www.shopfamilyfare.com/shop/meat/pork/prepared_pork/smithfield_applewood_smoked_bacon_pork_loin_filet_23_oz/p/6828650"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "pork loin",
+     "attempts": [
+      {
+       "term": "pork loin",
+       "state": "OK",
+       "hits": 38
+      }
+     ],
+     "hits": [
+      {
+       "item": "Whole Boneless Pork Loin",
+       "price": 20.93,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387667-whole-boneless-pork-loin-1-each"
+      },
+      {
+       "item": "HORMEL ALWAYS TENDER Original Pork Loin",
+       "price": 8.88,
+       "size": "1.5 lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2684731-hormel-original-pork-loin-filet-1-7-lb"
+      },
+      {
+       "item": "HORMEL ALWAYS TENDER Mesquite Barbecue Pork Loin",
+       "price": 8.88,
+       "size": "24 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90903-hormel-mesquite-barbecue-flavor-pork-loin-filet-680-g"
+      },
+      {
+       "item": "Tenderized Pork Loin Slices",
+       "price": 1.0,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84387229-tenderized-pork-loin-slices"
+      },
+      {
+       "item": "HORMEL ALWAYS TENDER Lemon Garlic Pork Loin",
+       "price": 8.88,
+       "size": "1.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/90908-hormel-lemon-garlic-pork-loin-filet-1-5-oz"
+      },
+      {
+       "item": "Whole Pork Tenderloin",
+       "price": 7.48,
+       "size": "$2.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389061-whole-pork-tenderloin"
+      },
+      {
+       "item": "Whole Smoked Pork Loin",
+       "price": 63.34,
+       "size": "$3.99 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/89314812-whole-smoked-pork-loin"
+      },
+      {
+       "item": "Boneless Pork Chop",
+       "price": 2.5,
+       "size": "8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "pork loin",
+     "attempts": [
+      {
+       "term": "pork loin",
+       "state": "MATCHES",
+       "hits": 21
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member’s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound",
+       "price": 17.31,
+       "size": "",
+       "unit_price": "$1.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2F125NWDOJLS"
+      },
+      {
+       "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+       "price": 9.6,
+       "size": "",
+       "unit_price": "$2.98/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+      },
+      {
+       "item": "Member’s Mark Whole Bone In Pork Loin Back Ribs, Vacuum Pack, priced per pound",
+       "price": 22.26,
+       "size": "",
+       "unit_price": "$3.18/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3FIBAFXV8Y9T"
+      },
+      {
+       "item": "Smithfield Garlic & Herb Pork Tenderloin, 19.2 oz, 2 Pk.",
+       "price": 9.84,
+       "size": "",
+       "unit_price": "$0.26/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3MD7L55PQ891"
+      },
+      {
+       "item": "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
+       "price": 10.37,
+       "size": "",
+       "unit_price": "$0.23/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7G7MYR79DF60"
+      },
+      {
+       "item": "Whole Boneless Pork Loins, Case, priced per pound",
+       "price": 93.37,
+       "size": "",
+       "unit_price": "$1.94/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1SC4COU6MV1A"
+      },
+      {
+       "item": "Member's Mark Whole Bone In Pork Loin, Vacuum Pack, priced per pound",
+       "price": 97.92,
+       "size": "",
+       "unit_price": "$2.04/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/68PEEJEC26HX"
+      },
+      {
+       "item": "Pork Loin Back Ribs, Case, priced per pound",
+       "price": 170.03,
+       "size": "",
+       "unit_price": "$3.14/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/23FGDNFNKNHN"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "chipotle in adobo",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "chipotle in adobo",
+     "attempts": [
+      {
+       "term": "chipotle in adobo",
+       "state": "OK",
+       "hits": 4
+      }
+     ],
+     "hits": [
+      {
+       "item": "Goya Chipotle Peppers in Adobo Sauce",
+       "price": 2.79,
+       "size": "7 oz",
+       "relevance": 91,
+       "url": "https://www.bakersplus.com/p/0004133102874"
+      },
+      {
+       "item": "Sans Marcos Chipotle Peppers In Adobo Sauce",
+       "price": 1.69,
+       "size": "7.5 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0007423495114"
+      },
+      {
+       "item": "La Costeña® Chipotle Peppers in Adobo Sauce",
+       "price": 1.89,
+       "size": "7 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0007639700407"
+      },
+      {
+       "item": "Kroger® Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+       "price": 1.49,
+       "size": "7 oz",
+       "relevance": 86,
+       "url": "https://www.bakersplus.com/p/0001111088003"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "chipotle in adobo",
+     "attempts": [
+      {
+       "term": "chipotle in adobo",
+       "state": "OK",
+       "hits": 2
+      }
+     ],
+     "hits": [
+      {
+       "item": "La Costena Chipotles, Peppers In Adobo Sauce 7 Oz",
+       "price": 2.19,
+       "size": "7 oz",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/la_costena_chipotles_peppers_in_adobo_sauce_7_oz/p/44529"
+      },
+      {
+       "item": "San Marcos Original Recipe Traditional Mexican Flavor Chipotles Peppers In Adobo Sauce 7.5 Oz",
+       "price": 2.29,
+       "size": "7.5 oz",
+       "relevance": 77,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_traditional_mexican_flavor_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "chipotle in adobo",
+     "attempts": [
+      {
+       "term": "chipotle in adobo",
+       "state": "OK",
+       "hits": 41
+      }
+     ],
+     "hits": [
+      {
+       "item": "La Costeña Chipotles, Peppers in Adobo Sauce",
+       "price": 2.99,
+       "size": "7 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40786-la-coste-a-chipotle-peppers-in-adobo-sauce-7-oz"
+      },
+      {
+       "item": "San Marcos Original Recipe Traditional Mexican Flavor Chipotle Peppers in Adobo Sauce",
+       "price": 2.99,
+       "size": "7.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/40707-san-marcos-chipotle-peppers-in-adobo-sauce-7-5-oz"
+      },
+      {
+       "item": "Dei Fratelli Tomatoes, Chili Ready, Diced",
+       "price": 1.99,
+       "size": "14.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16310120-dei-fratelli-tomatoes-chili-ready-diced-14-5-oz"
+      },
+      {
+       "item": "Ortega Medium Chipotle Aioli Sauce",
+       "price": 4.99,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29430482-ortega-sauce-chipotle-aioli-9-oz"
+      },
+      {
+       "item": "Mrs. Grimes Chili Beans, in Chili Sauce, Original",
+       "price": 1.18,
+       "size": "15 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16979332-mrs-grimes-chili-beans-in-chili-sauce-original-15-oz"
+      },
+      {
+       "item": "Tomatillo",
+       "price": 0.31,
+       "size": "$2.49 / lb",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16382470-tomatillo-1-lb"
+      },
+      {
+       "item": "Mrs. Grimes Pinto Beans",
+       "price": 1.18,
+       "size": "15.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19040200-mrs-grimes-pinto-beans-15-5-oz"
+      },
+      {
+       "item": "La Preferida Fajita Seasoning Mix, Mexican Spices",
+       "price": 1.0,
+       "size": "1.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/317368-la-preferida-fajita-seasoning-mix-mexican-spices-1-25-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "chipotle in adobo",
+     "attempts": [
+      {
+       "term": "chipotle in adobo",
+       "state": "MATCHES",
+       "hits": 19
+      }
+     ],
+     "hits": [
+      {
+       "item": "Fresh Craving's Mexicali Dip, 24 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.33/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6JZXQUJGXRMV"
+      },
+      {
+       "item": "Chi-Chi's Medium Thick & Chunky Salsa, 60 oz.",
+       "price": 7.32,
+       "size": "",
+       "unit_price": "$0.12/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1PAR3EKQ8RKT"
+      },
+      {
+       "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.69/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+      },
+      {
+       "item": "McCormick Chili Original Seasoning Mix 1.25 oz., 6 pk.",
+       "price": 5.74,
+       "size": "",
+       "unit_price": "$0.77/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1AH6SA6EYA92"
+      },
+      {
+       "item": "Member's Mark Ground Turmeric, 20 oz.",
+       "price": 7.98,
+       "size": "",
+       "unit_price": "$0.40/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2DTR8SZPG3Y7"
+      },
+      {
+       "item": "Member's Mark Organic Ground Turmeric, 9.5 oz.",
+       "price": 5.54,
+       "size": "",
+       "unit_price": "$0.58/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/25VRW1LELOFE"
+      },
+      {
+       "item": "Member's Mark Chicken Bouillon, 32 oz.",
+       "price": 8.96,
+       "size": "",
+       "unit_price": "$0.28/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6OMVSB9YGO90"
+      },
+      {
+       "item": "Adolph's Unseasoned Tenderizer, 44.5 oz.",
+       "price": 9.62,
+       "size": "",
+       "unit_price": "$0.22/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/7H5K9HALQ41T"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

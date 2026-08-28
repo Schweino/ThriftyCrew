@@ -1,0 +1,31 @@
+{
+    "slug":  "sheet-pan-maple-mustard-pork-tenderloin-dinner",
+    "title":  "Sheet Pan Maple Mustard Pork Tenderloin Dinner",
+    "source_url":  "https://thecleaneatingcouple.com/sheet-pan-maple-mustard-pork-tenderloin-dinner/",
+    "protein":  "pork",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:20:36",
+    "updated":  "2026-08-27T18:20:36",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Sheet-pan pork tenderloin with roasted potatoes and broccoli duplicates live sheet-pan-pork-tenderloin-potatoes-green-beans (identical to the sheet-pan-pork-tenderloin-and-potatoes already cut this run); maple-mustard glaze and side-veg swap do not make a new dinner, and maple-dijon pork is separately live.",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:20:36",
+                        "by":  "harvest",
+                        "detail":  "https://thecleaneatingcouple.com/sheet-pan-maple-mustard-pork-tenderloin-dinner/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:20:36",
+                        "by":  "decider",
+                        "detail":  "Sheet-pan pork tenderloin with roasted potatoes and broccoli duplicates live sheet-pan-pork-tenderloin-potatoes-green-beans (identical to the sheet-pan-pork-tenderloin-and-potatoes already cut this run); maple-mustard glaze and side-veg swap do not make a new dinner, and maple-dijon pork is separately live."
+                    }
+                ]
+}

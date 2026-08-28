@@ -1,164 +1,164 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T12:06:33",
+ "generated": "2026-08-27T18:36:44",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "cotija cheese",
+   "term": "blackened seasoning mix",
    "state": "MATCHES",
-   "term_used": "cotija cheese",
+   "term_used": "blackened seasoning mix",
    "attempts": [
     {
-     "term": "cotija cheese",
+     "term": "blackened seasoning mix",
      "state": "MATCHES",
-     "hits": 19
+     "hits": 17
     }
    ],
    "hits": [
     {
-     "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
-     "price": 9.64,
+     "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
+     "price": 7.78,
      "size": "",
-     "unit_price": "$0.40/oz",
+     "unit_price": "$0.65/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
+     "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
     },
     {
-     "item": "Sargento Fun! Balanced Breaks Variety Snack Kit, 2 oz., 8 ct.",
-     "price": 11.47,
+     "item": "Weber Kick'N Chicken Seasoning, 22 oz.",
+     "price": 9.98,
      "size": "",
-     "unit_price": "$1.43/ea",
+     "unit_price": "$0.45/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6UG8X2G5NMSM"
+     "url": "https://www.samsclub.com/p/-/1WRBVATZED29"
     },
     {
-     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
-     "price": 7.44,
+     "item": "Member’s Mark Cajun Seasoning, 22 oz.",
+     "price": 9.98,
      "size": "",
-     "unit_price": "$0.31/oz",
+     "unit_price": "$0.45/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
+     "url": "https://www.samsclub.com/p/-/4YA42F1XS2EF"
     },
     {
-     "item": "El Viajero Panela Basket Cheese 3 lbs.",
-     "price": 11.67,
+     "item": "Badia Complete Seasoning, 28 oz.",
+     "price": 6.38,
      "size": "",
-     "unit_price": "$3.89/lb",
+     "unit_price": "$0.23/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0RQKQXZG40PD"
+     "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
     },
     {
-     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
-     "price": 7.28,
+     "item": "Kinder's Chicken Salt Seasoning, 8.5 oz.",
+     "price": 6.48,
      "size": "",
-     "unit_price": "$0.30/oz",
+     "unit_price": "$0.76/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
+     "url": "https://www.samsclub.com/p/-/6REQ194JYRNT"
     },
     {
-     "item": "The Laughing Cow Creamy Swiss Cheese Wedge, Original, 3 pk.",
-     "price": 4.58,
+     "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+     "price": 6.98,
      "size": "",
-     "unit_price": "$1.53/ea",
+     "unit_price": "$0.69/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/37OQ8A2NMXGG"
+     "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
     },
     {
-     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
-     "price": 5.92,
+     "item": "McCormick Basil Balsamic Seasoning, 11.37 oz.",
+     "price": 2.91,
      "size": "",
-     "unit_price": "$0.18/oz",
+     "unit_price": "$0.26/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
+     "url": "https://www.samsclub.com/p/-/2UXTA5JDE6CY"
     },
     {
-     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
-     "price": 12.17,
+     "item": "McCormick Grill Mates Montreal Chicken Seasoning, 10.87 oz.",
+     "price": 7.42,
      "size": "",
-     "unit_price": "$2.43/lb",
+     "unit_price": "$0.68/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/12YP4C3FR3U8"
+     "url": "https://www.samsclub.com/p/-/3H1DDZHFDLIP"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
   },
   {
-   "term": "red onion",
+   "term": "frozen cilantro lime rice",
    "state": "MATCHES",
-   "term_used": "red onion",
+   "term_used": "frozen cilantro lime rice",
    "attempts": [
     {
-     "term": "red onion",
+     "term": "frozen cilantro lime rice",
      "state": "MATCHES",
-     "hits": 18
+     "hits": 20
     }
    ],
    "hits": [
     {
-     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
-     "price": 6.97,
+     "item": "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
+     "price": 13.86,
      "size": "",
-     "unit_price": "$4.65/lb",
+     "unit_price": "$3.65/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+     "url": "https://www.samsclub.com/p/-/4UFAGU9IU135"
     },
     {
-     "item": "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
-     "price": 6.15,
+     "item": "Gorton's Golden Crunchy Panko Fish Fillets, Frozen, 28 ct.",
+     "price": 13.86,
+     "size": "",
+     "unit_price": "$0.49/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3NBPUW3VG0XX"
+    },
+    {
+     "item": "Member's Mark Stir Fry Mix, Frozen 16 oz, 5 pk.",
+     "price": 9.18,
+     "size": "",
+     "unit_price": "$1.84/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6BOL8CRTAHX1"
+    },
+    {
+     "item": "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+     "price": 6.73,
      "size": "",
      "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/25CSPSJ2282X"
+     "url": "https://www.samsclub.com/p/-/6E5MZMROPG6C"
     },
     {
-     "item": "Sweet Onions, 5 lbs.",
-     "price": 4.96,
+     "item": "Member's Mark Triple Berry Blend, Frozen, 64 oz.",
+     "price": 10.46,
      "size": "",
-     "unit_price": "$0.99/lb",
+     "unit_price": "$0.16/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/61EDSZBFT3MZ"
+     "url": "https://www.samsclub.com/p/-/5LP5I0UW2S6C"
     },
     {
-     "item": "Organic Yellow Onions, 5 lbs.",
-     "price": 5.22,
+     "item": "El Monterey Beef and Bean Burritos 4 oz., 24 pk.",
+     "price": 12.86,
      "size": "",
-     "unit_price": "$1.04/lb",
+     "unit_price": "",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5OE6XPPNWUH4"
+     "url": "https://www.samsclub.com/p/-/63DCKYQ2FBS2"
     },
     {
-     "item": "Cocktail Tomatoes On The Vine, 2 lbs.",
-     "price": 5.47,
+     "item": "Member's Mark Natural Blueberries, Frozen 4 lbs.",
+     "price": 9.17,
      "size": "",
-     "unit_price": "$2.73/lb",
+     "unit_price": "$0.14/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1DRHQQFI5XTS"
+     "url": "https://www.samsclub.com/p/-/74MFICPZKX8J"
     },
     {
-     "item": "Tomatoes on the Vine, 3 lbs.",
-     "price": 4.97,
+     "item": "Member's Mark Organic Mango Chunks, Frozen, 4 lbs.",
+     "price": 8.36,
      "size": "",
-     "unit_price": "$1.66/lb",
+     "unit_price": "$2.09/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4WQ0DM58Y18Y"
-    },
-    {
-     "item": "Spice World Organic Peeled Garlic, 3 lbs.",
-     "price": 11.42,
-     "size": "",
-     "unit_price": "$3.81/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2AEH85NR8DI6"
-    },
-    {
-     "item": "Pure Pacific Organic Celery Sticks, 2.5 lbs.",
-     "price": 4.24,
-     "size": "",
-     "unit_price": "$1.70/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1UAS63GSPBL2"
+     "url": "https://www.samsclub.com/p/-/0UMEVRJF2VME"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

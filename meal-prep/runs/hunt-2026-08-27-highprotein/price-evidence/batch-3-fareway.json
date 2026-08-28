@@ -1,148 +1,99 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T12:06:38",
+ "generated": "2026-08-27T18:36:49",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "cotija cheese",
+   "term": "blackened seasoning mix",
    "state": "MATCHES",
-   "term_used": "cotija cheese",
+   "term_used": "blackened seasoning mix",
    "attempts": [
     {
-     "term": "cotija cheese",
+     "term": "blackened seasoning mix",
      "state": "OK",
-     "hits": 22
+     "hits": 1
     }
    ],
    "hits": [
     {
-     "item": "Mission Super Soft Flour Tortillas, Street Tacos Size, 12 Count",
-     "price": 1.99,
-     "size": "12 ct",
+     "item": "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+     "price": 2.49,
+     "size": "2.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16249657-mission-street-tacos-flour-tortillas-12-0-ct"
-    },
-    {
-     "item": "Fareway Taco Blend Fancy Shredded Cheese",
-     "price": 2.48,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24712408-fareway-cheese-taco-blend-fancy-shredded-8-oz"
-    },
-    {
-     "item": "Fareway Neufchatel Cheese",
-     "price": 1.99,
-     "size": "8 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/20565842-fareway-cheese-neufchatel-8-oz"
-    },
-    {
-     "item": "Crystal Farms Blue Cheese, Crumbled",
-     "price": 2.98,
-     "size": "4 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1516384-crystal-farms-cheese-wisconsin-blue-crumbled-4-oz"
-    },
-    {
-     "item": "Guerrero Tostadas Caseras Amarillas",
-     "price": 2.99,
-     "size": "22 ct",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/203419-guerrero-tostadas-22-ct"
-    },
-    {
-     "item": "Fareway 4% Min Small Curd Cottage Cheese",
-     "price": 7.88,
-     "size": "48 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/26544540-fareway-small-curd-4-milkfat-min-cottage-cheese-48-oz"
-    },
-    {
-     "item": "Sargento Gouda Sliced Cheese, 10 slices",
-     "price": 3.99,
-     "size": "7 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/77159-sargento-sliced-gouda-natural-cheese-7-oz"
-    },
-    {
-     "item": "Crystal Farms Cheese, Parmesan, Finely Shredded",
-     "price": 2.67,
-     "size": "5.5 oz",
-     "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27152419-crystal-farms-cf-shredded-parmesan-cheese-5-5-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/260331-louisiana-fish-fry-products-blackened-seasoning-cajun-2-5-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
   },
   {
-   "term": "red onion",
+   "term": "frozen cilantro lime rice",
    "state": "MATCHES",
-   "term_used": "red onion",
+   "term_used": "frozen cilantro lime rice",
    "attempts": [
     {
-     "term": "red onion",
+     "term": "frozen cilantro lime rice",
      "state": "OK",
-     "hits": 18
+     "hits": 72
     }
    ],
    "hits": [
     {
-     "item": "Red Onion",
-     "price": 1.11,
-     "size": "$1.48 / lb",
+     "item": "Mahatma Cilantro Limon Jasmine Rice, Microwaveable Rice",
+     "price": 1.99,
+     "size": "8.8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19820289-mahatma-cilantro-lim-n-jasmine-rice-8-8-oz"
     },
     {
-     "item": "Crazy Fresh Red Onion Diced",
-     "price": 2.99,
-     "size": "1 each",
+     "item": "Vigo Rice, Cilantro Lime",
+     "price": 2.49,
+     "size": "8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19269233-crazy-fresh-diced-red-onion-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17802850-vigo-rice-cilantro-lime-8-oz"
     },
     {
-     "item": "Mezzetta Pickled Red Onions",
-     "price": 5.97,
-     "size": "16 fl oz",
+     "item": "Ben's Original Cilantro Lime Flavored Rice Easy Dinner Side",
+     "price": 1.97,
+     "size": "8.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27276229-mezzetta-pickled-red-onions-16-fl-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24553706-ben-s-original-cilantro-lime-flavored-8-5-oz"
     },
     {
-     "item": "Litehouse Herb, Freeze Dried Red Onion",
-     "price": 4.99,
-     "size": "0.6 oz",
+     "item": "Mahatma Mexican Style Jasmine Rice, Gluten Free, Microwaveable Rice",
+     "price": 1.99,
+     "size": "8.8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151495-litehouse-freeze-dried-red-onion-0-35-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/30552309-mahatma-jasmine-rice-mexican-style-8-8-oz"
     },
     {
-     "item": "Cilantro",
-     "price": 1.49,
-     "size": "1 each",
+     "item": "Birds Eye Steamfresh Long Grain White Rice with Mixed Vegetables, Frozen Side",
+     "price": 1.99,
+     "size": "10 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41922-birds-eye-steamfresh-rice-mix-vegetable-10-oz"
     },
     {
-     "item": "Green Onions (Scallions)",
-     "price": 0.99,
-     "size": "1 bunch",
+     "item": "Mahatma Yellow Rice, Gluten Free, Microwaveable Rice",
+     "price": 1.99,
+     "size": "8.8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43042579-mahatma-yellow-rice-8-8-oz"
     },
     {
-     "item": "Cucumber",
-     "price": 0.99,
-     "size": "1 each",
+     "item": "Green Giant Spring Veggies, Brown Rice & Quinoa with Garlic Basil Sauce (Frozen)",
+     "price": 3.99,
+     "size": "10 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345-cucumber-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/29770249-green-giant-veggies-rice-restaurant-style-spring-veggies-brown-rice-quinoa-with-garlic-basil-sauce-10-00-oz"
     },
     {
-     "item": "Hass Avocado",
-     "price": 0.99,
-     "size": "1 each",
+     "item": "Minute Rice Ready-To-Eat Restaurant-Style Sticky Rice, Microwaveable Rice Cups",
+     "price": 1.99,
+     "size": "2 x 8.8 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/43042588-minute-rice-sticky-rice-restaurant-style-8-8-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

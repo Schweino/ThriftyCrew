@@ -1,0 +1,159 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Blackened Chicken with Mango Salsa",
+  "source_url": "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
+  "servings": 4,
+  "time_total": null,
+  "time_active": null,
+  "ingredients": [
+    {
+      "raw": "1 Large Mango Diced",
+      "item": "mango",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Bunch Fresh Cilantro Chopped",
+      "item": "fresh cilantro",
+      "qty": "1",
+      "unit": "bunch",
+      "prep": "chopped",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Large Avocado Diced",
+      "item": "avocado",
+      "qty": "1",
+      "unit": null,
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ Red Onion Minced",
+      "item": "red onion",
+      "qty": "½",
+      "unit": null,
+      "prep": "minced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Pinch of Salt",
+      "item": "salt",
+      "qty": null,
+      "unit": "pinch",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Pinch of Pepper",
+      "item": "pepper",
+      "qty": null,
+      "unit": "pinch",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tablespoons Olive Oil or Avocado Oil Divided",
+      "item": "olive oil or avocado oil",
+      "qty": "2",
+      "unit": "tablespoon",
+      "prep": "divided",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ Fresh Lime or Orange Juiced",
+      "item": "fresh lime or orange",
+      "qty": "½",
+      "unit": null,
+      "prep": "juiced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5 Pounds Chicken Breast Diced",
+      "item": "chicken breast",
+      "qty": "1.5",
+      "unit": "pound",
+      "prep": "diced",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1.5-2 Tablespoons Blackened Seasoning Mix",
+      "item": "blackened seasoning mix",
+      "qty": "1.5-2",
+      "unit": "tablespoon",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Packages Frozen Cilantro Lime Rice",
+      "item": "frozen cilantro lime rice",
+      "qty": "2",
+      "unit": "package",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Primal Kitchen Avocado Lime Dipping Sauce Drizzled to Garnish",
+      "item": "avocado lime dipping sauce",
+      "qty": null,
+      "unit": null,
+      "prep": "drizzled to garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "Make the fresh mango salsa:",
+    "Dice your large mango, chop your cilantro, dice your avocado and mince your red onion and add them to a medium bowl.",
+    "Season with a pinch of salt and pepper (or to taste). Then add 1 tablespoon of olive or avocado oil and the juice of half a lime. Toss until the salsa is well combined.",
+    "Prepare your Chicken:",
+    "Dice your chicken into 1\" cubes.",
+    "Add about 1.5-2 Tbs of Blackened seasoning mix to your chicken and toss until the seasonings are well distributed.",
+    "Add 1 tbs of avocado oil to a large cast iron skillet on medium-high heat. When you have a hot skillet, add in your diced chicken. Cook for about 3 minutes on each side or until your chicken is no longer pink in the center and reaches an internal temperature of 165 F. Then let the chicken rest.",
+    "Prepare your Cilantro Lime Rice:",
+    "I used frozen cilantro lime rice packets and followed the instructions on the packaging but you are welcome to make your own.",
+    "Assemble Your Bowl:",
+    "Serve your blackened chicken with your fresh mango salsa on your bed of cilantro lime rice and drizzle with some Primal Kitchen Avocado Lime Sauce if using. Sit at the dinner table with your family and enjoy!"
+  ],
+  "concerns": [
+    "Page fetched live and confirmed: all 12 ingredient lines the local pass reported are printed verbatim on the page; the local verifier's 2/12 miss appears to be a matching artifact (page renders quantities/fractions inside recipe-card markup), not a transcription error.",
+    "'2 Packages Frozen Cilantro Lime Rice' gives no package size anywhere on the page; pricing will need a package-size assumption.",
+    "'½ Fresh Lime or Orange Juiced' and '2 Tablespoons Olive Oil or Avocado Oil Divided' are either/or lines as printed; instructions use lime and avocado oil.",
+    "'1 Bunch Fresh Cilantro Chopped' reads high for a 4-serving salsa but is transcribed as printed.",
+    "rung-3 transcription verified only 17% of its lines against the cached page; unverified: 1 Large Mango Diced, 1 Bunch Fresh Cilantro Chopped, 1 Large Avocado Diced, ½ Red Onion Minced, 2 Tablespoons Olive Oil or Avocado Oil Divided, ½ Fresh Lime or Orange Juiced, 1.5 Pounds Chicken Breast Diced, 1.5-2 Tablespoons Blackened Seasoning Mix, 2 Packages Frozen Cilantro Lime Rice, Primal Kitchen Avocado Lime Dipping Sauce Drizzled to Garnish"
+  ],
+  "extracted_by": "claude",
+  "verification": {
+    "lines": 12,
+    "verified": 2,
+    "unverified": 10,
+    "verified_rate": 0.1667,
+    "unverified_lines": [
+      "1 Large Mango Diced",
+      "1 Bunch Fresh Cilantro Chopped",
+      "1 Large Avocado Diced",
+      "½ Red Onion Minced",
+      "2 Tablespoons Olive Oil or Avocado Oil Divided",
+      "½ Fresh Lime or Orange Juiced",
+      "1.5 Pounds Chicken Breast Diced",
+      "1.5-2 Tablespoons Blackened Seasoning Mix",
+      "2 Packages Frozen Cilantro Lime Rice",
+      "Primal Kitchen Avocado Lime Dipping Sauce Drizzled to Garnish"
+    ],
+    "passed": false
+  }
+}

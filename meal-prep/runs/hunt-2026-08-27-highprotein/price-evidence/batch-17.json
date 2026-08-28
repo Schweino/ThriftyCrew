@@ -1,0 +1,355 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 2,
+ "generated": "2026-08-27T18:30:02",
+ "batch_terms": [
+  "dried parsley"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "dried parsley",
+   "unit": "oz",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "dried parsley",
+     "attempts": [
+      {
+       "term": "dried parsley",
+       "state": "OK",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Litehouser Freeze Dried Parsley",
+       "price": 6.49,
+       "size": "0.3 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0007766133596"
+      },
+      {
+       "item": "Gourmet Garden Lightly Dried Chopped Parsley",
+       "price": 4.99,
+       "size": "0.35 oz",
+       "relevance": 89,
+       "url": "https://www.bakersplus.com/p/0087520800176"
+      },
+      {
+       "item": "Parsley",
+       "price": 1.29,
+       "size": "1 ct",
+       "relevance": 48,
+       "url": "https://www.bakersplus.com/p/0000000004899"
+      },
+      {
+       "item": "Parsley - Italian",
+       "price": 1.29,
+       "size": "1 ct",
+       "relevance": 46,
+       "url": "https://www.bakersplus.com/p/0000000004901"
+      },
+      {
+       "item": "Organic Parsley",
+       "price": 1.99,
+       "size": "1 ct",
+       "relevance": 46,
+       "url": "https://www.bakersplus.com/p/0000000094899"
+      },
+      {
+       "item": "Smart WayT Parsley Flakes",
+       "price": 1.25,
+       "size": "0.5 oz",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0001111011740"
+      },
+      {
+       "item": "Organic Italian Parsley",
+       "price": 1.99,
+       "size": "each",
+       "relevance": 44,
+       "url": "https://www.bakersplus.com/p/0000000094901"
+      },
+      {
+       "item": "Krogerr Parsley Flakes Shaker",
+       "price": 3.29,
+       "size": "0.82 oz",
+       "relevance": 43,
+       "url": "https://www.bakersplus.com/p/0001111072463"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "parsley",
+     "attempts": [
+      {
+       "term": "dried parsley",
+       "state": "OK",
+       "hits": 0
+      },
+      {
+       "term": "parsley",
+       "state": "OK",
+       "hits": 15
+      }
+     ],
+     "hits": [
+      {
+       "item": "Parsley, Italian",
+       "price": 1.99,
+       "size": "1 ct",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/parsley_italian/p/78778"
+      },
+      {
+       "item": "Regular/Curly Parsley",
+       "price": 1.49,
+       "size": "1 ea",
+       "relevance": 135,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/regular_curly_parsley/p/12587"
+      },
+      {
+       "item": "Spice Supreme Parsley Flakes",
+       "price": null,
+       "size": "0.5 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_parsley_flakes/p/2400906"
+      },
+      {
+       "item": "Spice Islands Parsley 0.3 Oz",
+       "price": 5.39,
+       "size": "0.3 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/spice_islands_parsley_0_3_oz/p/1564405684704730611"
+      },
+      {
+       "item": "Organic Cilantro (Chinese Parsley)",
+       "price": 1.69,
+       "size": "1 ct",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/organic_cilantro_chinese_parsley/p/2313435"
+      },
+      {
+       "item": "Our Family Parsley Flakes 0.25 Oz",
+       "price": 2.39,
+       "size": "0.25 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_parsley_flakes_0_25_oz/p/7194342"
+      },
+      {
+       "item": "Mc Cormick Parsley Flakes 0.5 Oz",
+       "price": 2.79,
+       "size": "0.5 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_parsley_flakes_0_5_oz/p/34845"
+      },
+      {
+       "item": "Lawry's Parsley Flakes 0.25 Oz",
+       "price": 3.49,
+       "size": "0.25 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/lawry_s_parsley_flakes_0_25_oz/p/1564405684713622059"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "dried parsley",
+     "attempts": [
+      {
+       "term": "dried parsley",
+       "state": "OK",
+       "hits": 41
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Parsley Flakes",
+       "price": 1.99,
+       "size": "0.25 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16656192-mccormick-parsley-flakes-0-25-oz"
+      },
+      {
+       "item": "Badia Spices Parsley Flakes",
+       "price": 3.99,
+       "size": "1 g",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258008-badia-spices-parsley-flakes-1-0-oz"
+      },
+      {
+       "item": "Litehouse Parsley, Freeze Dried",
+       "price": 4.99,
+       "size": "0.3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/9222-litehouse-freeze-dried-parsley-0-35-oz"
+      },
+      {
+       "item": "Badia Spices Parsley Flakes",
+       "price": 7.99,
+       "size": "3 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74379214-badia-parsley-flakes"
+      },
+      {
+       "item": "Litehouse Freeze Dried Basil",
+       "price": 4.99,
+       "size": "0.28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151621-litehouse-freeze-dried-basil-0-35-oz"
+      },
+      {
+       "item": "Truefood Basil",
+       "price": 5.99,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27842551-truefood-basil-1-each"
+      },
+      {
+       "item": "Baby Dill",
+       "price": 3.99,
+       "size": "1 bunch",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345991-baby-dill-each"
+      },
+      {
+       "item": "Crazy Fresh Baby Dill Herb",
+       "price": 2.99,
+       "size": "0.75 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1169680-crazy-fresh-baby-dill-herb-75-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "dried parsley",
+     "attempts": [
+      {
+       "term": "dried parsley",
+       "state": "MATCHES",
+       "hits": 22
+      }
+     ],
+     "hits": [
+      {
+       "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+       "price": 4.98,
+       "size": "",
+       "unit_price": "$0.17/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+      },
+      {
+       "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.70/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+      },
+      {
+       "item": "Member's Mark Parsley Flakes, 3.2 oz",
+       "price": 6.44,
+       "size": "",
+       "unit_price": "$2.01/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/3F1K23CN8VC8"
+      },
+      {
+       "item": "Mrs. Dash Original Seasoning, 10 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.70/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+      },
+      {
+       "item": "Dan-O's Original Seasoning, 8.9 oz.",
+       "price": 6.98,
+       "size": "",
+       "unit_price": "$0.78/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+      },
+      {
+       "item": "Weber Chicago Steak Seasoning, 28 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.36/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/61L614F29AFN"
+      },
+      {
+       "item": "Lawry's Coarse Ground Garlic Salt with Parsley, 33 oz.",
+       "price": 8.88,
+       "size": "",
+       "unit_price": "$0.27/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2UEDQI34LTXJ"
+      },
+      {
+       "item": "Goya Adobo All-Purpose Seasoning with Pepper, 28 oz.",
+       "price": 4.48,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/36G92429U3DD"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

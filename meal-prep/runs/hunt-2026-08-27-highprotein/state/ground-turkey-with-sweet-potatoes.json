@@ -1,0 +1,31 @@
+{
+    "slug":  "ground-turkey-with-sweet-potatoes",
+    "title":  "Ground Turkey with Sweet Potatoes",
+    "source_url":  "https://nomastehungry.com/healthy-ground-turkey-stuffed-sweet-potatoes/",
+    "protein":  "turkey",
+    "state":  "rejected-dupe",
+    "wave":  null,
+    "created":  "2026-08-27T18:17:55",
+    "updated":  "2026-08-27T18:17:55",
+    "terms":  [
+
+              ],
+    "reject_reason":  "Ground turkey with celery/carrot gravy served in sweet potatoes is the same dinner as live ground-turkey-sweet-potato-bowl; the stuffed-potato vehicle vs bowl is not a distinct plate and carbs run high (74g).",
+    "parked_on":  [
+
+                  ],
+    "history":  [
+                    {
+                        "state":  "sourced",
+                        "at":  "2026-08-27T18:17:55",
+                        "by":  "harvest",
+                        "detail":  "https://nomastehungry.com/healthy-ground-turkey-stuffed-sweet-potatoes/"
+                    },
+                    {
+                        "state":  "rejected-dupe",
+                        "at":  "2026-08-27T18:17:55",
+                        "by":  "decider",
+                        "detail":  "Ground turkey with celery/carrot gravy served in sweet potatoes is the same dinner as live ground-turkey-sweet-potato-bowl; the stuffed-potato vehicle vs bowl is not a distinct plate and carbs run high (74g)."
+                    }
+                ]
+}

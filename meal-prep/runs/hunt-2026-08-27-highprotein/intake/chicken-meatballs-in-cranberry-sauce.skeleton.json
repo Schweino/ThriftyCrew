@@ -1,0 +1,136 @@
+﻿{
+    "_doc":  "The machine fields as ISSUED. build-intake-skeleton.ps1 -Verify diffs the writer-completed intake against this; any drift in a locked field is exit 1 with the fields named.",
+    "built_at":  "2026-08-27T19:06:05",
+    "slug":  "chicken-meatballs-in-cranberry-sauce",
+    "findings":  [
+
+                 ],
+    "notes":  [
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Salt\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "\u0027Fresh Rosemary\u0027 is optional in the source (mapped-optional) and IS counted in the macros",
+                  "merged a second \u0027Olive Oil\u0027 line into the first - 141 g total",
+                  "merged a second \u0027Salt\u0027 line into the first - 20 g total"
+              ],
+    "intake":  {
+                   "name":  "Chicken Meatballs in Cranberry Sauce",
+                   "slug":  "chicken-meatballs-in-cranberry-sauce",
+                   "protein":  "chicken",
+                   "cuisine":  "",
+                   "source_url":  "https://healthyfitnessmeals.com/chicken-meatball-recipe/",
+                   "visibility":  "paid",
+                   "ingredients":  [
+                                       {
+                                           "item":  "Cranberry Sauce",
+                                           "grams":  1389,
+                                           "buy":  "5 cups (three and a half 14 oz cans)"
+                                       },
+                                       {
+                                           "item":  "Honey",
+                                           "grams":  297,
+                                           "buy":  "7/8 cup"
+                                       },
+                                       {
+                                           "item":  "Chili Powder",
+                                           "grams":  9,
+                                           "buy":  "1 tbsp plus 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Cayenne Pepper",
+                                           "grams":  1,
+                                           "buy":  "scant 1 tsp"
+                                       },
+                                       {
+                                           "item":  "Red Pepper Flakes",
+                                           "grams":  3,
+                                           "buy":  "1 3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Salt",
+                                           "grams":  20,
+                                           "buy":  "to taste (10 g); 1 3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Olive Oil",
+                                           "grams":  141,
+                                           "buy":  "7 tbsp; 3 1/2 tbsp"
+                                       },
+                                       {
+                                           "item":  "Boneless Skinless Chicken Breast",
+                                           "grams":  3175,
+                                           "buy":  "7 lb, cut into cubes"
+                                       },
+                                       {
+                                           "item":  "Panko Bread Crumbs",
+                                           "grams":  52,
+                                           "buy":  "7/8 cup"
+                                       },
+                                       {
+                                           "item":  "Whole Wheat Flour",
+                                           "grams":  105,
+                                           "buy":  "7/8 cup, for rolling the meatballs"
+                                       },
+                                       {
+                                           "item":  "Eggs",
+                                           "grams":  175,
+                                           "buy":  "4 large eggs, beaten"
+                                       },
+                                       {
+                                           "item":  "Worcestershire Sauce",
+                                           "grams":  119,
+                                           "buy":  "1/2 cup"
+                                       },
+                                       {
+                                           "item":  "Garlic Powder",
+                                           "grams":  11,
+                                           "buy":  "1 tbsp plus 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Onion Powder",
+                                           "grams":  8,
+                                           "buy":  "1 tbsp plus 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Paprika",
+                                           "grams":  8,
+                                           "buy":  "1 tbsp plus 1/2 tsp"
+                                       },
+                                       {
+                                           "item":  "Black Pepper",
+                                           "grams":  2,
+                                           "buy":  "3/4 tsp"
+                                       },
+                                       {
+                                           "item":  "Fresh Rosemary",
+                                           "grams":  7,
+                                           "buy":  "2 sprigs, to garnish (7 g)"
+                                       }
+                                   ],
+                   "macros_per_serving":  {
+                                              "calories":  646,
+                                              "protein_g":  55,
+                                              "carbs_g":  68.7,
+                                              "fat_g":  18.1
+                                          },
+                   "writer_notes":  [
+
+                                    ],
+                   "forbidden_prose_terms":  [
+
+                                             ],
+                   "prose":  {
+
+                             },
+                   "head":  {
+                                "description":  "",
+                                "keywords":  "",
+                                "image":  "",
+                                "prepTime":  "PT10M",
+                                "cookTime":  "PT15M",
+                                "totalTime":  "PT25M",
+                                "steps":  [
+
+                                          ]
+                            }
+               }
+}

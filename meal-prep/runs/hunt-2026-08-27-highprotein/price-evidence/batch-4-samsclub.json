@@ -1,361 +1,29 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T12:10:40",
+ "generated": "2026-08-27T18:59:41",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "frozen lightly breaded chicken breast bites",
+   "term": "red pepper flakes",
    "state": "MATCHES",
-   "term_used": "frozen lightly breaded chicken breast bites",
+   "term_used": "red pepper flakes",
    "attempts": [
     {
-     "term": "frozen lightly breaded chicken breast bites",
-     "state": "MATCHES",
-     "hits": 19
-    }
-   ],
-   "hits": [
-    {
-     "item": "Real Good Foods Lightly Breaded Chicken Breast Chunks, Frozen, 3 lbs.",
-     "price": 16.98,
-     "size": "",
-     "unit_price": "$5.66/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/29P5RW6V2A68"
-    },
-    {
-     "item": "Just Bare Lightly Breaded Chicken Breast Original Strips, Frozen, 3 lbs.",
-     "price": 13.87,
-     "size": "",
-     "unit_price": "$4.62/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1NKMBWJA5DBZ"
-    },
-    {
-     "item": "Member's Mark Fully Cooked Lightly Breaded Chicken Breast Bites, Frozen, 3 lbs.",
-     "price": 11.87,
-     "size": "",
-     "unit_price": "$3.96/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/61OUCVEW0HWM"
-    },
-    {
-     "item": "Just Bare Lightly Breaded Chicken Breast Original Bites, Frozen, 3 lbs.",
-     "price": 13.47,
-     "size": "",
-     "unit_price": "$4.49/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3UL58XUHGS40"
-    },
-    {
-     "item": "Just Bare Lightly Breaded Chicken Breast Fillets, Frozen, 2.5 lbs.",
-     "price": 13.87,
-     "size": "",
-     "unit_price": "$5.55/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/64FHSOXVI6GZ"
-    },
-    {
-     "item": "Member's Mark Southern Style Chicken Bites, Frozen, 3 lbs.",
-     "price": 13.97,
-     "size": "",
-     "unit_price": "$4.66/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1A8A4NM6ZCT6"
-    },
-    {
-     "item": "Member's Mark Breaded and Boneless Honey Barbecue Chicken Bites, Frozen, 3.5 lbs.",
-     "price": 12.98,
-     "size": "",
-     "unit_price": "$3.71/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2EWC79F1K0NP"
-    },
-    {
-     "item": "Tyson Crispy Chicken Breast Strips, Frozen, 3.5 lbs.",
-     "price": 12.97,
-     "size": "",
-     "unit_price": "$3.71/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7G17H7ZZ68XT"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "fresh mozzarella",
-   "state": "MATCHES",
-   "term_used": "fresh mozzarella",
-   "attempts": [
-    {
-     "term": "fresh mozzarella",
-     "state": "MATCHES",
-     "hits": 28
-    }
-   ],
-   "hits": [
-    {
-     "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
-     "price": 8.28,
-     "size": "",
-     "unit_price": "$0.26/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
-    },
-    {
-     "item": "BelGioioso Shaved Cheese Blend 1.75 lbs.",
-     "price": 9.86,
-     "size": "",
-     "unit_price": "$5.63/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7KJVTA4JOHFS"
-    },
-    {
-     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
-     "price": 7.44,
-     "size": "",
-     "unit_price": "$0.31/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
-    },
-    {
-     "item": "Member's Mark Part-Skim Mozzarella Cheese 5 lbs.",
-     "price": 12.17,
-     "size": "",
-     "unit_price": "$2.43/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6YW1108UYN4W"
-    },
-    {
-     "item": "Formaggio Cheese Artisan Meat & Mozzarella Variety Wraps 22 oz.",
-     "price": 12.94,
-     "size": "",
-     "unit_price": "$0.59/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4GO1R6FUV9IT"
-    },
-    {
-     "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
-     "price": 9.64,
-     "size": "",
-     "unit_price": "$0.40/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
-    },
-    {
-     "item": "Member's Mark Part-Skim Shredded Mozzarella Cheese 1 lb., 2 pk.",
-     "price": 5.92,
-     "size": "",
-     "unit_price": "$0.18/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/27AUTWLYVFQF"
-    },
-    {
-     "item": "Member's Mark Light String Cheese 36 ct.",
-     "price": 7.27,
-     "size": "",
-     "unit_price": "$0.20/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7IM6BJPRZN7R"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "Boursin cheese",
-   "state": "MATCHES",
-   "term_used": "Boursin cheese",
-   "attempts": [
-    {
-     "term": "Boursin cheese",
+     "term": "red pepper flakes",
      "state": "MATCHES",
      "hits": 21
     }
    ],
    "hits": [
     {
-     "item": "Boursin® Gourmet Cheese Spread, Variety Pack,  5.3 oz.​, 3 pk.",
-     "price": 6.96,
+     "item": "Old trapper Hot & Spicy Beef Jerky, 18 oz.",
+     "price": 19.98,
      "size": "",
-     "unit_price": "$0.44/oz",
+     "unit_price": "$1.11/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/37NX70I6H35W"
-    },
-    {
-     "item": "Athenos Crumbled Traditional Feta Cheese (24 oz.)",
-     "price": 7.28,
-     "size": "",
-     "unit_price": "$0.30/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4FUXQBP6QFHI"
-    },
-    {
-     "item": "Emmi Roth Alpine Cheese Blend, Shredded, 24 oz.",
-     "price": 9.64,
-     "size": "",
-     "unit_price": "$0.40/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1MM9NW3RIA0A"
-    },
-    {
-     "item": "BelGioioso Pre-Sliced Fresh Mozzarella 32 oz.",
-     "price": 8.28,
-     "size": "",
-     "unit_price": "$0.26/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2LPNVU9BVD46"
-    },
-    {
-     "item": "President Brie Soft-Ripened Cheese (19.6 oz.)",
-     "price": 7.84,
-     "size": "",
-     "unit_price": "$0.40/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2G0RCCECTEOE"
-    },
-    {
-     "item": "Kerrygold Dubliner Cheese, 1.75 lbs.",
-     "price": 12.87,
-     "size": "",
-     "unit_price": "$7.35/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3OV28O1VC6S4"
-    },
-    {
-     "item": "Cello Domestic Romano Cheese Wheel approx. 18 lbs.",
-     "price": 174.26,
-     "size": "",
-     "unit_price": "$9.68/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2TU6KN96JHZ9"
-    },
-    {
-     "item": "BelGioioso Fresh Mozzarella Cheese Pearls, 8 oz., 3 pk.",
-     "price": 7.44,
-     "size": "",
-     "unit_price": "$0.31/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6GUB26J3YDOM"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "penne pasta",
-   "state": "MATCHES",
-   "term_used": "penne pasta",
-   "attempts": [
-    {
-     "term": "penne pasta",
-     "state": "MATCHES",
-     "hits": 19
-    }
-   ],
-   "hits": [
-    {
-     "item": "Barilla Protein+ Penne & Rotini, 14.5 oz., 4 pk.",
-     "price": 8.48,
-     "size": "",
-     "unit_price": "",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3ZP01NA677CJ"
-    },
-    {
-     "item": "Barilla Pasta Thin Spaghetti 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$0.09/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/772IIJE5LBAD"
-    },
-    {
-     "item": "Barilla Penne Pasta 16 oz., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$1.42/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/701R3QYOQQ76"
-    },
-    {
-     "item": "Barilla Pasta Variety Pack 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$1.42/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1CTME0624C4X"
-    },
-    {
-     "item": "Barilla Gluten-Free Pasta, Variety Pack 12 oz., 4 pk.",
-     "price": 8.98,
-     "size": "",
-     "unit_price": "$2.25/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/0W72DRN01XTS"
-    },
-    {
-     "item": "Al Bronzo by Barilla Organic Pasta, Variety Pack, 16 oz., 4 pk.",
-     "price": 7.08,
-     "size": "",
-     "unit_price": "$1.77/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/5YK7S2NN4Y00"
-    },
-    {
-     "item": "Member's Mark High Protein Penne Pasta with Italian Sausage, priced per pound",
-     "price": 17.15,
-     "size": "",
-     "unit_price": "$5.12/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4Y6URBC6J0MS"
-    },
-    {
-     "item": "Barilla Elbow Pasta, 1 lb., 6 pk.",
-     "price": 8.52,
-     "size": "",
-     "unit_price": "$1.42/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/62GDX0FGUKF5"
-    }
-   ],
-   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
-  },
-  {
-   "term": "Moroccan Spice Mix",
-   "state": "MATCHES",
-   "term_used": "Moroccan Spice Mix",
-   "attempts": [
-    {
-     "term": "Moroccan Spice Mix",
-     "state": "MATCHES",
-     "hits": 8
-    }
-   ],
-   "hits": [
-    {
-     "item": "McCormick Original Taco Seasoning Mix, 1 oz., 12 pk.",
-     "price": 7.78,
-     "size": "",
-     "unit_price": "$0.65/ea",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4LZHJ9QELZ8L"
-    },
-    {
-     "item": "Lawry's Seasoned Salt, 40 oz.",
-     "price": 7.48,
-     "size": "",
-     "unit_price": "$0.19/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3UNOOK1W977O"
-    },
-    {
-     "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
-     "price": 6.98,
-     "size": "",
-     "unit_price": "$0.69/oz",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+     "url": "https://www.samsclub.com/p/-/4QL2M49YI1SL"
     },
     {
      "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
@@ -366,36 +34,605 @@
      "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
     },
     {
-     "item": "Hidden Valley, Garlic Ranch Dry Dressing & Seasoning, 6 Pack",
+     "item": "Member's Mark Crushed Red Pepper, 13.5 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6VIC6DIW1WTD"
+    },
+    {
+     "item": "Member's Mark Crushed Red Pepper, 3.75 lbs.",
+     "price": 20.98,
+     "size": "",
+     "unit_price": "$5.59/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2JJILIIX4EJO"
+    },
+    {
+     "item": "Mrs. Dash Original Seasoning, 10 oz.",
      "price": 6.98,
      "size": "",
-     "unit_price": "$1.16/ea",
+     "unit_price": "$0.70/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/4FQ0FAEG1TZM"
+     "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
     },
     {
-     "item": "Old Bay Seasoning, 7.5 lbs.",
-     "price": 39.88,
-     "size": "",
-     "unit_price": "$5.32/lb",
-     "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6MGYI9AQ9VZA"
-    },
-    {
-     "item": "Kinder's Whiskey Peppercorn Seasoning, 9.7 oz.",
+     "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
      "price": 6.98,
      "size": "",
-     "unit_price": "$0.72/oz",
+     "unit_price": "$0.70/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/538KLULEC35X"
+     "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
     },
     {
-     "item": "Kinder's Caramelized Onion Burger Rub and Seasoning, 9.1 oz.",
-     "price": 5.48,
+     "item": "Member's Mark Ground White Pepper, 18 oz.",
+     "price": 14.98,
      "size": "",
-     "unit_price": "$0.60/oz",
+     "unit_price": "$0.83/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/13T9F65CNQL1"
+     "url": "https://www.samsclub.com/p/-/7175MUPTHTDS"
+    },
+    {
+     "item": "Member's Mark Restaurant Coarse Black Pepper, 18 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/716OGZC1M129"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "whole wheat flour",
+   "state": "MATCHES",
+   "term_used": "whole wheat flour",
+   "attempts": [
+    {
+     "term": "whole wheat flour",
+     "state": "MATCHES",
+     "hits": 13
+    }
+   ],
+   "hits": [
+    {
+     "item": "Nature's Eats Blanched Almond Nut Flour, 48 oz.",
+     "price": 14.98,
+     "size": "",
+     "unit_price": "$0.31/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4PFQNOPJ59K9"
+    },
+    {
+     "item": "Mission 8\" Protein Whole Wheat Flour Tortillas, 12 ct.",
+     "price": 7.78,
+     "size": "",
+     "unit_price": "$0.43/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1634R6MQVLZX"
+    },
+    {
+     "item": "Gold Medal All Purpose Flour, 12 lbs.",
+     "price": 6.72,
+     "size": "",
+     "unit_price": "$0.56/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2V4R3MQP7LKY"
+    },
+    {
+     "item": "King Arthur Bread Flour, 10 lbs.",
+     "price": 8.38,
+     "size": "",
+     "unit_price": "$0.84/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3EJBF2VJT0IQ"
+    },
+    {
+     "item": "Member's Mark All Purpose Flour, 25 lbs.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "$0.34/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5DODYSIB475T"
+    },
+    {
+     "item": "Member's Mark Bread & Pizza Flour, 25 lbs.",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "$0.42/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3JZZ1APK8Y29"
+    },
+    {
+     "item": "King Arthur Baking Company, 00 Pizza Flour, 5 lbs.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.60/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1SD16V0KDJXT"
+    },
+    {
+     "item": "Maseca Masa Corn Flour, 22 lbs.",
+     "price": 21.78,
+     "size": "",
+     "unit_price": "$0.99/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6K1FI7SA88F9"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "fresh red chili",
+   "state": "MATCHES",
+   "term_used": "fresh red chili",
+   "attempts": [
+    {
+     "term": "fresh red chili",
+     "state": "MATCHES",
+     "hits": 8
+    }
+   ],
+   "hits": [
+    {
+     "item": "Panera Bread Ready-to-Heat Broccoli Cheddar Soup, 40 oz, 4 Single Serve Cups (Refrigerated)",
+     "price": 10.48,
+     "size": "",
+     "unit_price": "",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6HN67YMAV8P1"
+    },
+    {
+     "item": "Nissin Top Ramen, Beef, 24 pk.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.29/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6K8I2SA7SQEH"
+    },
+    {
+     "item": "Nissin Top Ramen, Chicken, 24 pk.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.29/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3F8RQZGYQ248"
+    },
+    {
+     "item": "PhoLicious Spicy Chicken Ramen, 4.1 oz., 4 pk.",
+     "price": 13.28,
+     "size": "",
+     "unit_price": "$3.32/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3QFZID9KANNR"
+    },
+    {
+     "item": "Member's Mark Chicken Broth, 32 oz., 6 pk.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.04/foz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7H04F2E4J097"
+    },
+    {
+     "item": "Chef-mate Hot Dog Chili Sauce With Beef 108 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4XT99DZVPBR8"
+    },
+    {
+     "item": "Stagg Silverado Beef Chili with Beans 15 oz., 6 pk.",
+     "price": 13.98,
+     "size": "",
+     "unit_price": "$2.33/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1YON6C4DDQF6"
+    },
+    {
+     "item": "Pacific Bone Broth, Unsalted, 32 oz., 3 pk.",
+     "price": 13.98,
+     "size": "",
+     "unit_price": "$4.66/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2CYOKYA3KU0M"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "potatoes",
+   "state": "MATCHES",
+   "term_used": "potatoes",
+   "attempts": [
+    {
+     "term": "potatoes",
+     "state": "MATCHES",
+     "hits": 41
+    }
+   ],
+   "hits": [
+    {
+     "item": "Seeds of Change Organic Chipotle Style Brown Rice, 8.5 oz., 6 pk.",
+     "price": 11.98,
+     "size": "",
+     "unit_price": "$2.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1B6LXVADXQ1P"
+    },
+    {
+     "item": "Ben's Original Roasted Chicken Rice Cups, 8 ct.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$1.25/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7D3MI61E4Q2W"
+    },
+    {
+     "item": "Creamer Potatoes, 5 lbs.",
+     "price": 6.72,
+     "size": "",
+     "unit_price": "$1.34/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6T0FS28MWSMB"
+    },
+    {
+     "item": "Russet Potatoes, 10 lbs.",
+     "price": 5.17,
+     "size": "",
+     "unit_price": "$0.52/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+    },
+    {
+     "item": "Sweet Potatoes, 5 lbs.",
+     "price": 4.87,
+     "size": "",
+     "unit_price": "$0.97/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3P97KL9367OH"
+    },
+    {
+     "item": "RiceSelect Pearl Couscous, 40 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2GKQNXTDHW40"
+    },
+    {
+     "item": "Yellow Potatoes, 8 lbs.",
+     "price": 7.64,
+     "size": "",
+     "unit_price": "$0.95/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IIL6HOXM4L5"
+    },
+    {
+     "item": "Red Potatoes, 8 lbs.",
+     "price": 6.92,
+     "size": "",
+     "unit_price": "$0.86/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5FQI9Z9VCTXU"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "chicken bone broth",
+   "state": "MATCHES",
+   "term_used": "chicken bone broth",
+   "attempts": [
+    {
+     "term": "chicken bone broth",
+     "state": "MATCHES",
+     "hits": 23
+    }
+   ],
+   "hits": [
+    {
+     "item": "Kettle & Fire Chicken Bone Broth, 16.9 oz., 6 ct.",
+     "price": 21.98,
+     "size": "",
+     "unit_price": "$3.66/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2X5O8541TVVH"
+    },
+    {
+     "item": "Marie Callender's Chicken Variety Pack Soup 8 ct.",
+     "price": 13.78,
+     "size": "",
+     "unit_price": "$1.72/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3XO6HFL6A979"
+    },
+    {
+     "item": "Swanson Chicken Bone Broth, 32 oz., 3 pk.",
+     "price": 8.48,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2DBU8L0TGZ3D"
+    },
+    {
+     "item": "Bare Bones Instant Chicken Bouillon Bone Broth Sticks, 4.23 oz., 8 ct.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$1.00/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1Y1DHFRZJBTV"
+    },
+    {
+     "item": "Bare Bones Chicken Instant Bone Broth Stick, 12 ct.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.83/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AU9M6ZGMX0K"
+    },
+    {
+     "item": "Samyang MEP Ramen Bowl, Red Pepper and Chicken & Cilantro, 6 pk.",
+     "price": 9.78,
+     "size": "",
+     "unit_price": "$1.63/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/47OXDHXYHOQ9"
+    },
+    {
+     "item": "Swanson Chicken Broth 32 oz., 6 pk.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$1.66/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1X254XV86WHW"
+    },
+    {
+     "item": "Swanson Chicken Broth 14.5 oz., 12 pk.",
+     "price": 8.93,
+     "size": "",
+     "unit_price": "$0.74/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1H8EQP1KU777"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "canned corn",
+   "state": "MATCHES",
+   "term_used": "canned corn",
+   "attempts": [
+    {
+     "term": "canned corn",
+     "state": "MATCHES",
+     "hits": 21
+    }
+   ],
+   "hits": [
+    {
+     "item": "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
+     "price": 8.42,
+     "size": "",
+     "unit_price": "$1.05/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2IS6C9JATZ5E"
+    },
+    {
+     "item": "Orale! Premium Corn Husks, 16 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.44/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3FDUXETS786U"
+    },
+    {
+     "item": "Del Monte Whole Kernel Corn, 106 oz.",
+     "price": 5.76,
+     "size": "",
+     "unit_price": "$0.05/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2CLHKQS2F6MO"
+    },
+    {
+     "item": "Del Monte Mexican Style Street Corn, 14.75 oz., 6 pk.",
+     "price": 10.78,
+     "size": "",
+     "unit_price": "$1.80/ea",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6XQL19VX7A3O"
+    },
+    {
+     "item": "Hormel Mary Kitchen Corned Beef Hash, 14 oz., 6 pk.",
+     "price": 16.68,
+     "size": "",
+     "unit_price": "$0.20/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4D6KO860HAU1"
+    },
+    {
+     "item": "Libby's Corned Beef, 12 oz., 3 pk.",
+     "price": 12.48,
+     "size": "",
+     "unit_price": "$5.55/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5J634R20F1NR"
+    },
+    {
+     "item": "Del Monte Sweet Peas, 105 oz.",
+     "price": 7.12,
+     "size": "",
+     "unit_price": "$0.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3WTTXI3YJUV4"
+    },
+    {
+     "item": "Member's Mark Whole Artichoke Hearts, 33.5 oz.",
+     "price": 7.86,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/0V8BGXDOBK9P"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "pork loin",
+   "state": "MATCHES",
+   "term_used": "pork loin",
+   "attempts": [
+    {
+     "term": "pork loin",
+     "state": "MATCHES",
+     "hits": 21
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member’s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound",
+     "price": 17.31,
+     "size": "",
+     "unit_price": "$1.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2F125NWDOJLS"
+    },
+    {
+     "item": "Member’s Mark Boneless Center Cut Pork Loin Chops, priced per pound",
+     "price": 9.6,
+     "size": "",
+     "unit_price": "$2.98/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/331P9RWWSCLL"
+    },
+    {
+     "item": "Member’s Mark Whole Bone In Pork Loin Back Ribs, Vacuum Pack, priced per pound",
+     "price": 22.26,
+     "size": "",
+     "unit_price": "$3.18/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3FIBAFXV8Y9T"
+    },
+    {
+     "item": "Smithfield Garlic & Herb Pork Tenderloin, 19.2 oz, 2 Pk.",
+     "price": 9.84,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3MD7L55PQ891"
+    },
+    {
+     "item": "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
+     "price": 10.37,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7G7MYR79DF60"
+    },
+    {
+     "item": "Whole Boneless Pork Loins, Case, priced per pound",
+     "price": 93.37,
+     "size": "",
+     "unit_price": "$1.94/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1SC4COU6MV1A"
+    },
+    {
+     "item": "Member's Mark Whole Bone In Pork Loin, Vacuum Pack, priced per pound",
+     "price": 97.92,
+     "size": "",
+     "unit_price": "$2.04/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/68PEEJEC26HX"
+    },
+    {
+     "item": "Pork Loin Back Ribs, Case, priced per pound",
+     "price": 170.03,
+     "size": "",
+     "unit_price": "$3.14/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/23FGDNFNKNHN"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "chipotle in adobo",
+   "state": "MATCHES",
+   "term_used": "chipotle in adobo",
+   "attempts": [
+    {
+     "term": "chipotle in adobo",
+     "state": "MATCHES",
+     "hits": 19
+    }
+   ],
+   "hits": [
+    {
+     "item": "Fresh Craving's Mexicali Dip, 24 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.33/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6JZXQUJGXRMV"
+    },
+    {
+     "item": "Chi-Chi's Medium Thick & Chunky Salsa, 60 oz.",
+     "price": 7.32,
+     "size": "",
+     "unit_price": "$0.12/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1PAR3EKQ8RKT"
+    },
+    {
+     "item": "McCormick Perfect Pinch Salad Supreme Seasoning, 10.12 oz.",
+     "price": 6.98,
+     "size": "",
+     "unit_price": "$0.69/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7AM6A8RRG2ZQ"
+    },
+    {
+     "item": "McCormick Chili Original Seasoning Mix 1.25 oz., 6 pk.",
+     "price": 5.74,
+     "size": "",
+     "unit_price": "$0.77/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1AH6SA6EYA92"
+    },
+    {
+     "item": "Member's Mark Ground Turmeric, 20 oz.",
+     "price": 7.98,
+     "size": "",
+     "unit_price": "$0.40/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2DTR8SZPG3Y7"
+    },
+    {
+     "item": "Member's Mark Organic Ground Turmeric, 9.5 oz.",
+     "price": 5.54,
+     "size": "",
+     "unit_price": "$0.58/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/25VRW1LELOFE"
+    },
+    {
+     "item": "Member's Mark Chicken Bouillon, 32 oz.",
+     "price": 8.96,
+     "size": "",
+     "unit_price": "$0.28/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6OMVSB9YGO90"
+    },
+    {
+     "item": "Adolph's Unseasoned Tenderizer, 44.5 oz.",
+     "price": 9.62,
+     "size": "",
+     "unit_price": "$0.22/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/7H5K9HALQ41T"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

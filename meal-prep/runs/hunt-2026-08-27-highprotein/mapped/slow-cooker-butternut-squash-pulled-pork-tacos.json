@@ -1,0 +1,209 @@
+﻿{
+    "slug":  "slow-cooker-butternut-squash-pulled-pork-tacos",
+    "title":  "Slow Cooker Butternut Squash Pulled Pork Tacos",
+    "source_url":  "https://www.wellplated.com/slow-cooker-butternut-squash-pulled-pork-tacos/",
+    "source_servings":  6,
+    "target_servings":  14,
+    "scale_factor":  2.3333,
+    "protein":  "pork",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-27",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "3 pounds butternut squash (peeled and cut into bite-sized chunks)",
+                            "item":  "Butternut Squash",
+                            "bid":  "butternut-squash",
+                            "board":  null,
+                            "grams":  3175,
+                            "buy":  "7 lb, peeled and cut into bite-sized chunks",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "REUSE of a live board id at 5 of 7, cheapest 1.49 at Baker\u0027s, per the 2026-08-26 \u0027cubed butternut squash\u0027 ruling; only the vocabulary row is missing. Spaghetti squash is a different food. DB row already present.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 pounds boneless pork loin roast",
+                            "item":  "Pork Loin",
+                            "bid":  "pork-loin",
+                            "board":  null,
+                            "grams":  2117,
+                            "buy":  "4 2/3 lb boneless pork loin roast",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "A boneless loin roast IS the whole pork loin - \u0027boneless\u0027 and \u0027roast\u0027 describe how the same cut is sold, not a different product, and pork-loin is the vocabulary\u0027s own id for it. Refused pork-shoulder (a cheaper, fattier cut) and ground-pork. Board finds nothing, so the term is enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons kosher salt (divided)",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  28,
+                            "buy":  "4 2/3 tsp, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027kosher salt\u0027 -\u003e salt (by mapper on 2026-08-16T11:53:03); nearest vocabulary rows: Sea Salt [sea-salt] same form | Salt [salt] same form | Celery Salt [celery-salt] same form; board MAPPED: salt, 7 of 7 stores, cheapest 0.0304 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground black pepper",
+                            "item":  "Black Pepper",
+                            "bid":  "black-pepper",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "2 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027ground black pepper\u0027 -\u003e black-pepper (by mapper on 2026-08-16T11:53:04); nearest vocabulary rows: Black Pepper [black-pepper] DIFFERENT FORM: ground | Yellow Bell Pepper [yellow-bell-pepper] DIFFERENT FORM: ground | Red Bell Pepper [red-bell-pepper] DIFFERENT FORM: ground; board MAPPED: black-pepper, 7 of 7 stores, cheapest 0.4167 at Hy-Vee",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground cumin",
+                            "item":  "Ground Cumin",
+                            "bid":  "ground-cumin",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "2 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-cumin, 7 of 7 stores, cheapest 0.4321 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 teaspoon ground cinnamon",
+                            "item":  "Ground Cinnamon",
+                            "bid":  "ground-cinnamon",
+                            "board":  "recipe",
+                            "grams":  6,
+                            "buy":  "2 1/3 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: ground-cinnamon, 7 of 7 stores, cheapest 0.3629 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon extra-virgin olive oil",
+                            "item":  "Olive Oil",
+                            "bid":  "olive-oil",
+                            "board":  "recipe",
+                            "grams":  31,
+                            "buy":  "2 1/3 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027extra virgin olive oil\u0027 -\u003e olive-oil (by mapper on 2026-08-26T04:53:06); nearest vocabulary rows: Olive Oil [olive-oil] DIFFERENT FORM: extra/virgin; board MAPPED: olive-oil, 7 of 7 stores, cheapest 0.1879 at Sam\u0027s Club",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2-3 chipotle peppers packed in adobo (coarsely chopped (individual peppers, not full cans!) )",
+                            "item":  "Chipotle in Adobo",
+                            "bid":  "chipotle-adobo",
+                            "board":  null,
+                            "grams":  58,
+                            "buy":  "6 peppers, coarsely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Exact same-form vocabulary row. The line insists on individual peppers, not the whole can, so it is weighed at 2 1/2 peppers (about 10 g each) rather than a can. Board finds nothing; term enqueued.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons adobo sauce from the canned chiles ((add more for extra heat))",
+                            "item":  "Chipotle in Adobo",
+                            "bid":  "chipotle-adobo",
+                            "board":  null,
+                            "grams":  70,
+                            "buy":  "4 2/3 tbsp of the adobo sauce from the same can",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "The line says outright that the sauce comes from the same can already bought for the peppers, so this is the same product and the same id, weighed separately so its macros count. The \u0027sauce/in\u0027 form flag is a wording artefact.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 onion (coarsely chopped)",
+                            "item":  "Yellow Onion",
+                            "bid":  "onions",
+                            "board":  "weekly",
+                            "grams":  257,
+                            "buy":  "2 1/3 onions, coarsely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027onion\u0027 -\u003e onions (by mapper on 2026-08-26T10:11:23); nearest vocabulary rows: Yellow Onion [onions] same form | Red Onion [red-onion] same form | Onion Powder [onion-powder] DIFFERENT FORM: powder",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 teaspoons minced garlic (about 4 cloves)",
+                            "item":  "Garlic",
+                            "bid":  "garlic",
+                            "board":  "recipe",
+                            "grams":  13,
+                            "buy":  "4 2/3 tsp minced (about 9 cloves)",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: prior ruling: \u0027minced garlic\u0027 -\u003e garlic (by mapper on 2026-08-26T04:52:59); nearest vocabulary rows: Garlic Powder [garlic-powder] DIFFERENT FORM: minced/powder | Garlic [garlic] DIFFERENT FORM: minced",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/2 cup orange juice",
+                            "item":  "Orange Juice",
+                            "bid":  "orange-juice",
+                            "board":  "weekly",
+                            "grams":  290,
+                            "buy":  "1 1/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: orange-juice, 7 of 7 stores, cheapest 0.0585 at Aldi",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 tablespoons red wine vinegar (or substitute additional orange juice)",
+                            "item":  "Red Wine Vinegar",
+                            "bid":  "red-wine-vinegar",
+                            "board":  "recipe",
+                            "grams":  70,
+                            "buy":  "4 2/3 tbsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "pre-resolved mechanically: exact vocabulary row; board MAPPED: red-wine-vinegar, 6 of 7 stores, cheapest 0.1192 at Walmart",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "For Serving: corn tortillas, (fresh cilantro, lime wedges, and feta cheese or queso fresco)",
+                            "item":  "Corn Tortillas",
+                            "bid":  "corn-tortillas",
+                            "board":  "recipe",
+                            "grams":  700,
+                            "buy":  "28 corn tortillas, for serving",
+                            "optional":  true,
+                            "decision":  "mapped-optional",
+                            "notes":  "Two tortillas per serving at the source\u0027s own 6-serving yield.",
+                            "grams_from":  "line"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "pork loin",
+                                 "chipotle in adobo"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "slow-cooker-butternut-squash-pulled-pork-tacos: the food DB already carries \u0027Pork Loin\u0027 and the mapper\u0027s row DIFFERS on serving_grams, serving_qty, serving_unit, calories, protein_g, fat_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 138.4 cal / 20.5 P / 0.0 C / 5.4 F  vs  mapper 166.0 / 21.3 / 0.0 / 8.3. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 4 oz = 112 g) they still disagree: calories 185.9 vs 155; protein_g 23.86 vs 23; fat_g 9.33 vs 6. existing={\"serving_grams\": 112, \"serving_qty\": 4, \"serving_unit\": \"oz\", \"calories\": 155, \"protein_g\": 23, \"fat_g\": 6} new={\"serving_grams\": 100, \"serving_qty\": 100, \"serving_unit\": \"g\", \"calories\": 166, \"protein_g\": 21.3, \"fat_g\": 8.33}"
+                        ],
+    "new_commodity_proposals":  [
+
+                                ],
+    "registrar_rulings":  [
+
+                          ],
+    "join_fallbacks":  [
+
+                       ],
+    "macro_cross_check":  "Computed 502 cal / 38.8 g protein / 51 g carbs per serving over 6 servings, against the source\u0027s published 477 / 40 / 57. Calories +5.2%, protein -3.0%, both well inside the bar, so the grams are sound - in particular the 3 lb squash reads as 3 lb of prepped flesh rather than whole squash, which is what makes the calories agree. LOUD FLAG: my computed protein of 38.8 g sits just UNDER this run\u0027s 40 g floor even though the source publishes exactly 40. The recipe is genuinely borderline rather than wrong, and it turns on the pork row - I used the lean-and-fat RAW cut (21.3 g protein per 100 g); the trimmed lean-only cut would carry it clear. I am not rejecting on this; the band gate should rule with the number in front of it."
+}

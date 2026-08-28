@@ -1,0 +1,201 @@
+{
+  "state": "ok",
+  "reason": null,
+  "title": "Chicken Meatballs in Cranberry Sauce",
+  "source_url": "https://healthyfitnessmeals.com/chicken-meatball-recipe/",
+  "servings": 4,
+  "time_total": "25 minutes",
+  "time_active": "10 minutes",
+  "ingredients": [
+    {
+      "raw": "14 oz Cranberry Sauce (one can)",
+      "item": "Cranberry Sauce",
+      "qty": "14 oz",
+      "unit": null,
+      "prep": "(one can)",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ Cup Honey",
+      "item": "Honey",
+      "qty": "¼",
+      "unit": "Cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tsp Chili Powder",
+      "item": "Chili Powder",
+      "qty": "1",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ Tsp Cayenne Pepper",
+      "item": "Cayenne Pepper",
+      "qty": "¼",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ Tsp Chili Flakes",
+      "item": "Chili Flakes",
+      "qty": "½",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "Kosher salt and ground pepper, to taste",
+      "item": "Kosher salt and ground pepper",
+      "qty": null,
+      "unit": null,
+      "prep": "to taste",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp Olive Oil",
+      "item": "Olive Oil",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 lbs Chicken breast or turkey (cubed)",
+      "item": "Chicken breast or turkey",
+      "qty": "2",
+      "unit": "lbs",
+      "prep": "cubed",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ Cup Panko",
+      "item": "Panko",
+      "qty": "¼",
+      "unit": "Cup",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ Cup Whole Wheat Flour (or Gluten-free, for rolling the meatballs)",
+      "item": "Whole Wheat Flour",
+      "qty": "¼",
+      "unit": "Cup",
+      "prep": "or Gluten-free, for rolling the meatballs",
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Large Egg",
+      "item": "Large Egg",
+      "qty": "1",
+      "unit": null,
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "2 Tbsp Worcestershire Sauce",
+      "item": "Worcestershire Sauce",
+      "qty": "2",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tsp Garlic Powder",
+      "item": "Garlic Powder",
+      "qty": "1",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tsp Onion Powder",
+      "item": "Onion Powder",
+      "qty": "1",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tsp Paprika",
+      "item": "Paprika",
+      "qty": "1",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "1 Tbsp Olive Oil",
+      "item": "Olive Oil",
+      "qty": "1",
+      "unit": "Tbsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "¼ Tsp Black Pepper",
+      "item": "Black Pepper",
+      "qty": "¼",
+      "unit": "Tsp",
+      "prep": null,
+      "optional": false,
+      "section": null
+    },
+    {
+      "raw": "½ Tsp Kosher Salt ( or to taste)",
+      "item": "Kosher Salt",
+      "qty": "½",
+      "unit": "Tsp",
+      "prep": "( or to taste)",
+      "optional": true,
+      "section": null
+    },
+    {
+      "raw": "Optional: fresh rosemary, to garnish",
+      "item": "fresh rosemary",
+      "qty": null,
+      "unit": null,
+      "prep": "to garnish",
+      "optional": true,
+      "section": null
+    }
+  ],
+  "instructions": [
+    "In a food processor add the meat chunks and pulse to chop. Add all the remaining ingredients and pulse again until meat is medium-fine.",
+    "Using wet hands form the meat mixture into about 1-inch balls. Gently roll them in flour, shaking any excess.",
+    "Heat a large non-stick pan over medium heat. Drizzle with about 2 Tbsps oil and carefully add in the meatballs. Cook for about 2 minutes on each side, or until cooked through and golden-brown.",
+    "Meanwhile, in a small bowl, mix cranberry sauce with remaining ingredients until well combined.",
+    "Pour cranberry sauce and stir well. Reduce the heat to low and simmer until bubbly, about 5 minute"
+  ],
+  "concerns": [],
+  "extracted_by": "jsonld-local",
+  "verification": {
+    "lines": 19,
+    "verified": 19,
+    "unverified": 0,
+    "verified_rate": 1.0,
+    "unverified_lines": [],
+    "passed": true,
+    "bar": "every line (rung 1)",
+    "failures": []
+  }
+}

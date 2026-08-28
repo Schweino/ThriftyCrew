@@ -1,0 +1,150 @@
+{
+ "name": "Chicken Meatballs in Cranberry Sauce",
+ "slug": "chicken-meatballs-in-cranberry-sauce",
+ "protein": "chicken",
+ "cuisine": "American",
+ "source_url": "https://healthyfitnessmeals.com/chicken-meatball-recipe/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Cranberry Sauce",
+   "grams": 1389,
+   "buy": "5 cups (three and a half 14 oz cans)"
+  },
+  {
+   "item": "Honey",
+   "grams": 297,
+   "buy": "7/8 cup"
+  },
+  {
+   "item": "Chili Powder",
+   "grams": 9,
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "item": "Cayenne Pepper",
+   "grams": 1,
+   "buy": "scant 1 tsp"
+  },
+  {
+   "item": "Red Pepper Flakes",
+   "grams": 3,
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "item": "Salt",
+   "grams": 20,
+   "buy": "to taste (10 g); 1 3/4 tsp"
+  },
+  {
+   "item": "Olive Oil",
+   "grams": 141,
+   "buy": "7 tbsp; 3 1/2 tbsp"
+  },
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 3175,
+   "buy": "7 lb, cut into cubes"
+  },
+  {
+   "item": "Panko Bread Crumbs",
+   "grams": 52,
+   "buy": "7/8 cup"
+  },
+  {
+   "item": "Whole Wheat Flour",
+   "grams": 105,
+   "buy": "7/8 cup, for rolling the meatballs"
+  },
+  {
+   "item": "Eggs",
+   "grams": 175,
+   "buy": "4 large eggs, beaten"
+  },
+  {
+   "item": "Worcestershire Sauce",
+   "grams": 119,
+   "buy": "1/2 cup"
+  },
+  {
+   "item": "Garlic Powder",
+   "grams": 11,
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "item": "Onion Powder",
+   "grams": 8,
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "item": "Paprika",
+   "grams": 8,
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "item": "Black Pepper",
+   "grams": 2,
+   "buy": "3/4 tsp"
+  },
+  {
+   "item": "Fresh Rosemary",
+   "grams": 7,
+   "buy": "2 sprigs, to garnish (7 g)"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 646,
+  "protein_g": 55,
+  "carbs_g": 68.7,
+  "fat_g": 18.1
+ },
+ "writer_notes": [
+  "Ingredient-vs-step reconciliation done: all 17 locked ingredients are used. Meatball mix (step 1): chicken, panko, eggs, Worcestershire, garlic powder, onion powder, paprika, black pepper, salt. Rolling (step 2): whole wheat flour. Searing (step 3): olive oil. Sauce (step 4): cranberry sauce, honey, chili powder, cayenne, red pepper flakes, salt, black pepper. Garnish (step 5): fresh rosemary. No orphan ingredient, no step invents anything unbought.",
+  "Salt and black pepper intentionally appear in both the meatball mix and the sauce, matching the source transcription which seasons both components.",
+  "Source protein was 'chicken breast or turkey'; locked protein is chicken, so prose names chicken only.",
+  "No cost_lines were provided this dispatch, so shop_smart makes no per-ounce or per-package price claims; only the ${{cost_ps}} token and the $1 a month membership line carry money.",
+  "DATA FLAG: Olive Oil locked buy '7 tbsp; 3 1/2 tbsp' looks possibly inflated. Source lists 2 Tbsp in the sauce group (sauce uses no oil) plus 1 Tbsp in the meatball group, and step 3 references 'about 2 Tbsps oil'. The leading 7 tbsp may double-count the stray sauce-group oil line. Confirm the searing oil scale; not fixed here.",
+  "Scale sanity otherwise clean: 2 lb source chicken x 3.5 = 7 lb for 14 servings; 1 egg x 3.5 rounds to 4; 14 oz can x 3.5 = three and a half cans (~5 cups).",
+  "High carb load (68.7 g/serving) comes from 5 cups cranberry sauce plus 7/8 cup honey; in band since carbs are unrestricted, and the cranberry sauce plus panko satisfy the real-carbohydrate-source requirement."
+ ],
+ "forbidden_prose_terms": [
+  "turkey",
+  "seafood",
+  "shrimp",
+  "keto",
+  "low carb",
+  "sugar free",
+  "gluten free",
+  "homemade cranberry sauce"
+ ],
+ "prose": {
+  "intro_html": "<p>Cranberry sauce is not just a November guest that shows up once a year and overstays its welcome. Here it earns a paycheck. We are wrapping tender chicken meatballs in a sweet and slightly spicy cranberry glaze, then packing it into 14 containers you can pull from all week.</p><p>Here is the honest part. This eats like a treat and cooks like a weeknight favor to yourself. You get 55 grams of protein and 646 calories per container, and the whole thing comes together in about 25 minutes start to finish. Real food, real protein, and a sauce good enough that you forget you are eating on a budget.</p>",
+  "shop_smart": "<p>The chicken is the whole game. You are buying 7 pounds of boneless skinless chicken breast to fill 14 containers, so this is the trip where you hunt down the family pack or the bulk bag. Budget meal prep lives and dies on how you buy the protein.</p><p>Cranberry sauce is the other star. You need 5 cups, which works out to three and a half of the 14 ounce cans. Buy four cans so you have a whole one in reserve instead of staring at a half empty can wondering what to do with it. Whole berry or jellied both cook down fine, so grab whichever one is cheaper on the shelf.</p><p>Everything else is pantry duty. Honey, panko, whole wheat flour, four large eggs, and Worcestershire sauce, plus the spice rack crew: chili powder, cayenne, red pepper flakes, garlic powder, onion powder, paprika, salt, and black pepper. If your jars are already stocked, this list is short. The fresh rosemary is optional garnish, so leave it off if you are trimming the cart.</p>",
+  "make_it": "<p>Start with the meatballs. Drop the cubed chicken into a food processor and pulse until it is chopped. Add the panko, the eggs, the Worcestershire, garlic powder, onion powder, paprika, black pepper, and salt, then pulse again until the mixture is medium fine. A food processor does in 30 seconds what your hands would wrestle with for ten minutes.</p><p>Wet your hands so the meat does not stick, then form the mixture into about 1 inch balls. Roll each one gently in the whole wheat flour and shake off the excess. That thin flour coat is what gives you the golden crust in the pan.</p><p>Heat a large non stick pan over medium heat and drizzle in the olive oil. Carefully add the meatballs and cook about 2 minutes per side, until they are golden brown and cooked through. Work in batches if the pan gets crowded, because a crowded pan steams the meat instead of browning it.</p><p>While those cook, mix the cranberry sauce in a bowl with the honey, chili powder, cayenne, red pepper flakes, salt, and black pepper until it is well combined. Pour that over the meatballs, stir well, reduce the heat to low, and simmer until it is bubbly, about 5 minutes. Finish with fresh rosemary if you are using it.</p>",
+  "portion_html": "<p>Here is the trick that keeps 14 containers honest. When the meatballs and sauce are done, weigh the full pan, subtract the weight of the empty pan, and divide what is left by 14. That number is your target grams per container, and then you scoop to the scale instead of to the eye.</p><p>Do it that way and every box lands at the same 646 calories and 55 grams of protein. Eyeball it and the first three containers are feasts while the last three come up short. The scale is the fix, and it costs you two extra minutes.</p><p>The cranberry sauce and panko carry the carbs here, so this is a complete plate on its own. If you want it to stretch further, a scoop of rice or a few roasted potatoes rides well under that glaze.</p>",
+  "cost_closing_html": "<p>Now the money, because that is why we are here. This whole batch breaks down to about ${{cost_ps}} per serving. That is 14 dinners of chicken meatballs in a real cranberry glaze for less than most people drop on a single lunch out.</p><p>Line it up against a frozen high protein entree that runs three or four dollars and hands you half the protein. You are getting 55 grams a container here for a fraction of that. The math is not close, and the taste is not either.</p>",
+  "upsell_html": "<p>If this is the kind of cooking you want more of, that is exactly what Thrifty Crew is built for. A dollar a month gets you the full library of budget meal prep recipes, each one costed to the serving and built to hit real protein numbers.</p><p>Cook this batch, eat well all week, and let the sauce do the bragging.</p>"
+ },
+ "head": {
+  "description": "High protein chicken meatballs simmered in a sweet and spicy cranberry sauce. A budget meal prep dinner that makes 14 servings at 55g protein and 646 calories each.",
+  "keywords": "chicken meatballs, cranberry sauce, high protein meal prep, budget meal prep dinner, chicken meatball recipe, meal prep chicken, cranberry chicken meatballs",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "PT15M",
+  "totalTime": "PT25M",
+  "steps": [
+   "Add the cubed chicken to a food processor and pulse to chop. Add the panko, eggs, Worcestershire sauce, garlic powder, onion powder, paprika, black pepper, and salt, then pulse again until the mixture is medium fine.",
+   "With wet hands, form the mixture into about 1 inch balls and roll each one gently in the whole wheat flour, shaking off any excess.",
+   "Heat a large non stick pan over medium heat, drizzle in the olive oil, and cook the meatballs about 2 minutes per side until golden brown and cooked through, working in batches if needed.",
+   "In a small bowl, mix the cranberry sauce with the honey, chili powder, cayenne, red pepper flakes, salt, and black pepper until well combined.",
+   "Pour the cranberry sauce over the meatballs, stir well, reduce the heat to low, and simmer until bubbly, about 5 minutes. Garnish with fresh rosemary if using."
+  ],
+  "step_names": [
+   "Blend the meatball mix",
+   "Roll and flour",
+   "Sear the meatballs",
+   "Mix the cranberry sauce",
+   "Simmer and finish"
+  ]
+ }
+}

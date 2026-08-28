@@ -1,0 +1,193 @@
+{
+ "slug": "chicken-meatballs-in-cranberry-sauce",
+ "lines": [
+  {
+   "raw": "14 oz Cranberry Sauce (one can)",
+   "buy": "5 cups (three and a half 14 oz cans)",
+   "grams_source": 396.9,
+   "notes": "Canned sweetened sauce, jellied or whole berry."
+  },
+  {
+   "raw": "¼ Cup Honey",
+   "buy": "7/8 cup"
+  },
+  {
+   "raw": "1 Tsp Chili Powder",
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "raw": "¼ Tsp Cayenne Pepper",
+   "buy": "scant 1 tsp"
+  },
+  {
+   "raw": "½ Tsp Chili Flakes",
+   "buy": "1 3/4 tsp",
+   "grams_source": 0.9
+  },
+  {
+   "raw": "Kosher salt and ground pepper, to taste",
+   "buy": "to taste (10 g)",
+   "grams_source": 3,
+   "notes": "Costed as salt; the pepper on this line is pantry-static."
+  },
+  {
+   "raw": "2 Tbsp Olive Oil",
+   "buy": "7 tbsp"
+  },
+  {
+   "raw": "2 lbs Chicken breast or turkey (cubed)",
+   "buy": "7 lb, cut into cubes",
+   "grams_source": 907.2
+  },
+  {
+   "raw": "¼ Cup Panko",
+   "buy": "7/8 cup",
+   "grams_source": 15,
+   "notes": "Panko is light: 1 cup is about 60 g, not the 108 g of fine dry crumbs."
+  },
+  {
+   "raw": "¼ Cup Whole Wheat Flour (or Gluten-free, for rolling the meatballs)",
+   "buy": "7/8 cup, for rolling the meatballs",
+   "grams_source": 30
+  },
+  {
+   "raw": "1 Large Egg",
+   "buy": "4 large eggs, beaten",
+   "grams_source": 50,
+   "notes": "3 1/2 eggs at batch scale, rounded up to 4 whole eggs by the cook."
+  },
+  {
+   "raw": "2 Tbsp Worcestershire Sauce",
+   "buy": "1/2 cup"
+  },
+  {
+   "raw": "1 Tsp Garlic Powder",
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "raw": "1 Tsp Onion Powder",
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "raw": "1 Tsp Paprika",
+   "buy": "1 tbsp plus 1/2 tsp"
+  },
+  {
+   "raw": "1 Tbsp Olive Oil",
+   "buy": "3 1/2 tbsp"
+  },
+  {
+   "raw": "¼ Tsp Black Pepper",
+   "buy": "3/4 tsp"
+  },
+  {
+   "raw": "½ Tsp Kosher Salt ( or to taste)",
+   "buy": "1 3/4 tsp"
+  },
+  {
+   "raw": "Optional: fresh rosemary, to garnish",
+   "buy": "2 sprigs, to garnish (7 g)",
+   "grams_source": 2
+  }
+ ],
+ "rulings": [
+  {
+   "raw": "14 oz Cranberry Sauce (one can)",
+   "term": "Cranberry Sauce",
+   "canon_item": "Cranberry Sauce",
+   "bid": "cranberry-sauce",
+   "decision": "mapped",
+   "grams_source": 396.9,
+   "evidence": "REUSE of a live board id at 6 of 7 stores, cheapest 0.1038 at Walmart; only the vocabulary row was missing. Deliberately NOT fresh-cranberries (the 2026-08-27 shelf ruling): a sweetened canned sauce carries 40 g carbs per 100 g against raw fruit's 12."
+  },
+  {
+   "raw": "½ Tsp Chili Flakes",
+   "term": "Chili Flakes",
+   "canon_item": "Red Pepper Flakes",
+   "bid": "red-pepper-flakes",
+   "decision": "mapped",
+   "grams_source": 0.9,
+   "evidence": "Chili flakes and red pepper flakes are one jar under two shelf names; the same-form vocabulary row exists and the 2026-08-26 'red chili flakes' ruling went here. Board found nothing, so the term is enqueued."
+  },
+  {
+   "raw": "Kosher salt and ground pepper, to taste",
+   "term": "Kosher salt and ground pepper",
+   "canon_item": "Salt",
+   "bid": "salt",
+   "decision": "mapped",
+   "grams_source": 3,
+   "evidence": "One line carrying two pantry seasonings; costed as salt (7 of 7) with the black pepper pantry-static, per the 'Salt/Pepper' and 'Salt and pepper' precedents. The three DIFFERENT FORM bell-pepper rows are a wording artefact of the word 'pepper'."
+  },
+  {
+   "raw": "2 lbs Chicken breast or turkey (cubed)",
+   "term": "Chicken breast or turkey",
+   "canon_item": "Boneless Skinless Chicken Breast",
+   "bid": "chicken-breast",
+   "decision": "mapped",
+   "grams_source": 907.2,
+   "evidence": "The line names chicken first and turkey as the alternative; chicken-breast is live at 7 of 7, cheapest 1.99 at Hy-Vee. Refused the turkey-breast rows: a different bird at a different per-lb price."
+  },
+  {
+   "raw": "¼ Cup Panko",
+   "term": "Panko",
+   "canon_item": "Panko Bread Crumbs",
+   "bid": "bread-crumbs",
+   "decision": "mapped",
+   "grams_source": 15,
+   "evidence": "REUSE of bread-crumbs, live at 7 of 7: panko is a breadcrumb style sold on the same shelf in the same price class, not a form flip. The gram-per-cup difference is handled by weighing the line at 60 g/cup rather than by the id."
+  },
+  {
+   "raw": "¼ Cup Whole Wheat Flour (or Gluten-free, for rolling the meatballs)",
+   "term": "Whole Wheat Flour",
+   "canon_item": "Whole Wheat Flour",
+   "bid": "whole-wheat-flour",
+   "decision": "mapped",
+   "grams_source": 30,
+   "evidence": "Genuine form flip, refused the bridge to flour (All-Purpose): whole wheat is its own bag at a higher per-lb price and a different gram weight per cup. New id proposed."
+  },
+  {
+   "raw": "1 Large Egg",
+   "term": "Large Egg",
+   "canon_item": "Eggs",
+   "bid": "eggs",
+   "decision": "mapped",
+   "grams_source": 50,
+   "evidence": "REUSE of eggs, live at 7 of 7, cheapest 0.99 at Fareway. One large egg is 50 g shelled; the estate's live '1 large egg (120 g)' defect is the error being avoided here."
+  }
+ ],
+ "absent_terms": [
+  "red pepper flakes",
+  "whole wheat flour"
+ ],
+ "db_entries_written": [
+  "Cranberry Sauce",
+  "Panko Bread Crumbs",
+  "Whole Wheat Flour"
+ ],
+ "db_row_findings": [
+  "chicken-meatballs-in-cranberry-sauce: the food DB already carries 'Red Pepper Flakes' and the mapper's row DIFFERS on serving_grams, serving_qty, calories, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 333.3 cal / 0.0 P / 55.6 C / 0.0 F  vs  mapper 0.0 / 0.0 / 0.0 / 0.0. On one basis (the mapper's row scaled onto the DB's 1 tsp = 1.8 g) they still disagree: calories 0 vs 6; carbs_g 0 vs 1. existing={\"serving_grams\": 1.8, \"serving_qty\": 1, \"calories\": 6, \"carbs_g\": 1} new={\"serving_grams\": 0.5, \"serving_qty\": 0.25, \"calories\": 0, \"carbs_g\": 0}",
+  "chicken-meatballs-in-cranberry-sauce: the food DB already carries 'Panko Breadcrumbs' and this row is landing as 'Panko Bread Crumbs' - the same name modulo punctuation and plural, so these are almost certainly ONE food with two rows. The row was WRITTEN (a naming question must not park a recipe) and the lookup is name-keyed, so until they are merged one of them silently shadows the other."
+ ],
+ "db_row_notes": [
+  "chicken-meatballs-in-cranberry-sauce: 'Eggs' arrived on a different serving basis (100 g = 100 g) than the row the DB holds, and the two AGREE once put on one basis - the mapper's row scaled onto the DB's 1 large egg = 50 g reproduces the DB's own numbers within 5 kcal and 0.5 g. Nothing was written and the household row stands, which is the rule."
+ ],
+ "rejected": [],
+ "ruled_substitutions": [],
+ "new_commodity_proposals": [
+  {
+   "term": "Whole Wheat Flour",
+   "proposed_bid": "whole-wheat-flour",
+   "evidence": "Not already priced under another spelling: the only flour id in the estate is `flour`, whose vocabulary name is All-Purpose Flour, and no commodity, recipe-commodity or board row names a whole-grain wheat flour. It is a genuine form flip rather than a synonym: whole wheat is a separate bag at a higher per-lb price and a different gram weight per cup (about 120 g against 125 g for AP), so bridging it onto `flour` would publish both a wrong price and a wrong weight.",
+   "declared": true
+  }
+ ],
+ "registrar_rulings": [
+  {
+   "proposed_bid": "whole-wheat-flour",
+   "verdict": "approve",
+   "bid": "whole-wheat-flour",
+   "reason": "Not priced anywhere under another spelling: the live feed contains no 'whole wheat' string at all, and the only flour ids in the estate are flour (All-Purpose, priced $0.3392/lb Sam's Club), almond-flour (a different food), and the recipe alias all-purpose-flour -> flour. Decisively, the existing flour commodity EXCLUDES 'whole\\s+wheat' (commodities.json line 10882), so the estate already treats whole wheat as a different purchase and bridging it onto flour would price the wrong bag at a wrong per-lb and a wrong g/cup. Mint whole-wheat-flour as a recipe-only id (recipe-board baseline + recipe-commodities.json) unless Brad promotes it to the weekly worklist. Prescription: include must require the contiguous phrase 'whole\\s+wheat\\s+flour' (also 'whole[\\s-]*grain\\s+(wheat\\s+)?flour', 'white\\s+whole\\s+wheat\\s+flour'); exclude whole-wheat BREAD/PASTA/TORTILLA/PANCAKE-MIX products plus the full household/pet/baby boilerplate cloned from flour's ~80-pattern list, and 'bread\\s+flour', 'self[\\s-]*rising', '\\bmix\\b'. Follow-up edits for the caller: add allowlist pairs (whole-wheat-flour, flour, 'different form: whole-grain vs refined AP, separate bags at different per-lb') and (whole-wheat-flour, almond-flour, 'different food') to commodity-dupe-allowlist.json in the same change, so the daily dupe audit's substring sweep never re-flags a pair already adjudicated here."
+  }
+ ],
+ "macro_cross_check": "Computed 648 cal / 55.0 g protein / 67 g carbs per serving over 4 servings, against the source's published 641 / 52 / 68. Protein is +5.8%, well inside the 15% bar, and calories land within 1%. The chicken line at 907.2 g (2 lb, the source's own weight) is the driver and needs no correction. Band: passes (450-800 cal, protein >= 40)."
+}
