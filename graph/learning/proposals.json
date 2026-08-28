@@ -85,6 +85,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:09510bd4b3aec846547e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"great\\\\s+value\\\\s+shredded\\\\s+mozzarella\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Great Value Shredded Mozzarella'. Specific to brand and form.",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T18:29:19",
     "id": "lp:0969b931beabdea0c0bf",
     "kind": "add_alias",
@@ -1057,6 +1069,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:61c98017ad0c21337a96",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"kraft\\\\s+natural\\\\s+mozzarella\\\\s+(finely\\\\s+)?shredded\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches multiple Kraft Natural Mozzarella Shredded variants. Anchors on brand and form.",
+    "status": "proposed",
+    "target_id": "part-skim-mozzarella-shredded"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T17:00:43",
     "id": "lp:637fdecfb2a8d18eff41",
     "kind": "add_alias",
@@ -1177,6 +1201,30 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:6cf621d6997aff5c41e9",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"smart\\\\s+way\\\\s+cut\\\\s+green\\\\s+beans\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Smart Way Cut Green Beans'. Specific to the brand and cut.",
+    "status": "proposed",
+    "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:6f8834729c0dc143e588",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"figaro\\\\s+hickory\\\\s+liquid\\\\s+smoke\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
+    "status": "proposed",
+    "target_id": "liquid-smoke"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:55:56",
     "id": "lp:713f6204b36383fab784",
     "kind": "add_alias",
@@ -1258,6 +1306,18 @@
     "rationale": "surfaced by escalation review; the commodity's existing excludes stay in force",
     "status": "applied",
     "target_id": "commodity:staple:energy-drinks"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:7953971dc8bc9b8aff14",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cafe\\\\s+spicy\\\\s+italian\\\\s+sausage\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
+    "status": "proposed",
+    "target_id": "hot-italian-sausage"
   },
   {
     "confidence": 0.95,
@@ -1549,6 +1609,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:9473738901f8444aeacf",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"pace\\\\s+hot\\\\s+honey\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Pace® Hot Honey Habanero'. Anchors on brand and product name.",
+    "status": "proposed",
+    "target_id": "hot-honey"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T23:45:32",
     "id": "lp:95a2cd3c08798d9f9961",
     "kind": "add_alias",
@@ -1654,6 +1726,18 @@
     "rationale": "Matches 'Red Pepper'. Anchors on 'red' and 'pepper'.",
     "status": "rejected",
     "target_id": "red-bell-pepper"
+  },
+  {
+    "confidence": 0.95,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:a19a1c027540449ec0b0",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"gv\\\\s+thjasmine\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Great Value Gv Thjasmine'. This is a specific typo/abbreviation for Great Value Jasmine Rice. The pattern is very specific to this listing.",
+    "status": "proposed",
+    "target_id": "jasmine-rice-dry"
   },
   {
     "confidence": 0.9,
@@ -2218,6 +2302,18 @@
     "rationale": "escalation-review round 2: 'Cheese Product ... 16 Slices' (the FDA term for processed slices)",
     "status": "applied",
     "target_id": "commodity:staple:sliced-cheese"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-08-27T21:32:30",
+    "id": "lp:d5f35b4ef8ad684c5ae6",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"simply\\\\s+nature\\\\s+organic\\\\s+spinach\"}",
+    "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
+    "rationale": "Matches 'Simply Nature Organic Spinach'. While brand-anchored, this is a specific frozen spinach product often sold in chopped form. The pattern is specific enough to avoid matching fresh spinach or other brands.",
+    "status": "proposed",
+    "target_id": "frozen-chopped-spinach"
   },
   {
     "confidence": 0.9,

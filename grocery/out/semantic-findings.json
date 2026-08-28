@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-27 08:18",
+    "generated":  "2026-08-27 21:32",
     "board":  "comparison-2026-08-26.json",
-    "sidecar_generated":  "2026-08-27 08:18:27",
+    "sidecar_generated":  "2026-08-27 21:32:17",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  3084,
-                     "corpus":  37922,
-                     "rule_invisible":  6779
+                     "board_pairs":  3085,
+                     "corpus":  37957,
+                     "rule_invisible":  6846
                  },
     "identity_count":  0,
     "coverage_count":  55,
@@ -341,6 +341,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
+                         "store":  "Walmart",
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.6889,
+                         "score":  0.927433,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "frozen-fruit",
                          "commodity":  "Frozen Fruit / Berries",
                          "store":  "Walmart",
@@ -397,16 +407,6 @@
                          "product":  "Nature’s Eats Ultimate Almond+ Flour Blend, Gluten-Free, 16 oz",
                          "cos":  0.7513,
                          "score":  0.924117,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "deli-ham",
-                         "commodity":  "Ham (deli / sliced)",
-                         "store":  "Walmart",
-                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
-                         "cos":  0.6889,
-                         "score":  0.923328,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

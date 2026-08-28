@@ -1,6 +1,34 @@
 {
  "cases": [
   {
+   "detail": "held with reason: decision not-purchased",
+   "event": {
+    "at": "2026-08-27T18:36:18",
+    "bid": "",
+    "by": "mapper",
+    "decision": "not-purchased",
+    "event_id": "ie:69eefdfbf18e1c874202",
+    "evidence": "Optional brand-specific garnish ('if using' in the instructions); dropped rather than made a new niche commodity, so the shopper buys nothing for it. The board's `avocados` match is a different food.",
+    "held_reason": "decision not-purchased",
+    "key": "avocado lime dipping sauce",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "Primal Kitchen Avocado Lime Dipping Sauce Drizzled to Garnish",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "blackened-chicken-with-mango-salsa",
+    "surprise": false,
+    "term": "avocado lime dipping sauce"
+   },
+   "ids_seen": [],
+   "key": "avocado lime dipping sauce",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
    "detail": "held with reason: the map result did not validate",
    "event": {
     "at": "2026-08-26T12:06:19",
@@ -113,6 +141,34 @@
    },
    "ids_seen": [],
    "key": "cold water",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-08-27T12:04:30",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:f69e801bf569902cfd8f",
+    "evidence": "Same ruling as the corn-salad cotija line: board ABSENT, no same-concept id exists, pantry-static pricing on a 15 g garnish is safe.",
+    "held_reason": "decision mapped-null",
+    "key": "cotija cheese",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "Cotija cheese",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "street-corn-chicken-rice-bowls",
+    "surprise": false,
+    "term": "Cotija cheese"
+   },
+   "ids_seen": [],
+   "key": "cotija cheese",
    "ledger_row": null,
    "why": "held"
   },
@@ -322,36 +378,6 @@
    "detail": "held with reason: the map result did not validate",
    "event": {
     "at": "2026-08-26T12:06:19",
-    "bid": "eggs",
-    "by": "mapper",
-    "decision": "mapped",
-    "event_id": "ie:c9c0872a1182e8e4a30c",
-    "evidence": "eggs is a live board id at 7 of 7, so a reuse; the vocabulary lookup missed only on the singular/qualifier wording. Whole egg out of shell = 50 g, not the 148 g/100 g figure applied to a shell weight.",
-    "held_reason": "the map result did not validate",
-    "key": "large egg",
-    "kind": "ruling",
-    "predicted": {
-     "bid": "",
-     "source": "none"
-    },
-    "projected": false,
-    "raw": "1 large egg (lightly beaten)",
-    "run": "hunt-2026-08-26-smoke3",
-    "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
-    "surprise": false,
-    "term": "large egg"
-   },
-   "ids_seen": [
-    "eggs"
-   ],
-   "key": "large egg",
-   "ledger_row": null,
-   "why": "held"
-  },
-  {
-   "detail": "held with reason: the map result did not validate",
-   "event": {
-    "at": "2026-08-26T12:06:19",
     "bid": "ground-bison",
     "by": "mapper",
     "decision": "mapped",
@@ -375,36 +401,6 @@
     "ground-bison"
    ],
    "key": "lean ground bison",
-   "ledger_row": null,
-   "why": "held"
-  },
-  {
-   "detail": "held with reason: the map result did not validate",
-   "event": {
-    "at": "2026-08-26T12:06:19",
-    "bid": "lemons",
-    "by": "mapper",
-    "decision": "mapped",
-    "event_id": "ie:124da0a51963088cde03",
-    "evidence": "Zest is the peel of the fruit you buy, so the live lemons id (5 of 7) prices it; the shelf's Orange Zest to orange-juice row is the wrong precedent, juice is not peel. 1 tsp zest = 2 g.",
-    "held_reason": "the map result did not validate",
-    "key": "lemon zest",
-    "kind": "ruling",
-    "predicted": {
-     "bid": "",
-     "source": "none"
-    },
-    "projected": false,
-    "raw": "1 teaspoon lemon zest",
-    "run": "hunt-2026-08-26-smoke3",
-    "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
-    "surprise": false,
-    "term": "lemon zest"
-   },
-   "ids_seen": [
-    "lemons"
-   ],
-   "key": "lemon zest",
    "ledger_row": null,
    "why": "held"
   },
@@ -439,12 +435,40 @@
   {
    "detail": "held with reason: decision mapped-null",
    "event": {
-    "at": "2026-08-26T13:26:48",
+    "at": "2026-08-27T12:09:50",
     "bid": "",
     "by": "mapper",
     "decision": "mapped-null",
-    "event_id": "ie:ab8dfa708dfd060b4616",
-    "evidence": "Dry ground mustard seed is not the prepared condiment `mustard` - different price class and a completely different gram weight per teaspoon, so I refuse that bridge. 1 tsp does not justify minting an id; pantry-static pricing is safe.",
+    "event_id": "ie:d282f3bd9c4068ef6aae",
+    "evidence": "Board absent and no vocabulary row; a multi-spice blend has no single commodity I can prove, exactly as the 2026-08-26 'Moroccan Seven Spice Blend' -> no id ruling found. Pantry-static pricing on 7.5 g is safe, and the source offers a make-your-own blend from spices already in the pantry.",
+    "held_reason": "decision mapped-null",
+    "key": "moroccan spice mix",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "1 tablespoon Moroccan spice mix (store bought or make your own (see below))",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "moroccan-chicken-couscous-bowl",
+    "surprise": false,
+    "term": "Moroccan spice mix"
+   },
+   "ids_seen": [],
+   "key": "moroccan spice mix",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-08-27T05:14:05",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:f27efa55efb3d044e498",
+    "evidence": "Dry ground mustard seed, not the prepared condiment the `mustard` id prices - different price class and different gram weight, per the 2026-08-26 precedent. Pantry-static pricing on 6 g is safe.",
     "held_reason": "decision mapped-null",
     "key": "mustard powder",
     "kind": "ruling",
@@ -453,9 +477,9 @@
      "source": "none"
     },
     "projected": false,
-    "raw": "1 teaspoon mustard powder",
-    "run": "hunt-2026-08-26-smoke5",
-    "slug": "chicken-and-rice-one-pot",
+    "raw": "1 tbsp mustard powder",
+    "run": "hunt-2026-08-27-ten",
+    "slug": "kfc-oven-baked-fried-chicken-tenders",
     "surprise": false,
     "term": "mustard powder"
    },
@@ -493,32 +517,60 @@
    "why": "held"
   },
   {
-   "detail": "held with reason: the map result did not validate",
+   "detail": "held with reason: notes refuse the bid",
    "event": {
-    "at": "2026-08-26T12:06:19",
-    "bid": "fresh-parsley",
+    "at": "2026-08-27T18:29:41",
+    "bid": "pasta",
     "by": "mapper",
     "decision": "mapped",
-    "event_id": "ie:6e87e3cb65b53b20a1e4",
-    "evidence": "Chopped, 4 tbsp, into a raw mix is the fresh herb, so the Fresh Parsley [fresh-parsley] vocabulary row is the same form and an existing id, a reuse. Dried parsley is refused as a form flip.",
-    "held_reason": "the map result did not validate",
-    "key": "parsley",
+    "event_id": "ie:5a845552ab95b35d8085",
+    "evidence": "Rename of the bare intake term onto the vocabulary's generic dry-pasta row Ziti Pasta [pasta] (same form, board 7 of 7); shape is not a food identity or price difference for dry short pasta. Buy string names macaroni because the dish is mac and cheese.",
+    "held_reason": "notes refuse the bid",
+    "key": "pasta",
     "kind": "ruling",
     "predicted": {
      "bid": "",
      "source": "none"
     },
     "projected": false,
-    "raw": "4 tablespoons chopped parsley",
-    "run": "hunt-2026-08-26-smoke3",
-    "slug": "sheet-pan-meatballs-with-chickpeas-cauliflower-and-butternut",
-    "surprise": false,
-    "term": "parsley"
+    "raw": "300 g Pasta",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "honey-bbq-chicken-mac-and-cheese",
+    "surprise": true,
+    "term": "Pasta"
    },
    "ids_seen": [
-    "fresh-parsley"
+    "pasta"
    ],
-   "key": "parsley",
+   "key": "pasta",
+   "ledger_row": null,
+   "why": "held"
+  },
+  {
+   "detail": "held with reason: decision mapped-null",
+   "event": {
+    "at": "2026-08-27T12:04:30",
+    "bid": "",
+    "by": "mapper",
+    "decision": "mapped-null",
+    "event_id": "ie:2ae68d2ab80a1111488c",
+    "evidence": "Standing rejection: red onion is not `onions` (variety pricing), so the board's 7 of 7 onions match cannot carry it. Unquantified topping weighed at 30 g source scale; term reported for pricing.",
+    "held_reason": "decision mapped-null",
+    "key": "pickled red onions or fresh red onions",
+    "kind": "ruling",
+    "predicted": {
+     "bid": "",
+     "source": "none"
+    },
+    "projected": false,
+    "raw": "Pickled red onions or fresh red onions (chopped)",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "street-corn-chicken-rice-bowls",
+    "surprise": false,
+    "term": "Pickled red onions or fresh red onions"
+   },
+   "ids_seen": [],
+   "key": "pickled red onions or fresh red onions",
    "ledger_row": null,
    "why": "held"
   },
@@ -607,30 +659,30 @@
    "why": "held"
   },
   {
-   "detail": "held with reason: decision mapped-null",
+   "detail": "held with reason: decision not-purchased",
    "event": {
-    "at": "2026-08-26T05:09:06",
+    "at": "2026-08-27T11:57:38",
     "bid": "",
     "by": "mapper",
-    "decision": "mapped-null",
-    "event_id": "ie:6a7231262bbd1dd970b5",
-    "evidence": "Two distinct pantry foods on one unsplittable line, so no single bid can carry it - the 2026-08-26 precedent. Pantry-static pricing at 3 pinches is safe.",
-    "held_reason": "decision mapped-null",
-    "key": "salt and pepper",
+    "decision": "not-purchased",
+    "event_id": "ie:1d192b3393ed36809e2a",
+    "evidence": "An unquantified either/or serving suggestion naming TWO different foods, and the estate's standing rejection forbids collapsing corn chips into tortilla-chips, so there is no single food to cost. The board's `tortillas` match is soft flour tortillas, a wrong food. Dropped as a garnish rather than costed against a guess; the chili is complete without it.",
+    "held_reason": "decision not-purchased",
+    "key": "tortilla chips or fritos",
     "kind": "ruling",
     "predicted": {
      "bid": "",
      "source": "none"
     },
     "projected": false,
-    "raw": "3 pinches salt and pepper ($0.05)",
-    "run": "hunt-2026-08-26-ten",
-    "slug": "sheet-pan-pesto-chicken-dinner",
+    "raw": "Tortilla Chips or Fritos",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "pioneer-woman-chili",
     "surprise": false,
-    "term": "salt and pepper"
+    "term": "Tortilla Chips or Fritos"
    },
    "ids_seen": [],
-   "key": "salt and pepper",
+   "key": "tortilla chips or fritos",
    "ledger_row": null,
    "why": "held"
   },
@@ -665,12 +717,12 @@
   {
    "detail": "held with reason: decision not-purchased",
    "event": {
-    "at": "2026-08-26T10:11:23",
+    "at": "2026-08-27T12:04:28",
     "bid": "",
     "by": "mapper",
     "decision": "not-purchased",
-    "event_id": "ie:5c63218b5e7b16e9ecbc",
-    "evidence": "Tap water for the cornstarch slurry: no commodity, no cost, no macros. 4 tbsp x 14.79 g.",
+    "event_id": "ie:7ad2625894aa35ecc1cf",
+    "evidence": "Tap water for cooking the rice: no commodity and no cost, following the 2026-08-27 'water' ruling. Still weighed at 236.6 g/cup and still printed, because it goes in the pot.",
     "held_reason": "decision not-purchased",
     "key": "water",
     "kind": "ruling",
@@ -679,9 +731,9 @@
      "source": "none"
     },
     "projected": false,
-    "raw": "4 tablespoons water",
-    "run": "hunt-2026-08-26-smoke",
-    "slug": "salisbury-steak-burgers",
+    "raw": "2 cups water",
+    "run": "hunt-2026-08-27-highprotein",
+    "slug": "street-corn-chicken-rice-bowls",
     "surprise": false,
     "term": "water"
    },
@@ -691,15 +743,15 @@
    "why": "held"
   },
   {
-   "detail": "held with reason: decision mapped-null",
+   "detail": "held with reason: no bid ruled",
    "event": {
-    "at": "2026-08-26T04:36:36",
+    "at": "2026-08-27T04:22:55",
     "bid": "",
     "by": "mapper",
-    "decision": "mapped-null",
-    "event_id": "ie:47691adea372c35044e6",
-    "evidence": "No commodity claims it (captures only), and black-pepper is a different spice at a different price, so I will not bridge it. Optional line at 1/8 tsp: pantry-static pricing is safe and the term is reported as optional_absent.",
-    "held_reason": "decision mapped-null",
+    "decision": "mapped-optional",
+    "event_id": "ie:22aa11e976dd9c9ada33",
+    "evidence": "No commodity claims it, and I will not bridge it onto black-pepper: different spice, different price class. Optional at 1/8 tsp, so pantry-static pricing is safe; enqueued in absent_terms since captures carry matching products.",
+    "held_reason": "no bid ruled",
     "key": "white pepper",
     "kind": "ruling",
     "predicted": {
@@ -708,7 +760,7 @@
     },
     "projected": false,
     "raw": "1/8 tsp white pepper (optional)",
-    "run": "hunt-2026-08-26-ten",
+    "run": "hunt-2026-08-27-ten",
     "slug": "dill-pickle-chicken-wings",
     "surprise": false,
     "term": "white pepper"
@@ -775,6 +827,6 @@
    "why": "held"
   }
  ],
- "generated_at": "2026-08-26T21:30:05",
+ "generated_at": "2026-08-27T21:30:06",
  "instructions": "Each case is an identity the nightly ingest could not settle mechanically. Rule each one and write a verdicts file: {\"verdicts\": [{event_id, verdict: record|supersede|leave, item_id (required for record and supersede), evidence, by: \"adjudication\"}]}. Apply it with meal-prep\\pipeline\\learn_apply.py --apply-reviews <that file>. Nothing here has been applied: this stage promotes nothing, by design."
 }

@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-08-26T21:32:42",
-    "started":  "2026-08-26T21:30:02",
-    "deadline":  "2026-08-27T00:00:02",
+    "generated":  "2026-08-27T21:32:56",
+    "started":  "2026-08-27T21:30:01",
+    "deadline":  "2026-08-28T00:00:01",
     "hard_stop":  "06:30",
     "jobs":  4,
     "contested":  0,
-    "elapsed_sec":  161,
+    "elapsed_sec":  174,
     "card_free":  true,
-    "free_vram_mib":  14416,
+    "free_vram_mib":  14448,
     "llama_started":  true,
     "stages":  [
                    {
@@ -19,32 +19,32 @@
                    {
                        "stage":  "defs",
                        "state":  "OK",
-                       "detail":  "[21:30:05] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
+                       "detail":  "[21:30:06] wrote C:\\Codex\\ThriftyCrew\\sidecar\\data\\commodity-defs-graph.json",
                        "sec":  1
                    },
                    {
                        "stage":  "hunter",
                        "state":  "OK",
-                       "detail":  "ingest_hunter_events: 196 event(s) in the log, 196 newly filed, 27 review case(s), 130 gold row(s), 0 surprise(s) queued",
+                       "detail":  "ingest_hunter_events: 381 event(s) in the log, 185 newly filed, 29 review case(s), 98 gold row(s), 4 surprise(s) queued",
                        "sec":  0
                    },
                    {
                        "stage":  "sweep",
                        "state":  "OK",
                        "detail":  "",
-                       "sec":  117
+                       "sec":  131
                    },
                    {
                        "stage":  "serve",
                        "state":  "OK",
                        "detail":  "4 slots",
-                       "sec":  12
+                       "sec":  8
                    },
                    {
                        "stage":  "resolve",
                        "state":  "OK",
-                       "detail":  "resolved 22140 rows in 1.9s (20507 distinct questions, 0 model calls)",
-                       "sec":  2
+                       "detail":  "resolved 22140 rows in 2.7s (20507 distinct questions, 0 model calls)",
+                       "sec":  3
                    },
                    {
                        "stage":  "stage1",

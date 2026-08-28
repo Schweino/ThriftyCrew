@@ -101,6 +101,57 @@ function Test-LedgerStamped {
 # content comparison would either fire constantly or need a second copy of the "which fields count" rule.
 # The question here is only "did the auditor see the current bytes", and mtime ordering answers exactly
 # that and nothing more.
+function Get-RawSpecHash {
+  <# The spec's exact bytes. Deliberately NOT propagate's masked Get-SpecHash: this asks "is this
+     file byte-for-byte what the last publish attempt left behind", and a mask would let a real edit
+     hide inside the masked fields. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path)) { return '' }
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try { return ([BitConverter]::ToString($sha.ComputeHash([IO.File]::ReadAllBytes($Path))) -replace '-', '') }
+  finally { $sha.Dispose() }
+}
+
+function Get-AttemptStampPath { param([string]$RunDir, [int]$Wave)
+  return (Join-Path $RunDir ("waves\wave-{0}.publish-attempt.json" -f $Wave))
+}
+
+function Get-SelfInflictedStale {
+  <#
+    Which of these "stale" slugs were made stale BY THIS WAVE'S OWN PREVIOUS PUBLISH ATTEMPT.
+
+    P1b IS RIGHT AND IT WAS ALSO EATING THE RUN (2026-08-27/28). A GO older than a spec edit is a GO
+    for bytes that no longer exist, so the gate must exist. But the publish REWRITES THE SPECS ITSELF
+    - E1 tokenizes prose literals, E2 re-anchors cost_ps and costPerServing - so an attempt that
+    reaches E4 and fails there leaves every spec newer than the audit that certified it. The retry
+    then refuses on damage the previous retry caused, and the only way forward is a brand-new
+    adversarial audit of identical work.
+
+    Measured: EIGHT full wave audits produced three published recipes, and five of those audits were
+    re-buying a GO that a plumbing failure had discarded. butter-chicken-pasta was audited five times
+    without once changing.
+
+    So an attempt writes the spec hashes it is about to publish with, and a later run forgives
+    exactly those bytes: same hash means nothing but this wave's own publish has touched the file
+    since the audit. A DIFFERENT hash is a real edit and stays stale - that is the half that keeps
+    the gate a gate. No stamp at all means the old behaviour, unchanged.
+  #>
+  param([string[]]$Stale, [string]$StampPath, [string]$SpecsRoot)
+  $out = @{}
+  if (-not $Stale -or -not (Test-Path -LiteralPath $StampPath)) { return $out }
+  $doc = $null
+  try { $doc = ([IO.File]::ReadAllText($StampPath, [Text.Encoding]::UTF8) -replace "^﻿", '') | ConvertFrom-Json }
+  catch { return $out }
+  if (-not $doc -or -not $doc.hashes) { return $out }
+  foreach ($s in $Stale) {
+    $want = [string]$doc.hashes.$s
+    if (-not $want) { continue }
+    $got = Get-RawSpecHash (Join-Path $SpecsRoot ("{0}.json" -f $s))
+    if ($got -and $got -eq $want) { $out[$s] = $true }
+  }
+  return $out
+}
+
 function Get-AllowCreatePath {
   <#
     The create-authority file's path, ABSOLUTE, because the process that reads it does not share this
@@ -202,6 +253,45 @@ if ($runSelfTest) {
   function T($msg, $cond, $got) { if ($cond) { Write-Output ("ok    " + $msg) } else { Write-Output ("FAIL  " + $msg + "   got: " + $got); $script:f++ } }
 
   # ---- THE FOUNDING GATE, frozen. An auditor NO-GO blocks publish, full stop.
+  # ---- P1b: a failed attempt must not re-buy its own audit ----------------------------------------
+  # P1b is right and it was also eating the run. The publish REWRITES the specs - E1 tokenizes prose,
+  # E2 re-anchors cost_ps - so an attempt that dies at E4 leaves every spec newer than the audit that
+  # certified it, and the retry refuses on damage the previous retry caused. Measured on
+  # hunt-2026-08-27-highprotein: EIGHT full wave audits produced three published recipes, five of
+  # them re-buying a GO that a plumbing failure had discarded, and butter-chicken-pasta was audited
+  # five times without once changing.
+  $siTmp = Join-Path ([IO.Path]::GetTempPath()) ("wp-si-" + [Guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path (Join-Path $siTmp 'waves') -Force | Out-Null
+  New-Item -ItemType Directory -Path (Join-Path $siTmp 'recipes') -Force | Out-Null
+  try {
+    $specA = Join-Path $siTmp 'recipes\a-slug.json'
+    $specB = Join-Path $siTmp 'recipes\b-slug.json'
+    Set-Content -LiteralPath $specA -Value '{"slug":"a-slug","stat":{"cost_ps":"2.10"}}' -Encoding UTF8
+    Set-Content -LiteralPath $specB -Value '{"slug":"b-slug","stat":{"cost_ps":"3.10"}}' -Encoding UTF8
+    $stamp = Join-Path $siTmp 'waves\wave-9.publish-attempt.json'
+    @{ wave = 9; hashes = @{ 'a-slug' = (Get-RawSpecHash $specA); 'b-slug' = (Get-RawSpecHash $specB) } } |
+      ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $stamp -Encoding UTF8
+
+    $f1 = Get-SelfInflictedStale @('a-slug', 'b-slug') $stamp (Join-Path $siTmp 'recipes')
+    T 'MUST FIRE  a spec byte-identical to what this wave''s own failed attempt left is FORGIVEN - the retry must not re-buy an adversarial audit of work nothing changed' `
+      ($f1.Count -eq 2) ("forgave " + $f1.Count)
+
+    # ...and the half that keeps the gate a gate: a REAL edit after the attempt is still stale.
+    Set-Content -LiteralPath $specB -Value '{"slug":"b-slug","stat":{"cost_ps":"9.99"},"note":"edited"}' -Encoding UTF8
+    $f2 = Get-SelfInflictedStale @('a-slug', 'b-slug') $stamp (Join-Path $siTmp 'recipes')
+    T 'CLEAN TWIN a spec genuinely EDITED since the attempt is still stale - forgiveness is per-byte, never per-wave' `
+      ($f2.Count -eq 1 -and $f2.ContainsKey('a-slug') -and -not $f2.ContainsKey('b-slug')) `
+      ("forgave " + (@($f2.Keys) -join ','))
+    T 'CLEAN TWIN with NO attempt stamp nothing is forgiven - a first publish behaves exactly as before' `
+      ((Get-SelfInflictedStale @('a-slug') (Join-Path $siTmp 'waves\no-such.json') (Join-Path $siTmp 'recipes')).Count -eq 0) 'forgave without a stamp'
+    T 'CLEAN TWIN a slug absent from the stamp is not forgiven - the stamp answers only for what it recorded' `
+      ((Get-SelfInflictedStale @('c-slug') $stamp (Join-Path $siTmp 'recipes')).Count -eq 0) 'forgave an unstamped slug'
+    T 'CLEAN TWIN a MISSING spec is not forgiven - an empty hash must never match an empty stamp entry' `
+      ((Get-SelfInflictedStale @('gone-slug') $stamp (Join-Path $siTmp 'recipes')).Count -eq 0) 'forgave a missing spec'
+    T '  the hash is over the RAW bytes, so an edit inside the masked machine fields is still caught' `
+      ((Get-RawSpecHash $specA) -ne (Get-RawSpecHash $specB)) 'two different specs hashed the same'
+  } finally { Remove-Item -LiteralPath $siTmp -Recurse -Force -ErrorAction SilentlyContinue }
+
   # ---- E4 create authority: the path crosses a working-directory change ---------------------------
   # THE THING THAT KILLED WAVES 3 AND 4 (2026-08-27). The daemon passes a RELATIVE -RunDir, so the
   # allow-create file was written at a relative path and handed to propagate, which does
@@ -437,6 +527,17 @@ foreach ($s in $slugs) {
 # and wrapping THAT in @() re-wraps the whole array into one element: Count reads 1 for two problems and,
 # worse, 1 for ZERO problems - the gate would refuse every wave including a perfectly fresh one. Measured
 # 0/1/2 findings both ways. Assign it bare; the fixtures below pin all three cardinalities.
+# ...but first forgive the specs THIS WAVE'S OWN FAILED ATTEMPT rewrote. E1 tokenizes prose and E2
+# re-anchors cost_ps, so any attempt that dies at E4 leaves every spec newer than its audit and the
+# retry refuses on damage the retry itself caused. Filtering here rather than inside
+# Get-StaleAuditProblems keeps that function and its three cardinality fixtures exactly as they are.
+$stampPath = Get-AttemptStampPath $RunDir $Wave
+$newerThanAudit = @($specTimes.Keys | Where-Object { [datetime]$specTimes[$_] -gt $auditWritten })
+$forgiven = Get-SelfInflictedStale $newerThanAudit $stampPath (Join-Path $mp 'db\recipes')
+foreach ($s in @($forgiven.Keys | Sort-Object)) {
+  Write-Output ("      = {0}: newer than the audit, but BYTE-IDENTICAL to what this wave's own previous publish attempt left behind - not a re-edit" -f $s)
+  [void]$specTimes.Remove($s)
+}
 $stale = Get-StaleAuditProblems $auditWritten $specTimes
 if ($stale.Count) {
   $stale | ForEach-Object { Write-Output ("      ! " + $_) }
@@ -734,6 +835,22 @@ Set-Content -Path $allowFile -Value ($slugs -join "`n") -Encoding UTF8
 # It cost two diagnosis cycles because the daemon truncated the refusal; the file it now writes is
 # what made this readable at all. Resolve-Path AFTER the write, because it requires the file to exist.
 $allowFile = Get-AllowCreatePath $allowFile
+# THE ATTEMPT STAMP, written HERE because everything that rewrites a spec has now run: E1 tokenized
+# the prose, E2 re-anchored the cost fields. If E4 or anything after it fails, the next run compares
+# these hashes at P1b and forgives exactly these bytes - so a plumbing failure costs a retry instead
+# of a second adversarial audit of identical work. Best effort: a stamp that cannot be written must
+# not stop a publish that is otherwise ready, it only costs the next run an audit it would have paid
+# for anyway.
+try {
+  $attemptHashes = [ordered]@{}
+  foreach ($s in $slugs) { $attemptHashes[$s] = Get-RawSpecHash (Join-Path $mp ("db\recipes\{0}.json" -f $s)) }
+  $stampDoc = [ordered]@{ wave = $Wave; batch = $batch; at = (Get-Date).ToString('s')
+                          note = 'spec bytes as this attempt is about to publish them; P1b forgives these exact bytes on a retry'
+                          hashes = $attemptHashes }
+  [IO.File]::WriteAllText((Get-AttemptStampPath $RunDir $Wave), ($stampDoc | ConvertTo-Json -Depth 5), $UTF8)
+} catch {
+  Write-Output ("  E4  NOTE the publish-attempt stamp could not be written ({0}) - a retry after a failure here will re-audit" -f $_.Exception.Message)
+}
 Write-Output ("  E4  create authority: {0} wave slug(s) may be created; any other new slug is refused" -f $slugs.Count)
 $prop = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $here 'propagate-recipes.ps1') -AllowCreateFile $allowFile 2>&1
 $propRc = $LASTEXITCODE
