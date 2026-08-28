@@ -38,7 +38,7 @@
 # ledger row listing a single slug. An array parameter here would silently collapse the create-authority
 # list to one unmatched name and refuse every legitimate create. A newline-delimited file crosses the
 # process boundary intact.
-param([switch]$DryRun, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "")
+param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "")
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -201,7 +201,16 @@ if ($Baseline) {
 
 $dirty = @(Get-DirtySlugs $stamps $files)
 Write-Output ("propagate: {0} dirty spec(s) of {1}" -f $dirty.Count, $files.Count)
-if ($DryRun) { $dirty | Select-Object -First 30 | ForEach-Object { Write-Output ("  " + $_) }; exit 0 }
+# -DryRun's WHOLE JOB is to answer "what would this publish?", and it capped the list at 30 with no
+# remainder line - so a 91-slug set printed 30 names ending at 'h' and looked complete. The count on the
+# line above is right, but a reader checking the list against it has to notice a number they were not
+# shown. -Full prints every one; the default keeps the short list and now NAMES what it withheld.
+if ($DryRun) {
+  $show = if ($Full) { $dirty.Count } else { 30 }
+  $dirty | Select-Object -First $show | ForEach-Object { Write-Output ("  " + $_) }
+  if ($dirty.Count -gt $show) { Write-Output ("  ... and {0} more not listed - re-run with -Full" -f ($dirty.Count - $show)) }
+  exit 0
+}
 if (-not $dirty.Count) { Write-Output 'nothing to propagate'; exit 0 }
 
 # each stage runs as a child so its exit code is its verdict; a failure stops the chain BEFORE the stamp.
