@@ -1586,6 +1586,10 @@
     },
     {
         "item":  "Mexican Cheese Blend",
+        "aliases":  [
+                        "Mexican Blend Shredded Cheese"
+                    ],
+        "alias_ruling":  "registrar 2026-08-28: same food, same form, word-order flip - the 80/20-ground-beef class. Brad's 2026-08-26 ruling puts aliases in the vocabulary, so this is an alias and not a row.",
         "bid":  "shredded-cheese",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1707,6 +1711,10 @@
     },
     {
         "item":  "Panko Breadcrumbs",
+        "aliases":  [
+                        "Panko Bread Crumbs"
+                    ],
+        "alias_ruling":  "registrar 2026-08-28: same food, word split. bread-crumbs' include carries \bpanko\b and its note says 'Includes panko'. Known and pre-existing: that combined id's cheapest is PLAIN crumbs while panko costs more (recipe-floor-id-map.json:38 records it) - this alias inherits that standing ruling, it does not create it.",
         "bid":  "bread-crumbs",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1895,6 +1903,10 @@
     },
     {
         "item":  "Potato",
+        "aliases":  [
+                        "Potatoes"
+                    ],
+        "alias_ruling":  "registrar 2026-08-28: same food, plural. Potato already bids russet-potatoes ($0.409/lb Aldi) and potato->russet-potatoes is an already-verified floor-map pair.",
         "bid":  "russet-potatoes",
         "gpu":  453.592,
         "unit":  "lb",
@@ -3045,5 +3057,82 @@
         "buy_pkg_g":  67,
         "buy_pkg_label":  "each",
         "note":  "Registrar ruling 2026-08-28: REUSE the fruit, same reasoning as Lemon Zest - zest exists only on the whole fruit. gpu 4 = about 2 tsp of zest per lime. Board receipt: Fresh Lime $0.25 each (Walmart), a cell that only became correct after the 2026-08-27 board fix that removed a box of Tastykake snack-cake sticks from the lemons row."
+    },
+    {
+        "item":  "Coconut Oil",
+        "bid":  "coconut-oil",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  397,
+        "pantry_pkg_label":  "14oz jar",
+        "bulk":  true,
+        "note":  "Registrar ruling 2026-08-28: REUSE. coconut-oil is a live weekly id at $0.1952/oz (Sam's Club); the vocabulary simply had no NAME for it - it carried only \"Coconut Milk\". The missing half was the name namespace, not the price. Pantry basis: a jar outlives one recipe."
+    },
+    {
+        "item":  "Cooking Spray",
+        "bid":  "cooking-spray",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  170,
+        "pantry_pkg_label":  "6oz can",
+        "bulk":  true,
+        "note":  "Registrar ruling 2026-08-28: REUSE. cooking-spray is live at $0.3113/oz (Aldi) with no vocabulary row. Pantry basis - a can outlives one recipe."
+    },
+    {
+        "item":  "Cranberry Sauce",
+        "bid":  "cranberry-sauce",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  397,
+        "buy_pkg_label":  "14oz can",
+        "note":  "Registrar ruling 2026-08-28: REUSE. cranberry-sauce (label \"Cranberry Sauce (canned)\") is live at $0.1038/oz (Walmart), and its excludes already fence off juice, fresh, dried and craisins, so the canned form is unambiguous. The vocabulary carried only \"Fresh Cranberries\" - a different form, correctly separate."
+    },
+    {
+        "item":  "Fresh Red Chili",
+        "bid":  "serrano-peppers",
+        "gpu":  453.592,
+        "unit":  "lb",
+        "board":  "weekly",
+        "buy_pkg_g":  453.592,
+        "buy_pkg_label":  "lb",
+        "note":  "Registrar ruling 2026-08-28: REUSE serrano-peppers. No fresh-red-chile id exists (crushed-thai-chili is a DRIED spice; jalapenos are the green counterpart). grocery\\carriage.json:754 already resolved this exact term on 2026-08-27: CARRIED as \"Serrano Peppers (Capsicums)\" at Family Fare, and serrano-peppers is live at exactly that price ($2.99/lb, same store) - the same-crown-same-store tell, here pointing toward reuse. At garnish grams the green-vs-red ripeness gap moves neither the price basis nor the macros. If literal red fresnos are ever wanted, the carriage sweep says no Omaha store carries them, so there is nothing to price."
+    },
+    {
+        "item":  "Blackened Seasoning",
+        "bid":  "cajun-seasoning",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "weekly",
+        "pantry_pkg_g":  71,
+        "pantry_pkg_label":  "2.5oz shaker",
+        "bulk":  true,
+        "note":  "Registrar ruling 2026-08-28: REUSE, and minting would have repeated the lasagna-noodles trap. The only carried SKU (carriage.json:734, Fareway $2.49) is literally \"Louisiana Fish Fry BLACKENED CAJUN Seasoning\", which cajun-seasoning's include (cajun|creole)\\s+seasoning ALREADY matches - so a minted blackened-seasoning id would have fought the existing one for its own crown product. cajun-seasoning is live at $0.1666/oz (Sam's Club). A pure non-cajun blackening rub would need an include carve-out on cajun-seasoning first; that is a Brad variant call."
+    },
+    {
+        "item":  "Romaine Lettuce",
+        "bid":  "lettuce",
+        "gpu":  300,
+        "unit":  "each",
+        "board":  "weekly",
+        "buy_pkg_g":  300,
+        "buy_pkg_label":  "each (heart)",
+        "note":  "Registrar ruling 2026-08-28: REUSE. lettuce's include list is [\"\\blettuce\\b\",\"\\biceberg\\b\",\"\\bromaine\\b\"] - romaine is EXPLICITLY claimed already - and it is live at $0.9975/each (crown: 4-ct romaine hearts, Family Fare). Minting romaine-lettuce would put one SKU under two ids. The run's own registrar ruling inside mapped\\sriracha-chicken-tacos.json had already adjudicated this. gpu 300 = one heart; confirm against the Tanimura & Antle 4-ct label, since the crown price is per heart. A red-onion-style variety split would be an estate edit (drop \\bromaine\\b from lettuce first), not a mint."
+    },
+    {
+        "item":  "Cilantro Lime Rice",
+        "bid":  "cilantro-lime-rice",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  241,
+        "buy_pkg_label":  "8.5oz pouch",
+        "note":  "Registrar ruling 2026-08-28: the estate DOES price prepared rice as one id - cooked-jasmine-rice and ready-to-serve-long-grain-wild-rice-pouch are both live composites - so this is not decomposed into rice + cilantro + lime. The id deliberately does NOT say \"frozen\": the only carried product (carriage.json:744, verdict 2026-08-27) is a SHELF-STABLE pouch, Ben's Original Cilantro Lime Flavored Rice 8.5 oz at Fareway $1.97, and pouch-vs-frozen is the same ready-cooked-seasoned-rice purchase. Do not split a class thinner than the market stocks it. Excludes cauliflower FIRST: cilantro-lime cauliflower rice is a common SKU and a different food - this batch's queso-cotija trap. Honest caveat: one-store carriage means one-store pricing until capture widens.",
+        "aliases":  [
+                        "Frozen Cilantro Lime Rice"
+                    ],
+        "alias_ruling":  "the recipe says frozen; the carried product is a shelf-stable pouch of the same ready-seasoned rice"
     }
 ]

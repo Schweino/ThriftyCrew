@@ -9525,6 +9525,23 @@
                                "size":  "10 oz"
                            }
                        ]
+        },
+        {
+            "id":  "cilantro-lime-rice",
+            "commodity":  "Cilantro Lime Rice (ready/frozen)",
+            "category":  "Pasta, Rice \u0026 Grains",
+            "unit":  "oz",
+            "cheapest_store":  "Fareway",
+            "stores":  [
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.2318,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Ben\u0027s Original Cilantro Lime Flavored Rice",
+                               "size":  "8.5 oz"
+                           }
+                       ]
         }
     ],
     "built_at":  "2026-08-21T06:29:41",

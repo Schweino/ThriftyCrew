@@ -1171,6 +1171,27 @@
       "note": "Brad 2026-08-23: DRY raw jasmine only. Instant is parboiled then dehydrated - it neither cooks nor yields like raw jasmine at the same weight and costs more per oz - and 82 recipes buy against '3.5 cups dry jasmine' at 700 g on this per-oz basis. Ready-to-eat cups and frozen pouches are already caught by the global excludes."
     },
     {
+        "id":  "cilantro-lime-rice",
+        "label":  "Cilantro Lime Rice (ready/frozen)",
+        "unit":  "oz",
+        "band_min":  0.08,
+        "band_max":  0.5,
+        "include":  [
+                        "cilantro\\s+lime\\s+(?:flavored\\s+)?rice",
+                        "rice[^,]*cilantro\\s+lime"
+                    ],
+        "exclude":  [
+                        "cauliflower",
+                        "\\bbowl\\b",
+                        "burrito",
+                        "\\bsoup\\b",
+                        "seasoning",
+                        "\\bchips?\\b",
+                        "\\bkit\\b",
+                        "\\binstant\\b"
+                    ]
+    },
+    {
       "id": "ketchup",
       "label": "Ketchup",
       "unit": "oz",

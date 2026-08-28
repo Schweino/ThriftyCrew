@@ -113,6 +113,27 @@
             "reviewed": "2026-08-27",
             "reviewed_by": "claude, executing the commodity-registrar's ruling for hunt-2026-08-27-highprotein",
             "reason": "Cooked breaded frozen against raw fresh - a different purchase, not a preparation note on the same one."
+        },
+        {
+            "a": "no-boil-lasagna-noodles",
+            "b": "lasagna-noodles",
+            "reviewed": "2026-08-28",
+            "reviewed_by": "claude, executing the commodity-registrar's batch ruling for hunt-2026-08-27-highprotein",
+            "reason": "Same food, different FORM, and the form is the purchase - a recipe written no-boil fails on regular noodles. lasagna-noodles' crown is regular boil at $0.115/oz against no-boil at $0.2067-0.2658; its includes carried oven-ready and no-boil until 2026-08-28, when they moved to its excludes so the two ids cannot fight for the same products."
+        },
+        {
+            "a": "cilantro-lime-rice",
+            "b": "cooked-jasmine-rice",
+            "reviewed": "2026-08-28",
+            "reviewed_by": "claude, executing the commodity-registrar's batch ruling for hunt-2026-08-27-highprotein",
+            "reason": "Seasoned ready rice against plain cooked rice - a different purchase. The estate already prices prepared rice as its own id (cooked-jasmine-rice, ready-to-serve-long-grain-wild-rice-pouch)."
+        },
+        {
+            "a": "cilantro-lime-rice",
+            "b": "jasmine-rice",
+            "reviewed": "2026-08-28",
+            "reviewed_by": "claude, executing the commodity-registrar's batch ruling for hunt-2026-08-27-highprotein",
+            "reason": "Ready-cooked seasoned rice against raw grain: different purchase, different price class."
         }
     ]
 }
