@@ -3168,12 +3168,12 @@
     },
     {
         "item":  "Reduced Fat Cheddar Cheese",
-        "bid":  "cheddar-cheese",
+        "bid":  "reduced-fat-cheddar",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "recipe",
         "buy_pkg_g":  227,
-        "buy_pkg_label":  "8oz block",
+        "buy_pkg_label":  "8 oz bag",
         "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Cheddar Cheese', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Reduced-fat (2% milk) cheddar is the same product concept on the same shelf at the same per-ounce price class as block cheddar, so bid reuse is sound; the macro difference is carried by the label row returned here rather than by a bridged id. Not the shredded id - the source names cheese, not a bag, and the instructions grate it."
     },
     {
@@ -3253,5 +3253,37 @@
         "pantry_pkg_label":  "2oz jar",
         "bulk":  true,
         "note":  "Tandoori spice blend (Shan, USDA branded FDC 2666734), 25 cal per 8 g tbsp. Bids garam-masala, which is where Brad 2026-08-16 put this food and where Brad 2026-08-28 RULED it stays. The registrar had recommended re-bidding to the tandoori-seasoning commodity (live, but n=1, Hy-Vee 2.8295/oz) on the grounds that the two blends are genuinely different foods; Brad declined, and the reason not to is on the record: it would re-price a 56 g line about 2.8x onto one-store carriage. Revisit if tandoori-seasoning ever gets more than one store behind it. This row exists because the ALIAS was the defect - a 56 g line booked against the all-zero Garam Masala spice row erased 175 cal from the batch - and fixing that never required moving the price."
+    },
+    {
+        "item":  "Baby Potatoes",
+        "bid":  "baby-potatoes",
+        "gpu":  453.59,
+        "unit":  "lb",
+        "board":  "weekly",
+        "pantry_pkg_g":  680,
+        "pantry_pkg_label":  "24 oz bag",
+        "bulk":  true,
+        "note":  "Minted from the commodity-registrar's APPROVE ruling and the pricer's own store evidence, executed by the map lane. Reason on record: 7 of 7 stores carry it as its own SKU class and the estate already treats it as one: yukon-gold-potatoes deliberately EXCLUDES 'petite' and 'creamer potato', so today baby potatoes fall to no bucket at all. Whole thin-skin miniatures at ~3x russet's per-lb crown (Hy-Vee $1.29/lb vs russet $0.409/lb Aldi) - a different purchase, not a variant label."
+    },
+    {
+        "item":  "Whole Wheat Flour",
+        "bid":  "whole-wheat-flour",
+        "gpu":  453.59,
+        "unit":  "lb",
+        "board":  "weekly",
+        "pantry_pkg_g":  2268,
+        "pantry_pkg_label":  "5 lb bag",
+        "bulk":  true,
+        "note":  "Minted from the commodity-registrar's APPROVE ruling and the pricer's own store evidence, executed by the map lane. Reason on record: The `flour` id is All-Purpose and EXCLUDES 'whole\\s+wheat' by name - the estate already ruled this a different purchase and then never gave it a home, so 5-of-7-store whole wheat flour is priced by nothing today. Same treatment bread flour already gets."
+    },
+    {
+        "item":  "Frozen Cauliflower Rice",
+        "bid":  "frozen-cauliflower-rice",
+        "gpu":  28.35,
+        "unit":  "oz",
+        "board":  "weekly",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12 oz bag",
+        "note":  "Minted from the commodity-registrar's APPROVE ruling and the pricer's own store evidence, executed by the map lane. Reason on record: Riced is fenced out of every existing home: frozen-cauliflower-florets excludes 'riced' and 'cauliflower rice' by name, fresh cauliflower excludes 'riced', and the rice grain id excludes 'cauliflower'. 7 of 7 stores carry it and no id can claim it - same food as florets, different form, different purchase."
     }
 ]

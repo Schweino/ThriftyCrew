@@ -9542,6 +9542,210 @@
                                "size":  "8.5 oz"
                            }
                        ]
+        },
+        {
+            "id":  "reduced-fat-cheddar",
+            "commodity":  "Reduced Fat Cheddar Cheese",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Baker\u0027s",
+            "stores":  [
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.25,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Reduced Fat Sharp Cheddar Shredded Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.2536,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Happy Farms Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese",
+                               "size":  "11 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.3543,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Finely Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese",
+                               "size":  "7 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "baby-potatoes",
+            "commodity":  "Baby Potatoes",
+            "category":  "Vegetables",
+            "unit":  "lb",
+            "cheapest_store":  "Hy-Vee",
+            "stores":  [
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  1.29,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "B-Size Gold Potatoes",
+                               "size":  "lb"
+                           },
+                           {
+                               "store":  "Sam\u0027s Club",
+                               "per_unit":  1.344,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Creamer Potatoes, 5 lbs.",
+                               "size":  "5 lb"
+                           },
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  2.1933,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Bite Size Medley Potatoes",
+                               "size":  "24 oz"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  2.52,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fresh Red Petite Potatoes",
+                               "size":  "1.5 lb"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  3.3267,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "The Little Potato Co. Little Yellows",
+                               "size":  "1.5 lb"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  3.3267,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Our Family Potatoes Yellow Baby Dutch",
+                               "size":  "24 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  3.99,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Red Creamer Potatoes",
+                               "size":  "1 lb"
+                           }
+                       ]
+        },
+        {
+            "id":  "whole-wheat-flour",
+            "commodity":  "Whole Wheat Flour",
+            "category":  "Baking \u0026 Spices",
+            "unit":  "lb",
+            "cheapest_store":  "Walmart",
+            "stores":  [
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.592,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Great Value Whole Wheat Flour",
+                               "size":  "5 lb"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.656,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Whole Wheat Flour",
+                               "size":  "5 lb"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.698,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Traditional Whole Wheat Flour",
+                               "size":  "5 lb"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.738,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Our Family Flour, Whole Wheat, Unbleached 5 Lb",
+                               "size":  "5 lb"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  1.198,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain",
+                               "size":  "5 lb"
+                           }
+                       ]
+        },
+        {
+            "id":  "frozen-cauliflower-rice",
+            "commodity":  "Frozen Cauliflower Rice",
+            "category":  "Frozen",
+            "unit":  "oz",
+            "cheapest_store":  "Aldi",
+            "stores":  [
+                           {
+                               "store":  "Aldi",
+                               "per_unit":  0.1492,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Season\u0027s Choice Frozen Plain Riced Cauliflower",
+                               "size":  "12 oz"
+                           },
+                           {
+                               "store":  "Walmart",
+                               "per_unit":  0.1867,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Great Value Riced Cauliflower",
+                               "size":  "12 oz"
+                           },
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.1992,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Recipe Beginnings Frozen Cauliflower Rice",
+                               "size":  "12 oz"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.299,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Frozen Cauliflower Rice Our Family Steamable",
+                               "size":  "10 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.299,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Birds Eye Riced Cauliflower, Frozen Vegetables",
+                               "size":  "10 oz"
+                           },
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.3324,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Riced Cauliflower Steam in Bag",
+                               "size":  "10.5 oz"
+                           }
+                       ]
         }
     ],
     "built_at":  "2026-08-21T06:29:41",

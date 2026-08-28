@@ -1,0 +1,52 @@
+[
+  {
+    "id": "baby-potatoes",
+    "commodity": "Baby Potatoes",
+    "category": "Vegetables",
+    "unit": "lb",
+    "stores": [
+      {
+        "store": "Walmart",
+        "price": 3.78,
+        "size": "1.5 lb",
+        "item": "Fresh Red Petite Potatoes"
+      },
+      {
+        "store": "Fareway",
+        "price": 4.99,
+        "size": "1.5 lb",
+        "item": "The Little Potato Co. Little Yellows"
+      },
+      {
+        "store": "Family Fare",
+        "price": 4.99,
+        "size": "24 oz",
+        "item": "Our Family Potatoes Yellow Baby Dutch"
+      },
+      {
+        "store": "Hy-Vee",
+        "price": 1.29,
+        "size": "lb",
+        "item": "B-Size Gold Potatoes"
+      },
+      {
+        "store": "Sam's Club",
+        "price": 6.72,
+        "size": "5 lb",
+        "item": "Creamer Potatoes, 5 lbs."
+      },
+      {
+        "store": "Aldi",
+        "price": 3.29,
+        "size": "24 oz",
+        "item": "Bite Size Medley Potatoes"
+      },
+      {
+        "store": "Baker's",
+        "price": 3.99,
+        "size": "1 lb",
+        "item": "Red Creamer Potatoes"
+      }
+    ]
+  }
+]

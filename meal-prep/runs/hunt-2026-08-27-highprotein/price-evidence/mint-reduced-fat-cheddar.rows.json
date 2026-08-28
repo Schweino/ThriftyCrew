@@ -1,0 +1,28 @@
+[
+  {
+    "id": "reduced-fat-cheddar",
+    "commodity": "Reduced Fat Cheddar Cheese",
+    "category": "Dairy & Eggs",
+    "unit": "oz",
+    "stores": [
+      {
+        "store": "Hy-Vee",
+        "price": 2.48,
+        "size": "7 oz",
+        "item": "Hy-Vee Finely Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese"
+      },
+      {
+        "store": "Aldi",
+        "price": 2.79,
+        "size": "11 oz",
+        "item": "Happy Farms Shredded 2% Milk Reduced Fat Sharp Cheddar Cheese"
+      },
+      {
+        "store": "Baker's",
+        "price": 2.0,
+        "size": "8 oz",
+        "item": "Kroger Reduced Fat Sharp Cheddar Shredded Cheese"
+      }
+    ]
+  }
+]

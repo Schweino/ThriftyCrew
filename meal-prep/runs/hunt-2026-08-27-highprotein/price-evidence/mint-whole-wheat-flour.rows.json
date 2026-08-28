@@ -1,0 +1,40 @@
+[
+  {
+    "id": "whole-wheat-flour",
+    "commodity": "Whole Wheat Flour",
+    "category": "Baking & Spices",
+    "unit": "lb",
+    "stores": [
+      {
+        "store": "Walmart",
+        "price": 2.96,
+        "size": "5 lb",
+        "item": "Great Value Whole Wheat Flour"
+      },
+      {
+        "store": "Fareway",
+        "price": 5.99,
+        "size": "5 lb",
+        "item": "King Arthur Baking Company Whole Wheat Flour, 100% Whole Grain"
+      },
+      {
+        "store": "Family Fare",
+        "price": 3.69,
+        "size": "5 lb",
+        "item": "Our Family Flour, Whole Wheat, Unbleached 5 Lb"
+      },
+      {
+        "store": "Hy-Vee",
+        "price": 3.28,
+        "size": "5 lb",
+        "item": "Hy-Vee Whole Wheat Flour"
+      },
+      {
+        "store": "Baker's",
+        "price": 3.49,
+        "size": "5 lb",
+        "item": "Kroger Traditional Whole Wheat Flour"
+      }
+    ]
+  }
+]

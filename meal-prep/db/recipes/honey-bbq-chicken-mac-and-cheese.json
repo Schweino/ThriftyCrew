@@ -1,0 +1,351 @@
+{
+    "name":  "Honey BBQ Chicken Mac and Cheese",
+    "slug":  "honey-bbq-chicken-mac-and-cheese",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
+    "source_site":  "theproteinplayground.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "ORPHAN RISK RESOLVED: Ground Ginger is bought (3 1/2 tsp) but the source transcription\u0027s seasoning step (step 2) omits it, listing only garlic powder, onion powder, paprika, salt, and black pepper. Ginger sits with the chicken/BBQ seasonings in the source ingredient block, so I added it to the chicken seasoning step to avoid a spec-guards orphan hard-fail. Confirm ginger belongs on the chicken.",
+                         "PASTA NAMING: locked line reads \u0027Ziti Pasta ... (about 10 cups elbow macaroni)\u0027, the dish is \u0027mac and cheese\u0027, and the transcription says only \u0027Pasta\u0027 (300 g). Three noodle identities for one line. Locked, untouched, flagged.",
+                         "MACRO SANITY: per-serving protein 50.5 g reads a touch high for the ingredient set (3 lb chicken plus dairy over 14 servings). Engine figure, left as-is, flagged for a check.",
+                         "No cost_lines were in this dispatch, so shop_smart makes no per-package or per-ounce cost claim. It references buy quantities only, plus the verifiable double-duty of garlic powder, paprika, black pepper, and salt across the chicken and the sauce (traceable to the ingredient lines themselves).",
+                         "cost_ps, cal, and protein are written as tokens (${{cost_ps}}, {{cal}}, {{protein}}) for batch-uniform templating; no literal money or macro figures appear in prose except through those tokens.",
+                         "Both the air fryer and pan cooking options from the source are preserved in make_it and head.steps.",
+                         "Ingredient-to-step reconciliation complete both directions: every bought line is used by a step and no step uses anything not bought."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "em dash",
+                                  "en dash",
+                                  "keto",
+                                  "low carb",
+                                  "guilt free",
+                                  "cheat meal",
+                                  "superfood",
+                                  "diet food"
+                              ],
+    "cal_floor":  null,
+    "stat":  {
+                 "cal":  751,
+                 "protein":  50,
+                 "carbs":  85,
+                 "fat":  24,
+                 "cost_ps":  "3.28"
+             },
+    "intro_html":  "There is a particular kind of comfort in a bowl of mac and cheese, and usually a particular kind of guilt riding along with it. This one keeps the comfort and leaves the guilt at the door. We blend fat free cottage cheese, light cream cheese, and reduced fat cheddar into a sauce that eats like the real thing, then crown every bowl with honey BBQ chicken that caramelizes right in the pan. It lands at {{cal}} calories and {{protein}} grams of protein a serving, which is the kind of math that lets you go back for a second look at the container with a clear conscience. Fourteen servings, one afternoon, dinner handled all week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 2 1/3 cups (525 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1 1/2 pounds (about 3 cups) (700 g)",
+                                "\u003cstrong\u003eReduced Fat Cheddar Cheese (Kraft Shredded Sharp Cheddar made with 2% Milk):\u003c/strong\u003e 4 3/4 cups shredded (525 g)",
+                                "\u003cstrong\u003eMilk:\u003c/strong\u003e 2 1/4 cups (525 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (22 g)",
+                                "\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 3 1/2 teaspoons dried (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total) (8 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (16 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total) (63 g)",
+                                "\u003cstrong\u003eYellow Mustard (generic (USDA)):\u003c/strong\u003e 3 1/2 teaspoons (18 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 pounds, diced (1400 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 7 tablespoons (147 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 3 1/2 teaspoons (8 g)",
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3/4 cup plus 2 tablespoons (245 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 3 1/2 teaspoons (6 g)",
+                                "\u003cstrong\u003eCooking Spray (PAM):\u003c/strong\u003e as needed for the pan (10 g)",
+                                "\u003cstrong\u003eZiti Pasta (Great Value):\u003c/strong\u003e 2 1/3 pounds dry (about 10 cups elbow macaroni) (1050 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Fat Free Cottage Cheese, 2 1/3 cups: ~$2.11. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 1 1/2 pounds (about 3 cups): ~$5.68. \u003cstrong\u003eBuy 4 8oz bricks: $7.37.\u003c/strong\u003e",
+                       "Reduced Fat Cheddar Cheese, 4 3/4 cups shredded: ~$2.82. \u003cstrong\u003eBuy 3 8oz blocks: $3.65.\u003c/strong\u003e",
+                       "Milk, 2 1/4 cups: ~$0.39. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
+                       "Yellow Mustard, 3 1/2 teaspoons: ~$0.03. \u003cstrong\u003eBuy 1 20oz bottle: $1.00.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 pounds, diced: ~$6.88. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Honey, 7 tablespoons: ~$1.16. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "BBQ Sauce, 3/4 cup plus 2 tablespoons: ~$0.66. \u003cstrong\u003eBuy 1 (covers about two batches).\u003c/strong\u003e",
+                       "Ground Ginger, 3 1/2 teaspoons: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ziti Pasta, 2 1/3 pounds dry (about 10 cups elbow macaroni): ~$2.24. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, dried parsley, black pepper, paprika, salt, onion powder, cooking spray): ~$1.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.17 across 14 servings, so roughly $1.66 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.42 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.51. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Here is where it gets good. All fourteen servings, chicken and cheese and pasta included, come out to ${{cost_ps}} a serving. That is restaurant comfort food for the price of a vending machine snack, and it is built on cottage cheese and cream cheese instead of a pan of butter and flour. Cook it once, eat it all week, and let the numbers do the arguing.",
+    "shop_smart":  "The cheese sauce is doing the heavy lifting here, so shop the dairy first. You need 2 1/3 cups of fat free cottage cheese, 1 1/2 pounds of light cream cheese, and 4 3/4 cups of shredded reduced fat cheddar. Buy the cheddar however your store sells it plainest, block or bag, because it all goes in the blender anyway. Round it out with 2 1/4 cups of milk. The chicken is 3 pounds of boneless skinless breast, diced, and the pasta is 2 1/3 pounds dry. The honey BBQ side is small: 7 tablespoons of honey and 3/4 cup plus 2 tablespoons of BBQ sauce. Here is the quiet efficiency of this recipe. The garlic powder, paprika, black pepper, and salt each get bought one time and then pull double duty, seasoning the chicken and going into the sauce, so nothing in the spice aisle sits on the shelf unused.",
+    "make_it":  [
+                    "Start with the chicken, because it wants a head start. Season your 3 pounds of diced chicken breast with garlic powder, onion powder, paprika, ground ginger, salt, and black pepper. You have two roads here. Air fryer people, preheat to 350F, spray the chicken lightly with cooking spray, and cook 10 to 12 minutes, shaking the basket halfway, until it is golden and cooked through. Stovetop people, heat a non-stick pan over medium, hit it with cooking spray, and cook the chicken 6 to 8 minutes until browned and done. Either way, once it is cooked, toss it in a bowl with the honey and BBQ sauce until every piece is coated, then give it another 1 to 2 minutes over the heat to let that glaze caramelize. Now the pasta. Bring a big pot of salted water to a boil and cook your pasta to the package directions. Before you drain, dip out about a quarter cup of the pasta water and set it aside, because that starchy water is your secret for a loose, creamy sauce. Drain and hold. The sauce is a blender job, which is the whole trick to keeping this light. Combine the cottage cheese, cream cheese, shredded cheddar, milk, garlic powder, parsley, black pepper, paprika, salt, and mustard, and blend until it is smooth and creamy. Pour it into a saucepan over medium-low heat and stir, cooking 3 to 5 minutes until it thickens up. If it gets too thick on you, splash in some of that reserved pasta water. Stir the drained pasta into the sauce until every noodle is coated, adding more pasta water until it looks right to you. Then walk away for 10 minutes. Letting it rest is what pulls the flavors together and sets the sauce. Portion it into bowls, top each one with the honey BBQ chicken, and finish with a sprinkle of parsley."
+                ],
+    "portion_html":  "Fourteen servings out of one batch, so a kitchen scale earns its keep here. Weigh your empty container, then weigh the full pot of mac and cheese with the chicken kept separate, subtract the container, and divide that pasta total by 14. Scoop the same weight into every container so nobody gets shorted on the cheesy part. Then split the honey BBQ chicken evenly across all fourteen and lay it on top. Eyeballing it means the first few bowls run rich and the last few run sad, and the scale fixes that in about a minute.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/\" target=\"_blank\" rel=\"noopener\"\u003etheproteinplayground.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "The board that priced this whole thing out, every commodity and every substitution, runs you a dollar a month. One recipe like this pays that back before you finish the first container. Grab the membership, cook the batch, and let the savings stack up quietly in the background while you eat well.",
+    "cost_batch":  23.17,
+    "cost_batch_true":  32.42,
+    "cost_per_serving":  1.66,
+    "cost_per_serving_true":  2.32,
+    "cost_pantry_add":  11.09,
+    "cost_first_run":  43.51,
+    "scaler":  {
+                   "cost":  "32.42",
+                   "ing":  [
+                               {
+                                   "item":  "Fat Free Cottage Cheese",
+                                   "canon":  "Fat Free Cottage Cheese",
+                                   "grams":  525,
+                                   "buy":  "2 1/3 cups",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
+                                   "grams":  700,
+                                   "buy":  "1 1/2 pounds (about 3 cups)",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Cheddar Cheese",
+                                   "canon":  "Reduced Fat Cheddar Cheese",
+                                   "grams":  525,
+                                   "buy":  "4 3/4 cups shredded",
+                                   "bid":  "reduced-fat-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Milk",
+                                   "canon":  "Milk",
+                                   "grams":  525,
+                                   "buy":  "2 1/4 cups",
+                                   "bid":  "milk",
+                                   "gpu":  "3785.000"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  22,
+                                   "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Parsley",
+                                   "canon":  "Dried Parsley",
+                                   "grams":  2,
+                                   "buy":  "3 1/2 teaspoons dried",
+                                   "bid":  "dried-parsley",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  8,
+                                   "buy":  "1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total)",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  16,
+                                   "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total)",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  63,
+                                   "buy":  "3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Mustard",
+                                   "canon":  "Yellow Mustard",
+                                   "grams":  18,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1400,
+                                   "buy":  "3 pounds, diced",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  147,
+                                   "buy":  "7 tablespoons",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "canon":  "Onion Powder",
+                                   "grams":  8,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "canon":  "BBQ Sauce",
+                                   "grams":  245,
+                                   "buy":  "3/4 cup plus 2 tablespoons",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "canon":  "Ground Ginger",
+                                   "grams":  6,
+                                   "buy":  "3 1/2 teaspoons",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cooking Spray",
+                                   "canon":  "Cooking Spray",
+                                   "grams":  10,
+                                   "buy":  "as needed for the pan",
+                                   "bid":  "cooking-spray",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ziti Pasta",
+                                   "canon":  "Ziti Pasta",
+                                   "grams":  1050,
+                                   "buy":  "2 1/3 pounds dry (about 10 cups elbow macaroni)",
+                                   "bid":  "pasta",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "High protein honey BBQ chicken mac and cheese meal prep. A blended cottage and cream cheese sauce over pasta, topped with caramelized honey BBQ chicken. Fourteen servings.",
+                 "keywords":  "honey bbq chicken mac and cheese, high protein mac and cheese, meal prep mac and cheese, budget meal prep dinner, chicken mac and cheese, high protein meal prep, healthy mac and cheese",
+                 "image":  "",
+                 "prepTime":  "PT10M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.28,
+                 "recipeIngredient":  [
+                                          "Fat Free Cottage Cheese, 2 1/3 cups (525 g)",
+                                          "1/3 Fat Cream Cheese, 1 1/2 pounds (about 3 cups) (700 g)",
+                                          "Reduced Fat Cheddar Cheese, 4 3/4 cups shredded (525 g)",
+                                          "Milk, 2 1/4 cups (525 g)",
+                                          "Garlic Powder, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (22 g)",
+                                          "Dried Parsley, 3 1/2 teaspoons dried (2 g)",
+                                          "Black Pepper, 1 3/4 teaspoons for the chicken; 1 3/4 teaspoons for the cheese sauce (3 1/2 teaspoons total) (8 g)",
+                                          "Paprika, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce (7 teaspoons total) (16 g)",
+                                          "Salt, 3 1/2 teaspoons for the chicken; 3 1/2 teaspoons for the cheese sauce; 3 1/2 teaspoons for the pasta water (10 1/2 teaspoons total) (63 g)",
+                                          "Yellow Mustard, 3 1/2 teaspoons (18 g)",
+                                          "Boneless Skinless Chicken Breast, 3 pounds, diced (1400 g)",
+                                          "Honey, 7 tablespoons (147 g)",
+                                          "Onion Powder, 3 1/2 teaspoons (8 g)",
+                                          "BBQ Sauce, 3/4 cup plus 2 tablespoons (245 g)",
+                                          "Ground Ginger, 3 1/2 teaspoons (6 g)",
+                                          "Cooking Spray, as needed for the pan (10 g)",
+                                          "Ziti Pasta, 2 1/3 pounds dry (about 10 cups elbow macaroni) (1050 g)"
+                                      ],
+                 "steps":  [
+                               "Season the 3 pounds of diced chicken breast with garlic powder, onion powder, paprika, ground ginger, salt, and black pepper.",
+                               "Cook the chicken: air fry at 350F for 10 to 12 minutes shaking halfway, or pan fry over medium heat with cooking spray for 6 to 8 minutes, until golden and cooked through.",
+                               "Toss the cooked chicken with the honey and BBQ sauce, then cook 1 to 2 minutes more to caramelize the glaze.",
+                               "Boil the pasta in salted water. Reserve about a quarter cup of pasta water, then drain and set aside.",
+                               "Blend the cottage cheese, cream cheese, shredded cheddar, milk, garlic powder, parsley, black pepper, paprika, salt, and mustard until smooth and creamy.",
+                               "Heat the cheese sauce in a saucepan over medium-low for 3 to 5 minutes, loosening with reserved pasta water if it thickens too much.",
+                               "Stir the drained pasta into the sauce until evenly coated, adding pasta water to reach the consistency you want.",
+                               "Let it rest 10 minutes to thicken, then portion into bowls and top each with the honey BBQ chicken and a sprinkle of parsley."
+                           ],
+                 "step_names":  [
+                                    "Season the chicken",
+                                    "Cook the chicken",
+                                    "Glaze in honey BBQ",
+                                    "Boil the pasta",
+                                    "Blend the cheese sauce",
+                                    "Warm the sauce",
+                                    "Combine",
+                                    "Rest and top"
+                                ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Fat Free Cottage Cheese",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "1/3 Fat Cream Cheese",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Reduced Fat Cheddar Cheese",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Milk",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Dried Parsley",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Yellow Mustard",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1400
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Onion Powder",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  245
+                              },
+                              {
+                                  "item":  "Ground Ginger",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Cooking Spray",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Ziti Pasta",
+                                  "grams":  1050
+                              }
+                          ]
+}

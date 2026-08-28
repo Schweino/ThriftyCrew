@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-28T13:20:37",
-    "count":  261,
+    "updated":  "2026-08-28T16:41:53",
+    "count":  260,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -1819,15 +1819,6 @@
                             "item_id":  "1-3-fat-cream-cheese",
                             "bid_exists":  true,
                             "evidence":  "Light cream cheese IS the 1/3-less-fat tub, so the vocabulary row 1/3 Fat Cream Cheese [1-3-fat-cream-cheese] is the same product and the form flag is a wording artefact. Preferred over the board\u0027s generic cream-cheese, which prices the full-fat brick at different macros. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
-                            "by":  "mapper",
-                            "at":  "2026-08-27T18:29:39"
-                        },
-                        {
-                            "key":  "30 reduced fat cheddar cheese",
-                            "term":  "30% Reduced Fat Cheddar Cheese",
-                            "item_id":  "cheddar-cheese",
-                            "bid_exists":  true,
-                            "evidence":  "Reduced-fat (2% milk) cheddar is the same product concept on the same shelf at the same per-ounce price class as block cheddar, so bid reuse is sound; the macro difference is carried by the label row returned here rather than by a bridged id. Not the shredded id - the source names cheese, not a bag, and the instructions grate it. [slug honey-bbq-chicken-mac-and-cheese, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T18:29:39"
                         },

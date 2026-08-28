@@ -1358,6 +1358,38 @@ def run():
     T("MUST FIRE  only CARRIED rows that carry BOTH a price and a size become board cells - "
       "'blocked' and 'not-carried' are verdicts about a store, not prices",
       *_mint_carries_only_carried_priced_rows())
+    H("MINT: the size the shelf printed vs the basis a cell may carry (2026-08-28)")
+    T("MUST FIRE  a packaging noun is STRIPPED, not guessed at - Walmart's '1.5 lb bag', '5 lb bag' "
+      "and '12 oz bag (frozen)' blocked three approved mints over a word that cannot move a "
+      "magnitude", *_size_a_packaging_noun_is_stripped_not_guessed_at())
+    T("MUST FIRE  a parenthesised TOTAL survives the stripper - eating '(32 oz)' off "
+      "'16 oz x 2 pk (32 oz)' hands the board half the package and a per_unit twice too high",
+      *_size_a_parenthesised_TOTAL_still_wins())
+    T("MUST FIRE  a multipack with NO stated total is refused and NAMED - multiplying 12 oz x 4 pk "
+      "invents $0.1402/oz, which would out-crown Aldi on a number nobody printed",
+      *_size_a_multipack_with_no_total_is_refused_and_named())
+    T("MUST FIRE  a per-weight marker is rewritten ONLY when the row proves it - right unit AND the "
+      "dollars matching the recorded price; 1.29 is DOLLARS, and that cell is the cheapest on "
+      "baby-potatoes", *_size_a_per_weight_marker_needs_the_row_to_prove_it())
+    T("CLEAN TWIN a size the capture already printed correctly travels byte-identical - a second "
+      "resolver that disagrees with export-feed is the divergence, not the fix",
+      *_size_a_canonical_string_is_never_touched())
+    T("MUST FIRE  ...and queue_store_evidence actually normalises the cell it emits and reports "
+      "what it dropped - export-feed re-derives the basis from the STORED size and reads "
+      "'12 oz bag (frozen)' as 0.0", *_size_the_evidence_reader_actually_normalises_and_reports())
+    T("MUST FIRE  ...and the MINT hands it the prescription's own unit, or the per-weight rule is "
+      "unarmed and Hy-Vee's $1.29/lb leaves the board in silence",
+      *_size_the_mint_passes_the_rows_own_unit())
+    T("MUST FIRE  the vocabulary row is named after the ruling's TERM, not its proposed_bid - the "
+      "lookup is NAME-KEYED and proposed_bid is routinely a slug, so the slug builds a row no "
+      "recipe will ever ask for", *_mint_names_the_row_after_the_TERM_not_the_proposed_slug())
+    T("MUST FIRE  a name the vocabulary ALREADY claims is a REPOINT, not an add - the id and its "
+      "board row go live, add-ingredient-row is never called, and the rebid is named; this is the "
+      "Reduced Fat Cheddar case exactly",
+      *_mint_a_name_the_vocabulary_claims_is_a_repoint_not_an_add())
+    T("MUST FIRE  the vocabulary row records WHY the id exists - the justification is the RULING's "
+      "reason, not the prescription's, and a row that ships 'Reason on record:' followed by nothing "
+      "is permanent", *_mint_the_row_records_WHY_the_id_exists())
     T("MUST FIRE  an approve with NO prescription mints nothing and says so - a silent skip is the "
       "hand-typing era with nobody watching", *_mint_approve_without_prescription_refuses_loudly())
     T("MUST FIRE  an approve with no CARRIED store row mints nothing and names the capture pass it "
@@ -4166,6 +4198,18 @@ def _mint_queue(tmp, term="cotija cheese", stores=None):
     return path
 
 
+def _mint_vocab(tmp, rows=None):
+    """The vocabulary a mint fixture reads, and it is a SEAM on purpose. `Cotija Cheese` is a real
+    row in the live db\ingredients.json, so a fixture that let the daemon read the live file would
+    take the name-already-claimed road below for reasons that have nothing to do with what it is
+    testing - and would flip red the day somebody adds a row. Empty means "no name is claimed",
+    which is the state every mint fixture except the repoint one is describing."""
+    path = os.path.join(tmp, "mint-ingredients.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(rows or [], f)
+    return path
+
+
 _MINT_SPEC = {"label": "Cotija Cheese", "unit": "oz", "include": ["cotija"],
               "clone_exclude_from": "queso-fresco", "gpu": 28.3495,
               "category": "Dairy & Eggs",
@@ -4186,7 +4230,7 @@ def _mint_happy_road_runs_all_three_tools():
     tmp = scratch_dir(prefix="daemon-mint-ok-")
     try:
         ps = FakePS()
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
         made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
         order = [c["script"] for c in ps.calls]
         want = ["new-commodity.ps1", "add-recipe-board-rows.ps1", "add-ingredient-row.ps1"]
@@ -4213,7 +4257,7 @@ def _mint_include_stays_a_list():
         spec = dict(_MINT_SPEC)
         spec["include"] = ["reduced\s+fat.*cheddar", "cheddar.*reduced\s+fat"]
         spec["extra_exclude"] = ["fat[\s-]*free", "\bspread\b"]
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
         arun(d.execute_registrar_mints("s1", [_mint_ruling(mint=spec)]))
         a = (ps.find("new-commodity") or [{}])[0].get("args", [])
         inc = FakePS.value_after(a, "-Include")
@@ -4234,7 +4278,7 @@ def _mint_carries_only_carried_priced_rows():
     tmp = scratch_dir(prefix="daemon-mint-ev-")
     try:
         ps = FakePS()
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp, stores={
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp, stores={
             "Family Fare": {"state": "carried", "price": 4.29, "size": "8 oz", "item": "Cacique"},
             "Hy-Vee": {"state": "carried", "price": 5.19, "size": "", "item": "no size printed"},
             "Fareway": {"state": "blocked", "price": 3.99, "size": "8 oz", "item": "blocked row"},
@@ -4242,6 +4286,230 @@ def _mint_carries_only_carried_priced_rows():
         got = d.queue_store_evidence("cotija cheese")
         return ([r["store"] for r in got] == ["Family Fare"] and got[0]["price"] == 4.29,
                 "evidence=%s" % json.dumps(got))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# SIZE NORMALISATION: the free text the shelf printed, turned into a basis a board cell may carry.
+#
+# THE STRINGS HERE ARE THE REAL ONES, off the attended 7-store capture of 2026-08-28. That matters
+# more than usual: on that same day a fixture passed only because its test food shared no word with
+# the slug it was meant to catch, so every case below uses the exact text a store actually printed
+# and the exact price recorded beside it.
+#
+# WHAT THE LINE IS. Removing the word `bag` from "1.5 lb bag" cannot change a magnitude, so it is
+# EXTRACTION. Turning "12 oz x 4 pk" into 48 oz is a multiplication on a package count, so it is
+# ARITHMETIC ON A GUESS - and a wrong one publishes a per_unit four times too low, which is a false
+# CROWN, the direction that actually hurts. The first is done here; the second is refused and named.
+# =====================================================================================================
+def _norm(size, unit=None, price=None):
+    return HD.Daemon.normalize_pkg_size(size, unit, price)
+
+
+def _size_a_packaging_noun_is_stripped_not_guessed_at():
+    """MUST FIRE. Walmart prints "1.5 lb bag" and "5 lb bag"; add-recipe-board-rows resolves neither,
+    so three of the four mints the registrar approved on 2026-08-28 could not be executed over the
+    word `bag`. The magnitude was never in doubt - it was printed - and dropping a packaging noun
+    cannot move it."""
+    got = [_norm("1.5 lb bag", "lb", 3.78)[0], _norm("5 lb bag", "lb", 2.96)[0],
+           _norm("12 oz bag (frozen)", "oz", 2.24)[0]]
+    return (got == ["1.5 lb", "5 lb", "12 oz"], "got=%s" % json.dumps(got))
+
+
+def _size_a_parenthesised_TOTAL_still_wins():
+    """MUST FIRE, and it is the fence around the fixture above. add-recipe-board-rows' own rule is
+    that a trailing parenthesised TOTAL beats the leading magnitude - "16 oz x 2 pk (32 oz)" is 32,
+    not 16. A stripper that ate every parenthetical would delete that total and hand the tool a
+    string it resolves to HALF the package, publishing a per_unit twice too high. Only a
+    parenthetical carrying NO number is decoration, because a total has a number in it."""
+    kept = _norm("16 oz x 2 pk (32 oz)", "oz", 5.0)[0]
+    return (kept == "16 oz x 2 pk (32 oz)", "got=%r" % kept)
+
+
+def _size_a_multipack_with_no_total_is_refused_and_named():
+    """MUST FIRE. Sam's Club prints "12 oz x 4 pk" for Member's Mark Riced Cauliflower at $6.73 and
+    never states the total. Reading it as 12 oz is wrong high and harmless; multiplying to 48 oz
+    without the shelf saying so is wrong LOW - $0.1402/oz, which would beat Aldi's $0.1492 and take
+    the crown on a number nobody printed. Neither is extraction, so the row is dropped and the
+    reason is carried, not swallowed."""
+    size, why = _norm("12 oz x 4 pk", "oz", 6.73)
+    return (size is None and "multipack" in why and "12 oz x 4 pk" in why,
+            "size=%r why=%r" % (size, why[:120]))
+
+
+def _size_a_per_weight_marker_needs_the_row_to_prove_it():
+    """MUST FIRE, and it is the reason a store cannot be quietly dropped. Hy-Vee prints
+    "sold by weight, $1.29/lb" for B-Size Gold Potatoes, and that cell is the CHEAPEST on
+    baby-potatoes - lose it and the board crowns Baker's $3.99/lb, a 3x error on a published floor.
+
+    It is also the trap a naive `<number> <unit>` extractor falls into: 1.29 is DOLLARS. So the
+    rewrite is only allowed when the row itself proves it - the marker's unit IS the row's unit AND
+    the dollars equal the price the capture recorded. Each half must be load-bearing: a marker read
+    onto an `oz` row, or against a price that disagrees with it, must come back UNTOUCHED for the
+    board tool to refuse."""
+    s = "sold by weight, $1.29/lb"
+    proven = _norm(s, "lb", 1.29)[0]
+    wrong_unit = _norm(s, "oz", 1.29)[0]
+    wrong_price = _norm(s, "lb", 2.50)[0]
+    no_context = _norm(s, None, None)[0]
+    return (proven == "lb" and wrong_unit == s and wrong_price == s and no_context == s,
+            "proven=%r wrong_unit=%r wrong_price=%r no_context=%r"
+            % (proven, wrong_unit, wrong_price, no_context))
+
+
+def _size_a_canonical_string_is_never_touched():
+    """CLEAN TWIN. Every size the captures already print correctly must travel byte-identical - a
+    normaliser that rewrites what was already right is a second resolver, and two resolvers that
+    disagree is the exact divergence add-recipe-board-rows' header warns about with export-feed."""
+    same = ["8 oz", "11 oz", "7 oz", "10.5 oz", "1.5 lb", "5 lb", "24 oz", "1 lb", "12 oz"]
+    got = [_norm(x, "oz", 2.0)[0] for x in same]
+    return (got == same, "got=%s" % json.dumps(got))
+
+
+def _size_the_evidence_reader_actually_normalises_and_reports():
+    """MUST FIRE, and it is the wiring every fixture above passes without. The normaliser is worth
+    nothing if queue_store_evidence hands the raw string on: the whole point is that the string is
+    canonical BEFORE it becomes a cell, because export-feed re-derives the package basis from the
+    STORED size and would read "12 oz bag (frozen)" as basis 0.0 in silence.
+
+    And the drop must be LOUD. A row that cannot become a cell is a store missing from the board,
+    which can be the cheapest one - so it lands on the findings road with its reason."""
+    tmp = scratch_dir(prefix="daemon-mint-size-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp, term="frozen cauliflower rice",
+                                                              stores={
+            "Walmart": {"state": "carried", "price": 2.24, "size": "12 oz bag (frozen)",
+                        "item": "Great Value Riced Cauliflower"},
+            "Aldi": {"state": "carried", "price": 1.79, "size": "12 oz",
+                     "item": "Season's Choice Frozen Plain Riced Cauliflower"},
+            "Sam's Club": {"state": "carried", "price": 6.73, "size": "12 oz x 4 pk",
+                           "item": "Member's Mark Riced Cauliflower, Frozen, 12 oz., 4 pk."}}))
+        got = d.queue_store_evidence("frozen cauliflower rice", "oz")
+        by = dict((r["store"], r["size"]) for r in got)
+        named = [f for f in d.findings if "Sam's Club" in f and "multipack" in f]
+        return (by == {"Walmart": "12 oz", "Aldi": "12 oz"} and len(named) == 1,
+                "cells=%s findings=%s" % (json.dumps(by), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _size_the_mint_passes_the_rows_own_unit():
+    """MUST FIRE. The per-weight rule can only be proven against the row the cell is going onto, so
+    if execute_registrar_mints reads the evidence without the prescription's unit that rule is
+    permanently unarmed and Hy-Vee's $1.29/lb potatoes silently leave the board. Nothing else in the
+    chain would notice: the mint still succeeds, one store shorter, with a 3x crown."""
+    tmp = scratch_dir(prefix="daemon-mint-unit-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp, term="baby potatoes", stores={
+            "Hy-Vee": {"state": "carried", "price": 1.29, "size": "sold by weight, $1.29/lb",
+                       "item": "B-Size Gold Potatoes"},
+            "Baker's": {"state": "carried", "price": 3.99, "size": "1 lb",
+                        "item": "Red Creamer Potatoes"}}))
+        spec = dict(_MINT_SPEC)
+        spec.update({"label": "Baby Potatoes", "unit": "lb", "category": "Vegetables",
+                     "include": ["baby.*potato"], "clone_exclude_from": "russet-potatoes"})
+        arun(d.execute_registrar_mints("s1", [_mint_ruling(
+            bid="baby-potatoes", term="baby potatoes", mint=spec)]))
+        rows = (ps.find("add-recipe-board-rows") or [{}])[0].get("args", [])
+        path = FakePS.value_after(rows, "-RowsFile")
+        cells = {}
+        if path and os.path.isfile(path):
+            with open(path, "r", encoding="utf-8") as f:
+                cells = dict((c["store"], c["size"]) for c in json.load(f)[0]["stores"])
+        return (cells == {"Hy-Vee": "lb", "Baker's": "1 lb"},
+                "cells=%s findings=%s" % (json.dumps(cells), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_names_the_row_after_the_TERM_not_the_proposed_slug():
+    """MUST FIRE. The vocabulary lookup is NAME-KEYED, and a registrar ruling carries two different
+    things: `proposed_bid` is what the mapper ASKED for and is routinely a slug - the 2026-08-28
+    batch carries "reduced-fat-cheddar-cheese", "baby-potatoes", "frozen-cauliflower-rice" - while
+    `term` is the spelling the recipe line actually uses. Built off the slug, the row is named
+    something no recipe will ever ask for and the recipe stays blocked with its row sitting there.
+
+    The fixtures could not see this until now because `_mint_ruling` spells both fields the same
+    way, so the two were indistinguishable. This one spells them DIFFERENTLY on purpose, and the
+    evidence is filed under the term - which is also where queue_store_evidence has always looked."""
+    tmp = scratch_dir(prefix="daemon-mint-term-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp),
+                   queue_path=_mint_queue(tmp, term="Baby Potatoes"))
+        arun(d.execute_registrar_mints("s1", [_mint_ruling(
+            proposed_bid="baby-potatoes", bid="baby-potatoes", term="Baby Potatoes")]))
+        a = (ps.find("add-ingredient-row") or [{}])[0].get("args", [])
+        return (FakePS.value_after(a, "-Item") == "Baby Potatoes",
+                "-Item=%r findings=%s" % (FakePS.value_after(a, "-Item"),
+                                          json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_a_name_the_vocabulary_claims_is_a_repoint_not_an_add():
+    """MUST FIRE, and it is the case the whole 2026-08-28 fix exists for. `Reduced Fat Cheddar
+    Cheese` already HAS a vocabulary row - the reuse road wrote it pointing at `cheddar-cheese`,
+    which floor-maps to the generic shredded-cheese basket and prices a 2% cheddar line off
+    part-skim MOZZARELLA. That row is precisely why the id was minted, and add-ingredient-row
+    refuses it outright: a name resolves to exactly one row.
+
+    So the id and its board row must go live and the REPOINT must be named - it is a rebid, which
+    moves bid, unit and gpu together and carries the change into every spec that costs the food.
+    Calling that a failed mint would describe a half-state with a message untrue of it, and calling
+    add-ingredient-row anyway would just collect a refusal. Both halves are load-bearing here: the
+    two tools that DID succeed must have run, and the third must NOT have been called at all."""
+    tmp = scratch_dir(prefix="daemon-mint-claimed-")
+    try:
+        ps = FakePS()
+        vocab = _mint_vocab(tmp, [{"item": "Reduced Fat Cheddar Cheese", "bid": "cheddar-cheese",
+                                   "gpu": 28.3495, "unit": "oz", "board": "recipe"}])
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=vocab,
+                   queue_path=_mint_queue(tmp, term="Reduced Fat Cheddar Cheese"))
+        spec = dict(_MINT_SPEC)
+        spec.update({"label": "Reduced Fat Cheddar Cheese", "unit": "oz",
+                     "companion_edits": ["shredded-cheese claims 'Shredded 2%' today"]})
+        made = arun(d.execute_registrar_mints("s1", [_mint_ruling(
+            bid="reduced-fat-cheddar", proposed_bid="reduced-fat-cheddar-cheese",
+            term="Reduced Fat Cheddar Cheese", mint=spec)]))
+        order = [c["script"] for c in ps.calls]
+        repoint = [f for f in d.findings if "rebid-ingredient.ps1" in f
+                   and "-ToBid reduced-fat-cheddar" in f]
+        companion = [f for f in d.findings if "COMPANION EDIT" in f]
+        return (made == ["reduced-fat-cheddar"]
+                and order == ["new-commodity.ps1", "add-recipe-board-rows.ps1"]
+                and len(repoint) == 1 and len(companion) == 1,
+                "made=%s order=%s findings=%s"
+                % (json.dumps(made), json.dumps(order), json.dumps(d.findings)[:300]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _mint_the_row_records_WHY_the_id_exists():
+    """MUST FIRE. add-ingredient-row writes a NOTE onto the vocabulary row, and that note is the one
+    place a later reader finds out why an id was born. The justification lives on the RULING - the
+    registrar's `reason` field - while `mint` is only the recipe for building the id, and every
+    ruling in the first real batch put it exactly there. Read off the prescription alone, the row
+    ships "Reason on record:" followed by nothing, permanently.
+
+    The fallback order is load-bearing too: a prescription that carries its own reason must still
+    win, because that is the shape the earlier fixtures and _MINT_SPEC describe."""
+    tmp = scratch_dir(prefix="daemon-mint-why-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp),
+                   queue_path=_mint_queue(tmp, term="Whole Wheat Flour"))
+        spec = dict(_MINT_SPEC)
+        spec.pop("reason")
+        arun(d.execute_registrar_mints("s1", [_mint_ruling(
+            bid="whole-wheat-flour", term="Whole Wheat Flour", mint=spec,
+            reason="the `flour` id is All-Purpose and EXCLUDES whole wheat by name")]))
+        note = FakePS.value_after((ps.find("add-ingredient-row") or [{}])[0].get("args", []),
+                                  "-Note")
+        return ("EXCLUDES whole wheat by name" in str(note), "note=%r" % str(note)[-140:])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -4255,7 +4523,7 @@ def _mint_approve_without_prescription_refuses_loudly():
         ps = FakePS()
         r = _mint_ruling()
         r.pop("mint")
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
         made = arun(d.execute_registrar_mints("s1", [r]))
         said = any("no prescription" in f and "cotija-cheese" in f for f in d.findings)
         return (made == [] and said and not ps.calls,
@@ -4272,7 +4540,7 @@ def _mint_approve_without_evidence_refuses_loudly():
     tmp = scratch_dir(prefix="daemon-mint-noev-")
     try:
         ps = FakePS()
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp, stores={
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp, stores={
             "Family Fare": {"state": "not-carried", "price": None, "size": "", "item": ""}}))
         made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
         said = any("capture pass" in f for f in d.findings)
@@ -4299,7 +4567,7 @@ def _mint_refuses_a_category_it_cannot_place():
                 spec.pop("category")
             else:
                 spec["category"] = bad
-            d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+            d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
             made = arun(d.execute_registrar_mints("s1", [_mint_ruling(mint=spec)]))
             said = any("board category" in f for f in d.findings)
             out.append((made == [] and said and not ps.calls, len(ps.calls), d.findings[:1]))
@@ -4314,7 +4582,7 @@ def _mint_a_refused_id_is_never_born():
     tmp = scratch_dir(prefix="daemon-mint-rej-")
     try:
         ps = FakePS()
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
         made = arun(d.execute_registrar_mints("s1", [
             _mint_ruling(verdict="reject"), _mint_ruling(verdict=None)]))
         return (made == [] and not ps.calls,
@@ -4329,7 +4597,7 @@ def _mint_a_tool_refusal_stops_the_chain():
     tmp = scratch_dir(prefix="daemon-mint-stop-")
     try:
         ps = FakePS({"new-commodity": (3, "", "REFUSED: the include pattern blocks itself")})
-        d = daemon(run_dir=tmp, ps=ps, queue_path=_mint_queue(tmp))
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_mint_vocab(tmp), queue_path=_mint_queue(tmp))
         made = arun(d.execute_registrar_mints("s1", [_mint_ruling()]))
         after = [c["script"] for c in ps.calls if "new-commodity" not in c["script"]]
         said = any("new-commodity refused" in f for f in d.findings)
@@ -4484,14 +4752,26 @@ def _reuse_uses_the_commodity_basis_when_no_row_names_the_id():
 
 
 def _reuse_with_no_kin_refuses_rather_than_inventing_a_basis():
-    """MUST FIRE. No existing row carries `baby-potatoes`, so there is no priced basis to copy. This
-    is the case that must NOT fall back to a default gpu - it is a mint, and it says so."""
+    """MUST FIRE. No row and no COMMODITY carries this bid, so there is no priced basis to copy.
+    This is the case that must NOT fall back to a default gpu - it is a mint, and it says so.
+
+    THE ID IS DELIBERATELY FICTIONAL (2026-08-28). This fixture used `baby-potatoes`, and the day it
+    was written that was a true example: the reuse road's own docstring cites it as "no commodity at
+    all... really is a mint". Then the registrar approved it, the mint executed, and `baby-potatoes`
+    became a live priced commodity - so the fixture went red for the best possible reason, on a
+    change that was the whole point of the work.
+
+    `commodity_basis` reads the LIVE commodities files and has no seam (unlike `ingredients_path`
+    beside it), so a real id can be minted out from under this assertion at any time. A name nothing
+    will ever mint is the only stable way to say "nothing carries this bid" - the assertion is about
+    the ABSENCE, and an absence should not be spelled with something the estate is trying to create.
+    """
     tmp = scratch_dir(prefix="daemon-reuse-nokin-")
     try:
         ps = FakePS()
         d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
         made = arun(d.write_reuse_vocabulary_rows(
-            "s1", _reuse_res(name="Baby Potatoes", bid="baby-potatoes")))
+            "s1", _reuse_res(name="No Such Food", bid="no-such-commodity-anywhere-2026")))
         said = any("none will be invented" in f and "MINT" in f for f in d.findings)
         return (made == [] and said and not ps.calls,
                 "made=%s calls=%d findings=%s"

@@ -4462,7 +4462,93 @@ class Daemon(object):
                 done.append(wk)
         return done
 
-    def queue_store_evidence(self, term):
+    # ---- FREE-TEXT SIZE -> THE SHAPE A BOARD CELL MAY CARRY -------------------------------------
+    #
+    # WHY THIS EXISTS (2026-08-28). The pricer records the size EXACTLY as the shelf printed it, and
+    # three of the four mints approved that day died on that: Walmart writes "1.5 lb bag", "5 lb bag"
+    # and "12 oz bag (frozen)". add-recipe-board-rows refuses every one of them - correctly, it will
+    # not guess a basis - so an approved ruling with seven stores of real evidence could not be
+    # executed over the word `bag`.
+    #
+    # AND THE BOARD TOOL IS NOT THE ONLY READER. export-feed.ps1's Get-PkgBasis re-derives the
+    # package basis from the size string STORED IN THE CELL, with the same anchored
+    # `^<number> <unit>$` regex. So even a board tool that accepted "12 oz bag (frozen)" would leave
+    # a cell the feed reads as basis 0.0 - silently, downstream, on a file every recipe page fetches.
+    # That is what settles WHERE this belongs: the string has to be canonical BEFORE it becomes a
+    # cell, not forgiven at one of the two readers. Normalising here keeps the two resolvers agreeing.
+    #
+    # IT EXTRACTS, IT DOES NOT COMPUTE. Dropping the word `bag` does not change a magnitude, and
+    # neither does dropping a parenthetical carrying no number: "1.5 lb bag" is 1.5 lb either way.
+    # A multipack with no stated total is the opposite - "12 oz x 4 pk" needs 12 x 4, which is
+    # arithmetic on a package count, and getting it wrong publishes a per_unit four times too LOW,
+    # i.e. a false crown. That one is REFUSED and named, exactly as the board tool refuses it.
+    #
+    # THE SOLE JUDGE OF RESOLVABILITY IS STILL add-recipe-board-rows. This does not re-implement
+    # Resolve-Size in Python - a second resolver is the divergence that function's own header warns
+    # about. It strips decoration and hands the result on; anything it cannot prove travels
+    # unchanged and is refused downstream, where it always was.
+    _PKG_NOUN = (r"(?:bag|bags|box|boxes|pkg|pkgs|package|packages|carton|cartons|container|"
+                 r"containers|tub|tubs|jar|jars|can|cans|bottle|bottles|pouch|pouches|block|blocks|"
+                 r"loaf|bunch|tray|trays|sleeve|sleeves|stick|sticks)")
+    # Only the aliases a per-weight marker can name. Deliberately NOT the board's full alias table:
+    # this map exists to check that a marker's unit IS the row's unit, never to convert between them.
+    _MARKER_UNITS = {"lb": "lb", "lbs": "lb", "pound": "lb", "pounds": "lb",
+                     "oz": "oz", "ounce": "oz", "ounces": "oz",
+                     "each": "each", "ct": "each", "ea": "each"}
+
+    @classmethod
+    def normalize_pkg_size(cls, size, row_unit=None, price=None):
+        """(canonical_size, why_refused). `why_refused` is set ONLY when the size comes back None.
+
+        A size that needs no work, and a size this cannot prove anything about, both come back
+        unchanged - the board tool judges those, as it always has.
+        """
+        s = str(size or "").strip()
+        if not s:
+            return None, "the capture recorded no size at all"
+        # ---- A PER-WEIGHT MARKER, AND ONLY WHEN THE ROW ITSELF PROVES IT ------------------------
+        # "sold by weight, $1.29/lb" is the shape Hy-Vee prints for loose produce, and it is the
+        # CHEAPEST cell on baby-potatoes - drop it and the board crowns a $3.99/lb row instead, a
+        # 3x error on a published floor. It is also the perfect trap for a naive extractor: 1.29 is
+        # DOLLARS, not a magnitude. So it is rewritten only when two things are true at once - the
+        # marker's unit IS the row's unit, and the dollars in the string equal the price the capture
+        # recorded. Then a bare "lb" is not a guess: it is the board's existing convention for a
+        # by-weight cell (93-7-ground-turkey and apple carry a bare `lb` size today), and the
+        # per_unit that falls out of it is the marked price itself.
+        m = re.search(r"\$\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*([a-zA-Z]{1,6})\b", s)
+        if m and row_unit and price not in (None, ""):
+            u = cls._MARKER_UNITS.get(m.group(2).strip().lower())
+            try:
+                marked, paid = float(m.group(1)), float(price)
+            except (TypeError, ValueError):
+                marked = paid = None
+            if u and u == str(row_unit).strip().lower() and marked is not None \
+                    and abs(marked - paid) <= 0.005:
+                return u, ""
+        # ---- a trailing parenthetical carrying NO number is a descriptor, not a total ------------
+        # "(frozen)", "(family size)". The board tool's rule is that a parenthesised TOTAL wins, and
+        # a total has a number in it; one without cannot be that, so removing it cannot change which
+        # total wins. "16 oz x 2 pk (32 oz)" is left untouched here on purpose.
+        cleaned = re.sub(r"\s*\(\s*[^()\d]*\s*\)\s*$", "", s).strip()
+        # ---- a trailing packaging noun ----------------------------------------------------------
+        cleaned = re.sub(r"\s+" + cls._PKG_NOUN + r"\.?\s*$", "", cleaned,
+                         flags=re.IGNORECASE).strip()
+        # ---- a multipack with no stated total is arithmetic, and it is not done here -------------
+        # The `x` shape is the one the captures actually emit, and it is matched on the SEPARATOR,
+        # not on a digit before it: "12 oz x 4 pk" has a unit between the magnitude and the x, so a
+        # `\d\s*x\s*\d` pattern reads it as ordinary text and lets a four-pack through as 12 oz.
+        # Measured 2026-08-28 - that was this guard's first cut, and it did not fire on the one row
+        # in the estate that needs it.
+        if re.search(r"\s[xX]\s*\d", cleaned) and \
+                not re.search(r"\(\s*[\d.]+\s*[a-zA-Z]", cleaned):
+            return None, ("%r is a multipack whose TOTAL the shelf never stated. Multiplying the "
+                          "pack count would be arithmetic on a guess, and a wrong one publishes a "
+                          "per_unit several times too LOW - a false crown. Re-capture the size with "
+                          "its total, e.g. '12 oz x 4 pk (48 oz)'." % s)
+        return (cleaned or None), ("" if cleaned else
+                                   "%r left nothing behind once its decoration was removed" % s)
+
+    def queue_store_evidence(self, term, row_unit=None):
         """The pricer's own per-store rows for `term`, in the shape add-recipe-board-rows wants.
 
         The pricer already gathers exactly this - item, size, price, per store - and records it with
@@ -4500,8 +4586,21 @@ class Daemon(object):
                     price = float(price)
                 except (TypeError, ValueError):
                     continue
+                # THE SIZE IS CANONICALISED HERE OR THE ROW IS DROPPED AND NAMED. A row the
+                # normaliser cannot prove is never quietly re-shaped: it is either handed on
+                # unchanged for add-recipe-board-rows to judge, or refused with a reason that
+                # reaches the findings road - because the cell it would have made can be the
+                # CHEAPEST one, and dropping Hy-Vee's by-weight row off baby-potatoes would crown a
+                # $3.99/lb cell over a $1.29/lb one in silence.
+                norm, why = self.normalize_pkg_size(size, row_unit, price)
+                if not norm:
+                    self.findings.append(
+                        "mint/%s: the %s row for %r carries a size this cannot turn into a board "
+                        "cell, so that store is NOT on the row and its price cannot crown: %s"
+                        % (str(term), str(store), str(name).strip(), why))
+                    continue
                 out.append({"store": str(store), "price": price,
-                            "size": str(size).strip(), "item": str(name).strip()})
+                            "size": norm, "item": str(name).strip()})
         return out
 
     # GRAMS IN ONE UNIT OF A STANDARD MEASURE. These are conversions, not estimates - an ounce is
@@ -4700,7 +4799,16 @@ class Daemon(object):
                 continue
             bid = str(r.get("bid") or r.get("proposed_bid") or "").strip()
             spec = r.get("mint") if isinstance(r.get("mint"), dict) else None
-            term = str(r.get("proposed_bid") or "").strip()
+            # THE NAME THE VOCABULARY MUST RESOLVE IS `term`, NOT `proposed_bid` (2026-08-28).
+            # `proposed_bid` is what the MAPPER asked for and it is routinely a SLUG - the batch
+            # ruled that day carries "reduced-fat-cheddar-cheese", "baby-potatoes",
+            # "frozen-cauliflower-rice" - while `term` is the spelling the recipe line actually
+            # uses ("Baby Potatoes"). The vocabulary lookup is NAME-KEYED, so building the row off
+            # the slug writes a name no recipe will ever ask for, and the recipe stays blocked with
+            # a row sitting right there. The evidence read two lines down already preferred `term`;
+            # only the row did not, and the fixtures could not see it because their ruling spelled
+            # both fields the same way.
+            term = str(r.get("term") or r.get("proposed_bid") or "").strip()
             if not bid:
                 continue
             if not spec:
@@ -4709,18 +4817,29 @@ class Daemon(object):
                     "nothing could be minted. The id stays unborn and the recipe stays blocked."
                     % (slug, bid))
                 continue
-            ev = self.queue_store_evidence(r.get("term") or term)
+            # THE UNIT TRAVELS WITH THE TERM. A per-weight marker is only provable
+            # against the row it is going onto, so reading the evidence without the
+            # prescription's unit would leave that rule permanently unarmed.
+            ev = self.queue_store_evidence(term,
+                                           str(spec.get("unit") or "").strip().lower())
             if not ev:
                 self.findings.append(
                     "mint/%s: the registrar APPROVED %r but the pricer recorded no CARRIED store row "
                     "with a price AND a size for it, so there is nothing to build a board row from. "
                     "This one needs a capture pass before it can be born." % (slug, bid))
                 continue
-            ok, why = await self.mint_one(bid, spec, ev, term or bid)
+            ok, why = await self.mint_one(bid, spec, ev, term or bid,
+                                          str(r.get("reason") or ""))
             if ok:
                 made.append(bid)
-                self.log("  mint: %s born from the registrar's approval - %d store cell(s), "
-                         "vocabulary row written" % (bid, len(ev)))
+                # NOT "vocabulary row written". On the repoint road above, mint_one returns True
+                # with add-ingredient-row deliberately never called - the name was already claimed -
+                # and this line claimed a row that does not exist. Observed on the real batch,
+                # 2026-08-28: it printed for reduced-fat-cheddar, whose row still pointed at
+                # cheddar-cheese. What is always true is the id and its priced cells; the findings
+                # carry whatever is still owed.
+                self.log("  mint: %s born from the registrar's approval - %d store cell(s)"
+                         % (bid, len(ev)))
             else:
                 self.findings.append("mint/%s: %r could not be executed: %s" % (slug, bid, why))
         return made
@@ -4737,7 +4856,7 @@ class Daemon(object):
         return [str(c.get("label") or "") for c in (doc.get("categories") or [])
                 if isinstance(c, dict) and str(c.get("label") or "").strip()]
 
-    async def mint_one(self, bid, spec, evidence, term):
+    async def mint_one(self, bid, spec, evidence, term, reason=""):
         """new-commodity -> add-recipe-board-rows -> add-ingredient-row, in that order, stopping at
         the first refusal. Returns (ok, why_not).
 
@@ -4801,12 +4920,48 @@ class Daemon(object):
         if rc != 0:
             return False, "add-recipe-board-rows refused: %s" % ((out or "") + (err or "")).strip()[:220]
 
+        # ---- A NAME THE VOCABULARY ALREADY CLAIMS IS A REPOINT, NOT AN ADD (2026-08-28) ----------
+        #
+        # THE DRIVING CASE. `Reduced Fat Cheddar Cheese` already HAS a vocabulary row - the reuse
+        # road wrote it, pointing at `cheddar-cheese`, which floor-maps to the generic
+        # shredded-cheese basket and prices a 2% cheddar line off part-skim MOZZARELLA. That row is
+        # exactly why the id was minted, and add-ingredient-row refuses it: "NAME COLLISION: ... is
+        # already claimed by row ...". Left alone, mint_one would report the whole mint as FAILED
+        # after new-commodity and the board row had both succeeded - a half-state described by a
+        # message that is not true of it.
+        #
+        # THE REPOINT IS NOT DONE HERE, ON PURPOSE. rebid-ingredient.ps1 moves bid, unit and gpu
+        # together and carries the change into every spec that costs the food, then invalidates the
+        # identity cache. That is a recost, not a row edit, and it is a person's call which specs
+        # move with it. So the id and its price go live and the repoint is NAMED, with the command
+        # that performs it.
+        if self.vocabulary_knows(term):
+            self.findings.append(
+                "mint/%s: the id and its board row are LIVE, but the name %r is already claimed by "
+                "a vocabulary row pointing somewhere else, so the recipe still prices on the OLD "
+                "id until it is repointed. This is a rebid, not an add - it moves bid, unit and gpu "
+                "together and carries the change into every spec that costs it: "
+                "meal-prep\\pipeline\\rebid-ingredient.ps1 -Item %r -ToBid %s -ToUnit %s -ToGpu %s "
+                "-Apply" % (bid, term, term, bid, str(spec.get("unit") or "oz"),
+                            str(spec.get("gpu") or 28.3495)))
+            for note in (spec.get("companion_edits") or []):
+                self.findings.append(
+                    "mint/%s: the registrar named a COMPANION EDIT that is not automated - two ids "
+                    "claiming one product is the defect this estate keeps paying for, so a person "
+                    "must make this one: %s" % (bid, str(note)[:300]))
+            return True, ""
         vargs = ["-Item", term, "-Bid", bid, "-Unit", str(spec.get("unit") or "oz"),
                  "-Gpu", str(spec.get("gpu") or 28.3495),
                  "-Board", ("recipe" if ns_recipe else "weekly"),
                  "-Note", ("Minted from the commodity-registrar's APPROVE ruling and the pricer's own "
                            "store evidence, executed by the map lane. Reason on record: %s"
-                           % str((spec.get("reason") or ""))[:400]),
+                           # THE REASON LIVES ON THE RULING, NOT IN THE PRESCRIPTION (2026-08-28).
+                           # `mint` is the recipe for building the id; the JUSTIFICATION is the
+                           # registrar's own field beside it, and every ruling in the first real
+                           # batch put it there. Reading only the prescription writes "Reason on
+                           # record:" followed by nothing onto a PERMANENT vocabulary row - the one
+                           # place a later reader looks to find out why the id exists.
+                           % str((spec.get("reason") or reason or ""))[:400]),
                  "-Apply"]
         if spec.get("pantry_pkg_g"):
             vargs += ["-PantryPkgG", str(spec.get("pantry_pkg_g")),
@@ -4816,8 +4971,19 @@ class Daemon(object):
                       "-BuyPkgLabel", str(spec.get("buy_pkg_label") or "")]
         rc, out, err = await self.ps(ADD_INGREDIENT_ROW_PS, vargs, timeout=300)
         if rc != 0:
-            return False, ("the id and its board row exist but add-ingredient-row refused, so the "
-                           "NAME still does not resolve: %s"
+            # AND THE COMMONEST REFUSAL IS AN ORDERING ONE, NOT A JUDGEMENT (2026-08-28).
+            # add-ingredient-row requires the bid to be priced on the LIVE FEED, and the feed is
+            # rebuilt by recipe-overlay -> export-feed, which this chain does not run - a board row
+            # written a second ago is not on a feed exported this morning. So every one of the three
+            # weekly mints in the first real batch reached this line, and add-ingredient-row's own
+            # advice ("Register and price it first") reads as though the registrar had been skipped
+            # when it had just been obeyed. The id and its cells ARE live; only the name is owed,
+            # and re-running the vocabulary step after a feed export completes it.
+            return False, ("the id and its board row ARE written, but add-ingredient-row refused, so "
+                           "the NAME does not resolve yet. If it says the bid is not on the feed, "
+                           "that is ORDERING, not a verdict: run grocery\\recipe-overlay.ps1 then "
+                           "grocery\\export-feed.ps1 and re-run the vocabulary step - the registrar "
+                           "has already been obeyed. Tool said: %s"
                            % ((out or "") + (err or "")).strip()[:220])
         for note in (spec.get("companion_edits") or []):
             self.findings.append(

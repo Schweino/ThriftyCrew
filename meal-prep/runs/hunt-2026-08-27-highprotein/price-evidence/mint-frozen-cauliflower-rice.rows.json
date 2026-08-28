@@ -1,0 +1,46 @@
+[
+  {
+    "id": "frozen-cauliflower-rice",
+    "commodity": "Frozen Cauliflower Rice",
+    "category": "Frozen",
+    "unit": "oz",
+    "stores": [
+      {
+        "store": "Walmart",
+        "price": 2.24,
+        "size": "12 oz",
+        "item": "Great Value Riced Cauliflower"
+      },
+      {
+        "store": "Fareway",
+        "price": 2.99,
+        "size": "10 oz",
+        "item": "Birds Eye Riced Cauliflower, Frozen Vegetables"
+      },
+      {
+        "store": "Family Fare",
+        "price": 2.99,
+        "size": "10 oz",
+        "item": "Frozen Cauliflower Rice Our Family Steamable"
+      },
+      {
+        "store": "Hy-Vee",
+        "price": 3.49,
+        "size": "10.5 oz",
+        "item": "Hy-Vee Riced Cauliflower Steam in Bag"
+      },
+      {
+        "store": "Aldi",
+        "price": 1.79,
+        "size": "12 oz",
+        "item": "Season's Choice Frozen Plain Riced Cauliflower"
+      },
+      {
+        "store": "Baker's",
+        "price": 2.39,
+        "size": "12 oz",
+        "item": "Kroger Recipe Beginnings Frozen Cauliflower Rice"
+      }
+    ]
+  }
+]
