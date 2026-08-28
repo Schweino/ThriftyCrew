@@ -238,6 +238,41 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   # masked by their parsable size_text; Hy-Vee ad rows are name-parsed and would have published it). The
   # word tokens (ct/pk/...) keep the lazy gap for '6 pk of 12 oz' forms - a marketing word cannot follow
   # them, only 'x' has that ambiguity.
+  # A TRAILING PARENTHESISED TOTAL, WHEN THE ARITHMETIC PROVES IT IS ONE (2026-08-28).
+  # "16 oz x 2 pk (32 oz)" - the shape the Recipe Hunter's pricing agent records for a club multipack -
+  # reached the pack-first branch below and matched on "2 pk (32 oz)", because that branch's \D+? gap
+  # happily crosses an opening bracket. It then read TWO PACKS OF 32 oz and returned 64 oz: the pack
+  # count applied twice, against a size string that had already stated the total. Live effect measured
+  # 2026-08-28: shaved-beef-steak|Sam's Club published at $4.3675/lb against a true $8.735/lb, which
+  # also handed Sam's the "Cheapest" badge on a row Aldi actually wins, and drove the recipe card for
+  # philly-cheesesteak-stuffed-peppers to a $18.28 cheapest-per-serving against a $4.37 everyday.
+  #
+  # THE ARITHMETIC DECIDES, NOT THE BRACKET - the rule multipack-lib already applies to this same
+  # question. "6 pk (12 fl oz)" is SIX BOTTLES of 12 fl oz and its parenthetical is a per-item size, so
+  # a blanket "trailing bracket wins" would break it in the opposite direction. The parenthetical is
+  # taken as the total ONLY when the string states a per-item weight W and a count N elsewhere and
+  # N x W reproduces it (16 x 2 = 32). That is the store telling us the sum itself; anything else
+  # falls through to the branches below unchanged.
+  # 3% matches Test-MpSizeIsPackTotal's tolerance, for the stores' own rounding of a pack total.
+  # add-recipe-board-rows.ps1's Resolve-Size and pu-lib both already read this string as 32 oz; this is
+  # the third copy of the rule catching up, and the parity case in the self-test holds them together.
+  $pt = [regex]::Match($s, '\(\s*(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon|qt|quart|pt|pint|liter|litre|ltr|ml)\s*\)')
+  if ($pt.Success) {
+    $ptv = [double]$pt.Groups[1].Value; $pttok = $pt.Groups[2].Value
+    $lead = $s.Substring(0, $pt.Index)
+    $counts = @(); foreach ($cm in [regex]::Matches($lead, '(\d+)\s*[- ]?\s*(?:pk\b|packs?\b|ct\b|count\b|x|\u00d7)')) { $cv = [double]$cm.Groups[1].Value; if ($cv -gt 1) { $counts += $cv } }
+    $proved = $false
+    foreach ($wm in [regex]::Matches($lead, '(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon|qt|quart|pt|pint|liter|litre|ltr|ml)\b')) {
+      $wv = Convert-ToUnit ([double]$wm.Groups[1].Value) $wm.Groups[2].Value $pttok
+      if ($wv -eq $null -or $wv -le 0) { continue }
+      foreach ($c in $counts) { if ($ptv -gt 0 -and ([math]::Abs(($wv * $c) - $ptv) / $ptv) -le 0.03) { $proved = $true; break } }
+      if ($proved) { break }
+    }
+    if ($proved) {
+      $ptc = Convert-ToUnit $ptv $pttok $unit
+      if ($ptc -ne $null) { return $ptc }
+    }
+  }
   # \D+? is lazy and both each-size groups take leading-dot decimals, so "6 pk .5 gal" reads 0.5, not 5.
   $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:(?:ct|count|pk|packs?)\D+?|(?:x|\u00d7)\s*-?\s*)(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
   if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
@@ -711,6 +746,17 @@ if ($SelfTest) {
   _Near 'weight-first pack "16 oz 6 pk"'   (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '16 oz 6 pk') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'pack-first order (must stay)'     (Get-UnitPrice (_D '$6.38' "Bush's Garbanzo Beans, 6 pk" $null '6 pk 16 oz') (_C 'oz')).unit_price 0.0665 0.001
   _Near 'x-separator "12 x 12 fl oz"'      (Get-UnitPrice (_D '$4.72' 'Hy-Vee Cola 12Pk' $null '12 x 12 fl oz') (_C 'floz')).unit_price 0.0328 0.001
+  # MUST-FIRE (2026-08-28): a size that states its own pack TOTAL in brackets. The pack-first branch's
+  # \D+? gap crossed the "(" and read "2 pk (32 oz)" as two packs OF 32 oz - 64 oz for a 32 oz product.
+  # Real row: shaved-beef-steak|Sam's Club, Demakes Bros. Choice Beef Shaved Steak $17.47, PUBLISHED at
+  # $4.3675/lb against a true $8.735/lb, which also mis-awarded the row's Cheapest badge (Aldi wins it at
+  # $7.3714) and blew up philly-cheesesteak-stuffed-peppers' cheapest-per-serving to $18.28 vs a $4.37
+  # everyday. Fails at 4.3675 on the pre-fix engine. pu-lib has always read this string correctly.
+  _Near 'bracketed pack total "2 pk (32 oz)"' (Get-UnitPrice (_D '$17.47' 'Demakes Bros. Choice Beef Shaved Steak' $null '16 oz x 2 pk (32 oz)') (_C 'lb')).unit_price 8.735 0.001
+  # THE OPPOSITE DIRECTION, and why the arithmetic decides rather than the bracket: "6 pk (12 fl oz)"
+  # names a PER-ITEM size, so its total is 72 fl oz, not 12. Nothing in the string multiplies to 12, so
+  # the bracket is not taken. A blanket "trailing bracket wins" rule would price this six-pack as one can.
+  _Near 'bracketed PER-ITEM size stays a pack' (Get-UnitPrice (_D '$5.99' 'Sparkling Water 6 pk' $null '6 pk (12 fl oz)') (_C 'floz')).unit_price 0.0832 0.001
   # the times-sign twin, built from [char]0x00D7 so this file never carries the literal. MUST-FIRE:
   # the 2026-07-30 batch shipped the times branch as a literal while this file was BOM-less and read
   # as ANSI - two mojibake chars that can never match a real U+00D7 - and every suite stayed green
