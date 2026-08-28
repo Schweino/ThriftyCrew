@@ -800,10 +800,20 @@ if ($runSkipShared) {
   $dr = Receive-Job -Job $dryJob -Wait -AutoRemoveJob
   $nulls = Get-DryRunNullIds $dr.lines
   $dryOk = ([int]$dr.rc -eq 0 -and $nulls -eq 0)
+  # THE PROBE'S OWN OUTPUT, when it fails. This check said only "could not look" and threw the
+  # child's output away, so on waves 3, 6 and 8 two separate auditors had to re-run update-recipes-db
+  # by hand to find out why - and BOTH then mis-diagnosed it, reporting that the probe invokes the
+  # script bare and it wants <RunDir>\specs-ready.txt. It does not: this call passes -SpecList, and
+  # update-recipes-db line 112 takes $SpecList verbatim and never consults specs-ready.txt. The real
+  # rc-1 cause is still unknown, because it only appears when there are rows to BUILD (once the slugs
+  # are already in recipes-db the script short-circuits with "nothing to add" and exits 0), and by
+  # the time anyone looks the wave has published. So the tail rides on the finding: the next
+  # occurrence will name its own cause instead of costing a re-run and earning a wrong answer.
+  $dryTail = @($dr.lines | Where-Object { $_.Trim() } | Select-Object -Last 4)
   $sharedChecks.Add((New-Check 'recipes-db-dryrun' $dryOk ([ordered]@{ rc = [int]$dr.rc; null_item_ids = $nulls }) `
     $(if ($dryOk) { 'update-recipes-db -DryRun builds every row with an item_id on all of them' }
-      elseif ($nulls -lt 0) { 'update-recipes-db -DryRun never printed its item_id source line, so the null-id count could not be read. Could-not-look is not a clean bill.' }
-      else { ("update-recipes-db -DryRun: rc {0}, {1} row(s) with a null item_id - the grocery merge cannot join those" -f $dr.rc, $nulls) })))
+      elseif ($nulls -lt 0) { 'update-recipes-db -DryRun never printed its item_id source line, so the null-id count could not be read. Could-not-look is not a clean bill. Its own last lines: ' + (($dryTail -join ' // ')) }
+      else { ("update-recipes-db -DryRun: rc {0}, {1} row(s) with a null item_id - the grocery merge cannot join those. Tail: {2}" -f $dr.rc, $nulls, ($dryTail -join ' // ')) })))
 
   # ---- P8: the serveability probes ----------------------------------------------------------------
   $tplPath = Join-Path $here 'tpl2-scaler-prefix.html'
