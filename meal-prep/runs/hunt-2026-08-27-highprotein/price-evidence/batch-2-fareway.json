@@ -1,77 +1,134 @@
 {
  "store": "Fareway",
  "store_key": "fareway",
- "generated": "2026-08-27T18:30:02",
+ "generated": "2026-08-28T06:58:56",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "dried parsley",
+   "term": "romaine lettuce",
    "state": "MATCHES",
-   "term_used": "dried parsley",
+   "term_used": "romaine lettuce",
    "attempts": [
     {
-     "term": "dried parsley",
+     "term": "romaine lettuce",
      "state": "OK",
-     "hits": 41
+     "hits": 6
     }
    ],
    "hits": [
     {
-     "item": "McCormick Parsley Flakes",
-     "price": 1.99,
-     "size": "0.25 oz",
+     "item": "Dole Fresh Romaine Hearts - 3 CT",
+     "price": 3.88,
+     "size": "3 ct",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16656192-mccormick-parsley-flakes-0-25-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/145651-dole-fresh-romaine-hearts-3-ct-3-0-ct"
     },
     {
-     "item": "Badia Spices Parsley Flakes",
+     "item": "Dole Hearts of Romaine",
      "price": 3.99,
-     "size": "1 g",
+     "size": "9 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/258008-badia-spices-parsley-flakes-1-0-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41760-dole-hearts-of-romaine-9-oz"
     },
     {
-     "item": "Litehouse Parsley, Freeze Dried",
-     "price": 4.99,
-     "size": "0.3 oz",
+     "item": "Revol Greens Romaine Crunch",
+     "price": 3.99,
+     "size": "4 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/9222-litehouse-freeze-dried-parsley-0-35-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22328673-revol-greens-romaine-crunch-4-5-oz"
     },
     {
-     "item": "Badia Spices Parsley Flakes",
-     "price": 7.99,
-     "size": "3 oz",
+     "item": "Dole Classic Romaine",
+     "price": 3.49,
+     "size": "9 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/74379214-badia-parsley-flakes"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41740-dole-classic-romaine-9-oz"
     },
     {
-     "item": "Litehouse Freeze Dried Basil",
-     "price": 4.99,
-     "size": "0.28 oz",
+     "item": "Dole Premium Romaine",
+     "price": 3.99,
+     "size": "9.5 oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/151621-litehouse-freeze-dried-basil-0-35-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16325212-dole-romaine-premium-9-5-oz"
     },
     {
-     "item": "Truefood Basil",
-     "price": 5.99,
+     "item": "Iceberg Lettuce",
+     "price": 1.77,
      "size": "1 each",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/27842551-truefood-basil-1-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17680402-dole-iceberg-lettuce-1-ea"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "sriracha",
+   "state": "MATCHES",
+   "term_used": "sriracha",
+   "attempts": [
+    {
+     "term": "sriracha",
+     "state": "OK",
+     "hits": 53
+    }
+   ],
+   "hits": [
+    {
+     "item": "Huy Fong Foods Hot Sriracha Chili Sauce",
+     "price": 6.98,
+     "size": "28 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410469-huy-fong-hot-sriracha-chili-sauce-28-oz"
     },
     {
-     "item": "Baby Dill",
+     "item": "Tabasco Sriracha Sauce",
+     "price": 4.99,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676652-tabasco-sriracha-sauce-566-0-g"
+    },
+    {
+     "item": "Yellowbird Classic Blue Agave Sriracha",
+     "price": 5.99,
+     "size": "9.8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17445098-yellowbird-sauce-blue-agave-sriracha-condiment-9-8-oz"
+    },
+    {
+     "item": "Lee Kum Kee Sriracha Mayo",
+     "price": 5.99,
+     "size": "15 fl oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/254906-lee-kum-kee-spread-and-dressing-sriracha-mayo-15-oz"
+    },
+    {
+     "item": "Huy Fong Foods Hot Chili Sauce",
+     "price": 5.49,
+     "size": "17 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35512-huy-fong-chili-sauce-hot-sriracha-17-oz"
+    },
+    {
+     "item": "CHOLULA Original Hot Sauce",
      "price": 3.99,
-     "size": "1 bunch",
+     "size": "5 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16345991-baby-dill-each"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25334-cholula-original-hot-sauce-5-fl-oz"
     },
     {
-     "item": "Crazy Fresh Baby Dill Herb",
-     "price": 2.99,
-     "size": "0.75 oz",
+     "item": "Kewpie Mayonnaise",
+     "price": 5.79,
+     "size": "12 fl oz",
      "relevance": null,
-     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/1169680-crazy-fresh-baby-dill-herb-75-oz"
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16474600-kewpie-mayonnaise-12-oz"
+    },
+    {
+     "item": "Heinz Tomato Ketchup",
+     "price": 2.5,
+     "size": "20 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/103084-heinz-tomato-ketchup-20-oz"
     }
    ],
    "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."

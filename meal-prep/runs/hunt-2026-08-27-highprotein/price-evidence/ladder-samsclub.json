@@ -1,0 +1,151 @@
+{
+ "store": "Sam's Club",
+ "store_key": "samsclub",
+ "generated": "2026-08-28T06:55:57",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "ras el hanout",
+   "state": "MATCHES",
+   "term_used": "ras el hanout",
+   "attempts": [
+    {
+     "term": "ras el hanout",
+     "state": "MATCHES",
+     "hits": 6
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark No Antibiotics Ever Rotisserie Seasoned Chicken Breast, Sliced, 1 lb. 6 oz.",
+     "price": 9.57,
+     "size": "",
+     "unit_price": "$6.96/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6ZLFIIYVJSHV"
+    },
+    {
+     "item": "Member's Mark Fully Cooked Canadian Bacon, 24 oz.",
+     "price": 9.72,
+     "size": "",
+     "unit_price": "$0.41/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/19419RRU7UMF"
+    },
+    {
+     "item": "Miracle Whip Original Mayo-like Dressing, 1 gal.",
+     "price": 14.24,
+     "size": "",
+     "unit_price": "$0.11/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/55OXD5X91ECO"
+    },
+    {
+     "item": "French's 100% Natural Classic Yellow Mustard, 30 oz., 2 pk.",
+     "price": 5.48,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/67I7U5OZ8MLK"
+    },
+    {
+     "item": "Smash Kitchen USDA Organic Yellow Mustard, 20 oz., 2 pk.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5BPW7KAGSMJO"
+    },
+    {
+     "item": "Smash Kitchen USDA Organic Real Mayonnaise, 32 oz. Jar",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.28/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3IYF8NMJDRPX"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "moroccan seasoning",
+   "state": "MATCHES",
+   "term_used": "moroccan seasoning",
+   "attempts": [
+    {
+     "term": "moroccan seasoning",
+     "state": "MATCHES",
+     "hits": 19
+    }
+   ],
+   "hits": [
+    {
+     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+     "price": 4.98,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+    },
+    {
+     "item": "Member’s Mark Taco Seasoning, 23 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.26/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2Z6S0T7JV2I8"
+    },
+    {
+     "item": "Member’s Mark Italian Seasoning, 6 oz.",
+     "price": 6.88,
+     "size": "",
+     "unit_price": "$1.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4H0TWMS6PB2R"
+    },
+    {
+     "item": "Weber Chicago Steak Seasoning, 28 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.36/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/61L614F29AFN"
+    },
+    {
+     "item": "Badia Complete Seasoning, 28 oz.",
+     "price": 6.38,
+     "size": "",
+     "unit_price": "$0.23/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/1G4Z7Y5LKVMO"
+    },
+    {
+     "item": "Member's Mark Granulated Garlic, 26 oz.",
+     "price": 9.28,
+     "size": "",
+     "unit_price": "$0.36/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/2O9B1XVL2QNZ"
+    },
+    {
+     "item": "Tony Chachere's Original Creole Seasoning 32 oz.",
+     "price": 5.33,
+     "size": "",
+     "unit_price": "$0.17/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/28IH2CV52GST"
+    },
+    {
+     "item": "Kinder's Grilled Chicken Seasoning 9.2 oz.",
+     "price": 5.98,
+     "size": "",
+     "unit_price": "$0.65/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/3UIQJ89Y67FP"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  }
+ ]
+}

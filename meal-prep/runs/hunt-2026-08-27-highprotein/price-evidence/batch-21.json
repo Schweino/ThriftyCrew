@@ -1,0 +1,638 @@
+{
+ "schema": "price-evidence/1",
+ "run": "hunt-2026-08-27-highprotein",
+ "batch": 2,
+ "generated": "2026-08-28T06:58:56",
+ "batch_terms": [
+  "romaine lettuce",
+  "sriracha"
+ ],
+ "roster": [
+  "Baker's",
+  "Family Fare",
+  "Hy-Vee",
+  "Aldi",
+  "Fareway",
+  "Sam's Club",
+  "Walmart"
+ ],
+ "findings": [],
+ "terms": [
+  {
+   "term": "romaine lettuce",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "romaine lettuce",
+     "attempts": [
+      {
+       "term": "romaine lettuce",
+       "state": "OK",
+       "hits": 13
+      }
+     ],
+     "hits": [
+      {
+       "item": "Romaine Lettuce",
+       "price": 2.79,
+       "size": "1 ct",
+       "relevance": 136,
+       "url": "https://www.bakersplus.com/p/0000000004640"
+      },
+      {
+       "item": "Organic Romaine Lettuce",
+       "price": 3.69,
+       "size": "1 ct",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0000000094640"
+      },
+      {
+       "item": "Kroger® Shredded Romaine Lettuce",
+       "price": 2.69,
+       "size": "6.5 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111062468"
+      },
+      {
+       "item": "Kroger® Hearts of Romaine Lettuce",
+       "price": 3.79,
+       "size": "9 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111062732"
+      },
+      {
+       "item": "Kroger® Romaine Lettuce Hearts",
+       "price": 4.79,
+       "size": "18 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111091629"
+      },
+      {
+       "item": "Dole Chopped Salad Romaine Lettuce",
+       "price": 4.89,
+       "size": "32 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0007143000951"
+      },
+      {
+       "item": "Private Selection® Artisan Romaine Lettuce",
+       "price": 2.99,
+       "size": "2 ct",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111060336"
+      },
+      {
+       "item": "Kroger® Romaine Lettuce Blend Salad Mix",
+       "price": 3.79,
+       "size": "10 oz",
+       "relevance": 130,
+       "url": "https://www.bakersplus.com/p/0001111091038"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "romaine lettuce",
+     "attempts": [
+      {
+       "term": "romaine lettuce",
+       "state": "OK",
+       "hits": 4
+      }
+     ],
+     "hits": [
+      {
+       "item": "Romaine Lettuce",
+       "price": 2.99,
+       "size": "lb",
+       "relevance": 136,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/romaine_lettuce/p/2311643"
+      },
+      {
+       "item": "Tanimura & Antle Lettuce, Artisan Romaine 2 Ea",
+       "price": 3.99,
+       "size": "2 ea",
+       "relevance": 88,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/tanimura_antle_lettuce_artisan_romaine_2_ea/p/3078191"
+      },
+      {
+       "item": "Ocean Mist Farms Romaine Hearts   3 Ct",
+       "price": 4.99,
+       "size": "22 oz",
+       "relevance": 40,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/ocean_mist_farms_romaine_hearts_3_ct/p/112424"
+      },
+      {
+       "item": "Fresh Express Romaine, Classic Chopped 32 Oz",
+       "price": 7.99,
+       "size": "32 oz",
+       "relevance": 39,
+       "url": "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/fresh_express_romaine_classic_chopped_32_oz/p/579902"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "romaine lettuce",
+     "attempts": [
+      {
+       "term": "romaine lettuce",
+       "state": "OK",
+       "hits": 6
+      }
+     ],
+     "hits": [
+      {
+       "item": "Dole Fresh Romaine Hearts - 3 CT",
+       "price": 3.88,
+       "size": "3 ct",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/145651-dole-fresh-romaine-hearts-3-ct-3-0-ct"
+      },
+      {
+       "item": "Dole Hearts of Romaine",
+       "price": 3.99,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41760-dole-hearts-of-romaine-9-oz"
+      },
+      {
+       "item": "Revol Greens Romaine Crunch",
+       "price": 3.99,
+       "size": "4 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22328673-revol-greens-romaine-crunch-4-5-oz"
+      },
+      {
+       "item": "Dole Classic Romaine",
+       "price": 3.49,
+       "size": "9 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/41740-dole-classic-romaine-9-oz"
+      },
+      {
+       "item": "Dole Premium Romaine",
+       "price": 3.99,
+       "size": "9.5 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16325212-dole-romaine-premium-9-5-oz"
+      },
+      {
+       "item": "Iceberg Lettuce",
+       "price": 1.77,
+       "size": "1 each",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17680402-dole-iceberg-lettuce-1-ea"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "romaine lettuce",
+     "attempts": [
+      {
+       "term": "romaine lettuce",
+       "state": "MATCHES",
+       "hits": 17
+      }
+     ],
+     "hits": [
+      {
+       "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+       "price": 2.97,
+       "size": "",
+       "unit_price": "$0.25/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/51UHB4PTHYY8"
+      },
+      {
+       "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+       "price": 6.97,
+       "size": "",
+       "unit_price": "$4.65/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
+      },
+      {
+       "item": "Romaine Hearts, 6 ct.",
+       "price": 4.67,
+       "size": "",
+       "unit_price": "$0.78/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2LV333GNDZWB"
+      },
+      {
+       "item": "Iceberg Lettuce, 2 heads",
+       "price": 2.46,
+       "size": "",
+       "unit_price": "$1.23/ea",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1YYGJI1X4AJ5"
+      },
+      {
+       "item": "Organic Baby Bella Mushroom 24 oz.",
+       "price": 4.97,
+       "size": "",
+       "unit_price": "$0.21/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4OX5KB1U5MVC"
+      },
+      {
+       "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+       "price": 4.92,
+       "size": "",
+       "unit_price": "$2.46/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
+      },
+      {
+       "item": "Organic Tender Sweet Carrots, 5 lbs.",
+       "price": 4.56,
+       "size": "",
+       "unit_price": "$0.91/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/1L0R87CJG8TJ"
+      },
+      {
+       "item": "Russet Potatoes, 10 lbs.",
+       "price": 5.22,
+       "size": "",
+       "unit_price": "$0.52/lb",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  },
+  {
+   "term": "sriracha",
+   "unit": "",
+   "stores": [
+    {
+     "store": "Baker's",
+     "state": "MATCHES",
+     "term_used": "sriracha",
+     "attempts": [
+      {
+       "term": "sriracha",
+       "state": "OK",
+       "hits": 23
+      }
+     ],
+     "hits": [
+      {
+       "item": "Kroger® Sriracha Sauce",
+       "price": 3.99,
+       "size": "17 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0001111087588"
+      },
+      {
+       "item": "Texas Pete® CHA! Sriracha",
+       "price": 4.99,
+       "size": "18 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0007550000520"
+      },
+      {
+       "item": "Murray's Sriracha Dolmas",
+       "price": 6.99,
+       "size": "10.9 oz",
+       "relevance": 134,
+       "url": "https://www.bakersplus.com/p/0081794401372"
+      },
+      {
+       "item": "Melinda's® Sriracha Hot Sauce",
+       "price": 4.99,
+       "size": "12 fl oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0085000311307"
+      },
+      {
+       "item": "OX Sriracha Hot Chili Sauce",
+       "price": 5.49,
+       "size": "18.25 oz",
+       "relevance": 133,
+       "url": "https://www.bakersplus.com/p/0885108128300"
+      },
+      {
+       "item": "Lantana® Sriracha Carrot Hummus",
+       "price": null,
+       "size": "10 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0085543200426"
+      },
+      {
+       "item": "Hapi® Snacks Spicy Sriracha Peas",
+       "price": 2.39,
+       "size": "4.23 oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001115222613"
+      },
+      {
+       "item": "Kroger® Sriracha Ranch Dressing",
+       "price": 2.79,
+       "size": "16 fl oz",
+       "relevance": 132,
+       "url": "https://www.bakersplus.com/p/0001111003637"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Family Fare",
+     "state": "MATCHES",
+     "term_used": "sriracha",
+     "attempts": [
+      {
+       "term": "sriracha",
+       "state": "OK",
+       "hits": 11
+      }
+     ],
+     "hits": [
+      {
+       "item": "Tabasco Sauce, Sriracha 20 Oz",
+       "price": 6.99,
+       "size": "20 oz",
+       "relevance": 133,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/tabasco_sauce_sriracha_20_oz/p/2047901"
+      },
+      {
+       "item": "Sky Valley Sriracha Sauce 14 Oz",
+       "price": 4.99,
+       "size": "14 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/sky_valley_sriracha_sauce_14_oz/p/1564405684711321728"
+      },
+      {
+       "item": "Tabasco Sriracha Hot Sauce 11 Oz",
+       "price": 5.39,
+       "size": "11 oz",
+       "relevance": 132,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/tabasco_sriracha_hot_sauce_11_oz/p/1564405684714148253"
+      },
+      {
+       "item": "Tuong Ot Sriracha Hot Chili Sauce 17 Oz",
+       "price": 5.99,
+       "size": "17 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/tuong_ot_sriracha_hot_chili_sauce_17_oz/p/19740"
+      },
+      {
+       "item": "Huy Fong Hot Sriracha Chili Sauce 28 Oz",
+       "price": 6.99,
+       "size": "28 oz",
+       "relevance": 130,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/huy_fong_hot_sriracha_chili_sauce_28_oz/p/2501512"
+      },
+      {
+       "item": "Doritos Golden Sriracha Tortilla Chips 9.25 Oz",
+       "price": 3.49,
+       "size": "9.25 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/doritos_golden_sriracha_tortilla_chips_9_25_oz/p/1564405684716371067"
+      },
+      {
+       "item": "Chick Fil A Sweet & Spicy Sriracha Sauce 16 Fl Oz",
+       "price": 5.99,
+       "size": "16 fl oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/chick_fil_a_sweet_spicy_sriracha_sauce_16_fl_oz/p/1564405684713582364"
+      },
+      {
+       "item": "Yellowbird Mellow Hot Blue Agave Sriracha 9.8 Oz",
+       "price": 6.99,
+       "size": "9.8 oz",
+       "relevance": 128,
+       "url": "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/yellowbird_mellow_hot_blue_agave_sriracha_9_8_oz/p/1564405684689267717"
+      }
+     ],
+     "reason": "",
+     "tier": "server"
+    },
+    {
+     "store": "Hy-Vee",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "no pre-pass tier covers this store - Hy-Vee has no driver lane (its puller is a refresh, not a search), so a new term is the pricer's own browser tab",
+     "tier": "pricer-tab"
+    },
+    {
+     "store": "Aldi",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    },
+    {
+     "store": "Fareway",
+     "state": "MATCHES",
+     "term_used": "sriracha",
+     "attempts": [
+      {
+       "term": "sriracha",
+       "state": "OK",
+       "hits": 53
+      }
+     ],
+     "hits": [
+      {
+       "item": "Huy Fong Foods Hot Sriracha Chili Sauce",
+       "price": 6.98,
+       "size": "28 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16410469-huy-fong-hot-sriracha-chili-sauce-28-oz"
+      },
+      {
+       "item": "Tabasco Sriracha Sauce",
+       "price": 4.99,
+       "size": "20 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/2676652-tabasco-sriracha-sauce-566-0-g"
+      },
+      {
+       "item": "Yellowbird Classic Blue Agave Sriracha",
+       "price": 5.99,
+       "size": "9.8 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17445098-yellowbird-sauce-blue-agave-sriracha-condiment-9-8-oz"
+      },
+      {
+       "item": "Lee Kum Kee Sriracha Mayo",
+       "price": 5.99,
+       "size": "15 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/254906-lee-kum-kee-spread-and-dressing-sriracha-mayo-15-oz"
+      },
+      {
+       "item": "Huy Fong Foods Hot Chili Sauce",
+       "price": 5.49,
+       "size": "17 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35512-huy-fong-chili-sauce-hot-sriracha-17-oz"
+      },
+      {
+       "item": "CHOLULA Original Hot Sauce",
+       "price": 3.99,
+       "size": "5 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/25334-cholula-original-hot-sauce-5-fl-oz"
+      },
+      {
+       "item": "Kewpie Mayonnaise",
+       "price": 5.79,
+       "size": "12 fl oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16474600-kewpie-mayonnaise-12-oz"
+      },
+      {
+       "item": "Heinz Tomato Ketchup",
+       "price": 2.5,
+       "size": "20 oz",
+       "relevance": null,
+       "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/103084-heinz-tomato-ketchup-20-oz"
+      }
+     ],
+     "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate.",
+     "tier": "driver"
+    },
+    {
+     "store": "Sam's Club",
+     "state": "MATCHES",
+     "term_used": "sriracha",
+     "attempts": [
+      {
+       "term": "sriracha",
+       "state": "MATCHES",
+       "hits": 20
+      }
+     ],
+     "hits": [
+      {
+       "item": "Member's Mark Italian Basil Pesto, 22 oz.",
+       "price": 8.58,
+       "size": "",
+       "unit_price": "$0.39/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/6FLADUR7OH6P"
+      },
+      {
+       "item": "Chef-mate Country Sausage Gravy, 105 oz.",
+       "price": 9.58,
+       "size": "",
+       "unit_price": "$0.09/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/54GU3TPM4YPS"
+      },
+      {
+       "item": "Huy Fong Sriracha Sauce, 28 oz., 2 pk.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.16/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/2HO9ZKI68FJC"
+      },
+      {
+       "item": "Yellowbird Blue Agave Sriracha, 19.6 oz.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.46/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/5AVA01F864WZ"
+      },
+      {
+       "item": "Sonny's BBQ Sweet BBQ Sauce, 84 oz.",
+       "price": 9.98,
+       "size": "",
+       "unit_price": "$0.12/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/205WATYF73VJ"
+      },
+      {
+       "item": "Rao's Homemade Marinara Sauce, 22 oz., 2 pk.",
+       "price": 7.76,
+       "size": "",
+       "unit_price": "$0.18/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4P0AL8KH8MXL"
+      },
+      {
+       "item": "Prego Italian Flavored Meat Sauce, 45 oz., 3 pk.",
+       "price": 8.98,
+       "size": "",
+       "unit_price": "$0.07/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/37YRAI9ULYAX"
+      },
+      {
+       "item": "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+       "price": 6.54,
+       "size": "",
+       "unit_price": "$0.15/oz",
+       "relevance": null,
+       "url": "https://www.samsclub.com/p/-/4NVYRII7HK4Z"
+      }
+     ],
+     "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+     "tier": "driver"
+    },
+    {
+     "store": "Walmart",
+     "state": "UNUSABLE",
+     "term_used": "",
+     "attempts": [],
+     "hits": [],
+     "reason": "attended lane - this store answers Brad's own Chrome and not an automated one, so it is only checkable while he is present",
+     "tier": "attended"
+    }
+   ]
+  }
+ ]
+}

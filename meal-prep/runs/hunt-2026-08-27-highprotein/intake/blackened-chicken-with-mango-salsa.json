@@ -2,7 +2,7 @@
  "name": "Blackened Chicken with Mango Salsa",
  "slug": "blackened-chicken-with-mango-salsa",
  "protein": "chicken",
- "cuisine": "Caribbean-Cajun",
+ "cuisine": "Tex-Mex",
  "source_url": "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
  "visibility": "paid",
  "ingredients": [
@@ -69,49 +69,50 @@
   "fat_g": 22.2
  },
  "writer_notes": [
-  "Source's 12th ingredient, Primal Kitchen Avocado Lime Dipping Sauce, is NOT in the 11 costed/locked lines. It was the optional 'if using' garnish and was dropped from the build. I omitted it from all prose and steps because nothing bought it, and added it to forbidden_prose_terms.",
-  "Source listed '1/2 Fresh Lime or Orange Juiced'; build resolved to Lime Juice only (3.5 tbsp, about 2 limes). I wrote lime only to match the costed list.",
-  "Olive Oil is 'divided' in the locked view (7 tbsp): prose splits it as ~1 tbsp into the salsa and the remainder to sear the chicken, matching the source's 1 tbsp/1 tbsp split scaled up.",
-  "Macros cited via {{cal}} and {{protein}} tokens; the only dollar figure is the ${{cost_ps}} token plus the $1/month membership line. No cost_lines were supplied, so shop_smart makes no per-ounce or per-package price claims, only quantity guidance from the locked buy strings.",
-  "All 11 locked ingredients (mango, cilantro, avocado, red onion, salt, black pepper, olive oil, lime juice, chicken breast, blackened seasoning, frozen cilantro lime rice) are each used by a step. No step uses anything not on the list."
+  "Olive oil is a DIVIDED buy (7 tbsp): I split it in prose, roughly 3 1/2 tbsp into the salsa and the remainder into the skillet, so the full purchased quantity is used across two steps.",
+  "The source transcription lists a 12th ingredient, Primal Kitchen Avocado Lime Dipping Sauce, as an optional 'if using' garnish. It is NOT in the 11 locked buy lines, so I deliberately kept it out of the method and shop_smart and added it to forbidden_prose_terms - no step may use an ingredient nobody purchased. If the intent is to sell it, it needs a buy line added upstream; I left the recipe as shopped.",
+  "All 11 locked ingredients are used by a step; no step uses anything off the buy list.",
+  "Macros used in prose (620 cal, 43.6 g protein, 61.9 g carbs, 22.2 g fat) are verbatim from the locked view and satisfy this run's band (450-800 cal, protein >= 40).",
+  "No cost_lines were provided in this dispatch, so shop_smart makes no per-ounce or per-package cost claims; cost appears only as the ${{cost_ps}} token plus the $1/month membership line.",
+  "Scaling from the source (~3.5x) is internally consistent and quantities are plausible for 14 servings; no data flags."
  ],
  "forbidden_prose_terms": [
   "Primal Kitchen",
   "Avocado Lime Dipping Sauce",
-  "dipping sauce",
-  "orange juice",
   "seafood",
+  "shrimp",
+  "fish",
   "—",
   "–"
  ],
  "prose": {
-  "intro_html": "<p>Blackened chicken with mango salsa is proof that eating like you are on vacation and eating like you have a budget are not enemies. You get a fast, peppery sear on chicken breast, a bright mango and avocado salsa that does the heavy lifting on flavor, and a bed of cilantro lime rice underneath to make it a real meal. No fussy technique, no ingredient you have to hunt down at three stores.</p><p>Here is the part I like. One serving lands at {{cal}} calories with {{protein}} grams of protein, and the carbs come from an honest bowl of rice, not from a sauce doing math tricks. That is a dinner that feeds you, keeps you full, and does not wreck the grocery bill. We are scaling it to 14 containers, so you cook once and eat all week.</p>",
-  "shop_smart": "<p>This one is friendly to shop for because almost everything is whole produce and one freezer item. Here is how I fill the cart for 14 servings:</p><ul><li><strong>Mangoes and avocados:</strong> you want about 3 1/2 large mangoes and 3 1/2 large avocados. Buy them a touch firm a few days out and let them ripen on the counter so they are ready on prep day, not mush.</li><li><strong>Cilantro:</strong> plan on about 3 1/2 bunches (roughly 7 oz once chopped). Fresh, not dried, this is the whole personality of the salsa.</li><li><strong>Red onion and limes:</strong> a couple of medium red onions covers the 1 3/4 you need, and 2 limes gets you the 3 1/2 tablespoons of juice for the salsa.</li><li><strong>Chicken breast:</strong> 5 1/4 lb of boneless skinless breast. Buy the big family pack and dice it yourself at home instead of paying for pre-cut.</li><li><strong>Frozen cilantro lime rice:</strong> grab seven 10 oz bags. The freezer aisle version cooks in minutes and keeps this a weeknight job.</li><li><strong>Blackened seasoning and oil:</strong> 6 tablespoons of blackened seasoning and 7 tablespoons of olive or avocado oil, which we divide between the salsa and the searing.</li></ul>",
-  "make_it": "<p><strong>1. Make the mango salsa.</strong> Dice the mangoes and avocados, chop the cilantro, and mince the red onion. Add them all to a large bowl. Hit it with a pinch of salt and pepper, pour in a tablespoon of the oil and the fresh lime juice, and toss until everything is coated and combined. Taste it and adjust the salt.</p><p><strong>2. Season the chicken.</strong> Dice the chicken breast into 1 inch cubes. Add the blackened seasoning and toss until every piece is well coated.</p><p><strong>3. Sear the chicken.</strong> Heat the rest of the oil in a large cast iron skillet over medium-high. When it is hot, add the chicken in batches so you do not crowd the pan. Cook about 3 minutes per side, until it is no longer pink in the center and reaches an internal temperature of 165 F. Let it rest while you finish the rice.</p><p><strong>4. Make the cilantro lime rice.</strong> Cook the frozen cilantro lime rice bags according to the package directions. That is the whole job here.</p><p><strong>5. Build the bowls.</strong> Lay down a bed of rice, top with the blackened chicken, and spoon the mango salsa over the top. Divide across your containers and you are done.</p>",
-  "portion_html": "<p>Do not eyeball this. Cook everything, then portion by weight so all 14 containers come out even. Add up the cooked rice, the rested chicken, and the salsa, weigh the total, and divide by 14. That number is your per-container weight. Scoop rice first, then chicken, then a spoon of salsa on top, and check each one against the scale as you go. Even portions mean every serving actually hits {{cal}} calories and {{protein}} grams of protein, not just the first three off the top.</p><p>Keep the salsa portioned right on top and these hold well in the fridge through the week.</p>",
-  "cost_closing_html": "<p>Here is what makes this a keeper. Real chicken breast, real produce, and a bright salsa, and it still comes out to ${{cost_ps}} per serving. That is the whole point of cooking once and portioning fourteen ways: you buy the family pack, you use every bit of it, and the price per dinner drops through the floor. Compare that to what a single takeout bowl with the same ingredients would run you.</p>",
-  "upsell_html": "<p>If a plan like this is your speed, that is exactly what Thrifty Crew is built for. Membership is a dollar a month, and it pays for itself before you finish your first batch. Come cook with the crew.</p>"
+  "intro_html": "<p>Blackened chicken with mango salsa is the kind of dinner that looks like a twenty dollar patio plate and actually costs you a rounding error. Spice-crusted chicken breast, a fresh salsa of mango, avocado, cilantro and red onion, all sitting on a bed of cilantro lime rice. Fourteen containers out of one cook.</p><p>The numbers do the talking. Every serving lands at 620 calories with 43.6 grams of protein, 61.9 grams of carbs and 22.2 grams of fat, and it comes in at ${{cost_ps}} a serving. Sweet mango against smoky blackening seasoning is a combination that keeps you eating clean because it never tastes like eating clean.</p>",
+  "shop_smart": "<p>Here is how to shop this one without overthinking it.</p><ul><li>You need 3 1/2 large mangoes, ripe but not mushy. A ripe mango gives a little when you press near the stem and smells sweet at that end. If the store only has hard ones, buy a few days early and let them sit on the counter.</li><li>Grab 3 1/2 large avocados. Buy them at a mix of ripeness so they are not all rock hard on cook day. They get diced into the salsa, so slightly firm beats overripe.</li><li>The rice is the shortcut: seven 10 oz bags of frozen cilantro lime rice, about 14 cups prepared. Frozen packets cook in minutes and keep the labor down on a 14-serving batch.</li><li>Chicken breast is the anchor at 5 1/4 lb, so reach for the big family pack of boneless skinless breast.</li><li>You need 3 1/2 bunches of fresh cilantro, about 7 oz, and a couple of red onions for the 1 1/4 cups minced. Round up on cilantro, it wilts fast and you would rather have extra.</li></ul>",
+  "make_it": "<p>Start with the salsa so the flavors can mingle while you cook. Dice 3 1/2 large mangoes, dice 3 1/2 large avocados, chop your 3 1/2 bunches of cilantro and mince the red onion down to about 1 1/4 cups. Pile it all into a big bowl.</p><p>Season the salsa with salt and pepper to taste, then add about 3 1/2 tablespoons of the olive oil and the 3 1/2 tablespoons of fresh lime juice. That oil is divided, so hold the rest back for the skillet. Toss until it is well combined and set it aside.</p><p>Now the chicken. Dice 5 1/4 lb of boneless skinless chicken breast into 1 inch cubes. Add the 6 tablespoons of blackened seasoning and toss until every piece is coated.</p><p>Heat the rest of your olive oil in a large cast iron skillet over medium-high heat. Work in batches so you do not crowd the pan, and cook the chicken about 3 minutes per side until it is no longer pink in the center and reaches an internal temperature of 165 F. Then let it rest.</p><p>Cook the frozen cilantro lime rice, all seven 10 oz bags, right on the package instructions. That comes out to about 14 cups prepared.</p><p>Assemble: a bed of cilantro lime rice, blackened chicken on top, and a good spoon of mango salsa to finish. Sit down at the table and enjoy it.</p>",
+  "portion_html": "<p>Fourteen containers, and the honest way to split them even is to weigh, not eyeball. Zero out your scale under an empty container, weigh the full pot of rice and divide by 14 so every box gets the same base. Do the same with the chicken. The salsa goes on last, a heaping spoon per box, or keep it in small side cups if you are storing these more than a day or two so the avocado stays fresh.</p><p>Each container comes out to 620 calories, 43.6 grams of protein, 61.9 grams of carbs and 22.2 grams of fat. That is your dinner sorted for two weeks of workdays.</p>",
+  "cost_closing_html": "<p>This is the whole point of cooking in bulk. Blackened chicken with mango salsa over cilantro lime rice runs ${{cost_ps}} a serving, and you built fourteen of them in one session. Set that next to a single fast-casual bowl and the math is not close.</p>",
+  "upsell_html": "<p>Every recipe on Thrifty Crew is built like this one: real macros, real prices, no guesswork. Membership is a dollar a month, less than the tip on the meal you were about to order out. Come cook the rest of the menu with us.</p>"
  },
  "head": {
-  "description": "Blackened chicken with fresh mango avocado salsa over cilantro lime rice. A budget high-protein meal prep dinner scaled to 14 servings, 43 g protein each.",
-  "keywords": "blackened chicken, mango salsa, meal prep, high protein dinner, cilantro lime rice, budget meal prep, chicken breast recipe, mango avocado salsa",
+  "description": "Meal prep blackened chicken with fresh mango salsa over cilantro lime rice. Fourteen high-protein servings at 620 calories and 43.6 g protein each, built for a budget.",
+  "keywords": "blackened chicken, mango salsa, meal prep, high protein dinner, cilantro lime rice, budget meal prep, chicken breast, 14 servings",
   "image": "",
   "prepTime": "",
   "cookTime": "",
   "totalTime": "",
   "steps": [
-   "Dice the mangoes and avocados, chop the cilantro, and mince the red onion into a large bowl. Season with a pinch of salt and pepper, add a tablespoon of the oil and the fresh lime juice, and toss until well combined.",
-   "Dice the chicken breast into 1 inch cubes, add the blackened seasoning, and toss until every piece is evenly coated.",
-   "Heat the remaining oil in a large cast iron skillet over medium-high. Sear the chicken in batches about 3 minutes per side until it reaches 165 F internal, then let it rest.",
-   "Cook the frozen cilantro lime rice according to the package directions.",
-   "Build each bowl with a bed of rice, the blackened chicken, and a spoon of mango salsa, then divide evenly across all 14 containers by weight."
+   "Make the mango salsa: dice the mangoes and avocados, chop the cilantro, and mince the red onion into a large bowl. Season with salt and pepper, add part of the divided olive oil and the fresh lime juice, and toss to combine. Set aside.",
+   "Dice the chicken breast into 1 inch cubes and toss with the blackened seasoning until every piece is coated.",
+   "Heat the remaining olive oil in a large cast iron skillet over medium-high heat. Cook the chicken in batches about 3 minutes per side until no longer pink in the center and at 165 F internal, then let it rest.",
+   "Cook the frozen cilantro lime rice according to the package instructions.",
+   "Assemble each bowl: cilantro lime rice on the bottom, blackened chicken on top, and mango salsa to finish."
   ],
   "step_names": [
    "Make the mango salsa",
    "Season the chicken",
    "Sear the chicken",
    "Cook the rice",
-   "Assemble and portion"
+   "Assemble the bowls"
   ]
  }
 }

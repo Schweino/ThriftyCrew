@@ -1,0 +1,195 @@
+﻿{
+    "slug":  "sriracha-chicken-tacos",
+    "title":  "Sriracha Chicken Tacos",
+    "source_url":  "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/",
+    "source_servings":  4,
+    "target_servings":  14,
+    "scale_factor":  3.5,
+    "protein":  "chicken",
+    "mapped_by":  "recipe-ingredient-mapper",
+    "assembled_by":  "map-preresolve.ps1 -Assemble",
+    "mapped_at":  "2026-08-28",
+    "conventions":  "buy strings are cook measures (what goes in the pot). Grams are TARGET-scale: the mapper states them where its printed measure quantizes away from the exact scale, and otherwise they are parse-compute\u0027s source-basis weight for that line multiplied by scale_factor exactly once.",
+    "ingredients":  [
+                        {
+                            "source_raw":  "1 1/2 pounds boneless skinless chicken breasts ()",
+                            "item":  "Boneless Skinless Chicken Breast",
+                            "bid":  "chicken-breast",
+                            "board":  "weekly",
+                            "grams":  2381,
+                            "buy":  "5 1/4 lb, trimmed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 680.4 g source basis carried through.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "4 tablespoons Sriracha sauce (divided)",
+                            "item":  "Sriracha",
+                            "bid":  "sriracha",
+                            "board":  null,
+                            "grams":  210,
+                            "buy":  "3/4 cup plus 2 tbsp, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 tbsp sriracha = 15 g (Huy Fong label basis 1 tsp = 5 g); 4 tbsp = 60 g source. Not a form flip: sriracha IS a sauce, so \u0027Sriracha sauce\u0027 is a rename onto the existing vocabulary row Sriracha [sriracha], with no change of product, price class or gram weight. Declined the board\u0027s generic hot-sauce match, which prices Louisiana-style bottles rather than this chili-garlic paste.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 tablespoon + 2 teaspoons honey (divided)",
+                            "item":  "Honey",
+                            "bid":  "honey",
+                            "board":  "recipe",
+                            "grams":  74,
+                            "buy":  "3 1/2 tbsp, divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Buy string follows the pre-resolved 21 g source basis (the qty engine weighed the 1 tbsp only, not the extra 2 tsp); flagged in detail.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 limes (juiced, divided)",
+                            "item":  "limes",
+                            "bid":  "limes",
+                            "board":  null,
+                            "grams":  469,
+                            "buy":  "7 limes, juiced (about 7/8 cup juice), divided",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Whole limes purchased and squeezed, 67 g each, matching the Lime Wedges precedent of weighing whole fruit. Reuse of the live limes id (5 of 7, cheapest 0.25 at Walmart), following the 2026-08-27 \u0027fresh lime juice\u0027 and \u0027Lime Wedges\u0027 rulings that price whole limes squeezed. Named \u0027limes\u0027 to match the food-DB row this batch already carries.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1/2 cup sour cream",
+                            "item":  "Light Sour Cream",
+                            "bid":  "sour-cream",
+                            "board":  "recipe",
+                            "grams":  402,
+                            "buy":  "1 3/4 cups",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 115 g source basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 1/2 tablespoons finely chopped fresh cilantro",
+                            "item":  "Fresh Cilantro",
+                            "bid":  "cilantro",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "1/3 cup finely chopped",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 1.5 g source basis (about 1 g per tbsp chopped).",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1/4 teaspoon salt",
+                            "item":  "Salt",
+                            "bid":  "salt",
+                            "board":  "recipe",
+                            "grams":  5,
+                            "buy":  "scant 1 tsp",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 1.5 g source basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 1/2 tablespoons vegetable oil (if not using a grill)",
+                            "item":  "Vegetable Oil",
+                            "bid":  "vegetable-oil",
+                            "board":  "recipe",
+                            "grams":  74,
+                            "buy":  "1/3 cup, for the skillet",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 21 g source basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "2 cups shredded romaine lettuce",
+                            "item":  "Romaine Lettuce",
+                            "bid":  "lettuce",
+                            "board":  null,
+                            "grams":  329,
+                            "buy":  "7 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "1 cup shredded romaine = 47 g (USDA measure); 2 cups = 94 g source. Refused the board\u0027s generic lettuce id: romaine is variety priced (romaine hearts are a separate SKU well above a head of iceberg), which is the standing red-onion-is-not-onions and cherry-tomatoes-are-not-tomatoes rejection. New id proposed to the registrar; \u0027shredded\u0027 is a cut, not a form flip.",
+                            "grams_from":  "ruling"
+                        },
+                        {
+                            "source_raw":  "1 cup shredded Cheddar cheese",
+                            "item":  "Cheddar Cheese, Shredded",
+                            "bid":  "cheddar-cheese-shredded",
+                            "board":  "recipe",
+                            "grams":  396,
+                            "buy":  "3 1/2 cups shredded",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 113 g source basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "1 avocado (pitted, peeled, and sliced)",
+                            "item":  "Avocado",
+                            "bid":  "avocados",
+                            "board":  "weekly",
+                            "grams":  525,
+                            "buy":  "3 1/2 medium avocados, pitted, peeled and sliced",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Settled line; 150 g source basis.",
+                            "grams_from":  "engine"
+                        },
+                        {
+                            "source_raw":  "8 Corn or flour tortillas (store-bought or homemade, warmed)",
+                            "item":  "Corn Tortillas",
+                            "bid":  "corn-tortillas",
+                            "board":  null,
+                            "grams":  658,
+                            "buy":  "28 corn tortillas, warmed",
+                            "optional":  false,
+                            "decision":  "mapped",
+                            "notes":  "Corn chosen over flour (listed first, and the vocabulary row is Corn Tortillas); 23.5 g each off the Mission label serving of 2 tortillas = 47 g. The source offers a choice and corn is listed first, so the line resolves to the same-form vocabulary row Corn Tortillas [corn-tortillas]; the board carries tortillas at 7 of 7. Corn and flour are different foods at different gram weights, so only one may be priced and weighed.",
+                            "grams_from":  "ruling"
+                        }
+                    ],
+    "pricing_terms_needed":  [
+                                 "romaine lettuce",
+                                 "sriracha"
+                             ],
+    "ruled_substitutions":  [
+
+                            ],
+    "rejected":  [
+
+                 ],
+    "db_entries_written":  [
+
+                           ],
+    "db_row_findings":  [
+                            "sriracha-chicken-tacos: the food DB already carries \u0027Corn Tortillas\u0027 and the mapper\u0027s row DIFFERS on serving_grams, carbs_g. Nothing was written and the existing row stands. On one basis, per 100 g: DB 200.0 cal / 4.0 P / 42.0 C / 2.0 F  vs  mapper 212.8 / 4.3 / 42.6 / 2.1. On one basis (the mapper\u0027s row scaled onto the DB\u0027s 2 tortillas = 50 g) they still disagree: calories 106.4 vs 100. existing={\"serving_grams\": 50, \"carbs_g\": 21} new={\"serving_grams\": 47, \"carbs_g\": 20}"
+                        ],
+    "new_commodity_proposals":  [
+                                    {
+                                        "term":  "shredded romaine lettuce",
+                                        "proposed_bid":  "romaine-lettuce",
+                                        "evidence":  "Romaine is not already priced under another spelling: the pre-resolve board matcher returned only the generic `lettuce` id for this term and no vocabulary row shares a core word with it, and no romaine, cos or \u0027romaine hearts\u0027 spelling surfaced in any near-row list for this batch. It is a genuinely different commodity from `lettuce` (iceberg/head basis) on both price and pack - romaine sells as 3-count hearts or a whole head at a clearly higher shelf price - which is the same variety-pricing distinction the estate already enforces for red onion vs onions and cherry tomatoes vs tomatoes. If a romaine id already exists under another name this is a reuse, not a new mint, and the line should take that id.",
+                                        "declared":  true
+                                    }
+                                ],
+    "registrar_rulings":  [
+                              {
+                                  "proposed_bid":  "romaine-lettuce",
+                                  "verdict":  "alias",
+                                  "bid":  "lettuce",
+                                  "reason":  "The mapper\u0027s central claim - that no romaine spelling exists anywhere in the estate - is false: I read grocery\\commodities.json at the `lettuce` id (line 7557) and its include list is [\u0027\\blettuce\\b\u0027, \u0027\\biceberg\\b\u0027, \u0027\\bromaine\\b\u0027], so romaine heads and hearts are EXPLICITLY claimed by the existing `lettuce` commodity today; the dossier\u0027s own near-row list showed this include truncated at \u0027\\bromai...\u0027. `lettuce` is live-priced at $0.9975/each across 7 stores (crown: Tanimura \u0026 Antle 4-ct at Family Fare), and its excludes (\u0027shredded\u0027, \u0027chopped\u0027, \u0027salad mix\u0027, \u0027kit\u0027, \u0027blend\u0027) confirm the intended purchase for a \u0027shredded romaine lettuce\u0027 recipe line is a whole head/hearts you shred yourself - the same purchase `lettuce` prices. Minting `romaine-lettuce` while `lettuce`\u0027s include claims \\bromaine\\b would put the SAME romaine SKU under two ids with two prices, the exact bread-crumbs/breadcrumbs defect this gate exists to prevent. Follow-up: add `romaine-lettuce -\u003e lettuce` to recipe-floor-id-map.json (units match: each). If Brad later wants the red-onion-style variety split the mapper argues for, that is an estate edit - narrow `lettuce`\u0027s include to drop \\bromaine\\b, then mint - not something this gate can approve while the overlap stands. Separately, on the vocabulary side: the ingredient NAME \u0027shredded romaine lettuce\u0027 has no vocabulary row per the pre-resolve; if a row is minted, FDC 746769 (Lettuce, cos or romaine, raw, Foundation) is the correct macro source - that is a name-namespace action and does not mint an id."
+                              }
+                          ],
+    "join_fallbacks":  [
+                           "\u00271 1/2 pounds boneless skinless chicken breasts ()\u0027: the qty engine could not ground this weight (count/each guess of 680 g against a line stating 227 g - the engine did not read the stated weight), so its number is a fallback and the cross-check is skipped; recorded to the density gaps list"
+                       ],
+    "macro_cross_check":  "Source page publishes 573 cal / 48 g protein / 33 g carbs per serving at 4 servings. Recomputed at source scale from the food DB plus my three new rows: chicken 680.4 g = 790 cal / 151.9 P; cheddar 113 g = 444 cal / 24.2 P; avocado 150 g = 240 cal; oil 21 g = 180 cal; tortillas 188 g (8) = 400 cal / 8 P / 80 C; sour cream 115 g = 161 cal; sriracha 60 g = 56 cal; limes 134 g = 40 cal; honey 21 g = 60 cal; romaine 94 g = 16 cal; cilantro and salt negligible. Totals 2387 cal / 193.8 g protein / 150 g carbs, i.e. 597 cal, 48.5 g protein, 37.6 g carbs per serving. Protein is within 1% of the source\u0027s 48 g, so no portion is misweighed - in particular the 1 1/2 lb chicken line needs no each-weight correction. Calories run 4% high and carbs 14% high, both explained by counting whole limes rather than juice only and by the tortilla label being a touch heavier than the source\u0027s assumption. Run band (450-800 cal, protein \u003e= 40) PASSES at 597 / 48.5, and per-serving figures are unchanged by the 3.5x scale to 14 servings."
+}

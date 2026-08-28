@@ -1,8 +1,8 @@
 ﻿{
     "_doc":  "Ingredient string -\u003e commodity id, plus whether a bid is wired. Consulted by the mapper before it reasons and before it asks the commodity-registrar. IDENTITY ONLY - never a price.",
     "_rule":  "Invalidated by any registrar ruling that changes a commodity id. bid_exists is a fact about db\\ingredients.json wiring, refreshed by the mapper, and is what lets a recipe hold at `mapped` instead of dying at the audit.",
-    "updated":  "2026-08-27T18:58:38",
-    "count":  242,
+    "updated":  "2026-08-28T06:58:26",
+    "count":  246,
     "resolutions":  [
                         {
                             "key":  "pepperoni",
@@ -2181,6 +2181,42 @@
                             "evidence":  "REUSE of shredded-cheese, live at 7 of 7: reduced fat is a label variant of the same bag at the same shelf price, the \u0027reduced sodium beef broth\u0027 call. The macros differ, so the DB row is the reduced-fat one. [slug high-protein-chicken-enchilada-casserole, run hunt-2026-08-27-highprotein]",
                             "by":  "mapper",
                             "at":  "2026-08-27T18:58:38"
+                        },
+                        {
+                            "key":  "sriracha sauce",
+                            "term":  "Sriracha sauce",
+                            "item_id":  "sriracha",
+                            "bid_exists":  true,
+                            "evidence":  "Not a form flip: sriracha IS a sauce, so \u0027Sriracha sauce\u0027 is a rename onto the existing vocabulary row Sriracha [sriracha], with no change of product, price class or gram weight. Declined the board\u0027s generic hot-sauce match, which prices Louisiana-style bottles rather than this chili-garlic paste. [slug sriracha-chicken-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T06:58:25"
+                        },
+                        {
+                            "key":  "limes",
+                            "term":  "limes",
+                            "item_id":  "limes",
+                            "bid_exists":  true,
+                            "evidence":  "Reuse of the live limes id (5 of 7, cheapest 0.25 at Walmart), following the 2026-08-27 \u0027fresh lime juice\u0027 and \u0027Lime Wedges\u0027 rulings that price whole limes squeezed. Named \u0027limes\u0027 to match the food-DB row this batch already carries. [slug sriracha-chicken-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T06:58:25"
+                        },
+                        {
+                            "key":  "shredded romaine lettuce",
+                            "term":  "shredded romaine lettuce",
+                            "item_id":  "lettuce",
+                            "bid_exists":  false,
+                            "evidence":  "Refused the board\u0027s generic lettuce id: romaine is variety priced (romaine hearts are a separate SKU well above a head of iceberg), which is the standing red-onion-is-not-onions and cherry-tomatoes-are-not-tomatoes rejection. New id proposed to the registrar; \u0027shredded\u0027 is a cut, not a form flip. [slug sriracha-chicken-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T06:58:25"
+                        },
+                        {
+                            "key":  "corn or flour tortillas",
+                            "term":  "Corn or flour tortillas",
+                            "item_id":  "corn-tortillas",
+                            "bid_exists":  true,
+                            "evidence":  "The source offers a choice and corn is listed first, so the line resolves to the same-form vocabulary row Corn Tortillas [corn-tortillas]; the board carries tortillas at 7 of 7. Corn and flour are different foods at different gram weights, so only one may be priced and weighed. [slug sriracha-chicken-tacos, run hunt-2026-08-27-highprotein]",
+                            "by":  "mapper",
+                            "at":  "2026-08-28T06:58:26"
                         }
                     ]
 }

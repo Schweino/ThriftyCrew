@@ -9475,6 +9475,56 @@
                                "size":  "24 oz"
                            }
                        ]
+        },
+        {
+            "id":  "no-boil-lasagna-noodles",
+            "commodity":  "No-Boil Lasagna Noodles",
+            "category":  "Pasta, Rice \u0026 Grains",
+            "unit":  "oz",
+            "cheapest_store":  "Hy-Vee",
+            "stores":  [
+                           {
+                               "store":  "Hy-Vee",
+                               "per_unit":  0.2067,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Hy-Vee Oven Ready No Boil Lasagna",
+                               "size":  "12 oz"
+                           },
+                           {
+                               "store":  "Fareway",
+                               "per_unit":  0.2658,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Fareway Oven Ready Lasagna",
+                               "size":  "12 oz"
+                           }
+                       ]
+        },
+        {
+            "id":  "cotija-cheese",
+            "commodity":  "Cotija Cheese",
+            "category":  "Dairy \u0026 Eggs",
+            "unit":  "oz",
+            "cheapest_store":  "Baker\u0027s",
+            "stores":  [
+                           {
+                               "store":  "Baker\u0027s",
+                               "per_unit":  0.4738,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "Kroger Mercado Mexican Style Queso Cotija Grated Cheese",
+                               "size":  "8 oz"
+                           },
+                           {
+                               "store":  "Family Fare",
+                               "per_unit":  0.599,
+                               "type":  "everyday",
+                               "bulk":  false,
+                               "item":  "El Mexicano Grating Cheese, Part Skim, Cotija Queso",
+                               "size":  "10 oz"
+                           }
+                       ]
         }
     ],
     "built_at":  "2026-08-21T06:29:41",

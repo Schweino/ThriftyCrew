@@ -1,85 +1,164 @@
 {
  "store": "Sam's Club",
  "store_key": "samsclub",
- "generated": "2026-08-27T18:30:00",
+ "generated": "2026-08-28T06:58:51",
  "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
  "note": "",
  "results": [
   {
-   "term": "dried parsley",
+   "term": "romaine lettuce",
    "state": "MATCHES",
-   "term_used": "dried parsley",
+   "term_used": "romaine lettuce",
    "attempts": [
     {
-     "term": "dried parsley",
+     "term": "romaine lettuce",
      "state": "MATCHES",
-     "hits": 22
+     "hits": 17
     }
    ],
    "hits": [
     {
-     "item": "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
-     "price": 4.98,
+     "item": "Taylor Farms Sweet Kale Chopped Salad Kit, 12 oz.",
+     "price": 2.97,
      "size": "",
-     "unit_price": "$0.17/oz",
+     "unit_price": "$0.25/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/6AX2T543NPSY"
+     "url": "https://www.samsclub.com/p/-/51UHB4PTHYY8"
     },
     {
-     "item": "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
-     "price": 6.98,
+     "item": "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+     "price": 6.97,
      "size": "",
-     "unit_price": "$0.70/oz",
+     "unit_price": "$4.65/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2T1C8H8IFMH5"
+     "url": "https://www.samsclub.com/p/-/6Y6XJBESHQP2"
     },
     {
-     "item": "Member's Mark Parsley Flakes, 3.2 oz",
-     "price": 6.44,
+     "item": "Romaine Hearts, 6 ct.",
+     "price": 4.67,
      "size": "",
-     "unit_price": "$2.01/oz",
+     "unit_price": "$0.78/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/3F1K23CN8VC8"
+     "url": "https://www.samsclub.com/p/-/2LV333GNDZWB"
     },
     {
-     "item": "Mrs. Dash Original Seasoning, 10 oz.",
-     "price": 6.98,
+     "item": "Iceberg Lettuce, 2 heads",
+     "price": 2.46,
      "size": "",
-     "unit_price": "$0.70/oz",
+     "unit_price": "$1.23/ea",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2HXB7T58ZZMK"
+     "url": "https://www.samsclub.com/p/-/1YYGJI1X4AJ5"
     },
     {
-     "item": "Dan-O's Original Seasoning, 8.9 oz.",
-     "price": 6.98,
+     "item": "Organic Baby Bella Mushroom 24 oz.",
+     "price": 4.97,
      "size": "",
-     "unit_price": "$0.78/oz",
+     "unit_price": "$0.21/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/1QBWJTYRCLBE"
+     "url": "https://www.samsclub.com/p/-/4OX5KB1U5MVC"
     },
     {
-     "item": "Weber Chicago Steak Seasoning, 28 oz.",
-     "price": 9.98,
+     "item": "Taylor Farms Brussels Sprouts 2 lbs.",
+     "price": 4.92,
      "size": "",
-     "unit_price": "$0.36/oz",
+     "unit_price": "$2.46/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/61L614F29AFN"
+     "url": "https://www.samsclub.com/p/-/6FCC4Q0ZYYW7"
     },
     {
-     "item": "Lawry's Coarse Ground Garlic Salt with Parsley, 33 oz.",
-     "price": 8.88,
+     "item": "Organic Tender Sweet Carrots, 5 lbs.",
+     "price": 4.56,
      "size": "",
-     "unit_price": "$0.27/oz",
+     "unit_price": "$0.91/lb",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/2UEDQI34LTXJ"
+     "url": "https://www.samsclub.com/p/-/1L0R87CJG8TJ"
     },
     {
-     "item": "Goya Adobo All-Purpose Seasoning with Pepper, 28 oz.",
-     "price": 4.48,
+     "item": "Russet Potatoes, 10 lbs.",
+     "price": 5.22,
+     "size": "",
+     "unit_price": "$0.52/lb",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5U45JH9B3HT0"
+    }
+   ],
+   "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."
+  },
+  {
+   "term": "sriracha",
+   "state": "MATCHES",
+   "term_used": "sriracha",
+   "attempts": [
+    {
+     "term": "sriracha",
+     "state": "MATCHES",
+     "hits": 20
+    }
+   ],
+   "hits": [
+    {
+     "item": "Member's Mark Italian Basil Pesto, 22 oz.",
+     "price": 8.58,
+     "size": "",
+     "unit_price": "$0.39/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/6FLADUR7OH6P"
+    },
+    {
+     "item": "Chef-mate Country Sausage Gravy, 105 oz.",
+     "price": 9.58,
+     "size": "",
+     "unit_price": "$0.09/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/54GU3TPM4YPS"
+    },
+    {
+     "item": "Huy Fong Sriracha Sauce, 28 oz., 2 pk.",
+     "price": 8.98,
      "size": "",
      "unit_price": "$0.16/oz",
      "relevance": null,
-     "url": "https://www.samsclub.com/p/-/36G92429U3DD"
+     "url": "https://www.samsclub.com/p/-/2HO9ZKI68FJC"
+    },
+    {
+     "item": "Yellowbird Blue Agave Sriracha, 19.6 oz.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.46/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/5AVA01F864WZ"
+    },
+    {
+     "item": "Sonny's BBQ Sweet BBQ Sauce, 84 oz.",
+     "price": 9.98,
+     "size": "",
+     "unit_price": "$0.12/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/205WATYF73VJ"
+    },
+    {
+     "item": "Rao's Homemade Marinara Sauce, 22 oz., 2 pk.",
+     "price": 7.76,
+     "size": "",
+     "unit_price": "$0.18/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4P0AL8KH8MXL"
+    },
+    {
+     "item": "Prego Italian Flavored Meat Sauce, 45 oz., 3 pk.",
+     "price": 8.98,
+     "size": "",
+     "unit_price": "$0.07/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/37YRAI9ULYAX"
+    },
+    {
+     "item": "Bertolli Alfredo Sauce with Aged Parmesan Cheese, 15 oz., 3 pk.",
+     "price": 6.54,
+     "size": "",
+     "unit_price": "$0.15/oz",
+     "relevance": null,
+     "url": "https://www.samsclub.com/p/-/4NVYRII7HK4Z"
     }
    ],
    "reason": "  rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder."

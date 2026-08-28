@@ -2995,5 +2995,55 @@
         "buy_pkg_g":  680,
         "buy_pkg_label":  "24oz bag",
         "note":  "Registrar-approved mint: no id prices whole-muscle breaded chicken. The nearest row is chicken-nuggets at $0.1435/oz, a formed/ground product at roughly a third of this class, so a nugget floor would misprice every line using it by ~3x. Board receipt: Simple Truth Fully Cooked Lightly Breaded Chicken Breast Bites 24 oz at $0.4496/oz (Baker's) - inside the $0.38-0.56/oz band the registrar predicted before seeing the product."
+    },
+    {
+        "item":  "No-Boil Lasagna Noodles",
+        "bid":  "no-boil-lasagna-noodles",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz box",
+        "note":  "Registrar ruling 2026-08-28: SAME FOOD, DIFFERENT FORM, and the form is the purchase - a recipe written no-boil fails on regular noodles. lasagna-noodles CLAIMED both: its includes carried oven\\s+ready and no\\s+boil while its crown is Great Value Lasagna Pasta at $0.115/oz, so a no-boil line was being bid at half its price - the breadcrumbs/panko silent-disagreement shape. Those two patterns were moved from that id's includes to its excludes in the same edit, or the two ids would fight for the same Hy-Vee/Fareway products under first-match-wins. Board receipt: Hy-Vee Oven Ready No Boil Lasagna 12 oz at $0.2067/oz."
+    },
+    {
+        "item":  "Cotija Cheese",
+        "bid":  "cotija-cheese",
+        "gpu":  28.3495,
+        "unit":  "oz",
+        "board":  "recipe",
+        "buy_pkg_g":  227,
+        "buy_pkg_label":  "8oz wedge",
+        "note":  "Registrar ruling 2026-08-28: zero cotija strings in any of the three id namespaces, the alias map, the floor-id map or the live feed - swept per file, not trusted as one empty grep. Nearest foods checked by FOOD not name: feta ($0.3033/oz, also salty and crumbling, but different milk, aging and product), queso (a DIP), shredded-cheese, block-cheese. queso's include is \\bqueso\\b and it excluded fresco but NOT cotija, so products literally named \"Queso Cotija\" would have matched a dip id; \\bcotija\\b was added to its excludes in the same edit. Board receipt: Kroger Mercado Queso Cotija Grated 8 oz at $0.4738/oz."
+    },
+    {
+        "item":  "Fresh Lemon Juice",
+        "bid":  "lemons",
+        "gpu":  47,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  58,
+        "buy_pkg_label":  "each",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, not lemon-juice. That id is priced $0.0675/floz but its entire board row set is bottled/reconstituted - ReaLemon, GV 32 fl oz, Hy-Vee Reconstituted 100% Juice - and bottled reconstituted juice is a different purchase from fresh-squeezed, which is what the recipe asks for. gpu 47 = the juice yield of one medium lemon (~3 Tbsp), following the estate's existing fresh-juice convention, which the Lime row's own 2026-08-27 note describes as \"pricing a juice line as the fruit it is squeezed from\". Board receipt: Fresh Lemon $0.50 each (Walmart)."
+    },
+    {
+        "item":  "Lemon Zest",
+        "bid":  "lemons",
+        "gpu":  6,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  58,
+        "buy_pkg_label":  "each",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit. Zest exists only on the whole fresh lemon - the bottled lemon-juice purchase cannot yield it - so pricing zest per floz of juice is a category error. The Orange Zest -> orange-juice row does NOT transfer as precedent: it was a workaround from when no whole-orange id existed, and an `oranges` id exists now (flagged separately). gpu 6 = about 1 Tbsp of zest per medium lemon. A recipe using both the zest and the juice of one lemon double-counts one fruit slightly; that is the accepted yield-row convention."
+    },
+    {
+        "item":  "Lime Zest",
+        "bid":  "limes",
+        "gpu":  4,
+        "unit":  "each",
+        "board":  "recipe",
+        "buy_pkg_g":  67,
+        "buy_pkg_label":  "each",
+        "note":  "Registrar ruling 2026-08-28: REUSE the fruit, same reasoning as Lemon Zest - zest exists only on the whole fruit. gpu 4 = about 2 tsp of zest per lime. Board receipt: Fresh Lime $0.25 each (Walmart), a cell that only became correct after the 2026-08-27 board fix that removed a box of Tastykake snack-cake sticks from the lemons row."
     }
 ]

@@ -353,6 +353,30 @@
       "note": "Requires a reduced-fat/Neufchatel signal so it does not steal full-fat cream cheese from the generic staple; excludes fat-free (different product) and flavored/whipped tubs."
     },
     {
+        "id":  "cotija-cheese",
+        "label":  "Cotija Cheese",
+        "unit":  "oz",
+        "band_min":  0.3,
+        "band_max":  0.9,
+        "include":  [
+                        "\\bcotija\\b"
+                    ],
+        "exclude":  [
+                        "salad\\s+kit",
+                        "street\\s+corn\\s+kit",
+                        "\\bdip\\b",
+                        "seasoning",
+                        "\\bsalsa\\b",
+                        "fat[\\s-]?free",
+                        "frosting",
+                        "whipped",
+                        "strawberry",
+                        "onion",
+                        "garlic",
+                        "jalapeno"
+                    ]
+    },
+    {
         "id":  "garlic-herb-cheese-spread",
         "label":  "Garlic \u0026 Herb Cheese Spread",
         "unit":  "oz",
@@ -2002,6 +2026,36 @@
       "band_min": 0.03,
       "band_max": 0.3,
       "note": "Dry rotini pasta. 'rotini' is distinctive; excludes pasta-salad kits and prepared/canned pasta dinners."
+    },
+    {
+        "id":  "no-boil-lasagna-noodles",
+        "label":  "No-Boil Lasagna Noodles",
+        "unit":  "oz",
+        "band_min":  0.12,
+        "band_max":  0.45,
+        "include":  [
+                        "(?:oven\\s+ready|no\\s+boil)\\b.{0,20}lasagna",
+                        "lasagna\\b.{0,25}(?:oven\\s+ready|no\\s+boil)"
+                    ],
+        "exclude":  [
+                        "frozen",
+                        "\\bmeat\\b",
+                        "\\bcheese\\b.{0,15}lasagna",
+                        "\\bsauce\\b",
+                        "canned",
+                        "salad",
+                        "\\bkit\\b",
+                        "microwav",
+                        "chef\\s+boyardee",
+                        "dinner",
+                        "helper",
+                        "frozen",
+                        "canned",
+                        "protein\\+?",
+                        "chickpea",
+                        "lentil",
+                        "\\bbanza\\b"
+                    ]
     },
     {
         "id":  "protein-pasta",

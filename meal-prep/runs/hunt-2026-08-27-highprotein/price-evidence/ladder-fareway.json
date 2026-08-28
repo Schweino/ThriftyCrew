@@ -1,0 +1,151 @@
+{
+ "store": "Fareway",
+ "store_key": "fareway",
+ "generated": "2026-08-28T06:55:11",
+ "ladder": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder.",
+ "note": "",
+ "results": [
+  {
+   "term": "ras el hanout",
+   "state": "MATCHES",
+   "term_used": "ras el hanout",
+   "attempts": [
+    {
+     "term": "ras el hanout",
+     "state": "OK",
+     "hits": 72
+    }
+   ],
+   "hits": [
+    {
+     "item": "Frontier Co-op Smoked Paprika",
+     "price": 6.49,
+     "size": "1.87 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/54842-frontier-smoked-paprika-1-87-oz"
+    },
+    {
+     "item": "Fareway Seasoning Mix",
+     "price": 1.98,
+     "size": "10 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/24454343-fareway-seasoning-mix-10-oz"
+    },
+    {
+     "item": "Fareway Meat Market Organic Salt & Pepper",
+     "price": 6.99,
+     "size": "9.28 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/111118087-fareway-meat-market-organic-salt-pepper-9-28-oz"
+    },
+    {
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+     "price": 7.99,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+    },
+    {
+     "item": "Badia Spices Paprika",
+     "price": 1.68,
+     "size": "2 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+     "item": "Simply Organic Garam Masala",
+     "price": 6.99,
+     "size": "3 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16367802-simply-organic-garam-masala-3-oz"
+    },
+    {
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+    },
+    {
+     "item": "McCormick Paprika",
+     "price": 3.99,
+     "size": "2.12 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/16408814-mccormick-paprika-2-12-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  },
+  {
+   "term": "moroccan seasoning",
+   "state": "MATCHES",
+   "term_used": "moroccan seasoning",
+   "attempts": [
+    {
+     "term": "moroccan seasoning",
+     "state": "OK",
+     "hits": 72
+    }
+   ],
+   "hits": [
+    {
+     "item": "Spice Islands Beau Monde Seasoning",
+     "price": 4.99,
+     "size": "3.5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/19996299-spice-islands-beau-monde-seasoning-3-5-oz"
+    },
+    {
+     "item": "McCormick® GRILL MATES Roasted Garlic & Herb Seasoning",
+     "price": 2.49,
+     "size": "2.75 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/35267-mccormick-grill-mates-roasted-garlic-herb-seasoning-2-75-oz"
+    },
+    {
+     "item": "Badia Spices Italian Seasoning, Mediterranean Blend",
+     "price": 7.99,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/17547846-badia-spices-italian-seasoning-mediterranean-blend-5-oz"
+    },
+    {
+     "item": "Cavender's Seasoning, Greek, All Purpose",
+     "price": 4.99,
+     "size": "8 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/119281-cavender-s-seasoning-greek-all-purpose-8-oz"
+    },
+    {
+     "item": "Morton Seasoning Blend",
+     "price": 3.68,
+     "size": "4 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/97798-morton-nature-s-seasons-seasoning-blend-savory-blend-of-spices-for-lighter-fare-4-oz-canister-4-oz"
+    },
+    {
+     "item": "Kinder's The Blend Seasoning",
+     "price": 5.98,
+     "size": "6.25 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/22159198-kinder-s-seasoning-the-blend-6-25-oz"
+    },
+    {
+     "item": "Hickman's Bbq All Purpose Premium Rub",
+     "price": 9.99,
+     "size": "11 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/52180263-fat-boy-all-purpose-rub-11-oz"
+    },
+    {
+     "item": "Kinder's Brown Sugar Seasoning",
+     "price": 5.98,
+     "size": "5 oz",
+     "relevance": null,
+     "url": "https://shop.fareway.com/store/fareway-meat-grocery/products/165044-kinder-s-rub-brown-sugar-5-oz"
+    }
+   ],
+   "reason": "rung 1 only - this driver searches the term AS GIVEN and never walks search-verdict-lib's retry ladder. EMPTY here permits not-carried ONLY after the pricer completes the ladder. Rows are the page's priced Apollo nodes and may include suggestion tiles - adjudicate."
+  }
+ ]
+}

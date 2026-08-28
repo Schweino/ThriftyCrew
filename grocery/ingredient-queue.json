@@ -7589,17 +7589,66 @@
                                   ],
                       "added":  "2026-08-28T06:58:27",
                       "why":  "sriracha-chicken-tacos needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  2.27,
+                                                     "size":  "2 ct",
+                                                     "item":  "Fresh Produce, Petite Romaine Lettuce, 2 Count Bag",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027romaine lettuce\u0027 (commodity lettuce, week 2026-08-26) names Walmart \u0027Fresh Produce, Petite Romaine Lettuce, 2 Count Bag\u0027, ad $2.27, 2 ct, per-2-pack $1.135/each, everyday shelf price. That is whole romaine lettuce, not a kit or dressing.",
+                                                     "checked":  "2026-08-28T07:01:03"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  3.88,
+                                                     "size":  "3 ct",
+                                                     "item":  "Dole Fresh Romaine Hearts - 3 CT",
+                                                     "evidence":  "driver lookup rung 1 \u0027romaine lettuce\u0027 = 6 priced Apollo nodes, no no-results banner. Dole Fresh Romaine Hearts 3 CT $3.88 is whole romaine hearts, exactly the form a cook buys; Dole Hearts of Romaine 9 oz $3.99 and Dole Classic Romaine 9 oz $3.49 corroborate. The $1.77 Iceberg Lettuce row is a suggestion tile and was ruled out.",
+                                                     "checked":  "2026-08-28T07:01:03"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "lb",
+                                                         "item":  "Romaine Lettuce",
+                                                         "evidence":  "probe pre-pass rung 1 \u0027romaine lettuce\u0027 = 4 hits, no no-results banner. Top row rel 136 \u0027Romaine Lettuce\u0027 $2.99/lb is bulk fresh romaine, the form a cook buys. Ocean Mist Romaine Hearts 3 ct $4.99 corroborates.",
+                                                         "checked":  "2026-08-28T07:01:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session. Ruled from disk as well: price-ingredient.ps1 -Name \u0027romaine lettuce\u0027 maps to commodity lettuce and the only Hy-Vee capture row is \u0027Bud by Dole iceberg head lettuce, each, $1.97\u0027 - iceberg, NOT romaine. A capture miss is not a shelf audit, so this stays blocked/PENDING for an attended run.",
+                                                    "checked":  "2026-08-28T07:01:03"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  4.67,
+                                                             "size":  "6 ct",
+                                                             "item":  "Romaine Hearts, 6 ct.",
+                                                             "evidence":  "driver lookup rung 1 \u0027romaine lettuce\u0027 = 17 hits, no no-results banner. \u0027Romaine Hearts, 6 ct.\u0027 linePrice $4.67, unitPrice $0.78/ea - whole romaine hearts. Most other rows (kale kit, tomatoes, iceberg, mushrooms, carrots, potatoes) are unrelated produce and were ruled out. Note: the 2026-08-26 comparison carries the same item at $6.22/6 ct, so the club price has moved.",
+                                                             "checked":  "2026-08-28T07:01:03"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Ruled from disk as well: price-ingredient.ps1 -Name \u0027romaine lettuce\u0027 returns only \u0027Iceberg Lettuce Each\u0027 $1.89 for Aldi - iceberg, NOT romaine. Capture miss is never not-carried; stays PENDING for an attended run.",
+                                                  "checked":  "2026-08-28T07:01:03"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.79,
+                                                          "size":  "1 ct",
+                                                          "item":  "Romaine Lettuce",
+                                                          "evidence":  "probe pre-pass rung 1 \u0027romaine lettuce\u0027 = 13 hits, no no-results banner. Top row rel 136 is a plain head of Romaine Lettuce, 1 ct, $2.79 - the ingredient itself, not a salad kit or dressing. Organic head $3.69 and Kroger Hearts of Romaine 9 oz $3.79 corroborate.",
+                                                          "checked":  "2026-08-28T07:01:03"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   },
                   {
@@ -7609,17 +7658,66 @@
                                   ],
                       "added":  "2026-08-28T06:58:27",
                       "why":  "sriracha-chicken-tacos needs it",
-                      "status":  "pending",
+                      "status":  "resolved",
                       "stores":  {
-                                     "Walmart":  null,
-                                     "Fareway":  null,
-                                     "Family Fare":  null,
-                                     "Hy-Vee":  null,
-                                     "Sam\u0027s Club":  null,
-                                     "Aldi":  null,
-                                     "Baker\u0027s":  null
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session. Also checked disk: price-ingredient.ps1 -Name \u0027sriracha\u0027 returns 4 of 7 stores and Walmart is not among them. Capture miss is never not-carried; stays PENDING for an attended run.",
+                                                     "checked":  "2026-08-28T07:01:03"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  6.98,
+                                                     "size":  "28 oz",
+                                                     "item":  "Huy Fong Foods Hot Sriracha Chili Sauce",
+                                                     "evidence":  "driver lookup rung 1 \u0027sriracha\u0027 = 53 priced Apollo nodes, no no-results banner. Huy Fong Foods Hot Sriracha Chili Sauce 28 oz $6.98 is the reference sriracha; Tabasco Sriracha 20 oz $4.99 and Yellowbird Classic Blue Agave Sriracha 9.8 oz $5.99 corroborate. Ruled out as suggestion tiles / not the ingredient: Lee Kum Kee Sriracha Mayo, Kewpie Mayonnaise, Cholula, Heinz Ketchup.",
+                                                     "checked":  "2026-08-28T07:01:03"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  5.99,
+                                                         "size":  "17 oz",
+                                                         "item":  "Tuong Ot Sriracha Hot Chili Sauce 17 Oz",
+                                                         "evidence":  "probe pre-pass rung 1 \u0027sriracha\u0027 = 11 hits, no no-results banner. Tuong Ot Sriracha Hot Chili Sauce 17 Oz $5.99 is the classic rooster-bottle sriracha; Huy Fong Hot Sriracha Chili Sauce 28 Oz $6.99 and Tabasco Sriracha 11 Oz $5.39 corroborate. Ruled out: Doritos Golden Sriracha chips and the Chick Fil A sriracha dipping sauce.",
+                                                         "checked":  "2026-08-28T07:01:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  7.99,
+                                                    "size":  "28 oz",
+                                                    "item":  "Tuong Sriracha Hot Chili Sauce",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027sriracha\u0027 (board commodity sriracha) names Hy-Vee \u0027Tuong Sriracha Hot Chili Sauce\u0027 28 oz at $0.2854/floz; the underlying capture grocery\\out\\regular\\hyvee-regular-2026-08-27.json gives ad_price $7.99, regular 7.99, source \u0027Aisles Online current shelf price (storeId 1465, Omaha #01)\u0027, as_of 2026-08-21. That is the bottled sriracha itself.",
+                                                    "checked":  "2026-08-28T07:01:03"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  8.98,
+                                                             "size":  "28 oz, 2 pk",
+                                                             "item":  "Huy Fong Sriracha Sauce, 28 oz., 2 pk.",
+                                                             "evidence":  "driver lookup rung 1 \u0027sriracha\u0027 = 20 hits, no no-results banner. \u0027Huy Fong Sriracha Sauce, 28 oz., 2 pk.\u0027 linePrice $8.98, unitPrice $0.16/oz - the bottled sriracha in club pack. Yellowbird Blue Agave Sriracha 19.6 oz $8.98 corroborates. The pesto, gravy, BBQ, marinara, meat sauce and alfredo rows are unrelated sauce-aisle filler and were ruled out.",
+                                                             "checked":  "2026-08-28T07:01:03"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session. Also checked disk: price-ingredient.ps1 -Name \u0027sriracha\u0027 returns 4 of 7 stores and Aldi is not among them. A capture miss is a publish-sweep gap, not a shelf audit, so this stays blocked/PENDING for an attended run.",
+                                                  "checked":  "2026-08-28T07:01:03"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.99,
+                                                          "size":  "17 oz",
+                                                          "item":  "Kroger Sriracha Sauce",
+                                                          "evidence":  "probe pre-pass rung 1 \u0027sriracha\u0027 = 23 hits, no no-results banner. Kroger Sriracha Sauce 17 oz $3.99 (rel 134) is the bottled sauce itself. Melinda\u0027s Sriracha Hot Sauce 12 fl oz $4.99 and OX Sriracha Hot Chili Sauce 18.25 oz $5.49 corroborate. Ruled out: Sriracha Dolmas, Sriracha Carrot Hummus, Spicy Sriracha Peas and Sriracha Ranch Dressing - foods flavoured with it, not the ingredient.",
+                                                          "checked":  "2026-08-28T07:01:03"
+                                                      }
                                  },
-                      "verdict":  "PENDING",
+                      "verdict":  "CARRIED",
                       "notes":  null
                   }
               ]

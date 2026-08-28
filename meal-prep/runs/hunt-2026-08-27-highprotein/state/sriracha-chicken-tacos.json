@@ -3,12 +3,19 @@
     "title":  "Sriracha Chicken Tacos",
     "source_url":  "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/",
     "protein":  "chicken",
-    "state":  "extracted",
+    "state":  "priced",
     "wave":  null,
     "created":  "2026-08-27T18:20:32",
-    "updated":  "2026-08-27T18:20:56",
+    "updated":  "2026-08-28T07:01:29",
     "terms":  [
-
+                  {
+                      "term":  "romaine lettuce",
+                      "optional":  false
+                  },
+                  {
+                      "term":  "sriracha",
+                      "optional":  false
+                  }
               ],
     "reject_reason":  null,
     "parked_on":  [
@@ -32,6 +39,24 @@
                         "at":  "2026-08-27T18:20:56",
                         "by":  "local",
                         "detail":  "extraction ladder rung 1, every line verified"
+                    },
+                    {
+                        "state":  "mapped",
+                        "at":  "2026-08-28T06:58:26",
+                        "by":  "mapper",
+                        "detail":  "Residual lines ruled: 4 of 4 (mapped 4, mapped-null 0, rejected 0, not-purchased 0). New food-DB rows returned: 3 (Sriracha, Romaine Lettuce, Corn Tortillas). No rejections. Pre-resolve table was present, complete and consistent - 8 settled lines carried through untouched, identities not re-derived. Two label reads spent, both on Corn Tortillas (FDC shelf held only corn masa flour); Sriracha and R"
+                    },
+                    {
+                        "state":  "pricing",
+                        "at":  "2026-08-28T06:58:26",
+                        "by":  "mapper",
+                        "detail":  ""
+                    },
+                    {
+                        "state":  "priced",
+                        "at":  "2026-08-28T07:01:29",
+                        "by":  "derive",
+                        "detail":  "all 2 blocking ingredient(s) carried"
                     }
                 ]
 }

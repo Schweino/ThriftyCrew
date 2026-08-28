@@ -1,0 +1,126 @@
+{
+ "name": "Sriracha Chicken Tacos",
+ "slug": "sriracha-chicken-tacos",
+ "protein": "chicken",
+ "cuisine": "Tex-Mex",
+ "source_url": "https://www.laurafuentes.com/spicy-sriracha-chicken-tacos/",
+ "visibility": "paid",
+ "ingredients": [
+  {
+   "item": "Boneless Skinless Chicken Breast",
+   "grams": 2381,
+   "buy": "5 1/4 lb, trimmed"
+  },
+  {
+   "item": "Sriracha",
+   "grams": 210,
+   "buy": "3/4 cup plus 2 tbsp, divided"
+  },
+  {
+   "item": "Honey",
+   "grams": 74,
+   "buy": "3 1/2 tbsp, divided"
+  },
+  {
+   "item": "limes",
+   "grams": 469,
+   "buy": "7 limes, juiced (about 7/8 cup juice), divided"
+  },
+  {
+   "item": "Light Sour Cream",
+   "grams": 402,
+   "buy": "1 3/4 cups"
+  },
+  {
+   "item": "Fresh Cilantro",
+   "grams": 5,
+   "buy": "1/3 cup finely chopped"
+  },
+  {
+   "item": "Salt",
+   "grams": 5,
+   "buy": "scant 1 tsp"
+  },
+  {
+   "item": "Vegetable Oil",
+   "grams": 74,
+   "buy": "1/3 cup, for the skillet"
+  },
+  {
+   "item": "Romaine Lettuce",
+   "grams": 329,
+   "buy": "7 cups shredded"
+  },
+  {
+   "item": "Cheddar Cheese, Shredded",
+   "grams": 396,
+   "buy": "3 1/2 cups shredded"
+  },
+  {
+   "item": "Avocado",
+   "grams": 525,
+   "buy": "3 1/2 medium avocados, pitted, peeled and sliced"
+  },
+  {
+   "item": "Corn Tortillas",
+   "grams": 658,
+   "buy": "28 corn tortillas, warmed"
+  }
+ ],
+ "macros_per_serving": {
+  "calories": 592,
+  "protein_g": 48,
+  "carbs_g": 37.5,
+  "fat_g": 28.4
+ },
+ "writer_notes": [
+  "Every one of the 12 bought ingredients is used by a step and no step calls for anything unbought; verified against the locked view before finishing.",
+  "Honey is deliberately written as 'most of the honey' (marinade) and 'the last of the honey' (drizzle) rather than pinned tablespoons, because the locked Honey buy (3 1/2 tbsp) looks like it covers only the marinade portion at 3.5x scale. See report flag. Prose stays true whichever way that number resolves.",
+  "Sriracha and lime are also written as 'most' / 'the rest' to mirror the source's divided quantities without introducing a computed number.",
+  "This dish assembles fresh, so portion_html stores components separately and builds day-of. Avocado and warm tortillas are called out as build-fresh items to avoid browning and sogginess.",
+  "Only numbers used in prose are the locked figures (592 cal, 48 g protein, 14 servings, 28 tortillas = 2 per serving) and the ${{cost_ps}} token; no dollar literals or per-line costs.",
+  "No shop_smart bullet makes a per-ounce or lasts-N-batches claim, since no cost_lines were supplied to trace one to."
+ ],
+ "forbidden_prose_terms": [
+  "—",
+  "–",
+  "restaurant-quality",
+  "artisanal",
+  "gourmet",
+  "cheap eats",
+  "guilt-free",
+  "superfood"
+ ],
+ "prose": {
+  "intro_html": "<p>Here is the thing about tacos on a meal prep plan: most people assume they are a cheat, a thing you eat when the budget is already blown. Not these. Sriracha chicken tacos give you 48 grams of protein and 592 calories a serving, which is a serious dinner wearing a fun costume. The chicken marinates in sriracha, honey and lime until it is sweet, tangy and just hot enough to wake you up, then you shred it and pile it high with crisp romaine, sharp cheddar and cool avocado. A cilantro sour cream to settle the heat, a last drizzle of spicy honey-sriracha to bring it back, and you have got a container that tastes like a Friday and costs like a Tuesday.</p>",
+  "shop_smart": "<ul><li>The whole plan leans on chicken breast, so buy the 5 1/4 pounds where it is sold in the family pack rather than the tidy little trays up front. Same meat, better sticker.</li><li>You need 7 limes for the juice. Pick the ones that give a little when you squeeze them and feel heavy for their size, because a hard, light lime is mostly rind and you will curse it at the cutting board.</li><li>One bottle of sriracha covers the whole batch with room to spare, since 3/4 cup plus 2 tablespoons is a real dent but not a whole bottle. Same with the honey and the 1/3 cup of oil, both pantry staples you likely already own.</li><li>Buy the block-adjacent 3 1/2 cups of shredded cheddar however it is cheapest at your store, and grab the 28 corn tortillas in the big stack, not the boutique six pack.</li><li>Avocados are the one thing that will not wait. Buy the 3 1/2 you need firm and a couple days out, and let them ripen on the counter so they hit their stride the day you build the tacos.</li></ul>",
+  "make_it": "<p>Start the night before if you can, because the marinade is where the flavor lives. Put the trimmed chicken breasts in a big zip-top bag or an airtight container. Add most of the sriracha, most of the honey and the juice of about half your limes, seal it, squish it around to coat every piece, and let it sit in the fridge at least 4 hours or overnight.</p><p>When you are ready to cook, make the two sauces first so they are waiting. Whisk the sour cream with the rest of the lime juice, the chopped cilantro and the salt, then cover it and park it in the fridge. In a second small bowl, whisk the last of the sriracha with the last of the honey for the finishing drizzle and set it aside.</p><p>Heat the oil in a large skillet over medium-high, or fire up a grill. Pull the chicken from the marinade, let the extra drip off, and cook it 5 to 7 minutes on the first side, flip, and give it about 5 more, until the thickest piece reads 165F. Do it in batches if your pan is crowded, because a crowded pan steams instead of sears. Throw the used marinade out, it has done its job. Move the chicken to a board and let it rest until you can handle it, then shred it with two forks. Warm the tortillas, and you are ready to build or box.</p>",
+  "portion_html": "<p>This one portions a little differently than a stew, because a taco built on Monday and eaten on Thursday is a sad, soggy thing. So we treat the parts like parts. Weigh your pile of shredded chicken and divide it evenly across 14 containers, dropping any odd bit onto the lightest one until they all sit about the same on the scale. That is your protein locked in. Then split the romaine, cheddar and avocado between them, and keep the cilantro sour cream and the spicy honey-sriracha drizzle in their own little cups. Stack 2 warm tortillas per serving on the side, since 28 tortillas across 14 servings is exactly two apiece. At dinner you build fresh in about a minute: chicken, lettuce, cheese, avocado, both drizzles. Crisp shell, cool avocado, no mush.</p>",
+  "cost_closing_html": "<p>Run the register tape and this lands at ${{cost_ps}} a serving for a genuine 48 grams of protein and a dinner you actually look forward to. That is the whole game right there. You are not choking down another sad chicken-and-rice bowl to hit your macros, you are eating tacos, and you are paying less than the drive-thru charges for a paper bag of regret. Cheap and boring is easy. Cheap and this good takes a plan, and you just made one.</p>",
+  "upsell_html": "<p>If a card like this saves you one takeout night a week, it has already paid for a year of the membership several times over, because the whole library runs a dollar a month. That is the pitch, and the math is not subtle: come cook the rest of them with us.</p>"
+ },
+ "head": {
+  "description": "Sriracha chicken tacos built for meal prep: sweet-and-spicy marinated shredded chicken with cilantro sour cream, 48 g protein and 592 calories a serving, scaled to 14 servings.",
+  "keywords": "sriracha chicken tacos, high protein meal prep, chicken tacos meal prep, budget meal prep dinner, spicy chicken tacos, cilantro sour cream, shredded chicken tacos",
+  "image": "",
+  "prepTime": "PT10M",
+  "cookTime": "",
+  "totalTime": "",
+  "steps": [
+   "Put the trimmed chicken in a zip-top bag or airtight container. Add most of the sriracha, most of the honey and the juice of about half the limes. Seal, coat every piece, and refrigerate at least 4 hours or overnight.",
+   "Whisk the sour cream with the rest of the lime juice, the chopped cilantro and the salt. Cover and refrigerate while you cook.",
+   "In a second small bowl, whisk the last of the sriracha with the last of the honey for the finishing drizzle and set aside.",
+   "Heat the oil in a large skillet over medium-high or preheat a grill. Pull the chicken from the marinade, let it drip, and cook 5 to 7 minutes, flip, and cook about 5 more, until the internal temperature reaches 165F. Work in batches so the pan sears instead of steams. Discard the marinade.",
+   "Transfer the chicken to a board and rest until cool enough to handle, then shred with two forks. Warm the tortillas.",
+   "Portion the shredded chicken evenly across 14 containers, then split the romaine, cheddar and avocado between them. Keep the cilantro sour cream and spicy honey-sriracha drizzle in separate cups with 2 tortillas per serving, and build fresh at dinner."
+  ],
+  "step_names": [
+   "Marinate the chicken",
+   "Make the cilantro sour cream",
+   "Mix the spicy honey-sriracha",
+   "Cook the chicken",
+   "Rest and shred",
+   "Portion and build"
+  ]
+ }
+}

@@ -99,47 +99,44 @@
   "fat_g": 24.3
  },
  "writer_notes": [
-  "Cream cheese is placed in the pot at step 1 (start), reading the source's 'all ingredients except cheese' as excluding only the shredded Mexican blend; this is the only way the bought 14 oz cream cheese line is used, so do not move it to the melt step or it orphans.",
-  "Sour cream is written as a to-serve topping only (step 4), matching its 'optional, to serve' buy line; it is not cooked into the batch.",
-  "Cost is carried as the ${{cost_ps}} token because no literal cost_ps appears in the locked view. Protein is the {{protein}} token; calories are stated as the bound 'under 600' (542 per locked view).",
-  "DATA FLAG: cayenne buys at 3.5 tsp total for 14 servings and exceeds chili powder (1 3/4 tsp); faithful to source's 2 tsp scaled up but genuinely hot, so prose stays heat-neutral rather than overselling spice.",
-  "DATA FLAG: bean cup yields are inconsistent for the same can count - kidney 2 1/2 cups from 'about two 15 oz cans' vs black beans 4 cups from 'just under two 15 oz cans'.",
-  "DATA FLAG: source lists plain 8 oz cream cheese; locked line is 14 oz of 1/3 Fat Cream Cheese, a fat-level swap and scale-up that the macros assume."
+  "All 17 locked ingredients are used by a step: chicken, bone broth, ranch, garlic powder, onion powder, cayenne, paprika, chili powder, corn, diced tomatoes, kidney beans, black beans, green chiles and bacon plus cream cheese go into the load step; Mexican blend shredded cheese goes in at the end; sour cream is the optional serve-side topping. No orphans, nothing invented.",
+  "Cream cheese is placed in the LOAD step, not the final cheese step. The source instruction says 'combine all ingredients except cheese', but for crack chicken chili the 'except cheese' means only the shredded Mexican blend; cream cheese must go in at the start or it is bought and never used.",
+  "FLAG: cayenne scales to 1 tbsp + 1/2 tsp (about 3.5 tsp) across 14 servings. This is faithful to the source (2 tsp x ~1.75 scale) but is a genuinely hot amount; prose calls it spicy and points to the cooling toppings. QA may want to confirm the catalog is fine with that heat level.",
+  "Whole recipe scales consistently at ~1.75x from the source (2 lb chicken, 8 oz cream cheese, 10 slices bacon), so no per-line quantity looks off for a 14-serving batch.",
+  "No cost_lines were provided in the dispatch, so shop_smart makes no per-ounce or package-longevity claims and carries no dollar figure; cost closing uses only the ${{cost_ps}} token plus the standard $1/month membership line.",
+  "Macros cited in prose (542 cal, 47.4g protein) are the locked engine figures only; no number was computed or estimated."
  ],
  "forbidden_prose_terms": [
   "keto",
-  "low-carb",
   "low carb",
-  "gluten-free",
-  "gluten free",
-  "seafood",
-  "shrimp",
-  "paleo",
-  "whole30",
-  "sugar-free",
-  "cures",
-  "healthy"
+  "low-carb",
+  "guilt-free",
+  "superfood",
+  "clean eating",
+  "em dash",
+  "—",
+  "–"
  ],
  "prose": {
-  "intro_html": "<p>Crack chicken chili earns the name honestly. It is the creamy, ranch-spiked, bacon-loaded cousin of regular chili, and once a container of it is waiting in your fridge you stop thinking about takeout. Here is the part that matters for the crew: it clears {{protein}} grams of protein a serving and still lands under 600 calories a bowl. That is comfort food without the comfort food regret.</p><p>Better still, it is a dump and go slow cooker meal. You load the crock in the morning, walk away, and come home to fourteen dinners done. No searing, no browning, no standing over a pot. That is my kind of Tuesday.</p>",
-  "shop_smart": "<p>This is a pantry and cans build, which is exactly why it stays cheap. Start with the chicken. You need 3 1/2 pounds of boneless skinless breast, and that is almost always a better deal in a big family pack than in little trays. Buy the largest pack that fits your freezer and you are set.</p><p>The cans do the heavy lifting here. Grab two 14.5 ounce cans of corn, two 15 ounce cans of diced tomatoes, two 15 ounce cans of kidney beans, two 15 ounce cans of black beans, and two 4 ounce cans of green chiles. Fire roasted tomatoes are worth grabbing if the shelf has them, but plain diced will not hurt a thing.</p><p>Cream cheese comes in 8 ounce bricks and you need 14 ounces, so two bricks covers it with a little left over for a bagel. Ranch seasoning runs about one and three quarter packets, so a two packet box has you covered. Bacon is 18 slices cooked crisp, which a standard pack gets you. And buy the Mexican blend shredded by the bag, not the pricey little cup.</p>",
-  "make_it": "<p>This one is built for the slow cooker, so there is very little to it. Into the crock go the chicken breasts, the bone broth, the ranch seasoning, the garlic powder, onion powder, cayenne, paprika and chili powder, then the drained corn, the tomatoes, the kidney beans, the black beans, the green chiles, the chopped crisp bacon and the cream cheese. Everything except the shredded Mexican blend cheese goes in now. Give it a stir, put the lid on, and cook on high for 4 to 5 hours or low for 6 to 8.</p><p>When you have about 30 minutes left, lift the chicken breasts out, shred them with two forks, and drop the meat back into the pot to finish. The cream cheese will have melted into the broth by now and made everything creamy.</p><p>Right at the end, stir in the shredded Mexican blend cheese and let it melt through. Taste it, and go easy the first spoonful because there is real cayenne in here. Then it is ready to portion.</p>",
-  "portion_html": "<p>Fourteen containers is the target, and the honest way to split it even is the scale, not your eyeballs. Set your empty container on a kitchen scale and zero it out. Weigh the full pot, subtract the pot, then divide that number by 14. That is your gram weight per container. Scoop to that number every time and every crew member gets the same dinner, same macros, no one shorted.</p><p>Hold the sour cream, avocado and extra cheese until serving. Those go on top the day you eat it, not into the storage container, so nothing goes watery in the fridge.</p>",
-  "cost_closing_html": "<p>Run the numbers and this whole pot breaks down to ${{cost_ps}} a serving. That is a creamy, protein packed, bacon studded dinner for less than the drink you would order with takeout, and you made fourteen of them in one afternoon of doing basically nothing.</p>",
-  "upsell_html": "<p>Every recipe on Thrifty Crew runs through the same cost engine, so you know what a meal costs before you ever turn on the crock. Membership is a dollar a month, right about the price of one serving of this chili. Join the crew and eat like this every week.</p>"
+  "intro_html": "<p>Crack Chicken Chili sounds like a dare and eats like a warm blanket. It is the crack chicken idea, ranch, bacon and cream cheese, poured into a pot of chili and left alone to get better while you go live your life. You do almost nothing, which is exactly the kind of cooking I respect.</p><p>Here is why it earns a spot in the rotation. Each of the 14 servings lands at 542 calories with 47.4 grams of protein, and it gets there on chicken breast, two kinds of beans and a can of corn instead of anything fancy. That is a lot of real food doing real work. The slow cooker does the rest.</p>",
+  "shop_smart": "<p>This one is a pantry run more than a shopping trip, and that is the whole point. Buy the chicken breast in the biggest boneless skinless pack your store sells, since 3 1/2 pounds is the backbone of the batch and freezes fine if you catch it on sale.</p><p>The rest is cans and shelf staples. You need corn, diced tomatoes, kidney beans, black beans and green chiles, so read the label sizes against the list before you check out rather than grabbing on autopilot. Grab a ranch seasoning packet or two, a brick and change of cream cheese, and a bag of Mexican blend shredded cheese. Cook your own bacon from a standard pack instead of buying pre-cooked, because you are chopping it into the pot anyway and the crisp is better. Garlic powder, onion powder, cayenne, paprika and chili powder are almost certainly already in your cabinet, so check before you double up.</p>",
+  "make_it": "<p>This is a dump-and-walk-away recipe, so the method is short and honest.</p><p>Put the chicken breast in the slow cooker and pour in the bone broth. Add the ranch seasoning, garlic powder, onion powder, cayenne, paprika and chili powder. Now the cans: drained corn, the diced tomatoes with their juice, drained and rinsed kidney beans, drained and rinsed black beans, and the green chiles. Scatter in the chopped cooked bacon and drop the cream cheese right on top. It looks like a lump now and it will melt into the broth as it goes. Stir once, cover, and cook on high for 4 to 5 hours or on low for 6 to 8.</p><p>When you have about 30 minutes left, lift the chicken breasts out, shred them with two forks, and return the meat to the pot to finish. Right before serving, stir in the shredded Mexican blend cheese until it disappears into the chili. A heads up on the heat: this build carries a real dose of cayenne, so it leans spicy. That is what a bowl of sour cream, avocado and a little extra cheese on top is for.</p>",
+  "portion_html": "<p>Do not eyeball this. Set your empty container on the scale, hit tare, and weigh the finished chili in the pot first so you know your total. Divide that number by 14, then scoop to that weight in each container. Every lid closes on the same portion, which is the only way the 542 calories and 47.4 grams of protein per serving actually mean anything.</p><p>Keep the sour cream, avocado and extra cheese on the side and add them the day you eat, not now. Cold toppings do not survive a week in the fridge, and the chili itself reheats better without them stirred in.</p>",
+  "cost_closing_html": "<p>Here is the part that makes it stick. This whole batch of 14 dinners runs about ${{cost_ps}} per serving, and it is built almost entirely from cans and pantry spices you can buy any week of the year. No seasonal produce, no specialty aisle, no surprises at the register.</p><p>That is 14 high-protein dinners handled for less than most people spend on one takeout order, and it took you ten minutes of actual effort.</p>",
+  "upsell_html": "<p>Make it once and you will see why it stays in the rotation. It reheats like a champ, it feeds a crowd or a work week, and it costs next to nothing to keep on repeat.</p><p>If you want the full stack of recipes, the shopping math and the weekly plans that keep your grocery bill honest, the Thrifty Crew membership is a dollar a month. One pot of chili already paid for the year.</p>"
  },
  "head": {
-  "description": "Crack chicken chili built for meal prep: a creamy, bacon-loaded slow cooker chili with over 47 grams of protein a serving and fourteen budget dinners from one pot.",
-  "keywords": "crack chicken chili, chicken chili meal prep, slow cooker chili, high protein chili, crockpot crack chicken, budget meal prep dinner",
+  "description": "Crack Chicken Chili made in the slow cooker for meal prep: 14 high-protein servings at 542 calories and 47.4g protein each, built on chicken breast, beans, corn, bacon and cream cheese.",
+  "keywords": "crack chicken chili, slow cooker chili, high protein meal prep, chicken chili, crockpot chicken chili, budget meal prep dinner, ranch chicken chili",
   "image": "",
   "prepTime": "PT10M",
   "cookTime": "PT4H",
   "totalTime": "PT4H10M",
   "steps": [
-   "Add the chicken breast, bone broth, ranch seasoning, garlic powder, onion powder, cayenne, paprika, chili powder, drained corn, diced tomatoes, kidney beans, black beans, green chiles, chopped bacon and cream cheese to the slow cooker. Stir, cover and cook on high for 4 to 5 hours or on low for 6 to 8 hours.",
-   "With about 30 minutes left, lift out the chicken, shred it with two forks and return it to the pot to finish cooking.",
-   "Stir in the shredded Mexican blend cheese until it melts through.",
-   "Weigh the full pot, divide by 14 and portion evenly across the containers. Top with sour cream, avocado or extra cheese to serve."
+   "Add the chicken breast and bone broth to the slow cooker, then the ranch seasoning, garlic powder, onion powder, cayenne, paprika and chili powder. Add the drained corn, diced tomatoes with their juice, drained and rinsed kidney beans and black beans, the green chiles, the chopped cooked bacon and the cream cheese. Stir once, cover, and cook on high 4 to 5 hours or low 6 to 8 hours.",
+   "With about 30 minutes left, lift out the chicken breasts, shred them with two forks, and return the meat to the pot to finish cooking.",
+   "Stir in the shredded Mexican blend cheese until it melts fully into the chili.",
+   "Weigh and portion into 14 containers, and top each serving with sour cream, avocado, or extra cheese when you eat it."
   ],
   "step_names": [
    "Load the slow cooker",

@@ -29478,8 +29478,6 @@
         "band_max":  0.4,
         "include":  [
                         "lasagna\\s+noodles?",
-                        "oven\\s+ready\\b.{0,20}lasagna",
-                        "no\\s+boil\\b.{0,15}lasagna",
                         "lasagna\\s+pasta",
                         "lasagne\\s+pasta|wavy\\s+lasagne"
                     ],
@@ -29582,7 +29580,9 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "oven\\s+ready",
+                        "no\\s+boil"
                     ]
     },
     {
@@ -29914,7 +29914,8 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bcotija\\b"
                     ]
     },
     {
