@@ -175,17 +175,29 @@ def main():
             if not n:
                 continue
             if n not in item_names:
-                # ORPHAN-MACRO: a macro row with no price row. Recorded, not inserted - the FK would refuse
-                # it and abort the build, and one legacy reference row must not block the whole estate.
+                # A macro row with no price row. Recorded, not inserted - the FK would refuse it and abort
+                # the build, and one legacy reference row must not block the whole estate.
                 #
                 # AND NO ALIAS RESOLUTION HERE, DELIBERATELY - the spec side resolves, this side must not.
-                # Some of these orphans ARE aliases ('Smoked Sausage', 'Sour Cream', 'Cream Cheese'), so
-                # resolving them looks like the same fix. It is the opposite: item_macro is keyed by item,
-                # the insert is INSERT OR REPLACE, and Andouille's label would land on top of the Pork
-                # Smoked Sausage row's macros and be stamped into every recipe that uses it. That is
-                # exactly the corruption Brad's 2026-08-16 ruling 9 named. A spec costing by an alias wants
-                # the shared PRICE; a macro row named by an alias is claiming its own NUMBERS, which is a
-                # different question and needs a person.
+                # Some of these orphans ARE aliases, so resolving them looks like the same fix. It is the
+                # opposite: item_macro is keyed by item, the insert is INSERT OR REPLACE, and Andouille's
+                # label would land on top of the Pork Smoked Sausage row's macros and be stamped into every
+                # recipe that uses it. That is exactly the corruption Brad's 2026-08-16 ruling 9 named. A
+                # spec costing by an alias wants the shared PRICE; a macro row named by an alias is
+                # claiming its own NUMBERS, which is a different question and needs a person.
+                #
+                # THIS COMMENT USED TO NAME THREE SUCH ROWS ('Smoked Sausage', 'Sour Cream', 'Cream
+                # Cheese'). Counted on 2026-08-28 there are TEN, and not one states the same numbers as the
+                # row it resolves to - Pepperoni is Hormel PORK at 500 cal/100 g resolving to Great Value
+                # TURKEY Pepperoni at 250, and Tandoori Masala is a real spice row resolving to a Garam
+                # Masala row of zeroes. Seven of the ten have a target macro row that the REPLACE would
+                # overwrite. The hazard is bigger than this comment claimed, not smaller.
+                #
+                # The audit that reports these splits them, and the split is the useful half: nine are
+                # consumed by specs (pipeline\audit-schema-constraints.ps1 calls that MACRO-IDENTITY and
+                # fails on it - a recipe booking one food's numbers while sending the reader to buy
+                # another); the rest are the map-lane backlog and fail nothing. This skip covers both,
+                # because neither belongs in item_macro under someone else's key.
                 skipped_macro.append(n)
                 continue
             mrows.append((n, m.get('brand'), m.get('serving_grams'), m.get('serving_qty'),

@@ -35,7 +35,9 @@
     FK-SPEC-ITEM  a spec ingredient must name a real item row       (the 6 macro-only items)
                   -- "name" means item name OR adjudicated alias, see Resolve-ItemName
     FK-SPEC-BID   a spec ingredient's bid must name a real commodity
-    ORPHAN-MACRO  a macro row must belong to a known item
+    MACRO-IDENTITY a macro row a SPEC CONSUMES must belong to the item that spec is priced against
+                  -- the hard half of the old ORPHAN-MACRO; see Get-OrphanMacroClass
+    ORPHAN-MACRO  BACKLOG, never hard: a macro row with no price row that no spec consumes
     ORPHAN-DENS   a density row must belong to a known item
     NOT-NULL-GPU  a priced item needs a grams-per-unit
     UNIQUE-ITEM   one row per item name, per store
@@ -96,6 +98,49 @@ function Resolve-ItemName { param([string]$Name, $ItemNames, $AliasMap)
   if ($AliasMap.ContainsKey($Name))  { return $AliasMap[$Name] }
   return $null
 }
+function Get-OrphanMacroClass { param([string]$Name, $ItemNames, [int]$SpecUseCount)
+  # A MACRO ROW WITH NO PRICE ROW IS TWO DIFFERENT FACTS, AND ONLY ONE OF THEM IS A DEFECT (Brad, 2026-08-28).
+  #
+  # Until today this was one class standing at 104 against a baseline of 1 recorded on 2026-08-07, so the
+  # script exited 1 every single day and nobody could tell a new defect from the standing noise - a
+  # duplicate 'Fresh Thyme' key (UNIQUE-ITEM, a STRUCTURAL class) sat unread underneath it. The 104 were
+  # read one by one before this split; the trend was reconstructed by recomputing the count at every commit
+  # since the baseline. What it showed:
+  #
+  #   * db\ingredients.json has LOST NOTHING. It grew 277 -> 334 rows over the same three weeks. Exactly
+  #     three orphan names ever had a price row, and each was removed by a commit that defends it:
+  #     Red Wine (4056603f, deleted as an orphan), Green Bell Pepper (194f34f9, deduped into the existing
+  #     'Green Bell Peppers' row on the same bid) and Boneless Pork Chops (2d1b9ea7, withdrawn because the
+  #     registrar had ruled against bridging it to pork-chops - "Member's Mark BONE-IN Pork Chops").
+  #   * The growth is the recipe-hunter map lane: 54 of the unconsumed rows carry an `added_by` naming a
+  #     hunt from the last three days, and the count SAWTOOTHS - each hunt adds rows (+21, +17, +13) and the
+  #     registrar commit that follows converts some to price rows (-5, -6, -7). ORPHAN-MACRO was never
+  #     measuring a defect; it was measuring the map-lane -> registrar backlog. A hard count ratchet is the
+  #     wrong instrument for a number that is SUPPOSED to rise mid-hunt, so this half never fails. It is
+  #     still printed, because a backlog nobody can see is a backlog nobody drains.
+  #
+  # The defect is the other half: a macro row a SPEC ACTUALLY CONSUMES, whose food is not the food that
+  # spec is priced against. That is a recipe booking one food's numbers and sending the reader to buy
+  # another, and it is hard from the first one.
+  #
+  # NO ALIAS RESOLUTION HERE, DELIBERATELY - this signature does not even take the alias map, so a future
+  # edit cannot quietly add one. db\build_db.py's ORPHAN-MACRO skip explains why on the storage side
+  # (item_macro is keyed by item under INSERT OR REPLACE, so Andouille's label would land on top of the
+  # Pork Smoked Sausage row - Brad's 2026-08-16 ruling 9). The audit side has its own reason: resolving
+  # would SILENCE the finding. There are ten alias-named macro rows, not the three that comment names, and
+  # not one of them states the same numbers as the row it resolves to (Pepperoni is Hormel PORK at
+  # 500 cal/100 g and resolves to Great Value TURKEY Pepperoni at 250; Tandoori Masala is a real spice row
+  # resolving to a Garam Masala row of zeroes). Nine are live in specs. FK-SPEC-ITEM resolves aliases
+  # because it asks "does this name reach a price?" - aliases answer that. This check asks "whose numbers
+  # are these?" - aliases do not.
+  if ($ItemNames.ContainsKey($Name)) { return $null }        # it has its own price row; not an orphan
+  if ($SpecUseCount -gt 0) { return 'MACRO-IDENTITY' }
+  return 'ORPHAN-MACRO'
+}
+# Classes that are REPORTED but never hard. Everything else ratchets against the baseline, so a class
+# absent from the baseline is hard from its first hit - that is the structural enforcement, and this list
+# is the only exemption from it. Adding a name here is a decision someone defends in a diff.
+$script:BACKLOG_CLASSES = @('ORPHAN-MACRO')
 function Test-PairedCost { param([int]$MacroOnly, [int]$CostOnly)
   # a legitimate display override renames one item: the two "only" sets stay balanced. An unbalanced split
   # means a line exists on one side and nowhere on the other.
@@ -140,6 +185,23 @@ if ($SelfTest) {
   $fx2 = @([pscustomobject]@{ item = 'Broccoli'; bid = 'broccoli' }, [pscustomobject]@{ item = 'Broccoli Florets'; bid = 'broccoli-florets'; aliases = @('Broccoli') })
   $fx2Names = @{}; foreach ($r in $fx2) { $fx2Names[[string]$r.item] = $r }
   T 'a ROW NAME wins over another row claiming it as an alias'        ((Resolve-ItemName 'Broccoli' $fx2Names (Get-AliasMap $fx2)) -eq 'Broccoli') ((Resolve-ItemName 'Broccoli' $fx2Names (Get-AliasMap $fx2)))
+  # THE ORPHAN-MACRO SPLIT, frozen against the rows that motivated it (Brad, 2026-08-28). 'Pepperoni' is a
+  # macro row of Hormel PORK pepperoni with no price row of its own; keto-crustless-pizza-casserole books
+  # its grams AND costs it against turkey-pepperoni. That is the hard half. 'Quinoa' is the other half: a
+  # map-lane row for a food no spec has used yet, which costs nobody anything today.
+  $omNames = @{}; $omNames['Turkey Pepperoni'] = 1; $omNames['Light Sour Cream'] = 1
+  T 'MUST FIRE  a macro row a SPEC CONSUMES with no price row is an identity defect' ((Get-OrphanMacroClass 'Pepperoni' $omNames 1) -eq 'MACRO-IDENTITY') ((Get-OrphanMacroClass 'Pepperoni' $omNames 1))
+  T 'BACKLOG    an unconsumed orphan is backlog, not a defect'        ((Get-OrphanMacroClass 'Quinoa' $omNames 0) -eq 'ORPHAN-MACRO') ((Get-OrphanMacroClass 'Quinoa' $omNames 0))
+  T 'CLEAN TWIN a macro row WITH its own price row is neither'        ($null -eq (Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3)) ((Get-OrphanMacroClass 'Turkey Pepperoni' $omNames 3))
+  # the whole point of the split: the backlog half must never page, the defect half must page immediately
+  T 'the backlog half is exempt from the ratchet'                     ($script:BACKLOG_CLASSES -contains 'ORPHAN-MACRO') 'ORPHAN-MACRO would page daily again'
+  T 'the identity half is NOT exempt - it is hard from the first one' ($script:BACKLOG_CLASSES -notcontains 'MACRO-IDENTITY') 'MACRO-IDENTITY was exempted'
+  # ALIAS-BLIND ON PURPOSE. 'Sour Cream' IS an adjudicated alias of Light Sour Cream, and resolving it here
+  # would silence a live finding: the food DB's Sour Cream is full-fat at 198 cal/100 g, Light Sour Cream
+  # is 140, and four specs book the first while buying the second. Resolve-ItemName must not reach this
+  # check - the fixture passes an alias map to neither call, and the signature refuses to take one.
+  T 'RULING     an ALIAS-named consumed macro row still fires (no rescue)' ((Get-OrphanMacroClass 'Sour Cream' $omNames 4) -eq 'MACRO-IDENTITY') ((Get-OrphanMacroClass 'Sour Cream' $omNames 4))
+  T 'Get-OrphanMacroClass cannot be handed an alias map at all'       (@((Get-Command Get-OrphanMacroClass).Parameters.Keys) -notcontains 'AliasMap') 'an alias map parameter appeared'
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -184,7 +246,11 @@ foreach ($r in $ing) {
 $aliasMap = Get-AliasMap $ing
 
 # ---- item_macro: every macro row must belong to a known item --------------------------------------------
+# The orphans are only COLLECTED here. Which half of the split each one lands in depends on whether a spec
+# consumes it, and the specs are not read until below - see Get-OrphanMacroClass for why the two halves are
+# not the same finding.
 $macroOf = @{}
+$orphanMacro = @{}
 foreach ($grp in $fdbRaw.PSObject.Properties) {
   if ($grp.Value -isnot [array]) { continue }
   foreach ($m in $grp.Value) {
@@ -192,9 +258,10 @@ foreach ($grp in $fdbRaw.PSObject.Properties) {
     if (-not $n) { continue }
     if ($macroOf.ContainsKey($n)) { V 'UNIQUE-ITEM' "food-macros-db has '$n' more than once (would break UNIQUE(item))" ; continue }
     $macroOf[$n] = $m
-    if (-not $itemNames.ContainsKey($n)) { V 'ORPHAN-MACRO' "macro row '$n' has no db\ingredients.json row (cannot be costed)" }
+    if (-not $itemNames.ContainsKey($n)) { $orphanMacro[$n] = $true }
   }
 }
+$macroUse = @{}   # macro-row name -> the slugs whose ingredients_grams book it
 
 # ---- item_density: rows belong to known items, and must agree with the food DB's own base ---------------
 foreach ($p in $dens.PSObject.Properties) {
@@ -235,11 +302,35 @@ foreach ($sf in (Get-ChildItem (Join-Path $mpRoot 'db\recipes\*.json'))) {
   }
   # PAIRED-COST: the macro basis and the cost basis must describe the same set (modulo paired renames)
   $macroNames  = @(@($s.ingredients_grams | ForEach-Object { [string]$_.item }) | Where-Object { $_ })
+  foreach ($mn in $macroNames) {
+    if (-not $macroUse.ContainsKey($mn)) { $macroUse[$mn] = @() }
+    if ($macroUse[$mn] -notcontains $slug) { $macroUse[$mn] += $slug }
+  }
   $scalerNames = @(@($s.scaler.ing | ForEach-Object { $k = $_.item; if ($_.canon) { $k = $_.canon }; [string]$k }) | Where-Object { $_ })
   $mOnly = @($macroNames  | Where-Object { $scalerNames -notcontains $_ })
   $cOnly = @($scalerNames | Where-Object { $macroNames  -notcontains $_ })
   if (($mOnly.Count -or $cOnly.Count) -and -not (Test-PairedCost $mOnly.Count $cOnly.Count)) {
     V 'PAIRED-COST' ("{0}: macro-only [{1}] vs cost-only [{2}] - one side has a line the other lacks" -f $slug, ($mOnly -join '|'), ($cOnly -join '|'))
+  }
+}
+
+# ---- the orphan-macro split (needs both the macro rows and the specs) ------------------------------------
+foreach ($n in ($orphanMacro.Keys | Sort-Object)) {
+  # ContainsKey FIRST. @($hashtable['missing']) is @($null), whose .Count is 1 in PS 5.1, not 0 - written
+  # the short way this put all 104 orphans in the defect half, each reading "1 spec(s) ... []".
+  $slugs = @(); if ($macroUse.ContainsKey($n)) { $slugs = @($macroUse[$n]) }
+  switch (Get-OrphanMacroClass $n $itemNames $slugs.Count) {
+    'MACRO-IDENTITY' {
+      # name the row it is PRICED as, because that is the question the reader has to answer: are these
+      # numbers this food's, or that one's? Reporting only "no price row" hid that for three weeks.
+      $as = if ($aliasMap.ContainsKey($n)) { "priced as '$($aliasMap[$n])'" } else { 'nothing on the price side owns this name' }
+      $shown = if ($slugs.Count -gt 3) { (($slugs | Select-Object -First 3) -join ', ') + ", +$($slugs.Count - 3) more" } else { $slugs -join ', ' }
+      V 'MACRO-IDENTITY' "$($slugs.Count) spec(s) book macros from '$n', which has no db\ingredients.json row - $as [$shown]"
+    }
+    'ORPHAN-MACRO' {
+      $by = if ($macroOf[$n].PSObject.Properties['added_by']) { " (added by $($macroOf[$n].added_by))" } else { '' }
+      V 'ORPHAN-MACRO' "macro row '$n' has no db\ingredients.json row and no spec books it$by"
+    }
   }
 }
 
@@ -264,13 +355,19 @@ if (Test-Path $baselinePath) {
 }
 if ($Baseline) {
   $out = [ordered]@{}
-  foreach ($g in ($violations | Group-Object cls | Sort-Object Name)) { $out[$g.Name] = $g.Count }
+  # a backlog class carries no baseline line - it cannot fail, so a number here would be a decision nobody
+  # is actually making. The stale ORPHAN-MACRO=1 line from 2026-08-07 drops out on the next -Baseline run.
+  foreach ($g in ($violations | Group-Object cls | Sort-Object Name)) {
+    if ($script:BACKLOG_CLASSES -contains $g.Name) { continue }
+    $out[$g.Name] = $g.Count
+  }
   ($out | ConvertTo-Json -Depth 3) | Out-File $baselinePath -Encoding utf8
   Write-Output ("schema-constraint baseline recorded: " + (($out.Keys | ForEach-Object { "$_=$($out[$_])" }) -join ', '))
   exit 0
 }
 $hard = @()
 foreach ($g in ($violations | Group-Object cls)) {
+  if ($script:BACKLOG_CLASSES -contains $g.Name) { continue }            # reported, never hard - see BACKLOG_CLASSES
   $was = if ($base.ContainsKey($g.Name)) { $base[$g.Name] } else { 0 }   # unrecorded class => 0 => any hit is hard
   if ($g.Count -gt $was) { $hard += ($g.Group | Select-Object -First ($g.Count - $was)) }
 }
@@ -280,7 +377,10 @@ $byCls = $violations | Group-Object cls | Sort-Object Count -Descending
 Write-Output ("schema constraints: {0} row(s) would REFUSE to insert into the normalized schema ({1} hard)" -f $violations.Count, $hard.Count)
 Write-Output ("  scope: {0} commodities, {1} items, {2} macro rows, {3} density rows, {4} specs" -f $comIds.Count, $itemNames.Count, $macroOf.Count, @($dens.PSObject.Properties).Count, @(Get-ChildItem (Join-Path $mpRoot 'db\recipes\*.json')).Count)
 Write-Output ''
-foreach ($g in $byCls) { Write-Output ("  {0,-14} {1,5}" -f $g.Name, $g.Count) }
+foreach ($g in $byCls) {
+  $tag = if ($script:BACKLOG_CLASSES -contains $g.Name) { '   backlog - reported, never fails' } else { '' }
+  Write-Output ("  {0,-14} {1,5}{2}" -f $g.Name, $g.Count, $tag)
+}
 Write-Output ''
 $cap = if ($ShowAll) { 10000 } else { 6 }
 foreach ($g in $byCls) {
