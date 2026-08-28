@@ -24,6 +24,12 @@
     tbsp    -> under 120 g; cups above; ounces when nothing else is known
 #>
 
+# THE USABLE FLOOR - a quarter of a unit, the point below which a home kitchen runs out of ways to
+# measure. It was the bare literal 0.25 in the tsp rung here AND a second $script:UsableFloor in
+# repair-unmeasurable-qty.ps1, which reads this file. Two copies of a threshold drift, and the drift
+# is silent in the worst direction: a repair that 'fixes' a row into something the sweep still flags.
+# So it lives here once and the repair reads it.
+$script:FA_USABLE = 0.25
 $script:FA_LB = 453.592
 $script:FA_OZ = 28.3495
 
@@ -91,12 +97,71 @@ function Get-FriendlyAmt {
         $m = [regex]::Match([string]$pre, '(?i)^\s*(\d+(?:\.\d+)?)\s*([a-z]+)')
         if ($m.Success) {
             $q = [double]$m.Groups[1].Value; $u = $m.Groups[2].Value.ToLower()
-            if (($u -eq 'tbsp' -and $q -lt 1) -or ($u -eq 'oz' -and $g -lt 30)) {
+            # THE CUPS RUNG (2026-08-28). 'cups' was not in this gate, and that is the whole of the
+            # UNMEASURABLE-QTY class that survived the 2026-08-05 sweep. Chicken Broth NEVER reaches the
+            # tablespoon branch at all - Get-FriendlyAmtCore's Broth arm returns cups unconditionally -
+            # so 15 g of broth printed '0.06 cups' and no rung below could see it. Nine live labels sat
+            # on that, and repair-unmeasurable-qty reported every one as 'no usable unit exists' while
+            # the usable unit was one tablespoon.
+            if (($u -eq 'tbsp' -and $q -lt 1) -or ($u -eq 'oz' -and $g -lt 30) -or ($u -eq 'cups' -and $q -lt $script:FA_USABLE)) {
+                # A COUNT RUNG AHEAD OF THE STEP-DOWN, for the shapes a spoon cannot describe.
+                # ORDER IS THE RULE HERE (2026-08-28). This sat below the spoon attempts, and the cup
+                # step-down added the same day answered first: Dried Arbol Chiles has cup=25, so 2 g
+                # became '1.25 tbsp' of whole dried chiles. For an item the estate has authored NO spoon
+                # for, 'how many' is the better question than 'what fraction of a cup', so it is asked
+                # first. Items that DO carry a spoon are excluded by the gate below and never reach it,
+                # so nothing else changes order. Bay Leaves is
+                # authored as {each 0.6, leaf 0.6} and NOTHING else: you do not spoon bay leaves, you
+                # count them. Without this the small-amount branch falls to the weight fallback and the
+                # card asks for '0.04 oz', the same unmeasurable label the rung exists to end.
+                #
+                # WIDENED 2026-08-28, on the same evidence as the cups rung. It read 'leaf' only and
+                # required the item to have NO cup either, so Dried Arbol Chiles - {each 0.7, cup 25},
+                # no spoon - fell through to '0.08 cups' in three live recipes whose steps say to use the
+                # chiles WHOLE. A cup is not a spoon; when the volume label has already failed, a cup
+                # density is not evidence that the food can be measured by volume. So the gate is now
+                # 'no tsp and no tbsp', and 'each' is read after 'leaf'.
+                #
+                # THE TABLESPOON CONDITION IS WHAT KEEPS THIS HONEST. Fresh Basil and Fresh Mint also
+                # carry leaf=0.5, and a blanket count rung would turn a cup of basil into '150 leaves' -
+                # trading one unusable label for another. Both have tbsp, so both are excluded, and if the
+                # estate ever authors a spoon for an item that spoon wins and this rung stops firing.
+                #
+                # AN AUTHORED COUNT-NOUN IS REQUIRED, not merely a small 'each'. 'each' is overloaded in
+                # densities (Chicken Broth each=240 IS a cup), so the noun in db\each-nouns.json is the
+                # estate SAYING this food is counted. Without one the rung declines rather than printing
+                # a bare number - the same refusal Get-FaEachNoun makes, one step earlier.
+                if (-not (Get-FaDen $item 'tsp') -and -not (Get-FaDen $item 'tbsp')) {
+                    $per = Get-FaDen $item 'leaf'
+                    if (-not $per) { $e = Get-FaDen $item 'each'; if ($e -and $e -lt 40) { $per = $e } }
+                    if ($per -and $per -gt 0 -and $script:FA_EN.ContainsKey($item)) {
+                        $n = [Math]::Max(1, [Math]::Round($g / $per))
+                        return ("$n " + (Get-FaEachNoun $item $n))
+                    }
+                }
+                # A CUP THAT IS TOO BIG STEPS DOWN TO A SPOON. 16 tbsp to the cup and 3 tsp to the
+                # tablespoon are DEFINITIONS of the units, not claims about the food, so dividing an
+                # authored cup density is the same arithmetic the tbsp/3 line below already does. It is
+                # what lets Chicken Broth - which has cup=240 and no spoon authored at all - be named in
+                # the spoon a reader owns. Tablespoons first, because 2 tbsp of broth is a better
+                # sentence than 6 tsp; teaspoons only when a tablespoon would print as a fraction of one.
+                if ($u -eq 'cups') {
+                    $cupD = Get-FaDen $item 'cup'
+                    if ($cupD -and $cupD -gt 0) {
+                        $tbn = $g / ($cupD / 16.0)
+                        if ($tbn -ge 1) { return ((Get-FaFrac $tbn) + ' tbsp') }
+                    }
+                }
                 $tsp = Get-FaDen $item 'tsp'
                 if (-not $tsp) { $tb = Get-FaDen $item 'tbsp'; if ($tb) { $tsp = $tb / 3.0 } }
+                # ONLY FOR A LABEL THAT CAME OUT IN CUPS. Measured: unscoped, this fallback reached the
+                # OUNCE branch above and turned Frozen Chopped Spinach's perfectly good '1 oz' into
+                # '15.75 tsp', because spinach has a cup density and no spoon. An ounce label that a
+                # kitchen scale can read is not the defect this rung exists to fix.
+                if (-not $tsp -and $u -eq 'cups') { $cd = Get-FaDen $item 'cup'; if ($cd) { $tsp = $cd / 48.0 } }
                 if ($tsp -and $tsp -gt 0) {
                     $n = $g / $tsp
-                    if ($n -ge 0.25 -and $n -lt 24) { return ((Get-FaFrac $n) + ' tsp') }
+                    if ($n -ge $script:FA_USABLE -and $n -lt 24) { return ((Get-FaFrac $n) + ' tsp') }
                 }
                 # A LEAF RUNG below the spoon, for the one shape a spoon cannot describe. Bay Leaves is
                 # authored in densities as {each 0.6, leaf 0.6} and NOTHING else: there is no tsp, tbsp or
@@ -107,13 +172,6 @@ function Get-FriendlyAmt {
                 # Fresh Mint also carry leaf=0.5, and they have cup + tbsp too - a blanket leaf rung would
                 # turn a cup of basil into "150 leaves", trading one unusable label for another. If the
                 # estate ever authors a spoon for an item, that spoon wins and this rung stops firing.
-                if (-not (Get-FaDen $item 'tsp') -and -not (Get-FaDen $item 'tbsp') -and -not (Get-FaDen $item 'cup')) {
-                    $leaf = Get-FaDen $item 'leaf'
-                    if ($leaf -and $leaf -gt 0) {
-                        $n = [Math]::Max(1, [Math]::Round($g / $leaf))
-                        return ("$n " + (Get-FaEachNoun $item $n))
-                    }
-                }
             }
             # "1 cups" - Get-FaFrac returns the bare number and the branch appends a hardcoded plural, so
             # exactly one cup prints with an s. Small, but it is on the card.

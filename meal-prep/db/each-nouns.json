@@ -26,6 +26,7 @@
     "Celery":                { "one": "stalk",        "many": "stalks" },
     "Cucumber":              { "one": "cucumber",     "many": "cucumbers" },
     "Dill Pickles":          { "one": "pickle",       "many": "pickles" },
+    "Dried Arbol Chiles":    { "one": "chile",        "many": "chiles" },
     "Eggplant":              { "one": "eggplant",     "many": "eggplants" },
     "Green Bell Peppers":    { "one": "pepper",       "many": "peppers" },
     "Green Cabbage":         { "one": "head",         "many": "heads" },
@@ -49,6 +50,7 @@
   },
   "notes": {
     "Bay Leaves": "densities each = 0.6 g, and every shipped line is a single leaf at 1 g.",
+    "Dried Arbol Chiles": "densities each = 0.7 g. It also carries cup = 25, which is why the label read '0.08 cups' in three live recipes until 2026-08-28 - a cup of whole dried chiles is a measure nobody uses, and pozole-rojo's own step says to add them WHOLE. The count-noun is what lets FriendlyAmt's count rung name them; without an entry here that rung declines rather than printing a bare number.",
     "Celery": "a stalk (rib), not the whole bunch - densities stalk = each = 55 g. The cost section buys the bunch.",
     "Green Cabbage": "'heads' matches the purchase unit the receipt already prints ('Buy 2 heads') and the writers' own JSON-LD ('1.7 heads green cabbage'). densities carries head = each = 900 g.",
     "Japanese Curry Roux": "the writers' JSON-LD says '7 boxes' and the receipt says 'Buy 7 3.2oz boxs'. densities gained box = 92 AND boxes = 92: 'boxes' is a CM_PKGWORD, so repair-cook-measures treats it as guilty until it can weigh it, and its singulariser only strips a trailing 's' ('boxes' -> 'boxe'), so the plural key has to be there too or the label gets rewritten to a weight on the next repair pass.",

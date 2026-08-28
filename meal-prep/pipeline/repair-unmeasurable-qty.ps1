@@ -61,7 +61,12 @@ $script:MeasureUnits = @('lb','lbs','oz','cup','cups','tbsp','tsp')
 # re-derived label must clear to count as usable. If they were two constants they would drift, and the
 # drift would be silent in the worst direction: a repair that "fixes" a row into something the sweep
 # still flags, or clears the sweep with something the reader still cannot measure.
-$script:UsableFloor = 0.25
+#
+# IT NOW HAS EXACTLY ONE HOME (2026-08-28), and it is not this file. friendly-amt-lib carried the same
+# 0.25 as a bare literal in its teaspoon rung - so the generator and the sweep that grades the generator
+# were two copies of one threshold, which is the drift this comment warns about, one level up. This
+# reads the generator's.
+$script:UsableFloor = $script:FA_USABLE
 
 function Test-UnmeasurableQty {
     <# True when a buy label LEADS with a quantity below a quarter of its measurable unit (zero included). #>
