@@ -122,7 +122,8 @@ if ($SelfTest) {
     'Potato', 'Sweet Potatoes', 'Peas', 'Frozen Green Peas', 'Cheddar Cheese, Shredded', 'Fries',
     'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper',
     'Paprika', 'Dried Thyme', 'Garlic Powder', 'Onion Powder',   # the composite-rider pair below needs the riders to be known foods
-    'Tomato', 'Marinara Sauce'   # the constituent-rule pair - without Tomato in this vocab both its fixtures are vacuous
+    'Tomato', 'Marinara Sauce',   # the constituent-rule pair - without Tomato in this vocab both its fixtures are vacuous
+    'Coconut Milk', 'Coconut Oil'   # the coconut constituent pair, and the two names its over-forgiveness twin needs
   )
   $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
@@ -294,6 +295,31 @@ if ($SelfTest) {
   }
   $ph6 = @(Get-SpecContradictions $phantomNoTomato $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'omato' })
   Chk 'MUST FIRE  PHANTOM     tomato over an ALFREDO recipe is still a real phantom' ($ph6.Count -ge 1) 'constituent rule over-forgave'
+
+  # FROZEN FIXTURE (2026-08-28): the constituent rule's SECOND live case, and the reason its keys became
+  # phrases. beef-rendang-rice-bowls buys four cans of coconut milk and step 7 says the beef 'starts frying
+  # in the coconut oil that separates out' - the oil is what the milk breaks into, not a fifteenth thing to
+  # shop for. The finding appeared on 2026-08-28 with no change to the recipe: db\ingredients.json gained a
+  # Coconut Oil row that day (f3911bff), and this class can only see a phrase the vocabulary knows.
+  $phantomCoconut = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 640; protein = 44; cost_ps = '3.11' }
+    ingredients_display = @('<strong>Beef Chuck Roast:</strong> 4.75 lb (2117 g)', '<strong>Coconut Milk (Thai Kitchen):</strong> 4 cans (1582 g)')
+    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Beef Chuck Roast'; grams = 2117 }, [pscustomobject]@{ item = 'Coconut Milk'; grams = 1582 }) }
+    make_it = @('The liquid reduces, then breaks, and the beef starts frying in the coconut oil that separates out.')
+  }
+  $ph7 = @(Get-SpecContradictions $phantomCoconut $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN coconut oil is covered by the bought COCONUT MILK (constituent rule)' ($ph7.Count -eq 0) (($ph7 | ForEach-Object { $_.why }) -join ' | ')
+  # THE OVER-FORGIVENESS TWIN. Keyed on the bare token 'coconut' with the bare value 'oil', the entry above
+  # would forgive ANY oil in a recipe holding a can of coconut milk, because 'oil' is a token of Olive Oil
+  # too. Same spec, same bought line, a different oil the recipe does not buy - it must still fire.
+  $phantomCoconutOlive = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 640; protein = 44; cost_ps = '3.11' }
+    ingredients_display = @('<strong>Beef Chuck Roast:</strong> 4.75 lb (2117 g)', '<strong>Coconut Milk (Thai Kitchen):</strong> 4 cans (1582 g)')
+    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Beef Chuck Roast'; grams = 2117 }, [pscustomobject]@{ item = 'Coconut Milk'; grams = 1582 }) }
+    make_it = @('Finish the sauce with a spoonful of olive oil before serving.')
+  }
+  $ph8 = @(Get-SpecContradictions $phantomCoconutOlive $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'Olive Oil' })
+  Chk 'MUST FIRE  PHANTOM     olive oil over a coconut-milk recipe is still a real phantom' ($ph8.Count -ge 1) 'coconut constituent entry over-forgave every oil'
 
   # THE SAME-COMMODITY RULE (2026-08-27). Four LIVE specs - beef-birria-burrito, beef-burrito-tex-mex,
   # salsa-verde-chicken-burrito, turkey-florentine-rice-bake - say "shredded cheese" in a step while their

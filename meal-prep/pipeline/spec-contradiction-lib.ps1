@@ -1,4 +1,4 @@
-<#
+﻿<#
   spec-contradiction-lib.ps1 - the shared reading of a recipe spec's self-contradictions.
 
   ONE COPY ON PURPOSE. audit-spec-contradictions.ps1 reports these and repair-spec-contradictions.ps1 fixes
@@ -260,14 +260,28 @@ $script:PHANTOM_SUBJ = '(?:^|\s)(?:it|they|we|you|i|he|she|that|this|which|who)\
 # recipe that buys Marinara Sauce (the one PHANTOM finding on the live board for weeks, 2026-08-08). Keyed
 # on a token of the OWNED ingredient; the values are foods a step may name that the product accounts for.
 # Deliberately tiny: each entry is a measured false positive, not a food-knowledge project.
+#
+# KEYS AND VALUES ARE PHRASES, EVERY WORD REQUIRED (2026-08-28). They were single tokens until beef-rendang
+# needed the third entry: its step 7 says the beef "starts frying in the coconut oil that separates out" of
+# the coconut milk it buys four cans of - the oil is what the milk BREAKS INTO, which is the marinara/tomato
+# shape exactly. Keyed on the single token 'coconut' that entry would have forgiven a step naming Olive Oil,
+# Sesame Oil or Vegetable Oil in any recipe holding a can of coconut milk, because the value 'oil' is a
+# token of all of them. So both sides now match on ALL of their words: the owned line must carry every word
+# of the key, the named food every word of the value. The two original entries are single-word and read
+# identically under this rule.
 $script:PHANTOM_CONSTITUENT = @{
-  'marinara' = @('tomato')
-  'ketchup'  = @('tomato')
+  'marinara'     = @('tomato')
+  'ketchup'      = @('tomato')
+  'coconut milk' = @('coconut oil')
 }
 function Test-FoodConstituent($ownTok, $namTok) {
-  foreach ($o in @($ownTok)) {
-    if ($script:PHANTOM_CONSTITUENT.ContainsKey($o)) {
-      foreach ($n in @($namTok)) { if (@($script:PHANTOM_CONSTITUENT[$o]) -contains $n) { return $true } }
+  $ownTok = @($ownTok); $namTok = @($namTok)
+  foreach ($k in $script:PHANTOM_CONSTITUENT.Keys) {
+    $kt = @($k -split ' ')
+    if (@($kt | Where-Object { $ownTok -notcontains $_ }).Count -gt 0) { continue }
+    foreach ($v in @($script:PHANTOM_CONSTITUENT[$k])) {
+      $vt = @($v -split ' ')
+      if (@($vt | Where-Object { $namTok -notcontains $_ }).Count -eq 0) { return $true }
     }
   }
   return $false
