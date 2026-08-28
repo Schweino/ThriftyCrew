@@ -388,6 +388,24 @@ _REFUSE_HEAD = r"(refus\w*|reject\w*|not\s+the|is\s+not)"
 _ID_CH = r"[a-z0-9-]"
 
 
+# A REPORTED REFUSAL IS NOT THIS RULING'S REFUSAL (2026-08-28). Kept in lockstep with the PowerShell
+# twin, `map-preresolve.Test-BidContradictsNotes`, which is where the third production false positive
+# landed - `baked-cubano-chicken`, run hunt-2026-08-27-highprotein. That ruling bid `deli-ham`, argued
+# FOR it twice, and stuck because it CITED a past ruling refusing that id in order to distinguish it:
+#
+#     "The 'spiral ham' precedent refused deli-ham for a bone-in whole ham, which is the opposite
+#      case and does not bind here."
+#
+# The discriminator is a SUBJECT. A ruling's own refusals are subject-less imperatives - "Refused the
+# chicken-thighs bridge", "REFUSED chicken-breast (boneless skinless)" - and a reported one names who
+# refused, immediately before the verb. The two implementations have drifted apart twice already (the
+# lookarounds landed here a day after PowerShell had them, and the word lists still differ), so this
+# lands in both on the same day.
+_ATTRIBUTED = re.compile(
+    r"(?:precedent|ruling|rule|note|entry|row|audit|finding|case|ledger|guard|gate|check|memo"
+    r"|comment|convention|standing\s+order)s?['\u2019]?s?\s*$", re.I)
+
+
 def refuse_near_bid(bid):
     return re.compile(_REFUSE_HEAD + r"[^.;:!?]{0,80}?"
                       + r"(?<!" + _ID_CH + r")" + re.escape(str(bid)) + r"(?!" + _ID_CH + r")",
@@ -405,7 +423,14 @@ def notes_refuse_bid(evidence, bid):
     b = str(bid or "").strip()
     if not b or not evidence:
         return False
-    return bool(refuse_near_bid(b).search(str(evidence)))
+    text = str(evidence)
+    # EVERY match is examined, not just the first: one evidence string can carry a reported refusal
+    # AND a real one, and stopping at the first would let the order of the prose decide the verdict.
+    for m in refuse_near_bid(b).finditer(text):
+        if _ATTRIBUTED.search(text[:m.start()]):
+            continue                      # somebody else's refusal, cited - not this ruling's
+        return True
+    return False
 
 
 # =====================================================================================================
@@ -1194,6 +1219,41 @@ def cmd_selftest(_a):
       "fired")
     T("CLEAN TWIN  a refusal in a PREVIOUS clause does not reach across the punctuation",
       not notes_refuse_bid("rejected the bridge; salt is the right id here", "salt"), "fired")
+
+    # ---- the 2026-08-28 false positive: a CITED refusal is not this ruling's -----------------------
+    # FROZEN, verbatim from `baked-cubano-chicken`, run hunt-2026-08-27-highprotein - the third
+    # production firing of this check and the third false positive. The ruling bids `deli-ham` and
+    # argues FOR it twice; it stuck because it CITED a past ruling that refused that id, in order to
+    # say the past ruling does not bind here. Citing the precedent you are declining to follow is what
+    # a careful mapper does, so the check was punishing its best reasoning.
+    #
+    # Pinned in BOTH implementations on the same day. The PowerShell twin
+    # (map-preresolve.Test-BidContradictsNotes) is the one that actually stuck the recipe, and these
+    # two have drifted apart twice before - the lookarounds landed here a day late, and the refusal
+    # word lists still differ - so neither gets a rule the other lacks.
+    print("")
+    print("a REPORTED refusal is not this ruling's refusal (the 2026-08-28 cubano false positive)")
+    CUBANO_HAM = ("This line IS sliced deli lunch meat, which is exactly what deli-ham prices "
+                  "(7 of 7, cheapest 0.1238 Walmart) - a reuse. Refused the vocabulary's Diced Ham: "
+                  "cubed convenience packs are a different pack and price class. The 'spiral ham' "
+                  "precedent refused deli-ham for a bone-in whole ham, which is the opposite case "
+                  "and does not bind here.")
+    T("CLEAN TWIN  a ruling that CITES a past refusal of its own bid, to distinguish it, is not "
+      "contradicting itself", not notes_refuse_bid(CUBANO_HAM, "deli-ham"),
+      "the cubano false positive fired again")
+    T("MUST FIRE   ...but the SAME refusal in the ruling's OWN voice, with no one to attribute it "
+      "to, still fires - the rule narrowed this check, it did not disable it",
+      notes_refuse_bid("This line IS sliced deli lunch meat. Refused deli-ham for a bone-in whole "
+                       "ham.", "deli-ham"),
+      "the attribution rule swallowed a real self-contradiction")
+    T("MUST FIRE   a REPORTED refusal standing BEFORE a real one does not clear it - every match is "
+      "read, so the order of the prose cannot decide the verdict",
+      notes_refuse_bid("The 'spiral ham' precedent refused deli-ham for a whole ham. Refused "
+                       "deli-ham here too, on the pack-class rule.", "deli-ham"),
+      "the first (reported) match short-circuited the real contradiction behind it")
+    T("CLEAN TWIN  the 2.6 founding evidence says 'precedent' AFTER its refusal, not before it, so "
+      "the attribution rule leaves the founding case firing",
+      notes_refuse_bid(OI26, "chicken-thighs"), "the founding case stopped firing")
 
     # ---- the 2026-08-26 false positive, and the boundary that was missing ----------------------
     # A REFUSED SIBLING IS NOT A REFUSED BID. Before the boundary fix, `re.escape(bid)` matched

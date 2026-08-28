@@ -1205,6 +1205,33 @@ function Select-CheapestAlternative {
 # and the token bounds are what carry this check; the gap WIDTH is not.
 $script:REFUSAL_WORDS = 'refus\w*|reject\w*|declin\w*|rul\w*\s+out|not\s+bridg\w*'
 
+# A REPORTED REFUSAL IS NOT THIS RULING'S REFUSAL (2026-08-28). Third production firing, third false
+# positive, and this one names the mechanism the other two only hinted at. Verbatim from
+# `baked-cubano-chicken`, run hunt-2026-08-27-highprotein:
+#
+#     "This line IS sliced deli lunch meat, which is exactly what deli-ham prices - a reuse. Refused
+#      the vocabulary's Diced Ham: cubed convenience packs are a different pack and price class. The
+#      'spiral ham' precedent refused deli-ham for a bone-in whole ham, which is the opposite case
+#      and does not bind here."
+#
+# The ruling bids `deli-ham`, argues FOR it twice, and is stuck because it CITED A PAST RULING that
+# refused that id in order to distinguish it. The check cannot tell "someone else refused Y, and that
+# does not apply" from "I refuse Y" - and citing the precedent you are declining to follow is exactly
+# what a careful mapper does, so this check was punishing its best reasoning for the third time.
+#
+# THE DISCRIMINATOR IS A SUBJECT. This ruling's OWN refusals are subject-less imperatives - "Refused
+# the corn-tortillas bridge", "REFUSED chicken-breast (boneless skinless)", "Refused the
+# chicken-thighs bridge" - which is how every founding fixture below reads. A REPORTED one names who
+# did the refusing right before the verb: "the 'spiral ham' precedent refused". So a refusal whose
+# verb is immediately preceded by an attribution noun is somebody else's, and is not read as this
+# ruling contradicting itself.
+#
+# NARROWING, NOT DISABLING. Every fixture above still fires: none of them puts a noun before the verb,
+# and `$realNotes` says "...precedent" AFTER its refusal, not before it. An id the ruling refuses in
+# its own voice still parks the recipe.
+$script:REFUSAL_ATTRIBUTION =
+  "(?i)(?:precedent|ruling|rule|note|entry|row|audit|finding|case|ledger|guard|gate|check|memo|comment|convention|standing\s+order)s?['’]?s?\s*$"
+
 function Test-BidContradictsNotes {
   param([string]$Bid, [string]$Notes)
   if (-not $Bid -or -not $Notes) { return $false }
@@ -1214,7 +1241,14 @@ function Test-BidContradictsNotes {
   # a longer hyphenated id in either direction (`tortillas` in `corn-tortillas`, `chicken-thighs` in
   # `boneless-chicken-thighs`), because a refused sibling is sound reasoning, not a contradiction.
   $rx = ('(?i)(?:' + $script:REFUSAL_WORDS + ')(?:[^.;:!?]{0,60}?)(?<![a-z0-9-])' + $b + '(?![a-z0-9-])')
-  return [bool]([regex]::IsMatch($Notes, $rx))
+  # EVERY match is examined, not just the first: one evidence string can carry a reported refusal AND
+  # a real one, and returning on the first would let the order of the prose decide the verdict.
+  foreach ($m in [regex]::Matches($Notes, $rx)) {
+    $before = $Notes.Substring(0, $m.Index)
+    if ([regex]::IsMatch($before, $script:REFUSAL_ATTRIBUTION)) { continue }
+    return $true
+  }
+  return $false
 }
 
 # FDC CANDIDATE ROWS, read from the cache fdc_lookup.py fills. Read-only and offline: this never
@@ -2297,6 +2331,37 @@ if ($runSelfTest) {
   T 'MUST FIRE  a SHORT bid inside a LONGER refused id is not a contradiction - substring matching would park a good recipe' `
     (-not (Test-BidContradictsNotes -Bid 'chicken-breast' -Notes $longRefusal)) `
     'matched chicken-breast inside bone-in-chicken-breast'
+
+  # ---- FIXTURE A1c-3. THE THIRD PRODUCTION FIRING, AND THE THIRD FALSE POSITIVE (2026-08-28). -----
+  # FROZEN FIXTURE, verbatim from `baked-cubano-chicken` in run hunt-2026-08-27-highprotein. The
+  # ruling bids `deli-ham`, argues FOR it twice - "This line IS sliced deli lunch meat, which is
+  # exactly what deli-ham prices" - and was stuck anyway, because it CITED a past ruling that refused
+  # that id in order to say the past ruling does not apply here.
+  #
+  # That is the difference between a refusal and a REPORT of one, and it is what the attribution rule
+  # reads: the ruling's own refusal in this very string ("Refused the vocabulary's Diced Ham") has no
+  # subject before the verb, and the reported one does ("the 'spiral ham' precedent refused").
+  $hamNotes = ("This line IS sliced deli lunch meat, which is exactly what deli-ham prices (7 of 7, " +
+               "cheapest 0.1238 Walmart) - a reuse. Refused the vocabulary's Diced Ham: cubed " +
+               "convenience packs are a different pack and price class. The 'spiral ham' precedent " +
+               "refused deli-ham for a bone-in whole ham, which is the opposite case and does not " +
+               "bind here.")
+  T 'CLEAN TWIN a ruling that CITES a past refusal of its own bid, to distinguish it, is not contradicting itself' `
+    (-not (Test-BidContradictsNotes -Bid 'deli-ham' -Notes $hamNotes)) `
+    'the 2026-08-28 cubano false positive fired again'
+  # AND THE NARROWING HAS A FLOOR. Strip the attribution - make the same sentence the ruling'"'"'s OWN
+  # voice - and the check must fire again, or this stopped being a gate.
+  $hamOwnVoice = ("This line IS sliced deli lunch meat. Refused deli-ham for a bone-in whole ham.")
+  T 'MUST FIRE  ...but the SAME refusal in the ruling OWN voice, with no one else to attribute it to, still parks the recipe' `
+    (Test-BidContradictsNotes -Bid 'deli-ham' -Notes $hamOwnVoice) `
+    'the attribution rule swallowed a real self-contradiction'
+  # A REPORTED REFUSAL BESIDE A REAL ONE. Order must not decide the verdict: the reported one comes
+  # FIRST here, so a check that returned on its first match would clear a genuine contradiction.
+  $hamBoth = ("The 'spiral ham' precedent refused deli-ham for a whole ham. Refused deli-ham here " +
+              "too, on the pack-class rule.")
+  T 'MUST FIRE  a REPORTED refusal standing before a REAL one does not clear it - every match is read, not just the first' `
+    (Test-BidContradictsNotes -Bid 'deli-ham' -Notes $hamBoth) `
+    'the first (reported) match short-circuited the real contradiction behind it'
 
   # ---- FIXTURE A1c-2. THE FALSE POSITIVE THIS CHECK ACTUALLY PRODUCED (2026-08-26). --------------
   # FROZEN FIXTURE, verbatim from `easy-beef-enchiladas` in run hunt-2026-08-26-smoke - the FIRST
