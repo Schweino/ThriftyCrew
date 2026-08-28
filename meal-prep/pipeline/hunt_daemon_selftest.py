@@ -1324,6 +1324,21 @@ def run():
       *_learn_a_clean_batch_trips_nothing())
     T("MUST FIRE  a registrar ruling gets its OWN event (the estate's first registrar ledger) and "
       "the REJECTED id is held rather than cached", *_learn_registrar_rulings_get_events())
+    H("REUSE: a new NAME for an id that already exists gets its row (2026-08-28)")
+    T("MUST FIRE  a reuse writes the vocabulary row and INHERITS unit and gpu from the row that "
+      "already carries that bid - the basis belongs to the commodity, not the name",
+      *_reuse_writes_the_row_and_inherits_the_basis())
+    T("MUST FIRE  a bid NO existing row carries has no basis to inherit, so nothing is written and "
+      "no gpu is invented - that case is a mint",
+      *_reuse_with_no_kin_refuses_rather_than_inventing_a_basis())
+    T("CLEAN TWIN a name the vocabulary already resolves gets no second row - and ALIASES count, or "
+      "the duplicate the registrar exists to prevent gets written here instead",
+      *_reuse_does_not_duplicate_a_name_the_vocabulary_already_resolves())
+    T("CLEAN TWIN a `mapped-null` ruling has no id to point a row at and is left alone",
+      *_reuse_ignores_a_ruling_with_no_id())
+    T("MUST FIRE  ...and the CALL SITE runs it from assemble_mapped - the wiring every fixture "
+      "above passes without, and the exact gap that stuck four finished recipes",
+      *_reuse_the_call_site_actually_runs())
     H("MINT: the registrar's approval now executes itself (2026-08-28)")
     T("MUST FIRE  an APPROVED ruling with a prescription and carried evidence runs all three "
       "sanctioned tools in dependency order - the hand between the registrar and a priced row is "
@@ -4302,6 +4317,139 @@ def _mint_the_call_site_actually_executes():
         arun(d.assemble_mapped("s1", res, None))
         ran = [c["script"] for c in ps.calls if "new-commodity" in c["script"]]
         return (len(ran) == 1, "new-commodity calls=%d all=%s"
+                % (len(ran), json.dumps(sorted(set(c["script"] for c in ps.calls)))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# =====================================================================================================
+# REUSE: the OTHER half of the loop, and the half that blocks more recipes.
+#
+# An `approve` is the rare registrar ruling. The common one is a new NAME for an id that already
+# exists and is already priced - `Reduced Fat Cheddar Cheese` onto `cheddar-cheese`. Nothing needs to
+# be born, and yet on run hunt-2026-08-27-highprotein four recipes still sat stuck in the write lane
+# over seven such names, because build-run-specs refuses a name the vocabulary does not resolve and
+# nothing wrote that row either.
+#
+# THE SAFETY ARGUMENT IS INHERITANCE. The unit and gpu are not guessed and not asked of a model: they
+# are COPIED from an existing row carrying the SAME bid, because gpu means "grams in one unit of the
+# priced basis" and the basis belongs to the commodity, not to the name. If nothing carries that bid
+# there is nothing to inherit, and that is a MINT, not a reuse - it stops and says so rather than
+# inventing a basis, which is the estate's oldest and most expensive class of error.
+# =====================================================================================================
+def _reuse_vocab(tmp, rows=None):
+    if rows is None:
+        # DELIBERATELY NOT THE DEFAULTS. The executor falls back to unit "oz", gpu 28.3495 and board
+        # "recipe" when a field is missing, so a source row carrying exactly those values would let
+        # this fixture pass with the inheritance torn out entirely - vacuous, and this suite has been
+        # bitten by that shape before. `lb` / 453.592 / `weekly` can only arrive by being COPIED.
+        rows = [{"item": "Cheddar Cheese", "bid": "cheddar-cheese", "gpu": 453.592, "unit": "lb",
+                 "board": "weekly", "buy_pkg_g": 226.8, "buy_pkg_label": "8oz block"},
+                {"item": "Pork Smoked Sausage", "bid": "kielbasa", "gpu": 453.592, "unit": "lb",
+                 "board": "weekly", "aliases": ["Smoked Sausage"]}]
+    path = os.path.join(tmp, "ingredients.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(rows, f)
+    return path
+
+
+def _reuse_res(name="Reduced Fat Cheddar Cheese", bid="cheddar-cheese", decision="mapped"):
+    res = _mapper_result("s1")
+    res["new_commodity_proposals"] = []
+    res["rulings"] = [{"raw": "150 g %s" % name, "term": name, "canon_item": name, "bid": bid,
+                       "decision": decision, "grams_source": 150,
+                       "evidence": "same shelf, same per-ounce price class - bid reuse is sound"}]
+    return res
+
+
+def _reuse_writes_the_row_and_inherits_the_basis():
+    """MUST FIRE, and the assertion that matters is the BASIS, not the call. A row written with the
+    right bid and a guessed gpu prices the recipe wrong while every guard reads green - that is the
+    Apple-each-vs-lb class. oz and 28.3495 must come from `Cheddar Cheese`, which carries the bid."""
+    tmp = scratch_dir(prefix="daemon-reuse-ok-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        made = arun(d.write_reuse_vocabulary_rows("s1", _reuse_res()))
+        call = (ps.find("add-ingredient-row") or [None])[0]
+        a = call["args"] if call else []
+        got = {f: FakePS.value_after(a, f) for f in ("-Item", "-Bid", "-Unit", "-Gpu", "-Board")}
+        return (made == ["Reduced Fat Cheddar Cheese"] and got["-Bid"] == "cheddar-cheese"
+                and got["-Unit"] == "lb" and got["-Gpu"] == "453.592" and got["-Board"] == "weekly"
+                and "-Apply" in a and not d.findings,
+                "made=%s args=%s findings=%s"
+                % (json.dumps(made), json.dumps(got), json.dumps(d.findings)[:200]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _reuse_with_no_kin_refuses_rather_than_inventing_a_basis():
+    """MUST FIRE. No existing row carries `baby-potatoes`, so there is no priced basis to copy. This
+    is the case that must NOT fall back to a default gpu - it is a mint, and it says so."""
+    tmp = scratch_dir(prefix="daemon-reuse-nokin-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        made = arun(d.write_reuse_vocabulary_rows(
+            "s1", _reuse_res(name="Baby Potatoes", bid="baby-potatoes")))
+        said = any("no priced basis to inherit" in f.replace("\n", " ") or
+                   "NO existing vocabulary row carries that id" in f for f in d.findings)
+        return (made == [] and said and not ps.calls,
+                "made=%s calls=%d findings=%s"
+                % (json.dumps(made), len(ps.calls), json.dumps(d.findings)[:260]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _reuse_does_not_duplicate_a_name_the_vocabulary_already_resolves():
+    """CLEAN TWIN, and ALIASES COUNT. `Smoked Sausage` is not a row - it is an alias on `Pork Smoked
+    Sausage` - and writing a second row for it is exactly the duplicate the registrar exists to
+    prevent. A name-only check would have written one."""
+    tmp = scratch_dir(prefix="daemon-reuse-dup-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        made = arun(d.write_reuse_vocabulary_rows(
+            "s1", _reuse_res(name="Smoked Sausage", bid="kielbasa")))
+        made2 = arun(d.write_reuse_vocabulary_rows(
+            "s1", _reuse_res(name="Cheddar Cheese", bid="cheddar-cheese")))
+        return (made == [] and made2 == [] and not ps.calls,
+                "alias=%s row=%s calls=%d"
+                % (json.dumps(made), json.dumps(made2), len(ps.calls)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _reuse_ignores_a_ruling_with_no_id():
+    """CLEAN TWIN. `mapped-null` names a food the mapper deliberately settled WITHOUT an id. There is
+    nothing to point a row at, and inventing one would be worse than the stall."""
+    tmp = scratch_dir(prefix="daemon-reuse-null-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        made = arun(d.write_reuse_vocabulary_rows(
+            "s1", _reuse_res(name="Powdered Peanut Butter", bid="", decision="mapped-null")))
+        return (made == [] and not ps.calls and not d.findings,
+                "made=%s calls=%d findings=%s"
+                % (json.dumps(made), len(ps.calls), json.dumps(d.findings)[:160]))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _reuse_the_call_site_actually_runs():
+    """MUST FIRE, pinning the WIRING. Every fixture above passes with write_reuse_vocabulary_rows
+    called from nowhere - which is precisely the state the estate was in while four finished recipes
+    sat stuck. This drives assemble_mapped and asserts add-ingredient-row RAN."""
+    tmp = scratch_dir(prefix="daemon-reuse-wire-")
+    try:
+        preresolved(tmp, ["s1"], residual={"s1": ["reduced fat cheddar cheese"]})
+        ps = _t8_ps(sweep={"slug": "s1", "count": 0, "proposals": []})
+        d = daemon(run_dir=tmp, ps=ps, ingredients_path=_reuse_vocab(tmp))
+        arun(d.assemble_mapped("s1", _reuse_res(), None))
+        ran = ps.find("add-ingredient-row")
+        return (len(ran) == 1 and FakePS.value_after(ran[0]["args"], "-Item")
+                == "Reduced Fat Cheddar Cheese",
+                "add-ingredient-row calls=%d all=%s"
                 % (len(ran), json.dumps(sorted(set(c["script"] for c in ps.calls)))))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

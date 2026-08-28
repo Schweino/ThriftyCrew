@@ -40,4 +40,9 @@ named the collision, which is the intended behaviour and the reason the rule is 
 Stakes are low per recipe - panko is a coating, grams are small - but the row is shared, so the error
 is shared too.
 
-Brad's call. Not started.
+RESOLVED 2026-08-28. Brad kept the FDC basis: a US label rounds to 0 g only under 0.5 g, and this
+basis puts 1.07 g on that same 30 g serving, so the two could not both be right and the label was the
+likelier error. The surviving row keeps the LABEL row's NAME - `Panko Breadcrumbs` is the vocabulary
+row and the canon on all four specs that cost panko - and carries the FDC numbers and source. The
+duplicate row is dropped (433 -> 432) and the LOCKSTEP `want` list is back to four. Shipped in
+ca1939da.

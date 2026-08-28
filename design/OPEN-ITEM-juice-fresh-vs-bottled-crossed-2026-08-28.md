@@ -39,4 +39,17 @@ Per Brad's 2026-08-26 naming ruling (leading qualifiers and the basis IN the nam
    `Fresh Lemon Juice` -> `lemons` gpu 47 was added 2026-08-28, so lemon is now correct by accident
    rather than by rule. Naming both explicitly is what makes it a rule.
 
-Brad's call. Not started.
+RESOLVED 2026-08-28. Brad ruled the PLAIN name is the bottle - "lime juice definitely comes in a
+bottle from stores" - so `Lime Juice` now bids `lime-juice` at floz / gpu 29.57, mirroring
+`Lemon Juice` exactly and keeping its own 8 floz bottle package. 70 specs moved with it; measured
+against the previous commit that is -$0.036 per serving, 69 of the 70 cheaper, about $0.50 on a
+14-serving batch.
+
+A `Fresh Lime Juice` row was ADDED beside it (bid `limes`, gpu 30), mirroring `Fresh Lemon Juice`.
+That is the step that makes this a RULE rather than a second accident: the plain name means the
+bottle and the qualified name means the fruit, for both fruits, stated in the names per Brad's
+2026-08-26 naming ruling. Nothing resolves the new row yet, so no recipe moved onto it.
+
+The spec audit this item asked for FIRST was not run separately - rebid-ingredient.ps1 selects blocks
+by IDENTITY (canon or item, never the bid alone), which is the protection the audit was standing in
+for, and it reported every slug it touched. Shipped in ca1939da.

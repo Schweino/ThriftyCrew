@@ -31,4 +31,16 @@ the "tool gap" that blocked the pork mint on 2676e46e.
 
 Then audit which live specs use Orange Zest and recost them.
 
-Brad's call. Not started.
+RESOLVED 2026-08-28. Repointed `Orange Zest` -> `oranges`, one spec touched
+(slow-cooker-orange-chicken-rice-bowls).
+
+THE PRESCRIBED gpu 6 COULD NOT BE USED, and the tool refused it rather than letting it through: the
+feed serves `oranges` per LB, not per each, and gpu is "grams in one unit of the PRICED basis". The
+same principle was re-derived for that basis instead - 6 g of zest should consume one orange, one
+orange is 131 g, 131 g is 0.2888 lb, so gpu = 6 / 0.2888 = 20.78, with buy_pkg_g 131 ("each") as the
+purchase. The yield convention is unchanged; only the unit it is expressed in.
+
+The rebid tool's hardcoded `board` = 'weekly' was left standing here (it is `oranges`, a weekly-board
+produce id), unlike the Lime Juice row where an exact sibling - `Lemon Juice`, same commodity class,
+live and working - said `recipe`. Nothing in live code reads that field; every reader is under
+meal-preprchive. Shipped in ca1939da.

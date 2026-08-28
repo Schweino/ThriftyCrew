@@ -63,6 +63,7 @@ HUNT_RUN_PS = os.path.join(HERE, "hunt-run.ps1")
 INGREDIENT_QUEUE_PS = os.path.join(REPO, "grocery", "ingredient-queue.ps1")
 INGREDIENT_QUEUE_JSON = os.path.join(REPO, "grocery", "ingredient-queue.json")
 CATEGORIES_JSON = os.path.join(REPO, "grocery", "categories.json")
+INGREDIENTS_JSON = os.path.join(REPO, "meal-prep", "db", "ingredients.json")
 PROBE_INGREDIENT_PS = os.path.join(REPO, "grocery", "probe-ingredient.ps1")
 PULL_BROWSER_STORES_PY = os.path.join(REPO, "grocery", "pull-browser-stores.py")
 # 25 s/request x ladder rungs x 2 stores x up to 10 terms. One call for the whole batch.
@@ -340,7 +341,8 @@ class Daemon(object):
                  target=0, dry_run_publish=True, pool_path=None, dispatcher=None, ps=None,
                  quiet=False, ledger_path="", preresolve_args=(), specs_dir="",
                  costed_path="", pyrun=None, food_db_path="", queue_path="",
-                 carriage_path="", considered_path="", events_path="", resolutions_path=""):
+                 carriage_path="", considered_path="", events_path="", resolutions_path="",
+                 ingredients_path=""):
         self.run_dir = run_dir
         self.run_id = run_id
         # T2: the narrative gets a file the moment the run dir is known. A QUIET daemon is a fixture
@@ -408,6 +410,10 @@ class Daemon(object):
         self.queue_path = queue_path
         self.carriage_path = carriage_path
         self.considered_path = considered_path
+        # THE VOCABULARY SEAM (2026-08-28). The reuse road WRITES db\ingredients.json, so the H2
+        # lesson applies here exactly as it did to the food DB: a fixture that exercises a writer
+        # against the live estate file is a fixture that edits the estate.
+        self.ingredients_path = ingredients_path
         # TWO MORE SEAMS, AND THE H2 LESSON IS WHY THEY EXIST BEFORE THE FIRST DRILL RATHER THAN
         # AFTER IT (PLAN-ingredient-memory D1). This build makes the daemon a WRITER of two more
         # estate-wide files: meal-prep\db\ingredient-events.jsonl and, through
@@ -2914,6 +2920,11 @@ class Daemon(object):
         # prescription and real CARRIED evidence is now executed here; anything missing either stops
         # and says which, and every write still goes through the tool that guards it.
         await self.execute_registrar_mints(slug, rulings, tables)
+        # AND THE REUSE HALF, which blocks more recipes than the mint half does. An approve is rare;
+        # a new NAME for an id that already exists is the common ruling, and it stuck four recipes on
+        # 2026-08-27 for want of a row nothing wrote. Runs AFTER the mints so a name reusing an id
+        # that was just minted finds its basis to inherit.
+        await self.write_reuse_vocabulary_rows(slug, res)
         db_written, db_findings, db_notes, db_renames = await self.write_food_db_rows(
             slug, res.get("food_db_rows"))
         shortfall = self.food_db_shortfall(slug, res, tables, db_written, db_findings)
@@ -4490,6 +4501,116 @@ class Daemon(object):
                 out.append({"store": str(store), "price": price,
                             "size": str(size).strip(), "item": str(name).strip()})
         return out
+
+    def vocabulary_rows(self):
+        r"""db\ingredients.json, as a list. An unreadable file returns [] and every caller degrades to
+        "I cannot tell", which is the safe direction here - never "there is no row"."""
+        try:
+            with open(self.ingredients_path or INGREDIENTS_JSON, "r", encoding="utf-8-sig") as f:
+                rows = json.load(f)
+        except Exception:                                         # noqa: BLE001
+            return []
+        return [r for r in (rows or []) if isinstance(r, dict)]
+
+    def vocabulary_knows(self, name, rows=None):
+        """Does the vocabulary already resolve this NAME - as a row or as an alias?
+
+        ALIASES COUNT. `Smoked Sausage` is not a row, it is an alias on `Pork Smoked Sausage`, and a
+        second row for it would be the duplicate the registrar exists to prevent.
+        """
+        want = str(name or "").strip().lower()
+        if not want:
+            return True                                           # nameless: not ours to create
+        for r in (rows if rows is not None else self.vocabulary_rows()):
+            if str(r.get("item") or "").strip().lower() == want:
+                return True
+            for a in (r.get("aliases") or []):
+                if str(a).strip().lower() == want:
+                    return True
+        return False
+
+    async def write_reuse_vocabulary_rows(self, slug, res):
+        """THE OTHER HALF OF THE LOOP, and the half that blocks more recipes (2026-08-28).
+
+        `execute_registrar_mints` carries an APPROVE all the way to a priced id. But an approve is the
+        RARE ruling. The common one is REUSE: the mapper reads `Reduced Fat Cheddar Cheese` and rules
+        it onto `cheddar-cheese`, an id that already exists and is already priced. Nothing new has to
+        be born - and yet the recipe still cannot be built, because build-run-specs refuses a name the
+        VOCABULARY does not resolve, and nothing wrote that row either.
+
+        MEASURED on run hunt-2026-08-27-highprotein: four recipes stuck in the write lane on exactly
+        this, over seven names - Reduced Fat Cheddar Cheese, Light Mayonnaise, Cooked White Rice,
+        Apricot Jam, Baby Potatoes, Whole Wheat Flour, Frozen Cauliflower Rice. Every one of them had
+        a bid the mapper had already justified. Nothing was missing but the row.
+
+        A REUSE INHERITS THE BASIS OF THE ROW IT REUSES, and that is the whole safety argument. The
+        unit and gpu are not guessed here and are not asked of a model: they are COPIED from an
+        existing vocabulary row carrying the SAME bid, because gpu means "grams in one unit of the
+        priced basis" and the basis is a property of the commodity, not of the name. `Reduced Fat
+        Cheddar Cheese` reusing `cheddar-cheese` gets oz and 28.3495 because `Cheddar Cheese` already
+        does.
+
+        AND IF NOTHING CARRIES THAT BID, THIS IS NOT A REUSE. There is no row to inherit from, so
+        there is no basis to copy and none is invented: it stops and says so. That case is a MINT,
+        and the mint road above is where it belongs - with a registrar ruling and store evidence.
+        """
+        made = []
+        rows = self.vocabulary_rows()
+        by_bid = {}
+        for r in rows:
+            b = str(r.get("bid") or "").strip()
+            if b:
+                by_bid.setdefault(b, []).append(r)
+        seen = set()
+        for r in (res.get("rulings") or []):
+            if not isinstance(r, dict):
+                continue
+            if str(r.get("decision") or "").strip().lower() != "mapped":
+                continue                                          # mapped-null has no id to reuse
+            name = str(r.get("canon_item") or "").strip()
+            bid = str(r.get("bid") or "").strip()
+            if not name or not bid or name.lower() in seen:
+                continue
+            if self.vocabulary_knows(name, rows):
+                continue
+            seen.add(name.lower())
+            kin = by_bid.get(bid) or []
+            if not kin:
+                self.findings.append(
+                    "vocab/%s: %r was ruled onto %r, but NO existing vocabulary row carries that id, "
+                    "so there is no priced basis to inherit and none will be invented. That makes "
+                    "this a MINT, not a reuse - it needs a registrar ruling and store evidence."
+                    % (slug, name, bid))
+                continue
+            src = kin[0]
+            args = ["-Item", name, "-Bid", bid,
+                    "-Unit", str(src.get("unit") or "oz"),
+                    "-Gpu", str(src.get("gpu") or 28.3495),
+                    "-Board", str(src.get("board") or "recipe"),
+                    "-Note", ("Reuse row written by the map lane: the mapper ruled this name onto an "
+                              "id that already exists and is already priced, so nothing is minted. "
+                              "The unit and gpu are COPIED from %r, which carries the same bid - the "
+                              "priced basis belongs to the commodity, not to the name. The mapper's "
+                              "reason: %s" % (str(src.get("item")),
+                                              str(r.get("evidence") or "")[:400])),
+                    "-Apply"]
+            if src.get("pantry_pkg_g"):
+                args += ["-PantryPkgG", str(src.get("pantry_pkg_g")),
+                         "-PantryPkgLabel", str(src.get("pantry_pkg_label") or ""), "-Bulk"]
+            elif src.get("buy_pkg_g"):
+                args += ["-BuyPkgG", str(src.get("buy_pkg_g")),
+                         "-BuyPkgLabel", str(src.get("buy_pkg_label") or "")]
+            rc, out, err = await self.ps(ADD_INGREDIENT_ROW_PS, args, timeout=300)
+            if rc != 0:
+                self.findings.append(
+                    "vocab/%s: the reuse row for %r on %r was REFUSED: %s"
+                    % (slug, name, bid, ((out or "") + (err or "")).strip()[:220]))
+                continue
+            made.append(name)
+            rows = self.vocabulary_rows()                          # the file just changed
+            self.log("  vocab: %s -> %s, basis inherited from %s"
+                     % (name, bid, str(src.get("item"))))
+        return made
 
     async def execute_registrar_mints(self, slug, rulings, tables=None):
         r"""Carry an APPROVED registrar ruling all the way to a priced, nameable ingredient.
