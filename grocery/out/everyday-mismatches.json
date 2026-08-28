@@ -86,7 +86,7 @@
         "ratio":  0.91,
         "price":  2.69,
         "size":  "1 lb",
-        "boardItem":  "Freshire Farms Asparagus",
+        "boardItem":  "Asparagus 1 LB",
         "linkItem":  "Asparagus, Package",
         "board_src":  "main"
     },
@@ -94,9 +94,9 @@
         "id":  "avocados",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
-        "board":  1.344,
+        "board":  1.328,
         "link":  1.046,
-        "ratio":  0.78,
+        "ratio":  0.79,
         "price":  5.23,
         "size":  "5 ct",
         "boardItem":  "Avocados, 5 ct.",
@@ -166,6 +166,19 @@
         "size":  "2.85 oz",
         "boardItem":  "Jack Link\u0027s Beef Jerky, Original",
         "linkItem":  "Jack Link\u0027s Beef Jerky, Original",
+        "board_src":  "main"
+    },
+    {
+        "id":  "bell-peppers",
+        "store":  "Aldi",
+        "unit":  "each",
+        "board":  0.83,
+        "link":  0.8967,
+        "ratio":  1.08,
+        "price":  2.69,
+        "size":  "3 ct",
+        "boardItem":  "Mixed Bell Peppers",
+        "linkItem":  "Mixed Bell Peppers",
         "board_src":  "main"
     },
     {
@@ -361,6 +374,19 @@
         "size":  "lb",
         "boardItem":  "Fresh Red Cherries",
         "linkItem":  "Fresh Red Cherries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chuck-roast",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  6.99,
+        "link":  7.99,
+        "ratio":  1.14,
+        "price":  7.99,
+        "size":  "lb",
+        "boardItem":  "Choice Black Angus Chuck Roast Per LB",
+        "linkItem":  "USDA Choice Black Angus Chuck Roast",
         "board_src":  "main"
     },
     {
@@ -728,6 +754,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "grapes",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  1.6233,
+        "link":  1.9567,
+        "ratio":  1.21,
+        "price":  5.87,
+        "size":  "3 lb",
+        "boardItem":  "Red Seedless Grapes, 3 lbs.",
+        "linkItem":  "Red Seedless Grapes, 3 lbs.",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-cinnamon",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -918,7 +957,7 @@
         "ratio":  1.07,
         "price":  3.01,
         "size":  "1 gal",
-        "boardItem":  "Friendly Farms Vitamin D Milk 1 Gal",
+        "boardItem":  "Friendly Farms 2 Milk 1 Gal",
         "linkItem":  "Friendly Farms 1 Low Fat Milk 1 Gal",
         "board_src":  "main"
     },
@@ -931,7 +970,7 @@
         "ratio":  0.87,
         "price":  1.29,
         "size":  "8 oz",
-        "boardItem":  "White Mushroom 8 OZ",
+        "boardItem":  "White Mushrooms",
         "linkItem":  "Monterey White Mushrooms Sliced 8 OZ",
         "board_src":  "main"
     },
@@ -1173,9 +1212,9 @@
         "id":  "russet-potatoes",
         "store":  "Sam\u0027s Club",
         "unit":  "lb",
-        "board":  0.517,
+        "board":  0.522,
         "link":  0.456,
-        "ratio":  0.88,
+        "ratio":  0.87,
         "price":  4.56,
         "size":  "10 lb",
         "boardItem":  "Russet Potatoes, 10 lbs.",
@@ -1193,6 +1232,19 @@
         "size":  "32 oz",
         "boardItem":  "Fremont Fish Market Value Pack Wild Caught Salmon 32 OZ",
         "linkItem":  "Fremont Fish Market Value Pack Wild Caught Salmon",
+        "board_src":  "main"
+    },
+    {
+        "id":  "sauerkraut",
+        "store":  "Aldi",
+        "unit":  "oz",
+        "board":  0.0579,
+        "link":  0.0704,
+        "ratio":  1.22,
+        "price":  1.69,
+        "size":  "24 oz",
+        "boardItem":  "Deutsche Kuche German Style Sauerkraut 24 OZ",
+        "linkItem":  "Deutsche Kuche German Style Sauerkraut 24 OZ",
         "board_src":  "main"
     },
     {
@@ -1258,6 +1310,19 @@
         "size":  "1 lb",
         "boardItem":  "Strawberries",
         "linkItem":  "Whole Strawberries 1 LB",
+        "board_src":  "main"
+    },
+    {
+        "id":  "strawberries",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.1553,
+        "link":  0.1225,
+        "ratio":  0.79,
+        "price":  3.92,
+        "size":  "2 lb",
+        "boardItem":  "Strawberries, 2 lbs.",
+        "linkItem":  "Strawberries, 2 lbs.",
         "board_src":  "main"
     },
     {
@@ -1646,7 +1711,7 @@
         "ratio":  1.1,
         "price":  5.49,
         "size":  "12 oz",
-        "boardItem":  "Sun-MaidÂ® California Golden Raisins Dried Fruit Snack",
+        "boardItem":  "Sun-MaidÃ‚Â® California Golden Raisins Dried Fruit Snack",
         "linkItem":  "Sun-Maid California Golden Raisins Dried Fruit Snack",
         "board_src":  "recipe"
     },
@@ -1750,7 +1815,7 @@
         "ratio":  0.52,
         "price":  1.67,
         "size":  "8 oz",
-        "boardItem":  "Sargento® Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
+        "boardItem":  "SargentoÂ® Provolone with  Smoke Flavor Sliced Cheese, 12 slices",
         "linkItem":  "Great Value Deli Style Sliced Provolone Cheese, 8 oz",
         "board_src":  "recipe"
     },
@@ -1841,7 +1906,7 @@
         "ratio":  0.77,
         "price":  2.5,
         "size":  "12 fl oz",
-        "boardItem":  "KrogerÂ® Mild Buffalo Wing Sauce",
+        "boardItem":  "KrogerÃ‚Â® Mild Buffalo Wing Sauce",
         "linkItem":  "Kroger Mild Buffalo Wing Sauce",
         "board_src":  "recipe"
     },
@@ -1854,7 +1919,7 @@
         "ratio":  1.12,
         "price":  5.49,
         "size":  "16 oz",
-        "boardItem":  "KrogerÂ® Hot Italian Sausage",
+        "boardItem":  "KrogerÃ‚Â® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
         "board_src":  "recipe"
     },
@@ -1867,7 +1932,7 @@
         "ratio":  0.95,
         "price":  3.5,
         "size":  "16 oz",
-        "boardItem":  "KrogerÂ® Low-Moisture Part Skim Mozzarella Shredded Cheese",
+        "boardItem":  "KrogerÃ‚Â® Low-Moisture Part Skim Mozzarella Shredded Cheese",
         "linkItem":  "Kroger Low-Moisture Part Skim Mozzarella Shredded Cheese",
         "board_src":  "recipe"
     },
@@ -1893,7 +1958,7 @@
         "ratio":  1.11,
         "price":  15.99,
         "size":  "10 lb",
-        "boardItem":  "KrogerÂ® Jasmine Rice",
+        "boardItem":  "KrogerÃ‚Â® Jasmine Rice",
         "linkItem":  "Kroger Jasmine Rice",
         "board_src":  "recipe"
     },
@@ -1919,7 +1984,7 @@
         "ratio":  0.92,
         "price":  2.5,
         "size":  "16 oz",
-        "boardItem":  "HerdezÂ® Salsa Verde Mild",
+        "boardItem":  "HerdezÃ‚Â® Salsa Verde Mild",
         "linkItem":  "Herdez Salsa Verde Mild",
         "board_src":  "recipe"
     },

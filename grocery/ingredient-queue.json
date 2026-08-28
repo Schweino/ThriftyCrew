@@ -5541,7 +5541,8 @@
                   {
                       "term":  "baby potatoes",
                       "recipes":  [
-                                      "sheet-pan-pesto-chicken-dinner"
+                                      "sheet-pan-pesto-chicken-dinner",
+                                      "apricot-chicken-sheet-pan-dinner-recipe-video"
                                   ],
                       "added":  "2026-08-26T05:09:08",
                       "why":  "sheet-pan-pesto-chicken-dinner needs it",
@@ -5553,55 +5554,55 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-26T05:17:31"
+                                                     "checked":  "2026-08-28T07:39:03"
                                                  },
                                      "Fareway":  {
                                                      "state":  "carried",
-                                                     "price":  3.88,
-                                                     "size":  "3 lb",
-                                                     "item":  "Summertime Farms Baby Gold Potatoes",
-                                                     "evidence":  "driver lookup rung 1 at Fareway: 47 priced nodes; \u0027Summertime Farms Baby Gold Potatoes\u0027 3 lb \\.88 is the fresh bagged baby potato, corroborated by Little Potato Co. Little Yellows/Little Reds 1.5 lb \\.99. Russet row ruled out.",
-                                                     "checked":  "2026-08-26T05:17:31"
+                                                     "price":  4.99,
+                                                     "size":  "1.5 lb",
+                                                     "item":  "The Little Potato Co. Little Yellows",
+                                                     "evidence":  "driver lookup \u0027little potatoes\u0027 = 6 priced Apollo nodes, all The Little Potato Co.: Little Yellows 1.5 lb $4.99, Little Duos 3 lb $5.99; \u0027Baby Potatoes\u0027 = 48 nodes incl. Summertime Farms Baby Gold and Baby Red Potatoes 3 lb $3.88. Fresh small whole potatoes; excluded Fareway Sliced Potatoes and the Loaded Baked Potato deli item.",
+                                                     "checked":  "2026-08-28T07:39:03"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "carried",
                                                          "price":  4.99,
                                                          "size":  "24 oz",
-                                                         "item":  "Our Family Potatoes Red Baby Dutch",
-                                                         "evidence":  "probe rung 1 at Family Fare: 9 hits; rel 92 is a 24 oz bag of fresh baby Dutch reds in the fresh_fruits_vegetables/potatoes aisle. Idahoan \u0027Baby Reds\u0027 MASHED boxes and Happy Baby pouches ruled out as not the ingredient.",
-                                                         "checked":  "2026-08-26T05:17:31"
+                                                         "item":  "Our Family Potatoes Yellow Baby Dutch",
+                                                         "evidence":  "Freshop store_id 6401 Omaha, probe \u0027baby potatoes\u0027 = 9 hits; Our Family Potatoes Yellow Baby Dutch 24 oz $4.99 and Red Baby Dutch 24 oz $4.99 are fresh small whole potatoes in the produce/potatoes aisle. Ruled out the Idahoan Baby Reds dehydrated mash and the Happy Baby/Tippy Toes sweet-potato infant pouches.",
+                                                         "checked":  "2026-08-28T07:39:03"
                                                      },
                                      "Hy-Vee":  {
-                                                    "state":  "blocked",
-                                                    "price":  null,
-                                                    "size":  "",
-                                                    "item":  "",
-                                                    "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-26T05:17:31"
+                                                    "state":  "carried",
+                                                    "price":  1.29,
+                                                    "size":  "sold by weight, $1.29/lb",
+                                                    "item":  "B-Size Gold Potatoes",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027gold potatoes\u0027 maps to yukon-gold-potatoes and the Hy-Vee cell is \u0027B-Size Gold Potatoes\u0027 $1.29/lb (Aisles Online search current price, storeId 1465, Omaha #01). B-size is the produce grade for 1.5-2.25 inch potatoes, i.e. exactly the baby/creamer size this ingredient names.",
+                                                    "checked":  "2026-08-28T07:39:03"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "carried",
-                                                             "price":  6.96,
+                                                             "price":  6.72,
                                                              "size":  "5 lb",
                                                              "item":  "Creamer Potatoes, 5 lbs.",
-                                                             "evidence":  "driver lookup rung 1 at Sam\u0027s Club: 22 hits; \u0027Creamer Potatoes, 5 lbs.\u0027 \\.96, unit \\.39/lb - creamer is the trade name for baby potatoes. Reser\u0027s oven-roasted prepared potatoes and Idahoan Baby Reds mashed ruled out; 8 lb yellow/red are full-size.",
-                                                             "checked":  "2026-08-26T05:17:31"
+                                                             "evidence":  "driver lookup \u0027little potatoes\u0027/\u0027Baby Potatoes\u0027: Creamer Potatoes, 5 lbs. $6.72 ($1.34/lb) at Omaha club. Creamer = the small whole potato. Excluded Flavor Bombs cherry tomatoes, Little Bellies snack sticks and Idahoan Baby Reds instant mash.",
+                                                             "checked":  "2026-08-28T07:39:03"
                                                          },
                                      "Aldi":  {
                                                   "state":  "carried",
                                                   "price":  3.29,
                                                   "size":  "24 oz",
                                                   "item":  "MK Baby Potatoes Medley",
-                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027baby potatoes\u0027 names one Aldi capture row, MK Baby Potatoes Medley 24 oz \\.29, and \u0027potatoes\u0027 corroborates with Bite Size Yellow Potatoes 24 oz \\.29 and Little Yellows Fresh Potatoes 24 oz \\.29.",
-                                                  "checked":  "2026-08-26T05:17:31"
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027baby potatoes\u0027 returns Aldi MK Baby Potatoes Medley 24 oz $3.29 in today\u0027s captures; -Name \u0027potatoes\u0027 also returns Aldi \u0027Little Yellows Fresh Potatoes\u0027 24 oz $3.29 and \u0027Bite Size Yellow Potatoes Bag\u0027 24 oz $3.29. All three are fresh small whole potatoes.",
+                                                  "checked":  "2026-08-28T07:39:03"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "carried",
                                                           "price":  3.99,
                                                           "size":  "1 lb",
                                                           "item":  "Red Creamer Potatoes",
-                                                          "evidence":  "rung 1 \u0027baby potatoes\u0027 returned 25 hits but every visible row was a frozen Birds Eye seasoned side or Stage-1/2 sweet-potato BABY FOOD - none is the ingredient. Walked the ladder myself: rung 2 synonym \u0027creamer potatoes\u0027 returned 2 hits, both the fresh bagged creamers a cook would buy (Red \\.99/lb, White \\.99/lb). \u0027petite potatoes\u0027 corroborates (Private Selection Petite Red Gourmet Potatoes 1.5 lb \\.99).",
-                                                          "checked":  "2026-08-26T05:17:31"
+                                                          "evidence":  "probe-ingredient.ps1 \u0027creamer potatoes\u0027 (ladder rung 2 synonym; rung 1 \u0027baby potatoes\u0027/\u0027little potatoes\u0027 returned only baby food and frozen sides): kroger-public-api locationId 61500319, 2 hits, both genuine - Red Creamer Potatoes 1 lb $3.99 and White Creamer Potatoes 1 lb $4.99. Creamer potatoes are the small whole waxy potatoes this ingredient names.",
+                                                          "checked":  "2026-08-28T07:39:03"
                                                       }
                                  },
                       "verdict":  "CARRIED",
@@ -6838,23 +6839,23 @@
                                                      "size":  "",
                                                      "item":  "",
                                                      "evidence":  "blocked - no browser in this session",
-                                                     "checked":  "2026-08-28T06:56:28"
+                                                     "checked":  "2026-08-28T07:19:58"
                                                  },
                                      "Fareway":  {
-                                                     "state":  "not-carried",
+                                                     "state":  "blocked",
                                                      "price":  null,
                                                      "size":  "",
                                                      "item":  "",
-                                                     "evidence":  "Pre-pass rung 1 \u0027Moroccan Spice Mix\u0027=72. I walked two further rungs myself with pull-browser-stores.py lookup mode (ladder-fareway.json): \u0027moroccan seasoning\u0027=72 and \u0027ras el hanout\u0027=72 - the identical 72 on three unrelated terms is the R1 suggestion-grid tell, and \u0027ras el hanout\u0027 returned Frontier Smoked Paprika, Fareway Seasoning Mix, Badia Paprika, Simply Organic Garam Masala, McCormick Paprika. Across all three rungs the sampled priced nodes are single spices and non-Moroccan blends (Italian/Mediterranean, Beau Monde, Greek, taco, chili); no Moroccan blend or ras el hanout appears.",
-                                                     "checked":  "2026-08-28T06:56:28"
+                                                     "evidence":  "INSTRUMENT UNUSABLE, not an empty shelf. Driver lookup mode (pull-browser-stores.py --store fareway) returned EXACTLY 72 candidates for three different terms - \u0027Moroccan Spice Mix\u0027=72, \u0027ras el hanout\u0027=72, \u0027moroccan seasoning\u0027=72 - with overlapping spice-aisle rows (Frontier Smoked Paprika, Badia Paprika, Simply Organic Garam Masala, Tajin). An identical count across three unrelated queries is the Instacart \u0027browse related items\u0027 suggestion grid (R1), and the extractor exposes only 8 of the 72 rows with relevance null, so I can neither read the no-results banner nor see 64 of the rows. None of the 24 rows I did see is a Moroccan blend, but that cannot support not-carried. Needs an attended tab.",
+                                                     "checked":  "2026-08-28T07:19:58"
                                                  },
                                      "Family Fare":  {
                                                          "state":  "not-carried",
                                                          "price":  null,
                                                          "size":  "",
                                                          "item":  "",
-                                                         "evidence":  "Full ladder plus synonyms via probe-ingredient.ps1: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0, \u0027ras el hanout\u0027=0, \u0027moroccan seasoning\u0027=0 (fell back to \u0027seasoning\u0027=25: Dan O\u0027s blends, Andys fish breading, popcorn seasoning - no Moroccan blend). Rung \u0027moroccan\u0027=3 hits, all health-and-beauty: Suave Moroccan Oil shampoo and conditioner, Nair Moroccan Argan shower cream. No ras el hanout or Moroccan spice blend.",
-                                                         "checked":  "2026-08-28T06:56:28"
+                                                         "evidence":  "probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (Freshop store_id 6401 Omaha). Pricer walked two synonym rungs himself: \u0027ras el hanout\u0027=0 hits both rungs, \u0027moroccan\u0027=3 hits and all three are health-and-beauty - Suave Moroccan Oil shampoo and conditioner, Nair Moroccan Argan shower cream. No spice blend.",
+                                                         "checked":  "2026-08-28T07:19:58"
                                                      },
                                      "Hy-Vee":  {
                                                     "state":  "blocked",
@@ -6862,15 +6863,15 @@
                                                     "size":  "",
                                                     "item":  "",
                                                     "evidence":  "blocked - no browser in this session",
-                                                    "checked":  "2026-08-28T06:56:28"
+                                                    "checked":  "2026-08-28T07:19:58"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "state":  "not-carried",
                                                              "price":  null,
                                                              "size":  "",
                                                              "item":  "",
-                                                             "evidence":  "Pre-pass rung 1 \u0027Moroccan Spice Mix\u0027=8, all generic (taco, Lawry\u0027s, Montreal steak, Old Bay). I walked two further rungs myself with pull-browser-stores.py lookup mode (ladder-samsclub.json): \u0027ras el hanout\u0027=6 hits and they are rotisserie chicken breast, Canadian bacon, Miracle Whip and mustard - a zero-relevance fallback, i.e. no result; \u0027moroccan seasoning\u0027=19 hits, all generic (Montreal steak, Member\u0027s Mark taco/Italian, Badia Complete, Tony Chachere\u0027s, Kinder\u0027s). No Moroccan blend or ras el hanout in the club.",
-                                                             "checked":  "2026-08-28T06:56:28"
+                                                             "evidence":  "Driver rung 1 \u0027Moroccan Spice Mix\u0027=8 hits, all 8 seen, all generic blends (McCormick taco, Lawry\u0027s seasoned salt, Salad Supreme, Montreal Steak, Old Bay, Kinder\u0027s) - none Moroccan. Pricer walked the ladder himself via the same driver: \u0027ras el hanout\u0027=6 hits and all 6 are the engine\u0027s no-match fallback (Member\u0027s Mark rotisserie chicken breast, Canadian bacon, Miracle Whip, French\u0027s mustard, mayo) - nothing spice-related at all; \u0027moroccan seasoning\u0027=19 hits headed by Montreal Steak, Member\u0027s Mark Taco, Member\u0027s Mark Italian, Weber Chicago Steak, Badia Complete, Tony Chachere\u0027s Creole. A stocked Moroccan blend would head its own exact query, not sit below Chicago Steak Seasoning. No ras el hanout or Moroccan blend on the club shelf.",
+                                                             "checked":  "2026-08-28T07:19:58"
                                                          },
                                      "Aldi":  {
                                                   "state":  "blocked",
@@ -6878,15 +6879,15 @@
                                                   "size":  "",
                                                   "item":  "",
                                                   "evidence":  "blocked - no browser in this session",
-                                                  "checked":  "2026-08-28T06:56:28"
+                                                  "checked":  "2026-08-28T07:19:58"
                                               },
                                      "Baker\u0027s":  {
                                                           "state":  "not-carried",
                                                           "price":  null,
                                                           "size":  "",
                                                           "item":  "",
-                                                          "evidence":  "Full ladder plus synonyms via probe-ingredient.ps1: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0, \u0027ras el hanout\u0027=0, \u0027moroccan seasoning\u0027=0 (fell back to bare \u0027seasoning\u0027=25: Cajun, Italian, taco, Adobo, Old Bay - no Moroccan blend). Rung \u0027moroccan\u0027=22 hits and every Moroccan-named item is non-food or a different food: Tree Hut Moroccan Rose scrub/body wash/shave oil, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. No ras el hanout or Moroccan spice blend on the shelf.",
-                                                          "checked":  "2026-08-28T06:56:28"
+                                                          "evidence":  "probe-ingredient full ladder: \u0027Moroccan Spice Mix\u0027=0, \u0027MoroccanSpiceMix\u0027=0 (kroger-public-api locationId 61500319). Pricer walked two synonym rungs himself: \u0027ras el hanout\u0027=0 hits (EMPTY both rungs), \u0027moroccan\u0027=22 hits, all non-food or unrelated - Tree Hut Moroccan Rose sugar scrub/body butter/shave oil, Stash Moroccan Mint tea, RiceSelect Moroccan-Style Couscous. No Moroccan/ras el hanout spice blend in any rung.",
+                                                          "checked":  "2026-08-28T07:19:58"
                                                       }
                                  },
                       "verdict":  "PENDING",
@@ -7715,6 +7716,282 @@
                                                           "item":  "Kroger Sriracha Sauce",
                                                           "evidence":  "probe pre-pass rung 1 \u0027sriracha\u0027 = 23 hits, no no-results banner. Kroger Sriracha Sauce 17 oz $3.99 (rel 134) is the bottled sauce itself. Melinda\u0027s Sriracha Hot Sauce 12 fl oz $4.99 and OX Sriracha Hot Chili Sauce 18.25 oz $5.49 corroborate. Ruled out: Sriracha Dolmas, Sriracha Carrot Hummus, Spicy Sriracha Peas and Sriracha Ranch Dressing - foods flavoured with it, not the ingredient.",
                                                           "checked":  "2026-08-28T07:01:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "little potatoes",
+                      "recipes":  [
+                                      "apricot-chicken-sheet-pan-dinner-recipe-video"
+                                  ],
+                      "added":  "2026-08-28T07:34:36",
+                      "why":  "apricot-chicken-sheet-pan-dinner-recipe-video needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T07:39:03"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  4.99,
+                                                     "size":  "1.5 lb",
+                                                     "item":  "The Little Potato Co. Little Yellows",
+                                                     "evidence":  "driver lookup \u0027little potatoes\u0027 = 6 priced Apollo nodes, all The Little Potato Co.: Little Yellows 1.5 lb $4.99, Little Duos 3 lb $5.99; \u0027Baby Potatoes\u0027 = 48 nodes incl. Summertime Farms Baby Gold and Baby Red Potatoes 3 lb $3.88. Fresh small whole potatoes; excluded Fareway Sliced Potatoes and the Loaded Baked Potato deli item.",
+                                                     "checked":  "2026-08-28T07:39:03"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  4.99,
+                                                         "size":  "24 oz",
+                                                         "item":  "Our Family Potatoes Yellow Baby Dutch",
+                                                         "evidence":  "Freshop store_id 6401 Omaha, probe \u0027baby potatoes\u0027 = 9 hits; Our Family Potatoes Yellow Baby Dutch 24 oz $4.99 and Red Baby Dutch 24 oz $4.99 are fresh small whole potatoes in the produce/potatoes aisle. Ruled out the Idahoan Baby Reds dehydrated mash and the Happy Baby/Tippy Toes sweet-potato infant pouches.",
+                                                         "checked":  "2026-08-28T07:39:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "carried",
+                                                    "price":  1.29,
+                                                    "size":  "sold by weight, $1.29/lb",
+                                                    "item":  "B-Size Gold Potatoes",
+                                                    "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027gold potatoes\u0027 maps to yukon-gold-potatoes and the Hy-Vee cell is \u0027B-Size Gold Potatoes\u0027 $1.29/lb (Aisles Online search current price, storeId 1465, Omaha #01). B-size is the produce grade for 1.5-2.25 inch potatoes, i.e. exactly the baby/creamer size this ingredient names.",
+                                                    "checked":  "2026-08-28T07:39:03"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.72,
+                                                             "size":  "5 lb",
+                                                             "item":  "Creamer Potatoes, 5 lbs.",
+                                                             "evidence":  "driver lookup \u0027little potatoes\u0027/\u0027Baby Potatoes\u0027: Creamer Potatoes, 5 lbs. $6.72 ($1.34/lb) at Omaha club. Creamer = the small whole potato. Excluded Flavor Bombs cherry tomatoes, Little Bellies snack sticks and Idahoan Baby Reds instant mash.",
+                                                             "checked":  "2026-08-28T07:39:03"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  3.29,
+                                                  "size":  "24 oz",
+                                                  "item":  "MK Baby Potatoes Medley",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027baby potatoes\u0027 returns Aldi MK Baby Potatoes Medley 24 oz $3.29 in today\u0027s captures; -Name \u0027potatoes\u0027 also returns Aldi \u0027Little Yellows Fresh Potatoes\u0027 24 oz $3.29 and \u0027Bite Size Yellow Potatoes Bag\u0027 24 oz $3.29. All three are fresh small whole potatoes.",
+                                                  "checked":  "2026-08-28T07:39:03"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  3.99,
+                                                          "size":  "1 lb",
+                                                          "item":  "Red Creamer Potatoes",
+                                                          "evidence":  "probe-ingredient.ps1 \u0027creamer potatoes\u0027 (ladder rung 2 synonym; rung 1 \u0027baby potatoes\u0027/\u0027little potatoes\u0027 returned only baby food and frozen sides): kroger-public-api locationId 61500319, 2 hits, both genuine - Red Creamer Potatoes 1 lb $3.99 and White Creamer Potatoes 1 lb $4.99. Creamer potatoes are the small whole waxy potatoes this ingredient names.",
+                                                          "checked":  "2026-08-28T07:39:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "cider vinegar",
+                      "recipes":  [
+                                      "apricot-chicken-sheet-pan-dinner-recipe-video"
+                                  ],
+                      "added":  "2026-08-28T07:34:37",
+                      "why":  "apricot-chicken-sheet-pan-dinner-recipe-video needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "carried",
+                                                     "price":  6.67,
+                                                     "size":  "128 fl oz",
+                                                     "item":  "Great Value Apple Cider Vinegar, 128 fl oz",
+                                                     "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027apple cider vinegar\u0027 -\u003e commodity apple-cider-vinegar, Walmart cell = Great Value Apple Cider Vinegar 128 fl oz $6.67 ($0.0521/floz), everyday shelf price, cheapest of 6 stores.",
+                                                     "checked":  "2026-08-28T07:39:03"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.79,
+                                                     "size":  "32 fl oz",
+                                                     "item":  "Fareway Apple Cider Vinegar",
+                                                     "evidence":  "driver lookup \u0027cider vinegar\u0027 = 6 priced nodes, all apple cider vinegar: Fareway Apple Cider Vinegar 32 fl oz $2.79 and 16 fl oz $1.99, Heinz 32 fl oz $3.99. Matches the board cell for apple-cider-vinegar at Fareway.",
+                                                     "checked":  "2026-08-28T07:39:03"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  3.69,
+                                                         "size":  "32 fl oz",
+                                                         "item":  "Apple Cider Vinegar Our Family",
+                                                         "evidence":  "Freshop store_id 6401 Omaha, probe \u0027cider vinegar\u0027 = 9 hits; Our Family Apple Cider Vinegar 32 fl oz $3.69 and 16 fl oz $1.79, Heinz All Natural 32 oz $5.39. Board cell for apple-cider-vinegar at Family Fare is Heinz Apple Cider 64 oz $5.69.",
+                                                         "checked":  "2026-08-28T07:39:03"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T07:39:03"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  16.98,
+                                                             "size":  "128 fl oz",
+                                                             "item":  "Bragg Organic Raw Unfiltered Apple Cider Vinegar",
+                                                             "evidence":  "driver lookup \u0027cider vinegar\u0027 = 23 nodes; the liquid vinegar rows are Bragg Organic Raw Unfiltered 128 fl oz $16.98 ($0.13/floz) and Bragg Organic 32 oz 2-pk $9.98. Excluded the Bragg capsules and the Nature\u0027s Truth ACV gummies/capsules, which are supplements not vinegar. Matches the board cell for apple-cider-vinegar.",
+                                                             "checked":  "2026-08-28T07:39:03"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "carried",
+                                                  "price":  4.49,
+                                                  "size":  "32 fl oz",
+                                                  "item":  "Simply Nature Organic Apple Cider Vinegar",
+                                                  "evidence":  "no browser this session; ruled from disk instead - price-ingredient.ps1 -Name \u0027apple cider vinegar\u0027 -\u003e commodity apple-cider-vinegar, Aldi cell = Simply Nature Organic Apple Cider Vinegar 32 fl oz $4.49 everyday shelf price.",
+                                                  "checked":  "2026-08-28T07:39:03"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  6.99,
+                                                          "size":  "1 gal",
+                                                          "item":  "Kroger Apple Cider Vinegar",
+                                                          "evidence":  "probe \u0027cider vinegar\u0027 = 23 hits; Kroger Apple Cider Vinegar 1 gal $6.99 ($0.055/floz) and 64 fl oz $4.99, plus Bragg organic 16 fl oz $3.99. Confirmed on the board: price-ingredient.ps1 -Name \u0027apple cider vinegar\u0027 -\u003e commodity apple-cider-vinegar, Baker\u0027s cell = Kroger Apple Cider Vinegar. Excluded the Goli ACV gummies and the peach cider vinegar.",
+                                                          "checked":  "2026-08-28T07:39:03"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "powdered peanut butter",
+                      "recipes":  [
+                                      "bang-bang-chicken-bowls"
+                                  ],
+                      "added":  "2026-08-28T07:50:50",
+                      "why":  "bang-bang-chicken-bowls needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T07:52:55"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  8.99,
+                                                     "size":  "16 oz",
+                                                     "item":  "PB2 Powdered Peanut Butter, Original",
+                                                     "evidence":  "driver lookup rung 1 \u0027powdered peanut butter\u0027: single priced Apollo node, PB2 Powdered Peanut Butter Original 16 oz $8.99 - exact-name product match, no ladder needed since the rung answered with the ingredient itself",
+                                                     "checked":  "2026-08-28T07:52:55"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  10.99,
+                                                         "size":  "16 oz",
+                                                         "item":  "Pb2 Powdered Original Peanut Butter 16 Oz",
+                                                         "evidence":  "pre-pass probe rung 1 \u0027powdered peanut butter\u0027: 2 hits, both PB2 (powdered original 16 oz $10.99 and PB2 Pure Peanut Powder 16 oz $11.99); the first is the ingredient",
+                                                         "checked":  "2026-08-28T07:52:55"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T07:52:55"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "blocked",
+                                                             "price":  null,
+                                                             "size":  "",
+                                                             "item":  "",
+                                                             "evidence":  "driver lookup rung 1 returned 22 rows; the one genuine candidate, \u0027PBfit Classic Peanut Butter 8g Powdered Peanut Butter Spread, 1.87 lbs\u0027, came back with no-honest-price and every other row is a protein powder or a jarred spread (Skippy/Jif/Orgain/KOS). A carried row needs a price and I have none, so this is a price-extraction block, not an empty shelf - re-check attended",
+                                                             "checked":  "2026-08-28T07:52:55"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T07:52:55"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  4.99,
+                                                          "size":  "6.5 oz",
+                                                          "item":  "PB2 Original Powdered Peanut Butter",
+                                                          "evidence":  "pre-pass probe rung 1 \u0027powdered peanut butter\u0027: 5 priced hits, top three are PB2 powdered peanut butter (6.5/16/24 oz) plus two Simple Truth powdered plant-based PB; PB2 Original 6.5 oz $4.99 is the ingredient exactly, defatted peanut flour a cook buys for this recipe",
+                                                          "checked":  "2026-08-28T07:52:55"
+                                                      }
+                                 },
+                      "verdict":  "CARRIED",
+                      "notes":  null
+                  },
+                  {
+                      "term":  "frozen cauliflower rice",
+                      "recipes":  [
+                                      "bang-bang-chicken-bowls"
+                                  ],
+                      "added":  "2026-08-28T07:50:51",
+                      "why":  "bang-bang-chicken-bowls needs it",
+                      "status":  "resolved",
+                      "stores":  {
+                                     "Walmart":  {
+                                                     "state":  "blocked",
+                                                     "price":  null,
+                                                     "size":  "",
+                                                     "item":  "",
+                                                     "evidence":  "blocked - no browser in this session",
+                                                     "checked":  "2026-08-28T07:52:55"
+                                                 },
+                                     "Fareway":  {
+                                                     "state":  "carried",
+                                                     "price":  2.99,
+                                                     "size":  "10 oz",
+                                                     "item":  "Birds Eye Riced Cauliflower, Frozen Vegetables",
+                                                     "evidence":  "driver lookup rung 1 \u0027frozen cauliflower rice\u0027: 73 nodes; Birds Eye Riced Cauliflower 10 oz $2.99 is plain frozen riced cauliflower (the Savory Herb and Green Giant medley/risotto rows are seasoned variants and ruled out)",
+                                                     "checked":  "2026-08-28T07:52:55"
+                                                 },
+                                     "Family Fare":  {
+                                                         "state":  "carried",
+                                                         "price":  2.99,
+                                                         "size":  "10 oz",
+                                                         "item":  "Frozen Cauliflower Rice Our Family Steamable",
+                                                         "evidence":  "pre-pass EMPTY was a term artifact - its ladder only tried \u0027frozen cauliflower rice\u0027 then the spacing variant \u0027frozencauliflowerrice\u0027. I walked one more rung myself: probe-ingredient.ps1 \u0027riced cauliflower\u0027 returns 4 Family Fare hits including \u0027Frozen Cauliflower Rice Our Family Steamable\u0027 10 oz $2.99 in freezer/frozen_vegetables/cauliflower. Carried",
+                                                         "checked":  "2026-08-28T07:52:55"
+                                                     },
+                                     "Hy-Vee":  {
+                                                    "state":  "blocked",
+                                                    "price":  null,
+                                                    "size":  "",
+                                                    "item":  "",
+                                                    "evidence":  "blocked - no browser in this session",
+                                                    "checked":  "2026-08-28T07:52:55"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "state":  "carried",
+                                                             "price":  6.73,
+                                                             "size":  "12 oz x 4 pk",
+                                                             "item":  "Member\u0027s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+                                                             "evidence":  "driver lookup rung 1 \u0027frozen cauliflower rice\u0027: 14 rows; Member\u0027s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk. $6.73 is the ingredient (remaining rows are frozen fruit and prepared fried rice / orange chicken, ruled out)",
+                                                             "checked":  "2026-08-28T07:52:55"
+                                                         },
+                                     "Aldi":  {
+                                                  "state":  "blocked",
+                                                  "price":  null,
+                                                  "size":  "",
+                                                  "item":  "",
+                                                  "evidence":  "blocked - no browser in this session",
+                                                  "checked":  "2026-08-28T07:52:55"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "state":  "carried",
+                                                          "price":  2.39,
+                                                          "size":  "12 oz",
+                                                          "item":  "Kroger Recipe Beginnings Frozen Cauliflower Rice",
+                                                          "evidence":  "pre-pass probe rung 1 \u0027frozen cauliflower rice\u0027: 7 hits; Kroger Recipe Beginnings Frozen Cauliflower Rice 12 oz $2.39 is plain riced cauliflower, no sauce or medley - confirmed again on my own probe of \u0027riced cauliflower\u0027 (8 hits, same SKU)",
+                                                          "checked":  "2026-08-28T07:52:55"
                                                       }
                                  },
                       "verdict":  "CARRIED",

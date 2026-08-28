@@ -837,6 +837,15 @@
         "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
+        "id":  "chuck-roast",
+        "store":  "Family Fare",
+        "product":  "Fresh Beef Chuck Roast, Boneless",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "cilantro",
         "store":  "Family Fare",
         "product":  "Cilantro (Chinese Parsley/Coriander)",
@@ -956,7 +965,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -1393,6 +1402,15 @@
         "aisle":  "pantry/baking",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "frozen-broccoli",
+        "store":  "Family Fare",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "frozen-brussels-sprouts",
@@ -3393,13 +3411,13 @@
         "reason":  "\u0027honey-dijon-mustard\u0027 is in no estate category - refused rather than guessed"
     },
     {
-        "id":  "light-sour-cream",
+        "id":  "frozen-broccoli-florets",
         "store":  "Family Fare",
-        "product":  "Daisy Daisy® Light Sour Cream 16 Oz. Tub",
-        "dept":  "dairy",
-        "aisle":  "dairy/sour_cream",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
         "verdict":  "BLIND",
-        "reason":  "\u0027light-sour-cream\u0027 is in no estate category - refused rather than guessed"
+        "reason":  "\u0027frozen-broccoli-florets\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "buffalo-wing-sauce",
@@ -3499,5 +3517,23 @@
         "aisle":  "pantry/mixes_spices_seasoning",
         "verdict":  "BLIND",
         "reason":  "\u0027white-wine-vinegar\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "almond-butter",
+        "store":  "Family Fare",
+        "product":  "Our Family Creamy Almond Butter",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "BLIND",
+        "reason":  "\u0027almond-butter\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "bone-broth",
+        "store":  "Family Fare",
+        "product":  "Our Family Beef Bone Broth 32 Fl Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/broth_soups_stews_chili",
+        "verdict":  "BLIND",
+        "reason":  "\u0027bone-broth\u0027 is in no estate category - refused rather than guessed"
     }
 ]

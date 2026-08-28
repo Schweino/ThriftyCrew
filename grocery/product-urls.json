@@ -775,13 +775,6 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-08-23 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13585869052",
-                                                         "price":  6.22,
-                                                         "size":  "4 lb",
-                                                         "name":  "Envy Apples, 4 lbs.",
-                                                         "board_pu":  1.555
-                                                     },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16551400-gala-apple-1-lb",
                                                  "name":  "Gala Apple",
@@ -806,14 +799,6 @@
                              },
                   "applesauce":  {
                                      "commodity":  "applesauce",
-                                     "Aldi":  {
-                                                  "url":  "https://www.aldi.us/store/aldi/products/19520000-simply-nature-unsweetened-applesauce-46-oz",
-                                                  "name":  "Simply Nature Unsweetened Applesauce 46 OZ",
-                                                  "price":  "$3.19",
-                                                  "size":  "46 oz",
-                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
-                                                  "board_pu":  0.0693
-                                              },
                                      "Family Fare":  {
                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/applesauce/our_family_applesauce_unsweetened_48_oz/p/7081164",
                                                          "name":  "Our Family Applesauce, Unsweetened 48 Oz",
@@ -856,7 +841,14 @@
                                                      "price":  "$9.08",
                                                      "size":  "189.2 oz",
                                                      "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                     "Aldi":  {
+                                                  "url":  "https://www.aldi.us/store/aldi/products/21118337-lunch-buddies-cinnamon-applesauce-cups-4-oz",
+                                                  "name":  "Lunch Buddies Cinnamon Applesauce Cups 4 OZ",
+                                                  "price":  "$1.95",
+                                                  "size":  "24 oz",
+                                                  "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                              }
                                  },
                   "apricots":  {
                                    "commodity":  "Apricots",
@@ -1717,11 +1709,11 @@
                                                    "verified":  "2026-08-09 DERIVED from the price row (same record the board priced)"
                                                },
                                    "Baker\u0027s":  {
-                                                        "url":  "https://www.bakersplus.com/p/irish-spring-original-deodorant-bar-soap-for-men-with-flaxseed-oil-12-hour-fresh-deodorant-soap/0003500014110",
-                                                        "name":  "Irish Spring Original Deodorant Bar Soap for Men With Flaxseed Oil 12 Hour Fresh Deodorant Soap",
-                                                        "price":  "$6.29",
-                                                        "size":  "8 pk 3.7 oz",
-                                                        "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
+                                                        "url":  "https://www.bakersplus.com/p/ivory-gentle-bar-soap-plant-based-without-heavy-perfumes-parabens-or-phthalates-original-scent/0003077222298",
+                                                        "name":  "Ivory Gentle Bar Soap Plant-Based Without Heavy Perfumes Parabens or Phthalates Original Scent",
+                                                        "price":  "$8.49",
+                                                        "size":  "12 ct",
+                                                        "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
                                                     }
                                },
                   "batteries":  {
@@ -1850,13 +1842,6 @@
                                                  "size":  "18 oz",
                                                  "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                              },
-                                    "Baker\u0027s":  {
-                                                         "url":  "https://www.bakersplus.com/p/sweet-baby-ray-s-original-bbq-sauce/0001340900004",
-                                                         "name":  "Sweet Baby Ray\u0027s Original BBQ Sauce",
-                                                         "price":  8.49,
-                                                         "size":  "80 oz",
-                                                         "verified":  "2026-08-23"
-                                                     },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/3963368/hy-vee-honey-bbq-sauce",
                                                    "name":  "Hy-Vee Honey BBQ Sauce",
@@ -1870,7 +1855,14 @@
                                                     "price":  "$3.99",
                                                     "size":  "40 oz",
                                                     "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kraft-sweet-honey-slow-simmered-bbq-sauce/0002100005238",
+                                                         "name":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
+                                                         "price":  "$1.99",
+                                                         "size":  "18 fl oz",
+                                                         "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                     }
                                 },
                   "beef-broth":  {
                                      "commodity":  "Beef Broth",
@@ -2886,11 +2878,11 @@
                                                             "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                                         },
                                             "Baker\u0027s":  {
-                                                                 "url":  "https://www.bakersplus.com/p/kroger-mild-pork-sausage-roll/0001111097298",
-                                                                 "name":  "Kroger Mild Pork Sausage Roll",
-                                                                 "price":  3.29,
+                                                                 "url":  "https://www.bakersplus.com/p/kroger-hot-pork-sausage-roll/0001111097299",
+                                                                 "name":  "Kroger Hot Pork Sausage Roll",
+                                                                 "price":  "$3.29",
                                                                  "size":  "16 oz",
-                                                                 "verified":  "2026-08-23"
+                                                                 "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
                                                              }
                                         },
                   "broccoli":  {
@@ -5422,13 +5414,6 @@
                                                                "verified":  "2026-08-23",
                                                                "board_pu":  0.1779
                                                            },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/15677963466",
-                                                                  "price":  5.67,
-                                                                  "size":  "2 lb",
-                                                                  "name":  "Grape Tomatoes, 2 lbs.",
-                                                                  "board_pu":  0.1772
-                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/Fresh-Cherubs-Grape-Tomatoes-24-oz-Package/317386581",
                                                           "name":  "Fresh Cherubs Grape Tomatoes, 24 oz Package",
@@ -5463,7 +5448,14 @@
                                                          "price":  "$4.69",
                                                          "size":  "10 oz",
                                                          "verified":  "2026-08-25 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/13599513403",
+                                                                  "name":  "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+                                                                  "price":  "$6.97",
+                                                                  "size":  "1.5 lb",
+                                                                  "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "chicken-breast":  {
                                          "commodity":  "Boneless Skinless Chicken Breast",
@@ -7388,11 +7380,11 @@
                                                               "verified":  "2026-08-23"
                                                           },
                                          "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_24_oz/p/1564405684702751833",
-                                                             "name":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+                                                             "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_small_curd_4_milkfat_minimum_24_oz/p/7081910",
+                                                             "name":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
                                                              "price":  "$3.69",
                                                              "size":  "24 oz",
-                                                             "verified":  "2026-08-24 DERIVED from the price row (same record the board priced)"
+                                                             "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
                                                          }
                                      },
                   "cotton-swabs":  {
@@ -7976,14 +7968,6 @@
                                    },
                   "deli-ham":  {
                                    "commodity":  "deli-ham",
-                                   "Aldi":  {
-                                                "url":  "https://www.aldi.us/store/aldi/products/20165091-lunch-mate-honey-ham-16-oz",
-                                                "name":  "Lunch Mate Honey Ham 16 OZ",
-                                                "price":  "$4.15",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                                "board_pu":  0.2594
-                                            },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/73880/smithfield-sliced-deli-ham",
                                                   "name":  "Smithfield Sliced Deli Ham",
@@ -8026,7 +8010,14 @@
                                                    "price":  "$4.99",
                                                    "size":  "16 oz",
                                                    "verified":  "2026-08-20 DERIVED from the price row (same record the board priced)"
-                                               }
+                                               },
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/20019634-lunch-mate-black-forest-ham-16-oz",
+                                                "name":  "Lunch Mate Black Forest Ham 16 OZ",
+                                                "price":  "$4.15",
+                                                "size":  "16 oz",
+                                                "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                            }
                                },
                   "deodorant":  {
                                     "commodity":  "deodorant",
@@ -8581,13 +8572,6 @@
                                                     "size":  "5.6 oz",
                                                     "verified":  "2026-08-09 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/19348961936",
-                                                             "name":  "Milk-Bone Original Dog Biscuits, Medium Crunchy Dog Treats, 15 lbs.",
-                                                             "price":  "$13.98",
-                                                             "size":  "15 lb",
-                                                             "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                         },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/Milk-Bone-Original-Dog-Biscuits-Small-Crunchy-Dog-Treats-24-Ounces/10293676",
                                                      "name":  "Milk Bone Original Small Dog Biscuits, Original Beef Flavor Dog Treats for Small Dogs, 24 oz Box",
@@ -8608,7 +8592,14 @@
                                                   "price":  "$4.99",
                                                   "size":  "10 oz",
                                                   "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                              }
+                                              },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/7910051029",
+                                                             "name":  "Milk-Bone Original Flavor Large Crunchy Dog Biscuits, 15 lbs.",
+                                                             "price":  "$13.98",
+                                                             "size":  "15 lb",
+                                                             "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                         }
                                  },
                   "donuts":  {
                                  "commodity":  "donuts",
@@ -12022,13 +12013,6 @@
                                                  "size":  "2.25 lb",
                                                  "verified":  "2026-08-12 DERIVED from the price row (same record the board priced)"
                                              },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/13773419692",
-                                                         "name":  "Green Seedless Grapes, 3 lbs.",
-                                                         "price":  "$5.87",
-                                                         "size":  "3 lb",
-                                                         "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Aldi":  {
                                               "url":  "https://www.aldi.us/store/aldi/products/305371-red-grapes-each",
                                               "name":  "Red Grapes Each",
@@ -12042,7 +12026,14 @@
                                                       "price":  "$7.99",
                                                       "size":  "3 lb",
                                                       "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/13585869299",
+                                                         "name":  "Red Seedless Grapes, 3 lbs.",
+                                                         "price":  "$5.87",
+                                                         "size":  "3 lb",
+                                                         "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "greek-yogurt":  {
                                        "commodity":  "Greek Yogurt",
@@ -18577,7 +18568,14 @@
                                                                 "price":  "$1.94",
                                                                 "size":  "lb",
                                                                 "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                            },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-fresh-natural-pork-shoulder-butt-bone-in/0020799300000",
+                                                             "name":  "Kroger Fresh Natural Pork Shoulder Butt Bone In",
+                                                             "price":  "$2.99",
+                                                             "size":  "lb",
+                                                             "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "pork-tenderloin":  {
                                           "commodity":  "Pork Tenderloin",
@@ -19316,14 +19314,6 @@
                             },
                   "ranch-dressing":  {
                                          "commodity":  "ranch-dressing",
-                                         "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/112653332-tuscan-garden-avocado-ranch-dressing-20-fl-oz",
-                                                      "name":  "Tuscan Garden Avocado Ranch Dressing 20 FL OZ",
-                                                      "price":  "$2.35",
-                                                      "size":  "20 fl oz",
-                                                      "verified":  "2026-08-05 DERIVED from the price row (same record the board priced)",
-                                                      "board_pu":  0.1175
-                                                  },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068057-fareway-dressing-ranch-16-oz",
                                                          "price":  2.48,
@@ -19365,7 +19355,14 @@
                                                               "price":  3.99,
                                                               "size":  "36 fl oz",
                                                               "verified":  "2026-08-23"
-                                                          }
+                                                          },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/112653223-tuscan-garden-buffalo-ranch-dressing-20-fl-oz",
+                                                      "name":  "Tuscan Garden Buffalo Ranch Dressing 20 FL OZ",
+                                                      "price":  "$2.35",
+                                                      "size":  "20 fl oz",
+                                                      "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                  }
                                      },
                   "ranch-seasoning-mix":  {
                                               "commodity":  "Ranch Seasoning Mix (packet)",
@@ -22200,7 +22197,14 @@
                                                     "price":  "$1.89",
                                                     "size":  "1 lb",
                                                     "verified":  "2026-08-23 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/13612870276",
+                                                               "name":  "Strawberries, 2 lbs.",
+                                                               "price":  "$3.92",
+                                                               "size":  "2 lb",
+                                                               "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
+                                                           }
                                    },
                   "string-cheese":  {
                                         "commodity":  "string-cheese",
@@ -25642,6 +25646,13 @@
                                                  "price":  "$19.48",
                                                  "size":  "59.175 fl oz",
                                                  "verified":  "2026-08-27 DERIVED from the price row (same record the board priced)"
+                                             },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16316604-christian-brothers-grape-brandy-other-750-ml",
+                                                 "name":  "Christian Brothers VS Brandy",
+                                                 "price":  "$11.99",
+                                                 "size":  "750 ml",
+                                                 "verified":  "2026-08-28 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "red-wine":  {

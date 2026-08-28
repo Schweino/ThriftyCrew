@@ -1,5 +1,5 @@
 {
-    "updated":  "2026-08-27T08:15:50",
+    "updated":  "2026-08-28T08:14:44",
     "price_table":  "price-table-2026-08-26.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
@@ -7,9 +7,9 @@
                        "file":  "ingredient-queue.json",
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
-                       "captured":  274,
+                       "captured":  391,
                        "reached":  16,
-                       "missing":  258,
+                       "missing":  375,
                        "missing_rows":  [
                                             {
                                                 "key":  "chili-garlic-sauce",
@@ -1407,7 +1407,7 @@
                                                 "key":  "red onion",
                                                 "store":  "Walmart",
                                                 "price":  1.34,
-                                                "size":  "lb (3 lb bag)",
+                                                "size":  "$/lb (3 lb bag)",
                                                 "item":  "Fresh Red Onions, 3 lb, Bag",
                                                 "commodity_known":  false
                                             },
@@ -1415,39 +1415,39 @@
                                                 "key":  "red onion",
                                                 "store":  "Fareway",
                                                 "price":  1.11,
-                                                "size":  "each ($1.48/lb)",
+                                                "size":  "$1.48 / lb",
                                                 "item":  "Red Onion",
                                                 "commodity_known":  false
                                             },
                                             {
                                                 "key":  "red onion",
                                                 "store":  "Family Fare",
-                                                "price":  1.99,
+                                                "price":  1.79,
                                                 "size":  "lb",
-                                                "item":  "Organic Red Onions",
+                                                "item":  "Sweet Red Italian Onions",
                                                 "commodity_known":  false
                                             },
                                             {
                                                 "key":  "red onion",
                                                 "store":  "Hy-Vee",
                                                 "price":  1.28,
-                                                "size":  "lb",
+                                                "size":  "$/lb (sold ~0.85 lb each)",
                                                 "item":  "Sweet Red Onions",
                                                 "commodity_known":  false
                                             },
                                             {
                                                 "key":  "red onion",
                                                 "store":  "Sam\u0027s Club",
-                                                "price":  6.42,
-                                                "size":  "6 lbs",
-                                                "item":  "Tanimura and Antle Sweet Italian Red Onions",
+                                                "price":  6.15,
+                                                "size":  "6 lb",
+                                                "item":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
                                                 "commodity_known":  false
                                             },
                                             {
                                                 "key":  "red onion",
                                                 "store":  "Aldi",
                                                 "price":  1.095,
-                                                "size":  "lb (2 lb bag)",
+                                                "size":  "$/lb (2 lb bag)",
                                                 "item":  "Red Onion Bag 2 Lbs",
                                                 "commodity_known":  false
                                             },

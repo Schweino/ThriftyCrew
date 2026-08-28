@@ -3,47 +3,47 @@
     "namespace":  "recipe",
     "rules_hash":  "148a9e57bd444d5e32d2ce9f4d04869742b21bcdcd05e2d1c08b6a7ad809954c",
     "board_date":  "2026-08-26",
-    "built_at":  "2026-08-28T07:13:41",
-    "rows_total":  35940,
-    "rows_reused_from_previous":  0,
-    "rows_rematched":  35940,
+    "built_at":  "2026-08-28T08:12:18",
+    "rows_total":  35948,
+    "rows_reused_from_previous":  35837,
+    "rows_rematched":  111,
     "rows_contested":  43,
     "key_collisions_demoted_to_name":  587,
     "stores":  [
                    {
                        "store":  "Aldi",
                        "rows":  2865,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "rows":  7394,
+                       "rows":  7399,
                        "changed":  true
                    },
                    {
                        "store":  "Family Fare",
                        "rows":  5350,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Fareway",
-                       "rows":  1004,
+                       "rows":  1009,
                        "changed":  true
                    },
                    {
                        "store":  "Hy-Vee",
                        "rows":  2125,
-                       "changed":  true
+                       "changed":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "rows":  202,
+                       "rows":  200,
                        "changed":  true
                    },
                    {
                        "store":  "Walmart",
                        "rows":  17000,
-                       "changed":  true
+                       "changed":  false
                    }
                ]
 }

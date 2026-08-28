@@ -146,7 +146,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-27T08:14:36",
+    "generated":  "2026-08-28T08:13:37",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -306,6 +306,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "bbq-sauce",
+                              "commodity":  "BBQ Sauce",
+                              "unit":  "oz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.1106,
+                              "size":  "18 fl oz",
+                              "item":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "beef-broth",
                               "commodity":  "Beef Broth / Stock",
                               "unit":  "floz",
@@ -394,8 +406,8 @@
                               "commodity":  "Chicken Broth / Stock",
                               "unit":  "floz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.0416,
-                              "size":  "192 fl oz",
+                              "per_unit":  0.04,
+                              "size":  "fl oz",
                               "item":  "Member\u0027s Mark Chicken Broth, 32 oz., 6 pk.",
                               "kind":  "volume",
                               "row_kind":  "weight",

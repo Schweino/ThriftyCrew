@@ -1,12 +1,12 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-08-27",
-                  "pid":  28484,
-                  "started":  "2026-08-27T08:00:02",
-                  "updated":  "2026-08-27T08:31:07",
-                  "stage":  "complete",
-                  "exit_code":  1,
-                  "log":  "--- run-log: capture-run-daily | 2026-08-27T08:00:02 | pid 28484 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-08-27.log"
+                  "date":  "2026-08-28",
+                  "pid":  37340,
+                  "started":  "2026-08-28T08:00:01",
+                  "updated":  "2026-08-28T08:23:19",
+                  "stage":  "publishing",
+                  "exit_code":  null,
+                  "log":  "--- run-log: capture-run-daily | 2026-08-28T08:00:01 | pid 37340 --- C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-08-28.log"
               },
     "ad":  {
                "date":  "2026-08-28",
