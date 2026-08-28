@@ -26,7 +26,7 @@
                  "protein":  31,
                  "carbs":  81,
                  "fat":  15,
-                 "cost_ps":  "3.32"
+                 "cost_ps":  "3.33"
              },
     "intro_html":  "One pot means one pot. The pasta cooks directly in the salsa and broth, which means the starch that normally goes down the drain stays in the pan and thickens the sauce for free. No colander, no second pot, no separate sauce. Each serving runs {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Jarred salsa doing the job of six separate ingredients is one of the better shortcuts in a budget kitchen.",
     "ingredients_display":  [
@@ -49,19 +49,19 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Olive Oil, 1.75 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "93/7 Ground Turkey, 2.5 lb: ~$9.81. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
+                       "Olive Oil, 1.75 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 2.5 lb: ~$11.68. \u003cstrong\u003eBuy 3 lbs: $13.65.\u003c/strong\u003e",
                        "Yellow Onion, 1.3 onions: ~$0.37. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Garlic, 4.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Garlic, 4.5 tbsp: ~$0.52. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Salsa, 4.25 cups: ~$4.35. \u003cstrong\u003eBuy 3 16oz jars: $5.91.\u003c/strong\u003e",
-                       "Chicken Broth, 2 cartons: ~$2.48. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cartons: ~$2.81. \u003cstrong\u003ePantry staple; this batch alone uses about 3 32oz cartons.\u003c/strong\u003e",
                        "Pasta Shells, 44 oz dry: ~$2.66. \u003cstrong\u003eBuy 4 12oz boxes: $2.91.\u003c/strong\u003e",
-                       "Cheddar Cheese, Shredded, 5 oz: ~$1.10. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
-                       "Light Sour Cream, 1.5 cups: ~$1.19. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, chili powder, garlic powder, onion powder, dried oregano, ground cumin, black pepper): ~$1.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.97 across 14 servings, so roughly $1.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.31 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.60. Those containers then feed this batch and many more after it."
+                       "Cheddar Cheese, Shredded, 5 oz: ~$0.78. \u003cstrong\u003eBuy 1 8oz bag: $1.22.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.5 cups: ~$1.34. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, chili powder, garlic powder, onion powder, dried oregano, ground cumin, black pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.69 across 14 servings, so roughly $1.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.24 across 14 servings, roughly $2.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.64. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Salsa replaces canned tomatoes, chiles, onion, and half the seasoning at once, and pasta cooked in its own sauce means nothing gets poured away.",
     "shop_smart":  [
@@ -83,14 +83,14 @@
     "portion_html":  "Weigh the pot, subtract the empty pot weight you wrote down, and divide by 14. One-pot pastas keep drinking sauce as they cool, so portion soon and let the scale keep the containers even. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://cookingforkeeps.com/one-pot-turkey-mexican-pasta/\" target=\"_blank\" rel=\"noopener\"\u003ecookingforkeeps.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot, one pan to wash, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
-    "cost_batch":  23.97,
-    "cost_batch_true":  29.31,
-    "cost_per_serving":  1.71,
-    "cost_per_serving_true":  2.09,
-    "cost_pantry_add":  20.29,
-    "cost_first_run":  49.6,
+    "cost_batch":  25.69,
+    "cost_batch_true":  31.24,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.23,
+    "cost_pantry_add":  15.4,
+    "cost_first_run":  46.64,
     "scaler":  {
-                   "cost":  "29.31",
+                   "cost":  "31.24",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -209,7 +209,7 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  330,
                                    "buy":  "1.5 cups",
-                                   "bid":"sour-cream",
+                                   "bid":"light-sour-cream",
                                    "gpu":28.3495
                                },
                                {
@@ -229,7 +229,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  3.32,
+                 "costPerServing":  3.33,
                  "recipeIngredient":  [
                                           "Olive Oil, 1.75 tbsp (23 g)",
                                           "93/7 Ground Turkey, 2.5 lb (1164 g)",

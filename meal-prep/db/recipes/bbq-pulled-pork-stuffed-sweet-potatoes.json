@@ -26,7 +26,7 @@
                  "protein":  45,
                  "carbs":  57,
                  "fat":  39,
-                 "cost_ps":  "2.84"
+                 "cost_ps":  "2.86"
              },
     "intro_html":  "Sweet and smoky is one of the oldest pairings in American barbecue, and here it happens in one bowl. A roasted sweet potato splits open, gets a pile of barbecue pulled pork dropped into it, then sour cream, onion and cilantro on top. No bun to buy, no bun to go stale, and the potato brings fiber and potassium that a white roll never did. This is also the easiest thing in the section to prep, because the two components store separately and reheat on their own schedules.",
     "ingredients_display":  [
@@ -45,18 +45,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pork Shoulder, 7.5 lb: ~$26.44. \u003cstrong\u003eBuy 8 lbs: $28.56.\u003c/strong\u003e",
+                       "Pork Shoulder, 7.5 lb: ~$16.59. \u003cstrong\u003eBuy 8 lbs: $17.92.\u003c/strong\u003e",
                        "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Sweet Potatoes, 14 sweet potatoes: ~$5.94. \u003cstrong\u003eBuy 4 lbs: $5.94.\u003c/strong\u003e",
-                       "BBQ Sauce, 3.5 cups: ~$4.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
-                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "BBQ Sauce, 3.5 cups: ~$2.63. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
+                       "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, bay leaves, smoked paprika): ~$0.63. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $40.77 across 14 servings, so roughly $2.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $44.79 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.59. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper, bay leaves, smoked paprika): ~$0.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.29 across 14 servings, so roughly $2.09 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.60 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.98. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The pork shoulder is nearly all of it. The sweet potato that holds the whole thing together is the cheapest item on the list.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Set one roasted sweet potato in each of your 14 containers, then set your mixing pot of barbecue pork on the scale, subtract the empty pot weight from Step 1, divide by 14, and pile that exact weight into each potato. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-pulled-pork-stuffed-sweet-potatoes/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eBarbecue in a sweet potato for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  40.77,
-    "cost_batch_true":  44.79,
-    "cost_per_serving":  2.91,
-    "cost_per_serving_true":  3.2,
-    "cost_pantry_add":  9.8,
-    "cost_first_run":  54.59,
+    "cost_batch":  29.29,
+    "cost_batch_true":  32.6,
+    "cost_per_serving":  2.09,
+    "cost_per_serving_true":  2.33,
+    "cost_pantry_add":  7.38,
+    "cost_first_run":  39.98,
     "scaler":  {
-                   "cost":  "44.79",
+                   "cost":  "32.60",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",
@@ -163,7 +163,7 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  300,
                                    "buy":  "1.25 cups",
-                                   "bid":"sour-cream",
+                                   "bid":"light-sour-cream",
                                    "gpu":28.3495
                                },
                                {
@@ -191,7 +191,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT9H",
                  "totalTime":  "PT9H20M",
-                 "costPerServing":  2.84,
+                 "costPerServing":  2.86,
                  "recipeIngredient":  [
                                           "Pork Shoulder, 7.5 lb (3360 g)",
                                           "Vegetable Oil, 7 tbsp (98 g)",

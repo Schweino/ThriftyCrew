@@ -304,8 +304,16 @@ $new = $row
 $new = [regex]::Replace($new, '("bid":\s*")[^"]*(")',  ('${1}' + $ToBid + '${2}'))
 $new = [regex]::Replace($new, '("unit":\s*")[^"]*(")', ('${1}' + $ToUnit + '${2}'))
 $new = [regex]::Replace($new, '("gpu":\s*)[0-9.]+',    ('${1}' + $ToGpu))
-# board is 'recipe' only while the id lives on the recipe board; a moved bid is on the weekly one by definition
-$new = [regex]::Replace($new, '("board":\s*")[^"]*(")', '${1}weekly${2}')
+# board names the NAMESPACE the new id lives in - it is not the DIRECTION of the move. The 2026-08-09
+# original was written for a recipe->weekly sweep and hardcoded 'weekly' on that run's own assumption.
+# A rebid INTO a recipe-namespace id then writes a false fact: 'Light Sour Cream' -> light-sour-cream
+# (2026-08-28) is in grocery\recipe-commodities.json and on recipe-board.json, absent from the weekly
+# catalog entirely, yet came out labelled weekly. cost-recipes merges every board into one id-keyed
+# table so the PRICE was unharmed, but 201 rows use this field as a discriminator. Read the catalogs.
+$recipeCat = Join-Path $repo 'grocery\recipe-commodities.json'
+$newBoard  = 'weekly'
+if ((Test-Path $recipeCat) -and ((Get-Content $recipeCat -Raw) -match ('"' + [regex]::Escape($ToBid) + '"'))) { $newBoard = 'recipe' }
+$new = [regex]::Replace($new, '("board":\s*")[^"]*(")', ('${1}' + $newBoard + '${2}'))
 if ($BuyPkgG -ge 0)   { $new = [regex]::Replace($new, '("buy_pkg_g":\s*)[0-9.]+', ('${1}' + $BuyPkgG)) }
 if ($BuyPkgLabel)     { $new = [regex]::Replace($new, '("buy_pkg_label":\s*")[^"]*(")', ('${1}' + $BuyPkgLabel + '${2}')) }
 $rawNew = $raw.Substring(0, $m.Index) + $new + $raw.Substring($m.Index + $m.Length)

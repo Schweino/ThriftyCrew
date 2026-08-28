@@ -18,7 +18,7 @@
                  "protein":  50,
                  "carbs":  58,
                  "fat":  24,
-                 "cost_ps":  "5.51"
+                 "cost_ps":  "5.52"
              },
     "intro_html":  "Comfort food that actually works for meal prep, with a creamy gravy that clings to tender potatoes. You get a big {{protein}} grams of protein per bowl for about ${{cost_ps}} a serving (at everyday cost). It makes 14 servings, so cook once and you are set.",
     "ingredients_display":  [
@@ -42,23 +42,23 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Beef, 6 lb: ~$39.84. \u003cstrong\u003eBuy 6 lbs: $39.84.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 6 lb: ~$37.13. \u003cstrong\u003eBuy 6 lbs: $37.13.\u003c/strong\u003e",
                        "Potato, 8 lb: ~$4.39. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
                        "Beef Broth, 3 cups: ~$1.10. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
                        "Bread Crumbs, 1 cup: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Light Sour Cream, 1 tub: ~$0.65. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
+                       "Light Sour Cream, 1 tub: ~$0.73. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Milk, 1 quart: ~$0.09. \u003cstrong\u003eBuy 1 gallon: $2.82.\u003c/strong\u003e",
                        "Eggs, 1 large: ~$0.32. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
-                       "Butter, 2.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
-                       "Olive Oil, 2.25 tbsp (sauce): ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 2.25 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
+                       "Olive Oil, 2.25 tbsp (sauce): ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 2 3/4 tbsp (meatballs): ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "All-Purpose Flour, 8.75 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Brown Sugar, 1 tsp (meatballs) + 1 tsp (sauce): ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, ground nutmeg, ground allspice, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $48.08 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $56.38 across 14 servings, roughly $4.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.63. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, ground nutmeg, ground allspice, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $45.52 across 14 servings, so roughly $3.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.33 across 14 servings, roughly $3.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $23.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $77.33. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
@@ -76,14 +76,14 @@
     "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melskitchencafe.com/skillet-swedish-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003eMel\u0027s Kitchen Cafe\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the kind of dinner that feels like a treat but keeps your grocery budget right where you want it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  48.08,
-    "cost_batch_true":  56.38,
-    "cost_per_serving":  3.43,
-    "cost_per_serving_true":  4.03,
-    "cost_pantry_add":  22.25,
-    "cost_first_run":  78.63,
+    "cost_batch":  45.52,
+    "cost_batch_true":  54.33,
+    "cost_per_serving":  3.25,
+    "cost_per_serving_true":  3.88,
+    "cost_pantry_add":  23,
+    "cost_first_run":  77.33,
     "scaler":  {
-                   "cost":  "56.38",
+                   "cost":  "54.33",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -124,7 +124,7 @@
                                    "item":  "Light Sour Cream",
                                    "grams":  180,
                                    "buy":  "1 tub",
-                                   "bid":  "sour-cream",
+                                   "bid":  "light-sour-cream",
                                    "gpu":  28.3495
                                },
                                {
@@ -209,7 +209,7 @@
     "head":  {
                  "description":  "A high-protein Swedish meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, swedish meatball and potato bowls, budget dinner",
-                 "costPerServing":  5.51,
+                 "costPerServing":  5.52,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2730 g)",
                                           "Potato, 8 lb (3505 g)",

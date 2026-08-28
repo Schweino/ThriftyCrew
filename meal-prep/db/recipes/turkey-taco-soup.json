@@ -24,7 +24,7 @@
                  "protein":  35,
                  "carbs":  76,
                  "fat":  17,
-                 "cost_ps":  "3.10"
+                 "cost_ps":  "3.12"
              },
     "intro_html":  "Taco soup is what happens when taco night gets practical. Ground turkey, kidney beans, sweet corn and a tomato base seasoned like a taco, thinned into something you can eat with a spoon and pack into containers. A little sour cream on top and a scoop of rice underneath turns it into a full plate. Seven main ingredients, one pot, and almost nothing on the receipt.",
     "ingredients_display":  [
@@ -44,19 +44,19 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
-                       "Tomato Sauce, 5.2 cans: ~$5.04. \u003cstrong\u003eBuy 6 15oz cans: $5.76.\u003c/strong\u003e",
-                       "Kidney Beans, 3.5 cans: ~$2.87. \u003cstrong\u003eBuy 4 cans: $3.29.\u003c/strong\u003e",
-                       "Sweet Whole Kernel Corn, 2 cans: ~$1.58. \u003cstrong\u003eBuy 2 cans: $1.58.\u003c/strong\u003e",
-                       "Sugar-Free Maple Syrup, 1.75 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Chicken Broth, 1.8 cartons: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.93. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Tomato Sauce, 5.2 cans: ~$4.40. \u003cstrong\u003eBuy 6 15oz cans: $5.03.\u003c/strong\u003e",
+                       "Kidney Beans, 3.5 cans: ~$3.11. \u003cstrong\u003eBuy 4 cans: $3.56.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 cans: ~$1.64. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Sugar-Free Maple Syrup, 1.75 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1.8 cartons: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (taco seasoning, onion powder, salt, black pepper): ~$1.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.44 across 14 servings, so roughly $2.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.05 across 14 servings, roughly $2.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.53 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.58. Those containers then feed this batch and many more after it."
+                       "Light Sour Cream, 1.25 cups: ~$1.22. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning, onion powder, salt, black pepper): ~$0.97. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.03 across 14 servings, so roughly $2.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.00 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.62. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a spiced, bean-loaded dinner with sour cream on top. Cans and rice are doing the work here, and cans and rice are cheap.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Spread the cooked rice into your 14 containers, then set the soup pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every serving lands near {{cal}} calories with {{protein}} grams of protein once the sour cream goes on at reheat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/turkey-taco-soup/\" target=\"_blank\" rel=\"noopener\"\u003eifoodreal.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "\u003cem\u003eTaco night in a container for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  28.44,
-    "cost_batch_true":  32.05,
-    "cost_per_serving":  2.03,
-    "cost_per_serving_true":  2.29,
-    "cost_pantry_add":  10.53,
-    "cost_first_run":  42.58,
+    "cost_batch":  31.03,
+    "cost_batch_true":  35,
+    "cost_per_serving":  2.22,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  8.62,
+    "cost_first_run":  43.62,
     "scaler":  {
-                   "cost":  "32.05",
+                   "cost":  "35.00",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -179,7 +179,7 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  300,
                                    "buy":  "1.25 cups",
-                                   "bid":"sour-cream",
+                                   "bid":"light-sour-cream",
                                    "gpu":28.3495
                                },
                                {
@@ -199,7 +199,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.10,
+                 "costPerServing":  3.12,
                  "recipeIngredient":  [
                                           "93/7 Ground Turkey, 3.5 lb (1588 g)",
                                           "Tomato Sauce, 5.2 cans (2231 g)",

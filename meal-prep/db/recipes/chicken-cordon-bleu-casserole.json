@@ -24,7 +24,7 @@
                  "protein":  43,
                  "carbs":  50,
                  "fat":  29,
-                 "cost_ps":  "2.71"
+                 "cost_ps":  "2.74"
              },
     "intro_html":  "Real chicken cordon bleu means pounding cutlets flat, rolling them around ham and cheese, breading each one, and praying nothing leaks in the oven. Nobody is doing that fourteen times on a Sunday. This casserole takes the same four flavors, chicken, ham, swiss, and dijon, and layers them in one dish with a cracker topping. Each serving carries {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -44,18 +44,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Boneless Skinless Chicken Breast, 3 lb: ~$9.42. \u003cstrong\u003eBuy 3 lbs: $9.81.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3 lb: ~$6.43. \u003cstrong\u003eBuy 3 lbs: $6.69.\u003c/strong\u003e",
                        "Diced Ham, 1.25 lb: ~$5.78. \u003cstrong\u003eBuy 2 16oz packs: $9.93.\u003c/strong\u003e",
-                       "Light Sour Cream, 3.5 cups: ~$2.91. \u003cstrong\u003eBuy 2 16oz tubs: $3.28.\u003c/strong\u003e",
+                       "Light Sour Cream, 3.5 cups: ~$3.27. \u003cstrong\u003eBuy 2 16oz tubs: $3.68.\u003c/strong\u003e",
                        "Swiss Cheese, 14 oz: ~$2.92. \u003cstrong\u003eBuy 2 8ozes: $3.35.\u003c/strong\u003e",
                        "Dijon Mustard, 1.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cream of Chicken Soup, 2.3 cans: ~$1.73. \u003cstrong\u003eBuy 3 10.5oz cans: $2.22.\u003c/strong\u003e",
                        "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
-                       "Pantry seasonings (onion powder, garlic powder, butter crackers, salt, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.93 across 14 servings, so roughly $1.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.87 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.68. Those containers then feed this batch and many more after it."
+                       "Rice, 4 cups dry: ~$0.88. \u003cstrong\u003eBuy 1 (covers this batch with some left over).\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, garlic powder, butter crackers, salt, black pepper): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.24 across 14 servings, so roughly $1.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.09 across 14 servings, roughly $2.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.39. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Ham is the trick on that number, because it adds protein and salt cured flavor for less than chicken costs per pound, which lets the whole dish punch above its price.",
     "shop_smart":  [
@@ -77,14 +77,14 @@
     "portion_html":  "Score the bake into 14 even squares and lift one into each container. Weigh a couple of them to confirm your squares are honest, since the corners always look bigger than they are. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e. Reheat uncovered so the cracker topping crisps instead of going soft.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/easy-chicken-cordon-bleu-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "All the cordon bleu flavor with none of the rolling and breading, for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
-    "cost_batch":  24.93,
-    "cost_batch_true":  32.87,
-    "cost_per_serving":  1.78,
-    "cost_per_serving_true":  2.35,
-    "cost_pantry_add":  10.81,
-    "cost_first_run":  43.68,
+    "cost_batch":  22.24,
+    "cost_batch_true":  30.09,
+    "cost_per_serving":  1.59,
+    "cost_per_serving_true":  2.15,
+    "cost_pantry_add":  8.3,
+    "cost_first_run":  38.39,
     "scaler":  {
-                   "cost":  "32.87",
+                   "cost":  "30.09",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -107,7 +107,7 @@
                                    "canon":  "Light Sour Cream",
                                    "grams":  805,
                                    "buy":  "3.5 cups",
-                                   "bid":"sour-cream",
+                                   "bid":"light-sour-cream",
                                    "gpu":28.3495
                                },
                                {
@@ -199,7 +199,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  2.71,
+                 "costPerServing":  2.74,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Breast, 3 lb (1307 g)",
                                           "Diced Ham, 1.25 lb (529 g)",
