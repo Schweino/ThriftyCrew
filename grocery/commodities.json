@@ -2054,7 +2054,11 @@
                         "chunk\\s+cheese",
                         "cheese\\s+chunk",
                         "(cheddar|mozzarella|colby|jack|swiss|provolone|monterey)\\s+chunk",
-                        "\\bchunk\\b.{0,24}cheese"
+                        "\\bchunk\\b.{0,24}cheese",
+                        "reduced\\s+fat\\s+(?:\\w+\\s+){0,2}cheddar",
+                        "cheddar[^,]{0,30}reduced\\s+fat",
+                        "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
+                        "cheddar[^,]{0,25}\\b2%\\s+milk"
                     ]
     },
     {
@@ -3385,7 +3389,9 @@
         "include":  [
                         "baby\\s+(?:\\w+\\s+){0,2}potato(?:es)?",
                         "petite\\s+(?:\\w+\\s+){0,2}potato(?:es)?",
-                        "creamer\\s+potato(?:es)?"
+                        "creamer\\s+potato(?:es)?",
+                        "potato(?:es)?[^,]{0,20}\\b(?:baby|petite|creamer)\\b",
+                        "(?:baby|petite|creamer)\\s+(?:\\w+\\s+){0,5}potato(?:es)?"
                     ],
         "exclude":  [
                         "sweet\\s+potato",
@@ -3584,7 +3590,8 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bmashed\\b"
                     ]
     },
     {
@@ -20273,7 +20280,10 @@
                         "\\btequila\\b",
                         "\\bschnapps\\b",
                         "\\brum\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bbaby\\b",
+                        "petite",
+                        "creamer"
                     ]
     },
     {
@@ -24551,7 +24561,8 @@
                         "\\brum\\b",
                         "\\bimitation\\b",
                         "\\bartificially\\s+flavou?red\\b",
-                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b"
+                        "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
+                        "\\bpotato(?:es)?\\b"
                     ]
     },
     {
@@ -35418,6 +35429,9 @@
         "id":  "frozen-cauliflower-rice",
         "label":  "Frozen Cauliflower Rice",
         "unit":  "oz",
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
         "include":  [
                         "riced\\s+cauliflower",
                         "cauliflower\\s+rice"

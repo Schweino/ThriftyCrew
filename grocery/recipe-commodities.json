@@ -620,8 +620,12 @@
         "spread",
         "cheese\\s*ball",
         "\\bmac\\b",
-        "macaroni"
-      ],
+        "macaroni",
+        "reduced\\s+fat\\s+(?:\\w+\\s+){0,2}cheddar",
+        "cheddar[^,]{0,30}reduced\\s+fat",
+        "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
+        "cheddar[^,]{0,25}\\b2%\\s+milk"
+    ],
       "band_min": 0.08,
       "band_max": 0.7,
       "note": "Requires BOTH 'cheddar' and 'shred' in either order. Place this rule BEFORE the generic 'shredded-cheese' staple so specific cheddar wins the first-match; otherwise the generic one will absorb it."
@@ -1949,8 +1953,11 @@
         "\\bpuff",
         "gnocchi",
         "frozen",
-        "canned"
-      ],
+        "canned",
+        "\\bbaby\\b",
+        "petite",
+        "creamer"
+    ],
       "band_min": 0.2,
       "band_max": 2.5,
       "note": "Generic fresh potatoes (russet/red/gold/yukon/bagged). Excludes processed forms (chips, tots, fries, instant, hash browns, mashed, salad). Ordering matters: place after the existing russet-potatoes rule so russet items keep their own bucket."
