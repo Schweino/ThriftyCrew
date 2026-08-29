@@ -63,7 +63,40 @@ function Get-CardBids {
   if (-not $m.Success) { return $null }
   try { $d = $m.Groups[1].Value | ConvertFrom-Json } catch { return $null }
   $out = New-Object System.Collections.Generic.List[string]
-  foreach ($it in $d.ing) { $b = [string]$it.bid; if ($b) { [void]$out.Add($b) } }
+  # `if ($b)` alone is not the test: a whitespace-only bid is TRUTHY in PowerShell, so "   " was
+  # collected as a real commodity id, looked up in the feed, missed, and reported as
+  # "1 bid(s) absent from ingredients:    " - a finding naming nothing. Worse, it made this extractor
+  # and Get-CardUnbidItems disagree about the same line, which is two definitions of "has a bid" in one
+  # file. Trim-and-test is the definition audit-unbid-ingredients uses; both extractors now share it.
+  foreach ($it in $d.ing) { $b = [string]$it.bid; if ($b -and $b.Trim() -ne '') { [void]$out.Add($b) } }
+  return , $out.ToArray()
+}
+
+# THE BLIND SPOT THIS GATE HAD (2026-08-29). Get-CardBids skips a line with no bid - `if ($b)` - so the
+# ONE defect that guarantees the browser cannot price a card was the one thing this gate could not see.
+# A card carrying an unbid line collected only its OTHER bids, every one of them covered, and the gate
+# read clean. Three LIVE paid cards sat that way: baked-turkey-kibbeh-casserole (Bulgur Wheat),
+# musakhan-sumac-chicken (Sumac) and turkey-meatball-sub-bake (Keto Bun).
+#
+# It matters because the browser is fail-closed. tpl2-scaler-prefix.html:317 returns null for the WHOLE
+# batch total if any line prices to null, and its price() returns null when `it.bid` is falsy - so one
+# unbid line does not cost the reader one row, it takes down the total, the per-serving figure and the
+# composition chart together. That is strictly worse than a bid the feed happens to miss, which is what
+# this gate already refuses. Returns the reader-facing item names, because "Sumac" is what a person can
+# act on and "" is not.
+function Get-CardUnbidItems {
+  param([string]$Html)
+  $m = [regex]::Match($Html, '<script type="application/json" class="smp-sc-data">(.*?)</script>', 'Singleline')
+  if (-not $m.Success) { return $null }
+  try { $d = $m.Groups[1].Value | ConvertFrom-Json } catch { return $null }
+  $out = New-Object System.Collections.Generic.List[string]
+  foreach ($it in $d.ing) {
+    $b = [string]$it.bid
+    if ($b -and $b.Trim() -ne '') { continue }
+    $nm = [string]$it.item
+    if (-not $nm) { $nm = '(unnamed line)' }
+    [void]$out.Add($nm)
+  }
   return , $out.ToArray()
 }
 
@@ -87,7 +120,11 @@ function Test-FeedCoverage {
     [string[]]$Exempt = @(),
     # slug -> array of "Item [VERDICT]" for lines whose carriage is not CARRIED, from costed.json's
     # `uncarried` field. Derived by lib\carriage-lib.ps1 in cost-recipes.ps1; this gate only reads it.
-    [hashtable]$Uncarried = @{}
+    [hashtable]$Uncarried = @{},
+    # slug -> array of reader-facing item names on the BUILT CARD that carry no bid at all. Read from
+    # the card, like $CardBids, because the card is what the browser gets. NOT exemptible: the
+    # no-board-price allowlist excuses a bid the boards do not price, and an absent bid is not that.
+    [hashtable]$CardUnbid = @{}
   )
   $findings = New-Object System.Collections.Generic.List[object]
   $exempted = New-Object System.Collections.Generic.List[object]
@@ -102,6 +139,17 @@ function Test-FeedCoverage {
         slug    = $slug
         verdict = 'NOT-CARRIED'
         detail  = ("no Omaha store is proven to carry: " + ((@($Uncarried[$slug]) | Select-Object -First 6) -join ', '))
+      })
+      continue
+    }
+    # UNBID SECOND, and ahead of the feed checks for the same reason carriage comes first: no amount of
+    # feed coverage rescues a line the browser has no key to look up. Its own verdict, so the report
+    # names the actual fix (heal the spec's bid) instead of sending the reader to hunt a feed row.
+    if ($CardUnbid.ContainsKey($slug) -and @($CardUnbid[$slug]).Count) {
+      $findings.Add([pscustomobject]@{
+        slug    = $slug
+        verdict = 'UNBID_LINE'
+        detail  = ("the card's live scaler cannot price, so the whole total reads Unavailable: " + ((@($CardUnbid[$slug]) | Select-Object -First 6) -join ', '))
       })
       continue
     }
@@ -238,6 +286,60 @@ if ($SelfTest) {
         -Uncarried @{ 'american-goulash-pasta' = @('Something [UNKNOWN]') }
   TT 'CLEAN TWIN  another recipe''s uncarried line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
 
+  # -- THE BLIND SPOT, frozen (2026-08-29). A card carrying a line with NO bid at all. Every bid it DOES
+  #    carry is covered, so every check above this one reads green - which is exactly how three live
+  #    paid cards sat with a dark scaler while this gate reported them clean.
+  $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
+        -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -CardUnbid @{ 'country-captain-chicken' = @('Sumac') }
+  TT 'MUST FIRE  a card line with NO bid is a finding even when every other bid is covered' `
+     ($r.findings.Count -eq 1 -and $r.findings[0].verdict -eq 'UNBID_LINE' -and $r.findings[0].detail -match 'Sumac') `
+     ("findings=$($r.findings.Count) verdict=$($r.findings | ForEach-Object { $_.verdict })")
+
+  # -- AND IT IS NOT EXEMPTIBLE. no-board-price-ok excuses a bid the boards do not price; it cannot
+  #    excuse the absence of a bid, because there is no id for the allowlist to name.
+  $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
+        -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -Exempt @('chicken-thigh', 'rice') -CardUnbid @{ 'country-captain-chicken' = @('Keto Bun') }
+  TT 'MUST FIRE  an unbid line is not pardoned by the no-board-price allowlist' `
+     ($r.findings.Count -eq 1 -and $r.findings[0].verdict -eq 'UNBID_LINE') ("findings=$($r.findings.Count)")
+
+  # -- CLEAN TWIN. Another recipe's unbid line must not fail this one.
+  $r = Test-FeedCoverage -PublishedSlugs @('country-captain-chicken') -CardBids $CARDS `
+        -FeedRecipes @{ 'country-captain-chicken' = 1 } -FeedIngredients $ING -FeedPricingInputs $PIN `
+        -CardUnbid @{ 'american-goulash-pasta' = @('Sumac') }
+  TT 'CLEAN TWIN  another recipe''s unbid line does not fail this one' ($r.findings.Count -eq 0) ("findings=$($r.findings.Count)")
+
+  # -- THE EXTRACTOR, against the real baked shape. Get-CardBids skipping bid-less lines is correct for
+  #    what it returns; the bug was that nothing ELSE looked. These two must disagree on the same card.
+  $cardHtml = '<script type="application/json" class="smp-sc-data">{"ing":[' +
+              '{"item":"Ground Turkey","bid":"93-7-ground-turkey","gpu":"453.592"},' +
+              '{"item":"Sumac","grams":62},' +
+              '{"item":"Salt","bid":"   "}' +
+              ']}</script>'
+  # NO @() HERE, and that is the point. `return , $arr` emits the array as ONE object so a single-element
+  # result does not unroll to a bare string; wrapping the call in @() re-wraps that object and every
+  # .Count reads 1 whatever the card said. Measured on this very fixture: a 2-unbid card reported 1, and
+  # a card with ZERO unbid lines also reported 1 - the shape that would have made this whole check vacuous.
+  $gotBids  = Get-CardBids $cardHtml
+  $gotUnbid = Get-CardUnbidItems $cardHtml
+  TT 'MUST FIRE  the extractor names an item with no bid property at all' ($gotUnbid -contains 'Sumac') ($gotUnbid -join ',')
+  TT 'MUST FIRE  a whitespace-only bid counts as unbid, matching audit-unbid-ingredients' `
+     ($gotUnbid -contains 'Salt') ($gotUnbid -join ',')
+  TT 'CLEAN TWIN a properly bid line is not reported as unbid' (-not ($gotUnbid -contains 'Ground Turkey')) ($gotUnbid -join ',')
+  # THE PARTITION IS THE INVARIANT. Every line lands in exactly one extractor - no line counted twice,
+  # none dropped. This is what caught the whitespace-bid disagreement: Get-CardBids collected "   " as a
+  # real id while Get-CardUnbidItems called the same line unbid, so a 3-line card reported 2+2.
+  TT 'the two extractors partition the card: 1 bid + 2 unbid on a 3-line card' `
+     ($gotBids.Count -eq 1 -and $gotUnbid.Count -eq 2) ("bids=$($gotBids.Count) unbid=$($gotUnbid.Count)")
+  TT 'MUST FIRE  a whitespace-only bid is NOT collected as a real commodity id' `
+     (-not ($gotBids -contains '   ')) ($gotBids -join '|')
+  # A card whose every line IS bid must yield an EMPTY unbid list, not $null - the caller tests .Count.
+  $cleanHtml = '<script type="application/json" class="smp-sc-data">{"ing":[{"item":"Rice","bid":"rice"}]}</script>'
+  $cleanUnbid = Get-CardUnbidItems $cleanHtml
+  TT 'CLEAN TWIN a fully bid card yields an empty unbid list, not null' `
+     ($null -ne $cleanUnbid -and $cleanUnbid.Count -eq 0) ('count=' + $(if ($null -eq $cleanUnbid) { 'null' } else { $cleanUnbid.Count }))
+
   # and the allowlist must not become a blanket pardon for the rest of the card
   $r = Test-FeedCoverage -PublishedSlugs @('peruvian-pollo-saltado') -CardBids $CARDS2 `
         -FeedRecipes @{ 'peruvian-pollo-saltado' = 1 } -FeedIngredients @{ 'rice' = @{} } -FeedPricingInputs $PIN `
@@ -319,13 +421,17 @@ if ($Slugs) { $published = @($published | Where-Object { $Slugs -contains $_ }) 
 if (-not $published.Count) { Write-Output 'FEEDCOV: no published slugs in scope'; Write-GuardComplete -Name 'FEEDCOV' -Summary '0 slugs in scope'; exit 0 }
 
 $cardBids = @{}
+$cardUnbid = @{}
 $noCard = New-Object System.Collections.Generic.List[string]
 foreach ($slug in $published) {
   $cf = Join-Path $mp ('db\built\' + $slug + '.body.html')
   if (-not (Test-Path $cf)) { $noCard.Add($slug); continue }
-  $b = Get-CardBids ([IO.File]::ReadAllText($cf))
+  $html = [IO.File]::ReadAllText($cf)
+  $b = Get-CardBids $html
   if ($null -eq $b) { $noCard.Add($slug); continue }
   $cardBids[$slug] = $b
+  $u = Get-CardUnbidItems $html
+  if ($null -ne $u -and @($u).Count) { $cardUnbid[$slug] = $u }
 }
 
 function ToMap($obj) { $h = @{}; if ($null -ne $obj) { foreach ($p in $obj.PSObject.Properties) { $h[$p.Name] = $p.Value } }; return $h }
@@ -352,7 +458,8 @@ if (Test-Path $costedFile) {
 
 $res = Test-FeedCoverage -PublishedSlugs $published -CardBids $cardBids `
          -FeedRecipes (ToMap $feed.recipes) -FeedIngredients (ToMap $feed.ingredients) `
-         -FeedPricingInputs (ToMap $feed.pricing_inputs) -Exempt $exempt -Uncarried $uncarried
+         -FeedPricingInputs (ToMap $feed.pricing_inputs) -Exempt $exempt -Uncarried $uncarried `
+         -CardUnbid $cardUnbid
 $findings = @($res.findings)
 
 $where = $(if ($Live) { "the LIVE feed at $FEED_URL" } else { $feedSrc })

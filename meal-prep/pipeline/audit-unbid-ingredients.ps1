@@ -1,15 +1,33 @@
 # audit-unbid-ingredients.ps1
 # ---------------------------------------------------------------------------------------------------
-# Sweeps db\recipes for scaler ingredients carrying NO bid. cost-recipes prices an unbid line at $0.00
-# WITHOUT failing, so the recipe ships a cost that silently excludes that ingredient.
+# Sweeps db\recipes for scaler ingredients carrying NO bid. Such a line cannot be priced by the
+# BROWSER, so the card's interactive scaler goes dark - see WHAT IT ACTUALLY BREAKS below.
 #
 # FOUNDING BUG (2026-08-16). build-v2-spec.ps1 threw on the LESSER defect (a bid that resolves to
 # nothing on the live feed - CHEAPEST-FALLBACK) but merely printed a report line for the WORSE one (no
-# bid at all), after the spec had already been written. 23 specs carried $0.00 ingredients and four
-# were LIVE: turkey-meatball-sub-bake (Keto Bun, 1320 g, claiming $3.26/serving), dak-galbi-chicken-
-# cabbage-skillet (Korean Rice Cakes, 1300 g, $3.74), baked-turkey-kibbeh-casserole (Bulgur Wheat,
-# 957 g, $2.60) and musakhan-sumac-chicken (Sumac, 62 g, $1.91). The build now refuses; this sweep is
-# the standing guard so the class cannot re-enter by a hand-edit, a migration, or a future bug.
+# bid at all), after the spec had already been written. 23 specs carried the defect and four were LIVE:
+# turkey-meatball-sub-bake (Keto Bun, 1320 g), dak-galbi-chicken-cabbage-skillet (Korean Rice Cakes,
+# 1300 g), baked-turkey-kibbeh-casserole (Bulgur Wheat, 957 g) and musakhan-sumac-chicken (Sumac,
+# 62 g). The build now refuses; this sweep is the standing guard so the class cannot re-enter by a
+# hand-edit, a migration, or a future bug.
+#
+# THIS FILE USED TO SAY THE PRICE WAS $0.00, AND THAT WAS FALSE (corrected 2026-08-29). The claim was
+# "cost-recipes prices an unbid line at $0.00 WITHOUT failing, so the recipe ships a cost that silently
+# excludes that ingredient". It does not. cost-recipes.ps1 lifts canon+grams from the spec (line 37)
+# and resolves the bid from db\ingredients.json (line 187) - it never reads the spec's bid at all.
+# NEUTER-PROVED: stripping a WORKING bid ("fresh-mint" + gpu) out of the kibbeh spec and recosting
+# produced a byte-identical costed record (ps=2.81, batch=39.32, lines_priced=9, mint still $3.77).
+# All four founding recipes were priced correctly the whole time, three of them off label captures.
+# The wrong diagnosis outlived the bug by 13 days and sent a later session hunting an understated
+# price that never existed, so the correction is written here rather than quietly applied.
+#
+# WHAT IT ACTUALLY BREAKS is the card's INTERACTIVE scaler, which is fail-closed by design.
+# tpl2-scaler-prefix.html line 317 returns null for the whole batch total if ANY line prices to null,
+# and price() returns null when `it.bid` is falsy. So the reader sees the ingredient row read "Price
+# unavailable in this release", the grand total read "Unavailable - one or more release prices are
+# missing" (line 385), the composition chart hidden (line 333), and the shopping-list total read
+# "Unavailable". The static prose number beside it stays correct. A dark feature on a paid page, not
+# an understated price - real, but the opposite severity, and it must be reported as what it is.
 #
 #   .\audit-unbid-ingredients.ps1                     sweep every spec in db\recipes
 #   .\audit-unbid-ingredients.ps1 -Slugs a,b,c        sweep only these (wave-publish preflight)
@@ -121,6 +139,25 @@ if($runSelfTest){
   T 'MUST FIRE  build-v2-spec.ps1 THROWS on an unbid ingredient' ($bvs -match 'UNBID INGREDIENT') 'guard text not found'
   T 'MUST FIRE  build-v2-spec.ps1 reads the not-price-tracked allowlist' ($bvs -match 'notTrackedOk') 'allowlist not read'
 
+  # THE DIAGNOSIS IS PINNED (2026-08-29). This guard spent 13 days telling readers an unbid line was
+  # "priced at $0.00" and quoting stat.cost_ps as the recipe's claim. Both were false, and the wrong
+  # story cost a later session most of a run chasing a price bug that did not exist. A guard's words
+  # are part of its contract: these cases fail if the false diagnosis is ever restored.
+  $self = Get-Content $PSCommandPath -Raw -Encoding utf8
+  $reportBody = ($self -split '# ---- sweep ')[-1]
+  T 'MUST NOT FIRE  the report never claims an unbid line is priced at $0.00' `
+    ($reportBody -notmatch 'priced at .?\$0\.00') 'the $0.00 claim is back in the report'
+  T 'MUST FIRE  the finding quotes cost_per_serving, not stat.cost_ps' `
+    ($reportBody -match '\$j\.cost_per_serving' -and $reportBody -notmatch '\$j\.stat\.cost_ps') 'wrong field quoted as the page price'
+  T 'MUST FIRE  the report names the real symptom (the live scaler reads Unavailable)' `
+    ($reportBody -match "live scaler reads 'Unavailable'") 'symptom not named'
+  T 'MUST FIRE  the report points at the repair that heals a known-bid block' `
+    ($reportBody -match 'repair-missing-scaler-bid\.ps1') 'no fix path offered'
+  # And the repair it names must actually exist - a guard citing a script nobody wrote is worse than
+  # a guard citing none, because the reader stops looking.
+  T 'MUST FIRE  the repair this guard names exists on disk' `
+    (Test-Path (Join-Path $here 'repair-missing-scaler-bid.ps1')) 'repair-missing-scaler-bid.ps1 not found'
+
   if($bad -gt 0){ Write-Output ("audit-unbid-ingredients SELF-TEST FAIL ({0})" -f $bad); exit 2 }
   Write-Output 'audit-unbid-ingredients SELF-TEST PASS'
   Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary 'selftest pass'
@@ -168,10 +205,16 @@ foreach($f in $files){
   if(@($ing).Count -eq 0){ continue }
   $unbid = Get-UnbidItems $ing $allowMap
   if(@($unbid).Count -gt 0){
-    # stat.cost_ps is the reader-facing per-serving number rendered on the card - the claim that is
-    # wrong when an ingredient costs $0.00. cost_batch / cost_batch_true are the batch figures.
+    # cost_per_serving is the everyday per-serving number the card and recipes-db both render. It is
+    # reported here as CONTEXT (which page is affected), never as an accusation: it is not wrong.
+    #
+    # THIS USED TO READ stat.cost_ps AND PRINT IT AS "claims $X" (fixed 2026-08-29). stat.cost_ps is a
+    # different quantity and diverges from cost_per_serving on ALL 587 specs - it printed "claims $4.51"
+    # for a recipe whose page says $2.60, which is not a discrepancy this guard found but one it
+    # manufactured. A guard that quotes the wrong field to dramatise a finding teaches the next reader
+    # to distrust the finding.
     $cps = $null
-    if($j.PSObject.Properties.Name -contains 'stat' -and $j.stat -and ($j.stat.PSObject.Properties.Name -contains 'cost_ps')){ $cps = [string]$j.stat.cost_ps }
+    if($j.PSObject.Properties.Name -contains 'cost_per_serving' -and $null -ne $j.cost_per_serving){ $cps = [string]$j.cost_per_serving }
     $findings += [pscustomobject]@{ slug=$slug; unbid=@($unbid); count=@($unbid).Count; claimed_cps=$cps; total_ingredients=@($ing).Count }
   }
 }
@@ -188,10 +231,12 @@ if(@($findings).Count -eq 0){
   Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary ("clean n={0}" -f @($files).Count)
   exit 0
 }
-Write-Output ("  {0} spec(s) carry ingredients priced at `$0.00:" -f @($findings).Count)
+Write-Output ("  {0} spec(s) carry an ingredient the browser cannot price (the card's live scaler reads 'Unavailable'):" -f @($findings).Count)
 foreach($f in ($findings | Sort-Object count -Descending)){
-  Write-Output ("    {0,-46} claims {1,-7} unbid {2}: {3}" -f $f.slug, $(if($f.claimed_cps){'$'+$f.claimed_cps}else{'(uncosted)'}), $f.count, (@($f.unbid) -join ', '))
+  Write-Output ("    {0,-46} page {1,-7} unbid {2}: {3}" -f $f.slug, $(if($f.claimed_cps){'$'+$f.claimed_cps}else{'(uncosted)'}), $f.count, (@($f.unbid) -join ', '))
 }
-Write-Output '  Fix: wire the bid in db\ingredients.json and re-cost, or - only if the item truly costs the reader nothing - allowlist its canon name in db\not-price-tracked-ok.json.'
+Write-Output '  The per-serving number beside it is NOT wrong: cost-recipes resolves the bid from db\ingredients.json, not from the spec.'
+Write-Output '  Fix: pipeline\repair-missing-scaler-bid.ps1 -Apply heals any block whose vocabulary row already knows the bid, then recost,'
+Write-Output '       reanchor and rebuild the card. A vocabulary row that is deliberately bid-less needs a product-class ruling, not a repair.'
 Write-GuardComplete -Name 'audit-unbid-ingredients' -Summary ("findings={0}" -f @($findings).Count)
 exit 1
