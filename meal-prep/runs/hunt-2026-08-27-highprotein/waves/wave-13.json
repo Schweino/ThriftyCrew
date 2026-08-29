@@ -1,0 +1,24 @@
+{
+    "wave":  13,
+    "run":  "hunt-2026-08-27-highprotein",
+    "batch":  "hunt-2026-08-27-highprotein-w13",
+    "created":  "2026-08-29T10:49:16",
+    "slugs":  [
+                  "crack-chicken-chili",
+                  "blackened-chicken-with-mango-salsa"
+              ],
+    "recipes":  [
+                    {
+                        "slug":  "crack-chicken-chili",
+                        "title":  "Crack Chicken Chili",
+                        "source_url":  "https://wholesomelymorgan.com/crack-chicken-chili/",
+                        "protein":  "chicken"
+                    },
+                    {
+                        "slug":  "blackened-chicken-with-mango-salsa",
+                        "title":  "Blackened Chicken with Mango Salsa",
+                        "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
+                        "protein":  "chicken"
+                    }
+                ]
+}

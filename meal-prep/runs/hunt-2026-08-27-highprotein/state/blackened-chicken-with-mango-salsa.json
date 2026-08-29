@@ -3,10 +3,10 @@
     "title":  "Blackened Chicken with Mango Salsa",
     "source_url":  "https://easyeatsdietitian.com/blackened-chicken-with-mango-salsa/",
     "protein":  "chicken",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  13,
     "created":  "2026-08-27T18:20:33",
-    "updated":  "2026-08-29T09:45:42",
+    "updated":  "2026-08-29T10:49:16",
     "terms":  [
                   {
                       "term":  "blackened seasoning mix",
@@ -109,6 +109,12 @@
                         "at":  "2026-08-29T09:45:42",
                         "by":  "fable",
                         "detail":  "revived: the sole blocker was the shared audit-spec-contradictions gate (PHANTOM 3 vs baseline 0); re-run 2026-08-29 reports 0 findings across 587 specs, exit 0 - the gate is back to baseline and the defect was never this recipe  [audit blockers: shared, shared-data; none recipe-local]"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:16",
+                        "by":  "wave-close",
+                        "detail":  "wave 13"
                     }
                 ]
 }

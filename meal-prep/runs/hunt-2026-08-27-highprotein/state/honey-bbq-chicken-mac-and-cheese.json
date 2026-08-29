@@ -3,10 +3,10 @@
     "title":  "Honey BBQ Chicken Mac and Cheese",
     "source_url":  "https://www.theproteinplayground.com/honey-bbq-chicken-mac-and-cheese/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  12,
     "created":  "2026-08-27T18:20:34",
-    "updated":  "2026-08-28T20:17:52",
+    "updated":  "2026-08-28T20:29:04",
     "terms":  [
                   {
                       "term":  "dried parsley",
@@ -94,6 +94,12 @@
                         "state":  "waved",
                         "at":  "2026-08-28T20:17:52",
                         "by":  "wave-close",
+                        "detail":  "wave 12"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-28T20:29:04",
+                        "by":  "wave-publish",
                         "detail":  "wave 12"
                     }
                 ]
