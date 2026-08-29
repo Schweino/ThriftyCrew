@@ -1,4 +1,4 @@
-# json-db-io.ps1 - shared IO helpers for the meal-prep pipeline. Dot-source it:
+﻿# json-db-io.ps1 - shared IO helpers for the meal-prep pipeline. Dot-source it:
 #   . (Join-Path $PSScriptRoot '..\lib\json-db-io.ps1')
 # Exists because two PS 5.1 traps bit the R300 run repeatedly (2026-07-25/26):
 #   (1) ConvertTo-Json on an array can emit {"value":[...],"Count":N} (propagates from a file
@@ -188,6 +188,17 @@ function Get-JsonArraySpans {
 
 # Get-JsonStringSpan: the span of the JSON string literal whose opening quote sits at $OpenIndex,
 # returned as the span of its CONTENT (between the quotes) so a caller can splice a new value in.
+function Get-JsonNumberSpan {
+    <# Span of the JSON number literal starting at $Start (as returned by Find-JsonValueStart). #>
+    param([Parameter(Mandatory)][string]$Raw, [Parameter(Mandatory)][int]$Start)
+    if ($Start -lt 0 -or $Start -ge $Raw.Length) { throw "Get-JsonNumberSpan: index $Start out of range" }
+    if ($Raw[$Start] -eq '"') { throw "Get-JsonNumberSpan: value at $Start is a STRING, not a number" }
+    $j = $Start
+    while ($j -lt $Raw.Length -and ([string]$Raw[$j]) -match '[-+0-9.eE]') { $j++ }
+    if ($j -eq $Start) { throw "Get-JsonNumberSpan: no number literal at $Start" }
+    return [pscustomobject]@{ Start = $Start; End = ($j - 1) }
+}
+
 function Get-JsonStringSpan {
     param(
         [Parameter(Mandatory)][string]$Raw,

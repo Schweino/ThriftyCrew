@@ -1,4 +1,4 @@
-<#
+﻿<#
   sync-recipesdb-cost.ps1 - carry the COST BLOCK from the specs into recipes-db.json.
 
   WHY THIS EXISTS (founding bug: 2026-08-04, written 2026-08-04).
@@ -45,16 +45,11 @@ function Format-CostNumber([double]$v) {
     return ([double]$v).ToString([Globalization.CultureInfo]::InvariantCulture)
 }
 
-function Get-JsonNumberSpan {
-    <# Span of the JSON number literal starting at $Start (as returned by Find-JsonValueStart). #>
-    param([Parameter(Mandatory)][string]$Raw, [Parameter(Mandatory)][int]$Start)
-    if ($Start -lt 0 -or $Start -ge $Raw.Length) { throw "Get-JsonNumberSpan: index $Start out of range" }
-    if ($Raw[$Start] -eq '"') { throw "Get-JsonNumberSpan: value at $Start is a STRING, not a number" }
-    $j = $Start
-    while ($j -lt $Raw.Length -and ([string]$Raw[$j]) -match '[-+0-9.eE]') { $j++ }
-    if ($j -eq $Start) { throw "Get-JsonNumberSpan: no number literal at $Start" }
-    return [pscustomobject]@{ Start = $Start; End = ($j - 1) }
-}
+# MOVED TO lib\json-db-io.ps1 (2026-08-29). Get-JsonNumberSpan lived here, but it is generic JSON span
+# arithmetic with nothing cost-specific about it, and sync-recipesdb-macros.ps1 needed exactly the same
+# span logic to patch the per_serving / batch blocks. Copying it would have been a second copy of the same
+# arithmetic - the trap this file's own sibling header names ("the two-copies-of-the-same-math blind
+# spot is a documented board trap"). This script already dot-sources the lib, so it simply gets it there.
 
 function Test-CostBlockCoherent {
     <#

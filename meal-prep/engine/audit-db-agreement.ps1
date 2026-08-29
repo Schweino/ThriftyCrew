@@ -1,4 +1,4 @@
-# audit-db-agreement.ps1 - drift guard between the TWO recipe masters (by design: recipes-db.json is
+﻿# audit-db-agreement.ps1 - drift guard between the TWO recipe masters (by design: recipes-db.json is
 # the catalog INDEX, db\recipes\<slug>.json are the SPECS). Nothing enforced their agreement until
 # 2026-07-26 (estate audit finding): a recipe added to one but not the other, or a protein/visibility
 # edit applied to only one, silently splits the surfaces (rotation/top5 read the index; cards read specs).
@@ -34,6 +34,41 @@ $issues = New-Object System.Collections.Generic.List[string]
 # older importer, not drift, and failing the daily guard on it every morning would train everyone to
 # ignore the one line that matters.
 $script:COST_FIELDS = @('cost_per_serving','cost_batch','cost_batch_true','cost_per_serving_true','cost_pantry_add','cost_first_run')
+
+# THE MACRO COPY HAD NO DRIFT CHECK AT ALL until 2026-08-29 - the same blind spot the cost block had
+# before 2026-08-04, and found the same way: by a defect sitting in plain sight. recipes-db.per_serving is
+# a COPY of the spec's stat block, written once at import and never refreshed, and the two feed different
+# surfaces - the cards and the JSON-LD Google indexes print the SPEC, while the feed, hub grid and
+# related-recipe cards print the INDEX. 127 recipes disagreed, worst gap 249 cal
+# (slow-cooker-king-ranch-chicken-bowls, spec 816 vs index 567): a reader could see two different calorie
+# counts for one dish depending which page they were on.
+# THE FIELD NAMES DIFFER ON THE TWO SIDES, and that is not cosmetic - it is why this went unnoticed. The
+# spec says cal/protein/carbs/fat, the index says calories/protein_g/carbs_g/fat_g. A check written the
+# obvious way, comparing like-named fields, matches NOTHING on either side and reports a confident zero.
+$script:MACRO_PAIRS = @(
+    @{ Spec = 'cal';     Idx = 'calories'  },
+    @{ Spec = 'protein'; Idx = 'protein_g' },
+    @{ Spec = 'carbs';   Idx = 'carbs_g'   },
+    @{ Spec = 'fat';     Idx = 'fat_g'     }
+)
+
+function Get-MacroDrift {
+    <# Pure, like Get-CostDrift, so the founding gap is pinned by -SelfTest without a live file. #>
+    param([Parameter(Mandatory)]$Row, [Parameter(Mandatory)]$Spec, [Parameter(Mandatory)][string]$Slug)
+    $out = New-Object System.Collections.Generic.List[string]
+    $ps = $Row.per_serving; $st = $Spec.stat
+    if (-not $ps -or -not $st) { return @($out.ToArray()) }
+    foreach ($pr in $script:MACRO_PAIRS) {
+        if ($ps.PSObject.Properties.Name -notcontains $pr.Idx) { continue }
+        if ($st.PSObject.Properties.Name -notcontains $pr.Spec) { continue }
+        $a = [double]$ps.($pr.Idx); $b = [double]$st.($pr.Spec)
+        # A whole unit, because both sides store rounded integers and a half-unit gap is the rounding, not drift.
+        if ([Math]::Abs($a - $b) -gt 0.5) {
+            $out.Add(("MACRO-DRIFT: {0} {1} index={2:0} spec={3:0} (the index copy is stale - run pipeline\sync-recipesdb-macros.ps1)" -f $Slug, $pr.Idx, $a, $b))
+        }
+    }
+    return @($out.ToArray())
+}
 
 function Get-CostDrift {
     <# Pure, so the founding bug can be pinned by -SelfTest without touching a live file. #>
@@ -71,6 +106,25 @@ if($SelfTest){
     $d4 = Get-CostDrift -Row ([pscustomobject]@{ cost_per_serving=2.45 }) -Spec ([pscustomobject]@{ cost_per_serving=2.455 }) -Slug 'rounding'
     T 'CLEAN TWIN a sub-half-cent difference is rounding, not drift' ($d4.Count -eq 0) ($d4 -join '|')
     $d5 = Get-CostDrift -Row ([pscustomobject]@{ cost_per_serving=2.45 }) -Spec ([pscustomobject]@{ cost_per_serving=2.46 }) -Slug 'onecent'
+
+    # ---- MACRO DRIFT (2026-08-29) -------------------------------------------------------------
+    # MUST FIRE: the shape that shipped - 127 recipes whose index copy never caught up with the spec.
+    $mRow  = [pscustomobject]@{ per_serving = [pscustomobject]@{ calories=567; protein_g=36; carbs_g=62; fat_g=18 } }
+    $mSpec = [pscustomobject]@{ stat        = [pscustomobject]@{ cal=816;     protein=36;    carbs=62;    fat=18    } }
+    $m1 = @(Get-MacroDrift -Row $mRow -Spec $mSpec -Slug 'king-ranch')
+    T 'MUST FIRE  a stale index macro copy is reported against its spec' ($m1.Count -eq 1) ("issues=" + $m1.Count)
+    # CLEAN TWIN: agreement is silent.
+    $mOk = [pscustomobject]@{ stat = [pscustomobject]@{ cal=567; protein=36; carbs=62; fat=18 } }
+    $m2 = @(Get-MacroDrift -Row $mRow -Spec $mOk -Slug 'agreeing')
+    T 'CLEAN TWIN a matching macro copy is silent' ($m2.Count -eq 0) ("issues=" + $m2.Count)
+    # THE FIELD-NAME TRAP ITSELF. If the pairing is ever "fixed" to compare like-named fields, this check
+    # goes permanently quiet against a fully drifted row - which is exactly how it stayed unnoticed.
+    T 'the two sides use DIFFERENT field names, so a like-for-like comparison would prove nothing' (@($script:MACRO_PAIRS | Where-Object { $_.Spec -eq $_.Idx }).Count -eq 0) 'a pair uses the same name on both sides'
+    $m3 = @(Get-MacroDrift -Row $mRow -Spec ([pscustomobject]@{ stat = [pscustomobject]@{ cal=816 } }) -Slug 'partial')
+    T 'a spec stat missing three of four macros still reports the one it can compare' ($m3.Count -eq 1) ("issues=" + $m3.Count)
+    # Rounding is not drift: both sides store integers.
+    $m4 = @(Get-MacroDrift -Row ([pscustomobject]@{ per_serving = [pscustomobject]@{ calories=567 } }) -Spec ([pscustomobject]@{ stat = [pscustomobject]@{ cal=567.4 } }) -Slug 'rounding')
+    T 'a half-unit gap is rounding, not drift' ($m4.Count -eq 0) ("issues=" + $m4.Count)
     T 'MUST FIRE  a one-cent disagreement IS drift (the copy has exactly one right value)' ($d5.Count -eq 1) ($d5 -join '|')
     if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -185,6 +239,8 @@ foreach($s in $specSlugs.Keys){
   # cost block: the index copy has exactly one legitimate value, the spec's. Report per ROW rather than
   # per field - a stale row moves all six numbers at once, and 403 rows x 6 would bury every other line.
   $cd = @(Get-CostDrift -Row $row -Spec $spec -Slug $s)
+  $md = @(Get-MacroDrift -Row $row -Spec $spec -Slug $s)
+  foreach($m in $md){ $issues.Add($m) }
   if($cd.Count){
     $costDriftRows++; $costDriftFields += $cd.Count
     if($costDriftRows -le $CAP8){ $issues.Add(($cd | Where-Object { $_ -match 'cost_per_serving ' } | Select-Object -First 1)) }
