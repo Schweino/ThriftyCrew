@@ -68,10 +68,10 @@
                        "Reduced Fat Mozzarella, 5 oz: ~$1.07. \u003cstrong\u003eBuy 1 8oz bag: $1.74.\u003c/strong\u003e",
                        "Lime Juice, 1.75 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 3/4 cup: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Pantry seasonings (jerk seasoning, salt): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.49 across 14 servings, so roughly $2.18 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.59 across 14 servings, roughly $3.26 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.10. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (jerk seasoning, salt): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.46 across 14 servings, so roughly $2.18 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.56 across 14 servings, roughly $3.25 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.65. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for a Caribbean plate most people only order out. Thigh keeps the cost down, the mango salsa does the celebrating.",
     "shop_smart":  [
@@ -93,14 +93,14 @@
     "portion_html":  "Weigh the rice, beans and chicken, subtract the empty bowl, and divide by 14 so the calorie count actually holds across all 14. Add the salsa and the spoon of yogurt on top, then roll. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Keep the salsa in a separate cup if you are freezing these, and add it fresh after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://saucedupfoods.com/the-greatest-jerk-chicken-burritos-with-mango-salsa/\" target=\"_blank\" rel=\"noopener\"\u003esaucedupfoods.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Jerk chicken burritos with mango salsa, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
-    "cost_batch":  30.49,
-    "cost_batch_true":  45.59,
+    "cost_batch":  30.46,
+    "cost_batch_true":  45.56,
     "cost_per_serving":  2.18,
-    "cost_per_serving_true":  3.26,
-    "cost_pantry_add":  12.51,
-    "cost_first_run":  58.1,
+    "cost_per_serving_true":  3.25,
+    "cost_pantry_add":  12.09,
+    "cost_first_run":  57.65,
     "scaler":  {
-                   "cost":  "45.59",
+                   "cost":  "45.56",
                    "ing":  [
                                {
                                    "item":  "High Fiber Tortilla",

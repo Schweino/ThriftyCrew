@@ -563,7 +563,9 @@
         "bulk":  true
     },
     {
-        "item":  "Chili Crisp / Chili Oil"
+        "item":  "Chili Crisp / Chili Oil",
+        "buy_pkg_g":  210,
+        "buy_pkg_label":  "7.41oz jar"
     },
     {
         "item":  "Chili Powder",
@@ -778,7 +780,7 @@
         "gpu":  28.3495,
         "unit":  "oz",
         "pantry_pkg_g":  454,
-        "pantry_pkg_label":  "1lb bag (board capture)",
+        "pantry_pkg_label":  "1lb bag",
         "bulk":  true
     },
     {
@@ -1231,7 +1233,7 @@
         "gpu":  28.3495,
         "unit":  "oz",
         "pantry_pkg_g":  227,
-        "pantry_pkg_label":  "8oz jar (board capture)",
+        "pantry_pkg_label":  "8oz jar",
         "bulk":  true
     },
     {
@@ -1439,7 +1441,7 @@
         "unit":  "oz",
         "board":  "recipe",
         "pantry_pkg_g":  283,
-        "pantry_pkg_label":  "10 oz jar (Walkerswood, Walmart $4.52 captured 2026-07-25)",
+        "pantry_pkg_label":  "10oz jar",
         "bulk":  true
     },
     {
@@ -1468,7 +1470,7 @@
         "unit":  "each",
         "board":  "recipe",
         "buy_pkg_g":  400,
-        "buy_pkg_label":  "8 buns"
+        "buy_pkg_label":  "8-bun pack"
     },
     {
         "item":  "Kidney Beans",
@@ -1747,7 +1749,9 @@
         "item":  "Pasta Shells - jumbo",
         "bid":  "jumbo-pasta-shells",
         "gpu":  28.3495,
-        "unit":  "oz"
+        "unit":  "oz",
+        "buy_pkg_g":  340,
+        "buy_pkg_label":  "12oz box"
     },
     {
         "item":  "Peanut Butter",
@@ -2296,7 +2300,7 @@
         "unit":  "oz",
         "board":  "recipe",
         "pantry_pkg_g":  227,
-        "pantry_pkg_label":  "8oz jar (label capture)",
+        "pantry_pkg_label":  "8oz jar",
         "bulk":  true
     },
     {
@@ -2334,7 +2338,7 @@
         "gpu":  38,
         "unit":  "floz",
         "pantry_pkg_g":  768,
-        "pantry_pkg_label":  "20.2floz bottle (600ml)",
+        "pantry_pkg_label":  "20.2floz bottle",
         "bulk":  true
     },
     {
@@ -2353,7 +2357,7 @@
         "unit":  "oz",
         "board":  "recipe",
         "buy_pkg_g":  227,
-        "buy_pkg_label":  "8oz"
+        "buy_pkg_label":  "8oz package"
     },
     {
         "item":  "Taco Seasoning",
@@ -2737,7 +2741,7 @@
         "unit":  "dozen",
         "board":  "weekly",
         "buy_pkg_g":  204,
-        "buy_pkg_label":  "12ct eggs",
+        "buy_pkg_label":  "12ct carton",
         "note":  "gpu = yolk grams per egg (~17 g). Priced per egg PURCHASED - you buy whole eggs to get yolks, so that is the real cost."
     },
     {
@@ -3106,7 +3110,7 @@
         "unit":  "each",
         "board":  "weekly",
         "buy_pkg_g":  300,
-        "buy_pkg_label":  "each (heart)",
+        "buy_pkg_label":  "romaine heart",
         "note":  "Registrar ruling 2026-08-28: REUSE. lettuce's include list is [\"\\blettuce\\b\",\"\\biceberg\\b\",\"\\bromaine\\b\"] - romaine is EXPLICITLY claimed already - and it is live at $0.9975/each (crown: 4-ct romaine hearts, Family Fare). Minting romaine-lettuce would put one SKU under two ids. The run's own registrar ruling inside mapped\\sriracha-chicken-tacos.json had already adjudicated this. gpu 300 = one heart; confirm against the Tanimura & Antle 4-ct label, since the crown price is per heart. A red-onion-style variety split would be an estate edit (drop \\bromaine\\b from lettuce first), not a mint."
     },
     {

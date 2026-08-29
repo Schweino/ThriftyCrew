@@ -222,6 +222,12 @@ function Invoke-Stage { param([string]$Label, [scriptblock]$Run)
 
 Invoke-Stage 'sync-recipesdb-buy' { & powershell -ExecutionPolicy Bypass -File (Join-Path $here 'sync-recipesdb-buy.ps1') -Apply | Select-Object -Last 1 }
 Invoke-Stage 'audit-db-agreement (hard gate)' { & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') | Select-Object -Last 1 }
+# BEFORE ANY CARD RENDERS, because the cost line pluralises a package label in front of a paying
+# reader: "Buy {n} {label}s". Wired here on 2026-08-29 and not only into wave-publish, because the
+# seven pages that shipped "Buy 2 8ozes", "Buy 4 8 bunses" and "Buy 2 Great Value 12 ozes" did NOT
+# come through a wave - they came through this chain, on a plain recost of already-live recipes. A
+# gate that only guards new waves would have watched every one of them go out.
+Invoke-Stage 'audit-buy-label-plurals (hard gate)' { & powershell -ExecutionPolicy Bypass -File (Join-Path $here 'audit-buy-label-plurals.ps1') | Select-Object -Last 1 }
 Invoke-Stage 'gen-planner-data' { & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'gen-planner-data.ps1') | Select-Object -Last 1 }
 # -Slugs IN-PROCESS for build/publish (engine\README: `powershell -File` marshals an array as one string)
 Write-Output '-- build-cards (dirty slugs)'

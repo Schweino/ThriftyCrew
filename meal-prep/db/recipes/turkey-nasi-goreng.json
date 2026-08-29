@@ -47,18 +47,18 @@
     "cost_lines":  [
                        "Turkey Breast, 3.5 lb: ~$16.71. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
                        "Vegetable Oil, 0.5 cups: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Sweet Soy Sauce, 6 oz: ~$1.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 5 cups dry: ~$1.09. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
-                       "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Jalapeno, 2 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Sweet Soy Sauce, 6 oz: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.12. \u003cstrong\u003eBuy 1 (covers this batch).\u003c/strong\u003e",
+                       "Garlic, 4 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Jalapeno, 2 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 lb: $1.43.\u003c/strong\u003e",
                        "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Eggs, 14 large eggs: ~$1.66. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.89. \u003cstrong\u003eBuy 2 dozens: $3.25.\u003c/strong\u003e",
                        "Green Onions, 8.75 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Cucumber, 1 cucumber: ~$0.76. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.67 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.42 across 14 servings, roughly $2.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.11. Those containers then feed this batch and many more after it."
+                       "Pantry seasonings (salt, black pepper): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.71 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.33 across 14 servings, roughly $2.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.47. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). One bottle of sweet soy sauce is the difference between plain fried rice and this, and that bottle keeps paying you back long after this batch.",
     "shop_smart":  [
@@ -80,14 +80,14 @@
     "portion_html":  "Set the pot of fried rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Top each with a fried egg, a few cucumber rounds, and the sliced green onions. Every bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/nasi-goreng-indonesian-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Indonesian fried rice for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  24.67,
-    "cost_batch_true":  40.42,
+    "cost_batch":  24.71,
+    "cost_batch_true":  40.33,
     "cost_per_serving":  1.76,
-    "cost_per_serving_true":  2.89,
-    "cost_pantry_add":  14.69,
-    "cost_first_run":  55.11,
+    "cost_per_serving_true":  2.88,
+    "cost_pantry_add":  12.14,
+    "cost_first_run":  52.47,
     "scaler":  {
-                   "cost":  "40.42",
+                   "cost":  "40.33",
                    "ing":  [
                                {
                                    "item":  "Turkey Breast",
