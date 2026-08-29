@@ -2841,6 +2841,156 @@
                         "ruled_on":  "2026-08-23",
                         "ruled_by":  "escalation-review",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-oregano|Walmart|frontier-co-op-oregano-leaf-organic-cut-and-sift",
+                        "commodity":  "dried-oregano",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Frontier Co-op Oregano Leaf Organic Cut And Sifted Fancy Grade, 16 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart Marketplace bulk bag, ship-only (no pickup/delivery offered; \"Shipping, arrives Mon Aug 31\" read live 2026-08-29). Zero Frontier Co-op rows appear in the 11,256-row store-scoped capture of 2026-08-11, and no 16 oz size exists anywhere in the oregano line, which tops out at 3.12 oz. Held the Walmart cell at $0.945/oz against Great Value Oregano Leaves 0.87 oz at $1.2414/oz, the shelf item and Walmart own Overall pick. Same defect as the dried-rosemary marketplace bag corrected 2026-08-29.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-basil|Walmart|frontier-co-op-certified-organic-basil-leaf-16-o",
+                        "commodity":  "dried-basil",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Frontier Co-op Certified Organic Basil Leaf, 16 oz. Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart Marketplace bulk bag, ship-only. Absent from the store-scoped capture; no 16 oz size in the basil line. Held the Walmart CROWN at $0.7312/oz against Great Value Basil Leaves 0.8 oz at $1.35/oz (Overall pick, pickup available, confirmed live 2026-08-29). Board was 85% cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-parsley|Walmart|frontier-co-op-certified-organic-parsley-leaf-fl",
+                        "commodity":  "dried-parsley",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Frontier Co-op Certified Organic Parsley Leaf Flakes, 16 oz. Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart Marketplace bulk bag, ship-only. Absent from the store-scoped capture; no 16 oz size in the parsley line. Held the Walmart CROWN at $1.4394/oz against Great Value Parsley Flakes 2.7 oz at $2.2667/oz (confirmed live 2026-08-29). Board was 57% cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-dill|Walmart|frontier-co-op-certified-organic-dill-weed-16-oz",
+                        "commodity":  "dried-dill",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Frontier Co-op Certified Organic Dill Weed, 16 oz. Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart Marketplace bulk bag, ship-only. Absent from the store-scoped capture; no 16 oz size in the dill line. Held the Walmart CROWN at $1.505/oz against Great Value Dill Weed 0.75 oz at $2.96/oz (confirmed live 2026-08-29). Board was 49% cheap - nearly half the real shelf cost.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "curry-powder|Walmart|frontier-co-op-certified-organic-curry-powder-16",
+                        "commodity":  "curry-powder",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Frontier Co-op Certified Organic Curry Powder, 16 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Walmart Marketplace bulk bag, ship-only. Absent from the store-scoped capture; the in-store curry line runs 1.75-2 oz. Held the Walmart cell at $0.7669/oz against Great Value Curry Powder 2 oz at $1.06/oz (confirmed live 2026-08-29). Board was 38% cheap.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "hummus|Walmart|marketside-gluten-free-dark-chocolate-hummus-10",
+                        "commodity":  "hummus",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Gluten-Free Dark Chocolate Hummus, 10 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dessert spread, not savoury hummus, on a row whose every other cell is classic or roasted-red-pepper hummus. Marketside Gluten-Free Classic Hummus 10 oz sits at the identical $2.87 / $0.287 per oz, so this is a card-fidelity defect with no price consequence - the number was right and the product named was wrong.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pineapple|Walmart|suja-organic-immunity-turmeric-pineapple-wellnes",
+                        "commodity":  "pineapple",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Suja Organic Immunity Turmeric Pineapple Wellness Shots, 1.7 fl oz Bottle, 4-Pack"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 4-pack of 1.7 fl oz turmeric wellness shots priced onto an each-unit fresh whole pineapple row. Not pineapple in any form. Walmart sells Fresh Pineapple, Each at $1.98 (rollback, confirmed live 2026-08-29) against the $2.245 this cell published.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee-pods|Walmart|great-value-milk-chocolate-hot-cocoa-k-cups-0-53",
+                        "commodity":  "coffee-pods",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Milk Chocolate Hot Cocoa K-Cups, 0.53 oz, 18 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hot cocoa, not coffee, and it HELD THE CROWN at $0.2711/each. Great Value Donut Shop 100% Arabica Medium Roast Coffee Pods 48 ct at $16.47 is $0.3431/each (confirmed live 2026-08-29), so correcting this hands the crown to Sam\u0027s Club at $0.3298.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|Walmart|marketside-organic-cucumbers-2-count",
+                        "commodity":  "cucumbers",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Organic Cucumbers, 2 Count"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Organic 2-count pack on a conventional each-unit row where every other store cell is a single conventional cucumber. Walmart own conventional Fresh Cucumber, Each is $0.76 (confirmed live 2026-08-29) against the $1.36 this cell published - the board was 79% HIGH, and 17 recipes price cucumber at Walmart.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "radishes|Walmart|fresh-organic-whole-red-radish-12oz-bag",
+                        "commodity":  "radishes",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Fresh Organic whole Red Radish, 12oz Bag"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Organic bag on a conventional row; every other store cell is a conventional 16 oz bag at $0.12-$0.19/oz. Walmart conventional Fresh Produce Bagged Whole Red Radish is $2.17 at $0.362/oz (confirmed live 2026-08-29). No recipe prices radishes, so this is shopper-facing only.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-29",
+                        "ruled_by":  "wrong-product-sweep-2026-08-29",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
