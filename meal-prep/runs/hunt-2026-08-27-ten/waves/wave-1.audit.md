@@ -1,80 +1,97 @@
-NO-GO
-scope: mediterranean-chicken-w-marinade (re-audit after recost cd3036a6; supersedes the 2026-08-27 GO)
+GO
+scope: mediterranean-chicken-w-marinade (scoped re-audit of the 92a5ccff repair; supersedes the 2026-08-29 11:00 NO-GO)
 
-# Wave 1 RE-audit - hunt-2026-08-27-ten (mediterranean-chicken-w-marinade), 2026-08-29
+# Wave 1 RE-audit - hunt-2026-08-27-ten (mediterranean-chicken-w-marinade), 2026-08-29 (afternoon)
 
-Battery: waves\wave-1.preaudit.json generated 2026-08-29T10:51:20, scoped, 16 checks, 0 failed,
-exit 0 with WAVE-PREAUDIT-COMPLETE. Freshness: ingredients.json 08:09:14 -> spec 10:47:23 ->
-report 10:51:20, nothing moved since. The battery is green and it is still a NO-GO, because the
-defect is one the battery has no check for.
+Battery: waves\wave-1.preaudit.json generated 2026-08-29T11:27:31, scoped, 16 checks, 0 failed,
+exit 0 with WAVE-PREAUDIT-COMPLETE (27.7s). The report postdates the fix commit (10:57:51) and the
+spec/costed mtimes it certifies (10:55:31); nothing in the chain moved after it was written.
 
-### Blocker 1 (shared-data): the recost resurrected "Buy 5 6oz can, draineds" - the 08-27 Blocker 2 fix was never committed
+## The blocker's repair, verified in git - not in the working tree
 
-Today's spec (meal-prep\db\recipes\mediterranean-chicken-w-marinade.json, line 68) reads:
+1. THE COMMIT IS REAL. `git log --all -S "6oz drained-weight can" -- meal-prep/db/ingredients.json`
+   now returns exactly one hit: 92a5ccff, which carries ingredients.json, costed.json AND the spec
+   in one commit - the shape the predecessor's fix prescribed. 92a5ccff is an ancestor of HEAD;
+   `git diff 92a5ccff..HEAD` on all three files is empty and `git status` shows them clean, so the
+   committed bytes ARE today's bytes. The failure mode that ate the 08-27 repair (source fixed only
+   in the working tree, stripped by the 07:00 bot's autoStash) cannot recur for this label.
+2. THE ROW: ingredients.json Black Olives, bid black-olives, buy_pkg_label "6oz drained-weight can",
+   buy_pkg_g 170. Pluralizable noun last.
+3. EVERY SURFACE:
+   - Spec cost line (line 68): "Black Olives, about 1 1/2 lb drained black olives (three 14.5 oz
+     cans): ~$8.43. <strong>Buy 5 6oz drained-weight cans: $9.84.</strong>" - correct.
+   - Rebuilt card (battery scratch dir wave-1.preaudit-cards\mediterranean-chicken-w-marinade):
+     body embeds "pkg_l":"6oz drained-weight can" in its data payload; head clean. Zero "draineds"
+     in body, head, spec, or anywhere under meal-prep\db (repo grep).
+   - The card surface is additionally safe BY CONSTRUCTION: its client-side pkgLabel() renders
+     count + ' x ' + pkg_l and never appends a plural s (only 'head' is special-cased), so the
+     card never had this defect - it lived solely in the server-rendered spec cost_lines.
+4. PRICE UNCHANGED, CHAIN RECONCILES. $9.84 for 5 cans; utilization $8.43 = (728g needed / 850g
+   bought) x 9.84 exactly; 5 is the minimal count (4 x 170g = 680g < 728g). Tiers: 56.78/14 = 4.06,
+   63.65/14 = 4.55, 63.65 + 10.79 = 74.44 = cost_first_run, scaler.cost 63.65 = cost_batch_true.
+   13 lines, 0 unpriced. Battery cost-engine-consistency, cost-reconcile ("to the cent"),
+   plausibility, line coverage all green.
 
-    Buy 5 6oz can, draineds: $9.84.
+## Everything the 08-27 GO certified, re-verified on today's bytes
 
-This is byte-for-byte the garbled label the 06:10 audit of 08-27 blocked on, and which the 06:18 GO
-verified repaired "AT THE SOURCE". The history shows what happened:
+- MACROS: battery recompute from food-macros-db: 560.9 / 51.8 / 16.1 / 34.2 vs stat 561/52/16/34,
+  all four within tolerance, no missing food-DB rows. Matches the 08-27 figures exactly.
+- STAT-PROSE: zero "51.8"/"16.1" literals in the spec; audit-spec-contradictions clean.
+- PROTEIN: derived chicken by grams (2540 g, no competitor), matches claimed. recipes-db -DryRun
+  builds every row with an item_id.
+- VOICE: zero em/en dashes in spec and rebuilt card.
+- CARDS: structural compare against the live al-pastor reference clean; JSON-LD parses as Recipe.
+- The head description's "tomatoes" is real - Cherry Tomatoes, 834 g, is an ingredient (checked
+  because the olive-line snippets happened not to show it).
+- GHOST EXCERPT (new gate): head.description is 177 chars with no tokens to expand, safely under
+  Ghost's 300-char custom_excerpt cap. audit-ghost-field-limits.ps1: 1 spec, 0 findings, exit 0.
+  Confirmed by direct measurement, not just the gate.
+- stat.cost_ps 5.30 vs today's first-run 5.32: expected pre-publish drift. Estate survey shows
+  cost_ps = cost_first_run/servings at stat-write time and drifts pennies after recosts until
+  wave-publish E2 re-anchors it per slug (several live specs show identical drift). Not a blocker;
+  E2 owns it.
 
-- No commit of meal-prep\db\ingredients.json has EVER contained "6oz drained-weight can"
-  (git log --all -S finds zero hits). The black-olives row has said buy_pkg_label
-  "6oz can, drained" since it was born in e3fed9f0 and says so right now.
-- The 08-27 repair fixed the label in the WORKING TREE, rebuilt the spec, and the spec fix
-  landed in commit 8db19121 - but the ingredients.json edit was lost before it was committed
-  (the ~07:00 bot's autoStash rebase rewriting uncommitted files is the known mechanism for this).
-- Today's recost (cd3036a6) re-rendered the buy strings from the unfixed source. The renderer
-  pluralizes buy_pkg_label by appending "s" for count > 1, so "6oz can, drained" + "Buy 5"
-  = "draineds" again. Repo sweep: this is the only spec carrying the string.
+## The CLASS question: other labels the pluralizer will garble
 
-FIX (owner: the shared ingredients DB, then a recipe-local rebuild):
-1. meal-prep\db\ingredients.json, black-olives row: buy_pkg_label "6oz can, drained" ->
-   "6oz drained-weight can" (pluralizable noun last, per the 08-27 ruling). COMMIT IT this time,
-   in the same commit as the spec rebuild, so the fix cannot be stripped from under the spec again.
-2. Recost/rebuild this slug so the cost line renders "Buy 5 6oz drained-weight cans: $9.84."
-   (price is unchanged; only the label re-renders). Then scoped re-audit with -Slugs.
+Get-CostPlural (meal-prep\pipeline\cost-render-lib.ps1, ~line 59) appends "s" - or "es" after
+ch/sh/ss/s/x/z - to the END of the whole label unless it ends in "each". So the defect class is
+any label that reaches it with n >= 2 and does not END in a cleanly pluralizable noun. Swept all
+344 labels in ingredients.json plus every pkg/starter_pkg in costed.json, then MEASURED the
+rendered specs rather than predicting. NOT fixed, per instructions - named only:
 
-## What the recost moved, verified clean (everything except the blocker)
+FIRING TODAY in 7 live specs (none in this run or wave; all are older published recipes):
+  - Swiss Cheese, buy_pkg_label "8oz" -> "Buy 2 8ozes" / "Buy 3 8ozes" (chicken-cordon-bleu-casserole,
+    turkey-cordon-bleu-casserole, turkey-reuben-casserole, turkey-wild-rice-casserole)
+  - Keto Bun, buy_pkg_label "8 buns" -> "Buy 4 8 bunses" (turkey-meatball-sub-bake)
+  - Pasta Shells - jumbo, costed pkg "Great Value 12 oz" -> "Buy 2 Great Value 12 ozes"
+    (ground-turkey-lasagna-casserole, turkey-manicotti-ricotta)
+LATENT (0 firing lines in today's costed.json, will garble the day n >= 2):
+  - Romaine Lettuce, buy_pkg_label "each (heart)" -> "each (heart)s" (the each$ guard misses it)
+  - Egg Yolk, buy_pkg_label "12ct eggs" -> "12ct eggses"
+  - pantry labels ending in parentheticals, exposed only when starter_n >= 2 renders the
+    "Pantry staple; this batch alone uses about N <label>s" line: Dried Ancho Chiles
+    "1lb bag (board capture)", Ground Fennel "8oz jar (board capture)", Sumac "8oz jar (label
+    capture)", Sweet Soy Sauce "20.2floz bottle (600ml)", Jerk Seasoning "10 oz jar (Walkerswood,
+    Walmart $4.52 captured 2026-07-25)" - the last three would leak capture provenance to readers
+    even before pluralization.
+Repair owner for all of the above: shared-data (the label rows), and the predecessor's process
+advisory stands - the battery still has no check for a garbled pluralized render; the sweep above
+is exactly the shape such a check should take.
 
-The cd3036a6 diff touches exactly: the olive buy label (the blocker), the lemons line
-(2.54/2.72 -> 2.80/3.00, 6 lemons at $0.50 each - shelf-plausible), pantry seasonings
-(0.32 -> 0.35), the three cost-tier lines, the six cost_* fields, and scaler.cost. Nothing else.
+Aside, same file, not this slug: the "Green Olives" row carries bid "olives" while the "Olives"
+row carries bid "green-olives" - the display names and bids look crossed. Neither touches this
+recipe (it uses black-olives); flagged for the mapper to rule on, not fixed.
 
-- COST CHAIN: internally coherent by recompute: 56.78/14 = 4.06 exactly; 63.65/14 = 4.55 exactly;
-  63.65 + 10.79 = 74.44 exactly; scaler.cost 63.65 matches cost_batch_true. Battery
-  cost reconciliation, plausibility, and line coverage all clean; 0 unpriced, 0 uncarried.
-- STALE LITERALS: grep of the spec for every old figure (4.04, 4.52, 56.49, 63.34, 73.94, 10.6,
-  2.54, 2.72, 0.32, 4.05) finds zero survivors. cost_closing_html uses the {{cost_ps}} template,
-  so its per-serving figure tracks automatically.
-- MACROS: untouched by the recost (diff confirms no macro field moved); the 08-27 verification
-  (560.9/51.8/16.1/34.2 vs stat 561/52/16/34, band clear with margin) stands on today's bytes -
-  battery macro recompute green again today.
-- STAT-PROSE (08-27 Blocker 1): still fixed. Zero "51.8"/"16.1" in the spec;
-  audit-spec-contradictions clean.
-- UNBID_LINE (new gate 120a26c1): all 13 scaler lines carry a resolving bid (verified directly,
-  and audit-unbid-ingredients clean n=1), so feed-covers-published will not refuse this card
-  once the blocker is repaired.
-- MAPPING / PROTEIN / CARDS / VOICE / GATES: unchanged since 08-27; recipes-db -DryRun green,
-  P8 endpoint + feed probes green (565 recipes, feed generated 2026-08-29T09:16:24).
+## Advisories carried forward unchanged (predecessor + 08-27, still true, still not blocking)
 
-## Advisories (not blocking)
-
-- Carried forward unchanged from 08-27: two shopping stories on one card (prose "three 15 oz cans"
-  artichokes / "three 14.5 oz cans" olives vs engine buy strings - both plans cover the batch);
-  the artichoke display line's "drained" beside a gross-basis figure; the "w/" in the title.
-- For the battery owner (process): the battery has no check that catches a garbled buy_pkg_label
-  render - the dash sweep, structural compare and cost reconciliation all pass over "draineds".
-  Both times this defect was caught by an auditor reading the cost lines. A cheap check exists:
-  flag any buy string whose pluralized label ends in a non-noun token (", draineds", "-eds", etc.)
-  or simply grep built cost lines for "draineds?"-style regressions against a bad-render list.
-- For the repair process (process): a source repair verified only in the working tree is not a
-  repair. The 08-27 GO was correct about the bytes it saw, but the estate's known
-  uncommitted-file hazards (the 07:00 bot's autoStash rebase) mean a repair is only durable
-  once committed. Verify the COMMIT, not just the file.
+Two shopping stories on one card (prose "three 14.5 oz cans" olives / "three 15 oz cans"
+artichokes vs the engine's buy counts - both plans cover the batch); the artichoke display line's
+"drained" beside a gross-basis figure; the "w/" in the title.
 
 ## Verdict
 
-NO-GO. One blocker: the black-olives buy_pkg_label regression, shared-data, fix in
-ingredients.json + spec rebuild + commit both together. Everything the one-cent recost was
-supposed to be checked for is clean; the recost itself is sound. The blocker is a 2-line repair
-and a scoped re-audit away from GO.
+GO. The repair is committed, correct on every surface, the price did not move, the chain
+reconciles to the cent, the macros and every 08-27 certification hold on today's bytes, and the
+new Ghost gate passes by direct measurement. The class defect is real but lives entirely outside
+this wave, in 7 already-published specs and a handful of latent labels, named above for a
+separate repair.

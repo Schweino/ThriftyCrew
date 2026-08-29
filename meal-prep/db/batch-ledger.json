@@ -547,7 +547,7 @@
   {
       "batch":  "hunt-2026-08-27-ten-w1",
       "opened":  "2026-08-27T06:09:46",
-      "last_activity":  "2026-08-27T06:21:10",
+      "last_activity":  "2026-08-29T12:39:28",
       "closed":  false,
       "closed_at":  null,
       "close_detail":  null,
@@ -579,6 +579,26 @@
                          "stage":  "audit",
                          "at":  "2026-08-27T06:21:10",
                          "detail":  "1/1 GO"
+                     },
+                     {
+                         "stage":  "cost-basis",
+                         "at":  "2026-08-29T12:39:10",
+                         "detail":  "compute-v2-perserving + reanchor on 1 slug(s)"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-29T12:39:11",
+                         "detail":  "1 row(s) via hunt-2026-08-27-ten-w1"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-29T12:39:28",
+                         "detail":  "1 card(s) rebuilt via propagate"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-29T12:39:28",
+                         "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 10 collateral spec(s) carried by propagate (total dirty 11)"
                      }
                  ]
   },

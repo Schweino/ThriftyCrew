@@ -5,8 +5,8 @@
     "wave":  1,
     "batch":  "hunt-2026-08-27-ten-w1",
     "scope":  "scoped: mediterranean-chicken-w-marinade",
-    "generated":  "2026-08-29T10:51:20",
-    "elapsed_sec":  36.1,
+    "generated":  "2026-08-29T11:27:31",
+    "elapsed_sec":  27.7,
     "wave_slugs":  [
                        "mediterranean-chicken-w-marinade"
                    ],
@@ -15,7 +15,7 @@
               ],
     "inputs":  {
                    "run_dir":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten",
-                   "costed_mtime":  "2026-08-29T10:46:47",
+                   "costed_mtime":  "2026-08-29T10:55:31",
                    "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
                    "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
@@ -25,7 +25,7 @@
                                                                      "check":  "spec-present",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "mtime":  "2026-08-29T10:47:23"
+                                                                                     "mtime":  "2026-08-29T10:55:31"
                                                                                  },
                                                                      "detail":  "spec present and parses"
                                                                  },
@@ -69,8 +69,8 @@
                                                                      "check":  "cost-reconcile",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "spec_mtime":  "2026-08-29T10:47:23",
-                                                                                     "costed_mtime":  "2026-08-29T10:46:47",
+                                                                                     "spec_mtime":  "2026-08-29T10:55:31",
+                                                                                     "costed_mtime":  "2026-08-29T10:55:31",
                                                                                      "costed_is_newer_than_spec":  false
                                                                                  },
                                                                      "detail":  "every spec cost field matches its engine row to the cent"
@@ -104,7 +104,7 @@
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
                                                                                      "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten\\waves\\wave-1.preaudit-cards\\mediterranean-chicken-w-marinade",
-                                                                                     "body_bytes":  68890,
+                                                                                     "body_bytes":  68896,
                                                                                      "make_it_steps":  1,
                                                                                      "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                  },
@@ -185,10 +185,10 @@
                               "verdict":  "pass",
                               "numbers":  {
                                               "url":  "https://feed.thriftycrew.com/smp-feed.json",
-                                              "feed_recipes":  565,
-                                              "generated":  "2026-08-29T09:16:24"
+                                              "feed_recipes":  567,
+                                              "generated":  "2026-08-29T11:04:54"
                                           },
-                              "detail":  "200 + parseable (565 recipes, generated 2026-08-29T09:16:24)"
+                              "detail":  "200 + parseable (567 recipes, generated 2026-08-29T11:04:54)"
                           }
                       ],
     "summary":  {
