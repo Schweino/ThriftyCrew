@@ -1108,10 +1108,10 @@
   {
       "batch":  "hunt-2026-08-27-highprotein-w12",
       "opened":  "2026-08-28T20:17:52",
-      "last_activity":  "2026-08-28T20:29:01",
-      "closed":  false,
-      "closed_at":  null,
-      "close_detail":  null,
+      "last_activity":  "2026-08-28T20:41:41",
+      "closed":  true,
+      "closed_at":  "2026-08-28T20:41:41",
+      "close_detail":  "post-publish review CLEAN; 174 weekly week_cost movers between 18:29 and 20:29 feeds attributed to the 108-stamp propagate a23f7775 (bid/gpu corrections), not the cheddar mint",
       "slugs":  [
                     "honey-bbq-chicken-mac-and-cheese"
                 ],
@@ -1160,6 +1160,16 @@
                          "stage":  "publish",
                          "at":  "2026-08-28T20:29:01",
                          "detail":  "1/1 wave slug(s) published through engine\\publish (visibility preserved) + 22 collateral spec(s) carried by propagate (total dirty 23)"
+                     },
+                     {
+                         "stage":  "serveability",
+                         "at":  "2026-08-28T20:29:07",
+                         "detail":  "1/1 wave slug(s) verified against the rebuilt feed"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-28T20:41:41",
+                         "detail":  "independent review: live page + Ghost card verified (bid reduced-fat-cheddar, 17 lines, no dashes, no stale prices), live feed 566 current, feed-covers-published RC=0 over 566, spec-contradictions RC=0 PHANTOM 0, top5-weekly clean, 375px no h-scroll, cheddar move isolated to this recipe in costed.json"
                      }
                  ]
   }
