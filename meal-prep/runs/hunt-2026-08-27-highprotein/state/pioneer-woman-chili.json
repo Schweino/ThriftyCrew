@@ -3,10 +3,10 @@
     "title":  "The Pioneer Woman Chili",
     "source_url":  "https://thecozycook.com/pioneer-woman-chili/",
     "protein":  "beef",
-    "state":  "rejected-audit",
-    "wave":  5,
+    "state":  "written",
+    "wave":  null,
     "created":  "2026-08-27T11:40:25",
-    "updated":  "2026-08-27T16:44:21",
+    "updated":  "2026-08-29T10:58:18",
     "terms":  [
                   {
                       "term":  "masa harina",
@@ -29,7 +29,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -129,6 +129,12 @@
                         "at":  "2026-08-27T16:44:21",
                         "by":  "auditor",
                         "detail":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-29T10:58:18",
+                        "by":  "fable",
+                        "detail":  "repaired: Brad ruling 2026-08-29: rename descriptively and drop the celebrity-trademark title. Recipe and source credit stand; only the name and slug change.  [audit blockers: recipe-local; 2 recipe-local; source-QA still owed]"
                     }
                 ]
 }

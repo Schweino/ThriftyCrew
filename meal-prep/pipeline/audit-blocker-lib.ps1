@@ -69,25 +69,73 @@ function Get-BlockerKindsFromLine {
   return @($out)
 }
 
+function Get-LeadingKindDeclaration {
+  <#
+    The kind stated as the OPENING TOKEN of a blocker's body line, e.g. `Recipe-local. Owner: mapper.`
+
+    THE HEADING IS NOT THE ONLY PLACE AUDITORS PUT IT, and reading only the heading nearly cost two
+    more recipes (2026-08-29). Wave 5 of hunt-2026-08-27-highprotein writes:
+        ### Blocker 1 - healthy-hamburger-helper: macros computed on Protein+ pasta...
+        Recipe-local. Owner: recipe-ingredient-mapper.
+    The auditor DID classify both blockers, on the line underneath. A reader that only looked at the
+    heading called that "no kind declared" and refused -Repair on a recipe whose defect the report
+    names in the clearest possible terms.
+
+    Deliberately strict: the kind must be the line's LEADING token, optionally followed by punctuation.
+    Scanning body prose for the word `shared` would classify "this is a shared concern" as a kind and
+    quietly turn a recipe-local blocker into a revivable one, which is the dangerous direction.
+  #>
+  param([string]$Line)
+  $s = ([string]$Line).TrimStart()
+  foreach ($k in $script:BLOCKER_KINDS) {
+    if ([regex]::IsMatch($s, '^' + [regex]::Escape($k) + '\b', 'IgnoreCase')) { return @($k) }
+  }
+  return @()
+}
+
+function Get-BlockerKinds {
+  <#
+    Every OPEN blocker in one report, as the kinds it declares - in its heading's parentheses, or as
+    the leading token of the body line(s) directly beneath it, whichever the auditor used.
+
+    Only the lines up to the next heading are read, so one blocker's classification can never be
+    credited to the blocker after it.
+  #>
+  param([string]$Path)
+  $lines = @(Get-Content $Path)
+  $out = @()
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    if (-not (Test-IsBlockerHeading $lines[$i])) { continue }
+    $kinds = @(Get-BlockerKindsFromLine $lines[$i])
+    if (-not $kinds.Count) {
+      # Look only at the body of THIS blocker, and only until it says something that is not a
+      # classification - two lines is the whole convention in every report on disk.
+      for ($j = $i + 1; $j -lt $lines.Count -and $j -le $i + 2; $j++) {
+        if ([string]$lines[$j] -match '^###\s') { break }
+        $k = @(Get-LeadingKindDeclaration $lines[$j])
+        if ($k.Count) { $kinds = $k; break }
+      }
+    }
+    $out += [pscustomobject]@{ heading = ([string]$lines[$i]).TrimEnd(); kinds = @($kinds) }
+  }
+  return @($out)
+}
+
 function Get-AuditBlockerKinds {
-  <# Every kind declared by every OPEN blocker heading in one audit report. #>
+  <# Every kind declared by every OPEN blocker in one audit report, flattened. #>
   param([string]$Path)
   $kinds = @()
-  foreach ($ln in (Get-Content $Path)) {
-    if (-not (Test-IsBlockerHeading $ln)) { continue }
-    $kinds += @(Get-BlockerKindsFromLine $ln)
-  }
+  foreach ($b in @(Get-BlockerKinds $Path)) { $kinds += @($b.kinds) }
   return @($kinds)
 }
 
 function Get-KindlessBlockerHeadings {
-  <# The headings that open a blocker and never say whose defect it was. The gate's whole subject. #>
+  <# The blockers that never say whose defect they were, in the heading or beneath it. #>
   param([string]$Path)
   $bad = @()
-  foreach ($ln in (Get-Content $Path)) {
-    if (-not (Test-IsBlockerHeading $ln)) { continue }
-    if (@(Get-BlockerKindsFromLine $ln).Count) { continue }
-    $bad += ([string]$ln).TrimEnd()
+  foreach ($b in @(Get-BlockerKinds $Path)) {
+    if (@($b.kinds).Count) { continue }
+    $bad += $b.heading
   }
   return @($bad)
 }

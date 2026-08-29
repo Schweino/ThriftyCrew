@@ -98,10 +98,31 @@ if ($runSelfTest) {
     T 'CLEAN TWIN all four heading forms in use, correctly tagged, produce no finding' `
       (@(Get-HeadingFindings @($good) @{}).Count -eq 0) (@(Get-HeadingFindings @($good) @{}).Count.ToString())
 
-    $bad = Seed 'wave-2.audit.md' "NO-GO`n### Blocker 1 - slug: macros computed on the wrong pasta`n"
+    $bad = Seed 'wave-2.audit.md' "NO-GO`n### Blocker 1 - slug: macros computed on the wrong pasta`n- File: meal-prep\db\recipes\slug.json`n"
     $bf = @(Get-HeadingFindings @($bad) @{})
-    T 'MUST FIRE  a blocker heading that names no kind is a finding - this is what welds -Revive shut' `
+    T 'MUST FIRE  a blocker that names no kind in the heading OR beneath it is a finding' `
       ($bf.Count -eq 1 -and $bf[0].heading -match 'wrong pasta') ($bf.Count.ToString())
+
+    # THE KIND IS NOT ALWAYS IN THE HEADING, and reading only the heading nearly cost two recipes.
+    # This is wave 5 of hunt-2026-08-27-highprotein verbatim in shape - the auditor classified both
+    # blockers on the line UNDERNEATH, and a heading-only reader called that "no kind declared" and
+    # refused -Repair on a defect the report names outright.
+    $body = Seed 'wave-6.audit.md' "NO-GO`n### Blocker 1 - slug: macros computed on Protein+ pasta`nRecipe-local. Owner: recipe-ingredient-mapper.`n"
+    T 'CLEAN TWIN a kind stated as the LEADING token of the body line counts, exactly as auditors write it' `
+      (@(Get-HeadingFindings @($body) @{}).Count -eq 0) (@(Get-HeadingFindings @($body) @{}).Count.ToString())
+
+    # ...but only as the LEADING token. Prose that merely CONTAINS a kind word must not classify, or
+    # "this is a shared concern" silently turns a recipe-local blocker into a revivable one - the
+    # dangerous direction, since -Revive would then return a recipe whose own defect is unfixed.
+    $prose = Seed 'wave-7.audit.md' "NO-GO`n### Blocker 1 - slug: something broke`nThis is a shared concern across the process.`n"
+    T 'MUST FIRE  a kind word buried in prose does NOT classify - only a leading declaration does' `
+      (@(Get-HeadingFindings @($prose) @{}).Count -eq 1) (@(Get-HeadingFindings @($prose) @{}).Count.ToString())
+
+    # One blocker's classification must never be credited to the next one.
+    $bleed = Seed 'wave-8.audit.md' "NO-GO`n### Blocker 1 - slug-a: broke`n### Blocker 2 - slug-b: also broke`nRecipe-local. Owner: writer.`n"
+    $bl = @(Get-HeadingFindings @($bleed) @{})
+    T 'MUST FIRE  a kind under blocker 2 does not classify blocker 1 - the scan stops at the next heading' `
+      ($bl.Count -eq 1 -and $bl[0].heading -match 'slug-a') (($bl | ForEach-Object { $_.heading }) -join ' | ')
 
     $prior = Seed 'wave-3.audit.md' "GO`n### Prior BLOCKER 3 (recipe-local) - VERIFIED FIXED`n### Prior BLOCKER 4 - no kind and still closed`n"
     # What excludes a CLOSED blocker is the LEADING anchor - `Prior` is not one of the labels - and

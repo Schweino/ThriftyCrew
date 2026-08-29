@@ -3,10 +3,10 @@
     "title":  "Healthy Hamburger Helper",
     "source_url":  "https://thecleaneatingcouple.com/homemade-hamburger-helper/",
     "protein":  "beef",
-    "state":  "rejected-audit",
-    "wave":  5,
+    "state":  "written",
+    "wave":  null,
     "created":  "2026-08-27T11:40:22",
-    "updated":  "2026-08-27T16:44:21",
+    "updated":  "2026-08-29T10:58:18",
     "terms":  [
                   {
                       "term":  "93/7 lean ground beef",
@@ -25,7 +25,7 @@
                       "optional":  true
                   }
               ],
-    "reject_reason":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT",
+    "reject_reason":  null,
     "parked_on":  [
 
                   ],
@@ -125,6 +125,12 @@
                         "at":  "2026-08-27T16:44:21",
                         "by":  "auditor",
                         "detail":  "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT"
+                    },
+                    {
+                        "state":  "written",
+                        "at":  "2026-08-29T10:58:18",
+                        "by":  "fable",
+                        "detail":  "repaired: Brad ruling 2026-08-29: recompute the macros on REGULAR rotini, which is what every reader-facing surface already sells - the source line, the buy string, the cost class and shop_smart. The Protein+ food-DB row was the wrong basis, not the wrong recipe.  [audit blockers: recipe-local; 2 recipe-local; source-QA still owed]"
                     }
                 ]
 }

@@ -45,6 +45,9 @@ param(
   # that reopens a verdict has to be written where the recipe's own history will carry it, and a band
   # read silently from a file someone edited afterwards is not evidence of anything.
   [switch]$Reband,
+  # -Repair: the complement of -Revive - a defect that WAS this recipe's own, ruled on by Brad, and
+  # now allowed to be fixed. See the rejected-audit -> written note in the NEXT table.
+  [switch]$Repair,
   [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$RecipeSummary,
   [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
@@ -97,6 +100,7 @@ $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Adv
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
 $runRevive = [bool]$Revive
 $runReband = [bool]$Reband
+$runRepair = [bool]$Repair
 $runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
@@ -200,7 +204,24 @@ $script:NEXT = @{
   # honest record of which moves the machine allows; hiding the edge from it and writing the state
   # file behind its back would be the worse lie, and is the exact thing this file's own notes warn
   # about ("a verdict a state machine cannot express is a verdict that gets faked or lost").
-  'rejected-audit' = @('qa-passed')
+  # rejected-audit -> written EXISTS FOR -Repair AND FOR NOTHING ELSE (2026-08-29), and it is the exact
+  # complement of the edge above. -Revive answers "none of the open blockers were mine" and returns the
+  # recipe to qa-passed, because a recipe rejected for somebody else's defect was already finished.
+  # -Repair answers the opposite case: at least one blocker WAS this recipe's own, Brad has since ruled
+  # on it, and the repair needs somewhere to land. It returns to `written`, not qa-passed, because a
+  # repaired spec has to face source-QA again - handing it qa-passed would certify bytes nobody checked.
+  #
+  # It was needed because rejected-audit had EXACTLY ONE exit. Probing every state proves it: written,
+  # mapped, extracted, spec-built, waved and priced were all refused, qa-passed alone allowed. So a
+  # recipe with a real defect of its own - healthy-hamburger-helper's macros computed on a pasta the
+  # card does not sell, pioneer-woman-chili's trademark title - could be ruled on by Brad and still have
+  # no way back, while the audit that rejected it says in plain words "fix it and let the wave
+  # re-audit". A verdict the state machine cannot express is a verdict that gets faked or lost.
+  #
+  # THIS DOES SOFTEN THE ONE-REPAIR RULE and that was Brad's call, made explicitly, not mine to assume.
+  # The rule exists so a wave cannot spend unlimited budget re-repairing one recipe; an owner's ruling
+  # after the wave has closed is a different authority from the pipeline granting itself another go.
+  'rejected-audit' = @('qa-passed', 'written')
   # rejected-qa -> written EXISTS FOR -Reband AND FOR NOTHING ELSE (2026-08-29), and it is the SECOND
   # declared exception, on the same reasoning as the first. The macro band gate settles a recipe that
   # misses the calorie window straight from `written`, and it files that verdict as `rejected-qa` even
@@ -1404,6 +1425,47 @@ if ($runSelfTest) {
        ((@($rbWrong | ForEach-Object { [string]$_ }) -join ' ') -match 'only applies to a band rejection')) `
       (@($rbWrong | ForEach-Object { [string]$_ }) -join ' ')
 
+    # ---- -Repair: the complement of -Revive -------------------------------------------------------
+    # These reuse wave 11 (shared-data only) and wave 12 (one recipe-local) from above ON PURPOSE: the
+    # SAME two audits drive both commands to opposite answers, which is the clearest possible statement
+    # that the two gates are complements and not two spellings of one rule.
+    SeedRv 'rp-ok'     'rejected-audit' 12
+    SeedRv 'rp-shared' 'rejected-audit' 11
+    SeedRv 'rp-noaudit' 'rejected-audit' 13
+    SeedRv 'rp-noreason' 'rejected-audit' 12
+    SeedRv 'rp-wrongstate' 'waved' 12
+
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rp-ok' -By 'test' -Reason 'Brad ruled the macros recompute on regular pasta' | Out-Null
+    $rpDoc = Read-Json (Join-Path $rv 'state\rp-ok.json')
+    T 'REPAIR an OPEN recipe-local blocker is exactly what -Repair is FOR, and it lands on written' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rp-ok') -eq 'written') (StRv 'rp-ok')
+    T 'REPAIR   ...and the ruling, the blocker count and the outstanding QA all land on the history' `
+      (([string]$rpDoc.history[-1].detail) -match 'regular pasta' -and `
+       ([string]$rpDoc.history[-1].detail) -match '1 recipe-local' -and `
+       ([string]$rpDoc.history[-1].detail) -match 'source-QA still owed' -and `
+       $null -eq $rpDoc.wave -and $null -eq $rpDoc.reject_reason) ([string]$rpDoc.history[-1].detail)
+
+    # THE SYMMETRY, asserted in both directions on the same two fixtures. Without this pair, -Repair
+    # could quietly widen into "any rejected-audit recipe comes back" and every case above still passes.
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rp-shared' -By 'test' -Reason 'please' | Out-Null
+    T 'MUST FIRE  REPAIR a wave whose blockers are ALL shared has nothing for this recipe to repair - that is a -Revive' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rp-shared') -eq 'rejected-audit') (StRv 'rp-shared')
+    T 'CLEAN TWIN   ...and -Revive ACCEPTS that very audit, so the two commands are complements, not duplicates' `
+      ((StRv 'rv-ok') -eq 'qa-passed' -and (StRv 'rv-local') -eq 'rejected-audit') `
+      ('rv-ok=' + (StRv 'rv-ok') + ' rv-local=' + (StRv 'rv-local'))
+
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rp-noaudit' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  REPAIR with no audit on disk has no finding to authorise it, so it is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rp-noaudit') -eq 'rejected-audit') (StRv 'rp-noaudit')
+
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rp-noreason' -By 'test' | Out-Null
+    T 'MUST FIRE  REPAIR with no -Reason is refused - it softens the one-repair rule and must name whose ruling did that' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rp-noreason') -eq 'rejected-audit') (StRv 'rp-noreason')
+
+    & $PSCommandPath -Repair -RunDir $rv -Slug 'rp-wrongstate' -By 'test' -Reason 'it is mid-wave' | Out-Null
+    T 'MUST FIRE  REPAIR a slug that is not rejected-audit is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rp-wrongstate') -eq 'waved') (StRv 'rp-wrongstate')
+
     T 'CLEAN TWIN every OTHER rejected state is still terminal - the doors are two declared exceptions' `
       ((-not (Test-LegalTransition 'rejected-dupe' 'qa-passed')) -and `
        (-not (Test-LegalTransition 'rejected-macros' 'qa-passed')) -and `
@@ -1956,6 +2018,53 @@ if ($runReband) {
   Write-JsonAtomic -Path $sp -Obj $e
   Write-Output ("hunt-run: {0}  {1} -> written  ({2})" -f $Slug, $from, $detail)
   Write-GuardComplete -Name 'hunt-run' -Summary ("reband {0}" -f $Slug)
+  exit 0
+}
+
+# ---- -Repair: a defect that WAS this recipe's own, ruled on, and now allowed to be fixed -------------
+# The mirror image of -Revive, gated on the mirror-image evidence. -Revive refuses unless NO open
+# blocker is recipe-local; -Repair refuses unless AT LEAST ONE is. That symmetry is deliberate: between
+# them the two commands cover the audit's own verdict without overlapping, and neither can do the
+# other's job. A recipe carrying only shared blockers does not need repairing - it needs reviving - and
+# this says so rather than quietly doing the wrong thing.
+if ($runRepair) {
+  if (-not $Slug)   { Write-Output 'hunt-run: -Repair needs -Slug'; exit 1 }
+  if (-not $Reason) { Write-Output 'hunt-run: -Repair needs -Reason "<the ruling that reopened this, and whose it was>"'; exit 1 }
+  $sp = Get-StatePath $RunDir $Slug
+  if (-not (Test-Path $sp)) { Write-Output ("hunt-run: '{0}' has no state file" -f $Slug); exit 1 }
+  $e = Read-Json $sp
+  $from = [string]$e.state
+  if ($from -ne 'rejected-audit') {
+    Write-Output ("hunt-run: -Repair only applies to rejected-audit; {0} is '{1}'" -f $Slug, $from); exit 1
+  }
+  $wk = [int]$e.wave
+  $auditPath = Join-Path $RunDir ("waves\wave-{0}.audit.md" -f $wk)
+  if (-not (Test-Path $auditPath)) {
+    Write-Output ("hunt-run: no audit at {0} - a repair is authorised by the audit's own finding, and there is none" -f $auditPath); exit 1
+  }
+  $kinds = @(Get-AuditBlockerKinds $auditPath)
+  if (-not $kinds.Count) {
+    Write-Output ('hunt-run: ' + $Slug + "'s audit names no open blocker whose heading declares a (kind), so nothing here can tell whose defect it was. Refusing."); exit 1
+  }
+  $local = @($kinds | Where-Object { $_ -eq 'recipe-local' })
+  if (-not $local.Count) {
+    Write-Output ("hunt-run: REFUSED - none of {0}'s open blockers is recipe-local, so there is nothing here for THIS recipe to repair. That is a -Revive, not a -Repair." -f $Slug)
+    exit 1
+  }
+  if (-not (Test-LegalTransition $from 'written')) {
+    Write-Output ("hunt-run: REFUSED {0}: {1} -> written" -f $Slug, $from); exit 1
+  }
+  $detail = ("repaired: " + $Reason + "  [audit blockers: " + (($kinds | Sort-Object -Unique) -join ', ') + "; " + $local.Count + " recipe-local; source-QA still owed]")
+  $e.state = 'written'
+  $e.updated = (Get-Stamp)
+  $e.reject_reason = $null
+  # Same reasoning as -Revive: the wave claim goes with the rejection, or the slug reads as already
+  # claimed by an open wave and never closes into a new one.
+  $e.wave = $null
+  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'written'; at = (Get-Stamp); by = $By; detail = $detail })
+  Write-JsonAtomic -Path $sp -Obj $e
+  Write-Output ("hunt-run: {0}  rejected-audit -> written  ({1})" -f $Slug, $detail)
+  Write-GuardComplete -Name 'hunt-run' -Summary ("repair {0}" -f $Slug)
   exit 0
 }
 

@@ -2,25 +2,13 @@
   {
     "report": "hunt-2026-08-27-highprotein/wave-1.audit.md",
     "heading": "### BLOCKER 1 - chicken-rice-and-broccoli: spec-contradictions gate is RED (STAT-PROSE 1 vs baseline 0)",
-    "why": "Predates the rule (2026-08-27). Both blockers here were resolved by the wave-1 re-audit, which returned GO; nothing is held terminal by the missing kind.",
+    "why": "Predates the rule (2026-08-27), and genuinely declares no kind anywhere - its body opens with '- File:' bullets rather than a classification. Both blockers here were closed by the wave-1 re-audit, which returned GO, so nothing is held terminal by the omission.",
     "recorded": "2026-08-29"
   },
   {
     "report": "hunt-2026-08-27-highprotein/wave-1.audit.md",
     "heading": "### BLOCKER 2 - teriyaki-grilled-chicken-and-veggie-rice-bowls: dish identity never ruled against the live teriyaki-chicken-bowl",
-    "why": "Predates the rule (2026-08-27). The same dish-identity question was re-stated WITH its kind as wave 6 Blocker 1 (recipe-local), which is the heading -Revive actually reads for this slug.",
-    "recorded": "2026-08-29"
-  },
-  {
-    "report": "hunt-2026-08-27-highprotein/wave-5.audit.md",
-    "heading": "### Blocker 1 - healthy-hamburger-helper: macros computed on Protein+ pasta, recipe sold as regular",
-    "why": "Predates the rule (2026-08-27). A genuine recipe-local defect: the macros are computed on a pasta the recipe does not sell. Baselined so the gate ships green, NOT to make it revivable - it needs the repair, not a revival.",
-    "recorded": "2026-08-29"
-  },
-  {
-    "report": "hunt-2026-08-27-highprotein/wave-5.audit.md",
-    "heading": "### Blocker 2 - pioneer-woman-chili: trademark title, unruled - a question, not a shrug",
-    "why": "Predates the rule (2026-08-27). A real open question for Brad (trademark title), not a shared blocker; baselined for the gate only.",
+    "why": "Predates the rule (2026-08-27), body opens with '- The live catalog carries...' and never classifies. The same dish-identity question was restated WITH its kind as wave 6 Blocker 1 (recipe-local), and wave 6 is the audit -Revive and -Repair actually read for this slug.",
     "recorded": "2026-08-29"
   }
 ]
