@@ -108,8 +108,13 @@ if ($SelfTest) {
       [IO.File]::WriteAllText((Join-Path $t ('db\recipes\' + $s + '.json')), ('{"slug":"' + $s + '"}'), $UTF8)
       [IO.File]::WriteAllText((Join-Path $t ('db\built\' + $s + '.body.html')), '<p>card</p>', $UTF8)
     }
+    # keep-me's card links to drop-me, the way every card's related-recipes grid links to its neighbours.
+    [IO.File]::WriteAllText((Join-Path $t 'db\built\keep-me.body.html'),
+      "<p>card</p><a href='https://www.thriftycrew.com/drop-me/'>Drop Me</a>", $UTF8)
     [IO.File]::WriteAllText((Join-Path $t 'pipeline\propagate-stamps.json'),
       (ConvertTo-Json ([ordered]@{ 'keep-me' = 'aaa'; 'drop-me' = 'bbb'; 'keep-two' = 'ccc' }) -Depth 4), $UTF8)
+    [IO.File]::WriteAllText((Join-Path $t 'db\published-hashes.json'),
+      (ConvertTo-Json ([ordered]@{ 'keep-me' = 'h1'; 'drop-me' = 'h2'; 'keep-two' = 'h3' }) -Depth 4), $UTF8)
 
     function Run([hashtable]$p) { $o = & $PSCommandPath @p; return @{ rc = $LASTEXITCODE; out = ($o -join ' | ') } }
     function Rdb { $d = (Get-Content (Join-Path $t 'recipes-db.json') -Raw | ConvertFrom-Json); return $d.recipes }
@@ -138,7 +143,19 @@ if ($SelfTest) {
     T '  ...and the spec file is gone' (-not (Test-Path (Join-Path $t 'db\recipes\drop-me.json'))) 'spec survived'
     T '  ...and the built card is gone' (-not (Test-Path (Join-Path $t 'db\built\drop-me.body.html'))) 'card survived'
     T '  ...and the propagate stamp is gone' ($null -eq ((Get-Content (Join-Path $t 'pipeline\propagate-stamps.json') -Raw | ConvertFrom-Json).'drop-me')) 'stamp survived'
+    # THE RECORD THAT THE PAGE IS LIVE MUST GO TOO. Missed by the first cut: steps 1-5 removed
+    # everything that DESCRIBED the recipe and left published-hashes saying it was live, so
+    # feed-covers-published kept reporting the retired slug as SLUG_MISSING against a page that no
+    # longer exists. Reproduced on two separate retirements before it was identified.
+    $phAfter = (Get-Content (Join-Path $t 'db\published-hashes.json') -Raw | ConvertFrom-Json)
+    T '  ...and the published-hashes entry is gone' ($null -eq $phAfter.'drop-me') 'the retired page still claims to be published'
+    T '  ...and the OTHER published hashes survive' (([string]$phAfter.'keep-me' -eq 'h1') -and ([string]$phAfter.'keep-two' -eq 'h3')) 'took a neighbour down with it'
     T '  ...and the OTHER specs and cards are untouched' ((Test-Path (Join-Path $t 'db\recipes\keep-me.json')) -and (Test-Path (Join-Path $t 'db\built\keep-two.body.html'))) 'collateral damage'
+    # INBOUND LINKS ARE REPORTED, not repaired: rebuilding somebody else's live card is not this
+    # script's call, but leaving a 404 unmentioned is what step 6 already did once.
+    T 'MUST FIRE  a live card still linking to the retired page is NAMED' ($r.out -match 'INBOUND LINKS' -and $r.out -match 'keep-me') $r.out
+    T '  ...and the linking card is NOT silently rewritten' `
+      (([IO.File]::ReadAllText((Join-Path $t 'db\built\keep-me.body.html'))).Contains('thriftycrew.com/drop-me/')) 'the script edited a page it does not own'
 
     # MUST FIRE: retiring the same slug twice is refused, not silently "already done"
     $r = Run @{ Slug = 'drop-me'; Reason = 'drill'; Root = $t; SkipGhost = $true; Apply = $true }
@@ -240,6 +257,49 @@ if (Test-Path $stampPath) {
     [IO.File]::WriteAllText($stampPath, ($stDoc | ConvertTo-Json -Depth 6), $UTF8)
     Say '  propagate stamp: removed'
   }
+}
+
+# 6. db\published-hashes.json - THE RECORD THAT THE PAGE EXISTS.
+#
+# MISSED BY THE FIRST CUT (2026-08-29). Steps 1-5 removed the recipe from everything that DESCRIBES it
+# and left the record that it is LIVE. So a retired recipe kept claiming to be published: Ghost had no
+# post, and this file still said there was one. feed-covers-published reads exactly this file to decide
+# what to check, so it then reported the retired slug as SLUG_MISSING - "published, but the feed its
+# card fetches has never heard of it" - which is a true sentence about a page that no longer exists.
+#
+# It cost a whole diagnosis to notice. chicken-biryani-rice-bowls showed up as SLUG_MISSING in this
+# morning's first estate-wide feed-covers run and was written off as a pre-existing unrelated defect.
+# It was not: it was the FIRST use of this script, three hours earlier, leaving its hash behind. The
+# second retirement reproduced it exactly, which is what identified the cause. A takedown that leaves
+# the "it is live" record behind is the same class of half-done this script's header argues against -
+# it is just the quiet half rather than the loud one.
+$phPath = Join-Path $mp 'db\published-hashes.json'
+if (Test-Path $phPath) {
+  $phRaw = [IO.File]::ReadAllText($phPath, [Text.Encoding]::UTF8) -replace '^\xEF\xBB\xBF', ''
+  $phDoc = $phRaw | ConvertFrom-Json
+  if ($phDoc.PSObject.Properties.Name -contains $Slug) {
+    $phDoc.PSObject.Properties.Remove($Slug)
+    [IO.File]::WriteAllText($phPath, ($phDoc | ConvertTo-Json -Depth 6), $UTF8)
+    Say '  published-hashes: removed'
+  }
+}
+
+# 7. INBOUND LINKS, reported and never silently repaired. Every card bakes a "related recipes" grid of
+# absolute thriftycrew.com URLs, so retiring a recipe leaves a 404 on whatever LIVE pages linked to it.
+# Rebuilding those cards regenerates the grid from the current catalogue and drops the dead link - but
+# that is a republish of somebody else's live paid page, which is not this script's call to make. It is
+# named here because a broken link nobody was told about is exactly what step 6 was.
+$inbound = @()
+$builtDir = Join-Path $mp 'db\built'
+if (Test-Path $builtDir) {
+  $needle = 'thriftycrew.com/' + $Slug + '/'
+  foreach ($f in (Get-ChildItem (Join-Path $builtDir '*.body.html') -ErrorAction SilentlyContinue)) {
+    if (([IO.File]::ReadAllText($f.FullName)).Contains($needle)) { $inbound += $f.BaseName }
+  }
+}
+if ($inbound.Count) {
+  Say ("  INBOUND LINKS: {0} live card(s) still link to this now-deleted page - {1}" -f $inbound.Count, ($inbound -join ', '))
+  Say '    rebuild and republish those cards, or they render a 404 in their related-recipes grid.'
 }
 
 Say ''
