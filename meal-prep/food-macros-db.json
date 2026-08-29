@@ -1,4 +1,4 @@
-{
+﻿{
  "readme": "Food macro database for Thrifty Crew meal prep. Each item's calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
  "items": [
   {
@@ -53,17 +53,17 @@
   },
   {
    "item": "Rotini Pasta",
-   "brand": "Barilla",
+   "brand": "Great Value",
    "serving_grams": 56,
    "serving_qty": 2,
    "serving_unit": "oz",
-   "calories": 190,
-   "protein_g": 10,
-   "carbs_g": 38,
+   "calories": 200,
+   "protein_g": 7,
+   "carbs_g": 42,
    "fat_g": 1,
-   "fiber_g": 5,
-   "notes": "Protein Plus; 2 oz (56g) dry per serving; from label",
-   "source": "PROXY - USDA FDC 2597925 (Branded) ROTINI PASTA standing in; Barilla's own rotini entry is the REGULAR line at 321 cal / 14.3 g protein and the row is Protein Plus; this high-protein rotini reproduces the row; corroborates the stored row within tolerance, checked 2026-08-26"
+   "fiber_g": 2,
+   "notes": "CORRECTED 2026-08-29: this row carried the Barilla PROTEIN PLUS panel (190 cal / 10 P / 38 C / 5 fiber) while every recipe using it sells REGULAR rotini - the source line, the buy string, the cost class and shop_smart all say so, and the board prices regular. Wave 5 of hunt-2026-08-27-highprotein blocked healthy-hamburger-helper on exactly this. Now the regular enriched-semolina panel, 2 oz (56 g) dry per serving. The Protein Plus numbers still live, correctly named, in the High Protein Pasta row.",
+   "source": "Great Value enriched semolina panel, identical across every GV dry cut already in this DB (Orzo, Ziti, Farfalle, Pasta Shells): 56 g / 200 cal / 7 P / 42 C / 1 F. Corroborated by USDA FDC 169736 (SR Legacy) Pasta, dry, enriched, the same record those rows cite."
   },
   {
    "item": "Broccoli Florets",
@@ -5865,6 +5865,35 @@
    "fiber_g": 0,
    "source": "https://www.eatthismuch.com/food/nutrition/juniper-berries,482361/",
    "notes": "Spice-jar label prints all zeroes at a 1/4 tsp serving. CALLED OUT: the page's own serving-gram field reads 7 g, which cannot be a quarter teaspoon of whole berries, so serving_grams is stated at the true 1/4 tsp weight of about 0.5 g; every macro is zero, so no gram basis changes a computed macro. The FDC shelf for this term offered only goji, mixed-berry and acai rows, none of which is juniper.",
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+  },
+  {
+   "item": "Pork Carnitas",
+   "brand": "Del Real Foods",
+   "serving_qty": 3,
+   "serving_unit": "oz",
+   "serving_grams": 84,
+   "calories": 200,
+   "protein_g": 20,
+   "carbs_g": 0,
+   "fat_g": 14,
+   "fiber_g": 0,
+   "source": "https://delrealfoods.com/products/carnitas",
+   "notes": "Label as printed: 3 oz (84 g), 5 servings per container, 200 cal, 14 g fat (6 g sat), 0 g carb, 0 g fiber, 20 g protein, 330 mg sodium. No usable FDC candidate existed for this food.",
+   "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
+  },
+  {
+   "item": "Dill Pickle Slices",
+   "serving_qty": 100,
+   "serving_unit": "g",
+   "serving_grams": 100,
+   "calories": 12,
+   "protein_g": 0.5,
+   "carbs_g": 2.41,
+   "fat_g": 0.3,
+   "fiber_g": 1.0,
+   "source": "fdc:168558",
+   "notes": "Pickles, cucumber, dill or kosher dill [SR Legacy], per 100 g as published.",
    "added_by": "recipe-hunter map lane (hunt-2026-08-27-highprotein)"
   }
  ]

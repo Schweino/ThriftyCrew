@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Pizza Pasta Bowls",
     "slug":  "pizza-pasta-bowls",
     "cuisine":  "Italian-American",
@@ -14,16 +14,16 @@
     "writer_notes":  [],
     "forbidden_prose_terms":  [],
     "stat":  {
-                 "cal":  396,
-                 "protein":  28,
-                 "carbs":  54,
+                 "cal":  408,
+                 "protein":  24,
+                 "carbs":  59,
                  "fat":  10,
                  "cost_ps":  "1.06"
              },
     "intro_html":  "All the fun of pizza night, none of the delivery fee. Turkey pepperoni, high-protein rotini, marinara, and gooey mozzarella bake up into a bowl the kids will actually ask for again. It reheats great, it costs about ${{cost_ps}} a serving (at everyday cost), and it scratches the pizza itch without the twenty-dollar order.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 9 1/4 oz (about 9.5 oz) (261 g)",
-                                "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 9 2/3 cups (14.5 oz each) (959 g)",
+                                "\u003cstrong\u003eRotini Pasta (Great Value):\u003c/strong\u003e 9 2/3 cups (14.5 oz each) (959 g)",
                                 "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1148 g)",
                                 "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 14 slices (8 oz each) (392 g)"
                             ],
