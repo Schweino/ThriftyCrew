@@ -40,6 +40,42 @@ function Test-BaseDrift { param([double]$DensityGrams,[double]$FoodDbGrams,[doub
   if($FoodDbGrams -le 0 -or $DensityGrams -le 0){ return $false }
   return ([Math]::Abs($DensityGrams-$FoodDbGrams)/$FoodDbGrams -gt $Tol) }
 
+# HOW MANY OF $Unit IS ONE SERVING? Returns $null when the label does not LEAD with that unit.
+#
+# WHY THIS EXISTS (2026-08-29). This guard compared densities' grams-per-cup straight against the food
+# DB's serving_grams whenever serving_unit merely CONTAINED the word "cup" and serving_qty was 1. But
+# serving_unit is a transcribed label sentence, not a unit token - "1/4 cup (62g), about 7 servings per
+# container" - so the row means one serving IS a QUARTER cup and IS 62 g. Comparing 246 against 62 and
+# calling it a 4x conflict was the guard doing the arithmetic wrong, not the data disagreeing.
+#
+# MEASURED, because reversing a MUST-FIRE case needs more than an argument. Dividing by the label's own
+# fraction reconciles the rows to within rounding, four separate times: Ricotta 62/(1/4)=248 vs 246
+# (0.8%), Mexican Cheese Blend 28/(1/4)=112 vs 113 (0.9%), Orzo 56/(1/3)=168 vs 170 (1.2%), Cheese
+# Tortellini 120/1=120 vs 122 (1.7%). Four independent products cannot land inside 2% by accident, so
+# the food DB rows are faithful transcriptions and this guard's reading of them was the defect. All 13
+# standing WARNs were artifacts of it - and this file's own line 173 already warns that a guard crying
+# wolf "trains people to scroll past" it.
+#
+# THE LEADING UNIT IS THE SERVING'S UNIT. Chili Crisp reads "1/4 cup (60g); per 1 tbsp (~14g) that is
+# ~98 cal" - it contains "tbsp", so the old check compared densities' 14 g/tbsp against the 60 g that
+# belongs to the CUP. A unit mentioned later in the sentence is commentary; only the one the serving is
+# actually stated in may be normalised against, so a non-leading unit returns $null and is skipped.
+function Get-LabelUnitQty { param([string]$ServingUnit,[string]$Unit)
+  if(-not $ServingUnit -or -not $Unit){ return $null }
+  $s = $ServingUnit.Trim()
+  $u = [regex]::Escape($Unit)
+  # '1 1/3 tbsp' - a whole number and a fraction. Must be tried first: the bare-fraction pattern below
+  # would otherwise read '1 1/3' as 1/3 and understate the serving by a whole unit.
+  $m = [regex]::Match($s, '^(\d+)\s+(\d+)\s*/\s*(\d+)\s*' + $u + '\b')
+  if($m.Success){ return [double]$m.Groups[1].Value + ([double]$m.Groups[2].Value / [double]$m.Groups[3].Value) }
+  $m = [regex]::Match($s, '^(\d+)\s*/\s*(\d+)\s*' + $u + '\b')                      # '1/4 cup'
+  if($m.Success){ return [double]$m.Groups[1].Value / [double]$m.Groups[2].Value }
+  $m = [regex]::Match($s, '^(\d+(?:\.\d+)?)\s*' + $u + '\b')                        # '2 tbsp', '1 cup'
+  if($m.Success){ return [double]$m.Groups[1].Value }
+  $m = [regex]::Match($s, '^' + $u + '\b')                                          # bare 'cup'
+  if($m.Success){ return 1.0 }
+  return $null }
+
 # AN ALIAS IS A PRICE ROW (2026-08-16). This guard indexed db\ingredients.json by `item` alone, so every
 # canon name that reaches its row through an adjudicated ALIAS read as "no ingredients.json row (its cost
 # line is silently dropped)" - a sentence that is false twice over: the row is there, and the line is
@@ -82,9 +118,55 @@ if($SelfTest){
   T 'MUST FIRE  a spec naming one thing to cost and another to count macros'           (Test-NameSplit 'Green Olives' 'Olives') 'no finding'
   T 'CLEAN TWIN both arrays naming the same item'                                      (-not (Test-NameSplit 'Rice' 'Rice')) 'spurious finding'
   T 'MUST FIRE  Rice at 185 g/cup in densities against 200 in the food DB'             (Test-BaseDrift 185 200) 'no finding'
-  T 'MUST FIRE  Ricotta at 246 g/cup against 62 (a 1/4-cup serving labelled a cup)'    (Test-BaseDrift 246 62) 'no finding'
   T 'CLEAN TWIN a base inside rounding (203 vs 200)'                                   (-not (Test-BaseDrift 203 200)) 'spurious finding'
   T 'CLEAN TWIN a missing base is not drift'                                           (-not (Test-BaseDrift 0 200)) 'spurious finding'
+
+  # ---- THE LABEL FRACTION (2026-08-29) -------------------------------------------------------------
+  # A CASE WAS REVERSED HERE, deliberately, and this is the reasoning so nobody re-flips it by feel.
+  # This suite used to assert:
+  #     'MUST FIRE  Ricotta at 246 g/cup against 62 (a 1/4-cup serving labelled a cup)'  Test-BaseDrift 246 62
+  # The case NAME had the diagnosis right - it is a 1/4-cup serving - and then demanded a finding
+  # anyway, which pinned the arithmetic error in place as an invariant. 62 g is not Ricotta's cup
+  # weight and was never claimed to be; it is the weight of a quarter cup, and 62 x 4 = 248 against
+  # densities' 246. The rows agreed all along.
+  T 'a quarter-cup label serving normalises to the cup, and then AGREES (Ricotta 62 -> 248 vs 246)' `
+    (-not (Test-BaseDrift 246 (62 / (Get-LabelUnitQty '1/4 cup (62g), about 7 servings per container' 'cup')))) `
+    'still reporting the founding false positive'
+  T 'the same holds for shredded cheese (Mexican Cheese Blend 28 -> 112 vs 113)' `
+    (-not (Test-BaseDrift 113 (28 / (Get-LabelUnitQty '1/4 cup (28g), about 8 servings per container' 'cup')))) 'false positive'
+  T 'and for a third-cup label (Orzo 56 -> 168 vs 170)' `
+    (-not (Test-BaseDrift 170 (56 / (Get-LabelUnitQty '1/3 cup (56g) dry' 'cup')))) 'false positive'
+  # AND THE GUARD MUST STILL BITE. Normalising is not the same as excusing: a row whose normalised base
+  # really does disagree has to fail, or this change would have replaced a noisy guard with a silent one.
+  T 'MUST FIRE  a genuinely drifted base still fails after normalising (100 vs 56/(2/3)=84)' `
+    (Test-BaseDrift 100 (56 / (Get-LabelUnitQty '2/3 cup (56g) dry' 'cup'))) 'the fix silenced a real finding'
+
+  T 'a bare unit with no number is one of that unit'      ((Get-LabelUnitQty 'cup' 'cup') -eq 1)              ([string](Get-LabelUnitQty 'cup' 'cup'))
+  T 'an explicit whole number is read as itself'          ((Get-LabelUnitQty '2 tbsp (30g) paste' 'tbsp') -eq 2) ([string](Get-LabelUnitQty '2 tbsp (30g) paste' 'tbsp'))
+  # '1 1/3 tbsp' must not read as 1/3. Achiote Paste is the live row: 20 g per 1 1/3 tbsp is 15 g/tbsp,
+  # where reading the fraction alone would claim 60 and invent a 4x drift out of nothing.
+  T 'MUST FIRE  a mixed number is not read as its fraction alone (1 1/3 tbsp, not 1/3)' `
+    ([Math]::Abs((Get-LabelUnitQty '1 1/3 tbsp (20g)' 'tbsp') - 1.3333) -lt 0.001) ([string](Get-LabelUnitQty '1 1/3 tbsp (20g)' 'tbsp'))
+  # THE CHILI CRISP CASE. Its label mentions tbsp only as an aside after the cup serving, so the old
+  # substring test compared densities' 14 g/tbsp against the 60 g belonging to the cup.
+  T 'MUST NOT FIRE  a unit mentioned only later in the sentence is not the serving unit' `
+    ($null -eq (Get-LabelUnitQty '1/4 cup (60g); per 1 tbsp (~14g) that is ~98 cal' 'tbsp')) `
+    ([string](Get-LabelUnitQty '1/4 cup (60g); per 1 tbsp (~14g) that is ~98 cal' 'tbsp'))
+  T 'CLEAN TWIN ...but the LEADING unit on that same label still resolves' `
+    ((Get-LabelUnitQty '1/4 cup (60g); per 1 tbsp (~14g) that is ~98 cal' 'cup') -eq 0.25) `
+    ([string](Get-LabelUnitQty '1/4 cup (60g); per 1 tbsp (~14g) that is ~98 cal' 'cup'))
+  T 'a unit absent from the label yields nothing to compare' ($null -eq (Get-LabelUnitQty '1 slice (28g)' 'cup')) 'matched a unit that is not there'
+  # EVERY BRANCH MUST BE ANCHORED, not just the bare-unit one. Found by neuter: dropping the leading ^
+  # from the FRACTION branch left the suite green, because no fixture stated its serving in one unit and
+  # then mentioned a fraction of another. This is that fixture. Unanchored, 'cup' would resolve to 0.5
+  # here and the guard would compare densities' grams-per-cup against 113/0.5 = 226 g - a fabricated
+  # base for a food sold by the patty.
+  T 'MUST NOT FIRE  a fraction of a DIFFERENT unit later in the label is not the serving' `
+    ($null -eq (Get-LabelUnitQty '1 patty (113g), about 1/2 cup crumbled' 'cup')) `
+    ([string](Get-LabelUnitQty '1 patty (113g), about 1/2 cup crumbled' 'cup'))
+  T 'CLEAN TWIN ...and the unit it IS stated in still resolves' `
+    ((Get-LabelUnitQty '1 patty (113g), about 1/2 cup crumbled' 'patty') -eq 1) `
+    ([string](Get-LabelUnitQty '1 patty (113g), about 1/2 cup crumbled' 'patty'))
   # ALIAS INDEXING - the 2026-08-16 false-HARD class that blocked three waves. Fixture mirrors the real rows.
   $aliasRows = @(
     [pscustomobject]@{ item='1/3 Fat Cream Cheese'; bid='1-3-fat-cream-cheese'; aliases=@('Cream Cheese') },
@@ -180,10 +262,24 @@ foreach($p in $dens.PSObject.Properties){
   $row=$fdbm[$item]
   foreach($u in @('cup','tbsp','each')){
     if(-not $p.Value.PSObject.Properties[$u]){ continue }
-    if([string]$row.serving_unit -notmatch $u){ continue }
     if([double]$row.serving_qty -ne 1){ continue }
-    if(Test-BaseDrift ([double]$p.Value.$u) ([double]$row.serving_grams)){
-      $warn.Add("BASE-DRIFT: '$item' one $u is $($p.Value.$u) g in densities but $($row.serving_grams) g in the food DB - buy labels and macros disagree about the same measure")
+    # NORMALISE THE LABEL BEFORE COMPARING. serving_grams is the weight of ONE SERVING, and the serving
+    # is only sometimes one whole $u - see Get-LabelUnitQty. $null means this unit is not the one the
+    # serving is stated in, which is a skip rather than a finding: there is nothing to compare.
+    $qty = Get-LabelUnitQty ([string]$row.serving_unit) $u
+    if($null -eq $qty -or $qty -le 0){ continue }
+    $dbPerUnit = [double]$row.serving_grams / $qty
+    if(Test-BaseDrift ([double]$p.Value.$u) $dbPerUnit){
+      # Show the label's own fraction as a fraction. [Math]::Round on 2/3 prints 0.666666666666667,
+      # which reads as a computed quantity rather than the "2/3 cup" actually printed on the box.
+      $qtyText = switch($true){
+        ([Math]::Abs($qty - [Math]::Round($qty,0)) -lt 0.001) { [string][int][Math]::Round($qty,0); break }
+        default { $r = [Math]::Round($qty,3); "$r" }
+      }
+      $labelFrac = ([regex]::Match([string]$row.serving_unit, '^\s*(\d+(?:\s+\d+\s*/\s*\d+)?|\d+\s*/\s*\d+)\s*' + [regex]::Escape($u))).Groups[1].Value
+      if($labelFrac){ $qtyText = ($labelFrac -replace '\s+',' ').Trim() }
+      $shown = if($qty -eq 1){ "$($row.serving_grams) g" } else { "$([Math]::Round($dbPerUnit,0)) g (label serving $($row.serving_grams) g per $qtyText $u)" }
+      $warn.Add("BASE-DRIFT: '$item' one $u is $($p.Value.$u) g in densities but $shown in the food DB - buy labels and macros disagree about the same measure")
     }
   }
 }
