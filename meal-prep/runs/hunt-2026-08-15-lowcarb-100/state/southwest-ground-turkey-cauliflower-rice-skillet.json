@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-16T01:20:25",
-    "updated":  "2026-08-29T10:10:01",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-29T10:10:01",
                         "by":  "source-qa",
                         "detail":  "PASS on both anchors (upnorthnosh.com matches, all 3 optional markers included). Battery coverage FAIL fully adjudicated: cayenne is a matcher artifact; bagged cauliflower rice built as fresh heads riced at home is a disclosed mapper substitution with identical macros and the form stated on every reader surface; siracha mayo, shredded lettuce and pico de gallo are source-marked optional. CARRIES FORWARD to the auditor: writer_notes flag Cauliflower unwired in db/ingredients.json (cost floor), and a 93/7 vs 85/15 turkey band question."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }

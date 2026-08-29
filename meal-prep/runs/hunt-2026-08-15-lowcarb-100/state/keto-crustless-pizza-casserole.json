@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-16T01:35:04",
-    "updated":  "2026-08-29T10:10:00",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-29T10:10:00",
                         "by":  "source-qa",
                         "detail":  "PASS on both anchors (drdavinahseats.com matches line for line). Battery coverage FAIL fully adjudicated: Mozzarella/Marinara are food-DB booking rows only - every reader-facing surface says Pizza Blend Cheese and tomato basil pasta sauce; baby bella mushrooms are marked optional on the SOURCE and dropped from list and steps together. Note: writer_notes misstate the scale as 1.1667x when every rated line sits at 1.125x."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }

@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  2,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-16T01:26:17",
-    "updated":  "2026-08-16T12:10:51",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
 
               ],
@@ -98,6 +98,12 @@
                         "at":  "2026-08-16T12:10:51",
                         "by":  "auditor",
                         "detail":  "audit-clean, trimmed out of blocked wave 2"
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }

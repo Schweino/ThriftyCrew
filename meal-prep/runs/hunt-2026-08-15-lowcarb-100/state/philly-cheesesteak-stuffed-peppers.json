@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  2,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-15T20:40:29",
-    "updated":  "2026-08-16T12:32:12",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
                   {
                       "term":  "green bell pepper",
@@ -105,6 +105,12 @@
                         "at":  "2026-08-16T12:32:12",
                         "by":  "source-qa",
                         "detail":  "Re-QA PASS on current 11:58:52 bytes: source fidelity unchanged from live-page QA, cost re-render (beef now priced) independently reconciled, orphan-clean both directions, prose tokens/literals match spec cost fields, zero em dashes, macros 521/31/17/38 in band. Supersedes the 06:01:53 stamp."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }

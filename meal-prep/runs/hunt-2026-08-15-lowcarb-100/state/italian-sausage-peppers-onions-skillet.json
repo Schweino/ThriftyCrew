@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-15T20:32:43",
-    "updated":  "2026-08-29T10:10:10",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-29T10:10:10",
                         "by":  "source-qa",
                         "detail":  "PASS on both anchors (lowcarbmaven.com matches line for line). Battery coverage FAIL fully adjudicated: Hot Italian Sausage IS the 1 lb Italian sausage links from the source at exactly 3.5x [1588 g], and the heat choice is disclosed to the reader in shop_smart; salt-and-pepper is marked optional in the extraction itself and mapped optional-pantry at zero grams. Zero true inventions or drops."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }

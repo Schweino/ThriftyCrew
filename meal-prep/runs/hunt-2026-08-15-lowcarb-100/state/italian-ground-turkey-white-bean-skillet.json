@@ -3,10 +3,10 @@
     "title":  "",
     "source_url":  "",
     "protein":  "",
-    "state":  "qa-passed",
-    "wave":  null,
+    "state":  "waved",
+    "wave":  5,
     "created":  "2026-08-16T01:05:37",
-    "updated":  "2026-08-29T10:10:00",
+    "updated":  "2026-08-29T10:49:10",
     "terms":  [
 
               ],
@@ -74,6 +74,12 @@
                         "at":  "2026-08-29T10:10:00",
                         "by":  "source-qa",
                         "detail":  "PASS on both anchors (live page fetched 2026-08-29, matches transcription verbatim). Battery 6/6. First-ever source-QA. Note only: parmesan stirred through rather than sprinkled on, a portioning adaptation for 14 weighed containers."
+                    },
+                    {
+                        "state":  "waved",
+                        "at":  "2026-08-29T10:49:10",
+                        "by":  "wave-close",
+                        "detail":  "wave 5"
                     }
                 ]
 }
