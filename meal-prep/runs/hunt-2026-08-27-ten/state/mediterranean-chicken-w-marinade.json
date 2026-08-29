@@ -3,10 +3,10 @@
     "title":  "Mediterranean Chicken w/ Marinade",
     "source_url":  "https://keviniscooking.com/baked-chicken-mediterranean-with-marinade/",
     "protein":  "chicken",
-    "state":  "waved",
+    "state":  "published",
     "wave":  1,
     "created":  "2026-08-27T04:12:24",
-    "updated":  "2026-08-27T06:09:45",
+    "updated":  "2026-08-29T12:39:31",
     "terms":  [
 
               ],
@@ -73,6 +73,12 @@
                         "state":  "waved",
                         "at":  "2026-08-27T06:09:45",
                         "by":  "wave-close",
+                        "detail":  "wave 1"
+                    },
+                    {
+                        "state":  "published",
+                        "at":  "2026-08-29T12:39:31",
+                        "by":  "wave-publish",
                         "detail":  "wave 1"
                     }
                 ]
