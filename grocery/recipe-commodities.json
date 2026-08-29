@@ -601,8 +601,11 @@
       "include": [
         "shred\\w*\\s+cheddar",
         "cheddar\\s+cheese\\s+shred",
-        "cheddar,?\\s*shred"
-      ],
+        "cheddar,?\\s*shred",
+        "cheddar[^,]{0,30}\\bshred",
+        "shred\\w*[^,]{0,30}\\bcheddar\\b",
+        "Milk, so the percent-less spelling was slipping a reduced-fat product into the full-fat id"
+    ],
       "exclude": [
         "cottage",
         "cream\\s+cheese",
@@ -624,7 +627,16 @@
         "reduced\\s+fat\\s+(?:\\w+\\s+){0,2}cheddar",
         "cheddar[^,]{0,30}reduced\\s+fat",
         "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
-        "cheddar[^,]{0,25}\\b2%\\s+milk"
+        "cheddar[^,]{0,25}\\b2%\\s+milk",
+        "fat[\\s-]*free",
+        "dairy[\\s-]*free",
+        "\\bvegan\\b",
+        "cheddar\\s+style",
+        "\\bjack\\b",
+        "mexican",
+        "asadero",
+        "fiesta",
+        "\\b2\\s+milk\\b"
     ],
       "band_min": 0.08,
       "band_max": 0.7,
@@ -638,7 +650,9 @@
                         "reduced\\s+fat\\s+(?:\\w+\\s+){0,2}cheddar",
                         "cheddar[^,]{0,30}reduced\\s+fat",
                         "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
-                        "cheddar[^,]{0,25}\\b2%\\s+milk"
+                        "cheddar[^,]{0,25}\\b2%\\s+milk",
+                        "\\b2\\s+milk\\b[^,]{0,30}cheddar",
+                        "cheddar[^,]{0,30}\\b2\\s+milk\\b"
                     ],
         "exclude":  [
                         "fat[\\s-]*free",
@@ -658,7 +672,9 @@
                         "spread",
                         "cheese\\s*ball",
                         "\\bmac\\b",
-                        "macaroni"
+                        "macaroni",
+                        "milk is a gallon of milk",
+                        "milk is a gallon of milk"
                     ]
     },
     {

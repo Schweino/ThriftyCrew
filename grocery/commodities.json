@@ -2058,7 +2058,9 @@
                         "reduced\\s+fat\\s+(?:\\w+\\s+){0,2}cheddar",
                         "cheddar[^,]{0,30}reduced\\s+fat",
                         "2%\\s+(?:milk\\s+)?(?:\\w+\\s+){0,2}cheddar",
-                        "cheddar[^,]{0,25}\\b2%\\s+milk"
+                        "cheddar[^,]{0,25}\\b2%\\s+milk",
+                        "cheese\\s+sticks?\\b",
+                        "\\bsalami\\b"
                     ]
     },
     {
