@@ -1,0 +1,144 @@
+{
+    "slug": "classic-beef-and-bean-chili",
+    "title": "The Pioneer Woman Chili",
+    "source_url": "https://thecozycook.com/pioneer-woman-chili/",
+    "protein": "beef",
+    "state": "written",
+    "wave": null,
+    "created": "2026-08-27T11:40:25",
+    "updated": "2026-08-29T10:58:18",
+    "terms": [
+        {
+            "term": "masa harina",
+            "optional": false
+        },
+        {
+            "term": "shredded cheddar cheese",
+            "optional": false
+        },
+        {
+            "term": "Cheddar Cheese, Shredded",
+            "optional": true
+        },
+        {
+            "term": "Lime",
+            "optional": true
+        },
+        {
+            "term": "Tortilla Chips",
+            "optional": true
+        }
+    ],
+    "reject_reason": null,
+    "parked_on": [],
+    "history": [
+        {
+            "state": "sourced",
+            "at": "2026-08-27T11:40:25",
+            "by": "harvest",
+            "detail": "https://thecozycook.com/pioneer-woman-chili/"
+        },
+        {
+            "state": "selected",
+            "at": "2026-08-27T11:40:26",
+            "by": "decider",
+            "detail": "Classic ground-beef-and-bean chili fills a gap \u2014 the catalog's chili neighbours are chili-mac, casserole, and turkey/pork versions, not a straight beef chili; band 613/42/40 verified."
+        },
+        {
+            "state": "extracted",
+            "at": "2026-08-27T11:41:32",
+            "by": "local",
+            "detail": "extraction ladder rung 1, every line verified"
+        },
+        {
+            "state": "mapped",
+            "at": "2026-08-27T11:57:38",
+            "by": "mapper",
+            "detail": "Residual lines ruled 5, rejected 0, not-purchased 1 (Tortilla Chips or Fritos, dropped as an unquantified either/or garnish naming two foods the estate's standing rejection keeps apart; excluded from `lines` because it is not purchased). New food-DB rows returned 4, all from the FDC shelf, plus one food_db_absent entry for tortilla chips after two failed label reads. One new commodity proposal (ma"
+        },
+        {
+            "state": "pricing",
+            "at": "2026-08-27T11:57:38",
+            "by": "mapper",
+            "detail": ""
+        },
+        {
+            "state": "parked",
+            "at": "2026-08-27T11:59:04",
+            "by": "derive",
+            "detail": "waiting on: masa harina, shredded cheddar cheese"
+        },
+        {
+            "state": "priced",
+            "at": "2026-08-27T12:06:09",
+            "by": "derive",
+            "detail": "all 2 blocking ingredient(s) carried"
+        },
+        {
+            "state": "spec-built",
+            "at": "2026-08-27T14:56:06",
+            "by": "writer",
+            "detail": ""
+        },
+        {
+            "state": "written",
+            "at": "2026-08-27T14:56:06",
+            "by": "writer",
+            "detail": ""
+        },
+        {
+            "state": "qa-passed",
+            "at": "2026-08-27T14:59:20",
+            "by": "source-qa",
+            "detail": ""
+        },
+        {
+            "state": "waved",
+            "at": "2026-08-27T14:59:20",
+            "by": "wave-close",
+            "detail": "wave 3"
+        },
+        {
+            "state": "qa-passed",
+            "at": "2026-08-27T15:59:42",
+            "by": "daemon",
+            "detail": "returned to the wave pool: wave 3 never published (its batch is unclosed), so the recipe was stranded at waved"
+        },
+        {
+            "state": "waved",
+            "at": "2026-08-27T16:11:53",
+            "by": "wave-close",
+            "detail": "wave 4"
+        },
+        {
+            "state": "qa-passed",
+            "at": "2026-08-27T16:25:20",
+            "by": "daemon",
+            "detail": "returned to the wave pool: wave 4 never published (its batch is unclosed), so the recipe was stranded at waved"
+        },
+        {
+            "state": "waved",
+            "at": "2026-08-27T16:27:52",
+            "by": "wave-close",
+            "detail": "wave 5"
+        },
+        {
+            "state": "rejected-audit",
+            "at": "2026-08-27T16:44:21",
+            "by": "auditor",
+            "detail": "NO-GO, report at meal-prep/runs/hunt-2026-08-27-highprotein/waves/wave-5.audit.md. CONTEXT VERIFIED: wave 5 is the sanctioned re-cut of wave 4, whose publish crashed at E4 (allow-create file race) AFT"
+        },
+        {
+            "state": "written",
+            "at": "2026-08-29T10:58:18",
+            "by": "fable",
+            "detail": "repaired: Brad ruling 2026-08-29: rename descriptively and drop the celebrity-trademark title. Recipe and source credit stand; only the name and slug change.  [audit blockers: recipe-local; 2 recipe-local; source-QA still owed]"
+        },
+        {
+            "state": "written",
+            "at": "2026-08-29T13:00:00",
+            "by": "fable",
+            "detail": "renamed pioneer-woman-chili -> classic-beef-and-bean-chili on Brad ruling 2026-08-29: the celebrity-trademark title was wave 5 Blocker 2 and would have been the first such title in the catalogue. Recipe and source credit (thecozycook.com) unchanged; only the name, slug and three prose mentions moved. Renamed while unpublished, which is when a slug change is cheap."
+        }
+    ]
+}

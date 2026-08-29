@@ -1,6 +1,6 @@
-{
-    "name":  "The Pioneer Woman Chili",
-    "slug":  "pioneer-woman-chili",
+﻿{
+    "name":  "Classic Beef and Bean Chili",
+    "slug":  "classic-beef-and-bean-chili",
     "cuisine":  "Tex-Mex",
     "protein":  "beef",
     "servings":  14,
@@ -35,7 +35,7 @@
                  "fat":  38,
                  "cost_ps":  "3.68"
              },
-    "intro_html":  "\u003cp\u003eChili is the cheapest way I know to feed a crowd something that tastes like you fussed over it, and this one leans on the Pioneer Woman\u0027s trick of thickening with masa harina instead of a can of thickener you would never buy twice. Ground beef, two kinds of beans, tomatoes, and a spice drawer\u0027s worth of chili powder do the heavy lifting. It comes in at {{cal}} calories and {{protein}} grams of protein a serving, which is a real dinner, not a snack pretending to be one. You brown, you simmer, you portion. That is the whole game.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eChili is the cheapest way I know to feed a crowd something that tastes like you fussed over it, and this one leans on the traditional trick of thickening with masa harina instead of a can of thickener you would never buy twice. Ground beef, two kinds of beans, tomatoes, and a spice drawer\u0027s worth of chili powder do the heavy lifting. It comes in at {{cal}} calories and {{protein}} grams of protein a serving, which is a real dinner, not a snack pretending to be one. You brown, you simmer, you portion. That is the whole game.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003e80/20 Ground Beef (generic (USDA)):\u003c/strong\u003e 4 2/3 lb (2117 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves, diced (14 g)",
@@ -220,7 +220,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Pioneer Woman chili scaled to 14 meal-prep servings: ground beef, kidney and pinto beans, and diced tomatoes thickened with masa harina, at {{cal}} calories and {{protein}} grams of protein per serving.",
+                 "description":  "Classic beef and bean chili scaled to 14 meal-prep servings: ground beef, kidney and pinto beans, and diced tomatoes thickened with masa harina, at {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "pioneer woman chili, meal prep chili, high protein chili, beef and bean chili, masa harina chili, budget meal prep dinner, 14 servings chili",
                  "image":  "",
                  "prepTime":  "PT10M",
