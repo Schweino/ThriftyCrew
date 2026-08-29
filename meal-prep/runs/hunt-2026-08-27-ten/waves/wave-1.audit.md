@@ -1,68 +1,80 @@
-GO
-scope: mediterranean-chicken-w-marinade
+NO-GO
+scope: mediterranean-chicken-w-marinade (re-audit after recost cd3036a6; supersedes the 2026-08-27 GO)
 
-# Wave 1 RE-audit - hunt-2026-08-27-ten (mediterranean-chicken-w-marinade)
+# Wave 1 RE-audit - hunt-2026-08-27-ten (mediterranean-chicken-w-marinade), 2026-08-29
 
-Scoped re-audit after the 06:10 NO-GO (two blockers, both this slug). Battery report:
-waves\wave-1.preaudit.json, generated 2026-08-27T06:18:24, 16 checks, 0 failed, scope whole-wave
-(the full battery re-ran, not just the slug). Freshness verified: ingredients.json 06:17:10 ->
-costed.json 06:17:19 -> spec 06:17:24 -> report 06:18:24, and nothing in that chain has moved since
-the report was generated. The repair was done in the right ORDER (label at the source, then recost,
-then spec rebuild), not by hand-patching the spec.
+Battery: waves\wave-1.preaudit.json generated 2026-08-29T10:51:20, scoped, 16 checks, 0 failed,
+exit 0 with WAVE-PREAUDIT-COMPLETE. Freshness: ingredients.json 08:09:14 -> spec 10:47:23 ->
+report 10:51:20, nothing moved since. The battery is green and it is still a NO-GO, because the
+defect is one the battery has no check for.
 
-## The two blockers, verified repaired
+### Blocker 1 (shared-data): the recost resurrected "Buy 5 6oz can, draineds" - the 08-27 Blocker 2 fix was never committed
 
-BLOCKER 1 (STAT-PROSE x4) - FIXED. Grep of the spec finds zero "51.8" and zero "16.1"; prose now
-reads "52 grams of protein" / "52g protein" and "16 grams of carb" / "16g carb" in intro_html,
-portion_html, cost_closing_html and head.description. The carbs advisory (16.1 -> 16) was applied
-too. audit-spec-contradictions is back to baseline: clean, exit 0.
+Today's spec (meal-prep\db\recipes\mediterranean-chicken-w-marinade.json, line 68) reads:
 
-BLOCKER 2 ("6oz can, draineds") - FIXED AT THE SOURCE. ingredients.json black-olives
-buy_pkg_label is now "6oz drained-weight can" (pluralizable noun last), and the spec's cost line
-renders "Buy 5 6oz drained-weight cans: $9.84." Repo-wide grep of meal-prep\db finds zero
-"draineds". The scratch-rebuilt card is clean of both defects.
+    Buy 5 6oz can, draineds: $9.84.
 
-## Verdict per category
+This is byte-for-byte the garbled label the 06:10 audit of 08-27 blocked on, and which the 06:18 GO
+verified repaired "AT THE SOURCE". The history shows what happened:
 
-1. MACROS - clean. Battery recompute 560.9/51.8/16.1/34.2 vs stat 561/52/16/34, no missing food-DB
-   rows; the macro inputs did not change in the repair (prose + cost label only). Independent
-   sanity re-add of the heavy lines (chicken 2540 g, feta 635 g at 70/28 g, oil 151 g, olives 728 g
-   drained at 25/15 g, artichokes 1230 g gross at 40/130 g) lands at ~7850 batch cal vs 561x14=7854
-   and ~51 g protein/serving. BAND (run-dir authority): 561 in [450,700], 16 <= 40 carbs,
-   52 >= 40 protein - all clear with margin. No seafood in the 13 lines; 14 servings; $4.04/serving.
-2. COSTS - clean. Engine row coherent (56.49 batch, 63.34 true, 73.94 first-run, 13 lines, 0
-   unpriced); shelf plausibility was checked line by line in the 06:10 audit and only the olive
-   line's LABEL changed since (price unchanged, $1.97/6oz drained can - shelf-plausible). Basis
-   coherence (artichokes gross/gross, olives drained/drained) re-confirmed unchanged.
-   stat.cost_ps basis is wave-publish E2's hard-verify at publish time, as designed.
-3. MAPPING - clean, unchanged since the full 06:10 review (13/13 bids resolve; black-olives and
-   lemons rulings written; grape->cherry tomato and fresh spinach precedents checked then).
-4. PROTEIN - clean. chicken claimed = derived, 2540 g, sole protein. recipes-db -DryRun green.
-5. CARDS - clean. Scratch rebuild structurally identical to the live reference, JSON-LD parses,
-   scaler + 3-part cost + source credit present. db\built card absent as expected pre-publish
-   (wave-publish builds it). Card is the existing template verbatim, so no new 375px surface.
-6. VOICE - clean on the gate (0 dash bytes). QA verdict pass with live-page anchor; substitutions
-   (grape->cherry canon stand-in, garlic cloves, salt form) ruled deliberate and defensible.
-7. GATES - all green legitimately. The spec-contradictions gate was returned to baseline by fixing
-   the spec, not by touching the gate. Dish identity: decider ruling on record distinguishes this
-   bake from the slow-cooker Mediterranean bowls and the creamy spinach-artichoke bakes; checked
-   against provencal / marbella / souvlaki neighbors - distinct dishes by method and flavor base.
-   State file tells one story sourced->waved, no open condition questions (selection-time band
-   figure 673/18/49 was a pre-scaling estimate; final 561/16/52 also passes - not a contradiction).
+- No commit of meal-prep\db\ingredients.json has EVER contained "6oz drained-weight can"
+  (git log --all -S finds zero hits). The black-olives row has said buy_pkg_label
+  "6oz can, drained" since it was born in e3fed9f0 and says so right now.
+- The 08-27 repair fixed the label in the WORKING TREE, rebuilt the spec, and the spec fix
+  landed in commit 8db19121 - but the ingredients.json edit was lost before it was committed
+  (the ~07:00 bot's autoStash rebase rewriting uncommitted files is the known mechanism for this).
+- Today's recost (cd3036a6) re-rendered the buy strings from the unfixed source. The renderer
+  pluralizes buy_pkg_label by appending "s" for count > 1, so "6oz can, drained" + "Buy 5"
+  = "draineds" again. Repo sweep: this is the only spec carrying the string.
 
-## Advisories carried forward (NOT blocking, ruled so at 06:10, nothing changed)
+FIX (owner: the shared ingredients DB, then a recipe-local rebuild):
+1. meal-prep\db\ingredients.json, black-olives row: buy_pkg_label "6oz can, drained" ->
+   "6oz drained-weight can" (pluralizable noun last, per the 08-27 ruling). COMMIT IT this time,
+   in the same commit as the spec rebuild, so the fix cannot be stripped from under the spec again.
+2. Recost/rebuild this slug so the cost line renders "Buy 5 6oz drained-weight cans: $9.84."
+   (price is unchanged; only the label re-renders). Then scoped re-audit with -Slugs.
 
-- Two shopping stories on one card: prose still says "about three 15 oz cans" (artichokes) and
-  "three 14.5 oz cans" (olives) vs engine "Buy 4 13.8oz cans" / "Buy 5 6oz drained-weight cans".
-  Both plans cover the batch (45oz >= 43.4oz gross; ~27oz >= 25.7oz drained), so neither is false;
-  align prose to board packages in a future writer touch.
-- Artichoke display line says "drained" beside the gross-basis 1230 g figure; tidy when touched.
-- Title uses "w/" ("Mediterranean Chicken w/ Marinade"), locked at selection; flagged for Brad's
-  awareness, not blocking.
-- For the battery owner (from QA): coverage_check.py cannot parse compound weights ("1 lb 6 oz")
-  or decimal prose figures; produced three false fails at QA and will recur.
+## What the recost moved, verified clean (everything except the blocker)
+
+The cd3036a6 diff touches exactly: the olive buy label (the blocker), the lemons line
+(2.54/2.72 -> 2.80/3.00, 6 lemons at $0.50 each - shelf-plausible), pantry seasonings
+(0.32 -> 0.35), the three cost-tier lines, the six cost_* fields, and scaler.cost. Nothing else.
+
+- COST CHAIN: internally coherent by recompute: 56.78/14 = 4.06 exactly; 63.65/14 = 4.55 exactly;
+  63.65 + 10.79 = 74.44 exactly; scaler.cost 63.65 matches cost_batch_true. Battery
+  cost reconciliation, plausibility, and line coverage all clean; 0 unpriced, 0 uncarried.
+- STALE LITERALS: grep of the spec for every old figure (4.04, 4.52, 56.49, 63.34, 73.94, 10.6,
+  2.54, 2.72, 0.32, 4.05) finds zero survivors. cost_closing_html uses the {{cost_ps}} template,
+  so its per-serving figure tracks automatically.
+- MACROS: untouched by the recost (diff confirms no macro field moved); the 08-27 verification
+  (560.9/51.8/16.1/34.2 vs stat 561/52/16/34, band clear with margin) stands on today's bytes -
+  battery macro recompute green again today.
+- STAT-PROSE (08-27 Blocker 1): still fixed. Zero "51.8"/"16.1" in the spec;
+  audit-spec-contradictions clean.
+- UNBID_LINE (new gate 120a26c1): all 13 scaler lines carry a resolving bid (verified directly,
+  and audit-unbid-ingredients clean n=1), so feed-covers-published will not refuse this card
+  once the blocker is repaired.
+- MAPPING / PROTEIN / CARDS / VOICE / GATES: unchanged since 08-27; recipes-db -DryRun green,
+  P8 endpoint + feed probes green (565 recipes, feed generated 2026-08-29T09:16:24).
+
+## Advisories (not blocking)
+
+- Carried forward unchanged from 08-27: two shopping stories on one card (prose "three 15 oz cans"
+  artichokes / "three 14.5 oz cans" olives vs engine buy strings - both plans cover the batch);
+  the artichoke display line's "drained" beside a gross-basis figure; the "w/" in the title.
+- For the battery owner (process): the battery has no check that catches a garbled buy_pkg_label
+  render - the dash sweep, structural compare and cost reconciliation all pass over "draineds".
+  Both times this defect was caught by an auditor reading the cost lines. A cheap check exists:
+  flag any buy string whose pluralized label ends in a non-noun token (", draineds", "-eds", etc.)
+  or simply grep built cost lines for "draineds?"-style regressions against a bad-render list.
+- For the repair process (process): a source repair verified only in the working tree is not a
+  repair. The 08-27 GO was correct about the bytes it saw, but the estate's known
+  uncommitted-file hazards (the 07:00 bot's autoStash rebase) mean a repair is only durable
+  once committed. Verify the COMMIT, not just the file.
 
 ## Verdict
 
-GO. Both blockers repaired at the correct owner, gates returned to baseline without weakening,
-band re-verified against the run dir's numbers, nothing outside the repaired chain moved.
+NO-GO. One blocker: the black-olives buy_pkg_label regression, shared-data, fix in
+ingredients.json + spec rebuild + commit both together. Everything the one-cent recost was
+supposed to be checked for is clean; the recost itself is sound. The blocker is a 2-line repair
+and a scoped re-audit away from GO.

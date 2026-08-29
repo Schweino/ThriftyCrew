@@ -4,9 +4,9 @@
     "run":  "hunt-2026-08-27-ten",
     "wave":  1,
     "batch":  "hunt-2026-08-27-ten-w1",
-    "scope":  "whole-wave",
-    "generated":  "2026-08-27T06:18:24",
-    "elapsed_sec":  15.7,
+    "scope":  "scoped: mediterranean-chicken-w-marinade",
+    "generated":  "2026-08-29T10:51:20",
+    "elapsed_sec":  36.1,
     "wave_slugs":  [
                        "mediterranean-chicken-w-marinade"
                    ],
@@ -14,7 +14,8 @@
                   "mediterranean-chicken-w-marinade"
               ],
     "inputs":  {
-                   "costed_mtime":  "2026-08-27T06:17:19",
+                   "run_dir":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten",
+                   "costed_mtime":  "2026-08-29T10:46:47",
                    "reference_card":  "C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html",
                    "food_db":  "C:\\Codex\\ThriftyCrew\\meal-prep\\food-macros-db.json"
                },
@@ -24,7 +25,7 @@
                                                                      "check":  "spec-present",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "mtime":  "2026-08-27T06:17:24"
+                                                                                     "mtime":  "2026-08-29T10:47:23"
                                                                                  },
                                                                      "detail":  "spec present and parses"
                                                                  },
@@ -55,10 +56,10 @@
                                                                      "check":  "cost-engine-consistency",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "cost_batch":  56.49,
-                                                                                     "cost_batch_true":  63.34,
-                                                                                     "cost_per_serving":  4.04,
-                                                                                     "cost_first_run":  73.94,
+                                                                                     "cost_batch":  56.78,
+                                                                                     "cost_batch_true":  63.65,
+                                                                                     "cost_per_serving":  4.06,
+                                                                                     "cost_first_run":  74.44,
                                                                                      "lines":  13,
                                                                                      "lines_unpriced":  0
                                                                                  },
@@ -68,8 +69,8 @@
                                                                      "check":  "cost-reconcile",
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
-                                                                                     "spec_mtime":  "2026-08-27T06:17:24",
-                                                                                     "costed_mtime":  "2026-08-27T06:17:19",
+                                                                                     "spec_mtime":  "2026-08-29T10:47:23",
+                                                                                     "costed_mtime":  "2026-08-29T10:46:47",
                                                                                      "costed_is_newer_than_spec":  false
                                                                                  },
                                                                      "detail":  "every spec cost field matches its engine row to the cent"
@@ -103,7 +104,7 @@
                                                                      "verdict":  "pass",
                                                                      "numbers":  {
                                                                                      "scratch":  "C:\\Codex\\ThriftyCrew\\meal-prep\\runs\\hunt-2026-08-27-ten\\waves\\wave-1.preaudit-cards\\mediterranean-chicken-w-marinade",
-                                                                                     "body_bytes":  68910,
+                                                                                     "body_bytes":  68890,
                                                                                      "make_it_steps":  1,
                                                                                      "reference":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice.body.html"
                                                                                  },
@@ -126,7 +127,7 @@
                               "numbers":  {
                                               "rc":  0
                                           },
-                              "detail":  "clean: STORE-INTEGRITY-COMPLETE hard=0 warn=13"
+                              "detail":  "clean: STORE-INTEGRITY-COMPLETE hard=0 warn=9"
                           },
                           {
                               "check":  "audit-vocab-integrity",
@@ -184,10 +185,10 @@
                               "verdict":  "pass",
                               "numbers":  {
                                               "url":  "https://feed.thriftycrew.com/smp-feed.json",
-                                              "feed_recipes":  562,
-                                              "generated":  "2026-08-26T08:12:17"
+                                              "feed_recipes":  565,
+                                              "generated":  "2026-08-29T09:16:24"
                                           },
-                              "detail":  "200 + parseable (562 recipes, generated 2026-08-26T08:12:17)"
+                              "detail":  "200 + parseable (565 recipes, generated 2026-08-29T09:16:24)"
                           }
                       ],
     "summary":  {
