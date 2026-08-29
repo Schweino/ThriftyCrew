@@ -603,6 +603,27 @@ if ($runSelfTest) {
       return @($arr | Where-Object { $_.check -eq $name })[0]
     }
 
+    # ---- MUST FIRE: a RELATIVE -RunDir is resolved before the Start-Job fan-out -------------------
+    # Start-Job's process does not inherit this one's working directory, so a relative -RunDir - what
+    # every hand-run supplies - reaches the shared-gate jobs as a path they cannot resolve. That is
+    # the "battery failure is a HARNESS defect" both the wave-10 and wave-11 audits diagnosed and
+    # worked around by hand. The drill runs with -SkipShared, so it cannot observe the jobs
+    # themselves; it observes the thing they depend on, which the report now records.
+    function RunDrillFrom([string]$cwd, [string]$relRoot, [string]$refCard) {
+      Push-Location $cwd
+      try {
+        $a = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $selfPath, '-RunDir', $relRoot,
+               '-Wave', '1', '-Root', $dMp, '-SkipShared', '-SkipLive', '-ReferenceCard', $refCard)
+        $out = & powershell @a 2>&1
+        return [pscustomobject]@{ rc = $LASTEXITCODE; lines = @($out | ForEach-Object { [string]$_ }) }
+      } finally { Pop-Location }
+    }
+    $rRel = RunDrillFrom (Split-Path $dRun -Parent) (Split-Path $dRun -Leaf) $srcRef
+    $repRel = ReadDrillReport
+    $recorded = if ($null -ne $repRel) { [string]$repRel.inputs.run_dir } else { '' }
+    T 'END-TO-END MUST FIRE a RELATIVE -RunDir is resolved to an absolute path, or the shared-gate jobs cannot see it' `
+      ($null -ne $repRel -and $recorded -and [IO.Path]::IsPathRooted($recorded)) ("run_dir recorded as '" + $recorded + "'")
+
     # ---- CLEAN TWIN: an untouched live spec passes every per-slug check ----------------------------
     $r1 = RunDrill $dMp $srcRef @()
     $rep1 = ReadDrillReport
@@ -680,6 +701,21 @@ if (-not $RunDir -or $Wave -le 0) {
   exit 2
 }
 if (-not (Test-Path $RunDir)) { Block ("run dir not found: " + $RunDir); Write-GuardComplete -Name 'wave-preaudit' -Summary 'blocked: no run dir'; exit 2 }
+
+# ---- ABSOLUTE-IZE BEFORE ANYTHING REACHES Start-Job (2026-08-28) --------------------------------
+# Start-Job runs its scriptblock in a NEW PowerShell process, and that process does NOT inherit this
+# one's working directory. So a RELATIVE -RunDir - which every hand-run and every relative call site
+# supplies - resolves against some other folder inside the job, and the shared-gate fan-out below
+# fails on paths that are perfectly correct out here.
+#
+# IT FAILED AS A HARNESS DEFECT, WHICH IS WHY IT SURVIVED TWO AUDITS. The wave-11 and wave-10 audits
+# both hit it, both diagnosed it as "the battery failure is the HARNESS, not the recipe", and both
+# re-derived the result by hand with absolute paths (RC=0). A gate that fails for its own reasons
+# teaches a wave nothing and costs an auditor a manual re-run every time.
+#
+# Resolved ONCE, here, so every path Join-Path builds from it downstream - the manifest, the slug
+# list, OutFile, the card scratch root - is absolute by construction rather than by remembering.
+$RunDir = (Resolve-Path -LiteralPath $RunDir).ProviderPath
 
 $manPath = Join-Path $RunDir ("waves\wave-{0}.json" -f $Wave)
 if (-not (Test-Path $manPath)) {
@@ -1007,6 +1043,10 @@ $report = [ordered]@{
   wave_slugs   = @($waveSlugs)
   slugs        = @($target)
   inputs       = [ordered]@{
+    # THE RESOLVED RunDir, recorded because the Start-Job fan-out depends on it being absolute and
+    # nothing else in this report would show whether it is. A relative value here means the shared
+    # gates ran against a path their job process could not see.
+    run_dir        = $RunDir
     costed_mtime   = $costedMtime.ToString('s')
     reference_card = $ReferenceCard
     food_db        = $foodDbPath
