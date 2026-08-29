@@ -1358,6 +1358,16 @@ def run():
     T("MUST FIRE  only CARRIED rows that carry BOTH a price and a size become board cells - "
       "'blocked' and 'not-carried' are verdicts about a store, not prices",
       *_mint_carries_only_carried_priced_rows())
+    H("WAVE TRIM: whose defect spends whose repair budget (2026-08-28)")
+    T("MUST FIRE  a SHARED-DATA blocker does not spend this recipe's one repair - it goes back to "
+      "qa-passed to be re-waved, never to rejected-audit, which nothing can leave",
+      *_trim_a_shared_blocker_does_not_spend_the_repair())
+    T("CLEAN TWIN a RECIPE-LOCAL blocker already repaired once is still terminal - the one-repair "
+      "rule keeps its teeth", *_trim_a_recipe_local_blocker_is_still_terminal())
+    T("MUST FIRE  an audit that named NO blocker kind keeps the old rule - the exemption is granted "
+      "on evidence, never on silence", *_trim_an_unnamed_blocker_kind_keeps_the_old_rule())
+    T("CLEAN TWIN a recipe the auditor did not name still goes back to the pool, whatever the "
+      "blocker kind was", *_trim_a_clean_neighbour_is_never_rejected())
     H("MINT: the size the shelf printed vs the basis a cell may carry (2026-08-28)")
     T("MUST FIRE  a packaging noun is STRIPPED, not guessed at - Walmart's '1.5 lb bag', '5 lb bag' "
       "and '12 oz bag (frozen)' blocked three approved mints over a word that cannot move a "
@@ -3580,7 +3590,15 @@ def _trim_all_blocked():
     tmp = _wave_scratch()
     try:
         ps = FakePS({"hunt-run.ps1": lambda a: (0, "hunt-run: wave 1 closed with 3 recipe(s)", "")})
-        d, _fd = _wave_daemon([{"verdict": "NO-GO", "blocking_slugs": [], "blocker_kind": "shared-data",
+        # RECIPE-LOCAL ON PURPOSE (2026-08-28). What this case is about is `blocking_slugs: []` -
+        # a NO-GO that blames the wave as a whole names nobody, and must therefore block EVERYONE
+        # rather than read as a licence to publish. The blocker KIND is incidental to that, but it
+        # is no longer inert: a shared-data blocker does not spend a recipe's repair budget, so
+        # scripting one here made the three slugs come back as qa-passed and the assertion below -
+        # which is about publication, not about rejection - failed for a reason it never meant to
+        # test. The shared-data branch has its own case, `_trim_a_shared_blocker_does_not_spend_
+        # the_repair`.
+        d, _fd = _wave_daemon([{"verdict": "NO-GO", "blocking_slugs": [], "blocker_kind": "recipe-local",
                                 "summary": "the wave as a whole"},
                                {"verdict": "NO-GO", "blocking_slugs": []}], tmp, ps)
         arun(d.run_wave(1))
@@ -4184,6 +4202,85 @@ def _spawn_with_no_args_is_unchanged():
 # found real per-store evidence. Missing either, it must REFUSE AND SAY WHICH - a silent skip here
 # would look exactly like the hand-typing era, except with nobody watching for the paragraph.
 # =====================================================================================================
+# =====================================================================================================
+# WAVE TRIM: whose defect spends whose repair budget (2026-08-28)
+#
+# trim_wave had NO fixture of any kind, which is how the call site kept a rule nobody had checked.
+# The rule it kept cost a finished recipe: honey-bbq-chicken-mac-and-cheese was made TERMINAL on
+# wave 11 with zero open blockers of its own - a gate red over three PHANTOM specs in OTHER recipes,
+# and a board-wide cheddar price owned by the pricer. `rejected-audit` is not a key in hunt-run's
+# transition table, so it was unrecoverable, and both blockers were closed hours later by other work.
+# =====================================================================================================
+def _trim_tos(ps):
+    """Every state hunt-run was asked to advance a slug TO, in call order."""
+    return [FakePS.value_after(c["args"], "-To") for c in ps.find("hunt-run")]
+
+
+def _trim_a_shared_blocker_does_not_spend_the_repair():
+    """MUST FIRE. The repair budget is already spent, but the blocker is shared data - a gate red
+    over another recipe's spec, or a price the pricer owns. Neither is anything this recipe's owner
+    could fix and neither says a word about this recipe, so it must go BACK to qa-passed to be
+    re-waved, never to rejected-audit, which nothing can leave."""
+    tmp = scratch_dir(prefix="daemon-trim-shared-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps)
+        audit = {"blocking_slugs": ["s1"], "blocker_kind": "shared-data",
+                 "summary": "spec-contradictions red over three other recipes"}
+        arun(d.trim_wave(11, ["s1"], audit, True))
+        tos = _trim_tos(ps)
+        return ("rejected-audit" not in tos and "qa-passed" in tos, "-To=%s" % json.dumps(tos))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _trim_a_recipe_local_blocker_is_still_terminal():
+    """CLEAN TWIN, and the fence around the fixture above. The one-repair rule keeps its teeth: a
+    defect in THIS recipe, already repaired once, is still terminal. An exemption that swallowed this
+    case would make the budget meaningless and let a genuinely broken recipe bounce for ever."""
+    tmp = scratch_dir(prefix="daemon-trim-local-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps)
+        audit = {"blocking_slugs": ["s1"], "blocker_kind": "recipe-local",
+                 "summary": "a doubled gram token in this spec"}
+        arun(d.trim_wave(11, ["s1"], audit, True))
+        return ("rejected-audit" in _trim_tos(ps), "-To=%s" % json.dumps(_trim_tos(ps)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _trim_an_unnamed_blocker_kind_keeps_the_old_rule():
+    """MUST FIRE. The exemption is granted on EVIDENCE, never on silence. An audit that returned no
+    blocker_kind has not said the defect was somebody else's, and reading its silence as an exemption
+    would quietly retire the one-repair rule for every auditor that forgets the field."""
+    tmp = scratch_dir(prefix="daemon-trim-silent-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps)
+        arun(d.trim_wave(11, ["s1"], {"blocking_slugs": ["s1"], "summary": "no kind given"}, True))
+        return ("rejected-audit" in _trim_tos(ps), "-To=%s" % json.dumps(_trim_tos(ps)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _trim_a_clean_neighbour_is_never_rejected():
+    """CLEAN TWIN. A recipe the auditor did NOT name goes back to the pool whatever the blocker kind
+    was - the rule this file has held since 2026-08-16, re-pinned because the change above is one
+    branch away from it."""
+    tmp = scratch_dir(prefix="daemon-trim-clean-")
+    try:
+        ps = FakePS()
+        d = daemon(run_dir=tmp, ps=ps)
+        audit = {"blocking_slugs": ["s1"], "blocker_kind": "recipe-local", "summary": "x"}
+        arun(d.trim_wave(11, ["s1", "s2"], audit, True))
+        tos = _trim_tos(ps)
+        return (tos.count("rejected-audit") == 1 and tos.count("qa-passed") == 1,
+                "-To=%s" % json.dumps(tos))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def _mint_queue(tmp, term="cotija cheese", stores=None):
     """Write a queue file in the shape ingredient-queue.ps1 -Record actually leaves on disk -
     per-store dicts keyed by store name, each with state/price/size/item/evidence."""

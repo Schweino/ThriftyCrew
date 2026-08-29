@@ -94,18 +94,25 @@ export function makeBreaker({ threshold = 5, maxCalls = 900 } = {}) {
 // recipes in `waved`, a state whose only exits are published / rejected-audit / qa-passed / written,
 // and nothing ever picks them up again. Two audit-clean recipes sat hostage to eight blocked ones.
 // -----------------------------------------------------------------------------------------------------
-export function planTrim(waveSlugs, perSlug, alreadyRepaired) {
+export function planTrim(waveSlugs, perSlug, alreadyRepaired, blockerKind) {
   const blocked = [], clean = []
   for (const s of waveSlugs) {
     const v = perSlug && perSlug[s]
     if (v && String(v).toUpperCase().startsWith('BLOCK')) blocked.push(s); else clean.push(s)
   }
+  // A SHARED-DATA BLOCKER IS NOT THIS RECIPE'S DEFECT, AND MUST NOT SPEND ITS ONE REPAIR
+  // (2026-08-28). Wave 11 of hunt-2026-08-27-highprotein made a recipe TERMINAL with zero open
+  // defects of its own: a gate red over three PHANTOM specs in OTHER recipes, and a board-wide
+  // cheddar price. Neither was its owner's to fix; both were closed hours later. See the python
+  // twin for the full account. An absent kind spends the budget exactly as before.
+  const shared = String(blockerKind || '').trim().toLowerCase() === 'shared-data'
+  const terminal = Boolean(alreadyRepaired) && !shared
   return {
     clean,
     blocked,
     // A slug that has already had its one repair cycle is terminal; anything else goes back for repair.
-    toReject: alreadyRepaired ? blocked : [],
-    toRepair: alreadyRepaired ? [] : blocked,
+    toReject: terminal ? blocked : [],
+    toRepair: terminal ? [] : blocked,
     // Publishing the clean remainder is the whole point: never hold good recipes for bad neighbours.
     canPublishClean: clean.length > 0,
   }

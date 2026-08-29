@@ -1161,6 +1161,102 @@
    "expect": "a,b",
    "must_fire": false,
    "note": "items pushed before close are drained, not discarded"
+  },
+  {
+   "id": "B10-shared-blocker-does-not-spend-the-repair",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "GO"
+    },
+    true,
+    "shared-data"
+   ],
+   "expect": {
+    "clean": [
+     "b"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [],
+    "toRepair": [
+     "a"
+    ],
+    "canPublishClean": true
+   },
+   "must_fire": true,
+   "note": "the repair is already spent, but the blocker was a gate red over ANOTHER recipe's data - the slug goes back to be re-waved, never to rejected-audit, which is terminal"
+  },
+  {
+   "id": "B10-recipe-local-blocker-is-still-terminal",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "GO"
+    },
+    true,
+    "recipe-local"
+   ],
+   "expect": {
+    "clean": [
+     "b"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [
+     "a"
+    ],
+    "toRepair": [],
+    "canPublishClean": true
+   },
+   "must_fire": true,
+   "note": "the one-repair rule keeps its teeth: a defect in THIS recipe, already repaired once, is still terminal"
+  },
+  {
+   "id": "B10-unknown-blocker-kind-spends-the-repair",
+   "kind": "call",
+   "fn": "planTrim",
+   "args": [
+    [
+     "a",
+     "b"
+    ],
+    {
+     "a": "BLOCK",
+     "b": "GO"
+    },
+    true,
+    ""
+   ],
+   "expect": {
+    "clean": [
+     "b"
+    ],
+    "blocked": [
+     "a"
+    ],
+    "toReject": [
+     "a"
+    ],
+    "toRepair": [],
+    "canPublishClean": true
+   },
+   "must_fire": true,
+   "note": "an audit that did not say what kind of blocker it found gets the OLD behaviour - the exemption is granted on evidence, never on silence"
   }
  ]
 }

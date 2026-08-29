@@ -37,6 +37,7 @@
 #   .\hunt-run.ps1 -SelfTest
 param(
   [switch]$Init, [switch]$Advance, [switch]$Derive, [switch]$WaveClose, [switch]$Status, [switch]$SelfTest,
+  [switch]$Revive, [string]$Reason = '',
   [switch]$Lane, [switch]$LaneSummary, [switch]$StageSummary, [switch]$RecipeSummary,
   [switch]$WaveSync, [int]$Wave = 0,
   [int]$InputTokens = -1, [int]$OutputTokens = -1,   # -1 = not reported (older lines, or a lane that cannot see usage)
@@ -87,6 +88,7 @@ $runRecipeSummary = [bool]$RecipeSummary
 $runLaneSummary = [bool]$LaneSummary -or $runStageSummary
 $runSelfTest = [bool]$SelfTest; $runInit = [bool]$Init; $runAdvance = [bool]$Advance
 $runDerive = [bool]$Derive; $runWaveClose = [bool]$WaveClose; $runStatus = [bool]$Status
+$runRevive = [bool]$Revive
 $runLane = [bool]$Lane; $runWaveSync = [bool]$WaveSync
 $runDrain = [bool]$Drain; $runNoLedger = [bool]$NoLedger; $runJson = [bool]$Json
 
@@ -175,11 +177,29 @@ $script:NEXT = @{
   # held -> verified is REFUSED on purpose: a held recipe must go back through `published` (which means
   # actually re-publishing it) before anyone can verify it. Verifying a drafted page is the exact lie this
   # state exists to prevent.
+  # rejected-audit -> qa-passed EXISTS FOR -Revive AND FOR NOTHING ELSE (2026-08-28). A NO-GO used
+  # to be terminal full stop, and on wave 11 that cost a recipe with ZERO open blockers of its own:
+  # both survivors were shared-data - a gate red over three OTHER recipes' specs, and a board-wide
+  # cheddar price - and both were closed hours later by other work. plan_trim no longer spends a
+  # recipe's repair budget on somebody else's defect, but that fix is not retroactive, and a recipe
+  # already sitting in a terminal state needed a door.
+  #
+  # THE EVIDENCE GATE IS THE COMMAND, NOT THIS TABLE. -Revive refuses unless the wave's own audit
+  # shows at least one OPEN blocker and not one of them recipe-local. This table stays the single
+  # honest record of which moves the machine allows; hiding the edge from it and writing the state
+  # file behind its back would be the worse lie, and is the exact thing this file's own notes warn
+  # about ("a verdict a state machine cannot express is a verdict that gets faked or lost").
+  'rejected-audit' = @('qa-passed')
   'published'  = @('verified', 'held')
   'held'       = @('published')
   'verified'   = @()
 }
-foreach ($r in $script:REJECTED_STATES) { $script:NEXT[$r] = @() }
+# A REJECTED STATE IS TERMINAL BY DEFAULT, NOT BY FORCE (2026-08-28). This loop used to assign @()
+# unconditionally, which silently overwrote any edge the table above declared - the literal read as
+# law and the loop quietly repealed it, which is worse than either rule alone. It now fills in the
+# terminal default only where the table states nothing, so `rejected-audit -> qa-passed` above
+# survives as the one declared, commented exception and every other rejected state stays terminal.
+foreach ($r in $script:REJECTED_STATES) { if (-not $script:NEXT.ContainsKey($r)) { $script:NEXT[$r] = @() } }
 $script:ALL_STATES = @($script:NEXT.Keys)
 
 function Test-LegalTransition {
@@ -1159,6 +1179,82 @@ if ($runSelfTest) {
       ((@($back9.terms)).Count.ToString() + ' rows')
   } finally { Remove-Item $ct -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- -Revive: undoing a rejection that was never this recipe's fault -----------------------------
+  # On wave 11 a finished recipe was made TERMINAL with zero open blockers of its own - both survivors
+  # were shared-data, and both were closed hours later by other work. plan_trim no longer spends a
+  # recipe's budget on somebody else's defect, but that is not retroactive, so a door was needed. The
+  # door is gated on the AUDIT'S OWN WORDS, because the blocker headings already record whose defect
+  # each one was; every refusal below is that gate holding.
+  $rv = Join-Path ([IO.Path]::GetTempPath()) ('hr-revive-' + [guid]::NewGuid().ToString('N'))
+  try {
+    [void](New-Item -ItemType Directory (Join-Path $rv 'state'))
+    [void](New-Item -ItemType Directory (Join-Path $rv 'waves'))
+    function SeedRv([string]$slug, [string]$state, $wave) {
+      $e = [ordered]@{ slug = $slug; title = 'T'; source_url = 'u'; protein = 'chicken'; state = $state
+                       wave = $wave; created = '2026-08-28T00:00:00'; updated = '2026-08-28T00:00:00'
+                       terms = @(); reject_reason = 'blocked by the wave audit'; parked_on = @(); history = @() }
+      Write-JsonAtomic -Path (Join-Path $rv ('state\' + $slug + '.json')) -Obj $e
+    }
+    function AuditRv([int]$k, [string]$body) {
+      [IO.File]::WriteAllText((Join-Path $rv ('waves\wave-' + $k + '.audit.md')), $body, $script:UTF8)
+    }
+    function StRv([string]$slug) { (Read-Json (Join-Path $rv ('state\' + $slug + '.json'))).state }
+
+    AuditRv 11 "## VERDICT: NO-GO`n### BLOCKER 1 (shared-data, owner: writer) - STILL OPEN`n### BLOCKER 2 (shared-data, owner: pricer) - STILL OPEN`n### Prior BLOCKER 3 (recipe-local, owner: writer) - VERIFIED FIXED`n"
+    AuditRv 12 "## VERDICT: NO-GO`n### BLOCKER 1 (recipe-local, owner: writer) - STILL OPEN`n### BLOCKER 2 (shared-data, owner: pricer) - STILL OPEN`n"
+    AuditRv 14 "## VERDICT: NO-GO`nno blocker headings at all`n"
+    SeedRv 'rv-ok' 'rejected-audit' 11
+    SeedRv 'rv-local' 'rejected-audit' 12
+    SeedRv 'rv-noaudit' 'rejected-audit' 13
+    SeedRv 'rv-noheads' 'rejected-audit' 14
+    # These two are otherwise PERFECTLY revivable - rejected-audit, wave 11, whose audit carries only
+    # shared-data blockers. That is the point: each is refused by exactly one gate, so tearing that
+    # gate out is the only thing that can change the answer. The first shape of these two cases used
+    # subjects that a DIFFERENT gate refused anyway, and both stayed green with their subject torn
+    # out - vacuous, and caught only by running the neuter.
+    SeedRv 'rv-noreason' 'rejected-audit' 11
+    # `waved`, not `published`, and that is the whole subtlety: published cannot reach qa-passed at
+    # all, so the state machine refuses it and the explicit check never has to. `waved` CAN reach
+    # qa-passed legally, so this gate is the only thing standing between -Revive and a recipe that
+    # was never rejected in the first place.
+    SeedRv 'rv-wrongstate' 'waved' 11
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-ok' -By 'test' -Reason 'both shared blockers closed' | Out-Null
+    $rvDoc = Read-Json (Join-Path $rv 'state\rv-ok.json')
+    T 'REVIVE a rejection whose every OPEN blocker was shared-data returns to qa-passed' `
+      ($LASTEXITCODE -eq 0 -and (StRv 'rv-ok') -eq 'qa-passed') (StRv 'rv-ok')
+    T 'REVIVE   ...and the stated reason AND the audit evidence land on the history' `
+      (([string]$rvDoc.history[-1].detail) -match 'both shared blockers closed' -and `
+       ([string]$rvDoc.history[-1].detail) -match 'none recipe-local') ([string]$rvDoc.history[-1].detail)
+    T 'REVIVE   ...and the wave claim is cleared, or the next -WaveClose calls it already claimed' `
+      ($null -eq $rvDoc.wave -and $null -eq $rvDoc.reject_reason) ('wave=' + [string]$rvDoc.wave)
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-local' -By 'test' -Reason 'please' | Out-Null
+    T 'MUST FIRE  REVIVE an OPEN recipe-local blocker is refused - the one-repair rule keeps its teeth' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-local') -eq 'rejected-audit') (StRv 'rv-local')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-noaudit' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  REVIVE no audit on disk is no evidence, so it is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-noaudit') -eq 'rejected-audit') (StRv 'rv-noaudit')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-noheads' -By 'test' -Reason 'trust me' | Out-Null
+    T 'MUST FIRE  REVIVE an audit naming no blockers cannot say whose defect it was, so it is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-noheads') -eq 'rejected-audit') (StRv 'rv-noheads')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-noreason' -By 'test' | Out-Null
+    T 'MUST FIRE  REVIVE a revival with no -Reason is refused - the one command that undoes a verdict must say why' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-noreason') -eq 'rejected-audit') (StRv 'rv-noreason')
+
+    & $PSCommandPath -Revive -RunDir $rv -Slug 'rv-wrongstate' -By 'test' -Reason 'it is mid-wave, not rejected' | Out-Null
+    T 'MUST FIRE  REVIVE a slug that is not rejected-audit is refused' `
+      ($LASTEXITCODE -ne 0 -and (StRv 'rv-wrongstate') -eq 'waved') (StRv 'rv-wrongstate')
+
+    T 'CLEAN TWIN every OTHER rejected state is still terminal - the door is one declared exception' `
+      ((-not (Test-LegalTransition 'rejected-dupe' 'qa-passed')) -and `
+       (-not (Test-LegalTransition 'rejected-macros' 'qa-passed')) -and `
+       (Test-LegalTransition 'rejected-audit' 'qa-passed')) 'the terminal default was repealed too widely'
+  } finally { Remove-Item $rv -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($f -eq 0) { Write-Output 'hunt-run SELF-TEST PASS'; exit 0 }
   Write-Output ("hunt-run SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
 }
@@ -1592,6 +1688,63 @@ if ($runLane) {
 }
 
 # ---- -Advance -------------------------------------------------------------------------------------
+# ---- -Revive ---------------------------------------------------------------------------------------
+# Return a recipe that was rejected for SOMEBODY ELSE'S defect. Gated on the audit's own words: the
+# blocker headings already say `(shared-data, owner: X)` or `(recipe-local, owner: X)`, so the
+# evidence for the exemption is written down before anyone asks for it.
+if ($runRevive) {
+  if (-not $Slug)   { Write-Output 'hunt-run: -Revive needs -Slug'; exit 1 }
+  # A REASON IS MANDATORY. This is the one command that undoes a verdict, so the record has to say
+  # who decided it was wrong and why; a revival with no stated cause is indistinguishable from a
+  # mistake six months later.
+  if (-not $Reason) { Write-Output 'hunt-run: -Revive needs -Reason "<why this rejection no longer holds>"'; exit 1 }
+  $sp = Get-StatePath $RunDir $Slug
+  if (-not (Test-Path $sp)) { Write-Output ("hunt-run: '{0}' has no state file" -f $Slug); exit 1 }
+  $e = Read-Json $sp
+  $from = [string]$e.state
+  if ($from -ne 'rejected-audit') {
+    Write-Output ("hunt-run: -Revive only applies to rejected-audit; {0} is '{1}'" -f $Slug, $from); exit 1
+  }
+  $wk = [int]$e.wave
+  $auditPath = Join-Path $RunDir ("waves\wave-{0}.audit.md" -f $wk)
+  if (-not (Test-Path $auditPath)) {
+    Write-Output ("hunt-run: no audit at {0} - the exemption is granted on the audit's own evidence, and there is none" -f $auditPath); exit 1
+  }
+  # Only OPEN blockers count. A heading that says `Prior BLOCKER` is one an earlier cycle already
+  # closed, and holding a recipe terminal for a defect that is on record as fixed is the bug.
+  $kinds = @()
+  foreach ($ln in (Get-Content $auditPath)) {
+    $m = [regex]::Match([string]$ln, '^###\s+BLOCKER\s+\d+\s*\(\s*([a-zA-Z-]+)')
+    if ($m.Success) { $kinds += $m.Groups[1].Value.ToLower() }
+  }
+  if (-not $kinds.Count) {
+    # Single-quoted on purpose: a backtick is PowerShell's escape character, so quoting the heading
+    # shape with backticks inside a double-quoted string silently eats them.
+    Write-Output ('hunt-run: ' + $Slug + "'s audit names no open blockers in the '### BLOCKER n (kind)' form, so nothing here can tell whose defect it was. Refusing."); exit 1
+  }
+  $local = @($kinds | Where-Object { $_ -eq 'recipe-local' })
+  if ($local.Count) {
+    Write-Output ("hunt-run: REFUSED - {0}'s audit still carries {1} recipe-local blocker(s). The one-repair rule holds for a defect in THIS recipe; fix it and let the wave re-audit." -f $Slug, $local.Count)
+    exit 1
+  }
+  if (-not (Test-LegalTransition $from 'qa-passed')) {
+    Write-Output ("hunt-run: REFUSED {0}: {1} -> qa-passed" -f $Slug, $from); exit 1
+  }
+  $detail = ("revived: " + $Reason + "  [audit blockers: " + (($kinds | Sort-Object -Unique) -join ', ') + "; none recipe-local]")
+  $e.state = 'qa-passed'
+  $e.updated = (Get-Stamp)
+  $e.reject_reason = $null
+  # The wave field is cleared with the rejection: the recipe is going back to the pool and will be
+  # claimed by whichever wave closes next. Leaving the old number on it is how a slug reads as
+  # "already claimed by an open wave" and never closes again.
+  $e.wave = $null
+  $e.history = @(@($e.history) + [pscustomobject]@{ state = 'qa-passed'; at = (Get-Stamp); by = $By; detail = $detail })
+  Write-JsonAtomic -Path $sp -Obj $e
+  Write-Output ("hunt-run: {0}  rejected-audit -> qa-passed  ({1})" -f $Slug, $detail)
+  Write-GuardComplete -Name 'hunt-run' -Summary ("revive {0}" -f $Slug)
+  exit 0
+}
+
 if ($runAdvance) {
   if (-not $Slug -or -not $To) { Write-Output 'hunt-run: -Advance needs -Slug and -To'; exit 1 }
   # BEFORE anything is read or written: a composite term must never reach a state file. See the

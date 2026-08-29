@@ -485,7 +485,7 @@ def make_breaker(threshold=CIRCUIT_THRESHOLD, max_calls=MAX_AGENT_CALLS):
 # and nothing ever picked them up again. Two audit-clean recipes sat hostage to eight blocked ones.
 # ---------------------------------------------------------------------------------------------------
 
-def plan_trim(wave_slugs, per_slug, already_repaired):
+def plan_trim(wave_slugs, per_slug, already_repaired, blocker_kind=""):
     blocked, clean = [], []
     for s in wave_slugs:
         v = (per_slug or {}).get(s)
@@ -493,12 +493,31 @@ def plan_trim(wave_slugs, per_slug, already_repaired):
             blocked.append(s)
         else:
             clean.append(s)
+        # A SHARED-DATA BLOCKER IS NOT THIS RECIPE'S DEFECT, AND MUST NOT SPEND ITS ONE REPAIR
+        # (2026-08-28). Measured on wave 11 of hunt-2026-08-27-highprotein: honey-bbq-chicken-mac-
+        # and-cheese was made TERMINAL with zero open defects of its own. Its three blockers were one
+        # recipe-local (a doubled gram token, fixed and verified) and two shared-data - a gate red
+        # over three PHANTOM specs in three OTHER recipes, and cheddar-cheese priced by mozzarella,
+        # a board-wide defect owned by the pricer. Neither was anything its owner could fix, and
+        # neither said a word about the recipe; both were closed hours later by other work. The
+        # budget had already been spent, `rejected-audit` is not a key in hunt-run's transition
+        # table, and the recipe was unrecoverable.
+        #
+        # THE INFORMATION WAS ALREADY WRITTEN DOWN. Every audit labels its blockers
+        # `(shared-data, owner: X)` or `(recipe-local, owner: X)`, and choose_scope right below this
+        # already branches on exactly that field to decide re-audit scope. Nothing read it here.
+        #
+        # DEFAULTS TO THE OLD BEHAVIOUR. An absent or unknown kind spends the budget exactly as
+        # before, so every existing vector stays green and no caller has to be updated to keep the
+        # rule it already had.
+        shared = str(blocker_kind or "").strip().lower() == "shared-data"
+        terminal = bool(already_repaired) and not shared
     return {
         "clean": clean,
         "blocked": blocked,
         # A slug that has already had its one repair cycle is terminal; anything else goes back.
-        "toReject": blocked if already_repaired else [],
-        "toRepair": [] if already_repaired else blocked,
+        "toReject": blocked if terminal else [],
+        "toRepair": [] if terminal else blocked,
         # Publishing the clean remainder is the whole point: never hold good recipes for bad neighbours.
         "canPublishClean": len(clean) > 0,
     }

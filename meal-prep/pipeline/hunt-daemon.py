@@ -6361,7 +6361,13 @@ class Daemon(object):
         # An auditor that named NOBODY blocks the whole wave: a NO-GO blaming the wave as a whole is
         # not a licence to publish any of it.
         per_slug = {s: ("BLOCK" if (not blockers or s in blockers) else "GO") for s in slugs}
-        plan = hunt_lib.plan_trim(slugs, per_slug, repair_spent)
+        # THE BLOCKER'S KIND DECIDES WHOSE BUDGET IS SPENT (2026-08-28). `repair_spent` alone made a
+        # recipe terminal for defects that were never about it - wave 11 lost a recipe with zero open
+        # blockers of its own to a gate red over three OTHER recipes' specs and a board-wide cheddar
+        # price. The auditor already reports blocker_kind, and choose_scope already branches on it;
+        # this is the second reader it always needed. An audit that names no kind gets the old rule.
+        blocker_kind = str((audit or {}).get("blocker_kind") or "")
+        plan = hunt_lib.plan_trim(slugs, per_slug, repair_spent, blocker_kind)
         self.log("WAVE %d: trimming - %d blocked, %d clean%s"
                  % (wk, len(plan["blocked"]), len(plan["clean"]),
                     " (the auditor named no slugs, so the whole wave is blocked)" if not blockers
